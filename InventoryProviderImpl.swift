@@ -92,7 +92,6 @@ class InventoryProviderImpl: InventoryProvider {
             if saved {
                 handler(ProviderResult(status: .Success))
                 if remote {
-                    // background TODO should we sync like now only when local DB save was success or also when it failed
                     self?.remoteProvider.addInventory(inventory) {remoteResult in
                         
                         if let remoteInventory = remoteResult.successResult {
@@ -102,7 +101,7 @@ class InventoryProviderImpl: InventoryProvider {
                                 }
                             }
                         } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler) // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                         }
                     }
                 }

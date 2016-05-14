@@ -14,6 +14,7 @@ import QorumLogs
 //change
 protocol AddEditInventoryControllerDelegate: class {
     func onInventoryAdded(inventory: Inventory)
+    func onInventoryAddError(inventory: Inventory)
     func onInventoryUpdated(inventory: Inventory)
 }
 
@@ -173,9 +174,12 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
                     let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
                     
                     let inventoryWithSharedUsers = Inventory(uuid: NSUUID().UUIDString, name: listName, users: totalUsers, bgColor: bgColor, order: currentListsCount)//change
-                    Providers.inventoryProvider.addInventory(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{//change
+                    Providers.inventoryProvider.addInventory(inventoryWithSharedUsers, remote: true, weakSelf.resultHandler(onSuccess: {
                         weakSelf.delegate?.onInventoryAdded(inventoryWithSharedUsers)
-                    })
+                        }, onErrorAdditional: {result in
+                            weakSelf.delegate?.onInventoryAddError(inventoryWithSharedUsers)
+                        }
+                    ))
                 } else {
                     print("Error: no currentListsCount")
                 }

@@ -114,8 +114,11 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         
         models = reorderedInventories.map{ExpandableTableViewInventoryModel(inventory: $0)}
         
-        Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: true, successHandler{
-        })
+        Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: true, resultHandler(onSuccess: {
+            }, onErrorAdditional: {[weak self] result in
+                self?.initModels()
+            }
+        ))
     }
     
     override func canRemoveModel(model: ExpandableTableViewModel, can: Bool -> Void) {
@@ -197,7 +200,8 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         setTopBarState(.NormalFromExpanded)
     }
     
-    // MARK: - EditListViewController
+    // MARK: - AddEditInventoryControllerDelegate
+    
     func onInventoryAdded(list: Inventory) {
         tableView.wrapUpdates {[weak self] in
             if let weakSelf = self {
@@ -214,6 +218,18 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         tableView.reloadData()
         topAddEditListControllerManager?.expand(false)
         setTopBarState(.NormalFromExpanded)
+    }
+    
+    func onInventoryAddError(inventory: Inventory) {
+        initModels()
+        // If the user quickly after adding the inventory opened its inventory items controller, close it.
+        for childViewController in childViewControllers {
+            if let inventoryItemsController = childViewController as? InventoryItemsController {
+                if (inventoryItemsController.inventory.map{$0.same(inventory)}) ?? false {
+                    inventoryItemsController.back()
+                }
+            }
+        }
     }
     
     // MARK: - Websocket

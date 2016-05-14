@@ -390,9 +390,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 }()
                 
                 // NOTE: For the provider the whole state is updated here - including possible section removal (if the current undo list item is the last one in the section) and the order field update of possible following sections. This means that the contents of the table view may be in a slightly inconsistent state with the data in the provider during the time cell is in undo (for the table view the section is still there, for the provider it's not). This is fine as the undo state is just a UI thing (local) and it should be cleared as soon as we try to start a new action (add, edit, delete, reorder etc) or go to the cart/stash.
-                Providers.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, orderInDstStatus: nil, remote: true, weakSelf.successHandler {switchedListItem in
+                Providers.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, orderInDstStatus: nil, remote: true, weakSelf.resultHandler(onSuccess: {switchedListItem in
                         weakSelf.onTableViewChangedQuantifiables()
-                })
+                    }, onErrorAdditional: {result in
+                        weakSelf.updatePossibleList()
+                    }
+                ))
             })
         }
     }
@@ -541,9 +544,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onListItemDeleted(tableViewListItem: TableViewListItem) {
-        Providers.listItemsProvider.remove(tableViewListItem.listItem, remote: true, successHandler{[weak self] in
+        Providers.listItemsProvider.remove(tableViewListItem.listItem, remote: true, resultHandler(onSuccess: {[weak self] in
             self?.onTableViewChangedQuantifiables()
-        })
+            }, onErrorAdditional: {[weak self] result in
+                self?.updatePossibleList()
+            }
+        ))
     }
     
     // MARK: - QuickAddDelegate
@@ -800,8 +806,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     func onSectionRemoved(section: Section) {
         listItemsTableViewController.removeSection(section.uuid)
-        Providers.sectionProvider.remove(section, remote: true, successHandler{
-        })
+        Providers.sectionProvider.remove(section, remote: true, resultHandler(onSuccess: {
+            }, onErrorAdditional: {[weak self] result in
+                self?.updatePossibleList()
+            }
+        ))
     }
 
     

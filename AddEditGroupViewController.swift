@@ -14,6 +14,7 @@ import QorumLogs
 //change
 protocol AddEditGroupControllerDelegate: class {
     func onGroupAdded(inventory: ListItemGroup)
+    func onGroupAddError(group: ListItemGroup)
     func onGroupUpdated(inventory: ListItemGroup)
 }
 
@@ -134,10 +135,12 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
                 let inventoryWithSharedUsers = ListItemGroup(uuid: NSUUID().UUIDString, name: listName, bgColor: bgColor, order: currentListsCount)
-                Providers.listItemGroupsProvider.add(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{
-                    weakSelf.delegate?.onGroupAdded(inventoryWithSharedUsers)
-                })
-                    
+                    Providers.listItemGroupsProvider.add(inventoryWithSharedUsers, remote: true, weakSelf.resultHandler(onSuccess: {
+                        weakSelf.delegate?.onGroupAdded(inventoryWithSharedUsers)
+                        }, onErrorAdditional: {result in
+                            weakSelf.delegate?.onGroupAddError(inventoryWithSharedUsers)
+                        }
+                    ))
                 } else {
                     print("Error: no currentListsCount")
                 }

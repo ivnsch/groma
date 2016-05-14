@@ -141,15 +141,17 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
 
         models = reorderedLists.map{ExpandableTableViewListModel(list: $0)}
         
-        Providers.listProvider.updateListsOrder(orderUpdates, remote: true, successHandler{
-        })
+        Providers.listProvider.updateListsOrder(orderUpdates, remote: true, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+                self?.initModels()
+            }
+        ))
     }
     
     override func onRemoveModel(model: ExpandableTableViewModel) {
         Providers.listProvider.remove((model as! ExpandableTableViewListModel).list, remote: true, resultHandler(onSuccess: {
-            }, onError: {[weak self] result in
+            }, onErrorAdditional: {[weak self] result in
                 self?.initModels()
-                self?.defaultErrorHandler()(providerResult: result)
             }
         ))
     }
@@ -212,6 +214,18 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         tableView.reloadData()
         topAddEditListControllerManager?.expand(false)
         setTopBarState(.NormalFromExpanded)
+    }
+    
+    func onListAddError(list: List) {
+        initModels()
+        // If the user quickly after adding the list opened its list items controller, close it.
+        for childViewController in childViewControllers {
+            if let todoListItemController = childViewController as? TodoListItemsController {
+                if (todoListItemController.currentList.map{$0.same(list)}) ?? false {
+                    todoListItemController.back()
+                }
+            }
+        }
     }
     
     // MARK: - ExpandableTopViewControllerDelegate

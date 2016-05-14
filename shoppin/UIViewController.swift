@@ -60,6 +60,38 @@ extension UIViewController {
     func successHandler<T>(onSuccess: (T) -> ()) -> ((providerResult: ProviderResult<T>) -> ()) {
         return self.resultHandler(onSuccess: onSuccess, onError: nil)
     }
+
+    func resultHandler(onSuccess onSuccess: VoidFunction, onErrorAdditional: ((ProviderResult<Any>) -> Void)) -> (providerResult: ProviderResult<Any>) -> Void {
+        return {[weak self] providerResult in
+            if providerResult.success {
+                onSuccess()
+                
+            } else {
+                onErrorAdditional(providerResult)
+                self?.defaultErrorHandler()(providerResult: providerResult)
+            }
+            self?.progressVisible(false)
+        }
+    }
+
+    // Result handler for result with payload
+    func resultHandler<T>(onSuccess onSuccess: (T) -> Void, onErrorAdditional: ((ProviderResult<T>) -> Void)) -> (providerResult: ProviderResult<T>) -> Void {
+        return {[weak self] providerResult in
+            if providerResult.success {
+                if let successResult = providerResult.sucessResult {
+                    onSuccess(successResult)
+                } else {
+                    QL4("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
+                    self?.handleResultHelper(.Unknown, error: nil, errorObj: nil)
+                }
+                
+            } else {
+                onErrorAdditional(providerResult)
+                self?.defaultErrorHandler()(providerResult: providerResult)
+            }
+            self?.progressVisible(false)
+        }
+    }
     
     func resultHandler(onSuccess onSuccess: VoidFunction, onError: ((ProviderResult<Any>) -> Void)? = nil) -> (providerResult: ProviderResult<Any>) -> Void {
         return {[weak self] providerResult in

@@ -14,6 +14,7 @@ import QorumLogs
 
 protocol AddEditListControllerDelegate: class {
     func onListAdded(list: List)
+    func onListAddError(list: List)
     func onListUpdated(list: List)
 }
 
@@ -282,9 +283,14 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                     let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
                     
                     let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: totalUsers, bgColor: bgColor, order: currentListsCount, inventory: inventory, store: store)
-                    Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
+                    
+                    
+                    Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.resultHandler(onSuccess: {list in
                         weakSelf.delegate?.onListAdded(list)
-                    })
+                        }, onErrorAdditional: {result in
+                            weakSelf.delegate?.onListAddError(listWithSharedUsers)
+                        }
+                    ))
                     
                 } else {
                     QL4("No currentListsCount")

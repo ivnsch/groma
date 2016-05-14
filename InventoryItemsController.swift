@@ -199,6 +199,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onTopBarTitleTap() {
+        back()
+    }
+    
+    func back() {
         onExpand(false)
         topQuickAddControllerManager?.controller?.onClose()
         expandDelegate?.setExpanded(false)

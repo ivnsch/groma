@@ -68,9 +68,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                         self?.dbGroupsProvider.updateLastSyncTimeStamp(remoteGroup) {success in
                         }
                     } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<RemoteGroup>) in
-                            print("Error: adding group in remote: \(group), result: \(remoteResult)")
-                        }
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }
             }

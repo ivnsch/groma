@@ -214,6 +214,10 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func onTopBarTitleTap() {
+        back()
+    }
+    
+    func back() {
         onExpand(false)
         topQuickAddControllerManager?.controller?.onClose()
         expandDelegate?.setExpanded(false)
@@ -427,8 +431,8 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     func remove(model: ProductWithQuantity, onSuccess: VoidFunction, onError: ProviderResult<Any> -> Void) {
         Providers.listItemGroupsProvider.remove((model as! ProductWithQuantityGroup).groupItem, remote: true, resultHandler(onSuccess: {
             onSuccess()
-            }, onError: {result in
-                onError(result)
+        }, onError: {result in
+            onError(result)
         }))
     }
     

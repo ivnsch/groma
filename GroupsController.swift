@@ -110,15 +110,17 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         
         models = reorderedGroups.map{ExpandableTableViewGroupModel(group: $0)}
         
-        Providers.listItemGroupsProvider.updateGroupsOrder(orderUpdates, remote: true, successHandler{
-        })
+        Providers.listItemGroupsProvider.updateGroupsOrder(orderUpdates, remote: true, resultHandler(onSuccess: {
+            }, onErrorAdditional: {[weak self] result in
+                self?.initModels()
+            }
+        ))
     }
     
     override func onRemoveModel(model: ExpandableTableViewModel) {
         Providers.listItemGroupsProvider.remove((model as! ExpandableTableViewGroupModel).group, remote: true, resultHandler(onSuccess: {
-            }, onError: {[weak self] result in
+            }, onErrorAdditional: {[weak self] result in
                 self?.initModels()
-                self?.defaultErrorHandler()(providerResult: result)
             }
         ))
     }
@@ -224,6 +226,19 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         topAddEditListControllerManager?.expand(false)
         setTopBarState(.NormalFromExpanded)
     }
+    
+    func onGroupAddError(group: ListItemGroup) {
+        initModels()
+        // If the user quickly after adding the group opened its group items controller, close it.
+        for childViewController in childViewControllers {
+            if let groupItemsController = childViewController as? GroupItemsController {
+                if (groupItemsController.group.map{$0.same(group)}) ?? false {
+                    groupItemsController.back()
+                }
+            }
+        }
+    }
+    
     
     // MARK: - ExpandableTopViewControllerDelegate
     
