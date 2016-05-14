@@ -78,6 +78,10 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         didSet {
             if let listToEdit = listToEdit {
                 prefill(listToEdit)
+                
+                // Editing of store for now disabled, see comment under "Edit store note" for reason
+                storeInputField.enabled = false
+                storeInputField.userInteractionEnabled = false
             }
         }
     }
@@ -266,7 +270,36 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             
             
             if let listToEdit = weakSelf.listToEdit {
-                
+            
+                // Edit store note
+                // This was the start of update store functionality but this turns to be complicated, for the user we have to update the referenced store products, which is easy but if the list has participants, we also have to do this also for them, which is not so easy, should we do this immediately or when pulling, how, etc. Doing nothing for the participants is not an option as they'd stay in a list with new store B but the store products have still store A which is an invalid state and leads to inconsistencies - e.g. when they update the price of the store product, it will affect store products in other lists with store A, while they expect it to affect lists with store B as this is the store that the list is showing. Note: we can't just update the store of the products! This would change the store of this products also in other lists - we have to change the reference of the list items to store products.
+//                // If oldDifferentStore is nil, it means the store was not updated
+//                func afterStoreUpdateCheck(oldDifferentStore: String?) {
+//                    
+//                    let message: String = {
+//                        if store?.isEmpty ?? true {
+//                            return "You're removing the store of '\(listName)'. The products used in this list will be replaced with products that don't have a list. This may affect the current prices in this list."
+//                        } else {
+//                            return "You're assigning a new store to '\(listName)'. The products used in this list will be replaced with products of the new store. This may affect the current prices in this list."
+//                        }
+//                    }()
+//                    
+//                    ConfirmationPopup.show(title: "Store update", message: message, okTitle: "Continue", cancelTitle: "Cancel", controller: weakSelf, onOk: {
+//                        
+//                        let totalUsers = weakSelf.users + weakSelf.invitedUsers
+//                        
+//                        // Note on shared users: if the shared users controller was not opened this will be nil so listToEdit is not affected (passing nil on copy is a noop)
+//                        let updatedList = listToEdit.copy(name: listName, users: totalUsers, bgColor: bgColor, inventory: inventory, store: ListCopyStore(store))
+//                        self?.delegate?.onUpdateList(updatedList, oldDifferentStore: oldDifferentStore)
+//                        
+//                    }, onCancel: nil)
+//                }
+//                if store != listToEdit.store {
+//                    afterStoreUpdateCheck(store)
+//                } else {
+//                    afterStoreUpdateCheck(nil)
+//                }
+            
                 let totalUsers = weakSelf.users + weakSelf.invitedUsers
 
                 // Note on shared users: if the shared users controller was not opened this will be nil so listToEdit is not affected (passing nil on copy is a noop)

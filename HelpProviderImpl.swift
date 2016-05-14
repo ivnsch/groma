@@ -88,6 +88,8 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Can I use this app as a todo list? A household finances app?", text: "Why not? This is obviously not the main focus of this app but nothing hinders you from creative repurposing. You can for example combine normal shopping items with items that act as tasks or reminders. Or have lists with the items that represent the fixed costs in you home, like electricity or rent, and move them to the inventory - maybe a different one than your main inventory - to have a more complete overview of the overall expenses."),
         
         HelpItem(title: "What happens when my account is removed?", text: "Your data in the server is removed permanently. If you share list or inventories with other users these are not affected, except that you are removed as a participant. The data in your device is also not affected and you can continue using the app normally."),
+
+        HelpItem(title: "Can I change the store of a list?", text: "No, once the list is submitted, the store can't be changed. If you need to do this you have to delete the list and create a new one with the new store."),
         
         HelpItem(title: "Troubleshooting: I'm not receiving real time updates", text: "First of all, check if you're logged in! Real time updates don't work when you aren't logged in. If you are logged in, ensure that the real time connection is enabled in the settings. When the connections drops while you are logged in, the app tries to reestablish it automatically (you will see a label above the tab bar 'connecting to server...') in this case you only have to wait until the label disappears.", type: .Troubleshooting),
         
@@ -142,6 +144,8 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "Was passiert wenn mein Benutzerkonto gelöscht wird?", text: "Deine Daten werden permanent gelöscht. Wenn du Listen oder Inventare geteilt hast, wird für die andere Betnutzer alles gleich bleiben, außer dass du als Teilnehmer verschwindest. Die daten auf deinem Gerät bleiben auch erhalten und du kannst die App normal weiter benutzen."),
         
+        HelpItem(title: "Kann ich den Laden von einer Liste ändern?", text: "Nein, nachdem die Liste gespeichert wurde, kann der Laden nicht mehr geändert werden. Falls du dies brauchst, musst du die alte Liste löschen und eine neue mit dem neuen Laden erstellen."),
+        
         HelpItem(title: "Fehlerbehandlung: Ich bekomme keine Echtzeit Updates", text: "Zuerst überprüfe on du eingeloggt bist. Als nächstes stelle sicher dass die Echtzeitverbindung, in den Einstellungen, aktiviert ist. Wenn die Verbindung mit dem Server verloren geht während du eingeloggt bist, wird die App versuchen die automatisch wieder herzustellen (du wirst ein TODO***Schildchen**** unten sehen mit 'Verbinde mit Server...' In diesem Fall musst du nur warten bis dass das TODO***Schildchen*** verschwindet.", type: .Troubleshooting),
         
         HelpItem(title: "Fehlerbehandlung: Die synchronisierung funktioniert nicht", text: "Wenn du wiederholend synchronisierungsfehler bekommst, als Notlösung, kannst du in den Einstellungen 'Lokale Daten überschreiben' wählen. Hiermit werden deine lokale Daten mit den Daten überschrieben, die du das letzte Mal erfolgreich synchronisiert hast, und somit mögliche Ursachen vom Synchronisierungsfehler beseitigt. Diese Einstellung ist natürlich nur sichtbar wenn du eingeloggt bist und eine aktive Internetverbindung hast.", type: .Troubleshooting),
@@ -193,6 +197,8 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Puedo utilizar esta app para comprar en línea?", text: "Sí. El uso para este fin por el momento no es óptimo pero se encuentra en desarrollo y mejorará gradualmente en próximos updates."),
         
         HelpItem(title: "Qué pasa cuando mi cuenta es borrada?", text: "Tus datos son borrados permanentemente. Si compartes una listas o inventarios con otras personas, estos no serán afectados, excepto que tú eres removido(a) como participante. Los datos en tu device no son afectados y puedes continuar usando la app normalmente."),
+        
+        HelpItem(title: "Puedo cambiar el almancén de una lista?", text: "No, después que guardas la lista, el almacén no se puede cambiar. Si necesitas cambiarlo tienes que borrar la lista z crear una nueva con el nuevo almancén."),
         
         HelpItem(title: "Problemas: No estoy recibiendo updates en tiempo real", text: "Primero que todo, revisa que tanto conexión internet esté activa y como conectado(a) con tu cuenta de usuario en Groma. Updates en tiempo real no funcionan si no estás conectado(a). Si lo estás, asegura que la conexión de tiempo real está activa en las preferencias. Cuando la conexión a internet se pierde mientras estás conectado(a) la app intenta reestablecerla automáticamente. Es este caso ves un un label arriba de los tabs en la parte baja, que dice 'conectando al servidor...' En este caso sólo tienes que esperar hasta que este label desaparezca, lo que significa que la conexión fué reestablecida.", type: .Troubleshooting),
         
