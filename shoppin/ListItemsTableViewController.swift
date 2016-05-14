@@ -763,6 +763,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     /**
     Sets pending item (mark as undo" if open and shows cell open state. Submits currently pending item if existent.
     parameter onFinish: After cell marked open and automatic update of possible second "undo" item (to "done").
+     // TODO!!!! remove notify remote parameter, this is necessary anymore
     */
     func markOpen(open: Bool, indexPath: NSIndexPath, notifyRemote: Bool, onFinish: VoidFunction? = nil) {
         if let section = self.tableViewSections[safe: indexPath.section], tableViewListItem = section.tableViewListItems[safe: indexPath.row] {

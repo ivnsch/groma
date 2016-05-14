@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO rename in ProductGroup, this is not anymore a group of list items
 class ListItemGroup: Identifiable, Equatable {
 
     let uuid: String
