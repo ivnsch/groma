@@ -34,15 +34,17 @@ class ExpandableItemsTableViewCell: UITableViewCell {
                 let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: model.bgColor, isFlat: true)
                 listName.textColor = contrastingTextColor
                 
-                if let subtitle = model.subtitle {
-                    subtitleLabel?.text = subtitle
-                    subtitleLabel?.textColor = contrastingTextColor
-                    subtitleLabel?.hidden = false
-                    nameVerticalCenterConstraint?.constant = -10
-                } else {
+                // For now no subtitle, it makes the screen look overloaded. If we enable it we also need to animate properly on open/close
+//                if let subtitle = model.subtitle {
+//                    subtitleLabel?.text = subtitle
+//                    subtitleLabel?.textColor = contrastingTextColor
+//                    subtitleLabel?.hidden = false
+//                    nameVerticalCenterConstraint?.constant = -10
+//                } else {
                     subtitleLabel?.hidden = true
                     nameVerticalCenterConstraint?.constant = 0
-                }
+//                }
+                
                 
 //                let showUserInfo = model.users.count > 0
                 let showUserInfo = false
