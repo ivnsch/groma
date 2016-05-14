@@ -13,9 +13,8 @@ import QorumLogs
 
 //change
 protocol AddEditGroupControllerDelegate: class {
-    func onGroupAdded(inventory: ListItemGroup)
-    func onGroupAddError(group: ListItemGroup)
-    func onGroupUpdated(inventory: ListItemGroup)
+    func onAddGroup(group: ListItemGroup)
+    func onUpdateGroup(group: ListItemGroup)
 }
 
 // TODO after final design either remove color code or reenable it
@@ -126,23 +125,15 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
             guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
             guard let listName = weakSelf.groupNameInputField.text else {QL4("Validation was not implemented correctly"); return}
 
-
             if let listToEdit = weakSelf.listToEdit {
-                let updatedList = listToEdit.copy(name: listName, bgColor: bgColor)
-                Providers.listItemGroupsProvider.update(updatedList, remote: true, weakSelf.successHandler{//change
-                    weakSelf.delegate?.onGroupUpdated(updatedList)
-                })
+                let updatedGroup = listToEdit.copy(name: listName, bgColor: bgColor)
+                weakSelf.delegate?.onUpdateGroup(updatedGroup)
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
-                let inventoryWithSharedUsers = ListItemGroup(uuid: NSUUID().UUIDString, name: listName, bgColor: bgColor, order: currentListsCount)
-                    Providers.listItemGroupsProvider.add(inventoryWithSharedUsers, remote: true, weakSelf.resultHandler(onSuccess: {
-                        weakSelf.delegate?.onGroupAdded(inventoryWithSharedUsers)
-                        }, onErrorAdditional: {result in
-                            weakSelf.delegate?.onGroupAddError(inventoryWithSharedUsers)
-                        }
-                    ))
+                    let group = ListItemGroup(uuid: NSUUID().UUIDString, name: listName, bgColor: bgColor, order: currentListsCount)
+                    weakSelf.delegate?.onAddGroup(group)
                 } else {
-                    print("Error: no currentListsCount")
+                    QL4("No currentListsCount")
                 }
             }
         }

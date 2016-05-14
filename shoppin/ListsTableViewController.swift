@@ -197,26 +197,26 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     // MARK: - AddEditListControllerDelegate
-    //sub?
-    func onListAdded(list: List) {
-        tableView.wrapUpdates {[weak self] in
-            if let weakSelf = self {
-                self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
-                self?.models.append(ExpandableTableViewListModel(list: list))
-                self?.topAddEditListControllerManager?.expand(false)
-                self?.setTopBarState(.NormalFromExpanded)
+    
+    func onAddList(list: List) {
+        Providers.listProvider.add(list, remote: true, resultHandler(onSuccess: {[weak self] list in
+            self?.addListUI(list)
+            }, onErrorAdditional: {[weak self] result in
+                self?.onListAddOrUpdateError(list)
             }
-        }
-    }
-
-    func onListUpdated(list: List) {
-        models.update(ExpandableTableViewListModel(list: list))
-        tableView.reloadData()
-        topAddEditListControllerManager?.expand(false)
-        setTopBarState(.NormalFromExpanded)
+        ))
     }
     
-    func onListAddError(list: List) {
+    func onUpdateList(list: List) {
+        Providers.listProvider.update([list], remote: true, resultHandler(onSuccess: {[weak self] in
+            self?.updateListUI(list)
+            }, onErrorAdditional: {[weak self] result in
+                self?.onListAddOrUpdateError(list)
+            }
+        ))
+    }
+
+    private func onListAddOrUpdateError(list: List) {
         initModels()
         // If the user quickly after adding the list opened its list items controller, close it.
         for childViewController in childViewControllers {
@@ -227,6 +227,25 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             }
         }
     }
+    
+    private func addListUI(list: List) {
+        tableView.wrapUpdates {[weak self] in
+            if let weakSelf = self {
+                self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
+                self?.models.append(ExpandableTableViewListModel(list: list))
+                self?.topAddEditListControllerManager?.expand(false)
+                self?.setTopBarState(.NormalFromExpanded)
+            }
+        }
+    }
+    
+    private func updateListUI(list: List) {
+        models.update(ExpandableTableViewListModel(list: list))
+        tableView.reloadData()
+        topAddEditListControllerManager?.expand(false)
+        setTopBarState(.NormalFromExpanded)
+    }
+    
     
     // MARK: - ExpandableTopViewControllerDelegate
     
@@ -259,9 +278,9 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 let list = notification.obj
                 switch notification.verb {
                 case .Add:
-                    onListAdded(list)
+                    addListUI(list)
                 case .Update:
-                    onListUpdated(list)
+                    updateListUI(list)
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {

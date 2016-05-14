@@ -209,25 +209,43 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     // MARK: - EditListViewController
     //change
-    func onGroupAdded(list: ListItemGroup) {
+    func onAddGroup(group: ListItemGroup) {
+        Providers.listItemGroupsProvider.add(group, remote: true, resultHandler(onSuccess: {[weak self] in
+            self?.addGroupUI(group)
+            }, onErrorAdditional: {[weak self] result in
+                self?.onGroupAddOrUpdateError(group)
+            }
+        ))
+    }
+    
+    func onUpdateGroup(group: ListItemGroup) {
+        Providers.listItemGroupsProvider.update(group, remote: true, resultHandler(onSuccess: {[weak self] in
+            self?.updateGroupUI(group)
+            }, onErrorAdditional: {[weak self] result in
+                self?.onGroupAddOrUpdateError(group)
+            }
+        ))
+    }
+    
+    private func addGroupUI(group: ListItemGroup) {
         tableView.wrapUpdates {[weak self] in
             if let weakSelf = self {
                 self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
-                self?.models.append(ExpandableTableViewGroupModel(group: list))
+                self?.models.append(ExpandableTableViewGroupModel(group: group))
                 self?.topAddEditListControllerManager?.expand(false)
                 self?.setTopBarState(.NormalFromExpanded)
             }
         }
     }
     
-    func onGroupUpdated(list: ListItemGroup) {
-        models.update(ExpandableTableViewGroupModel(group: list))
+    private func updateGroupUI(group: ListItemGroup) {
+        models.update(ExpandableTableViewGroupModel(group: group))
         tableView.reloadData()
         topAddEditListControllerManager?.expand(false)
         setTopBarState(.NormalFromExpanded)
     }
     
-    func onGroupAddError(group: ListItemGroup) {
+    private func onGroupAddOrUpdateError(group: ListItemGroup) {
         initModels()
         // If the user quickly after adding the group opened its group items controller, close it.
         for childViewController in childViewControllers {
@@ -238,7 +256,6 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
             }
         }
     }
-    
     
     // MARK: - ExpandableTopViewControllerDelegate
     
@@ -258,10 +275,10 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
                 let group = notification.obj
                 switch notification.verb {
                 case .Add:
-                    onGroupAdded(group)
+                    addGroupUI(group)
                 case .Update:
                     Providers.listItemGroupsProvider.update(group, remote: false, successHandler{[weak self] in
-                        self?.onGroupUpdated(group)
+                        self?.updateGroupUI(group)
                     })
                 default: QL4("Not handled case: \(notification.verb))")
                 }

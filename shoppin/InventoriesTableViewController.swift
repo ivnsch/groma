@@ -202,25 +202,43 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     // MARK: - AddEditInventoryControllerDelegate
     
-    func onInventoryAdded(list: Inventory) {
+    func onAddInventory(inventory: Inventory) {
+        Providers.inventoryProvider.addInventory(inventory, remote: true, resultHandler(onSuccess: {[weak self] in
+            self?.addInventoryUI(inventory)
+            }, onErrorAdditional: {[weak self] result in
+                self?.onInventoryAddOrUpdateError(inventory)
+            }
+        ))
+    }
+    
+    func onUpdateInventory(inventory: Inventory) {
+        Providers.inventoryProvider.updateInventory(inventory, remote: true, resultHandler(onSuccess: {[weak self] in
+            self?.updateInventoryUI(inventory)
+            }, onErrorAdditional: {[weak self] result in
+                self?.onInventoryAddOrUpdateError(inventory)
+            }
+        ))
+    }
+    
+    private func addInventoryUI(inventory: Inventory) {
         tableView.wrapUpdates {[weak self] in
             if let weakSelf = self {
                 self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
-                self?.models.append(ExpandableTableViewInventoryModel(inventory: list))
+                self?.models.append(ExpandableTableViewInventoryModel(inventory: inventory))
                 self?.topAddEditListControllerManager?.expand(false)
                 self?.setTopBarState(.NormalFromExpanded)
             }
         }
     }
     
-    func onInventoryUpdated(list: Inventory) {
-        models.update(ExpandableTableViewInventoryModel(inventory: list))
+    private func updateInventoryUI(inventory: Inventory) {
+        models.update(ExpandableTableViewInventoryModel(inventory: inventory))
         tableView.reloadData()
         topAddEditListControllerManager?.expand(false)
         setTopBarState(.NormalFromExpanded)
     }
     
-    func onInventoryAddError(inventory: Inventory) {
+    private func onInventoryAddOrUpdateError(inventory: Inventory) {
         initModels()
         // If the user quickly after adding the inventory opened its inventory items controller, close it.
         for childViewController in childViewControllers {
@@ -240,10 +258,10 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                 let inventory = notification.obj
                 switch notification.verb {
                 case .Add:
-                    onInventoryAdded(inventory)
+                    addInventoryUI(inventory)
                 case .Update:
                     Providers.inventoryProvider.updateInventory(inventory, remote: false, successHandler{[weak self] in
-                        self?.onInventoryUpdated(inventory)
+                        self?.updateInventoryUI(inventory)
                     })
                 default: QL4("Not handled case: \(notification.verb))")
                 }

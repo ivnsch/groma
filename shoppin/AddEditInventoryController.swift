@@ -13,9 +13,8 @@ import QorumLogs
 
 //change
 protocol AddEditInventoryControllerDelegate: class {
-    func onInventoryAdded(inventory: Inventory)
-    func onInventoryAddError(inventory: Inventory)
-    func onInventoryUpdated(inventory: Inventory)
+    func onAddInventory(inventory: Inventory)
+    func onUpdateInventory(inventory: Inventory)
 }
 
 // TODO try to refactor with AddEditListController, lot of repeated code
@@ -162,24 +161,17 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
                 
                 let totalUsers = weakSelf.users + weakSelf.invitedUsers
 
-                let updatedList = listToEdit.copy(name: listName, users: totalUsers, bgColor: bgColor)
-                Providers.inventoryProvider.updateInventory(updatedList, remote: true, weakSelf.successHandler{//change
-                    weakSelf.delegate?.onInventoryUpdated(updatedList)
-                })
-                
+                let updatedInventory = listToEdit.copy(name: listName, users: totalUsers, bgColor: bgColor)
+                weakSelf.delegate?.onUpdateInventory(updatedInventory)
+
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
                     
                     // If it's a new inventory add myself as a participant, to be consistent with list after server updates it (server adds the caller as a participant)
                     let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
                     
-                    let inventoryWithSharedUsers = Inventory(uuid: NSUUID().UUIDString, name: listName, users: totalUsers, bgColor: bgColor, order: currentListsCount)//change
-                    Providers.inventoryProvider.addInventory(inventoryWithSharedUsers, remote: true, weakSelf.resultHandler(onSuccess: {
-                        weakSelf.delegate?.onInventoryAdded(inventoryWithSharedUsers)
-                        }, onErrorAdditional: {result in
-                            weakSelf.delegate?.onInventoryAddError(inventoryWithSharedUsers)
-                        }
-                    ))
+                    let inventory = Inventory(uuid: NSUUID().UUIDString, name: listName, users: totalUsers, bgColor: bgColor, order: currentListsCount)//change
+                    weakSelf.delegate?.onAddInventory(inventory)
                 } else {
                     print("Error: no currentListsCount")
                 }

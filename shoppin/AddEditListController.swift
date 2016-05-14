@@ -13,9 +13,8 @@ import CMPopTipView
 import QorumLogs
 
 protocol AddEditListControllerDelegate: class {
-    func onListAdded(list: List)
-    func onListAddError(list: List)
-    func onListUpdated(list: List)
+    func onAddList(list: List)
+    func onUpdateList(list: List)
 }
 
 // TODO try to refactor with AddEditInventoryController, lot of repeated code
@@ -272,9 +271,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
 
                 // Note on shared users: if the shared users controller was not opened this will be nil so listToEdit is not affected (passing nil on copy is a noop)
                 let updatedList = listToEdit.copy(name: listName, users: totalUsers, bgColor: bgColor, inventory: inventory, store: ListCopyStore(store))
-                Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
-                    weakSelf.delegate?.onListUpdated(updatedList)
-                })
+                self?.delegate?.onUpdateList(updatedList)
             
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
@@ -282,15 +279,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                     // If it's a new list add myself as a participant, to be consistent with list after server updates it (server adds the caller as a participant)
                     let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
                     
-                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: totalUsers, bgColor: bgColor, order: currentListsCount, inventory: inventory, store: store)
+                    let list = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: totalUsers, bgColor: bgColor, order: currentListsCount, inventory: inventory, store: store)
                     
-                    
-                    Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.resultHandler(onSuccess: {list in
-                        weakSelf.delegate?.onListAdded(list)
-                        }, onErrorAdditional: {result in
-                            weakSelf.delegate?.onListAddError(listWithSharedUsers)
-                        }
-                    ))
+                    self?.delegate?.onAddList(list)
                     
                 } else {
                     QL4("No currentListsCount")
