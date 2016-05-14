@@ -184,27 +184,14 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }
     }
     
-    func onGroupItemUpdated(tryCloseTop: Bool) {
-        // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
-        reload()
-//        topAddEditListItemControllerManager?.controller?.clear()
-        if tryCloseTop {
-            topQuickAddControllerManager?.expand(false)
-            topQuickAddControllerManager?.controller?.onClose()
-            topBarOnCloseExpandable()
-        }
+    func closeTopController() {
+        topQuickAddControllerManager?.expand(false)
+        topQuickAddControllerManager?.controller?.onClose()
+        topBarOnCloseExpandable()
     }
     
     private func reload() {
         productsWithQuantityController?.clearAndLoadFirstPage()
-    }
-    
-    func onGroupItemAdded(tryCloseTop: Bool) {
-        // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
-        reload()
-        if tryCloseTop {
-            toggleTopAddController()
-        }
     }
     
     // MARK: - ListTopBarViewDelegate
@@ -330,17 +317,31 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
         
         func onEditItem(input: ListItemInput, editingItem: GroupItem) {
-            Providers.listItemGroupsProvider.update(input, updatingGroupItem: editingItem, remote: true, successHandler{[weak self] in
-                self?.onGroupItemUpdated(true)
-            })
+            Providers.listItemGroupsProvider.update(input, updatingGroupItem: editingItem, remote: true, resultHandler (onSuccess: {[weak self] (inventoryItem, replaced) in
+                if replaced { // if an item was replaced (means: a previous item with same unique as the updated item already existed and was removed from the inventory) reload items to get rid of it.
+                    self?.reload()
+                } else {
+                    self?.updateItemUI(inventoryItem)
+                    self?.closeTopController()
+                }
+            }, onError: {[weak self] result in
+                self?.reload()
+                self?.defaultErrorHandler()(providerResult: result)
+            }))
         }
         
         func onAddItem(input: ListItemInput) {
             if let group = group {
                 let groupItemInput = GroupItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
-                Providers.listItemGroupsProvider.add(groupItemInput, group: group, remote: true, self.successHandler{[weak self] groupItem in
-                    self?.onGroupItemAdded(true)
-                })
+                Providers.listItemGroupsProvider.add(groupItemInput, group: group, remote: true, resultHandler (onSuccess: {[weak self] groupItem in
+                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end.
+                    self?.reload()
+                    self?.closeTopController()
+                }, onError: {[weak self] result in
+                    self?.reload()
+                    self?.closeTopController()
+                    self?.defaultErrorHandler()(providerResult: result)
+                }))
             } else {
                 QL4("Group isn't set, can't add item")
             }

@@ -180,7 +180,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func onInventoryItemUpdated() {
+    func closeTopController() {
         topQuickAddControllerManager?.expand(false)
         topQuickAddControllerManager?.controller?.onClose()
         topBarOnCloseExpandable()
@@ -344,13 +344,16 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
         
         func onEditListItem(input: ListItemInput, editingItem: InventoryItem) {
-            let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
-            let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
-            // TODO! calculate quantity delta correctly?
-            let updatedInventoryItem = editingItem.copy(quantity: input.quantity, quantityDelta: input.quantity, product: updatedProduct)
-            Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, resultHandler (onSuccess: {[weak self] in
-                self?.updateItemUI(updatedInventoryItem)
-                self?.onInventoryItemUpdated()
+
+            let inventoryItemInput = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
+            
+            Providers.inventoryItemsProvider.updateInventoryItem(inventoryItemInput, updatingInventoryItem: editingItem, remote: true, resultHandler (onSuccess: {[weak self]  (inventoryItem, replaced) in
+                if replaced { // if an item was replaced (means: a previous item with same unique as the updated item already existed and was removed from the inventory) reload items to get rid of it.
+                    self?.reload()
+                } else {
+                    self?.updateItemUI(inventoryItem)
+                    self?.closeTopController()
+                }
             }, onError: {[weak self] result in
                 self?.reload()
                 self?.defaultErrorHandler()(providerResult: result)
@@ -361,13 +364,15 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if let inventory = inventory {
                 let input = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
                 
-                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, remote: true, successHandler{[weak self] addedOrIncrementedInventoryItem in
+                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, remote: true, resultHandler (onSuccess: {[weak self] groupItem in
                     // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end.
                     self?.reload()
-                    
-                    
-                    self?.toggleTopAddController()
-                })
+                    self?.closeTopController()
+                }, onError: {[weak self] result in
+                    self?.reload()
+                    self?.closeTopController()
+                    self?.defaultErrorHandler()(providerResult: result)
+                }))
             } else {
                 QL4("Inventory isn't set, can't add item")
             }

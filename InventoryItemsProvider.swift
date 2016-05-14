@@ -26,6 +26,8 @@ protocol InventoryItemsProvider {
     // Add inventory and history items in a transaction. Used by e.g. websocket
     func addToInventoryLocal(inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: ProviderResult<Any> -> Void)
     
+    func updateInventoryItem(input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, _ handler: ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)> -> Void)
+
     func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
     // For websocket - simply upserts the inventory item, does not any checks or re-referencing of dependencies.

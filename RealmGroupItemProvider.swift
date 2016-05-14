@@ -195,6 +195,21 @@ class RealmGroupItemProvider: RealmProvider {
         })
     }
     
+    // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
+    func deletePossibleGroupItemWithUnique(productName: String, productBrand: String, group: ListItemGroup, handler: Bool -> Void) {
+        removeReturnCount(DBGroupItem.createFilterGroupAndProductName(group.uuid, productName: productName, productBrand: productBrand), handler: {removedCountMaybe in
+            if let removedCount = removedCountMaybe {
+                if removedCount > 0 {
+                    QL2("Found group item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), group: {\(group.uuid), \(group.name)}")
+                }
+            } else {
+                QL4("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(group.uuid), \(group.name)}")
+            }
+            handler(removedCountMaybe.map{$0 > 0} ?? false)
+        }, objType: DBGroupItem.self)
+    }
+    
+    
     // Expected to be executed in do/catch and write block
     func removeGroupItemsForGroupSync(realm: Realm, groupUuid: String, markForSync: Bool) -> Bool {
         let dbGroupItems = realm.objects(DBGroupItem).filter(DBGroupItem.createFilterGroup(groupUuid))

@@ -255,6 +255,31 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
+    func updateInventoryItem(input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, _ handler: ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)> -> Void) {
+        
+        // Remove a possible already existing item with same unique (name+brand) in the same list.
+        DBProviders.inventoryItemProvider.deletePossibleInventoryItemWithUnique(input.productPrototype.name, productBrand: input.productPrototype.brand, inventory: updatingInventoryItem.inventory) {foundAndDeletedInventoryItem in
+            // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
+            Providers.productProvider.mergeOrCreateProduct(input.productPrototype.name, category: input.productPrototype.category, categoryColor: input.productPrototype.categoryColor, brand: input.productPrototype.brand, updateCategory: false) {[weak self] result in
+                
+                if let product = result.sucessResult {
+                    let updatedInventoryItem = updatingInventoryItem.copy(quantity: input.quantity, product: product)
+                    self?.updateInventoryItem(updatedInventoryItem, remote: remote) {result in
+                        if result.success {
+                            handler(ProviderResult(status: .Success, sucessResult: (inventoryItem: updatedInventoryItem, replaced: foundAndDeletedInventoryItem)))
+                        } else {
+                            QL4("Error updating inventory item: \(result)")
+                            handler(ProviderResult(status: result.status))
+                        }
+                    }
+                } else {
+                    QL4("Error fetching product: \(result.status)")
+                    handler(ProviderResult(status: .DatabaseUnknown))
+                }
+            }
+        }
+    }
+    
     // TODO!!!!update now has to load first possible existent product by unique like in group item/list item update. -- explanation: because on update we can change the unique, e.g. different name+brand for product and in this case we don't want to update the underlaying product but change the item's reference to a possible already existing product with this new unique, or create a new one.
     func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         memProvider.updateInventoryItem(item)

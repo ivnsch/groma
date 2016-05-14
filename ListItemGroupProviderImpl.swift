@@ -311,16 +311,27 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     
-    func update(input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func update(input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: ProviderResult<(groupItem: GroupItem, replaced: Bool)> -> Void) {
         
-        Providers.productProvider.mergeOrCreateProduct(input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand, updateCategory: false) {[weak self] result in
-            
-            if let product = result.sucessResult {
-                let updatedGroupItem = updatingGroupItem.copy(quantity: input.quantity, product: product)
-                self?.update(updatedGroupItem, remote: remote, handler)
-            } else {
-                QL4("Error fetching product: \(result.status)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+        // Remove a possible already existing item with same unique (name+brand) in the same list.
+        DBProviders.groupItemProvider.deletePossibleGroupItemWithUnique(input.name, productBrand: input.brand, group: updatingGroupItem.group) {foundAndDeletedGroupItem in
+            // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
+            Providers.productProvider.mergeOrCreateProduct(input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand, updateCategory: false) {[weak self] result in
+                
+                if let product = result.sucessResult {
+                    let updatedGroupItem = updatingGroupItem.copy(quantity: input.quantity, product: product)
+                    self?.update(updatedGroupItem, remote: remote) {result in
+                        if result.success {
+                            handler(ProviderResult(status: .Success, sucessResult: (groupItem: updatedGroupItem, replaced: foundAndDeletedGroupItem)))
+                        } else {
+                            QL4("Error updating group item: \(result)")
+                            handler(ProviderResult(status: result.status))
+                        }
+                    }
+                } else {
+                    QL4("Error fetching product: \(result.status)")
+                    handler(ProviderResult(status: .DatabaseUnknown))
+                }
             }
         }
     }
