@@ -14,7 +14,7 @@ class ListItemProviderImpl: ListItemProvider {
 
     let dbProvider = RealmListItemProvider()
     let remoteProvider = RemoteListItemProvider()
-    let memProvider = MemListItemProvider(enabled: false)
+    let memProvider = MemListItemProvider(enabled: true)
 
     // MARK: - Get
     
