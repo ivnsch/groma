@@ -16,11 +16,11 @@ class ListProviderImpl: ListProvider {
     
     // Note: programmatic sorting 2x. But users normally have only a few lists so it's ok
     func lists(remote: Bool = true, _ handler: ProviderResult<[List]> -> ()) {
-        DBProviders.listProvider.loadLists{(var dbLists) in
+        DBProviders.listProvider.loadLists{dbLists in
             
-            dbLists = dbLists.sortedByOrder()
+            let sortedDBLists = dbLists.sortedByOrder()
             
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbLists))
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: sortedDBLists))
             
             if remote {
                 self.remoteListProvider.lists {remoteResult in
@@ -29,11 +29,11 @@ class ListProviderImpl: ListProvider {
                         let lists: [List] = ListMapper.listsWithRemote(remoteLists)
                         
                         // if there are no local lists or there's a difference, overwrite the local lists
-                        if dbLists != lists {
+                        if sortedDBLists != lists {
                             
                             DBProviders.listProvider.overwriteLists(lists, clearTombstones: true) {saved in
                                 if saved {
-                                    if !dbLists.equalsExcludingSyncAttributes(lists) { // the sync attributes are not relevant to the ui so notify ui only if sth else changed
+                                    if !sortedDBLists.equalsExcludingSyncAttributes(lists) { // the sync attributes are not relevant to the ui so notify ui only if sth else changed
                                         handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
                                     }
                                 } else {
