@@ -82,6 +82,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                 // Editing of store for now disabled, see comment under "Edit store note" for reason
                 storeInputField.enabled = false
                 storeInputField.userInteractionEnabled = false
+                storeInputField.placeholder = nil
             }
         }
     }
