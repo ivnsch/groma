@@ -270,11 +270,13 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             
             Providers.productProvider.productsWithPosibleSections(searchText, list: list, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 
+                // TODO bug: some times (rarely) it shows nothing after opening quickly and typing (maybe first time?). Log showed 23 results last time is happened. It shows nothing after this line, meaning that onListItems is not called, meaning tuple.substring == weakSelf.searchText is false?
                 QL1("Loaded products, current search: \(self?.searchText), range: \(self?.paginator.currentPage), sortBy: \(self?.contentData.sortBy), result search: \(tuple.substring), results: \(tuple.productsWithMaybeSections.count)")
                 
                 if let weakSelf = self {
                     // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
                     // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
+                    QL1("Comparing: #\(tuple.substring)# with #\(weakSelf.searchText)#")
                     if tuple.substring == weakSelf.searchText {
                         let quickAddItems = tuple.productsWithMaybeSections.map{QuickAddProduct($0.product, colorOverride: $0.section.map{$0.color}, boldRange: $0.product.name.range(weakSelf.searchText, caseInsensitive: true))}
                         onItemsLoaded(quickAddItems)
