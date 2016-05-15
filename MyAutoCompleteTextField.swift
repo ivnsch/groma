@@ -15,6 +15,8 @@ protocol MyAutoCompleteTextFieldDelegate {
 
 class MyAutoCompleteTextField: MLPAutoCompleteTextField {
 
+    @IBInspectable var fontType: Int = -1
+    
     var myDelegate: MyAutoCompleteTextFieldDelegate?
 
     private var borderLayer: CALayer?
@@ -32,6 +34,13 @@ class MyAutoCompleteTextField: MLPAutoCompleteTextField {
     
     private func sharedInit() {
         registerAutoCompleteCellClass(MyAutocompleteCell.self, forCellReuseIdentifier: "myAutoCompleteCell")
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        if let size = LabelMore.mapToFontSize(fontType) {
+            self.font = UIFont.systemFontOfSize(size)
+        }
     }
     
     override func configureCell(cell: UITableViewCell!, atIndexPath indexPath: NSIndexPath!, withAutoCompleteString string: String!) {

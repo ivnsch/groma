@@ -433,7 +433,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     // MARK: - MLPAutoCompleteTextFieldDelegate
     
-    // TODO remove this?
     func autoCompleteTextField(textField: MLPAutoCompleteTextField!, didSelectAutoCompleteString selectedString: String!, withAutoCompleteObject selectedObject: MLPAutoCompletionObject!, forRowAtIndexPath indexPath: NSIndexPath!) {
 
         if textField == sectionInput {
