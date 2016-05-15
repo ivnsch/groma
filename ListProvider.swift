@@ -12,7 +12,7 @@ protocol ListProvider {
     
     func lists(remote: Bool, _ handler: ProviderResult<[List]> -> ())
     
-    func list(listId: String, _ handler: ProviderResult<List> -> ())
+    func list(listUuid: String, _ handler: ProviderResult<List> -> ())
   
     // TODO move list-only methods from listitemsprovider here
 

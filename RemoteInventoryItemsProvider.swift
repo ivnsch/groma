@@ -18,18 +18,6 @@ class RemoteInventoryItemsProvider: Any {
     }
 
     // Adds inventoryItems to remote, IMPORTANT: All items are assumed to have the same inventory TODO maybe implement server service such that we don't have to put inventory uuid in url, and just use the inventory for each inventory item for the insert
-    func addToInventory(inventoryItems: [InventoryItemWithHistoryItem], handler: RemoteResult<RemoteInventoryItemsWithHistoryAndDependencies> -> ()) {
-        let parameters = inventoryItems.map{[weak self] in self!.toDictionary($0)}
-        if let inventoryUuid = inventoryItems.first?.inventoryItem.inventory.uuid {
-            RemoteProvider.authenticatedRequest(.POST, Urls.inventoryItems + "/\(inventoryUuid)", parameters) {result in
-                handler(result)
-            }
-        } else {
-            print("Warn: RemoteInventoryItemsProvider.addToInventory: called without items. Remote service was not called.")
-        }
-    }
-
-    // Adds inventoryItems to remote, IMPORTANT: All items are assumed to have the same inventory TODO maybe implement server service such that we don't have to put inventory uuid in url, and just use the inventory for each inventory item for the insert
     func addToInventory(inventoryItemsWithDelta: [(inventoryItem: InventoryItem, delta: Int)], handler: RemoteResult<RemoteInventoryItemsWithDependencies> -> ()) {
         
         func toParams(inventoryItemWithDelta: (inventoryItem: InventoryItem, delta: Int)) -> [String: AnyObject] {

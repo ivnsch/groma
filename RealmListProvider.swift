@@ -132,9 +132,20 @@ class RealmListProvider: RealmProvider {
         for list in lists.lists {
             realm.create(DBList.self, value: list.timestampUpdateDict, update: true)
         }
-        for inventory in lists.inventories {
-            realm.create(DBInventory.self, value: inventory.inventory.timestampUpdateDict, update: true)
-        }
+//        for inventory in lists.inventories {
+//            realm.create(DBInventory.self, value: inventory.inventory.timestampUpdateDict, update: true)
+//        }
+    }
+    
+    func updateLastSyncTimeStamp(lists: [List], timestamp: Int64, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            for list in lists {
+                realm.create(DBList.self, value: DBList.timestampUpdateDict(list.uuid, lastUpdate: timestamp), update: true)
+            }
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
     }
     
     func clearListTombstone(uuid: String, handler: Bool -> Void) {

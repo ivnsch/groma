@@ -74,9 +74,9 @@ class RemoteListItemProvider {
         }
     }
     
-    func update(lists: [List], handler: RemoteResult<RemoteListsWithDependencies> -> ()) {
+    func update(lists: [List], handler: RemoteResult<Int64> -> ()) {
         let parameters = lists.map{self.toRequestParams($0)}
-        RemoteProvider.authenticatedRequest(.PUT, Urls.lists, parameters) {result in
+        RemoteProvider.authenticatedRequestArrayParamsTimestamp(.PUT, Urls.lists, parameters) {result in
             handler(result)
         }
     }
@@ -171,9 +171,9 @@ class RemoteListItemProvider {
         }
     }
     
-    func add(list: List, handler: RemoteResult<RemoteListsWithDependencies> -> ()) {
+    func add(list: List, handler: RemoteResult<Int64> -> Void) {
         let parameters = toRequestPrams(list)
-        RemoteProvider.authenticatedRequest(.POST, Urls.list, parameters) {result in
+        RemoteProvider.authenticatedRequestTimestamp(.POST, Urls.list, parameters) {result in
             handler(result)
         }
     }

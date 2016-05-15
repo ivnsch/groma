@@ -14,7 +14,7 @@ class ListItemProviderImpl: ListItemProvider {
 
     let dbProvider = RealmListItemProvider()
     let remoteProvider = RemoteListItemProvider()
-    let memProvider = MemListItemProvider(enabled: true)
+    let memProvider = MemListItemProvider(enabled: false)
 
     // MARK: - Get
     
@@ -30,30 +30,30 @@ class ListItemProviderImpl: ListItemProvider {
             }
         }
 
-        self.dbProvider.loadListItems(list, handler: {[weak self] (var dbListItems) in
+        self.dbProvider.loadListItems(list, handler: {[weak self] dbListItems in
             
             // reorder items by position
             // TODO ? a possible optimization is to save the list to local db sorted instead of having order field, see http://stackoverflow.com/questions/25023826/reordering-realm-io-data-in-tableview-with-swift
             // the server still needs (internally at least) the order column
             // TODO another optimization is to do the server items sorting in the server
     
-            dbListItems = dbListItems.sortedByOrder(sortOrderByStatus) // order is relative to section (0...n) so there will be repeated numbers.
+            let sotedDBListItems = dbListItems.sortedByOrder(sortOrderByStatus) // order is relative to section (0...n) so there will be repeated numbers.
             
             // we assume the database result is always == mem result, so if returned from mem already no need to return from db
             // TODO there's no need to load the items from db before doing the remote call (confirm this), since we assume memory == database it would be enough to compare 
             // the server result with memory. Load from db only when there's no memory cache.
             if !memListItemsMaybe.isSet {
-                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbListItems))
+                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: sotedDBListItems))
             }
             
-            self?.memProvider.overwrite(dbListItems)
+            self?.memProvider.overwrite(sotedDBListItems)
             
             self?.remoteProvider.listItems(list: list) {[weak self] remoteResult in
                 
                 if let remoteListItems = remoteResult.successResult {
                     let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: sortOrderByStatus)
                     
-                    if (dbListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
+                    if (sotedDBListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
                         self?.dbProvider.overwrite(listItemsWithRelations.listItems, listUuid: list.uuid, clearTombstones: true) {saved in
                             
                             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItemsWithRelations.listItems))

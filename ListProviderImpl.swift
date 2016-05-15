@@ -12,7 +12,6 @@ import QorumLogs
 class ListProviderImpl: ListProvider {
    
     let remoteListProvider = RemoteListItemProvider()
-//    let dbProvider = RealmListItemProvider()
     
     // Note: programmatic sorting 2x. But users normally have only a few lists so it's ok
     func lists(remote: Bool = true, _ handler: ProviderResult<[List]> -> ()) {
@@ -20,13 +19,13 @@ class ListProviderImpl: ListProvider {
             
             let sortedDBLists = dbLists.sortedByOrder()
             
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: sortedDBLists))
+            handler(ProviderResult(status: .Success, sucessResult: sortedDBLists))
             
             if remote {
                 self.remoteListProvider.lists {remoteResult in
                     
                     if let remoteLists = remoteResult.successResult {
-                        let lists: [List] = ListMapper.listsWithRemote(remoteLists)
+                        let lists = ListMapper.listsWithRemote(remoteLists)
                         
                         // if there are no local lists or there's a difference, overwrite the local lists
                         if sortedDBLists != lists {
@@ -34,10 +33,10 @@ class ListProviderImpl: ListProvider {
                             DBProviders.listProvider.overwriteLists(lists, clearTombstones: true) {saved in
                                 if saved {
                                     if !sortedDBLists.equalsExcludingSyncAttributes(lists) { // the sync attributes are not relevant to the ui so notify ui only if sth else changed
-                                        handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
+                                        handler(ProviderResult(status: .Success, sucessResult: lists))
                                     }
                                 } else {
-                                    print("Error overwriting lists - couldn't save")
+                                    QL4("Error overwriting lists - couldn't save")
                                 }
                             }
                         }
@@ -50,16 +49,15 @@ class ListProviderImpl: ListProvider {
         }
     }
     
-    // TODO is this used? Also what id, is it uuid?
-    func list(listId: String, _ handler: ProviderResult<List> -> ()) {
+    func list(listUuid: String, _ handler: ProviderResult<List> -> ()) {
         // return the saved object, to get object with generated id
-        DBProviders.listProvider.loadList(listId) {dbListMaybe in
+        DBProviders.listProvider.loadList(listUuid) {dbListMaybe in
             if let dbList = dbListMaybe {
-                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbList))
+                handler(ProviderResult(status: .Success, sucessResult: dbList))
                 
             } else {
-                print("Error: couldn't loadList: \(listId)")
-                handler(ProviderResult(status: ProviderStatusCode.NotFound))
+                QL4("Couldn't loadList: \(listUuid)")
+                handler(ProviderResult(status: .NotFound))
             }
             
         }
@@ -81,8 +79,9 @@ class ListProviderImpl: ListProvider {
             
             if remote {
                 self?.remoteListProvider.add(list, handler: {remoteResult in
-                    if let remoteLists = remoteResult.successResult {
-                        DBProviders.listProvider.updateLastSyncTimeStamp(remoteLists) {success in
+                    if let timestamp = remoteResult.successResult {
+                        // We update only the timestamp of the lists as the server doesn't update the inventory, only sends it, as dependency. TODO (server/client) use timestamp-only response.
+                        DBProviders.listProvider.updateLastSyncTimeStamp([list], timestamp: timestamp) {success in
                             if !success {
                                 QL4("Error storing last update timestamp")
                             }
@@ -106,8 +105,8 @@ class ListProviderImpl: ListProvider {
             if updated {
                 if remote {
                     self?.remoteListProvider.update(lists) {remoteResult in
-                        if let remoteLists = remoteResult.successResult {
-                            DBProviders.listProvider.updateLastSyncTimeStamp(remoteLists) {success in
+                        if let timestamp = remoteResult.successResult {
+                            DBProviders.listProvider.updateLastSyncTimeStamp(lists, timestamp: timestamp) {success in
                                 if !success {
                                     QL4("Error storing last update timestamp")
                                 }

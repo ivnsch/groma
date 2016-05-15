@@ -58,6 +58,10 @@ class DBList: DBSyncable {
         return ["uuid": orderUpdate.uuid, "order": orderUpdate.order, DBSyncable.dirtyFieldName: dirty]
     }
     
+    static func timestampUpdateDict(uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
+        return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
+    }
+    
     // MARK: -
     
     static func fromDict(dict: [String: AnyObject], inventory: DBInventory) -> DBList {

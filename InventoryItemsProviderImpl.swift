@@ -69,86 +69,6 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    
-    func addToInventory(inventory: Inventory, itemInput: ProductWithQuantityInput, remote: Bool, _ handler: ProviderResult<InventoryItemWithHistoryItem> -> Void) {
-        addToInventory(inventory, itemInputs: [itemInput], remote: remote) {result in
-            if let addedItem = result.sucessResult?.first {
-                handler(ProviderResult(status: .Success, sucessResult: addedItem))
-            } else {
-                QL4("Couldn't add to inventory: \(result)")
-                handler(ProviderResult(status: .DatabaseUnknown))
-            }
-        }
-    }
-    
-    func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryItem]> -> Void) {
-        DBProviders.inventoryItemProvider.addOrIncrementInventoryItemWithInput(itemInputs, inventory: inventory, dirty: remote) {[weak self] addOrIncrementInventoryItemsWithInputMaybe in
-
-            if let addOrIncrementInventoryItemWithInput = addOrIncrementInventoryItemsWithInputMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: addOrIncrementInventoryItemWithInput))
-
-                // we can use this instead of invalidating the memory cache. But if possible I think it's better to invalidate to minimise error possibilities, in this case we are moving items from cart to inventory which happens not that offen and also it takes some time to the user to open the inventory screen, so there doesn't seem to be a reason to use mem cache instead of invalidating
-//                let memAdded = self?.memProvider.addInventoryItems(addOrIncrementInventoryItemWithInput) ?? false
-//                if memAdded {
-//                    handler(ProviderResult(status: .Success))
-//                }
-                self?.invalidateMemCache()
-                
-                if remote {
-                    self?.remoteInventoryItemsProvider.addToInventory(addOrIncrementInventoryItemWithInput) {remoteResult in
-                        
-                        if let remoteInventoryItems = remoteResult.successResult {
-                            
-                            print("DEBUG: add remote inventory items success")
-                            
-                            
-                            // TODO is this comment still relevant?
-                            // For now no saving in local database, since there's no logic to increment in the client
-                            // TODO in the future we should do the increment in the client, as the app can be used offline-only
-                            // then call a sync with the server when we're online, where we either send the pending increments or somehow overwrite with updated items, taking into account timestamps
-                            // remember that the inventory has to support merge since it can be shared with other users
-                            //                self.dbInventoryProvider.saveInventory(items) {saved in
-                            //                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
-                            //                    handler(ProviderResult(status: providerStatus))
-                            //                }
-                            
-                            
-                            DBProviders.inventoryItemProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[InventoryItemWithHistoryItem]>) in
-                                QL4("Error addToInventory: \(remoteResult.status)")
-                                // if there's a not connection related server error, invalidate cache
-                                self?.memProvider.invalidate()
-                                handler(result)
-                            })
-                        }
-                    }
-                }
-                
-                
-            } else {
-                QL4("Error adding to inventory - database didn't return success")
-                handler(ProviderResult(status: .DatabaseUnknown))
-            }
-        }
-    }
-
-    // Outdated implementation, needs now store product
-//    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void) {
-//    
-//        DBProviders.inventoryItemProvider.addOrIncrementInventoryItemWithInput(itemInput, inventory: inventory, delta: itemInput.quantity) {addedInventoryItemWithHistoryMaybe in
-//            
-//            if let addedInventoryItemWithHistory = addedInventoryItemWithHistoryMaybe {
-//                handler(ProviderResult(status: .Success, sucessResult: addedInventoryItemWithHistory))
-//            } else {
-//                QL4("Error fetching product")
-//                handler(ProviderResult(status: .DatabaseUnknown))
-//                
-//            }
-//        }
-//    }
-    
     func addToInventoryLocal(inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: ProviderResult<Any> -> Void) {
         DBProviders.inventoryItemProvider.saveInventoryAndHistoryItem(inventoryItems, historyItems: historyItems, dirty: dirty) {success in
             if success {
@@ -280,7 +200,6 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    // TODO!!!!update now has to load first possible existent product by unique like in group item/list item update. -- explanation: because on update we can change the unique, e.g. different name+brand for product and in this case we don't want to update the underlaying product but change the item's reference to a possible already existing product with this new unique, or create a new one.
     func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         memProvider.updateInventoryItem(item)
         

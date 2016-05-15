@@ -259,7 +259,10 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 
                 if saved {
                     self?.remoteGroupsProvider.addGroupItems(items) {remoteResult in
-                        if !remoteResult.success {
+                        if let remoteGroupItems = remoteResult.successResult {
+                            DBProviders.groupItemProvider.updateLastSyncTimeStamp(remoteGroupItems) {success in
+                            }
+                        } else {
                             QL4("Error adding group items in remote: \(items), result: \(remoteResult)")
                             DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                         }
