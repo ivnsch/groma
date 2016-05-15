@@ -65,7 +65,7 @@ class RemoteUserProvider {
     }
     
     func forgotPassword(email: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        let parameters = ["email": email, "foo": "foo"] // foo is a filler parameter bc of a bug in the server
+        let parameters = ["email": email, "foo": ""] // foo is a filler parameter bc of a bug in the server
         RemoteProvider.request(.POST, Urls.forgotPassword, parameters) {result in
             handler(result)
         }
