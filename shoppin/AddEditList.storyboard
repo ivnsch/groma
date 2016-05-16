@@ -37,7 +37,7 @@
                                     <outlet property="delegate" destination="rbt-HL-39m" id="Wg8-SQ-bBx"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Store (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tkj-0N-ADP" customClass="MyAutoCompleteTextField" customModule="shoppin" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Store (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tkj-0N-ADP" customClass="TextFieldMore" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="15" y="111" width="253" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="VtH-ud-VeT"/>
