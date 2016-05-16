@@ -104,15 +104,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     }
     
     private func configLog() {
-        QorumLogs.enabled = true
-        QorumLogs.minimumLogLevelShown = 1
-        QorumOnlineLogs.minimumLogLevelShown = 4
-     
-        QorumLogs.KZLinkedConsoleSupportEnabled = true
+        
+        func debugConfig() {
+            QorumLogs.enabled = false
+            QorumLogs.minimumLogLevelShown = 1
+            QorumLogs.KZLinkedConsoleSupportEnabled = true
+            QorumLogs.onlyShowTheseFiles(MyWebSocket.self, MyWebsocketDispatcher.self)
+            QorumLogs.test()
+        }
+        
+        // Sends logs to Google doc
+        func productionConfig() {
+            QorumOnlineLogs.setupOnlineLogs(formLink: "https://docs.google.com/forms/d/1m0bwDy0jtndEaF_X-_ccw1va2vI2Dn13YnQJe3JtOyo/formResponse",
+                                            versionField: "entry.1897545847", userInfoField: "entry.748327727", methodInfoField: "entry.1497134983", textField: "entry.2103211608")
+            
+            var extraInfo = [String: String]()
+            if let email = Providers.userProvider.mySharedUser?.email {
+                extraInfo["user"] = email
+            }
+            if let deviceId: String = PreferencesManager.loadPreference(PreferencesManagerKey.deviceId) {
+                extraInfo["did"] = deviceId
+            }
+            QorumOnlineLogs.extraInformation = extraInfo
+            
+            QorumLogs.enabled = false // This must be disabled for online log to work
+            QorumOnlineLogs.minimumLogLevelShown = 1
+            QorumOnlineLogs.enabled = true
+            QorumOnlineLogs.test()
+        }
 
-//        QorumLogs.onlyShowTheseFiles(MyWebSocket.self, MyWebsocketDispatcher.self)
-
-//        QorumLogs.test()
+        debugConfig()
     }
     
     private func initWebsocket() {
