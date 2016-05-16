@@ -76,7 +76,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func addGroupItems(srcGroup: ListItemGroup, targetGroup: ListItemGroup, remote: Bool, _ handler: ProviderResult<[(groupItem: GroupItem, delta: Int)]> -> Void) {
-        groupItems(srcGroup, sortBy: .Alphabetic) {[weak self] result in
+        groupItems(srcGroup, sortBy: .Alphabetic, fetchMode: .MemOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
                 let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
                 self?.add(targetGroup, productsWithQuantities: productsWithQuantities, remote: remote) {result in
@@ -159,12 +159,15 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
 
-    func groupItems(group: ListItemGroup, sortBy: InventorySortBy, _ handler: ProviderResult<[GroupItem]> -> Void) {
+    func groupItems(group: ListItemGroup, sortBy: InventorySortBy, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[GroupItem]> -> Void) {
         DBProviders.groupItemProvider.groupItems(group, sortBy: sortBy) {[weak self] (var dbItems) in
             
             dbItems = dbItems.sortBy(sortBy)
             
             handler(ProviderResult(status: .Success, sucessResult: dbItems))
+            if fetchMode == .MemOnly {
+                return
+            }
             
             self?.remoteGroupsProvider.groupsItems(group) {remoteResult in
                 
@@ -192,10 +195,10 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     // TODO pass a prototype or product+quantity similar to list items. Don't pass a new group item, the creation of the new group item should happen in the db provider, only when one with given semantic unique doesn't exist already.
-    func add(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func add(item: GroupItem, remote: Bool, _ handler: ProviderResult<GroupItem> -> Void) {
         DBProviders.groupItemProvider.addOrIncrement(item, dirty: remote) {[weak self] addedOrIncrementedGroupItemMaybe in
             if let addedOrIncrementedGroupItem = addedOrIncrementedGroupItemMaybe {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .Success, sucessResult: addedOrIncrementedGroupItem))
                 
                 if remote {
                     self?.remoteGroupsProvider.addGroupItem(addedOrIncrementedGroupItem) {remoteResult in

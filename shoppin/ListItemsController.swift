@@ -948,6 +948,18 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             } else {
                 print("Error: ViewController.onWebsocketAddListItems: no value")
             }
+            
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<[ListItem]>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    updatePossibleList() // reload list
+                    
+                default: print("Error: ViewController.onWebsocketUpdateListItems: Not handled: \(notification.verb)")
+                }
+            } else {
+                print("Error: ViewController.onWebsocketAddListItems: no value")
+            }
         } else {
             print("Error: ViewController.onWebsocketAddListItems: no userInfo")
         }

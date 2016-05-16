@@ -302,8 +302,8 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             // TODO don't create group item here we don't know if it exists in the group already, if it does the new uuid is not used. Use a prototype class like in list items.
             let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: 1, product: product, group: group)
             
-            Providers.listItemGroupsProvider.add(groupItem, remote: true, successHandler{[weak self] result in
-                self?.productsWithQuantityController?.addOrUpdateUI(ProductWithQuantityGroup(groupItem: groupItem), scrollToCell: true)
+            Providers.listItemGroupsProvider.add(groupItem, remote: true, successHandler{[weak self] addedItem in
+                self?.productsWithQuantityController?.addOrUpdateUI(ProductWithQuantityGroup(groupItem: addedItem), scrollToCell: true)
             })
         }
     }
@@ -420,7 +420,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func loadModels(page: NSRange, sortBy: InventorySortBy, onSuccess: [ProductWithQuantity] -> Void) {
         if let group = group {
-            Providers.listItemGroupsProvider.groupItems(group, sortBy: sortBy, successHandler{groupItems in
+            Providers.listItemGroupsProvider.groupItems(group, sortBy: sortBy, fetchMode: .Both, successHandler{groupItems in
                 let productsWithQuantity = groupItems.map{ProductWithQuantityGroup(groupItem: $0)}
                 onSuccess(productsWithQuantity)
             })
@@ -587,21 +587,23 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     func onWebsocketGroup(note: NSNotification) {
         if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
-                
-                let groupUuid = notification.obj
-                if let group = group {
-                    
-                    if group.uuid == groupUuid {
-                        AlertPopup.show(title: "Group deleted", message: "The group \(group.name) was deleted from another device. Returning to groups.", controller: self, onDismiss: {[weak self] in
-                            self?.navigationController?.popViewControllerAnimated(true)
-                        })
+                switch notification.verb {
+                case WSNotificationVerb.Delete:
+                    let groupUuid = notification.obj
+                    if let group = group {
+                        
+                        if group.uuid == groupUuid {
+                            AlertPopup.show(title: "Group deleted", message: "The group \(group.name) was deleted from another device. Returning to groups.", controller: self, onDismiss: {[weak self] in
+                                self?.navigationController?.popViewControllerAnimated(true)
+                                })
+                        } else {
+                            QL1("Websocket: Group items controller received a notification to delete a group which is not the one being currently shown")
+                        }
                     } else {
-                        QL1("Websocket: Group items controller received a notification to delete a group which is not the one being currently shown")
+                        QL4("Websocket: Can't process delete group notification because there's no group set")
                     }
-                } else {
-                    QL4("Websocket: Can't process delete group notification because there's no group set")
+                default: break
                 }
-                
             } else {
                 QL4("No value")
             }

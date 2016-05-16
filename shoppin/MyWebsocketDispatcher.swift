@@ -67,6 +67,7 @@ enum WSNotificationCategory: String {
     case GroupItems = "groupItems"
     case List = "list"
     case ListItem = "listItem"
+    case ListItems = "listItems"
     case Section = "section"
     case Inventory = "inventory"
     case InventoryItem = "inventoryItem"
@@ -117,6 +118,8 @@ struct MyWebsocketDispatcher {
                 processList(verb, topic, sender, data)
             case .ListItem:
                 processListItem(verb, topic, sender, data)
+            case .ListItems:
+                processListItems(verb, topic, sender, data)
             case .Section:
                 processSection(verb, topic, sender, data)
             case .Inventory:
@@ -675,6 +678,30 @@ struct MyWebsocketDispatcher {
         default: QL4("Not handled verb: \(verb)")
         }
     }
+    
+    
+    private static func processListItems(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
+        switch verb {
+
+        case WSNotificationVerb.Add:
+            if let remoteListItems = RemoteListItems(representation: data) {
+                let listItems = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: nil).listItems
+                Providers.listItemsProvider.update(listItems, remote: false) {result in
+                    if result.success {
+                        postNotification(.ListItems, verb, sender, listItems)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Update lis titems \(listItems)", result: result)
+                    }
+                }
+
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update list items, data: \(data)")
+            }
+            
+        default: QL4("Not handled verb: \(verb)")
+        }
+    }
+
     
     private static func processSection(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {

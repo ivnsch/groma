@@ -159,7 +159,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func addGroupItems(group: ListItemGroup, status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
-        Providers.listItemGroupsProvider.groupItems(group, sortBy: .Alphabetic) {[weak self] result in
+        Providers.listItemGroupsProvider.groupItems(group, sortBy: .Alphabetic, fetchMode: .MemOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
                 self?.add(groupItems, status: status, list: list, handler)
             } else {
