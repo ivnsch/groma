@@ -31,6 +31,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     @IBOutlet weak var storeInputField: UITextField!
     @IBOutlet weak var sharedUsersWidthConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var storeAlignRightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var storeSpaceToParticipantsConstraint: NSLayoutConstraint!
+    
     private var inventories: [Inventory] = [] {
         didSet {
             selectedInventory = listToEdit?.inventory ?? inventories.first
@@ -160,6 +163,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         if sharedUsersButton.hidden {
             sharedUsersWidthConstraint.constant = 0
         }
+        storeAlignRightConstraint.priority = visible ? 750 : 1000
+        storeSpaceToParticipantsConstraint.priority = visible ? 1000 : 750
     }
     
     override func viewWillAppear(animated: Bool) {
