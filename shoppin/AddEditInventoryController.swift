@@ -80,6 +80,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     
     private func setSharedButtonVisibile(visible: Bool) {
         sharedUsersButton.hidden = !visible
+        colorButton.contentHorizontalAlignment = visible ? .Center : .Right
     }
     
     private func initValidator() {
@@ -99,7 +100,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         
         listNameInputField.becomeFirstResponder()
         
-//        sharedUsersButton.hidden = !ConnectionProvider.connectedAndLoggedIn
+        setSharedButtonVisibile(ConnectionProvider.connectedAndLoggedIn)
     }
     
     private func setBackgroundColor(color: UIColor) {

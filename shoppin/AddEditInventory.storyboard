@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--Add Edit Inventory Controller-->
@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Inventory name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="958-Da-VLu" customClass="TextFieldMore" customModule="shoppin" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Inventory name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="958-Da-VLu" customClass="TextFieldMore" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="25" y="28" width="325" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="94c-mD-itq"/>
@@ -36,8 +36,8 @@
                                     <outlet property="delegate" destination="DXc-fp-bVb" id="REI-jy-KFC"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Auc-8i-PnM" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="161" y="72" width="53" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Auc-8i-PnM" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="25" y="72" width="325" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Colours">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -73,15 +73,17 @@
                             <constraint firstAttribute="trailing" secondItem="bg3-OT-zRt" secondAttribute="trailing" constant="30" id="JBd-aP-62I" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstItem="bg3-OT-zRt" firstAttribute="baseline" secondItem="Auc-8i-PnM" secondAttribute="baseline" id="Lfr-iP-GuG"/>
                             <constraint firstItem="958-Da-VLu" firstAttribute="top" secondItem="PmJ-d3-xse" secondAttribute="bottom" constant="8" id="Ljv-XS-PaJ"/>
+                            <constraint firstItem="Auc-8i-PnM" firstAttribute="leading" secondItem="h5W-ku-HnU" secondAttribute="leading" constant="25" id="PIo-Nh-MSe" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstItem="Auc-8i-PnM" firstAttribute="top" secondItem="958-Da-VLu" secondAttribute="bottom" constant="14" id="dU4-5H-hi0"/>
-                            <constraint firstItem="Auc-8i-PnM" firstAttribute="centerX" secondItem="h5W-ku-HnU" secondAttribute="centerX" id="i4N-TS-9sa"/>
                             <constraint firstAttribute="trailing" secondItem="958-Da-VLu" secondAttribute="trailing" constant="80" id="kfU-mL-UtW"/>
                             <constraint firstItem="958-Da-VLu" firstAttribute="leading" secondItem="h5W-ku-HnU" secondAttribute="leading" constant="25" id="xOG-xO-T1c" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstAttribute="trailing" secondItem="958-Da-VLu" secondAttribute="trailing" constant="25" id="yCq-4r-ToJ" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                            <constraint firstAttribute="trailing" secondItem="Auc-8i-PnM" secondAttribute="trailing" constant="25" id="yYY-o9-Gah" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="kfU-mL-UtW"/>
+                                <exclude reference="Lfr-iP-GuG"/>
                             </mask>
                         </variation>
                     </view>
