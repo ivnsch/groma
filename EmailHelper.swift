@@ -55,7 +55,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
 
             controller.presentViewController(mail, animated: true, completion: nil)
         } else {
-            AlertPopup.show(message: "Couldn't find an email account. If the problem persists, please send us an e-mail manually to the address: \(email)", controller: controller)
+            AlertPopup.show(message: trans("popup_couldnt_find_email_account", email), controller: controller)
         }
     }
     

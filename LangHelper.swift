@@ -13,6 +13,7 @@ enum SupportedLang: String {
     case DE = "de", EN = "en", ES = "es"
 }
 
+// TODO is this used? Duplicate of LangManager?
 class LangHelper: Any {
     
     // TODO rename *supported* lang!

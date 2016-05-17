@@ -22,7 +22,7 @@ class RatingPopupController: UIViewController, RatingProvideFeedbackControllerDe
     @IBAction func onGoodTap(sender: UIButton) {
         if let url = NSURL(string : "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=\(appId)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1)") {
             if !UIApplication.sharedApplication().openURL(url) {
-                AlertPopup.show(message: "Couldn't open app store url.", controller: self)
+                AlertPopup.show(message: trans("popup_couldnt_open_app_store_url"), controller: self)
                 PreferencesManager.savePreference(PreferencesManagerKey.dontShowAppRatingDialogAgain, value: true) // rating has practically the same meaning as selecting don't show again
             }
         } else {

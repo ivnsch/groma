@@ -17,7 +17,7 @@ class SwipeToIncrementAlertHelper {
         let showedCanSwipeToIncrementCountNumber: NSNumber = PreferencesManager.loadPreference(.showedCanSwipeToIncrementCounter) ?? 0
         let showedCanSwipeToIncrementCount = showedCanSwipeToIncrementCountNumber.integerValue
         if showedCanSwipeToIncrementCount == countToShowPopup {
-            AlertPopup.show(title: "Psst!", message: "You can also swipe to the left or right of the cell to change the quantity.\nThis is specially useful if you want to increment/decrement more than 1 at a time!", controller: controller)
+            AlertPopup.show(title: trans("popup_title_psst"), message: trans("popups_swipe_to_increment_explanation"), controller: controller)
         }
         PreferencesManager.savePreference(PreferencesManagerKey.showedCanSwipeToIncrementCounter, value: NSNumber(integer: showedCanSwipeToIncrementCount + 1))
     }

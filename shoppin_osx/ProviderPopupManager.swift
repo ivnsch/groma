@@ -26,7 +26,7 @@ class ProviderPopupManager {
         if (currentStatus.map {$0 != status}) ?? true { // if there's no popup or if there's a popup with different status code
             currentStatus = status
             
-            let title = "Error"
+            let title = trans("popup_title_error")
             let message: String = RequestErrorToMsgMapper.message(status)
             
             AlertPopup.show(title: title, message: message, window: window, onDismiss: {[weak self] in

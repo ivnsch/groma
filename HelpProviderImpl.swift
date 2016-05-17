@@ -93,7 +93,7 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "Troubleshooting: I'm not receiving real time updates", text: "First of all, check if you're logged in! Real time updates don't work when you aren't logged in. If you are logged in, ensure that the real time connection is enabled in the settings. When the connections drops while you are logged in, the app tries to reestablish it automatically (you will see a label above the tab bar 'connecting to server...') in this case you only have to wait until the label disappears.", type: .Troubleshooting),
         
-        HelpItem(title: "Troubleshooting: Sync doesn't work", text: "If you are getting repeatedly sync errors, as a last resort you can go to settings and select 'Overwrite local data'. This will reset the data on your device to the last data your successfully synced and likely fix the error. This is of course only a makeshift, such that you can use your account again, until the cause is fixed. This setting is only visible when are logged in and connected.", type: .Troubleshooting),
+        HelpItem(title: "Troubleshooting: Sync doesn't work or I get invalid request errors", text: "If you are getting repeatedly any of these errors, as a last resort you can go to settings and select 'Overwrite local data'. This will reset the data on your device to the last data your successfully synced and likely fix them. This setting is only visible when you are logged in and connected.", type: .Troubleshooting),
         
         HelpItem(title: "I cannot find the information I'm looking for", text: "Send us a feedback email! We are glad to answer your questions.")
         

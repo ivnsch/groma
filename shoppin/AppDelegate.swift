@@ -604,7 +604,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                             
                         } else {
                             QL1("Rating dialog: Couldn't open app store url")
-                            AlertPopup.show(message: "Couldn't open app store url.", controller: controller)
+                            AlertPopup.show(message: trans("popup_couldnt_open_app_store_url"), controller: controller)
                         }
                     } else {
                         QL4("Url is nil, can't go to app store")
@@ -625,7 +625,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                 Notification.send(Notification.LogoutUI) // in case we are currently in user screens
             })
             
-            ConfirmationPopup.show(title: "Required update", message: "Please update the app in order to continue using your user account.", okTitle: "Update", cancelTitle: "Log out", controller: controller, onOk: {
+            ConfirmationPopup.show(title: trans("popup_title_required_update"), message: trans("popup_please_update_app_to_use_account"), okTitle: trans("popup_button_update"), cancelTitle: trans("popup_button_log_out"), controller: controller, onOk: {
                 
                 if let url = NSURL(string: Constants.appStoreLink) {
                     
@@ -634,7 +634,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                         
                     } else {
                         QL1("Rating dialog: Couldn't open app store url")
-                        AlertPopup.show(message: "Couldn't open app store url.", controller: controller)
+                        AlertPopup.show(message: trans("popup_couldnt_open_app_store_url"), controller: controller)
                     }
                 } else {
                     QL4("Url is nil, can't go to app store")

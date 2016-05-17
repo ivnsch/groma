@@ -268,7 +268,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         validateInputs(self.listInputsValidator) {[weak self] in
             
             guard let weakSelf = self else {return}
-            guard let inventory = weakSelf.selectedInventory else {AlertPopup.show(message: "Please select an inventory", controller: weakSelf); return}
+            guard let inventory = weakSelf.selectedInventory else {AlertPopup.show(message: trans("popup_please_select_inventory"), controller: weakSelf); return}
             guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
             guard let listName = weakSelf.listNameInputField.text else {QL4("Validation was not implemented correctly"); return}
             
@@ -405,7 +405,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             }
             
         } else {
-            AlertPopup.show(message: "Please login to manage participants", controller: self)
+            AlertPopup.show(message: trans("popup_please_login_for_participants"), controller: self)
         }
     }
     
@@ -487,7 +487,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         if let list = listToEdit {
             Providers.pullProvider.pullListProducs(list.uuid, srcUser: user, successHandler{[weak self] listItems in  guard let weakSelf = self else {return}
                 self?.parentViewController?.progressVisible(false)
-                AlertPopup.show(title: "Success", message: "Your list item products have been updated to match the products of \(user.email).", controller: weakSelf)
+                AlertPopup.show(title: trans("popup_title_success"), message: trans("popup_list_products_updated_to_match_user", user.email), controller: weakSelf)
             })
         }
     }

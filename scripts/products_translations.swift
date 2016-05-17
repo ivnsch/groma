@@ -2,11 +2,12 @@
 
 import Cocoa
 
+// TODO! must not overwrite not product related translations
+
 // This script updates the translations with keys (normally product names) from suggestions prefiller.
 // It iterates through the keys from suggestion prefiller, if a translation with this key already exists is re-inserted untouched, if not a new translation with empty value is inserted
 // The translations will be in the same order as in suggestions prefiller.
 // WARN: Assumes that the translation files contain only product names - any other translations (keys are not in suggestions prefiller) will be removed!
-// TODO change this, we probably want to store other translations in these files in the future.
 
 let suggestionsPrefillerPath = "../SuggestionsPrefiller.swift"
 

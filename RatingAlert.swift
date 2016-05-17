@@ -62,9 +62,9 @@ class RatingAlert: EmailHelperDelegate {
         
         self.controller = controller
         
-        let alert = UIAlertController(title: "Rate Groma", message: "If you love Groma, please take a moment to rate it", preferredStyle: .Alert)
+        let alert = UIAlertController(title: trans("popup_title_rate_app"), message: trans("popup_please_rate_app"), preferredStyle: .Alert)
         
-        alert.addAction(UIAlertAction(title: "Rate", style: .Default) {[weak self ]alertAction in guard let weakSelf = self else {return}
+        alert.addAction(UIAlertAction(title: trans("popup_button_rate_app"), style: .Default) {[weak self ]alertAction in guard let weakSelf = self else {return}
             if let url = NSURL(string: Constants.appStoreLink) {
                 
                 if UIApplication.sharedApplication().openURL(url) {
@@ -73,7 +73,7 @@ class RatingAlert: EmailHelperDelegate {
                     
                 } else {
                     QL1("Rating dialog: Couldn't open app store url")
-                    AlertPopup.show(message: "Couldn't open app store url.", controller: controller)
+                    AlertPopup.show(message: trans("popup_couldnt_open_app_store_url"), controller: controller)
                 }
             } else {
                 QL4("Url is nil, can't go to rating")
@@ -83,7 +83,7 @@ class RatingAlert: EmailHelperDelegate {
             weakSelf.delegate?.onDismissRatingAlert()
         })
         
-        alert.addAction(UIAlertAction(title: "Send feedback", style: .Default) {[weak self] alertAction in
+        alert.addAction(UIAlertAction(title: trans("popup_button_rate_feedback"), style: .Default) {[weak self] alertAction in
             QL1("Rating dialog: selected Send feedback")
             PreferencesManager.savePreference(PreferencesManagerKey.dontShowAppRatingDialogAgain, value: true)
             self?.em = EmailHelper(controller: controller)
@@ -94,7 +94,7 @@ class RatingAlert: EmailHelperDelegate {
             self?.delegate?.onDismissRatingAlert()
         })
 
-        alert.addAction(UIAlertAction(title: "Ask me later", style: .Default) {[weak self] alertAction in
+        alert.addAction(UIAlertAction(title: trans("popup_button_rate_ask_later"), style: .Default) {[weak self] alertAction in
             QL1("Rating dialog: selected ask me later")
             PreferencesManager.savePreference(PreferencesManagerKey.lastAppRatingDialogDate, value: NSDate())
             
@@ -102,7 +102,7 @@ class RatingAlert: EmailHelperDelegate {
             self?.delegate?.onDismissRatingAlert()
         })
         
-        alert.addAction(UIAlertAction(title: "Don't ask again", style: .Default) {[weak self] alertAction in
+        alert.addAction(UIAlertAction(title: trans("popup_button_rate_dont_ask_again"), style: .Default) {[weak self] alertAction in
             QL1("Rating dialog: selected don't ask again")
             PreferencesManager.savePreference(PreferencesManagerKey.lastAppRatingDialogDate, value: NSDate())
             

@@ -112,7 +112,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         } else {
             
             if !acceptedTerms {
-                AlertPopup.show(message: "Please accept the terms and conditions", controller: self)
+                AlertPopup.show(message: trans("popup_please_accept_terms"), controller: self)
                 
             } else {
                 if let email = emailField.text, password = passwordField.text/*, firstName = firstNameField.text, lastName = lastNameField.text*/ {

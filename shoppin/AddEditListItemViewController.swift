@@ -553,19 +553,19 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     func onDeleteSuggestion(string: String, sender: MyAutoCompleteTextField) {
         switch sender {
         case sectionInput:
-            ConfirmationPopup.show(title: "Confirmation", message: "Do you want to remove '\(string)'?\nThis will remove all sections and categories with this name and associated list, group, inventory and history items everywhere in the app.", okTitle: "Yes", cancelTitle: "No", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+            ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_section_completion_confirm", string), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
                 Providers.sectionProvider.removeAllWithName(string, remote: true, weakSelf.successHandler {
                     Providers.productCategoryProvider.removeAllCategoriesWithName(string, remote: true, weakSelf.successHandler {
                         self?.delegate?.onRemovedSectionCategoryName(string)
-                        AlertPopup.show(message: "'\(string)' was removed.", controller: weakSelf)
+                        AlertPopup.show(message: trans("popup_was_removed", string), controller: weakSelf)
                     })
                 })
             })
         case brandInput:
-            ConfirmationPopup.show(title: "Confirmation", message: "Do you want to remove '\(string)'?\nThis will remove all products with this brand and associated list, group, inventory and history items everywhere in the app.", okTitle: "Yes", cancelTitle: "No", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+            ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_brand_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
                 Providers.brandProvider.removeProductsWithBrand(string, remote: true, weakSelf.successHandler {
                     self?.delegate?.onRemovedBrand(string)
-                    AlertPopup.show(message: "'\(string)' was removed.", controller: weakSelf)
+                    AlertPopup.show(message: trans("popup_was_removed", string), controller: weakSelf)
                 })
             })
         default: QL4("Not handled input")

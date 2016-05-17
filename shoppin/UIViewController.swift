@@ -175,7 +175,7 @@ extension UIViewController {
         case .SizeLimit:
             let size = errorObj.map{$0}
             let sizeStr = size.map{"(\($0))"} ?? ""
-            AlertPopup.show(title: title, message: "size_limit_exceeded \(sizeStr)", controller: self)
+            AlertPopup.show(title: title, message: trans("size_limit_exceeded", sizeStr), controller: self)
         
         case .MustUpdateApp:
             QL1("Controller received: \(status), do nothing.") // popup in this case is shown by AppDelegate

@@ -1286,6 +1286,7 @@
 		EB4A38AF1C8F86B4000714F9 /* RemotePullProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotePullProvider.swift; sourceTree = "<group>"; };
 		EB4A38B31C8F8901000714F9 /* RemoteProductsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductsWithDependencies.swift; sourceTree = "<group>"; };
 		EB4B39BE1CEB942900B41063 /* SwipeToIncrementAlertHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeToIncrementAlertHelper.swift; sourceTree = "<group>"; };
+		EB4B39C01CEBDF5E00B41063 /* products_translations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = products_translations.swift; path = ../scripts/products_translations.swift; sourceTree = "<group>"; };
 		EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSharedLists.swift; sourceTree = "<group>"; };
 		EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableChoiceModal.swift; sourceTree = "<group>"; };
 		EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditablePlainTableViewController.swift; sourceTree = "<group>"; };
@@ -1983,6 +1984,7 @@
 				EB2F5D7C1A55817100DBC4AF /* common */,
 				EB6F81301B471793008680E0 /* utils */,
 				EBBC231C1BB4ABC80002F6B1 /* prefill */,
+				EB4B39C21CEBDF6B00B41063 /* scripts */,
 				EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */,
 				EB1DDEB11A3334EC00D778DE /* Main.storyboard */,
 				EB1DDEB41A3334EC00D778DE /* Images.xcassets */,
@@ -2258,6 +2260,14 @@
 				EB4A38A31C87B96C000714F9 /* GoogleSignInHelper.swift */,
 			);
 			name = social;
+			sourceTree = "<group>";
+		};
+		EB4B39C21CEBDF6B00B41063 /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				EB4B39C01CEBDF5E00B41063 /* products_translations.swift */,
+			);
+			name = scripts;
 			sourceTree = "<group>";
 		};
 		EB4C36561B4C115E00C387C5 /* libraryCandidates */ = {

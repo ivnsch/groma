@@ -915,7 +915,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 case .Delete:
                     if let list = currentList {
                         if list.uuid == listUuid {
-                            AlertPopup.show(title: "List deleted", message: "The list \(list.name) was deleted from another device. Returning to lists.", controller: self, onDismiss: {[weak self] in
+                            AlertPopup.show(title: trans("popup_title_list_deleted"), message: trans("popup_list_was_deleted_in_other_device", list.name), controller: self, onDismiss: {[weak self] in
                                 self?.back()
                             })
                         } else {

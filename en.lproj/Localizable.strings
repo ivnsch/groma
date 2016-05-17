@@ -205,3 +205,112 @@ pr_chocolates = "Chocolates";
 pr_ice_cream = "Ice cream";
 pr_mints = "Mints";
 pr_marshmallows = "Marshmallow";
+
+
+
+popup_title_success = "Success";
+popup_title_info = "Info";
+popup_title_confirm = "Confirm";
+popup_title_warning = "Warning";
+popup_title_error = "Error";
+popup_title_required_update = "Required update";
+popup_title_group_deleted = "Group deleted";
+popup_title_inventory_deleted = "Inventory deleted";
+popup_title_list_deleted = "List deleted";
+popup_title_validation_failed = "Validation failed";
+popup_title_rate_app = "Rate Groma";
+popup_title_restore_bundled_products = "Restore products";
+popup_title_bundled_products_restored = "Products restored";
+popup_title_size_limit = "Size limit";
+popup_title_psst = "Psst!";
+
+
+popup_please_login_for_participants = "Please login to manage participants";
+popup_products_updated_to_match_user = "Your products have been updated to match the products of %@.";
+popup_list_products_updated_to_match_user = "Your list item products have been updated to match the products of %@.";
+popup_please_select_inventory = "Please select an inventory";
+popup_was_removed = "%@ was removed.";
+popup_please_rate_app = "If you love Groma, please take a moment to rate it";
+popup_couldnt_open_app_store_url = "Couldn't open app store url.";
+popup_please_update_app_to_use_account = "Please update the app in order to continue using your user account.";
+popup_buy_will_add_to_history_stats = "This will add your cart items to the the inventory %@ and the corresponding history and stats";
+popup_you_cant_buy_cart = "You can't move items to the inventory '%@'\nAsk a user with access to this inventory to share it with you.";
+popup_remove_section_completion_confirm = "Do you want to remove '%@'?\nThis will remove all sections and categories with this name and associated list, group, inventory and history items everywhere in the app.";
+popup_remove_brand_completion_confirm = "Do you want to remove '%@'?\nThis will remove all products with this brand and associated list, group, inventory and history items everywhere in the app.";
+popup_couldnt_find_email_account = "Couldn't find an email account. If the problem persists, please send us an e-mail manually to the address: \(email)";
+popup_group_was_deleted_in_other_device = "The group %@ was deleted from another device. Returning to groups.";
+popup_delete_history_also_deletes_stats = "Deleting history items will also delete their data from the stats";
+popup_add_items_directly_inventory = "Adding or incrementing items here in the inventory does *not* affect history and stats.\nIf you want the items to appear in history and stats, use 'buy' in the cart. The cart can be found in shopping lists.";
+popup_inventory_was_deleted_in_other_device = "The inventory '%@' was deleted from another device. Returning to inventories.";
+popup_list_was_deleted_in_other_device = "The list '%@' was deleted from another device. Returning to lists.";
+popup_please_accept_terms = "Please accept the terms and conditions";
+popup_your_data_was_overwritten = "Your local data was overwritten";
+popup_are_you_sure_remove_account = "Are you sure you want to remove your account?";
+popup_your_account_was_removed = "Your account was removed";
+popup_you_already_use_bundled_products = "You're already using all the bundled products.";
+popup_hints_restored = "Hints restored";
+popups_settings_overwrite = "This will overwrite all your (Groma) data on this device with the data stored in the server. You may lose data.\nThis is only a helper to solve technical problems and is not necessary under normal circumstances.";
+popups_restore_bundled_products = "Restores bundled products that you deleted since the intallation of the app, or in case you changed the language of the device, adds all the bundled products in the new language. Your existing producs and items are not affected.";
+popups_restore_hints = "Restores all introductory explanation popups and hints.";
+popups_participants_you_dont_have_to_add_yourself = "You don't have to add yourself to the list";
+popups_participants_user_already_in_list = "The user: %@\n is already in the list";
+popups_participants_user_not_registered = "The user: %@\n is not registered";
+popups_participants_must_be_logged_in = "You must be logged in to share with other users";
+popups_participants_invitation_explanation = "The user has not been invited yet. To submit the invitations you have to submit the list.\nIf you close the list without submitting, the participants list is resetted and no invitations are sent.";
+popups_invitation_pending = "Invitation pending";
+popups_swipe_to_increment_explanation = "You can also swipe to the left or right of the cell to change the quantity.\nThis is specially useful if you want to increment/decrement more than 1 at a time!";
+
+
+popups_size_limit_lists = "You can't have more than %@ lists";
+popups_size_limit_groups = "You can't have more than %@ groups";
+popups_size_limit_inventories = "You can't have more than %@ inventories";
+popups_size_limit_list_items = "You can't have more than %@ list items";
+popups_size_limit_group_items = "You can't have more than %@ group items";
+popups_size_limit_inventory_items = "You can't have more than %@ inventory items";
+popups_size_limit_history_items = "You can't have more than %@ history items";
+popups_size_limit_products = "You can't have more than %@ products";
+popups_size_limit_line2 = "\nMaybe you can remove a not used one?\nIf you *really* need more feel free to contact us via feedback email.\nHappy to adjust this if there are enough complaints or for a special case.";
+
+
+popup_button_ok = "Ok";
+popup_button_cancel = "Cancel";
+popup_button_yes = "Yes";
+popup_button_no = "No";
+popup_button_continue = "Continue";
+popup_button_update = "Update";
+popup_button_log_out = "Log out";
+popup_button_buy = "Buy";
+popup_button_got_it = "Got it!";
+popup_button_rate_app = "Rate";
+popup_button_rate_feedback = "Send feedback";
+popup_button_rate_ask_later = "Ask me later";
+popup_button_rate_dont_ask_again = "Don't ask again";
+popup_button_restore_bundled_product = "Restore";
+
+
+error_not_authenticated = "Not authenticated. Please login and try again.";
+error_already_exists = "Already exists";
+error_not_found = "Not found";
+error_invalid_credentials = "Invalid credentials";
+error_blacklisted = "Your account was reporting suspicious activity and was blocked.\nPlease contact support (you can use the feedback option under '...' for this).";
+error_registered_another_provider = "Your user id is already registered with a different provider.\nPlease contact support if you need further assistance.";
+size_limit_exceeded = "You exceeded the max allowed allowed size limit: %@.\nThese size limits are meant for the most part as a security measure and we may consider changing them according to user feedback.\nContact us (you can use the feedback option under '...' for this)!";
+error_server_generic = "Server communication error. Please try again later.";
+error_server_not_reachable = "Server nor reachable. Please try again later.";
+error_server_communication_unknown = "Unknown server error. Please try again later.";
+error_server_invalid_params = "Invalid request.\nPlease consult the troubleshooting section in help or contact support (both can be found in the '...' tab).";
+error_unknown_database = "Unknown error. Please try again later.";
+error_unknown = "Unknown error. Please try again later.";
+social_login_cancelled = "Social signup cancelled";
+social_login_error = "Social signup error";
+social_already_exists = "And account with the same user id already exists.";
+success = "Sucess";
+error_no_internet_connection = "There's no internet connection. Please try again with an internet connection.";
+sync_failed = "Synchronisation failed.\nPlease consult the troubleshooting section in help or contact support (both can be found in the '...' tab).";
+
+
+setting_overwrite_data = "Overwrite data";
+setting_remove_account = "Remove account";
+setting_restore_bundled_products = "Restore bundled products";
+setting_restore_hints = "Restore hints";
+setting_real_time_connection = "Real time connection";

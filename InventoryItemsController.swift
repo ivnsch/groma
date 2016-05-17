@@ -269,7 +269,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         if alreadyShowedPopup {
             onContinue()
         } else {
-            AlertPopup.show(title: "Info", message: "Adding or incrementing items here in the inventory does *not* affect history and stats.\nIf you want the items to appear in history and stats, use 'buy' in the cart. The cart can be found in shopping lists.", controller: self, okMsg: "Got it!") {
+            AlertPopup.show(title: trans("popup_title_info"), message: trans("popup_add_items_directly_inventory"), controller: self, okMsg: trans("popup_button_got_it")) {
                 PreferencesManager.savePreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp, value: true)
                 onContinue()
             }
@@ -563,7 +563,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                     if let inventory = inventory {
                         
                         if inventory.uuid == inventoryUuid {
-                            AlertPopup.show(title: "Inventory deleted", message: "The inventory \(inventory.name) was deleted from another device. Returning to inventories.", controller: self, onDismiss: {[weak self] in
+                            AlertPopup.show(title: trans("popup_title_inventory_deleted"), message: trans("popup_inventory_was_deleted_in_other_device", inventory.name), controller: self, onDismiss: {[weak self] in
                                 self?.navigationController?.popViewControllerAnimated(true)
                             })
                         } else {

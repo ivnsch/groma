@@ -204,7 +204,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             if alreadyShowedPopup {
                 delete()
             } else {
-                AlertPopup.show(title: "Info", message: "Deleting history items will also delete their data from the stats", controller: self, okMsg: "Got it!") {
+                AlertPopup.show(title: trans("popup_title_info"), message: trans("popup_delete_history_also_deletes_stats"), controller: self, okMsg: trans("popup_button_got_it")) {
                     PreferencesManager.savePreference(PreferencesManagerKey.showedDeleteHistoryItemHelp, value: true)
                     delete()
                 }

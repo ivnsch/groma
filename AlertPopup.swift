@@ -19,14 +19,14 @@ class AlertPopup: NSObject {
         return alert
     }
 
-    static func show(title title: String? = nil, message: String, controller: UIViewController, okMsg: String = "Ok", cancelMsg: String = "Cancel", okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) {
+    static func show(title title: String? = nil, message: String, controller: UIViewController, okMsg: String = trans("popup_button_ok"), cancelMsg: String = trans("popup_button_cancel"), okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) {
         let alert = create(title: title, message: message, okMsg: okMsg, onDismiss: onDismiss)
         controller.presentViewController(alert, animated: true, completion: nil)
     }
 
     // TODO better structure, alert and confirm should be 2 different classes, which share part of the view and code
     // Frame of popup (including semitransparent background) in case this is different than the frame controller's view.
-    static func showCustom(title title: String? = nil, message: String, controller: UIViewController, frame: CGRect? = nil, okMsg: String = "Ok", confirmMsg: String = "Ok", cancelMsg: String = "Cancel", hasOkButton: Bool = false, isConfirm: Bool = false, rootControllerStartPoint: CGPoint? = nil, okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) {
+    static func showCustom(title title: String? = nil, message: String, controller: UIViewController, frame: CGRect? = nil, okMsg: String = trans("popup_button_ok"), confirmMsg: String = trans("popup_button_ok"), cancelMsg: String = trans("popup_button_cancel"), hasOkButton: Bool = false, isConfirm: Bool = false, rootControllerStartPoint: CGPoint? = nil, okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) {
         
         guard controller.view.viewWithTag(ViewTags.NotePopup) == nil else {QL2("Already showing popup, return"); return}
         

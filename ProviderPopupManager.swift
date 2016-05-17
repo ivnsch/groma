@@ -27,7 +27,7 @@ class ProviderPopupManager {
         if (currentStatus.map {$0 != status}) ?? true { // if there's no popup or if there's a popup with different status code
             currentStatus = status
             
-            let title = "Error"
+            let title = trans("popup_title_error")
             let message: String = RequestErrorToMsgMapper.message(status)
 
             AlertPopup.show(title: title, message: message, controller: controller, onDismiss: {[weak self] in
@@ -44,12 +44,12 @@ class ProviderPopupManager {
         
         if (currentStatus.map {$0 != status}) ?? true { // if there's no popup or if there's a popup with different status code
             currentStatus = status
-            
-            let title = "Validation failed"
-            
+
+            let title = trans("popup_title_validation_failed")
+
             let message = error.pathErrors.map {e in
                 let pathErrorsStr = e.validationErrors.map{$0.msg}.joinWithSeparator(", ")
-                return ("Field: \(e.path), errors: \(pathErrorsStr)")
+                return ("\(e.path): \(pathErrorsStr)")
             }.joinWithSeparator("\n")
             
             AlertPopup.show(title: title, message: message, controller: controller, onDismiss: {[weak self] in

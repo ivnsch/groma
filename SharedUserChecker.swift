@@ -14,11 +14,11 @@ struct SharedUserChecker {
     static func check(email: String, users: [SharedUser], controller: UIViewController, onSuccess: VoidFunction) {
         
         if (Providers.userProvider.mySharedUser.map{$0.email == email}) ?? false {
-            AlertPopup.show(title: "Info", message: "You don't have to add yourself to the list", controller: controller)
+            AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_you_dont_have_to_add_yourself"), controller: controller)
             
         } else {
             if users.contains({$0.email == email}) {
-                AlertPopup.show(title: "Info", message: "The user: \(email)\n is already in the list", controller: controller)
+                AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_user_already_in_list", email), controller: controller)
                 
             } else {
                 controller.progressVisible()
@@ -29,7 +29,7 @@ struct SharedUserChecker {
                         onSuccess()
                         
                     case .NotFound:
-                        AlertPopup.show(title: "Info", message: "The user: \(email)\n is not registered", controller: controller)
+                        AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_user_not_registered", email), controller: controller)
                         
                     default:
                         controller.defaultErrorHandler()(providerResult: result)

@@ -593,7 +593,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                     if let group = group {
                         
                         if group.uuid == groupUuid {
-                            AlertPopup.show(title: "Group deleted", message: "The group \(group.name) was deleted from another device. Returning to groups.", controller: self, onDismiss: {[weak self] in
+                            AlertPopup.show(title: trans("popup_title_group_deleted"), message: trans("popup_group_was_deleted_in_other_device", group.name), controller: self, onDismiss: {[weak self] in
                                 self?.navigationController?.popViewControllerAnimated(true)
                                 })
                         } else {

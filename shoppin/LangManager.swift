@@ -8,6 +8,15 @@
 
 import UIKit
 
+func trans(key: String) -> String {
+    return NSLocalizedString(key, comment: "")
+}
+
+func trans(key: String, _ params: String...) -> String {
+    return String.localizedStringWithFormat(NSLocalizedString(key, comment: ""), params)
+}
+
+
 class LangManager {
 
     let availableLangs = ["de", "en", "es"]

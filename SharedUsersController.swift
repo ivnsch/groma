@@ -104,7 +104,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     private func tryAddInputUser() {
         if !ConnectionProvider.connectedAndLoggedIn {
-            AlertPopup.show(message: "You must be logged in to share with other users", controller: self)
+            AlertPopup.show(message: trans("popups_participants_must_be_logged_in"), controller: self)
             
         } else {
             validateInputs(userInputsValidator) {[weak self] in
@@ -117,7 +117,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
                             weakSelf.addUserInputField.clear()
                             
                             // TODO!!!! improve this, functionality is a bit weird. either submit the users immediately (needs maybe separate service?) or add some sort of indicator to add/edit screen showing that submitting the updated users is pending. At very least add a preference to show this dialog only once.
-                            AlertPopup.show(title: "Info", message: "The user has not been invited yet. To submit the invitations you have to submit the list.\nIf you close the list without submitting, the participants list is resetted and no invitations are sent.", controller: weakSelf, okMsg: "Got it!")
+                            AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_invitation_explanation"), controller: weakSelf, okMsg: trans("popup_button_got_it"))
                         })
                     } else {
                         print("Error: validation was not implemented correctly")
@@ -241,6 +241,6 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: - InvitedSharedUserCellDelegate
     
     func onInviteInfoSharedUser(sharedUser: SharedUser, cell: InvitedUserCell) {
-        AlertPopup.show(message: "Invitation pending", controller: self)
+        AlertPopup.show(message: trans("popups_invitation_pending"), controller: self)
     }
 }

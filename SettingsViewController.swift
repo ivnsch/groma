@@ -48,26 +48,23 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     @IBOutlet weak var tableView: UITableView!
     
-    private let clearHistorySetting = SimpleSetting(id: .ClearHistory, label: "Clear history")
-    private let overwriteDataSetting = SimpleSetting(id: .OverwriteData, label: "Overwrite data", labelColor: UIColor.redColor(), hasHelp: true)
-    private let removeAccountSetting = SimpleSetting(id: .RemoveAccount, label: "Remove account", labelColor: UIColor.redColor())
-    private let restorePrefillProductsSetting = SimpleSetting(id: .RestorePrefillProducts, label: "Restore bundled products", hasHelp: true)
-    private let restoreHintsSetting = SimpleSetting(id: .RestoreHints, label: "Restore hints", hasHelp: true)
+    private let clearHistorySetting = SimpleSetting(id: .ClearHistory, label: "Clear history") // debug
+    private let overwriteDataSetting = SimpleSetting(id: .OverwriteData, label: trans("setting_overwrite_data"), labelColor: UIColor.redColor(), hasHelp: true)
+    private let removeAccountSetting = SimpleSetting(id: .RemoveAccount, label: trans("setting_remove_account"), labelColor: UIColor.redColor())
+    private let restorePrefillProductsSetting = SimpleSetting(id: .RestorePrefillProducts, label: trans("setting_restore_bundled_products"), hasHelp: true)
+    private let restoreHintsSetting = SimpleSetting(id: .RestoreHints, label: trans("setting_restore_hints"), hasHelp: true)
     
     // developer
-    private let addDummyHistoryItemsSetting = SimpleSetting(id: .AddDummyHistoryItems, label: "Add dummy history items")
-    private let clearAllDataSetting = SimpleSetting(id: .ClearAllData, label: "Clear all data")
+    private let addDummyHistoryItemsSetting = SimpleSetting(id: .AddDummyHistoryItems, label: "Add dummy history items") // debug
+    private let clearAllDataSetting = SimpleSetting(id: .ClearAllData, label: "Clear all data") // debug
     
     private var settings: [Setting] = []
     
-//    "This will overwrite all your (Groma) data on this device with the data stored in the server. You may lose data.\nThis is only a helper to solve technical problems and is not necessary under normal circumstances."
-    private let overwritePopupMessage: String = NSLocalizedString("settings_popups_msg_overwrite", comment: "")
+    private let overwritePopupMessage: String = trans("popups_settings_overwrite")
     
-//    "This will restore bundled products that you deleted since the intallation of the app, or in case you changed the language of the device, add all the bundled products in the new language. Your existing producs and items are not affected.\nNote: If you changed the language and still have products in the old language, you'll end with multiple versions of the same product for the different languages."
-    private let restoreProductsMessage: String = NSLocalizedString("settings_popups_msg_restore_product", comment: "")
+    private let restoreProductsMessage: String = trans("popups_restore_bundled_products")
     
-//    "Restores all introductory explanation popups and hints."
-    private let restoreHintsMessage: String = NSLocalizedString("settings_popups_msg_restore_hints", comment: "")
+    private let restoreHintsMessage: String = trans("popups_restore_hints")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +80,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let showServerThings = ConnectionProvider.connectedAndLoggedIn
         
         if showServerThings {
-            let realTimeConnectionSetting = SwitchSetting(id: .EnableRealTime, label: "Real time connection", on: Providers.userProvider.isWebsocketConnected())
+            let realTimeConnectionSetting = SwitchSetting(id: .EnableRealTime, label: trans("setting_real_time_connection"), on: Providers.userProvider.isWebsocketConnected())
             
             settings = [
                 clearHistorySetting,
@@ -110,6 +107,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     // MARK: -
     
+    // Debug only
     private func removeHistory() {
         Providers.historyProvider.removeAllHistoryItems(successHandler{
             AlertPopup.show(message: "The history was cleared", controller: self)
@@ -117,16 +115,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     private func overwriteData() {
-        ConfirmationPopup.show(title: "Warning", message: overwritePopupMessage, okTitle: "Continue", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+        ConfirmationPopup.show(title: trans("popup_title_warning"), message: overwritePopupMessage, okTitle: trans("popup_button_continue"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
             weakSelf.progressVisible()
             Providers.globalProvider.fullDownload(weakSelf.successHandler({result in
-                AlertPopup.show(message: "Your local data was overwritten", controller: weakSelf)
+                AlertPopup.show(message: trans("popup_your_data_was_overwritten"), controller: weakSelf)
             }))
         }, onCancel: nil)
     }
     
     private func removeAccount() {
-        ConfirmationPopup.show(message: "Are you sure you want to remove your account?", controller: self, onOk: {[weak self] in
+        ConfirmationPopup.show(message: trans("popup_are_you_sure_remove_account"), controller: self, onOk: {[weak self] in
             
             if let weakSelf = self {
                 
@@ -135,7 +133,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     FBSDKLoginManager().logOut() // in case we logged in using fb
                     GIDSignIn.sharedInstance().signOut()  // in case we logged in using google
                     
-                    AlertPopup.show(title: "Success", message: "Your account was removed", controller: weakSelf, onDismiss: {
+                    AlertPopup.show(title: trans("popup_title_success"), message: trans("popup_your_account_was_removed"), controller: weakSelf, onDismiss: {
                         // TODO check that the user here is logged out already
                         weakSelf.updateServerRelatedItemsUI()
                     })
@@ -153,6 +151,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    // Debug only
     private func addDummyHistoryItems() {
         
         let user = SharedUser(email: "dummy@user.test")
@@ -206,6 +205,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         })
     }
     
+    // Debug only
     private func clearAllData() {
         Providers.globalProvider.clearAllData(false, handler: successHandler{
             AlertPopup.show(message: "The data was cleared", controller: self)
@@ -215,10 +215,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private func restorePrefillProducts() {
         
         func onRestored() {
-            AlertPopup.show(message: "Products restored", controller: self)
+            AlertPopup.show(message: trans("popup_title_bundled_products_restored"), controller: self)
         }
         
-        ConfirmationPopup.show(title: "Restore Products", message: restoreProductsMessage, okTitle: "Restore", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+        ConfirmationPopup.show(title: trans("popup_title_restore_bundled_products"), message: restoreProductsMessage, okTitle: trans("popup_button_restore_bundled_product"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
         
             Providers.productProvider.restorePrefillProductsLocal(weakSelf.resultHandler(resetProgress: false, onSuccess: {restoredSomething in
                 if restoredSomething {
@@ -231,7 +231,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                         onRestored()
                     }
                 } else {
-                    AlertPopup.show(message: "You're already using all the bundled products.", controller: weakSelf)
+                    AlertPopup.show(message: trans("popup_you_already_use_bundled_products"), controller: weakSelf)
                 }
             }, onErrorAdditional: {_ in }))
             
@@ -244,7 +244,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         PreferencesManager.clearPreference(key: .showedAddDirectlyToInventoryHelp)
         PreferencesManager.clearPreference(key: .showedDeleteHistoryItemHelp)
         PreferencesManager.savePreference(.showedCanSwipeToIncrementCounter, value: NSNumber(integer: SwipeToIncrementAlertHelper.countToShowPopup)) // show first time user tries to increment after this
-        AlertPopup.show(message: "Hints restored", controller: self)
+        AlertPopup.show(message: trans("popup_hints_restored"), controller: self)
     }
     
     // MARK: - UITableView

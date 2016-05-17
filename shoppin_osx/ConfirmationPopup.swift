@@ -12,8 +12,8 @@ class ConfirmationPopup {
     
     class func show(title title: String? = nil, message: String, window: NSWindow, onOk: VoidFunction? = nil, onCancel: VoidFunction? = nil) {
         let alert = NSAlert()
-        alert.addButtonWithTitle("Ok")
-        alert.addButtonWithTitle("Cancel")
+        alert.addButtonWithTitle(trans("popup_button_ok"))
+        alert.addButtonWithTitle(trans("popup_button_cancel"))
         alert.messageText = message
         alert.alertStyle = NSAlertStyle.InformationalAlertStyle
         
