@@ -32,7 +32,7 @@ class MoreViewController: UITableViewController {
         
         items = [
             MoreItem(type: .History, text: "History"),
-            MoreItem(type: .ManageProduct, text: "Manage product"),
+            MoreItem(type: .ManageProduct, text: "Manage products"),
             MoreItem(type: .Settings, text: "Settings"),
             MoreItem(type: .Help, text: "Help"),
             MoreItem(type: .Share, text: "Share"),
