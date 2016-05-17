@@ -25,9 +25,11 @@ class Setting {
 class SimpleSetting: Setting {
     let label: String
     let labelColor: UIColor
-    init(id: SettingId, label: String, labelColor: UIColor = UIColor.blackColor()) {
+    let hasHelp: Bool
+    init(id: SettingId, label: String, labelColor: UIColor = UIColor.blackColor(), hasHelp: Bool = false) {
         self.label = label
         self.labelColor = labelColor
+        self.hasHelp = hasHelp
         super.init(id: id)
     }
 }
@@ -42,21 +44,30 @@ class SwitchSetting: Setting {
     }
 }
 
-class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwitchSettingCellDelegate {
+class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwitchSettingCellDelegate, SimpleSettingCellDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
     private let clearHistorySetting = SimpleSetting(id: .ClearHistory, label: "Clear history")
-    private let overwriteDataSetting = SimpleSetting(id: .OverwriteData, label: "Overwrite data", labelColor: UIColor.redColor())
+    private let overwriteDataSetting = SimpleSetting(id: .OverwriteData, label: "Overwrite data", labelColor: UIColor.redColor(), hasHelp: true)
     private let removeAccountSetting = SimpleSetting(id: .RemoveAccount, label: "Remove account", labelColor: UIColor.redColor())
-    private let restorePrefillProductsSetting = SimpleSetting(id: .RestorePrefillProducts, label: "Restore bundled products")
-    private let restoreHintsSetting = SimpleSetting(id: .RestoreHints, label: "Restore hints")
+    private let restorePrefillProductsSetting = SimpleSetting(id: .RestorePrefillProducts, label: "Restore bundled products", hasHelp: true)
+    private let restoreHintsSetting = SimpleSetting(id: .RestoreHints, label: "Restore hints", hasHelp: true)
     
     // developer
     private let addDummyHistoryItemsSetting = SimpleSetting(id: .AddDummyHistoryItems, label: "Add dummy history items")
     private let clearAllDataSetting = SimpleSetting(id: .ClearAllData, label: "Clear all data")
     
     private var settings: [Setting] = []
+    
+//    "This will overwrite all your (Groma) data on this device with the data stored in the server. You may lose data.\nThis is only a helper to solve technical problems and is not necessary under normal circumstances."
+    private let overwritePopupMessage: String = NSLocalizedString("settings_popups_msg_overwrite", comment: "")
+    
+//    "This will restore bundled products that you deleted since the intallation of the app, or in case you changed the language of the device, add all the bundled products in the new language. Your existing producs and items are not affected.\nNote: If you changed the language and still have products in the old language, you'll end with multiple versions of the same product for the different languages."
+    private let restoreProductsMessage: String = NSLocalizedString("settings_popups_msg_restore_product", comment: "")
+    
+//    "Restores all introductory explanation popups and hints."
+    private let restoreHintsMessage: String = NSLocalizedString("settings_popups_msg_restore_hints", comment: "")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,7 +117,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     private func overwriteData() {
-        ConfirmationPopup.show(title: "Warning", message: "This will overwrite all your (Groma) data on this device with the data stored in the server. You may lose data.\nThis is only a helper to solve technical problems and is not necessary under normal circumstances.", okTitle: "Continue", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+        ConfirmationPopup.show(title: "Warning", message: overwritePopupMessage, okTitle: "Continue", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
             weakSelf.progressVisible()
             Providers.globalProvider.fullDownload(weakSelf.successHandler({result in
                 AlertPopup.show(message: "Your local data was overwritten", controller: weakSelf)
@@ -207,7 +218,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             AlertPopup.show(message: "Products restored", controller: self)
         }
         
-        ConfirmationPopup.show(title: "Restore Products", message: "This will restore bundled products that you deleted since the intallation of the app, or in case you changed the language of the device, add all the bundled products in the new language. Your existing producs and items are not affected.\nNote: If you changed the language and still have products in the old language, you'll end with multiple versions of the same product for the different languages.", okTitle: "Restore", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+        ConfirmationPopup.show(title: "Restore Products", message: restoreProductsMessage, okTitle: "Restore", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
         
             Providers.productProvider.restorePrefillProductsLocal(weakSelf.resultHandler(resetProgress: false, onSuccess: {restoredSomething in
                 if restoredSomething {
@@ -271,6 +282,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if let simpleSetting = setting as? SimpleSetting {
                 let cell = tableView.dequeueReusableCellWithIdentifier("simpleSetting", forIndexPath: indexPath) as! SimpleSettingCell
                 cell.setting = simpleSetting
+                cell.delegate = self
                 return cell
                 
             } else if let switchSetting = setting as? SwitchSetting {
@@ -298,6 +310,23 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         default:
             QL3("Not supported: \(setting)")
             break
+        }
+    }
+    
+    // MARK: - SimpleSettingCellDelegate
+    
+    func onSimpleSettingHelpTap(cell: SimpleSettingCell, setting: SimpleSetting) {
+        switch setting.id {
+        case .OverwriteData:
+            AlertPopup.show(message: overwritePopupMessage, controller: self)
+            
+        case .RestorePrefillProducts:
+            AlertPopup.show(message: restoreProductsMessage, controller: self)
+
+        case .RestoreHints:
+            AlertPopup.show(message: restoreHintsMessage, controller: self)
+
+        default: QL4("No supported setting: \(setting)")
         }
     }
     
