@@ -137,7 +137,6 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             clearPossibleNotePopup()
             topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()
             setEmptyUI(false, animated: false)
-            clearPossibleUndo()
             topBar.setLeftButtonIds([])
             topBar.setRightButtonModels(rightButtonsClosing())
             // Clear list item memory cache when we leave controller. This is not really necessary but just "in case". The list item memory cache is there to smooth things *inside* a list, that is transitions between todo/done/stash, and adding/incrementing items. Causing a db-reload when we load the controller is totally ok.
