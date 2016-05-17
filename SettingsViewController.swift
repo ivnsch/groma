@@ -12,7 +12,7 @@ import FBSDKLoginKit
 import QorumLogs
 
 enum SettingId {
-    case ClearHistory, OverwriteData, RemoveAccount, EnableRealTime, AddDummyHistoryItems, ClearAllData, RestorePrefillProducts
+    case ClearHistory, OverwriteData, RemoveAccount, EnableRealTime, AddDummyHistoryItems, ClearAllData, RestorePrefillProducts, RestoreHints
 }
 
 class Setting {
@@ -48,7 +48,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private let overwriteDataSetting = SimpleSetting(id: .OverwriteData, label: "Overwrite data")
     private let removeAccountSetting = SimpleSetting(id: .RemoveAccount, label: "Remove account")
     private let restorePrefillProductsSetting = SimpleSetting(id: .RestorePrefillProducts, label: "Restore bundled products")
-
+    private let restoreHintsSetting = SimpleSetting(id: .RestoreHints, label: "Restore hints")
+    
     // developer
     private let addDummyHistoryItemsSetting = SimpleSetting(id: .AddDummyHistoryItems, label: "Add dummy history items")
     private let clearAllDataSetting = SimpleSetting(id: .ClearAllData, label: "Clear all data")
@@ -78,14 +79,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 removeAccountSetting,
                 addDummyHistoryItemsSetting,
                 clearAllDataSetting,
-                restorePrefillProductsSetting
+                restorePrefillProductsSetting,
+                restoreHintsSetting
             ]
         } else {
             settings = [
                 clearHistorySetting,
                 addDummyHistoryItemsSetting,
                 clearAllDataSetting,
-                restorePrefillProductsSetting
+                restorePrefillProductsSetting,
+                restoreHintsSetting
             ]
         }
         
@@ -223,6 +226,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     }
     
+    private func restoreHints() {
+        PreferencesManager.clearPreference(key: .shownCanSwipeToOpenStash)
+        PreferencesManager.clearPreference(key: .showedAddDirectlyToInventoryHelp)
+        PreferencesManager.clearPreference(key: .showedDeleteHistoryItemHelp)
+        AlertPopup.show(message: "Hints restored", controller: self)
+    }
+    
     // MARK: - UITableView
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -247,6 +257,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             clearAllData()
         case .RestorePrefillProducts:
             restorePrefillProducts()
+        case .RestoreHints:
+            restoreHints()
         }
     }
     
