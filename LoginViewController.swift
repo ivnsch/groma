@@ -91,7 +91,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "Products"
+        navigationItem.title = "Login"
 
         passwordField.secureTextEntry = true
         
