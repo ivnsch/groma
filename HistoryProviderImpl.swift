@@ -135,4 +135,39 @@ class HistoryProviderImpl: HistoryProvider {
             handler(ProviderResult(status: success ? .Success : .DatabaseUnknown))
         }
     }
+    
+    func oldestDate(inventory: Inventory, handler: ProviderResult<NSDate> -> Void) {
+        DBProviders.historyProvider.oldestDate(inventory) {oldestDateMaybe in
+            if let oldestDate = oldestDateMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: oldestDate))
+            } else {
+                handler(ProviderResult(status: .NotFound))
+            }
+        }
+    }
+    
+    func removeHistoryItemsForMonthYear(monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: ProviderResult<Any> -> Void) {
+        
+        DBProviders.historyProvider.removeHistoryItems(monthYear, inventory: inventory, markForSync: remote) {[weak self] removedHistoryItemsUuidsMaybe in
+            
+            if let removedHistoryItemsUuids = removedHistoryItemsUuidsMaybe {
+                handler(ProviderResult(status: .Success))
+                if remote {
+                    self?.remoteProvider.removeHistoryItems(removedHistoryItemsUuids) {result in
+                        if result.success {
+                            self?.dbProvider.clearHistoryItemsTombstones(removedHistoryItemsUuids) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstones for history items: \(removedHistoryItemsUuids)")
+                                }
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(result, handler: handler)
+                        }
+                    }
+                }
+            } else {
+                QL4("Coult not remove history items for month year: \(monthYear)")
+            }
+        }
+    }
 }

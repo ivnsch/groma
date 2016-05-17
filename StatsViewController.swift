@@ -63,6 +63,7 @@ class StatsViewController: UIViewController
     private var selectedInventory: Inventory? {
         didSet {
             loadChart()
+            clearFirstMonthIfIncomplete()
         }
     }
     
@@ -88,6 +89,85 @@ class StatsViewController: UIViewController
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         loadInventories()
+    }
+    
+    // TODO this logic is messy and for now disabled. Is there a reliable way to delete possible first incomplete month? - accross multiple devices, installations, shared users
+    private func clearFirstMonthIfIncomplete() {
+        guard !(PreferencesManager.loadPreference(PreferencesManagerKey.clearedFirstIncompleteMonthStats) ?? false) else {
+            QL2("Already cleared first incomplete month, nothing to do")
+            return
+        }
+        
+        guard !(PreferencesManager.loadPreference(PreferencesManagerKey.cancelledClearFirstIncompleteMonthStats) ?? false) else {
+            QL2("User cancelled to clear the first incomplete stats months, skipping")
+            return
+        }
+        guard let inventory = selectedInventory else {QL3("No inventory"); return}
+
+        // Get the date of the oldest history item
+        Providers.statsProvider.oldestDate(inventory, resultHandler(onSuccess: {[weak self] dateMaybe in guard let weakSelf = self else {return}
+            
+            if let oldestDate: NSDate = dateMaybe {
+                
+                if let firstLaunchDate: NSDate = PreferencesManager.loadPreference(PreferencesManagerKey.firstLaunchDate) {
+                    
+                    let oldestDateDayMonthYear = oldestDate.dayMonthYear
+                    let firstLaunchDateDayMonthYear = firstLaunchDate.dayMonthYear
+                    
+                    // PROBLEM: This algorithm isn't entirely safe and can remove months that are complete:
+                    // if installation month == current oldest month && installed after first && today is more than 1 month after oldest month -> delete oldest month
+                    // Consider situation: With 3 months usage, user cleared on device A the oldest month (month 1). Now user on device B, where installed the app in month 2 (a day different than the 1st) and is in month 3 now (1 month after current oldest date (month 2)), will also delete month 2, which is actually complete.
+                    // As a compromise, not seeing for now another solution, adjusting text in popup to leave decision to the user - "if the previous month was incomplete..."
+                    
+                    guard oldestDateDayMonthYear.month == firstLaunchDateDayMonthYear.month && oldestDateDayMonthYear.year == firstLaunchDateDayMonthYear.year else {
+                        // The only way we can currently know if first month may be incomplete if by checking the app installation date. This is limited though, if user reinstalled app or is using multiple devices it doesn't necessarily match. In this case we just skip our check, user will have to notice average issue themselves and delete items from history manually.
+                        QL2("Oldest date month/year != installation date month/year. Can't make assumptions about first month completeness")
+                        return
+                    }
+                    
+                    // If we are after oldest month.
+                    if NSDate().dayMonthYear.month - oldestDateDayMonthYear.month > 1 {
+                        
+                        let oldestDateMonthYear = MonthYear(month: oldestDateDayMonthYear.month, year: oldestDateDayMonthYear.year)
+                        
+                        // if the app was installed on the 1st, we assume the first month was complete, so we don't clear it.
+                        if firstLaunchDate.dayMonthYear.day != 1 {
+                            
+                            // If there's actually data for this month, otherwise there's nothing to remove so we don't bother user asking
+                            Providers.statsProvider.hasDataForMonthYear(oldestDateMonthYear, inventory: inventory, handler: weakSelf.successHandler{hasData in
+                                
+                                ConfirmationPopup.show(title: "First month start", message: "Congrats! You started a complete month report. If the previous month is incomplete (you didn't use the app the full month) you can remove it now, to improve the average calculations.", okTitle: "Remove", cancelTitle: "Cancel", controller: weakSelf, onOk: {
+                                    
+                                    Providers.statsProvider.clearMonthYearData(oldestDateMonthYear, inventory: inventory, remote: true, handler: weakSelf.successHandler{[weak self] in
+                                        PreferencesManager.savePreference(PreferencesManagerKey.clearedFirstIncompleteMonthStats, value: true)
+                                        self?.loadChart()
+                                        })
+                                    
+                                    }, onCancel: {
+                                        PreferencesManager.savePreference(PreferencesManagerKey.cancelledClearFirstIncompleteMonthStats, value: true)
+                                })
+                            })
+                            
+                        } else {
+                            QL2("Different month than installation month but installed at day 1 - nothing to do")
+                        }
+                        
+                    } else {
+                        QL2("Same month as installation month")
+                    }
+                }
+                
+            } else {
+                QL2("No stats data yet / no oldest item")
+            }
+
+            
+        }, onError: {[weak self] result in
+            self?.defaultErrorHandler([.NotFound])(providerResult: result)
+        }))
+        
+        
+        
     }
     
     private func loadInventories() {

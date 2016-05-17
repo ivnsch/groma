@@ -37,6 +37,9 @@ enum PreferencesManagerKey: String {
     case userDisabledWebsocket = "userDisabledWebsocket"
     
     case lastShouldUpdateAppDialogDate = "lastShouldUpdateAppDialogDate" // the last date where should update app dialog was shown
+    
+    case cancelledClearFirstIncompleteMonthStats = "cancelledClearFirstIncompleteMonthStats"
+    case clearedFirstIncompleteMonthStats = "clearedFirstIncompleteMonthStats"
 }
 
 class PreferencesManager {

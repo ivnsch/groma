@@ -182,4 +182,24 @@ class StatsProviderImpl: StatsProvider {
         
         return sortedByPrice
     }
+    
+    func hasDataForMonthYear(monthYear: MonthYear, inventory: Inventory, handler: ProviderResult<Bool> -> Void) {
+        Providers.historyProvider.historyItems(monthYear, inventory: inventory) {result in
+            if let items = result.sucessResult {
+                handler(ProviderResult(status: .Success, sucessResult: items.isEmpty))
+            } else {
+                QL4("Didn't return result, monthYear: \(monthYear), inventory: \(inventory)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
+    func clearMonthYearData(monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: ProviderResult<Any> -> Void) {
+        Providers.historyProvider.removeHistoryItemsForMonthYear(monthYear, inventory: inventory, remote: remote, handler: handler)
+    }
+    
+    func oldestDate(inventory: Inventory, _ handler: ProviderResult<NSDate> -> Void) {
+        Providers.historyProvider.oldestDate(inventory, handler: handler)
+    }
+    
 }

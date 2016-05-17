@@ -234,6 +234,62 @@ class RealmHistoryProvider: RealmProvider {
         return true
     }
     
+    func removeHistoryItems(monthYear: MonthYear, inventory: Inventory, markForSync: Bool, handler: [String]? -> Void) {
+        
+        doInWriteTransaction({[weak self] realm in
+            
+            if let date = monthYear.toDate() {
+                
+                if let endOfMonth = NSDate.endOfMonth(monthYear.month, year: monthYear.year) {
+                    let startOfMonth = date.startOfMonth
+                    
+                    let dbHistoryItems = realm.objects(DBHistoryItem).filter(DBHistoryItem.createPredicate(startOfMonth.toMillis(), endAddedDate: endOfMonth.toMillis(), inventoryUuid: inventory.uuid))
+                    if markForSync {
+                        let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
+                        self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
+                    }
+                    
+                    let deletedHistoryItemsUuids = dbHistoryItems.map{$0.uuid}
+                    
+                    realm.delete(dbHistoryItems)
+                    return deletedHistoryItemsUuids
+                    
+                } else {
+                    QL4("Didn't get endOfMonth for month year: \(monthYear)")
+                    return nil
+                }
+            } else {
+                QL4("Counldn't convert month year to date: \(monthYear)")
+                return nil
+            }
+            
+        }, finishHandler: {(deletedHistoryItemsUuidsMaybe: [String]?) in
+            if let deletedHistoryItemsUuids = deletedHistoryItemsUuidsMaybe {
+                handler(deletedHistoryItemsUuids)
+            } else {
+                QL4("Error: RealmHistoryProvider.removeHistoryItem: success in nil")
+                handler(nil)
+            }
+        })
+    }
+    
+    func oldestDate(inventory: Inventory, handler: NSDate? -> Void) {
+        
+        withRealm({realm in
+            
+            if let oldestItem = realm.objects(DBHistoryItem).sorted(DBHistoryItem.addedDateKey, ascending: true).first {
+                return oldestItem.addedDate.millisToEpochDate()
+            } else {
+                QL1("No items / oldest item")
+                return nil
+            }
+            
+        }, resultHandler: {(oldestDateMaybe: NSDate?) in
+            // TODO (low prio) differentiate if there was no item or an error ocurred
+            handler(oldestDateMaybe)
+        })
+    }
+    
     // TODO!! optimise this, instead of adding everything to the tombstone table and send on sync maybe just store somewhere a flag and send it on sync, which instructs the server to delete all the history.
     func removeAllHistoryItems(markForSync: Bool, handler: Bool -> ()) {
         self.doInWriteTransaction({[weak self] realm in
@@ -307,6 +363,17 @@ class RealmHistoryProvider: RealmProvider {
         doInWriteTransaction({realm in
             for historyItem in historyItemGroup.historyItems {
                 realm.deleteForFilter(DBRemoveHistoryItem.self, DBRemoveHistoryItem.createFilter(historyItem.uuid))
+            }
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func clearHistoryItemsTombstones(uuids: [String], handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            for uuid in uuids {
+                realm.deleteForFilter(DBRemoveHistoryItem.self, DBRemoveHistoryItem.createFilter(uuid))
             }
             return true
             }, finishHandler: {success in

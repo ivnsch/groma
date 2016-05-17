@@ -30,8 +30,12 @@ protocol HistoryProvider {
     func removeHistoryItemGroupForHistoryItemLocal(uuid: String, _ handler: ProviderResult<Any> -> Void)
     
     func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
-    
+
+    func removeHistoryItemsForMonthYear(monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: ProviderResult<Any> -> Void)
+
     func removeAllHistoryItems(handler: ProviderResult<Any> -> Void)
+
+    func oldestDate(inventory: Inventory, handler: ProviderResult<NSDate> -> Void)
     
     // NOTE: only for debug purpose! Normally history items can be added only via inventory
     func addHistoryItems(historyItems: [HistoryItem], _ handler: ProviderResult<Any> -> Void)

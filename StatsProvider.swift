@@ -67,4 +67,9 @@ protocol StatsProvider {
     
     func history(timePeriod: TimePeriod, group: AggregateGroup, inventory: Inventory, _ handler: ProviderResult<GroupMonthYearAggregate> -> ())
     
+    func hasDataForMonthYear(monthYear: MonthYear, inventory: Inventory, handler: ProviderResult<Bool> -> Void)
+    
+    func clearMonthYearData(monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: ProviderResult<Any> -> Void)
+    
+    func oldestDate(inventory: Inventory, _ handler: ProviderResult<NSDate> -> Void)
 }
