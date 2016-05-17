@@ -268,6 +268,7 @@
 		EB4A38B41C8F8901000714F9 /* RemoteProductsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38B31C8F8901000714F9 /* RemoteProductsWithDependencies.swift */; };
 		EB4A38B51C8F8901000714F9 /* RemoteProductsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38B31C8F8901000714F9 /* RemoteProductsWithDependencies.swift */; };
 		EB4A38B61C8F8901000714F9 /* RemoteProductsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38B31C8F8901000714F9 /* RemoteProductsWithDependencies.swift */; };
+		EB4B39BF1CEB942A00B41063 /* SwipeToIncrementAlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4B39BE1CEB942900B41063 /* SwipeToIncrementAlertHelper.swift */; };
 		EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */; };
 		EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */; };
 		EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */; };
@@ -1284,6 +1285,7 @@
 		EB4A38AB1C8F863D000714F9 /* PullProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullProviderImpl.swift; sourceTree = "<group>"; };
 		EB4A38AF1C8F86B4000714F9 /* RemotePullProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotePullProvider.swift; sourceTree = "<group>"; };
 		EB4A38B31C8F8901000714F9 /* RemoteProductsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductsWithDependencies.swift; sourceTree = "<group>"; };
+		EB4B39BE1CEB942900B41063 /* SwipeToIncrementAlertHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeToIncrementAlertHelper.swift; sourceTree = "<group>"; };
 		EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSharedLists.swift; sourceTree = "<group>"; };
 		EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableChoiceModal.swift; sourceTree = "<group>"; };
 		EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditablePlainTableViewController.swift; sourceTree = "<group>"; };
@@ -2943,6 +2945,7 @@
 				EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */,
 				EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */,
 				EBED0D131C824FE200A1EEC4 /* EmailHelper.swift */,
+				EB4B39BE1CEB942900B41063 /* SwipeToIncrementAlertHelper.swift */,
 				EB3E92F01CDA3A610048DA0D /* LangHelper.swift */,
 				EB37ABB61CA099BA00FE9D7A /* ToggleButtonRotator.swift */,
 				EBB8FC7A1CD3EBC2008FD084 /* WebsocketHelper.swift */,
@@ -3760,6 +3763,7 @@
 				EB1B366D1BC48238003519F2 /* DBPlanItem.swift in Sources */,
 				EB8EDE221C9B6AEE003B566F /* RemoteIncrement.swift in Sources */,
 				EBDA09F81BF8DBE50039E1E8 /* ExpandableTopViewController.swift in Sources */,
+				EB4B39BF1CEB942A00B41063 /* SwipeToIncrementAlertHelper.swift in Sources */,
 				EB7858791B7F7083008AAD12 /* RemoteHistoryItem.swift in Sources */,
 				EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */,
 				EB0C1B9C1B3DBF9600F24C85 /* RegisterViewController.swift in Sources */,

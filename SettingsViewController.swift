@@ -243,6 +243,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         PreferencesManager.clearPreference(key: .shownCanSwipeToOpenStash)
         PreferencesManager.clearPreference(key: .showedAddDirectlyToInventoryHelp)
         PreferencesManager.clearPreference(key: .showedDeleteHistoryItemHelp)
+        PreferencesManager.savePreference(.showedCanSwipeToIncrementCounter, value: NSNumber(integer: SwipeToIncrementAlertHelper.countToShowPopup)) // show first time user tries to increment after this
         AlertPopup.show(message: "Hints restored", controller: self)
     }
     

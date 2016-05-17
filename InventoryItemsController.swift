@@ -468,21 +468,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func increment(model: ProductWithQuantity, delta: Int, onSuccess: Int -> Void) {
-
-        func increment() {
-            Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, remote: true, successHandler({updatedQuantity in
-                QL2("inv controller CALL SUCEESS: calling on success")
-                onSuccess(updatedQuantity)
-            }))
-        }
-
-        if delta > 0 { // positive increment - show info
-            checkShowAddToInventoryExplanationPopup {
-                increment()
-            }
-        } else {
-            increment()
-        }
+        Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, remote: true, successHandler({updatedQuantity in
+            onSuccess(updatedQuantity)
+        }))
     }
     
     func onModelSelected(model: ProductWithQuantity, indexPath: NSIndexPath) {

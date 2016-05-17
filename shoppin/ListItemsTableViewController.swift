@@ -619,10 +619,12 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     func onMinusTap(tableViewListItem: TableViewListItem) {
         listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: -1)
+        SwipeToIncrementAlertHelper.check(self)
     }
     
     func onPlusTap(tableViewListItem: TableViewListItem) {
         listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: 1)
+        SwipeToIncrementAlertHelper.check(self)
     }
     
     func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {

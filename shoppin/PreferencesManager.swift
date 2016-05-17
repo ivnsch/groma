@@ -26,7 +26,7 @@ enum PreferencesManagerKey: String {
     // explanation popups that are displayed only once after installation
     case showedAddDirectlyToInventoryHelp = "showedAddDirectlyToInventoryHelp"
     case showedDeleteHistoryItemHelp = "showedDeleteHistoryItemHelp"
-    
+    case showedCanSwipeToIncrementCounter = "showedCanSwipeToIncrementCounter" // we show this after n times, since it's not critical and we don't want to overwhelm user with popups the first time they use the app.
     case websocketUuid = "websocketUuid"
     
     case loginTokenFallback = "loginTokenFallback"
