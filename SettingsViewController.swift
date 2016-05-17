@@ -24,8 +24,10 @@ class Setting {
 
 class SimpleSetting: Setting {
     let label: String
-    init(id: SettingId, label: String) {
+    let labelColor: UIColor
+    init(id: SettingId, label: String, labelColor: UIColor = UIColor.blackColor()) {
         self.label = label
+        self.labelColor = labelColor
         super.init(id: id)
     }
 }
@@ -45,8 +47,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var tableView: UITableView!
     
     private let clearHistorySetting = SimpleSetting(id: .ClearHistory, label: "Clear history")
-    private let overwriteDataSetting = SimpleSetting(id: .OverwriteData, label: "Overwrite data")
-    private let removeAccountSetting = SimpleSetting(id: .RemoveAccount, label: "Remove account")
+    private let overwriteDataSetting = SimpleSetting(id: .OverwriteData, label: "Overwrite data", labelColor: UIColor.redColor())
+    private let removeAccountSetting = SimpleSetting(id: .RemoveAccount, label: "Remove account", labelColor: UIColor.redColor())
     private let restorePrefillProductsSetting = SimpleSetting(id: .RestorePrefillProducts, label: "Restore bundled products")
     private let restoreHintsSetting = SimpleSetting(id: .RestoreHints, label: "Restore hints")
     

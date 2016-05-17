@@ -16,6 +16,7 @@ class SimpleSettingCell: UITableViewCell {
         didSet {
             if let setting = setting {
                 label.text = setting.label
+                label.textColor = setting.labelColor
             }
         }
     }
