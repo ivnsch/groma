@@ -110,6 +110,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
                     
                     if let controller = UIApplication.sharedApplication().delegate?.window??.rootViewController { // since we change controller on success need root controller in case we show error popup
                         Providers.listItemsProvider.buyCart(weakSelf.listItemsTableViewController.items, list: list, remote: true, controller.successHandler{result in
+                            weakSelf.delegate?.onCartSendItemsToStash(weakSelf.listItemsTableViewController.items)
                             weakSelf.close()
                         })
                     } else {
@@ -131,19 +132,6 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
             QL3("List is not set, can't add to inventory")
         }
         
-    }
-    
-    private func sendAllItemToStash(onFinish: VoidFunction) {
-        if let list = currentList {
-            Providers.listItemsProvider.switchAllToStatus(listItemsTableViewController.items, list: list, status1: .Done, status: .Stash, remote: true) {[weak self] result in guard let weakSelf = self else {return}
-                if result.success {
-                    weakSelf.delegate?.onCartSendItemsToStash(weakSelf.listItemsTableViewController.items)
-                    weakSelf.listItemsTableViewController.setListItems([])
-                    weakSelf.onTableViewChangedQuantifiables()
-                    onFinish()
-                }
-            }
-        }
     }
     
     override func setDefaultLeftButtons() {
