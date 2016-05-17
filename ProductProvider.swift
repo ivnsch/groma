@@ -58,4 +58,7 @@ protocol ProductProvider {
     TODO use results like everywhere else, maybe put in a different specific utility class this is rather provider-internal
     */
     func mergeOrCreateProduct(productName: String, category: String, categoryColor: UIColor, brand: String, updateCategory: Bool, _ handler: ProviderResult<Product> -> Void)
+    
+    // Returns if restored at least one product
+    func restorePrefillProductsLocal(handler: ProviderResult<Bool> -> Void)
 }

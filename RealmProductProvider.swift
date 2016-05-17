@@ -477,4 +477,27 @@ class RealmProductProvider: RealmProvider {
                 handler(result)
         }
     }
+    
+    // Returns: true if restored a product, false if didn't restore a product, nil if error ocurred
+    func restorePrefillProducts(handler: Bool? -> Void) {
+        
+        doInWriteTransaction({realm in
+            
+            let prefillProducts = SuggestionsPrefiller().prefillProducts(LangManager().appLang).products
+            
+            var restoredSomething: Bool = false
+            
+            for prefillProduct in prefillProducts {
+                if realm.objects(DBProduct).filter(DBProduct.createFilterNameBrand(prefillProduct.name, brand: prefillProduct.brand)).isEmpty {
+                    QL1("Restoring prefill product: \(prefillProduct)")
+                    realm.add(prefillProduct, update: false)
+                    restoredSomething = true
+                }
+            }
+            return restoredSomething
+            
+            }, finishHandler: {successMaybe in
+                handler(successMaybe)
+        })
+    }
 }

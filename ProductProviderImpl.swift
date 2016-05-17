@@ -266,4 +266,15 @@ class ProductProviderImpl: ProductProvider {
             handler(ProviderResult(status: success ? .Success : .Unknown))
         }
     }
+    
+    func restorePrefillProductsLocal(handler: ProviderResult<Bool> -> Void) {
+        DBProviders.productProvider.restorePrefillProducts() {restoredSomethingMaybe in
+            if let restoredSomething = restoredSomethingMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: restoredSomething))
+            } else {
+                QL4("Local error restoring products")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
 }

@@ -12,7 +12,7 @@ import FBSDKLoginKit
 import QorumLogs
 
 enum SettingId {
-    case ClearHistory, OverwriteData, RemoveAccount, EnableRealTime, AddDummyHistoryItems, ClearAllData
+    case ClearHistory, OverwriteData, RemoveAccount, EnableRealTime, AddDummyHistoryItems, ClearAllData, RestorePrefillProducts
 }
 
 class Setting {
@@ -47,6 +47,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private let clearHistorySetting = SimpleSetting(id: .ClearHistory, label: "Clear history")
     private let overwriteDataSetting = SimpleSetting(id: .OverwriteData, label: "Overwrite data")
     private let removeAccountSetting = SimpleSetting(id: .RemoveAccount, label: "Remove account")
+    private let restorePrefillProductsSetting = SimpleSetting(id: .RestorePrefillProducts, label: "Restore bundled products")
+
     // developer
     private let addDummyHistoryItemsSetting = SimpleSetting(id: .AddDummyHistoryItems, label: "Add dummy history items")
     private let clearAllDataSetting = SimpleSetting(id: .ClearAllData, label: "Clear all data")
@@ -75,13 +77,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 overwriteDataSetting,
                 removeAccountSetting,
                 addDummyHistoryItemsSetting,
-                clearAllDataSetting
+                clearAllDataSetting,
+                restorePrefillProductsSetting
             ]
         } else {
             settings = [
                 clearHistorySetting,
                 addDummyHistoryItemsSetting,
-                clearAllDataSetting
+                clearAllDataSetting,
+                restorePrefillProductsSetting
             ]
         }
         
@@ -192,6 +196,33 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         })
     }
     
+    private func restorePrefillProducts() {
+        
+        func onRestored() {
+            AlertPopup.show(message: "Products restored", controller: self)
+        }
+        
+        ConfirmationPopup.show(title: "Restore Products", message: "This will restore bundled products that you deleted since the intallation of the app, or in case you changed the language of the device, add all the bundled products in the new language. Your existing producs and items are not affected.\nNote: If you changed the language and still have products in the old language, you'll end with multiple versions of the same product for the different languages.", okTitle: "Restore", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+        
+            Providers.productProvider.restorePrefillProductsLocal(weakSelf.resultHandler(resetProgress: false, onSuccess: {restoredSomething in
+                if restoredSomething {
+                    if ConnectionProvider.connectedAndLoggedIn {
+                        weakSelf.progressVisible()
+                        Providers.globalProvider.sync(false, handler: weakSelf.successHandler{syncResult in
+                            onRestored()
+                        })
+                    } else {
+                        onRestored()
+                    }
+                } else {
+                    AlertPopup.show(message: "You're already using all the bundled products.", controller: weakSelf)
+                }
+            }, onErrorAdditional: {_ in }))
+            
+        }, onCancel: nil)
+
+    }
+    
     // MARK: - UITableView
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -214,6 +245,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             addDummyHistoryItems()
         case .ClearAllData:
             clearAllData()
+        case .RestorePrefillProducts:
+            restorePrefillProducts()
         }
     }
     

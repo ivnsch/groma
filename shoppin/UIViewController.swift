@@ -61,7 +61,7 @@ extension UIViewController {
         return self.resultHandler(onSuccess: onSuccess, onError: nil)
     }
 
-    func resultHandler(onSuccess onSuccess: VoidFunction, onErrorAdditional: ((ProviderResult<Any>) -> Void)) -> (providerResult: ProviderResult<Any>) -> Void {
+    func resultHandler(resetProgress resetProgress: Bool = true, onSuccess: VoidFunction, onErrorAdditional: ((ProviderResult<Any>) -> Void)) -> (providerResult: ProviderResult<Any>) -> Void {
         return {[weak self] providerResult in
             if providerResult.success {
                 onSuccess()
@@ -70,12 +70,14 @@ extension UIViewController {
                 onErrorAdditional(providerResult)
                 self?.defaultErrorHandler()(providerResult: providerResult)
             }
-            self?.progressVisible(false)
+            if resetProgress {
+                self?.progressVisible(false)
+            }
         }
     }
 
     // Result handler for result with payload
-    func resultHandler<T>(onSuccess onSuccess: (T) -> Void, onErrorAdditional: ((ProviderResult<T>) -> Void)) -> (providerResult: ProviderResult<T>) -> Void {
+    func resultHandler<T>(resetProgress resetProgress: Bool = true, onSuccess: (T) -> Void, onErrorAdditional: ((ProviderResult<T>) -> Void)) -> (providerResult: ProviderResult<T>) -> Void {
         return {[weak self] providerResult in
             if providerResult.success {
                 if let successResult = providerResult.sucessResult {
@@ -89,11 +91,13 @@ extension UIViewController {
                 onErrorAdditional(providerResult)
                 self?.defaultErrorHandler()(providerResult: providerResult)
             }
-            self?.progressVisible(false)
+            if resetProgress {
+                self?.progressVisible(false)
+            }
         }
     }
     
-    func resultHandler(onSuccess onSuccess: VoidFunction, onError: ((ProviderResult<Any>) -> Void)? = nil) -> (providerResult: ProviderResult<Any>) -> Void {
+    func resultHandler(resetProgress resetProgress: Bool = true, onSuccess: VoidFunction, onError: ((ProviderResult<Any>) -> Void)? = nil) -> (providerResult: ProviderResult<Any>) -> Void {
         return {[weak self] providerResult in
             if providerResult.success {
                 onSuccess()
@@ -105,12 +109,14 @@ extension UIViewController {
                     self?.defaultErrorHandler()(providerResult: providerResult)
                 }
             }
-            self?.progressVisible(false)
+            if resetProgress {
+                self?.progressVisible(false)
+            }
         }
     }
     
     // Result handler for result with payload
-    func resultHandler<T>(onSuccess onSuccess: (T) -> Void, onError: ((ProviderResult<T>) -> Void)? = nil) -> (providerResult: ProviderResult<T>) -> Void {
+    func resultHandler<T>(resetProgress resetProgress: Bool = true, onSuccess: (T) -> Void, onError: ((ProviderResult<T>) -> Void)? = nil) -> (providerResult: ProviderResult<T>) -> Void {
         return {[weak self] providerResult in
             if providerResult.success {
                 if let successResult = providerResult.sucessResult {
@@ -127,8 +133,9 @@ extension UIViewController {
                     self?.defaultErrorHandler()(providerResult: providerResult)
                 }
             }
-            
-            self?.progressVisible(false)
+            if resetProgress {
+                self?.progressVisible(false)
+            }
         }
     }
 

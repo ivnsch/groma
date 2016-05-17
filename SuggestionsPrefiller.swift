@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import QorumLogs
 
 class SuggestionsPrefiller {
 
@@ -86,27 +87,23 @@ class SuggestionsPrefiller {
         }
     }
 
-    
-    var uuid: String {
+    private var uuid: String {
         return NSUUID().UUIDString
     }
     
-    func tr(key: String, _ lang: String) -> String {
-        let path = NSBundle.mainBundle().pathForResource(lang, ofType: "lproj")
-        let bundle = NSBundle(path: path!)
-        if let str = bundle?.localizedStringForKey(key, value: nil, table: nil) {
-            return str
-        } else {
-            print("Warn: SuggestionsPrefiller.tr: Didn't find translation for key: \(key), lang: \(lang)")
-            return ""
+    func prefillProducts(lang: String) -> (categories: [DBProductCategory], products: [DBProduct]) {
+
+        func noResult() -> (categories: [DBProductCategory], products: [DBProduct]) {
+            return (categories: [], products: [])
         }
-    }
-    
-    
-    // TODO!!! add brand to products! and unique key name + mark --- prices without mark will likely be annoying to users as they will have to edit the product (price) every time they decide to buy a different brand. Prefill would not have brands! User has to edit the prefilled products or add new ones with the brands.
-    // we could add brand to name but this is going to cause space problems in the lists and looks bad
-    
-    private func prefillProducts(lang: String) -> (categories: [DBProductCategory], products: [DBProduct]) {
+        
+        guard let path = NSBundle.mainBundle().pathForResource(lang, ofType: "lproj") else {QL4("No path for lang: \(lang)"); return noResult()}
+        guard let bundle = NSBundle(path: path) else {QL4("No bundle for path: \(path)"); return noResult()}
+        
+        func tr(key: String, _ lang: String) -> String {
+            return bundle.localizedStringForKey(key, value: nil, table: nil)
+        }
+        
         let fruitsCat = DBProductCategory(uuid: uuid, name: tr("pr_fruits", lang), bgColorHex: UIColor.flatRedColor().hexStr)
         let frozenFruitsCat = DBProductCategory(uuid: uuid, name: tr("pr_fruits_frozen", lang), bgColorHex: UIColor.flatBlueColor().hexStr)
         let vegetablesCat = DBProductCategory(uuid: uuid, name: tr("pr_vegetables", lang), bgColorHex: UIColor.flatGreenColor().hexStr)
