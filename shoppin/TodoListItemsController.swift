@@ -190,7 +190,10 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
                 doneViewController.delegate = self
                 doneViewController.onUIReady = {
                     doneViewController.currentList = self.currentList
+                }
+                doneViewController.onViewWillAppear = {
                     if let dotColor = self.topBar.dotColor {
+                        doneViewController.topBar.showDot()
                         doneViewController.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
                     } else {
                         QL4("Invalid state: top bar has no dot color")
@@ -204,7 +207,10 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
 //                stashViewController.navigationItemTextColor = titleLabel?.textColor
                 stashViewController.onUIReady = {
                     stashViewController.currentList = self.currentList
+                }
+                stashViewController.onViewWillAppear = {
                     if let dotColor = self.topBar.dotColor {
+                        stashViewController.topBar.showDot()
                         stashViewController.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
                     } else {
                         QL4("Invalid state: top bar has no dot color")

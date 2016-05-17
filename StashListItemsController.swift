@@ -29,7 +29,7 @@ class StashListItemsController: ListItemsController {
         onUIReady?()
         
         topBar.setBackVisible(true)
-        topBar.positionTitleLabelLeft(true, animated: false, withDot: true)
+        topBar.positionTitleLabelLeft(true, animated: false, withDot: false)
     }
     
     

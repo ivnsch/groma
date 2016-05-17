@@ -149,33 +149,47 @@ class ListTopBarView: UIView {
         }
     }
     
-    func animateDot(expanding: Bool, duration: CFTimeInterval = 0.3) {
+    private func generateCirclePath() -> UIBezierPath? {
         
-        guard let titleTextSize = titleLabel.text?.size(titleLabelFont) else {return}
-        
-        let rectPath = UIBezierPath(roundedRect: CGRectInset(self.bounds, -10, -10), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(5, 5))
-        
+        guard let titleTextSize = titleLabel.text?.size(titleLabelFont) else {return nil}
+
         let circleDiam: CGFloat = 12
         let cornerRadius = circleDiam / 2
         let x = frame.width / 2 + (titleTextSize.width / 2) + 8
         let y = CGFloat(centerYInExpandedState) - (circleDiam / 2)
         
         let circlePath = UIBezierPath(roundedRect: CGRectMake(x, y, circleDiam, circleDiam), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(cornerRadius, cornerRadius))
-//        circlePath.closePath()
+        //        circlePath.closePath()
+        return circlePath
+    }
+    
+    func showDot() {
+        guard let circlePath = generateCirclePath() else {QL3("No circle path"); return }
+        bgColorLayer?.path = circlePath.CGPath
+    }
+    
+    // parameter: toDot: true: rect -> dot, false: dot -> rect
+    func animateRectDot(toDot: Bool, duration: CFTimeInterval) {
         
-        let animationKey = "path"
-        
-        let pathAnimation = CABasicAnimation(keyPath: animationKey)
-        pathAnimation.duration = duration
-        pathAnimation.fromValue = expanding ? rectPath.CGPath : circlePath.CGPath
+        guard let circlePath = generateCirclePath() else {QL3("No circle path"); return }
 
-        // Disable implicit animation
-        CATransaction.disableActions()
-        bgColorLayer?.path = expanding ? circlePath.CGPath : rectPath.CGPath
+        let rectPath = UIBezierPath(roundedRect: CGRectInset(self.bounds, -10, -10), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(5, 5))
         
-        pathAnimation.toValue = expanding ? circlePath.CGPath : rectPath.CGPath
-        bgColorLayer?.addAnimation(pathAnimation, forKey: animationKey)
-
+        if duration > 0 {
+            let animationKey = "path"
+            
+            let pathAnimation = CABasicAnimation(keyPath: animationKey)
+            pathAnimation.duration = duration
+            pathAnimation.fromValue = toDot ? rectPath.CGPath : circlePath.CGPath
+            
+            // Disable implicit animation
+            CATransaction.disableActions()
+            
+            pathAnimation.toValue = toDot ? circlePath.CGPath : rectPath.CGPath
+            bgColorLayer?.addAnimation(pathAnimation, forKey: animationKey)
+        }
+        
+        bgColorLayer?.path = toDot ? circlePath.CGPath : rectPath.CGPath
     }
     
     // parameter: center => center, !center => left
@@ -200,13 +214,13 @@ class ListTopBarView: UIView {
             }
             
             if withDot {
-                animateDot(center)
+                animateRectDot(center, duration: 0.3)
             }
 
         } else {
             
             if withDot && center { // we want to show the dot when the view is in expanded (label=center) state
-                animateDot(true, duration: 0.1) // since the dot is not added as a view but simply animation with fill after, to show dot without animation we run the animation with duration 0
+                showDot()
             }
             layoutIfNeeded()
             delegate?.onCenterTitleAnimComplete(center)

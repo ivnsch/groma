@@ -42,7 +42,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
         onUIReady?()
         
         topBar.setBackVisible(true)
-        topBar.positionTitleLabelLeft(true, animated: false, withDot: true)
+        topBar.positionTitleLabelLeft(true, animated: false, withDot: false)
         
         buyViewHeightConstraint.constant = DimensionsManager.listItemsPricesViewHeight
 
