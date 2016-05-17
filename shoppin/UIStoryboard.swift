@@ -70,10 +70,6 @@ extension UIStoryboard {
     
     
     // MARK: - Intro
-
-    class func introNavController() -> UINavigationController {
-        return introStoryboard().instantiateViewControllerWithIdentifier("IntroNavController") as! UINavigationController
-    }
     
     class func introViewController() -> IntroViewController {
         return introStoryboard().instantiateViewControllerWithIdentifier("IntroController") as! IntroViewController

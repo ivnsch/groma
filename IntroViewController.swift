@@ -10,6 +10,10 @@ import UIKit
 import SwipeView
 import QorumLogs
 
+enum IntroMode {
+    case Launch, More
+}
+
 class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, SwipeViewDataSource, SwipeViewDelegate {
 
     @IBOutlet weak var swipeView: SwipeView!
@@ -22,6 +26,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     @IBOutlet weak var verticalCenterSlideConstraint: NSLayoutConstraint!
     
+    var mode: IntroMode = .Launch
+    
     private let pageModels: [(key: String, imageName: String)] = [
         ("Manage shopping lists comfortably", "intro_lists"),
         ("Connect lists with inventories to keep track of your items", "intro_inventory"),
@@ -31,8 +37,10 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     private var finishedSlider = false {
         didSet {
-            skipButton.setTitle("Start", forState: .Normal)
-            skipButton.setTitleColor(Theme.black, forState: .Normal)
+            if mode == .Launch {
+                skipButton.setTitle("Start", forState: .Normal)
+                skipButton.setTitleColor(Theme.black, forState: .Normal)
+            }
         }
     }
     
@@ -40,22 +48,26 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         super.viewDidLoad()
         pageControl.numberOfPages = pageModels.count
         
-        let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
-//        let initActions = true
-        
-        QL1("Will init database: \(initActions)")
-        
-        if initActions {
-            setButtonsEnabled(false)
-            initDatabase {[weak self] in
-                self?.setButtonsEnabled(true)
+        if mode == .Launch {
+            
+            let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
+            //        let initActions = true
+            
+            QL1("Will init database: \(initActions)")
+            
+            if initActions {
+                setButtonsEnabled(false)
+                initDatabase {[weak self] in
+                    self?.setButtonsEnabled(true)
+                }
             }
+            
+            skipButton.hidden = false
+            
+        } else {
+            navigationItem.title = "Intro"
+            skipButton.hidden = true
         }
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(true)
-        self.navigationController?.navigationBarHidden = true
     }
     
     private func setButtonsEnabled(enabled: Bool) {
@@ -125,8 +137,10 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 
     
     @IBAction func skipTapped(sender: UIButton) {
-        PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
-        self.startMainStoryboard()
+        if mode == .Launch {
+            PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
+            exit()
+        }
     }
     
     // MARK: - RegisterDelegate
@@ -144,16 +158,14 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     // MARK: -
     
-    private func startMainStoryboard() {
-        self.navigationController?.navigationBarHidden = true // otherwise it overlays the navigation of the nested view controllers (not sure if this structure is ok, maybe all should use the same navigation controller?)
-
-        let tabController = UIStoryboard.mainTabController()
-        self.navigationController?.setViewControllers([tabController], animated: true)
+    private func exit() {
+        self.modalTransitionStyle = .CrossDissolve
+        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func onLoginSuccess() {
         PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
-        self.startMainStoryboard()
+        exit()
     }
     
     func onRegisterFromLoginSuccess() {

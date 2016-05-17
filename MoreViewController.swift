@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 
 enum MoreItemType {
-    case History, ManageProduct, User, Settings, Help, Share, Feedback, About
+    case History, ManageProduct, User, Settings, Help, Share, Feedback, WatchIntro, About
 }
 
 typealias MoreItem = (type: MoreItemType, text: String)
@@ -37,6 +37,7 @@ class MoreViewController: UITableViewController {
             MoreItem(type: .Help, text: "Help"),
             MoreItem(type: .Share, text: "Share"),
             MoreItem(type: .Feedback, text: "Feedback"),
+            MoreItem(type: .WatchIntro, text: "Watch intro again"),
             MoreItem(type: .About, text: "About")
         ]
         
@@ -91,6 +92,11 @@ class MoreViewController: UITableViewController {
 //            let controller = UIStoryboard.shareAppViewController()
 //            navigationController?.setNavigationBarHidden(true, animated: false)
 //            navigationController?.pushViewController(controller, animated: true)
+            
+        case .WatchIntro:
+            let controller = UIStoryboard.introViewController()
+            controller.mode = .More
+            navigationController?.pushViewController(controller, animated: true)
             
         case .About:
             let controller = UIStoryboard.aboutViewController()

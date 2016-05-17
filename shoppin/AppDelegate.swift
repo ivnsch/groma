@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         ifDebugLaunchActions()
         
-        showController(firstController())
+        showController()
 
         initReachability()
 
@@ -155,18 +155,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         BITHockeyManager.sharedHockeyManager().authenticator.authenticateInstallation()
     }
     
-    private func showController(controller: UIViewController) {
+    private func showController() {
+        
+        let controller = UIStoryboard.mainTabController()
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.rootViewController = controller
         self.window?.makeKeyAndVisible()
-    }
-    
-    private func firstController() -> UIViewController {
-        // The intro is shown (even if user stops the app and comes back) until it's completed (log in / register success or skip)
+        
         if (isDebug() && debugForceShowIntro) || PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
-            return UIStoryboard.introNavController()
-        } else {
-            return UIStoryboard.mainTabController()
+            let introController = UIStoryboard.introViewController()
+            introController.mode = .Launch
+            
+            self.window?.rootViewController?.presentViewController(introController, animated: false, completion: nil)
         }
     }
     
