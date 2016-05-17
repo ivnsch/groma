@@ -19,6 +19,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     @IBOutlet weak var swipeView: SwipeView!
     @IBOutlet weak var pageControl: UIPageControl!
     
+    @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
     @IBOutlet weak var skipButton: UIButton!
     // This works but for now disabled, no signup in intro
 //    @IBOutlet weak var loginButton: UIButton!
@@ -51,29 +52,33 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         if mode == .Launch {
             
             let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
-            //        let initActions = true
+//            let initActions = true
             
             QL1("Will init database: \(initActions)")
-            
-            if initActions {
-                setButtonsEnabled(false)
-                initDatabase {[weak self] in
-                    self?.setButtonsEnabled(true)
+
+            func toggleButtons(canSkip: Bool) {
+                progressIndicator.hidden = canSkip
+                skipButton.hidden = !canSkip
+                if !progressIndicator.hidden {
+                    progressIndicator.startAnimating()
                 }
             }
             
-            skipButton.hidden = false
+            if initActions {
+                toggleButtons(false)
+                
+                initDatabase {
+                    toggleButtons(true)
+                }
+            } else {
+                toggleButtons(true)
+            }
             
         } else {
             navigationItem.title = "Intro"
             skipButton.hidden = true
+            progressIndicator.hidden = true
         }
-    }
-    
-    private func setButtonsEnabled(enabled: Bool) {
-        skipButton.enabled = enabled
-//        loginButton.enabled = enabled
-//        registerButton.enabled = enabled
     }
     
 //    @IBAction func loginTapped(sender: UIButton) {

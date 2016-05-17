@@ -49,6 +49,9 @@
                                 <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </pageControl>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="pJ3-Ic-Ev2">
+                                <rect key="frame" x="177" y="568" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -72,6 +75,7 @@
                                 </userDefinedRuntimeAttributes>
                             </constraint>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="7sM-E7-U7q"/>
+                            <constraint firstItem="pJ3-Ic-Ev2" firstAttribute="centerY" secondItem="NJR-Pk-tTx" secondAttribute="centerY" id="93w-fo-p1C"/>
                             <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="dKg-jx-UjW" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
@@ -89,6 +93,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
+                            <constraint firstItem="pJ3-Ic-Ev2" firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="kq0-sL-AYj"/>
                             <constraint firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="mK8-90-YtI"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="leading" secondItem="q6e-yE-ONc" secondAttribute="leading" id="xZ6-gy-O9O">
                                 <userDefinedRuntimeAttributes>
@@ -110,6 +115,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="pageControl" destination="mkE-ao-QPc" id="fb6-Vq-8Za"/>
+                        <outlet property="progressIndicator" destination="pJ3-Ic-Ev2" id="ShC-N5-xC0"/>
                         <outlet property="skipButton" destination="NJR-Pk-tTx" id="vOf-eA-cbw"/>
                         <outlet property="swipeView" destination="6ZS-ry-WaI" id="TgR-a1-308"/>
                         <outlet property="verticalCenterSlideConstraint" destination="3Tk-Zj-DvH" id="rMo-yr-l31"/>
