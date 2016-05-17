@@ -18,6 +18,8 @@ class DBHistoryItem: DBSyncable {
     dynamic var userOpt: DBSharedUser? = DBSharedUser()
     dynamic var paidPrice: Float = 0 // product price at the moment of buying the item (per unit)
     
+    static let addedDateKey = "addedDate"
+    
     override static func primaryKey() -> String? {
         return "uuid"
     }
