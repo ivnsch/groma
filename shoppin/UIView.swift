@@ -219,7 +219,11 @@ extension UIView {
     func addBorderWithYOffset(color: UIColor, width: CGFloat, offset: CGFloat) {
         let border = CALayer()
         border.backgroundColor = color.CGColor
-        border.frame = CGRectMake(0, offset - width, self.bounds.size.width, width)
+        
+        // FIXME! hack - self.bounds.size.width. Quick fix for full width in cells, in iPhone6+ the border not complete - because file in IB is for iPhone6 screen size and when we retrieve bounds the final size is not calculated yet.
+        border.frame = CGRectMake(0, offset - width, DimensionsManager.fullWidth, width)
+//        border.frame = CGRectMake(0, offset - width, self.bounds.size.width, width)
+        
         self.layer.addSublayer(border)
     }
     
