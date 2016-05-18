@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJR-Pk-tTx" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="170" y="561" width="35" height="34"/>
+                                <rect key="frame" x="170" y="541" width="35" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Skip">
                                     <color key="titleColor" red="0.67450980392156867" green="0.67450980392156867" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
@@ -34,7 +34,7 @@
                                 </connections>
                             </button>
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="6ZS-ry-WaI" customClass="SwipeView">
-                                <rect key="frame" x="0.0" y="184" width="375" height="300"/>
+                                <rect key="frame" x="0.0" y="164" width="375" height="300"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="gWF-zF-RTt"/>
@@ -45,19 +45,19 @@
                                 </connections>
                             </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="mkE-ao-QPc">
-                                <rect key="frame" x="168" y="494" width="39" height="37"/>
+                                <rect key="frame" x="168" y="474" width="39" height="37"/>
                                 <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </pageControl>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="pJ3-Ic-Ev2">
-                                <rect key="frame" x="177" y="568" width="20" height="20"/>
+                                <rect key="frame" x="177" y="548" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="6ZS-ry-WaI" secondAttribute="trailing" id="15Y-Bf-R9H"/>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="10" id="2Je-Xu-p9d"/>
-                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerY" secondItem="q6e-yE-ONc" secondAttribute="centerY" id="3Tk-Zj-DvH" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerY" secondItem="q6e-yE-ONc" secondAttribute="centerY" constant="-20" id="3Tk-Zj-DvH" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
@@ -67,10 +67,10 @@
                                         <real key="value" value="-20"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                        <real key="value" value="0.0"/>
+                                        <real key="value" value="-30"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                        <real key="value" value="0.0"/>
+                                        <real key="value" value="-30"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
