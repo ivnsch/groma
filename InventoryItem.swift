@@ -52,7 +52,7 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     func same(inventoryItem: InventoryItem) -> Bool {
-        return product.uuid == inventoryItem.product.uuid && inventory.uuid == inventoryItem.inventory.uuid
+        return uuid == inventoryItem.uuid
     }
     
     func copy(uuid uuid: String? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, product: Product? = nil, inventory: Inventory? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> InventoryItem {
