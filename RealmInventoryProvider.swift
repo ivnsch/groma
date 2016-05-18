@@ -212,6 +212,11 @@ class RealmInventoryProvider: RealmProvider {
                 handler(success ?? false)
         })
     }
+
+    func updateLastSyncTimeStamp(inventory: RemoteInventoryWithDependencies, handler: Bool -> Void) {
+        self.updateLastSyncTimeStamp(inventory.inventory, handler: handler)
+        // the users are not synced so only inventory
+    }
     
     func updateLastSyncTimeStampSync(realm: Realm, inventory: RemoteInventory) {
         realm.create(DBInventory.self, value: inventory.timestampUpdateDict, update: true)

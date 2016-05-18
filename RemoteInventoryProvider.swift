@@ -16,14 +16,14 @@ class RemoteInventoryProvider: RemoteProvider {
         }
     }
     
-    func addInventory(inventory: Inventory, handler: RemoteResult<RemoteInventory> -> ()) {
+    func addInventory(inventory: Inventory, handler: RemoteResult<RemoteInventoryWithDependencies> -> ()) {
         let params = self.toRequestParams(inventory)
         RemoteProvider.authenticatedRequest(.POST, Urls.inventory, params) {result in
             handler(result)
         }
     }
     
-    func updateInventory(inventory: Inventory, handler: RemoteResult<RemoteInventory> -> ()) {
+    func updateInventory(inventory: Inventory, handler: RemoteResult<RemoteInventoryWithDependencies> -> ()) {
         let params = self.toRequestParams(inventory)
         RemoteProvider.authenticatedRequest(.PUT, Urls.inventory, params) {result in
             handler(result)
