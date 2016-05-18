@@ -14,7 +14,14 @@ extension Array where Element: List {
     Sorts increasingly by order
     */
     func sortedByOrder() -> [List] {
-        return self.sort {$0.order <= $1.order}
+        return sort {
+            switch ($0.order, $1.order) {
+            case let (lhs, rhs) where lhs == rhs: // this should normally not happen, but just in case, get a fixed ordering anyway
+                return $0.name < $1.name
+            case let (lhs, rhs):
+                return lhs < rhs
+            }
+        }
     }
     
     func equalsExcludingSyncAttributes(rhs: [List]) -> Bool {
