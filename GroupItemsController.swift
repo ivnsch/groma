@@ -322,8 +322,8 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                     self?.reload()
                 } else {
                     self?.updateItemUI(inventoryItem)
-                    self?.closeTopController()
                 }
+                self?.closeTopController()
             }, onError: {[weak self] result in
                 self?.reload()
                 self?.defaultErrorHandler()(providerResult: result)

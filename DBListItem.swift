@@ -156,6 +156,10 @@ class DBListItem: DBSyncable {
     static func createFilterUniqueInList(productName: String, productBrand: String, list: List) -> String {
         return "\(createFilterList(list.uuid)) AND productOpt.productOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)'"
     }
+
+    static func createFilterUniqueInListNotUuid(productName: String, productBrand: String, notUuid: String, list: List) -> String {
+        return "\(createFilterList(list.uuid)) AND productOpt.productOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)' AND uuid != '\(notUuid)'"
+    }
     
     static func createFilterWithProducts(productUuids: [String]) -> String {
         let productUuidsStr: String = productUuids.map{"'\($0)'"}.joinWithSeparator(",")

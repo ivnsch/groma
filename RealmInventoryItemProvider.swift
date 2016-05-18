@@ -241,8 +241,8 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
-    func deletePossibleInventoryItemWithUnique(productName: String, productBrand: String, inventory: Inventory, handler: Bool -> Void) {
-        removeReturnCount(DBInventoryItem.createFilter(ProductUnique(name: productName, brand: productBrand), inventoryUuid: inventory.uuid), handler: {removedCountMaybe in
+    func deletePossibleInventoryItemWithUnique(productName: String, productBrand: String, inventory: Inventory, notUuid: String, handler: Bool -> Void) {
+        removeReturnCount(DBInventoryItem.createFilter(ProductUnique(name: productName, brand: productBrand), inventoryUuid: inventory.uuid, notUuid: notUuid), handler: {removedCountMaybe in
             if let removedCount = removedCountMaybe {
                 if removedCount > 0 {
                     QL2("Found inventory item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), inventory: {\(inventory.uuid), \(inventory.name)}")

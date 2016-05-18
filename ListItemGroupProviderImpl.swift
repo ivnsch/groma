@@ -319,8 +319,8 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     
     func update(input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: ProviderResult<(groupItem: GroupItem, replaced: Bool)> -> Void) {
         
-        // Remove a possible already existing item with same unique (name+brand) in the same list.
-        DBProviders.groupItemProvider.deletePossibleGroupItemWithUnique(input.name, productBrand: input.brand, group: updatingGroupItem.group) {foundAndDeletedGroupItem in
+        // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
+        DBProviders.groupItemProvider.deletePossibleGroupItemWithUnique(input.name, productBrand: input.brand, group: updatingGroupItem.group, notUuid: updatingGroupItem.uuid) {foundAndDeletedGroupItem in
             // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
             Providers.productProvider.mergeOrCreateProduct(input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand, updateCategory: false) {[weak self] result in
                 

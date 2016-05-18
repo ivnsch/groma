@@ -533,8 +533,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                     weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
                     //                    self?.updatePrices(.MemOnly)
                     weakSelf.onTableViewChangedQuantifiables()
-                    weakSelf.setEditing(false, animated: true, tryCloseTopViewController: true)
                 }
+                weakSelf.closeTopController()
             })
         } else {
             print("Error: Invalid state: trying to update list item without current list")
@@ -592,7 +592,6 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
         func onEditListItem(input: ListItemInput, editingListItem: ListItem) {
             // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
-            listItemsTableViewController.cellMode = .Note
             updateItem(editingListItem, listItemInput: input)
         }
         
@@ -846,6 +845,18 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         topQuickAddControllerManager?.controller?.onClose()
         topEditSectionControllerManager?.controller?.onClose()
         expandDelegate?.setExpanded(false)
+    }
+    
+    
+    private func topBarOnCloseExpandable() {
+        setDefaultLeftButtons()
+        topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
+    }
+    
+    private func closeTopController() {
+        topQuickAddControllerManager?.expand(false)
+        topQuickAddControllerManager?.controller?.onClose()
+        topBarOnCloseExpandable()
     }
     
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {

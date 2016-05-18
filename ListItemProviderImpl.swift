@@ -274,8 +274,8 @@ class ListItemProviderImpl: ListItemProvider {
     // NOTE: for now assumes that the store is not updated (the app doesn't allow to edit the store of a list item). This means that we don't look if a store product with the name-brand-store exists and link to that one if it does like we do with product or category. We just update the current store product. TODO review this
     func update(listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: ProviderResult<(listItem: ListItem, replaced: Bool)> -> Void) {
         
-        // Remove a possible already existing item with same unique (name+brand) in the same list.
-        DBProviders.listItemProvider.deletePossibleListItemWithUnique(listItemInput.name, productBrand: listItemInput.brand, list: list) {[weak self] foundAndDeletedListItem in
+        // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
+        DBProviders.listItemProvider.deletePossibleListItemWithUnique(listItemInput.name, productBrand: listItemInput.brand, notUuid: updatingListItem.uuid, list: list) {[weak self] foundAndDeletedListItem in
         
             self?.sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: nil) {[weak self] result in
                 

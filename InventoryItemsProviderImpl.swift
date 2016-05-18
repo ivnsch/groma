@@ -186,8 +186,8 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     
     func updateInventoryItem(input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, _ handler: ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)> -> Void) {
         
-        // Remove a possible already existing item with same unique (name+brand) in the same list.
-        DBProviders.inventoryItemProvider.deletePossibleInventoryItemWithUnique(input.productPrototype.name, productBrand: input.productPrototype.brand, inventory: updatingInventoryItem.inventory) {foundAndDeletedInventoryItem in
+        // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
+        DBProviders.inventoryItemProvider.deletePossibleInventoryItemWithUnique(input.productPrototype.name, productBrand: input.productPrototype.brand, inventory: updatingInventoryItem.inventory, notUuid: updatingInventoryItem.uuid) {foundAndDeletedInventoryItem in
             // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
             Providers.productProvider.mergeOrCreateProduct(input.productPrototype.name, category: input.productPrototype.category, categoryColor: input.productPrototype.categoryColor, brand: input.productPrototype.brand, updateCategory: false) {[weak self] result in
                 

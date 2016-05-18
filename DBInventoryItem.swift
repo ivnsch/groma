@@ -60,6 +60,10 @@ class DBInventoryItem: DBSyncable {
     static func createFilter(productUnique: ProductUnique, inventoryUuid: String) -> String {
         return "\(createFilterInventory(inventoryUuid)) AND productOpt.name = '\(productUnique.name)' AND productOpt.brand = '\(productUnique.brand)'"
     }
+
+    static func createFilter(productUnique: ProductUnique, inventoryUuid: String, notUuid: String) -> String {
+        return "\(createFilterInventory(inventoryUuid)) AND productOpt.name = '\(productUnique.name)' AND productOpt.brand = '\(productUnique.brand)' AND uuid != '\(notUuid)'"
+    }
     
     static func createFilter(productUuid: String, _ inventoryUuid: String) -> String {
         return "productOpt.uuid = '\(productUuid)' AND inventoryOpt.uuid = '\(inventoryUuid)'"

@@ -269,8 +269,8 @@ class RealmListItemProvider: RealmProvider {
     }
 
     // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
-    func deletePossibleListItemWithUnique(productName: String, productBrand: String, list: List, handler: Bool -> Void) {
-        removeReturnCount(DBListItem.createFilterUniqueInList(productName, productBrand: productBrand, list: list), handler: {removedCountMaybe in
+    func deletePossibleListItemWithUnique(productName: String, productBrand: String, notUuid: String, list: List, handler: Bool -> Void) {
+        removeReturnCount(DBListItem.createFilterUniqueInListNotUuid(productName, productBrand: productBrand, notUuid: notUuid, list: list), handler: {removedCountMaybe in
             if let removedCount = removedCountMaybe {
                 if removedCount > 0 {
                     QL2("Found list item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
