@@ -122,7 +122,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self?.tableView.insertRowsAtIndexPaths([sectionIndexPath], withRowAnimation: .Top)
                 sectionModel.expanded = true
             }
-            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: NSNotFound, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
         }
     }
     

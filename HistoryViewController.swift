@@ -282,7 +282,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 self?.tableView.insertRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
                 sectionModel.expanded = true
             }, onComplete: {[weak self] in
-                self?.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+                self?.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: NSNotFound, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
             })
         }
     }
