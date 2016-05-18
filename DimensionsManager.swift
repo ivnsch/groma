@@ -192,6 +192,15 @@ class DimensionsManager {
         case .Large: return 30
         }
     }
+
+    static var emptyViewTopConstraint: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 140
+        case .Small: return 140
+        case .Middle: return 160
+        case .Large: return 160
+        }
+    }
     
     static var topMenuBarHeight: CGFloat {
         return 40

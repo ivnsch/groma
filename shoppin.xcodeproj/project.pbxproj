@@ -269,6 +269,7 @@
 		EB4A38B51C8F8901000714F9 /* RemoteProductsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38B31C8F8901000714F9 /* RemoteProductsWithDependencies.swift */; };
 		EB4A38B61C8F8901000714F9 /* RemoteProductsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38B31C8F8901000714F9 /* RemoteProductsWithDependencies.swift */; };
 		EB4B39BF1CEB942A00B41063 /* SwipeToIncrementAlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4B39BE1CEB942900B41063 /* SwipeToIncrementAlertHelper.swift */; };
+		EB4B39C41CEBF05300B41063 /* TopEmptyViewConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4B39C31CEBF05300B41063 /* TopEmptyViewConstraint.swift */; };
 		EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */; };
 		EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */; };
 		EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */; };
@@ -1287,6 +1288,7 @@
 		EB4A38B31C8F8901000714F9 /* RemoteProductsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductsWithDependencies.swift; sourceTree = "<group>"; };
 		EB4B39BE1CEB942900B41063 /* SwipeToIncrementAlertHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeToIncrementAlertHelper.swift; sourceTree = "<group>"; };
 		EB4B39C01CEBDF5E00B41063 /* products_translations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = products_translations.swift; path = ../scripts/products_translations.swift; sourceTree = "<group>"; };
+		EB4B39C31CEBF05300B41063 /* TopEmptyViewConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopEmptyViewConstraint.swift; sourceTree = "<group>"; };
 		EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSharedLists.swift; sourceTree = "<group>"; };
 		EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableChoiceModal.swift; sourceTree = "<group>"; };
 		EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditablePlainTableViewController.swift; sourceTree = "<group>"; };
@@ -2382,6 +2384,7 @@
 				EBB6D74F1CD68EC900F9C711 /* LabelMore.swift */,
 				EBB6D7551CD69E6100F9C711 /* TextFieldMore.swift */,
 				EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */,
+				EB4B39C31CEBF05300B41063 /* TopEmptyViewConstraint.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -4040,6 +4043,7 @@
 				EB4A38B01C8F86B4000714F9 /* RemotePullProvider.swift in Sources */,
 				EB4D57A81B74B90600BC6171 /* ListSync.swift in Sources */,
 				EB7E8B611B2ADF620090409A /* Try.swift in Sources */,
+				EB4B39C41CEBF05300B41063 /* TopEmptyViewConstraint.swift in Sources */,
 				EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */,
 				EBB9A7401B5EB21900E5487D /* InventoryProviderImpl.swift in Sources */,
 				EBED0D121C824EC300A1EEC4 /* RatingProvideFeedbackController.swift in Sources */,

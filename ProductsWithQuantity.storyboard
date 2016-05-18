@@ -74,7 +74,7 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="xlU-gu-Hqm">
-                                        <rect key="frame" x="75" y="157" width="226" height="206"/>
+                                        <rect key="frame" x="75" y="200" width="225" height="206"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="Z2W-jV-7aE"/>
                                             <constraint firstAttribute="width" constant="60" id="vhO-8t-1qo"/>
@@ -87,7 +87,7 @@
                                         </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ops, there are no inventory items yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2dJ-JG-9o5" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="39" y="383" width="298" height="22"/>
+                                        <rect key="frame" x="39" y="426" width="298" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -98,7 +98,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy items in the cart to add some!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LUt-lH-RYz" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="70" y="413" width="235" height="18"/>
+                                        <rect key="frame" x="70" y="456" width="235" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -115,10 +115,16 @@
                                     <constraint firstItem="xlU-gu-Hqm" firstAttribute="centerX" secondItem="kZw-vd-0Tu" secondAttribute="centerX" id="MxQ-Hl-619"/>
                                     <constraint firstItem="LUt-lH-RYz" firstAttribute="centerX" secondItem="kZw-vd-0Tu" secondAttribute="centerX" id="QpZ-FC-wjc"/>
                                     <constraint firstItem="LUt-lH-RYz" firstAttribute="top" secondItem="2dJ-JG-9o5" secondAttribute="bottom" constant="8" id="RHY-nt-KhF"/>
-                                    <constraint firstItem="xlU-gu-Hqm" firstAttribute="width" secondItem="kZw-vd-0Tu" secondAttribute="width" multiplier="0.6" constant="1" id="WMF-8j-xGx"/>
+                                    <constraint firstItem="xlU-gu-Hqm" firstAttribute="width" secondItem="kZw-vd-0Tu" secondAttribute="width" multiplier="0.6" id="WMF-8j-xGx"/>
                                     <constraint firstItem="2dJ-JG-9o5" firstAttribute="top" secondItem="xlU-gu-Hqm" secondAttribute="bottom" constant="20" id="dIN-7H-2Zf"/>
-                                    <constraint firstItem="xlU-gu-Hqm" firstAttribute="centerY" secondItem="kZw-vd-0Tu" secondAttribute="centerY" constant="-64" id="tD2-gy-hoK"/>
+                                    <constraint firstItem="xlU-gu-Hqm" firstAttribute="centerY" secondItem="kZw-vd-0Tu" secondAttribute="centerY" constant="-22" id="tD2-gy-hoK"/>
+                                    <constraint firstItem="xlU-gu-Hqm" firstAttribute="top" secondItem="kZw-vd-0Tu" secondAttribute="top" constant="200" id="yqr-vX-L22" customClass="TopEmptyViewConstraint" customModule="shoppin"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="tD2-gy-hoK"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
