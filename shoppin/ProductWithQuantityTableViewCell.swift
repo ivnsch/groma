@@ -66,7 +66,6 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     }
     
     weak var delegate: ProductWithQuantityTableViewCellDelegate?
-    var row: Int?
 
     var shownQuantity: Int = 0 {
         didSet {

@@ -138,7 +138,6 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         let model = self.models[indexPath.row]
         
         cell.model = model
-        cell.row = indexPath.row
         cell.delegate = self
         
         return cell
@@ -290,11 +289,20 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     Note that despite implicitly unwrapped may look suitable here, we prefer working with ? as general approach
     */
     private func checkChangeInventoryItemQuantity(cell: ProductWithQuantityTableViewCell, delta: Int) {
-        if let inventoryItem = cell.model, row = cell.row {
-            changeInventoryItemQuantity(cell, row: row, inventoryItem: inventoryItem, delta: delta)
+        if let inventoryItem = cell.model, indexPath = getIndexPath(inventoryItem) {
+            changeInventoryItemQuantity(cell, row: indexPath.row, inventoryItem: inventoryItem, delta: delta)
         } else {
             print("Error: Cell has invalid state, inventory item and row must not be nil at this point")
         }
+    }
+    
+    private func getIndexPath(model: ProductWithQuantity) -> NSIndexPath? {
+        for (i, m) in models.enumerate() {
+            if m.same(model) {
+                return NSIndexPath(forRow: i, inSection: 0)
+            }
+        }
+        return nil
     }
     
     private func changeInventoryItemQuantity(cell: ProductWithQuantityTableViewCell, row: Int, inventoryItem: ProductWithQuantity, delta: Int) {
@@ -305,18 +313,16 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
                 
                 if let weakSelf = self {
                     
-                    weakSelf.updateQuantityUI(inventoryItem, updatedQuantity: updatedQuantity, cell: cell, row: row)
+                    weakSelf.updateQuantityUI(inventoryItem, updatedQuantity: updatedQuantity)
                     
                     if inventoryItem.quantity + delta == 0 {
                         cell.startDeleteProgress {
-                            
-                            weakSelf.tableView.reloadData()
-                            
-                            
+                            weakSelf.remove(inventoryItem)
+
                             weakSelf.delegate?.remove(inventoryItem, onSuccess: {
-                                weakSelf.removeUI(row)
-                                
                             }, onError: {result in
+                                QL4("Error ocurred - reloading first page")
+                                weakSelf.clearAndLoadFirstPage()
                             })
                         }
                     }
@@ -324,16 +330,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             })
         }
     }
-    
-    // TODO review this method why pass delta separately? why need to pass inventory item from tableview instead of parameter inventory item?
-    func updateIncrementUI(inventoryItem: ProductWithQuantity, delta: Int) {
-        if let (index, item, cellMaybe) = inventoryItemTableViewData(inventoryItem) {
-            updateIncrementUI(item, delta: delta, cell: cellMaybe, row: index)
-        } else {
-            print("Warn: InventoryItemsTableViewController.updateIncrementUI: Didn't find inventoryItem: \(inventoryItem)")
-        }
-    }
-    
+
     // Finds tableview related data of inventory item, if it's in tableview, otherwise returns nil
     private func inventoryItemTableViewData(inventoryItem: ProductWithQuantity) -> (index: Int, item: ProductWithQuantity, cell: ProductWithQuantityTableViewCell?)? { // note item -> the item currently in tableview TODO why do we need to return this if it's "same" as parameter inventoryItem
         if let (index, item) = (models.enumerate().filter{$0.element.same(inventoryItem)}.first) {
@@ -423,8 +420,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     }
     
     private func tryIncrementItem(inventoryItem: ProductWithQuantity) -> Bool {
-        if let (index, item, cellMaybe) = inventoryItemTableViewData(inventoryItem) {
-            updateIncrementUI(item, delta: inventoryItem.quantity, cell: cellMaybe, row: index)
+        if let (index, item, _) = inventoryItemTableViewData(inventoryItem) {
+            updateIncrementUI(item, delta: inventoryItem.quantity)
             tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0), atScrollPosition: .Top, animated: true)
             return true
         } else {
@@ -444,22 +441,29 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    private func updateQuantityUI(item: ProductWithQuantity, updatedQuantity: Int, cell: ProductWithQuantityTableViewCell?, row: Int) {
-        let updatedItem = item.updateQuantityCopy(updatedQuantity)
-        
-        models[row] = updatedItem
-        if let cell = cell {
-            cell.model = updatedItem
-            cell.quantityLabel.text = "\(updatedItem.quantity)"
+    private func updateQuantityUI(item: ProductWithQuantity, updatedQuantity: Int) {
+        if let (index, _, cellMaybe) = inventoryItemTableViewData(item) {
+            let updatedItem = item.updateQuantityCopy(updatedQuantity)
+            models[index] = updatedItem
+            if let cell = cellMaybe {
+                cell.model = updatedItem
+                cell.quantityLabel.text = "\(updatedItem.quantity)"
+            }
+        } else {
+            QL3("Warn: InventoryItemsTableViewController.remove: didn't find item: \(item)")
         }
     }
     
-    private func updateIncrementUI(inventoryItem: ProductWithQuantity, delta: Int, cell: ProductWithQuantityTableViewCell?, row: Int) {
-        let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
-        models[row] = incrementedItem
-        if let cell = cell {
-            cell.model = incrementedItem
-            cell.quantityLabel.text = "\(incrementedItem.quantity)"
+    func updateIncrementUI(inventoryItem: ProductWithQuantity, delta: Int) {
+        if let (index, _, cellMaybe) = inventoryItemTableViewData(inventoryItem) {
+            let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
+            models[index] = incrementedItem
+            if let cell = cellMaybe {
+                cell.model = incrementedItem
+                cell.quantityLabel.text = "\(incrementedItem.quantity)"
+            }
+        } else {
+            QL3("Warn: InventoryItemsTableViewController.remove: didn't find item: \(inventoryItem)")
         }
     }
     

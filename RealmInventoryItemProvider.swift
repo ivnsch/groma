@@ -55,7 +55,7 @@ class RealmInventoryItemProvider: RealmProvider {
         }
     }
     
-    func incrementInventoryItem(itemUuid: String, delta: Int, onlyDelta: Bool = false, dirty: Bool, handler: Int? -> ()) {
+    func incrementInventoryItem(itemUuid: String, delta: Int, onlyDelta: Bool = false, dirty: Bool, handler: DBResult<Int> -> Void) {
         
         doInWriteTransaction({realm in
             
@@ -77,23 +77,23 @@ class RealmInventoryItemProvider: RealmProvider {
                     
                     realm.add(dbIncrementedInventoryitem, update: true)
                     
-                    return dbIncrementedInventoryitem.quantity
+                    return DBResult(status: .NotFound, sucessResult: dbIncrementedInventoryitem.quantity)
                     
                 } else {
                     QL3("Inventory item not found: \(itemUuid)")
-                    return nil
+                    return DBResult(status: .NotFound)
                 }
             }
             
-        }) {(updatedQuantityMaybe: Int?) in
+        }) {(result: DBResult<Int>?) in
             QL2("Calling handler")
-            handler(updatedQuantityMaybe)
+            handler(result ?? DBResult(status: .Unknown))
         }
     }
     
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     // param onlyDelta: if we want to update only quantityDelta field (opposed to updating both quantity and quantityDelta)
-    func incrementInventoryItem(item: InventoryItem, delta: Int, onlyDelta: Bool = false, dirty: Bool, handler: Int? -> ()) {
+    func incrementInventoryItem(item: InventoryItem, delta: Int, onlyDelta: Bool = false, dirty: Bool, handler: DBResult<Int> -> Void) {
         incrementInventoryItem(item.uuid, delta: delta, onlyDelta: onlyDelta, dirty: dirty, handler: handler)
     }
     

@@ -141,34 +141,43 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             handler(ProviderResult(status: .Success))
         }
         
-        DBProviders.inventoryItemProvider.incrementInventoryItem(item, delta: delta, onlyDelta: false, dirty: remote) {[weak self] updatedQuantityMaybe in
+        DBProviders.inventoryItemProvider.incrementInventoryItem(item, delta: delta, onlyDelta: false, dirty: remote) {[weak self] dbResult in
 
             if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
-                if let updatedQuantity = updatedQuantityMaybe {
+                if let updatedQuantity = dbResult.sucessResult {
                     handler(ProviderResult(status: .Success, sucessResult: updatedQuantity))
-                } else {
-                    handler(ProviderResult(status: .DatabaseSavingError))
-                }
-            }
-            
-            if remote {
-                let itemIncrement = ItemIncrement(delta: delta, itemUuid: item.uuid)
-                self?.remoteInventoryItemsProvider.incrementInventoryItem(itemIncrement) {remoteResult in
                     
-                    if let incrementResult = remoteResult.successResult {
-                        DBProviders.inventoryItemProvider.updateInventoryItemWithIncrementResult(incrementResult) {success in
-                            if !success {
-                                QL4("Couldn't save increment result for item: \(item), remoteResult: \(remoteResult)")
+                    if remote {
+                        let itemIncrement = ItemIncrement(delta: delta, itemUuid: item.uuid)
+                        self?.remoteInventoryItemsProvider.incrementInventoryItem(itemIncrement) {remoteResult in
+                            
+                            if let incrementResult = remoteResult.successResult {
+                                DBProviders.inventoryItemProvider.updateInventoryItemWithIncrementResult(incrementResult) {success in
+                                    if !success {
+                                        QL4("Couldn't save increment result for item: \(item), remoteResult: \(remoteResult)")
+                                    }
+                                }
+                                
+                            } else {
+                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Int>) in
+                                    QL4("Error incrementing item: \(item) in remote, result: \(result)")
+                                    // if there's a not connection related server error, invalidate cache
+                                    self?.memProvider.invalidate()
+                                    handler(result)
+                                })
                             }
                         }
-                        
+                    }
+                    
+                    
+                } else {
+                    if dbResult.status == .NotFound {
+                        // When swiping many times quickly we get requests to increment items that have already been deleted, which triggers error alert - this may require a better fix but for now we ignore not found status
+                        QL3("Item to increment not found: \(item), returning success anyway")
+                        handler(ProviderResult(status: .Success))
                     } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Int>) in
-                            QL4("Error incrementing item: \(item) in remote, result: \(result)")
-                            // if there's a not connection related server error, invalidate cache
-                            self?.memProvider.invalidate()
-                            handler(result)
-                        })
+                        QL4("Unknown error incrementing inventory item: \(item), delta: \(delta)")
+                        handler(ProviderResult(status: .DatabaseSavingError))
                     }
                 }
             }
@@ -274,10 +283,15 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                         }
                     } else {
                         DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                            print("Error removing inventory item in uuid: productUuid: \(uuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
-                            // if there's a not connection related server error, invalidate cache
-                            self?.memProvider.invalidate()
-                            handler(remoteResult)
+                            QL3("Error removing inventory item in uuid: productUuid: \(uuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
+                            // When swiping many items quickly it may be that we send multiple requests to delete same item, so we get not found sometimes. Ignore.
+                            // TODO is this really necessary - what can be do client side to prevent trying to delete same item multiple times?
+                            if remoteResult.status != .NotFound {
+                                self?.memProvider.invalidate()
+                                handler(remoteResult)
+                            } else {
+                                QL3("Inventory item to delete was not found in the server, ignoring")
+                            }
                         }
                     }
                 }
