@@ -91,6 +91,17 @@ class RealmListProvider: RealmProvider {
             }
             realm.delete(dbList)
         }
+        
+        // Update order. No synchonisation with server for this, since server also reorders on delete, and on sync. Not sure right now if reorder on sync covers all cases specially for multiple devices, for now looks sufficient.
+        let allSortedDbLists = realm.objects(DBList).sort({$0.order < $1.order})
+        let updatedDbLists: [DBList] = allSortedDbLists.mapEnumerate {(index, dbList) in
+            dbList.order = index
+            return dbList
+        }
+        for updatedDbList in updatedDbLists {
+            realm.create(DBList.self, value: ["uuid": updatedDbList.uuid, "order": updatedDbList.order], update: true)
+        }
+        
         return true
     }
     

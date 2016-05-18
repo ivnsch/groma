@@ -118,6 +118,17 @@ class RealmInventoryProvider: RealmProvider {
             let toRemove = inventoryResults.map{DBRemoveInventory($0)}
             saveObjsSyncInt(realm, objs: toRemove, update: true)
         }
+        
+        // Update order. No synchonisation with server for this, since server also reorders on delete, and on sync. Not sure right now if reorder on sync covers all cases specially for multiple devices, for now looks sufficient.
+        let allSortedDbInventories = realm.objects(DBInventory).sort({$0.order < $1.order})
+        let updatedDbInventories: [DBInventory] = allSortedDbInventories.mapEnumerate {(index, dbList) in
+            dbList.order = index
+            return dbList
+        }
+        for updatedDbInventory in updatedDbInventories {
+            realm.create(DBInventory.self, value: ["uuid": updatedDbInventory.uuid, "order": updatedDbInventory.order], update: true)
+        }
+        
         realm.delete(inventoryResults)
     }
     

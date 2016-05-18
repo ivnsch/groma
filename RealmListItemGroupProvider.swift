@@ -112,6 +112,16 @@ class RealmListItemGroupProvider: RealmProvider {
             }
             realm.delete(itemToRemove)
             
+            // Update order. No synchonisation with server for this, since server also reorders on delete, and on sync. Not sure right now if reorder on sync covers all cases specially for multiple devices, for now looks sufficient.
+            let allSortedDbGroups = realm.objects(DBListItemGroup).sort({$0.order < $1.order})
+            let updatedDbGroups: [DBListItemGroup] = allSortedDbGroups.mapEnumerate {(index, dbList) in
+                dbList.order = index
+                return dbList
+            }
+            for updatedDbGroup in updatedDbGroups {
+                realm.create(DBListItemGroup.self, value: ["uuid": updatedDbGroup.uuid, "order": updatedDbGroup.order], update: true)
+            }
+
         } else {
             QL1("No group to remove: uuid: \(groupUuid)")
         }
