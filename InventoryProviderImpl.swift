@@ -17,7 +17,10 @@ class InventoryProviderImpl: InventoryProvider {
 
     func inventories(remote: Bool = true, _ handler: ProviderResult<[Inventory]> -> ()) {
         self.dbInventoryProvider.loadInventories {dbInventories in
-            handler(ProviderResult(status: .Success, sucessResult: dbInventories))
+            
+            let sotedDBInventories = dbInventories.sortedByOrder() // include name in sorting to guarantee equal ordering with remote result, in case of duplicate order fields
+            
+            handler(ProviderResult(status: .Success, sucessResult: sotedDBInventories))
             
             if remote {
                 self.remoteProvider.inventories {remoteResult in
@@ -26,7 +29,7 @@ class InventoryProviderImpl: InventoryProvider {
                         let inventories: [Inventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
                         let sortedInventories = inventories.sortedByOrder()
                         
-                        if dbInventories != sortedInventories {
+                        if sotedDBInventories != sortedInventories {
                             
                             self.dbInventoryProvider.overwrite(sortedInventories, clearTombstones: true, dirty: false) {saved in
                                 if saved {

@@ -25,7 +25,16 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     // TODO don't use QuickAddItemSortBy here, map to a (new) group specific enum
     func groups(range: NSRange, sortBy: GroupSortBy, _ handler: ProviderResult<[ListItemGroup]> -> Void) {
         dbGroupsProvider.groups(range, sortBy: sortBy) {[weak self] dbGroups in
-            handler(ProviderResult(status: .Success, sucessResult: dbGroups))
+            
+            let sotedDBGroups: [ListItemGroup] = {
+                if sortBy == .Order {
+                    return dbGroups.sortedByOrder() // include name in sorting to guarantee equal ordering with remote result, in case of duplicate order fields
+                } else {
+                    return dbGroups
+                }
+            }()
+            
+            handler(ProviderResult(status: .Success, sucessResult: sotedDBGroups))
             
             self?.remoteGroupsProvider.groups {remoteResult in
                 
@@ -33,7 +42,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     let groups: [ListItemGroup] = remoteGroups.map{ListItemGroupMapper.listItemGroupWithRemote($0)}
                     let sortedGroups = groups.sortedByOrder()
                     
-                    if dbGroups != sortedGroups {
+                    if sotedDBGroups != sortedGroups {
                         self?.dbGroupsProvider.overwrite(groups, clearTombstones: true) {saved in
                             if saved {
                                 handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: sortedGroups))
