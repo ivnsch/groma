@@ -128,13 +128,13 @@ class ListTopBarView: UIView {
 //        centerYLine.centerYInParent(centerYOffsetInExpandedState)
         
         
-        let hairline = UIImageView()
-        hairline.translatesAutoresizingMaskIntoConstraints = false
-        hairline.backgroundColor = UIColor.lightGrayColor()
-        addSubview(hairline)
-        hairline.fillSuperviewWidth()
-        hairline.heightConstraint(0.5)
-        hairline.alignBottom(self, constant: 0)
+//        let hairline = UIImageView()
+//        hairline.translatesAutoresizingMaskIntoConstraints = false
+//        hairline.backgroundColor = UIColor.lightGrayColor()
+//        addSubview(hairline)
+//        hairline.fillSuperviewWidth()
+//        hairline.heightConstraint(0.5)
+//        hairline.alignBottom(self, constant: 0)
         
         let shapeLayer = CAShapeLayer()
         shapeLayer.frame = self.bounds
