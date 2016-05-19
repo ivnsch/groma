@@ -254,6 +254,10 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let model = models[indexPath.row]
         delegate?.onModelSelected(model, indexPath: indexPath)
+        
+        if let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: indexPath.row, inSection: 0)) as? ProductWithQuantityTableViewCell {
+            cell.cancelDeleteProgress()
+        }
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
