@@ -311,27 +311,30 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     private func changeInventoryItemQuantity(cell: ProductWithQuantityTableViewCell, row: Int, inventoryItem: ProductWithQuantity, delta: Int) {
         
-        if inventoryItem.quantity + delta >= 0 {
-            
-            delegate?.increment(inventoryItem, delta: delta, onSuccess: {[weak self] updatedQuantity in
+        func remove() {
+            cell.startDeleteProgress {[weak self] in
+                self?.remove(inventoryItem)
                 
-                if let weakSelf = self {
-                    
-                    weakSelf.updateQuantityUI(inventoryItem, updatedQuantity: updatedQuantity)
-                    
-                    if inventoryItem.quantity + delta == 0 {
-                        cell.startDeleteProgress {
-                            weakSelf.remove(inventoryItem)
-
-                            weakSelf.delegate?.remove(inventoryItem, onSuccess: {
-                            }, onError: {result in
-                                QL4("Error ocurred - reloading first page")
-                                weakSelf.clearAndLoadFirstPage()
-                            })
-                        }
-                    }
+                self?.delegate?.remove(inventoryItem, onSuccess: {
+                    }, onError: {[weak self] result in
+                        QL4("Error ocurred - reloading first page")
+                        self?.clearAndLoadFirstPage()
+                })
+            }
+        }
+        
+        let newQuantity = inventoryItem.quantity + delta
+        
+        if newQuantity >= 0 {
+            delegate?.increment(inventoryItem, delta: delta, onSuccess: {[weak self] updatedQuantity in
+                self?.updateQuantityUI(inventoryItem, updatedQuantity: updatedQuantity)
+                if newQuantity == 0 {
+                    remove()
                 }
             })
+            
+        } else { // user tries to decrement when the quantity is already 0 (quantity + delta is a negative number) -> start remove animation
+            remove()
         }
     }
 
