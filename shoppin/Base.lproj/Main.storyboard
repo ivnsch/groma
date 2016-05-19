@@ -54,7 +54,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cmp-U7-jlB">
-                                <rect key="frame" x="0.0" y="85" width="375" height="582"/>
+                                <rect key="frame" x="0.0" y="95" width="375" height="572"/>
                                 <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="reuseIdentifier" id="Ijr-7n-zCH" customClass="HelpCell" customModule="shoppin" customModuleProvider="target">
@@ -96,7 +96,7 @@
                                 </connections>
                             </tableView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zUT-nN-8Zc" customClass="RoundTextField" customModule="shoppin">
-                                <rect key="frame" x="20" y="50" width="335" height="35"/>
+                                <rect key="frame" x="20" y="40" width="335" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="BsN-MQ-epw"/>
                                 </constraints>
@@ -116,8 +116,8 @@
                             <constraint firstItem="zUT-nN-8Zc" firstAttribute="leading" secondItem="NXh-nl-wzj" secondAttribute="leading" constant="20" id="c9L-IQ-tad"/>
                             <constraint firstAttribute="trailing" secondItem="cmp-U7-jlB" secondAttribute="trailing" id="kGR-uh-lcr"/>
                             <constraint firstAttribute="trailing" secondItem="zUT-nN-8Zc" secondAttribute="trailing" constant="20" id="r4S-GI-B3S"/>
-                            <constraint firstItem="zUT-nN-8Zc" firstAttribute="top" secondItem="3sa-HG-6lK" secondAttribute="bottom" constant="30" id="uwW-9E-fhm"/>
-                            <constraint firstItem="cmp-U7-jlB" firstAttribute="top" secondItem="zUT-nN-8Zc" secondAttribute="bottom" id="zBj-jH-N62"/>
+                            <constraint firstItem="zUT-nN-8Zc" firstAttribute="top" secondItem="3sa-HG-6lK" secondAttribute="bottom" constant="20" id="uwW-9E-fhm"/>
+                            <constraint firstItem="cmp-U7-jlB" firstAttribute="top" secondItem="zUT-nN-8Zc" secondAttribute="bottom" constant="20" id="zBj-jH-N62"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Help" id="HDq-27-xgh">
@@ -979,7 +979,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aQD-q2-WPN" customClass="ChartBaseView" customModule="SwiftCharts">
-                                <rect key="frame" x="0.0" y="104" width="375" height="304"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="294"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2GP-Qy-qZp">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="0.0"/>
@@ -1131,7 +1131,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             <constraint firstItem="fwZ-a2-d32" firstAttribute="leading" secondItem="llX-YW-eE9" secondAttribute="leading" id="E7c-tG-FZa"/>
                             <constraint firstItem="h5a-TG-tsU" firstAttribute="top" secondItem="H9i-XV-A40" secondAttribute="bottom" constant="30" id="G4r-Rn-Ynm"/>
                             <constraint firstItem="CcA-yY-Wpn" firstAttribute="leading" secondItem="llX-YW-eE9" secondAttribute="leading" constant="20" id="H4c-3p-n3a"/>
-                            <constraint firstItem="aQD-q2-WPN" firstAttribute="top" secondItem="yZf-9B-noG" secondAttribute="bottom" id="HIA-7Y-wUj"/>
+                            <constraint firstItem="aQD-q2-WPN" firstAttribute="top" secondItem="yZf-9B-noG" secondAttribute="bottom" constant="10" id="HIA-7Y-wUj"/>
                             <constraint firstAttribute="trailing" secondItem="H9i-XV-A40" secondAttribute="trailing" id="I7j-Zv-4ws"/>
                             <constraint firstAttribute="trailing" secondItem="aQD-q2-WPN" secondAttribute="trailing" id="JrO-0B-AbO"/>
                             <constraint firstItem="yZf-9B-noG" firstAttribute="top" secondItem="QHy-Ek-0nU" secondAttribute="bottom" id="Ju6-mv-Ukx"/>
