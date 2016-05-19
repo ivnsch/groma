@@ -18,6 +18,8 @@ struct Theme {
     static let lightGrey = UIColor(hexString: "ACACAC")
     static let lightGrey2 = UIColor(hexString: "D4D4D4")
     
+    static let grey = UIColor(hexString: "7D8B8C")
+    
     static let cellBottomBorderColor = UIColor(hexString: "EADFE4")
     
     static let blue = UIColor(hexString: "0E95E0")
