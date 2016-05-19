@@ -24,7 +24,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private var slices: [Slice] = [] {
         didSet {
-            pieChart?.selectedSliceOffsetRadius = slices.count <= 1 ? 0 : 3
+            pieChart?.selectedSliceOffsetRadius = slices.count <= 1 ? 0 : 10
         }
     }
     
@@ -177,17 +177,20 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         pieChart.delegate = self
         pieChart.reloadData()
         self.pieChart = pieChart
+  
         
-        let centerDiam: CGFloat = 110
+        
+        // Center gap, for now disabled since when chart has very large slices (e.g. has only 2) when tapping on them looks bad.
+//        let centerDiam: CGFloat = 110
         
         // FIXME!! + 20 (10 in case of y) because this is the offset we pass to pieCenter and + 15 because the radius we pass (85) is 15 less than the default - TODO calculate this correctly! Apparently the pieCenter is not updated ?
-        let x = pieChart.pieCenter.x - centerDiam / 2 + 20 + 15
-        let y = pieChart.pieCenter.y - centerDiam / 2 + 10 + 15
+//        let x = pieChart.pieCenter.x - centerDiam / 2 + 20 + 15
+//        let y = pieChart.pieCenter.y - centerDiam / 2 + 10 + 15
         
-        let centerView = UIView(frame: CGRectMake(x, y, centerDiam, centerDiam))
-        centerView.layer.cornerRadius = centerDiam / 2
-        centerView.backgroundColor = UIColor.whiteColor()
-        pieChartContainer.addSubview(centerView)
+//        let centerView = UIView(frame: CGRectMake(x, y, centerDiam, centerDiam))
+//        centerView.layer.cornerRadius = centerDiam / 2
+//        centerView.backgroundColor = UIColor.whiteColor()
+//        pieChartContainer.addSubview(centerView)
     }
     
     override func viewDidAppear(animated: Bool) {
