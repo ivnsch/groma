@@ -12,8 +12,10 @@ func trans(key: String) -> String {
     return NSLocalizedString(key, comment: "")
 }
 
-func trans(key: String, _ params: String...) -> String {
-    return String.localizedStringWithFormat(NSLocalizedString(key, comment: ""), params)
+func trans(key: String, _ params: CVarArgType...) -> String {
+    return withVaList(params) {
+        NSString(format: NSLocalizedString(key, comment: ""), arguments: $0)
+    } as String
 }
 
 
