@@ -1,0 +1,48 @@
+
+/* Class = "UILabel"; text = "0"; ObjectID = "80h-ha-9Dw"; */
+"80h-ha-9Dw.text" = "0";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "9Rc-cx-ee2"; */
+"9Rc-cx-ee2.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "PHE-mh-lAU"; */
+"PHE-mh-lAU.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "SqV-LQ-m9i"; */
+"SqV-LQ-m9i.text" = "Label";
+
+/* Class = "UILabel"; text = "Move items from the todo list or add directly using the top menu!"; ObjectID = "Xde-nJ-NKG"; */
+"Xde-nJ-NKG.text" = "Move items from the todo list or add directly using the top menu!";
+
+/* Class = "UIButton"; normalTitle = "Undo"; ObjectID = "YuY-vx-r0F"; */
+"YuY-vx-r0F.normalTitle" = "Undo";
+
+/* Class = "UIBarButtonItem"; title = "Buy"; ObjectID = "bc8-rn-N1i"; */
+"bc8-rn-N1i.title" = "Buy";
+
+/* Class = "UILabel"; text = "The backstore is empty"; ObjectID = "dPu-gm-3Bj"; */
+"dPu-gm-3Bj.text" = "The backstore is empty";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "dj1-Th-3Dt"; */
+"dj1-Th-3Dt.text" = "Label";
+
+/* Class = "UINavigationItem"; title = "Cart"; ObjectID = "e5V-gC-Nfp"; */
+"e5V-gC-Nfp.title" = "Cart";
+
+/* Class = "UILabel"; text = "Just add some, will ya?"; ObjectID = "fPp-Ci-147"; */
+"fPp-Ci-147.text" = "Just add some, will ya?";
+
+/* Class = "UILabel"; text = "You cart is empty"; ObjectID = "hAl-pb-QcH"; */
+"hAl-pb-QcH.text" = "You cart is empty";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "npq-ts-NkO"; */
+"npq-ts-NkO.text" = "Label";
+
+/* Class = "UILabel"; text = "Buy"; ObjectID = "oYb-WW-vJz"; */
+"oYb-WW-vJz.text" = "Buy";
+
+/* Class = "UILabel"; text = "Ops, there are no list items yet"; ObjectID = "sxW-16-sQo"; */
+"sxW-16-sQo.text" = "Ops, there are no list items yet";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "yHW-3q-Yxc"; */
+"yHW-3q-Yxc.text" = "Label";

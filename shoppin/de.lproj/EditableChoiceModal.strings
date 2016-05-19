@@ -1,0 +1,12 @@
+
+/* Class = "UIButton"; normalTitle = "Add"; ObjectID = "9nn-FH-wOX"; */
+"9nn-FH-wOX.normalTitle" = "Hinzufügen";
+
+/* Class = "UIBarButtonItem"; title = "Done"; ObjectID = "B9S-Q0-zlh"; */
+"B9S-Q0-zlh.title" = "Erledigt";
+
+/* Class = "UINavigationItem"; title = "Share list"; ObjectID = "aD9-Zf-36B"; */
+"aD9-Zf-36B.title" = "Liste teilen";
+
+/* Class = "UITextField"; placeholder = "Enter participant's e-mail address"; ObjectID = "qB4-ae-t6z"; */
+"qB4-ae-t6z.placeholder" = "Füge die E-Mail";

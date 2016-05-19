@@ -1,42 +1,42 @@
 
 /* Class = "UILabel"; text = "User"; ObjectID = "0H2-xa-BWO"; */
-"0H2-xa-BWO.text" = "User";
+"0H2-xa-BWO.text" = "Usuario";
 
 /* Class = "UINavigationItem"; title = "Settings"; ObjectID = "1iM-IL-890"; */
-"1iM-IL-890.title" = "Settings";
+"1iM-IL-890.title" = "Opciones";
 
 /* Class = "UIBarButtonItem"; title = "Edit"; ObjectID = "2wJ-dj-ZN0"; */
-"2wJ-dj-ZN0.title" = "Edit";
+"2wJ-dj-ZN0.title" = "Editar";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "36b-Gq-dkK"; */
 "36b-Gq-dkK.text" = "Label";
 
 /* Class = "UINavigationItem"; title = "About"; ObjectID = "3A0-vx-wCG"; */
-"3A0-vx-wCG.title" = "About";
+"3A0-vx-wCG.title" = "Pie de imprenta";
 
 /* Class = "UILabel"; text = "Manage products"; ObjectID = "57p-SP-5tY"; */
-"57p-SP-5tY.text" = "Manage products";
+"57p-SP-5tY.text" = "Productos";
 
 /* Class = "UIBarButtonItem"; title = "Edit"; ObjectID = "58d-U0-n5x"; */
-"58d-U0-n5x.title" = "Edit";
+"58d-U0-n5x.title" = "Editar";
 
 /* Class = "UIButton"; normalTitle = "x Months"; ObjectID = "5O5-fM-mtz"; */
-"5O5-fM-mtz.normalTitle" = "x Months";
+"5O5-fM-mtz.normalTitle" = "x meses";
 
 /* Class = "UILabel"; text = "Stash"; ObjectID = "5T8-dN-c0D"; */
-"5T8-dN-c0D.text" = "Stash";
+"5T8-dN-c0D.text" = "Depósito";
 
 /* Class = "UILabel"; text = "Tap to add a list"; ObjectID = "7OH-1y-kro"; */
-"7OH-1y-kro.text" = "Tap to add a list";
+"7OH-1y-kro.text" = "Presiona para agregar una lista";
 
 /* Class = "UILabel"; text = "History"; ObjectID = "93P-6p-iJK"; */
-"93P-6p-iJK.text" = "History";
+"93P-6p-iJK.text" = "Historial";
 
 /* Class = "UILabel"; text = "There's nothing to report"; ObjectID = "9Fg-gJ-nkw"; */
-"9Fg-gJ-nkw.text" = "There's nothing to report";
+"9Fg-gJ-nkw.text" = "No hay nada para reportar";
 
 /* Class = "UILabel"; text = "Tap to add a group"; ObjectID = "AW3-zP-xlQ"; */
-"AW3-zP-xlQ.text" = "Tap to add a group";
+"AW3-zP-xlQ.text" = "Presiona para agregar un groupo";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "Bhe-SQ-8YA"; */
 "Bhe-SQ-8YA.text" = "Label";
@@ -45,46 +45,46 @@
 "Bvb-VA-geS.text" = "Label";
 
 /* Class = "UILabel"; text = "Projected total spendings this month"; ObjectID = "CcA-yY-Wpn"; */
-"CcA-yY-Wpn.text" = "Projected total spendings this month";
+"CcA-yY-Wpn.text" = "Gastos totales estimados en este mes";
 
 /* Class = "UINavigationItem"; title = "Inventory"; ObjectID = "Cqs-XQ-Z61"; */
-"Cqs-XQ-Z61.title" = "Inventory";
+"Cqs-XQ-Z61.title" = "Inventario";
 
 /* Class = "UILabel"; text = "There are no listitems"; ObjectID = "Dny-Vg-Zzw"; */
-"Dny-Vg-Zzw.text" = "There are no listitems";
+"Dny-Vg-Zzw.text" = "No hay items";
 
 /* Class = "UINavigationItem"; title = "Stash"; ObjectID = "DtP-Nf-EOg"; */
-"DtP-Nf-EOg.title" = "Stash";
+"DtP-Nf-EOg.title" = "Depósito";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "FsV-Bz-0vE"; */
 "FsV-Bz-0vE.text" = "Label";
 
 /* Class = "UINavigationItem"; title = "Help"; ObjectID = "HDq-27-xgh"; */
-"HDq-27-xgh.title" = "Help";
+"HDq-27-xgh.title" = "Ayuda";
 
 /* Class = "UINavigationItem"; title = "User"; ObjectID = "HfT-g5-z2P"; */
-"HfT-g5-z2P.title" = "User";
+"HfT-g5-z2P.title" = "Cuenta";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "JGo-Cb-Ord"; */
 "JGo-Cb-Ord.text" = "Label";
 
 /* Class = "UILabel"; text = "There are no Groups"; ObjectID = "Jve-6C-5eI"; */
-"Jve-6C-5eI.text" = "There are no Groups";
+"Jve-6C-5eI.text" = "No hay grupos";
 
 /* Class = "UIButton"; normalTitle = "undo"; ObjectID = "Jx8-ie-aiQ"; */
-"Jx8-ie-aiQ.normalTitle" = "undo";
+"Jx8-ie-aiQ.normalTitle" = "Revertir";
 
 /* Class = "UILabel"; text = "There are no listitems"; ObjectID = "M4e-aB-YVk"; */
-"M4e-aB-YVk.text" = "There are no listitems";
+"M4e-aB-YVk.text" = "No hay ítems";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "MLf-Cc-uTT"; */
 "MLf-Cc-uTT.text" = "Label";
 
 /* Class = "UILabel"; text = "Share"; ObjectID = "NhL-56-zay"; */
-"NhL-56-zay.text" = "Share";
+"NhL-56-zay.text" = "Compartir";
 
 /* Class = "UITabBarItem"; title = "User"; ObjectID = "NwJ-uz-FPH"; */
-"NwJ-uz-FPH.title" = "User";
+"NwJ-uz-FPH.title" = "Cuenta";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "O8d-6A-xsA"; */
 "O8d-6A-xsA.text" = "Label";
@@ -93,40 +93,40 @@
 "P5t-9b-PXe.text" = "Label";
 
 /* Class = "UILabel"; text = "Help"; ObjectID = "QFq-IR-td5"; */
-"QFq-IR-td5.text" = "Help";
+"QFq-IR-td5.text" = "Ayuda";
 
 /* Class = "UILabel"; text = "About"; ObjectID = "RHQ-AR-gZ5"; */
-"RHQ-AR-gZ5.text" = "About";
+"RHQ-AR-gZ5.text" = "Pie de imprenta";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "U1b-4l-rZm"; */
 "U1b-4l-rZm.text" = "Label";
 
 /* Class = "UILabel"; text = "Average daily spendings this month"; ObjectID = "V34-s8-kUI"; */
-"V34-s8-kUI.text" = "Average daily spendings this month";
+"V34-s8-kUI.text" = "Gastos promedio en este mes";
 
 /* Class = "UIBarButtonItem"; title = "Buy"; ObjectID = "V6t-4K-Jlt"; */
-"V6t-4K-Jlt.title" = "Buy";
+"V6t-4K-Jlt.title" = "Comprar";
 
 /* Class = "UINavigationItem"; title = "Cart"; ObjectID = "WXN-Hy-99l"; */
-"WXN-Hy-99l.title" = "Cart";
+"WXN-Hy-99l.title" = "Carrito de compras";
 
 /* Class = "UINavigationItem"; title = "History"; ObjectID = "XOb-RL-vmC"; */
-"XOb-RL-vmC.title" = "History";
+"XOb-RL-vmC.title" = "Historial";
 
 /* Class = "UILabel"; text = "Tap to add an inventory"; ObjectID = "XuI-Ww-EUx"; */
-"XuI-Ww-EUx.text" = "Tap to add an inventory";
+"XuI-Ww-EUx.text" = "Presiona para agregar un inventario";
 
 /* Class = "UILabel"; text = "Inventory"; ObjectID = "YTK-jY-FxL"; */
-"YTK-jY-FxL.text" = "Inventory";
+"YTK-jY-FxL.text" = "Inventario";
 
 /* Class = "UILabel"; text = "Inventory"; ObjectID = "ZdS-Pk-h8r"; */
-"ZdS-Pk-h8r.text" = "Inventory";
+"ZdS-Pk-h8r.text" = "Inventario";
 
 /* Class = "UILabel"; text = "Settings"; ObjectID = "Zi4-H9-VqQ"; */
-"Zi4-H9-VqQ.text" = "Settings";
+"Zi4-H9-VqQ.text" = "Opciones";
 
 /* Class = "UILabel"; text = "There are no lists"; ObjectID = "bRL-cw-Ukc"; */
-"bRL-cw-Ukc.text" = "There are no lists";
+"bRL-cw-Ukc.text" = "No hay listas";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "bqW-8q-Oq6"; */
 "bqW-8q-Oq6.text" = "Label";
@@ -135,22 +135,22 @@
 "bsU-MP-TUW.title" = "Plan";
 
 /* Class = "UITabBarItem"; title = "More"; ObjectID = "cLJ-PG-GFJ"; */
-"cLJ-PG-GFJ.title" = "More";
+"cLJ-PG-GFJ.title" = "Más";
 
 /* Class = "UIButton"; normalTitle = " "; ObjectID = "cfR-FR-ibb"; */
 "cfR-FR-ibb.normalTitle" = " ";
 
 /* Class = "UITabBarItem"; title = "Groups"; ObjectID = "ddO-2P-JLY"; */
-"ddO-2P-JLY.title" = "Groups";
+"ddO-2P-JLY.title" = "Grupos";
 
 /* Class = "UILabel"; text = "Mark your first cart items as \"bought\" to start seeing reports"; ObjectID = "dm0-uo-IfV"; */
-"dm0-uo-IfV.text" = "Mark your first cart items as \"bought\" to start seeing reports";
+"dm0-uo-IfV.text" = "Compra tus primeros ítems para ver reportes";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "dxv-Gd-l65"; */
 "dxv-Gd-l65.text" = "Label";
 
 /* Class = "UILabel"; text = "There's no history yet"; ObjectID = "eL2-CC-5WO"; */
-"eL2-CC-5WO.text" = "There's no history yet";
+"eL2-CC-5WO.text" = "No hay historial aún";
 
 /* Class = "UILabel"; text = "There are no plan items yet"; ObjectID = "f0H-UL-k6R"; */
 "f0H-UL-k6R.text" = "There are no plan items yet";
@@ -159,10 +159,10 @@
 "gpp-Rq-ikf.text" = "$5";
 
 /* Class = "UILabel"; text = "Average / month"; ObjectID = "h5a-TG-tsU"; */
-"h5a-TG-tsU.text" = "Average / month";
+"h5a-TG-tsU.text" = "Promedio mensual";
 
 /* Class = "UILabel"; text = "The cart is empty"; ObjectID = "hEq-5G-XWq"; */
-"hEq-5G-XWq.text" = "The cart is empty";
+"hEq-5G-XWq.text" = "El carrito está vacío";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "iL4-5Y-aAl"; */
 "iL4-5Y-aAl.text" = "Label";
@@ -174,22 +174,22 @@
 "mx1-zn-oyy.text" = "Label";
 
 /* Class = "UILabel"; text = "Tap to start adding listitems"; ObjectID = "nXD-8u-PnX"; */
-"nXD-8u-PnX.text" = "Tap to start adding listitems";
+"nXD-8u-PnX.text" = "Presiona para agregar ítems";
 
 /* Class = "UITabBarItem"; title = "Report"; ObjectID = "omU-Id-l2V"; */
-"omU-Id-l2V.title" = "Report";
+"omU-Id-l2V.title" = "Reporte";
 
 /* Class = "UINavigationItem"; title = "More"; ObjectID = "pOl-Aw-Cd4"; */
-"pOl-Aw-Cd4.title" = "More";
+"pOl-Aw-Cd4.title" = "Más";
 
 /* Class = "UILabel"; text = "Tap to start adding listitems"; ObjectID = "pQ3-yB-b2g"; */
-"pQ3-yB-b2g.text" = "Tap to start adding listitems";
+"pQ3-yB-b2g.text" = "Presiona para agregar ítems";
 
 /* Class = "UINavigationItem"; title = "Inventory"; ObjectID = "pV4-uC-pga"; */
-"pV4-uC-pga.title" = "Inventory";
+"pV4-uC-pga.title" = "Inventario";
 
 /* Class = "UINavigationItem"; title = "Report"; ObjectID = "px8-6J-Kby"; */
-"px8-6J-Kby.title" = "Report";
+"px8-6J-Kby.title" = "Reporte";
 
 /* Class = "UILabel"; text = "Total"; ObjectID = "pzX-Lu-bqO"; */
 "pzX-Lu-bqO.text" = "Total";
@@ -198,19 +198,19 @@
 "rN8-fi-WUd.normalTitle" = " ";
 
 /* Class = "UITabBarItem"; title = "History"; ObjectID = "sfI-ey-1RN"; */
-"sfI-ey-1RN.title" = "History";
+"sfI-ey-1RN.title" = "Historial";
 
 /* Class = "UILabel"; text = "Apples"; ObjectID = "sle-Ve-3Yk"; */
-"sle-Ve-3Yk.text" = "Apples";
+"sle-Ve-3Yk.text" = "Manzanas";
 
 /* Class = "UILabel"; text = "There are x items in the stash"; ObjectID = "tVm-ZY-nIu"; */
-"tVm-ZY-nIu.text" = "There are x items in the stash";
+"tVm-ZY-nIu.text" = "Hay x ítems en el depósito";
 
 /* Class = "UITabBarItem"; title = "List"; ObjectID = "uJG-Eo-xiW"; */
-"uJG-Eo-xiW.title" = "List";
+"uJG-Eo-xiW.title" = "Lista";
 
 /* Class = "UIBarButtonItem"; title = "Reset"; ObjectID = "uTn-eY-a3d"; */
-"uTn-eY-a3d.title" = "Reset";
+"uTn-eY-a3d.title" = "Retornar";
 
 /* Class = "UILabel"; text = "Feedback"; ObjectID = "vx4-6X-toJ"; */
 "vx4-6X-toJ.text" = "Feedback";
@@ -219,19 +219,19 @@
 "whD-Ml-qX4.text" = "Tap to add your first plan item";
 
 /* Class = "UILabel"; text = "There are no Inventories"; ObjectID = "xQd-dS-i5E"; */
-"xQd-dS-i5E.text" = "There are no Inventories";
+"xQd-dS-i5E.text" = "No hay inventarios aún";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "xtG-TL-rqn"; */
 "xtG-TL-rqn.text" = "Label";
 
 /* Class = "UITabBarItem"; title = "Inventory"; ObjectID = "yUm-WR-GoU"; */
-"yUm-WR-GoU.title" = "Inventory";
+"yUm-WR-GoU.title" = "Inventario";
 
 /* Class = "UILabel"; text = "Mark your first cart items as \"bought\" to see them in the history"; ObjectID = "zCU-qa-UjF"; */
-"zCU-qa-UjF.text" = "Mark your first cart items as \"bought\" to see them in the history";
+"zCU-qa-UjF.text" = "Compra tus primeros ítems en el carrito para verlos en el historial";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "zbV-mP-7M8"; */
 "zbV-mP-7M8.text" = "Label";
 
 /* Class = "UILabel"; text = "Loading"; ObjectID = "zs0-Gl-c0J"; */
-"zs0-Gl-c0J.text" = "Loading";
+"zs0-Gl-c0J.text" = "Cargando";

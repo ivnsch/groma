@@ -1,0 +1,24 @@
+
+/* Class = "UITextField"; placeholder = "Colour"; ObjectID = "CcK-74-2fx"; */
+"CcK-74-2fx.placeholder" = "Farbe";
+
+/* Class = "UITextField"; text = "Colour"; ObjectID = "CcK-74-2fx"; */
+"CcK-74-2fx.text" = "Farbe";
+
+/* Class = "UITextField"; placeholder = "Price"; ObjectID = "NrU-fN-qdF"; */
+"NrU-fN-qdF.placeholder" = "Preis";
+
+/* Class = "UITextField"; placeholder = "Note (optional)"; ObjectID = "Yfv-oA-AU6"; */
+"Yfv-oA-AU6.placeholder" = "Notiz (optional)";
+
+/* Class = "UILabel"; text = "Add new item"; ObjectID = "dwL-LH-4dI"; */
+"dwL-LH-4dI.text" = "Neues Item";
+
+/* Class = "UITextField"; placeholder = "List section"; ObjectID = "i1w-xi-aFz"; */
+"i1w-xi-aFz.placeholder" = "Abteilung";
+
+/* Class = "UITextField"; placeholder = "Brand (optional)"; ObjectID = "r5b-Sz-J4o"; */
+"r5b-Sz-J4o.placeholder" = "Marke (optional)";
+
+/* Class = "UITextField"; placeholder = "Quantity"; ObjectID = "vWS-vL-cob"; */
+"vWS-vL-cob.placeholder" = "Menge";

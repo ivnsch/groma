@@ -59,13 +59,13 @@ class HelpProviderImpl: HelpProvider {
         
         //        HelpItem(title: "Can I share lists or inventories with Android users?", text: "No, because there's no Android app yet. Stay in the loop though, a light version is planned."),
         
-        HelpItem(title: "Can I edit items globally? What are products?", text: "Products are the 'common unit' of all the items you manage in the app. If you want to edit the name of an item and want this to be done also in list, group, inventory and history items, you just have to edit it once in the 'manage products' screen. Also, if you want to remove a product, because e.g. you don't want to see it in the top-menu items anymore, do it in this screen."),
+        HelpItem(title: "Can I edit items globally? What are products?", text: "Products are the 'common unit' of all the items you manage in the app. If you want to edit the name of an item and want this to be done also in list, group, inventory and history items, you just have to edit it once in the products screen. Also, if you want to remove a product, because e.g. you don't want to see it in the top-menu items anymore, do it in this screen."),
         
-        HelpItem(title: "How do I remove products from the top menu? I never use them!", text: "You can remove them in 'Manage products' (in the ... tab)."),
+        HelpItem(title: "How do I remove products from the top menu? I never use them!", text: "You can remove them in the products screen (in the ... tab)."),
         
         HelpItem(title: "I bought items with incorrect prices, how do I correct this?", text: "In order to keep your reports reliable, the history is a 'snapshot' of what you bought and not meant to be edited. Not everything is lost though: You can delete history items and buy the list items again with the corrected price."),
         //
-        HelpItem(title: "What happens when I remove products in the manage products screen?", text: "The product and all list/group/inventory, history and top-menu items associated with it will be removed. For example, if you remove 'Apples' with brand 'x', all the list, inventory, group and history and top-menu items that are named 'Apples' and have the brand 'x' Will be removed. Don't worry about products with no brand - an empty brand is handled like a brand and will only remove items with the same name that have also an empty brand."),
+        HelpItem(title: "What happens when I remove products in the products screen?", text: "The product and all list/group/inventory, history and top-menu items associated with it will be removed. For example, if you remove 'Apples' with brand 'x', all the list, inventory, group and history and top-menu items that are named 'Apples' and have the brand 'x' Will be removed. Don't worry about products with no brand - an empty brand is handled like a brand and will only remove items with the same name that have also an empty brand."),
         
         HelpItem(title: "What happens when I remove history items?", text: "Removal of history items affects also the stats! If you, for example, remove 5x lemon cakes, bought on March the 3d, that costed 10, your stats for March will show 10 less spendings."),
         
@@ -119,16 +119,16 @@ class HelpProviderImpl: HelpProvider {
         
         //        HelpItem(title: "Can I share lists or inventories with Android users?", text: "No, because there's no Android app yet. Stay in the loop though, a light version is planned."),
         
-        HelpItem(title: "Kann ich Einträge global editieren? Was sind Produkte?", text: "Produkte sind die gemeinsame Einheit aller Einträge in dieser App. Um global Eingenschaften zu editieren, also so dass es auch in den Listen, Gruppen, Inventare, Geschichte und Statistiken gemacht wird, musst du es nur einmal in der 'Produktverwaltung' Ansicht machen. Ebenso, wenn du Produkte global löschen willst, musst du es nur einmal in dieser Ansicht machen."),
+        HelpItem(title: "Kann ich Einträge global editieren? Was sind Produkte?", text: "Produkte sind die gemeinsame Einheit aller Einträge in dieser App. Um global Eingenschaften zu editieren, also so dass es auch in den Listen, Gruppen, Inventare, Verlauf und Statistiken gemacht wird, musst du es nur einmal in der 'Produktverwaltung' Ansicht machen. Ebenso, wenn du Produkte global löschen willst, musst du es nur einmal in dieser Ansicht machen."),
         
         HelpItem(title: "Wie kann ich Produktvorschlage vom Top-Menü löschen? Ich benutze sie nie!", text: "Du kannst sie in der Ansicht 'Produktverwaltung' (im ... Tab) löschen."),
         
-        HelpItem(title: "Werden die Statisktiken geändert wenn ich Preise editiere?", text: "Nein, die Preise werden natürlich 'eingefroren' im Moment wo du sie kaufst. Sollte es allerdings dazu kommen, dass du Preise für bereits gekaufte Produkte korrigieren möchtest, kannst du die jeweiligen Einträge aus der Geschichte löschen, und sie nochmal mit den korrigierten Preisen kaufen."),
+        HelpItem(title: "Werden die Statisktiken geändert wenn ich Preise editiere?", text: "Nein, die Preise werden natürlich 'eingefroren' im Moment wo du sie kaufst. Sollte es allerdings dazu kommen, dass du Preise für bereits gekaufte Produkte korrigieren möchtest, kannst du die jeweiligen Einträge aus dem Verlauf löschen, und sie nochmal mit den korrigierten Preisen kaufen."),
         // x
         HelpItem(title: "Was passiert wenn ich Produkte lösche?", text: "The product and all list/group/inventory, history and top-menu items associated with it will be removed. For example, if you remove 'Apples' with brand 'x', all the list, inventory, group and history and top-menu items that are named 'Apples' and have the brand 'x' Will be removed. Don't worry about products with no brand - an empty brand is handled like a brand and will only remove items with the same name that have also an empty brand."),
         
         // x
-        HelpItem(title: "Was passiert wenn ich Einträge aus der Geschichte lösche?", text: "Die entsprechende Einträge verschinden auch aus den Statistiken. Wenn du deine Statistiken nicht ändern willst, solltest du die Geschichte auch nicht löschen!"),
+        HelpItem(title: "Was passiert wenn ich Verlaufseinträge lösche?", text: "Die entsprechende Einträge verschinden auch aus den Statistiken. Wenn du deine Statistiken nicht ändern willst, solltest du den Verlauf auch nicht löschen!"),
         
         //        HelpItem(title: "How can I use custom quantity units, e.g. pounds?", text: ""),
         
@@ -138,7 +138,7 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "Ich teile ein Inventar mit einem anderen Benutzer aber unsere Berichte sind anders, warum?", text: "Um Verwirrung zu vermeiden, wenn ein Benutzer Preise von geteilten Produkten ändert, werden diese Änderungen nicht automatisch auf andere Benutzer übertragen. Folglich können benutzer unterschiedliche Preise für dieselbe Inventar Einträge haben, was auch bedeutet dass die Berichte anders ausfallen. Wenn du willst dass deine Produkte gänzlich mit den Produkten von einem anderen Teilnehmer übereinstimmen, gehe zu der Teilnehmerliste vom Inventar, und tippe 'ziehen' an neben dem Benutzer."),
         
-        HelpItem(title: "Was bedeutet 'ziehen' in der Teilnehmer liste?", text: "Um Verwirrung zu vermeiden, wenn ein Benutzer Preise von geteilten Produkten ändert, werden diese Änderungen nicht automatisch auf andere Benutzer übertragen.  Wenn du willst dass deine Produkte gänzlich mit den Produkten von einem anderen Teilnehmer übereinstimmen, gehe zu der Teilnehmerliste vom Inventar, und tippe 'ziehen' an neben dem Benutzer. Im Fall von Listen, betrifft das Ziehen nur die Produkte die sich derzeit in der Liste befinden. Im Fall vom Inventar, betrifft es alle Produkte, da das Inventar auch mit der Geschichte verknüpft ist und somit ein umfassenderes Umfang hat."),
+        HelpItem(title: "Was bedeutet 'ziehen' in der Teilnehmer liste?", text: "Um Verwirrung zu vermeiden, wenn ein Benutzer Preise von geteilten Produkten ändert, werden diese Änderungen nicht automatisch auf andere Benutzer übertragen.  Wenn du willst dass deine Produkte gänzlich mit den Produkten von einem anderen Teilnehmer übereinstimmen, gehe zu der Teilnehmerliste vom Inventar, und tippe 'ziehen' an neben dem Benutzer. Im Fall von Listen, betrifft das Ziehen nur die Produkte die sich derzeit in der Liste befinden. Im Fall vom Inventar, betrifft es alle Produkte, da das Inventar auch mit dem Verlauf verknüpft ist und somit ein umfassenderes Umfang hat."),
         
         HelpItem(title: "Kann ich diese App auch für Onlineshopping benutzen?", text: "Ja. Sie ist noch nicht ganz darauf optimiert aber einige Verbesserung werden bereits entwickelt und werden in kommente Updates verfügbar sein."),
         

@@ -235,8 +235,8 @@ popup_couldnt_open_app_store_url = "Couldn't open app store url.";
 popup_please_update_app_to_use_account = "Please update the app in order to continue using your user account.";
 popup_buy_will_add_to_history_stats = "This will add your cart items to the the inventory %@ and the corresponding history and stats";
 popup_you_cant_buy_cart = "You can't move items to the inventory '%@'\nAsk a user with access to this inventory to share it with you.";
-popup_remove_section_completion_confirm = "Do you want to remove '%@'?\nThis will remove all sections and categories with this name and associated list, group, inventory and history items everywhere in the app.";
-popup_remove_brand_completion_confirm = "Do you want to remove '%@'?\nThis will remove all products with this brand and associated list, group, inventory and history items everywhere in the app.";
+popup_remove_section_completion_confirm = "Do you want to remove '%@'?\nThis will remove all sections and categories with this name and associated list, group, inventory and history items.";
+popup_remove_brand_completion_confirm = "Do you want to remove '%@'?\nThis will remove all products with this brand and associated list, group, inventory and history items.";
 popup_couldnt_find_email_account = "Couldn't find an email account. If the problem persists, please send us an e-mail manually to the address: \(email)";
 popup_group_was_deleted_in_other_device = "The group %@ was deleted from another device. Returning to groups.";
 popup_delete_history_also_deletes_stats = "Deleting history items will also delete their data from the stats";
@@ -258,7 +258,7 @@ popups_participants_user_not_registered = "The user: %@\n is not registered";
 popups_participants_must_be_logged_in = "You must be logged in to share with other users";
 popups_participants_invitation_explanation = "The user has not been invited yet. To submit the invitations you have to submit the list.\nIf you close the list without submitting, the participants list is resetted and no invitations are sent.";
 popups_invitation_pending = "Invitation pending";
-popups_swipe_to_increment_explanation = "You can also swipe to the left or right of the cell to change the quantity.\nThis is specially useful if you want to increment/decrement more than 1 at a time!";
+popups_swipe_to_increment_explanation = "You can also swipe to the left or right on the cells to change the quantity.\nThis is specially useful if you want to increment/decrement more than 1 at a time!";
 
 
 popups_size_limit_lists = "You can't have more than %@ lists";
@@ -314,3 +314,6 @@ setting_remove_account = "Remove account";
 setting_restore_bundled_products = "Restore bundled products";
 setting_restore_hints = "Restore hints";
 setting_real_time_connection = "Real time connection";
+
+
+title_products = "Products";

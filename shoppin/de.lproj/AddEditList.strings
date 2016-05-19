@@ -1,0 +1,18 @@
+
+/* Class = "UIButton"; normalTitle = "Colours"; ObjectID = "0bu-Vf-atl"; */
+"0bu-Vf-atl.normalTitle" = "Farben";
+
+/* Class = "UIButton"; normalTitle = "Participants"; ObjectID = "1sk-oR-mxV"; */
+"1sk-oR-mxV.normalTitle" = "Teilnehmer";
+
+/* Class = "UITextField"; placeholder = "List name"; ObjectID = "F28-F1-Smm"; */
+"F28-F1-Smm.placeholder" = "Liste Name";
+
+/* Class = "UIButton"; normalTitle = " "; ObjectID = "VtI-z7-VYE"; */
+"VtI-z7-VYE.normalTitle" = " ";
+
+/* Class = "UILabel"; text = "in"; ObjectID = "dqk-Mw-1ri"; */
+"dqk-Mw-1ri.text" = "in";
+
+/* Class = "UITextField"; placeholder = "Store (optional)"; ObjectID = "tkj-0N-ADP"; */
+"tkj-0N-ADP.placeholder" = "Laden (optional)";

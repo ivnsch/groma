@@ -1,0 +1,9 @@
+
+/* Class = "UITextField"; placeholder = "Inventory name"; ObjectID = "958-Da-VLu"; */
+"958-Da-VLu.placeholder" = "Nombre de inventario";
+
+/* Class = "UIButton"; normalTitle = "Colours"; ObjectID = "Auc-8i-PnM"; */
+"Auc-8i-PnM.normalTitle" = "Colores";
+
+/* Class = "UIButton"; normalTitle = "Add participants"; ObjectID = "bg3-OT-zRt"; */
+"bg3-OT-zRt.normalTitle" = "Participantes";

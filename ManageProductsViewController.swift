@@ -130,7 +130,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
     private func initNavBar(actions: [UIBarButtonSystemItem]) {
-        navigationItem.title = "Manage products"
+        navigationItem.title = trans("title_products")
         
         var buttons: [UIBarButtonItem] = []
         

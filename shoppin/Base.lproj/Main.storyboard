@@ -1624,8 +1624,8 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="VuJ-sa-air"/>
                                 <exclude reference="lCB-Nf-cQR"/>
+                                <exclude reference="VuJ-sa-air"/>
                             </mask>
                         </variation>
                     </view>

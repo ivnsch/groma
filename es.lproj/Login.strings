@@ -1,0 +1,21 @@
+
+/* Class = "UILabel"; text = "You can log in again any time!"; ObjectID = "3G3-DS-C6O"; */
+"3G3-DS-C6O.text" = "Te puedes conectar de nuevo cuando desees!";
+
+/* Class = "UILabel"; text = "Welcome back! Please log in again."; ObjectID = "D7c-wL-aYY"; */
+"D7c-wL-aYY.text" = "Por favor actualiza tu sesión";
+
+/* Class = "UIButton"; normalTitle = "Login"; ObjectID = "EgA-OH-X0u"; */
+"EgA-OH-X0u.normalTitle" = "Conectar";
+
+/* Class = "UIButton"; normalTitle = "Forgot password?"; ObjectID = "QVU-Pz-cxq"; */
+"QVU-Pz-cxq.normalTitle" = "Perdiste la contraseña?";
+
+/* Class = "UIButton"; normalTitle = "Facebook"; ObjectID = "t83-R4-Wil"; */
+"t83-R4-Wil.normalTitle" = "Facebook";
+
+/* Class = "UIButton"; normalTitle = "Register"; ObjectID = "v0i-2j-jaS"; */
+"v0i-2j-jaS.normalTitle" = "Registrarse";
+
+/* Class = "UIButton"; normalTitle = "Use app offline"; ObjectID = "yQG-pO-NNA"; */
+"yQG-pO-NNA.normalTitle" = "Usar app offline";

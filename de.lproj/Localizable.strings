@@ -206,3 +206,114 @@ pr_chocolates = "Schokolade";
 pr_ice_cream = "Eis";
 pr_mints = "Pfefferminz";
 pr_marshmallows = "Marshmallow";
+
+
+
+popup_title_success = "Erfolg";
+popup_title_info = "Info";
+popup_title_confirm = "Bestätigung";
+popup_title_warning = "Warnung";
+popup_title_error = "Fehler";
+popup_title_required_update = "Erfordeliches Update";
+popup_title_group_deleted = "Gruppe gelöscht";
+popup_title_inventory_deleted = "Inventar gelöscht";
+popup_title_list_deleted = "Liste gelöscht";
+popup_title_validation_failed = "Validierung fehlgeschlagen";
+popup_title_rate_app = "Rate Groma";
+popup_title_restore_bundled_products = "Produkte wiederherstellen";
+popup_title_bundled_products_restored = "Product wiederhergestellt";
+popup_title_size_limit = "Maximale Anzahl überschritten";
+popup_title_psst = "Psst!";
+
+
+popup_please_login_for_participants = "Um Teilnehmer zu verwalten musst du eingeloggt sein.";
+popup_products_updated_to_match_user = "Deine Produkte wurden aktualisiert. Sie sind jetzt mit den Produkten von %@ gleich.";
+popup_list_products_updated_to_match_user = "Deine Produkte wurden aktualisiert. Sie sind jetzt mit den Produkten von %@ gleich.";
+popup_please_select_inventory = "Bitte wähle ein Inventar aus";
+popup_was_removed = "%@ wurde gelöscht.";
+popup_please_rate_app = "Gefällt dir Groma? Bitte nimm dir einen Moment Zeit um uns zu bewerten!";
+popup_couldnt_open_app_store_url = "Konnte die App Store URL nicht öffnen.";
+popup_please_update_app_to_use_account = "Bitte aktualisiere Groma um weiterhin dein Benutzerkonto zu benutzen.";
+popup_buy_will_add_to_history_stats = "Dies wird deine Einträge in das Inventar %@ und entsprechende Verlaufseinträge und Statistiken hinzufügen.";
+popup_you_cant_buy_cart = "Dz kannst keine Einträge in das Inventar '%@' verschieben\nBitte einen Benutzer mit Zugang zu diesem Inventar dich als Teilnehmer hinzuzufügen.";
+popup_remove_section_completion_confirm = "Willst du '%@' wirklich löschen?\nDies wird alle Abteilungen und Kategorien mit diesem Namen und damit verbundene Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
+popup_remove_brand_completion_confirm = "Willst du '%@' wirklich löschen?\nDies wird alle Produkte die mit dieser Marke und alle damit verbundene Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
+popup_couldnt_find_email_account = "Konnte keine e-Mail Konto finden.";
+popup_group_was_deleted_in_other_device = "Die Gruppe '%@' wurde auf einem anderen Gerät gelöscht.";
+popup_delete_history_also_deletes_stats = "Entfernung von Verlaufseinträge modifiziert entsprechend den Bericht.";
+popup_add_items_directly_inventory = "Einträge direkt im Inventar hinzufügen oder inkrementieren modifiziert nicht den Verlauf und Bericht.\nWenn du willst dass die Einträge im Verlauf und Bericht auftauchen, musst du im Einkaufswagen 'kaufen' benutzen. Der Einkaufswagen kann in den Einkauflisten gefunden werden.";
+popup_inventory_was_deleted_in_other_device = "Das inventar '%@' wurde auf einem anderen Gerät gelöscht.";
+popup_list_was_deleted_in_other_device = "Die Liste '%@' wurde auf einem anderen Gerät gelöscht.";
+popup_please_accept_terms = "Bitte akzeptiere die AGB.";
+popup_your_data_was_overwritten = "Deine lokale Daten wurden überschrieben.";
+popup_are_you_sure_remove_account = "Bist du sicher dass du dein Benutzerkonto löschen willst?";
+popup_your_account_was_removed = "Dein Benutzerkonto wurde gelöscht.";
+popup_you_already_use_bundled_products = "Du benutzt alle gebündelte Produkte bereits.";
+popup_hints_restored = "Hinweise wiederhergestellt.";
+popups_settings_overwrite = "Dies wird deine (Groma) Daten auf diesem Gerät mit den Daten die du das letzte Mal erfolgreich synchrinisieren konntest überschreiben.\nDies ist eine Notlösung für technische Probleme und nicht für den Normalgebraucht gedacht.";
+popups_restore_bundled_products = "Stellt gelöschte gebündelte Produkte wieder her, oder in dem Fall dass du die Sprache gewechselt hast, fügt die gebündelte Produkte in der neuen Sprache ein. Deine existierende Produkte werden hier nicht berührt.";
+popups_restore_hints = "Stellt alle Hinweise wieder her.";
+popups_participants_you_dont_have_to_add_yourself = "Du musst dich nicht selbst hinzufügen.";
+popups_participants_user_already_in_list = "%@\n ist bereits in den Teilnehmern.";
+popups_participants_user_not_registered = "%@\n ist nicht registriert.";
+popups_participants_must_be_logged_in = "Du musst eingeloggt sein um mit anderen Benutzern zu teilen.";
+popups_participants_invitation_explanation = "Der Benutzer/Benutzerin wurde noch nicht eingeladen. Die Einladungen werden gesendet wenn du die Liste speicherst.";
+popups_invitation_pending = "Einladung ausstehend";
+popups_swipe_to_increment_explanation = "Du kannst auch auf den Einträgen links oder rechts streichen um die Menge zu ändern.\nDies ist besonders nützlich wenn du mehr als 1 auf einmal ändern willst!";
+
+
+popups_size_limit_lists = "Maximale Listen Anzahl überschreitet: %@";
+popups_size_limit_groups = "Maximale Gruppen Anzahl überschreitet: %@";
+popups_size_limit_inventories = "Maximale Inventar Anzahl überschreitet: %@";
+popups_size_limit_list_items = "Maximale Listeneinträge Anzahl überschreitet: %@";
+popups_size_limit_group_items = "Maximale Gruppeneinträge Anzahl überschreitet: %@";
+popups_size_limit_inventory_items = "Maximale Inventareinträge Anzahl überschreitet: %@";
+popups_size_limit_history_items = "Maximale Verlaufseinträge Anzahl überschreitet: %@";
+popups_size_limit_products = "Maximale Produkt Anzahl überschreitet: %@";
+popups_size_limit_line2 = "\nVielleicht kannst du nicht benutzte Einträge loschen?\nWenn du wirklich so viele Einträge brauchst kannst du uns gerne kontaktieren, sollten wir genug Beschwerden oder eine gute Begründung erhalten, passen wir es gerne an.";
+
+popup_button_ok = "Ok";
+popup_button_cancel = "Abbrechen";
+popup_button_yes = "Ja";
+popup_button_no = "Nein";
+popup_button_continue = "Fortsetzen";
+popup_button_update = "Aktualisierung";
+popup_button_log_out = "Ausloggen";
+popup_button_buy = "Kaufen";
+popup_button_got_it = "Alles klar!";
+popup_button_rate_app = "Bewerten";
+popup_button_rate_feedback = "Feedback senden";
+popup_button_rate_ask_later = "Später";
+popup_button_rate_dont_ask_again = "Nicht wieder fragen";
+popup_button_restore_bundled_product = "Wiederherstellen";
+
+
+error_not_authenticated = "Nicht authentifiziert. Bitte log dich ein und versuch es noch mal.";
+error_already_exists = "Eintrag existiert bereits";
+error_not_found = "Eintrag Konnte nicht gefunden werden";
+error_invalid_credentials = "Ungültige Zugangsdaten";
+error_blacklisted = "Dein Account hatte verdächtige Aktivitäten und wurde blockiert.\nBitte kontaktiere Support (hierfür kannst du die Feedback Option unter '...' benutzen).";
+error_registered_another_provider = "Deine Benutzer Id ist bereits registriert, mit einem anderen Provider.\nBitte kontaktiere Support wenn du weitere Hilfe benötigst.";
+size_limit_exceeded = "Du hast die maximale Anzahl Eiträge überschritten: %@.\nBitte versuche alte oder nicht benutze Einträge zu entfernen. Diese Limits sind eine Sicherheitsmaßnahme. Falls du sie zu niedrig findest, oder besondere Wünsche hast, kontaktiere Support, wir helfen gerne weiter.";
+error_server_generic = "Server Kommunikationsfehler. Bitte versuche es später nochmal.";
+error_server_not_reachable = "Server nicht erreichbar. Bitte versuche es später nochmal.";
+error_server_communication_unknown = "Unbekannter Fehler. Bitte versuche es später nochmal.";
+error_server_invalid_params = "Ungültige Anfrage.\nBitte schaue dir die Fehlerbehebungsthemen in der Hilfe an, oder kontaktiere Support (beide kannst du im '...' tab finden).";
+error_unknown_database = "Unbekannter Fehler. Bitte versuche es später nochmal.";
+error_unknown = "Unbekannter Fehler. Bitte versuche es später nochmal.";
+social_login_cancelled = "Social Signup abgebrochen";
+social_login_error = "Social Signup Fehler";
+social_already_exists = "Es gibt bereits ein Benutzerkonto mit der selben Benutzer Id.";
+success = "Sucess";
+error_no_internet_connection = "Keine Internetverbidung verfugbar. Bitte versuche es nochmal mit einer Internetverbindung.";
+sync_failed = "Synchronisierungsfehler.\nBitte schaue dir die Fehlerbehebungsthemen in der Hilfe an, oder kontaktiere Support (beide kannst du im '...' tab finden).";
+
+
+setting_overwrite_data = "Daten überschreiben";
+setting_remove_account = "Benutzerkonto entfernen";
+setting_restore_bundled_products = "Gebündelte Produkte wiederherstellen";
+setting_restore_hints = "Hinweise wiederherstellen";
+setting_real_time_connection = "Echtzeitverbindung";
+
+
+title_products = "Produkte";

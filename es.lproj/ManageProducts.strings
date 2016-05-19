@@ -1,0 +1,36 @@
+
+/* Class = "UILabel"; text = "Loading"; ObjectID = "619-aI-90d"; */
+"619-aI-90d.text" = "Loading";
+
+/* Class = "UILabel"; text = "Loading"; ObjectID = "8Lv-hw-XhW"; */
+"8Lv-hw-XhW.text" = "Loading";
+
+/* Class = "UILabel"; text = "Loading"; ObjectID = "8Zv-mK-Xqr"; */
+"8Zv-mK-Xqr.text" = "Loading";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "HDP-Ig-OTR"; */
+"HDP-Ig-OTR.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Brands"; ObjectID = "Joh-yV-Aa3"; */
+"Joh-yV-Aa3.normalTitle" = "Marcas";
+
+/* Class = "UIButton"; normalTitle = "Usage"; ObjectID = "Tm6-P2-xyl"; */
+"Tm6-P2-xyl.normalTitle" = "Uso";
+
+/* Class = "UIButton"; normalTitle = "Products"; ObjectID = "UI2-YJ-gEu"; */
+"UI2-YJ-gEu.normalTitle" = "Productos";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "abP-c3-Tb5"; */
+"abP-c3-Tb5.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Categories"; ObjectID = "dqx-Ao-W36"; */
+"dqx-Ao-W36.normalTitle" = "Categorias";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "l6S-Yc-dle"; */
+"l6S-Yc-dle.text" = "Label";
+
+/* Class = "UILabel"; text = "Sort by:"; ObjectID = "uaW-wg-NEG"; */
+"uaW-wg-NEG.text" = "Orden:";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "wRH-9P-Cgb"; */
+"wRH-9P-Cgb.text" = "Label";

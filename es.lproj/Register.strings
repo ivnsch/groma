@@ -1,0 +1,15 @@
+
+/* Class = "UIButton"; normalTitle = "Register"; ObjectID = "5NA-t7-V2O"; */
+"5NA-t7-V2O.normalTitle" = "Registrar";
+
+/* Class = "UIButton"; normalTitle = "I accept the terms and conditions"; ObjectID = "JMu-N0-SQq"; */
+"JMu-N0-SQq.normalTitle" = "Acepto los términos";
+
+/* Class = "UIButton"; normalTitle = "Facebook"; ObjectID = "LMD-Gz-aMB"; */
+"LMD-Gz-aMB.normalTitle" = "Facebook";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "n3k-3q-0Hq"; */
+"n3k-3q-0Hq.placeholder" = "Email";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "qQD-85-qkI"; */
+"qQD-85-qkI.placeholder" = "Contraseña";

@@ -1,0 +1,9 @@
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "COs-cN-0xk"; */
+"COs-cN-0xk.text" = "Label";
+
+/* Class = "UITextField"; placeholder = "User e-mail"; ObjectID = "DbI-15-JMH"; */
+"DbI-15-JMH.placeholder" = "E-mail de usuario(a)";
+
+/* Class = "UIButton"; normalTitle = "+"; ObjectID = "MWW-P2-Pl6"; */
+"MWW-P2-Pl6.normalTitle" = "+";

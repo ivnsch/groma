@@ -1,6 +1,6 @@
 
 /* Class = "UILabel"; text = "User"; ObjectID = "0H2-xa-BWO"; */
-"0H2-xa-BWO.text" = "Benuzer";
+"0H2-xa-BWO.text" = "Benutzer";
 
 /* Class = "UINavigationItem"; title = "Settings"; ObjectID = "1iM-IL-890"; */
 "1iM-IL-890.title" = "Einstellungen";
@@ -12,10 +12,10 @@
 "36b-Gq-dkK.text" = "Label";
 
 /* Class = "UINavigationItem"; title = "About"; ObjectID = "3A0-vx-wCG"; */
-"3A0-vx-wCG.title" = "About";
+"3A0-vx-wCG.title" = "Impressum";
 
 /* Class = "UILabel"; text = "Manage products"; ObjectID = "57p-SP-5tY"; */
-"57p-SP-5tY.text" = "Produktverwaltung";
+"57p-SP-5tY.text" = "Produkte";
 
 /* Class = "UIBarButtonItem"; title = "Edit"; ObjectID = "58d-U0-n5x"; */
 "58d-U0-n5x.title" = "Bearbeiten";
@@ -72,7 +72,7 @@
 "Jve-6C-5eI.text" = "Es gibt keine Gruppen";
 
 /* Class = "UIButton"; normalTitle = "undo"; ObjectID = "Jx8-ie-aiQ"; */
-"Jx8-ie-aiQ.normalTitle" = "undo";
+"Jx8-ie-aiQ.normalTitle" = "Undo";
 
 /* Class = "UILabel"; text = "There are no listitems"; ObjectID = "M4e-aB-YVk"; */
 "M4e-aB-YVk.text" = "Es gibt keine Einträge";
@@ -96,13 +96,13 @@
 "QFq-IR-td5.text" = "Hilfe";
 
 /* Class = "UILabel"; text = "About"; ObjectID = "RHQ-AR-gZ5"; */
-"RHQ-AR-gZ5.text" = "About";
+"RHQ-AR-gZ5.text" = "Impressum";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "U1b-4l-rZm"; */
 "U1b-4l-rZm.text" = "Label";
 
 /* Class = "UILabel"; text = "Average daily spendings this month"; ObjectID = "V34-s8-kUI"; */
-"V34-s8-kUI.text" = "Durchschnittsausgaben in diesem Monat";
+"V34-s8-kUI.text" = "MonatsDurchschnitt";
 
 /* Class = "UIBarButtonItem"; title = "Buy"; ObjectID = "V6t-4K-Jlt"; */
 "V6t-4K-Jlt.title" = "Kaufen";
@@ -159,7 +159,7 @@
 "gpp-Rq-ikf.text" = "$5";
 
 /* Class = "UILabel"; text = "Average / month"; ObjectID = "h5a-TG-tsU"; */
-"h5a-TG-tsU.text" = "Durchschnitt / Monat";
+"h5a-TG-tsU.text" = "Monatsdurchschnitt";
 
 /* Class = "UILabel"; text = "The cart is empty"; ObjectID = "hEq-5G-XWq"; */
 "hEq-5G-XWq.text" = "Der Einkaufswagen ist leer";
