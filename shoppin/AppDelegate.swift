@@ -196,8 +196,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         UITabBar.appearance().barTintColor = Theme.tabBarBackgroundColor
         UITabBar.appearance().translucent = false
 
+        // Hide hairline
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        
         UINavigationBar.appearance().barTintColor = Theme.navigationBarBackgroundColor
         UINavigationBar.appearance().tintColor = Theme.navigationBarTextColor
         UINavigationBar.appearance().translucent = false

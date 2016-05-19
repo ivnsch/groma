@@ -519,13 +519,34 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                     <outlet property="delegate" destination="TSQ-MW-ySX" id="Wad-Kn-vnP"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zC1-zy-fhA" userLabel="Divider">
+                                <rect key="frame" x="0.0" y="20" width="375" height="1"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="nzA-GX-Wfq">
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                                <real key="value" value="0.5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </constraint>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="height">
+                                        <real key="value" value="0.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="bM8-vb-d54" firstAttribute="top" secondItem="VOB-7c-032" secondAttribute="bottom" id="4a0-Of-iJJ"/>
                             <constraint firstAttribute="trailing" secondItem="bM8-vb-d54" secondAttribute="trailing" id="9Ei-Qc-SlV"/>
+                            <constraint firstItem="zC1-zy-fhA" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" id="LaL-uU-trA"/>
                             <constraint firstItem="bM8-vb-d54" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" id="VF6-kO-ovk"/>
                             <constraint firstAttribute="bottom" secondItem="bM8-vb-d54" secondAttribute="bottom" id="knD-E2-9YN"/>
+                            <constraint firstItem="zC1-zy-fhA" firstAttribute="top" secondItem="VOB-7c-032" secondAttribute="bottom" id="oSm-e1-gda"/>
+                            <constraint firstAttribute="trailing" secondItem="zC1-zy-fhA" secondAttribute="trailing" id="pGh-MJ-cB2"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="1iM-IL-890">
@@ -990,9 +1011,15 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fwZ-a2-d32" userLabel="Divider">
                                 <rect key="frame" x="0.0" y="104" width="375" height="1"/>
-                                <color key="backgroundColor" red="0.90588235294117647" green="0.90588235294117647" blue="0.90588235294117647" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="v17-Oc-ycn"/>
+                                    <constraint firstAttribute="height" constant="1" id="v17-Oc-ycn">
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                                <real key="value" value="0.5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </constraint>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Projected total this month" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CcA-yY-Wpn">
@@ -1079,7 +1106,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QHy-Ek-0nU" userLabel="Divider">
                                 <rect key="frame" x="0.0" y="64" width="375" height="0.0"/>
-                                <color key="backgroundColor" red="0.90588235294117647" green="0.90588235294117647" blue="0.90588235294117647" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="0.5" id="MQG-D4-Pnf"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="0.5" id="zPS-Wr-qkp"/>
@@ -1460,8 +1487,8 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Apples" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="sle-Ve-3Yk" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="9" width="510" height="22"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Apples" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="sle-Ve-3Yk" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="9" width="285" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
