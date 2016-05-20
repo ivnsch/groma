@@ -53,7 +53,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        nameTextField.attributedPlaceholder = NSAttributedString(string: "Section name", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        nameTextField.attributedPlaceholder = NSAttributedString(string: trans("placeholder_section_name"), attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
         
         initValidator()
         
@@ -83,7 +83,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
     
     private func initValidator() {
         let validator = Validator()
-        validator.registerField(nameTextField, rules: [MinLengthRule(length: 1, message: "validation_section_name_not_empty")])
+        validator.registerField(nameTextField, rules: [MinLengthRule(length: 1, message: trans("validation_section_name_not_empty"))])
         self.validator = validator
     }
     

@@ -58,9 +58,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             if !users.isEmpty {
                 let title: String = {
                     if users.count == 1 {
-                        return "\(users.count) participant"
+                        return trans("participants_count_singular", "\(users.count)")
                     } else {
-                        return "\(users.count) participants"
+                        return trans("participants_count_plural", "\(users.count)")
                     }
                 }()
                 sharedUsersButton.setTitle(title, forState: .Normal)
@@ -117,8 +117,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     private func initValidator() {
         let listInputsValidator = Validator()
-        listInputsValidator.registerField(listNameInputField, rules: [MinLengthRule(length: 1, message: "validation_list_name_not_empty")])
-        listInputsValidator.registerField(storeInputField, rules: [MaxLengthRule(length: 50, message: "validation_store_max")])
+        listInputsValidator.registerField(listNameInputField, rules: [MinLengthRule(length: 1, message: trans("validation_list_name_not_empty"))])
         self.listInputsValidator = listInputsValidator
     }
     
@@ -129,8 +128,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         
         initValidator()
         
-        listNameInputField.setPlaceholderWithColor("List name", color: UIColor.whiteColor())
-        storeInputField.setPlaceholderWithColor("Store (optional)", color: UIColor.whiteColor())
+        listNameInputField.setPlaceholderWithColor(trans("placeholder_list_name"), color: UIColor.whiteColor())
+        storeInputField.setPlaceholderWithColor(trans("placeholder_store"), color: UIColor.whiteColor())
         
         setBackgroundColor(UIColor.randomFlatColor())
         
@@ -144,8 +143,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             
             let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
             
-            listNameInputField.setPlaceholderWithColor("List name", color: contrastingTextColor)
-            storeInputField.setPlaceholderWithColor("Store (optional)", color: contrastingTextColor)
+            listNameInputField.setPlaceholderWithColor(trans("placeholder_list_name"), color: contrastingTextColor)
+            storeInputField.setPlaceholderWithColor(trans("placeholder_store"), color: contrastingTextColor)
             listNameInputField.textColor = contrastingTextColor
             storeInputField.textColor = contrastingTextColor
             inventoriesLabel.textColor = contrastingTextColor

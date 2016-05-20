@@ -261,8 +261,11 @@ popups_participants_invitation_explanation = "Der Benutzer/Benutzerin wurde noch
 popups_invitation_pending = "Einladung ausstehend";
 popups_swipe_to_increment_explanation = "Du kannst auch auf den Einträgen links oder rechts streichen um die Menge zu ändern.\nDies ist besonders nützlich wenn du mehr als 1 auf einmal ändern willst!";
 popup_title_group_is_empty = "Leer";
-popup_group_is_empty = "Diese Gruppe hat keine Items!";
+popup_group_is_empty = "Diese Gruppe hat keine Einträge!";
 popups_password_email_sent = "Eine e-Mail um deinen Passwort zurückzusetzen wurde gesendet.";
+popup_remove_list_warning = "Dies wird die Lise \"%@\" auch für die anderen Teilnehmer entfernen.\nFalls du dich nur austragen willst, benutze bitte die Teilnehmerliste."
+popup_remove_section_confirm = "Bist du sicher dass du die Abteilung \"%@\" entfernen willst?\nDies wird auch die Einträge, die sich derzeit in der Abteilung befinden, löschen."
+popup_remove_inventory_warning = "Die mit diesem Inventar verknüpfen Listen, Geschichts und Berichtsdaten werden auch gelöscht.";
 
 
 popups_size_limit_lists = "Maximale Listen Anzahl überschreitet: %@";
@@ -281,6 +284,7 @@ popup_button_yes = "Ja";
 popup_button_no = "Nein";
 popup_button_continue = "Fortsetzen";
 popup_button_update = "Aktualisierung";
+popup_button_remove = "Löschen";
 popup_button_log_out = "Ausloggen";
 popup_button_buy = "Kaufen";
 popup_button_got_it = "Alles klar!";
@@ -289,6 +293,7 @@ popup_button_rate_feedback = "Feedback senden";
 popup_button_rate_ask_later = "Später";
 popup_button_rate_dont_ask_again = "Nicht wieder fragen";
 popup_button_restore_bundled_product = "Wiederherstellen";
+popup_button_remove_list = "Liste entfernen";
 
 
 error_not_authenticated = "Nicht authentifiziert. Bitte log dich ein und versuch es noch mal.";
@@ -325,19 +330,64 @@ title_forgot_password = "Ich habe mein Passwort vergessen";
 title_register = "Registrierung";
 title_user = "Benutzer";
 title_intro = "Intro";
+title_edit_item = "Eintrag editieren";
+title_lists = "Listen";
+title_cart = "Einkaufswagen";
+title_stash = "Lager";
+title_inventories = "Inventarios";
+title_groups = "Gruppen";
+title_participants = "Teilnehmer";
+
+
+empty_inventory_line1 = "Dein Inventar ist leer";
+empty_inventory_line2 = "Um Einträge hinzuzufügen, wähle \"kaufen\" im Einkaufswagen aus.";
+empty_group_line1 = "Deine Gruppe ist leer";
+empty_group_line2 = "Tappe um Einträge hinzuzufügen";
 
 
 generic_login = "Einloggen";
 
 
 placeholder_enter_email = "E-mail";
+placeholder_section_name = "Abteilungsname";
+placeholder_section = "Abteilung";
+placeholder_category = "Kategorie";
+placeholder_list_name = "Listenname";
+placeholder_store = "Laden (optional)";
+placeholder_inventory_name = "Inventarname";
+placeholder_group_name = "Gruppenname";
+
+
 validation_missing_password = "Bitte gib dein Passwort ein";
-
-
 validation_email_format = "Inkorrektes e-Mail Format";
+validation_section_name_not_empty = "Bitte gib einen Abteilungsnamen ein";
+validation_quantity_not_empty = "Bitte gib eine Menge ein";
+validation_price_not_empty = "Bitte gib einen Preis ein";
+validation_list_name_not_empty = "Bitte gib einen Namen für die Liste ein";
+validation_inventory_name_not_empty = "Bitte gib einen Namen für das Inventar ein";
+validation_user_input_not_empty = "Bitte gib eine e-Mail Adresse ein";
+validation_group_name_not_empty = "Bitte gib ein Gruppennamen ein";
 
 
 first_inventory_name = "Haushalt";
 
 
 intro_button_start = "Empezar";
+
+
+participants_count_singular = "%@ Teilnehmer";
+participants_count_plural = "%@ Teilnehmer";
+
+
+history_delete_items_in_group = "Dies wird alle untergeordnete Verlaufseinträge löschen.";
+
+
+stats_details_rest = "Rest(%@)";
+
+
+sort_by_usage = "Nutzung";
+sort_by_alphabetic = "Alphabetisch";
+sort_by_count = "Menge";
+
+
+sharing_message = "TODO";

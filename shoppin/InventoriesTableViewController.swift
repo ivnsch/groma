@@ -45,7 +45,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setNavTitle("Inventories")
+        setNavTitle(trans("title_inventories"))
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
 
@@ -123,7 +123,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     override func canRemoveModel(model: ExpandableTableViewModel, can: Bool -> Void) {
         let inventory = (model as! ExpandableTableViewInventoryModel).inventory
-        ConfirmationPopup.show(title: "Warning", message: "Removing the inventory '\(inventory.name)' will remove also all the history items, stats and lists associated with it.", okTitle: "Remove", cancelTitle: "Cancel", controller: self, onOk: {
+        ConfirmationPopup.show(title: trans("popup_title_warning"), message: trans("popup_remove_inventory_warning"), okTitle: trans("popup_button_remove"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {
                 can(true)
             }, onCancel: {
                 can(false)

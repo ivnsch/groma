@@ -49,9 +49,9 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
             if !users.isEmpty {
                 let title: String = {
                     if users.count == 1 {
-                        return "\(users.count) participant"
+                        return trans("participants_count_singular", "\(users.count)")
                     } else {
-                        return "\(users.count) participants"
+                        return trans("participants_count_plural", "\(users.count)")
                     }
                 }()
                 sharedUsersButton.setTitle(title, forState: .Normal)
@@ -85,7 +85,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     
     private func initValidator() {
         let listInputsValidator = Validator()
-        listInputsValidator.registerField(self.listNameInputField, rules: [MinLengthRule(length: 1, message: "validation_list_name_not_empty")])
+        listInputsValidator.registerField(self.listNameInputField, rules: [MinLengthRule(length: 1, message: trans("validation_inventory_name_not_empty"))])
         self.listInputsValidator = listInputsValidator
     }
     
@@ -94,7 +94,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         
         initValidator()
         
-        listNameInputField.setPlaceholderWithColor("Inventory name", color: UIColor.whiteColor())
+        listNameInputField.setPlaceholderWithColor(trans("placeholder_inventory_name"), color: UIColor.whiteColor())
         
         setBackgroundColor(UIColor.randomFlatColor())
         
@@ -110,7 +110,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
             
             let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
             
-            listNameInputField.setPlaceholderWithColor("Inventory name", color: contrastingTextColor)
+            listNameInputField.setPlaceholderWithColor(trans("placeholder_inventory_name"), color: contrastingTextColor)
             listNameInputField.textColor = contrastingTextColor
             colorButton.setTitleColor(contrastingTextColor, forState: .Normal)
             sharedUsersButton.setTitleColor(contrastingTextColor, forState: .Normal)

@@ -82,7 +82,7 @@ class SharedUsersViewController: UIViewController {
     
     private func initValidator() {
         let userInputsValidator = Validator()
-        userInputsValidator.registerField(self.addUserInputField, rules: [MinLengthRule(length: 1, message: "validation_user_input_not_empty")])
+        userInputsValidator.registerField(self.addUserInputField, rules: [MinLengthRule(length: 1, message: trans("validation_user_input_not_empty"))])
         
         self.userInputsValidator = userInputsValidator
     }

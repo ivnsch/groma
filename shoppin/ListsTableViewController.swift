@@ -49,7 +49,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setNavTitle("Lists")        
+        setNavTitle(trans("title_lists"))
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListsTableViewController.onWebsocketList(_:)), name: WSNotificationName.List.rawValue, object: nil)
@@ -101,7 +101,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     override func canRemoveModel(model: ExpandableTableViewModel, can: Bool -> Void) {
         let list = (model as! ExpandableTableViewListModel).list
         if list.users.count > 1 { // myself + 1
-            ConfirmationPopup.show(title: "!", message: "This will remove the list '\(list.name)' also for the other participants (\(list.users.count - 1)).\nIf you wish to only remove yourself as a participant please edit the list participants instead.", okTitle: "Remove list", cancelTitle: "Cancel", controller: self, onOk: {
+            ConfirmationPopup.show(title: trans("popup_title_warning"), message: trans("popup_remove_list_warning", list.name), okTitle: trans("popup_button_remove_list"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {
                 can(true)
                 }, onCancel: {
                     can(false)

@@ -499,7 +499,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func emptyViewData() -> (text: String, text2: String, imgName: String) {
-        return (text: "You inventory is empty", text2: "To add items, tap on 'buy' in the cart.", imgName: "empty_page")
+        return (text: trans("empty_inventory_line1"), text2: trans("empty_inventory_line2"), imgName: "empty_page")
     }
     
     func onEmptyViewTap() {

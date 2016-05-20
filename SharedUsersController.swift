@@ -61,14 +61,14 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     private func initValidator() {
         let userInputsValidator = Validator()
-        userInputsValidator.registerField(self.addUserInputField, rules: [EmailRule(message: "validation_email_wrong")])
+        userInputsValidator.registerField(self.addUserInputField, rules: [EmailRule(message: trans("validation_email_format"))])
         self.userInputsValidator = userInputsValidator
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "Participants"
+        navigationItem.title = trans("title_participants")
         
         initValidator()
         

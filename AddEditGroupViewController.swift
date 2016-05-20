@@ -74,7 +74,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     
     private func initValidator() {
         let listInputsValidator = Validator()
-        listInputsValidator.registerField(self.groupNameInputField, rules: [MinLengthRule(length: 1, message: "validation_list_name_not_empty")])
+        listInputsValidator.registerField(self.groupNameInputField, rules: [MinLengthRule(length: 1, message: trans("validation_group_name_not_empty"))])
         
         self.listInputsValidator = listInputsValidator
         
@@ -85,7 +85,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         
         initValidator()
         
-        groupNameInputField.setPlaceholderWithColor("Group name", color: UIColor.whiteColor())
+        groupNameInputField.setPlaceholderWithColor(trans("placeholder_group_name"), color: UIColor.whiteColor())
         
         setBackgroundColor(UIColor.randomColor())
         
@@ -99,7 +99,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
             
             let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
             
-            groupNameInputField.setPlaceholderWithColor("Group name", color: contrastingTextColor)
+            groupNameInputField.setPlaceholderWithColor(trans("placeholder_group_name"), color: contrastingTextColor)
             groupNameInputField.textColor = contrastingTextColor
             colorButton.setTitleColor(contrastingTextColor, forState: .Normal)
         }

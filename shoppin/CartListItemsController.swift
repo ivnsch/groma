@@ -99,7 +99,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
     }
 
     override func topBarTitle(list: List) -> String {
-        return "Cart"
+        return trans("title_cart")
     }
     
     private func addAllItemsToInventory() {

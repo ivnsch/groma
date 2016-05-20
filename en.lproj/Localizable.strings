@@ -262,6 +262,9 @@ popups_swipe_to_increment_explanation = "You can also swipe to the left or right
 popup_title_group_is_empty = "Empty";
 popup_group_is_empty = "This group has no items!";
 popups_password_email_sent = "And email to reset your password was sent";
+popup_remove_list_warning = "This will remove the list \"%@\" also for the other participants.\nIf you wish to only remove yourself as a participant please edit the list participants instead."
+popup_remove_section_confirm = "Are you sure you want to remove the section \"%@\"?\nThis will also remove all the list items contained in this section"
+popup_remove_inventory_warning = "This will remove also the history items, stats and lists associated with this inventory."
 
 
 popups_size_limit_lists = "You can't have more than %@ lists";
@@ -281,6 +284,7 @@ popup_button_yes = "Yes";
 popup_button_no = "No";
 popup_button_continue = "Continue";
 popup_button_update = "Update";
+popup_button_remove = "Remove";
 popup_button_log_out = "Log out";
 popup_button_buy = "Buy";
 popup_button_got_it = "Got it!";
@@ -289,6 +293,7 @@ popup_button_rate_feedback = "Send feedback";
 popup_button_rate_ask_later = "Ask me later";
 popup_button_rate_dont_ask_again = "Don't ask again";
 popup_button_restore_bundled_product = "Restore";
+popup_button_remove_list = "Remove list";
 
 
 error_not_authenticated = "Not authenticated. Please login and try again.";
@@ -325,19 +330,64 @@ title_forgot_password = "Forgot password";
 title_register = "Register";
 title_user = "User";
 title_intro = "Intro";
+title_edit_item = "Edit item";
+title_lists = "Lists";
+title_cart = "Cart";
+title_stash = "Back store";
+title_inventories = "Inventories";
+title_groups = "Groups";
+title_participants = "Participants";
+
+
+empty_inventory_line1 = "Your inventory is empty";
+empty_inventory_line2 = "To add items, tap on 'buy' in the cart.";
+empty_group_line1 = "Your group is empty";
+empty_group_line2 = "Tap to items";
 
 
 generic_login = "Login";
 
 
 placeholder_enter_email = "Enter your e-mail";
+placeholder_section_name = "Section name";
+placeholder_section = "Section";
+placeholder_category = "Category";
+placeholder_list_name = "List name";
+placeholder_store = "Store (optional)";
+placeholder_inventory_name = "Inventory name";
+placeholder_group_name = "Group name";
 
 
 validation_email_format = "Wrong email format";
 validation_missing_password = "Please enter your password";
+validation_section_name_not_empty = "Please enter a section name";
+validation_quantity_not_empty = "Plese enter a quantity";
+validation_price_not_empty = "Plese enter a price";
+validation_list_name_not_empty = "Please enter a list name";
+validation_inventory_name_not_empty = "Please enter a inventory name";
+validation_user_input_not_empty = "Please enter an email address";
+validation_group_name_not_empty = "Please enter a group name";
 
 
 first_inventory_name = "Home";
 
 
 intro_button_start = "Start";
+
+
+participants_count_singular = "%@ participant";
+participants_count_plural = "%@ participants";
+
+
+history_delete_items_in_group = "This will delete all the history items in this group";
+
+
+stats_details_rest = "Rest(%@)";
+
+
+sort_by_usage = "Usage";
+sort_by_alphabetic = "Alphabetic";
+sort_by_count = "Count";
+
+
+sharing_message = "TODO";

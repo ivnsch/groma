@@ -263,6 +263,9 @@ popups_swipe_to_increment_explanation = "También puedes deslizar el dedo a los 
 popup_title_group_is_empty = "Vacío";
 popup_group_is_empty = "Este grupo no tiene ítems!";
 popups_password_email_sent = "Recibirás próximamente un e-mail para restaurar tu clave";
+popup_remove_list_warning = "Esto removerá la lista \"%@\" para todos los participantes.\nSi sólo deseas removerte como participante hazlo en la lista de participantes."
+popup_remove_section_confirm = "Estás seguro(a) que quieres remover la sección \"%@\"?\nEsto también removerá los ítems que están en esta sección."
+popup_remove_inventory_warning = "Las listas, ítems de historial y estadística asociados con este inventario también serán removidos."
 
 
 popups_size_limit_lists = "No puedes tener mas de %@ listas";
@@ -282,6 +285,7 @@ popup_button_yes = "Sí";
 popup_button_no = "No";
 popup_button_continue = "Continuar";
 popup_button_update = "Actualizar";
+popup_button_remove = "Remover";
 popup_button_log_out = "Cerrar sesión";
 popup_button_buy = "Comprar";
 popup_button_got_it = "Entendido!";
@@ -290,6 +294,7 @@ popup_button_rate_feedback = "Enviar feedback";
 popup_button_rate_ask_later = "Después";
 popup_button_rate_dont_ask_again = "No preguntar de nuevo";
 popup_button_restore_bundled_product = "Restablecer";
+popup_button_remove_list = "Remover lista";
 
 
 error_not_authenticated = "No hay una sesión activa. Por favor conéctate e intenta de nuevo.";
@@ -326,19 +331,64 @@ title_forgot_password = "He olvidado my clave";
 title_register = "Registro";
 title_user = "Cuenta";
 title_intro = "Intro";
+title_edit_item = "Editar ítem";
+title_lists = "Listas";
+title_cart = "Carrito";
+title_stash = "Abstellkammer";
+title_inventories = "Inventarios";
+title_groups = "Groupos";
+title_participants = "Participantes";
+
+
+empty_inventory_line1 = "Tu inventario está vacío";
+empty_inventory_line2 = "Para agregar ítems, pulsa en \"comprar\" en el carrito.";
+empty_group_line1 = "Tu grupo está vacío";
+empty_group_line2 = "Pulsa para agregar ítems";
 
 
 generic_login = "Sesión";
 
 
 placeholder_enter_email = "Ingresa tu e-mail";
+placeholder_section_name = "Nombre de sección";
+placeholder_section = "Sección";
+placeholder_category = "Categoría";
+placeholder_list_name = "Nombre de la lista";
+placeholder_store = "Tienda (opcional)";
+placeholder_inventory_name = "Nombre del inventario";
+placeholder_group_name = "Nombre del grupo";
 
 
 validation_email_format = "Formato incorrecto de e-mail";
 validation_missing_password = "Por favor ingresa tu clave";
+validation_section_name_not_empty = "Por favor ingresa una sección";
+validation_quantity_not_empty = "Por favor ingresa una cantidad";
+validation_price_not_empty = "Por favor ingresa un precio";
+validation_list_name_not_empty = "Por favor ingresa un nombre para la lista";
+validation_inventory_name_not_empty = "Por favor ingresa un nombre de inventario";
+validation_user_input_not_empty = "Por favor ingresa un e-mail";
+validation_group_name_not_empty = "Por favor ingresa un nombre para el group";
 
 
 first_inventory_name = "Hogar";
 
 
 intro_button_start = "Starten";
+
+
+participants_count_singular = "%@ participante";
+participants_count_plural = "%@ participantes";
+
+
+history_delete_items_in_group = "Esto removerá todos los ítems de historial en este grupo.";
+
+
+stats_details_rest = "Resto(%@)";
+
+
+sort_by_usage = "Uso";
+sort_by_alphabetic = "Alfabéticamente";
+sort_by_count = "Cantidad";
+
+
+sharing_message = "TODO";

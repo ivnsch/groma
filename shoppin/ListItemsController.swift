@@ -806,7 +806,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func canRemoveSection(section: Section, can: Bool -> Void) {
-        ConfirmationPopup.show(title: "Confirm", message: "Are you sure you want to remove the section '\(section.name)'?\nThis will also remove all the list items contained in this section", okTitle: "Yes", cancelTitle: "Cancel", controller: self, onOk: {
+        ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_section_confirm", section.name), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {
             can(true)
         }, onCancel: {
             can(false)

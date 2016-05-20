@@ -53,7 +53,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     @IBOutlet weak var sortByButton: UIButton!
     private var sortByPopup: CMPopTipView?
     private let sortByOptions: [(value: ProductSortBy, key: String)] = [
-        (.Fav, "Usage"), (.Alphabetic, "Alphabetic")
+        (.Fav, trans("sort_by_usage")), (.Alphabetic, trans("sort_by_usage"))
     ]
     
     private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
@@ -81,7 +81,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "Products"
+        navigationItem.title = trans("title_products")
         
         tableView.allowsSelectionDuringEditing = true
         
@@ -137,7 +137,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         for action in actions {
             switch action {
             case .Edit:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: "onEditTap:")
+                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: #selector(ManageProductsViewController.onEditTap(_:)))
                 buttons.append(button)
             default: break
             }

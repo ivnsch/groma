@@ -185,8 +185,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 
 //                let sectionText = "Section"
 //                let categoryText = "Category"
-                let sectionPlaceHolderText = "List section"
-                let categoryPlaceHolderText = "Category"
+                let sectionPlaceHolderText = trans("placeholder_section")
+                let categoryPlaceHolderText = trans("placeholder_category")
                 
                 switch modus {
                 case .ListItem:
@@ -310,11 +310,11 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     private func initValidator() {
         let validator = Validator()
-        validator.registerField(sectionInput, rules: [MinLengthRule(length: 1, message: "validation_section_name_not_empty")])
-        validator.registerField(quantityInput, rules: [MinLengthRule(length: 1, message: "validation_quantity_not_empty"), FloatRule(message: "validation_quantity_number")])
+        validator.registerField(sectionInput, rules: [MinLengthRule(length: 1, message: trans("validation_section_name_not_empty"))])
+        validator.registerField(quantityInput, rules: [MinLengthRule(length: 1, message: trans("validation_quantity_not_empty"))])
 
         if modus == .ListItem {
-            validator.registerField(priceInput, rules: [MinLengthRule(length: 1, message: "validation_price_not_empty"), LocalizedFloatRule(message: "validation_price_number")])
+            validator.registerField(priceInput, rules: [MinLengthRule(length: 1, message: trans("validation_price_not_empty"))])
         }
         self.validator = validator
     }

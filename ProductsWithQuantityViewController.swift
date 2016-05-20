@@ -40,7 +40,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     @IBOutlet weak var sortByButton: UIButton!
 //    private var sortByPopup: CMPopTipView?
     private let sortByOptions: [(value: InventorySortBy, key: String)] = [
-        (.Count, "Count"), (.Alphabetic, "Alphabetic")
+        (.Count, trans("sort_by_count")), (.Alphabetic, trans("sort_by_alphabetic"))
     ]
     
     @IBOutlet weak var emptyView: UIView!

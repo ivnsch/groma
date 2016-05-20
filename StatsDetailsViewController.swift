@@ -310,7 +310,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         }
         
         if restPercentage > 0 {
-            let restSlice = Slice(value: restPercentage, text: "Rest(\(restPrice.toLocalCurrencyString()))", color: UIColor.grayColor())
+            let restSlice = Slice(value: restPercentage, text: trans("stats_details_rest", restPrice.toLocalCurrencyString()), color: UIColor.grayColor())
             slices.append(restSlice)
         }
 

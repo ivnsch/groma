@@ -44,7 +44,7 @@ class StashListItemsController: ListItemsController {
     }
     
     override func topBarTitle(list: List) -> String {
-        return "Back store"
+        return trans("title_stash")
     }
     
     private func resetAllItems() {
