@@ -22,7 +22,7 @@ enum ProviderStatusCode: Int {
     case Blacklisted = 10
     case ServerError = 101 // Generic server error - invalid json, etc.
     case ServerNotReachable = 102 // This is currently both server is down and no internet connection (detected when doing the request, opposed to .NoConnection).
-    case UnknownServerCommunicationError = 103
+    case UnknownServerCommunicationError = 103 // e.g. request timed out
     case ServerInvalidParamsError = 104 // Generic server error - invalid json, etc.
     case SocialLoginError = 105
     case SocialLoginCancelled = 106
