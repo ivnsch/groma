@@ -41,7 +41,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Register"
+        navigationItem.title = trans("title_register")
 
         self.navigationController?.navigationBarHidden = false
         

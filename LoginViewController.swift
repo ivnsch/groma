@@ -91,7 +91,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "Login"
+        navigationItem.title = trans("Login")
 
         passwordField.secureTextEntry = true
         
@@ -135,8 +135,8 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 
     private func initValidator() {
         let validator = Validator()
-        validator.registerField(self.userNameField, rules: [EmailRule(message: "validation_email_format")])
-        validator.registerField(self.passwordField, rules: [RequiredRule(message: "validation_pw_required")]) // TODO repl with translation key, for now this so testers understand
+        validator.registerField(self.userNameField, rules: [EmailRule(message: trans("validation_email_format"))])
+        validator.registerField(self.passwordField, rules: [RequiredRule(message: trans("validation_missing_password"))]) // TODO repl with translation key, for now this so testers understand
         self.validator = validator
     }
     
@@ -256,7 +256,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     // MARK: ForgotPasswordDelegate
     
     func onForgotPasswordSuccess() {
-        showInfoAlert(message: "An email to reset your password was sent")
+        showInfoAlert(message: trans("An email to reset your password was sent"))
     }
     
     // MARK:

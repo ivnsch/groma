@@ -39,7 +39,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     private var finishedSlider = false {
         didSet {
             if mode == .Launch {
-                skipButton.setTitle("Start", forState: .Normal)
+                skipButton.setTitle(trans("intro_button_start"), forState: .Normal)
                 skipButton.setTitleColor(Theme.black, forState: .Normal)
             }
         }
@@ -75,7 +75,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }
             
         } else {
-            navigationItem.title = "Intro"
+            navigationItem.title = trans("title_intro")
             skipButton.hidden = true
             progressIndicator.hidden = true
         }
@@ -110,7 +110,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             Providers.inventoryProvider.inventories(false, successHandler{[weak self] inventories in
                 if let weakSelf = self {
                     if inventories.isEmpty {
-                        let inventory = Inventory(uuid: NSUUID().UUIDString, name: "Home", bgColor: UIColor.flatBlueColor(), order: 0)
+                        let inventory = Inventory(uuid: NSUUID().UUIDString, name: trans("first_inventory_name"), bgColor: UIColor.flatBlueColor(), order: 0)
                         Providers.inventoryProvider.addInventory(inventory, remote: true, weakSelf.resultHandler(onSuccess: {
                             onFinish?()
                             }, onError: {result in

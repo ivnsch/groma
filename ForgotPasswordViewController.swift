@@ -27,12 +27,12 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        emailField.placeholder = "Enter your e-mail"
+        emailField.placeholder = trans("placeholder_enter_email")
         
         initValidator()
         prefill()
         
-        navigationItem.title = "Forgot password"
+        navigationItem.title = trans("title_forgot_password")
         
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(ForgotPasswordViewController.handleTap(_:)))
         recognizer.delegate = self
@@ -57,7 +57,7 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
 
     private func initValidator() {
         let validator = Validator()
-        validator.registerField(emailField, rules: [EmailRule(message: "validation_email_format")])
+        validator.registerField(emailField, rules: [EmailRule(message: trans("validation_email_format"))])
         self.validator = validator
     }
     

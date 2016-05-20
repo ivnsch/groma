@@ -53,7 +53,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     private func showUserDetailsController() {
         let userDetailsController = UIStoryboard.userDetailsViewController()
         userDetailsController.delegate = self
-        navigationItem.title = "User"
+        navigationItem.title = trans("title_user")
         self.replaceController(userDetailsController)
     }
     
@@ -62,7 +62,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     private func showLoginController() {
         let loginController = UIStoryboard.loginViewController()
         loginController.delegate = self
-        navigationItem.title = "Login"
+        navigationItem.title = trans("title_login")
         self.replaceController(loginController)
     }
     

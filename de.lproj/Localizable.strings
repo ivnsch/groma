@@ -262,6 +262,7 @@ popups_invitation_pending = "Einladung ausstehend";
 popups_swipe_to_increment_explanation = "Du kannst auch auf den Einträgen links oder rechts streichen um die Menge zu ändern.\nDies ist besonders nützlich wenn du mehr als 1 auf einmal ändern willst!";
 popup_title_group_is_empty = "Leer";
 popup_group_is_empty = "Diese Gruppe hat keine Items!";
+popups_password_email_sent = "Eine e-Mail um deinen Passwort zurückzusetzen wurde gesendet.";
 
 
 popups_size_limit_lists = "Maximale Listen Anzahl überschreitet: %@";
@@ -319,3 +320,24 @@ setting_real_time_connection = "Echtzeitverbindung";
 
 
 title_products = "Produkte";
+title_login = "Einloggen";
+title_forgot_password = "Ich habe mein Passwort vergessen";
+title_register = "Registrierung";
+title_user = "Benutzer";
+title_intro = "Intro";
+
+
+generic_login = "Einloggen";
+
+
+placeholder_enter_email = "E-mail";
+validation_missing_password = "Bitte gib dein Passwort ein";
+
+
+validation_email_format = "Inkorrektes e-Mail Format";
+
+
+first_inventory_name = "Haushalt";
+
+
+intro_button_start = "Empezar";

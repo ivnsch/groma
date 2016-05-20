@@ -261,6 +261,7 @@ popups_invitation_pending = "Invitation pending";
 popups_swipe_to_increment_explanation = "You can also swipe to the left or right on the cells to change the quantity.\nThis is specially useful if you want to increment/decrement more than 1 at a time!";
 popup_title_group_is_empty = "Empty";
 popup_group_is_empty = "This group has no items!";
+popups_password_email_sent = "And email to reset your password was sent";
 
 
 popups_size_limit_lists = "You can't have more than %@ lists";
@@ -319,3 +320,24 @@ setting_real_time_connection = "Real time connection";
 
 
 title_products = "Products";
+title_login = "Login";
+title_forgot_password = "Forgot password";
+title_register = "Register";
+title_user = "User";
+title_intro = "Intro";
+
+
+generic_login = "Login";
+
+
+placeholder_enter_email = "Enter your e-mail";
+
+
+validation_email_format = "Wrong email format";
+validation_missing_password = "Please enter your password";
+
+
+first_inventory_name = "Home";
+
+
+intro_button_start = "Start";
