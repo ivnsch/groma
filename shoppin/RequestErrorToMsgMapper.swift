@@ -42,6 +42,7 @@ struct RequestErrorToMsgMapper {
             case .IsNewDeviceLoginAndDeclinedOverwrite: return trans("Error invalid")
             case .CancelledLoginWithDifferentAccount: return trans("Cancelled")
             case .MustUpdateApp: return trans("Invalid service. Please update the app to continue using your user account.") // App delegate shows a different popup for this, see comment processing response in AlamofireHelper
+            case .IsEmpty: return trans("Empty")
         }
     }
 }

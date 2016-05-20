@@ -315,10 +315,17 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
         if let inventory = inventory {
-            Providers.inventoryItemsProvider.addToInventory(inventory, group: group, remote: true, successHandler{[weak self] inventoryItemsWithDelta in
+            Providers.inventoryItemsProvider.addToInventory(inventory, group: group, remote: true, resultHandler(onSuccess: {[weak self] inventoryItemsWithDelta in
                 let inventoryItems = inventoryItemsWithDelta.map{$0.inventoryItem}
                 self?.addOrUpdateUI(inventoryItems)
-            })
+            }, onError: {[weak self] result in guard let weakSelf = self else {return}
+                switch result.status {
+                case .IsEmpty:
+                    AlertPopup.show(title: trans("popup_title_group_is_empty"), message: trans("popup_group_is_empty"), controller: weakSelf)
+                default:
+                    self?.defaultErrorHandler()(providerResult: result)
+                }
+            }))
         }
     }
     

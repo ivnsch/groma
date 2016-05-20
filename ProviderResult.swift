@@ -40,6 +40,7 @@ enum ProviderStatusCode: Int {
     case Unknown = 2000 // Note: This represents unknown client error. Unknown server error is mapped to .ServerError
     case DateCalculationError = 2001
     case CancelledLoginWithDifferentAccount = 2002
+    case IsEmpty = 2003 // Generic status to indicate that something is empty and requires special handling
     
     // Not strictly an error
     case IsNewDeviceLoginAndDeclinedOverwrite = 3000

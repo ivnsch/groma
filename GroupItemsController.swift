@@ -290,10 +290,17 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
         if let currentGroup = self.group {
-            Providers.listItemGroupsProvider.addGroupItems(group, targetGroup: currentGroup, remote: true, successHandler{[weak self] groupItemsWithDelta in
+            Providers.listItemGroupsProvider.addGroupItems(group, targetGroup: currentGroup, remote: true, resultHandler(onSuccess: {[weak self] groupItemsWithDelta in
                 let groupItems = groupItemsWithDelta.map{$0.groupItem}
                 self?.addOrUpdateUI(groupItems)
-            })
+            }, onError: {[weak self] result in guard let weakSelf = self else {return}
+                switch result.status {
+                case .IsEmpty:
+                    AlertPopup.show(title: trans("popup_title_group_is_empty"), message: trans("popup_group_is_empty"), controller: weakSelf)
+                default:
+                    self?.defaultErrorHandler()(providerResult: result)
+                }
+            }))
         }
     }
     

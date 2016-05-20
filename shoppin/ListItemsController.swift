@@ -564,15 +564,21 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             
             // TODO save "group list item" don't desintegrate group immediatly
             
-            Providers.listItemsProvider.addGroupItems(group, status: status, list: list, successHandler{[weak self] addedListItems in
+            
+            Providers.listItemsProvider.addGroupItems(group, status: status, list: list, resultHandler(onSuccess: {[weak self] addedListItems in
                 if let list = self?.currentList {
                     self?.initWithList(list) // refresh list items
                 } else {
                     QL3("Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
                 }
-                onFinish?()
-                
-                })
+            }, onError: {[weak self] result in guard let weakSelf = self else {return}
+                switch result.status {
+                case .IsEmpty:
+                    AlertPopup.show(title: trans("popup_title_group_is_empty"), message: trans("popup_group_is_empty"), controller: weakSelf)
+                default:
+                    self?.defaultErrorHandler()(providerResult: result)
+                }
+            }))
         } else {
             QL4("Add product from quick list but there's no current list in ViewController'")
         }
