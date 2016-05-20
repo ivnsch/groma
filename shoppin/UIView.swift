@@ -65,14 +65,22 @@ extension UIView {
         return c
     }
     
-    func widthConstraint(width: CGFloat) {
+    func widthConstraint(width: CGFloat) -> NSLayoutConstraint {
         let c = NSLayoutConstraint(item: self, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: width)
         self.addConstraint(c)
+        return c
     }
     
-    func heightConstraint(height: CGFloat) {
+    func widthLessThanConstraint(width: CGFloat) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: .Width, relatedBy: .LessThanOrEqual, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: width)
+        self.addConstraint(c)
+        return c
+    }
+    
+    func heightConstraint(height: CGFloat) -> NSLayoutConstraint {
         let c = NSLayoutConstraint(item: self, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: height)
         self.addConstraint(c)
+        return c
     }
     
     func matchSize(view: UIView) {

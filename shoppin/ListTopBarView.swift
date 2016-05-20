@@ -49,6 +49,9 @@ struct TopBarButtonModel {
 
 class ListTopBarView: UIView {
 
+    // Min space to left and right of title view to edges of parent view. For now hardcoded, note also that this assumes only 1 button at the left and right
+    private let titleMinLeftRightMargin: CGFloat = 60
+    
     private var backButton: UIButton?
     var backButtonText: String?
     private var leftButtons: [UIButton] = []
@@ -77,6 +80,7 @@ class ListTopBarView: UIView {
     }
     
     private var titleLabelLeftConstraint: NSLayoutConstraint?
+    private var titleLabelWidthConstraint: NSLayoutConstraint?
     private var titleLabelCentered = false
     private let titleLabelLeftConstant: Float = Float(DimensionsManager.leftRightPaddingConstraint)
     
@@ -110,9 +114,10 @@ class ListTopBarView: UIView {
         centerYOffsetInExpandedState = centerYInExpandedState - (totalHeight / 2)
         
         titleLabel.font = titleLabelFont
+//        titleLabel.adjustsFontSizeToFitWidth = true
         addSubview(titleLabel)
         titleLabelLeftConstraint = titleLabel.alignLeft(self, constant: titleLabelLeftConstant)
-
+        
         titleLabelCenterYContraint = titleLabel.centerYInParent()
         layoutIfNeeded()
         
@@ -156,9 +161,10 @@ class ListTopBarView: UIView {
         let circleDiam: CGFloat = 12
         let cornerRadius = circleDiam / 2
         let x = frame.width / 2 + (titleTextSize.width / 2) + 8
+        let xMax = min(x, bounds.width - titleMinLeftRightMargin)
         let y = CGFloat(centerYInExpandedState) - (circleDiam / 2)
         
-        let circlePath = UIBezierPath(roundedRect: CGRectMake(x, y, circleDiam, circleDiam), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(cornerRadius, cornerRadius))
+        let circlePath = UIBezierPath(roundedRect: CGRectMake(xMax, y, circleDiam, circleDiam), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(cornerRadius, cornerRadius))
         //        circlePath.closePath()
         return circlePath
     }
@@ -205,6 +211,8 @@ class ListTopBarView: UIView {
         
         titleLabelLeftConstraint?.constant = center ? self.center.x - titleLabel.frame.width / 2 : CGFloat(titleLabelLeftConstant)
         titleLabelCenterYContraint?.constant = center ? 10 : 0
+        
+        titleLabelWidthConstraint = titleLabel.widthLessThanConstraint(bounds.width - (titleMinLeftRightMargin * 2))
         
         if animated {
             UIView.animateWithDuration(0.3, animations: {[weak self] in
