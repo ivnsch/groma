@@ -293,6 +293,11 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             Providers.listItemGroupsProvider.addGroupItems(group, targetGroup: currentGroup, remote: true, resultHandler(onSuccess: {[weak self] groupItemsWithDelta in
                 let groupItems = groupItemsWithDelta.map{$0.groupItem}
                 self?.addOrUpdateUI(groupItems)
+                if let firstGroupItem = groupItemsWithDelta.first {
+                    self?.productsWithQuantityController.scrollToItem(ProductWithQuantityGroup(groupItem: firstGroupItem.groupItem))
+                } else {
+                    QL3("Shouldn't be here without list items")
+                }
             }, onError: {[weak self] result in guard let weakSelf = self else {return}
                 switch result.status {
                 case .IsEmpty:

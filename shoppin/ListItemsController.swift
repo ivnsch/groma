@@ -568,6 +568,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             Providers.listItemsProvider.addGroupItems(group, status: status, list: list, resultHandler(onSuccess: {[weak self] addedListItems in
                 if let list = self?.currentList {
                     self?.initWithList(list) // refresh list items
+                    if let firstListItem = addedListItems.first {
+                        self?.listItemsTableViewController.scrollToListItem(firstListItem)
+                    } else {
+                        QL3("Shouldn't be here without list items")
+                    }
                 } else {
                     QL3("Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
                 }

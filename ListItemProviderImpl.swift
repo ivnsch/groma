@@ -161,7 +161,12 @@ class ListItemProviderImpl: ListItemProvider {
     func addGroupItems(group: ListItemGroup, status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
         Providers.listItemGroupsProvider.groupItems(group, sortBy: .Alphabetic, fetchMode: .MemOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
-                self?.add(groupItems, status: status, list: list, handler)
+                if groupItems.isEmpty {
+                    handler(ProviderResult(status: .IsEmpty))
+                } else {
+                    self?.add(groupItems, status: status, list: list, handler)
+                }
+                
             } else {
                 print("Error: ListItemProviderImpl.addGroupItems: Can't get group items for group: \(group)")
                 handler(ProviderResult(status: .DatabaseUnknown))

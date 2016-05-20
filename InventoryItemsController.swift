@@ -318,6 +318,11 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             Providers.inventoryItemsProvider.addToInventory(inventory, group: group, remote: true, resultHandler(onSuccess: {[weak self] inventoryItemsWithDelta in
                 let inventoryItems = inventoryItemsWithDelta.map{$0.inventoryItem}
                 self?.addOrUpdateUI(inventoryItems)
+                if let firstInventoryItem = inventoryItemsWithDelta.first {
+                    self?.productsWithQuantityController.scrollToItem(ProductWithQuantityInv(inventoryItem: firstInventoryItem.inventoryItem))
+                } else {
+                    QL3("Shouldn't be here without list items")
+                }
             }, onError: {[weak self] result in guard let weakSelf = self else {return}
                 switch result.status {
                 case .IsEmpty:

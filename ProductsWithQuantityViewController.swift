@@ -409,6 +409,14 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             addOrUpdateUI(inventoryItem, scrollToCell: false)
         }
     }
+    
+    func scrollToItem(item: ProductWithQuantity) {
+        if let indexPath = indexPathOfItem(item) {
+            tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+        } else {
+            QL2("Didn't find item to scroll to")
+        }
+    }
 
     private func tryUpdateItem(inventoryItem: ProductWithQuantity, scrollToCell: Bool) -> Bool {
         if let (index, _, cellMaybe) = inventoryItemTableViewData(inventoryItem) {

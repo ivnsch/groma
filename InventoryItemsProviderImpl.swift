@@ -349,8 +349,12 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     func addToInventory(inventory: Inventory, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]> -> Void) {
         Providers.listItemGroupsProvider.groupItems(group, sortBy: .Alphabetic, fetchMode: .MemOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
-                let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
-                self?.addToInventory(inventory, productsWithQuantities: productsWithQuantities, remote: remote, handler)
+                if groupItems.isEmpty {
+                    handler(ProviderResult(status: .IsEmpty))
+                } else {
+                    let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
+                    self?.addToInventory(inventory, productsWithQuantities: productsWithQuantities, remote: remote, handler)
+                }
             } else {
                 QL4("Couldn't get items for group: \(group)")
                 handler(ProviderResult(status: .DatabaseUnknown))

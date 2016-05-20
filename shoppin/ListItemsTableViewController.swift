@@ -846,4 +846,12 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             f(tableViewSection.section)
         })
     }
+    
+    func scrollToListItem(litsItem: ListItem) {
+        if let indexPath = getIndexPath(litsItem) {
+            tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+        } else {
+            QL2("Didn't find list item to scroll to")
+        }
+    }
 }

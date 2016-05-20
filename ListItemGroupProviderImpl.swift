@@ -87,14 +87,18 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     func addGroupItems(srcGroup: ListItemGroup, targetGroup: ListItemGroup, remote: Bool, _ handler: ProviderResult<[(groupItem: GroupItem, delta: Int)]> -> Void) {
         groupItems(srcGroup, sortBy: .Alphabetic, fetchMode: .MemOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
-                let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
-                self?.add(targetGroup, productsWithQuantities: productsWithQuantities, remote: remote) {result in
-                    // return fetched group items to the caller
-                    if let groupItems = result.sucessResult {
-                        handler(ProviderResult(status: .Success, sucessResult: groupItems))
-                    } else {
-                        print("Error: ListItemGroupProviderImpl.addGroupItems: Couldn't save group items for group: \(targetGroup)")
-                        handler(ProviderResult(status: result.status))
+                if groupItems.isEmpty {
+                    handler(ProviderResult(status: .IsEmpty))
+                } else {
+                    let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
+                    self?.add(targetGroup, productsWithQuantities: productsWithQuantities, remote: remote) {result in
+                        // return fetched group items to the caller
+                        if let groupItems = result.sucessResult {
+                            handler(ProviderResult(status: .Success, sucessResult: groupItems))
+                        } else {
+                            print("Error: ListItemGroupProviderImpl.addGroupItems: Couldn't save group items for group: \(targetGroup)")
+                            handler(ProviderResult(status: result.status))
+                        }
                     }
                 }
             } else {
