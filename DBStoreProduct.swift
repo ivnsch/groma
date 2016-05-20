@@ -123,6 +123,12 @@ class DBStoreProduct: DBSyncable {
     static func createFilterCategoryNameContains(text: String) -> String {
         return "productOpt.categoryOpt.name CONTAINS[c] '\(text)'"
     }
+    
+    // Sync - workaround for mysterious store products/products/categories that appear sometimes in sync reqeust
+    // Note these invalid objects will be removed on sync response when db is overwritten
+    static func createFilterDirtyAndValid() -> String {
+        return "\(DBSyncable.dirtyFilter()) && uuid != ''"
+    }
 
     // MARK: -
     
