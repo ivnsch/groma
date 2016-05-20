@@ -230,20 +230,20 @@ popup_please_login_for_participants = "Um Teilnehmer zu verwalten musst du einge
 popup_products_updated_to_match_user = "Deine Produkte wurden aktualisiert. Sie sind jetzt mit den Produkten von %@ gleich.";
 popup_list_products_updated_to_match_user = "Deine Produkte wurden aktualisiert. Sie sind jetzt mit den Produkten von %@ gleich.";
 popup_please_select_inventory = "Bitte wähle ein Inventar aus";
-popup_was_removed = "%@ wurde gelöscht.";
+popup_was_removed = "\"%@\" wurde gelöscht.";
 popup_please_rate_app = "Gefällt dir Groma? Bitte nimm dir einen Moment Zeit um uns zu bewerten!";
 popup_couldnt_open_app_store_url = "Konnte die App Store URL nicht öffnen.";
 popup_please_update_app_to_use_account = "Bitte aktualisiere Groma um weiterhin dein Benutzerkonto zu benutzen.";
-popup_buy_will_add_to_history_stats = "Dies wird deine Einträge in das Inventar %@ und entsprechende Verlaufseinträge und Statistiken hinzufügen.";
-popup_you_cant_buy_cart = "Dz kannst keine Einträge in das Inventar '%@' verschieben\nBitte einen Benutzer mit Zugang zu diesem Inventar dich als Teilnehmer hinzuzufügen.";
-popup_remove_section_completion_confirm = "Willst du '%@' wirklich löschen?\nDies wird alle Abteilungen und Kategorien mit diesem Namen und damit verbundene Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
-popup_remove_brand_completion_confirm = "Willst du '%@' wirklich löschen?\nDies wird alle Produkte die mit dieser Marke und alle damit verbundene Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
+popup_buy_will_add_to_history_stats = "Dies wird deine Einträge in das Inventar \"%@\" und entsprechende Verlaufseinträge und Statistiken hinzufügen.";
+popup_you_cant_buy_cart = "Dz kannst keine Einträge in das Inventar \"%@\" verschieben\nBitte einen Benutzer mit Zugang zu diesem Inventar dich als Teilnehmer hinzuzufügen.";
+popup_remove_section_completion_confirm = "Willst du \"%@\" wirklich löschen?\nDies wird alle Abteilungen und Kategorien mit diesem Namen und damit verbundene Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
+popup_remove_brand_completion_confirm = "Willst du \"%@\" wirklich löschen?\nDies wird alle Produkte die mit dieser Marke und alle damit verbundene Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
 popup_couldnt_find_email_account = "Konnte keine e-Mail Konto finden.";
-popup_group_was_deleted_in_other_device = "Die Gruppe '%@' wurde auf einem anderen Gerät gelöscht.";
+popup_group_was_deleted_in_other_device = "Die Gruppe \"%@\" wurde auf einem anderen Gerät gelöscht.";
 popup_delete_history_also_deletes_stats = "Entfernung von Verlaufseinträge modifiziert entsprechend den Bericht.";
 popup_add_items_directly_inventory = "Einträge direkt im Inventar hinzufügen oder inkrementieren modifiziert nicht den Verlauf und Bericht.\nWenn du willst dass die Einträge im Verlauf und Bericht auftauchen, musst du im Einkaufswagen 'kaufen' benutzen. Der Einkaufswagen kann in den Einkauflisten gefunden werden.";
-popup_inventory_was_deleted_in_other_device = "Das inventar '%@' wurde auf einem anderen Gerät gelöscht.";
-popup_list_was_deleted_in_other_device = "Die Liste '%@' wurde auf einem anderen Gerät gelöscht.";
+popup_inventory_was_deleted_in_other_device = "Das inventar \"%@\" wurde auf einem anderen Gerät gelöscht.";
+popup_list_was_deleted_in_other_device = "Die Liste \"%@\" wurde auf einem anderen Gerät gelöscht.";
 popup_please_accept_terms = "Bitte akzeptiere die AGB.";
 popup_your_data_was_overwritten = "Deine lokale Daten wurden überschrieben.";
 popup_are_you_sure_remove_account = "Bist du sicher dass du dein Benutzerkonto löschen willst?";
@@ -260,6 +260,8 @@ popups_participants_must_be_logged_in = "Du musst eingeloggt sein um mit anderen
 popups_participants_invitation_explanation = "Der Benutzer/Benutzerin wurde noch nicht eingeladen. Die Einladungen werden gesendet wenn du die Liste speicherst.";
 popups_invitation_pending = "Einladung ausstehend";
 popups_swipe_to_increment_explanation = "Du kannst auch auf den Einträgen links oder rechts streichen um die Menge zu ändern.\nDies ist besonders nützlich wenn du mehr als 1 auf einmal ändern willst!";
+popup_title_group_is_empty = "Leer";
+popup_group_is_empty = "Diese Gruppe hat keine Items!";
 
 
 popups_size_limit_lists = "Maximale Listen Anzahl überschreitet: %@";
@@ -306,7 +308,7 @@ social_login_error = "Social Signup Fehler";
 social_already_exists = "Es gibt bereits ein Benutzerkonto mit der selben Benutzer Id.";
 success = "Sucess";
 error_no_internet_connection = "Keine Internetverbidung verfugbar. Bitte versuche es nochmal mit einer Internetverbindung.";
-sync_failed = "Synchronisierungsfehler.\nBitte schaue dir die Fehlerbehebungsthemen in der Hilfe an, oder kontaktiere Support (beide kannst du im '...' tab finden).";
+sync_failed = "Synchronisierungsfehler.\nWenn das Problem weiterbesteht, schaue dir bitte die Fehlerbehebungsthemen in der Hilfe an, oder kontaktiere Support (beide kannst du im '...' tab finden).";
 
 
 setting_overwrite_data = "Daten überschreiben";
