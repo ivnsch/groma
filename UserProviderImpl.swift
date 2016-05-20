@@ -62,7 +62,7 @@ class UserProviderImpl: UserProvider {
         
         let resultHandler: ProviderResult<SyncResult> -> Void = {result in
             if result.success {
-                QL2("Sync success, connecting websocket...")
+                QL2("Sync/download success, connecting websocket...")
                 WebsocketHelper.tryConnectWebsocket()
                 if onlyOverwriteLocal {
                     // overwrote with new device and existing account - store a flag so we don't do this again (after this device is not considered "new" anymore and does normal sync).
@@ -71,9 +71,14 @@ class UserProviderImpl: UserProvider {
                 additionalActionsOnSyncSuccess?()
                 handler(result)
             } else {
-                QL4("Sync didn't return success: \(result)")
+                QL4("Sync/download didn't return success: \(result)")
                 // Return a sync failed status code such that the controller can show error message specific to this. Since we return this as a result of both login and sync, if we let only the server error code client wouldn't know if e.g. "wrong parameters" would be because of login or sync. Differentiation is important because on sync errors we let the user logged in (this way they can e.g. call full download from settings to try to solve the sync problem) while on login errors the user is logged out.
-                handler(ProviderResult(status: .SyncFailed, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+                if result.status == .UnknownServerCommunicationError || result.status == .ServerNotReachable {
+                    // If e.g. server timeout result needs to be treated differently e.g. don't show sync failed popup, logout
+                    handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+                } else {
+                    handler(ProviderResult(status: .SyncFailed, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+                }
             }
         }
         
