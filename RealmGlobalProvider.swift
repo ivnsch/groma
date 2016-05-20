@@ -17,9 +17,9 @@ class RealmGlobalProvider: RealmProvider {
         
         withRealm({realm in
 
-            let productCategories = realm.objects(DBProductCategory).filter(DBSyncable.dirtyFilter())
-            let products = realm.objects(DBProduct).filter(DBSyncable.dirtyFilter())
-            let storeProducts = realm.objects(DBStoreProduct).filter(DBSyncable.dirtyFilter())
+            let productCategories = realm.objects(DBProductCategory).filter(DBProductCategory.createFilterDirtyAndValid())
+            let products = realm.objects(DBProduct).filter(DBProduct.createFilterDirtyAndValid())
+            let storeProducts = realm.objects(DBStoreProduct).filter(DBStoreProduct.createFilterDirtyAndValid())
             let lists = realm.objects(DBList).filter(DBSyncable.dirtyFilter())
             let sections = realm.objects(DBSection).filter(DBSyncable.dirtyFilter())
             let listsItems = realm.objects(DBListItem).filter(DBSyncable.dirtyFilter())
