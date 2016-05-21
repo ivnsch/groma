@@ -74,7 +74,7 @@ class DimensionsManager {
     
     static var quickAddHeight: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 200
+        case .VerySmall: return 150
         case .Small: return 220
         case .Middle: return 290
         case .Large: return 310
@@ -92,7 +92,7 @@ class DimensionsManager {
     
     static var quickAddSlidingTabsViewHeight: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 35
+        case .VerySmall: return 30
         case .Small: return 35
         case .Middle: return 50
         case .Large: return 50
@@ -101,10 +101,18 @@ class DimensionsManager {
     
     static var quickAddSlidingLineBottomOffset: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 5
+        case .VerySmall: return 0
         case .Small: return 5
         case .Middle: return 10
         case .Large: return 10
+        }
+    }
+
+    static var quickAddSlidingLeftRightPadding: CGFloat {
+        switch widthDimension {
+        case .Small: return 120
+        case .Middle: return 140
+        case .Large: return 160
         }
     }
     
@@ -128,7 +136,7 @@ class DimensionsManager {
 
     static var quickAddCollectionViewCellVPadding: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 3
+        case .VerySmall: return 0
         case .Small: return 3
         case .Middle: return 6
         case .Large: return 6
@@ -137,7 +145,7 @@ class DimensionsManager {
 
     static var quickAddCollectionViewCellCornerRadius: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 15
+        case .VerySmall: return 16
         case .Small: return 15
         case .Middle: return 18
         case .Large: return 18
@@ -195,10 +203,19 @@ class DimensionsManager {
 
     static var emptyViewTopConstraint: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 140
-        case .Small: return 140
+        case .VerySmall: return 30
+        case .Small: return 120
         case .Middle: return 160
         case .Large: return 160
+        }
+    }
+
+    static var textFieldHeightConstraint: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 20
+        case .Small: return 35
+        case .Middle: return 35
+        case .Large: return 35
         }
     }
     
@@ -231,7 +248,7 @@ class DimensionsManager {
     
     static var topConstraintFirstInputWhenClose: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 50
+        case .VerySmall: return 10
         case .Small: return 60
         case .Middle: return 60
         case .Large: return 60
@@ -242,6 +259,36 @@ class DimensionsManager {
         switch heightDimension {
         case .VerySmall: return 60
         case .Small: return 60
+        case .Middle: return 60
+        case .Large: return 60
+        }
+    }
+    
+    // MARK: Report
+    
+    static var pieChartRadius: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 70
+        case .Small: return 80
+        case .Middle: return 85
+        case .Large: return 85
+        }
+    }
+
+    static var pieChartLabelRadius: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 55
+        case .Small: return 65
+        case .Middle: return 70
+        case .Large: return 70
+        }
+    }
+    
+    // MARK: Color picker
+    
+    static var colorCircleCellSize: CGFloat {
+        switch widthDimension {
+        case .Small: return 45
         case .Middle: return 60
         case .Large: return 60
         }

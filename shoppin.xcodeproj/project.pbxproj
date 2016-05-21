@@ -775,6 +775,7 @@
 		EBB2AB3B1B8B29CF007B8C59 /* InventoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */; };
 		EBB2AB3D1B8B3171007B8C59 /* InventoryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3C1B8B3171007B8C59 /* InventoryItemCell.swift */; };
 		EBB2AB411B8B434E007B8C59 /* InventoriesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBB2AB401B8B434E007B8C59 /* InventoriesViewController.xib */; };
+		EBB2CBC61CF0CFAD0040C619 /* TextFieldHeightConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */; };
 		EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */; };
 		EBB526711BEFD8C10002A286 /* HelpProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */; };
 		EBB526731BEFD8E90002A286 /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526721BEFD8E90002A286 /* HelpItem.swift */; };
@@ -1218,6 +1219,7 @@
 		EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlainTableViewController.swift; sourceTree = "<group>"; };
 		EB2AE2BE1CF09EDC0062309D /* extract_strings_localizables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = extract_strings_localizables.swift; path = scripts/extract_strings_localizables.swift; sourceTree = SOURCE_ROOT; };
+		EB2AE2C11CF0BB850062309D /* check_translations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = check_translations.swift; path = scripts/check_translations.swift; sourceTree = SOURCE_ROOT; };
 		EB2F5D101A4ACC4400DBC4AF /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		EB2F5D1C1A4B4CE300DBC4AF /* ListItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsTableViewController.swift; sourceTree = "<group>"; };
 		EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewController.swift; path = shoppin/UIViewController.swift; sourceTree = "<group>"; };
@@ -1549,6 +1551,7 @@
 		EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryCell.swift; sourceTree = "<group>"; };
 		EBB2AB3C1B8B3171007B8C59 /* InventoryItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemCell.swift; sourceTree = "<group>"; };
 		EBB2AB401B8B434E007B8C59 /* InventoriesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InventoriesViewController.xib; sourceTree = "<group>"; };
+		EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldHeightConstraint.swift; sourceTree = "<group>"; };
 		EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpProviderImpl.swift; sourceTree = "<group>"; };
 		EBB526721BEFD8E90002A286 /* HelpItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpItem.swift; sourceTree = "<group>"; };
@@ -2296,6 +2299,7 @@
 		EB4B39C21CEBDF6B00B41063 /* scripts */ = {
 			isa = PBXGroup;
 			children = (
+				EB2AE2C11CF0BB850062309D /* check_translations.swift */,
 				EB2AE2BE1CF09EDC0062309D /* extract_strings_localizables.swift */,
 				EB4B39C01CEBDF5E00B41063 /* products_translations.swift */,
 			);
@@ -2414,6 +2418,7 @@
 				EBB6D74F1CD68EC900F9C711 /* LabelMore.swift */,
 				EBB6D7551CD69E6100F9C711 /* TextFieldMore.swift */,
 				EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */,
+				EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */,
 				EB4B39C31CEBF05300B41063 /* TopEmptyViewConstraint.swift */,
 			);
 			name = common;
@@ -4116,6 +4121,7 @@
 				EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */,
 				EB4147CD1BE2288E00549CE4 /* ManageGroupsCell.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
+				EBB2CBC61CF0CFAD0040C619 /* TextFieldHeightConstraint.swift in Sources */,
 				EBF1F9E71CD76A1900F8016F /* MyAlert.swift in Sources */,
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
 				EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */,

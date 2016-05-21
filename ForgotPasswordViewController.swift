@@ -17,6 +17,8 @@ protocol ForgotPasswordDelegate: class {
 class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var emailField: UITextField!
+
+    @IBOutlet weak var sendButton: UIButton!
     
     private var validator: Validator?
 
@@ -32,11 +34,17 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
         initValidator()
         prefill()
         
+        layout()
+        
         navigationItem.title = trans("title_forgot_password")
         
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(ForgotPasswordViewController.handleTap(_:)))
         recognizer.delegate = self
         view.addGestureRecognizer(recognizer)
+    }
+    
+    private func layout() {
+        sendButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
     }
     
     override func viewWillAppear(animated: Bool) {

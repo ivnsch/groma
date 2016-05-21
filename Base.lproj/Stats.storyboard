@@ -103,19 +103,19 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cB3-Gm-4ee">
                                 <rect key="frame" x="0.0" y="20" width="375" height="220"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yj8-VA-p0A" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="251" y="50" width="110" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="yj8-VA-p0A" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="251" y="50" width="110" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                <integer key="value" value="20"/>
+                                                <integer key="value" value="30"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5bU-HT-zaT">
-                                        <rect key="frame" x="235" y="53" width="10" height="10"/>
+                                        <rect key="frame" x="235" y="45" width="10" height="10"/>
                                         <color key="backgroundColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="10" id="bCo-fq-ghk"/>
@@ -127,8 +127,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yrt-kh-TE5" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="251" y="74" width="31" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="Yrt-kh-TE5" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="251" y="74" width="110" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -139,7 +139,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TnV-Xv-ptY">
-                                        <rect key="frame" x="235" y="77" width="10" height="10"/>
+                                        <rect key="frame" x="235" y="69" width="10" height="10"/>
                                         <color key="backgroundColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="10" id="K9L-rn-b3P"/>
@@ -151,8 +151,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UNA-8t-cSa" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="251" y="98" width="31" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="UNA-8t-cSa" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="251" y="98" width="110" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -163,7 +163,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QnC-f5-ubb">
-                                        <rect key="frame" x="235" y="101" width="10" height="10"/>
+                                        <rect key="frame" x="235" y="93" width="10" height="10"/>
                                         <color key="backgroundColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="10" id="UsI-aq-Qwg"/>
@@ -175,8 +175,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Gh-Ag-ACF" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="251" y="122" width="31" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="0Gh-Ag-ACF" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="251" y="122" width="110" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -187,7 +187,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VIf-9r-DJT">
-                                        <rect key="frame" x="235" y="125" width="10" height="10"/>
+                                        <rect key="frame" x="235" y="117" width="10" height="10"/>
                                         <color key="backgroundColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="10" id="Bgx-WZ-CqU"/>
@@ -199,8 +199,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beO-MX-ioC" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="251" y="146" width="31" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="beO-MX-ioC" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="251" y="146" width="110" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -211,7 +211,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gzz-ZD-cbb">
-                                        <rect key="frame" x="235" y="149" width="10" height="10"/>
+                                        <rect key="frame" x="235" y="141" width="10" height="10"/>
                                         <color key="backgroundColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="10" id="WfP-hB-9wS"/>
@@ -223,8 +223,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jo6-bh-iVS" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="251" y="170" width="31" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="Jo6-bh-iVS" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="251" y="170" width="110" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -235,7 +235,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6F3-JV-DsL">
-                                        <rect key="frame" x="235" y="173" width="10" height="10"/>
+                                        <rect key="frame" x="235" y="165" width="10" height="10"/>
                                         <color key="backgroundColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="10" id="FHk-pZ-zIy"/>
@@ -259,23 +259,73 @@
                                     <constraint firstItem="Jo6-bh-iVS" firstAttribute="centerY" secondItem="6F3-JV-DsL" secondAttribute="centerY" id="CmM-RH-qzf"/>
                                     <constraint firstItem="Yrt-kh-TE5" firstAttribute="leading" secondItem="TnV-Xv-ptY" secondAttribute="trailing" constant="6" id="ECj-ZJ-wNo"/>
                                     <constraint firstItem="QnC-f5-ubb" firstAttribute="top" secondItem="TnV-Xv-ptY" secondAttribute="bottom" constant="14" id="Edq-gH-7ov"/>
-                                    <constraint firstAttribute="trailing" secondItem="yj8-VA-p0A" secondAttribute="trailing" priority="999" constant="14" id="GPk-Hj-KMT"/>
+                                    <constraint firstAttribute="trailing" secondItem="yj8-VA-p0A" secondAttribute="trailing" constant="14" id="GPk-Hj-KMT"/>
                                     <constraint firstItem="Gzz-ZD-cbb" firstAttribute="top" secondItem="VIf-9r-DJT" secondAttribute="bottom" constant="14" id="Go2-c4-uje"/>
+                                    <constraint firstItem="UNA-8t-cSa" firstAttribute="trailing" secondItem="yj8-VA-p0A" secondAttribute="trailing" id="HyR-gd-c1n"/>
                                     <constraint firstItem="Jo6-bh-iVS" firstAttribute="leading" secondItem="6F3-JV-DsL" secondAttribute="trailing" constant="6" id="I7H-FP-GeS"/>
-                                    <constraint firstItem="yj8-VA-p0A" firstAttribute="top" secondItem="cB3-Gm-4ee" secondAttribute="top" constant="50" id="ISV-57-D7H"/>
-                                    <constraint firstAttribute="height" constant="220" id="N1Q-e2-jji"/>
+                                    <constraint firstItem="yj8-VA-p0A" firstAttribute="top" secondItem="cB3-Gm-4ee" secondAttribute="top" constant="50" id="ISV-57-D7H" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                                <real key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                                <real key="value" value="40"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                                <real key="value" value="50"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                                <real key="value" value="50"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </constraint>
+                                    <constraint firstAttribute="height" constant="220" id="N1Q-e2-jji" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                                <integer key="value" value="170"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                                <integer key="value" value="210"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                                <integer key="value" value="220"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                                <integer key="value" value="220"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </constraint>
+                                    <constraint firstItem="Jo6-bh-iVS" firstAttribute="trailing" secondItem="yj8-VA-p0A" secondAttribute="trailing" id="Pnm-W6-8Gm"/>
                                     <constraint firstItem="0Gh-Ag-ACF" firstAttribute="centerY" secondItem="VIf-9r-DJT" secondAttribute="centerY" id="Qf2-C5-Xvf"/>
                                     <constraint firstItem="6F3-JV-DsL" firstAttribute="top" secondItem="Gzz-ZD-cbb" secondAttribute="bottom" constant="14" id="Xog-3X-1eL"/>
+                                    <constraint firstItem="Yrt-kh-TE5" firstAttribute="trailing" secondItem="yj8-VA-p0A" secondAttribute="trailing" id="d5K-bY-HMJ"/>
                                     <constraint firstItem="VIf-9r-DJT" firstAttribute="centerX" secondItem="5bU-HT-zaT" secondAttribute="centerX" id="fna-Jj-sIK"/>
                                     <constraint firstItem="Gzz-ZD-cbb" firstAttribute="centerX" secondItem="5bU-HT-zaT" secondAttribute="centerX" id="gNA-Da-zrr"/>
+                                    <constraint firstItem="0Gh-Ag-ACF" firstAttribute="trailing" secondItem="yj8-VA-p0A" secondAttribute="trailing" id="h3M-X7-LDR"/>
                                     <constraint firstItem="0Gh-Ag-ACF" firstAttribute="leading" secondItem="VIf-9r-DJT" secondAttribute="trailing" constant="6" id="iEW-bP-lnk"/>
                                     <constraint firstItem="TnV-Xv-ptY" firstAttribute="centerX" secondItem="5bU-HT-zaT" secondAttribute="centerX" id="qOw-dK-ncm"/>
                                     <constraint firstItem="VIf-9r-DJT" firstAttribute="top" secondItem="QnC-f5-ubb" secondAttribute="bottom" constant="14" id="qXx-WK-FU5"/>
                                     <constraint firstItem="UNA-8t-cSa" firstAttribute="leading" secondItem="QnC-f5-ubb" secondAttribute="trailing" constant="6" id="rmv-qu-MmV"/>
                                     <constraint firstItem="QnC-f5-ubb" firstAttribute="centerX" secondItem="5bU-HT-zaT" secondAttribute="centerX" id="sP3-7f-zNP"/>
                                     <constraint firstItem="yj8-VA-p0A" firstAttribute="centerY" secondItem="5bU-HT-zaT" secondAttribute="centerY" id="tkD-oi-idt"/>
+                                    <constraint firstItem="beO-MX-ioC" firstAttribute="trailing" secondItem="yj8-VA-p0A" secondAttribute="trailing" id="wEb-me-5Bx"/>
                                     <constraint firstItem="Yrt-kh-TE5" firstAttribute="centerY" secondItem="TnV-Xv-ptY" secondAttribute="centerY" id="xbf-88-Let"/>
-                                    <constraint firstItem="5bU-HT-zaT" firstAttribute="leading" secondItem="cB3-Gm-4ee" secondAttribute="leading" constant="235" id="zdf-Ke-ch6"/>
+                                    <constraint firstItem="5bU-HT-zaT" firstAttribute="leading" secondItem="cB3-Gm-4ee" secondAttribute="leading" constant="235" id="zdf-Ke-ch6" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
+                                                <real key="value" value="235"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
+                                                <real key="value" value="235"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
+                                                <real key="value" value="190"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </constraint>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aLA-Dg-hNI">

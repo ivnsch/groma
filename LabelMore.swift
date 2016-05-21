@@ -16,11 +16,11 @@ import QorumLogs
     // TODO enum for fontTypes? with the same name as the numbers such that we can add later 21, 22 etc. if necessary. For storyboards this is not very useful but when we set the font programmatically at least
     static func mapToFontSize(fontType: Int) -> CGFloat? {
         switch (DimensionsManager.widthDimension, fontType) {
-        case (.Small, 20): return 9
-        case (.Small, 30): return 11
-        case (.Small, 40): return 13
-        case (.Small, 50): return 15
-        case (.Small, 60): return 17
+        case (.Small, 20): return 10
+        case (.Small, 30): return 12
+        case (.Small, 40): return 14
+        case (.Small, 50): return 16
+        case (.Small, 60): return 18
 
         case (.Middle, 20): return 11
         case (.Middle, 30): return 13

@@ -26,6 +26,8 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
 //    @IBOutlet weak var firstNameField: UITextField!
 //    @IBOutlet weak var lastNameField: UITextField!
     
+    @IBOutlet weak var regButton: UIButton!
+    
     @IBOutlet weak var termsButton: UIButton!
     
     @IBOutlet weak var fbButton: FBSDKLoginButton!
@@ -53,6 +55,8 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         
         initValidator()
         
+        staticLayout()
+        
         eyeView.delegate = self
         
         fbButton.readPermissions = ["public_profile"]
@@ -64,6 +68,10 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(RegisterViewController.handleTap(_:)))
         recognizer.delegate = self
         view.addGestureRecognizer(recognizer)
+    }
+    
+    private func staticLayout() {
+        regButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
     }
     
     override func viewWillAppear(animated: Bool) {

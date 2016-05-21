@@ -59,7 +59,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                 
                 let isNormal = mode == .Normal
                 pleaseLoginAgainLabel.hidden = isNormal
-                firstFieldTopConstraint.constant = isNormal ? DimensionsManager.topConstraintFirstInputWhenOpen : DimensionsManager.topConstraintFirstInputWhenClose
+                firstFieldTopConstraint.constant = isNormal ? DimensionsManager.topConstraintFirstInputWhenClose : DimensionsManager.topConstraintFirstInputWhenOpen
                 
                 // on expired mode show below "use app offline" instead of register - there's no sense of registering here because the token just expired + we want to make clear to the users they can close the modal and continue using the app offline.
                 let isExpired = mode == .Expired

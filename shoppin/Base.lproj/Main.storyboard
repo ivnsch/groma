@@ -1145,9 +1145,41 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             <constraint firstItem="lHm-PF-Mch" firstAttribute="centerX" secondItem="llX-YW-eE9" secondAttribute="centerX" id="Wh2-lH-25m"/>
                             <constraint firstItem="lHm-PF-Mch" firstAttribute="top" secondItem="h5a-TG-tsU" secondAttribute="bottom" constant="2" id="Ygl-r0-ftd"/>
                             <constraint firstItem="lHm-PF-Mch" firstAttribute="centerY" secondItem="h5a-TG-tsU" secondAttribute="centerY" id="Zlk-ve-T2L"/>
-                            <constraint firstItem="V34-s8-kUI" firstAttribute="top" secondItem="h5a-TG-tsU" secondAttribute="bottom" constant="30" id="Zve-Fy-gvt"/>
+                            <constraint firstItem="V34-s8-kUI" firstAttribute="top" secondItem="h5a-TG-tsU" secondAttribute="bottom" constant="30" id="Zve-Fy-gvt" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                        <integer key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
                             <constraint firstItem="vV1-kR-bWX" firstAttribute="top" secondItem="Qfw-EP-IMI" secondAttribute="bottom" id="daM-er-BTV"/>
-                            <constraint firstItem="vV1-kR-bWX" firstAttribute="top" secondItem="aQD-q2-WPN" secondAttribute="bottom" constant="210" id="dvW-4U-lGb"/>
+                            <constraint firstItem="vV1-kR-bWX" firstAttribute="top" secondItem="aQD-q2-WPN" secondAttribute="bottom" constant="210" id="dvW-4U-lGb" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                        <integer key="value" value="150"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                        <integer key="value" value="190"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                        <integer key="value" value="210"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                        <integer key="value" value="210"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
                             <constraint firstAttribute="trailing" secondItem="QHy-Ek-0nU" secondAttribute="trailing" id="fe8-lr-C0F"/>
                             <constraint firstItem="Bvb-VA-geS" firstAttribute="centerX" secondItem="llX-YW-eE9" secondAttribute="centerX" id="fpD-sc-3YU"/>
                             <constraint firstItem="fwZ-a2-d32" firstAttribute="top" secondItem="yZf-9B-noG" secondAttribute="bottom" id="hvi-Xv-oFx"/>
@@ -1156,7 +1188,23 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             <constraint firstItem="P5t-9b-PXe" firstAttribute="top" secondItem="CcA-yY-Wpn" secondAttribute="bottom" constant="2" id="nlV-G9-HAQ"/>
                             <constraint firstItem="h5a-TG-tsU" firstAttribute="leading" secondItem="llX-YW-eE9" secondAttribute="leading" constant="20" id="nr5-Nl-Yrz"/>
                             <constraint firstItem="H9i-XV-A40" firstAttribute="leading" secondItem="llX-YW-eE9" secondAttribute="leading" id="oKt-jY-JTS"/>
-                            <constraint firstItem="CcA-yY-Wpn" firstAttribute="top" secondItem="V34-s8-kUI" secondAttribute="bottom" constant="30" id="pgk-28-Dc4"/>
+                            <constraint firstItem="CcA-yY-Wpn" firstAttribute="top" secondItem="V34-s8-kUI" secondAttribute="bottom" constant="30" id="pgk-28-Dc4" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                        <integer key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
                             <constraint firstAttribute="trailing" secondItem="yZf-9B-noG" secondAttribute="trailing" id="px5-uk-dw4"/>
                             <constraint firstItem="yZf-9B-noG" firstAttribute="top" secondItem="64S-tT-lZ0" secondAttribute="bottom" id="uiB-ko-aRc"/>
                             <constraint firstItem="V34-s8-kUI" firstAttribute="centerX" secondItem="llX-YW-eE9" secondAttribute="centerX" id="utX-Wb-njx"/>

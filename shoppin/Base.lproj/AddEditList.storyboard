@@ -205,13 +205,86 @@
                         <constraints>
                             <constraint firstItem="abD-dd-yWb" firstAttribute="top" secondItem="L6A-3y-Qs9" secondAttribute="bottom" id="AX9-q3-qoI"/>
                             <constraint firstItem="L6A-3y-Qs9" firstAttribute="leading" secondItem="gSy-fV-dCY" secondAttribute="leading" id="Dmy-8o-8bJ"/>
-                            <constraint firstItem="abD-dd-yWb" firstAttribute="top" secondItem="L6A-3y-Qs9" secondAttribute="bottom" constant="50" id="QUa-Kp-F66"/>
-                            <constraint firstAttribute="trailing" secondItem="L6A-3y-Qs9" secondAttribute="trailing" constant="50" id="doR-Kq-IOO"/>
+                            <constraint firstItem="abD-dd-yWb" firstAttribute="top" secondItem="L6A-3y-Qs9" secondAttribute="bottom" constant="50" id="QUa-Kp-F66" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                        <real key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
+                            <constraint firstAttribute="trailing" secondItem="L6A-3y-Qs9" secondAttribute="trailing" constant="50" id="doR-Kq-IOO" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
+                                        <real key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
                             <constraint firstItem="L6A-3y-Qs9" firstAttribute="top" secondItem="tsz-IX-tRC" secondAttribute="bottom" id="iES-8X-aIR"/>
                             <constraint firstAttribute="trailing" secondItem="L6A-3y-Qs9" secondAttribute="trailing" id="lbd-je-8rk"/>
-                            <constraint firstItem="L6A-3y-Qs9" firstAttribute="top" secondItem="tsz-IX-tRC" secondAttribute="bottom" constant="50" id="qN6-cH-a8C"/>
-                            <constraint firstItem="L6A-3y-Qs9" firstAttribute="leading" secondItem="gSy-fV-dCY" secondAttribute="leading" constant="50" id="xPM-Bo-jp7"/>
+                            <constraint firstItem="L6A-3y-Qs9" firstAttribute="top" secondItem="tsz-IX-tRC" secondAttribute="bottom" constant="50" id="qN6-cH-a8C" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                        <real key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
+                            <constraint firstItem="L6A-3y-Qs9" firstAttribute="leading" secondItem="gSy-fV-dCY" secondAttribute="leading" constant="50" id="xPM-Bo-jp7" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
+                                        <real key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                            <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                <real key="value" value="50"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                <real key="value" value="50"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                <real key="value" value="40"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                <real key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="Dmy-8o-8bJ"/>

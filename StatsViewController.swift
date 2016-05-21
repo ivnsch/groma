@@ -289,7 +289,28 @@ class StatsViewController: UIViewController
             return
         }
         
-        let labelSettings = ChartLabelSettings(font: Fonts.verySmallLight, fontColor: UIColor.grayColor())
+        let font: UIFont = {
+            if DimensionsManager.widthDimension == .Small {
+                if let fontSize = LabelMore.mapToFontSize(20) {
+                    return UIFont.systemFontOfSize(fontSize)
+                } else {
+                    QL4("No font for size")
+                    return UIFont.systemFontOfSize(10)
+                }
+            } else {
+                
+                if let fontSize = LabelMore.mapToFontSize(30) {
+                    return UIFont.systemFontOfSize(fontSize)
+                } else {
+                    QL4("No font for size")
+                    return UIFont.systemFontOfSize(12)
+                }
+            }
+        }()
+        
+//        let rotation: CGFloat = DimensionsManager.widthDimension == .Small ? 45 : 0
+        let rotation: CGFloat = 0
+        let labelSettings = ChartLabelSettings(font: font, fontColor: UIColor.grayColor(), rotation: rotation, rotationKeep: .Top)
         
         let outputDateFormatter = NSDateFormatter()
         outputDateFormatter.dateFormat = "MMM"

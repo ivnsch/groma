@@ -164,9 +164,9 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         //        let radius: CGFloat = 100
         //        let center = CGPointMake(pieChartContainer.bounds.width / , <#T##y: CGFloat##CGFloat#>)
         let pieChart = XYPieChart(frame: CGRectInset(pieChartContainer.bounds, 0, 0))
+        pieChart.pieRadius = DimensionsManager.pieChartRadius
         pieChart.pieCenter = CGPointMake(pieChart.pieRadius + 20, pieChart.pieRadius + 10)
-        pieChart.pieRadius = 85
-        pieChart.labelRadius = 70
+        pieChart.labelRadius = DimensionsManager.pieChartLabelRadius
         //        pieChart.showPercentage = true
         pieChart.showLabel = true
         pieChart.labelFont = Fonts.superSmallLight

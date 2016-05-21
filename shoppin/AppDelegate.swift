@@ -187,10 +187,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     }
     
     private func initGlobalAppearance() {
-        UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.superSmallLight, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
-        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: Fonts.regular, NSForegroundColorAttributeName: Theme.tabBarTextColor]
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.regular, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
-        UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.verySmallLight], forState: .Normal)
+        
+        let regularFont: UIFont = {
+            if let fontSize = LabelMore.mapToFontSize(50) {
+                return UIFont.systemFontOfSize(fontSize)
+            } else {
+                QL4("Not supported font size")
+                return UIFont.systemFontOfSize(18)
+            }
+        }()
+        
+//        UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.superSmallLight, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
+        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: regularFont, NSForegroundColorAttributeName: Theme.tabBarTextColor]
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName: regularFont, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
+//        UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.verySmallLight], forState: .Normal)
         
         UITabBar.appearance().tintColor = Theme.tabBarSelectedColor
         UITabBar.appearance().barTintColor = Theme.tabBarBackgroundColor

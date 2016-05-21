@@ -62,6 +62,9 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     private func showLoginController() {
         let loginController = UIStoryboard.loginViewController()
         loginController.delegate = self
+        loginController.onUIReady = {[weak loginController] in
+            loginController?.mode = .Normal
+        }
         navigationItem.title = trans("title_login")
         self.replaceController(loginController)
     }

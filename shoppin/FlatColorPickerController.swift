@@ -66,7 +66,9 @@ class FlatColorPickerController: UIViewController, UICollectionViewDataSource, U
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath)
         
         let color = flatColors[indexPath.row]
-        let circleView = CircleView(frame: CGRectMake(10, 10, 40, 40))
+        let circleSize = DimensionsManager.colorCircleCellSize - 5
+        let padding = (DimensionsManager.colorCircleCellSize - circleSize) / 2
+        let circleView = CircleView(frame: CGRectMake(padding, padding, circleSize, circleSize))
         circleView.color = color
         circleView.backgroundColor = UIColor.clearColor()
         cell.contentView.backgroundColor = UIColor.whiteColor()
@@ -78,6 +80,10 @@ class FlatColorPickerController: UIViewController, UICollectionViewDataSource, U
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let color = flatColors[indexPath.row]
         delegate?.onColorPicked(color)
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSizeMake(DimensionsManager.colorCircleCellSize, DimensionsManager.colorCircleCellSize)
     }
 }
 

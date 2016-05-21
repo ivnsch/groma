@@ -36,7 +36,7 @@
                                     <outlet property="delegate" destination="rg4-qz-Lat" id="KjX-KU-SIR"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EgA-OH-X0u">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EgA-OH-X0u" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="95" y="190" width="186" height="50"/>
                                 <color key="backgroundColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -226,7 +226,7 @@
                             <constraint firstItem="EgA-OH-X0u" firstAttribute="top" secondItem="TsF-zg-FLy" secondAttribute="bottom" constant="30" id="1k1-lB-RYq" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
-                                        <real key="value" value="30"/>
+                                        <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
@@ -268,11 +268,11 @@
                             <constraint firstItem="Crr-TG-4lg" firstAttribute="top" secondItem="t83-R4-Wil" secondAttribute="bottom" constant="20" id="UbY-6B-uvg" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
-                                        <integer key="value" value="10"/>
+                                        <integer key="value" value="5"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                        <integer key="value" value="10"/>
+                                        <integer key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
                                         <integer key="value" value="20"/>
@@ -305,7 +305,7 @@
                             <constraint firstItem="v0i-2j-jaS" firstAttribute="top" secondItem="QVU-Pz-cxq" secondAttribute="bottom" constant="30" id="d4g-t2-NwM" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
-                                        <integer key="value" value="15"/>
+                                        <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
@@ -325,11 +325,11 @@
                             <constraint firstItem="IE2-Wn-ab8" firstAttribute="top" secondItem="TsF-zg-FLy" secondAttribute="top" constant="5" id="hnf-AQ-bYv"/>
                             <constraint firstItem="3G3-DS-C6O" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="l47-dr-7sR"/>
                             <constraint firstItem="Yt4-Ha-XoG" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="20" id="moB-wI-T5L"/>
-                            <constraint firstItem="Yt4-Ha-XoG" firstAttribute="top" secondItem="bQi-hy-w8S" secondAttribute="top" constant="60" id="pAc-tg-rHQ" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target"/>
+                            <constraint firstItem="Yt4-Ha-XoG" firstAttribute="top" secondItem="bQi-hy-w8S" secondAttribute="top" constant="60" id="pAc-tg-rHQ"/>
                             <constraint firstItem="t83-R4-Wil" firstAttribute="top" secondItem="bQi-hy-w8S" secondAttribute="top" constant="391" id="sKv-n3-veH" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
-                                        <real key="value" value="300"/>
+                                        <integer key="value" value="260"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
