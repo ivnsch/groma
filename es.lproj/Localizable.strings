@@ -263,9 +263,9 @@ popups_swipe_to_increment_explanation = "También puedes deslizar el dedo a los 
 popup_title_group_is_empty = "Vacío";
 popup_group_is_empty = "Este grupo no tiene ítems!";
 popups_password_email_sent = "Recibirás próximamente un e-mail para restaurar tu clave";
-popup_remove_list_warning = "Esto removerá la lista \"%@\" para todos los participantes.\nSi sólo deseas removerte como participante hazlo en la lista de participantes."
-popup_remove_section_confirm = "Estás seguro(a) que quieres remover la sección \"%@\"?\nEsto también removerá los ítems que están en esta sección."
-popup_remove_inventory_warning = "Las listas, ítems de historial y estadística asociados con este inventario también serán removidos."
+popup_remove_list_warning = "Esto removerá la lista \"%@\" para todos los participantes.\nSi sólo deseas removerte como participante hazlo en la lista de participantes.";
+popup_remove_section_confirm = "Estás seguro(a) que quieres remover la sección \"%@\"?\nEsto también removerá los ítems que están en esta sección.";
+popup_remove_inventory_warning = "Las listas, ítems de historial y estadística asociados con este inventario también serán removidos.";
 
 
 popups_size_limit_lists = "No puedes tener mas de %@ listas";

@@ -263,8 +263,8 @@ popups_swipe_to_increment_explanation = "Du kannst auch auf den Einträgen links
 popup_title_group_is_empty = "Leer";
 popup_group_is_empty = "Diese Gruppe hat keine Einträge!";
 popups_password_email_sent = "Eine e-Mail um deinen Passwort zurückzusetzen wurde gesendet.";
-popup_remove_list_warning = "Dies wird die Lise \"%@\" auch für die anderen Teilnehmer entfernen.\nFalls du dich nur austragen willst, benutze bitte die Teilnehmerliste."
-popup_remove_section_confirm = "Bist du sicher dass du die Abteilung \"%@\" entfernen willst?\nDies wird auch die Einträge, die sich derzeit in der Abteilung befinden, löschen."
+popup_remove_list_warning = "Dies wird die Lise \"%@\" auch für die anderen Teilnehmer entfernen.\nFalls du dich nur austragen willst, benutze bitte die Teilnehmerliste.";
+popup_remove_section_confirm = "Bist du sicher dass du die Abteilung \"%@\" entfernen willst?\nDies wird auch die Einträge, die sich derzeit in der Abteilung befinden, löschen.";
 popup_remove_inventory_warning = "Die mit diesem Inventar verknüpfen Listen, Geschichts- und Berichtsdaten werden auch gelöscht.";
 
 
