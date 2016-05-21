@@ -373,6 +373,10 @@ first_inventory_name = "Home";
 
 
 intro_button_start = "Start";
+intro_slide_lists = "Manage shopping lists comfortably";
+intro_slide_inventories = "Connect lists with inventories to keep track of your items";
+intro_slide_real_time = "Share with other users in real time";
+intro_slide_stats = "Analyse your shopping behaviour and expenses";
 
 
 participants_count_singular = "%@ participant";

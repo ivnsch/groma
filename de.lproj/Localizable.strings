@@ -373,6 +373,10 @@ first_inventory_name = "Haushalt";
 
 
 intro_button_start = "Starten";
+intro_slide_lists = "Verwalte komfortabel deine Einkaufslisten";
+intro_slide_inventories = "Verbinde Listen mit Inventaren um den Überblick auf deine Lebensmittel zu behalten";
+intro_slide_real_time = "Teile mit anderen Benutzern in Echtzeit";
+intro_slide_stats = "Analysiere dein Kaufverhalten und Ausgaben";
 
 
 participants_count_singular = "%@ Teilnehmer";

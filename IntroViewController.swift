@@ -30,10 +30,10 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     var mode: IntroMode = .Launch
     
     private let pageModels: [(key: String, imageName: String)] = [
-        ("Manage shopping lists comfortably", "intro_lists"),
-        ("Connect lists with inventories to keep track of your items", "intro_inventory"),
-        ("Share with other users in real time", "intro_sharing"),
-        ("Analyse your shopping behaviour and expenses", "intro_stats")
+        (trans("intro_slide_lists"), "intro_lists"),
+        (trans("intro_slide_inventories"), "intro_inventory"),
+        (trans("intro_slide_real_time"), "intro_sharing"),
+        (trans("intro_slide_stats"), "intro_stats")
     ]
     
     private var finishedSlider = false {
