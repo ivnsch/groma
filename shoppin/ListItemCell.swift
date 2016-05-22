@@ -123,6 +123,11 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         let hasNote = tableViewListItem.listItem.note.map{!$0.isEmpty} ?? false
         let showNote = hasNote && mode == .Note
         
+        // Hide these labels during edit, for reordering (otherwise they stay visible while cell becomes semitransparent). We don't use undo in edit so it's ok to do this fix here. Otherwise private api like described here http://stackoverflow.com/a/10854018/930450, to get events when cell starts and ends moving works too (tested it on iOS 9). Prefer to do it here to avoid using private api.
+        let isEdit = mode == .Increment
+        undoLabel1.hidden = isEdit
+        undoLabel2.hidden = isEdit
+        
         let (itemsDelay, priceDelay): (NSTimeInterval, NSTimeInterval) = {
             if animated {
                 return mode == .Note ? (0.1, 0) : (0, 0.3) // for price a different delay to make it animate after/before the other elements (looks better imo)
