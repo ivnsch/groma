@@ -111,7 +111,7 @@ class SuggestionsPrefiller {
         let meatCat = DBProductCategory(uuid: uuid, name: tr("pr_meat", lang), bgColorHex: UIColor.flatRedColorDark().hexStr)
         let petsCat = DBProductCategory(uuid: uuid, name: tr("pr_pets", lang), bgColorHex: UIColor.flatGreenColorDark().hexStr)
         let bakeryCat = DBProductCategory(uuid: uuid, name: tr("pr_bakery", lang), bgColorHex: UIColor.flatBrownColorDark().hexStr)
-        let riceCat = DBProductCategory(uuid: uuid, name: tr("pr_rice", lang), bgColorHex: UIColor.flatWhiteColor().hexStr)
+        let riceCat = DBProductCategory(uuid: uuid, name: tr("pr_rice", lang), bgColorHex: UIColor.flatWhiteColorDark().hexStr)
         let nutsCat = DBProductCategory(uuid: uuid, name: tr("pr_nuts", lang), bgColorHex: UIColor.flatBrownColorDark().hexStr)
         let oilCat = DBProductCategory(uuid: uuid, name: tr("pr_oil", lang), bgColorHex: UIColor.flatYellowColor().hexStr)
         let clothesCat = DBProductCategory(uuid: uuid, name: tr("pr_clothes", lang), bgColorHex: UIColor.flatBlueColorDark().hexStr)
@@ -120,7 +120,7 @@ class SuggestionsPrefiller {
         let milkCat = DBProductCategory(uuid: uuid, name: tr("pr_milk", lang), bgColorHex: UIColor.flatYellowColor().hexStr)
         
         let fishCat = DBProductCategory(uuid: uuid, name: tr("pr_fish", lang), bgColorHex: UIColor.flatBlueColorDark().hexStr)
-        let pastaCat = DBProductCategory(uuid: uuid, name: tr("pr_pasta", lang), bgColorHex: UIColor.flatWhiteColorDark().hexStr)
+        let pastaCat = DBProductCategory(uuid: uuid, name: tr("pr_pasta", lang), bgColorHex: UIColor.flatSandColorDark().hexStr)
         let drinksCat = DBProductCategory(uuid: uuid, name: tr("pr_drinks", lang), bgColorHex: UIColor.flatBlueColor().lightenByPercentage(0.5).hexStr)
         let alcoholCat = DBProductCategory(uuid: uuid, name: tr("pr_alcohol", lang), bgColorHex: UIColor.flatBrownColorDark().hexStr)
         let hygienicCat = DBProductCategory(uuid: uuid, name: tr("pr_hygienic", lang), bgColorHex: UIColor.flatGrayColor().hexStr)
@@ -137,7 +137,7 @@ class SuggestionsPrefiller {
         let cerealCat = DBProductCategory(uuid: uuid, name: tr("pr_cereal", lang), bgColorHex: UIColor.flatOrangeColor().hexStr)
         let coldCutCat = DBProductCategory(uuid: uuid, name: tr("pr_cold_cut", lang), bgColorHex: UIColor.flatOrangeColorDark().hexStr)
         let ovenCat = DBProductCategory(uuid: uuid, name: tr("pr_oven", lang), bgColorHex: UIColor.flatBlackColorDark().hexStr)
-        let stationeriesCat = DBProductCategory(uuid: uuid, name: tr("pr_stationeries", lang), bgColorHex: UIColor.flatWhiteColor().hexStr)
+        let stationeriesCat = DBProductCategory(uuid: uuid, name: tr("pr_stationeries", lang), bgColorHex: UIColor.flatGrayColorDark().hexStr)
   
         let products: [DBProduct] = [
             // fruits
