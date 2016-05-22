@@ -204,7 +204,7 @@ class DimensionsManager {
     static var emptyViewTopConstraint: CGFloat {
         switch heightDimension {
         case .VerySmall: return 30
-        case .Small: return 120
+        case .Small: return 70
         case .Middle: return 160
         case .Large: return 160
         }
@@ -249,7 +249,7 @@ class DimensionsManager {
     static var topConstraintFirstInputWhenClose: CGFloat {
         switch heightDimension {
         case .VerySmall: return 10
-        case .Small: return 60
+        case .Small: return 30
         case .Middle: return 60
         case .Large: return 60
         }

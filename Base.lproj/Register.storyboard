@@ -223,10 +223,10 @@
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="15"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
                                         <integer key="value" value="20"/>
@@ -240,7 +240,7 @@
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                        <integer key="value" value="60"/>
+                                        <integer key="value" value="30"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
                                         <integer key="value" value="60"/>
@@ -257,7 +257,7 @@
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                        <real key="value" value="391"/>
+                                        <integer key="value" value="330"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
                                         <real key="value" value="391"/>
