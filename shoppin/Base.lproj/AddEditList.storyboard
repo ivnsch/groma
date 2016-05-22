@@ -209,10 +209,10 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                        <real key="value" value="50"/>
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                        <real key="value" value="50"/>
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
                                         <real key="value" value="40"/>
@@ -226,10 +226,10 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
-                                        <real key="value" value="50"/>
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
-                                        <real key="value" value="50"/>
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
                                         <real key="value" value="30"/>
@@ -242,10 +242,10 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                        <real key="value" value="50"/>
+                                        <integer key="value" value="50"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                        <real key="value" value="50"/>
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
                                         <real key="value" value="40"/>
@@ -259,10 +259,10 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
-                                        <real key="value" value="50"/>
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
-                                        <real key="value" value="50"/>
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
                                         <real key="value" value="30"/>

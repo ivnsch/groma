@@ -461,6 +461,16 @@ class StatsViewController: UIViewController
         
         let formatter = NSNumberFormatter()
         formatter.maximumFractionDigits = 2
+        
+        let barTotalLabelFont: UIFont = {   
+            if let fontSize = LabelMore.mapToFontSize(20) {
+                return UIFont.systemFontOfSize(fontSize)
+            } else {
+                QL4("No font for size")
+                return UIFont.systemFontOfSize(11)
+            }
+        }()
+        
         let labelsLayer = ChartPointsViewsLayer(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: cp, viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
             
             if chartPointModel.index == cp.count - 1 && chartPointModel.chartPoint.y.scalar > 0 {
@@ -468,7 +478,7 @@ class StatsViewController: UIViewController
                 
                 let yOffset: CGFloat = -15
                 label.text = "\(Float(chartPointModel.chartPoint.y.scalar).toLocalCurrencyString())"
-                label.font = Fonts.superSmall
+                label.font = barTotalLabelFont
                 label.textColor = UIColor.darkGrayColor()
                 label.sizeToFit()
                 label.center = CGPointMake(chartPointModel.screenLoc.x, innerFrame.origin.y)

@@ -156,10 +156,10 @@
                             <constraint firstItem="WX7-9y-9bC" firstAttribute="bottom" secondItem="qQD-85-qkI" secondAttribute="bottom" constant="-5" id="2YJ-Q5-zja"/>
                             <constraint firstItem="JMu-N0-SQq" firstAttribute="leading" secondItem="Y2i-oz-aRO" secondAttribute="trailing" constant="15" id="6TG-M5-pMV"/>
                             <constraint firstItem="WX7-9y-9bC" firstAttribute="trailing" secondItem="qQD-85-qkI" secondAttribute="trailing" id="A3T-NN-DE1"/>
-                            <constraint firstAttribute="trailing" secondItem="qQD-85-qkI" secondAttribute="trailing" constant="20" id="FBw-In-mZo"/>
-                            <constraint firstAttribute="trailing" secondItem="n3k-3q-0Hq" secondAttribute="trailing" constant="20" id="IaX-Wt-mep"/>
+                            <constraint firstAttribute="trailing" secondItem="n3k-3q-0Hq" secondAttribute="trailing" constant="20" id="IaX-Wt-mep" customClass="LeftRightBigPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstItem="Y2i-oz-aRO" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="20" id="Isu-AV-IR3"/>
                             <constraint firstItem="LMD-Gz-aMB" firstAttribute="centerX" secondItem="Nnu-ym-gUF" secondAttribute="centerX" id="JOR-1V-7Xp"/>
+                            <constraint firstItem="qQD-85-qkI" firstAttribute="leading" secondItem="n3k-3q-0Hq" secondAttribute="leading" id="K9k-rt-KMU"/>
                             <constraint firstItem="Y2i-oz-aRO" firstAttribute="top" secondItem="qQD-85-qkI" secondAttribute="bottom" constant="30" id="S1X-kX-AH2" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
@@ -177,7 +177,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
-                            <constraint firstItem="n3k-3q-0Hq" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="20" id="SAr-8A-d54"/>
+                            <constraint firstItem="n3k-3q-0Hq" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="20" id="SAr-8A-d54" customClass="LeftRightBigPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstAttribute="centerX" secondItem="5NA-t7-V2O" secondAttribute="centerX" id="SD7-OT-3TA"/>
                             <constraint firstItem="qQD-85-qkI" firstAttribute="top" secondItem="n3k-3q-0Hq" secondAttribute="bottom" constant="20" id="SWf-nW-QyT" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
@@ -215,7 +215,6 @@
                                 </userDefinedRuntimeAttributes>
                             </constraint>
                             <constraint firstItem="LDp-kw-m6z" firstAttribute="centerX" secondItem="Nnu-ym-gUF" secondAttribute="centerX" id="WKX-Iz-AgK"/>
-                            <constraint firstItem="qQD-85-qkI" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="20" id="Wt7-Lg-Sl2"/>
                             <constraint firstItem="LDp-kw-m6z" firstAttribute="top" secondItem="LMD-Gz-aMB" secondAttribute="bottom" constant="20" id="ZhT-l4-TbA" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
@@ -229,7 +228,7 @@
                                         <integer key="value" value="15"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="15"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
@@ -246,7 +245,7 @@
                                         <integer key="value" value="60"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                        <integer key="value" value="60"/>
+                                        <real key="value" value="80"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
@@ -268,6 +267,7 @@
                                 </userDefinedRuntimeAttributes>
                             </constraint>
                             <constraint firstItem="WX7-9y-9bC" firstAttribute="bottom" secondItem="qQD-85-qkI" secondAttribute="bottom" constant="-5" id="o9v-Oh-DFY"/>
+                            <constraint firstItem="qQD-85-qkI" firstAttribute="trailing" secondItem="n3k-3q-0Hq" secondAttribute="trailing" id="rfH-BE-VJc"/>
                             <constraint firstItem="WX7-9y-9bC" firstAttribute="top" secondItem="qQD-85-qkI" secondAttribute="top" constant="5" id="yFG-fT-cyB"/>
                         </constraints>
                         <variation key="default">

@@ -72,21 +72,11 @@
                                                 <constraint firstItem="LH7-ME-daK" firstAttribute="baseline" secondItem="Td7-f1-22Z" secondAttribute="baseline" id="HcO-M5-Vbe"/>
                                                 <constraint firstItem="Td7-f1-22Z" firstAttribute="centerY" secondItem="P8H-kl-UdR" secondAttribute="centerY" id="L9m-Cp-GYD"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="LH7-ME-daK" secondAttribute="trailing" constant="98" id="LP1-fs-HMS"/>
-                                                <constraint firstItem="LH7-ME-daK" firstAttribute="centerY" secondItem="P8H-kl-UdR" secondAttribute="centerY" constant="-10" id="M61-vb-jT1"/>
                                                 <constraint firstItem="2kV-4s-JdU" firstAttribute="leading" secondItem="LH7-ME-daK" secondAttribute="trailing" priority="999" constant="25" id="XNd-qt-HJx"/>
-                                                <constraint firstItem="Td7-f1-22Z" firstAttribute="leading" secondItem="P8H-kl-UdR" secondAttribute="leading" constant="20" id="aK5-PZ-rg5"/>
-                                                <constraint firstAttribute="trailing" secondItem="2kV-4s-JdU" secondAttribute="trailing" constant="20" id="cTJ-WS-qH6"/>
-                                                <constraint firstItem="2kV-4s-JdU" firstAttribute="centerY" secondItem="P8H-kl-UdR" secondAttribute="centerY" id="qwe-ap-ppi"/>
-                                                <constraint firstAttribute="trailing" secondItem="LH7-ME-daK" secondAttribute="trailing" constant="14" id="sA1-9v-rqz"/>
+                                                <constraint firstItem="Td7-f1-22Z" firstAttribute="leading" secondItem="P8H-kl-UdR" secondAttribute="leading" constant="20" id="aK5-PZ-rg5" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                                <constraint firstAttribute="trailing" secondItem="2kV-4s-JdU" secondAttribute="trailing" constant="20" id="cTJ-WS-qH6" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="2kV-4s-JdU" firstAttribute="baseline" secondItem="Td7-f1-22Z" secondAttribute="baseline" id="uoK-Yo-0OK"/>
                                             </constraints>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="M61-vb-jT1"/>
-                                                    <exclude reference="sA1-9v-rqz"/>
-                                                    <exclude reference="qwe-ap-ppi"/>
-                                                </mask>
-                                            </variation>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="nameLabel" destination="Td7-f1-22Z" id="u6D-N4-eoe"/>
@@ -270,13 +260,13 @@
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                             <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                                <real key="value" value="40"/>
+                                                <integer key="value" value="20"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                                <real key="value" value="50"/>
+                                                <integer key="value" value="20"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                                <real key="value" value="50"/>
+                                                <integer key="value" value="20"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </constraint>

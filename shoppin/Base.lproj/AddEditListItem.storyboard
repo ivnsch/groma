@@ -115,7 +115,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="25" y="146" width="336" height="40"/>
+                                <rect key="frame" x="25" y="146" width="325" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz"/>
                                 </constraints>
@@ -165,11 +165,11 @@
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="top" secondItem="If7-20-6Xv" secondAttribute="top" constant="8" id="5vc-zY-2WJ"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" id="8QS-gR-4dR"/>
                             <constraint firstItem="vWS-vL-cob" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="DJF-Fi-30J"/>
-                            <constraint firstAttribute="trailing" secondItem="Yfv-oA-AU6" secondAttribute="trailing" constant="14" id="GAE-Dh-oZk"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="width" secondItem="Xjl-8k-ZTY" secondAttribute="width" id="Ixd-KJ-nvO"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="height" secondItem="Xjl-8k-ZTY" secondAttribute="height" id="KLz-mz-O6h"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="bottom" secondItem="CcK-74-2fx" secondAttribute="bottom" id="LLD-Xt-dbo"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="Xjl-8k-ZTY" secondAttribute="top" id="Lj3-kE-rMA"/>
+                            <constraint firstItem="Yfv-oA-AU6" firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" id="MY4-WA-cwe"/>
                             <constraint firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" constant="14" id="PTH-u2-0Wm"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="bottom" secondItem="Xjl-8k-ZTY" secondAttribute="bottom" id="Qj0-os-Vco"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="top" id="Sha-Jh-tLV"/>

@@ -31,8 +31,8 @@ import QorumLogs
         case (.Large, 20): return 13
         case (.Large, 30): return 15
         case (.Large, 40): return 17
-        case (.Large, 50): return 19
-        case (.Large, 60): return 21
+        case (.Large, 50): return 20
+        case (.Large, 60): return 22
         
         default:
             QL3("Not handled fontType: \(fontType)")
@@ -43,7 +43,7 @@ import QorumLogs
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        if let size = LabelMore.mapToFontSize(fontType.integerValue) {
+        if let size = fontSize() {
             
 //            QL1("Init label with font size: \(size), text?: \(text). Dimension: \(DimensionsManager.widthDimension)")
             
@@ -54,6 +54,22 @@ import QorumLogs
                     return UIFont.systemFontOfSize(size)
                 }
             }()
+        }
+    }
+    
+    private func fontSize() -> CGFloat? {
+        return LabelMore.mapToFontSize(fontType.integerValue)
+    }
+    
+    func makeFontBold() {
+        if let size = fontSize() {
+            font = UIFont.boldSystemFontOfSize(size)
+        }
+    }
+    
+    func makeFontRegular() {
+        if let size = fontSize() {
+            font = UIFont.systemFontOfSize(size)
         }
     }
 }

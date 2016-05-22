@@ -462,10 +462,11 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     private func showPopup(button: UIView, controller: UIViewController, topOffset: CGFloat = 0, width: CGFloat? = nil, height: CGFloat? = nil, onWillShow: VoidFunction) {
         
-        if let windowView = UIApplication.sharedApplication().keyWindow { // add popup and overlay on top of everything
+        if let windowView = parentViewController?.view.superview?.superview?.superview {
             
             // TODO dynamic
             let topBarHeight: CGFloat = 64
+            let pricesViewHeight: CGFloat = DimensionsManager.listItemsPricesViewHeight
             let tabBarHeight: CGFloat = 49
             
             let x: CGFloat = {
@@ -477,7 +478,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             }()
             
             let w = width ?? windowView.frame.width
-            let h = height ?? (windowView.frame.height - topBarHeight - tabBarHeight)
+            let h = height ?? (windowView.frame.height - pricesViewHeight - topBarHeight)
             controller.view.frame = CGRectMake(x, topBarHeight + topOffset, w, h)
             
             windowView.addSubview(controller.view)

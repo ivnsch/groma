@@ -66,7 +66,7 @@ class FlatColorPickerController: UIViewController, UICollectionViewDataSource, U
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath)
         
         let color = flatColors[indexPath.row]
-        let circleSize = DimensionsManager.colorCircleCellSize - 5
+        let circleSize = DimensionsManager.colorCircleSize
         let padding = (DimensionsManager.colorCircleCellSize - circleSize) / 2
         let circleView = CircleView(frame: CGRectMake(padding, padding, circleSize, circleSize))
         circleView.color = color

@@ -112,7 +112,7 @@ class DimensionsManager {
         switch widthDimension {
         case .Small: return 120
         case .Middle: return 140
-        case .Large: return 160
+        case .Large: return 180
         }
     }
     
@@ -201,6 +201,14 @@ class DimensionsManager {
         }
     }
 
+    static var leftRightBigPaddingConstraint: CGFloat {
+        switch widthDimension {
+        case .Small: return 30
+        case .Middle: return 45
+        case .Large: return 55
+        }
+    }
+    
     static var emptyViewTopConstraint: CGFloat {
         switch heightDimension {
         case .VerySmall: return 30
@@ -251,7 +259,7 @@ class DimensionsManager {
         case .VerySmall: return 10
         case .Small: return 30
         case .Middle: return 60
-        case .Large: return 60
+        case .Large: return 80
         }
     }
     
@@ -290,7 +298,15 @@ class DimensionsManager {
         switch widthDimension {
         case .Small: return 45
         case .Middle: return 60
-        case .Large: return 60
+        case .Large: return 70
+        }
+    }
+    
+    static var colorCircleSize: CGFloat {
+        switch widthDimension {
+        case .Small: return 40
+        case .Middle: return 50
+        case .Large: return 50
         }
     }
 }

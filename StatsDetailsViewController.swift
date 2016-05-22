@@ -60,17 +60,17 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // TODO dynamic
     @IBOutlet weak var circle1: UIView!
-    @IBOutlet weak var label1: UILabel!
+    @IBOutlet weak var label1: LabelMore!
     @IBOutlet weak var circle2: UIView!
-    @IBOutlet weak var label2: UILabel!
+    @IBOutlet weak var label2: LabelMore!
     @IBOutlet weak var circle3: UIView!
-    @IBOutlet weak var label3: UILabel!
+    @IBOutlet weak var label3: LabelMore!
     @IBOutlet weak var circle4: UIView!
-    @IBOutlet weak var label4: UILabel!
+    @IBOutlet weak var label4: LabelMore!
     @IBOutlet weak var circle5: UIView!
-    @IBOutlet weak var label5: UILabel!
+    @IBOutlet weak var label5: LabelMore!
     @IBOutlet weak var circle6: UIView!
-    @IBOutlet weak var label6: UILabel!
+    @IBOutlet weak var label6: LabelMore!
     
     private func initLegends(slices: [Slice]) {
         circle1.hidden = true
@@ -169,7 +169,16 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         pieChart.labelRadius = DimensionsManager.pieChartLabelRadius
         //        pieChart.showPercentage = true
         pieChart.showLabel = true
-        pieChart.labelFont = Fonts.superSmallLight
+        
+        let font: UIFont = {
+            if let fontSize = LabelMore.mapToFontSize(20) {
+                return UIFont.systemFontOfSize(fontSize)
+            } else {
+                return UIFont.systemFontOfSize(13)
+            }
+        }()
+
+        pieChart.labelFont = font
         pieChart.labelColor = UIColor.blackColor()
         //        pieChart.pieCenter = CGPointMake(100, 100)
         pieChartContainer.addSubview(pieChart)
@@ -236,36 +245,36 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     // MARK: - XYPieChartDelegate
     
     func pieChart(pieChart: XYPieChart!, didSelectSliceAtIndex index: UInt) {
-        label1.font = Fonts.superSmallLight
-        label2.font = Fonts.superSmallLight
-        label3.font = Fonts.superSmallLight
-        label4.font = Fonts.superSmallLight
-        label5.font = Fonts.superSmallLight
-        label6.font = Fonts.superSmallLight
+        label1.makeFontRegular()
+        label2.makeFontRegular()
+        label3.makeFontRegular()
+        label4.makeFontRegular()
+        label5.makeFontRegular()
+        label6.makeFontRegular()
         switch index {
         case 0:
-            label1.font = Fonts.superSmallBold
+            label1.makeFontBold()
         case 1:
-            label2.font = Fonts.superSmallBold
+            label2.makeFontBold()
         case 2:
-            label3.font = Fonts.superSmallBold
+            label3.makeFontBold()
         case 3:
-            label4.font = Fonts.superSmallBold
+            label4.makeFontBold()
         case 4:
-            label5.font = Fonts.superSmallBold
+            label5.makeFontBold()
         case 5:
-            label6.font = Fonts.superSmallBold
+            label6.makeFontBold()
         default: break
         }
     }
     
     func pieChart(pieChart: XYPieChart!, didDeselectSliceAtIndex index: UInt) {
-        label1.font = Fonts.superSmallLight
-        label2.font = Fonts.superSmallLight
-        label3.font = Fonts.superSmallLight
-        label4.font = Fonts.superSmallLight
-        label5.font = Fonts.superSmallLight
-        label6.font = Fonts.superSmallLight
+        label1.makeFontRegular()
+        label2.makeFontRegular()
+        label3.makeFontRegular()
+        label4.makeFontRegular()
+        label5.makeFontRegular()
+        label6.makeFontRegular()
     }
     
     private func generateSlices(aggregates: [ProductAggregate]) -> [Slice] {

@@ -777,6 +777,7 @@
 		EBB2AB411B8B434E007B8C59 /* InventoriesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBB2AB401B8B434E007B8C59 /* InventoriesViewController.xib */; };
 		EBB2CBC61CF0CFAD0040C619 /* TextFieldHeightConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */; };
 		EBB2CBC81CF1D16D0040C619 /* NotEmptyTrimmedRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2CBC71CF1D16D0040C619 /* NotEmptyTrimmedRule.swift */; };
+		EBB2CBCA1CF20AD60040C619 /* LeftRightBigPaddingConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2CBC91CF20AD50040C619 /* LeftRightBigPaddingConstraint.swift */; };
 		EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */; };
 		EBB526711BEFD8C10002A286 /* HelpProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */; };
 		EBB526731BEFD8E90002A286 /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526721BEFD8E90002A286 /* HelpItem.swift */; };
@@ -1554,6 +1555,7 @@
 		EBB2AB401B8B434E007B8C59 /* InventoriesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InventoriesViewController.xib; sourceTree = "<group>"; };
 		EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldHeightConstraint.swift; sourceTree = "<group>"; };
 		EBB2CBC71CF1D16D0040C619 /* NotEmptyTrimmedRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotEmptyTrimmedRule.swift; sourceTree = "<group>"; };
+		EBB2CBC91CF20AD50040C619 /* LeftRightBigPaddingConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftRightBigPaddingConstraint.swift; sourceTree = "<group>"; };
 		EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpProviderImpl.swift; sourceTree = "<group>"; };
 		EBB526721BEFD8E90002A286 /* HelpItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpItem.swift; sourceTree = "<group>"; };
@@ -2420,6 +2422,7 @@
 				EBB6D74F1CD68EC900F9C711 /* LabelMore.swift */,
 				EBB6D7551CD69E6100F9C711 /* TextFieldMore.swift */,
 				EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */,
+				EBB2CBC91CF20AD50040C619 /* LeftRightBigPaddingConstraint.swift */,
 				EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */,
 				EB4B39C31CEBF05300B41063 /* TopEmptyViewConstraint.swift */,
 			);
@@ -4028,6 +4031,7 @@
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
 				EB7E83221B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
 				EBA288DB1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */,
+				EBB2CBCA1CF20AD60040C619 /* LeftRightBigPaddingConstraint.swift in Sources */,
 				EBED0D101C82229900A1EEC4 /* RatingPopupController.swift in Sources */,
 				EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */,
 				EB20FC071A599AE20058103B /* ProductWithQuantityTableViewCell.swift in Sources */,
