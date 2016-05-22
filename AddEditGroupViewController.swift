@@ -74,7 +74,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     
     private func initValidator() {
         let listInputsValidator = Validator()
-        listInputsValidator.registerField(self.groupNameInputField, rules: [MinLengthRule(length: 1, message: trans("validation_group_name_not_empty"))])
+        listInputsValidator.registerField(self.groupNameInputField, rules: [NotEmptyTrimmedRule(message: trans("validation_group_name_not_empty"))])
         
         self.listInputsValidator = listInputsValidator
         
@@ -123,7 +123,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
             
             guard let weakSelf = self else {return}
             guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
-            guard let listName = weakSelf.groupNameInputField.text else {QL4("Validation was not implemented correctly"); return}
+            guard let listName = weakSelf.groupNameInputField.text?.trim() else {QL4("Validation was not implemented correctly"); return}
 
             if let listToEdit = weakSelf.listToEdit {
                 let updatedGroup = listToEdit.copy(name: listName, bgColor: bgColor)

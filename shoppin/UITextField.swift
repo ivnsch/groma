@@ -24,6 +24,10 @@ extension UITextField {
         self.text = ""
     }
     
+    var trimmedText: String? {
+        return self.text.map{$0.trim()}
+    }
+    
     var optText: String? {
         if let text = text {
             return text == "" ? nil : text

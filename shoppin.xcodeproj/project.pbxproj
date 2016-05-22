@@ -776,6 +776,7 @@
 		EBB2AB3D1B8B3171007B8C59 /* InventoryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3C1B8B3171007B8C59 /* InventoryItemCell.swift */; };
 		EBB2AB411B8B434E007B8C59 /* InventoriesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBB2AB401B8B434E007B8C59 /* InventoriesViewController.xib */; };
 		EBB2CBC61CF0CFAD0040C619 /* TextFieldHeightConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */; };
+		EBB2CBC81CF1D16D0040C619 /* NotEmptyTrimmedRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2CBC71CF1D16D0040C619 /* NotEmptyTrimmedRule.swift */; };
 		EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */; };
 		EBB526711BEFD8C10002A286 /* HelpProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */; };
 		EBB526731BEFD8E90002A286 /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526721BEFD8E90002A286 /* HelpItem.swift */; };
@@ -1552,6 +1553,7 @@
 		EBB2AB3C1B8B3171007B8C59 /* InventoryItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemCell.swift; sourceTree = "<group>"; };
 		EBB2AB401B8B434E007B8C59 /* InventoriesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InventoriesViewController.xib; sourceTree = "<group>"; };
 		EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldHeightConstraint.swift; sourceTree = "<group>"; };
+		EBB2CBC71CF1D16D0040C619 /* NotEmptyTrimmedRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotEmptyTrimmedRule.swift; sourceTree = "<group>"; };
 		EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpProviderImpl.swift; sourceTree = "<group>"; };
 		EBB526721BEFD8E90002A286 /* HelpItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpItem.swift; sourceTree = "<group>"; };
@@ -2636,6 +2638,7 @@
 			isa = PBXGroup;
 			children = (
 				EB7DA2E61C6FF646007F1E43 /* ValidationRules.swift */,
+				EBB2CBC71CF1D16D0040C619 /* NotEmptyTrimmedRule.swift */,
 			);
 			name = validationRules;
 			sourceTree = "<group>";
@@ -4163,6 +4166,7 @@
 				EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */,
 				EBEA0CE41CA7F27700E68B81 /* RemoteListItemsReorderResult.swift in Sources */,
 				EB33D5551CDFA2000097AD58 /* MoreCell.swift in Sources */,
+				EBB2CBC81CF1D16D0040C619 /* NotEmptyTrimmedRule.swift in Sources */,
 				EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */,
 				EB4D57B01B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
 				EB7524551BF5830600A97A10 /* QuickAddGroupCell.swift in Sources */,

@@ -310,11 +310,11 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     private func initValidator() {
         let validator = Validator()
-        validator.registerField(sectionInput, rules: [MinLengthRule(length: 1, message: trans("validation_section_name_not_empty"))])
-        validator.registerField(quantityInput, rules: [MinLengthRule(length: 1, message: trans("validation_quantity_not_empty"))])
+        validator.registerField(sectionInput, rules: [NotEmptyTrimmedRule(message: trans("validation_section_name_not_empty"))])
+        validator.registerField(quantityInput, rules: [NotEmptyTrimmedRule(message: trans("validation_quantity_not_empty"))])
 
         if modus == .ListItem {
-            validator.registerField(priceInput, rules: [MinLengthRule(length: 1, message: trans("validation_price_not_empty"))])
+            validator.registerField(priceInput, rules: [NotEmptyTrimmedRule(message: trans("validation_price_not_empty"))])
         }
         self.validator = validator
     }
@@ -358,7 +358,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }()
             
-            if let price = priceMaybe, quantityText = quantityInput.text, quantity = Int(quantityText), section = sectionInput.text, brand = brandInput.text, note = noteInput.text, sectionColor = sectionColorButton.textColor {
+            if let price = priceMaybe, quantityText = quantityInput.text, quantity = Int(quantityText), section = sectionInput.text?.trim(), brand = brandInput.text?.trim(), note = noteInput.text?.trim(), sectionColor = sectionColorButton.textColor {
                 
                 // for now disabled due to new designs
 //                let baseQuantity = scaleInputs?.baseQuantity ?? 1

@@ -20,6 +20,10 @@ extension String {
         return self.rangeOfString(str, options: options) != nil
     }
     
+    func trim() -> String {
+        return stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+    }
+    
     var floatValue: Float? {
         return NSNumberFormatter().numberFromString(self)?.floatValue
     }

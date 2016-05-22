@@ -284,7 +284,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     // MARK: - AddEditListItemViewControllerDelegate
     
     func runAdditionalSubmitValidations() -> [UITextField: ValidationError]? {
-        return (ValidationRule(textField: searchBar, rules: [MinLengthRule(length: 1, message: "validation_item_name_not_empty")], errorLabel: nil).validateField().map{
+        return (ValidationRule(textField: searchBar, rules: [NotEmptyTrimmedRule(message: "validation_item_name_not_empty")], errorLabel: nil).validateField().map{
             [searchBar: $0]
         })
     }
@@ -296,7 +296,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?) {
         
-        if let name = searchBar.text {
+        if let name = searchBar.text?.trim() {
             
             let listItemInput = ListItemInput(name: name, quantity: quantity, price: price, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand)
             delegate?.onSubmitAddEditItem(listItemInput, editingItem: editingItem)

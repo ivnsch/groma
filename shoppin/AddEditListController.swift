@@ -117,7 +117,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     private func initValidator() {
         let listInputsValidator = Validator()
-        listInputsValidator.registerField(listNameInputField, rules: [MinLengthRule(length: 1, message: trans("validation_list_name_not_empty"))])
+        listInputsValidator.registerField(listNameInputField, rules: [NotEmptyTrimmedRule(message: trans("validation_list_name_not_empty"))])
         self.listInputsValidator = listInputsValidator
     }
     
@@ -269,9 +269,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             guard let weakSelf = self else {return}
             guard let inventory = weakSelf.selectedInventory else {AlertPopup.show(message: trans("popup_please_select_inventory"), controller: weakSelf); return}
             guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
-            guard let listName = weakSelf.listNameInputField.text else {QL4("Validation was not implemented correctly"); return}
+            guard let listName = weakSelf.listNameInputField.text?.trim() else {QL4("Validation was not implemented correctly"); return}
             
-            let store: String? = weakSelf.storeInputField.optText
+            let store: String? = weakSelf.storeInputField.optText?.trim()
             
             
             if let listToEdit = weakSelf.listToEdit {
