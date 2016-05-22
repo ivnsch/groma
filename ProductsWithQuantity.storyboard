@@ -28,7 +28,7 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="40"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nBh-aZ-qb2" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="249" y="11" width="54" height="18"/>
+                                        <rect key="frame" x="243" y="11" width="54" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -39,7 +39,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GzU-ob-qc5" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="319" y="5" width="42" height="30"/>
+                                        <rect key="frame" x="313" y="5" width="42" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="Count">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -65,7 +65,7 @@
                                 <constraints>
                                     <constraint firstItem="GzU-ob-qc5" firstAttribute="centerY" secondItem="IB8-aT-NV9" secondAttribute="centerY" id="4U3-jg-U3E"/>
                                     <constraint firstItem="nBh-aZ-qb2" firstAttribute="centerY" secondItem="IB8-aT-NV9" secondAttribute="centerY" id="7KP-kA-YAD"/>
-                                    <constraint firstAttribute="trailing" secondItem="GzU-ob-qc5" secondAttribute="trailing" constant="14" id="9hb-bD-C8W"/>
+                                    <constraint firstAttribute="trailing" secondItem="GzU-ob-qc5" secondAttribute="trailing" constant="20" id="9hb-bD-C8W"/>
                                     <constraint firstItem="GzU-ob-qc5" firstAttribute="baseline" secondItem="nBh-aZ-qb2" secondAttribute="baseline" id="Fkw-vC-UbW"/>
                                     <constraint firstAttribute="trailing" secondItem="iMY-Wf-Xm3" secondAttribute="trailing" id="G6F-jN-vH8"/>
                                     <constraint firstItem="iMY-Wf-Xm3" firstAttribute="leading" secondItem="IB8-aT-NV9" secondAttribute="leading" id="JOV-3t-ued"/>

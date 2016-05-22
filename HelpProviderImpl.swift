@@ -33,23 +33,23 @@ class HelpProviderImpl: HelpProvider {
     // TODO translations keys!
     private static var helpItemsEN = [
         
-        // #new
-        HelpItem(title: "How do the shopping lists, cart, store inventory and history are related?", text: "Shopping lists are always associated with an inventory, which is the place the items go when you press 'buy' in the cart. A typical inventory you want to use, and in most cases probably the only one, would be 'home' which represents your household. You can have multiple lists that send items to the same inventory. A list, also, is optionally associated with a store. For example the supermaket 'x'. Each list/store remembers the prices you assigned to its items, and once you 'buy' them, in the cart, add a corresponding entry to the history. When you add or increments items directly in the inventory, the history is not modified."),
+//        // #new
+//        HelpItem(title: "How do the shopping lists, cart, store inventory and history are related?", text: "Shopping lists are always associated with an inventory, which is the place the items go when you press 'buy' in the cart. A typical inventory you want to use, and in most cases probably the only one, would be 'home' which represents your household. You can have multiple lists that send items to the same inventory. A list, also, is optionally associated with a store. For example the supermaket 'x'. Each list/store remembers the prices you assigned to its items, and once you 'buy' them, in the cart, add a corresponding entry to the history. When you add or increments items directly in the inventory, the history is not modified."),
         
         HelpItem(title: "What is the back store?", text: "This is where your list items go after you 'buy' them. You can move the back store items back to the todo list by tapping on 'reset' or tapping on each of them individually. The back store can only be accessed when there are items in it, by swiping the prices view (in the todo list) to the left."),
         
         HelpItem(title: "What are groups? Is this the same as recipes?", text: "Groups are items that belong together, identified with a name and which can be added to a list or other places at once, using the top menu. You can use them for anything you want - they are most commonly used for recipes!"),
         
-        // #new
-        HelpItem(title: "I set the price of a list item but it's not updated in other lists.", text: "The prices of products, just like in real life, are store specific. Lists are bound to stores. Thus, when you set the price of an item this will affect only items from the same store of the list where you are in. When a list has no store, the update affects only items without a store."),
+//        // #new
+//        HelpItem(title: "I set the price of a list item but it's not updated in other lists.", text: "The prices of products, just like in real life, are store specific. Lists are bound to stores. Thus, when you set the price of an item this will affect only items from the same store of the list where you are in. When a list has no store, the update affects only items without a store."),
         
         //        // #new (only for app without no server support)
         //        HelpItem(title: "Can I upload my data to the cloud or share lists and inventories with other users?", text: "This functionality is currently available only in selected countries. If you are reading this, you're not in them ;). This is just a temporary limitation and will be hopefully removed soon for all countries."),
         
         HelpItem(title: "What is the relationship between categories and sections?", text: "Category is how you generally want to classify a product. E.g. for apples you probably would use 'fruits'. A section is the section in the store where you find the product. The section can be different than the category! For example thuna, could have 'fish' as category but be in the 'canned food' section.\nProducts have always a category, which is used everywhere in the app. Sections only exist in shopping lists."),
         
-        // #new
-        HelpItem(title: "What does color mean in the top menu for list/group/inventory items or products?.", text: "In the case of list items, this is the color of the section. In the other cases (group items, inventory items or products) this is the color of the category. This is the reason why the color button positioned on the same line as the section/category."),
+//        // #new
+//        HelpItem(title: "What does color mean in the top menu for list/group/inventory items or products?.", text: "In the case of list items, this is the color of the section. In the other cases (group items, inventory items or products) this is the color of the category. This is the reason why the color button positioned on the same line as the section/category."),
         
         HelpItem(title: "Do I need an account?", text: "Unless you want to share your lists or inventories with other users or synchronise with other devices, you don't need an account. The functionality of the app with or without an account, besides of this, is identical."),
         
@@ -64,7 +64,7 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "How do I remove products from the top menu? I never use them!", text: "You can remove them in the products screen (in the ... tab)."),
         
         HelpItem(title: "I bought items with incorrect prices, how do I correct this?", text: "In order to keep your reports reliable, the history is a 'snapshot' of what you bought and not meant to be edited. Not everything is lost though: You can delete history items and buy the list items again with the corrected price."),
-        //
+        
         HelpItem(title: "What happens when I remove products in the products screen?", text: "The product and all list/group/inventory, history and top-menu items associated with it will be removed. For example, if you remove 'Apples' with brand 'x', all the list, inventory, group and history and top-menu items that are named 'Apples' and have the brand 'x' Will be removed. Don't worry about products with no brand - an empty brand is handled like a brand and will only remove items with the same name that have also an empty brand."),
         
         HelpItem(title: "What happens when I remove history items?", text: "Removal of history items affects also the stats! If you, for example, remove 5x lemon cakes, bought on March the 3d, that costed 10, your stats for March will show 10 less spendings."),
@@ -82,10 +82,10 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Can I use this app for online shopping?", text: "Yes, but as you have probably noticed it's not optimised for this - yet! This is already on the works and will be available in upcoming updates. Hold on!"),
 
         // #new
-        HelpItem(title: "What are the participant permissions?", text: "To keep things simple, all participants are equal. The moment you share something with someone, this user gets full rights to the shared item. This person can also share the item with other users. The reach of a participant is of course limited only to the items in the list or inventory being shared. They can't, for example, modify your underlaying products, e.g. change the prices.\nWhen you share a list with someone and want this person to also be able to buy items - that is, to move them to the inventory associated with the list, don't forget to share also this inventory with them, otherwise 'buy' will not work. The reason of this separation is that you don't necessarily want to share always the lists with the same persons as the inventories, for example you may want to task someone to buy a list but don't give them access to your household. After the participant puts the items in the cart, you can 'buy' them."),
+        HelpItem(title: "What are the participant permissions?", text: "To keep things simple, all participants are equal. The moment you share something with someone, this user gets full rights to the shared item. This person can also share the item with other users. The reach of a participant is limited only to the items in the list or inventory being shared. They can't, for example, modify your underlaying products, e.g. change the prices.\nWhen you share a list with someone and want this person to also be able to buy items - that is, to move them to the inventory associated with the list, don't forget to share also this inventory with them, otherwise 'buy' will not work. The reason of this separation is that you don't necessarily want to share always the lists with the same persons as the inventories, for example you may want to task someone to buy a list but don't give them access to your household. After the participant puts the items in the cart, you can 'buy' them."),
         
-        // #new
-        HelpItem(title: "Can I use this app as a todo list? A household finances app?", text: "Why not? This is obviously not the main focus of this app but nothing hinders you from creative repurposing. You can for example combine normal shopping items with items that act as tasks or reminders. Or have lists with the items that represent the fixed costs in you home, like electricity or rent, and move them to the inventory - maybe a different one than your main inventory - to have a more complete overview of the overall expenses."),
+//        // #new
+//        HelpItem(title: "Can I use this app as a todo list? A household finances app?", text: "Why not? This is obviously not the main focus of this app but nothing hinders you from creative repurposing. You can for example combine normal shopping items with items that act as tasks or reminders. Or have lists with the items that represent the fixed costs in you home, like electricity or rent, and move them to the inventory - maybe a different one than your main inventory - to have a more complete overview of the overall expenses."),
         
         HelpItem(title: "What happens when my account is removed?", text: "Your data in the server is removed permanently. If you share list or inventories with other users these are not affected, except that you are removed as a participant. The data in your device is also not affected and you can continue using the app normally."),
 
@@ -95,7 +95,7 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "Troubleshooting: Sync doesn't work or I get invalid request errors", text: "If you are getting repeatedly any of these errors, as a last resort you can go to settings and select 'Overwrite local data'. This will reset the data on your device to the last data your successfully synced and likely fix them. This setting is only visible when you are logged in and connected.", type: .Troubleshooting),
         
-        HelpItem(title: "I cannot find the information I'm looking for", text: "Send us a feedback email! We are glad to answer your questions.")
+        HelpItem(title: "I cannot find the information I'm looking for", text: "Send a feedback email! Glad to answer your questions.")
         
     ]
     
