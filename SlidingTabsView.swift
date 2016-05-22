@@ -88,6 +88,8 @@ class SlidingTabsView: UIView {
             addSubview(line)
             self.line = line
             
+            moveLine(0)
+            
             onViewsReady?()
         }
     }
