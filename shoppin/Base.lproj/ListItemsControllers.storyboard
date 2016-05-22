@@ -280,7 +280,7 @@
                                 <rect key="frame" x="-145" y="666" width="520" height="1"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0eD-HV-Myo">
-                                        <rect key="frame" x="460" y="0.0" width="60" height="1"/>
+                                        <rect key="frame" x="460" y="-15" width="60" height="31"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="q4Q-KL-w5r"/>
                                         </constraints>
@@ -297,6 +297,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="520" id="0f8-8Q-Vt8"/>
                                     <constraint firstAttribute="trailing" secondItem="0eD-HV-Myo" secondAttribute="trailing" id="Hlf-fx-LlM"/>
+                                    <constraint firstItem="0eD-HV-Myo" firstAttribute="centerY" secondItem="5T4-jf-M2R" secondAttribute="centerY" id="HrU-Yt-5uP"/>
                                     <constraint firstAttribute="height" constant="1" id="OvZ-Vs-sjM"/>
                                     <constraint firstItem="0eD-HV-Myo" firstAttribute="leading" secondItem="5T4-jf-M2R" secondAttribute="leading" id="Y3j-hu-rmH"/>
                                     <constraint firstItem="0eD-HV-Myo" firstAttribute="top" secondItem="5T4-jf-M2R" secondAttribute="top" id="hXi-E7-V0I"/>
@@ -305,6 +306,8 @@
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="Y3j-hu-rmH"/>
+                                        <exclude reference="hXi-E7-V0I"/>
+                                        <exclude reference="nfc-pA-CeF"/>
                                     </mask>
                                 </variation>
                                 <connections>

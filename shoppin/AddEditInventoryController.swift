@@ -23,7 +23,10 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     @IBOutlet weak var listNameInputField: UITextField!
     @IBOutlet weak var colorButton: UIButton!
     @IBOutlet weak var sharedUsersButton: UIButton!
-    
+
+    @IBOutlet weak var colorButtonHCenterConstraint: NSLayoutConstraint!
+    @IBOutlet weak var colorButtonRightPaddingConstraint: NSLayoutConstraint!
+
     private var listInputsValidator: Validator?
     
     weak var delegate: AddEditInventoryControllerDelegate?
@@ -80,7 +83,9 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     
     private func setSharedButtonVisibile(visible: Bool) {
         sharedUsersButton.hidden = !visible
-        colorButton.contentHorizontalAlignment = visible ? .Center : .Right
+        
+        colorButtonHCenterConstraint.priority = visible ? 1000 : 999
+        colorButtonRightPaddingConstraint.priority = visible ? 999 : 1000
     }
     
     private func initValidator() {
