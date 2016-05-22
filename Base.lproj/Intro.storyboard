@@ -70,7 +70,7 @@
                                         <real key="value" value="-30"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                        <real key="value" value="-30"/>
+                                        <integer key="value" value="-40"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
