@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Manage Shopping Lists.png",
+      "filename" : "groma-illos.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Manage Shopping Lists@2x.png",
+      "filename" : "groma-illos@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Manage Shopping Lists@3x.png",
+      "filename" : "groma-illos@3x.png",
       "scale" : "3x"
     }
   ],
