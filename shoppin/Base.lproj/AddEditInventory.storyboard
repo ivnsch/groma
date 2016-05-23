@@ -69,15 +69,21 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.59215686270000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="Auc-8i-PnM" firstAttribute="centerX" secondItem="h5W-ku-HnU" secondAttribute="centerX" id="2Uc-mO-KPC"/>
+                            <constraint firstItem="Auc-8i-PnM" firstAttribute="centerX" secondItem="h5W-ku-HnU" secondAttribute="centerX" priority="999" id="2Uc-mO-KPC"/>
                             <constraint firstItem="bg3-OT-zRt" firstAttribute="baseline" secondItem="Auc-8i-PnM" secondAttribute="baseline" id="9Ek-ef-vJM" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstAttribute="trailing" secondItem="bg3-OT-zRt" secondAttribute="trailing" constant="30" id="JBd-aP-62I" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstItem="958-Da-VLu" firstAttribute="top" secondItem="PmJ-d3-xse" secondAttribute="bottom" constant="8" id="Ljv-XS-PaJ"/>
-                            <constraint firstAttribute="trailing" secondItem="Auc-8i-PnM" secondAttribute="trailing" priority="999" constant="30" id="Uc7-U3-GLe"/>
+                            <constraint firstAttribute="trailing" secondItem="Auc-8i-PnM" secondAttribute="trailing" priority="998" constant="30" id="Uc7-U3-GLe"/>
                             <constraint firstItem="Auc-8i-PnM" firstAttribute="top" secondItem="958-Da-VLu" secondAttribute="bottom" constant="14" id="dU4-5H-hi0"/>
+                            <constraint firstItem="bg3-OT-zRt" firstAttribute="top" secondItem="958-Da-VLu" secondAttribute="bottom" constant="14" id="wIv-5o-Y3Q"/>
                             <constraint firstItem="958-Da-VLu" firstAttribute="leading" secondItem="h5W-ku-HnU" secondAttribute="leading" constant="25" id="xOG-xO-T1c" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstAttribute="trailing" secondItem="958-Da-VLu" secondAttribute="trailing" constant="25" id="yCq-4r-ToJ" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="9Ek-ef-vJM"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>

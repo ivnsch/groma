@@ -129,7 +129,7 @@
                         <constraints>
                             <constraint firstItem="tkj-0N-ADP" firstAttribute="leading" secondItem="F28-F1-Smm" secondAttribute="leading" id="0cV-v8-jwE"/>
                             <constraint firstAttribute="trailing" secondItem="F28-F1-Smm" secondAttribute="trailing" constant="25" id="3rT-RA-0y1" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
-                            <constraint firstItem="1sk-oR-mxV" firstAttribute="leading" secondItem="tkj-0N-ADP" secondAttribute="trailing" id="7Iv-TQ-QaH"/>
+                            <constraint firstItem="1sk-oR-mxV" firstAttribute="leading" secondItem="tkj-0N-ADP" secondAttribute="trailing" priority="999" id="7Iv-TQ-QaH"/>
                             <constraint firstItem="dqk-Mw-1ri" firstAttribute="top" secondItem="F28-F1-Smm" secondAttribute="bottom" constant="14" id="Av9-3u-cci"/>
                             <constraint firstItem="1sk-oR-mxV" firstAttribute="trailing" secondItem="F28-F1-Smm" secondAttribute="trailing" id="Czv-jV-2ZM"/>
                             <constraint firstItem="1sk-oR-mxV" firstAttribute="baseline" secondItem="tkj-0N-ADP" secondAttribute="baseline" id="ExU-lD-ig6"/>
@@ -139,7 +139,7 @@
                             <constraint firstItem="VtI-z7-VYE" firstAttribute="centerY" secondItem="dqk-Mw-1ri" secondAttribute="centerY" id="bNf-Ee-DCn"/>
                             <constraint firstItem="tkj-0N-ADP" firstAttribute="top" secondItem="VtI-z7-VYE" secondAttribute="bottom" constant="14" id="iJN-nf-tR5"/>
                             <constraint firstItem="F28-F1-Smm" firstAttribute="top" secondItem="J8v-ps-jZl" secondAttribute="bottom" constant="8" id="mNb-id-cF7"/>
-                            <constraint firstAttribute="trailing" secondItem="tkj-0N-ADP" secondAttribute="trailing" priority="999" constant="25" id="q14-92-HvN" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                            <constraint firstAttribute="trailing" secondItem="tkj-0N-ADP" secondAttribute="trailing" priority="998" constant="25" id="q14-92-HvN" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstItem="F28-F1-Smm" firstAttribute="leading" secondItem="FTk-Cw-gyF" secondAttribute="leading" constant="15" id="tHd-Cv-1P5" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstItem="VtI-z7-VYE" firstAttribute="leading" secondItem="dqk-Mw-1ri" secondAttribute="trailing" constant="14" id="uJd-el-B9C"/>
                             <constraint firstItem="0bu-Vf-atl" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="VtI-z7-VYE" secondAttribute="trailing" priority="999" constant="10" id="ydb-wp-hYt"/>

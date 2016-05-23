@@ -162,8 +162,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         if sharedUsersButton.hidden {
             sharedUsersWidthConstraint.constant = 0
         }
-        storeAlignRightConstraint.priority = visible ? 999 : 1000
-        storeSpaceToParticipantsConstraint.priority = visible ? 1000 : 999
+        storeAlignRightConstraint.priority = visible ? 998 : 999
+        storeSpaceToParticipantsConstraint.priority = visible ? 999 : 998
     }
     
     override func viewWillAppear(animated: Bool) {
