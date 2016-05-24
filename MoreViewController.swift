@@ -31,18 +31,18 @@ class MoreViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         items = [
-            MoreItem(type: .History, text: "History"),
-            MoreItem(type: .ManageProduct, text: "Manage products"),
-            MoreItem(type: .Settings, text: "Settings"),
-            MoreItem(type: .Help, text: "Help"),
-            MoreItem(type: .Share, text: "Share"),
-            MoreItem(type: .Feedback, text: "Feedback"),
-            MoreItem(type: .WatchIntro, text: "Watch intro again"),
-            MoreItem(type: .About, text: "About")
+            MoreItem(type: .History, text: trans("more_history")),
+            MoreItem(type: .ManageProduct, text: trans("more_products")),
+            MoreItem(type: .Settings, text: trans("more_settings")),
+            MoreItem(type: .Help, text: trans("more_help")),
+            MoreItem(type: .Share, text: trans("more_share")),
+            MoreItem(type: .Feedback, text: trans("more_feedback")),
+            MoreItem(type: .WatchIntro, text: trans("more_intro")),
+            MoreItem(type: .About, text: trans("more_about"))
         ]
         
         if CountryHelper.isInServerSupportedCountry() {
-            items.insert((type: .User, text: "User"), atIndex: 2)
+            items.insert((type: .User, text: trans("more_user")), atIndex: 2)
         }
         
         tableView.reloadData()

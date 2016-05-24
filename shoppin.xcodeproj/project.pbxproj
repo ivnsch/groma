@@ -630,7 +630,6 @@
 		EB8D1D111C389D6E00ADF884 /* ProductsWithQuantityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D101C389D6E00ADF884 /* ProductsWithQuantityViewController.swift */; };
 		EB8D1D131C396ED600ADF884 /* GroupItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D121C396ED600ADF884 /* GroupItemsController.swift */; };
 		EB8D1D151C396F8300ADF884 /* InventoryItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D141C396F8300ADF884 /* InventoryItemsController.swift */; };
-		EB8D1D171C3994BE00ADF884 /* ProductsWithQuantity.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB8D1D161C3994BE00ADF884 /* ProductsWithQuantity.storyboard */; };
 		EB8EDD271C18A45700A92136 /* MyWebsocketDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EDD261C18A45700A92136 /* MyWebsocketDispatcher.swift */; };
 		EB8EDE1A1C9B1A78003B566F /* RemoteSectionWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EDE191C9B1A78003B566F /* RemoteSectionWithDependencies.swift */; };
 		EB8EDE1B1C9B1A78003B566F /* RemoteSectionWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EDE191C9B1A78003B566F /* RemoteSectionWithDependencies.swift */; };
@@ -799,6 +798,7 @@
 		EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */; };
 		EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */; };
 		EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */; };
+		EBB655A81CF3D13D00B49A55 /* ProductsWithQuantity.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBB655AA1CF3D13D00B49A55 /* ProductsWithQuantity.storyboard */; };
 		EBB6D74E1CD628A200F9C711 /* MultiLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D74D1CD628A200F9C711 /* MultiLayoutConstraint.swift */; };
 		EBB6D7501CD68EC900F9C711 /* LabelMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D74F1CD68EC900F9C711 /* LabelMore.swift */; };
 		EBB6D7521CD6910D00F9C711 /* LeftRightPaddingConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */; };
@@ -1464,7 +1464,6 @@
 		EB8D1D101C389D6E00ADF884 /* ProductsWithQuantityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductsWithQuantityViewController.swift; sourceTree = "<group>"; };
 		EB8D1D121C396ED600ADF884 /* GroupItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItemsController.swift; sourceTree = "<group>"; };
 		EB8D1D141C396F8300ADF884 /* InventoryItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InventoryItemsController.swift; path = ../InventoryItemsController.swift; sourceTree = "<group>"; };
-		EB8D1D161C3994BE00ADF884 /* ProductsWithQuantity.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ProductsWithQuantity.storyboard; sourceTree = "<group>"; };
 		EB8EDD261C18A45700A92136 /* MyWebsocketDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebsocketDispatcher.swift; sourceTree = "<group>"; };
 		EB8EDE191C9B1A78003B566F /* RemoteSectionWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSectionWithDependencies.swift; sourceTree = "<group>"; };
 		EB8EDE1D1C9B1CC8003B566F /* RemoteListWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListWithDependencies.swift; sourceTree = "<group>"; };
@@ -1569,6 +1568,9 @@
 		EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationErrorMsgBuilder.swift; sourceTree = "<group>"; };
 		EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationAlert.swift; sourceTree = "<group>"; };
 		EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderFetchModus.swift; sourceTree = "<group>"; };
+		EBB655B11CF3D1BD00B49A55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ProductsWithQuantity.storyboard; sourceTree = "<group>"; };
+		EBB655B31CF3D1FE00B49A55 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ProductsWithQuantity.strings; sourceTree = "<group>"; };
+		EBB655B51CF3D21500B49A55 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ProductsWithQuantity.strings; sourceTree = "<group>"; };
 		EBB6D74D1CD628A200F9C711 /* MultiLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiLayoutConstraint.swift; sourceTree = "<group>"; };
 		EBB6D74F1CD68EC900F9C711 /* LabelMore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelMore.swift; sourceTree = "<group>"; };
 		EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftRightPaddingConstraint.swift; sourceTree = "<group>"; };
@@ -2704,7 +2706,7 @@
 		EB8D1D181C39F2F800ADF884 /* productWithQuantity */ = {
 			isa = PBXGroup;
 			children = (
-				EB8D1D161C3994BE00ADF884 /* ProductsWithQuantity.storyboard */,
+				EBB655AA1CF3D13D00B49A55 /* ProductsWithQuantity.storyboard */,
 				EB8D1D101C389D6E00ADF884 /* ProductsWithQuantityViewController.swift */,
 				EB20FC061A599AE20058103B /* ProductWithQuantityTableViewCell.swift */,
 			);
@@ -3560,7 +3562,7 @@
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
 				EBD667F61CED4C920055EE0B /* AddEditInventory.storyboard in Resources */,
 				EBD668121CED4DE00055EE0B /* ManageProducts.storyboard in Resources */,
-				EB8D1D171C3994BE00ADF884 /* ProductsWithQuantity.storyboard in Resources */,
+				EBB655A81CF3D13D00B49A55 /* ProductsWithQuantity.storyboard in Resources */,
 				EB4B39D21CED425000B41063 /* UserDetails.storyboard in Resources */,
 				EB5AD1961BEE2ED400BC6A2F /* EditSectionViewController.xib in Resources */,
 				EB0F5F861B962D2100035175 /* GoogleService-Info.plist in Resources */,
@@ -4933,6 +4935,16 @@
 				EB9F6CED1A8610550038355B /* Base */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		EBB655AA1CF3D13D00B49A55 /* ProductsWithQuantity.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EBB655B11CF3D1BD00B49A55 /* Base */,
+				EBB655B31CF3D1FE00B49A55 /* de */,
+				EBB655B51CF3D21500B49A55 /* es */,
+			);
+			name = ProductsWithQuantity.storyboard;
 			sourceTree = "<group>";
 		};
 		EBD667E31CED49EB0055EE0B /* AddEditListItem.storyboard */ = {

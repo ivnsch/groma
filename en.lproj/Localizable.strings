@@ -346,6 +346,7 @@ empty_group_line2 = "Tap to items";
 
 
 generic_login = "Login";
+generic_color = "Colour";
 
 
 placeholder_enter_email = "Enter your e-mail";
@@ -367,6 +368,7 @@ validation_list_name_not_empty = "Please enter a list name";
 validation_inventory_name_not_empty = "Please enter a inventory name";
 validation_user_input_not_empty = "Please enter an email address";
 validation_group_name_not_empty = "Please enter a group name";
+validation_password_characters = "The password must have at least 8 characters, including least 1 uppercase letter and 1 number.";
 
 
 first_inventory_name = "Home";
@@ -395,3 +397,21 @@ sort_by_count = "Count";
 
 
 sharing_message = "TODO";
+
+
+more_history = "History";
+more_products = "Products";
+more_user = "User";
+more_settings = "Settings";
+more_help = "Help";
+more_share = "Share";
+more_feedback = "Feedback";
+more_intro = "Watch intro again";
+more_about = "About";
+
+
+register_accept_terms = "I accept the %%terms and conditions%%";
+
+
+add_edit_list_item_add_new_item = "Add new item";
+add_edit_list_item_edit_item = "Edit Item";

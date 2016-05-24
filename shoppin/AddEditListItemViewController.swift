@@ -118,7 +118,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     @IBOutlet weak var priceInput: LineTextField!
 
     @IBOutlet weak var quantityInput: LineTextField!
-
+    
     @IBOutlet weak var titleLabel: UILabel!
 
 /////////////////////////////////////////////////////////////////////////
@@ -168,8 +168,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         didSet {
             if let editingPlanItem = editingPlanItem {
                 prefill(editingPlanItem)
-                titleLabel.text = "Edit item"
+                titleLabel.text = trans("add_edit_list_item_edit_item")
             } else {
+                
                 QL3("Setting updatingListItem before outlets are set")
             }
         }
@@ -230,6 +231,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         initTextFieldPlaceholders()
         initAutocompletionTextFields()
         
+        sectionColorButton.textColor = UIColor.grayColor()
+        sectionColorButton.text = trans("generic_color") // string from storyboard localization doesn't work, seems to be xcode bug
+        
         onViewDidLoad?()
         
         initValidator()
@@ -270,7 +274,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     private func initStaticLabels() {
         addNewItemLabel.font = DimensionsManager.font(.Regular, fontType: .Regular)
-        addNewItemLabel.text = "Add new item"
+        addNewItemLabel.text = trans("add_edit_list_item_add_new_item")
     }
     
     private func prefill(item: AddEditItem) {
@@ -283,11 +287,11 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     private func initTextFieldPlaceholders() {
-        brandInput.attributedPlaceholder = NSAttributedString(string: "Brand", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
-        sectionInput.attributedPlaceholder = NSAttributedString(string: "Section", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
-        quantityInput.attributedPlaceholder = NSAttributedString(string: "Quantity", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
-        priceInput.attributedPlaceholder = NSAttributedString(string: "Price", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
-        noteInput.attributedPlaceholder = NSAttributedString(string: "Note", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        quantityInput.attributedPlaceholder = NSAttributedString(string: quantityInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        priceInput.attributedPlaceholder = NSAttributedString(string: priceInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        noteInput.attributedPlaceholder = NSAttributedString(string: noteInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
     }
     
     private func initAutocompletionTextFields() {

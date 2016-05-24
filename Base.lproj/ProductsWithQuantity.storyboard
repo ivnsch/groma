@@ -90,8 +90,8 @@
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ops, there are no inventory items yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2dJ-JG-9o5" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="39" y="426" width="298" height="22"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ops, there are no inventory items yet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2dJ-JG-9o5" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="30" y="426" width="315" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -117,16 +117,19 @@
                                 <constraints>
                                     <constraint firstItem="2dJ-JG-9o5" firstAttribute="centerX" secondItem="kZw-vd-0Tu" secondAttribute="centerX" id="3TF-gx-JrG"/>
                                     <constraint firstItem="xlU-gu-Hqm" firstAttribute="centerX" secondItem="kZw-vd-0Tu" secondAttribute="centerX" id="MxQ-Hl-619"/>
+                                    <constraint firstItem="2dJ-JG-9o5" firstAttribute="leading" secondItem="kZw-vd-0Tu" secondAttribute="leading" constant="30" id="OOh-xe-dll"/>
                                     <constraint firstItem="LUt-lH-RYz" firstAttribute="centerX" secondItem="kZw-vd-0Tu" secondAttribute="centerX" id="QpZ-FC-wjc"/>
                                     <constraint firstItem="LUt-lH-RYz" firstAttribute="top" secondItem="2dJ-JG-9o5" secondAttribute="bottom" constant="8" id="RHY-nt-KhF"/>
                                     <constraint firstItem="xlU-gu-Hqm" firstAttribute="width" secondItem="kZw-vd-0Tu" secondAttribute="width" multiplier="0.6" id="WMF-8j-xGx"/>
                                     <constraint firstItem="2dJ-JG-9o5" firstAttribute="top" secondItem="xlU-gu-Hqm" secondAttribute="bottom" constant="20" id="dIN-7H-2Zf"/>
+                                    <constraint firstAttribute="trailing" secondItem="2dJ-JG-9o5" secondAttribute="trailing" constant="30" id="n7r-Mm-3II"/>
                                     <constraint firstItem="xlU-gu-Hqm" firstAttribute="centerY" secondItem="kZw-vd-0Tu" secondAttribute="centerY" constant="-22" id="tD2-gy-hoK"/>
                                     <constraint firstItem="xlU-gu-Hqm" firstAttribute="top" secondItem="kZw-vd-0Tu" secondAttribute="top" constant="200" id="yqr-vX-L22" customClass="TopEmptyViewConstraint" customModule="shoppin"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="tD2-gy-hoK"/>
+                                        <exclude reference="3TF-gx-JrG"/>
                                     </mask>
                                 </variation>
                             </view>

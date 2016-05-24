@@ -18,7 +18,7 @@
 "i1w-xi-aFz.placeholder" = "Sección";
 
 /* Class = "UITextField"; placeholder = "Brand (optional)"; ObjectID = "r5b-Sz-J4o"; */
-"r5b-Sz-J4o.placeholder" = "Marca (optional)";
+"r5b-Sz-J4o.placeholder" = "Marca (opcional)";
 
 /* Class = "UITextField"; placeholder = "Quantity"; ObjectID = "vWS-vL-cob"; */
 "vWS-vL-cob.placeholder" = "Cantidad";

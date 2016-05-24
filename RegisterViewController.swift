@@ -61,7 +61,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         
         fbButton.readPermissions = ["public_profile"]
         
-        let buttonTranslation = "I accept the %%terms and conditions%%" // TODO translations
+        let buttonTranslation = trans("register_accept_terms")
         let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
         termsButton.setAttributedTitle(attributedText, forState: .Normal)
         
@@ -90,7 +90,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     private func initValidator() {
         let validator = Validator()
         validator.registerField(self.emailField, rules: [EmailRule(message: "validation_email_format")])
-        validator.registerField(self.passwordField, rules: [PasswordRule(message: "password: 8 letter, 1 uppercase, 1 number")]) // TODO repl with translation key, for now this so testers understand
+        validator.registerField(self.passwordField, rules: [PasswordRule(message: "validation_password_characters")]) // TODO repl with translation key, for now this so testers understand
 //        validator.registerField(self.firstNameField, rules: [MinLengthRule(length: 1, message: "validation_first_name_min_length")]) // TODO repl with translation key, for now this so testers understand
 //        validator.registerField(self.lastNameField, rules: [MinLengthRule(length: 1, message: "validation_last_name_min_length")]) // TODO repl with translation key, for now this so testers understand
         self.validator = validator

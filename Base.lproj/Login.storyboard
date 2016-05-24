@@ -141,19 +141,6 @@
                                 <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IE2-Wn-ab8" customClass="EyeView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="315" y="125" width="40" height="30"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="ISs-cs-6Vk"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="qod-AI-nzG"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="qod-AI-nzG"/>
-                                    </mask>
-                                </variation>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v0i-2j-jaS" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="159" y="330" width="57" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -225,6 +212,19 @@
                                     <outlet property="delegate" destination="rg4-qz-Lat" id="NXN-iA-fbp"/>
                                 </connections>
                             </textField>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IE2-Wn-ab8" customClass="EyeView" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="315" y="125" width="40" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="ISs-cs-6Vk"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="qod-AI-nzG"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="qod-AI-nzG"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>

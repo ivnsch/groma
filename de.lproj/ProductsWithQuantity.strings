@@ -1,0 +1,24 @@
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "0Eg-VM-sQM"; */
+"0Eg-VM-sQM.text" = "Label";
+
+/* Class = "UILabel"; text = "Ops, there are no inventory items yet"; ObjectID = "2dJ-JG-9o5"; */
+"2dJ-JG-9o5.text" = "Hoppla! Es gibt noch keine Items";
+
+/* Class = "UILabel"; text = "Loading"; ObjectID = "AUs-nL-SaQ"; */
+"AUs-nL-SaQ.text" = "Laden...";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "BUa-eS-yfp"; */
+"BUa-eS-yfp.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Count"; ObjectID = "GzU-ob-qc5"; */
+"GzU-ob-qc5.normalTitle" = "Anzahl";
+
+/* Class = "UILabel"; text = "Buy items in the cart to add some!"; ObjectID = "LUt-lH-RYz"; */
+"LUt-lH-RYz.text" = "Buy items in the cart to add some!";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "esW-fo-yUS"; */
+"esW-fo-yUS.text" = "Label";
+
+/* Class = "UILabel"; text = "Sort by:"; ObjectID = "nBh-aZ-qb2"; */
+"nBh-aZ-qb2.text" = "Sortieren nach:";

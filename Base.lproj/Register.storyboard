@@ -98,13 +98,19 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LMD-Gz-aMB" customClass="FBSDKLoginButton">
                                 <rect key="frame" x="63" y="391" width="250" height="45"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="LNZ-Zy-o0r"/>
+                                    <constraint firstAttribute="height" constant="65" id="LNZ-Zy-o0r"/>
+                                    <constraint firstAttribute="height" constant="45" id="qBJ-U9-nOe"/>
                                     <constraint firstAttribute="width" constant="250" id="s69-yR-bsP"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Facebook">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="LNZ-Zy-o0r"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <outlet property="delegate" destination="WMc-15-YTM" id="3iT-VV-kaX"/>
                                 </connections>

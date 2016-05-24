@@ -29,11 +29,6 @@ class SimpleSettingCell: UITableViewCell {
             }
         }
     }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        selectionStyle = .None
-    }
     
     @IBAction func onHelpTap(sender: UIButton) {
         if let setting = setting {

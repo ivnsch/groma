@@ -152,6 +152,9 @@
 /* Class = "UILabel"; text = "There's no history yet"; ObjectID = "eL2-CC-5WO"; */
 "eL2-CC-5WO.text" = "No hay historial aún";
 
+/* Class = "UILabel"; text = "Buy your first items in the cart to see a history!"; ObjectID = "dmx-RZ-FMQ"; */
+"dmx-RZ-FMQ.text" = "Compra tus primeros ítems para ver un historial!";
+
 /* Class = "UILabel"; text = "There are no plan items yet"; ObjectID = "f0H-UL-k6R"; */
 "f0H-UL-k6R.text" = "There are no plan items yet";
 

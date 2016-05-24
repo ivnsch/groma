@@ -290,22 +290,22 @@ class StatsViewController: UIViewController
         }
         
         let font: UIFont = {
-            if DimensionsManager.widthDimension == .Small {
+//            if DimensionsManager.widthDimension == .Small {
                 if let fontSize = LabelMore.mapToFontSize(20) {
                     return UIFont.systemFontOfSize(fontSize)
                 } else {
                     QL4("No font for size")
                     return UIFont.systemFontOfSize(10)
                 }
-            } else {
-                
-                if let fontSize = LabelMore.mapToFontSize(30) {
-                    return UIFont.systemFontOfSize(fontSize)
-                } else {
-                    QL4("No font for size")
-                    return UIFont.systemFontOfSize(12)
-                }
-            }
+//            } else {
+//                
+//                if let fontSize = LabelMore.mapToFontSize(30) {
+//                    return UIFont.systemFontOfSize(fontSize)
+//                } else {
+//                    QL4("No font for size")
+//                    return UIFont.systemFontOfSize(12)
+//                }
+//            }
         }()
         
 //        let rotation: CGFloat = DimensionsManager.widthDimension == .Small ? 45 : 0

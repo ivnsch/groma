@@ -45,13 +45,13 @@
 "Bvb-VA-geS.text" = "Label";
 
 /* Class = "UILabel"; text = "Projected total spendings this month"; ObjectID = "CcA-yY-Wpn"; */
-"CcA-yY-Wpn.text" = "Geschätze Gesamtausgaben in diesem Monat";
+"CcA-yY-Wpn.text" = "Gesch. Gesamtausgaben akt. Monat";
 
 /* Class = "UINavigationItem"; title = "Inventory"; ObjectID = "Cqs-XQ-Z61"; */
 "Cqs-XQ-Z61.title" = "Inventar";
 
 /* Class = "UILabel"; text = "There are no listitems"; ObjectID = "Dny-Vg-Zzw"; */
-"Dny-Vg-Zzw.text" = "Es gibt keine Einträge";
+"Dny-Vg-Zzw.text" = "Hoppla! Es gibt noch keine Einträge";
 
 /* Class = "UINavigationItem"; title = "Stash"; ObjectID = "DtP-Nf-EOg"; */
 "DtP-Nf-EOg.title" = "Lager";
@@ -69,13 +69,13 @@
 "JGo-Cb-Ord.text" = "Label";
 
 /* Class = "UILabel"; text = "There are no Groups"; ObjectID = "Jve-6C-5eI"; */
-"Jve-6C-5eI.text" = "Es gibt keine Gruppen";
+"Jve-6C-5eI.text" = "Hoppla! Es gibt noch keine Gruppen";
 
 /* Class = "UIButton"; normalTitle = "undo"; ObjectID = "Jx8-ie-aiQ"; */
 "Jx8-ie-aiQ.normalTitle" = "Undo";
 
 /* Class = "UILabel"; text = "There are no listitems"; ObjectID = "M4e-aB-YVk"; */
-"M4e-aB-YVk.text" = "Es gibt keine Einträge";
+"M4e-aB-YVk.text" = "Hoppla! Es gibt noch keine Einträge";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "MLf-Cc-uTT"; */
 "MLf-Cc-uTT.text" = "Label";
@@ -102,7 +102,7 @@
 "U1b-4l-rZm.text" = "Label";
 
 /* Class = "UILabel"; text = "Average daily spendings this month"; ObjectID = "V34-s8-kUI"; */
-"V34-s8-kUI.text" = "MonatsDurchschnitt";
+"V34-s8-kUI.text" = "Monatsdurchschnitt";
 
 /* Class = "UIBarButtonItem"; title = "Buy"; ObjectID = "V6t-4K-Jlt"; */
 "V6t-4K-Jlt.title" = "Kaufen";
@@ -126,7 +126,7 @@
 "Zi4-H9-VqQ.text" = "Einstellungen";
 
 /* Class = "UILabel"; text = "There are no lists"; ObjectID = "bRL-cw-Ukc"; */
-"bRL-cw-Ukc.text" = "Es gibt keine Listen";
+"bRL-cw-Ukc.text" = "Hoppla! Es gibt noch keine Listen";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "bqW-8q-Oq6"; */
 "bqW-8q-Oq6.text" = "Label";
@@ -150,7 +150,10 @@
 "dxv-Gd-l65.text" = "Label";
 
 /* Class = "UILabel"; text = "There's no history yet"; ObjectID = "eL2-CC-5WO"; */
-"eL2-CC-5WO.text" = "Es gibt noch keinen Verlauf";
+"eL2-CC-5WO.text" = "Hoppla! Es gibt noch keinen Verlauf";
+
+/* Class = "UILabel"; text = "Buy your first items in the cart to see a history!"; ObjectID = "dmx-RZ-FMQ"; */
+"dmx-RZ-FMQ.text" = "Kaufe deine ersten Items um einen Verlauf zu sehen!";
 
 /* Class = "UILabel"; text = "There are no plan items yet"; ObjectID = "f0H-UL-k6R"; */
 "f0H-UL-k6R.text" = "Es gibt noch keine Planeinträge";
@@ -219,7 +222,7 @@
 "whD-Ml-qX4.text" = "Tape um deinen ersten Planeintrag hinzuzufügen";
 
 /* Class = "UILabel"; text = "There are no Inventories"; ObjectID = "xQd-dS-i5E"; */
-"xQd-dS-i5E.text" = "Es gibt noch keine Inventare";
+"xQd-dS-i5E.text" = "Hoppla! Es gibt noch keine Inventare";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "xtG-TL-rqn"; */
 "xtG-TL-rqn.text" = "Label";

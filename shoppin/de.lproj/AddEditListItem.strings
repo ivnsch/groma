@@ -9,7 +9,7 @@
 "NrU-fN-qdF.placeholder" = "Preis";
 
 /* Class = "UITextField"; placeholder = "Note (optional)"; ObjectID = "Yfv-oA-AU6"; */
-"Yfv-oA-AU6.placeholder" = "Notiz (optional)";
+"Yfv-oA-AU6.placeholder" = "Notiz (freiwillig)";
 
 /* Class = "UILabel"; text = "Add new item"; ObjectID = "dwL-LH-4dI"; */
 "dwL-LH-4dI.text" = "Neues Item";
@@ -18,7 +18,7 @@
 "i1w-xi-aFz.placeholder" = "Abteilung";
 
 /* Class = "UITextField"; placeholder = "Brand (optional)"; ObjectID = "r5b-Sz-J4o"; */
-"r5b-Sz-J4o.placeholder" = "Marke (optional)";
+"r5b-Sz-J4o.placeholder" = "Marke (freiwillig)";
 
 /* Class = "UITextField"; placeholder = "Quantity"; ObjectID = "vWS-vL-cob"; */
-"vWS-vL-cob.placeholder" = "Menge";
+"vWS-vL-cob.placeholder" = "Anzahl";

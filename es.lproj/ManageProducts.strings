@@ -30,7 +30,7 @@
 "l6S-Yc-dle.text" = "Label";
 
 /* Class = "UILabel"; text = "Sort by:"; ObjectID = "uaW-wg-NEG"; */
-"uaW-wg-NEG.text" = "Orden:";
+"uaW-wg-NEG.text" = "Ordenar por:";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "wRH-9P-Cgb"; */
 "wRH-9P-Cgb.text" = "Label";

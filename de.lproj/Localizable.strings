@@ -251,7 +251,7 @@ popup_your_account_was_removed = "Dein Benutzerkonto wurde gelöscht.";
 popup_you_already_use_bundled_products = "Du benutzt alle gebündelte Produkte bereits.";
 popup_hints_restored = "Hinweise wiederhergestellt.";
 popups_settings_overwrite = "Dies wird deine (Groma) Daten auf diesem Gerät mit den Daten die du das letzte Mal erfolgreich synchronisieren konntest überschreiben.\nDies ist eine Notlösung für technische Probleme und nicht für den Normalgebraucht gedacht.";
-popups_restore_bundled_products = "Stellt gelöschte gebündelte Produkte wieder her, oder in dem Fall dass du die Sprache gewechselt hast, fügt die gebündelte Produkte in der neuen Sprache ein. Deine existierende Produkte werden hier nicht berührt.";
+popups_restore_bundled_products = "Stellt gelöschte gebündelte Produkte wieder her, oder in dem Fall dass du die Sprache gewechselt hast, fügt die gebündelte Produkte in der neuen Sprache ein. Deine existierende Produkte werden hiervon nicht berührt.";
 popups_restore_hints = "Stellt alle Hinweise wieder her.";
 popups_participants_you_dont_have_to_add_yourself = "Du musst dich nicht selbst hinzufügen.";
 popups_participants_user_already_in_list = "%@\n ist bereits in den Teilnehmern.";
@@ -259,13 +259,13 @@ popups_participants_user_not_registered = "%@\n ist nicht registriert.";
 popups_participants_must_be_logged_in = "Du musst eingeloggt sein um mit anderen Benutzern zu teilen.";
 popups_participants_invitation_explanation = "Der Benutzer/Benutzerin wurde noch nicht eingeladen. Die Einladungen werden gesendet wenn du die Liste speicherst.";
 popups_invitation_pending = "Einladung ausstehend";
-popups_swipe_to_increment_explanation = "Du kannst auch auf den Einträgen links oder rechts streichen um die Menge zu ändern.\nDies ist besonders nützlich wenn du mehr als 1 auf einmal ändern willst!";
+popups_swipe_to_increment_explanation = "Du kannst auch auf den Einträgen nach Links oder Rechts streichen um die Anzahl zu ändern.\nDies ist besonders nützlich wenn du mehr als 1 auf einmal ändern willst!";
 popup_title_group_is_empty = "Leer";
 popup_group_is_empty = "Diese Gruppe hat keine Einträge!";
 popups_password_email_sent = "Eine e-Mail um deinen Passwort zurückzusetzen wurde gesendet.";
 popup_remove_list_warning = "Dies wird die Lise \"%@\" auch für die anderen Teilnehmer entfernen.\nFalls du dich nur austragen willst, benutze bitte die Teilnehmerliste.";
 popup_remove_section_confirm = "Bist du sicher dass du die Abteilung \"%@\" entfernen willst?\nDies wird auch die Einträge, die sich derzeit in der Abteilung befinden, löschen.";
-popup_remove_inventory_warning = "Die mit diesem Inventar verknüpfen Listen, Geschichts- und Berichtsdaten werden auch gelöscht.";
+popup_remove_inventory_warning = "Die mit diesem Inventar verknüpfen Listen, Verlaufs- und Berichtsdaten werden auch gelöscht.";
 
 
 popups_size_limit_lists = "Maximale Listen Anzahl überschreitet: %@";
@@ -334,18 +334,19 @@ title_edit_item = "Eintrag editieren";
 title_lists = "Listen";
 title_cart = "Einkaufswagen";
 title_stash = "Lager";
-title_inventories = "Inventarios";
+title_inventories = "Inventare";
 title_groups = "Gruppen";
 title_participants = "Teilnehmer";
 
 
-empty_inventory_line1 = "Dein Inventar ist leer";
-empty_inventory_line2 = "Um Einträge hinzuzufügen, wähle \"kaufen\" im Einkaufswagen aus.";
+empty_inventory_line1 = "Hoppla! Es gibt noch keine Items";
+empty_inventory_line2 = "Tappe um welche hinzuzufügen\noder kaufe sie im Einkaufswagen!";
 empty_group_line1 = "Deine Gruppe ist leer";
 empty_group_line2 = "Tappe um Einträge hinzuzufügen";
 
 
 generic_login = "Einloggen";
+generic_color = "Farbe";
 
 
 placeholder_enter_email = "E-mail";
@@ -353,7 +354,7 @@ placeholder_section_name = "Abteilungsname";
 placeholder_section = "Abteilung";
 placeholder_category = "Kategorie";
 placeholder_list_name = "Listenname";
-placeholder_store = "Laden (optional)";
+placeholder_store = "Laden (freiwillig)";
 placeholder_inventory_name = "Inventarname";
 placeholder_group_name = "Gruppenname";
 
@@ -361,12 +362,13 @@ placeholder_group_name = "Gruppenname";
 validation_missing_password = "Bitte gib dein Passwort ein";
 validation_email_format = "Inkorrektes e-Mail Format";
 validation_section_name_not_empty = "Bitte gib einen Abteilungsnamen ein";
-validation_quantity_not_empty = "Bitte gib eine Menge ein";
+validation_quantity_not_empty = "Bitte gib eine Anzahl ein";
 validation_price_not_empty = "Bitte gib einen Preis ein";
 validation_list_name_not_empty = "Bitte gib einen Namen für die Liste ein";
 validation_inventory_name_not_empty = "Bitte gib einen Namen für das Inventar ein";
 validation_user_input_not_empty = "Bitte gib eine e-Mail Adresse ein";
 validation_group_name_not_empty = "Bitte gib ein Gruppennamen ein";
+validation_password_characters = "Das Passwort musst mindestens 8 Zeichen enthalten, davon mindestens 1 Großbuchstabe und 1 Zahl.";
 
 
 first_inventory_name = "Haushalt";
@@ -391,7 +393,25 @@ stats_details_rest = "Rest(%@)";
 
 sort_by_usage = "Nutzung";
 sort_by_alphabetic = "Alphabetisch";
-sort_by_count = "Menge";
+sort_by_count = "Anzahl";
 
 
 sharing_message = "TODO";
+
+
+more_history = "Verlauf";
+more_products = "Produkte";
+more_user = "Konto";
+more_settings = "Einstellungen";
+more_help = "Hilfe";
+more_share = "Teilen";
+more_feedback = "Feedback";
+more_intro = "Intro nochmal sehen";
+more_about = "Impressum";
+
+
+register_accept_terms = "I accept the %%terms and conditions%%";
+
+
+add_edit_list_item_add_new_item = "Neues Item";
+add_edit_list_item_edit_item = "Item editieren";

@@ -347,6 +347,7 @@ empty_group_line2 = "Pulsa para agregar ítems";
 
 
 generic_login = "Sesión";
+generic_color = "Color";
 
 
 placeholder_enter_email = "Ingresa tu e-mail";
@@ -368,6 +369,7 @@ validation_list_name_not_empty = "Por favor ingresa un nombre para la lista";
 validation_inventory_name_not_empty = "Por favor ingresa un nombre de inventario";
 validation_user_input_not_empty = "Por favor ingresa un e-mail";
 validation_group_name_not_empty = "Por favor ingresa un nombre para el grupo";
+validation_password_characters = "La contraseña debe tener al menos 8 caracteres, entre los cuales debe haber por lo menos una mayúscula y un número.";
 
 
 first_inventory_name = "Hogar";
@@ -396,3 +398,21 @@ sort_by_count = "Cantidad";
 
 
 sharing_message = "TODO";
+
+
+more_history = "Historia";
+more_products = "Productos";
+more_user = "Cuenta";
+more_settings = "Opciones";
+more_help = "Ayuda";
+more_share = "Compartir";
+more_feedback = "Feedback";
+more_intro = "Ver intro de nuevo";
+more_about = "Sobre Groma";
+
+
+register_accept_terms = "Acepto los %%términos y condiciones%%";
+
+
+add_edit_list_item_add_new_item = "Nuevo ítem";
+add_edit_list_item_edit_item = "Editar ítem";
