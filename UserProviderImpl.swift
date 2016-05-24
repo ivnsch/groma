@@ -29,11 +29,16 @@ class UserProviderImpl: UserProvider {
     }
     
     func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
-        self.remoteProvider.register(user) {[weak self] result in
+        self.remoteProvider.register(user) {result in
             if result.success {
                 PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
             }
-            handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
+            
+            // Server sends only already exists but we need register-specific status code to show specific error message
+            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
+            let status = providerStatus == .AlreadyExists ? .UserAlreadyExists : providerStatus
+            
+            handler(ProviderResult(status: status))
         }
     }
     

@@ -41,6 +41,7 @@ enum ProviderStatusCode: Int {
     case DateCalculationError = 2001
     case CancelledLoginWithDifferentAccount = 2002
     case IsEmpty = 2003 // Generic status to indicate that something is empty and requires special handling
+    case UserAlreadyExists = 2004 // Client generated, the server sends only AlreadyExists
     
     // Not strictly an error
     case IsNewDeviceLoginAndDeclinedOverwrite = 3000

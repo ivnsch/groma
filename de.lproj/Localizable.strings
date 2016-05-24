@@ -315,6 +315,7 @@ social_already_exists = "Es gibt bereits ein Benutzerkonto mit der selben Benutz
 success = "Erfolg";
 error_no_internet_connection = "Keine Internetverbindung verfügbar. Bitte versuche es nochmal mit einer Internetverbindung.";
 sync_failed = "Synchronisationsfehler.\nWenn das Problem weiterbesteht, schaue dir bitte die Fehlerbehebungsthemen in der Hilfe an, oder kontaktiere Support (beide kannst du im '...' Tab finden).";
+error_user_already_exists = "Das Benutzerkonto existiert bereits.";
 
 
 setting_overwrite_data = "Daten überschreiben";

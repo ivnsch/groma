@@ -38,6 +38,8 @@ struct RequestErrorToMsgMapper {
             case .NoConnection: return trans("error_no_internet_connection")
             case .SyncFailed: return trans("sync_failed")
             
+            case .UserAlreadyExists: return trans("error_user_already_exists")
+            
             // There statuses are internal and not meant to be shown to the client. We don't want to add yet another layer for this so we handle them like normal provider status. We provide not empty strings just in case they accidentally appear to the client, to know where they come from.
             case .IsNewDeviceLoginAndDeclinedOverwrite: return trans("Error invalid")
             case .CancelledLoginWithDifferentAccount: return trans("Cancelled")

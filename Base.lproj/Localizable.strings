@@ -315,6 +315,7 @@ social_already_exists = "And account with the same user id already exists.";
 success = "Success";
 error_no_internet_connection = "There's no internet connection. Please try again with an internet connection.";
 sync_failed = "Synchronization failed.\nIf the Problem persists, please consult the troubleshooting section in help or contact support.";
+error_user_already_exists = "The user already exists";
 
 
 setting_overwrite_data = "Overwrite data";
