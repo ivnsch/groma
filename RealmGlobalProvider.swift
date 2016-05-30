@@ -232,9 +232,52 @@ class RealmGlobalProvider: RealmProvider {
                     handler(success)
                     
                 } else {
-                    print("Error: RealmGlobalProvider.clearAllData: no success result")
+                    QL4("No success result")
                     handler(false)
                 }
+        }
+    }
+    
+    func markAllDirty(handler: Bool -> Void) {
+        
+        func markObjsDirty<T: Object>(realm: Realm, obj: T.Type, idExtractor: T -> String) {
+            for obj in realm.objects(T) {
+                realm.create(T.self, value: ["uuid": idExtractor(obj), "dirty": true], update: true)
+            }
+        }
+        
+        func markAllDirtySync(realm: Realm) {
+            markObjsDirty(realm, obj: DBGroupItem.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: DBListItem.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: DBInventoryItem.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: DBHistoryItem.self, idExtractor: {$0.uuid})
+            
+            markObjsDirty(realm, obj: DBSection.self, idExtractor: {$0.uuid})
+            
+            markObjsDirty(realm, obj: DBListItemGroup.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: DBList.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: DBInventory.self, idExtractor: {$0.uuid})
+
+            markObjsDirty(realm, obj: DBStoreProduct.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: DBProduct.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: DBProductCategory.self, idExtractor: {$0.uuid})
+            
+//            this is not synced
+//            markObjsDirty(realm, obj: DBSharedUser.self, idExtractor: {$0.uuid})
+        }
+        
+        doInWriteTransaction({realm in
+            markAllDirtySync(realm)
+            return true
+            
+        }) {(successMaybe: Bool?) in
+            if let success = successMaybe {
+                handler(success)
+                
+            } else {
+                QL4("No success result")
+                handler(false)
+            }
         }
     }
 }

@@ -116,6 +116,21 @@ class UserProviderImpl: UserProvider {
     func removeAccount(handler: ProviderResult<Any> -> ()) {
         remoteProvider.removeAccount {result in
             handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
+            
+            if result.success {
+                // NOTE: For now disabled as this causes further errors which are not possible to solve for the user, e.g. sync tries to upload inventory which was not removed from the server when the user deleted the account, because it had other participants. Sync will fail because duplicate inventory uuid.
+                // If user removes the account and opens an account later again, we want to upload all the data to the server. So everything has to be marked as dirty again.
+                // Otherwise after first sync the user will load all this data
+                // Note this is only a partial fix, e.g. if user removes account in another device, it doesn't help.
+                // We probably should put this after "first login after register on same device" or similar TODO think about this.
+//                DBProviders.globalProvider.markAllDirty {markAllDirtySuccess in
+//                    if markAllDirtySuccess {
+//                        QL1("Reset dirty for all objs")
+//                    } else {
+//                        QL4("Error in mark dirty")
+//                    }
+//                }
+            }
         }
     }
     
