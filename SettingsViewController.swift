@@ -124,7 +124,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     private func removeAccount() {
-        ConfirmationPopup.show(message: trans("popup_are_you_sure_remove_account"), controller: self, onOk: {[weak self] in
+        ConfirmationPopup.show(message: trans("popup_are_you_sure_remove_account"), okTitle: trans("popup_button_yes"), controller: self, onOk: {[weak self] in
             
             if let weakSelf = self {
                 

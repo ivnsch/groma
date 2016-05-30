@@ -241,7 +241,7 @@ popup_remove_brand_completion_confirm = "Willst du \"%@\" wirklich löschen?\nDi
 popup_couldnt_find_email_account = "Konnte keine e-Mail Konto finden.";
 popup_group_was_deleted_in_other_device = "Die Gruppe \"%@\" wurde auf einem anderen Gerät gelöscht.";
 popup_delete_history_also_deletes_stats = "Entfernung von Verlaufseinträge modifiziert entsprechend den Bericht.";
-popup_add_items_directly_inventory = "Einträge direkt im Inventar hinzufügen oder inkrementieren modifiziert nicht den Verlauf und Bericht.\nWenn du willst dass die Einträge im Verlauf und Bericht auftauchen, musst du im Einkaufswagen 'kaufen' benutzen. Der Einkaufswagen kann in den Einkaufslisten gefunden werden.";
+popup_add_items_directly_inventory = "Einträge direkt im Inventar hinzufügen oder inkrementieren modifiziert nicht den Verlauf und Bericht.\nWenn du willst dass die Einträge im Verlauf und Bericht erscheinen, musst du im Einkaufswagen 'kaufen' benutzen. Der Einkaufswagen kann in den Einkaufslisten gefunden werden.";
 popup_inventory_was_deleted_in_other_device = "Das Inventar \"%@\" wurde auf einem anderen Gerät gelöscht.";
 popup_list_was_deleted_in_other_device = "Die Liste \"%@\" wurde auf einem anderen Gerät gelöscht.";
 popup_please_accept_terms = "Bitte akzeptiere die AGB.";
@@ -411,7 +411,7 @@ more_intro = "Intro nochmal sehen";
 more_about = "Impressum";
 
 
-register_accept_terms = "I accept the %%terms and conditions%%";
+register_accept_terms = "Ich akzeptiere die %%AGB%%";
 
 
 add_edit_list_item_add_new_item = "Neues Item";

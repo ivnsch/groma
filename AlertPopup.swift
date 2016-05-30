@@ -11,7 +11,7 @@ import QorumLogs
 
 class AlertPopup: NSObject {
     
-    static func create(title title: String? = nil, message: String, okMsg: String = "Ok", onDismiss: VoidFunction? = nil) -> UIViewController {
+    static func create(title title: String? = nil, message: String, okMsg: String = trans("popup_button_ok"), onDismiss: VoidFunction? = nil) -> UIViewController {
         let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: okMsg, style: UIAlertActionStyle.Default, handler: { alertAction in
             onDismiss?()
