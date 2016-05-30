@@ -394,8 +394,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     func onLoginTokenExpired(note: NSNotification) {
         guard let controller = window?.rootViewController else {"Can't show login modal, either window: \(window) or root controller: \(window?.rootViewController) is nil)"; return}
 
-        let loginController = ModalLoginController()
-        controller.presentViewController(loginController, animated: true, completion: nil)
+        if !(Providers.userProvider is UserProviderMock) {
+            let loginController = ModalLoginController()
+            controller.presentViewController(loginController, animated: true, completion: nil)
+        }
     }
     
     // MARK: - Websocket
