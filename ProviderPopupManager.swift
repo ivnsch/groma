@@ -23,8 +23,8 @@ class ProviderPopupManager {
     * If a popup is being already shown for the same status code, this method does nothing
     */
     func showStatusPopup(status: ProviderStatusCode, controller: UIViewController) {
-
-        if (currentStatus.map {$0 != status}) ?? true { // if there's no popup or if there's a popup with different status code
+        
+        if controller.presentedViewController == nil && ((currentStatus.map {$0 != status}) ?? true) { // if there's no popup or if there's a popup with different status code
             currentStatus = status
             
             let title = trans("popup_title_error")
@@ -36,13 +36,16 @@ class ProviderPopupManager {
             })
         } else {
             QL2("Skipping error popup, currentStatus: \(currentStatus), status: \(status)")
+            delay(1) { // If for some reason a popup wasn't closed properly, clear status after a while. Since this is used only to not show many popups of the same type at the same time, clearing after a delay is ok. This situation shouldn't happen, now that we added controller.presentedViewController == nil check, but adding this anyway as it's very, very bad when user can't see popups anymore until the next restart of the app, so even if it's just a small possibility we want to avoid this.
+                self?.currentStatus = nil
+            }
         }
     }
     
     // TODO!! test this
     func showRemoteValidationPopup(status: ProviderStatusCode, error: RemoteInvalidParametersResult, controller: UIViewController) {
         
-        if (currentStatus.map {$0 != status}) ?? true { // if there's no popup or if there's a popup with different status code
+        if controller.presentedViewController == nil && ((currentStatus.map {$0 != status}) ?? true) { // if there's no popup or if there's a popup with different status code
             currentStatus = status
 
             let title = trans("popup_title_validation_failed")
@@ -58,6 +61,9 @@ class ProviderPopupManager {
             })
         } else {
             QL2("Skipping error popup, currentStatus: \(currentStatus), status: \(status)")
+            delay(1) { // see note on delay in showStatusPopup method
+                self?.currentStatus = nil
+            }
         }
     }
 }
