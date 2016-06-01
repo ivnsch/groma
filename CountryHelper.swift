@@ -25,5 +25,6 @@ class CountryHelper {
         QL1("Is server supported country: \(countryCodeMaybe), isSupported: \(isSupported)")
         
         return isSupported
+//        return true
     }
 }

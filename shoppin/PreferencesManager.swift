@@ -40,6 +40,8 @@ enum PreferencesManagerKey: String {
     
     case cancelledClearFirstIncompleteMonthStats = "cancelledClearFirstIncompleteMonthStats"
     case clearedFirstIncompleteMonthStats = "clearedFirstIncompleteMonthStats"
+    
+    case internalMessageShowedNoServer = "internalMessageNoServer"
 }
 
 class PreferencesManager {

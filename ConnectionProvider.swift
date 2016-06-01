@@ -20,6 +20,7 @@ class ConnectionProvider {
     }
     
     static var connectedAndLoggedIn: Bool {
+//        return Providers.userProvider.hasLoginToken // testing (together with UserProviderMock)
         return ConnectionProvider.connected && Providers.userProvider.hasLoginToken
     }
 }

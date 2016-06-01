@@ -115,6 +115,17 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         
         onUIReady?()
     }
+
+    // Notification for testers
+//    override func viewDidAppear(animated: Bool) {
+//        super.viewDidAppear(animated)
+//        let alreadyShowedPopup: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.internalMessageShowedNoServer) ?? false
+//        if !alreadyShowedPopup {
+//            AlertPopup.show(title: "Internal message", message: "The app currently uses a fake backend. No actual requests are made or real time communication takes place. You also don't need to register before logging in. The functionality without a backend is identical except sharing and syncing.", controller: self) {
+//                PreferencesManager.savePreference(PreferencesManagerKey.internalMessageShowedNoServer, value: true)
+//            }
+//        }
+//    }
     
     private func staticLayout() {
         loginButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius

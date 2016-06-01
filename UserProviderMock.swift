@@ -33,7 +33,7 @@ class UserProviderMock: UserProvider {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true
             self?.email = loginData.email
-            handler(ProviderResult(status: .Success))
+            handler(ProviderResult(status: .Success, sucessResult: SyncResult(listInvites: [], inventoryInvites: [])))
         }
     }
     
@@ -46,7 +46,6 @@ class UserProviderMock: UserProvider {
     }
     
     func removeLoginToken() {
-        isLoggedIn = false
     }
     
     func ping() {
