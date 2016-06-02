@@ -36,7 +36,7 @@ class ProviderPopupManager {
             })
         } else {
             QL2("Skipping error popup, currentStatus: \(currentStatus), status: \(status)")
-            delay(1) { // If for some reason a popup wasn't closed properly, clear status after a while. Since this is used only to not show many popups of the same type at the same time, clearing after a delay is ok. This situation shouldn't happen, now that we added controller.presentedViewController == nil check, but adding this anyway as it's very, very bad when user can't see popups anymore until the next restart of the app, so even if it's just a small possibility we want to avoid this.
+            delay(1) {[weak self] in // If for somOe reason a popup wasn't closed properly, clear status after a while. Since this is used only to not show many popups of the same type at the same time, clearing after a delay is ok. This situation shouldn't happen, now that we added controller.presentedViewController == nil check, but adding this anyway as it's very, very bad when user can't see popups anymore until the next restart of the app, so even if it's just a small possibility we want to avoid this.
                 self?.currentStatus = nil
             }
         }
@@ -61,7 +61,8 @@ class ProviderPopupManager {
             })
         } else {
             QL2("Skipping error popup, currentStatus: \(currentStatus), status: \(status)")
-            delay(1) { // see note on delay in showStatusPopup method
+            delay(1) {[weak self] in
+                // see note on delay in showStatusPopup method
                 self?.currentStatus = nil
             }
         }

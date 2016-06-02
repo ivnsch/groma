@@ -342,12 +342,13 @@ title_participants = "Teilnehmer";
 
 empty_inventory_line1 = "Hoppla! Es gibt noch keine Items";
 empty_inventory_line2 = "Tappe um welche hinzuzufügen\noder kaufe sie im Einkaufswagen!";
-empty_group_line1 = "Deine Gruppe ist leer";
-empty_group_line2 = "Tappe um Einträge hinzuzufügen";
+empty_group_line1 = "Hoppla! Es gibt noch keine Items";
+empty_group_line2 = "Tappe um Items hinzuzufügen!";
 
 
 generic_login = "Einloggen";
 generic_color = "Farbe";
+generic_undo = "Rückgängig";
 
 
 placeholder_enter_email = "E-mail";
@@ -377,7 +378,7 @@ first_inventory_name = "Haushalt";
 
 intro_button_start = "Starten";
 intro_slide_lists = "Verwalte komfortabel deine Einkaufslisten";
-intro_slide_inventories = "Verbinde Listen mit Inventaren um den Überblick auf deine Lebensmittel zu behalten";
+intro_slide_inventories = "Behalten den Überblick auf die Lebensmittel in deinem Haushalt";
 intro_slide_real_time = "Teile mit anderen Benutzern in Echtzeit";
 intro_slide_stats = "Analysiere dein Kaufverhalten und Ausgaben";
 
@@ -397,7 +398,7 @@ sort_by_alphabetic = "Alphabetisch";
 sort_by_count = "Anzahl";
 
 
-sharing_message = "TODO";
+sharing_message = "Hol dir Groma, die neue App die Einkaufslisten und Lebensmittelverwaltung revolutioniert!";
 
 
 more_history = "Verlauf";
@@ -416,3 +417,21 @@ register_accept_terms = "Ich akzeptiere die %%AGB%%";
 
 add_edit_list_item_add_new_item = "Neues Item";
 add_edit_list_item_edit_item = "Item editieren";
+
+
+quick_add_slider_tab_products = "Produkte";
+quick_add_slider_tab_groups = "Gruppen";
+
+
+add_button_title = "Speichern";
+
+
+pull_to_add = "Ziehen zum Hinzufügen";
+
+
+list_items_items_in_cart_singular = "%@ Item im Einkaufswagen";
+list_items_items_in_cart_plural = "%@ Items im Einkaufswagen";
+list_items_items_in_backstore = "%@ in der Abstellkammer";
+
+
+email_device = "Gerät: %@";

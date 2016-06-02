@@ -137,7 +137,7 @@
         <!--About-->
         <scene sceneID="SMW-U0-hvc">
             <objects>
-                <viewController storyboardIdentifier="AboutViewController" id="imb-x4-nbm" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AboutViewController" id="imb-x4-nbm" customClass="AboutController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="vCj-Rn-aKt"/>
                         <viewControllerLayoutGuide type="bottom" id="RoX-Jf-WSu"/>
@@ -146,13 +146,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RDW-hy-ch1" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="135" y="358" width="107" height="72"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RDW-hy-ch1" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="134" y="258" width="107" height="72"/>
                                 <string key="text" base64-UTF8="YES">
 SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
 </string>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="fontType">
@@ -160,8 +160,8 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="about" translatesAutoresizingMaskIntoConstraints="NO" id="Je8-L8-ALQ">
-                                <rect key="frame" x="120" y="255" width="150" height="83"/>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="about" translatesAutoresizingMaskIntoConstraints="NO" id="Je8-L8-ALQ">
+                                <rect key="frame" x="120" y="155" width="150" height="83"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="1XQ-vd-cWg"/>
                                     <constraint firstAttribute="height" constant="60" id="giO-xe-YTW"/>
@@ -173,13 +173,25 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                     </mask>
                                 </variation>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkI-jx-bK6">
+                                <rect key="frame" x="96" y="350" width="184" height="30"/>
+                                <state key="normal" title="Feedback, questions, etc.?">
+                                    <color key="titleColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="onContactTap:" destination="imb-x4-nbm" eventType="touchUpInside" id="GUy-ee-9UZ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Je8-L8-ALQ" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" constant="7" id="9Bt-VB-Yb3"/>
                             <constraint firstItem="RDW-hy-ch1" firstAttribute="top" secondItem="Je8-L8-ALQ" secondAttribute="bottom" constant="20" id="EDP-Dp-6AD"/>
-                            <constraint firstItem="RDW-hy-ch1" firstAttribute="centerY" secondItem="nyx-EU-a0C" secondAttribute="centerY" constant="60" id="TH0-iH-8ot"/>
+                            <constraint firstItem="hkI-jx-bK6" firstAttribute="top" secondItem="RDW-hy-ch1" secondAttribute="bottom" constant="20" id="Lz6-F2-vqo"/>
+                            <constraint firstItem="RDW-hy-ch1" firstAttribute="centerY" secondItem="nyx-EU-a0C" secondAttribute="centerY" constant="-40" id="TH0-iH-8ot"/>
                             <constraint firstItem="RDW-hy-ch1" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="UJp-Zc-5lt"/>
+                            <constraint firstItem="RDW-hy-ch1" firstAttribute="top" secondItem="Je8-L8-ALQ" secondAttribute="bottom" constant="20" id="upF-yh-sx7"/>
+                            <constraint firstItem="hkI-jx-bK6" firstAttribute="centerX" secondItem="RDW-hy-ch1" secondAttribute="centerX" id="uqr-7x-i7q"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="3A0-vx-wCG">
@@ -277,7 +289,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ops, there are no lists yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bRL-cw-Ukc" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Oops, there are no lists yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bRL-cw-Ukc" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
                                         <rect key="frame" x="84" y="376" width="207" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
@@ -494,8 +506,8 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kcn-k3-3b4">
-                                                    <rect key="frame" x="526" y="30" width="51" height="31"/>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kcn-k3-3b4">
+                                                    <rect key="frame" x="301" y="30" width="51" height="31"/>
                                                     <connections>
                                                         <action selector="onSwitchChanged:" destination="1sk-H4-Z72" eventType="valueChanged" id="9Xk-K2-jkx"/>
                                                     </connections>
@@ -597,7 +609,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ops, there are no inventories yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xQd-dS-i5E" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Oops, there are no inventories yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xQd-dS-i5E" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
                                         <rect key="frame" x="56" y="376" width="263" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
@@ -852,7 +864,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6hQ-kC-l5Y">
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ops, there are no groups yet!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jve-6C-5eI" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Oops, there are no groups yet!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jve-6C-5eI" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
                                         <rect key="frame" x="70" y="376" width="236" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>

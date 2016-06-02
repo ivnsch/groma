@@ -72,7 +72,7 @@
 "Jve-6C-5eI.text" = "Hoppla! Es gibt noch keine Gruppen";
 
 /* Class = "UIButton"; normalTitle = "undo"; ObjectID = "Jx8-ie-aiQ"; */
-"Jx8-ie-aiQ.normalTitle" = "Undo";
+"Jx8-ie-aiQ.normalTitle" = "Rückgängig";
 
 /* Class = "UILabel"; text = "There are no listitems"; ObjectID = "M4e-aB-YVk"; */
 "M4e-aB-YVk.text" = "Hoppla! Es gibt noch keine Einträge";
@@ -102,7 +102,7 @@
 "U1b-4l-rZm.text" = "Label";
 
 /* Class = "UILabel"; text = "Average daily spendings this month"; ObjectID = "V34-s8-kUI"; */
-"V34-s8-kUI.text" = "Monatsdurchschnitt";
+"V34-s8-kUI.text" = "Monatstagesdurchschnitt";
 
 /* Class = "UIBarButtonItem"; title = "Buy"; ObjectID = "V6t-4K-Jlt"; */
 "V6t-4K-Jlt.title" = "Kaufen";
@@ -238,3 +238,6 @@
 
 /* Class = "UILabel"; text = "Loading"; ObjectID = "zs0-Gl-c0J"; */
 "zs0-Gl-c0J.text" = "Lädt";
+
+/* Class = "UIButton"; text = "Loading"; ObjectID = "hkI-jx-bK6"; */
+"hkI-jx-bK6.normalTitle" = "Feedback, Fragen, usw.?";

@@ -258,7 +258,7 @@ popups_participants_user_not_registered = "The user: %@\n is not registered";
 popups_participants_must_be_logged_in = "You must be logged in to share with other users";
 popups_participants_invitation_explanation = "The user has not been invited yet. To submit the invitations you have to submit the list.\nIf you close the list without submitting, the participants list is resetted and no invitations are sent.";
 popups_invitation_pending = "Invitation pending";
-popups_swipe_to_increment_explanation = "You can also swipe to the left or right on the cells to change the quantity.\nThis is specially useful if you want to increment/decrement more than 1 at a time!";
+popups_swipe_to_increment_explanation = "You can also swipe to the left or right to add (or remove) more than one item at a time.";
 popup_title_group_is_empty = "Empty";
 popup_group_is_empty = "This group has no items!";
 popups_password_email_sent = "And email to reset your password was sent";
@@ -348,6 +348,7 @@ empty_group_line2 = "Tap to items";
 
 generic_login = "Login";
 generic_color = "Colour";
+generic_undo = "Undo";
 
 
 placeholder_enter_email = "Enter your e-mail";
@@ -376,7 +377,7 @@ first_inventory_name = "Home";
 
 
 intro_button_start = "Start";
-intro_slide_lists = "Manage shopping lists comfortably";
+intro_slide_lists = "Manage shopping lists easily";
 intro_slide_inventories = "Connect lists with inventories to keep track of your items";
 intro_slide_real_time = "Share with other users in real time";
 intro_slide_stats = "Analyse your shopping behaviour and expenses";
@@ -397,7 +398,7 @@ sort_by_alphabetic = "Alphabetic";
 sort_by_count = "Count";
 
 
-sharing_message = "TODO";
+sharing_message = "Download Groma, the new app that revolutionises shopping lists and grocery management!";
 
 
 more_history = "History";
@@ -416,3 +417,21 @@ register_accept_terms = "I accept the %%terms and conditions%%";
 
 add_edit_list_item_add_new_item = "Add new item";
 add_edit_list_item_edit_item = "Edit Item";
+
+
+quick_add_slider_tab_products = "Products";
+quick_add_slider_tab_groups = "Groups";
+
+
+add_button_title = "Save";
+
+
+pull_to_add = "Pull to add";
+
+
+list_items_items_in_cart_singular = "%@ item in your cart";
+list_items_items_in_cart_plural = "%@ items in your cart";
+list_items_items_in_backstore = "%@ in the backstore";
+
+
+email_device = "Device: %@";

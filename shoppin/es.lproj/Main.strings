@@ -72,7 +72,7 @@
 "Jve-6C-5eI.text" = "No hay grupos";
 
 /* Class = "UIButton"; normalTitle = "undo"; ObjectID = "Jx8-ie-aiQ"; */
-"Jx8-ie-aiQ.normalTitle" = "Revertir";
+"Jx8-ie-aiQ.normalTitle" = "Deshacer";
 
 /* Class = "UILabel"; text = "There are no listitems"; ObjectID = "M4e-aB-YVk"; */
 "M4e-aB-YVk.text" = "No hay ítems";
@@ -238,3 +238,6 @@
 
 /* Class = "UILabel"; text = "Loading"; ObjectID = "zs0-Gl-c0J"; */
 "zs0-Gl-c0J.text" = "Cargando";
+
+/* Class = "UIButton"; text = "Loading"; ObjectID = "hkI-jx-bK6"; */
+"hkI-jx-bK6.normalTitle" = "Feedback, Preguntas, etc.?";

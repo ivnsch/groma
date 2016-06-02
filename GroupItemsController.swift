@@ -276,6 +276,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     // MARK: - ExpandableTopViewControllerDelegate
     
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+        // Fix top line looks slightly thicker after animation. Problem: We have to animate to min scale of 0.0001 because 0 doesn't work correctly (iOS bug) so the frame height passed here is not exactly 0, which leaves a little gap when we set it in the constraint
         topControlTopConstraint.constant = view.frame.height
         productsWithQuantityController?.topMenusHeightConstraint.constant = expand ? 0 : DimensionsManager.topMenuBarHeight
         self.view.layoutIfNeeded()

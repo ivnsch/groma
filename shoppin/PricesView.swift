@@ -51,7 +51,12 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     private var cartQuantity: Int = 0 {
         didSet {
             if let cartQuantityLabel = quantityLabel {
-                cartQuantityLabel.text = "\(cartQuantity) items in your cart"
+                if cartQuantity == 1 {
+                    cartQuantityLabel.text = trans("list_items_items_in_cart_singular", "\(cartQuantity)")
+                } else {
+                    cartQuantityLabel.text = trans("list_items_items_in_cart_plural", "\(cartQuantity)")
+                }
+                
             } else {
                 QL3("Setting cart quantity but label is not initialised yet")
             }
@@ -76,7 +81,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     private var stashQuantity: Int = 0 {
         didSet {
             if let stashQuantityLabel = stashQuantityLabel {
-                stashQuantityLabel.text = "\(stashQuantity) in the backstore"
+                stashQuantityLabel.text = trans("list_items_items_in_backstore", "\(stashQuantity)")
                 stashQuantityLabel.hidden = stashQuantity == 0
             } else {
                 QL3("Setting stash quantity but label is not initialised yet")

@@ -15,7 +15,7 @@
 "Xde-nJ-NKG.text" = "Bewege Items von der Todo Liste oder füge direkt hinzu mit dem Top Menü!";
 
 /* Class = "UIButton"; normalTitle = "Undo"; ObjectID = "YuY-vx-r0F"; */
-"YuY-vx-r0F.normalTitle" = "Undo";
+"YuY-vx-r0F.normalTitle" = "Rückgängig";
 
 /* Class = "UIBarButtonItem"; title = "Buy"; ObjectID = "bc8-rn-N1i"; */
 "bc8-rn-N1i.title" = "Kaufen";
@@ -41,7 +41,7 @@
 /* Class = "UILabel"; text = "Buy"; ObjectID = "oYb-WW-vJz"; */
 "oYb-WW-vJz.text" = "Kaufen";
 
-/* Class = "UILabel"; text = "Ops, there are no list items yet"; ObjectID = "sxW-16-sQo"; */
+/* Class = "UILabel"; text = "Oops, there are no list items yet"; ObjectID = "sxW-16-sQo"; */
 "sxW-16-sQo.text" = "Hoppla! Es gibt noch keine Items";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "yHW-3q-Yxc"; */

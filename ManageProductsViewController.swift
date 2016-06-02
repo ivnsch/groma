@@ -53,7 +53,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     @IBOutlet weak var sortByButton: UIButton!
     private var sortByPopup: CMPopTipView?
     private let sortByOptions: [(value: ProductSortBy, key: String)] = [
-        (.Fav, trans("sort_by_usage")), (.Alphabetic, trans("sort_by_usage"))
+        (.Fav, trans("sort_by_usage")), (.Alphabetic, trans("sort_by_alphabetic"))
     ]
     
     private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)

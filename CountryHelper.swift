@@ -11,7 +11,8 @@ import QorumLogs
 
 class CountryHelper {
     
-    private static let serverSupportedCountries = ["de"]
+//    private static let serverSupportedCountries = ["de"]
+    private static let serverSupportedCountries: [String] = []
     
     static func currentDeviceCountry() -> String? {
         return NSLocale.currentLocale().objectForKey(NSLocaleCountryCode) as? String

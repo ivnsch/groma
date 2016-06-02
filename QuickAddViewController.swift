@@ -201,6 +201,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             navController?.pushViewController(controller, animated: false)
 //            sortByButton.selected = false
             controller.onViewDidLoad = {[weak self, weak controller] in guard let weakSelf = self else {return}
+                
+            }
+            controller.onDidLoad = {[weak self, weak controller] in guard let weakSelf = self else {return}
                 controller?.editingItem = weakSelf.editingItem
                 controller?.modus = weakSelf.modus
             }

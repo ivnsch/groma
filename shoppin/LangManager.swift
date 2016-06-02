@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 func trans(key: String) -> String {
     return NSLocalizedString(key, comment: "")
@@ -26,13 +27,16 @@ class LangManager {
     let defaultLang = "en"
     
     var deviceLang: String {
-        return NSLocale.preferredLanguages().first ?? defaultLang
+        return NSBundle.mainBundle().preferredLocalizations.first ?? defaultLang
     }
     
     var appLang: String {
+        QL2("Device lang: \(deviceLang)")
         if availableLangs.contains(deviceLang) {
+            QL2("Returning device lang: \(deviceLang)")
             return deviceLang
         } else {
+            QL2("Device lang not supported, returning default lang: \(defaultLang)")
             return defaultLang
         }
     }

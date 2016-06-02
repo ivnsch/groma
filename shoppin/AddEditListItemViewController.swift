@@ -157,8 +157,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         didSet {
             if let editingItem = editingItem {
                 prefill(editingItem)
+                addNewItemLabel.text = trans("add_edit_list_item_edit_item")
             } else {
-                QL3("Setting updatingListItem before outlets are set")
+                QL3("Setting editingItem before outlets are set")
             }
         }
     }
@@ -168,7 +169,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         didSet {
             if let editingPlanItem = editingPlanItem {
                 prefill(editingPlanItem)
-                titleLabel.text = trans("add_edit_list_item_edit_item")
             } else {
                 
                 QL3("Setting updatingListItem before outlets are set")

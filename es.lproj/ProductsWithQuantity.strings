@@ -2,7 +2,7 @@
 /* Class = "UILabel"; text = "Label"; ObjectID = "0Eg-VM-sQM"; */
 "0Eg-VM-sQM.text" = "Label";
 
-/* Class = "UILabel"; text = "Ops, there are no inventory items yet"; ObjectID = "2dJ-JG-9o5"; */
+/* Class = "UILabel"; text = "Oops, there are no inventory items yet"; ObjectID = "2dJ-JG-9o5"; */
 "2dJ-JG-9o5.text" = "No hay ítems aún";
 
 /* Class = "UILabel"; text = "Loading"; ObjectID = "AUs-nL-SaQ"; */

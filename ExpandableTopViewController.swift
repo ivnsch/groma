@@ -117,7 +117,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                     } else {
                         weakSelf.overlay?.alpha = 0
                     }
-                    view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, expanded ? 1 : 0.001)
+                    view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, expanded ? 1 : 0.0001)
                     
                     if weakSelf.animateTableViewInset {
                         let topInset = (expanded ? weakSelf.openInset : weakSelf.closeInset) + view.frame.height

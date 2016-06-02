@@ -220,7 +220,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         quantityLabelCenterVerticallyConstraint.constant = 0
         priceLabel.alpha = 0
         
-        undoLabel2.text = "Undo"
+        undoLabel2.text = trans("undo")
         
         selectionStyle = UITableViewCellSelectionStyle.None
 

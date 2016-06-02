@@ -24,7 +24,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
         self.controller = controller
     }
     
-    func showEmail() {
+    func showEmail(appendSpecs appendSpecs: Bool = true) {
         let email = "foo@bar.com"
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
@@ -32,25 +32,27 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
             mail.setToRecipients([email])
             mail.setSubject("Feedback")
             
-            let device = UIDevice().type
-            
-            if device == .unrecognized {
-                QL4("No device name for: \(device)")
-            }
-            
-            let userStrMaybe = Providers.userProvider.mySharedUser.map{"User id: \($0.email)"}
-            
-            let strMaybe: String? = {
-                switch (userStrMaybe, device) {
-                case (nil, .unrecognized): return nil
-                case (nil, let deviceId): return "\n\nDevice: \(deviceId.rawValue)"
-                case (let userStr, .unrecognized): return "\n\n\(userStr!)"
-                case (let userStr, let deviceId): return "\n\n\(userStr!), device: \(deviceId.rawValue)"
+            if appendSpecs {
+                let device = UIDevice().type
+                
+                if device == .unrecognized {
+                    QL4("No device name for: \(device)")
                 }
-            }()
-            
-            if let str = strMaybe {
-                mail.setMessageBody(str, isHTML: false)
+                
+                let userStrMaybe = Providers.userProvider.mySharedUser.map{"User id: \($0.email)"}
+                
+                let strMaybe: String? = {
+                    switch (userStrMaybe, device) {
+                    case (nil, .unrecognized): return nil
+                    case (nil, let deviceId): return "\n\n\(trans("email_device", deviceId.rawValue))"
+                    case (let userStr, .unrecognized): return "\n\n\(userStr!)"
+                    case (let userStr, let deviceId): return "\n\n\(userStr!), \(trans("email_device", deviceId.rawValue))"
+                    }
+                }()
+                
+                if let str = strMaybe {
+                    mail.setMessageBody(str, isHTML: false)
+                }
             }
 
             controller.presentViewController(mail, animated: true, completion: nil)

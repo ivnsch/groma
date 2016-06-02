@@ -29,12 +29,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     var mode: IntroMode = .Launch
     
-    private let pageModels: [(key: String, imageName: String)] = [
-        (trans("intro_slide_lists"), "intro_lists"),
-        (trans("intro_slide_inventories"), "intro_inventory"),
-        (trans("intro_slide_real_time"), "intro_sharing"),
-        (trans("intro_slide_stats"), "intro_stats")
-    ]
+    private var pageModels: [(key: String, imageName: String)] =
+        [(trans("intro_slide_lists"), "intro_lists"),
+        (trans("intro_slide_inventories"), "intro_inventory")]
+        + (CountryHelper.isInServerSupportedCountry() ? [(trans("intro_slide_real_time"), "intro_sharing")] : [])
+        + [(trans("intro_slide_stats"), "intro_stats")]
     
     private var finishedSlider = false {
         didSet {
@@ -101,7 +100,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             let lang = LangManager().appLang // note that the prefill items are left permanently in whatever lang the device was when the user installed the app
             
             SuggestionsPrefiller().prefill(lang) {success in
-                QL1("Finish initialising database, success: \(success)")
+                QL1("Finish initialising database for lang: \(lang), success: \(success)")
                 onFinish?()
             }
         }

@@ -3595,6 +3595,17 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
+				TargetAttributes = {
+					11944C1404A029FB7C9A7EE21B8E279F = {
+						DevelopmentTeam = 37QAPDY2PR;
+					};
+					62A56B65AF0FDF8D4CDAABBCB1313F4D = {
+						DevelopmentTeam = 37QAPDY2PR;
+					};
+					C35781FD056428B51593092CDB348A43 = {
+						DevelopmentTeam = 37QAPDY2PR;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -4479,6 +4490,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 86B30639E18B99E1BF056CB5396FA14D /* Pods-shoppin.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -4497,6 +4509,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
 				PRODUCT_NAME = Pods_shoppin;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4804,6 +4817,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8763659FDCCDDC159A58816234DC5234 /* Pods-shoppin-RealmSwift.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -4819,6 +4833,7 @@
 				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-RealmSwift/Pods-shoppin-RealmSwift.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = RealmSwift;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4886,6 +4901,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F3A697F7A0D73A6F3EED96CF0742AAA4 /* Pods-shoppin-Realm.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -4901,6 +4917,7 @@
 				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-Realm/Pods-shoppin-Realm.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Realm;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4913,6 +4930,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8763659FDCCDDC159A58816234DC5234 /* Pods-shoppin-RealmSwift.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -4928,6 +4946,7 @@
 				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-RealmSwift/Pods-shoppin-RealmSwift.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = RealmSwift;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -5436,6 +5455,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2B194ABB531ABE238DB894A214BD103E /* Pods-shoppin.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -5454,6 +5474,7 @@
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
 				PRODUCT_NAME = Pods_shoppin;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -5467,6 +5488,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F3A697F7A0D73A6F3EED96CF0742AAA4 /* Pods-shoppin-Realm.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -5482,6 +5504,7 @@
 				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-Realm/Pods-shoppin-Realm.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = Realm;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

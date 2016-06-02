@@ -140,6 +140,7 @@
 		EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFB1A5972A30058103B /* InventoryProvider.swift */; };
 		EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryItemsProviderImpl.swift */; };
 		EB20FC071A599AE20058103B /* ProductWithQuantityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FC061A599AE20058103B /* ProductWithQuantityTableViewCell.swift */; };
+		EB21A3001D00A638000C594C /* AboutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB21A2FF1D00A638000C594C /* AboutController.swift */; };
 		EB22C7111C4B02EE00285352 /* ShareAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB22C7101C4B02EE00285352 /* ShareAppViewController.swift */; };
 		EB22C7141C4B034400285352 /* ShareApp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB22C7131C4B034400285352 /* ShareApp.storyboard */; };
 		EB22C7181C4B129300285352 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22C7171C4B129300285352 /* FBSDKShareKit.framework */; };
@@ -1211,6 +1212,7 @@
 		EB20FBFB1A5972A30058103B /* InventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryProvider.swift; sourceTree = "<group>"; };
 		EB20FBFD1A5972C70058103B /* InventoryItemsProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemsProviderImpl.swift; sourceTree = "<group>"; };
 		EB20FC061A599AE20058103B /* ProductWithQuantityTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProductWithQuantityTableViewCell.swift; path = shoppin/ProductWithQuantityTableViewCell.swift; sourceTree = "<group>"; };
+		EB21A2FF1D00A638000C594C /* AboutController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutController.swift; sourceTree = "<group>"; };
 		EB22C7101C4B02EE00285352 /* ShareAppViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareAppViewController.swift; sourceTree = "<group>"; };
 		EB22C7131C4B034400285352 /* ShareApp.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ShareApp.storyboard; sourceTree = "<group>"; };
 		EB22C7151C4B128200285352 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKMessengerShareKit.framework; path = "../../../sdks/FacebookSDKs-iOS-20150817/FBSDKMessengerShareKit.framework"; sourceTree = "<group>"; };
@@ -2114,6 +2116,14 @@
 			path = shoppin;
 			sourceTree = "<group>";
 		};
+		EB21A2FE1D00A615000C594C /* about */ = {
+			isa = PBXGroup;
+			children = (
+				EB21A2FF1D00A638000C594C /* AboutController.swift */,
+			);
+			name = about;
+			sourceTree = "<group>";
+		};
 		EB22C7121C4B031E00285352 /* shareApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -2387,6 +2397,7 @@
 				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
 				EBDCA12D1B88D4FF000020BF /* charts */,
 				EBA9E5E81C6380D200A85610 /* settings */,
+				EB21A2FE1D00A615000C594C /* about */,
 				EBBC23241BB5D5820002F6B1 /* popup */,
 				EBD828011BE95CC80072F9FA /* utils */,
 				EB0A058B1BDFCD4100D1E29D /* more */,
@@ -3840,6 +3851,7 @@
 				EB8EDE1A1C9B1A78003B566F /* RemoteSectionWithDependencies.swift in Sources */,
 				EB8226D71CE44EF3008A0A6E /* RemoteInventoryItemsWithDependencies.swift in Sources */,
 				EB9208341C4EEA2400332332 /* BrandProviderImpl.swift in Sources */,
+				EB21A3001D00A638000C594C /* AboutController.swift in Sources */,
 				EB6E3D131C56D0ED00D65DD5 /* PathButton.swift in Sources */,
 				EB40A4861B55159D000E9CAD /* DBList.swift in Sources */,
 				EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */,
@@ -5160,7 +5172,7 @@
 				OTHER_SWIFT_FLAGS = "-DDEBUG $(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f43687de-a451-44a4-98b6-1fdfb19dfb56";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -5188,7 +5200,7 @@
 				OTHER_SWIFT_FLAGS = "-DRELEASE $(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f43687de-a451-44a4-98b6-1fdfb19dfb56";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";

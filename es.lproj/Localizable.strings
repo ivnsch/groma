@@ -241,7 +241,7 @@ popup_remove_brand_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá
 popup_couldnt_find_email_account = "No se encontró una cuenta de email.";
 popup_group_was_deleted_in_other_device = "El grupo \"%@\" fue removido en otro aparato. Retorno a grupos.";
 popup_delete_history_also_deletes_stats = "Remover entradas del historial también remueve estos datos del reporte.";
-popup_add_items_directly_inventory = "Agregar o incrementar ítems directamente en el inventario no afecta el historial o el reporte. Para afectados, tienes que compar los ítems, usando el carrito de compra, el cual encuentras en las listas.";
+popup_add_items_directly_inventory = "Agregar o incrementar ítems directamente en el inventario no afecta el historial o el reporte. Para afectarlos, tienes que compar los ítems, usando el carrito de compra, el cual encuentras en las listas.";
 popup_inventory_was_deleted_in_other_device = "El inventario \"%@\" fue removido por otro aparato. Regresando a inventarios..";
 popup_list_was_deleted_in_other_device = "La lista \"%@\" fue removida por otro aparato. Regresando a listas.";
 popup_please_accept_terms = "Por favor acepta las condiciones";
@@ -252,7 +252,7 @@ popup_you_already_use_bundled_products = "Ya estas usando todos los productos pr
 popup_hints_restored = "Explicaciones restablecidas";
 popups_settings_overwrite = "Esto sobrescribirá todos tus datos (de Groma) en este aparato que no se hayan aún sincronizado con el servidor.\nEsto es sólo una ayuda para solucionar problemas técnicos y no es necesario en situaciones normales.";
 popups_restore_bundled_products = "Agrega de nuevo productos predefinidos que hayas borrado, o todos, en el caso que hayas cambiado el lenguaje del aparato. Esto no afecta tus productos existentes. Nota que si has cambiado el lenguaje, productos en el anterior lenguaje no serán removidos.";
-popups_restore_hints = "Reactiva las explicaciones y ayudas.";
+popups_restore_hints = "Reactiva las explicaciones .";
 popups_participants_you_dont_have_to_add_yourself = "No tienes que agregarte tú mismo(a)";
 popups_participants_user_already_in_list = "%@\n ya está en la lista";
 popups_participants_user_not_registered = "%@\n no está registrado(a)";
@@ -342,13 +342,14 @@ title_participants = "Participantes";
 
 
 empty_inventory_line1 = "Tu inventario está vacío";
-empty_inventory_line2 = "Para agregar ítems, pulsa en \"comprar\" en el carrito.";
+empty_inventory_line2 = "Para agregar ítems,\nusa \"comprar\" en el carrito.";
 empty_group_line1 = "Tu grupo está vacío";
 empty_group_line2 = "Pulsa para agregar ítems";
 
 
 generic_login = "Sesión";
 generic_color = "Color";
+generic_undo = "Deshacer";
 
 
 placeholder_enter_email = "Ingresa tu e-mail";
@@ -398,7 +399,7 @@ sort_by_alphabetic = "Alfabéticamente";
 sort_by_count = "Cantidad";
 
 
-sharing_message = "TODO";
+sharing_message = "Descarga Groma, la nueva app que revoluciona las listas de compras y administración de víveres!";
 
 
 more_history = "Historia";
@@ -417,3 +418,21 @@ register_accept_terms = "Acepto los %%términos y condiciones%%";
 
 add_edit_list_item_add_new_item = "Nuevo ítem";
 add_edit_list_item_edit_item = "Editar ítem";
+
+
+quick_add_slider_tab_products = "Productos";
+quick_add_slider_tab_groups = "Grupos";
+
+
+add_button_title = "Guardar";
+
+
+pull_to_add = "Arrastra para agregar";
+
+
+list_items_items_in_cart_singular = "%@ ítem en el carrito";
+list_items_items_in_cart_plural = "%@ ítems en el carrito";
+list_items_items_in_backstore = "%@ en el depósito";
+
+
+email_device = "Aparato: %@";

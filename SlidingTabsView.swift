@@ -108,7 +108,7 @@ class SlidingTabsView: UIView {
         let centerXButton1 = availableWidthForCenterOffset
         
         let button1 = createButton()
-        button1.setTitle("Products", forState: .Normal)
+        button1.setTitle(trans("quick_add_slider_tab_products"), forState: .Normal)
         button1.tapHandler = {[weak self] in
             self?.delegate?.onSlidingViewButtonTap(0, button: button1)
         }
@@ -120,7 +120,7 @@ class SlidingTabsView: UIView {
         let centerXButton2 = bounds.width - availableWidthForCenterOffset
         
         let button2 = createButton()
-        button2.setTitle("Groups", forState: .Normal)
+        button2.setTitle(trans("quick_add_slider_tab_groups"), forState: .Normal)
         button2.tapHandler = {[weak self] in
             self?.delegate?.onSlidingViewButtonTap(1, button: button2)
         }
