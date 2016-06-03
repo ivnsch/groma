@@ -39,4 +39,6 @@ protocol HistoryProvider {
     
     // NOTE: only for debug purpose! Normally history items can be added only via inventory
     func addHistoryItems(historyItems: [HistoryItem], _ handler: ProviderResult<Any> -> Void)
+    
+    func removeHistoryItemsOlderThan(date: NSDate, handler: ProviderResult<Bool> -> Void)
 }

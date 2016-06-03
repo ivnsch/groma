@@ -170,4 +170,17 @@ class HistoryProviderImpl: HistoryProvider {
             }
         }
     }
+    
+    // For now local only
+    func removeHistoryItemsOlderThan(date: NSDate, handler: ProviderResult<Bool> -> Void) {
+        DBProviders.historyProvider.removeHistoryItemsOlderThan(date) {removedSomething in
+            if let removedSomething = removedSomething {
+                QL2("Removed history items older than: \(date), removed something: \(removedSomething)")
+                handler(ProviderResult(status: .Success, sucessResult: removedSomething))
+            } else {
+                QL4("Coult not remove history items older than: \(date)")
+            }
+        }
+    }
+    
 }

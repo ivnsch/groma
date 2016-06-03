@@ -82,6 +82,11 @@ class DBHistoryItem: DBSyncable {
         return NSPredicate(format: "addedDate >= %@ AND addedDate <= %@ AND inventoryOpt.uuid == %@", NSNumber(longLong: Int64(startAddedDate)), NSNumber(longLong: Int64(endAddedDate)), inventoryUuid)
     }
     
+    static func createPredicateOlderThan(addedDate: Int64) -> NSPredicate {
+        return NSPredicate(format: "addedDate < %@", NSNumber(longLong: Int64(addedDate)))
+    }
+    
+    
     // MARK: -
 
     

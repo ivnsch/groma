@@ -273,6 +273,27 @@ class RealmHistoryProvider: RealmProvider {
         })
     }
     
+    
+    // Returns nil if error, true if found and removed something, false if there was nothing to remove
+    func removeHistoryItemsOlderThan(date: NSDate, handler: Bool? -> Void) {
+        
+        doInWriteTransaction({realm in
+            let items = realm.objects(DBHistoryItem).filter(DBHistoryItem.createPredicateOlderThan(date.toMillis()))
+            let removedSomething = items.count > 0
+            realm.delete(items)
+            return removedSomething
+            
+            }, finishHandler: {(removedMaybe: Bool?) in
+                if let removed = removedMaybe {
+                    handler(removed)
+                } else {
+                    QL4("removed is nil")
+                    handler(false)
+                }
+        })
+    }
+
+    
     func oldestDate(inventory: Inventory, handler: NSDate? -> Void) {
         
         withRealm({realm in

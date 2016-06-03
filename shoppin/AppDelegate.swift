@@ -65,6 +65,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         Notification.subscribe(.LoginTokenExpired, selector: #selector(AppDelegate.onLoginTokenExpired(_:)), observer: self)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketConnectionChange(_:)), name: WSNotificationName.Connection.rawValue, object: nil)
 
+        checkClearHistory()
+        
         return initFb
     }
 
@@ -339,6 +341,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         Providers.userProvider.disconnectWebsocket()
         
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    // Remove history entries older than 1 year
+    private func checkClearHistory() {
+        Providers.historyProvider.removeHistoryItemsOlderThan(NSDate.inMonths(-3)) {providerResult in
+            // Do nothing, it there's an error it's already logged in the provider. It doesn't make sense to show this to the user
+        }
     }
     
     

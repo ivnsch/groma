@@ -69,6 +69,15 @@ extension NSDate: Comparable {
             options: NSCalendarOptions(rawValue: 0))!
     }
     
+    static func inYears(years: Int) -> NSDate {
+        let today = NSDate()
+        return NSCalendar.currentCalendar().dateByAddingUnit(
+            .Year,
+            value: years,
+            toDate: today,
+            options: NSCalendarOptions(rawValue: 0))!
+    }
+    
     func inMonths(months: Int) -> NSDate {
         return NSCalendar.currentCalendar().dateByAddingUnit(
             .Month,
