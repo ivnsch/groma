@@ -36,6 +36,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     private(set) var models: [ProductWithQuantity] = []
 
+    @IBOutlet weak var topMenuView: UIView!
+    
     var sortBy: InventorySortBy? = .Count
     @IBOutlet weak var sortByButton: UIButton!
 //    private var sortByPopup: CMPopTipView?
@@ -249,6 +251,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     func updateEmptyUI() {
         emptyView.setHiddenAnimated(!models.isEmpty)
         delegate?.onEmpty(models.isEmpty)
+        topMenuView.setHiddenAnimated(models.isEmpty)
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
