@@ -62,7 +62,7 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
             if movingHorizontally {
                 let currentPoint = recognizer.translationInView(view)
                 let deltaX = currentPoint.x - panStartPoint.x
-                let deltaForQuantity = Int(deltaX / 10)
+                let deltaForQuantity = Int(deltaX / 20)
                 let updatedQuantity = max(0, initQuantitySlider + deltaForQuantity)
                 delegate.onQuantityUpdated(updatedQuantity)
             }
