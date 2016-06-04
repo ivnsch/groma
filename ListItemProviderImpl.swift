@@ -596,6 +596,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // Common code for update single and batch list items switch status (in case of single listItems contains only 1 element)
+    // Switches in memory status of listItems to target status, also updates order & quantity for which it loads list items from database
     // param: orderInDstStatus: To override default dst order with a manual order. This is used for undo cell, where we want to the item to be inserted back at the original position.
     private func switchStatusInsertInDst(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int? = nil, remote: Bool, _ handler: (switchedItems: [ListItem], storedItems: [ListItem])? -> Void) {
         
@@ -724,7 +725,7 @@ class ListItemProviderImpl: ListItemProvider {
         
         switchStatusInsertInDst(listItems, list: list, status1: status1, status: status, remote: remote) {switchResult in
             
-            if let (switchedItems, _) = switchResult { // here switchedItems is a 1 element array, containing the switched listItem
+            if let (switchedItems, _) = switchResult {
                 
                 // all the list items in src status are gone - set src order to 0, just for consistency
                 switchedItems.forEach({listItem -> Void in
@@ -785,46 +786,103 @@ class ListItemProviderImpl: ListItemProvider {
     
     func buyCart(listItems: [ListItem], list: List, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         
+        // Generate inventory/history items first because list items may change
         let inventoryAndHistoryItemsInput = listItems.map{ProductWithQuantityInput(product: $0.product, quantity: $0.doneQuantity)}
-        
-        getSwitchedItemsForSwitchAll(listItems, list: list, status1: .Done, status: .Stash, remote: remote) {result in
+
+        // If the todo list is empty, move items immediately to todo, otherwise to stash
+        listItemCount(.Todo, list: list, fetchMode: .MemOnly) {[weak self] result in
+            if let todoItemsCount = result.sucessResult {
+                
+                let todoISEmpty: Bool = todoItemsCount == 0
+                
+                let targetStatus: ListItemStatus = todoISEmpty ? .Todo : .Stash
             
-            if let switchedItems = result.sucessResult {
-                
-                DBProviders.listItemProvider.buyCart(list.uuid, switchedItems: switchedItems, inventory: list.inventory, itemInputs: inventoryAndHistoryItemsInput, remote: remote, {[weak self] dbBuyResult -> Void in
-                    if let inventoryWithHistoryItems = dbBuyResult.sucessResult {
+                self?.listItems(list, sortOrderByStatus: .Stash, fetchMode: .MemOnly) {stashListItems in
+                    
+                    self?.getSwitchedItemsForSwitchAll(listItems, list: list, status1: .Done, status: targetStatus, remote: remote) {result in
                         
-                        handler(ProviderResult(status: .Success))
-                        
-                        self?.remoteProvider.buyCart(list.uuid, inventoryItems: inventoryWithHistoryItems) {remoteResult in
+                        if let switchedItems = result.sucessResult {
                             
-                            if let timestamp = remoteResult.successResult {
+                            DBProviders.listItemProvider.buyCart(list.uuid, switchedItems: switchedItems, inventory: list.inventory, itemInputs: inventoryAndHistoryItemsInput, remote: remote, {[weak self] dbBuyResult -> Void in
+                                if let inventoryWithHistoryItems = dbBuyResult.sucessResult {
+                                    
+                                    // Called after we reset stash items, in case when todo list is left empty or immediately in case where the todo list is left non empty
+                                    func afterMaybeResetStash(resettedStashItems: [ListItem]? = nil) {
                                 
-                                DBProviders.listItemProvider.storeBuyCartResult(listItems, inventoryWithHistoryItems: inventoryWithHistoryItems, lastUpdate: timestamp) {success in
-                                    if !success {
-                                        QL4("Couldn't store remote all switch result in database: \(remoteResult) items: \(listItems)")
+                                        handler(ProviderResult(status: .Success))
+                                        
+                                        self?.remoteProvider.buyCart(list.uuid, inventoryItems: inventoryWithHistoryItems) {remoteResult in
+                                            
+                                            if let timestamp = remoteResult.successResult {
+                                                
+                                                DBProviders.listItemProvider.storeBuyCartResult(listItems, inventoryWithHistoryItems: inventoryWithHistoryItems, lastUpdate: timestamp) {success in
+                                                    if !success {
+                                                        QL4("Couldn't store remote all switch result in database: \(remoteResult) items: \(listItems)")
+                                                    }
+                                                }
+                                                
+                                                if let resettedStashItems = resettedStashItems {
+                                                    // Now that remote buyCart transaction finished, switch the stash also in remote.
+                                                    // TODO!!! -- this should be in the same transaction from buyCart (in client and server) so this additional call is not necessary. Also ensure consistency with the client and server switch.
+                                                    Providers.listItemsProvider.switchAllToStatus(resettedStashItems, list: list, status1: .Stash, status: .Todo, remote: true) {result in
+                                                        if !result.success {
+                                                            QL4("Error switching stash items (remote) after buyCart: \(result)")
+                                                        }
+                                                    }
+                                                }
+
+                                                
+                                            } else {
+                                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                                                    QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+                                                    self?.memProvider.invalidate()
+                                                    handler(result)
+                                                })
+                                            }
+                                        }
                                     }
+                                    
+                                    
+                                    if todoISEmpty {
+                                        // Do the possible stash emptying separately (not in the same transaction as switching items and inventory, history - reason is that switching items loads stored items from db, since we don't store the items until buyCart we can't use this method again to save the possible stash-to-todo switch. So for now we do this after the buy transaction, if it fails it's not critical if the stash items keep in the stash.
+                                        self?.listItems(list, sortOrderByStatus: .Stash, fetchMode: .MemOnly) {listItemsAfterSwitchResult in
+                                            if let listItemsAfterSwitch = listItemsAfterSwitchResult.sucessResult {
+                                                let stashItems = listItemsAfterSwitch.filter{$0.hasStatus(.Stash)}
+            
+                                                // We don't send it to remote because don't have called buyCart yet, that should come first (stash items should be appended after the cart items, like in client). The reason we don't have called buyCart is that we want to first to all client side operations in order to return to controller as soon as possible.
+                                                Providers.listItemsProvider.switchAllToStatus(stashItems, list: list, status1: .Stash, status: .Todo, remote: false) {result in
+                                                    if result.success {
+                                                        afterMaybeResetStash(stashItems)
+                                                    } else {
+                                                        QL4("Couldn't reset stash list items")
+                                                        handler(ProviderResult(status: .DatabaseUnknown))
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                    } else {
+                                        afterMaybeResetStash()
+                                    }
+                                    
+                                } else {
+                                    QL4("db buy cart didn't return items") // this should not happen as we should not call this method with an empty cart, and if there are cart items there must be inventory/history items.
+                                    handler(ProviderResult(status: .Unknown))
                                 }
-                                
-                            } else {
-                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                                    QL4("Remote call no success: \(remoteResult) items: \(listItems)")
-                                    self?.memProvider.invalidate()
-                                    handler(result)
-                                })
-                            }
+                            })
+                            
+                        } else {
+                            QL4("No switched items")
+                            handler(ProviderResult(status: .Unknown))
                         }
-                        
-                    } else {
-                        QL4("db buy cart didn't return items") // this should not happen as we should not call this method with an empty cart, and if there are cart items there must be inventory/history items.
-                        handler(ProviderResult(status: .Unknown))
                     }
-                })
-                
+                }
+
             } else {
-                QL4("No switched items")
-                handler(ProviderResult(status: .Unknown))
+                QL4("Couldn't get items count")
+                handler(ProviderResult(status: .DatabaseUnknown))
             }
+            
         }
     }
     
@@ -1062,7 +1120,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
 
     func listItemCount(status: ListItemStatus, list: List, fetchMode: ProviderFetchModus = .First, _ handler: ProviderResult<Int> -> Void) {
-        let countMaybe = memProvider.listItemCount(.Stash, list: list)
+        let countMaybe = memProvider.listItemCount(status, list: list)
         if let count = countMaybe {
             handler(ProviderResult(status: .Success, sucessResult: count))
             if fetchMode == .MemOnly {

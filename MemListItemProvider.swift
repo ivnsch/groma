@@ -216,7 +216,7 @@ class MemListItemProvider {
         guard listItems != nil else {return nil}
         
         if let _ = self.listItems![list.uuid] {
-            return self.listItems![list.uuid]!.filterStash().count
+            return self.listItems![list.uuid]!.filterStatus(status).count
         } else {
             QL1("Info: MemListItemProvider.listItemCount: there are no listitems for list: \(list)")
             return 0

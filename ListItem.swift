@@ -164,6 +164,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     
     var quantityOrderDebugDescription: String {
         return "\(uuid), \(product.product.name), TODO: (q: \(todoQuantity), o: \(todoOrder)), DONE: (q: \(doneQuantity), o; \(doneOrder)), STASH: (q: \(stashQuantity), o: \(stashOrder))"
+//        , section: \(section.shortOrderDebugDescription)
     }
     
     private var quantityAndOrderDebugDescription: String {

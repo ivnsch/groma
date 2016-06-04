@@ -294,7 +294,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             let sectionListItemsStr = section.tableViewListItems.reduce("") {str, tableViewListItem in
                 return "\(str)\t\(tableViewListItem)\n"
             }
-            return "(\(str)\(section.section.name)):\n[\(sectionListItemsStr)]"
+            return "(\(str)\(section.section.shortOrderDebugDescription)):\n[\(sectionListItemsStr)]"
         }
     }
 
