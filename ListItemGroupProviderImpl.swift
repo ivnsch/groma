@@ -279,7 +279,6 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                             DBProviders.groupItemProvider.updateLastSyncTimeStamp(remoteGroupItems) {success in
                             }
                         } else {
-                            QL4("Error adding group items in remote: \(items), result: \(remoteResult)")
                             DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                         }
                     }

@@ -49,6 +49,16 @@ class ProductProviderImpl: ProductProvider {
             }
         }
     }
+
+    func products(nameBrands: [(name: String, brand: String)], _ handler: ProviderResult<[Product]> -> Void) {
+        DBProviders.productProvider.loadProductsWithNameBrands(nameBrands) {productsMaybe in
+            if let dbProducts = productsMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: dbProducts))
+            } else {
+                handler(ProviderResult(status: .NotFound))
+            }
+        }
+    }
     
     func add(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         DBProviders.productProvider.saveProducts([product], update: true) {[weak self] saved in

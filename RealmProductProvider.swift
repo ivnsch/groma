@@ -62,6 +62,20 @@ class RealmProductProvider: RealmProvider {
         self.loadFirst(mapper, filter: DBProduct.createFilterNameBrand(name, brand: brand), handler: handler)
         
     }
+
+    func loadProductsWithNameBrands(nameBrands: [(name: String, brand: String)], handler: [Product]? -> Void) {
+        withRealm({realm in
+            var products: [Product] = []
+            for nameBrand in nameBrands {
+                let dbProduct: Results<DBProduct> = realm.objects(DBProduct).filter(DBProduct.createFilterNameBrand(nameBrand.name, brand: nameBrand.brand))
+                let product = dbProduct.map{ProductMapper.productWithDB($0)}
+                products.appendAll(product)
+            }
+            return products
+        }) {productsMaybe in
+            handler(productsMaybe)
+        }
+    }
     
     func loadProducts(range: NSRange, sortBy: ProductSortBy, handler: [Product] -> ()) {
         products(range: range, sortBy: sortBy) {tuple in

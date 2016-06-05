@@ -21,6 +21,8 @@ protocol ProductProvider {
 
     func products(text: String, range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<(substring: String?, products: [Product])> -> Void)
 
+    func products(nameBrands: [(name: String, brand: String)], _ handler: ProviderResult<[Product]> -> Void)
+    
     func productsWithPosibleSections(text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<(substring: String?, productsWithMaybeSections: [(product: Product, section: Section?)])> -> Void)
     
     func countProducts(handler: ProviderResult<Int> -> Void)

@@ -160,6 +160,8 @@ class SuggestionsPrefiller {
             DBProduct(uuid: uuid, name: tr("pr_mangos", lang), category: fruitsCat),
             DBProduct(uuid: uuid, name: tr("pr_limes", lang), category: fruitsCat),
             DBProduct(uuid: uuid, name: tr("pr_pomegranate", lang), category: fruitsCat),
+            DBProduct(uuid: uuid, name: tr("pr_pineapple", lang), category: fruitsCat),
+            DBProduct(uuid: uuid, name: tr("pr_plums", lang), category: fruitsCat),
             
             // frozen fruits
             DBProduct(uuid: uuid, name: tr("pr_strawberries_frozen", lang), category: frozenFruitsCat),
