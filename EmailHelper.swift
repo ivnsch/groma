@@ -25,7 +25,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
     }
     
     func showEmail(appendSpecs appendSpecs: Bool = true) {
-        let email = "foo@bar.com"
+        let email = "info@groma.co"
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
