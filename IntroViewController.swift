@@ -105,28 +105,28 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }
         }
         
-        func initDefaultInventory(onFinish: VoidFunction? = nil) {
+        func initDefaultInventory(onFinish: (Inventory? -> Void)? = nil) {
             Providers.inventoryProvider.inventories(false, resultHandler(onSuccess: {[weak self] inventories in
                 
                 if let weakSelf = self {
                     if inventories.isEmpty {
                         let inventory = Inventory(uuid: NSUUID().UUIDString, name: trans("first_inventory_name"), bgColor: UIColor.flatBlueColor(), order: 0)
                         Providers.inventoryProvider.addInventory(inventory, remote: true, weakSelf.resultHandler(onSuccess: {
-                            onFinish?()
+                            onFinish?(inventory)
                             }, onError: {result in
                                 // let the user start if there's an error (we don't expect any, but just in case!)
                                 // it would be very bad if user can't get past intro for whatever reason. Both adding default inventory and default products (TODO) are not critical for the app to be usable.
                                 QL4("Error adding inventory, result: \(result)")
-                                onFinish?()
+                                onFinish?(nil)
                         }))
                     } else {
-                        onFinish?()
+                        onFinish?(nil)
                     }
                 }
                 
                 }, onError: {result in
                     QL4("Error fetching inventories, result: \(result)")
-                    onFinish?()
+                    onFinish?(nil)
             }))
         }
         
@@ -135,7 +135,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                 
                 if groups.isEmpty {
                     
-                    let exampleGroup = ListItemGroup(uuid: NSUUID().UUIDString, name: "Fruits salad", bgColor: UIColor.flatYellowColor(), order: 0)
+                    let exampleGroup = ListItemGroup(uuid: NSUUID().UUIDString, name: trans("example_group_fruits_salad"), bgColor: UIColor.flatYellowColor(), order: 0)
                     
                     let ingredients: [(name: String, quantity: Int)] = [
                         (trans("pr_pineapple"), 1),
@@ -194,20 +194,91 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     onFinish?()
             }))
         }
+
+        func initExampleList(inventory: Inventory, onFinish: VoidFunction? = nil) {
+            Providers.listProvider.lists(false, resultHandler(onSuccess: {[weak self] lists in guard let weakSelf = self else {onFinish?(); return}
+                
+                if lists.isEmpty {
+                    
+                    let exampleList = List(uuid: NSUUID().UUIDString, name: trans("example_list_first_list"), bgColor: UIColor.flatOrangeColor(), order: 0, inventory: inventory, store: nil)
+                    
+                    let productsWithQuantity: [(name: String, quantity: Int)] = [
+                        (trans("pr_peaches"), 6),
+                        (trans("pr_oranges"), 12),
+                        (trans("pr_kiwis"), 4),
+                        (trans("pr_water_1"), 3)
+                    ]
+                    
+                    let productsWithBrands: [(name: String, brand: String)] = productsWithQuantity.map{(name: $0.name, brand: "")}
+                    
+                    Providers.productProvider.products(productsWithBrands, weakSelf.resultHandler(onSuccess: {products in
+                        
+                        if products.count != productsWithBrands.count {
+                            QL4("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products)")
+                            onFinish?()
+                            
+                        } else {
+                            Providers.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
+                        
+                                let productsIngredients: [(product: Product, quantity: Int)] = productsWithQuantity.flatMap {ingredient in
+                                    if let product = products.findFirst({$0.name == ingredient.name}) {
+                                        return (product, ingredient.quantity)
+                                    } else {
+                                        return nil
+                                    }
+                                }
+                                
+                                let storeProductInput = StoreProductInput(price: 1, baseQuantity: 1, unit: .None)
+                                let prototypes = productsIngredients.map {
+                                    ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color, storeProductInput: storeProductInput)
+                                }
+                                
+                                Providers.listItemsProvider.add(prototypes, status: .Todo, list: exampleList, note: nil, order: nil, weakSelf.resultHandler(onSuccess: {foo in
+                                    QL2("Finish adding example list")
+                                    onFinish?()
+                                    
+                                    }, onError: {result in
+                                        QL4("Error adding example list items, result: \(result), items: \(prototypes)")
+                                        onFinish?()
+                                }))
+                                
+                                }, onError: {result in
+                                    QL4("Error adding example list, result: \(result), group: \(exampleList)")
+                                    onFinish?()
+                            }))
+                        }
+                        }, onError: {result in
+                            QL4("Error querying products, result: \(result)")
+                            onFinish?()
+                    }))
+                }
+                }, onError: {result in
+                    QL4("Error fetching list, result: \(result)")
+                    onFinish?()
+            }))
+        }
         
         prefillDatabase {
             QL2("Finished copying prefill database")
-            initDefaultInventory {
+            initDefaultInventory {inventoryMaybe in
                 QL2("Finished adding default inventory")
                 initExampleGroup {
                     QL2("Finished adding example group")
-                    onComplete()
+                    if let inventory = inventoryMaybe {
+                        initExampleList(inventory) {
+                            QL2("Finished adding example list")
+                            onComplete()
+                        }
+                    } else {
+                        QL2("Didn't add default inventory so can't add example list")
+                        onComplete()
+                    }
                 }
             }
         }
-        
     }
 
+    
 //    @IBAction func registerTapped(sender: UIButton) {
 //        let registerController = UIStoryboard.registerViewController()
 //        registerController.delegate = self
