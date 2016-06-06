@@ -83,20 +83,20 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let realTimeConnectionSetting = SwitchSetting(id: .EnableRealTime, label: trans("setting_real_time_connection"), on: Providers.userProvider.isWebsocketConnected())
             
             settings = [
-                clearHistorySetting,
+//                clearHistorySetting,
                 realTimeConnectionSetting,
                 overwriteDataSetting,
                 removeAccountSetting,
-                addDummyHistoryItemsSetting,
-                clearAllDataSetting,
+//                addDummyHistoryItemsSetting,
+//                clearAllDataSetting,
                 restorePrefillProductsSetting,
                 restoreHintsSetting
             ]
         } else {
             settings = [
-                clearHistorySetting,
-                addDummyHistoryItemsSetting,
-                clearAllDataSetting,
+//                clearHistorySetting,
+//                addDummyHistoryItemsSetting,
+//                clearAllDataSetting,
                 restorePrefillProductsSetting,
                 restoreHintsSetting
             ]
