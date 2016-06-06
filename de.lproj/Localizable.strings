@@ -381,8 +381,8 @@ example_group_fruits_salad = "Obstsalat";
 
 
 intro_button_start = "Starten";
-intro_slide_lists = "Verwalte komfortabel deine Einkaufslisten";
-intro_slide_inventories = "Behalten den Überblick auf die Lebensmittel in deinem Haushalt";
+intro_slide_lists = "Verwalte einfach deine Einkaufslisten";
+intro_slide_inventories = "Behalte den Überblick über deine Lebensmittel";
 intro_slide_real_time = "Teile mit anderen Benutzern in Echtzeit";
 intro_slide_stats = "Analysiere dein Kaufverhalten und Ausgaben";
 
@@ -402,7 +402,7 @@ sort_by_alphabetic = "Alphabetisch";
 sort_by_count = "Anzahl";
 
 
-sharing_message = "Hol dir Groma, die neue App die Einkaufslisten und Lebensmittelverwaltung revolutioniert!";
+sharing_message = "Hol dir Groma, die neue App um einfach und bequem deine Lebensmittel und Einkaufslisten zu verwalten!";
 
 
 more_history = "Verlauf";

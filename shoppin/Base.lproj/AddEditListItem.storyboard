@@ -20,7 +20,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="NrU-fN-qdF" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="159" y="106" width="120" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="HqM-K2-C7L"/>
+                                    <constraint firstAttribute="height" constant="40" id="HqM-K2-C7L" customClass="TextFieldHeightConstraint" customModule="shoppin" customModuleProvider="target"/>
                                     <constraint firstAttribute="width" constant="120" id="qrp-kB-pXC"/>
                                 </constraints>
                                 <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -41,7 +41,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="List section" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="25" y="66" width="255" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="jOx-1e-S6w"/>
+                                    <constraint firstAttribute="height" constant="40" id="jOx-1e-S6w" customClass="TextFieldHeightConstraint" customModule="shoppin" customModuleProvider="target"/>
                                 </constraints>
                                 <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -63,7 +63,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Quantity" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vWS-vL-cob" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="25" y="106" width="120" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="6uo-WM-0CH"/>
+                                    <constraint firstAttribute="height" constant="40" id="6uo-WM-0CH" customClass="TextFieldHeightConstraint" customModule="shoppin" customModuleProvider="target"/>
                                     <constraint firstAttribute="width" constant="120" id="q9d-EY-Wvb"/>
                                 </constraints>
                                 <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -84,7 +84,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Brand (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5b-Sz-J4o" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="25" y="26" width="325" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="bLM-k5-r0i"/>
+                                    <constraint firstAttribute="height" constant="40" id="bLM-k5-r0i" customClass="TextFieldHeightConstraint" customModule="shoppin" customModuleProvider="target"/>
                                 </constraints>
                                 <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -117,7 +117,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="25" y="146" width="325" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz"/>
+                                    <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz" customClass="TextFieldHeightConstraint" customModule="shoppin" customModuleProvider="target"/>
                                 </constraints>
                                 <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -143,7 +143,7 @@
                             <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Colour" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="CcK-74-2fx" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="280" y="66" width="70" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="2T8-cF-A8U"/>
+                                    <constraint firstAttribute="height" constant="40" id="2T8-cF-A8U" customClass="TextFieldHeightConstraint" customModule="shoppin" customModuleProvider="target"/>
                                     <constraint firstAttribute="width" constant="70" id="MkS-fK-o65"/>
                                 </constraints>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>

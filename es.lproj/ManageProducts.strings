@@ -34,3 +34,6 @@
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "wRH-9P-Cgb"; */
 "wRH-9P-Cgb.text" = "Label";
+
+/* Class = "UITextField"; text = "Search"; ObjectID = "RTF-AV-DL0"; */
+"RTF-AV-DL0.placeholder" = "Buscar";

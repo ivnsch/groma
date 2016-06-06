@@ -146,7 +146,7 @@ class DimensionsManager {
     static var quickAddCollectionViewCellCornerRadius: CGFloat {
         switch heightDimension {
         case .VerySmall: return 16
-        case .Small: return 15
+        case .Small: return 16
         case .Middle: return 18
         case .Large: return 18
         }
@@ -222,8 +222,8 @@ class DimensionsManager {
         switch heightDimension {
         case .VerySmall: return 20
         case .Small: return 35
-        case .Middle: return 35
-        case .Large: return 35
+        case .Middle: return 40
+        case .Large: return 40
         }
     }
     
