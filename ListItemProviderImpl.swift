@@ -374,6 +374,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // Adds list items to .Todo
+    // TODO!!!! review parameters note and order, we are passing a list of prototypes so this doesn't make sense?   
     func add(prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<[ListItem]> -> Void) {
         
         func getOrderForNewSection(existingListItems: Results<DBListItem>) -> Int {
@@ -417,20 +418,27 @@ class ListItemProviderImpl: ListItemProvider {
                 // TODO interaction with mem provider is a bit finicky and messy here, if performance is ok and everything works correctly maybe we should do all the logic here and pass only the final list item to the mem provider. The initial idea I think was to put the logic to "upsert" listitem/section in mem provider in order to call handler with the result as soon as possible. This may have had another reasons besides only performance. Review this.
                 
                 // Fetch the section or create a new one if it doesn't exist. Note that this could be/was previously done in the memory provider, which helps a bit with performance as we don't have to read from the database. But we can have sections that are not referenced by any list item (in all status), so they are not in mem provider which has only list items. When sections are left empty after deleting list items or moving items to other sections, we don't delete the sections. So we now retrieve/create section here and pass it to mem provider together with the prototype.
-                let prototypesWithSections: [(StoreListItemPrototype, Section)] = storePrototypes.map {prototype in
-                    let existingSectionMaybe = realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first.map {dbSection in
-                        SectionMapper.sectionWithDB(dbSection)
-                    }
+                var prototypesWithSections: [(StoreListItemPrototype, Section)] = []
+                for prototype in storePrototypes {
+
+                    // Use possible equal section from previous items - this is needed because otherwise if we pass e.g. 3 different fruits and there's no fruits section in the database yet, we would create 3 new fruits sections. Also for performance. Note that later we fetch the section again doing the db transaction, so the error of having 3x the same section would be only in memory, i.e. visible the first time we load the controller and fixed after. TODO Simplify this? Do we really need to determine the section here and again in db transaction. This weird functionality may be a leftover of when we used only the memory cache in this part (see previous comment of why this was changed).
+                    let previousItemSectionMaybeWithSameName: (Section)? = (prototypesWithSections.findFirst{$0.1.name == prototype.targetSectionName})?.1
                     
-                    let section = existingSectionMaybe ?? {
-                        let newSection: Section = Section(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
-                        QL1("Section for prototype: \(prototype) didn't exist, created a new one: \(newSection)")
-                        return newSection
+                    let section = previousItemSectionMaybeWithSameName ?? {
+                    
+                        let existingSectionMaybe = realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first.map {dbSection in
+                            SectionMapper.sectionWithDB(dbSection)
+                        }
+                        return existingSectionMaybe ?? {
+                            
+                            let newSection: Section = Section(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
+                            QL1("Section for prototype: \(prototype) didn't exist, created a new one: \(newSection)")
+                            return newSection
+                        }()
+                        
                     }()
-                    
-                    return (prototype, section)
+                    prototypesWithSections.append((prototype, section))
                 }
-                
                 
                 let memAddedListItemsMaybe = weakSelf.memProvider.addOrUpdateListItems(prototypesWithSections, status: status, list: list, note: note)
                 if let addedListItems = memAddedListItemsMaybe {
