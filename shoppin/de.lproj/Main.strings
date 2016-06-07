@@ -24,7 +24,7 @@
 "5O5-fM-mtz.normalTitle" = "x Monate";
 
 /* Class = "UILabel"; text = "Stash"; ObjectID = "5T8-dN-c0D"; */
-"5T8-dN-c0D.text" = "Lager";
+"5T8-dN-c0D.text" = "Zwischenlager";
 
 /* Class = "UILabel"; text = "Tap to add a list"; ObjectID = "7OH-1y-kro"; */
 "7OH-1y-kro.text" = "Tappe um eine Liste hinzuzufügen";
@@ -54,7 +54,7 @@
 "Dny-Vg-Zzw.text" = "Hoppla! Es gibt noch keine Einträge";
 
 /* Class = "UINavigationItem"; title = "Stash"; ObjectID = "DtP-Nf-EOg"; */
-"DtP-Nf-EOg.title" = "Lager";
+"DtP-Nf-EOg.title" = "Zwischenlager";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "FsV-Bz-0vE"; */
 "FsV-Bz-0vE.text" = "Label";

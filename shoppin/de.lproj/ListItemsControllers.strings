@@ -21,7 +21,7 @@
 "bc8-rn-N1i.title" = "Kaufen";
 
 /* Class = "UILabel"; text = "The backstore is empty"; ObjectID = "dPu-gm-3Bj"; */
-"dPu-gm-3Bj.text" = "Die Abstellkammer ist leer";
+"dPu-gm-3Bj.text" = "Das Zwischenlager ist leer";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "dj1-Th-3Dt"; */
 "dj1-Th-3Dt.text" = "Label";

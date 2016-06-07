@@ -336,7 +336,7 @@ title_intro = "Intro";
 title_edit_item = "Eintrag editieren";
 title_lists = "Listen";
 title_cart = "Einkaufswagen";
-title_stash = "Lager";
+title_stash = "Zwischenlager";
 title_inventories = "Inventare";
 title_groups = "Gruppen";
 title_participants = "Teilnehmer";
@@ -435,7 +435,7 @@ pull_to_add = "Ziehen zum Hinzufügen";
 
 list_items_items_in_cart_singular = "%@ Item im Einkaufswagen";
 list_items_items_in_cart_plural = "%@ Items im Einkaufswagen";
-list_items_items_in_backstore = "%@ in der Abstellkammer";
+list_items_items_in_backstore = "%@ im Zwischenlager";
 
 
 email_device = "Gerät: %@";
