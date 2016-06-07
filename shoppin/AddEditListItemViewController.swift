@@ -62,10 +62,10 @@ struct AddEditItem {
         self.model = model
     }
     
-    init(item: ListItem) {
+    init(item: ListItem, currentStatus: ListItemStatus) {
         self.product = item.product.product
         self.storeProduct = item.product
-        self.quantity = item.todoQuantity // only in todo screen we can update items. Note that we will update only the todo quantity, if the item is also in cart or stash this quantities are not updated
+        self.quantity = item.quantity(currentStatus)
         self.sectionName = item.section.name
         self.sectionColor = item.section.color
         self.note = item.note

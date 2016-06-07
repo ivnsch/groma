@@ -373,7 +373,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             topQuickAddControllerManager?.expand(true)
             topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
             
-            topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: tableViewListItem.listItem))
+            topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: tableViewListItem.listItem, currentStatus: status))
             
         } else { // switch list item
 
