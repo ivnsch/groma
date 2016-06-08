@@ -57,6 +57,8 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         setEdit(true, animated: false)
         // cell starts small to blend with the collapsed original tableview and grows to normal size
         setCellHeight(DimensionsManager.defaultCellHeight, animated: true)
+        
+        tableView.bottomInset = DimensionsManager.listItemsPricesViewHeight + 10 // 10 - show a little empty space between the last item and the prices view
     }
     
     // Animate cell height
