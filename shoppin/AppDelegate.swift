@@ -345,7 +345,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     
     // Remove history entries older than 1 year
     private func checkClearHistory() {
-        Providers.historyProvider.removeHistoryItemsOlderThan(NSDate.inMonths(-3)) {providerResult in
+        Providers.historyProvider.removeHistoryItemsOlderThan(NSDate.inMonths(-12)) {providerResult in
             // Do nothing, it there's an error it's already logged in the provider. It doesn't make sense to show this to the user
         }
     }
