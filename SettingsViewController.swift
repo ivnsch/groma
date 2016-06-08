@@ -154,7 +154,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     // Debug only
     private func addDummyHistoryItems() {
         
-        let user = SharedUser(email: "dummy@user.test")
+        let user = SharedUser(email: "")
         
         Providers.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             
