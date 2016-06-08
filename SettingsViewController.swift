@@ -178,12 +178,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                             // max 5.000 Doesn't work: (month item count were between 1645 and 4895): does build request (takes very long), 14 mb, server rejects (413 response, max payload configured to 10mb)
                             // max 2.000: Takes long, but works: (month item count were between 790 and 1860): does request (takes about 1 min), 6 mb, response only 500kb (gzip), processed correctly.
                             
-                            let monthItemsCount = Int.random(2, max: 2000)
+                            let monthItemsCount = Int.random(2, max: 300)
                             QL1("Generating history item count: \(monthItemsCount) for date: \(date)")
                             let monthHistoryItems: [HistoryItem] = (2..<monthItemsCount).map {_ in
                                 let randomIndex = Int.random(products.count)
                                 let product = products[randomIndex]
-                                return HistoryItem(uuid: NSUUID().UUIDString, inventory: inventory, product: product, addedDate: date.toMillis(), quantity: Int.random(10), user: user, paidPrice: Float(Double.random()) * 10)
+                                return HistoryItem(uuid: NSUUID().UUIDString, inventory: inventory, product: product, addedDate: date.toMillis(), quantity: Int.random(10), user: user, paidPrice: Float(Double.random()) * 2)
                             }
                             return monthHistoryItems
                         }
