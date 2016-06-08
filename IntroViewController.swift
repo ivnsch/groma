@@ -29,11 +29,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     var mode: IntroMode = .Launch
     
-    private var pageModels: [(key: String, imageName: String)] =
-        [(trans("intro_slide_lists"), "intro_lists"),
-        (trans("intro_slide_inventories"), "intro_inventory")]
-        + (CountryHelper.isInServerSupportedCountry() ? [(trans("intro_slide_real_time"), "intro_sharing")] : [])
-        + [(trans("intro_slide_stats"), "intro_stats")]
+    private var pageModels: [(key: String, imageName: String)] = []
     
     private var finishedSlider = false {
         didSet {
@@ -46,6 +42,15 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        pageModels = [(trans("intro_slide_lists"), "intro_lists"),
+                      (trans("intro_slide_inventories"), "intro_inventory"),
+                      (trans("intro_slide_stats"), "intro_stats")]
+        if CountryHelper.isInServerSupportedCountry() {
+            pageModels.append((trans("intro_slide_real_time"), "intro_sharing"))
+        }
+        
+        
         pageControl.numberOfPages = pageModels.count
         
         if mode == .Launch {
