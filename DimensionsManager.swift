@@ -75,8 +75,8 @@ class DimensionsManager {
     static var quickAddHeight: CGFloat {
         switch heightDimension {
         case .VerySmall: return 150
-        case .Small: return 220
-        case .Middle: return 290
+        case .Small: return 210
+        case .Middle: return 285
         case .Large: return 310
         }
     }
