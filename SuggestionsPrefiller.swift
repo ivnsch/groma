@@ -110,7 +110,7 @@ class SuggestionsPrefiller {
         let herbsCat = DBProductCategory(uuid: uuid, name: tr("pr_herbs", lang), bgColorHex: UIColor.flatGreenColorDark().hexStr)
         let meatCat = DBProductCategory(uuid: uuid, name: tr("pr_meat", lang), bgColorHex: UIColor.flatRedColorDark().hexStr)
         let petsCat = DBProductCategory(uuid: uuid, name: tr("pr_pets", lang), bgColorHex: UIColor.flatGreenColorDark().hexStr)
-        let bakeryCat = DBProductCategory(uuid: uuid, name: tr("pr_bakery", lang), bgColorHex: UIColor.flatBrownColorDark().hexStr)
+        let bakeryCat = DBProductCategory(uuid: uuid, name: tr("pr_bakery", lang), bgColorHex: UIColor.flatTealColor().hexStr)
         let riceCat = DBProductCategory(uuid: uuid, name: tr("pr_rice", lang), bgColorHex: UIColor.flatWhiteColorDark().hexStr)
         let nutsCat = DBProductCategory(uuid: uuid, name: tr("pr_nuts", lang), bgColorHex: UIColor.flatBrownColorDark().hexStr)
         let oilCat = DBProductCategory(uuid: uuid, name: tr("pr_oil", lang), bgColorHex: UIColor.flatYellowColor().hexStr)
@@ -123,17 +123,17 @@ class SuggestionsPrefiller {
         let pastaCat = DBProductCategory(uuid: uuid, name: tr("pr_pasta", lang), bgColorHex: UIColor.flatSandColorDark().hexStr)
         let drinksCat = DBProductCategory(uuid: uuid, name: tr("pr_drinks", lang), bgColorHex: UIColor.flatBlueColor().lightenByPercentage(0.5).hexStr)
         let alcoholCat = DBProductCategory(uuid: uuid, name: tr("pr_alcohol", lang), bgColorHex: UIColor.flatBrownColorDark().hexStr)
-        let hygienicCat = DBProductCategory(uuid: uuid, name: tr("pr_hygienic", lang), bgColorHex: UIColor.flatGrayColor().hexStr)
+        let hygienicCat = DBProductCategory(uuid: uuid, name: tr("pr_hygienic", lang), bgColorHex: UIColor.flatMintColor().hexStr)
         let dipsCat = DBProductCategory(uuid: uuid, name: tr("pr_dips", lang), bgColorHex: UIColor.flatBrownColor().hexStr)
         let spicesCat = DBProductCategory(uuid: uuid, name: tr("pr_spices", lang), bgColorHex: UIColor.flatBrownColor().hexStr)
-        let friedCat = DBProductCategory(uuid: uuid, name: tr("pr_fried", lang), bgColorHex: UIColor.flatBrownColor().hexStr)
+        let friedCat = DBProductCategory(uuid: uuid, name: tr("pr_fried", lang), bgColorHex: UIColor.flatMaroonColor().hexStr)
         let breadCat = DBProductCategory(uuid: uuid, name: tr("pr_bread", lang), bgColorHex: UIColor.flatYellowColorDark().hexStr)
         let sweetsCat = DBProductCategory(uuid: uuid, name: tr("pr_sweets", lang), bgColorHex: UIColor.flatPinkColor().hexStr)
         let teaAndCoffeeCat = DBProductCategory(uuid: uuid, name: tr("pr_tea_coffee", lang), bgColorHex: UIColor.flatBlackColor().hexStr)
         let cheeseCat = DBProductCategory(uuid: uuid, name: tr("pr_cheese", lang), bgColorHex: UIColor.flatYellowColorDark().hexStr)
         let beansCat = DBProductCategory(uuid: uuid, name: tr("pr_beans", lang), bgColorHex: UIColor.flatRedColorDark().hexStr)
-        let eggsCat = DBProductCategory(uuid: uuid, name: tr("pr_eggs", lang), bgColorHex: UIColor.flatRedColorDark().hexStr)
-        let spreadCat = DBProductCategory(uuid: uuid, name: tr("pr_spread", lang), bgColorHex: UIColor.flatRedColorDark().hexStr)
+        let eggsCat = DBProductCategory(uuid: uuid, name: tr("pr_eggs", lang), bgColorHex: UIColor.flatNavyBlueColor().hexStr)
+        let spreadCat = DBProductCategory(uuid: uuid, name: tr("pr_spread", lang), bgColorHex: UIColor.flatPlumColor().hexStr)
         let cerealCat = DBProductCategory(uuid: uuid, name: tr("pr_cereal", lang), bgColorHex: UIColor.flatOrangeColor().hexStr)
         let coldCutCat = DBProductCategory(uuid: uuid, name: tr("pr_cold_cut", lang), bgColorHex: UIColor.flatOrangeColorDark().hexStr)
         let ovenCat = DBProductCategory(uuid: uuid, name: tr("pr_oven", lang), bgColorHex: UIColor.flatBlackColorDark().hexStr)
@@ -162,7 +162,9 @@ class SuggestionsPrefiller {
             DBProduct(uuid: uuid, name: tr("pr_pomegranate", lang), category: fruitsCat),
             DBProduct(uuid: uuid, name: tr("pr_pineapple", lang), category: fruitsCat),
             DBProduct(uuid: uuid, name: tr("pr_plums", lang), category: fruitsCat),
-            
+            DBProduct(uuid: uuid, name: tr("pr_tomatoes", lang), category: fruitsCat),
+            DBProduct(uuid: uuid, name: tr("pr_olives", lang), category: fruitsCat),
+
             // frozen fruits
             DBProduct(uuid: uuid, name: tr("pr_strawberries_frozen", lang), category: frozenFruitsCat),
             DBProduct(uuid: uuid, name: tr("pr_blueberries_frozen", lang), category: frozenFruitsCat),
@@ -173,14 +175,12 @@ class SuggestionsPrefiller {
             DBProduct(uuid: uuid, name: tr("pr_onions_red", lang), category: vegetablesCat),
             DBProduct(uuid: uuid, name: tr("pr_potatoes", lang), category: vegetablesCat),
             DBProduct(uuid: uuid, name: tr("pr_salad", lang), category: vegetablesCat),
-            DBProduct(uuid: uuid, name: tr("pr_tomatoes", lang), category: vegetablesCat),
             DBProduct(uuid: uuid, name: tr("pr_paprika", lang), category: vegetablesCat),
-            DBProduct(uuid: uuid, name: tr("pr_olives", lang), category: vegetablesCat),
             DBProduct(uuid: uuid, name: tr("pr_garlic", lang), category: vegetablesCat),
             DBProduct(uuid: uuid, name: tr("pr_carrots", lang), category: vegetablesCat),
             DBProduct(uuid: uuid, name: tr("pr_asparagus", lang), category: vegetablesCat),
-            DBProduct(uuid: uuid, name: tr("pr_dumplings", lang), category: vegetablesCat),
-            DBProduct(uuid: uuid, name: tr("pr_mashed_potatoes", lang), category: vegetablesCat),
+//            DBProduct(uuid: uuid, name: tr("pr_dumplings", lang), category: vegetablesCat),
+//            DBProduct(uuid: uuid, name: tr("pr_mashed_potatoes", lang), category: vegetablesCat),
             
             // herbs (fresh/dry)
             DBProduct(uuid: uuid, name: tr("pr_parsley", lang), category: herbsCat),
@@ -224,7 +224,7 @@ class SuggestionsPrefiller {
             // drinks
             DBProduct(uuid: uuid, name: tr("pr_water", lang), category: drinksCat),
             DBProduct(uuid: uuid, name: tr("pr_water_1", lang), category: drinksCat),
-            DBProduct(uuid: uuid, name: tr("pr_club_mate", lang), category: drinksCat),
+//            DBProduct(uuid: uuid, name: tr("pr_club_mate", lang), category: drinksCat),
             DBProduct(uuid: uuid, name: tr("pr_cola_1", lang), category: drinksCat),
             DBProduct(uuid: uuid, name: tr("pr_cola_1_5", lang), category: drinksCat),
             DBProduct(uuid: uuid, name: tr("pr_cola_2", lang), category: drinksCat),
@@ -339,9 +339,9 @@ class SuggestionsPrefiller {
             DBProduct(uuid: uuid, name: tr("pr_muesli", lang), category: cerealCat),
             
             // bread (bakery)
-            DBProduct(uuid: uuid, name: tr("pr_toast_bread", lang), category: cleaningCat),
-            DBProduct(uuid: uuid, name: tr("pr_bread", lang), category: cleaningCat),
-            DBProduct(uuid: uuid, name: tr("pr_baguette", lang), category: cleaningCat),
+            DBProduct(uuid: uuid, name: tr("pr_toast_bread", lang), category: breadCat),
+            DBProduct(uuid: uuid, name: tr("pr_bread", lang), category: breadCat),
+            DBProduct(uuid: uuid, name: tr("pr_baguette", lang), category: breadCat),
             
             // cold cut
             DBProduct(uuid: uuid, name: tr("pr_bacon", lang), category: coldCutCat),
