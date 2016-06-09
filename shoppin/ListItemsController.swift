@@ -247,6 +247,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         // if any top controller is open, close it
         if topQuickAddControllerManager?.expanded ?? false || topEditSectionControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.expand(false)
+            toggleButtonRotator.enabled = true
             topQuickAddControllerManager?.controller?.onClose()
             topEditSectionControllerManager?.expand(false)
             topEditSectionControllerManager?.controller?.onClose()
@@ -256,11 +257,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             if rotateTopBarButton {
                 topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
             }
-            
+        
             return false
             
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
+            toggleButtonRotator.enabled = false
             topQuickAddControllerManager?.controller?.initContent()
             
             topBar.setLeftButtonIds([])
@@ -292,6 +294,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
         if tryCloseTopViewController {
             topQuickAddControllerManager?.expand(false)
+            toggleButtonRotator.enabled = true
             topQuickAddControllerManager?.controller?.onClose()
             topEditSectionControllerManager?.controller?.onClose()
         }
@@ -555,6 +558,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     func onCloseQuickAddTap() {
         topQuickAddControllerManager?.expand(false)
+        toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()
         topEditSectionControllerManager?.controller?.onClose()
     }
@@ -834,6 +838,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func onExpandableClose() {
 //        topBar.setBackVisible(false)
         setDefaultLeftButtons()
+        toggleButtonRotator.enabled = true
         rightButtonsClosing()
         topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
         topQuickAddControllerManager?.controller?.onClose()
@@ -866,6 +871,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     private func closeTopController() {
         topQuickAddControllerManager?.expand(false)
+        toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()
         topBarOnCloseExpandable()
     }

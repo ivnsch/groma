@@ -149,6 +149,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onExpandableClose() {
         topBarOnCloseExpandable()
+        toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()        
     }
     
@@ -186,6 +187,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func closeTopController() {
         topQuickAddControllerManager?.expand(false)
+        toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()
         topBarOnCloseExpandable()
     }
@@ -232,6 +234,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         // if any top controller is open, close it
         if topQuickAddControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.expand(false)
+            toggleButtonRotator.enabled = true
             topQuickAddControllerManager?.controller?.onClose()
             
             setDefaultLeftButtons()
@@ -242,6 +245,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
+            toggleButtonRotator.enabled = true
             topQuickAddControllerManager?.controller?.initContent()
             
             topBar.setLeftButtonIds([])
@@ -286,6 +290,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onCloseQuickAddTap() {
         topQuickAddControllerManager?.expand(false)
+        toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()
     }
     

@@ -12,6 +12,8 @@ import QorumLogs
 
 class ToggleButtonRotator {
 
+    var enabled: Bool = true
+    
     // This is a hack to set the initial table view offset to 0, sometimes in groups or inventories list, the table view starts with -20 offset which makes the X appear rotated. Tried diabling adjust scroll view insets in storyboars etc. without success. TODO correct fix.
     func reset(scrollView: UIScrollView, topBar: ListTopBarView) {
         if let toggleButton = topBar.rightButton(.ToggleOpen) {
@@ -20,6 +22,9 @@ class ToggleButtonRotator {
     }
     
     func rotateForOffset(start: CGFloat, topBar: ListTopBarView, scrollView: UIScrollView) {
+        
+        guard enabled else {return}
+        
         let offset = scrollView.contentOffset.y
 //        QL1("Call rotate for offset, offset: \(offset)")
         if offset < start
