@@ -21,13 +21,16 @@ class ExpandCellAnimator {
     private var topSlidingView: UIView?
     private var bottomSlidingView: UIView?
 
-    var fromView: UIView = UIView()
-    var toView: UIView = UIView()
-    var inView: UIView = UIView()
+    weak var fromView: UIView? = UIView()
+    weak var toView: UIView? = UIView()
+    weak var inView: UIView? = UIView()
     
     weak var delegate: ExpandCellAnimatorDelegate?
     
     func animateTransition(isExpand: Bool, topOffsetY: CGFloat, expandedViewFrame: CGRect? = nil) {
+        
+        guard let fromView = fromView, toView = toView, inView = inView else {return}
+        
         
         fromView.layoutIfNeeded()
         
@@ -103,32 +106,32 @@ class ExpandCellAnimator {
         
         UIView.animateWithDuration(
             0.3,
-            animations: {
+            animations: {[weak self] in guard let weakSelf = self else {return}
                 if isExpand {
                     topSlidingView.center.y -= topSlidingDistance
                     bottomSlidingView.center.y += bottomSlidingDistance
-                    self.toView.frame = expandedFrame
-                    self.delegate?.animationsForCellAnimator(true, frontView: self.toView)
-                    self.toView.layoutIfNeeded()
-                    self.inView.layoutIfNeeded()
+                    toView.frame = expandedFrame
+                    weakSelf.delegate?.animationsForCellAnimator(true, frontView: toView)
+                    toView.layoutIfNeeded()
+                    inView.layoutIfNeeded()
                     
                 } else {
                     topSlidingView.center.y += topSlidingDistance
                     bottomSlidingView.center.y -= bottomSlidingDistance
                     //                    self.toView.frame = self.collapsedFrame
-                    self.toView.frame = CGRectMake(collapsedFrame2.origin.x, collapsedFrame2.origin.y, collapsedFrame2.width, collapsedFrame2.height)
-                    self.delegate?.animationsForCellAnimator(false, frontView: self.toView)
-                    self.toView.layoutIfNeeded()
-                    self.inView.layoutIfNeeded()
+                    toView.frame = CGRectMake(collapsedFrame2.origin.x, collapsedFrame2.origin.y, collapsedFrame2.width, collapsedFrame2.height)
+                    weakSelf.delegate?.animationsForCellAnimator(false, frontView: toView)
+                    toView.layoutIfNeeded()
+                    inView.layoutIfNeeded()
                 }
             },
-            completion: { _ in
+            completion: {[weak self] _ in guard let weakSelf = self else {return}
                 topSlidingView.removeFromSuperview()
                 bottomSlidingView.removeFromSuperview()
                 if !isExpand {
-                    self.toView.removeFromSuperview()
+                    toView.removeFromSuperview()
                 }
-                self.delegate?.animationsComplete(isExpand, frontView: self.toView)
+                weakSelf.delegate?.animationsComplete(isExpand, frontView: toView)
             }
         )
     }

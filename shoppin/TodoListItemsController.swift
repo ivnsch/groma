@@ -188,13 +188,15 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
             if let doneViewController = segue.destinationViewController as? CartListItemsController {
 //                doneViewController.navigationItemTextColor = titleLabel?.textColor
                 doneViewController.delegate = self
-                doneViewController.onUIReady = {
-                    doneViewController.currentList = self.currentList
+                
+                
+                doneViewController.onUIReady = {[weak doneViewController] in
+                    doneViewController?.currentList = self.currentList
                 }
-                doneViewController.onViewWillAppear = {
-                    if let dotColor = self.topBar.dotColor {
-                        doneViewController.topBar.showDot()
-                        doneViewController.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
+                doneViewController.onViewWillAppear = {[weak self, weak doneViewController] in guard let weakSelf = self else {return}
+                    if let dotColor = weakSelf.topBar.dotColor {
+                        doneViewController?.topBar.showDot()
+                        doneViewController?.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
                     } else {
                         QL4("Invalid state: top bar has no dot color")
                     }
@@ -205,13 +207,13 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         } else if segue.identifier == "stashSegue" {
             if let stashViewController = segue.destinationViewController as? StashListItemsController {
 //                stashViewController.navigationItemTextColor = titleLabel?.textColor
-                stashViewController.onUIReady = {
-                    stashViewController.currentList = self.currentList
+                stashViewController.onUIReady = {[weak stashViewController] in
+                    stashViewController?.currentList = self.currentList
                 }
-                stashViewController.onViewWillAppear = {
-                    if let dotColor = self.topBar.dotColor {
-                        stashViewController.topBar.showDot()
-                        stashViewController.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
+                stashViewController.onViewWillAppear = {[weak self, weak stashViewController] in guard let weakSelf = self else {return}
+                    if let dotColor = weakSelf.topBar.dotColor {
+                        stashViewController?.topBar.showDot()
+                        stashViewController?.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
                     } else {
                         QL4("Invalid state: top bar has no dot color")
                     }
