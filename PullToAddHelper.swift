@@ -15,7 +15,7 @@ class PullToAddHelper {
     static func createPullToAdd(parentController: UIViewController) -> UIRefreshControl {
         let refreshControl = UIRefreshControl()
         let label = UILabel(frame: CGRectMake(0, 0, parentController.view.frame.width, refreshControl.bounds.height))
-        label.font = Fonts.fontForSizeCategory(15)
+        label.font = Fonts.fontForSizeCategory(40)
         label.textColor = Theme.grey
         label.text = trans("pull_to_add")
         label.textAlignment = .Center
