@@ -67,8 +67,7 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "How do I make sense of the report?", text: "The bar chart shows your monthly spend for the last year. 'Monthly average' is the average of what you have spent in the last year, 'Daily average in this month' is the average of what you have spent so far in the current month, 'Projected total this month' is an estimation of what you will spend in total in the current month based on what you have spent so far in this month. Tapping on a bar shows you a detailed view of its month. The pie chart shows the top categories and below you see an aggregate of all the purchased products."),
         
-        HelpItem(title: "Can I use this app for online shopping?", text: "Yes, but as you have probably noticed it's not optimized for this - yet! This is already on the works and will be available in upcoming updates. Hold on!"),
-        
+        HelpItem(title: "Can I sync with other devices or users?", text: "This is currently in development and will be available in upcoming versions."),
         
         HelpItem(title: "Can I change the store that a List is linked to?", text: "No, once the List is submitted, the store can't be changed. If you need to do this you have to delete the List and create a new one with the new store."),
         
@@ -129,7 +128,7 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Wie ist der Bericht zu verstehen?", text: "Das Säulendiagramm zeigt dir deine monatlichen Ausgaben seitdem du angefangen hast, die App zu benutzen. 'Monatlicher Durchschnitt' ist der Durchschnitt von deinen Ausgaben in den Monaten wo du die App benutzt hast. 'Monatstagesdurchschnitt' ist der täglicher Durchschnitt von dem was du in diesem Monat ausgegeben hast. 'Gesch. Gesamtausgaben akt. Monat' ist die Schätzung von dem, was du in diesem Monat ausgeben wirst, anhand dessen was du bislang in diesem Monat ausgegeben hast. Wenn du eine Säule antippst kommst du zur Detail-Ansicht für den jeweiligen Monat. Da findest du ein Tortendiagramm mit den Kategorien wofür du am meisten ausgegeben hast und darunter ein Aggregat von den gekauften Produkten."),
         
         
-        HelpItem(title: "Kann ich diese App auch für Onlineshopping benutzen?", text: "Ja. Sie ist noch nicht ganz dafür optimiert aber einige Verbesserung werden bereits entwickelt und werden in kommenden Updates verfügbar sein."),
+        HelpItem(title: "Kann ich mit anderen Geräten oder Benutzern synchronisieren?", text: "Dies befindet sich derzeit in Entwicklung und wird in kommenden Versionen verfügbar sein."),
         
         HelpItem(title: "Kann ich den Laden von einer Liste ändern?", text: "Nein, nachdem die Liste gespeichert wurde, kann der Laden nicht mehr geändert werden. Falls du dies brauchst, musst du die alte Liste löschen und eine neue mit dem neuen Laden erstellen."),
         
@@ -187,13 +186,13 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "Cómo interpreto el reporte?", text: "La estadística de barras the muestra los gastos mensuales desde que empezaste a utilizar la app, hasta 1 año en el pasado. 'Promedio mensual' es el promedio de los gastos durante los meses que has usado la app. 'Promedio diario en este mes' es el promedio diario de lo que has gastado durante el mes actual. 'Gastos estimados para este mes'  es una estimación de lo que habrás gastado al final del mes actual (sólo para este mes). Pulsar en las barras te lleva a la vista de gastos para el mes correspondiente. El gráfico de torta muestra las categorías por las que más has gastado y abajo hay una lista de agregados de los productos que compraste durante el mes."),
         
-        HelpItem(title: "Puedo utilizar esta app para comprar en línea?", text: "Sí. El uso para este fin por el momento no es óptimo pero se encuentra en desarrollo y mejorará gradualmente en próximos updates."),
+        HelpItem(title: "Puedo sincronizar con otros dispositivos u usuarios?", text: "Esto se encuentra actualmente en desarrollo y estará disponible en versiones próximas."),
         
         HelpItem(title: "Puedo cambiar el almacén de una lista?", text: "No, después que guardas la lista, el almacén no se puede cambiar. Si necesitas cambiarlo tienes que borrar la lista y crear una nueva con el nuevo almacén."),
 
         HelpItem(title: "No encuentro la información que estoy buscando", text: "Envíanos un feedback email! Nos alegra mucho responder todas tus preguntas!"),
         
-//        HelpItem(title: "Necesito una cuenta de usuario?", text: "A menos que quieras compartir tus listas o inventarios con otros usuarios o syncronizar con otros aparatos, no necesitas una cuenta. Para todo lo demas, la app es identica con o sin cuenta."),
+//        HelpItem(title: "Necesito una cuenta de usuario?", text: "A menos que quieras compartir tus listas o inventarios con otros usuarios o syncronizar con otros dispositivos, no necesitas una cuenta. Para todo lo demas, la app es identica con o sin cuenta."),
 //        
 //        HelpItem(title: "Puedo utilizar la app cuando no estoy online?", text: "Sí, una conexión internet o cuenta de usuario no es necesaria. Si estás online y te desconectas, la app se syncronizará automáticamente cuando te conectes de nuevo."),
 //        
@@ -201,14 +200,14 @@ class HelpProviderImpl: HelpProvider {
 //        
 //        //        HelpItem(title: "Can I share lists or inventories with Android users?", text: "No, because there's no Android app yet. Stay in the loop though, a light version is planned."),
 //        
-//        HelpItem(title: "Necesito una cuenta de usuario?", text: "A menos que quieras compartir tus listas o inventarios con otros usuarios o syncronizar con otros aparatos, no necesitas una cuenta. Para todo lo demas, la app es identica con o sin cuenta."),
+//        HelpItem(title: "Necesito una cuenta de usuario?", text: "A menos que quieras compartir tus listas o inventarios con otros usuarios o syncronizar con otros dispositivos, no necesitas una cuenta. Para todo lo demas, la app es identica con o sin cuenta."),
 //        
 //        HelpItem(title: "Puedo utilizar la app cuando no estoy online?", text: "Sí, una conexión internet o cuenta de usuario no es necesaria. Si estás online y te desconectas, la app se syncronizará automáticamente cuando te conectes de nuevo."),
 //        
 //        HelpItem(title: "Cómo comparto listas o inventarious con otras personas?", text: "Para compartir listas o inventarios, ve a la vista donde las listas o inventarios están enlistados, ###toca el botón para editar, ###toca la list o inventario que quieres compartir y después en 'participantes'. Aquí puedes agregar o remover participantes. Participants con invitaciones pendientes tienen un signo de interrogación. Cuando no tienes una conexión a internet o cuenta de usuario activa, el botón de participantes no es visible."),
 //        
 //        //        HelpItem(title: "Can I share lists or inventories with Android users?", text: "No, because there's no Android app yet. Stay in the loop though, a light version is planned."),
-//        HelpItem(title: "Qué es la opción 'conección en tiempo real'?", text: "La conexión en tiempo real te permite recibir actualizaciones de otros aparatos/usuarios inmediatamente.  Con esta opción puedes deactivarla. Si la desactivas, no se volverá a activar automaticamente hasta que la actives de nuevo. Esta opción es sólo visible cuando tienes una conexión y cuenta de usuario activa."),
+//        HelpItem(title: "Qué es la opción 'conección en tiempo real'?", text: "La conexión en tiempo real te permite recibir actualizaciones de otros dispositivos/usuarios inmediatamente.  Con esta opción puedes deactivarla. Si la desactivas, no se volverá a activar automaticamente hasta que la actives de nuevo. Esta opción es sólo visible cuando tienes una conexión y cuenta de usuario activa."),
 //        
 //        HelpItem(title: "Estoy compartiendo my inventario con otros usuarios y vemos diferentes estadísticas, por qué?", text: "Para evitar confusión, cuando compartes ítems con otros usuarios, actualizaciones a sus precios are not compartidos automáticamente. Por esta razón es posible que usuarios tengan diferentes precios para los mismos ítems, lo que significa que la estadística puede mostrar diferentes gastos. Cuando quieras que tus ítems sean idénticos a los de otro(a) usuario(a), ve a la lista de participantes de de lista o inventario y selecciona 'descargar', próximo al(a) usuario(a)."),
 //        
