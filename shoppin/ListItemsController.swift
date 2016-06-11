@@ -12,7 +12,7 @@ import SwiftValidator
 import ChameleonFramework
 import QorumLogs
 
-class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, UIGestureRecognizerDelegate
+class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate
     //    , UIBarPositioningDelegate
 {
     
@@ -76,9 +76,6 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         topEditSectionControllerManager = initEditSectionControllerManager()
         
         topBar.delegate = self
-
-        
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onListRemovedNotification(_:)), name: Notification.ListRemoved.rawValue, object: nil)
         

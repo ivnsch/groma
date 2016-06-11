@@ -14,7 +14,7 @@ protocol CartListItemsControllerDelegate: class {
     func onCartSendItemsToStash(listItems: [ListItem])
 }
 
-class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate {
+class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var buyLabel: UILabel!
     @IBOutlet weak var totalDonePriceLabel: UILabel!
@@ -38,7 +38,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+
         onUIReady?()
         
         topBar.setBackVisible(true)
@@ -50,11 +50,30 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
 //            + Constants.tableViewAdditionalBottomInset
         
         expandCollapseButton.delegate = self
+        
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
 //    override var tableViewBottomInset: CGFloat {
 //        return pricesView.frame.height
 //    }
+    
+    
+    // Fixes random, rare freezes when coming back to todo controller. See http://stackoverflow.com/a/28919337/930450
+    // Curiously implementing gestureRecognizerShouldBegin and returning always true seemed to fix it (tested a long time after it and the bug didn't happen again - could be of course that this was just luck, though normally it appears after switching todo/cart 100 or so times and tested more than this). Letting the count check anyways, since this seems to be the proper fix.
+    // Note: I also tried implementing a UI test for this but swipe doesn't work well so need to test manually.
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        
+        guard let navigationController = navigationController else {QL3("No navigation controller"); return false}
+        
+        if navigationController.viewControllers.count > 1 {
+            return true
+        }
+        
+        // Not really a warning, just curious to see when this actually happens, see method comment.
+        QL3("Only info: Navigation controller viewControllers.count: \(navigationController.viewControllers.count)")
+        return false
+    }
     
     override func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
         super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
