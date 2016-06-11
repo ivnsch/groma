@@ -64,8 +64,8 @@ extension UIStoryboard {
         return mainStoryboard().instantiateViewControllerWithIdentifier("NavigationController") as! UINavigationController
     }
 
-    class func mainTabController() -> UIViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("MainTabController") 
+    class func mainTabController() -> UITabBarController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("MainTabController") as! UITabBarController
     }
     
     

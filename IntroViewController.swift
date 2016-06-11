@@ -31,6 +31,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     private var pageModels: [(key: String, imageName: String)] = []
     
+    var onCreateExampleList: VoidFunction?
+    
     private var finishedSlider = false {
         didSet {
             if mode == .Launch {
@@ -238,8 +240,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                     ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color, storeProductInput: storeProductInput)
                                 }
                                 
-                                Providers.listItemsProvider.add(prototypes, status: .Todo, list: exampleList, note: nil, order: nil, weakSelf.resultHandler(onSuccess: {foo in
+                                Providers.listItemsProvider.add(prototypes, status: .Todo, list: exampleList, note: nil, order: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
                                     QL2("Finish adding example list")
+                                    
+                                    self?.onCreateExampleList?()
+                                    
                                     onFinish?()
                                     
                                     }, onError: {result in
