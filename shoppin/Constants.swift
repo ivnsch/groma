@@ -26,5 +26,5 @@ struct Constants {
     
     private static let appId = "Groma"
 
-    static let appStoreLink = "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=\(Constants.appId)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1)"
+    static let appStoreLink = "itms-apps://itunes.apple.com/app/id1121689899"
 }
