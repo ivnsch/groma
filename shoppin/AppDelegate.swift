@@ -130,12 +130,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             QorumOnlineLogs.extraInformation = extraInfo
             
             QorumLogs.enabled = false // This must be disabled for online log to work
-            QorumOnlineLogs.minimumLogLevelShown = 1
+            QorumLogs.minimumLogLevelShown = 4 // This is set because we check in some places for QorumLogs.minimumLogLevelShown to do print statements
+
+            QorumOnlineLogs.minimumLogLevelShown = 4
             QorumOnlineLogs.enabled = true
             QorumOnlineLogs.test()
         }
 
-        debugConfig()
+//        debugConfig()
+        productionConfig()
     }
     
     private func initWebsocket() {
