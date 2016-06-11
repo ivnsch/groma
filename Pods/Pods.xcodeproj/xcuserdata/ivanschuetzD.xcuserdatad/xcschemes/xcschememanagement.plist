@@ -4,246 +4,135 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Alamofire-OSX.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Alamofire-iOS.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>CMPopTipView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>4</integer>
 		</dict>
 		<key>ChameleonFramework.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>3</integer>
 		</dict>
 		<key>HockeySDK-HockeySDKResources.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>5</integer>
 		</dict>
 		<key>KLCPopup.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>6</integer>
 		</dict>
 		<key>Nimble.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>7</integer>
-		</dict>
-		<key>Pods-shoppin-Alamofire.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>9</integer>
-		</dict>
-		<key>Pods-shoppin-Reachability.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>10</integer>
-		</dict>
-		<key>Pods-shoppin-Realm.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>11</integer>
-		</dict>
-		<key>Pods-shoppin-RealmSwift.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>12</integer>
-		</dict>
-		<key>Pods-shoppin-Valet.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>13</integer>
 		</dict>
 		<key>Pods-shoppin.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>8</integer>
-		</dict>
-		<key>Pods-shoppin_osx-Alamofire.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>15</integer>
-		</dict>
-		<key>Pods-shoppin_osx-Reachability.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>16</integer>
-		</dict>
-		<key>Pods-shoppin_osx-Realm.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>17</integer>
-		</dict>
-		<key>Pods-shoppin_osx-RealmSwift.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>18</integer>
-		</dict>
-		<key>Pods-shoppin_osx-Valet.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>19</integer>
 		</dict>
 		<key>Pods-shoppin_osx.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>14</integer>
-		</dict>
-		<key>Pods-shoppin_osxTests-Alamofire.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>21</integer>
-		</dict>
-		<key>Pods-shoppin_osxTests-Reachability.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>22</integer>
-		</dict>
-		<key>Pods-shoppin_osxTests-Realm.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>23</integer>
-		</dict>
-		<key>Pods-shoppin_osxTests-RealmSwift.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>24</integer>
-		</dict>
-		<key>Pods-shoppin_osxTests-Valet.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>25</integer>
 		</dict>
 		<key>Pods-shoppin_osxTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>20</integer>
 		</dict>
 		<key>QorumLogs.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>26</integer>
 		</dict>
-		<key>QorumLogs.xcscheme_^#shared#^_</key>
+		<key>Reachability-OSX.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>27</integer>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Reachability-iOS.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Realm-OSX.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Realm-iOS.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>RealmSwift-OSX.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>RealmSwift-iOS.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>Starscream.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>28</integer>
 		</dict>
 		<key>SwiftCharts.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>29</integer>
 		</dict>
 		<key>SwiftValidator.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>30</integer>
 		</dict>
 		<key>SwipeView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>31</integer>
+		</dict>
+		<key>Valet-OSX.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Valet-iOS.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>054976843AF8614B353A04C448805B60</key>
+		<key>0FDD27FEFEA9160FA2538DD9E9BC11B6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>11944C1404A029FB7C9A7EE21B8E279F</key>
+		<key>1026EB670623B81CDA1B63AA6D8A9F75</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1415B37437A64593A0D2E00C6721755C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>1F223B66B6D5CB89ABB9C2B2C9E64F81</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>29F542C94B8276276567FFB0E74821D8</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>2EC7CD9C3271358A56730DB1F69913BA</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>2F6FE21F66D7DB08A3F40092C43B5CEA</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>3AECCC066251457FA5B508D599900008</key>
+		<key>3268602751A536BF0E316999D4FCC7FE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -253,17 +142,37 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4FADA6D9C1F16523C7E226D85B201DB6</key>
+		<key>544BA38A5EAC55267A8A5732544629F5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>62A56B65AF0FDF8D4CDAABBCB1313F4D</key>
+		<key>54BE406C96991F7FDAC7F0BBE777A470</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6705E5E926AF6AC4F83F0B106BCDFD10</key>
+		<key>5B85FF4B533904A29705951204736D61</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>64C0AD9DF635D4309BE0FDE1A6CFA6FB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>66D43D7A2950F06C9299F38C26D268B8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6AEC36DD3220AA9B4012F60DB2145FF6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>701481D251CFFC837CFA4A5B5ED09A1A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -273,32 +182,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7A903982D1EB7E1FE3A87F800D24B1C8</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>7D82B791DF5C3545069FDFF7C79D38DD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8AA9D1663E4B55695BA312C07E929EE1</key>
+		<key>7E3C109CC572A2B2680C12FE7EDC1173</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8F4335CE7FEFFD2C03D763E13908051F</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>920A9B88DAF5BBE83BC1923111744236</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>976BEA4DB31BDB87CB7094002B2321EE</key>
+		<key>823627FE742E2CBC8BC899693F2569D8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -308,17 +202,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9EB1505102BCFCA00A22C9DC85850352</key>
+		<key>99F553C5A15719EAB93041ED055EEDFB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A17E87C5D7607CDF93CF45DFDACA243D</key>
+		<key>A00A12E9544D1635569F9CA6826C0410</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A538C40E0583A3BCECB65AC65590CAF2</key>
+		<key>A7CB122E0C3DE9929061E9F990EAA723</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -328,22 +222,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C35781FD056428B51593092CDB348A43</key>
+		<key>CAE0F99A2009806BCD6DF889770AAA3A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DF01F5A4F7E63B5A94C2E4FAED73F44B</key>
+		<key>D06BDE96B04A1A338B534227C5118261</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E487DEB74F133059A75CF777CABC0115</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>FE7BFE02B58C28D2EBD932A917F1426B</key>
+		<key>F9C27AD6FC68B5C5B20C645078F28F92</key>
 		<dict>
 			<key>primary</key>
 			<true/>

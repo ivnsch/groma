@@ -71,20 +71,20 @@ class SuggestionsPrefiller {
     }
     
     private func writeDBCopy(toPath: String) {
-
-        if let fromPath = Realm.Configuration.defaultConfiguration.path {
-            do {
-                try Realm().writeCopyToPath(toPath)
-                print("Copied realm from path: \(fromPath), toPath: \(toPath)")
-
-            } catch let error as NSError {
-                print("Error copying realm: \(error)")
-            } catch _ {
-                print("Error copying realm")
-            }
-        } else {
-            print("Error copying realm - no path")
-        }
+//
+//        if let fromPath = Realm.Configuration.defaultConfiguration.path {
+//            do {
+//                try Realm().writeCopyToPath(toPath)
+//                print("Copied realm from path: \(fromPath), toPath: \(toPath)")
+//
+//            } catch let error as NSError {
+//                print("Error copying realm: \(error)")
+//            } catch _ {
+//                print("Error copying realm")
+//            }
+//        } else {
+//            print("Error copying realm - no path")
+//        }
     }
 
     private var uuid: String {

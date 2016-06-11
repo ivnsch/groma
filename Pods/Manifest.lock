@@ -33,11 +33,11 @@ PODS:
   - Nimble (2.0.0-rc.2)
   - QorumLogs (0.5)
   - Reachability (3.2)
-  - Realm (0.98.3):
-    - Realm/Headers (= 0.98.3)
-  - Realm/Headers (0.98.3)
-  - RealmSwift (0.98.3):
-    - Realm (= 0.98.3)
+  - Realm (1.0.0):
+    - Realm/Headers (= 1.0.0)
+  - Realm/Headers (1.0.0)
+  - RealmSwift (1.0.0):
+    - Realm (= 1.0.0)
   - Starscream (1.0.2)
   - SwiftCharts (0.3)
   - SwiftValidator (2.1.1)
@@ -79,7 +79,7 @@ CHECKOUT OPTIONS:
     :commit: dbfc4ebd53395361c14eb2c9b13f629fc541bba2
     :git: https://github.com/Quick/Nimble.git
   QorumLogs:
-    :commit: 883bc6ef5e8d002e878bbc693bd087f37070d760
+    :commit: 5a4ce977d9fd721028209867b04a1564c7d519ab
     :git: https://github.com/i-schuetz/QorumLogs
   SwiftCharts:
     :commit: 4b05d8b0bf259277bcc068b3da770849b08bdc9d
@@ -104,12 +104,14 @@ SPEC CHECKSUMS:
   Nimble: e3cf5e73a491daf21c2bc88783dbfc55ce8b8e02
   QorumLogs: 6de76e5299e8ec5de6ff2404594727006cc5b43a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Realm: c6a7d00221a2d5177810a674aebd40c5e0b70b0f
-  RealmSwift: d6ecad6e4c2a645d6ac956c2c7e9efb375f39c31
+  Realm: e15cd8e7c11d3e576f628ba0b7cb855269b4991c
+  RealmSwift: 3229306d020d96f83b335f87a0dcbf2cef0e6a2b
   Starscream: 40e2c4c1c770d811f24116b8b7dbeb4542c56767
   SwiftCharts: c66a449d58f9c811c467f865a47b1b6136b49499
   SwiftValidator: 79936ea870f1dba8a0824763375375bb209fe30d
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009
   Valet: f7fb62b7b65db58eaceee7828cf8e464b1b8fb71
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: d68a9b40587503f441cc17e6e53dcffea4687164
+
+COCOAPODS: 1.0.0
