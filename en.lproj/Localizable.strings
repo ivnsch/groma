@@ -344,8 +344,8 @@ title_participants = "Participants";
 
 empty_inventory_line1 = "Your inventory is empty";
 empty_inventory_line2 = "To add items, tap on 'buy' in the cart.";
-empty_group_line1 = "Your group is empty";
-empty_group_line2 = "Tap to items";
+empty_group_line1 = "Oops, there are no groups items yet";
+empty_group_line2 = "Just add some, will ya?";
 
 
 generic_login = "Login";
