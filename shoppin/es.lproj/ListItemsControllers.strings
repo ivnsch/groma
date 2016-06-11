@@ -41,8 +41,8 @@
 /* Class = "UILabel"; text = "Buy"; ObjectID = "oYb-WW-vJz"; */
 "oYb-WW-vJz.text" = "Comprar";
 
-/* Class = "UILabel"; text = "Oops, there are no list items yet"; ObjectID = "sxW-16-sQo"; */
-"sxW-16-sQo.text" = "Tu lista está vacías";
+/* Class = "UILabel"; text = "Oops, there are no items yet"; ObjectID = "sxW-16-sQo"; */
+"sxW-16-sQo.text" = "Tu lista está vacía";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "yHW-3q-Yxc"; */
 "yHW-3q-Yxc.text" = "Label";

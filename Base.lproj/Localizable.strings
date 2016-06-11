@@ -439,3 +439,6 @@ list_items_items_in_backstore = "%@ in the backstore";
 
 
 email_device = "Device: %@";
+
+
+share_subject = "Groma";
