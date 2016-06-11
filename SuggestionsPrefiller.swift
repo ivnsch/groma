@@ -109,35 +109,35 @@ class SuggestionsPrefiller {
         let vegetablesCat = DBProductCategory(uuid: uuid, name: tr("pr_vegetables", lang), bgColorHex: UIColor.flatGreenColor().hexStr)
         let herbsCat = DBProductCategory(uuid: uuid, name: tr("pr_herbs", lang), bgColorHex: UIColor.flatGreenColorDark().hexStr)
         let meatCat = DBProductCategory(uuid: uuid, name: tr("pr_meat", lang), bgColorHex: UIColor.flatRedColorDark().hexStr)
-        let petsCat = DBProductCategory(uuid: uuid, name: tr("pr_pets", lang), bgColorHex: UIColor.flatGreenColorDark().hexStr)
+        let petsCat = DBProductCategory(uuid: uuid, name: tr("pr_pets", lang), bgColorHex: UIColor.flatPowderBlueColor().hexStr)
         let bakeryCat = DBProductCategory(uuid: uuid, name: tr("pr_bakery", lang), bgColorHex: UIColor.flatTealColor().hexStr)
-        let riceCat = DBProductCategory(uuid: uuid, name: tr("pr_rice", lang), bgColorHex: UIColor.flatWhiteColorDark().hexStr)
-        let nutsCat = DBProductCategory(uuid: uuid, name: tr("pr_nuts", lang), bgColorHex: UIColor.flatBrownColorDark().hexStr)
-        let oilCat = DBProductCategory(uuid: uuid, name: tr("pr_oil", lang), bgColorHex: UIColor.flatYellowColor().hexStr)
+        let riceCat = DBProductCategory(uuid: uuid, name: tr("pr_rice", lang), bgColorHex: UIColor.flatGrayColor().hexStr)
+        let nutsCat = DBProductCategory(uuid: uuid, name: tr("pr_nuts", lang), bgColorHex: UIColor.flatBrownColor().hexStr)
+        let oilCat = DBProductCategory(uuid: uuid, name: tr("pr_oil", lang), bgColorHex: UIColor.flatForestGreenColor().hexStr)
         let clothesCat = DBProductCategory(uuid: uuid, name: tr("pr_clothes", lang), bgColorHex: UIColor.flatBlueColorDark().hexStr)
         let cleaningCat = DBProductCategory(uuid: uuid, name: tr("pr_cleaning", lang), bgColorHex: UIColor.flatMagentaColor().hexStr)
         
-        let milkCat = DBProductCategory(uuid: uuid, name: tr("pr_milk", lang), bgColorHex: UIColor.flatYellowColor().hexStr)
+        let milkCat = DBProductCategory(uuid: uuid, name: tr("pr_milk", lang), bgColorHex: UIColor.flatWhiteColorDark().hexStr)
         
         let fishCat = DBProductCategory(uuid: uuid, name: tr("pr_fish", lang), bgColorHex: UIColor.flatBlueColorDark().hexStr)
         let pastaCat = DBProductCategory(uuid: uuid, name: tr("pr_pasta", lang), bgColorHex: UIColor.flatSandColorDark().hexStr)
         let drinksCat = DBProductCategory(uuid: uuid, name: tr("pr_drinks", lang), bgColorHex: UIColor.flatBlueColor().lightenByPercentage(0.5).hexStr)
-        let alcoholCat = DBProductCategory(uuid: uuid, name: tr("pr_alcohol", lang), bgColorHex: UIColor.flatBrownColorDark().hexStr)
+        let alcoholCat = DBProductCategory(uuid: uuid, name: tr("pr_alcohol", lang), bgColorHex: UIColor.flatPurpleColorDark().hexStr)
         let hygienicCat = DBProductCategory(uuid: uuid, name: tr("pr_hygienic", lang), bgColorHex: UIColor.flatMintColor().hexStr)
-        let dipsCat = DBProductCategory(uuid: uuid, name: tr("pr_dips", lang), bgColorHex: UIColor.flatBrownColor().hexStr)
-        let spicesCat = DBProductCategory(uuid: uuid, name: tr("pr_spices", lang), bgColorHex: UIColor.flatBrownColor().hexStr)
+        let dipsCat = DBProductCategory(uuid: uuid, name: tr("pr_dips", lang), bgColorHex: UIColor.flatMintColorDark().hexStr)
+        let spicesCat = DBProductCategory(uuid: uuid, name: tr("pr_spices", lang), bgColorHex: UIColor.flatBlackColor().hexStr)
         let friedCat = DBProductCategory(uuid: uuid, name: tr("pr_fried", lang), bgColorHex: UIColor.flatMaroonColor().hexStr)
         let breadCat = DBProductCategory(uuid: uuid, name: tr("pr_bread", lang), bgColorHex: UIColor.flatYellowColorDark().hexStr)
         let sweetsCat = DBProductCategory(uuid: uuid, name: tr("pr_sweets", lang), bgColorHex: UIColor.flatPinkColor().hexStr)
-        let teaAndCoffeeCat = DBProductCategory(uuid: uuid, name: tr("pr_tea_coffee", lang), bgColorHex: UIColor.flatBlackColor().hexStr)
-        let cheeseCat = DBProductCategory(uuid: uuid, name: tr("pr_cheese", lang), bgColorHex: UIColor.flatYellowColorDark().hexStr)
+        let teaAndCoffeeCat = DBProductCategory(uuid: uuid, name: tr("pr_tea_coffee", lang), bgColorHex: UIColor.flatBrownColor().hexStr)
+        let cheeseCat = DBProductCategory(uuid: uuid, name: tr("pr_cheese", lang), bgColorHex: UIColor.flatYellowColor().hexStr)
         let beansCat = DBProductCategory(uuid: uuid, name: tr("pr_beans", lang), bgColorHex: UIColor.flatRedColorDark().hexStr)
         let eggsCat = DBProductCategory(uuid: uuid, name: tr("pr_eggs", lang), bgColorHex: UIColor.flatNavyBlueColor().hexStr)
         let spreadCat = DBProductCategory(uuid: uuid, name: tr("pr_spread", lang), bgColorHex: UIColor.flatPlumColor().hexStr)
         let cerealCat = DBProductCategory(uuid: uuid, name: tr("pr_cereal", lang), bgColorHex: UIColor.flatOrangeColor().hexStr)
         let coldCutCat = DBProductCategory(uuid: uuid, name: tr("pr_cold_cut", lang), bgColorHex: UIColor.flatOrangeColorDark().hexStr)
-        let ovenCat = DBProductCategory(uuid: uuid, name: tr("pr_oven", lang), bgColorHex: UIColor.flatBlackColorDark().hexStr)
-        let stationeriesCat = DBProductCategory(uuid: uuid, name: tr("pr_stationeries", lang), bgColorHex: UIColor.flatGrayColorDark().hexStr)
+        let ovenCat = DBProductCategory(uuid: uuid, name: tr("pr_oven", lang), bgColorHex: UIColor.flatWatermelonColorDark().hexStr)
+        let stationeriesCat = DBProductCategory(uuid: uuid, name: tr("pr_stationeries", lang), bgColorHex: UIColor.flatNavyBlueColorDark().hexStr)
   
         let products: [DBProduct] = [
             // fruits
@@ -357,16 +357,6 @@ class SuggestionsPrefiller {
             
             // oven
             DBProduct(uuid: uuid, name: tr("pr_pizza", lang), category: ovenCat),
-            
-            // stationeries
-            DBProduct(uuid: uuid, name: tr("pr_paper", lang), category: stationeriesCat),
-            DBProduct(uuid: uuid, name: tr("pr_pens", lang), category: stationeriesCat),
-            DBProduct(uuid: uuid, name: tr("pr_pencils", lang), category: stationeriesCat),
-            DBProduct(uuid: uuid, name: tr("pr_notebooks", lang), category: stationeriesCat),
-            DBProduct(uuid: uuid, name: tr("pr_sharpeners", lang), category: stationeriesCat),
-            DBProduct(uuid: uuid, name: tr("pr_erasers", lang), category: stationeriesCat),
-            DBProduct(uuid: uuid, name: tr("pr_stapler", lang), category: stationeriesCat),
-            DBProduct(uuid: uuid, name: tr("pr_cartridges", lang), category: stationeriesCat),
 
             // tea & coffee
             DBProduct(uuid: uuid, name: tr("pr_green_tea", lang), category: teaAndCoffeeCat),
@@ -381,7 +371,17 @@ class SuggestionsPrefiller {
             DBProduct(uuid: uuid, name: tr("pr_chocolates", lang), category: sweetsCat),
             DBProduct(uuid: uuid, name: tr("pr_ice_cream", lang), category: sweetsCat),
             DBProduct(uuid: uuid, name: tr("pr_mints", lang), category: sweetsCat),
-            DBProduct(uuid: uuid, name: tr("pr_marshmallows", lang), category: sweetsCat)
+            DBProduct(uuid: uuid, name: tr("pr_marshmallows", lang), category: sweetsCat),
+            
+            // stationeries
+            DBProduct(uuid: uuid, name: tr("pr_paper", lang), category: stationeriesCat),
+            DBProduct(uuid: uuid, name: tr("pr_pens", lang), category: stationeriesCat),
+            DBProduct(uuid: uuid, name: tr("pr_pencils", lang), category: stationeriesCat),
+            DBProduct(uuid: uuid, name: tr("pr_notebooks", lang), category: stationeriesCat),
+            DBProduct(uuid: uuid, name: tr("pr_sharpeners", lang), category: stationeriesCat),
+            DBProduct(uuid: uuid, name: tr("pr_erasers", lang), category: stationeriesCat),
+            DBProduct(uuid: uuid, name: tr("pr_stapler", lang), category: stationeriesCat),
+            DBProduct(uuid: uuid, name: tr("pr_cartridges", lang), category: stationeriesCat)
         ]
 
         // TODO!!!! better extract the categories from products because listing them again here is error prone, if we forget one the app may crash during prefill! (as there will be products that reference not saved categories). Performance is not important here as this is used only to generate the prefill db not in the app.

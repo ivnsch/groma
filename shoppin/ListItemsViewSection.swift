@@ -106,8 +106,8 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
             let view = NSBundle.loadView("ListItemsSectionHeaderView", owner: self) as! ListItemsSectionHeaderView
             view.section = section
             view.backgroundColor = headerBGColor
-//            view.nameLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: headerBGColor, isFlat: true)
-            view.nameLabel.textColor = headerFontColor
+            view.nameLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: headerBGColor, isFlat: true)
+//            view.nameLabel.textColor = headerFontColor
             view.nameLabel.font = headerFont
             view.delegate = self
             return view
