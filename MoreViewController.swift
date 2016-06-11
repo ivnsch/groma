@@ -87,7 +87,7 @@ class MoreViewController: UITableViewController {
             emailHelper?.showEmail()
             
         case .Share:
-            share(trans("sharing_message"), sharingImage: nil, sharingURL: NSURL(string: "https://developers.facebook.com"))
+            share(trans("sharing_message"), sharingImage: nil, sharingURL: NSURL(string: "https://itunes.apple.com/app/groma/id1121689899?&mt=8"))
             // Initially implemented this, which contains facebook sharing using its SDK. It seems with the default share we achieve the same functionality (Facebook seems to not allow to add title and description to links to the app store, which is what we want to link to, see https://developers.facebook.com/docs/sharing/ios - this would have been the only reason to use the SDK). Letting it commented just in case.
 //            let controller = UIStoryboard.shareAppViewController()
 //            navigationController?.setNavigationBarHidden(true, animated: false)
@@ -135,6 +135,7 @@ class MoreViewController: UITableViewController {
         background({
             let controller = UIActivityViewController(activityItems: sharingItems, applicationActivities: nil)
 //            controller.excludedActivityTypes = [UIActivityTypeAirDrop]
+            controller.setValue(trans("share_subject"), forKey: "Subject")
             return controller
         }) {[weak self] (controller: UIViewController) in
             self?.view.defaultProgressVisible(false)
