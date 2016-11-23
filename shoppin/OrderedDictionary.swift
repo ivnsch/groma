@@ -151,8 +151,8 @@ struct OrderedDictionary<KeyType: Hashable, ValueType>: Sequence {
                 return nil
             }
             if nextIndex < self.array.count {
-                nextIndex += 1
                 let key = self.array[nextIndex]
+                nextIndex += 1
                 return (key, self.dictionary[key]!)
             } else {
                 return nil

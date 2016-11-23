@@ -15,11 +15,7 @@ class DBPlanItem: DBSyncable {
     dynamic var quantity: Int = 0
     dynamic var quantityDelta: Int = 0
     
-    dynamic lazy var key: String = self.keyValue()
-    
-    fileprivate func keyValue() -> String {
-        return product.uuid
-    }
+    dynamic var key: String = ""
     
     override static func primaryKey() -> String? {
         return "key"
@@ -31,6 +27,7 @@ class DBPlanItem: DBSyncable {
         }
         set(newProduct) {
             productOpt = newProduct
+            key = newProduct.uuid
         }
     }
     
