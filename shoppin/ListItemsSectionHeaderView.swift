@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ListItemsSectionHeaderViewDelegate: class {
-    func onHeaderTap(header: ListItemsSectionHeaderView)
+    func onHeaderTap(_ header: ListItemsSectionHeaderView)
 }
 
 class ListItemsSectionHeaderView: UIView {
@@ -26,7 +26,7 @@ class ListItemsSectionHeaderView: UIView {
     
     weak var delegate: ListItemsSectionHeaderViewDelegate!
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         delegate?.onHeaderTap(self)
     }
 }

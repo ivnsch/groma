@@ -10,8 +10,8 @@ import UIKit
 import QorumLogs
 
 protocol ExistingSharedUserCellDelegate: class {
-    func onDeleteSharedUser(sharedUser: SharedUser, cell: ExistingSharedUserCell)
-    func onPullSharedUser(sharedUser: SharedUser, cell: ExistingSharedUserCell)
+    func onDeleteSharedUser(_ sharedUser: SharedUser, cell: ExistingSharedUserCell)
+    func onPullSharedUser(_ sharedUser: SharedUser, cell: ExistingSharedUserCell)
 }
 
 class ExistingSharedUserCell: UITableViewCell {
@@ -28,10 +28,10 @@ class ExistingSharedUserCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        selectionStyle = .None
+        selectionStyle = .none
     }
 
-    @IBAction func onDeleteTap(sender: UIButton) {
+    @IBAction func onDeleteTap(_ sender: UIButton) {
         if let sharedUser = sharedUser {
             delegate?.onDeleteSharedUser(sharedUser, cell: self)
         } else {
@@ -39,7 +39,7 @@ class ExistingSharedUserCell: UITableViewCell {
         }
     }
     
-    @IBAction func onPullTap(sender: UIButton) {
+    @IBAction func onPullTap(_ sender: UIButton) {
         if let sharedUser = sharedUser {
             delegate?.onPullSharedUser(sharedUser, cell: self)
         } else {

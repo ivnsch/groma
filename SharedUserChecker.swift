@@ -11,13 +11,13 @@ import Foundation
 
 struct SharedUserChecker {
 
-    static func check(email: String, users: [SharedUser], controller: UIViewController, onSuccess: VoidFunction) {
+    static func check(_ email: String, users: [SharedUser], controller: UIViewController, onSuccess: @escaping VoidFunction) {
         
         if (Providers.userProvider.mySharedUser.map{$0.email == email}) ?? false {
             AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_you_dont_have_to_add_yourself"), controller: controller)
             
         } else {
-            if users.contains({$0.email == email}) {
+            if users.contains(where: {$0.email == email}) {
                 AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_user_already_in_list", email), controller: controller)
                 
             } else {
@@ -25,14 +25,14 @@ struct SharedUserChecker {
                 Providers.userProvider.isRegistered(email) {result in
                     
                     switch result.status {
-                    case .Success:
+                    case .success:
                         onSuccess()
                         
-                    case .NotFound:
+                    case .notFound:
                         AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_user_not_registered", email), controller: controller)
                         
                     default:
-                        controller.defaultErrorHandler()(providerResult: result)
+                        controller.defaultErrorHandler()(result)
                         print("Error: AddEditListController.onAddUserTap: unexpeted result status in isRegistered: \(result), input: \(email)")
                     }
                     controller.progressVisible(false)

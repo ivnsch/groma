@@ -11,7 +11,7 @@ import CMPopTipView
 
 class MyTipPopup: CMPopTipView {
 
-    init(customView: UIView, borderColor: UIColor? = UIColor.flatGrayColor()) {
+    init(customView: UIView, borderColor: UIColor? = UIColor.flatGray) {
         super.init(customView: customView)
         self.borderColor = borderColor
         sharedInit()
@@ -25,14 +25,14 @@ class MyTipPopup: CMPopTipView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func sharedInit() {
+    fileprivate func sharedInit() {
         hasShadow = false
         borderWidth = 1
         has3DStyle = false
         hasGradientBackground = false
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         dismissTapAnywhere = true
         disableTapToDismiss = false
-        animation = CMPopTipAnimationPop
+        animation = CMPopTipAnimation.pop
     }
 }

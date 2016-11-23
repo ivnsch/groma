@@ -11,9 +11,9 @@ import SwiftValidator
 
 struct ValidationErrorMsgBuilder {
 
-    static func errorMsg(errors: [UITextField: ValidationError]) -> String {
-        return errors.reduce("") {str, error in
-            str + error.1.errorMessage + "\n"
+    static func errorMsg(_ errors: [String]) -> String {
+        return errors.reduce("") {str, errorMessage in
+            str + errorMessage + "\n"
         }
     }
 }

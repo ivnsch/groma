@@ -33,7 +33,7 @@ class DBList: DBSyncable {
         return UIColor(hexString: bgColorHex)
     }
     
-    func setBgColor(bgColor: UIColor) {
+    func setBgColor(_ bgColor: UIColor) {
         bgColorHex = bgColor.hexStr
     }
     
@@ -43,28 +43,28 @@ class DBList: DBSyncable {
         
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
-    static func createInventoryFilter(inventoryUuid: String) -> String {
+    static func createInventoryFilter(_ inventoryUuid: String) -> String {
         return "inventoryOpt.uuid == '\(inventoryUuid)'"
     }
     
     // MARK: - Update
     
     // Creates dictionary to update database entry for an order update
-    static func createOrderUpdateDict(orderUpdate: OrderUpdate, dirty: Bool) -> [String: AnyObject] {
-        return ["uuid": orderUpdate.uuid, "order": orderUpdate.order, DBSyncable.dirtyFieldName: dirty]
+    static func createOrderUpdateDict(_ orderUpdate: OrderUpdate, dirty: Bool) -> [String: AnyObject] {
+        return ["uuid": orderUpdate.uuid as AnyObject, "order": orderUpdate.order as AnyObject, DBSyncable.dirtyFieldName: dirty as AnyObject]
     }
     
-    static func timestampUpdateDict(uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
+    static func timestampUpdateDict(_ uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
         return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
     
     // MARK: -
     
-    static func fromDict(dict: [String: AnyObject], inventory: DBInventory) -> DBList {
+    static func fromDict(_ dict: [String: AnyObject], inventory: DBInventory) -> DBList {
         let item = DBList()
         let listDict = dict["list"] as! [String: AnyObject]
         item.uuid = listDict["uuid"]! as! String
@@ -88,15 +88,15 @@ class DBList: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["name"] = name
-        dict["color"] = bgColorHex
-        dict["order"] = order
-        dict["inventory"] = inventory.toDict()
+        dict["uuid"] = uuid as AnyObject?
+        dict["name"] = name as AnyObject?
+        dict["color"] = bgColorHex as AnyObject?
+        dict["order"] = order as AnyObject?
+        dict["inventory"] = inventory.toDict() as AnyObject?
         if let store = storeOpt {
-            dict["store"] = store
+            dict["store"] = store as AnyObject?
         }
-        dict["users"] = users.map{$0.toDict()}
+        dict["users"] = users.map{$0.toDict()} as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
     }
@@ -105,8 +105,8 @@ class DBList: DBSyncable {
         return ["inventory"]
     }
     
-    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
-        DBProviders.listProvider.removeListDependenciesSync(realm, listUuid: uuid, markForSync: markForSync)
+    override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
+        _ = DBProviders.listProvider.removeListDependenciesSync(realm, listUuid: uuid, markForSync: markForSync)
         realm.delete(self)
     }
 }

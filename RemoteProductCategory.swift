@@ -17,12 +17,12 @@ struct RemoteProductCategory: ResponseObjectSerializable, ResponseCollectionSeri
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let name = representation.valueForKeyPath("name") as? String,
-            let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let name = representation.value(forKeyPath: "name") as? String,
+            let color = ((representation.value(forKeyPath: "color") as? String).map{colorStr in
                 UIColor(hexString: colorStr)
             }),
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -33,9 +33,9 @@ struct RemoteProductCategory: ResponseObjectSerializable, ResponseCollectionSeri
         self.lastUpdate = Int64(lastUpdate)
     }
 
-    static func collection(representation: AnyObject) -> [RemoteProductCategory]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteProductCategory]? {
         var products = [RemoteProductCategory]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let product = RemoteProductCategory(representation: obj) {
                 products.append(product)
             } else {
@@ -47,7 +47,7 @@ struct RemoteProductCategory: ResponseObjectSerializable, ResponseCollectionSeri
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color), listUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), color: \(color), listUpdate: \(lastUpdate)}"
     }
 }
 

@@ -40,10 +40,10 @@ class Inventory: Equatable, Hashable {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), users: \(users), bgColor: \(bgColor), order: \(order), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), users: \(users), bgColor: \(bgColor), order: \(order), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
-    func same(inventory: Inventory) -> Bool {
+    func same(_ inventory: Inventory) -> Bool {
         return self.uuid == inventory.uuid
     }
     
@@ -51,7 +51,7 @@ class Inventory: Equatable, Hashable {
         return uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, users: [SharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Inventory {
+    func copy(uuid: String? = nil, name: String? = nil, users: [SharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Inventory {
         return Inventory(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -63,7 +63,7 @@ class Inventory: Equatable, Hashable {
         )
     }
     
-    func equalsExcludingSyncAttributes(rhs: Inventory) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: Inventory) -> Bool {
         return uuid == rhs.uuid && name == rhs.name && bgColor == rhs.bgColor && order == rhs.order && users == rhs.users
     }
 }

@@ -13,7 +13,7 @@ import QorumLogs
 
     @IBInspectable var horizontal: Bool = false
 
-    private static let invalidNumber: Float = -9999999
+    fileprivate static let invalidNumber: Float = -9999999
     
     @IBInspectable var hSmall: Float = invalidNumber
     @IBInspectable var hMiddle: Float = invalidNumber
@@ -29,22 +29,22 @@ import QorumLogs
         
         // logging
         func dimensionStr() -> String {
-            return horizontal ? String(DimensionsManager.widthDimension) : String(DimensionsManager.heightDimension)
+            return horizontal ? String(describing: DimensionsManager.widthDimension) : String(describing: DimensionsManager.heightDimension)
         }
 
         let constant: Float = {
             if horizontal {
                 switch DimensionsManager.widthDimension {
-                case .Small: return hSmall
-                case .Middle: return hMiddle
-                case .Large: return hLarge
+                case .small: return hSmall
+                case .middle: return hMiddle
+                case .large: return hLarge
                 }
             } else {
                 switch DimensionsManager.heightDimension {
-                case .VerySmall: return vVerySmall
-                case .Small: return vSmall
-                case .Middle: return vMiddle
-                case .Large: return vLarge
+                case .verySmall: return vVerySmall
+                case .small: return vSmall
+                case .middle: return vMiddle
+                case .large: return vLarge
                 }
             }
         }()

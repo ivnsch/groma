@@ -10,20 +10,20 @@ import UIKit
 
 struct Shapes {
     
-    static func arrowToRightBGPath(size: CGSize, arrowWidth aw: CGFloat)  -> CGPath {
+    static func arrowToRightBGPath(_ size: CGSize, arrowWidth aw: CGFloat)  -> CGPath {
         
         let w = size.width
         let h = size.height
         
-        let path = CGPathCreateMutable()
+        let path = CGMutablePath()
         
-        CGPathMoveToPoint(path , nil, 0, 0)
-        CGPathAddLineToPoint(path, nil, w - aw, 0)
-        CGPathAddLineToPoint(path, nil, w, h / 2);
-        CGPathAddLineToPoint(path, nil, w - aw, h)
-        CGPathAddLineToPoint(path, nil, 0, h)
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x: w - aw, y: 0))
+        path.addLine(to: CGPoint(x: w, y: h / 2))
+        path.addLine(to: CGPoint(x: w - aw, y: h))
+        path.addLine(to: CGPoint(x: 0, y: h))
         
-        CGPathCloseSubpath(path)
+        path.closeSubpath()
         
         return path
     }

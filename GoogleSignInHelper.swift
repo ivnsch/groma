@@ -11,7 +11,7 @@ import QorumLogs
 
 struct GoogleSignInHelper {
 
-    static func configure(uiDelegate uiDelegate: GIDSignInUIDelegate, delegate: GIDSignInDelegate) {
+    static func configure(uiDelegate: GIDSignInUIDelegate, delegate: GIDSignInDelegate) {
         // Google sign-in
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)

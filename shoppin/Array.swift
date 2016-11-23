@@ -9,22 +9,22 @@
 import Foundation
 
 extension Array {
-    func forEach<U>(function: (element: Element) -> U) {
+    func forEach<U>(_ function: (_ element: Element) -> U) {
         for e in self {
-            function(element: e)
+            _ = function(e)
         }
     }
     
-    func findFirst(function: (element: Element) -> Bool) -> Element? {
+    func findFirst(_ function: (_ element: Element) -> Bool) -> Element? {
         for e in self {
-            if function(element: e) {
+            if function(e) {
                 return e
             }
         }
         return nil
     }
     
-    func contains(function: (element: Element) -> Bool) -> Bool {
+    func contains(_ function: (_ element: Element) -> Bool) -> Bool {
         return findFirst(function) != nil
     }
     
@@ -36,7 +36,7 @@ extension Array {
     // TODO maybe this is not very useful now that collect was added?
     // Filters a list and maps in the same iteration.
     // Reduce could also be used for this, but this has better performance.
-    func filterMap<T>(filterFunc: Element -> Bool, mapFunc: Element -> T) -> [T] {
+    func filterMap<T>(_ filterFunc: (Element) -> Bool, mapFunc: (Element) -> T) -> [T] {
         var arr: [T] = []
         for e in self {
             if filterFunc(e) {
@@ -48,7 +48,7 @@ extension Array {
 
     // Filter + map
     // parameter f, mapping and filtering function if returns nil -> filter out
-    func collect<T>(f: Element -> T?) -> [T] {
+    func collect<T>(_ f: (Element) -> T?) -> [T] {
         var arr: [T] = []
         for e in self {
             if let e = f(e) {
@@ -58,7 +58,7 @@ extension Array {
         return arr
     }
 
-    func split(belongs: Element -> Bool) -> (belongs: [Element], notBelongs: [Element]) {
+    func split(_ belongs: (Element) -> Bool) -> (belongs: [Element], notBelongs: [Element]) {
         var belongsArr: [Element] = []
         var notBelongsArr: [Element] = []
         for element in self {
@@ -71,7 +71,7 @@ extension Array {
         return (belongsArr, notBelongsArr)
     }
     
-    func splitMap<U>(belongs: Element -> Bool, mapper: Element -> U) -> (belongs: [U], notBelongs: [U]) {
+    func splitMap<U>(_ belongs: (Element) -> Bool, mapper: (Element) -> U) -> (belongs: [U], notBelongs: [U]) {
         var belongsArr: [U] = []
         var notBelongsArr: [U] = []
         for element in self {
@@ -86,7 +86,7 @@ extension Array {
     
     
     // More performant variant of array.enumerate().map{index, element}. We call it like this: array.mapEnumerate{index, Element in return Foo}
-    func mapEnumerate<T>(f: (Int, Element) -> T) -> [T] {
+    func mapEnumerate<T>(_ f: (Int, Element) -> T) -> [T] {
         var arr: [T] = []
         for i in 0..<self.count {
             arr.append(f(i, self[i]))
@@ -94,13 +94,13 @@ extension Array {
         return arr
     }
 
-    func forEachEnumerate(f: (Int, Element) -> Void) {
+    func forEachEnumerate(_ f: (Int, Element) -> Void) {
         for i in 0..<self.count {
             f(i, self[i])
         }
     }
     
-    func toDictionary<K: Hashable, V>(mapFunc: Element -> (K, V?)) -> [K: V] {
+    func toDictionary<K: Hashable, V>(_ mapFunc: (Element) -> (K, V?)) -> [K: V] {
         var dict = [K: V]()
         for e in self {
             let (k, v) = mapFunc(e)
@@ -109,7 +109,7 @@ extension Array {
         return dict
     }
     
-    mutating func appendAll(array: [Element]) {
+    mutating func appendAll(_ array: [Element]) {
         for element in array {
             self.append(element)
         }
@@ -119,24 +119,24 @@ extension Array {
     subscript(range: NSRange) -> Array<Element> {
         get {
             guard range.location < count else {return []}
-            let end = min((range.location + range.length), count)
+            let end = Swift.min((range.location + range.length), count)
             return Array(self[range.location..<end])
         }
     }
 
-    func sum(f: Element -> Float) -> Float {
+    func sum(_ f: (Element) -> Float) -> Float {
         return reduce(0) {sum, element in
             sum + f(element)
         }
     }
     
-    func sum(f: Element -> Int) -> Int {
+    func sum(_ f: (Element) -> Int) -> Int {
         return reduce(0) {sum, element in
             sum + f(element)
         }
     }
     
-    func removeAllWithCondition(f: Element -> Bool) -> Array<Element> {
+    func removeAllWithCondition(_ f: (Element) -> Bool) -> Array<Element> {
         var array = Array<Element>()
         for e in self {
             if !f(e) {
@@ -161,7 +161,7 @@ extension Array where Element: Identifiable {
     /**
     Replaces first element with same identity with element
     */
-    mutating func update(element: Element) -> Bool {
+    mutating func update(_ element: Element) -> Bool {
         for i in 0..<self.count {
             if self[i].same(element) {
                 self[i] = element
@@ -171,7 +171,7 @@ extension Array where Element: Identifiable {
         return false
     }
     
-    func indexOfUsingIdentifiable(element: Element) -> Int? {
+    func indexOfUsingIdentifiable(_ element: Element) -> Int? {
         for i in 0..<self.count {
             if self[i].same(element) {
                 return i
@@ -180,9 +180,9 @@ extension Array where Element: Identifiable {
         return nil
     }
     
-    mutating func removeUsingIdentifiable(element: Element) -> Int? {
+    mutating func removeUsingIdentifiable(_ element: Element) -> Int? {
         if let index = self.indexOfUsingIdentifiable(element) {
-            self.removeAtIndex(index)
+            self.remove(at: index)
             return index
         }
         return nil
@@ -192,9 +192,9 @@ extension Array where Element: Identifiable {
 extension Array where Element: Equatable {
     
     // safe element removal, and returns index of removed element optional
-    mutating func remove(element: Element) -> Int? {
-        if let index = self.indexOf(element) {
-            self.removeAtIndex(index)
+    mutating func remove(_ element: Element) -> Int? {
+        if let index = self.index(of: element) {
+            self.remove(at: index)
             return index
         }
         return nil

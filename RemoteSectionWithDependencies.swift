@@ -16,10 +16,10 @@ struct RemoteSectionWithDependencies: ResponseObjectSerializable, ResponseCollec
 
     init?(representation: AnyObject) {
         guard
-            let sectionObj = representation.valueForKeyPath("section"),
-            let section = RemoteSection(representation: sectionObj),
-            let listObj = representation.valueForKeyPath("list"),
-            let list = RemoteListWithDependencies(representation: listObj)
+            let sectionObj = representation.value(forKeyPath: "section"),
+            let section = RemoteSection(representation: sectionObj as AnyObject),
+            let listObj = representation.value(forKeyPath: "list"),
+            let list = RemoteListWithDependencies(representation: listObj as AnyObject)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -28,9 +28,9 @@ struct RemoteSectionWithDependencies: ResponseObjectSerializable, ResponseCollec
         self.list = list
     }
     
-    static func collection(representation: AnyObject) -> [RemoteSectionWithDependencies]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteSectionWithDependencies]? {
         var sections = [RemoteSectionWithDependencies]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let section = RemoteSectionWithDependencies(representation: obj) {
                 sections.append(section)
             } else {
@@ -41,6 +41,6 @@ struct RemoteSectionWithDependencies: ResponseObjectSerializable, ResponseCollec
     }
 
     var debugDescription: String {
-        return "{\(self.dynamicType) section: \(section), list: \(list)}"
+        return "{\(type(of: self)) section: \(section), list: \(list)}"
     }
 }

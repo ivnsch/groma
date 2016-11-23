@@ -15,7 +15,7 @@ struct RemoteRegisterResult: ResponseObjectSerializable, CustomDebugStringConver
     
     init?(representation: AnyObject) {
         guard
-            let token = representation.valueForKeyPath("token") as? String
+            let token = representation.value(forKeyPath: "token") as? String
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -24,6 +24,6 @@ struct RemoteRegisterResult: ResponseObjectSerializable, CustomDebugStringConver
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) token: \(self.token)}"
+        return "{\(type(of: self)) token: \(self.token)}"
     }
 }

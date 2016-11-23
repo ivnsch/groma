@@ -10,8 +10,8 @@ import UIKit
 
 extension Int64 {
     
-    func millisToEpochDate() -> NSDate {
+    func millisToEpochDate() -> Date {
         // TODO!!!! timezone?
-        return NSDate(timeIntervalSince1970: NSTimeInterval(self / Int64(1000)))
+        return Date(timeIntervalSince1970: TimeInterval(self / Int64(1000)))
     }
 }

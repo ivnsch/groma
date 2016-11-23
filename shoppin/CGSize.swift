@@ -9,7 +9,7 @@
 import UIKit
 
 extension CGSize {
-    func increase(dx: CGFloat, dy: CGFloat) -> CGSize {
-        return CGSizeMake(width + dx, height + dy)
+    func increase(_ dx: CGFloat, dy: CGFloat) -> CGSize {
+        return CGSize(width: width + dx, height: height + dy)
     }
 }

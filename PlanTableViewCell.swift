@@ -10,8 +10,8 @@ import UIKit
 
 
 protocol PlanTableViewCellDelegate: class {
-    func onPlusTap(planItem: PlanItem, cell: PlanTableViewCell, row: Int)
-    func onMinusTap(planItem: PlanItem, cell: PlanTableViewCell, row: Int)
+    func onPlusTap(_ planItem: PlanItem, cell: PlanTableViewCell, row: Int)
+    func onMinusTap(_ planItem: PlanItem, cell: PlanTableViewCell, row: Int)
 }
 
 class PlanTableViewCell: UITableViewCell {
@@ -40,22 +40,22 @@ class PlanTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
 
-    @IBAction func onPlusTap(sender: UIButton) {
-        if let planItem = planItem, row = row {
+    @IBAction func onPlusTap(_ sender: UIButton) {
+        if let planItem = planItem, let row = row {
             delegate?.onPlusTap(planItem, cell: self, row: row)
         } else {
             print("Error: No plan item")
         }
     }
 
-    @IBAction func onMinusTap(sender: UIButton) {
-        if let planItem = planItem, row = row {
+    @IBAction func onMinusTap(_ sender: UIButton) {
+        if let planItem = planItem, let row = row {
             delegate?.onMinusTap(planItem, cell: self, row: row)
         } else {
             print("Error: No plan item")

@@ -15,9 +15,9 @@ struct RemoteListInvitation: ResponseObjectSerializable, ResponseCollectionSeria
     
     init?(representation: AnyObject) {
         guard
-            let sender = representation.valueForKeyPath("sender") as? String,
-            let itemObj = representation.valueForKeyPath("item"),
-            let list = RemoteListNoUsers(representation: itemObj)
+            let sender = representation.value(forKeyPath: "sender") as? String,
+            let itemObj = representation.value(forKeyPath: "item"),
+            let list = RemoteListNoUsers(representation: itemObj as AnyObject)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -26,9 +26,9 @@ struct RemoteListInvitation: ResponseObjectSerializable, ResponseCollectionSeria
         self.list = list
     }
     
-    static func collection(representation: AnyObject) -> [RemoteListInvitation]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteListInvitation]? {
         var lists = [RemoteListInvitation]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let list = RemoteListInvitation(representation: obj) {
                 lists.append(list)
             } else {
@@ -40,6 +40,6 @@ struct RemoteListInvitation: ResponseObjectSerializable, ResponseCollectionSeria
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) sender: \(sender), list: \(list)}"
+        return "{\(type(of: self)) sender: \(sender), list: \(list)}"
     }
 }

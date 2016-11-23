@@ -32,7 +32,7 @@ class DBRemoveSharedUser: Object {
     
     // MARK: - Filters
     
-    static func createFilter(email: String) -> String {
+    static func createFilter(_ email: String) -> String {
         return "email == '\(email)'"
     }
     
@@ -40,7 +40,7 @@ class DBRemoveSharedUser: Object {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["email"] = email
+        dict["email"] = email as AnyObject?
         return dict
     }
 }

@@ -18,12 +18,12 @@ struct RemoteListItemIncrement: ResponseObjectSerializable, CustomDebugStringCon
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let statusInt = representation.valueForKeyPath("status") as? Int,
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let statusInt = representation.value(forKeyPath: "status") as? Int,
             let status = ListItemStatus(rawValue: statusInt),
-            let delta = representation.valueForKeyPath("delta") as? Int,
-            let updatedQuantity = representation.valueForKeyPath("updatedQuantity") as? Int,
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
+            let delta = representation.value(forKeyPath: "delta") as? Int,
+            let updatedQuantity = representation.value(forKeyPath: "updatedQuantity") as? Int,
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -36,6 +36,6 @@ struct RemoteListItemIncrement: ResponseObjectSerializable, CustomDebugStringCon
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), status: \(status), delta: \(delta), updatedQuantity: \(updatedQuantity), lastUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) uuid: \(uuid), status: \(status), delta: \(delta), updatedQuantity: \(updatedQuantity), lastUpdate: \(lastUpdate)}"
     }
 }

@@ -27,27 +27,27 @@ class DBSyncable: Object {
     dynamic var dirty: Bool = true
     
     // IMPORTANT: Use this only to store sync results
-    func setSyncableFieldswithRemoteDict(dict: [String: AnyObject]) {
+    func setSyncableFieldswithRemoteDict(_ dict: [String: AnyObject]) {
         // lastServerUpdate is called by server "lastUpdate". So we set lastServerUpdate with this. And subsequently we set lastUpdate with lastServerUpdate, as the sync is effectively updating the local db, so this is also the lastUpdate.
         self.lastServerUpdate = Int64(dict[DBSyncable.lastUpdateFieldName]! as! Double)
 //        self.lastUpdate = lastServerUpdate
         self.dirty = false
     }
     
-    func setSyncableFieldsInDict(inout dict: [String: AnyObject]) {
-        dict[DBSyncable.lastUpdateFieldName] = NSNumber(longLong: lastServerUpdate)
+    func setSyncableFieldsInDict(_ dict: inout [String: AnyObject]) {
+        dict[DBSyncable.lastUpdateFieldName] = NSNumber(value: lastServerUpdate as Int64)
     }
     
-    static func dirtyFilter(dirty: Bool = true) -> String {
+    static func dirtyFilter(_ dirty: Bool = true) -> String {
         return "\(dirtyFieldName) == \(dirty)"
     }
     
     // Helper for common code for different objects where we want to update the last server update timestamp on server response. The dirty flag is set to false, we assume this is called after server operation success so the object is synced.
-    static func timestampUpdateDict(uuid: String, lastServerUpdate: Int64) -> [String: AnyObject] {
-        return ["uuid": uuid, DBSyncable.lastServerUpdateFieldName: NSNumber(longLong: Int64(lastServerUpdate)), dirtyFieldName: false]
+    static func timestampUpdateDict(_ uuid: String, lastServerUpdate: Int64) -> [String: AnyObject] {
+        return ["uuid": uuid as AnyObject, DBSyncable.lastServerUpdateFieldName: NSNumber(value: Int64(lastServerUpdate) as Int64), dirtyFieldName: false as AnyObject]
     }
     
-    func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+    func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
         realm.delete(self)
     }
 }

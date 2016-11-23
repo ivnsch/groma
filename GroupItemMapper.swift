@@ -10,7 +10,7 @@ import Foundation
 
 class GroupItemMapper {
     
-    class func dbWith(groupItem: GroupItem, dirty: Bool) -> DBGroupItem {
+    class func dbWith(_ groupItem: GroupItem, dirty: Bool) -> DBGroupItem {
         let dbListItemGroup = DBGroupItem()
         dbListItemGroup.uuid = groupItem.uuid
         dbListItemGroup.quantity = groupItem.quantity
@@ -23,22 +23,22 @@ class GroupItemMapper {
         return dbListItemGroup
     }
     
-    class func groupItemWith(dbGroupItem: DBGroupItem) -> GroupItem {
+    class func groupItemWith(_ dbGroupItem: DBGroupItem) -> GroupItem {
         let product = ProductMapper.productWithDB(dbGroupItem.product)
         let group = ListItemGroupMapper.listItemGroupWith(dbGroupItem.group)
         return GroupItem(uuid: dbGroupItem.uuid, quantity: dbGroupItem.quantity, product: product, group: group, lastServerUpdate: dbGroupItem.lastServerUpdate)
     }
     
-    class func groupItemWithRemote(remoteGroupItem: RemoteGroupItem, product: Product, group: ListItemGroup) -> GroupItem {
+    class func groupItemWithRemote(_ remoteGroupItem: RemoteGroupItem, product: Product, group: ListItemGroup) -> GroupItem {
         return GroupItem(uuid: remoteGroupItem.uuid, quantity: remoteGroupItem.quantity, product: product, group: group, lastServerUpdate: remoteGroupItem.lastUpdate)
     }
     
     /**
      Parses the remote group items into model objects
      */
-    class func groupItemsWithRemote(remoteGroupItems: RemoteGroupItemsWithDependencies) -> GroupItemsWithRelations {
+    class func groupItemsWithRemote(_ remoteGroupItems: RemoteGroupItemsWithDependencies) -> GroupItemsWithRelations {
         
-        func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
+        func toProductCategoryDict(_ remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
             var dict: [String: ProductCategory] = [:]
             var arr: [ProductCategory] = []
             for remoteProductCategory in remoteProductsCategories {
@@ -50,7 +50,7 @@ class GroupItemMapper {
             return (dict, arr)
         }
         
-        func toProductDict(remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
+        func toProductDict(_ remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
             var dict: [String: Product] = [:]
             var arr: [Product] = []
             for remoteProduct in remoteProducts {
@@ -65,7 +65,7 @@ class GroupItemMapper {
             return (dict, arr)
         }
         
-        func toGroupDict(remoteSections: [RemoteGroup]) -> ([String: ListItemGroup], [ListItemGroup]) {
+        func toGroupDict(_ remoteSections: [RemoteGroup]) -> ([String: ListItemGroup], [ListItemGroup]) {
             var dict: [String: ListItemGroup] = [:]
             var arr: [ListItemGroup] = []
             for remoteSection in remoteSections {

@@ -10,8 +10,8 @@ import UIKit
 import QorumLogs
 
 protocol HistoryItemGroupHeaderViewDelegate: class {
-    func onHeaderTap(header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>)
-    func onDeleteGroupTap(sectionModel: SectionModel<HistoryItemGroup>, header: HistoryItemGroupHeaderView)
+    func onHeaderTap(_ header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>)
+    func onDeleteGroupTap(_ sectionModel: SectionModel<HistoryItemGroup>, header: HistoryItemGroupHeaderView)
 }
 
 class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
@@ -26,7 +26,7 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var leftLayoutConstraint: NSLayoutConstraint!
-    private var cellUncoverer: CellUncoverer?
+    fileprivate var cellUncoverer: CellUncoverer?
     
     var sectionIndex: Int?
     var sectionModel: SectionModel<HistoryItemGroup>?
@@ -81,11 +81,11 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
         cellUncoverer?.allowOpen = true
         cellUncoverer?.delegate = self
         
-        deleteGroupButton.addTarget(self, action: #selector(HistoryItemGroupHeaderView.onDeleteButtonTap(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        deleteGroupButton.addTarget(self, action: #selector(HistoryItemGroupHeaderView.onDeleteButtonTap(_:)), for: UIControlEvents.touchUpInside)
         
     }
 
-    func onDeleteButtonTap(sender: UIButton) {
+    func onDeleteButtonTap(_ sender: UIButton) {
         if let sectionModel = sectionModel {
             delegate?.onDeleteGroupTap(sectionModel, header: self)
         } else {
@@ -93,8 +93,8 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if let sectionIndex = sectionIndex, sectionModel = sectionModel {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let sectionIndex = sectionIndex, let sectionModel = sectionModel {
             delegate?.onHeaderTap(self, sectionIndex: sectionIndex, sectionModel: sectionModel)
         } else {
             QL4("No headerIndex or group")
@@ -103,7 +103,7 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
     
     // MARK: - CellUncovererDelegate
     
-    func onOpen(open: Bool) {
+    func onOpen(_ open: Bool) {
         self.open = open
     }
 }

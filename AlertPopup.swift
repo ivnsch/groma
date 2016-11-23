@@ -11,31 +11,31 @@ import QorumLogs
 
 class AlertPopup: NSObject {
     
-    static func create(title title: String? = nil, message: String, okMsg: String = trans("popup_button_ok"), onDismiss: VoidFunction? = nil) -> UIViewController {
-        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: okMsg, style: UIAlertActionStyle.Default, handler: { alertAction in
+    static func create(title: String? = nil, message: String, okMsg: String = trans("popup_button_ok"), onDismiss: VoidFunction? = nil) -> UIViewController {
+        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: okMsg, style: UIAlertActionStyle.default, handler: { alertAction in
             onDismiss?()
         }))
         return alert
     }
 
-    static func show(title title: String? = nil, message: String, controller: UIViewController, okMsg: String = trans("popup_button_ok"), cancelMsg: String = trans("popup_button_cancel"), okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) {
+    static func show(title: String? = nil, message: String, controller: UIViewController, okMsg: String = trans("popup_button_ok"), cancelMsg: String = trans("popup_button_cancel"), okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) {
         let alert = create(title: title, message: message, okMsg: okMsg, onDismiss: onDismiss)
-        controller.presentViewController(alert, animated: true, completion: nil)
+        controller.present(alert, animated: true, completion: nil)
     }
 
     // TODO better structure, alert and confirm should be 2 different classes, which share part of the view and code
     // Frame of popup (including semitransparent background) in case this is different than the frame controller's view.
-    static func showCustom(title title: String? = nil, message: String, controller: UIViewController, frame: CGRect? = nil, okMsg: String = trans("popup_button_ok"), confirmMsg: String = trans("popup_button_ok"), cancelMsg: String = trans("popup_button_cancel"), hasOkButton: Bool = false, isConfirm: Bool = false, rootControllerStartPoint: CGPoint? = nil, okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) {
+    static func showCustom(title: String? = nil, message: String, controller: UIViewController, frame: CGRect? = nil, okMsg: String = trans("popup_button_ok"), confirmMsg: String = trans("popup_button_ok"), cancelMsg: String = trans("popup_button_cancel"), hasOkButton: Bool = false, isConfirm: Bool = false, rootControllerStartPoint: CGPoint? = nil, okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) {
         
         guard controller.view.viewWithTag(ViewTags.NotePopup) == nil else {QL2("Already showing popup, return"); return}
         
-        let myAlert = NSBundle.loadView("MyAlert", owner: self) as! MyAlert
+        let myAlert = Bundle.loadView("MyAlert", owner: self) as! MyAlert
         
         myAlert.translatesAutoresizingMaskIntoConstraints = true
         myAlert.frame = frame ?? controller.view.bounds
         controller.view.addSubview(myAlert)
-        controller.view.bringSubviewToFront(myAlert)
+        controller.view.bringSubview(toFront: myAlert)
         myAlert.tag = ViewTags.NotePopup
         
         myAlert.confirmText = confirmMsg
@@ -56,7 +56,7 @@ class AlertPopup: NSObject {
         // "grow from point" animation
         if let point = rootControllerStartPoint {
             
-            myAlert.dismissAnimation = .None
+            myAlert.dismissAnimation = .none
             
             // close
             myAlert.onTapAnywhere = {
@@ -69,7 +69,7 @@ class AlertPopup: NSObject {
             myAlert.animateScale(true, anchorPoint: point, parentView: controller.view, frame: frame)
             
         } else { // normal alert animation
-            myAlert.dismissAnimation = .Fade
+            myAlert.dismissAnimation = .fade
             
             if !isConfirm && !hasOkButton {
                 myAlert.onTapAnywhere = {

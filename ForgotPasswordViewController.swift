@@ -20,7 +20,7 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
 
     @IBOutlet weak var sendButton: UIButton!
     
-    private var validator: Validator?
+    fileprivate var validator: Validator?
 
     weak var delegate: ForgotPasswordDelegate?
     
@@ -43,34 +43,34 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
         view.addGestureRecognizer(recognizer)
     }
     
-    private func layout() {
+    fileprivate func layout() {
         sendButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         emailField.becomeFirstResponder()
     }
     
-    func handleTap(recognizer: UITapGestureRecognizer) {
+    func handleTap(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
     
-    private func prefill() {
+    fileprivate func prefill() {
         if let email = self.email {
             emailField.text = email
             emailField.selectAll(nil)
         }
     }
 
-    private func initValidator() {
+    fileprivate func initValidator() {
         let validator = Validator()
         validator.registerField(emailField, rules: [EmailRule(message: trans("validation_email_format"))])
         self.validator = validator
     }
     
     
-    func textFieldShouldReturn(sender: UITextField) -> Bool {
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
         if sender == emailField {
             send()
             sender.resignFirstResponder()
@@ -79,19 +79,19 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
         return false
     }
     
-    @IBAction func onSubmitTap(sender: UIButton) {
+    @IBAction func onSubmitTap(_ sender: UIButton) {
         send()
     }
     
-    private func send() {
+    fileprivate func send() {
         
         guard validator != nil else {return}
         
         if let errors = validator?.validate() {
-            for (field, _) in errors {
-                field.showValidationError()
+            for (_, error) in errors {
+                error.field.showValidationError()
             }
-            self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             
         } else {
             if let email = emailField.text {

@@ -27,20 +27,20 @@ struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertibl
     
     init?(representation: AnyObject) {
         guard
-            let productCategories = representation.valueForKeyPath("productCategories") as? [[String: AnyObject]],
-            let products = representation.valueForKeyPath("products") as? [[String: AnyObject]],
-            let storeProducts = representation.valueForKeyPath("storeProducts") as? [[String: AnyObject]],
-            let inventories = representation.valueForKeyPath("inventories") as? [[String: AnyObject]],
-            let inventoriesItems = representation.valueForKeyPath("inventoriesItems") as? [[String: AnyObject]],
-            let lists = representation.valueForKeyPath("lists") as? [[String: AnyObject]],
-            let sections = representation.valueForKeyPath("sections") as? [[String: AnyObject]],
-            let listsItems = representation.valueForKeyPath("listsItems") as? [[String: AnyObject]],
-            let groups = representation.valueForKeyPath("groups") as? [[String: AnyObject]],
-            let groupsItems = representation.valueForKeyPath("groupsItems") as? [[String: AnyObject]],
-            let history = representation.valueForKeyPath("history") as? [[String: AnyObject]],
-            let listInvitationsObj = representation.valueForKeyPath("listInvitations"),
+            let productCategories = representation.value(forKeyPath: "productCategories") as? [[String: AnyObject]],
+            let products = representation.value(forKeyPath: "products") as? [[String: AnyObject]],
+            let storeProducts = representation.value(forKeyPath: "storeProducts") as? [[String: AnyObject]],
+            let inventories = representation.value(forKeyPath: "inventories") as? [[String: AnyObject]],
+            let inventoriesItems = representation.value(forKeyPath: "inventoriesItems") as? [[String: AnyObject]],
+            let lists = representation.value(forKeyPath: "lists") as? [[String: AnyObject]],
+            let sections = representation.value(forKeyPath: "sections") as? [[String: AnyObject]],
+            let listsItems = representation.value(forKeyPath: "listsItems") as? [[String: AnyObject]],
+            let groups = representation.value(forKeyPath: "groups") as? [[String: AnyObject]],
+            let groupsItems = representation.value(forKeyPath: "groupsItems") as? [[String: AnyObject]],
+            let history = representation.value(forKeyPath: "history") as? [[String: AnyObject]],
+            let listInvitationsObj = representation.value(forKeyPath: "listInvitations") as? [AnyObject],
             let listInvitations = RemoteListInvitation.collection(listInvitationsObj),
-            let inventoryInvitationsObj = representation.valueForKeyPath("inventoryInvitations"),
+            let inventoryInvitationsObj = representation.value(forKeyPath: "inventoryInvitations") as? [AnyObject],
             let inventoryInvitations = RemoteInventoryInvitation.collection(inventoryInvitationsObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -62,6 +62,6 @@ struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertibl
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) productCategories: \(productCategories), products: \(products), storeProducts: \(storeProducts), inventories: \(inventories), inventoryInvitations: \(inventoryInvitations)}"
+        return "{\(type(of: self)) productCategories: \(productCategories), products: \(products), storeProducts: \(storeProducts), inventories: \(inventories), inventoryInvitations: \(inventoryInvitations)}"
     }
 }

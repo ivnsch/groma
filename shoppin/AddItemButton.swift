@@ -16,9 +16,9 @@ class AddItemButton: UIButton {
         super.init(frame: frame)
         
         backgroundColor = UIColor(hexString: "1FAC6A")
-        setTitle(trans("add_button_title"), forState: UIControlState.Normal)
+        setTitle(trans("add_button_title"), for: UIControlState())
         
-        addTarget(self, action: #selector(AddItemButton.onTap(_:)), forControlEvents: .TouchUpInside)
+        addTarget(self, action: #selector(AddItemButton.onTap(_:)), for: .touchUpInside)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -30,7 +30,7 @@ class AddItemButton: UIButton {
 
     }
     
-    func onTap(sender: AddItemButton) {
+    func onTap(_ sender: AddItemButton) {
         tapHandler?()
     }
 }

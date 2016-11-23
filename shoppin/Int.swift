@@ -32,7 +32,7 @@ extension Int {
     
     - returns: Int
     */
-    public static func random(n: Int) -> Int {
+    public static func random(_ n: Int) -> Int {
         return Int(arc4random_uniform(UInt32(n)))
     }
     /**
@@ -43,7 +43,7 @@ extension Int {
     
     - returns: Int
     */
-    public static func random(min: Int, max: Int) -> Int {
+    public static func random(_ min: Int, max: Int) -> Int {
         return Int.random(max - min + 1) + min
     }
 }

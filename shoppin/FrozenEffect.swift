@@ -10,23 +10,23 @@ import UIKit
 
 class FrozenEffect {
     
-    class func apply(view:UIView) {
+    class func apply(_ view:UIView) {
         let blurView = createBlurView(forView: view)
         
         blurView.translatesAutoresizingMaskIntoConstraints = false
         
         let views:Dictionary = ["blurView": blurView]
         
-        view.insertSubview(blurView, atIndex: 0)
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[blurView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[blurView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        view.insertSubview(blurView, at: 0)
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[blurView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[blurView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
     }
     
-    private class func createBlurView(forView view:UIView) -> UIView {
+    fileprivate class func createBlurView(forView view:UIView) -> UIView {
         var blurView:UIView
         
         if NSClassFromString("UIBlurEffect") != nil {
-            let blurEffect:UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.ExtraLight)
+            let blurEffect:UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
             blurView = UIVisualEffectView(effect: blurEffect)
             blurView.frame = view.frame //view.frame ?? (controller's)
         } else {

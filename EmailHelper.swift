@@ -16,7 +16,7 @@ protocol EmailHelperDelegate: class {
 
 class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
     
-    private let controller: UIViewController
+    fileprivate let controller: UIViewController
     
     weak var delegate: EmailHelperDelegate?
     
@@ -24,7 +24,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
         self.controller = controller
     }
     
-    func showEmail(appendSpecs appendSpecs: Bool = true) {
+    func showEmail(appendSpecs: Bool = true) {
         let email = "info@groma.co"
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
@@ -55,7 +55,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
                 }
             }
 
-            controller.presentViewController(mail, animated: true, completion: nil)
+            controller.present(mail, animated: true, completion: nil)
         } else {
             AlertPopup.show(message: trans("popup_couldnt_find_email_account", email), controller: controller)
         }
@@ -63,20 +63,20 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
     
     // MARK: - MFMailComposeViewControllerDelegate
     
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result.rawValue {
-        case MFMailComposeResultCancelled.rawValue:
+        case MFMailComposeResult.cancelled.rawValue:
             print("Mail cancelled")
-        case MFMailComposeResultSaved.rawValue:
+        case MFMailComposeResult.saved.rawValue:
             print("Mail saved")
-        case MFMailComposeResultSent.rawValue:
+        case MFMailComposeResult.sent.rawValue:
             print("Mail sent")
             delegate?.onEmailSent() // TODO!!!! test this with device
-        case MFMailComposeResultFailed.rawValue:
+        case MFMailComposeResult.failed.rawValue:
             print("Mail sent failure: \(error?.localizedDescription)")
         default:
             break
         }
-        controller.dismissViewControllerAnimated(true, completion: nil)
+        controller.dismiss(animated: true, completion: nil)
     }
 }

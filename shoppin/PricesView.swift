@@ -23,20 +23,20 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var stashQuantityLabel: UILabel!
     
-    private(set) var totalPrice: Float?
-    private(set) var donePrice: Float?
+    fileprivate(set) var totalPrice: Float?
+    fileprivate(set) var donePrice: Float?
     
     var originalHeight: CGFloat = 0
-    private var originalPriceFont: UIFont!
-    private var originalCartImgLeftConstraint: CGFloat = 0
+    fileprivate var originalPriceFont: UIFont!
+    fileprivate var originalCartImgLeftConstraint: CGFloat = 0
     
     let minimizedHeight: CGFloat = 20
     
-    private let arrowWidth: CGFloat = 20
-    private let openWidth: CGFloat = -60 // width constant while showing stash view behind
+    fileprivate let arrowWidth: CGFloat = 20
+    fileprivate let openWidth: CGFloat = -60 // width constant while showing stash view behind
     
-    private(set) var open: Bool = false // when stash view behind is visible
-    private var expanded: Bool = true // if vertically minimized or expanded (expanded is normal size)
+    fileprivate(set) var open: Bool = false // when stash view behind is visible
+    fileprivate var expanded: Bool = true // if vertically minimized or expanded (expanded is normal size)
 
     var allowOpen: Bool = false {
         didSet {
@@ -46,9 +46,9 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     
     @IBOutlet weak var button: UIButton!
     @IBOutlet weak var leftLayoutConstraint: NSLayoutConstraint!
-    private var cellUncoverer: CellUncoverer?
+    fileprivate var cellUncoverer: CellUncoverer?
 
-    private var cartQuantity: Int = 0 {
+    fileprivate var cartQuantity: Int = 0 {
         didSet {
             if let cartQuantityLabel = quantityLabel {
                 if cartQuantity == 1 {
@@ -78,18 +78,18 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         }
     }
     
-    private var stashQuantity: Int = 0 {
+    fileprivate var stashQuantity: Int = 0 {
         didSet {
             if let stashQuantityLabel = stashQuantityLabel {
                 stashQuantityLabel.text = trans("list_items_items_in_backstore", "\(stashQuantity)")
-                stashQuantityLabel.hidden = stashQuantity == 0
+                stashQuantityLabel.isHidden = stashQuantity == 0
             } else {
                 QL3("Setting stash quantity but label is not initialised yet")
             }
         }
     }
     
-    private func updateQuantityCenterConstraint() {
+    fileprivate func updateQuantityCenterConstraint() {
         quantityCenterConstraint.constant = stashQuantity == 0 ? 0 : -10
     }
     
@@ -110,51 +110,51 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     
     // MARK: - CellUncovererDelegate
     
-    func onOpen(open: Bool) {
+    func onOpen(_ open: Bool) {
         self.open = open
     }
 
     // MARK -
     
-    func setOpen(open: Bool, animated: Bool = true) {
+    func setOpen(_ open: Bool, animated: Bool = true) {
         self.open = open
         cellUncoverer?.setOpen(open, animated: animated)
     }
       
-    func setTotalPrice(price: Float, animated: Bool) {
+    func setTotalPrice(_ price: Float, animated: Bool) {
         self.totalPrice = price
         updateTotalPriceLabel(animated)
     }
     
-    private func updateTotalPriceLabel(animated: Bool) {
+    fileprivate func updateTotalPriceLabel(_ animated: Bool) {
         if let totalPrice = totalPrice {
             let text = donePrice == 0 ? totalPrice.toLocalCurrencyString() : "/ \(totalPrice.toLocalCurrencyString())"
             updatePriceLabel(text, label: totalPriceLabel, animated: animated)
         }
     }
     
-    func setDonePrice(price: Float, animated: Bool) {
+    func setDonePrice(_ price: Float, animated: Bool) {
         self.donePrice = price
         let text = price.toLocalCurrencyString()
         updatePriceLabel(text, label: donePriceLabel, animated: animated)
         updateTotalPriceLabel(false) // depending if done price is 0 (empty - not visible) or not, total label gets a leading "/", so we have to refresh it
     }
     
-    private func updatePriceLabel(text: String, label: UILabel, animated: Bool) {
+    fileprivate func updatePriceLabel(_ text: String, label: UILabel, animated: Bool) {
         if text != label.text {
             label.text = text
             
             if animated {
-                UIView.animateWithDuration(0.15, animations: {
-                    label.transform = CGAffineTransformMakeScale(1.05, 1.05)
+                UIView.animate(withDuration: 0.15, animations: {
+                    label.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
                     label.font = Fonts.largeBold
-                }) {finished in
-                    UIView.animateWithDuration(0.15, animations: {
-                        label.transform = CGAffineTransformIdentity
+                }, completion: {finished in
+                    UIView.animate(withDuration: 0.15, animations: {
+                        label.transform = CGAffineTransform.identity
                         label.font = Fonts.regularLight
-                        }) {finished in
-                    }
-                }
+                        }, completion: {finished in
+                    }) 
+                }) 
             }
         }
     }
@@ -169,7 +169,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
 //    }
     
     // expanded: covers all width, contracted: space to see stash view
-    func setExpandedHorizontal(expanded: Bool) {
+    func setExpandedHorizontal(_ expanded: Bool) {
         open = !expanded
 //        widthConstraint.constant = widthConstant
 //        UIView.animateWithDuration(0.5) {[weak self] in
@@ -177,25 +177,25 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
 //        }
     }
     
-    private var widthConstant: CGFloat {
+    fileprivate var widthConstant: CGFloat {
         return open ? openWidth : 0
     }
 
     
-    private func checkExpandedVertical() {
+    fileprivate func checkExpandedVertical() {
         let expanded = cartQuantity > 0 || stashQuantity > 0
         setExpandedVerticalSimple(expanded, animated: true)
     }
     
-    private func setExpandedVerticalSimple(expanded: Bool, animated: Bool) {
+    fileprivate func setExpandedVerticalSimple(_ expanded: Bool, animated: Bool) {
         if expanded != self.expanded {
             self.expanded = expanded
 
             if animated {
                 heightConstraint.constant = expanded ? originalHeight : 0
-                UIView.animateWithDuration(0.3) {[weak self] in
+                UIView.animate(withDuration: 0.3, animations: {[weak self] in
                     self?.superview?.layoutIfNeeded()
-                }
+                }) 
             } else {
                 heightConstraint.constant = expanded ? originalHeight : 0
                 superview?.layoutIfNeeded()
@@ -204,7 +204,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     }
     
     // TODO this is from old UI, remove
-    func setExpandedVertical(expanded: Bool) {
+    func setExpandedVertical(_ expanded: Bool) {
         if expanded != self.expanded {
             self.expanded = expanded
             
@@ -212,19 +212,19 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
                 heightConstraint.constant = expanded ? originalHeight : minimizedHeight
                 cartImgLeftConstraint.constant = expanded ? originalCartImgLeftConstraint : -38 // -38: -(img width + img left constraint)
                 widthConstraint.constant = expanded ? widthConstant : superview.frame.width + arrowWidth
-                UIView.animateWithDuration(0.3, animations: {[weak self] in
+                UIView.animate(withDuration: 0.3, animations: {[weak self] in
                     self?.layoutIfNeeded()
                     self?.cartImg.alpha = expanded ? 1 : 0
                     let scale: CGFloat = expanded ? 1.3 : 0.7
-                    self?.totalPriceLabel.transform = CGAffineTransformMakeScale(scale, scale)
-                    self?.donePriceLabel.transform = CGAffineTransformMakeScale(scale, scale)
+                    self?.totalPriceLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
+                    self?.donePriceLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
                     }, completion: {[weak self] finished in
                         if let weakSelf = self {
                             let font = expanded ? weakSelf.originalPriceFont : Fonts.verySmallLight
                             weakSelf.totalPriceLabel.font = font
                             weakSelf.donePriceLabel.font = font
-                            self?.totalPriceLabel.transform = CGAffineTransformIdentity
-                            self?.donePriceLabel.transform = CGAffineTransformIdentity
+                            self?.totalPriceLabel.transform = CGAffineTransform.identity
+                            self?.donePriceLabel.transform = CGAffineTransform.identity
                             weakSelf.layoutIfNeeded()
                         }
                     })

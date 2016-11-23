@@ -9,23 +9,23 @@
 import Foundation
 
 enum ProductUnit: Int {
-    case None = 0
-    case Gram = 1
-    case Kilogram = 2
+    case none = 0
+    case gram = 1
+    case kilogram = 2
     
     var text: String {
         switch self {
-        case .None: return "None"
-        case .Gram: return "Gram"
-        case .Kilogram: return "Kilogram"
+        case .none: return "None"
+        case .gram: return "Gram"
+        case .kilogram: return "Kilogram"
         }
     }
     
     var shortText: String {
         switch self {
-        case .None: return ""
-        case .Gram: return "g"
-        case .Kilogram: return "kg"
+        case .none: return ""
+        case .gram: return "g"
+        case .kilogram: return "kg"
         }
     }
 }
@@ -58,10 +58,10 @@ final class Product: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), category: \(category), fav: \(fav), brand: \(brand), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), category: \(category), fav: \(fav), brand: \(brand), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, fav: Int? = nil, brand: String? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {
+    func copy(uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, fav: Int? = nil, brand: String? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -73,25 +73,25 @@ final class Product: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
-    func update(product: Product) -> Product {
+    func update(_ product: Product) -> Product {
         return update(product, category: product.category)
     }
     
     // Updates self and its dependencies with product, the references to the dependencies (uuid) are not changed
-    func updateWithoutChangingReferences(product: Product) -> Product {
+    func updateWithoutChangingReferences(_ product: Product) -> Product {
         let updatedCategory = category.updateWithoutChangingReferences(product.category)
         return update(product, category: updatedCategory)
     }
     
-    private func update(product: Product, category: ProductCategory) -> Product {
+    fileprivate func update(_ product: Product, category: ProductCategory) -> Product {
         return copy(name: product.name, category: product.category, fav: product.fav, brand: product.brand, lastServerUpdate: product.lastServerUpdate, removed: product.removed)
     }
     
-    func same(rhs: Product) -> Bool {
+    func same(_ rhs: Product) -> Bool {
         return uuid == rhs.uuid
     }
     
-    func equalsExcludingSyncAttributes(rhs: Product) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: Product) -> Bool {
         return uuid == rhs.uuid && name == rhs.name && category == rhs.category && brand == rhs.brand
     }
 }

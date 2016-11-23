@@ -11,12 +11,12 @@ import SwiftValidator
 import QorumLogs
 
 protocol SharedUsersControllerDelegate: class {
-    func onPull(user: SharedUser)
-    func onUsersUpdated(existingUsers: [SharedUser], invitedUsers: [SharedUser])
-    func invitedUsers(handler: [SharedUser] -> Void)
+    func onPull(_ user: SharedUser)
+    func onUsersUpdated(_ existingUsers: [SharedUser], invitedUsers: [SharedUser])
+    func invitedUsers(_ handler: @escaping ([SharedUser]) -> Void)
 }
 
-private enum SharedUserState {case New, Existing, Invited}
+private enum SharedUserState {case new, existing, invited}
 
 private struct UserCellModel {
     let user: SharedUser
@@ -32,7 +32,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var addUserInputField: UITextField!
     @IBOutlet weak var usersTableView: UITableView!
     
-    private var userInputsValidator: Validator?
+    fileprivate var userInputsValidator: Validator?
     
     var users: [SharedUser] {
         return userModels.map{$0.user}
@@ -40,26 +40,26 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     weak var delegate: SharedUsersControllerDelegate?
     
-    private var userModels: [UserCellModel] = [] {
+    fileprivate var userModels: [UserCellModel] = [] {
         didSet {
             usersTableView.reloadData()
         }
     }
     
-    private var existingUsers: [SharedUser] = []
-    private var invitedUsers: [SharedUser] = []
-    private var allKnownUsers: [SharedUser] = []
+    fileprivate var existingUsers: [SharedUser] = []
+    fileprivate var invitedUsers: [SharedUser] = []
+    fileprivate var allKnownUsers: [SharedUser] = []
 
     var onViewDidLoad: VoidFunction?
 
-    func initUsers(existing: [SharedUser], invited: [SharedUser], all: [SharedUser]) {
+    func initUsers(_ existing: [SharedUser], invited: [SharedUser], all: [SharedUser]) {
         self.existingUsers = existing
         self.invitedUsers = invited
         self.allKnownUsers = all
         updateCellModels()
     }
     
-    private func initValidator() {
+    fileprivate func initValidator() {
         let userInputsValidator = Validator()
         userInputsValidator.registerField(self.addUserInputField, rules: [EmailRule(message: trans("validation_email_format"))])
         self.userInputsValidator = userInputsValidator
@@ -80,7 +80,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-    private func initAddButtonHelper() -> AddButtonHelper? {
+    fileprivate func initAddButtonHelper() -> AddButtonHelper? {
         guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
         
         let overrideCenterY: CGFloat = view.frame.height + tabBarHeight
@@ -93,16 +93,16 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: -
 
     func updateCellModels() {
-        let invitedUserModels = invitedUsers.map{UserCellModel(user: $0, state: .Invited)}
+        let invitedUserModels = invitedUsers.map{UserCellModel(user: $0, state: .invited)}
         
         // For existing we have to filter out invited, because currently we store locally the invited users in shared users of the list, so when we edit the list (without having done sync, which would remove the invited users from shared users, as the server doesn't store them here) we would get duplicates (we call separately invited users service, to get the invited users).
-        let existingUserModels = existingUsers.filter{!invitedUsers.contains($0)}.map{UserCellModel(user: $0, state: .Existing)}
-        let newUserModels = allKnownUsers.filter{!existingUsers.contains($0) && !invitedUsers.contains($0)}.map{UserCellModel(user: $0, state: .New)}
+        let existingUserModels = existingUsers.filter{!invitedUsers.contains($0)}.map{UserCellModel(user: $0, state: .existing)}
+        let newUserModels = allKnownUsers.filter{!existingUsers.contains($0) && !invitedUsers.contains($0)}.map{UserCellModel(user: $0, state: .new)}
         
         userModels = existingUserModels + invitedUserModels + newUserModels
     }
     
-    private func tryAddInputUser() {
+    fileprivate func tryAddInputUser() {
         if !ConnectionProvider.connectedAndLoggedIn {
             AlertPopup.show(message: trans("popups_participants_must_be_logged_in"), controller: self)
             
@@ -127,20 +127,20 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
 
-    private func validateInputs(validator: Validator?, onValid: () -> ()) {
+    fileprivate func validateInputs(_ validator: Validator?, onValid: () -> ()) {
         
         guard validator != nil else {return}
         
         if let errors = validator?.validate() {
-            for (field, _) in errors {
-                field.showValidationError()
+            for (_, error) in errors {
+                error.field.showValidationError()
             }
-            self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             
         } else {
-            if let lastErrors = validator?.lastErrors {
-                for (field, _) in lastErrors {
-                    field.clearValidationError()
+            if let lastErrors = validator?.errors {
+                for (_, error) in lastErrors {
+                    error.field.clearValidationError()
                 }
             }
             
@@ -150,55 +150,55 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     // MARK: - Table view
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userModels.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cellModel = userModels[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cellModel = userModels[(indexPath as NSIndexPath).row]
         switch cellModel.state {
-        case .New:
-            let cell = tableView.dequeueReusableCellWithIdentifier("newUserCell", forIndexPath: indexPath) as! NewSharedUserCell
+        case .new:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "newUserCell", for: indexPath) as! NewSharedUserCell
             cell.sharedUser = cellModel.user
             cell.delegate = self
             return cell
-        case .Existing:
-            let cell = tableView.dequeueReusableCellWithIdentifier("existingUserCell", forIndexPath: indexPath) as! ExistingSharedUserCell
+        case .existing:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "existingUserCell", for: indexPath) as! ExistingSharedUserCell
             cell.sharedUser = cellModel.user
             cell.delegate = self
             return cell
-        case .Invited:
-            let cell = tableView.dequeueReusableCellWithIdentifier("invitedUserCell", forIndexPath: indexPath) as! InvitedUserCell
+        case .invited:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "invitedUserCell", for: indexPath) as! InvitedUserCell
             cell.sharedUser = cellModel.user
             cell.delegate = self
             return cell
         }
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             self.usersTableView.wrapUpdates {[weak self] in
                 if let weakSelf = self {
-                    weakSelf.userModels.removeAtIndex(indexPath.row)
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                    weakSelf.userModels.remove(at: (indexPath as NSIndexPath).row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
                 }
             }
         }
     }
     
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return false
     }
     
-    private func addSharedUser(sharedUser: SharedUser) {
+    fileprivate func addSharedUser(_ sharedUser: SharedUser) {
         invitedUsers.append(sharedUser)
         updateCellModels()
         usersTableView.reloadData()
@@ -206,7 +206,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     
-    func textFieldShouldReturn(sender: UITextField) -> Bool {
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
         if sender == addUserInputField {
             tryAddInputUser()
             sender.resignFirstResponder()
@@ -217,30 +217,30 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     // MARK: - NewSharedUserCellDelegate
     
-    func onAddSharedUser(sharedUser: SharedUser, cell: NewSharedUserCell) {
+    func onAddSharedUser(_ sharedUser: SharedUser, cell: NewSharedUserCell) {
         addSharedUser(sharedUser)
     }
     
     // MARK: - ExistingSharedUserCellDelegate
     
-    func onDeleteSharedUser(sharedUser: SharedUser, cell: ExistingSharedUserCell) {
-        existingUsers.remove(sharedUser)
+    func onDeleteSharedUser(_ sharedUser: SharedUser, cell: ExistingSharedUserCell) {
+        _ = existingUsers.remove(sharedUser)
         updateCellModels()
         usersTableView.reloadData()
         notifyDelegateUsersUpdated()
     }
     
-    private func notifyDelegateUsersUpdated() {
+    fileprivate func notifyDelegateUsersUpdated() {
         delegate?.onUsersUpdated(existingUsers, invitedUsers: invitedUsers)
     }
     
-    func onPullSharedUser(sharedUser: SharedUser, cell: ExistingSharedUserCell) {
+    func onPullSharedUser(_ sharedUser: SharedUser, cell: ExistingSharedUserCell) {
         delegate?.onPull(sharedUser)
     }
     
     // MARK: - InvitedSharedUserCellDelegate
     
-    func onInviteInfoSharedUser(sharedUser: SharedUser, cell: InvitedUserCell) {
+    func onInviteInfoSharedUser(_ sharedUser: SharedUser, cell: InvitedUserCell) {
         AlertPopup.show(message: trans("popups_invitation_pending"), controller: self)
     }
 }

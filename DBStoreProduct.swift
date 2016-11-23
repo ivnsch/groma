@@ -52,7 +52,7 @@ class DBStoreProduct: DBSyncable {
         self.removed = removed
     }
 
-    func copy(uuid uuid: String? = nil, price: Float? = nil, baseQuantity: Float? = nil, unit: Int? = nil, product: DBProduct? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> DBStoreProduct {
+    func copy(uuid: String? = nil, price: Float? = nil, baseQuantity: Float? = nil, unit: Int? = nil, store: String? = nil, product: DBProduct? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> DBStoreProduct {
         return DBStoreProduct(
             uuid: uuid ?? self.uuid,
             price: price ?? self.price,
@@ -67,28 +67,28 @@ class DBStoreProduct: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
-    static func createFilterBrand(brand: String) -> String {
+    static func createFilterBrand(_ brand: String) -> String {
         return "productOpt.brand == '\(brand)'"
     }
     
-    static func createFilterStore(store: String) -> String {
+    static func createFilterStore(_ store: String) -> String {
         return "store == '\(store)'"
     }
 
-    static func createFilterProduct(productUuid: String) -> String {
+    static func createFilterProduct(_ productUuid: String) -> String {
         return "productOpt.uuid == '\(productUuid)'"
     }
     
-    static func createFilterProductStore(productUuid: String, store: String) -> String {
+    static func createFilterProductStore(_ productUuid: String, store: String) -> String {
         return "\(createFilterProduct(productUuid)) && store == '\(store)'"
     }
 
-    static func createFilterProductsStores(products: [Product], store: String) -> String {
-        let productsUuidsStr: String = products.map{"'\($0.uuid)'"}.joinWithSeparator(",")
+    static func createFilterProductsStores(_ products: [Product], store: String) -> String {
+        let productsUuidsStr: String = products.map{"'\($0.uuid)'"}.joined(separator: ",")
         return "productOpt.uuid IN {\(productsUuidsStr)} && store == '\(store)'"
     }
     
@@ -96,31 +96,31 @@ class DBStoreProduct: DBSyncable {
 //        return createFilterNameBrand(prototype.name, brand: prototype.brand, store: prototype.store)
 //    }
     
-    static func createFilterNameBrand(name: String, brand: String, store: String) -> String {
+    static func createFilterNameBrand(_ name: String, brand: String, store: String) -> String {
         return "\(createFilterName(name)) AND \(createFilterBrand(brand)) AND \(createFilterStore(store))"
     }
     
-    static func createFilterName(name: String) -> String {
+    static func createFilterName(_ name: String) -> String {
         return "productOpt.name = '\(name)'"
     }
     
-    static func createFilterNameContains(text: String) -> String {
+    static func createFilterNameContains(_ text: String) -> String {
         return "productOpt.name CONTAINS[c] '\(text)'"
     }
     
-    static func createFilterBrandContains(text: String) -> String {
+    static func createFilterBrandContains(_ text: String) -> String {
         return "productOpt.brand CONTAINS[c] '\(text)'"
     }
     
-    static func createFilterStoreContains(text: String) -> String {
+    static func createFilterStoreContains(_ text: String) -> String {
         return "store CONTAINS[c] '\(text)'"
     }
     
-    static func createFilterCategory(categoryUuid: String) -> String {
+    static func createFilterCategory(_ categoryUuid: String) -> String {
         return "productOpt.categoryOpt.uuid = '\(categoryUuid)'"
     }
     
-    static func createFilterCategoryNameContains(text: String) -> String {
+    static func createFilterCategoryNameContains(_ text: String) -> String {
         return "productOpt.categoryOpt.name CONTAINS[c] '\(text)'"
     }
     
@@ -132,7 +132,7 @@ class DBStoreProduct: DBSyncable {
 
     // MARK: -
     
-    static func fromDict(dict: [String: AnyObject], product: DBProduct) -> DBStoreProduct {
+    static func fromDict(_ dict: [String: AnyObject], product: DBProduct) -> DBStoreProduct {
         let item = DBStoreProduct()
         item.uuid = dict["uuid"]! as! String
         item.price = dict["price"]! as! Float
@@ -146,12 +146,12 @@ class DBStoreProduct: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["price"] = price
-        dict["baseQuantity"] = baseQuantity
-        dict["unit"] = unit
-        dict["store"] = store
-        dict["product"] = product.toDict()
+        dict["uuid"] = uuid as AnyObject?
+        dict["price"] = price as AnyObject?
+        dict["baseQuantity"] = baseQuantity as AnyObject?
+        dict["unit"] = unit as AnyObject?
+        dict["store"] = store as AnyObject?
+        dict["product"] = product.toDict() as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
     }
@@ -162,12 +162,12 @@ class DBStoreProduct: DBSyncable {
     
     // This function doesn't really have to here but don't have a better place yet
     // A key that can be used e.g. in dictionaries
-    static func nameBrandStoreKey(name: String, brand: String, store: String) -> String {
+    static func nameBrandStoreKey(_ name: String, brand: String, store: String) -> String {
         return name + "-.9#]A-" + brand + "-.9#]A-" + store // insert some random text in between to prevent possible cases where name or brand text matches what would be a combination, e.g. a product is called "soapMyBrand" has empty brand and other product is called "soap" and has a brand "MyBrand" these are different but simple text concatenation would result in the same key.
     }
     
-    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
-        RealmStoreProductProvider().deleteStoreProductDependenciesSync(realm, storeProductUuid: uuid, markForSync: markForSync)
+    override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
+        _ = RealmStoreProductProvider().deleteStoreProductDependenciesSync(realm, storeProductUuid: uuid, markForSync: markForSync)
         realm.delete(self)
     }
 }

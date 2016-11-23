@@ -17,65 +17,65 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         }
     }
     
-    private weak var button: UIButton!
-    private weak var view: UIView!
+    fileprivate weak var button: UIButton!
+    fileprivate weak var view: UIView!
     
-    private var selectedInventory: Inventory? {
+    fileprivate var selectedInventory: Inventory? {
         didSet {
             if let inventory = selectedInventory {
                 onInventorySelected?(inventory)
-                button.setTitle(inventory.name, forState: .Normal)
+                button.setTitle(inventory.name, for: UIControlState())
             }
         }
     }
     
-    var onInventorySelected: (Inventory -> Void)?
+    var onInventorySelected: ((Inventory) -> Void)?
     
-    private var inventoriesPopup: CMPopTipView?
+    fileprivate var inventoriesPopup: CMPopTipView?
     
     
-    private func createPicker() -> UIPickerView {
-        let picker = UIPickerView(frame: CGRectMake(0, 0, 150, 100))
+    fileprivate func createPicker() -> UIPickerView {
+        let picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
         picker.delegate = self
         picker.dataSource = self
         return picker
     }
     
-    init(button: UIButton, view: UIView, onInventorySelected: (Inventory -> Void)?) {
+    init(button: UIButton, view: UIView, onInventorySelected: ((Inventory) -> Void)?) {
         self.button = button
         self.view = view
         self.onInventorySelected = onInventorySelected
         
         super.init()
         
-        button.addTarget(self, action: #selector(InventoryPicker.onButtonTap(_:)), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(InventoryPicker.onButtonTap(_:)), for: .touchUpInside)
     }
     
-    func onButtonTap(sender: UIButton) {
+    func onButtonTap(_ sender: UIButton) {
         if let popup = inventoriesPopup {
-            popup.dismissAnimated(true)
+            popup.dismiss(animated: true)
         } else {
             let popup = MyTipPopup(customView: createPicker())
-            popup.presentPointingAtView(sender, inView: view, animated: true)
+            popup.presentPointing(at: sender, in: view, animated: true)
         }
     }
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return inventories.count
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let label = view as? UILabel ?? UILabel()
         label.font = Fonts.regularLight
         label.text = inventories[row].name
         return label
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedInventory = inventories[row]
     }
 }

@@ -26,7 +26,7 @@ class DBSection: DBSyncable {
         return UIColor(hexString: bgColorHex)
     }
     
-    func setColor(bgColor: UIColor) {
+    func setColor(_ bgColor: UIColor) {
         bgColorHex = bgColor.hexStr
     }
     
@@ -47,7 +47,7 @@ class DBSection: DBSyncable {
         return ["name"]
     }
     
-    convenience init(uuid: String, name: String, bgColorHex: String, list: DBList, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    convenience init(uuid: String, name: String, bgColorHex: String, list: DBList, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastUpdate: Date = Date(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -71,9 +71,9 @@ class DBSection: DBSyncable {
         
         let (todoOrder, doneOrder, stashOrder): (Int, Int, Int) = {
             switch order.status {
-            case .Todo: return (order.order, 0, 0)
-            case .Done: return (0, order.order, 0)
-            case .Stash: return (0, 0, order.order)
+            case .todo: return (order.order, 0, 0)
+            case .done: return (0, order.order, 0)
+            case .stash: return (0, 0, order.order)
             }
         }()
         
@@ -82,34 +82,34 @@ class DBSection: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
-    static func createFilterWithName(name: String) -> String {
+    static func createFilterWithName(_ name: String) -> String {
         return "name == '\(name)'"
     }
     
-    static func createFilter(name: String, listUuid: String) -> String {
+    static func createFilter(_ name: String, listUuid: String) -> String {
         return "name == '\(name)' AND listOpt.uuid = '\(listUuid)'"
     }
     
-    static func createFilterWithNames(names: [String], listUuid: String) -> String {
-        let sectionsNamesStr: String = names.map{"'\($0)'"}.joinWithSeparator(",")
+    static func createFilterWithNames(_ names: [String], listUuid: String) -> String {
+        let sectionsNamesStr: String = names.map{"'\($0)'"}.joined(separator: ",")
         return "name IN {\(sectionsNamesStr)} AND listOpt.uuid = '\(listUuid)'"
     }
     
-    static func createFilterNameContains(text: String) -> String {
+    static func createFilterNameContains(_ text: String) -> String {
         return "name CONTAINS[c] '\(text)'"
     }
     
-    static func createFilterList(listUuid: String) -> String {
+    static func createFilterList(_ listUuid: String) -> String {
         return "listOpt.uuid == '\(listUuid)'"
     }
     
     // MARK: -
     
-    static func fromDict(dict: [String: AnyObject], list: DBList) -> DBSection {
+    static func fromDict(_ dict: [String: AnyObject], list: DBList) -> DBSection {
         let item = DBSection()
         item.uuid = dict["uuid"]! as! String
         item.name = dict["name"]! as! String
@@ -126,14 +126,14 @@ class DBSection: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["name"] = name
-        dict["color"] = bgColorHex
-        dict["list"] = list.toDict()        
-        dict["todoOrder"] = todoOrder
-        dict["doneOrder"] = doneOrder
-        dict["stashOrder"] = stashOrder
-        dict["listInput"] = list.toDict()
+        dict["uuid"] = uuid as AnyObject?
+        dict["name"] = name as AnyObject?
+        dict["color"] = bgColorHex as AnyObject?
+        dict["list"] = list.toDict() as AnyObject?        
+        dict["todoOrder"] = todoOrder as AnyObject?
+        dict["doneOrder"] = doneOrder as AnyObject?
+        dict["stashOrder"] = stashOrder as AnyObject?
+        dict["listInput"] = list.toDict() as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
     }
@@ -142,8 +142,8 @@ class DBSection: DBSyncable {
         return ["list"]
     }
     
-    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
-        RealmSectionProvider().removeSectionDependenciesSync(realm, sectionUuid: uuid, markForSync: markForSync)
+    override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
+        _ = RealmSectionProvider().removeSectionDependenciesSync(realm, sectionUuid: uuid, markForSync: markForSync)
         realm.delete(self)
     }
 }

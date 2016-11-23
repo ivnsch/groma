@@ -12,19 +12,19 @@ import QorumLogs
 
 class RealmGroupItemProvider: RealmProvider {
     
-    func groupItems(group: ListItemGroup, sortBy: InventorySortBy, handler: [GroupItem] -> Void) {
+    func groupItems(_ group: ListItemGroup, sortBy: InventorySortBy, handler: @escaping ([GroupItem]) -> Void) {
         let mapper = {GroupItemMapper.groupItemWith($0)}
         self.load(mapper, filter: DBGroupItem.createFilterGroup(group.uuid), handler: handler)
     }
     
-    func add(groupItem: GroupItem, dirty: Bool, handler: Bool -> Void) {
+    func add(_ groupItem: GroupItem, dirty: Bool, handler: @escaping (Bool) -> Void) {
         addOrUpdate(groupItem, dirty: dirty, handler: handler)
     }
     
     ///////////////////////////////////////////////////////////////
     // New - add/increment using only product + quantity, like in inventory, no fake/input group items
     
-    func addOrIncrement(group: ListItemGroup, productsWithQuantities: [(product: Product, quantity: Int)], dirty: Bool, _ handler: [(groupItem: GroupItem, delta: Int)]? -> Void) {
+    func addOrIncrement(_ group: ListItemGroup, productsWithQuantities: [(product: Product, quantity: Int)], dirty: Bool, _ handler: @escaping ([(groupItem: GroupItem, delta: Int)]?) -> Void) {
         doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return nil}
             
             var addedOrIncrementedItems: [(groupItem: GroupItem, delta: Int)] = []
@@ -39,10 +39,10 @@ class RealmGroupItemProvider: RealmProvider {
         })
     }
     
-    private func addOrIncrementGroupItem(realm: Realm, group: ListItemGroup, product: Product, quantity: Int, dirty: Bool) -> (groupItem: GroupItem, delta: Int) {
+    fileprivate func addOrIncrementGroupItem(_ realm: Realm, group: ListItemGroup, product: Product, quantity: Int, dirty: Bool) -> (groupItem: GroupItem, delta: Int) {
         
         // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
-        let mapper: DBGroupItem -> GroupItem = {GroupItemMapper.groupItemWith($0)}
+        let mapper: (DBGroupItem) -> GroupItem = {GroupItemMapper.groupItemWith($0)}
         let existingGroupItems: [GroupItem] = loadSync(realm, mapper: mapper, filter: DBGroupItem.createFilter(product, group: group))
         
         let addedOrIncrementedGroupItem: GroupItem = {
@@ -52,7 +52,7 @@ class RealmGroupItemProvider: RealmProvider {
                 return existingGroupItem.copy(quantity: quantity + existingQuantity)
                 
             } else { // if item doesn't exist there's nothing to increment
-                return GroupItem(uuid: NSUUID().UUIDString, quantity: quantity, product: product, group: group)
+                return GroupItem(uuid: UUID().uuidString, quantity: quantity, product: product, group: group)
             }
         }()
     
@@ -67,9 +67,9 @@ class RealmGroupItemProvider: RealmProvider {
     
     
     // param groupItems: Important: There are the input group items - not the target group items! This is when we add a group to a group - the input group items belong to the group that we are adding. This is equivalent to adding prototypes, products or group items to list/inventory.
-    func addOrIncrement(groupItems: [GroupItem], dirty: Bool, handler: Bool -> Void) {
+    func addOrIncrement(_ groupItems: [GroupItem], dirty: Bool, handler: @escaping (Bool) -> Void) {
         
-        func addOrIncrement(groupItems: [GroupItem]) -> Bool {
+        func addOrIncrement(_ groupItems: [GroupItem]) -> Bool {
             do {
                 // load items
                 let realm = try Realm()
@@ -89,7 +89,7 @@ class RealmGroupItemProvider: RealmProvider {
                     return GroupItemMapper.dbWith(item, dirty: dirty)
                 }
                 //save
-                saveObjsSync(newOrIncrementedGroupItems, update: true)
+                _ = saveObjsSync(newOrIncrementedGroupItems, update: true)
                 return true
                 
             } catch let error {
@@ -98,13 +98,13 @@ class RealmGroupItemProvider: RealmProvider {
             }
         }
         
-        func finished(success: Bool) {
-            dispatch_async(dispatch_get_main_queue(), {
+        func finished(_ success: Bool) {
+            DispatchQueue.main.async(execute: {
                 handler(success)
             })
         }
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
+
+        DispatchQueue.global(qos: .background).async {[weak self] in
             if let weakSelf = self {
                 let success = syncedRet(weakSelf) {
                     addOrIncrement(groupItems)
@@ -114,12 +114,12 @@ class RealmGroupItemProvider: RealmProvider {
                 print("Error: RealmListItemGroupProvider.addOrIncrement: no self")
                 finished(false)
             }
-            })
+        }
     }
     
-    func addOrIncrement(groupItem: GroupItem, dirty: Bool, handler: GroupItem? -> Void) {
+    func addOrIncrement(_ groupItem: GroupItem, dirty: Bool, handler: @escaping (GroupItem?) -> Void) {
         
-        func addOrIncrement(item: GroupItem) -> GroupItem? {
+        func addOrIncrement(_ item: GroupItem) -> GroupItem? {
             do {
                 let realm = try Realm()
                 let mapper = {GroupItemMapper.groupItemWith($0)}
@@ -127,11 +127,11 @@ class RealmGroupItemProvider: RealmProvider {
                 if let item = loadSync(realm, mapper: mapper, filter: DBGroupItem.createFilterGroupAndProductName(groupItem.group.uuid, productName: groupItem.product.name, productBrand: groupItem.product.brand)).first {
                     let incremented = item.incrementQuantityCopy(groupItem.quantity)
                     let dbItem = GroupItemMapper.dbWith(incremented, dirty: dirty)
-                    saveObjSync(dbItem, update: true)
+                    _ = saveObjSync(dbItem, update: true)
                     return incremented
                 } else {
                     let dbItem = GroupItemMapper.dbWith(groupItem, dirty: dirty)
-                    saveObjSync(dbItem, update: true)
+                    _ = saveObjSync(dbItem, update: true)
                     return groupItem
                 }
                 
@@ -141,13 +141,13 @@ class RealmGroupItemProvider: RealmProvider {
             }
         }
         
-        func finished(groupItemMaybe: GroupItem?) {
-            dispatch_async(dispatch_get_main_queue(), {
+        func finished(_ groupItemMaybe: GroupItem?) {
+            DispatchQueue.main.async(execute: {
                 handler(groupItemMaybe)
             })
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
+        DispatchQueue.global(qos: .background).async {[weak self] in
             if let weakSelf = self {
                 let success = syncedRet(weakSelf) {
                     addOrIncrement(groupItem)
@@ -157,31 +157,31 @@ class RealmGroupItemProvider: RealmProvider {
                 print("Error: RealmListItemGroupProvider.addOrIncrement: no self")
                 finished(nil)
             }
-        })
+        }
     }
     
-    func update(groupItem: GroupItem, dirty: Bool, handler: Bool -> Void) {
+    func update(_ groupItem: GroupItem, dirty: Bool, handler: @escaping (Bool) -> Void) {
         addOrUpdate(groupItem, dirty: dirty, handler: handler)
     }
     
-    func addOrUpdate(groupItem: GroupItem, dirty: Bool, handler: Bool -> Void) {
+    func addOrUpdate(_ groupItem: GroupItem, dirty: Bool, handler: @escaping (Bool) -> Void) {
         let dbObj = GroupItemMapper.dbWith(groupItem, dirty: dirty)
         saveObj(dbObj, update: true, handler: handler)
     }
     
-    func addOrUpdate(groupItems: [GroupItem], update: Bool =  true, dirty: Bool, handler: Bool -> Void) {
+    func addOrUpdate(_ groupItems: [GroupItem], update: Bool =  true, dirty: Bool, handler: @escaping (Bool) -> Void) {
         let dbObjs = groupItems.map{GroupItemMapper.dbWith($0, dirty: dirty)}
         self.saveObjs(dbObjs, update: update, handler: handler)
     }
     
-    func remove(groupItem: GroupItem, markForSync: Bool, handler: Bool -> Void) {
+    func remove(_ groupItem: GroupItem, markForSync: Bool, handler: @escaping (Bool) -> Void) {
         removeGroupItem(groupItem.uuid, markForSync: markForSync, handler: handler)
     }
     
-    func removeGroupItem(uuid: String, markForSync: Bool, handler: Bool -> Void) {
+    func removeGroupItem(_ uuid: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
         // Needs custom handling because we need the lastUpdate server timestamp and for this we have to retrieve the item from db
         self.doInWriteTransaction({realm in
-            if let itemToRemove = realm.objects(DBGroupItem).filter(DBGroupItem.createFilter(uuid)).first {
+            if let itemToRemove = realm.objects(DBGroupItem.self).filter(DBGroupItem.createFilter(uuid)).first {
                 if markForSync {
                     let toRemove = DBRemoveGroupItem(itemToRemove)
                     realm.add(toRemove, update: true)
@@ -196,7 +196,7 @@ class RealmGroupItemProvider: RealmProvider {
     }
     
     // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
-    func deletePossibleGroupItemWithUnique(productName: String, productBrand: String, group: ListItemGroup, notUuid: String, handler: Bool -> Void) {
+    func deletePossibleGroupItemWithUnique(_ productName: String, productBrand: String, group: ListItemGroup, notUuid: String, handler: @escaping (Bool) -> Void) {
         removeReturnCount(DBGroupItem.createFilterGroupAndProductName(group.uuid, productName: productName, productBrand: productBrand, notUuid: notUuid), handler: {removedCountMaybe in
             if let removedCount = removedCountMaybe {
                 if removedCount > 0 {
@@ -211,23 +211,23 @@ class RealmGroupItemProvider: RealmProvider {
     
     
     // Expected to be executed in do/catch and write block
-    func removeGroupItemsForGroupSync(realm: Realm, groupUuid: String, markForSync: Bool) -> Bool {
-        let dbGroupItems = realm.objects(DBGroupItem).filter(DBGroupItem.createFilterGroup(groupUuid))
+    func removeGroupItemsForGroupSync(_ realm: Realm, groupUuid: String, markForSync: Bool) -> Bool {
+        let dbGroupItems = realm.objects(DBGroupItem.self).filter(DBGroupItem.createFilterGroup(groupUuid))
         for dbGroupItem in dbGroupItems {
             removeGroupItemSync(realm, dbGroupItem: dbGroupItem, markForSync: markForSync)
         }
         return true
     }
 
-    func removeGroupItemsForProductSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
-        let dbGroupItems = realm.objects(DBGroupItem).filter(DBGroupItem.createFilterProduct(productUuid))
+    func removeGroupItemsForProductSync(_ realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
+        let dbGroupItems = realm.objects(DBGroupItem.self).filter(DBGroupItem.createFilterProduct(productUuid))
         for dbGroupItem in dbGroupItems {
             removeGroupItemSync(realm, dbGroupItem: dbGroupItem, markForSync: markForSync)
         }
         return true
     }
     
-    func removeGroupItemSync(realm: Realm, dbGroupItem: DBGroupItem, markForSync: Bool) {
+    func removeGroupItemSync(_ realm: Realm, dbGroupItem: DBGroupItem, markForSync: Bool) {
         if markForSync {
             let toRemoveGroupItem = DBRemoveGroupItem(dbGroupItem)
             realm.add(toRemoveGroupItem, update: true)
@@ -235,25 +235,25 @@ class RealmGroupItemProvider: RealmProvider {
         realm.delete(dbGroupItem)
     }
     
-    func overwrite(items: [GroupItem], groupUuid: String, clearTombstones: Bool, handler: Bool -> Void) {
+    func overwrite(_ items: [GroupItem], groupUuid: String, clearTombstones: Bool, handler: @escaping (Bool) -> Void) {
         let dbObjs = items.map{GroupItemMapper.dbWith($0, dirty: !clearTombstones)} // assumption - clear tombstones means it comes from server. Comes from server -> !dirty
-        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveGroupItem.self, DBRemoveGroupItem.createFilterWithGroup(groupUuid))} : nil
+        let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveGroupItem.self, DBRemoveGroupItem.createFilterWithGroup(groupUuid))} : nil
         self.overwrite(dbObjs, deleteFilter: DBGroupItem.createFilterGroup(groupUuid), resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
     
     // Copied from realm list item provider (which is copied from inventory item provider) refactor?
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
-    func incrementGroupItem(item: GroupItem, delta: Int, dirty: Bool, handler: Int? -> Void) {
+    func incrementGroupItem(_ item: GroupItem, delta: Int, dirty: Bool, handler: @escaping (Int?) -> Void) {
         incrementGroupItem(ItemIncrement(delta: delta, itemUuid: item.uuid), dirty: dirty, handler: handler)
     }
     
-    func incrementGroupItem(increment: ItemIncrement, dirty: Bool, handler: Int? -> Void) {
+    func incrementGroupItem(_ increment: ItemIncrement, dirty: Bool, handler: @escaping (Int?) -> Void) {
         
         doInWriteTransaction({realm in
             
             syncedRet(self) {
                 
-                let results = realm.objects(DBGroupItem).filter(DBGroupItem.createFilter(increment.itemUuid)).toArray()
+                let results = realm.objects(DBGroupItem.self).filter(DBGroupItem.self.createFilter(increment.itemUuid)).toArray()
                 let dbGroupItems = results.map{GroupItemMapper.groupItemWith($0)}
                 
                 if let groupItem = dbGroupItems.first {
@@ -279,7 +279,7 @@ class RealmGroupItemProvider: RealmProvider {
     
     // MARK: - Sync
     
-    func clearGroupItemTombstone(uuid: String, handler: Bool -> Void) {
+    func clearGroupItemTombstone(_ uuid: String, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             realm.deleteForFilter(DBRemoveGroupItem.self, DBRemoveGroupItem.createFilter(uuid))
             return true
@@ -288,7 +288,7 @@ class RealmGroupItemProvider: RealmProvider {
         })
     }
     
-    func clearGroupItemTombstonesForGroup(groupUuid: String, handler: Bool -> Void) {
+    func clearGroupItemTombstonesForGroup(_ groupUuid: String, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             realm.deleteForFilter(DBRemoveGroupItem.self, DBRemoveGroupItem.createFilterWithGroup(groupUuid))
             return true
@@ -296,7 +296,7 @@ class RealmGroupItemProvider: RealmProvider {
                 handler(success ?? false)
         })
     }
-    func updateGroupItemLastUpdate(updateDict: [String: AnyObject], handler: Bool -> Void) {
+    func updateGroupItemLastUpdate(_ updateDict: [String: AnyObject], handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             self?.updateGroupItemLastUpdate(realm, updateDict: updateDict)
             return true
@@ -305,11 +305,11 @@ class RealmGroupItemProvider: RealmProvider {
         })
     }
     
-    func updateGroupItemLastUpdate(realm: Realm, updateDict: [String: AnyObject]) {
+    func updateGroupItemLastUpdate(_ realm: Realm, updateDict: [String: AnyObject]) {
         realm.create(DBGroupItem.self, value: updateDict, update: true)
     }
     
-    func updateLastSyncTimeStamp(items: RemoteGroupItemsWithDependencies, handler: Bool -> Void) {
+    func updateLastSyncTimeStamp(_ items: RemoteGroupItemsWithDependencies, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             for listItem in items.groupItems {
                 realm.create(DBGroupItem.self, value: listItem.timestampUpdateDict, update: true)
@@ -329,9 +329,9 @@ class RealmGroupItemProvider: RealmProvider {
         })
     }
     
-    func updateGroupItemWithIncrementResult(incrementResult: RemoteIncrementResult, handler: Bool -> Void) {
+    func updateGroupItemWithIncrementResult(_ incrementResult: RemoteIncrementResult, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
-            if let storedItem = (realm.objects(DBGroupItem).filter(DBGroupItem.createFilter(incrementResult.uuid)).first) {
+            if let storedItem = (realm.objects(DBGroupItem.self).filter(DBGroupItem.self.createFilter(incrementResult.uuid)).first) {
                 
                 // store the timestamp only if it matches with the current quantity. E.g. if user increments very quicky 1,2,3,4,5,6
                 // we may receive the response from server for 1 when the database is already at 4 - so we don't want to store 1's timestamp for 4. When the user stops at 6 only the timestamp with the response with 6 quantity will be stored.

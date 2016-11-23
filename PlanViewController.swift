@@ -372,7 +372,7 @@ class PlanViewController: UIViewController
 //    
 //    // MARK: - QuickAddDelegate
 //    
-//    func onValidationErrors(errors: [UITextField: ValidationError]) {
+//    func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>) {
 //        // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
 //        presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
 //    }

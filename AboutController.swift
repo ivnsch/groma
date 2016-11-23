@@ -10,9 +10,9 @@ import UIKit
 
 class AboutController: UIViewController {
 
-    private var emailHelper: EmailHelper?
+    fileprivate var emailHelper: EmailHelper?
 
-    @IBAction func onContactTap(sender: UIButton) {
+    @IBAction func onContactTap(_ sender: UIButton) {
         emailHelper = EmailHelper(controller: self)
         emailHelper?.showEmail(appendSpecs: false)
     }

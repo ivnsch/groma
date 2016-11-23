@@ -13,27 +13,27 @@ class PlanProviderImpl: PlanProvider {
     let dbProvider = RealmPlanProvider()
     let remoteProvider = RemotePlanItemsProvider()
     
-    func planItems(handler: ProviderResult<[PlanItem]> -> Void) {
-        dbProvider.planItems(NSDate().startOfMonth) {dbItems in
-            handler(ProviderResult(status: .Success, sucessResult: dbItems))
+    func planItems(_ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
+        dbProvider.planItems(Date().startOfMonth) {dbItems in
+            handler(ProviderResult(status: .success, sucessResult: dbItems))
         }
     }
     
-    func planItem(productName: String, _ handler: ProviderResult<PlanItem?> -> Void) {
-        dbProvider.planItem(productName, startDate: NSDate().startOfMonth) {planItemMaybe in
+    func planItem(_ productName: String, _ handler: @escaping (ProviderResult<PlanItem?>) -> Void) {
+        dbProvider.planItem(productName, startDate: Date().startOfMonth) {planItemMaybe in
             if let planItem = planItemMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: planItem))
+                handler(ProviderResult(status: .success, sucessResult: planItem))
             } else {
-                handler(ProviderResult(status: .Success, sucessResult: nil))
+                handler(ProviderResult(status: .success, sucessResult: nil))
             }
         }
     }
 
-    func addPlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
+    func addPlanItem(_ itemInput: PlanItemInput, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
         addOrIncrementPlanItem(itemInput, inventory: inventory, handler)
     }
 
-    func addGroupItems(groupItems: [GroupItem], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
+    func addGroupItems(_ groupItems: [GroupItem], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
         let planItems = groupItems.map{
             PlanItem(inventory: inventory, product: $0.product, quantity: $0.quantity, usedQuantity: 0)
         }
@@ -41,42 +41,42 @@ class PlanProviderImpl: PlanProvider {
     }
     
     // TODO remote
-    func addPlanItems(planItems: [PlanItem], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
+    func addPlanItems(_ planItems: [PlanItem], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
         dbProvider.addOrIncrementPlanItems(planItems, inventory: inventory) {planItemsMaybe in
             if let planItems = planItemsMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: planItems))
+                handler(ProviderResult(status: .success, sucessResult: planItems))
             } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
     
     // TODO is this used? if yes needs remote
-    func addPlanItems(planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
+    func addPlanItems(_ planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
         dbProvider.addOrUpdateWithIncrement(planItemsInput, inventory: inventory) {planItemsMaybe in
             if let planItems = planItemsMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: planItems))
+                handler(ProviderResult(status: .success, sucessResult: planItems))
             } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
     
     // TODO is this used? if yes needs remote
-    func addProducts(products: [Product], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
+    func addProducts(_ products: [Product], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
         dbProvider.addOrIncrementProducts(products, inventory: inventory) {planItemsMaybe in
             if let planItems = planItemsMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: planItems))
+                handler(ProviderResult(status: .success, sucessResult: planItems))
             } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
     
-    func addProduct(product: Product, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
+    func addProduct(_ product: Product, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
         addProducts([product], inventory: inventory) {[weak self] result in
             if let planItem = result.sucessResult?.first {
-                handler(ProviderResult(status: .Success, sucessResult: planItem))
+                handler(ProviderResult(status: .success, sucessResult: planItem))
                 
                 self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
                     if !remoteResult.success {
@@ -87,18 +87,18 @@ class PlanProviderImpl: PlanProvider {
                 
             } else {
                 print("Error: Could not get the plan item: \(result)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
 
-    func updatePlanItem(planItem: PlanItem, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
+    func updatePlanItem(_ planItem: PlanItem, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
         dbProvider.update(planItem) {[weak self] updated in
             if updated {
                 // update product can change the name or price, and the products can be referenced by list items, so we have to invalidate memory cache.
                 Providers.listItemsProvider.invalidateMemCache()
 
-                handler(ProviderResult(status: .Success, sucessResult: planItem))
+                handler(ProviderResult(status: .success, sucessResult: planItem))
                 
                 self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
                     if !remoteResult.success {
@@ -108,15 +108,15 @@ class PlanProviderImpl: PlanProvider {
                 }
                 
             } else {
-                handler(ProviderResult(status: .DatabaseSavingError))
+                handler(ProviderResult(status: .databaseSavingError))
             }
         }
     }
 
     // TODO review this, adding product with existing name shows a new items in list this shouldn't happen. Maybe it's only the tableview
-    private func addOrIncrementPlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
+    fileprivate func addOrIncrementPlanItem(_ itemInput: PlanItemInput, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
         
-        func onHasProduct(product: Product, isUpdate: Bool) {
+        func onHasProduct(_ product: Product, isUpdate: Bool) {
             let planItem = PlanItem(inventory: inventory, product: product, quantity: itemInput.quantity, usedQuantity: -1)
             dbProvider.add(planItem) {[weak self] saved in
                 if saved {
@@ -124,7 +124,7 @@ class PlanProviderImpl: PlanProvider {
                         // update product can change the name or price, and the products can be referenced by list items, so we have to invalidate memory cache.
                         Providers.listItemsProvider.invalidateMemCache()
                     }
-                    handler(ProviderResult(status: .Success, sucessResult: planItem))
+                    handler(ProviderResult(status: .success, sucessResult: planItem))
                     
                     self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
                         if !remoteResult.success {
@@ -135,13 +135,13 @@ class PlanProviderImpl: PlanProvider {
                     }
                     
                 } else {
-                    handler(ProviderResult(status: .DatabaseSavingError))
+                    handler(ProviderResult(status: .databaseSavingError))
                 }
             }
         }
         
         planItem(itemInput.name) {[weak self] result in
-            if let existingPlanItemMaybe = result.sucessResult, existingPlanItem = existingPlanItemMaybe {
+            if let existingPlanItemMaybe = result.sucessResult, let existingPlanItem = existingPlanItemMaybe {
          
                 // if item with product and inventory already exists, increment it
                 let updatedCategory = existingPlanItem.product.category.copy(name: itemInput.category, color: itemInput.categoryColor)
@@ -163,15 +163,15 @@ class PlanProviderImpl: PlanProvider {
                         Providers.productCategoryProvider.categoryWithName(itemInput.category, {result in
                             
                             // if category doesn't exist, create a new one
-                            let category: ProductCategory = result.sucessResult ?? ProductCategory(uuid: NSUUID().UUIDString, name: itemInput.category, color: itemInput.categoryColor)
+                            let category: ProductCategory = result.sucessResult ?? ProductCategory(uuid: UUID().uuidString, name: itemInput.category, color: itemInput.categoryColor)
 
                             // add the product
-                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, category: category, brand: itemInput.brand)
+                            let product = Product(uuid: UUID().uuidString, name: itemInput.name, category: category, brand: itemInput.brand)
                             Providers.productProvider.add(product, remote: true) {result in
                                 if result.success {
                                     onHasProduct(product, isUpdate: false)
                                 } else {
-                                    handler(ProviderResult(status: .DatabaseSavingError))
+                                    handler(ProviderResult(status: .databaseSavingError))
                                 }
                             }
                         })
@@ -181,34 +181,34 @@ class PlanProviderImpl: PlanProvider {
         }
     }
     
-    func addPlanItem(item: PlanItem, _ handler: ProviderResult<Any> -> Void) {
+    func addPlanItem(_ item: PlanItem, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbProvider.add(item) {saved in
             if saved {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 // TODO server
                 
             } else {
-                handler(ProviderResult(status: .DatabaseSavingError))
+                handler(ProviderResult(status: .databaseSavingError))
             }
         }
     }
     
-    func removePlanItem(item: PlanItem, _ handler: ProviderResult<Any> -> Void) {
+    func removePlanItem(_ item: PlanItem, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbProvider.remove(item) {removed in
-            handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+            handler(ProviderResult(status: removed ? ProviderStatusCode.success : ProviderStatusCode.databaseUnknown))
         }
     }
     
-    func incrementPlanItem(item: PlanItem, delta: Int, _ handler: ProviderResult<Any> -> Void) {
+    func incrementPlanItem(_ item: PlanItem, delta: Int, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbProvider.increment(item, delta: delta) {saved in
             if saved {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 // TODO server
                 
             } else {
-                handler(ProviderResult(status: .DatabaseSavingError))
+                handler(ProviderResult(status: .databaseSavingError))
             }
         }
     }

@@ -10,20 +10,20 @@ import UIKit
 import QorumLogs
 
 protocol EyeViewDelegate: class {
-    func onEyeChange(open: Bool)
+    func onEyeChange(_ open: Bool)
 }
 
 class EyeView: UIView {
 
-    private var openLabel: UILabel?
+    fileprivate var openLabel: UILabel?
 
-    private let dotDiameter: CGFloat = 10
+    fileprivate let dotDiameter: CGFloat = 10
     
     weak var delegate: EyeViewDelegate?
     
-    private var open: Bool = true {
+    fileprivate var open: Bool = true {
         didSet {
-            openLabel?.hidden = !open
+            openLabel?.isHidden = !open
         }
     }
     
@@ -33,23 +33,23 @@ class EyeView: UIView {
         let x = (frame.width - dotDiameter) / 2
         let y = (frame.height - dotDiameter) / 2
         
-        let path = UIBezierPath(ovalInRect: CGRectMake(x, y, 10, 10))
+        let path = UIBezierPath(ovalIn: CGRect(x: x, y: y, width: 10, height: 10))
         
         let shapeLayer = CAShapeLayer()
-        shapeLayer.path = path.CGPath
-        let color = UIColor(hexString: "7F7F7F").CGColor
+        shapeLayer.path = path.cgPath
+        let color = UIColor(hexString: "7F7F7F").cgColor
         shapeLayer.fillColor = color
         shapeLayer.strokeColor = color
         shapeLayer.lineWidth = 1.0
         
         self.layer.addSublayer(shapeLayer)
         
-        let label = UILabel(frame: CGRectMake(0, 0, frame.width, frame.height))
-        label.font = UIFont.systemFontOfSize(18)
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        label.font = UIFont.systemFont(ofSize: 18)
         label.textColor = UIColor(hexString: "7F7F7F")
         label.text = "A"
-        label.textAlignment = .Center
-        label.backgroundColor = UIColor.whiteColor()
+        label.textAlignment = .center
+        label.backgroundColor = UIColor.white
         addSubview(label)
         self.openLabel = label
         
@@ -57,7 +57,7 @@ class EyeView: UIView {
         addGestureRecognizer(tapRecognizer)
     }
     
-    func onTap(sender: UITapGestureRecognizer) {
+    func onTap(_ sender: UITapGestureRecognizer) {
         open = !open
         delegate?.onEyeChange(open)
     }

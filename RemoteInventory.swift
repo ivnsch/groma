@@ -18,13 +18,13 @@ struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializab
 
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let name = representation.valueForKeyPath("name") as? String,
-            let order = representation.valueForKeyPath("order") as? Int,
-            let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let name = representation.value(forKeyPath: "name") as? String,
+            let order = representation.value(forKeyPath: "order") as? Int,
+            let color = ((representation.value(forKeyPath: "color") as? String).map{colorStr in
                 UIColor(hexString: colorStr)
             }),
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -36,9 +36,9 @@ struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializab
         self.lastUpdate = Int64(lastUpdate)
     }
 
-    static func collection(representation: AnyObject) -> [RemoteInventory]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteInventory]? {
         var sections = [RemoteInventory]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let section = RemoteInventory(representation: obj) {
                 sections.append(section)
             } else {
@@ -50,7 +50,7 @@ struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializab
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate)}"
     }
 }
 

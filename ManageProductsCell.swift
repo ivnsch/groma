@@ -21,7 +21,7 @@ class ManageProductsCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
     var product: ItemWithCellAttributes<Product>? {
@@ -46,13 +46,13 @@ class ManageProductsCell: UITableViewCell {
         }
     }
     
-    override func setEditing(editing: Bool, animated: Bool) {
+    override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
-        func animate(alpha: CGFloat) {
-            UIView.animateWithDuration(0.2) {[weak self] in
+        func animate(_ alpha: CGFloat) {
+            UIView.animate(withDuration: 0.2, animations: {[weak self] in
                 self?.categoryColorView.alpha = alpha
-            }
+            }) 
         }
         
         if editing {

@@ -17,7 +17,7 @@ class BlurBubbleTransition: NSObject, UIViewControllerAnimatedTransitioning {
     /**
     The point that originates the bubble.
     */
-    var startingPoint = CGPointZero {
+    var startingPoint = CGPoint.zero {
         didSet {
             bubble.center = startingPoint
         }
@@ -31,73 +31,72 @@ class BlurBubbleTransition: NSObject, UIViewControllerAnimatedTransitioning {
     /**
     The transition direction. Either `.Present` or `.Dismiss.`
     */
-    var transitionMode: BubbleTransitionMode = .Present
+    var transitionMode: BubbleTransitionMode = .present
     
     /**
     The color of the bubble. Make sure that it matches the destination controller's background color.
     */
 //    var bubbleColor: UIColor = .whiteColor() // ivan - disable color since we will not use it
     
-    var bubble = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light)) // ivan - change UIView with UIVisualEffectView
+    var bubble = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.light)) // ivan - change UIView with UIVisualEffectView
     
     // MARK: - UIViewControllerAnimatedTransitioning
     
     /**
     Required by UIViewControllerAnimatedTransitioning
     */
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
     }
     
-    private func frameForBubble(originalCenter: CGPoint, size originalSize: CGSize, start: CGPoint) -> CGRect {
+    fileprivate func frameForBubble(_ originalCenter: CGPoint, size originalSize: CGSize, start: CGPoint) -> CGRect {
         let lengthX = fmax(start.x, originalSize.width - start.x);
         let lengthY = fmax(start.y, originalSize.height - start.y)
         let offset = sqrt(lengthX * lengthX + lengthY * lengthY) * 2;
         let size = CGSize(width: offset, height: offset)
         
-        return CGRect(origin: CGPointZero, size: size)
+        return CGRect(origin: CGPoint.zero, size: size)
     }
     
     
     /**
     Required by UIViewControllerAnimatedTransitioning
     */
-    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        guard let containerView = transitionContext.containerView() else {
-            return
-        }
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         
-        if transitionMode == .Present {
-            let presentedControllerView = transitionContext.viewForKey(UITransitionContextToViewKey)!
+        let containerView = transitionContext.containerView
+        
+        if transitionMode == .present {
+            let presentedControllerView = transitionContext.view(forKey: UITransitionContextViewKey.to)!
             let originalCenter = presentedControllerView.center
             let originalSize = presentedControllerView.frame.size
             
-            bubble = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light)) // ivan - change UIView with UIVisualEffectView
+            bubble = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.light)) // ivan - change UIView with UIVisualEffectView
             bubble.frame = frameForBubble(originalCenter, size: originalSize, start: startingPoint)
             bubble.layer.cornerRadius = bubble.frame.size.height / 2
             bubble.clipsToBounds = true // ivan - without this the visual effect view will not show rounded corners
             
             bubble.center = startingPoint
-            bubble.transform = CGAffineTransformMakeScale(0.001, 0.001)
+            bubble.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
             //                bubble.backgroundColor = bubbleColor // ivan
             containerView.addSubview(bubble)
             
             presentedControllerView.center = startingPoint
-            presentedControllerView.transform = CGAffineTransformMakeScale(0.001, 0.001)
+            presentedControllerView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
             presentedControllerView.alpha = 0
             containerView.addSubview(presentedControllerView)
             
-            UIView.animateWithDuration(duration, animations: {
-                self.bubble.transform = CGAffineTransformIdentity
-                presentedControllerView.transform = CGAffineTransformIdentity
+            UIView.animate(withDuration: duration, animations: {
+                self.bubble.transform = CGAffineTransform.identity
+                presentedControllerView.transform = CGAffineTransform.identity
                 presentedControllerView.alpha = 1
                 presentedControllerView.center = originalCenter
-                }) { (_) in
+                }, completion: { (_) in
                     transitionContext.completeTransition(true)
-            }
+            }) 
         } else {
-            let key = (transitionMode == .Pop) ? UITransitionContextToViewKey : UITransitionContextFromViewKey
-            let returningControllerView = transitionContext.viewForKey(key)!
+            let key = (transitionMode == .pop) ? UITransitionContextViewKey.to : UITransitionContextViewKey.from
+            let returningControllerView = transitionContext.view(forKey: key)!
             let originalCenter = returningControllerView.center
             let originalSize = returningControllerView.frame.size
             
@@ -105,21 +104,21 @@ class BlurBubbleTransition: NSObject, UIViewControllerAnimatedTransitioning {
             bubble.layer.cornerRadius = bubble.frame.size.height / 2
             bubble.center = startingPoint
             
-            UIView.animateWithDuration(duration, animations: {
-                self.bubble.transform = CGAffineTransformMakeScale(0.001, 0.001)
-                returningControllerView.transform = CGAffineTransformMakeScale(0.001, 0.001)
+            UIView.animate(withDuration: duration, animations: {
+                self.bubble.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+                returningControllerView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
                 returningControllerView.center = self.startingPoint
                 returningControllerView.alpha = 0
                 
-                if self.transitionMode == .Pop {
+                if self.transitionMode == .pop {
                     containerView.insertSubview(returningControllerView, belowSubview: returningControllerView)
                     containerView.insertSubview(self.bubble, belowSubview: returningControllerView)
                 }
-                }) { (_) in
+                }, completion: { (_) in
                     returningControllerView.removeFromSuperview()
                     self.bubble.removeFromSuperview()
                     transitionContext.completeTransition(true)
-            }
+            }) 
         }
     }
     
@@ -127,7 +126,7 @@ class BlurBubbleTransition: NSObject, UIViewControllerAnimatedTransitioning {
     The possible directions of the transition
     */
     @objc enum BubbleTransitionMode: Int {
-        case Present, Dismiss, Pop
+        case present, dismiss, pop
     }
 
     

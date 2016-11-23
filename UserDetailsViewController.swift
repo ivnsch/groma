@@ -33,7 +33,7 @@ class UserDetailsViewController: UIViewController {
         logoutButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
     }
     
-    private func initContents(user: SharedUser) {
+    fileprivate func initContents(_ user: SharedUser) {
         if let userIdLabel = userIdLabel {
             userIdLabel.text = user.email
         } else {
@@ -41,14 +41,14 @@ class UserDetailsViewController: UIViewController {
         }
     }
     
-    @IBAction func onLogoutTap(sender: UIButton) {
+    @IBAction func onLogoutTap(_ sender: UIButton) {
         
         Providers.userProvider.logout {[weak self] remoteResult in
             
             FBSDKLoginManager().logOut() // in case we logged in using fb
             GIDSignIn.sharedInstance().signOut()  // in case we logged in using google
             
-            if remoteResult.success ?? false {
+            if remoteResult.success {
                 self?.delegate?.onLogoutSuccess()
                 
             } else {

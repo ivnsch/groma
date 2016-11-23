@@ -10,41 +10,41 @@ import Foundation
 
 class RemoteProductProvider: RemoteProvider {
     
-    func products(handler: RemoteResult<[RemoteProduct]> -> ()) {
-        RemoteProvider.authenticatedRequestArray(.GET, Urls.products) {result in
+    func products(_ handler: @escaping (RemoteResult<[RemoteProduct]>) -> ()) {
+        RemoteProvider.authenticatedRequestArray(.get, Urls.products) {result in
             handler(result)
         }
     }
     
-    func addProduct(product: Product, handler: RemoteResult<RemoteProduct> -> ()) {
+    func addProduct(_ product: Product, handler: @escaping (RemoteResult<RemoteProduct>) -> ()) {
         let params = RemoteListItemProvider().toRequestParams(product)
-        RemoteProvider.authenticatedRequest(.POST, Urls.product, params) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.product, params) {result in
             handler(result)
         }
     }
     
-    func updateProduct(product: Product, handler: RemoteResult<RemoteProduct> -> ()) {
+    func updateProduct(_ product: Product, handler: @escaping (RemoteResult<RemoteProduct>) -> ()) {
         let params = RemoteListItemProvider().toRequestParams(product)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.product, params) {result in
+        RemoteProvider.authenticatedRequest(.put, Urls.product, params) {result in
             handler(result)
         }
     }
 
-    func incrementFav(productUuid: String, handler: RemoteResult<RemoteProduct> -> ()) {
-        RemoteProvider.authenticatedRequest(.PUT, Urls.favProduct + "/\(productUuid)") {result in
+    func incrementFav(_ productUuid: String, handler: @escaping (RemoteResult<RemoteProduct>) -> ()) {
+        RemoteProvider.authenticatedRequest(.put, Urls.favProduct + "/\(productUuid)") {result in
             handler(result)
         }
     }
     
-    func deleteProduct(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.product + "/\(uuid)") {result in
+    func deleteProduct(_ uuid: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.product + "/\(uuid)") {result in
             handler(result)
         }
     }
     
-    func deleteProductsWithBrand(brandName: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        let encodedName = brandName.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.brand + "/\(encodedName)") {result in
+    func deleteProductsWithBrand(_ brandName: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        let encodedName = brandName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        RemoteProvider.authenticatedRequest(.delete, Urls.brand + "/\(encodedName)") {result in
             handler(result)
         }
     }

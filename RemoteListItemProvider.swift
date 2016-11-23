@@ -16,81 +16,82 @@ class RemoteListItemProvider {
     // (e.g. user uses 2 devices, device 2 doesn't have the recently added products in device 1 in it's local database, so it has to request the server)
     // Note that this overall needs more development, since device 2 can add products offline and we can get conflicts (same name, diff uuids) with the server
     // TODO do we really need list here ? didnt we want to make products global?
-    func product(name: String, list: List, handler: RemoteResult<RemoteProduct> -> ()) {
-        let params = [
-            "name": name,
-            "listUuid": list.uuid,
+    func product(_ name: String, list: List, handler: @escaping (RemoteResult<RemoteProduct>) -> ()) {
+        let params: [String: AnyObject] = [
+            "name": name as AnyObject,
+            "listUuid": list.uuid as AnyObject,
         ]
-        RemoteProvider.authenticatedRequest(.GET, Urls.productWithUnique, params) {result in
+        RemoteProvider.authenticatedRequest(.get, Urls.productWithUnique, params) {result in
             handler(result)
         }
     }
 
-    func section(name: String, list: List, handler: RemoteResult<RemoteSection> -> ()) {
-        let params = [
-            "name": name,
-            "listUuid": list.uuid,
+    func section(_ name: String, list: List, handler: @escaping (RemoteResult<RemoteSection>) -> ()) {
+        let params: [String: AnyObject] = [
+            "name": name as AnyObject,
+            "listUuid": list.uuid as AnyObject,
         ]
-        RemoteProvider.authenticatedRequest(.GET, Urls.sectionWithUnique, params) {result in
+        RemoteProvider.authenticatedRequest(.get, Urls.sectionWithUnique, params) {result in
             handler(result)
         }
     }
     
-    func lists(handler: RemoteResult<RemoteListsWithDependencies> -> ()) {
-        RemoteProvider.authenticatedRequest(.GET, Urls.lists) {result in
+    func lists(_ handler: @escaping (RemoteResult<RemoteListsWithDependencies>) -> ()) {
+        RemoteProvider.authenticatedRequest(.get, Urls.lists) {result in
             handler(result)
         }
     }
 
-    func listItems(list list: List, handler: RemoteResult<RemoteListItems> -> ()) {
-        RemoteProvider.authenticatedRequest(.GET, Urls.listItems, ["list": list.uuid]) {result in
+    func listItems(list: List, handler: @escaping (RemoteResult<RemoteListItems>) -> ()) {
+        let params: [String: AnyObject] = ["list": list.uuid as AnyObject]
+        RemoteProvider.authenticatedRequest(.get, Urls.listItems, params) {result in
             handler(result)
         }
     }
     
-    func removeListItem(listItemUuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.listItem + "/\(listItemUuid)") {result in
+    func removeListItem(_ listItemUuid: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.listItem + "/\(listItemUuid)") {result in
             handler(result)
         }
     }
     
-    func remove(section: Section, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.section + "/\(section.uuid)", toRequestParams(section)) {result in
+    func remove(_ section: Section, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.section + "/\(section.uuid)", toRequestParams(section)) {result in
             handler(result)
         }
     }
     
     
-    func remove(listUuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.list + "/\(listUuid)") {result in
+    func remove(_ listUuid: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.list + "/\(listUuid)") {result in
             handler(result)
         }
     }
     
-    func update(list: List, handler: RemoteResult<RemoteListsWithDependencies> -> ()) {
+    func update(_ list: List, handler: @escaping (RemoteResult<RemoteListsWithDependencies>) -> ()) {
         let parameters = self.toRequestParams(list)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.list, parameters) {result in
+        RemoteProvider.authenticatedRequest(.put, Urls.list, parameters) {result in
             handler(result)
         }
     }
     
-    func update(lists: [List], handler: RemoteResult<Int64> -> ()) {
+    func update(_ lists: [List], handler: @escaping (RemoteResult<Int64>) -> ()) {
         let parameters = lists.map{self.toRequestParams($0)}
-        RemoteProvider.authenticatedRequestArrayParamsTimestamp(.PUT, Urls.lists, parameters) {result in
+        RemoteProvider.authenticatedRequestArrayParamsTimestamp(.put, Urls.lists, parameters) {result in
             handler(result)
         }
     }
     
-    func add(listItem: ListItem, handler: RemoteResult<RemoteListItems> -> ()) {
+    func add(_ listItem: ListItem, handler: @escaping (RemoteResult<RemoteListItems>) -> ()) {
         let parameters = self.toRequestParams(listItem)
-        RemoteProvider.authenticatedRequest(.POST, Urls.addListItem, parameters) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.addListItem, parameters) {result in
             handler(result)
         }
     }
 
-    func add(listItems: [ListItem], handler: RemoteResult<RemoteListItems> -> ()) {
+    func add(_ listItems: [ListItem], handler: @escaping (RemoteResult<RemoteListItems>) -> ()) {
         let parameters = toRequestParams(listItems)
-        RemoteProvider.authenticatedRequest(.POST, Urls.addListItems, parameters) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.addListItems, parameters) {result in
             handler(result)
         }
     }
@@ -103,100 +104,100 @@ class RemoteListItemProvider {
 //    }
     
 //    RemoteSwitchListItemResult
-    func updateStatus(listItem: ListItem, statusUpdate: ListItemStatusUpdate, handler: RemoteResult<RemoteSwitchListItemResult> -> Void) {
+    func updateStatus(_ listItem: ListItem, statusUpdate: ListItemStatusUpdate, handler: @escaping (RemoteResult<RemoteSwitchListItemResult>) -> Void) {
         let parameters = toRequestParamsForStatusUpdate(listItem, statusUpdate: statusUpdate)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.updateListItemStatus, parameters) {result in
+        RemoteProvider.authenticatedRequest(.put, Urls.updateListItemStatus, parameters) {result in
             handler(result)
         }
     }
 
-    func buyCart(listUuid: String, inventoryItems: [InventoryItemWithHistoryItem], handler: RemoteResult<Int64> -> Void) {
+    func buyCart(_ listUuid: String, inventoryItems: [InventoryItemWithHistoryItem], handler: @escaping (RemoteResult<Int64>) -> Void) {
         let parameters = toRequestParams(listUuid, items: inventoryItems)
-        RemoteProvider.authenticatedRequestTimestamp(.POST, Urls.buyCart, parameters) {result in
+        RemoteProvider.authenticatedRequestTimestamp(.post, Urls.buyCart, parameters) {result in
             handler(result)
         }
     }
     
     // IMPORTANT: Assumes that the passed list items are ALL the existing list items in src status. If this is not the case, the remaining items/sections in src status will likely be left with a wrong order.
-    func updateAllStatus(listUuid: String, statusUpdate: ListItemStatusUpdate, handler: RemoteResult<RemoteSwitchAllListItemsResult> -> ()) {
-        let parameters: [String: AnyObject] = ["listUuid": listUuid, "src": statusUpdate.src.rawValue, "dst": statusUpdate.dst.rawValue]
-        RemoteProvider.authenticatedRequest(.PUT, Urls.updateAllListItemsStatus, parameters) {result in
+    func updateAllStatus(_ listUuid: String, statusUpdate: ListItemStatusUpdate, handler: @escaping (RemoteResult<RemoteSwitchAllListItemsResult>) -> ()) {
+        let parameters: [String: AnyObject] = ["listUuid": listUuid as AnyObject, "src": statusUpdate.src.rawValue as AnyObject, "dst": statusUpdate.dst.rawValue as AnyObject]
+        RemoteProvider.authenticatedRequest(.put, Urls.updateAllListItemsStatus, parameters) {result in
             handler(result)
         }
     }
     
     // TODO use update
-    func update(listItems: [ListItem], handler: RemoteResult<RemoteListItems> -> ()) {
+    func update(_ listItems: [ListItem], handler: @escaping (RemoteResult<RemoteListItems>) -> ()) {
         let parameters = listItems.map{self.toRequestParams($0)}
-        RemoteProvider.authenticatedRequest(.PUT, Urls.listItems, parameters) {result in
+        RemoteProvider.authenticatedRequest(.put, Urls.listItems, parameters) {result in
             handler(result)
         }
     }
     
     // TODO!!!! review these responses, the server isn't sending anything back. Do we want to update timestamp on order updates (list, inventory, group, listitem) or not?
-    func updateListItemsOrder(listItems: [ListItem], status: ListItemStatus, handler: RemoteResult<[RemoteOrderUpdate]> -> ()) {
+    func updateListItemsOrder(_ listItems: [ListItem], status: ListItemStatus, handler: @escaping (RemoteResult<[RemoteOrderUpdate]>) -> ()) {
         let params: [[String: AnyObject]] = listItems.map{
-            ["uuid": $0.uuid, "sectionUuid": $0.section.uuid, "order": $0.order(status)]
+            ["uuid": $0.uuid as AnyObject, "sectionUuid": $0.section.uuid as AnyObject, "order": $0.order(status) as AnyObject]
         }
         let url: String = {
             switch status {
-            case .Todo: return Urls.listItemsOrder
-            case .Done: return Urls.listItemsDoneOrder
-            case .Stash: return Urls.listItemsStashOrder
+            case .todo: return Urls.listItemsOrder
+            case .done: return Urls.listItemsDoneOrder
+            case .stash: return Urls.listItemsStashOrder
             }
         }()
         
-        RemoteProvider.authenticatedRequestArray(.PUT, url, params) {result in
+        RemoteProvider.authenticatedRequestArray(.put, url, params) {result in
             handler(result)
         }
     }
     
-    func updateListsOrder(orderUpdates: [OrderUpdate], handler: RemoteResult<[RemoteOrderUpdate]> -> ()) {
+    func updateListsOrder(_ orderUpdates: [OrderUpdate], handler: @escaping (RemoteResult<[RemoteOrderUpdate]>) -> ()) {
         let params: [[String: AnyObject]] = orderUpdates.map{
-            ["uuid": $0.uuid, "order": $0.order]
+            ["uuid": $0.uuid as AnyObject, "order": $0.order as AnyObject]
         }
-        RemoteProvider.authenticatedRequestArray(.PUT, Urls.listsOrder, params) {result in
+        RemoteProvider.authenticatedRequestArray(.put, Urls.listsOrder, params) {result in
             handler(result)
         }
     }
     
-    func incrementListItem(listItem: ListItem, delta: Int, status: ListItemStatus, handler: RemoteResult<RemoteListItemIncrementResult> -> ()) {
+    func incrementListItem(_ listItem: ListItem, delta: Int, status: ListItemStatus, handler: @escaping (RemoteResult<RemoteListItemIncrementResult>) -> ()) {
         let params: [String: AnyObject] = [
-            "uuid": listItem.uuid,
-            "status": status.rawValue,
-            "delta": delta
+            "uuid": listItem.uuid as AnyObject,
+            "status": status.rawValue as AnyObject,
+            "delta": delta as AnyObject
         ]
-        RemoteProvider.authenticatedRequest(.POST, Urls.incrementListItem, params) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.incrementListItem, params) {result in
             handler(result)
         }
     }
     
-    func add(list: List, handler: RemoteResult<Int64> -> Void) {
+    func add(_ list: List, handler: @escaping (RemoteResult<Int64>) -> Void) {
         let parameters = toRequestPrams(list)
-        RemoteProvider.authenticatedRequestTimestamp(.POST, Urls.list, parameters) {result in
+        RemoteProvider.authenticatedRequestTimestamp(.post, Urls.list, parameters) {result in
             handler(result)
         }
     }
 
-    func add(section: Section, handler: RemoteResult<RemoteSection> -> ()) {
+    func add(_ section: Section, handler: @escaping (RemoteResult<RemoteSection>) -> ()) {
 
         let listDict = toRequestParams(section.list)
 
         let parameters: [String: AnyObject] = [
-            "uuid": section.uuid,
-            "name": section.name,
-            "color": section.color.hexStr,
-            "list": listDict,
-            "todoOrder": section.todoOrder,
-            "doneOrder": section.doneOrder,
-            "stashOrder": section.stashOrder
+            "uuid": section.uuid as AnyObject,
+            "name": section.name as AnyObject,
+            "color": section.color.hexStr as AnyObject,
+            "list": listDict as AnyObject,
+            "todoOrder": section.todoOrder as AnyObject,
+            "doneOrder": section.doneOrder as AnyObject,
+            "stashOrder": section.stashOrder as AnyObject
         ]
-        RemoteProvider.authenticatedRequest(.POST, Urls.section, parameters) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.section, parameters) {result in
             handler(result)
         }
     }
 
-    func syncListsWithListItems(listsSync: ListsSync, handler: RemoteResult<RemoteListWithListItemsSyncResult> -> ()) {
+    func syncListsWithListItems(_ listsSync: ListsSync, handler: @escaping (RemoteResult<RemoteListWithListItemsSyncResult>) -> ()) {
         
         let lystsSyncDicts: [[String: AnyObject]] = listsSync.listsSyncs.map {listSync in
             
@@ -205,24 +206,24 @@ class RemoteListItemProvider {
             let sharedUsers: [[String: AnyObject]] = list.users.map{self.toRequestParams($0)}
             
             var dict: [String: AnyObject] = [
-                "uuid": list.uuid,
-                "name": list.name,
-                "order": list.order,
-                "users": sharedUsers,
+                "uuid": list.uuid as AnyObject,
+                "name": list.name as AnyObject,
+                "order": list.order as AnyObject,
+                "users": sharedUsers as AnyObject,
             ]
             
             if let lastServerUpdate = list.lastServerUpdate {
-                dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+                dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
             }
             
             let listItemsDicts = listSync.listItemsSync.listItems.map {toRequestParams($0)}
             let toRemoveDicts = listSync.listItemsSync.toRemove.map{self.toRequestParamsToRemove($0)}
             let listItemsSyncDict: [String: AnyObject] = [
-                "listItems": listItemsDicts,
-                "toRemove": toRemoveDicts
+                "listItems": listItemsDicts as AnyObject,
+                "toRemove": toRemoveDicts as AnyObject
             ]
 
-            dict["listItems"] = listItemsSyncDict
+            dict["listItems"] = listItemsSyncDict as AnyObject?
             
             return dict
         }
@@ -230,31 +231,31 @@ class RemoteListItemProvider {
         let toRemoveDicts = listsSync.toRemove.map{self.toRequestParamsToRemove($0)}
         
         let dictionary: [String: AnyObject] = [
-            "lists": lystsSyncDicts,
-            "toRemove": toRemoveDicts
+            "lists": lystsSyncDicts as AnyObject,
+            "toRemove": toRemoveDicts as AnyObject
         ]
 
-        RemoteProvider.authenticatedRequest(.POST, Urls.listsWithItemsSync, dictionary) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.listsWithItemsSync, dictionary) {result in
             handler(result)
         }
     }
     
-    func acceptInvitation(invitation: RemoteListInvitation, handler: RemoteResult<NoOpSerializable> -> Void) {
+    func acceptInvitation(_ invitation: RemoteListInvitation, handler: @escaping (RemoteResult<NoOpSerializable>) -> Void) {
         let parameters = toRequestParams(invitation, accept: true)
-        RemoteProvider.authenticatedRequest(.POST, Urls.listInvitation, parameters) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.listInvitation, parameters) {result in
             handler(result)
         }
     }
 
-    func rejectInvitation(invitation: RemoteListInvitation, handler: RemoteResult<NoOpSerializable> -> Void) {
+    func rejectInvitation(_ invitation: RemoteListInvitation, handler: @escaping (RemoteResult<NoOpSerializable>) -> Void) {
         let parameters = toRequestParams(invitation, accept: false)
-        RemoteProvider.authenticatedRequest(.POST, Urls.listInvitation, parameters) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.listInvitation, parameters) {result in
             handler(result)
         }
     }
     
-    func findInvitedUsers(listUuid: String, handler: RemoteResult<[RemoteSharedUser]> -> Void) {
-        RemoteProvider.authenticatedRequestArray(.GET, Urls.listInvitedUsers + "/\(listUuid)") {result in
+    func findInvitedUsers(_ listUuid: String, handler: @escaping (RemoteResult<[RemoteSharedUser]>) -> Void) {
+        RemoteProvider.authenticatedRequestArray(.get, Urls.listInvitedUsers + "/\(listUuid)") {result in
             handler(result)
         }
     }
@@ -271,203 +272,203 @@ class RemoteListItemProvider {
     //////////////////
     
     
-    func toRequestParams(invitation: RemoteListInvitation, accept: Bool) -> [String: AnyObject] {
+    func toRequestParams(_ invitation: RemoteListInvitation, accept: Bool) -> [String: AnyObject] {
         
         let sharedUser = SharedUser(email: invitation.sender) // TODO as commented in the invitation objs, these should contain shared user not only email (this means the server has to send us the shared user)
         
         return [
-            "uuid": invitation.list.uuid,
-            "accept": accept,
-            "sender": toRequestParams(sharedUser)
+            "uuid": invitation.list.uuid as AnyObject,
+            "accept": accept as AnyObject,
+            "sender": toRequestParams(sharedUser) as AnyObject
         ]
     }
     
-    func toRequestPrams(list: List) -> [String: AnyObject] {
+    func toRequestPrams(_ list: List) -> [String: AnyObject] {
         
         let inventoryDict = RemoteInventoryProvider().toRequestParams(list.inventory)
 
         var dict: [String: AnyObject] = [
-            "uuid": list.uuid,
-            "name": list.name,
-            "order": list.order,
-            "color": list.bgColor.hexStr,
-            "users": list.users.map{self.toRequestParams($0)},
-            "inventory": inventoryDict
+            "uuid": list.uuid as AnyObject,
+            "name": list.name as AnyObject,
+            "order": list.order as AnyObject,
+            "color": list.bgColor.hexStr as AnyObject,
+            "users": list.users.map{self.toRequestParams($0)} as AnyObject,
+            "inventory": inventoryDict as AnyObject
         ]
         
         if let store = list.store {
-            dict["store"] = store
+            dict["store"] = store as AnyObject?
         }
         if let lastServerUpdate = list.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         
         return dict
     }
     
-    func toRequestParams(sharedUser: SharedUser) -> [String: AnyObject] {
+    func toRequestParams(_ sharedUser: SharedUser) -> [String: AnyObject] {
         return [
-            "email": sharedUser.email,
-            "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
+            "email": sharedUser.email as AnyObject,
+            "foo": "" as AnyObject // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
         ]
     }
 
-    func toRequestParams(listItems: [ListItem]) -> [[String: AnyObject]] {
+    func toRequestParams(_ listItems: [ListItem]) -> [[String: AnyObject]] {
         return listItems.map{toRequestParams($0)}
     }
 
-    func toRequestParams(section: Section) -> [String: AnyObject] {
+    func toRequestParams(_ section: Section) -> [String: AnyObject] {
         
         let listDict = toRequestParams(section.list)
 
         var dict: [String: AnyObject] = [
-            "uuid": section.uuid,
-            "name": section.name,
-            "color": section.color.hexStr,
-            "todoOrder": section.todoOrder,
-            "doneOrder": section.doneOrder,
-            "stashOrder": section.stashOrder,
-            "listInput": listDict
+            "uuid": section.uuid as AnyObject,
+            "name": section.name as AnyObject,
+            "color": section.color.hexStr as AnyObject,
+            "todoOrder": section.todoOrder as AnyObject,
+            "doneOrder": section.doneOrder as AnyObject,
+            "stashOrder": section.stashOrder as AnyObject,
+            "listInput": listDict as AnyObject
         ]
         
         if let lastServerUpdate = section.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
 
         return dict
     }
     
-    func toRequestParams(listItem: ListItem) -> [String: AnyObject] {
+    func toRequestParams(_ listItem: ListItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
-            "uuid": listItem.uuid,
-            "note": listItem.note ?? "",
-            "todoQuantity": listItem.todoQuantity,
-            "todoOrder": listItem.todoOrder,
-            "doneQuantity": listItem.doneQuantity,
-            "doneOrder": listItem.doneOrder,
-            "stashQuantity": listItem.stashQuantity,
-            "stashOrder": listItem.stashOrder,
-            "storeProductInput": toRequestParams(listItem.product),
-            "listUuid": listItem.list.uuid,
-            "listName": listItem.list.name,
-            "sectionInput": toRequestParams(listItem.section),
+            "uuid": listItem.uuid as AnyObject,
+            "note": listItem.note as AnyObject? ?? "" as AnyObject,
+            "todoQuantity": listItem.todoQuantity as AnyObject,
+            "todoOrder": listItem.todoOrder as AnyObject,
+            "doneQuantity": listItem.doneQuantity as AnyObject,
+            "doneOrder": listItem.doneOrder as AnyObject,
+            "stashQuantity": listItem.stashQuantity as AnyObject,
+            "stashOrder": listItem.stashOrder as AnyObject,
+            "storeProductInput": toRequestParams(listItem.product) as AnyObject,
+            "listUuid": listItem.list.uuid as AnyObject,
+            "listName": listItem.list.name as AnyObject,
+            "sectionInput": toRequestParams(listItem.section) as AnyObject,
         ]
         
         if let lastServerUpdate = listItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         
         return dict
 
     }
 
-    func toRequestParamsForStatusUpdate(listItem: ListItem, statusUpdate: ListItemStatusUpdate) -> [String: AnyObject] {
+    func toRequestParamsForStatusUpdate(_ listItem: ListItem, statusUpdate: ListItemStatusUpdate) -> [String: AnyObject] {
         return [
-            "uuid": listItem.uuid,
-            "src": statusUpdate.src.rawValue,
-            "dst": statusUpdate.dst.rawValue,
-            "l": listItem.list.uuid,
-            "s": listItem.section.uuid
+            "uuid": listItem.uuid as AnyObject,
+            "src": statusUpdate.src.rawValue as AnyObject,
+            "dst": statusUpdate.dst.rawValue as AnyObject,
+            "l": listItem.list.uuid as AnyObject,
+            "s": listItem.section.uuid as AnyObject
         ]
     }
 
-    func toRequestParams(product: StoreProduct) -> [String: AnyObject] {
+    func toRequestParams(_ product: StoreProduct) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
-            "uuid": product.uuid,
-            "price": product.price,
-            "baseQuantity": product.baseQuantity,
-            "unit": product.unit.rawValue,
-            "store": product.store,            
-            "product": toRequestParams(product.product)
+            "uuid": product.uuid as AnyObject,
+            "price": product.price as AnyObject,
+            "baseQuantity": product.baseQuantity as AnyObject,
+            "unit": product.unit.rawValue as AnyObject,
+            "store": product.store as AnyObject,            
+            "product": toRequestParams(product.product) as AnyObject
         ]
         
         if let lastServerUpdate = product.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         
         return dict
     }
     
-    func toRequestParams(product: Product) -> [String: AnyObject] {
+    func toRequestParams(_ product: Product) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
-            "uuid": product.uuid,
-            "name": product.name,
-            "brand": product.brand,
-            "category": toRequestParams(product.category),
-            "fav": product.fav
+            "uuid": product.uuid as AnyObject,
+            "name": product.name as AnyObject,
+            "brand": product.brand as AnyObject,
+            "category": toRequestParams(product.category) as AnyObject,
+            "fav": product.fav as AnyObject
         ]
         
         if let lastServerUpdate = product.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         
         return dict
     }
     
-    func toRequestParams(productCategory: ProductCategory) -> [String: AnyObject] {
+    func toRequestParams(_ productCategory: ProductCategory) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
-            "uuid": productCategory.uuid,
-            "name": productCategory.name,
-            "color": productCategory.color.hexStr
+            "uuid": productCategory.uuid as AnyObject,
+            "name": productCategory.name as AnyObject,
+            "color": productCategory.color.hexStr as AnyObject
         ]
         
         if let lastServerUpdate = productCategory.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         
         return dict
     }
     
-    func toRequestParamsShort(list: List) -> [String: AnyObject] {
+    func toRequestParamsShort(_ list: List) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
-            "uuid": list.uuid,
-            "name": list.name,
-            "order": list.order,
-            "color": list.bgColor.hexStr
+            "uuid": list.uuid as AnyObject,
+            "name": list.name as AnyObject,
+            "order": list.order as AnyObject,
+            "color": list.bgColor.hexStr as AnyObject
         ]
 
         if let store = list.store {
-            dict["store"] = store
+            dict["store"] = store as AnyObject?
         }
         if let lastServerUpdate = list.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         
         return dict
     }
     
-    func toRequestParams(list: List) -> [String: AnyObject] {
+    func toRequestParams(_ list: List) -> [String: AnyObject] {
         let sharedUsers: [[String: AnyObject]] = list.users.map{self.toRequestParams($0)}
         var listDict = self.toRequestParamsShort(list)
-        listDict["users"] = sharedUsers
+        listDict["users"] = sharedUsers as AnyObject?
         let inventoryDict = RemoteInventoryProvider().toRequestParams(list.inventory)
-        listDict["inventory"] = inventoryDict
+        listDict["inventory"] = inventoryDict as AnyObject
         return listDict
     }
     
-    func toRequestParamsToRemove(listItem: ListItem) -> [String: AnyObject] {
-        var dict: [String: AnyObject] = ["uuid": listItem.uuid]
+    func toRequestParamsToRemove(_ listItem: ListItem) -> [String: AnyObject] {
+        var dict: [String: AnyObject] = ["uuid": listItem.uuid as AnyObject]
         if let lastServerUpdate = listItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         return dict
     }
 
-    func toRequestParamsToRemove(list: List) -> [String: AnyObject] {
-        var dict: [String: AnyObject] = ["uuid": list.uuid]
+    func toRequestParamsToRemove(_ list: List) -> [String: AnyObject] {
+        var dict: [String: AnyObject] = ["uuid": list.uuid as AnyObject]
         if let lastServerUpdate = list.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         return dict
     }
     
-    func toRequestParams(listUuid: String, items: [InventoryItemWithHistoryItem]) -> [String: AnyObject] {
+    func toRequestParams(_ listUuid: String, items: [InventoryItemWithHistoryItem]) -> [String: AnyObject] {
         
         let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
-        var dict: [String: AnyObject] = ["listUuid": listUuid]
+        var dict: [String: AnyObject] = ["listUuid": listUuid as AnyObject]
         let itemsDicts = items.map{remoteInventoryItemsProvider.toDictionary($0)}
         
-        dict["items"] = itemsDicts
+        dict["items"] = itemsDicts as AnyObject
         
         return dict
     }

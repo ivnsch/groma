@@ -40,7 +40,7 @@ class NavigationTitleView: UIView {
     override func awakeFromNib() {
         self.editMode = false
         
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(NavigationTitleView.onTap))
         self.addGestureRecognizer(tapRecognizer)
@@ -50,8 +50,8 @@ class NavigationTitleView: UIView {
     
     var editMode:Bool = false {
         didSet {
-            self.label.hidden = editMode
-            self.textField.hidden = !editMode
+            self.label.isHidden = editMode
+            self.textField.isHidden = !editMode
             
             self.textField.text = ""
             

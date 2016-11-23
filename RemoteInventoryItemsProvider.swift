@@ -11,67 +11,67 @@ import QorumLogs
 
 class RemoteInventoryItemsProvider: Any {
     
-    func inventoryItems(inventory: Inventory, handler: RemoteResult<[RemoteInventoryItemWithProduct]> -> ()) {
-        RemoteProvider.authenticatedRequestArray(.GET, Urls.inventoryItems, ["inventory": inventory.uuid]) {result in
+    func inventoryItems(_ inventory: Inventory, handler: @escaping (RemoteResult<[RemoteInventoryItemWithProduct]>) -> ()) {
+        RemoteProvider.authenticatedRequestArray(.get, Urls.inventoryItems, ["inventory": inventory.uuid as AnyObject]) {result in
             handler(result)
         }
     }
 
     // Adds inventoryItems to remote, IMPORTANT: All items are assumed to have the same inventory TODO maybe implement server service such that we don't have to put inventory uuid in url, and just use the inventory for each inventory item for the insert
-    func addToInventory(inventoryItemsWithDelta: [(inventoryItem: InventoryItem, delta: Int)], handler: RemoteResult<RemoteInventoryItemsWithDependencies> -> ()) {
+    func addToInventory(_ inventoryItemsWithDelta: [(inventoryItem: InventoryItem, delta: Int)], handler: @escaping (RemoteResult<RemoteInventoryItemsWithDependencies>) -> ()) {
         
-        func toParams(inventoryItemWithDelta: (inventoryItem: InventoryItem, delta: Int)) -> [String: AnyObject] {
+        func toParams(_ inventoryItemWithDelta: (inventoryItem: InventoryItem, delta: Int)) -> [String: AnyObject] {
             let productDict = RemoteListItemProvider().toRequestParams(inventoryItemWithDelta.inventoryItem.product)
             let inventoryDict = RemoteInventoryProvider().toRequestParams(inventoryItemWithDelta.inventoryItem.inventory)
             
             var dict: [String: AnyObject] = [
-                "uuid": inventoryItemWithDelta.inventoryItem.uuid,
-                "quantity": inventoryItemWithDelta.delta, // in this service the server does an "insert or increment" and interprets quantity as delta
-                "inventory": inventoryDict,
-                "product": productDict
+                "uuid": inventoryItemWithDelta.inventoryItem.uuid as AnyObject,
+                "quantity": inventoryItemWithDelta.delta as AnyObject, // in this service the server does an "insert or increment" and interprets quantity as delta
+                "inventory": inventoryDict as AnyObject,
+                "product": productDict as AnyObject
             ]
             
             if let lastServerUpdate = inventoryItemWithDelta.inventoryItem.lastServerUpdate {
-                dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+                dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
             }
             return dict
         }
 
         let parameters = inventoryItemsWithDelta.map{toParams($0)}
-        RemoteProvider.authenticatedRequest(.POST, Urls.inventoryItemsNoHistory, parameters) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.inventoryItemsNoHistory, parameters) {result in
             handler(result)
         }
     }
     
-    func updateInventoryItem(inventoryItem: InventoryItem, handler: RemoteResult<RemoteInventoryItemWithProduct> -> ()) {
+    func updateInventoryItem(_ inventoryItem: InventoryItem, handler: @escaping (RemoteResult<RemoteInventoryItemWithProduct>) -> ()) {
         let params = toRequestParams(inventoryItem)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.inventoryItem, params) {result in
+        RemoteProvider.authenticatedRequest(.put, Urls.inventoryItem, params) {result in
             handler(result)
         }
     }
     
-    func removeInventoryItem(inventoryItem: InventoryItem, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func removeInventoryItem(_ inventoryItem: InventoryItem, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
         removeInventoryItem(inventoryItem.uuid, handler: handler)
     }
 
-    func removeInventoryItem(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.inventoryItem + "/\(uuid)") {result in
+    func removeInventoryItem(_ uuid: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.inventoryItem + "/\(uuid)") {result in
             handler(result)
         }
     }
 
-    func incrementInventoryItem(increment: ItemIncrement, handler: RemoteResult<RemoteIncrementResult> -> ()) {
+    func incrementInventoryItem(_ increment: ItemIncrement, handler: @escaping (RemoteResult<RemoteIncrementResult>) -> ()) {
         let params: [String: AnyObject] = [
-            "uuid": increment.itemUuid,
-            "delta": increment.delta
+            "uuid": increment.itemUuid as AnyObject,
+            "delta": increment.delta as AnyObject
         ]
-        RemoteProvider.authenticatedRequest(.POST, Urls.incrementInventoryItem, params) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.incrementInventoryItem, params) {result in
             handler(result)
         }
     }
     
     // TODO remote inventory from inventory items, at least for sending - we want to add all the items to one inventory.......
-    func toDictionary(item: InventoryItemWithHistoryItem) -> [String: AnyObject] {
+    func toDictionary(_ item: InventoryItemWithHistoryItem) -> [String: AnyObject] {
         
         let productDict = RemoteListItemProvider().toRequestParams(item.inventoryItem.product)
         
@@ -79,38 +79,38 @@ class RemoteInventoryItemsProvider: Any {
         
         // TODO correct this structure in the server, product 2x
         return [
-            "product": productDict,
-            "inventoryItem": inventoryItemDict,
-            "historyItemUuid": item.historyItem.uuid,
-            "paidPrice": item.historyItem.paidPrice,
-            "addedDate": NSNumber(longLong: Int64(item.historyItem.addedDate)),
-            "user": self.toRequestParams(item.historyItem.user),
-            "delta": item.historyItem.quantity // history item quantity == delta (the quantity which we just added)
+            "product": productDict as AnyObject,
+            "inventoryItem": inventoryItemDict as AnyObject,
+            "historyItemUuid": item.historyItem.uuid as AnyObject,
+            "paidPrice": item.historyItem.paidPrice as AnyObject,
+            "addedDate": NSNumber(value: Int64(item.historyItem.addedDate) as Int64),
+            "user": self.toRequestParams(item.historyItem.user) as AnyObject,
+            "delta": item.historyItem.quantity as AnyObject // history item quantity == delta (the quantity which we just added)
         ]
     }
     
-    private func toRequestParams(sharedUser: SharedUser) -> [String: AnyObject] {
+    fileprivate func toRequestParams(_ sharedUser: SharedUser) -> [String: AnyObject] {
         return [
-            "email": sharedUser.email,
-            "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
+            "email": sharedUser.email as AnyObject,
+            "foo": "" as AnyObject // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
         ]
     }
     
     
-    private func toRequestParams(inventoryItem: InventoryItem, quantityOverwrite: Int? = nil) -> [String: AnyObject] {
+    fileprivate func toRequestParams(_ inventoryItem: InventoryItem, quantityOverwrite: Int? = nil) -> [String: AnyObject] {
         
         let productDict = RemoteListItemProvider().toRequestParams(inventoryItem.product)
         let inventoryDict = RemoteInventoryProvider().toRequestParams(inventoryItem.inventory)
         
         var dict: [String: AnyObject] = [
-            "uuid": inventoryItem.uuid,
-            "quantity": inventoryItem.quantity,
-            "inventory": inventoryDict,
-            "product": productDict
+            "uuid": inventoryItem.uuid as AnyObject,
+            "quantity": inventoryItem.quantity as AnyObject,
+            "inventory": inventoryDict as AnyObject,
+            "product": productDict as AnyObject
         ]
         
         if let lastServerUpdate = inventoryItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         
         return dict

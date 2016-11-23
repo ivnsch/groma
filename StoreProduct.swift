@@ -9,23 +9,23 @@
 import Foundation
 
 enum StoreProductUnit: Int {
-    case None = 0
-    case Gram = 1
-    case Kilogram = 2
+    case none = 0
+    case gram = 1
+    case kilogram = 2
     
     var text: String {
         switch self {
-        case .None: return "None"
-        case .Gram: return "Gram"
-        case .Kilogram: return "Kilogram"
+        case .none: return "None"
+        case .gram: return "Gram"
+        case .kilogram: return "Kilogram"
         }
     }
     
     var shortText: String {
         switch self {
-        case .None: return ""
-        case .Gram: return "g"
-        case .Kilogram: return "kg"
+        case .none: return ""
+        case .gram: return "g"
+        case .kilogram: return "kg"
         }
     }
 }
@@ -59,10 +59,10 @@ final class StoreProduct: Equatable, Identifiable, CustomDebugStringConvertible 
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), price: \(price), baseQuantity: \(baseQuantity), unit: \(unit), store: \(store), product: \(product), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
+        return "{\(type(of: self)) uuid: \(uuid), price: \(price), baseQuantity: \(baseQuantity), unit: \(unit), store: \(store), product: \(product), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
-    func copy(uuid uuid: String? = nil, price: Float? = nil, baseQuantity: Float? = nil, unit: StoreProductUnit? = nil, store: String? = nil, product: Product? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> StoreProduct {
+    func copy(uuid: String? = nil, price: Float? = nil, baseQuantity: Float? = nil, unit: StoreProductUnit? = nil, store: String? = nil, product: Product? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> StoreProduct {
         return StoreProduct(
             uuid: uuid ?? self.uuid,
             price: price ?? self.price,
@@ -76,33 +76,33 @@ final class StoreProduct: Equatable, Identifiable, CustomDebugStringConvertible 
     }
     
     // Overwrite all fields with fields of storeProduct, except uuid
-    func update(storeProduct: StoreProduct) -> StoreProduct {
+    func update(_ storeProduct: StoreProduct) -> StoreProduct {
         return copy(storeProduct, product: storeProduct.product)
     }
     
-    func update(storeProductInput: StoreProductInput) -> StoreProduct {
+    func update(_ storeProductInput: StoreProductInput) -> StoreProduct {
         return copy(price: storeProductInput.price, baseQuantity: storeProductInput.baseQuantity, unit: storeProductInput.unit)
     }
     
     // Updates self and its dependencies with storeProduct, the references to the dependencies (uuid) are not changed
-    func updateWithoutChangingReferences(storeProduct: StoreProduct) -> StoreProduct {
+    func updateWithoutChangingReferences(_ storeProduct: StoreProduct) -> StoreProduct {
         let updatedProduct = product.updateWithoutChangingReferences(storeProduct.product)
         return update(storeProduct, product: updatedProduct)
     }
 
-    private func update(storeProduct: StoreProduct, product: Product) -> StoreProduct {
+    fileprivate func update(_ storeProduct: StoreProduct, product: Product) -> StoreProduct {
         return copy(price: storeProduct.price, baseQuantity: storeProduct.baseQuantity, unit: storeProduct.unit, store: storeProduct.store, product: product, lastServerUpdate: storeProduct.lastServerUpdate, removed: storeProduct.removed)
     }
     
-    private func copy(storeProduct: StoreProduct, product: Product) -> StoreProduct {
+    fileprivate func copy(_ storeProduct: StoreProduct, product: Product) -> StoreProduct {
         return copy(price: storeProduct.price, baseQuantity: storeProduct.baseQuantity, unit: storeProduct.unit, store: storeProduct.store, product: product, lastServerUpdate: storeProduct.lastServerUpdate, removed: storeProduct.removed)
     }
 
-    func same(rhs: StoreProduct) -> Bool {
+    func same(_ rhs: StoreProduct) -> Bool {
         return uuid == rhs.uuid
     }
     
-    func equalsExcludingSyncAttributes(rhs: StoreProduct) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: StoreProduct) -> Bool {
         return uuid == rhs.uuid && price == rhs.price && product == rhs.product && baseQuantity == rhs.baseQuantity && unit == rhs.unit && store == rhs.store
     }
 }

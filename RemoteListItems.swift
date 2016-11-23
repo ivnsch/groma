@@ -28,17 +28,17 @@ struct RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializab
     
     init?(representation: AnyObject) {
         guard
-            let listsObj = representation.valueForKeyPath("lists"),
-            let lists = RemoteListsWithDependencies(representation: listsObj),
-            let storeProductsObj = representation.valueForKeyPath("storeProducts") as? [AnyObject],
+            let listsObj = representation.value(forKeyPath: "lists"),
+            let lists = RemoteListsWithDependencies(representation: listsObj as AnyObject),
+            let storeProductsObj = representation.value(forKeyPath: "storeProducts") as? [AnyObject],
             let storeProducts = RemoteStoreProduct.collection(storeProductsObj),
-            let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
+            let productsObj = representation.value(forKeyPath: "products") as? [AnyObject],
             let products = RemoteProduct.collection(productsObj),
-            let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
+            let productsCategoriesObj = representation.value(forKeyPath: "productsCategories") as? [AnyObject],
             let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
-            let sectionsObj = representation.valueForKeyPath("sections") as? [AnyObject],
+            let sectionsObj = representation.value(forKeyPath: "sections") as? [AnyObject],
             let sections = RemoteSection.collection(sectionsObj),
-            let listItemsObj = representation.valueForKeyPath("listItems") as? [AnyObject],
+            let listItemsObj = representation.value(forKeyPath: "listItems") as? [AnyObject],
             let listItems = RemoteListItem.collection(listItemsObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -53,9 +53,9 @@ struct RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializab
     }
     
     // Only for compatibility purpose with sync result, which always sends result as an array. With RemoteListItems we get always 1 element array
-    static func collection(representation: AnyObject) -> [RemoteListItems]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteListItems]? {
         var listItems = [RemoteListItems]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let listItem = RemoteListItems(representation: obj) {
                 listItems.append(listItem)
             } else {
@@ -67,6 +67,6 @@ struct RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializab
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) lists: \(lists), storeProducts: \(storeProducts), productsCategories: [\(productsCategories)], products: [\(products)], listItems: [\(listItems)}"
+        return "{\(type(of: self)) lists: \(lists), storeProducts: \(storeProducts), productsCategories: [\(productsCategories)], products: [\(products)], listItems: [\(listItems)}"
     }
 }

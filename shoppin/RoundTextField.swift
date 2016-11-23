@@ -12,14 +12,14 @@ class RoundTextField: UITextField {
     
     @IBInspectable var fontType: Int = -1
     
-    private var originalTextColor: UIColor?
+    fileprivate var originalTextColor: UIColor?
     
-    private var drawInvalid: Bool = false
+    fileprivate var drawInvalid: Bool = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
         if let size = LabelMore.mapToFontSize(fontType) {
-            self.font = UIFont.systemFontOfSize(size)
+            self.font = UIFont.systemFont(ofSize: size)
         }
         self.originalTextColor = textColor
     }
@@ -34,28 +34,28 @@ class RoundTextField: UITextField {
         setNeedsDisplay()
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
-        let rect = CGRectMake(0, 0, rect.width, rect.height)
-        let circlePath = UIBezierPath(roundedRect: rect, byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(15, 15))
-        circlePath.closePath()
+        let rect = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
+        let circlePath = UIBezierPath(roundedRect: rect, byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: 15, height: 15))
+        circlePath.close()
         
-        CGContextSetFillColorWithColor(context, UIColor.whiteColor().CGColor)
-        CGContextAddPath(context, circlePath.CGPath)
-        CGContextFillPath(context)
+        context?.setFillColor(UIColor.white.cgColor)
+        context?.addPath(circlePath.cgPath)
+        context?.fillPath()
         
         if drawInvalid {
             
             let borderWidth: CGFloat = 1
             let halfBorderWidth = borderWidth / 2
             
-            let borderPath = UIBezierPath(roundedRect: rect.insetAll(halfBorderWidth), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(15, 15))
-            borderPath.closePath()
+            let borderPath = UIBezierPath(roundedRect: rect.insetAll(halfBorderWidth), byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: 15, height: 15))
+            borderPath.close()
             
-            CGContextSetStrokeColorWithColor(context, UIColor.redColor().CGColor)
-            CGContextSetLineWidth(context, 1)
-            CGContextAddPath(context, borderPath.CGPath)
-            CGContextStrokePath(context)
+            context?.setStrokeColor(UIColor.flatRed.cgColor)
+            context?.setLineWidth(1)
+            context?.addPath(borderPath.cgPath)
+            context?.strokePath()
         }
     }
 }

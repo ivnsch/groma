@@ -16,7 +16,7 @@ class Suggestion: Equatable, Hashable {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) name: \(self.name)}"
+        return "{\(type(of: self)) name: \(self.name)}"
     }
     
     var hashValue: Int {

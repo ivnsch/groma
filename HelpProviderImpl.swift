@@ -10,7 +10,7 @@ import Foundation
 
 class HelpProviderImpl: HelpProvider {
     
-    func helpItems(handler: ProviderResult<[HelpItem]> -> Void) {
+    func helpItems(_ handler: @escaping (ProviderResult<[HelpItem]>) -> Void) {
         
         let items: [HelpItem] = {
             switch LangHelper.currentAppLang() {
@@ -20,7 +20,7 @@ class HelpProviderImpl: HelpProvider {
             }
         }()
         
-        handler(ProviderResult(status: .Success, sucessResult: items))
+        handler(ProviderResult(status: .success, sucessResult: items))
     }
     
     
@@ -31,7 +31,7 @@ class HelpProviderImpl: HelpProvider {
     // For now everything here and in memory, later maybe it makes sense to store these items in the prefill database?
     // (but this adds loading time at start, so maybe it's not bad in memory, also static var is lazy iirc)
     // TODO translations keys!
-    private static var helpItemsEN = [
+    fileprivate static var helpItemsEN = [
         
         //        // #new
         //        HelpItem(title: "How are the Lists, Cart, Inventory and History related?", text: "Shopping Lists are where you keep Lists of items you want to buy, when you marked them as bought in the Cart they go to the Inventory. The Inventory defaults to ‘Home’, but you can add other locations if you need. The best way to use Lists is to name each for the store where you will use it (this means that when you add prices it will be the right price for that store). When you mark an item as purchased the app also automatically adds it to your History.
@@ -102,7 +102,7 @@ class HelpProviderImpl: HelpProvider {
     // DE
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    private static var helpItemsDE = [
+    fileprivate static var helpItemsDE = [
         
         HelpItem(title: "Was ist der Unterschied zwischen Abteilungen und Kategorien?", text: "Kategorien ist wie du generell etwas einordnen willst. Die Abteilung ist der Ort im Laden, wo sich das Produkt befindet. Z.B. für Thunfisch könnte die Kategorie 'Fisch' lauten, und die Abteilung 'Dosenprodukte'."),
 
@@ -162,7 +162,7 @@ class HelpProviderImpl: HelpProvider {
     // ES
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    private static var helpItemsES = [
+    fileprivate static var helpItemsES = [
         
         HelpItem(title: "Cuál es la diferencia entre categorías y secciones?", text: "Categoría es como clasificas un producto. Por ejemplo para manzanas probablemente usarías 'frutas'. Una sección es la parte del almacén donde encuentras el producto. La sección no siempre es lo mismo que la categoría! Por ejemplo atún, podría tener 'pez' como categoría pero estar en la sección 'enlatados'.\nProductos siempre tienen una categoría (en listas, grupos, inventarios, etc.) mientras que la sección sólo es utilizada en las listas."),
         

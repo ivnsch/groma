@@ -10,13 +10,13 @@ import UIKit
 import QorumLogs
 
 protocol ListItemCellDelegate: class {
-    func onItemSwiped(listItem: TableViewListItem)
-    func onStartItemSwipe(listItem: TableViewListItem)
-    func onButtonTwoTap(listItem: TableViewListItem)
-    func onNoteTap(cell: ListItemCell, listItem: TableViewListItem)
-    func onMinusTap(listItem: TableViewListItem)
-    func onPlusTap(listItem: TableViewListItem)
-    func onPanQuantityUpdate(tableViewListItem: TableViewListItem, newQuantity: Int)
+    func onItemSwiped(_ listItem: TableViewListItem)
+    func onStartItemSwipe(_ listItem: TableViewListItem)
+    func onButtonTwoTap(_ listItem: TableViewListItem)
+    func onNoteTap(_ cell: ListItemCell, listItem: TableViewListItem)
+    func onMinusTap(_ listItem: TableViewListItem)
+    func onPlusTap(_ listItem: TableViewListItem)
+    func onPanQuantityUpdate(_ tableViewListItem: TableViewListItem, newQuantity: Int)
 }
 
 class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
@@ -44,11 +44,11 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
     
     @IBOutlet weak var minusTrailingConstraint: NSLayoutConstraint!
     
-    private weak var delegate: ListItemCellDelegate?
+    fileprivate weak var delegate: ListItemCellDelegate?
     
-    private var swipeToIncrementHelper: SwipeToIncrementHelper?
+    fileprivate var swipeToIncrementHelper: SwipeToIncrementHelper?
     
-    private var shownQuantity: Int = 0 {
+    fileprivate var shownQuantity: Int = 0 {
         didSet {
             if let tableViewListItem = tableViewListItem {
                 quantityLabel.text = String("\(shownQuantity) \(tableViewListItem.listItem.product.unit.shortText)")
@@ -56,22 +56,22 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         }
     }
     
-    private(set) var status: ListItemStatus?
-    var mode: ListItemCellMode = .Note {
+    fileprivate(set) var status: ListItemStatus?
+    var mode: ListItemCellMode = .note {
         didSet {
             updateModeItemsVisibility(true)
-            swipeToIncrementHelper?.enabled = mode == .Increment
+            swipeToIncrementHelper?.enabled = mode == .increment
         }
     }
-    private(set) var labelColor: UIColor = UIColor.blackColor() {
+    fileprivate(set) var labelColor: UIColor = UIColor.black {
         didSet {
             self.nameLabel?.textColor = self.labelColor
             self.quantityLabel?.textColor = self.labelColor
         }
     }
-    private(set) var tableViewListItem: TableViewListItem? {
+    fileprivate(set) var tableViewListItem: TableViewListItem? {
         didSet {
-            if let tableViewListItem = tableViewListItem, status = status {
+            if let tableViewListItem = tableViewListItem, let status = status {
                 
                 let listItem = tableViewListItem.listItem
                 
@@ -89,9 +89,9 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
                 
                 setOpen(tableViewListItem.swiped)
                 if tableViewListItem.swiped {
-                    backgroundColor = UIColor.clearColor()
+                    backgroundColor = UIColor.clear
                 } else {
-                    backgroundColor = UIColor.whiteColor()
+                    backgroundColor = UIColor.white
                 }
             }
         }
@@ -102,7 +102,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         self.tableViewListItem = tableViewListItem
     }
 
-    func setup(status: ListItemStatus, mode: ListItemCellMode, labelColor: UIColor, tableViewListItem: TableViewListItem, delegate: ListItemCellDelegate) {
+    func setup(_ status: ListItemStatus, mode: ListItemCellMode, labelColor: UIColor, tableViewListItem: TableViewListItem, delegate: ListItemCellDelegate) {
         self.status = status
         self.mode = mode
         self.labelColor = labelColor
@@ -112,25 +112,25 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         self.delegate = delegate
     }
     
-    private func updateModeItemsVisibility(animated: Bool) {
-        if let tableViewListItem = tableViewListItem, status = status {
+    fileprivate func updateModeItemsVisibility(_ animated: Bool) {
+        if let tableViewListItem = tableViewListItem, let status = status {
             updateModeItemsVisibility(mode, status: status, tableViewListItem: tableViewListItem, animated: true)
         }
     }
     
-    private func updateModeItemsVisibility(mode: ListItemCellMode, status: ListItemStatus, tableViewListItem: TableViewListItem, animated: Bool) {
+    fileprivate func updateModeItemsVisibility(_ mode: ListItemCellMode, status: ListItemStatus, tableViewListItem: TableViewListItem, animated: Bool) {
         
         let hasNote = tableViewListItem.listItem.note.map{!$0.isEmpty} ?? false
-        let showNote = hasNote && mode == .Note
+        let showNote = hasNote && mode == .note
         
         // Hide these labels during edit, for reordering (otherwise they stay visible while cell becomes semitransparent). We don't use undo in edit so it's ok to do this fix here. Otherwise private api like described here http://stackoverflow.com/a/10854018/930450, to get events when cell starts and ends moving works too (tested it on iOS 9). Prefer to do it here to avoid using private api.
-        let isEdit = mode == .Increment
-        undoLabel1.hidden = isEdit
-        undoLabel2.hidden = isEdit
+        let isEdit = mode == .increment
+        undoLabel1.isHidden = isEdit
+        undoLabel2.isHidden = isEdit
         
-        let (itemsDelay, priceDelay): (NSTimeInterval, NSTimeInterval) = {
+        let (itemsDelay, priceDelay): (TimeInterval, TimeInterval) = {
             if animated {
-                return mode == .Note ? (0.1, 0) : (0, 0.3) // for price a different delay to make it animate after/before the other elements (looks better imo)
+                return mode == .note ? (0.1, 0) : (0, 0.3) // for price a different delay to make it animate after/before the other elements (looks better imo)
             } else {
                 return (0, 0)
             }
@@ -139,12 +139,12 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         func update() {
             layoutIfNeeded()
             switch mode {
-            case .Note:
+            case .note:
                 noteButton.alpha = showNote ? 1 : 0
                 plusButton.alpha = 0
                 minusButton.alpha = 0
                 sectionColorView.alpha = 1
-            case .Increment:
+            case .increment:
                 noteButton.alpha = 0
                 plusButton.alpha = 1
                 minusButton.alpha = 1
@@ -156,15 +156,15 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
             
             let constant: CGFloat = {
                 switch mode {
-                case .Note: return 0
-                case .Increment: return 41
+                case .note: return 0
+                case .increment: return 41
                 }
             }()
 
             let minusConstant: CGFloat = {
                 switch mode {
-                case .Note: return DimensionsManager.leftRightPaddingConstraint
-                case .Increment: return 0
+                case .note: return DimensionsManager.leftRightPaddingConstraint
+                case .increment: return 0
                 }
             }()
             
@@ -172,9 +172,9 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
                 self?.plusButtonWidthConstraint.constant = constant
                 self?.minusButtonWidthConstraint.constant = constant
                 self?.minusTrailingConstraint.constant = minusConstant
-                UIView.animateWithDuration(0.2) {
+                UIView.animate(withDuration: 0.2, animations: {
                     update()
-                }
+                }) 
             }
             
         } else {
@@ -184,10 +184,10 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
 //        showPrice(tableViewListItem, status: status, mode: mode, animated: animated, animDelay: priceDelay)
     }
     
-    private func showPrice(tableViewListItem: TableViewListItem, status: ListItemStatus, mode: ListItemCellMode, animated: Bool, animDelay: NSTimeInterval) {
+    fileprivate func showPrice(_ tableViewListItem: TableViewListItem, status: ListItemStatus, mode: ListItemCellMode, animated: Bool, animDelay: TimeInterval) {
         let price = tableViewListItem.listItem.totalPrice(status)
         let hasPrice = price > 0
-        let showPrice = hasPrice && mode == .Increment
+        let showPrice = hasPrice && mode == .increment
         if showPrice {
             priceLabel.text = price.toLocalCurrencyString()
         }
@@ -203,10 +203,10 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         if animated {
             delay(animDelay) {[weak self] in
                 updateConstraint()
-                UIView.animateWithDuration(0.1) {
+                UIView.animate(withDuration: 0.1, animations: {
                     self?.layoutIfNeeded()
                     updateAlpha()
-                }
+                }) 
             }
         } else {
             updateConstraint()
@@ -222,7 +222,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         
         undoLabel2.text = trans("generic_undo")
         
-        selectionStyle = UITableViewCellSelectionStyle.None
+        selectionStyle = UITableViewCellSelectionStyle.none
 
         // When returning cell height programatically (which we need now in order to use different cell heights for different screen sizes), here it's still the height from the storyboard so we have to pass the offset for the line to eb draw at the bottom. Apparently there's no method where we get the cell with final height (did move to superview / window also still have the height from the storyboard)
         contentView.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
@@ -235,11 +235,11 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         swipeToIncrementHelper?.delegate = self
     }
     
-    func onTapPlusMinusContainer(recognizer: UITapGestureRecognizer) {
+    func onTapPlusMinusContainer(_ recognizer: UITapGestureRecognizer) {
         // do nothing
     }
     
-    @IBAction func onNoteTap(sender: UIButton) {
+    @IBAction func onNoteTap(_ sender: UIButton) {
         if let tableViewListItem = tableViewListItem{
             delegate?.onNoteTap(self, listItem: tableViewListItem)
         } else {
@@ -249,7 +249,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
     
     // TODO when we tap on minus while the item is 0, the item is cleared - this was not intentional but turns to be the desired behaviour. Review why it's cleared
     // TODO! related with above - review that due to the way we manage the quantity of the items (item is shown when todo/done/stash quantity > 0) we don't keep listitems in the database which are never shown and thus can't be deleted.
-    @IBAction func onMinusTap(sender: UIButton) {
+    @IBAction func onMinusTap(_ sender: UIButton) {
         if let tableViewListItem = tableViewListItem{
             delegate?.onMinusTap(tableViewListItem)
         } else {
@@ -257,7 +257,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         }
     }
     
-    @IBAction func onPlusTap(sender: UIButton) {
+    @IBAction func onPlusTap(_ sender: UIButton) {
         if let tableViewListItem = tableViewListItem{
             delegate?.onPlusTap(tableViewListItem)
         } else {
@@ -295,7 +295,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         return shownQuantity
     }
     
-    func onQuantityUpdated(quantity: Int) {
+    func onQuantityUpdated(_ quantity: Int) {
         shownQuantity = quantity
     }
     

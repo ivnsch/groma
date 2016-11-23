@@ -10,35 +10,35 @@ import Foundation
 
 protocol HistoryProvider {
     
-    func historyItems(range: NSRange, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> ())
+    func historyItems(_ range: NSRange, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ())
 
     /**
     * Get all history items with a date greater or equal than startDate, until today
     */
-    func historyItems(startDate: Int64, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> ())
+    func historyItems(_ startDate: Int64, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ())
 
-    func historyItems(monthYear: MonthYear, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> Void)
+    func historyItems(_ monthYear: MonthYear, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> Void)
     
-    func historyItemsGroups(range: NSRange, inventory: Inventory, _ handler: ProviderResult<[HistoryItemGroup]> -> ())
+    func historyItemsGroups(_ range: NSRange, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItemGroup]>) -> ())
     
-    func historyItem(uuid: String, handler: ProviderResult<HistoryItem?> -> Void)
+    func historyItem(_ uuid: String, handler: @escaping (ProviderResult<HistoryItem?>) -> Void)
     
-    func removeHistoryItem(historyItem: HistoryItem, _ handler: ProviderResult<Any> -> ())
+    func removeHistoryItem(_ historyItem: HistoryItem, _ handler: @escaping (ProviderResult<Any>) -> ())
 
-    func removeHistoryItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func removeHistoryItem(_ uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
-    func removeHistoryItemGroupForHistoryItemLocal(uuid: String, _ handler: ProviderResult<Any> -> Void)
+    func removeHistoryItemGroupForHistoryItemLocal(_ uuid: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func removeHistoryItemsGroup(_ historyItemGroup: HistoryItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
-    func removeHistoryItemsForMonthYear(monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: ProviderResult<Any> -> Void)
+    func removeHistoryItemsForMonthYear(_ monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void)
 
-    func removeAllHistoryItems(handler: ProviderResult<Any> -> Void)
+    func removeAllHistoryItems(_ handler: @escaping (ProviderResult<Any>) -> Void)
 
-    func oldestDate(inventory: Inventory, handler: ProviderResult<NSDate> -> Void)
+    func oldestDate(_ inventory: Inventory, handler: @escaping (ProviderResult<Date>) -> Void)
     
     // NOTE: only for debug purpose! Normally history items can be added only via inventory
-    func addHistoryItems(historyItems: [HistoryItem], _ handler: ProviderResult<Any> -> Void)
+    func addHistoryItems(_ historyItems: [HistoryItem], _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func removeHistoryItemsOlderThan(date: NSDate, handler: ProviderResult<Bool> -> Void)
+    func removeHistoryItemsOlderThan(_ date: Date, handler: @escaping (ProviderResult<Bool>) -> Void)
 }

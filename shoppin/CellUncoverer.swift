@@ -9,18 +9,18 @@
 import UIKit
 
 protocol CellUncovererDelegate: class {
-    func onOpen(open: Bool)
+    func onOpen(_ open: Bool)
 }
 
 class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
     
-    private weak var parentView: UIView!
-    private weak var button: UIView!
-    private weak var leftLayoutConstraint: NSLayoutConstraint!
+    fileprivate weak var parentView: UIView!
+    fileprivate weak var button: UIView!
+    fileprivate weak var leftLayoutConstraint: NSLayoutConstraint!
     
-    private var panRecognizer: UIPanGestureRecognizer!
-    private var panStartPoint: CGPoint!
-    private var startingLeftLayoutConstraint: CGFloat!
+    fileprivate var panRecognizer: UIPanGestureRecognizer!
+    fileprivate var panStartPoint: CGPoint!
+    fileprivate var startingLeftLayoutConstraint: CGFloat!
     
     var allowOpen: Bool = false
     
@@ -42,11 +42,11 @@ class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
         self.panRecognizer = panRecognizer
     }
     
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     
-    func onPanCell(recognizer: UIPanGestureRecognizer) {
+    func onPanCell(_ recognizer: UIPanGestureRecognizer) {
         
         guard allowOpen else {return}
         
@@ -56,13 +56,13 @@ class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
         }
         
         switch recognizer.state {
-        case .Began:
-            self.panStartPoint = recognizer.translationInView(self.button)
+        case .began:
+            self.panStartPoint = recognizer.translation(in: self.button)
             self.startingLeftLayoutConstraint = self.leftLayoutConstraint.constant
             
-        case .Changed:
+        case .changed:
             if movingHorizontally {
-                let currentPoint = recognizer.translationInView(parentView)
+                let currentPoint = recognizer.translation(in: parentView)
                 let deltaX = abs(currentPoint.x - self.panStartPoint.x)
                 let panningLeft = currentPoint.x < self.panStartPoint.x
                 
@@ -78,7 +78,7 @@ class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
                 }
             }
             
-        case .Ended:
+        case .ended:
             if movingHorizontally {
                 if abs(leftLayoutConstraint.constant) < stashViewWidth {
                     leftLayoutConstraint.constant = 0
@@ -86,12 +86,12 @@ class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
                     leftLayoutConstraint.constant = -stashViewWidth
                     delegate?.onOpen(true)
                 }
-                UIView.animateWithDuration(0.3) {[weak self] in
+                UIView.animate(withDuration: 0.3, animations: {[weak self] in
                     self?.parentView.layoutIfNeeded()
-                }
+                }) 
             }
             
-        case .Cancelled:
+        case .cancelled:
             if movingHorizontally {
                 if leftLayoutConstraint.constant < stashViewWidth {
                     leftLayoutConstraint.constant = 0
@@ -99,26 +99,26 @@ class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
                     leftLayoutConstraint.constant = -stashViewWidth
                     delegate?.onOpen(true)
                 }
-                UIView.animateWithDuration(0.3) {[weak self] in
+                UIView.animate(withDuration: 0.3, animations: {[weak self] in
                     self?.parentView.layoutIfNeeded()
-                }
+                }) 
             }
             
         default:
-            "Not handled"
+            print("Not handled")
         }
     }
 
-    func setOpen(open: Bool, animated: Bool = true) {
+    func setOpen(_ open: Bool, animated: Bool = true) {
         parentView.layoutIfNeeded()
         if open {
             leftLayoutConstraint.constant = -stashViewWidth
         } else {
             leftLayoutConstraint.constant = 0
         }
-        UIView.animateWithDuration(0.3) {[weak self] in
+        UIView.animate(withDuration: 0.3, animations: {[weak self] in
             self?.parentView.layoutIfNeeded()
-        }
+        }) 
     }
 
 }

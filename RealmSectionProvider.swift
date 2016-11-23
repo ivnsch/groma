@@ -12,29 +12,29 @@ import QorumLogs
 
 class RealmSectionProvider: RealmProvider {
     
-    func loadSectionWithUuid(uuid: String, handler: Section? -> ()) {
+    func loadSectionWithUuid(_ uuid: String, handler: @escaping (Section?) -> ()) {
         let mapper = {SectionMapper.sectionWithDB($0)}
         self.loadFirst(mapper, filter: DBSection.createFilter(uuid), handler: handler)
     }
     
-    func loadSection(name: String, list: List, handler: Section? -> ()) {
+    func loadSection(_ name: String, list: List, handler: @escaping (Section?) -> ()) {
         loadSections([name], list: list) {sections in
             handler(sections.first)
         }
     }
     
-    func loadSections(names: [String], list: List, handler: [Section] -> ()) {
+    func loadSections(_ names: [String], list: List, handler: @escaping ([Section]) -> ()) {
         let mapper = {SectionMapper.sectionWithDB($0)}
         self.load(mapper, filter: DBSection.createFilterWithNames(names, listUuid: list.uuid), handler: handler)
     }
 
     // Loads sections with given name from all the lists
-    func loadSections(name: String, handler: [Section] -> ()) {
+    func loadSections(_ name: String, handler: @escaping ([Section]) -> ()) {
         let mapper = {SectionMapper.sectionWithDB($0)}
         self.load(mapper, filter: DBSection.createFilterWithName(name), handler: handler)
     }
 
-    func saveSection(section: Section, handler: Bool -> ()) {
+    func saveSection(_ section: Section, handler: @escaping (Bool) -> ()) {
         let dbSection = DBSection()
         dbSection.uuid = section.uuid
         dbSection.name = section.name
@@ -42,21 +42,21 @@ class RealmSectionProvider: RealmProvider {
         self.saveObj(dbSection, handler: handler)
     }
     
-    func saveSections(sections: [Section], handler: Bool -> ()) {
+    func saveSections(_ sections: [Section], handler: @escaping (Bool) -> ()) {
         let dbSections = sections.map{SectionMapper.dbWithSection($0)}
         self.saveObjs(dbSections, update: true, handler: handler)
     }
     
-    func remove(section: Section, markForSync: Bool, handler: Bool -> ()) {
+    func remove(_ section: Section, markForSync: Bool, handler: @escaping (Bool) -> ()) {
         remove(section.uuid, markForSync: markForSync, handler: handler)
     }
     
-    func removeAllWithName(sectionName: String, markForSync: Bool, handler: [Section]? -> Void) {
+    func removeAllWithName(_ sectionName: String, markForSync: Bool, handler: @escaping ([Section]?) -> Void) {
         loadSections(sectionName) {[weak self] sections in guard let weakSelf = self else {return}
             if !sections.isEmpty {
                 weakSelf.doInWriteTransaction({realm in
                     for section in sections {
-                        weakSelf.removeSectionAndDependenciesSync(realm, sectionUuid: section.uuid, markForSync: markForSync)
+                        _ = weakSelf.removeSectionAndDependenciesSync(realm, sectionUuid: section.uuid, markForSync: markForSync)
                     }
                     return sections
                 }, finishHandler: {removedSectionsMaybe in
@@ -70,14 +70,14 @@ class RealmSectionProvider: RealmProvider {
         }
     }
     
-    func remove(sectionUuid: String, markForSync: Bool, handler: Bool -> Void) {
+    func remove(_ sectionUuid: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
         removeSectionAndDependencies(sectionUuid, markForSync: markForSync, handler: handler)
     }
     
-    func removeSectionAndDependencies(sectionUuid: String, markForSync: Bool, handler: Bool -> Void) {
+    func removeSectionAndDependencies(_ sectionUuid: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             if let weakSelf = self {
-                weakSelf.removeSectionAndDependenciesSync(realm, sectionUuid: sectionUuid, markForSync: markForSync)
+                _ = weakSelf.removeSectionAndDependenciesSync(realm, sectionUuid: sectionUuid, markForSync: markForSync)
                 return true
             } else {
                 QL4("self is nil")
@@ -89,12 +89,12 @@ class RealmSectionProvider: RealmProvider {
     }
     
     // Expected to be executed in a transaction
-    func removeSectionAndDependenciesSync(realm: Realm, sectionUuid: String, markForSync: Bool) -> Bool {
+    func removeSectionAndDependenciesSync(_ realm: Realm, sectionUuid: String, markForSync: Bool) -> Bool {
         
-        removeSectionDependenciesSync(realm, sectionUuid: sectionUuid, markForSync: markForSync)
+        _ = removeSectionDependenciesSync(realm, sectionUuid: sectionUuid, markForSync: markForSync)
         
         // delete section
-        if let dbSection = realm.objects(DBSection).filter(DBSection.createFilter(sectionUuid)).first {
+        if let dbSection = realm.objects(DBSection.self).filter(DBSection.createFilter(sectionUuid)).first {
             if markForSync {
                 let toRemove = DBSectionToRemove(dbSection) // create this before the delete or it crashes TODO!!!! also in other places of the app, this error is in several other providers
                 realm.add(toRemove, update: true)
@@ -107,27 +107,27 @@ class RealmSectionProvider: RealmProvider {
         }
     }
     
-    func removeSectionDependenciesSync(realm: Realm, sectionUuid: String, markForSync: Bool) -> Bool {
+    func removeSectionDependenciesSync(_ realm: Realm, sectionUuid: String, markForSync: Bool) -> Bool {
         // delete list items referencing the section
-        let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterWithSection(sectionUuid))
+        let dbListItems = realm.objects(DBListItem.self).filter(DBListItem.createFilterWithSection(sectionUuid))
         if markForSync {
-            let toRemoveListItems = dbListItems.map{DBRemoveListItem($0)} // create this before the delete or it crashes
+            let toRemoveListItems = Array(dbListItems.map{DBRemoveListItem($0)}) // create this before the delete or it crashes
             saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
         }
         realm.delete(dbListItems)
         return true
     }
     
-    func update(sections: [Section], handler: Bool -> ()) {
+    func update(_ sections: [Section], handler: @escaping (Bool) -> ()) {
         let dbSections = sections.map{SectionMapper.dbWithSection($0)}
         self.saveObjs(dbSections, update: true, handler: handler)
     }
     
     // Gets suggestions both from section and category names
-    func sectionSuggestionsContainingText(text: String, handler: [String] -> Void) {
+    func sectionSuggestionsContainingText(_ text: String, handler: @escaping ([String]) -> Void) {
         withRealm({ realm in
-            let sectionNames: [String] = realm.objects(DBSection).filter(DBSection.createFilterNameContains(text)).map{$0.name}
-            let categoryNames: [String] = realm.objects(DBProductCategory).filter(DBProductCategory.createFilterNameContains(text)).map{$0.name}
+            let sectionNames: [String] = realm.objects(DBSection.self).filter(DBSection.createFilterNameContains(text)).map{$0.name}
+            let categoryNames: [String] = realm.objects(DBProductCategory.self).filter(DBProductCategory.createFilterNameContains(text)).map{$0.name}
             let allNames: [String] = (sectionNames + categoryNames).distinct()
             return allNames
             
@@ -141,14 +141,14 @@ class RealmSectionProvider: RealmProvider {
         }
     }
     
-    func removeSectionIfEmptySync(realm: Realm, sectionUuid: String) {
-        if realm.objects(DBListItem).filter(DBListItem.createFilterWithSection(sectionUuid)).isEmpty { // if no list items reference the section
-            let dbSection = realm.objects(DBSection).filter(DBSection.createFilter(sectionUuid))
+    func removeSectionIfEmptySync(_ realm: Realm, sectionUuid: String) {
+        if realm.objects(DBListItem.self).filter(DBListItem.self.createFilterWithSection(sectionUuid)).isEmpty { // if no list items reference the section
+            let dbSection = realm.objects(DBSection.self).filter(DBSection.createFilter(sectionUuid))
             realm.delete(dbSection)
         }
     }
 
-    func clearSectionsTombstones(uuids: [String], handler: Bool -> Void) {
+    func clearSectionsTombstones(_ uuids: [String], handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             for uuid in uuids {
                 self?.clearSectionTombstoneSync(realm, uuid: uuid)
@@ -159,11 +159,11 @@ class RealmSectionProvider: RealmProvider {
         })
     }
     
-    private func clearSectionTombstoneSync(realm: Realm, uuid: String) {
+    fileprivate func clearSectionTombstoneSync(_ realm: Realm, uuid: String) {
         realm.deleteForFilter(DBRemoveSection.self, DBRemoveSection.createFilter(uuid))
     }
     
-    func clearSectionTombstone(uuid: String, handler: Bool -> Void) {
+    func clearSectionTombstone(_ uuid: String, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             self?.clearSectionTombstoneSync(realm, uuid: uuid)
             return true
@@ -172,7 +172,7 @@ class RealmSectionProvider: RealmProvider {
         })
     }
     
-    func updateLastSyncTimeStamps(sectionsUpdateDicts: [[String: AnyObject]], handler: Bool -> Void) {
+    func updateLastSyncTimeStamps(_ sectionsUpdateDicts: [[String: AnyObject]], handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             for dict in sectionsUpdateDicts {
                 QL1("Saving dictionaries for section updates: \(sectionsUpdateDicts)")

@@ -10,23 +10,23 @@ import Foundation
 
 protocol SectionProvider {
 
-    func loadSection(name: String, list: List, handler: ProviderResult<Section?> -> ())
+    func loadSection(_ name: String, list: List, handler: @escaping (ProviderResult<Section?>) -> ())
 
-    func update(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func update(_ section: Section, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func update(_ sections: [Section], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
-    func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func remove(_ section: Section, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func remove(sectionUuid: String, listUuid: String?, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func remove(_ sectionUuid: String, listUuid: String?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
     // Removes all the sections found with given name (across lists)
-    func removeAllWithName(sectionName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func removeAllWithName(_ sectionName: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     // Gets suggestions both from section and category names
-    func sectionSuggestionsContainingText(text: String, _ handler: ProviderResult<[String]> -> ())
+    func sectionSuggestionsContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> ())
     
-    func sections(names: [String], list: List, handler: ProviderResult<[Section]> -> ())
+    func sections(_ names: [String], list: List, handler: @escaping (ProviderResult<[Section]>) -> ())
     
     /**
     Utility method to refactor common code in ListItemsProviderImpl and ListItemGroupProviderImpl when adding new list or group items
@@ -35,5 +35,5 @@ protocol SectionProvider {
     
     - parameter possibleNewSectionOrder: if the section is determined to be new, position of section in list. If the section already exists this is not used. If nil this will be at the end of the list (an additional database fetch will be made to count the sections).
     */
-    func mergeOrCreateSection(sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, _ handler: ProviderResult<Section> -> Void)
+    func mergeOrCreateSection(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, _ handler: @escaping (ProviderResult<Section>) -> Void)
 }

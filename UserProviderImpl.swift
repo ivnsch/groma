@@ -13,11 +13,11 @@ import QorumLogs
 
 class UserProviderImpl: UserProvider {
    
-    private let remoteProvider = RemoteUserProvider()
+    fileprivate let remoteProvider = RemoteUserProvider()
 
-    private var webSocket: MyWebSocket? // arc
+    fileprivate var webSocket: MyWebSocket? // arc
     
-    func login(loginData: LoginData, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
+    func login(_ loginData: LoginData, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
 
         self.remoteProvider.login(loginData) {[weak self] result in
             if result.success {
@@ -28,7 +28,7 @@ class UserProviderImpl: UserProvider {
         }
     }
     
-    func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
+    func register(_ user: UserInput, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         self.remoteProvider.register(user) {result in
             if result.success {
                 PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
@@ -36,20 +36,20 @@ class UserProviderImpl: UserProvider {
             
             // Server sends only already exists but we need register-specific status code to show specific error message
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
-            let status = providerStatus == .AlreadyExists ? .UserAlreadyExists : providerStatus
+            let status = providerStatus == .alreadyExists ? .userAlreadyExists : providerStatus
             
             handler(ProviderResult(status: status))
         }
     }
     
-    func isRegistered(email: String, _ handler: ProviderResult<Any> -> ()) {
+    func isRegistered(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         remoteProvider.isRegistered(email) {result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
             handler(ProviderResult(status: providerStatus))
         }
     }
 
-    func logout(handler: ProviderResult<Any> -> ()) {
+    func logout(_ handler: @escaping (ProviderResult<Any>) -> ()) {
         // TODO ensure the socket always really disconnects (client or server side), to prevent possible zombies sockets in server. It should, but maybe connection error or sth.
         webSocket?.disconnect()
         remoteProvider.logout(remoteResultHandler(handler))
@@ -63,12 +63,12 @@ class UserProviderImpl: UserProvider {
         QL2("User logged out")
     }
     
-    func sync(isMatchSync isMatchSync: Bool, onlyOverwriteLocal: Bool, additionalActionsOnSyncSuccess: VoidFunction? = nil, handler: ProviderResult<SyncResult> -> Void) {
+    func sync(isMatchSync: Bool, onlyOverwriteLocal: Bool, additionalActionsOnSyncSuccess: VoidFunction? = nil, handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         
-        let resultHandler: ProviderResult<SyncResult> -> Void = {result in
+        let resultHandler: (ProviderResult<SyncResult>) -> Void = {result in
             if result.success {
                 QL2("Sync/download success, connecting websocket...")
-                WebsocketHelper.tryConnectWebsocket()
+                _ = WebsocketHelper.tryConnectWebsocket()
                 if onlyOverwriteLocal {
                     // overwrote with new device and existing account - store a flag so we don't do this again (after this device is not considered "new" anymore and does normal sync).
                     PreferencesManager.savePreference(PreferencesManagerKey.overwroteLocalDataAfterNewDeviceLogin, value: true)
@@ -78,11 +78,11 @@ class UserProviderImpl: UserProvider {
             } else {
                 QL4("Sync/download didn't return success: \(result)")
                 // Return a sync failed status code such that the controller can show error message specific to this. Since we return this as a result of both login and sync, if we let only the server error code client wouldn't know if e.g. "wrong parameters" would be because of login or sync. Differentiation is important because on sync errors we let the user logged in (this way they can e.g. call full download from settings to try to solve the sync problem) while on login errors the user is logged out.
-                if result.status == .UnknownServerCommunicationError || result.status == .ServerNotReachable {
+                if result.status == .unknownServerCommunicationError || result.status == .serverNotReachable {
                     // If e.g. server timeout result needs to be treated differently e.g. don't show sync failed popup, logout
                     handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
                 } else {
-                    handler(ProviderResult(status: .SyncFailed, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+                    handler(ProviderResult(status: .syncFailed, sucessResult: nil, error: result.error, errorObj: result.errorObj))
                 }
             }
         }
@@ -107,13 +107,13 @@ class UserProviderImpl: UserProvider {
         return webSocket?.isConnected ?? false
     }
     
-    func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ()) {
+    func forgotPassword(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         remoteProvider.forgotPassword(email) {result in
             handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
         }
     }
     
-    func removeAccount(handler: ProviderResult<Any> -> ()) {
+    func removeAccount(_ handler: @escaping (ProviderResult<Any>) -> ()) {
         remoteProvider.removeAccount {result in
             handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             
@@ -159,7 +159,7 @@ class UserProviderImpl: UserProvider {
         }
     }
     
-    func findAllKnownSharedUsers(handler: ProviderResult<[SharedUser]> -> Void) {
+    func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[SharedUser]>) -> Void) {
         remoteProvider.findAllKnownSharedUsers {result in
             if let remoteSharedUsers = result.successResult {
                 let sharedUsers = remoteSharedUsers.map{SharedUser(email: $0.email)}
@@ -173,7 +173,7 @@ class UserProviderImpl: UserProvider {
                     }
                 }()
                 
-                handler(ProviderResult(status: .Success, sucessResult: sharedUsersWithoutMe))
+                handler(ProviderResult(status: .success, sucessResult: sharedUsersWithoutMe))
             } else {
                 handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
@@ -182,11 +182,11 @@ class UserProviderImpl: UserProvider {
     
     
     // If we have login success with a different user than the one that is currently stored in the device, clear local db before doing sync. Otherwise we will upload the data from the old user to the account of the new one (which even if we wanted doesn't work because the uuids have to be unique).
-    private func wrapCheckDifferentUser(loggedInUserEmail: String, controller: UIViewController, handler: ProviderResult<Any> -> Void) {
+    fileprivate func wrapCheckDifferentUser(_ loggedInUserEmail: String, controller: UIViewController, handler: @escaping (ProviderResult<Any>) -> Void) {
         
         let loggingInWithADifferentUser = isDifferentUser(loggedInUserEmail)
         
-        if loggingInWithADifferentUser ?? false {
+        if loggingInWithADifferentUser {
             
             let previousEmail = Providers.userProvider.mySharedUser?.email ?? ""
 
@@ -207,17 +207,17 @@ class UserProviderImpl: UserProvider {
                         if !logoutResult.success {
                             QL4("Logout failed: \(logoutResult)")
                         }
-                        handler(ProviderResult(status: .CancelledLoginWithDifferentAccount))
+                        handler(ProviderResult(status: .cancelledLoginWithDifferentAccount))
                     }
             })
             
         } else {
-            handler(ProviderResult(status: .Success))
+            handler(ProviderResult(status: .success))
         }
     }
     
     
-    private func handleLoginSuccess(userEmail: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
+    fileprivate func handleLoginSuccess(_ userEmail: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         
         // If a user logs in the first time on a device but account exists already, we don't want to do a full sync because this would upload all the prefilled products (which have different uuids) and user would end with a duplicate (name suffix (n)) for each product.
         // So we remember if the user registered using this device, if not it means they are loggin in with a new device. If the user logs in with a new device we only overwrite the local database, meaning we send a sync with no payload.
@@ -248,7 +248,7 @@ class UserProviderImpl: UserProvider {
                     if !logoutResult.success {
                         QL4("Logout failed: \(logoutResult)")
                     }
-                    handler(ProviderResult(status: .IsNewDeviceLoginAndDeclinedOverwrite))
+                    handler(ProviderResult(status: .isNewDeviceLoginAndDeclinedOverwrite))
                 }
                 
             }, onCannotPresent: {[weak self] in // this can happen if we are showing another popup already on same controller - an example in this case is when we show the optional app update dialog, which also uses root controller. It's always presented before of this, so when we are here, it will not show anything. For now we do the same as if user cancelled - log out, this isn't perfect but is the only meaningful thing we can do here. Note it is important to return something! Otherwise we get e.g. not dismissed progress indicator. This situation (with the update dialog, the only where it has happened so far) can happen but is rare, it means that: 1. User has an outdated installation on a device, 2. User opened an account with other device, 3. User logs in with the outdated device - here we get 'new device' and 'should update app' popup at the same time. At least for this case logging out is ok, user just has to login again after cancelling the update (if they update the app everything is gone anyway) and then the new installation popup appears.
@@ -257,7 +257,7 @@ class UserProviderImpl: UserProvider {
                     if !logoutResult.success {
                         QL4("Logout failed: \(logoutResult)")
                     }
-                    handler(ProviderResult(status: .IsNewDeviceLoginAndDeclinedOverwrite))
+                    handler(ProviderResult(status: .isNewDeviceLoginAndDeclinedOverwrite))
                 }
             })
             
@@ -274,13 +274,13 @@ class UserProviderImpl: UserProvider {
         }
     }
     
-    func isDifferentUser(email: String) -> Bool {
+    func isDifferentUser(_ email: String) -> Bool {
         return mySharedUser.map{$0.email != email} ?? false
     }
     
     // MARK: - Social login
     
-    private func handleSocialSignUpResult(controller: UIViewController, result: RemoteResult<RemoteSocialLoginResult>, handler: ProviderResult<SyncResult> -> Void) {
+    fileprivate func handleSocialSignUpResult(_ controller: UIViewController, result: RemoteResult<RemoteSocialLoginResult>, handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         if let authResult = result.successResult {
             if authResult.isRegister {
                 // If register, send a normal sync. This is equivalent with a login with the credentials provider as the user is verified already and don't need to confirm. Except that here we know it's register, so we can just send a plain sync - without checks for possible accounts on other device.
@@ -303,14 +303,14 @@ class UserProviderImpl: UserProvider {
     }
     
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
-    func authenticateWithFacebook(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
+    func authenticateWithFacebook(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         remoteProvider.authenticateWithFacebook(token) {[weak self] result in
             self?.handleSocialSignUpResult(controller, result: result, handler: handler)
         }
     }
 
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
-    func authenticateWithGoogle(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
+    func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         remoteProvider.authenticateWithGoogle(token) {[weak self] result in
             self?.handleSocialSignUpResult(controller, result: result, handler: handler)
         }
@@ -318,7 +318,7 @@ class UserProviderImpl: UserProvider {
     
     // store email in prefs so we can e.g. prefill login controller, which is opened after registration
     // For now store it as simple preference, we need it to be added automatically to list shared users. This may change in the future
-    private func storeEmail(email: String) {
+    fileprivate func storeEmail(_ email: String) {
         PreferencesManager.savePreference(PreferencesManagerKey.email, value: NSString(string: email))
     }
 }

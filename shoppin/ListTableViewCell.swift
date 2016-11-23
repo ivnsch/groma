@@ -32,8 +32,8 @@ class ListTableViewCell: UITableViewCell {
                 
                 let showUserInfo = list.users.count > 0
                 
-                usersIcon.hidden = !showUserInfo
-                userCountLabel.hidden = !showUserInfo
+                usersIcon.isHidden = !showUserInfo
+                userCountLabel.isHidden = !showUserInfo
                 
                 if showUserInfo {
                     userCountLabel.text = "\(list.users.count)"
@@ -52,7 +52,7 @@ class ListTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

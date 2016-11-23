@@ -10,9 +10,9 @@ import UIKit
 import QorumLogs
 
 protocol ProductWithQuantityTableViewCellDelegate: class {
-    func onIncrementItemTap(cell: ProductWithQuantityTableViewCell)
-    func onDecrementItemTap(cell: ProductWithQuantityTableViewCell)
-    func onPanQuantityUpdate(cell: ProductWithQuantityTableViewCell, newQuantity: Int)
+    func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell)
+    func onDecrementItemTap(_ cell: ProductWithQuantityTableViewCell)
+    func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Int)
 }
 
 class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperDelegate {
@@ -27,8 +27,8 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
 
     @IBOutlet weak var categoryColorView: UIView!
     
-    private var isAnimatingProgress: Bool = false
-    private var animationCancelled: Bool = false
+    fileprivate var isAnimatingProgress: Bool = false
+    fileprivate var animationCancelled: Bool = false
     
     var model: ProductWithQuantity? {
         didSet {
@@ -61,7 +61,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
             // height now calculated yet so we pass the position of border
             addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
             
-            selectionStyle = UITableViewCellSelectionStyle.None
+            selectionStyle = UITableViewCellSelectionStyle.none
         }
     }
     
@@ -73,7 +73,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         }
     }
     
-    private var swipeToIncrementHelper: SwipeToIncrementHelper?
+    fileprivate var swipeToIncrementHelper: SwipeToIncrementHelper?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -82,21 +82,21 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         swipeToIncrementHelper?.delegate = self
     }
     
-    @IBAction func onIncrementTap(sender: UIButton) {
+    @IBAction func onIncrementTap(_ sender: UIButton) {
         delegate?.onIncrementItemTap(self)
     }
     
-    @IBAction func onDecrementTap(sender: UIButton) {
+    @IBAction func onDecrementTap(_ sender: UIButton) {
         delegate?.onDecrementItemTap(self)
     }
     
-    override func setEditing(editing: Bool, animated: Bool) {
+    override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
-        func animate(alpha: CGFloat) {
-            UIView.animateWithDuration(0.2) {[weak self] in
+        func animate(_ alpha: CGFloat) {
+            UIView.animate(withDuration: 0.2, animations: {[weak self] in
                 self?.categoryColorView.alpha = alpha
-            }
+            }) 
         }
 
         if editing {
@@ -106,12 +106,12 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         }
     }
     
-    func startDeleteProgress(onComplete: VoidFunction) {
+    func startDeleteProgress(_ onComplete: @escaping VoidFunction) {
         deleteProgressViewWidth.constant = deleteProgressContainer.frame.width
         isAnimatingProgress = true
         animationCancelled = false
         
-        UIView.animateWithDuration(1, delay: 0, options: .CurveLinear, animations: {[weak self] in
+        UIView.animate(withDuration: 1, delay: 0, options: .curveLinear, animations: {[weak self] in
             self?.contentView.layoutIfNeeded()
         }, completion: {[weak self] finished in
             self?.isAnimatingProgress = false
@@ -143,7 +143,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         return shownQuantity
     }
     
-    func onQuantityUpdated(quantity: Int) {
+    func onQuantityUpdated(_ quantity: Int) {
         shownQuantity = quantity
     }
     

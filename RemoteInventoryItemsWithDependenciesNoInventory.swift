@@ -17,11 +17,11 @@ struct RemoteInventoryItemsWithDependenciesNoInventory: ResponseObjectSerializab
     
     init?(representation: AnyObject) {
         guard
-            let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
+            let productsObj = representation.value(forKeyPath: "products") as? [AnyObject],
             let products = RemoteProduct.collection(productsObj),
-            let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
+            let productsCategoriesObj = representation.value(forKeyPath: "productsCategories") as? [AnyObject],
             let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
-            let inventoryItemsObj = representation.valueForKeyPath("items") as? [AnyObject],
+            let inventoryItemsObj = representation.value(forKeyPath: "items") as? [AnyObject],
             let inventoryItems = RemoteInventoryItem.collection(inventoryItemsObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -33,6 +33,6 @@ struct RemoteInventoryItemsWithDependenciesNoInventory: ResponseObjectSerializab
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) productsCategories: [\(productsCategories)], products: [\(products)], inventoryItems: [\(inventoryItems)}"
+        return "{\(type(of: self)) productsCategories: [\(productsCategories)], products: [\(products)], inventoryItems: [\(inventoryItems)}"
     }
 }

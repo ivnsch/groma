@@ -27,11 +27,11 @@ class DBProductCategory: DBSyncable {
         return UIColor(hexString: bgColorHex)
     }
     
-    func setColor(bgColor: UIColor) {
+    func setColor(_ bgColor: UIColor) {
         bgColorHex = bgColor.hexStr
     }
 
-    convenience init(uuid: String, name: String, bgColorHex: String, lastUpdate: NSDate = NSDate(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    convenience init(uuid: String, name: String, bgColorHex: String, lastUpdate: Date = Date(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -45,7 +45,7 @@ class DBProductCategory: DBSyncable {
         self.removed = removed
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, bgColorHex: String? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> DBProductCategory {
+    func copy(uuid: String? = nil, name: String? = nil, bgColorHex: String? = nil, lastUpdate: Date? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> DBProductCategory {
         return DBProductCategory(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -57,15 +57,15 @@ class DBProductCategory: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
-    static func createFilterName(name: String) -> String {
+    static func createFilterName(_ name: String) -> String {
         return "name = '\(name)'"
     }
     
-    static func createFilterNameContains(text: String) -> String {
+    static func createFilterNameContains(_ text: String) -> String {
         return "name CONTAINS[c] '\(text)'"
     }
     
@@ -76,7 +76,7 @@ class DBProductCategory: DBSyncable {
     }
     
     // MARK: -
-    static func fromDict(dict: [String: AnyObject]) -> DBProductCategory {
+    static func fromDict(_ dict: [String: AnyObject]) -> DBProductCategory {
         let item = DBProductCategory()
         item.uuid = dict["uuid"]! as! String
         item.name = dict["name"]! as! String
@@ -89,14 +89,14 @@ class DBProductCategory: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["name"] = name
-        dict["color"] = bgColorHex
+        dict["uuid"] = uuid as AnyObject?
+        dict["name"] = name as AnyObject?
+        dict["color"] = bgColorHex as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
     }
     
-    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+    override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
         DBProviders.productCategoryProvider.removeCategoryDependenciesSync(realm, categoryUuid: uuid, markForSync: markForSync)
         realm.delete(self)
     }

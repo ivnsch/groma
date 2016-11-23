@@ -9,58 +9,58 @@
 import Foundation
 
 enum GroupSortBy {
-    case Alphabetic, Fav, Order
+    case alphabetic, fav, order
 }
 
 protocol ListItemGroupProvider {
 
     // groups
     
-    func groups(handler: ProviderResult<[ListItemGroup]> -> Void)
+    func groups(_ handler: @escaping (ProviderResult<[ListItemGroup]>) -> Void)
     
-    func groups(range: NSRange, sortBy: GroupSortBy, _ handler: ProviderResult<[ListItemGroup]> -> Void)
+    func groups(_ range: NSRange, sortBy: GroupSortBy, _ handler: @escaping (ProviderResult<[ListItemGroup]>) -> Void)
 
-    func groups(text: String, range: NSRange, sortBy: GroupSortBy, _ handler: ProviderResult<(substring: String?, groups: [ListItemGroup])> -> Void)
+    func groups(_ text: String, range: NSRange, sortBy: GroupSortBy, _ handler: @escaping (ProviderResult<(substring: String?, groups: [ListItemGroup])>) -> Void)
     
-    func add(groups: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func add(_ groups: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func update(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func update(_ group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
-    func update(groups: [ListItemGroup], remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func update(_ groups: [ListItemGroup], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func updateGroupsOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func updateGroupsOrder(_ orderUpdates: [OrderUpdate], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func incrementFav(productUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func incrementFav(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func remove(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func remove(_ group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
-    func removeGroup(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func removeGroup(_ uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     // group items
     
-    func groupItems(group: ListItemGroup, sortBy: InventorySortBy, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[GroupItem]> -> Void)
+    func groupItems(_ group: ListItemGroup, sortBy: InventorySortBy, fetchMode: ProviderFetchModus, _ handler: @escaping (ProviderResult<[GroupItem]>) -> Void)
     
-    func add(item: GroupItem, remote: Bool, _ handler: ProviderResult<GroupItem> -> Void)
+    func add(_ item: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<GroupItem>) -> Void)
 
-    func add(items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func add(_ items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
     // For websocket - simply upserts the inventory item, does not any checks or re-referencing of dependencies.
-    func addOrUpdateLocal(groupItems: [GroupItem], _ handler: ProviderResult<Any> -> Void)
+    func addOrUpdateLocal(_ groupItems: [GroupItem], _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func addGroupItems(srcGroup: ListItemGroup, targetGroup: ListItemGroup, remote: Bool, _ handler: ProviderResult<[(groupItem: GroupItem, delta: Int)]> -> Void)
+    func addGroupItems(_ srcGroup: ListItemGroup, targetGroup: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Int)]>) -> Void)
 
-    func add(itemInput: GroupItemInput, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<GroupItem> -> Void)
+    func add(_ itemInput: GroupItemInput, group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<GroupItem>) -> Void)
 
-    func update(input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: ProviderResult<(groupItem: GroupItem, replaced: Bool)> -> Void)
+    func update(_ input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<(groupItem: GroupItem, replaced: Bool)>) -> Void)
     
     // Used by websockets TODO review (compare with update:input)
-    func update(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func update(_ item: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func remove(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func remove(_ item: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func removeGroupItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func removeGroupItem(_ uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func increment(groupItem: GroupItem, delta: Int, remote: Bool, _ handler: ProviderResult<Int> -> Void)
+    func increment(_ groupItem: GroupItem, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<Int>) -> Void)
 
-    func increment(increment: ItemIncrement, remote: Bool, _ handler: ProviderResult<Int> -> Void)
+    func increment(_ increment: ItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<Int>) -> Void)
 }

@@ -18,10 +18,10 @@ class ShareAppViewController: UIViewController {
         super.viewDidLoad()
         
     }
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
         let content: FBSDKShareLinkContent = FBSDKShareLinkContent()
-        content.contentURL = NSURL(string: "https://developers.facebook.com")
+        content.contentURL = URL(string: "https://developers.facebook.com")
         // Note that when link to store apparently title and description not used, see https://developers.facebook.com/docs/sharing/ios
         content.contentTitle = "Share Foo"
 //        content.contentDescription = "All round manager for shopping lists, household inventory and budget" // we don't want to accidentally publish this in FB yet ;)

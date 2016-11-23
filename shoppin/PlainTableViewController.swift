@@ -16,16 +16,16 @@ class PlainTableViewController: UITableViewController {
     
     let reuseIdentifier = "reuseIdentifier"
     
-    init(options:[String], onSelectOption:(Int, String) -> ()) {
-        super.init(style: UITableViewStyle.Plain)
+    init(options:[String], onSelectOption:@escaping (Int, String) -> ()) {
+        super.init(style: UITableViewStyle.plain)
 
         self.options = options
         self.onSelectOption = onSelectOption
         
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
@@ -36,24 +36,24 @@ class PlainTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.options.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) 
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) 
 
-        cell.textLabel?.text = self.options[indexPath.row]
+        cell.textLabel?.text = self.options[(indexPath as NSIndexPath).row]
 
         return cell
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let row = indexPath.row
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let row = (indexPath as NSIndexPath).row
         self.onSelectOption(row, self.options[row])
     }
 }

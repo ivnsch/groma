@@ -22,12 +22,12 @@ enum Notification: String {
     // Currently used for must app update dialog
     case LogoutUI = "LogoutUI"
     
-    static func send(notification: Notification, dict: [String: AnyObject]? = nil) {
-        NSNotificationCenter.defaultCenter().postNotificationName(notification.rawValue, object: nil, userInfo: dict)
+    static func send(_ notification: Notification, dict: [String: AnyObject]? = nil) {
+        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: notification.rawValue), object: nil, userInfo: dict)
     }
     
-    static func subscribe(notification: Notification, selector: Selector, observer: AnyObject) {
-        NSNotificationCenter.defaultCenter().addObserver(observer, selector: selector, name: notification.rawValue, object: nil)
+    static func subscribe(_ notification: Notification, selector: Selector, observer: AnyObject) {
+        NotificationCenter.default.addObserver(observer, selector: selector, name: NSNotification.Name(rawValue: notification.rawValue), object: nil)
     }
 }
 

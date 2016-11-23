@@ -15,9 +15,9 @@ struct RemotePlanItem: ResponseObjectSerializable, ResponseCollectionSerializabl
     
     init?(representation: AnyObject) {
         guard
-            let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
-            let productUuid = representation.valueForKeyPath("productUuid") as? String,
-            let quantity = representation.valueForKeyPath("quantity") as? Int
+            let inventoryUuid = representation.value(forKeyPath: "inventoryUuid") as? String,
+            let productUuid = representation.value(forKeyPath: "productUuid") as? String,
+            let quantity = representation.value(forKeyPath: "quantity") as? Int
             else {
                 print("Invalid json: \(representation)")
                 return nil}
@@ -27,9 +27,9 @@ struct RemotePlanItem: ResponseObjectSerializable, ResponseCollectionSerializabl
         self.quantity = quantity
     }
     
-    static func collection(representation: AnyObject) -> [RemotePlanItem]? {
+    static func collection(_ representation: [AnyObject]) -> [RemotePlanItem]? {
         var listItems = [RemotePlanItem]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let listItem = RemotePlanItem(representation: obj) {
                 listItems.append(listItem)
             } else {
@@ -40,6 +40,6 @@ struct RemotePlanItem: ResponseObjectSerializable, ResponseCollectionSerializabl
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventoryUuid: \(inventoryUuid), productUuid: \(productUuid), quantity: \(quantity)}"
+        return "{\(type(of: self)) inventoryUuid: \(inventoryUuid), productUuid: \(productUuid), quantity: \(quantity)}"
     }
 }

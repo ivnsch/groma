@@ -16,9 +16,9 @@ struct RemoteListItemReorder: ResponseObjectSerializable, ResponseCollectionSeri
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let order = representation.valueForKeyPath("order") as? Int,
-            let sectionUuid = representation.valueForKeyPath("sectionUuid") as? String
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let order = representation.value(forKeyPath: "order") as? Int,
+            let sectionUuid = representation.value(forKeyPath: "sectionUuid") as? String
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -28,9 +28,9 @@ struct RemoteListItemReorder: ResponseObjectSerializable, ResponseCollectionSeri
         self.sectionUuid = sectionUuid
     }
     
-    static func collection(representation: AnyObject) -> [RemoteListItemReorder]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteListItemReorder]? {
         var items = [RemoteListItemReorder]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let item = RemoteListItemReorder(representation: obj) {
                 items.append(item)
             } else {
@@ -42,14 +42,14 @@ struct RemoteListItemReorder: ResponseObjectSerializable, ResponseCollectionSeri
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), order: \(order), sectionUuid: \(sectionUuid)}"
+        return "{\(type(of: self)) uuid: \(uuid), order: \(order), sectionUuid: \(sectionUuid)}"
     }
     
 }
 
 extension RemoteListItemReorder {
 
-    func updateDict(status: ListItemStatus, dbSection: DBSection) -> [String: AnyObject] {
-        return ["uuid": uuid, ListItem.orderFieldName(status): order, "sectionOpt": dbSection]
+    func updateDict(_ status: ListItemStatus, dbSection: DBSection) -> [String: AnyObject] {
+        return ["uuid": uuid as AnyObject, ListItem.orderFieldName(status): order as AnyObject, "sectionOpt": dbSection]
     }
 }

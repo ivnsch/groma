@@ -12,15 +12,15 @@ import QorumLogs
 class CountryHelper {
     
 //    private static let serverSupportedCountries = ["de"]
-    private static let serverSupportedCountries: [String] = []
+    fileprivate static let serverSupportedCountries: [String] = []
     
     static func currentDeviceCountry() -> String? {
-        return NSLocale.currentLocale().objectForKey(NSLocaleCountryCode) as? String
+        return (Locale.current as NSLocale).object(forKey: NSLocale.Key.countryCode) as? String
     }
     
     static func isInServerSupportedCountry() -> Bool {
         
-        let countryCodeMaybe = currentDeviceCountry()?.lowercaseString
+        let countryCodeMaybe = currentDeviceCountry()?.lowercased()
         let isSupported = countryCodeMaybe.map{serverSupportedCountries.contains($0)} ?? false
         
         QL1("Is server supported country: \(countryCodeMaybe), isSupported: \(isSupported)")

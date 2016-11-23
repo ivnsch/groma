@@ -11,18 +11,18 @@ import QorumLogs
 
 class InventoryItemMapper {
     
-    class func inventoryItemWithDB(dbInventoryItem: DBInventoryItem) -> InventoryItem {
+    class func inventoryItemWithDB(_ dbInventoryItem: DBInventoryItem) -> InventoryItem {
         let product = ProductMapper.productWithDB(dbInventoryItem.product)
         let inventory = InventoryMapper.inventoryWithDB(dbInventoryItem.inventory)
         return InventoryItem(uuid: dbInventoryItem.uuid, quantity: dbInventoryItem.quantity, quantityDelta: dbInventoryItem.quantityDelta, product: product, inventory: inventory, lastServerUpdate: dbInventoryItem.lastServerUpdate)
     }
     
-    class func inventoryItemWithRemote(remoteItem: RemoteInventoryItemWithProduct, inventory: Inventory) -> InventoryItem {
+    class func inventoryItemWithRemote(_ remoteItem: RemoteInventoryItemWithProduct, inventory: Inventory) -> InventoryItem {
         let product = ProductMapper.productWithRemote(remoteItem.product, category: remoteItem.productCategory)
         return InventoryItem(uuid: remoteItem.inventoryItem.uuid, quantity: remoteItem.inventoryItem.quantity, product: product, inventory: inventory, lastServerUpdate: remoteItem.inventoryItem.lastUpdate)
     }
     
-    class func dbWithInventoryItem(item: InventoryItem, dirty: Bool) -> DBInventoryItem {
+    class func dbWithInventoryItem(_ item: InventoryItem, dirty: Bool) -> DBInventoryItem {
         let db = DBInventoryItem()
         db.uuid = item.uuid
         db.quantity = item.quantity
@@ -36,7 +36,7 @@ class InventoryItemMapper {
         return db
     }
     
-    class func dbInventoryItemWithRemote(item: RemoteInventoryItemWithProduct, inventory: DBInventory) -> DBInventoryItem {
+    class func dbInventoryItemWithRemote(_ item: RemoteInventoryItemWithProduct, inventory: DBInventory) -> DBInventoryItem {
         let product = ProductMapper.dbProductWithRemote(item.product, category: item.productCategory)
         
         let db = DBInventoryItem()
@@ -50,7 +50,7 @@ class InventoryItemMapper {
     }
 
     
-    private class func toInventoryDict(remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: Inventory], [Inventory]) {
+    fileprivate class func toInventoryDict(_ remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: Inventory], [Inventory]) {
         var dict: [String: Inventory] = [:]
         var arr: [Inventory] = []
         for remoteInventory in remoteInventories {
@@ -62,7 +62,7 @@ class InventoryItemMapper {
         return (dict, arr)
     }
     
-    private class func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
+    fileprivate class func toProductCategoryDict(_ remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
         var dict: [String: ProductCategory] = [:]
         var arr: [ProductCategory] = []
         for remoteProductCategory in remoteProductsCategories {
@@ -74,7 +74,7 @@ class InventoryItemMapper {
         return (dict, arr)
     }
     
-    private class func toProductDict(remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
+    fileprivate class func toProductDict(_ remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
         var dict: [String: Product] = [:]
         var arr: [Product] = []
         for remoteProduct in remoteProducts {
@@ -89,7 +89,7 @@ class InventoryItemMapper {
         return (dict, arr)
     }
     
-    class func itemsWithRemote(remoteItems: RemoteInventoryItemsWithDependencies) -> [InventoryItem] {
+    class func itemsWithRemote(_ remoteItems: RemoteInventoryItemsWithDependencies) -> [InventoryItem] {
         
         let (productsCategoriesDict, _) = toProductCategoryDict(remoteItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
         let (productsDict, _) = toProductDict(remoteItems.products, categories: productsCategoriesDict)
@@ -111,9 +111,9 @@ class InventoryItemMapper {
         return inventoryItems
     }
     
-    class func itemsWithRemote(remoteItems: RemoteInventoryItemsWithHistoryAndDependencies) -> (inventoryItems: [InventoryItem], historyItems: [HistoryItem]) {
+    class func itemsWithRemote(_ remoteItems: RemoteInventoryItemsWithHistoryAndDependencies) -> (inventoryItems: [InventoryItem], historyItems: [HistoryItem]) {
         
-        func toUserDict(remoteUsers: [RemoteSharedUser]) -> ([String: SharedUser], [SharedUser]) {
+        func toUserDict(_ remoteUsers: [RemoteSharedUser]) -> ([String: SharedUser], [SharedUser]) {
             var dict: [String: SharedUser] = [:]
             var arr: [SharedUser] = []
             for remoteSection in remoteUsers {
@@ -124,13 +124,13 @@ class InventoryItemMapper {
             return (dict, arr)
         }
         
-        func toHistoryItemDict(remoteHistoryItems: [RemoteHistoryItem], products: [String: Product], inventories: [String: Inventory], users: [String: SharedUser]) -> ([String: HistoryItem], [HistoryItem]) {
+        func toHistoryItemDict(_ remoteHistoryItems: [RemoteHistoryItem], products: [String: Product], inventories: [String: Inventory], users: [String: SharedUser]) -> ([String: HistoryItem], [HistoryItem]) {
             var dict: [String: HistoryItem] = [:]
             var arr: [HistoryItem] = []
             for remoteHistoryItem in remoteHistoryItems {
                 if let product = products[remoteHistoryItem.productUuid],
-                    inventory = inventories[remoteHistoryItem.inventoryUuid],
-                    user = users[remoteHistoryItem.userUuid]
+                    let inventory = inventories[remoteHistoryItem.inventoryUuid],
+                    let user = users[remoteHistoryItem.userUuid]
                 {
                     let historyItem = HistoryItemMapper.historyItemWithRemote(remoteHistoryItem, inventory: inventory, product: product, user: user)
                     dict[remoteHistoryItem.uuid] = historyItem

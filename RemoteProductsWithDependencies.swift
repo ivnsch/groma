@@ -16,9 +16,9 @@ struct RemoteProductsWithDependencies: ResponseObjectSerializable, CustomDebugSt
     
     init?(representation: AnyObject) {
         guard
-            let productsObj = representation.valueForKeyPath("products"),
+            let productsObj = representation.value(forKeyPath: "products") as? [AnyObject],
             let products = RemoteProduct.collection(productsObj),
-            let categoriesObj = representation.valueForKeyPath("categories"),
+            let categoriesObj = representation.value(forKeyPath: "categories") as? [AnyObject],
             let categories = RemoteProductCategory.collection(categoriesObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -29,6 +29,6 @@ struct RemoteProductsWithDependencies: ResponseObjectSerializable, CustomDebugSt
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) products: \(products), categories: \(categories)}"
+        return "{\(type(of: self)) products: \(products), categories: \(categories)}"
     }
 }

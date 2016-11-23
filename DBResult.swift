@@ -9,21 +9,21 @@
 import Foundation
 
 enum DBStatusCode: Int {
-    case Success = 1
+    case success = 1
     
-    case AlreadyExists = 4
-    case NotFound = 5
+    case alreadyExists = 4
+    case notFound = 5
     
-    case Unknown = 100
+    case unknown = 100
 }
 
-public class DBResult<T>: CustomDebugStringConvertible {
+open class DBResult<T>: CustomDebugStringConvertible {
     let status: DBStatusCode
     let sucessResult: T?
     let errorMsg: String?
     
     var success: Bool {
-        return self.status == .Success
+        return self.status == .success
     }
     
     var error: NSError? {
@@ -46,13 +46,13 @@ public class DBResult<T>: CustomDebugStringConvertible {
         self.init(status: status, sucessResult: nil, errorMsg: nil)
     }
     
-    private init(status: DBStatusCode, sucessResult: T?, errorMsg: String?) {
+    fileprivate init(status: DBStatusCode, sucessResult: T?, errorMsg: String?) {
         self.status = status
         self.sucessResult = sucessResult
         self.errorMsg = errorMsg
     }
     
-    public var debugDescription: String {
-        return "{\(self.dynamicType) status: \(self.status), model: \(self.sucessResult), errorMsg: \(self.errorMsg)}"
+    open var debugDescription: String {
+        return "{\(type(of: self)) status: \(self.status), model: \(self.sucessResult), errorMsg: \(self.errorMsg)}"
     }
 }

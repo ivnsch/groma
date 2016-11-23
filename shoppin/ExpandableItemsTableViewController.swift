@@ -24,7 +24,7 @@ class ExpandableTableViewModel: NSObject, Identifiable {
         fatalError("override")
     }
     
-    func same(rhs: ExpandableTableViewModel) -> Bool {
+    func same(_ rhs: ExpandableTableViewModel) -> Bool {
         fatalError("override")
     }
     
@@ -34,11 +34,11 @@ class ExpandableTableViewModel: NSObject, Identifiable {
 }
 
 protocol Foo: class { // TODO rename, put in other file
-    func setExpanded(expanded: Bool)
+    func setExpanded(_ expanded: Bool)
 }
 
 enum TopBarState {
-    case Normal, NormalFromExpanded, EditTable, EditItem, Add, AddNoAnim
+    case normal, normalFromExpanded, editTable, editItem, add, addNoAnim
 }
 
 
@@ -49,12 +49,12 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     @IBOutlet weak var emptyView: UIView!
 
-    private let listItemsProvider = ProviderFactory().listItemProvider
+    fileprivate let listItemsProvider = ProviderFactory().listItemProvider
     
     var models: [ExpandableTableViewModel] = [] {
         didSet {
-            emptyView.hidden = !models.isEmpty
-            tableView.hidden = !emptyView.hidden
+            emptyView.isHidden = !models.isEmpty
+            tableView.isHidden = !emptyView.isHidden
             if models != oldValue {
                 tableView.reloadData()
             }
@@ -63,28 +63,28 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     }
     
     
-    private var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
+    fileprivate var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
     
     var tableView: UITableView {
         return tableViewController.tableView
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "embedTableViewController" {
-            tableViewController = segue.destinationViewController as! UITableViewController
+            tableViewController = segue.destination as! UITableViewController
             tableViewController.tableView.dataSource = self
             tableViewController.tableView.delegate = self
         }
     }
     
     
-    private let expandCellAnimator = ExpandCellAnimator()
+    fileprivate let expandCellAnimator = ExpandCellAnimator()
     
-    private var originalNavBarFrame: CGRect = CGRectZero
+    fileprivate var originalNavBarFrame: CGRect = CGRect.zero
     
-    private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
+    fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
 
-    private let cellHeight = DimensionsManager.defaultCellHeight
+    fileprivate let cellHeight = DimensionsManager.defaultCellHeight
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,7 +93,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 
         let refreshControl = PullToAddHelper.createPullToAdd(self)
         tableViewController.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(ExpandableItemsTableViewController.onPullRefresh(_:)), forControlEvents: .ValueChanged)
+        refreshControl.addTarget(self, action: #selector(ExpandableItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)
         
         originalNavBarFrame = topBar.frame
         
@@ -105,7 +105,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         emptyView.addGestureRecognizer(tapRecognizer)
     }
 
-    private func printDebugModels() {
+    fileprivate func printDebugModels() {
         print("ExpandableItemsTableViewController items:")
         for model in models {
             print(model.debugDescription)
@@ -119,7 +119,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     // MARK: - Pull to add
     
-    func onPullRefresh(sender: UIRefreshControl) {
+    func onPullRefresh(_ sender: UIRefreshControl) {
         sender.endRefreshing()
         onPullToAdd()
     }
@@ -128,30 +128,30 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         // override
     }
     
-    private func initTopBar() {
+    fileprivate func initTopBar() {
         topBar.delegate = self
-        setTopBarState(.NormalFromExpanded)
+        setTopBarState(.normalFromExpanded)
     }
     
-    private func initTitleLabel() {
+    fileprivate func initTitleLabel() {
         let label = UILabel()
         label.font = Fonts.regular
-        label.textColor = UIColor.whiteColor()
+        label.textColor = UIColor.white
         topBar.addSubview(label)
     }
     
     
-    func setNavTitle(title: String) {
+    func setNavTitle(_ title: String) {
         topBar.title = title
         topBar.positionTitleLabelLeft(true, animated: false, withDot: false)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         initModels()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         toggleButtonRotator.reset(tableView, topBar: topBar)
     }
@@ -160,53 +160,53 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         fatalError("override")
     }
 
-    func setTopBarStateForAddTap(expand: Bool, rotateTopBarButtonOnExpand: Bool = true) {
+    func setTopBarStateForAddTap(_ expand: Bool, rotateTopBarButtonOnExpand: Bool = true) {
         if expand {
-            setTopBarState(rotateTopBarButtonOnExpand ? .Add : .AddNoAnim)
+            setTopBarState(rotateTopBarButtonOnExpand ? .add : .addNoAnim)
         } else {
-            setTopBarState(.NormalFromExpanded)
+            setTopBarState(.normalFromExpanded)
         }
     }
     
-    func setTopBarState(topBarState: TopBarState) {
+    func setTopBarState(_ topBarState: TopBarState) {
         
         func leftEdit() {
-            topBar.setLeftButtonIds([.Edit])
+            topBar.setLeftButtonIds([.edit])
         }
         
         func rightSubmitAndClose() { // v x
             topBar.setRightButtonModels([
 //                TopBarButtonModel(buttonId: .Submit),
-                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+                TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
             ])
         }
         
         func rightClose() { // x
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+                TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
             ])
         }
 
         func rightOpen() { // +
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformIdentity)
+                TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform.identity)
             ])
         }
         
         // animated
         func rightOpenFromClosed() { // x -> +
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)
+                TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)
             ])
         }
         
         // animated
-        func rightSubmitAndCloseFromOpen(animateToggle: Bool) { // + -> v x
+        func rightSubmitAndCloseFromOpen(_ animateToggle: Bool) { // + -> v x
             var models: [TopBarButtonModel] = [
 //                TopBarButtonModel(buttonId: .Submit)
             ]
             if animateToggle {
-                models.append(TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformIdentity, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4))))
+                models.append(TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform.identity, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4))))
             } else {
 //                models.append(TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4))))
             }
@@ -220,33 +220,33 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         }
 
         switch topBarState {
-        case .Normal:
+        case .normal:
             leftEdit()
             rightOpen()
             
-        case .NormalFromExpanded:
+        case .normalFromExpanded:
             leftEdit()
             rightOpenFromClosed()
             
-        case .EditTable:
+        case .editTable:
             leftEdit()
             rightOpen()
             
-        case .EditItem:
+        case .editItem:
             leftEdit()
             rightSubmitAndCloseFromOpen(true)
 
-        case .Add:
+        case .add:
             leftEdit()
             rightSubmitAndCloseFromOpen(true)
             
-        case .AddNoAnim:
+        case .addNoAnim:
             leftEdit()
             rightSubmitAndCloseFromOpen(false)
         }
     }
     
-    func onEmptyViewTap(sender: UITapGestureRecognizer) {
+    func onEmptyViewTap(_ sender: UITapGestureRecognizer) {
         onAddTap()
     }
 
@@ -254,40 +254,40 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         fatalError("override")
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.models.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("itemCell", forIndexPath: indexPath) as! ExpandableItemsTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath) as! ExpandableItemsTableViewCell
         
-        let model = models[indexPath.row]
+        let model = models[(indexPath as NSIndexPath).row]
         cell.model = model
         
         return cell
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeight
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            let model = models[indexPath.row]
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let model = models[(indexPath as NSIndexPath).row]
             canRemoveModel(model) {[weak self] can in
                 if can {
                     // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
                     tableView.wrapUpdates {
-                        self?.models.remove(model)
-                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
+                        _ = self?.models.remove(model)
+                        tableView.deleteRows(at: [indexPath], with: .top)
                     }
                     self?.onRemoveModel(model)
                 }
@@ -295,19 +295,19 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    func canRemoveModel(model: ExpandableTableViewModel, can: Bool -> Void) {
+    func canRemoveModel(_ model: ExpandableTableViewModel, can: @escaping (Bool) -> Void) {
         can(true)
     }
     
-    func onRemoveModel(model: ExpandableTableViewModel) {
+    func onRemoveModel(_ model: ExpandableTableViewModel) {
         fatalError("override")
     }
     
-    func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
         
-        let list = models[fromIndexPath.row]
-        models.removeAtIndex(fromIndexPath.row)
-        models.insert(list, atIndex: toIndexPath.row)
+        let list = models[(fromIndexPath as NSIndexPath).row]
+        models.remove(at: (fromIndexPath as NSIndexPath).row)
+        models.insert(list, at: (toIndexPath as NSIndexPath).row)
         
         onReorderedModels()
     }
@@ -316,31 +316,31 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         fatalError("override")
     }
     
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    func initDetailController(cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
+    func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
         fatalError("override")
     }
     
-    func onSelectCellInEditMode(model: ExpandableTableViewModel) {
-        setTopBarState(.EditItem)
+    func onSelectCellInEditMode(_ model: ExpandableTableViewModel) {
+        setTopBarState(.editItem)
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let model = self.models[indexPath.row]
+        let model = self.models[(indexPath as NSIndexPath).row]
         
-        if self.editing {
+        if self.isEditing {
             onSelectCellInEditMode(model)
             
         } else {
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            if let cell = tableView.cellForRow(at: indexPath) {
                 
                 let detailController = initDetailController(cell, model: model)
                 
-                let f = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, cell.frame.width, cell.frame.height)
+                let f = CGRect(x: cell.frame.origin.x, y: cell.frame.origin.y, width: cell.frame.width, height: cell.frame.height)
                 
                 expandCellAnimator.reset()
                 expandCellAnimator.collapsedFrame = f
@@ -357,15 +357,15 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
     }
     
-    func onAddTap(rotateTopBarButton: Bool = true) {
+    func onAddTap(_ rotateTopBarButton: Bool = true) {
     }
     
-    @IBAction func onEditTap(sender: UIBarButtonItem) {
-        self.setEditing(!self.editing, animated: true, tryCloseTopViewController: true)
+    @IBAction func onEditTap(_ sender: UIBarButtonItem) {
+        self.setEditing(!self.isEditing, animated: true, tryCloseTopViewController: true)
     }
     
     func topControllerIsExpanded() -> Bool {
@@ -373,7 +373,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     }
     
     // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
-    func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
+    func setEditing(_ editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
         super.setEditing(editing, animated: animated)
         
         if !editing {
@@ -392,30 +392,30 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     // MARK: - ExpandCellAnimatorDelegate
     
-    func animationsForCellAnimator(isExpanding: Bool, frontView: UIView) {
+    func animationsForCellAnimator(_ isExpanding: Bool, frontView: UIView) {
         let navBarFrame = topBar.frame
         if isExpanding {
-            topBar.transform = CGAffineTransformMakeTranslation(0, -navBarFrame.height)
+            topBar.transform = CGAffineTransform(translationX: 0, y: -navBarFrame.height)
         } else {
-            topBar.transform = CGAffineTransformMakeTranslation(0, 0)
+            topBar.transform = CGAffineTransform(translationX: 0, y: 0)
         }
     }
     
-    func setExpanded(expanded: Bool) {
+    func setExpanded(_ expanded: Bool) {
         expandCellAnimator.animateTransition(false, topOffsetY: 64)
     }
     
-    func animationsComplete(wasExpanding: Bool, frontView: UIView) {
+    func animationsComplete(_ wasExpanding: Bool, frontView: UIView) {
     }
     
-    func prepareAnimations(willExpand: Bool, frontView: UIView) {
+    func prepareAnimations(_ willExpand: Bool, frontView: UIView) {
     }
     
-    func removeModel(model: ExpandableTableViewModel) {
+    func removeModel(_ model: ExpandableTableViewModel) {
         
         func remove() {
             if let index = models.remove(model) {
-                tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Top)
+                tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .top)
             } else {
                 print("Warn: ViewController.onWebsocketList: Removed list item was not found in tableView")
             }
@@ -434,14 +434,14 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     func onTopBarTitleTap() {
     }
     
-    func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
+    func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId) {
         switch buttonId {
-        case .Submit:
+        case .submit:
             onSubmitTap()
-        case .ToggleOpen:
+        case .toggleOpen:
             onAddTap()
-        case .Edit:
-            let editing = !self.tableView.editing
+        case .edit:
+            let editing = !self.tableView.isEditing
             self.setEditing(editing, animated: true, tryCloseTopViewController: true)
         default:
             print("Warn: ExpandableItemsTableViewController.onTopBarButtonTap: Not handled buttonId: \(buttonId)")
@@ -449,12 +449,12 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    func onCenterTitleAnimComplete(center: Bool) {
+    func onCenterTitleAnimComplete(_ center: Bool) {
         if center {
-            setTopBarState(.Normal)
+            setTopBarState(.normal)
         }
     }
     
-    func onExpand(expanding: Bool) {
+    func onExpand(_ expanding: Bool) {
     }
 }

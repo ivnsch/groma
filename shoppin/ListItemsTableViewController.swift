@@ -10,66 +10,66 @@ import UIKit
 import QorumLogs
 
 protocol ListItemsTableViewDelegate: class {
-    func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo
-    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) // mark as undo
-    func onListItemReset(tableViewListItem: TableViewListItem) // revert undo
-    func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection)
-    func onIncrementItem(model: TableViewListItem, delta: Int)
-    func onTableViewScroll(scrollView: UIScrollView)
+    func onListItemClear(_ tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo
+    func onListItemSelected(_ tableViewListItem: TableViewListItem, indexPath: IndexPath) // mark as undo
+    func onListItemReset(_ tableViewListItem: TableViewListItem) // revert undo
+    func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection)
+    func onIncrementItem(_ model: TableViewListItem, delta: Int)
+    func onTableViewScroll(_ scrollView: UIScrollView)
     func onPullToAdd()
 }
 
 protocol ListItemsEditTableViewDelegate: class {
-    func onListItemsOrderChangedSection(tableViewListItems: [TableViewListItem])
-    func onListItemDeleted(tableViewListItem: TableViewListItem)
+    func onListItemsOrderChangedSection(_ tableViewListItems: [TableViewListItem])
+    func onListItemDeleted(_ tableViewListItem: TableViewListItem)
 }
 
 enum ListItemsTableViewControllerStyle {
-    case Normal, Gray
+    case normal, gray
 }
 
 class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
-    private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section
-    private(set) var tableViewSections: [ListItemsViewSection] = []
+    fileprivate let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section
+    fileprivate(set) var tableViewSections: [ListItemsViewSection] = []
     
-    private var lastContentOffset: CGFloat = 0
+    fileprivate var lastContentOffset: CGFloat = 0
     
     weak var scrollViewDelegate: UIScrollViewDelegate?
     weak var listItemsTableViewDelegate: ListItemsTableViewDelegate?
     weak var listItemsEditTableViewDelegate: ListItemsEditTableViewDelegate?
 
-    private(set) var sections: [Section] = [] // quick access. Sorting not necessarily same as in tableViewSections
-    private(set) var items: [ListItem] = [] // quick access. Sorting not necessarily same as in tableViewSections
+    fileprivate(set) var sections: [Section] = [] // quick access. Sorting not necessarily same as in tableViewSections
+    fileprivate(set) var items: [ListItem] = [] // quick access. Sorting not necessarily same as in tableViewSections
     
-    var style: ListItemsTableViewControllerStyle = .Normal
+    var style: ListItemsTableViewControllerStyle = .normal
     
-    var status: ListItemStatus = .Todo
+    var status: ListItemStatus = .todo
     
-    private var swipedTableViewListItem: TableViewListItem? // Item marked for "undo".
+    fileprivate var swipedTableViewListItem: TableViewListItem? // Item marked for "undo".
     
-    func touchEnabled(enabled:Bool) {
-        self.tableView.userInteractionEnabled = enabled
+    func touchEnabled(_ enabled:Bool) {
+        self.tableView.isUserInteractionEnabled = enabled
     }
     
     func enablePullToAdd() {
         let refreshControl = PullToAddHelper.createPullToAdd(self)
-        refreshControl.addTarget(self, action: #selector(ListItemsTableViewController.onPullRefresh(_:)), forControlEvents: .ValueChanged)
+        refreshControl.addTarget(self, action: #selector(ListItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)
         self.refreshControl = refreshControl
     }
     
-    func onPullRefresh(sender: UIRefreshControl) {
+    func onPullRefresh(_ sender: UIRefreshControl) {
         sender.endRefreshing()
         listItemsTableViewDelegate?.onPullToAdd()
     }
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         listItemsTableViewDelegate?.onTableViewScroll(scrollView)
     }
     
     var sectionsExpanded: Bool = true
     
-    var cellMode: ListItemCellMode = .Note {
+    var cellMode: ListItemCellMode = .note {
         didSet {
             // the section is only a "cell producer", it doesn't have access to the cells. So we have to set first the mode in the section (such that when the user scrolls the new cells are loaded with the correct mode, and in the visible cells, which we have access to, via the tableView, separately.
             for section in tableViewSections {
@@ -86,7 +86,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    var cellSwipeDirection: SwipeableCellDirection = .Right
+    var cellSwipeDirection: SwipeableCellDirection = .right
     
     /**
      Returns total price of shown items exluding those marked for undo
@@ -111,7 +111,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 //        self.tableView.allowsMultipleSelectionDuringEditing = true
     }
     
-    func tableViewShiftDown(offset: CGFloat) { // offset/inset to start at given offset but scroll behind it
+    func tableViewShiftDown(_ offset: CGFloat) { // offset/inset to start at given offset but scroll behind it
         self.tableView.inset = UIEdgeInsetsMake(offset, 0, 0, 0)
         self.tableView.topOffset = -self.tableView.inset.top
     }
@@ -120,7 +120,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 //        println(self.view.constraints().count)
     }
     
-    private func initTableView() {
+    fileprivate func initTableView() {
 //        self.tableView.registerClass(ListItemCell.self, forCellReuseIdentifier: ItemsListTableViewConstants.listItemCellIdentifier)
 
         self.tableView.dataSource = self
@@ -132,7 +132,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 //        self.tableView.setEditing(true, animated: true)
     }
     
-    func setListItems(items: [ListItem]) { // as function instead of variable+didSet because didSet is called each time we modify the array
+    func setListItems(_ items: [ListItem]) { // as function instead of variable+didSet because didSet is called each time we modify the array
         self.items = items
         self.initTableViewContent()
         
@@ -142,7 +142,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    private func initTableViewContent() {
+    fileprivate func initTableViewContent() {
         let(tableViewSections, sections) = buildTableViewSections(items)
         self.tableViewSections = tableViewSections
         self.sections = sections
@@ -154,7 +154,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         self.tableView.reloadData()
     }
     
-    func addListItem(listItem:ListItem) {
+    func addListItem(_ listItem:ListItem) {
         self.items.append(listItem)
         
         self.addListItemToSection(listItem)
@@ -162,7 +162,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         self.tableView.reloadData()
     }
 
-    private func addListItemToSection(listItem:ListItem) {
+    fileprivate func addListItemToSection(_ listItem:ListItem) {
         
         let tableViewListItem = TableViewListItem(listItem: listItem)
         
@@ -182,7 +182,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
 
-    func updateListItems(listItems: [ListItem], status: ListItemStatus, notifyRemote: Bool) {
+    func updateListItems(_ listItems: [ListItem], status: ListItemStatus, notifyRemote: Bool) {
         for listItem in listItems {
             updateListItem(listItem, status: status, notifyRemote: notifyRemote)
         }
@@ -192,11 +192,11 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     Update or add list item
     When sure it's an "add" case use addListItem - this checks first if the item exists and is thus slower
     */
-    func updateListItem(listItem: ListItem, status: ListItemStatus, notifyRemote: Bool) {
+    func updateListItem(_ listItem: ListItem, status: ListItemStatus, notifyRemote: Bool) {
         updateOrAddListItem(listItem, status: status, increment: false, notifyRemote: notifyRemote) // update means overwrite - don't increment
     }
 
-    func incrementListItem(increment: ItemIncrement, status: ListItemStatus, notifyRemote: Bool) {
+    func incrementListItem(_ increment: ItemIncrement, status: ListItemStatus, notifyRemote: Bool) {
         if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.uuid == increment.itemUuid}) {
             let incrementedListItem = tableViewListItem.listItem.increment(ListItemStatusQuantity(status: status, quantity: increment.delta))
             updateOrAddListItem(incrementedListItem, status: status, increment: false, notifyRemote: notifyRemote) // update means overwrite - don't increment
@@ -205,7 +205,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
 
-    func updateQuantity(uuid: String, quantity: Int, notifyRemote: Bool) {
+    func updateQuantity(_ uuid: String, quantity: Int, notifyRemote: Bool) {
         if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.uuid == uuid}) {
             let updatedItem = tableViewListItem.listItem.updateQuantity(ListItemStatusQuantity(status: status, quantity: quantity))
             updateListItem(updatedItem, status: status, notifyRemote: notifyRemote)
@@ -214,8 +214,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    private func findIndexInItems(listItem: ListItem) -> Int? {
-        for (index, item) in items.enumerate() {
+    fileprivate func findIndexInItems(_ listItem: ListItem) -> Int? {
+        for (index, item) in items.enumerated() {
             if item.same(listItem) {
                 return index
             }
@@ -223,7 +223,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         return nil
     }
     
-    private func replaceItemAndRebuildTable(listItem: ListItem) {
+    fileprivate func replaceItemAndRebuildTable(_ listItem: ListItem) {
         if let index = findIndexInItems(listItem) {
             items[index] = listItem
             initTableViewContent()
@@ -238,13 +238,13 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     // -parameter: increment if, in case it's an update, the quantities of the items should be added together. If false the quantity is just overwritten like the rest of fields
     // -status: the updated status of list item (if the item has switched status (e.g. swipe from todo to done), this is the new status, otherwise it's just the current status of the item)
     // TODO increment seems not ot be used, what was this for? remove?
-    func updateOrAddListItem(listItem: ListItem, status: ListItemStatus, increment: Bool, scrollToSelection: Bool = false, notifyRemote: Bool) {
+    func updateOrAddListItem(_ listItem: ListItem, status: ListItemStatus, increment: Bool, scrollToSelection: Bool = false, notifyRemote: Bool) {
         
         guard listItem.hasStatus(self.status) else {return} // with websockets it can be that if 2 list items controllers are active at the same time (e.g. when we are in cart) we receive list items here which don't have quantity in the status of this controller, so there's nothing to do in this method. This guard is required for the method to function correctly (otherwise item is appended at the end of table if not found).
         
         if let indexPath = getIndexPath(listItem) {
         
-            let oldItem = tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
+            let oldItem = tableViewSections[(indexPath as NSIndexPath).section].tableViewListItems[(indexPath as NSIndexPath).row]
         
             if self.status != status {
                 // the item is in this tableview but has now a new status - delete (swipe) it from tableview. This is used by websockets
@@ -255,7 +255,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 
             } else {
                 
-                var finalIndexPath: NSIndexPath?
+                var finalIndexPath: IndexPath?
                 
                 if (oldItem.listItem.section.same(listItem.section)) { // item is already in table view and also has same section
                     replaceItemAndRebuildTable(listItem)
@@ -269,7 +269,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 
                 if scrollToSelection {
                     if let finalIndexPath = finalIndexPath {
-                        tableView.scrollToRowAtIndexPath(finalIndexPath, atScrollPosition: .Top, animated: true)
+                        tableView.scrollToRow(at: finalIndexPath, at: .top, animated: true)
                     } else {
                         QL4("Invalid state: Index path should be set. Initial index path: \(indexPath). ListItem: \(listItem)")
                     }
@@ -282,14 +282,14 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             
             if scrollToSelection {
                 if let indexPath = getIndexPath(listItem) { // lookup indexpath where new item was inserted (initTableViewContent puts the item where it belongs)
-                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+                    tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 }
             }
         }
     }
     
     // Returns a string representing current sections with listitems
-    private func debugTableViewListItems() -> String {
+    fileprivate func debugTableViewListItems() -> String {
         return tableViewSections.reduce("") {str, section in
             let sectionListItemsStr = section.tableViewListItems.reduce("") {str, tableViewListItem in
                 return "\(str)\t\(tableViewListItem)\n"
@@ -299,7 +299,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
 
     // Returns a string representing current sections with listitems - focus: order
-    private func debugTableViewListItemsOrder() -> String {
+    fileprivate func debugTableViewListItemsOrder() -> String {
         return tableViewSections.reduce("") {str, section in
             let sectionListItemsStr = section.tableViewListItems.reduce("") {str, tableViewListItem in
                 return "\(str)\t\(tableViewListItem.listItem.shortOrderDebugDescription)\n"
@@ -309,7 +309,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // Updates a section based on identity (uuid). Note that this isn't usable for order update, as updating order requires to update the order field of sections below
-    func updateSection(section: Section) {
+    func updateSection(_ section: Section) {
         
         // This is maybe not the most performant way to do this update but it guarantees consistency as it uses the "official" entry point to initialise the table, which is setListItems
         let updatedItems: [ListItem] = items.map{item in
@@ -322,7 +322,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         setListItems(updatedItems)
     }
 
-    func updateSections(sections: [Section]) {
+    func updateSections(_ sections: [Section]) {
         
         let sectionsDict = sections.toDictionary{($0.uuid, $0)}
         
@@ -338,7 +338,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // loops through list items to generate tableview sections, returns also found sections so we don't have to loop 2x
-    private func buildTableViewSections(listItems: [ListItem]) -> (tableViewSections:[ListItemsViewSection], sections:[Section]) {
+    fileprivate func buildTableViewSections(_ listItems: [ListItem]) -> (tableViewSections:[ListItemsViewSection], sections:[Section]) {
         var tableViewSections:[ListItemsViewSection] = []
         var sections:[Section] = []
         
@@ -363,8 +363,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                     currentTableViewSection.delegate = self
                     currentTableViewSection.expanded = sectionsExpanded
 
-                    if self.style == .Gray {
-                        currentTableViewSection.style = .Gray
+                    if self.style == .gray {
+                        currentTableViewSection.style = .gray
                     }
                     tableViewSections.append(currentTableViewSection)
                     
@@ -383,24 +383,24 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // TODO return bool
-    func removeListItem(listItem: ListItem, animation: UITableViewRowAnimation = .Bottom) {
+    func removeListItem(_ listItem: ListItem, animation: UITableViewRowAnimation = .bottom) {
         if let indexPath = self.getIndexPath(listItem) {
             self.removeListItem(listItem, indexPath: indexPath, animation: animation)
         }
     }
     
-    func removeListItem(uuid: String, animation: UITableViewRowAnimation = .Bottom) {
+    func removeListItem(_ uuid: String, animation: UITableViewRowAnimation = .bottom) {
         if let indexPath = self.getIndexPath(uuid) {
             self.removeListItem(uuid, indexPath: indexPath, animation: animation)
         }
     }
 
-    private func removeListItem(listItem: ListItem, indexPath: NSIndexPath, animation: UITableViewRowAnimation = .Bottom) {
+    fileprivate func removeListItem(_ listItem: ListItem, indexPath: IndexPath, animation: UITableViewRowAnimation = .bottom) {
         removeListItem(listItem.uuid, animation: animation)
     }
     
     // TODO return bool
-    private func removeListItem(listItemUuid: String, indexPath: NSIndexPath, animation: UITableViewRowAnimation = .Bottom) {
+    fileprivate func removeListItem(_ listItemUuid: String, indexPath: IndexPath, animation: UITableViewRowAnimation = .bottom) {
         // TODO review this, we store items reduntantely, so find index in one list, remove, use indexPath for the other list....
         // also is it thread safe to pass indexpath like this
         // paramater indexPath and listitem?
@@ -414,13 +414,13 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         
         if let index = indexMaybe {
             // remove from model
-            self.items.removeAtIndex(index)
-            let tableViewSection = self.tableViewSections[indexPath.section]
-            tableViewSection.tableViewListItems.removeAtIndex(indexPath.row)
+            self.items.remove(at: index)
+            let tableViewSection = self.tableViewSections[(indexPath as NSIndexPath).section]
+            tableViewSection.tableViewListItems.remove(at: (indexPath as NSIndexPath).row)
             
             // remove from table view
             self.tableView.beginUpdates()
-            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: animation)
+            self.tableView.deleteRows(at: [indexPath], with: animation)
             
             // remove section if no items
             if tableViewSection.tableViewListItems.isEmpty {
@@ -431,7 +431,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // TODO we are iterating multiple times through listitems, once to find the product and in removeListItem...
-    func removeListItemReferencingProduct(productUuid: String) {
+    func removeListItemReferencingProduct(_ productUuid: String) {
         if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.uuid == productUuid}) {
             removeListItem(tableViewListItem.listItem)
         } else {
@@ -439,14 +439,14 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
 
-    func removeListItemsReferencingCategory(categoryUuid: String) {
+    func removeListItemsReferencingCategory(_ categoryUuid: String) {
         for (tableViewListItem, _) in findListItemsWithIndexPath({$0.product.product.category.uuid == categoryUuid}) {
             removeListItem(tableViewListItem.listItem)
         }
     }
     
     // Used by websocket, when receiving a notification of an updated product
-    func updateProduct(product: Product, status: ListItemStatus) {
+    func updateProduct(_ product: Product, status: ListItemStatus) {
         if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.product.uuid == product.uuid}) {
             let updated = tableViewListItem.listItem.update(product)
             updateListItem(updated, status: status, notifyRemote: false)
@@ -456,27 +456,27 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // TODO why do we need indexPath and have to look for the index in the sections array using uuid, shouldn't both have the same index?
-    private func removeSection(uuid: String, indexPath: NSIndexPath, animation: UITableViewRowAnimation = .Bottom) {
+    fileprivate func removeSection(_ uuid: String, indexPath: IndexPath, animation: UITableViewRowAnimation = .bottom) {
         tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
             // remove table view section
-            weakSelf.tableViewSections.removeAtIndex(indexPath.section)
+            weakSelf.tableViewSections.remove(at: (indexPath as NSIndexPath).section)
             // remove model section TODO better way
             let sectionIndexMaybe: Int? = weakSelf.getSectionIndex(uuid)
             if let sectionIndex = sectionIndexMaybe {
-                weakSelf.sections.removeAtIndex(sectionIndex)
+                weakSelf.sections.remove(at: sectionIndex)
                 // remove from table view
-                weakSelf.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: animation)
+                weakSelf.tableView.deleteSections(IndexSet(integer: sectionIndex), with: animation)
             }
         }
     }
     
-    func removeSection(uuid: String) {
+    func removeSection(_ uuid: String) {
         if let indexPath = getSectionIndexPath(uuid) {
             removeSection(uuid, indexPath: indexPath)
         }
     }
     
-    override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.scrollViewDelegate?.scrollViewWillBeginDragging?(scrollView)
         
 //        let velocity = scrollView.panGestureRecognizer.velocityInView(scrollView.superview)
@@ -485,11 +485,11 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         clearPendingSwipeItemIfAny(true)
     }
     
-    func getIndexPath(listItemUuid: String) -> NSIndexPath? {
-        for (sectionIndex, s) in self.tableViewSections.enumerate() {
-            for (listItemIndex, l) in s.tableViewListItems.enumerate() {
+    func getIndexPath(_ listItemUuid: String) -> IndexPath? {
+        for (sectionIndex, s) in self.tableViewSections.enumerated() {
+            for (listItemIndex, l) in s.tableViewListItems.enumerated() {
                 if (listItemUuid == l.listItem.uuid) {
-                    let indexPath = NSIndexPath(forRow: listItemIndex, inSection: sectionIndex)
+                    let indexPath = IndexPath(row: listItemIndex, section: sectionIndex)
                     return indexPath
                 }
             }
@@ -497,7 +497,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         return findListItemsWithIndexPath{$0.uuid == listItemUuid}.first.map{$0.indexPath}
     }
 
-    func getItem(listItemUuid: String) -> TableViewListItem? {
+    func getItem(_ listItemUuid: String) -> TableViewListItem? {
         for s in self.tableViewSections {
             for l in s.tableViewListItems {
                 if (listItemUuid == l.listItem.uuid) {
@@ -508,18 +508,18 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         return nil
     }
     
-    private typealias TableViewListItemWithIndexPath = (item: TableViewListItem, indexPath: NSIndexPath)
+    fileprivate typealias TableViewListItemWithIndexPath = (item: TableViewListItem, indexPath: IndexPath)
 
-    private func findFirstListItemWithIndexPath(filter: ListItem -> Bool) -> TableViewListItemWithIndexPath? {
+    fileprivate func findFirstListItemWithIndexPath(_ filter: (ListItem) -> Bool) -> TableViewListItemWithIndexPath? {
         return findListItemsWithIndexPath(filter).first
     }
     
-    private func findListItemsWithIndexPath(filter: ListItem -> Bool) -> [TableViewListItemWithIndexPath] {
+    fileprivate func findListItemsWithIndexPath(_ filter: (ListItem) -> Bool) -> [TableViewListItemWithIndexPath] {
         var arr: [TableViewListItemWithIndexPath] = []
-        for (sectionIndex, s) in self.tableViewSections.enumerate() {
-            for (listItemIndex, l) in s.tableViewListItems.enumerate() {
+        for (sectionIndex, s) in self.tableViewSections.enumerated() {
+            for (listItemIndex, l) in s.tableViewListItems.enumerated() {
                 if (filter(l.listItem)) {
-                    let indexPath = NSIndexPath(forRow: listItemIndex, inSection: sectionIndex)
+                    let indexPath = IndexPath(row: listItemIndex, section: sectionIndex)
                     arr.append((l, indexPath))
                 }
             }
@@ -527,16 +527,16 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         return arr
     }
     
-    func getIndexPath(listItem: ListItem) -> NSIndexPath? {
+    func getIndexPath(_ listItem: ListItem) -> IndexPath? {
         return getIndexPath(listItem.uuid)
     }
     
-    func getIndex(section: Section) -> Int? {
+    func getIndex(_ section: Section) -> Int? {
         return getSectionIndex(section.uuid)
     }
     
-    func getSectionIndex(uuid: String) -> Int? {
-        for (index, s) in self.sections.enumerate() {
+    func getSectionIndex(_ uuid: String) -> Int? {
+        for (index, s) in self.sections.enumerated() {
             if uuid == s.uuid {
                 return index
             }
@@ -544,10 +544,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         return nil
     }
     
-    func getSectionIndexPath(uuid: String) -> NSIndexPath? {
-        for (sectionIndex, s) in self.tableViewSections.enumerate() {
+    func getSectionIndexPath(_ uuid: String) -> IndexPath? {
+        for (sectionIndex, s) in self.tableViewSections.enumerated() {
             if (uuid == s.section.uuid) {
-                return NSIndexPath(forRow: 0, inSection: sectionIndex)
+                return IndexPath(row: 0, section: sectionIndex)
             }
         }
         return nil
@@ -557,7 +557,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     Submits item marked as "undo" if there is any
     - parameter: onFinish optional callback to execute after submitting (this may e.g. call a provider). If there's no pending item, this is not called.
     */
-    func clearPendingSwipeItemIfAny(notifyRemote: Bool, onFinish: VoidFunction? = nil) {
+    func clearPendingSwipeItemIfAny(_ notifyRemote: Bool, onFinish: VoidFunction? = nil) {
         if let s = self.swipedTableViewListItem {
             
             listItemsTableViewDelegate?.onListItemClear(s, notifyRemote: notifyRemote) {
@@ -573,11 +573,11 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     // MARK: - ItemActionsDelegate
     
-    func startItemSwipe(tableViewListItem: TableViewListItem) {
+    func startItemSwipe(_ tableViewListItem: TableViewListItem) {
         clearPendingSwipeItemIfAny(true)
     }
     
-    func endItemSwipe(tableViewListItem: TableViewListItem) {
+    func endItemSwipe(_ tableViewListItem: TableViewListItem) {
 //        let allListItems = self.tableViewSections.map {
 //            $0.listItems
 //            }.reduce([], combine: +)
@@ -586,22 +586,22 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         self.swipedTableViewListItem = tableViewListItem
     }
     
-    func undoSwipe(tableViewListItem: TableViewListItem) {
+    func undoSwipe(_ tableViewListItem: TableViewListItem) {
         listItemsTableViewDelegate?.onListItemReset(tableViewListItem)
         self.swipedTableViewListItem = nil
     }
 
-    func onNoteTap(cell: ListItemCell, tableViewListItem: TableViewListItem) {
+    func onNoteTap(_ cell: ListItemCell, tableViewListItem: TableViewListItem) {
         if let note = tableViewListItem.listItem.note {
             
             // use parent controller otherwise popup scrolls with the table
-            if let parentController = parentViewController {
+            if let parentController = parent {
                 let noteButton = cell.noteButton
                 
                 let topOffset: CGFloat = 64
                 let frame = parentController.view.bounds.copy(y: topOffset, height: parentController.view.bounds.height)
                 
-                let noteButtonPointParentController = parentController.view.convertPoint(CGPointMake(noteButton.center.x, noteButton.center.y), fromView: cell)
+                let noteButtonPointParentController = parentController.view.convert(CGPoint(x: (noteButton?.center.x)!, y: (noteButton?.center.y)!), from: cell)
                 // adjust the anchor point also for topOffset
                 let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
                 
@@ -617,30 +617,30 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    func onMinusTap(tableViewListItem: TableViewListItem) {
+    func onMinusTap(_ tableViewListItem: TableViewListItem) {
         listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: -1)
         SwipeToIncrementAlertHelper.check(self)
     }
     
-    func onPlusTap(tableViewListItem: TableViewListItem) {
+    func onPlusTap(_ tableViewListItem: TableViewListItem) {
         listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: 1)
         SwipeToIncrementAlertHelper.check(self)
     }
     
-    func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
+    func onHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
         listItemsTableViewDelegate?.onSectionHeaderTap(header, section: section)
     }
     
-    func onPanQuantityUpdate(tableViewListItem: TableViewListItem, newQuantity: Int) {
+    func onPanQuantityUpdate(_ tableViewListItem: TableViewListItem, newQuantity: Int) {
         listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: newQuantity - tableViewListItem.listItem.quantity(status))
     }
     
-    func setAllSectionsExpanded(expanded: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
+    func setAllSectionsExpanded(_ expanded: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
         
         var completed = 0
-        for (index, section) in tableViewSections.enumerate() {
+        for (index, section) in tableViewSections.enumerated() {
             setSectionExpanded(expanded, sectionIndex: index, section: section, animated: animated, onComplete: {[weak self] in
-                completed++
+                completed += 1
                 if completed == self?.tableViewSections.count {
                     onComplete?()
                 }
@@ -671,10 +671,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 //        onComplete?()
 //    }
 //    
-    private func setSectionExpanded(expanded: Bool, sectionIndex: Int, section: ListItemsViewSection, animated: Bool, onComplete: VoidFunction? = nil) {
+    fileprivate func setSectionExpanded(_ expanded: Bool, sectionIndex: Int, section: ListItemsViewSection, animated: Bool, onComplete: VoidFunction? = nil) {
         
-        let sectionIndexPaths: [NSIndexPath] = (0..<section.tableViewListItems.count).map {
-            return NSIndexPath(forRow: $0, inSection: sectionIndex)
+        let sectionIndexPaths: [IndexPath] = (0..<section.tableViewListItems.count).map {
+            return IndexPath(row: $0, section: sectionIndex)
         }
         
         if let onComplete = onComplete {
@@ -683,12 +683,12 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 
         if expanded {
             tableView.wrapUpdates {[weak self] in
-                self?.tableView.insertRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+                self?.tableView.insertRows(at: sectionIndexPaths, with: .top)
                 section.expanded = true
             }
         } else {
             tableView.wrapUpdates {[weak self] in
-                self?.tableView.deleteRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+                self?.tableView.deleteRows(at: sectionIndexPaths, with: .top)
                 section.expanded = false
             }
         }
@@ -697,59 +697,59 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     // MARK: - Table view data source
 
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return self.editing
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return self.isEditing
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return self.tableViewSections[section].viewForHeader()
     }
     
-    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return self.tableViewSections[section].viewForFooter()
     }
     
-    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return CGFloat(self.tableViewSections[section].heightForFooter())
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return CGFloat(self.tableViewSections[section].heightForHeader())
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.tableViewSections[section].numberOfRows()
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return self.tableViewSections.count
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let section = self.tableViewSections[indexPath.section]
-        return section.heightForRow(indexPath.row)
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let section = self.tableViewSections[(indexPath as NSIndexPath).section]
+        return section.heightForRow((indexPath as NSIndexPath).row)
     }
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let section = self.tableViewSections[indexPath.section]
-        return section.tableView(tableView, row:indexPath.row)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let section = self.tableViewSections[(indexPath as NSIndexPath).section]
+        return section.tableView(tableView, row:(indexPath as NSIndexPath).row)
         
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let tableViewListItem = self.tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let tableViewListItem = self.tableViewSections[(indexPath as NSIndexPath).section].tableViewListItems[(indexPath as NSIndexPath).row]
         self.listItemsTableViewDelegate?.onListItemSelected(tableViewListItem, indexPath: indexPath)
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
             
             self.tableView.beginUpdates()
 
             // remove from tableview and model
-            let listItem = self.tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
-            self.removeListItem(listItem.listItem, indexPath: indexPath, animation: UITableViewRowAnimation.Bottom)
+            let listItem = self.tableViewSections[(indexPath as NSIndexPath).section].tableViewListItems[(indexPath as NSIndexPath).row]
+            self.removeListItem(listItem.listItem, indexPath: indexPath, animation: UITableViewRowAnimation.bottom)
             
             // remove from content provider
             self.listItemsEditTableViewDelegate?.onListItemDeleted(listItem)
@@ -758,8 +758,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return self.editing
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return self.isEditing
     }
 
     /**
@@ -767,8 +767,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     parameter onFinish: After cell marked open and automatic update of possible second "undo" item (to "done").
      // TODO!!!! remove notify remote parameter, this is necessary anymore
     */
-    func markOpen(open: Bool, indexPath: NSIndexPath, notifyRemote: Bool, onFinish: VoidFunction? = nil) {
-        if let section = self.tableViewSections[safe: indexPath.section], tableViewListItem = section.tableViewListItems[safe: indexPath.row] {
+    func markOpen(_ open: Bool, indexPath: IndexPath, notifyRemote: Bool, onFinish: VoidFunction? = nil) {
+        if let section = self.tableViewSections[safe: (indexPath as NSIndexPath).section], let tableViewListItem = section.tableViewListItems[safe: (indexPath as NSIndexPath).row] {
             // Note: order is important here! first show open at current index path, then remove possible pending (which can make indexPath invalid, thus later), then update pending variable with new item
             self.showCellOpen(open, indexPath: indexPath)
             self.clearPendingSwipeItemIfAny(notifyRemote) {
@@ -781,11 +781,11 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    private func showCellOpen(open: Bool, indexPath: NSIndexPath) {
-        if let swipeableCell = tableView.cellForRowAtIndexPath(indexPath) as? SwipeableCell {
-            if let section = tableViewSections[safe: indexPath.section] {
-                if section.tableViewListItems[safe: indexPath.row] != nil {
-                    section.tableViewListItems[indexPath.row].swiped = open
+    fileprivate func showCellOpen(_ open: Bool, indexPath: IndexPath) {
+        if let swipeableCell = tableView.cellForRow(at: indexPath) as? SwipeableCell {
+            if let section = tableViewSections[safe: (indexPath as NSIndexPath).section] {
+                if section.tableViewListItems[safe: (indexPath as NSIndexPath).row] != nil {
+                    section.tableViewListItems[(indexPath as NSIndexPath).row].swiped = open
                 } else {
                     QL3("Didn't find item for index path: \(indexPath)")
                 }
@@ -800,10 +800,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
    
     // updates list item models with current ordering in table view
     // TODO review and remove commented / not necessary code
-    private func updateListItemsModelsOrder() {
+    fileprivate func updateListItemsModelsOrder() {
         var sectionRows = 0
         for section in self.tableViewSections {
-            for (listItemIndex, tableViewListItem) in section.tableViewListItems.enumerate() {
+            for (listItemIndex, tableViewListItem) in section.tableViewListItems.enumerated() {
 //                let absoluteRowIndex = listItemIndex + sectionRows
 //                tableViewListItem.listItem.order = absoluteRowIndex
                 tableViewListItem.listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: listItemIndex))
@@ -812,17 +812,17 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if sourceIndexPath != destinationIndexPath {
-            let srcSection = self.tableViewSections[sourceIndexPath.section]
-            let tableViewListItem = srcSection.tableViewListItems[sourceIndexPath.row]
-            srcSection.tableViewListItems.removeAtIndex(sourceIndexPath.row)
+            let srcSection = self.tableViewSections[(sourceIndexPath as NSIndexPath).section]
+            let tableViewListItem = srcSection.tableViewListItems[(sourceIndexPath as NSIndexPath).row]
+            srcSection.tableViewListItems.remove(at: (sourceIndexPath as NSIndexPath).row)
             
-            let dstSection = self.tableViewSections[destinationIndexPath.section]
+            let dstSection = self.tableViewSections[(destinationIndexPath as NSIndexPath).section]
             tableViewListItem.listItem.section = dstSection.section //not superclean to update model data in this controller, but for simplicity...
             
             //        let absoluteRow = tableView.absoluteRow(destinationIndexPath)
-            dstSection.tableViewListItems.insert(tableViewListItem, atIndex: destinationIndexPath.row)
+            dstSection.tableViewListItems.insert(tableViewListItem, at: (destinationIndexPath as NSIndexPath).row)
             
             self.updateListItemsModelsOrder()
             
@@ -841,15 +841,15 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    func hasSectionWith(f: Section -> Bool) -> Bool {
-        return tableViewSections.contains({tableViewSection in
+    func hasSectionWith(_ f: (Section) -> Bool) -> Bool {
+        return tableViewSections.contains(where: {tableViewSection in
             f(tableViewSection.section)
         })
     }
     
-    func scrollToListItem(litsItem: ListItem) {
+    func scrollToListItem(_ litsItem: ListItem) {
         if let indexPath = getIndexPath(litsItem) {
-            tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         } else {
             QL2("Didn't find list item to scroll to")
         }

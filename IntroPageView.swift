@@ -17,6 +17,6 @@ class IntroPageView: UIView {
         
         label.font = Fonts.smallLight
         
-        imageView.contentMode = .Center
+        imageView.contentMode = .center
     }
 }

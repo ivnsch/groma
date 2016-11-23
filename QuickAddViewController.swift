@@ -12,9 +12,9 @@ import QorumLogs
 
 
 protocol QuickAddDelegate: class {
-    func onAddProduct(product: Product)
-    func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?)
-    func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) // editingItem == nil -> add
+    func onAddProduct(_ product: Product)
+    func onAddGroup(_ group: ListItemGroup, onFinish: VoidFunction?)
+    func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) // editingItem == nil -> add
 
 //    func onValidationErrors(errors: [UITextField: ValidationError])
 //    func planItem(productName: String, handler: PlanItem? -> ())
@@ -28,14 +28,14 @@ protocol QuickAddDelegate: class {
     
     func parentViewForAddButton() -> UIView
     
-    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void)
+    func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void)
     
-    func onRemovedSectionCategoryName(name: String)
-    func onRemovedBrand(name: String)
+    func onRemovedSectionCategoryName(_ name: String)
+    func onRemovedBrand(_ name: String)
 }
 
 private enum AddProductOrGroupContent {
-    case Product, Group
+    case product, group
 }
 
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
@@ -43,23 +43,23 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     weak var delegate: QuickAddDelegate?
     
-    var itemType: QuickAddItemType = .Product // for now product/group mutually exclusive (no mixed tableview)
+    var itemType: QuickAddItemType = .product // for now product/group mutually exclusive (no mixed tableview)
     
     var originalViewFrame: CGRect?
     
     @IBOutlet weak var searchBar: RoundTextField!
     @IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
     
-    private weak var navController: UINavigationController?
-    private var quickAddListItemViewController: QuickAddPageController? {
+    fileprivate weak var navController: UINavigationController?
+    fileprivate var quickAddListItemViewController: QuickAddPageController? {
         return navController?.viewControllers.first as? QuickAddPageController
     }
     
-    private var showingController: UIViewController? {
+    fileprivate var showingController: UIViewController? {
         return navController?.viewControllers.last
     }
     
-    private var editingItem: AddEditItem? {
+    fileprivate var editingItem: AddEditItem? {
         didSet {
             if let editingItem = editingItem {
                 searchBar.text = editingItem.product.name
@@ -80,25 +80,25 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     var open: Bool = false
     
-    private let toolButtonsHeight: CGFloat = 50 // for now hardcoded, since theres no toolbar-view yet (only buttons + constraits constants). TODO
+    fileprivate let toolButtonsHeight: CGFloat = 50 // for now hardcoded, since theres no toolbar-view yet (only buttons + constraits constants). TODO
 
-    private var keyboardHeight: CGFloat?
+    fileprivate var keyboardHeight: CGFloat?
     
-    var modus: AddEditListItemControllerModus = .ListItem
+    var modus: AddEditListItemControllerModus = .listItem
     
     var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        searchBar.addTarget(self, action: #selector(QuickAddViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
+        searchBar.addTarget(self, action: #selector(QuickAddViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
 
         searchBarHeightConstraint.constant = DimensionsManager.searchBarHeight
     }
     
     // MARK: - QuickAddPageControllerDelegate
     
-    func onPageChanged(newIndex: Int, pageType: QuickAddItemType) {
+    func onPageChanged(_ newIndex: Int, pageType: QuickAddItemType) {
         itemType = pageType
         searchBar.text = ""
     }
@@ -108,12 +108,12 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     func onClose() {
     }
     
-    func textFieldDidChange(textField: UITextField) {
+    func textFieldDidChange(_ textField: UITextField) {
         
         QL1("textFieldDidChange, text: \(textField.text)")
         
         if !isEdit {
-            if let controller = quickAddListItemViewController, searchText = textField.text {
+            if let controller = quickAddListItemViewController, let searchText = textField.text {
                 controller.search(searchText)
             } else {
                 QL3("Controller: \(quickAddListItemViewController) or search is nil: \(textField.text)")
@@ -124,11 +124,11 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
     
     // Show controller either in quick add mode (collection view + possible edit) or edit-only. If this is not called the controller shows without contents.
-    func initContent(editingItem: AddEditItem? = nil) {
+    func initContent(_ editingItem: AddEditItem? = nil) {
 
         if editingItem != nil {
             self.editingItem = editingItem
-            showAddProductController()
+            _ = showAddProductController()
             
         } else {
             let controller = UIStoryboard.quickAddPageController()
@@ -136,7 +136,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             controller.quickAddListItemDelegate = self
             
             // HACK - to show the products with section colors when we are in list items - TODO proper solution
-            if itemType == .ProductForList {
+            if itemType == .productForList {
                 controller.itemTypeForFirstPage = itemType
                 controller.list = list
             }
@@ -149,9 +149,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
 
     // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "navController" {
-            navController = segue.destinationViewController as? UINavigationController
+            navController = segue.destination as? UINavigationController
         } else {
             QL3("Not handled segue")
         }
@@ -163,12 +163,12 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     ///////////////////////////////////////////
     
     // returns: status changed: if it was showing and was subsequently hidden
-    private func hideAddProductController() -> Bool {
+    fileprivate func hideAddProductController() -> Bool {
         if navController?.viewControllers.last as? AddEditListItemViewController != nil {
-            navController?.popViewControllerAnimated(false)
+            _ = navController?.popViewController(animated: false)
             
             // Change back from "Next" to default
-            searchBar.returnKeyType = .Default
+            searchBar.returnKeyType = .default
             // without this the key doesn't change immediately. According to some internet sites this can cause issues with autocorrection, but we don't need it
             searchBar.resignFirstResponder()
             searchBar.becomeFirstResponder()
@@ -181,7 +181,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
     
     // returns: status changed: if it was not showing and was subsequently shown
-    private func showAddProductController() -> Bool {
+    fileprivate func showAddProductController() -> Bool {
         
         // TODO now that we removed all the topbar buttons and added swiper, do we still need this check?
         if navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
@@ -208,7 +208,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             }
             
             // show "Next" in the keyboard
-            searchBar.returnKeyType = .Next
+            searchBar.returnKeyType = .next
             // without this the key doesn't change immediately. According to some internet sites this can cause issues with autocorrection, but we don't need it
             searchBar.resignFirstResponder()
             searchBar.becomeFirstResponder()
@@ -220,8 +220,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         return false
     }
     
-    private enum QuickAddTopState {
-        case Product, Group, AddNew
+    fileprivate enum QuickAddTopState {
+        case product, group, addNew
     }
 
     //////////////////////////////////////////
@@ -231,12 +231,12 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     // MARK: - QuickAddListItemDelegate
     
     // group was selected in group quick list
-    func onAddGroup(group: ListItemGroup) {
+    func onAddGroup(_ group: ListItemGroup) {
         delegate?.onAddGroup(group, onFinish: nil)
     }
     
     // product was selected in product quick list
-    func onAddProduct(product: Product) {
+    func onAddProduct(_ product: Product) {
         delegate?.onAddProduct(product)
     }
     
@@ -244,38 +244,38 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         delegate?.onCloseQuickAddTap()
     }
     
-    func onHasItems(hasItems: Bool) {
+    func onHasItems(_ hasItems: Bool) {
         if hasItems {
-            hideAddProductController()
+            _ = hideAddProductController()
             quickAddListItemViewController?.setEmptyViewVisible(false) // this is a no op for .Product as we never show empty view here (we show add products view instead)
             searchBar.text = searchBar.text?.uncapitalizeFirst() // revert posible capitalization done in hasItems == true. A possible manual capitalization of the user would also be reverted but it's very improbable user will capitalize the search input.
         } else {
             switch itemType {
-            case .Product:
+            case .product:
                 fallthrough
-            case .ProductForList:
+            case .productForList:
                 searchBar.text = searchBar.text?.capitalizeFirst() // on has not items the search text becomes item name input, so we capitalize the first letter.
-                showAddProductController()
-            case .Group: quickAddListItemViewController?.setEmptyViewVisible(true)
+                _ = showAddProductController()
+            case .group: quickAddListItemViewController?.setEmptyViewVisible(true)
             }
         }
     }
     
     // MARK: - Actions dispatch
     
-    func handleFloatingButtonAction(action: FLoatingButtonAction) {
+    func handleFloatingButtonAction(_ action: FLoatingButtonAction) {
         if let _ = showingController as? QuickAddListItemViewController {
             print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
             
             
         } else if let addEditListItemViewController = showingController as? AddEditListItemViewController {
             switch action {
-            case .Submit:
+            case .submit:
                 addEditListItemViewController.submit()
-            case .Back:
-                navController?.popViewControllerAnimated(false)
+            case .back:
+                _ = navController?.popViewController(animated: false)
                 delegate?.onQuickListOpen() // we are now back in quick list
-            case .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
+            case .add, .toggle, .expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
             }
             
         } else {
@@ -285,18 +285,21 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     // MARK: - AddEditListItemViewControllerDelegate
     
-    func runAdditionalSubmitValidations() -> [UITextField: ValidationError]? {
-        return (ValidationRule(textField: searchBar, rules: [NotEmptyTrimmedRule(message: "validation_item_name_not_empty")], errorLabel: nil).validateField().map{
-            [searchBar: $0]
+    func runAdditionalSubmitValidations() -> ValidatorDictionary<ValidationError>? {
+        return (ValidationRule(field: searchBar, rules: [NotEmptyTrimmedRule(message: "validation_item_name_not_empty")], errorLabel: nil).validateField().map{
+            var dict = ValidatorDictionary<ValidationError>()
+            dict[searchBar] = $0
+            return dict
+//            [searchBar: $0]
         })
     }
     
-    func onValidationErrors(errors: [UITextField: ValidationError]) {
+    func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>) {
         // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
-        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+        present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?) {
+    func onOkTap(_ price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?) {
         
         if let name = searchBar.text?.trim() {
             
@@ -314,15 +317,15 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         return delegate?.parentViewForAddButton()
     }
     
-    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void) {
+    func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
         delegate?.addEditSectionOrCategoryColor(name, handler: handler)
     }
     
-    func onRemovedSectionCategoryName(name: String) {
+    func onRemovedSectionCategoryName(_ name: String) {
         delegate?.onRemovedSectionCategoryName(name)
     }
     
-    func onRemovedBrand(name: String) {
+    func onRemovedBrand(_ name: String) {
         delegate?.onRemovedBrand(name)
     }
     
@@ -338,7 +341,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
 //    }
     
     
-    func textFieldShouldReturn(sender: UITextField) -> Bool {
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
         if sender == searchBar {
             if let addEditListItemController = navController?.viewControllers.last as? AddEditListItemViewController {
                 addEditListItemController.focusFirstTextField()

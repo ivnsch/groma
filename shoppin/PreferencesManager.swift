@@ -46,7 +46,7 @@ enum PreferencesManagerKey: String {
 
 class PreferencesManager {
 
-    class func savePreference<T: AnyObject>(key: PreferencesManagerKey, value: T) {
+    class func savePreference<T: Any>(_ key: PreferencesManagerKey, value: T) {
         self.savePreference(key: key.rawValue, value: value)
     }
     
@@ -60,9 +60,9 @@ class PreferencesManager {
 //        return true
 //    }
     
-    class func loadPreference<T: Any>(key:PreferencesManagerKey) -> T? {
-        let objectMaybe: AnyObject? = self.loadPreference(key: key.rawValue)
-        if let object: AnyObject = objectMaybe {
+    class func loadPreference<T: Any>(_ key:PreferencesManagerKey) -> T? {
+        let objectMaybe: Any? = self.loadPreference(key: key.rawValue)
+        if let object: Any = objectMaybe {
             
             let casted = object as? T
             
@@ -78,20 +78,20 @@ class PreferencesManager {
         }
     }
     
-    class private func savePreference<T: AnyObject>(key key: String, value: T) {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(value, forKey: key)
+    class fileprivate func savePreference<T: Any>(key: String, value: T) {
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(value, forKey: key)
         userDefaults.synchronize()
     }
 
-    class func clearPreference(key key: PreferencesManagerKey) {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(nil, forKey: key.rawValue)
+    class func clearPreference(key: PreferencesManagerKey) {
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(nil, forKey: key.rawValue)
         userDefaults.synchronize()
     }
     
-    class private func loadPreference(key key:String) -> AnyObject? {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.objectForKey(key)
+    class fileprivate func loadPreference(key:String) -> Any? {
+        let userDefaults = UserDefaults.standard
+        return userDefaults.object(forKey: key)
     }
 }

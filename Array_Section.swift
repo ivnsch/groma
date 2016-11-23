@@ -10,7 +10,7 @@ import Foundation
 
 extension Array where Element: Section {
 
-    func inOrder(status: ListItemStatus) -> [Section] {
-        return sort {$0.order(status) < $1.order(status)}
+    func inOrder(_ status: ListItemStatus) -> [Section] {
+        return sorted {$0.order(status) < $1.order(status)}
     }
 }

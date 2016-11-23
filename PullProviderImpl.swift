@@ -14,7 +14,7 @@ class PullProviderImpl: PullProvider {
     let listItemsDbProvider = RealmListItemProvider()
     let productsDbProvider = RealmProductProvider()
     
-    func pullListProducs(listUuid: String, srcUser: SharedUser, _ handler: ProviderResult<[ListItem]> -> Void) {
+    func pullListProducs(_ listUuid: String, srcUser: SharedUser, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
         
         remoteProvider.pullListProducs(listUuid, srcUser: srcUser) {[weak self] remoteResult in
             
@@ -25,7 +25,7 @@ class PullProviderImpl: PullProvider {
                 self?.listItemsDbProvider.overwrite(listItemsWithRelations.listItems, listUuid: listUuid, clearTombstones: true) {saved in
                     Providers.listItemsProvider.invalidateMemCache() // normally we expect pull to be called outside the list items screen so this is basically a no-op (list items screen clears the mem cache when leaving it). But just to be consistent.
                     
-                    handler(ProviderResult(status: .Success, sucessResult: listItemsWithRelations.listItems))
+                    handler(ProviderResult(status: .success, sucessResult: listItemsWithRelations.listItems))
                 }
                 
             } else {
@@ -34,7 +34,7 @@ class PullProviderImpl: PullProvider {
         }
     }
     
-    func pullInventoryProducs(listUuid: String, srcUser: SharedUser, _ handler: ProviderResult<Any> -> Void) {
+    func pullInventoryProducs(_ listUuid: String, srcUser: SharedUser, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         
         remoteProvider.pullInventoryProducs(listUuid, srcUser: srcUser) {[weak self] remoteResult in
             
@@ -47,7 +47,7 @@ class PullProviderImpl: PullProvider {
                     Providers.listItemsProvider.invalidateMemCache()
                     Providers.inventoryItemsProvider.invalidateMemCache()
                     
-                    handler(ProviderResult(status: .Success))
+                    handler(ProviderResult(status: .success))
                 }
                 
             } else {

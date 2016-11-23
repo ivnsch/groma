@@ -44,38 +44,38 @@ class DBGroupItem: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
-    static func createFilterGroup(groupUuid: String) -> String {
+    static func createFilterGroup(_ groupUuid: String) -> String {
         return "groupOpt.uuid = '\(groupUuid)'"
     }
 
-    static func createFilterProduct(productUuid: String) -> String {
+    static func createFilterProduct(_ productUuid: String) -> String {
         return "productOpt.uuid = '\(productUuid)'"
     }
     
-    static func createFilter(product: Product, group: ListItemGroup) -> String {
+    static func createFilter(_ product: Product, group: ListItemGroup) -> String {
         return createFilterGroupAndProductName(group.uuid, productName: product.name, productBrand: product.brand)
     }
 
-    static func createFilterGroupAndProductName(groupUuid: String, productName: String, productBrand: String) -> String {
+    static func createFilterGroupAndProductName(_ groupUuid: String, productName: String, productBrand: String) -> String {
         return "\(createFilterGroup(groupUuid)) AND productOpt.name = '\(productName)' AND productOpt.brand = '\(productBrand)'"
     }
 
-    static func createFilterGroupAndProductName(groupUuid: String, productName: String, productBrand: String, notUuid: String) -> String {
+    static func createFilterGroupAndProductName(_ groupUuid: String, productName: String, productBrand: String, notUuid: String) -> String {
         return "\(createFilterGroup(groupUuid)) AND productOpt.name = '\(productName)' AND productOpt.brand = '\(productBrand)' AND uuid != '\(notUuid)'"
     }
     
-    static func createFilterGroupItemsUuids(groupItems: [GroupItem]) -> String {
-        let groupItemsUuidsStr = groupItems.map{"'\($0.uuid)'"}.joinWithSeparator(",")
+    static func createFilterGroupItemsUuids(_ groupItems: [GroupItem]) -> String {
+        let groupItemsUuidsStr = groupItems.map{"'\($0.uuid)'"}.joined(separator: ",")
         return "uuid IN {\(groupItemsUuidsStr)}"
     }
     
     // MARK: -
     
-    static func fromDict(dict: [String: AnyObject], product: DBProduct, group: DBListItemGroup) -> DBGroupItem {
+    static func fromDict(_ dict: [String: AnyObject], product: DBProduct, group: DBListItemGroup) -> DBGroupItem {
         let item = DBGroupItem()
         item.uuid = dict["uuid"]! as! String
         item.quantity = dict["quantity"]! as! Int
@@ -88,10 +88,10 @@ class DBGroupItem: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["quantity"] = quantity
-        dict["product"] = product.toDict()
-        dict["group"] = group.toDict()
+        dict["uuid"] = uuid as AnyObject?
+        dict["quantity"] = quantity as AnyObject?
+        dict["product"] = product.toDict() as AnyObject?
+        dict["group"] = group.toDict() as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
     }

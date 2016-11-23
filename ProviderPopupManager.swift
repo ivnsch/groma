@@ -13,16 +13,16 @@ class ProviderPopupManager {
 
     static let instance: ProviderPopupManager = ProviderPopupManager()
     
-    private var currentStatus: ProviderStatusCode?
+    fileprivate var currentStatus: ProviderStatusCode?
     
-    private init() {
+    fileprivate init() {
     }
     
     /**
     * Shows a popup with a message corresponding to passed status code
     * If a popup is being already shown for the same status code, this method does nothing
     */
-    func showStatusPopup(status: ProviderStatusCode, controller: UIViewController) {
+    func showStatusPopup(_ status: ProviderStatusCode, controller: UIViewController) {
         
         if controller.presentedViewController == nil && ((currentStatus.map {$0 != status}) ?? true) { // if there's no popup or if there's a popup with different status code
             currentStatus = status
@@ -43,7 +43,7 @@ class ProviderPopupManager {
     }
     
     // TODO!! test this
-    func showRemoteValidationPopup(status: ProviderStatusCode, error: RemoteInvalidParametersResult, controller: UIViewController) {
+    func showRemoteValidationPopup(_ status: ProviderStatusCode, error: RemoteInvalidParametersResult, controller: UIViewController) {
         
         if controller.presentedViewController == nil && ((currentStatus.map {$0 != status}) ?? true) { // if there's no popup or if there's a popup with different status code
             currentStatus = status
@@ -51,9 +51,9 @@ class ProviderPopupManager {
             let title = trans("popup_title_validation_failed")
 
             let message = error.pathErrors.map {e in
-                let pathErrorsStr = e.validationErrors.map{$0.msg}.joinWithSeparator(", ")
+                let pathErrorsStr = e.validationErrors.map{$0.msg}.joined(separator: ", ")
                 return ("\(e.path): \(pathErrorsStr)")
-            }.joinWithSeparator("\n")
+            }.joined(separator: "\n")
             
             AlertPopup.show(title: title, message: message, controller: controller, onDismiss: {[weak self] in
                 // IMPORTANT: When implementing dismissal by tapping outside, ensure the status is also cleared. See http://stackoverflow.com/a/25469305/930450

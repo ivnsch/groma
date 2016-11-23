@@ -12,35 +12,35 @@ import QorumLogs
 
 class RealmHistoryProvider: RealmProvider {
 
-    private lazy var historySortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "addedDate", ascending: false)
+    fileprivate lazy var historySortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "addedDate", ascending: false)
     
-    func add(historyItem: HistoryItem, handler: Bool -> ()) {
+    func add(_ historyItem: HistoryItem, handler: @escaping (Bool) -> ()) {
         let dbObj = HistoryItemMapper.dbWithHistoryItem(historyItem, dirty: true)
         self.saveObj(dbObj, update: false, handler: handler)
     }
     
-    func loadHistoryItems(range: NSRange? = nil, inventory: Inventory, handler: [HistoryItem] -> ()) {
+    func loadHistoryItems(_ range: NSRange? = nil, inventory: Inventory, handler: @escaping ([HistoryItem]) -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
         self.load(mapper, sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
 
-    func loadHistoryItems(range: NSRange? = nil, startDate: Int64, inventory: Inventory, handler: [HistoryItem] -> ()) {
+    func loadHistoryItems(_ range: NSRange? = nil, startDate: Int64, inventory: Inventory, handler: @escaping ([HistoryItem]) -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
         self.load(mapper, predicate: DBHistoryItem.createPredicate(startDate, inventoryUuid: inventory.uuid), sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
 
-    func loadHistoryItems(productName: String, startDate: Int64, inventory: Inventory, handler: [HistoryItem] -> ()) {
+    func loadHistoryItems(_ productName: String, startDate: Int64, inventory: Inventory, handler: @escaping ([HistoryItem]) -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)}
         self.load(mapper, predicate: DBHistoryItem.createPredicate(productName, addedDate: startDate, inventoryUuid: inventory.uuid), sortDescriptor: historySortDescriptor, handler: handler)
     }
 
-    func loadAllHistoryItems(handler: [HistoryItem] -> ()) {
+    func loadAllHistoryItems(_ handler: @escaping ([HistoryItem]) -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)}
         self.load(mapper, sortDescriptor: historySortDescriptor, handler: handler)
     }
     
-    func loadHistoryItems(monthYear: MonthYear, inventory: Inventory, handler: [HistoryItem] -> Void) {
-        if let startDate = NSDate.startOfMonth(monthYear.month, year: monthYear.year)?.toMillis(), endDate = NSDate.endOfMonth(monthYear.month, year: monthYear.year)?.toMillis() {
+    func loadHistoryItems(_ monthYear: MonthYear, inventory: Inventory, handler: @escaping ([HistoryItem]) -> Void) {
+        if let startDate = Date.startOfMonth(monthYear.month, year: monthYear.year)?.toMillis(), let endDate = Date.endOfMonth(monthYear.month, year: monthYear.year)?.toMillis() {
             loadHistoryItems(startDate, endDate: endDate, inventory: inventory, handler)
         } else {
             print("Error: Invalid month year components to get start/end date: \(monthYear)")
@@ -48,29 +48,29 @@ class RealmHistoryProvider: RealmProvider {
         }
     }
     
-    func loadHistoryItems(startDate: Int64, endDate: Int64, inventory: Inventory, _ handler: [HistoryItem] -> Void) {
+    func loadHistoryItems(_ startDate: Int64, endDate: Int64, inventory: Inventory, _ handler: @escaping ([HistoryItem]) -> Void) {
         let mapper = {HistoryItemMapper.historyItemWith($0)}
         self.load(mapper, predicate: DBHistoryItem.createPredicate(startDate, endAddedDate: endDate, inventoryUuid: inventory.uuid), sortDescriptor: historySortDescriptor, handler: handler)
     }
     
     // TODO change data model! one table with groups and the other with history items, 1:n (also in server)
     // this is very important as right now we fetch and iterate through ALL the history items, this is very inefficient
-    func loadHistoryItemsGroups(range: NSRange, inventory: Inventory, _ handler: [HistoryItemGroup] -> ()) {
+    func loadHistoryItemsGroups(_ range: NSRange, inventory: Inventory, _ handler: @escaping ([HistoryItemGroup]) -> ()) {
 
         let finished: ([HistoryItemGroup]) -> () = {result in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 handler(result)
             })
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {[weak self] in guard let weakSelf = self else {return}
+        DispatchQueue.global(qos: .background).async {[weak self] in guard let weakSelf = self else {return}
             do {
                 let realm = try Realm()
-                let results = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilterWithInventory(inventory.uuid)).sorted("addedDate", ascending: false) // not using constant because weak self etc.
+                let results = realm.objects(DBHistoryItem.self).filter(DBHistoryItem.createFilterWithInventory(inventory.uuid)).sorted(byProperty: "addedDate", ascending: false) // not using constant because weak self etc.
                 
                 var dateDictDB = weakSelf.groupByDate(results)
                 dateDictDB = dateDictDB[range] // extract range
-                let dateDict: OrderedDictionary<NSDate, [HistoryItem]> = dateDictDB.mapDictionary {(k, v) in // we do this mapping after extract range - in groupBy iteration I think this causes to evaluate the db lazy objects which is very bad performance, since we are fetching the entire history
+                let dateDict: OrderedDictionary<Date, [HistoryItem]> = dateDictDB.mapDictionary {(k, v) in // we do this mapping after extract range - in groupBy iteration I think this causes to evaluate the db lazy objects which is very bad performance, since we are fetching the entire history
                     return (k, v.map{item in HistoryItemMapper.historyItemWith(item)})
                 }
 
@@ -90,8 +90,8 @@ class RealmHistoryProvider: RealmProvider {
         }
     }
     
-    private func groupByDate(dbHistoryItems: Results<DBHistoryItem>) -> OrderedDictionary<NSDate, [DBHistoryItem]> {
-        var dateDict: OrderedDictionary<NSDate, [DBHistoryItem]> = OrderedDictionary()
+    fileprivate func groupByDate(_ dbHistoryItems: Results<DBHistoryItem>) -> OrderedDictionary<Date, [DBHistoryItem]> {
+        var dateDict: OrderedDictionary<Date, [DBHistoryItem]> = OrderedDictionary()
         for result in dbHistoryItems {
             let addedDateWithoutSeconds = millisToGroupDate(result.addedDate)
             if dateDict[addedDateWithoutSeconds] == nil {
@@ -102,16 +102,16 @@ class RealmHistoryProvider: RealmProvider {
         return dateDict
     }
     
-    private func millisToGroupDate(date: Int64) -> NSDate {
-        return date.millisToEpochDate().dateWithZeroSeconds() // items are grouped using minutes
+    fileprivate func millisToGroupDate(_ date: Int64) -> Date {
+        return date.millisToEpochDate().dateWithZeroSeconds() as Date // items are grouped using minutes
     }
     
-    func loadHistoryItem(uuid: String, handler: HistoryItem? -> Void) {
+    func loadHistoryItem(_ uuid: String, handler: @escaping (HistoryItem?) -> Void) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
         self.loadFirst(mapper, filter: DBHistoryItem.createFilter(uuid), handler: handler)
     }
     
-    func removeHistoryItemsForGroupDate(date: Int64, inventoryUuid: String, handler: Bool -> Void) {
+    func removeHistoryItemsForGroupDate(_ date: Int64, inventoryUuid: String, handler: @escaping (Bool) -> Void) {
         let groupDate = millisToGroupDate(date)
         
         // since we don't want to make assumptions here about how the dates are stored (i.e. rounded to minutes or not), we load (minimal) range, group using the default grouping method and then take the items belonging to our group.
@@ -119,7 +119,7 @@ class RealmHistoryProvider: RealmProvider {
         let endDate = groupDate.inMinutes(1)
         
         doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return false}
-            let results = realm.objects(DBHistoryItem).filter(DBHistoryItem.createPredicate(startDate.toMillis(), endAddedDate: endDate.toMillis(), inventoryUuid: inventoryUuid))
+            let results = realm.objects(DBHistoryItem.self).filter(DBHistoryItem.createPredicate(startDate.toMillis(), endAddedDate: endDate.toMillis(), inventoryUuid: inventoryUuid))
             
             QL1("Found results for date: \(groupDate) in range: \(startDate) to \(endDate): \(results)")
             
@@ -138,11 +138,11 @@ class RealmHistoryProvider: RealmProvider {
         }
     }
     
-    func saveHistoryItems(historyItems: RemoteHistoryItems, dirty: Bool, handler: Bool -> ()) {
+    func saveHistoryItems(_ historyItems: RemoteHistoryItems, dirty: Bool, handler: @escaping (Bool) -> ()) {
         
         self.doInWriteTransaction({[weak self] realm in
             
-            realm.delete(realm.objects(DBHistoryItem))
+            realm.delete(realm.objects(DBHistoryItem.self))
             
             let historyItemsWithRelations = HistoryItemMapper.historyItemsWithRemote(historyItems)
             
@@ -157,11 +157,11 @@ class RealmHistoryProvider: RealmProvider {
     }
 
     // Overwrites all the history items
-    func saveHistoryItems(historyItemsWithRelations: HistoryItemsWithRelations, dirty: Bool, handler: Bool -> ()) {
+    func saveHistoryItems(_ historyItemsWithRelations: HistoryItemsWithRelations, dirty: Bool, handler: @escaping (Bool) -> ()) {
         
         self.doInWriteTransaction({[weak self] realm in
             
-            realm.delete(realm.objects(DBHistoryItem))
+            realm.delete(realm.objects(DBHistoryItem.self))
             
             self?.saveHistoryItemsHelper(realm, dirty: dirty, historyItemsWithRelations: historyItemsWithRelations)
             
@@ -175,7 +175,7 @@ class RealmHistoryProvider: RealmProvider {
     
     
     // common code, note that this is expected to be executed in a transaction
-    private func saveHistoryItemsHelper(realm: Realm, dirty: Bool, historyItemsWithRelations: HistoryItemsWithRelations) {
+    fileprivate func saveHistoryItemsHelper(_ realm: Realm, dirty: Bool, historyItemsWithRelations: HistoryItemsWithRelations) {
         
         // save inventory items
         for inventory in historyItemsWithRelations.inventories {
@@ -199,15 +199,15 @@ class RealmHistoryProvider: RealmProvider {
         }
     }
     
-    func saveHistoryItemsSyncResult(historyItems: RemoteHistoryItems, handler: Bool -> ()) {
+    func saveHistoryItemsSyncResult(_ historyItems: RemoteHistoryItems, handler: @escaping (Bool) -> ()) {
         self.saveHistoryItems(historyItems, dirty: false, handler: handler)
     }
     
-    func removeHistoryItem(uuid: String, markForSync: Bool, handler: Bool -> Void) {
+    func removeHistoryItem(_ uuid: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
         self.doInWriteTransaction({[weak self] realm in
-            let dbHistoryItems = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilter(uuid))
+            let dbHistoryItems = realm.objects(DBHistoryItem.self).filter(DBHistoryItem.createFilter(uuid))
             if markForSync {
-                let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
+                let toRemove = Array(dbHistoryItems.map{DBRemoveHistoryItem($0)})
                 self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
             }
             realm.delete(dbHistoryItems)
@@ -224,35 +224,35 @@ class RealmHistoryProvider: RealmProvider {
     }
     
     // Expected to be executed in do/catch and write block
-    func removeHistoryItemsForInventory(realm: Realm, inventoryUuid: String, markForSync: Bool) -> Bool {
-        let dbHistoryItems = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilterWithInventory(inventoryUuid))
+    func removeHistoryItemsForInventory(_ realm: Realm, inventoryUuid: String, markForSync: Bool) -> Bool {
+        let dbHistoryItems = realm.objects(DBHistoryItem.self).filter(DBHistoryItem.createFilterWithInventory(inventoryUuid))
         if markForSync {
-            let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
+            let toRemove = Array(dbHistoryItems.map{DBRemoveHistoryItem($0)})
             saveObjsSyncInt(realm, objs: toRemove, update: true)
         }
         realm.delete(dbHistoryItems)
         return true
     }
     
-    func removeHistoryItems(monthYear: MonthYear, inventory: Inventory, markForSync: Bool, handler: [String]? -> Void) {
+    func removeHistoryItems(_ monthYear: MonthYear, inventory: Inventory, markForSync: Bool, handler: @escaping ([String]?) -> Void) {
         
         doInWriteTransaction({[weak self] realm in
             
             if let date = monthYear.toDate() {
                 
-                if let endOfMonth = NSDate.endOfMonth(monthYear.month, year: monthYear.year) {
+                if let endOfMonth = Date.endOfMonth(monthYear.month, year: monthYear.year) {
                     let startOfMonth = date.startOfMonth
                     
-                    let dbHistoryItems = realm.objects(DBHistoryItem).filter(DBHistoryItem.createPredicate(startOfMonth.toMillis(), endAddedDate: endOfMonth.toMillis(), inventoryUuid: inventory.uuid))
+                    let dbHistoryItems = realm.objects(DBHistoryItem.self).filter(DBHistoryItem.createPredicate(startOfMonth.toMillis(), endAddedDate: endOfMonth.toMillis(), inventoryUuid: inventory.uuid))
                     if markForSync {
-                        let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
+                        let toRemove = Array(dbHistoryItems.map{DBRemoveHistoryItem($0)})
                         self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
                     }
                     
                     let deletedHistoryItemsUuids = dbHistoryItems.map{$0.uuid}
                     
                     realm.delete(dbHistoryItems)
-                    return deletedHistoryItemsUuids
+                    return Array(deletedHistoryItemsUuids)
                     
                 } else {
                     QL4("Didn't get endOfMonth for month year: \(monthYear)")
@@ -275,10 +275,10 @@ class RealmHistoryProvider: RealmProvider {
     
     
     // Returns nil if error, true if found and removed something, false if there was nothing to remove
-    func removeHistoryItemsOlderThan(date: NSDate, handler: Bool? -> Void) {
+    func removeHistoryItemsOlderThan(_ date: Date, handler: @escaping (Bool?) -> Void) {
         
         doInWriteTransaction({realm in
-            let items = realm.objects(DBHistoryItem).filter(DBHistoryItem.createPredicateOlderThan(date.toMillis()))
+            let items = realm.objects(DBHistoryItem.self).filter(DBHistoryItem.createPredicateOlderThan(date.toMillis()))
             let removedSomething = items.count > 0
             realm.delete(items)
             return removedSomething
@@ -294,29 +294,29 @@ class RealmHistoryProvider: RealmProvider {
     }
 
     
-    func oldestDate(inventory: Inventory, handler: NSDate? -> Void) {
+    func oldestDate(_ inventory: Inventory, handler: @escaping (Date?) -> Void) {
         
         withRealm({realm in
             
-            if let oldestItem = realm.objects(DBHistoryItem).sorted(DBHistoryItem.addedDateKey, ascending: true).first {
+            if let oldestItem = realm.objects(DBHistoryItem.self).sorted(byProperty: DBHistoryItem.addedDateKey, ascending: true).first {
                 return oldestItem.addedDate.millisToEpochDate()
             } else {
                 QL1("No items / oldest item")
                 return nil
             }
             
-        }, resultHandler: {(oldestDateMaybe: NSDate?) in
+        }, resultHandler: {(oldestDateMaybe: Date?) in
             // TODO (low prio) differentiate if there was no item or an error ocurred
             handler(oldestDateMaybe)
         })
     }
     
     // TODO!! optimise this, instead of adding everything to the tombstone table and send on sync maybe just store somewhere a flag and send it on sync, which instructs the server to delete all the history.
-    func removeAllHistoryItems(markForSync: Bool, handler: Bool -> ()) {
+    func removeAllHistoryItems(_ markForSync: Bool, handler: @escaping (Bool) -> ()) {
         self.doInWriteTransaction({[weak self] realm in
-            let dbHistoryItems = realm.objects(DBHistoryItem)
+            let dbHistoryItems = realm.objects(DBHistoryItem.self)
             if markForSync {
-                let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
+                let toRemove = Array(dbHistoryItems.map{DBRemoveHistoryItem($0)})
                 self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
             }
             realm.delete(dbHistoryItems)
@@ -332,11 +332,11 @@ class RealmHistoryProvider: RealmProvider {
         )
     }
     
-    func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, markForSync: Bool, _ handler: Bool -> Void) {
+    func removeHistoryItemsGroup(_ historyItemGroup: HistoryItemGroup, markForSync: Bool, _ handler: @escaping (Bool) -> Void) {
         self.doInWriteTransaction({[weak self] realm in
-            let dbHistoryItems = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilter(historyItemGroup))
+            let dbHistoryItems = realm.objects(DBHistoryItem.self).filter(DBHistoryItem.createFilter(historyItemGroup))
             if markForSync {
-                let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
+                let toRemove = Array(dbHistoryItems.map{DBRemoveHistoryItem($0)})
                 self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
             }
             realm.delete(dbHistoryItems)
@@ -352,7 +352,7 @@ class RealmHistoryProvider: RealmProvider {
         )
     }
     
-    func addHistoryItems(historyItems: [HistoryItem], handler: Bool -> Void) {
+    func addHistoryItems(_ historyItems: [HistoryItem], handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             let dbHistoryItems: [DBHistoryItem] = historyItems.map{HistoryItemMapper.dbWithHistoryItem($0, dirty: true)}
             for dbHistoryItem in dbHistoryItems {
@@ -371,7 +371,7 @@ class RealmHistoryProvider: RealmProvider {
     
     // MARK: - Sync
 
-    func clearHistoryItemTombstone(uuid: String, handler: Bool -> Void) {
+    func clearHistoryItemTombstone(_ uuid: String, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             realm.deleteForFilter(DBRemoveHistoryItem.self, DBRemoveHistoryItem.createFilter(uuid))
             return true
@@ -380,7 +380,7 @@ class RealmHistoryProvider: RealmProvider {
         })
     }
     
-    func clearHistoryItemsTombstones(historyItemGroup: HistoryItemGroup, handler: Bool -> Void) {
+    func clearHistoryItemsTombstones(_ historyItemGroup: HistoryItemGroup, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             for historyItem in historyItemGroup.historyItems {
                 realm.deleteForFilter(DBRemoveHistoryItem.self, DBRemoveHistoryItem.createFilter(historyItem.uuid))
@@ -391,7 +391,7 @@ class RealmHistoryProvider: RealmProvider {
         })
     }
     
-    func clearHistoryItemsTombstones(uuids: [String], handler: Bool -> Void) {
+    func clearHistoryItemsTombstones(_ uuids: [String], handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             for uuid in uuids {
                 realm.deleteForFilter(DBRemoveHistoryItem.self, DBRemoveHistoryItem.createFilter(uuid))

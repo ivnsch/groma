@@ -19,13 +19,13 @@ struct RemoteGlobalSyncResult: ResponseObjectSerializable, CustomDebugStringConv
 
     init?(representation: AnyObject) {
         guard
-            let listsObj = representation.valueForKeyPath("lists") as? [AnyObject],
+            let listsObj = representation.value(forKeyPath: "lists") as? [AnyObject],
             let lists = RemoteListWithListItems.collection(listsObj),
-            let inventoriesObj = representation.valueForKeyPath("inventories") as? [AnyObject],
+            let inventoriesObj = representation.value(forKeyPath: "inventories") as? [AnyObject],
             let inventories = RemoteInventoryWithItems.collection(inventoriesObj),
-            let historyObj = representation.valueForKeyPath("history") as? [AnyObject],
+            let historyObj = representation.value(forKeyPath: "history") as? [AnyObject],
             let history = RemoteHistoryItems.collection(historyObj),
-            let groupsObj = representation.valueForKeyPath("groups") as? [AnyObject],
+            let groupsObj = representation.value(forKeyPath: "groups") as? [AnyObject],
             let groups = RemoteGroupWithItems.collection(groupsObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -38,6 +38,6 @@ struct RemoteGlobalSyncResult: ResponseObjectSerializable, CustomDebugStringConv
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) lists: \(lists), inventories: \(inventories), history: \(history), groups: \(groups)}"
+        return "{\(type(of: self)) lists: \(lists), inventories: \(inventories), history: \(history), groups: \(groups)}"
     }
 }

@@ -10,5 +10,5 @@ import Foundation
 
 protocol HelpProvider {
 
-    func helpItems(handler: ProviderResult<[HelpItem]> -> Void)
+    func helpItems(_ handler: @escaping (ProviderResult<[HelpItem]>) -> Void)
 }

@@ -17,12 +17,12 @@ struct ItemWithCellAttributes<T: Equatable>: Equatable {
         self.boldRange = boldRange
     }
     
-    static func toItemWithCellAttributes(item: T) -> ItemWithCellAttributes<T> {
+    static func toItemWithCellAttributes(_ item: T) -> ItemWithCellAttributes<T> {
         return ItemWithCellAttributes<T>(item: item, boldRange: nil)
     }
     
     
-    static func toItemsWithCellAttributes(items: [T]) -> [ItemWithCellAttributes<T>] {
+    static func toItemsWithCellAttributes(_ items: [T]) -> [ItemWithCellAttributes<T>] {
         return items.map{toItemWithCellAttributes($0)}
     }
     

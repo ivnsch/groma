@@ -26,7 +26,7 @@ class OpenAndCloseListTest: XCTestCase {
         app.buttons["Skip"].tap()
         
         let tabBarsQuery = app.tabBars
-        tabBarsQuery.childrenMatchingType(.Button).elementBoundByIndex(4).tap()
+        tabBarsQuery.children(matching: .button).element(boundBy: 4).tap()
         
         let tablesQuery = app.tables
         tablesQuery.staticTexts["Settings"].tap()
@@ -143,16 +143,16 @@ class OpenAndCloseListTest: XCTestCase {
         
         let app = XCUIApplication()
 
-        app.tabBars.childrenMatchingType(.Button).elementBoundByIndex(2).tap()
+        app.tabBars.children(matching: .button).element(boundBy: 2).tap()
         
         
-        let element2 = app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element
-        let element = element2.childrenMatchingType(.Other).elementBoundByIndex(1)
+        let element2 = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element
+        let element = element2.children(matching: .other).element(boundBy: 1)
         
         
 //        let element = app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(1)
 //        element.tap()
-        element.childrenMatchingType(.Button).elementBoundByIndex(4).tap()
+        element.children(matching: .button).element(boundBy: 4).tap()
         app.keys["A"].tap()
         app.textFields["Inventory name"]
         app.buttons["Submit"].tap()
@@ -161,22 +161,22 @@ class OpenAndCloseListTest: XCTestCase {
         
         
         let tabBarsQuery = app.tabBars
-        tabBarsQuery.childrenMatchingType(.Button).elementBoundByIndex(0).tap()
+        tabBarsQuery.children(matching: .button).element(boundBy: 0).tap()
 //        
 //        let element2 = app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element
 //        let element = element2.childrenMatchingType(.Other).elementBoundByIndex(1)
-        element.childrenMatchingType(.Button).elementBoundByIndex(4).tap()
+        element.children(matching: .button).element(boundBy: 4).tap()
         app.keys["A"].tap()
         app.textFields["List name"]
         app.buttons["Submit"].tap()
         
-        element.childrenMatchingType(.Button).elementBoundByIndex(8).tap()
+        element.children(matching: .button).element(boundBy: 8).tap()
         app.keys["B"].tap()
         app.textFields["List name"]
-        let submitButton = element2.childrenMatchingType(.Button).matchingIdentifier("Submit").elementBoundByIndex(0)
+        let submitButton = element2.children(matching: .button).matching(identifier: "Submit").element(boundBy: 0)
         submitButton.tap()
         
-        element.childrenMatchingType(.Button).elementBoundByIndex(12).tap()
+        element.children(matching: .button).element(boundBy: 12).tap()
         app.keys["C"].tap()
         app.textFields["List name"]
         submitButton.tap()
@@ -185,28 +185,28 @@ class OpenAndCloseListTest: XCTestCase {
         let aStaticText = tablesQuery.staticTexts["A"]
         aStaticText.tap()
         
-        let element4 = element2.childrenMatchingType(.Other).elementBoundByIndex(2)
-        let element3 = element4.childrenMatchingType(.Other).elementBoundByIndex(1)
-        let button = element3.childrenMatchingType(.Button).elementBoundByIndex(2)
+        let element4 = element2.children(matching: .other).element(boundBy: 2)
+        let element3 = element4.children(matching: .other).element(boundBy: 1)
+        let button = element3.children(matching: .button).element(boundBy: 2)
         button.tap()
         
         let collectionViewsQuery = app.scrollViews.otherElements.collectionViews
         collectionViewsQuery.staticTexts["Apples"].tap()
         collectionViewsQuery.staticTexts["Oranges"].tap()
         
-        let button2 = element4.childrenMatchingType(.Button).element
+        let button2 = element4.children(matching: .button).element
         button2.tap()
 //        button2.tap()
-        tablesQuery.cells.containingType(.StaticText, identifier:"Apples").childrenMatchingType(.StaticText).matchingIdentifier("Apples").elementBoundByIndex(1).tap()
-        tablesQuery.cells.containingType(.StaticText, identifier:"Oranges").childrenMatchingType(.StaticText).matchingIdentifier("Oranges").elementBoundByIndex(1).tap()
+        tablesQuery.cells.containing(.staticText, identifier:"Apples").children(matching: .staticText).matching(identifier: "Apples").element(boundBy: 1).tap()
+        tablesQuery.cells.containing(.staticText, identifier:"Oranges").children(matching: .staticText).matching(identifier: "Oranges").element(boundBy: 1).tap()
         
-        let button3 = element4.childrenMatchingType(.Other).elementBoundByIndex(4).childrenMatchingType(.Button).element
+        let button3 = element4.children(matching: .other).element(boundBy: 4).children(matching: .button).element
         button3.tap()
         
         let tbBackButton = app.buttons["tb back"]
         tbBackButton.tap()
         
-        let button4 = element3.childrenMatchingType(.Button).elementBoundByIndex(6)
+        let button4 = element3.children(matching: .button).element(boundBy: 6)
         button4.tap()
         
         let bStaticText = tablesQuery.staticTexts["B"]
@@ -215,8 +215,8 @@ class OpenAndCloseListTest: XCTestCase {
         collectionViewsQuery.staticTexts["Oranges"].tap()
         collectionViewsQuery.staticTexts["Blueberries"].tap()
         button2.tap()
-        tablesQuery.cells.containingType(.StaticText, identifier:"Oranges").buttons["Undo"].tap()
-        tablesQuery.cells.containingType(.StaticText, identifier:"Blueberries").childrenMatchingType(.StaticText).matchingIdentifier("Blueberries").elementBoundByIndex(1).tap()
+        tablesQuery.cells.containing(.staticText, identifier:"Oranges").buttons["Undo"].tap()
+        tablesQuery.cells.containing(.staticText, identifier:"Blueberries").children(matching: .staticText).matching(identifier: "Blueberries").element(boundBy: 1).tap()
         button3.tap()
         tbBackButton.tap()
         button4.tap()
@@ -227,11 +227,11 @@ class OpenAndCloseListTest: XCTestCase {
         collectionViewsQuery.staticTexts["Lemons"].tap()
         collectionViewsQuery.staticTexts["Nectarines"].tap()
         button2.tap()
-        tablesQuery.cells.containingType(.StaticText, identifier:"Lemons").childrenMatchingType(.StaticText).matchingIdentifier("Lemons").elementBoundByIndex(1).tap()
-        tablesQuery.cells.containingType(.StaticText, identifier:"Nectarines").childrenMatchingType(.StaticText).matchingIdentifier("Nectarines").elementBoundByIndex(1).tap()
+        tablesQuery.cells.containing(.staticText, identifier:"Lemons").children(matching: .staticText).matching(identifier: "Lemons").element(boundBy: 1).tap()
+        tablesQuery.cells.containing(.staticText, identifier:"Nectarines").children(matching: .staticText).matching(identifier: "Nectarines").element(boundBy: 1).tap()
         button3.tap()
         
-        let table = element2.childrenMatchingType(.Table).element
+        let table = element2.children(matching: .table).element
         table.tap()
         table.tap()
         tbBackButton.tap()
@@ -241,7 +241,7 @@ class OpenAndCloseListTest: XCTestCase {
             aStaticText.tap()
             button3.tap()
             tbBackButton.tap()
-            let button5 = element3.childrenMatchingType(.Button).elementBoundByIndex(0)
+            let button5 = element3.children(matching: .button).element(boundBy: 0)
             button5.tap()
             bStaticText.tap()
             button3.tap()

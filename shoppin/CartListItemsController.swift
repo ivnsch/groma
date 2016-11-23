@@ -11,7 +11,7 @@ import QorumLogs
 
 
 protocol CartListItemsControllerDelegate: class {
-    func onCartSendItemsToStash(listItems: [ListItem])
+    func onCartSendItemsToStash(_ listItems: [ListItem])
 }
 
 class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate, UIGestureRecognizerDelegate {
@@ -31,7 +31,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
     weak var delegate: CartListItemsControllerDelegate?
     
     override var status: ListItemStatus {
-        return .Done
+        return .done
     }
     
     var onUIReady: VoidFunction? // avoid crash trying to access not yet initialized ui elements
@@ -62,7 +62,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
     // Fixes random, rare freezes when coming back to todo controller. See http://stackoverflow.com/a/28919337/930450
     // Curiously implementing gestureRecognizerShouldBegin and returning always true seemed to fix it (tested a long time after it and the bug didn't happen again - could be of course that this was just luck, though normally it appears after switching todo/cart 100 or so times and tested more than this). Letting the count check anyways, since this seems to be the proper fix.
     // Note: I also tried implementing a UI test for this but swipe doesn't work well so need to test manually.
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         
         guard let navigationController = navigationController else {QL3("No navigation controller"); return false}
         
@@ -75,7 +75,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
         return false
     }
     
-    override func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
+    override func setEditing(_ editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
         super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
         
         func toggleButtonVisibility() {
@@ -89,8 +89,8 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
         // TODO consistent animation with todo - there we have cross fade, because we change the entire view, here we don't change the view. Maybe take the button out of the view and move it like here during the cross fade of the view.
         if animated {
             buyRightConstraint.constant = editing ? 60 : 0
-            let delay: NSTimeInterval = editing ? 0 : 0.1 // when price moves right, wait a bit for the button to disappear
-            UIView.animateWithDuration(0.3, delay: delay, options: [], animations: {[weak self] in
+            let delay: TimeInterval = editing ? 0 : 0.1 // when price moves right, wait a bit for the button to disappear
+            UIView.animate(withDuration: 0.3, delay: delay, options: [], animations: {[weak self] in
                 self?.view.layoutIfNeeded()
                 }) {finished in
                 if editing {
@@ -100,7 +100,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
         }
     }
     
-    override func onToggleReorderSections(isNowInReorderSections: Bool) {
+    override func onToggleReorderSections(_ isNowInReorderSections: Bool) {
         expandCollapseButton.expanded = isNowInReorderSections
     }
     
@@ -112,22 +112,22 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
         totalDonePriceLabel.text = listItemsTableViewController.totalPrice.toLocalCurrencyString()
     }
     
-    override func onListItemsOrderChangedSection(tableViewListItems: [TableViewListItem]) {
+    override func onListItemsOrderChangedSection(_ tableViewListItems: [TableViewListItem]) {
         Providers.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
         })
     }
 
-    override func topBarTitle(list: List) -> String {
+    override func topBarTitle(_ list: List) -> String {
         return trans("title_cart")
     }
     
-    private func addAllItemsToInventory() {
+    fileprivate func addAllItemsToInventory() {
         
-        func onSizeLimitOk(list: List) {
+        func onSizeLimitOk(_ list: List) {
             listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
                     
-                    if let controller = UIApplication.sharedApplication().delegate?.window??.rootViewController { // since we change controller on success need root controller in case we show error popup
+                    if let controller = UIApplication.shared.delegate?.window??.rootViewController { // since we change controller on success need root controller in case we show error popup
                         Providers.listItemsProvider.buyCart(weakSelf.listItemsTableViewController.items, list: list, remote: true, controller.successHandler{result in
                             weakSelf.delegate?.onCartSendItemsToStash(weakSelf.listItemsTableViewController.items)
                             weakSelf.close()
@@ -155,26 +155,26 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
     
     override func setDefaultLeftButtons() {
         topBar.setBackVisible(true)
-        topBar.setLeftButtonIds([.Edit])
+        topBar.setLeftButtonIds([.edit])
     }
     
-    private func close() {
+    fileprivate func close() {
         listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
-            self?.navigationController?.popViewControllerAnimated(true)
+            _ = self?.navigationController?.popViewController(animated: true)
         }
     }
     
-    override func setEmptyUI(visible: Bool, animated: Bool) {
+    override func setEmptyUI(_ visible: Bool, animated: Bool) {
         super.setEmptyUI(visible, animated: animated)
         let hidden = !visible
         if animated {
             emptyListView.setHiddenAnimated(hidden)
         } else {
-            emptyListView.hidden = hidden
+            emptyListView.isHidden = hidden
         }
     }
     
-    @IBAction func onAddToInventoryTap(sender: UIBarButtonItem) {
+    @IBAction func onAddToInventoryTap(_ sender: UIBarButtonItem) {
         if let list = currentList {
             if InventoryAuthChecker.checkAccess(list.inventory) {
                 ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_buy_will_add_to_history_stats", list.inventory.name), okTitle: trans("popup_button_buy"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in
@@ -190,12 +190,12 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
     
     override func onTopBarBackButtonTap() {
         super.onTopBarBackButtonTap()
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     // MARK: - ExpandCollapseButtonDelegate
     
-    func onExpandButton(expanded: Bool) {
+    func onExpandButton(_ expanded: Bool) {
         toggleReorderSections()
     }
 }

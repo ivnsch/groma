@@ -11,7 +11,7 @@ import Foundation
 // Separate provider to make it easy to mock, for testing where there's no server available
 protocol PullProvider {
 
-    func pullListProducs(listUuid: String, srcUser: SharedUser, _ handler: ProviderResult<[ListItem]> -> Void)
+    func pullListProducs(_ listUuid: String, srcUser: SharedUser, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void)
     
-    func pullInventoryProducs(listUuid: String, srcUser: SharedUser, _ handler: ProviderResult<Any> -> Void)
+    func pullInventoryProducs(_ listUuid: String, srcUser: SharedUser, _ handler: @escaping (ProviderResult<Any>) -> Void)
 }

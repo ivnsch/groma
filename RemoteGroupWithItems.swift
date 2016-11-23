@@ -16,10 +16,10 @@ struct RemoteGroupWithItems: ResponseObjectSerializable, ResponseCollectionSeria
     
     init?(representation: AnyObject) {
         guard
-            let groupObj = representation.valueForKeyPath("group"),
-            let group = RemoteGroup(representation: groupObj),
-            let itemsObj = representation.valueForKeyPath("items") as? [AnyObject],
-            let groupItems = RemoteGroupItemsWithDependenciesNoGroup(representation: itemsObj)
+            let groupObj = representation.value(forKeyPath: "group"),
+            let group = RemoteGroup(representation: groupObj as AnyObject),
+            let itemsObj = representation.value(forKeyPath: "items") as? [AnyObject],
+            let groupItems = RemoteGroupItemsWithDependenciesNoGroup(representation: itemsObj as AnyObject)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -28,9 +28,9 @@ struct RemoteGroupWithItems: ResponseObjectSerializable, ResponseCollectionSeria
         self.groupItems = groupItems
     }
     
-    static func collection(representation: AnyObject) -> [RemoteGroupWithItems]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteGroupWithItems]? {
         var items = [RemoteGroupWithItems]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let item = RemoteGroupWithItems(representation: obj) {
                 items.append(item)
             } else {
@@ -42,6 +42,6 @@ struct RemoteGroupWithItems: ResponseObjectSerializable, ResponseCollectionSeria
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) group: \(group), groupItems: [\(groupItems)]}"
+        return "{\(type(of: self)) group: \(group), groupItems: [\(groupItems)]}"
     }
 }

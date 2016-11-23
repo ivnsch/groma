@@ -10,22 +10,22 @@ import Foundation
 
 extension String {
     
-    func contains(str: String, caseInsensitive: Bool = false) -> Bool {
+    func contains(_ str: String, caseInsensitive: Bool = false) -> Bool {
         
-        var options = NSStringCompareOptions()
+        var options = NSString.CompareOptions()
         if caseInsensitive {
-            options = options.union(NSStringCompareOptions.CaseInsensitiveSearch)
+            options = options.union(NSString.CompareOptions.caseInsensitive)
         }
 
-        return self.rangeOfString(str, options: options) != nil
+        return self.range(of: str, options: options) != nil
     }
     
     func trim() -> String {
-        return stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        return trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
     var floatValue: Float? {
-        return NSNumberFormatter().numberFromString(self)?.floatValue
+        return NumberFormatter().number(from: self)?.floatValue
     }
     
     var boolValue: Bool? {
@@ -41,12 +41,12 @@ extension String {
     
     // MARK: - Attributed text
     
-    func makeAttributed(substring: String, normalFont: UIFont, font: UIFont, caseInsensitive: Bool = false) -> NSAttributedString {
+    func makeAttributed(_ substring: String, normalFont: UIFont, font: UIFont, caseInsensitive: Bool = false) -> NSAttributedString {
         let substringRange = range(substring, caseInsensitive: caseInsensitive)
         return makeAttributed(substringRange, normalFont: normalFont, font: font)
     }
 
-    func makeAttributed(range: NSRange?, normalFont: UIFont, font: UIFont, textColor: UIColor = UIColor.darkTextColor()) -> NSAttributedString {
+    func makeAttributed(_ range: NSRange?, normalFont: UIFont, font: UIFont, textColor: UIColor = UIColor.darkText) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: self, attributes: [NSFontAttributeName: normalFont, NSForegroundColorAttributeName: textColor])
         if let range = range {
             attributedString.setAttributes([NSFontAttributeName: font, NSForegroundColorAttributeName: textColor], range: range)
@@ -60,22 +60,22 @@ extension String {
         return attributedString
     }
     
-    func makeAttributedBoldRegular(range: NSRange) -> NSAttributedString {
+    func makeAttributedBoldRegular(_ range: NSRange) -> NSAttributedString {
         return makeAttributed(range, normalFont: Fonts.regularLight, font: Fonts.regularBold)
     }
     
-    func underline(range: NSRange) -> NSMutableAttributedString {
+    func underline(_ range: NSRange) -> NSMutableAttributedString {
         let attributedText = NSMutableAttributedString(string: self)
-        attributedText.addAttribute(NSUnderlineStyleAttributeName, value:NSUnderlineStyle.StyleSingle.rawValue, range: range)
+        attributedText.addAttribute(NSUnderlineStyleAttributeName, value:NSUnderlineStyle.styleSingle.rawValue, range: range)
         return attributedText
     }
 
     // See doc of firstRangeBetween
     // Additionally, note that every ocurrence of the separator is removed from the string at the end
-    func underlineBetweenFirstSeparators(separator: String) -> NSMutableAttributedString {
+    func underlineBetweenFirstSeparators(_ separator: String) -> NSMutableAttributedString {
         if let range = firstRangeBetween(separator) {
             let underlined = underline(range)
-            underlined.mutableString.replaceOccurrencesOfString(separator, withString: "", options: [], range: fullRange)
+            underlined.mutableString.replaceOccurrences(of: separator, with: "", options: [], range: fullRange)
             return underlined
         } else {
             return toAttributedText()
@@ -89,11 +89,11 @@ extension String {
     }
     
     // src: http://stackoverflow.com/a/27880748/930450
-    func firstRangeOfRegex(regex: String) -> NSRange? {
+    func firstRangeOfRegex(_ regex: String) -> NSRange? {
         do {
             let regex = try NSRegularExpression(pattern: regex, options: [])
             let nsString = self as NSString
-            let results = regex.matchesInString(self, options: [], range: NSMakeRange(0, nsString.length))
+            let results = regex.matches(in: self, options: [], range: NSMakeRange(0, nsString.length))
             return results.first?.range
         } catch let error as NSError {
             print("invalid regex: \(error.localizedDescription)")
@@ -106,8 +106,8 @@ extension String {
     // It also works if the string starts or ends with the separator
     // This only returns the string between the first 2 separators, if there are more separators, they are ignored
     // WARNING: If the string has no separators it returns the complete string, if it has only 1 separator it returns the string after the separator
-    func firstRangeBetween(separator: String) -> NSRange? {
-        let components = componentsSeparatedByString(separator)
+    func firstRangeBetween(_ separator: String) -> NSRange? {
+        let components = self.components(separatedBy: separator)
         if let stringInBetween = components[safe: 1] {
             return range(stringInBetween)
         } else {
@@ -116,14 +116,14 @@ extension String {
         }
     }
     
-    func range(str: String, caseInsensitive: Bool = false) -> NSRange? {
+    func range(_ str: String, caseInsensitive: Bool = false) -> NSRange? {
         
-        var options = NSStringCompareOptions()
+        var options = NSString.CompareOptions()
         if caseInsensitive {
-            options = options.union(NSStringCompareOptions.CaseInsensitiveSearch)
+            options = options.union(NSString.CompareOptions.caseInsensitive)
         }
         // Cast to NSString - It's currently a bit easier to work with NSRange, than convert between Range and NSRange (needed for e.g. attributedString)
-        let range = (self as NSString).rangeOfString(str, options: options)
+        let range = (self as NSString).range(of: str, options: options)
         return range.location == NSNotFound ? nil : range
     }
     
@@ -131,19 +131,19 @@ extension String {
     
     // replace possible spaces with spaces that look like spaces but don't cause line break
     func noBreakSpaceStr() -> String {
-        return stringByReplacingOccurrencesOfString(" ", withString: "\u{00A0}")
+        return replacingOccurrences(of: " ", with: "\u{00A0}")
     }
     
     // http://stackoverflow.com/a/30450559/930450
     // NOTE: FIXME: that returned height a bit short at least in HelpViewController (see comment there). Maybe related with missing NSParagraphStyleAttributeName attribute, wrapping etc?
-    func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
-        let constraintRect = CGSize(width: width, height: CGFloat.max)
-        let boundingBox = self.boundingRectWithSize(constraintRect, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
+    func heightWithConstrainedWidth(_ width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
         return boundingBox.height
     }
     
-    func size(font: UIFont) -> CGSize {
-        return (self as NSString).sizeWithAttributes([NSFontAttributeName: font])
+    func size(_ font: UIFont) -> CGSize {
+        return (self as NSString).size(attributes: [NSFontAttributeName: font])
     }
     
 //    func startsWith(str:String) -> Bool {
@@ -167,7 +167,7 @@ extension String {
     func capitalizeFirst() -> String {
         if characters.count > 0 {
             var copy = self
-            copy.replaceRange(self.startIndex...self.startIndex, with: String(self[self.startIndex]).capitalizedString)
+            copy.replaceSubrange(self.startIndex...self.startIndex, with: String(self[self.startIndex]).capitalized)
             return copy
         } else {
             return self
@@ -177,7 +177,7 @@ extension String {
     func uncapitalizeFirst() -> String {
         if characters.count > 0 {
             var copy = self
-            copy.replaceRange(self.startIndex...self.startIndex, with: String(self[self.startIndex]).lowercaseString)
+            copy.replaceSubrange(self.startIndex...self.startIndex, with: String(self[self.startIndex]).lowercased())
             return copy
         } else {
             return self

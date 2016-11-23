@@ -26,10 +26,10 @@ struct ProductAggregate {
 final class GroupMonthYearAggregate: Equatable {
     let group: AggregateGroup
     let timePeriod: TimePeriod
-    let referenceDate: NSDate
+    let referenceDate: Date
     let monthYearAggregates: [MonthYearAggregate]
     
-    init(group: AggregateGroup, timePeriod: TimePeriod, referenceDate: NSDate, monthYearAggregates: [MonthYearAggregate]) {
+    init(group: AggregateGroup, timePeriod: TimePeriod, referenceDate: Date, monthYearAggregates: [MonthYearAggregate]) {
         self.group = group
         self.timePeriod = timePeriod
         self.referenceDate = referenceDate
@@ -39,14 +39,13 @@ final class GroupMonthYearAggregate: Equatable {
     /**
     Dates covered by timePeriod. The content of monthYearAggregates is irrelevant here.
     */
-    lazy var allDates: [NSDate] = {
+    lazy var allDates: [Date] = {
         // quantity can be negative, in which case we need quantity..0, or positive, in which case we need 0..quantity
-        let dates: [NSDate] = min(self.timePeriod.quantity + 1, 0).stride(through: max(self.timePeriod.quantity, 0), by: 1).map {quantity in
+        let dates: [Date] = stride(from: min(self.timePeriod.quantity + 1, 0), through: max(self.timePeriod.quantity, 0), by: 1).map {quantity in
             let offset = self.timePeriod.dateOffsetComponent(quantity)
-            return NSCalendar.currentCalendar().dateByAddingComponents(offset, toDate: self.referenceDate, options: .MatchStrictly)!
+            return Calendar.current.date(byAdding: offset, to: self.referenceDate, wrappingComponents: false)!
         }
-        
-        return dates.sort{$0 < $1}
+        return dates.sorted{$0 < $1}
     }()
 }
 
@@ -71,46 +70,46 @@ func ==(lhs: MonthYearAggregate, rhs: MonthYearAggregate) -> Bool {
 
 class StatsProviderImpl: StatsProvider {
 
-    func aggregate(monthYear: MonthYear, groupBy: GroupByAttribute, inventory: Inventory, _ handler: ProviderResult<[ProductAggregate]> -> ()) {
+    func aggregate(_ monthYear: MonthYear, groupBy: GroupByAttribute, inventory: Inventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ()) {
         RealmHistoryProvider().loadHistoryItems(monthYear, inventory: inventory) {historyItems in
             let productAggregates = self.toProductAggregates(historyItems)
-            handler(ProviderResult(status: .Success, sucessResult: productAggregates))
+            handler(ProviderResult(status: .success, sucessResult: productAggregates))
         }
     }
     
-    func aggregate(timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: Inventory, _ handler: ProviderResult<[ProductAggregate]> -> ()) {
+    func aggregate(_ timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: Inventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ()) {
         let dateComponents = timePeriod.dateOffsetComponent()
         
-        if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: NSDate(), options: .WrapComponents)?.toMillis() {
+        if let startDate = (Calendar.current as NSCalendar).date(byAdding: dateComponents as DateComponents, to: Date(), options: .wrapComponents)?.toMillis() {
             
             RealmHistoryProvider().loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
                 let productAggregates = self.toProductAggregates(historyItems)
-                handler(ProviderResult(status: .Success, sucessResult: productAggregates))
+                handler(ProviderResult(status: .success, sucessResult: productAggregates))
             }
             
         } else {
             print("Error: dateByAddingComponents in RealmStatsProvider, aggregate, returned nil. Can't calculate aggregate.")
-            handler(ProviderResult(status: .DateCalculationError))
+            handler(ProviderResult(status: .dateCalculationError))
         }
     }
     
-    func history(timePeriod: TimePeriod, group: AggregateGroup, inventory: Inventory, _ handler: ProviderResult<GroupMonthYearAggregate> -> ()) {
+    func history(_ timePeriod: TimePeriod, group: AggregateGroup, inventory: Inventory, _ handler: @escaping (ProviderResult<GroupMonthYearAggregate>) -> ()) {
         let dateComponents = timePeriod.dateOffsetComponent()
         
-        let referenceDate = NSDate() // today
-        if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: referenceDate, options: [])?.toMillis() {
+        let referenceDate = Date() // today
+        if let startDate = (Calendar.current as NSCalendar).date(byAdding: dateComponents as DateComponents, to: referenceDate, options: [])?.toMillis() {
             
             RealmHistoryProvider().loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
                 
                 var dict: OrderedDictionary<MonthYear, (price: Float, quantity: Int)> = OrderedDictionary()
                 
                 let (_, referenceDateMonth, referenceDateYear) = referenceDate.dayMonthYear
-                if timePeriod.timeUnit != .Month {
+                if timePeriod.timeUnit != .month {
                     QL4("Error: not supported timeunit: \(timePeriod.timeUnit) - the calculations will be incorrect") // for now we only need months (TODO complete or remove the other enum values, maybe even remove the enum)
                 }
                 
                 // Prefill the dictionary with the month years in time period's range. We need all the months in the result independently if they have history items or not ("left join")
-                let monthYears = min(timePeriod.quantity + 1, 0).stride(through: max(timePeriod.quantity, 0), by: 1).map {quantity in
+                let monthYears = stride(from: min(timePeriod.quantity + 1, 0), through: max(timePeriod.quantity, 0), by: 1).map {quantity in
                     MonthYear(month: referenceDateMonth, year: referenceDateYear).offsetMonths(quantity)
                 }
                 let monthYearsWithoutNils = monthYears.flatMap{$0} // we are not expecting nils here but we avoid ! (except in outlets) as general rule. There's an error log in offestMonths.
@@ -120,12 +119,18 @@ class StatsProviderImpl: StatsProvider {
                 
                 for historyItem in historyItems {
                     
-                    let components = NSCalendar.currentCalendar().components([.Month, .Year], fromDate: historyItem.addedDate.millisToEpochDate())
-                    let key = MonthYear(month: components.month, year: components.year)
-                    if let aggr = dict[key] {
-                        dict[key] = (price: aggr.price + historyItem.totalPaidPrice, quantity: aggr.quantity + historyItem.quantity)
+                    let components = Calendar.current.dateComponents([.month, .year], from: historyItem.addedDate.millisToEpochDate())
+                    if let month = components.month, let year = components.year {
+                        let key = MonthYear(month: month, year: year)
+                        if let aggr = dict[key] {
+                            dict[key] = (price: aggr.price + historyItem.totalPaidPrice, quantity: aggr.quantity + historyItem.quantity)
+                        } else {
+                            dict[key] = (price: historyItem.totalPaidPrice, quantity: historyItem.quantity)
+                        }
                     } else {
-                        dict[key] = (price: historyItem.totalPaidPrice, quantity: historyItem.quantity)
+                        QL4("No month/year in components")
+                        handler(ProviderResult(status: .unknown))
+                        break
                     }
                 }
                 
@@ -135,16 +140,16 @@ class StatsProviderImpl: StatsProvider {
                 
                 let groupMonthYearAggregate = GroupMonthYearAggregate(group: group, timePeriod: timePeriod, referenceDate: referenceDate, monthYearAggregates: monthYearAggregates)
                 
-                handler(ProviderResult(status: .Success, sucessResult: groupMonthYearAggregate))
+                handler(ProviderResult(status: .success, sucessResult: groupMonthYearAggregate))
             }
             
         } else {
             print("Error: dateByAddingComponents in RealmStatsProvider, aggregate, returned nil. Can't calculate aggregate.")
-            handler(ProviderResult(status: .DateCalculationError))
+            handler(ProviderResult(status: .dateCalculationError))
         }
     }
     
-    private func toProductAggregates(historyItems: [HistoryItem]) -> [ProductAggregate] {
+    fileprivate func toProductAggregates(_ historyItems: [HistoryItem]) -> [ProductAggregate] {
         
         // extract from history items total quantity and price for each product (a product can appear in multiple history items)
         var dict: OrderedDictionary<String, (product: Product, price: Float, quantity: Int)> = OrderedDictionary()
@@ -176,29 +181,29 @@ class StatsProviderImpl: StatsProvider {
             return ProductAggregate(product: value.product, totalCount: value.quantity, totalPrice: value.price, percentage: percentage)
         }
         
-        let sortedByPrice = productAggregates.sort {
+        let sortedByPrice = productAggregates.sorted {
             $0.0.totalPrice > $0.1.totalPrice
         }
         
         return sortedByPrice
     }
     
-    func hasDataForMonthYear(monthYear: MonthYear, inventory: Inventory, handler: ProviderResult<Bool> -> Void) {
+    func hasDataForMonthYear(_ monthYear: MonthYear, inventory: Inventory, handler: @escaping (ProviderResult<Bool>) -> Void) {
         Providers.historyProvider.historyItems(monthYear, inventory: inventory) {result in
             if let items = result.sucessResult {
-                handler(ProviderResult(status: .Success, sucessResult: items.isEmpty))
+                handler(ProviderResult(status: .success, sucessResult: items.isEmpty))
             } else {
                 QL4("Didn't return result, monthYear: \(monthYear), inventory: \(inventory)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
     
-    func clearMonthYearData(monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: ProviderResult<Any> -> Void) {
+    func clearMonthYearData(_ monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void) {
         Providers.historyProvider.removeHistoryItemsForMonthYear(monthYear, inventory: inventory, remote: remote, handler: handler)
     }
     
-    func oldestDate(inventory: Inventory, _ handler: ProviderResult<NSDate> -> Void) {
+    func oldestDate(_ inventory: Inventory, _ handler: @escaping (ProviderResult<Date>) -> Void) {
         Providers.historyProvider.oldestDate(inventory, handler: handler)
     }
     

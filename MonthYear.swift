@@ -24,18 +24,18 @@ class MonthYear: Equatable, Hashable, CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) month: \(month), year: \(year)}"
+        return "{\(type(of: self)) month: \(month), year: \(year)}"
     }
     
-    func toDate() -> NSDate? {
-        let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let components = NSDateComponents()
+    func toDate() -> Date? {
+        let gregorian = Calendar(identifier: Calendar.Identifier.gregorian)
+        var components = DateComponents()
         components.month = month
         components.year = year
-        return gregorian?.dateFromComponents(components)
+        return gregorian.date(from: components)
     }
     
-    func offsetMonths(months: Int) -> MonthYear? {
+    func offsetMonths(_ months: Int) -> MonthYear? {
         let date = toDate()
         if let dateWithOffset = date?.inMonths(months) {
             let (_, month, year) = dateWithOffset.dayMonthYear

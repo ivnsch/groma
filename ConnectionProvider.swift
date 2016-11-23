@@ -13,10 +13,15 @@ import QorumLogs
 class ConnectionProvider {
 
     static var connected: Bool {
-        let reachability = Reachability.reachabilityForInternetConnection()
-        let internetStatus = reachability.currentReachabilityStatus()
-        QL1("internetStatus: \(internetStatus.rawValue)")
-        return internetStatus != .NotReachable
+        if let reachability = Reachability.forInternetConnection() {
+            let internetStatus = reachability.currentReachabilityStatus()
+            QL1("internetStatus: \(internetStatus.rawValue)")
+            return internetStatus != NetworkStatus.NotReachable
+
+        } else {
+            QL4("Reachability is nil, returning false")
+            return false
+        }
     }
     
     static var connectedAndLoggedIn: Bool {

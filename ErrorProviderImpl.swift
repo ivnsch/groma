@@ -11,9 +11,9 @@ import QorumLogs
 
 class ErrorProviderImpl: ErrorProvider {
 
-    private let remoteProvider = RemoteErrorReporter()
+    fileprivate let remoteProvider = RemoteErrorReporter()
     
-    func reportError(error: ErrorReport) {
+    func reportError(_ error: ErrorReport) {
         QL2("Reporting an error: \(error)")
         remoteProvider.report(error) {remoteResult in
             if !remoteResult.success {

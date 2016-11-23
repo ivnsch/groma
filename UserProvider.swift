@@ -33,26 +33,26 @@ protocol UserProvider {
     */
     var mySharedUser: SharedUser? {get}
 
-    func isDifferentUser(email: String) -> Bool
+    func isDifferentUser(_ email: String) -> Bool
     
     // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
-    func login(loginData: LoginData, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ())
+    func login(_ loginData: LoginData, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
     
-    func register(user: UserInput, _ handler: ProviderResult<Any> -> ())
+    func register(_ user: UserInput, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func isRegistered(email: String, _ handler: ProviderResult<Any> -> ())
+    func isRegistered(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func logout(handler: ProviderResult<Any> -> ())
-    
-    // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
-    func authenticateWithFacebook(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ())
+    func logout(_ handler: @escaping (ProviderResult<Any>) -> Void)
     
     // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
-    func authenticateWithGoogle(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ())
+    func authenticateWithFacebook(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
+    
+    // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
+    func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
 
-    func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ())
+    func forgotPassword(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func removeAccount(handler: ProviderResult<Any> -> ())
+    func removeAccount(_ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func connectWebsocketIfLoggedIn()
     
@@ -60,5 +60,5 @@ protocol UserProvider {
     
     func isWebsocketConnected() -> Bool
     
-    func findAllKnownSharedUsers(handler: ProviderResult<[SharedUser]> -> Void)
+    func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[SharedUser]>) -> Void)
 }

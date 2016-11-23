@@ -19,7 +19,7 @@ class LangHelper: Any {
     // TODO rename *supported* lang!
     static func currentAppLang() -> SupportedLang {
         // TODO relationship with prefered lang? - make sure this can only be one of the preferred langs
-        if let langCode = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as? String {
+        if let langCode = (Locale.current as NSLocale).object(forKey: NSLocale.Key.languageCode) as? String {
             if let supportedLang = SupportedLang(rawValue: langCode) {
                 return supportedLang
             } else {

@@ -10,46 +10,46 @@ import Foundation
 
 class MemInventoryItemProvider {
     
-    private var inventoryItems = [String: [InventoryItem]]()
+    fileprivate var inventoryItems = [String: [InventoryItem]]()
     
-    private let enabled: Bool
+    fileprivate let enabled: Bool
     
     init(enabled: Bool = true) {
         self.enabled = enabled
     }
     
-    func inventoryItems(inventory: Inventory) -> [InventoryItem]? {
+    func inventoryItems(_ inventory: Inventory) -> [InventoryItem]? {
         guard enabled else {return nil}
         
         return inventoryItems[inventory.uuid]
     }
 
-    func inventoryItem(item: InventoryItem) -> InventoryItem? {
+    func inventoryItem(_ item: InventoryItem) -> InventoryItem? {
         guard enabled else {return nil}
         
         return inventoryItems[item.inventory.uuid]?.findFirst {$0.same(item)}
     }
     
-    func addInventoryItems(inventoryItems: [InventoryItem]) -> Bool {
+    func addInventoryItems(_ inventoryItems: [InventoryItem]) -> Bool {
         guard enabled else {return false}
         
         for inventoryItem in inventoryItems {
-            addInventoryItem(inventoryItem)
+            _ = addInventoryItem(inventoryItem)
         }
         return true
     }
     
     // Adds only the inventory items - this provider is not for history
-    func addInventoryItems(inventoryItemsWithHistory: [InventoryItemWithHistoryItem]) -> Bool {
+    func addInventoryItems(_ inventoryItemsWithHistory: [InventoryItemWithHistoryItem]) -> Bool {
         guard enabled else {return false}
         
         for inventoryItemWithHistory in inventoryItemsWithHistory {
-            addInventoryItem(inventoryItemWithHistory.inventoryItem)
+            _ = addInventoryItem(inventoryItemWithHistory.inventoryItem)
         }
         return true
     }
     
-    func incrementInventoryItem(inventoryItem: InventoryItem, delta: Int) -> Bool {
+    func incrementInventoryItem(_ inventoryItem: InventoryItem, delta: Int) -> Bool {
         guard enabled else {return false}
 
         // increment only quantity - in mem cache we don't care about quantityDelta, this cache is only used by the UI, not to write objs to database or server
@@ -60,7 +60,7 @@ class MemInventoryItemProvider {
     /**
     * Appends inventory item to list or increments quantity if already exists
     */
-    func addInventoryItem(inventoryItem: InventoryItem) -> Bool {
+    func addInventoryItem(_ inventoryItem: InventoryItem) -> Bool {
         guard enabled else {return false}
         
         // TODO more elegant way to write this?
@@ -85,26 +85,26 @@ class MemInventoryItemProvider {
         return true
     }
     
-    func removeInventoryItem(inventoryItem: InventoryItem) -> Bool {
+    func removeInventoryItem(_ inventoryItem: InventoryItem) -> Bool {
         guard enabled else {return false}
         
         // TODO more elegant way to write this?
         if inventoryItems[inventoryItem.inventory.uuid] != nil {
-            inventoryItems[inventoryItem.inventory.uuid]?.remove(inventoryItem)
+            _ = inventoryItems[inventoryItem.inventory.uuid]?.remove(inventoryItem)
             return true
         } else {
             return false
         }
     }
     
-    func removeInventoryItem(uuid: String, inventoryUuid: String) -> Bool {
+    func removeInventoryItem(_ uuid: String, inventoryUuid: String) -> Bool {
         guard enabled else {return false}
         
         for (inventoryUuid, items) in inventoryItems {
             if inventoryUuid == inventoryUuid {
                 for item in items {
                     if item.uuid == uuid {
-                        inventoryItems[inventoryUuid]?.remove(item)
+                        _ = inventoryItems[inventoryUuid]?.remove(item)
                         return true
                     }
                 }
@@ -113,19 +113,19 @@ class MemInventoryItemProvider {
         return false
     }
     
-    func updateInventoryItem(inventoryItem: InventoryItem) -> Bool {
+    func updateInventoryItem(_ inventoryItem: InventoryItem) -> Bool {
         guard enabled else {return false}
         
         // TODO more elegant way to write this?
         if inventoryItems[inventoryItem.inventory.uuid] != nil {
-            inventoryItems[inventoryItem.inventory.uuid]?.update(inventoryItem)
+            _ = inventoryItems[inventoryItem.inventory.uuid]?.update(inventoryItem)
             return true
         } else {
             return false
         }
     }
     
-    func updateInventoryItems(inventoryItems: [InventoryItem]) -> Bool {
+    func updateInventoryItems(_ inventoryItems: [InventoryItem]) -> Bool {
         guard enabled else {return false}
         
         for inventoryItem in inventoryItems {
@@ -136,7 +136,7 @@ class MemInventoryItemProvider {
         return true
     }
     
-    func overwrite(inventoryItems: [InventoryItem]) -> Bool {
+    func overwrite(_ inventoryItems: [InventoryItem]) -> Bool {
         guard enabled else {return false}
         
         invalidate()

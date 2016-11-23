@@ -15,9 +15,9 @@ struct RemoteInventoryWithDependencies: ResponseObjectSerializable, ResponseColl
     
     init?(representation: AnyObject) {
         guard
-            let inventoryObj = representation.valueForKeyPath("inventory"),
-            let inventory = RemoteInventory(representation: inventoryObj),
-            let unserializedUsers = representation.valueForKeyPath("users"),
+            let inventoryObj = representation.value(forKeyPath: "inventory"),
+            let inventory = RemoteInventory(representation: inventoryObj as AnyObject),
+            let unserializedUsers = representation.value(forKeyPath: "users") as? [AnyObject],
             let users = RemoteSharedUser.collection(unserializedUsers)
             else {
                 QL4("Invalid json: \(representation)")
@@ -27,9 +27,9 @@ struct RemoteInventoryWithDependencies: ResponseObjectSerializable, ResponseColl
         self.users = users
     }
     
-    static func collection(representation: AnyObject) -> [RemoteInventoryWithDependencies]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteInventoryWithDependencies]? {
         var inventories = [RemoteInventoryWithDependencies]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let inventory = RemoteInventoryWithDependencies(representation: obj) {
                 inventories.append(inventory)
             } else {
@@ -41,6 +41,6 @@ struct RemoteInventoryWithDependencies: ResponseObjectSerializable, ResponseColl
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventory: \(inventory), users: \(users)}"
+        return "{\(type(of: self)) inventory: \(inventory), users: \(users)}"
     }
 }

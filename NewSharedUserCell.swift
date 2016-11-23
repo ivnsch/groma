@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 
 protocol NewSharedUserCellDelegate: class {
-    func onAddSharedUser(sharedUser: SharedUser, cell: NewSharedUserCell)
+    func onAddSharedUser(_ sharedUser: SharedUser, cell: NewSharedUserCell)
 }
 
 class NewSharedUserCell: UITableViewCell {
@@ -27,10 +27,10 @@ class NewSharedUserCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        selectionStyle = .None
+        selectionStyle = .none
     }
 
-    @IBAction func onAddTap(sender: UIButton) {
+    @IBAction func onAddTap(_ sender: UIButton) {
         if let sharedUser = sharedUser {
             delegate?.onAddSharedUser(sharedUser, cell: self)
         } else {

@@ -12,19 +12,19 @@ import QorumLogs
 // TODO rename this controller in only groups controller and remove the old groups controller. Also delegate methods not with "Add" but simply "Tap" - the implementation of this delegate decides what the tap means.
 
 protocol QuickAddListItemDelegate: class {
-    func onAddProduct(product: Product)
-    func onAddGroup(group: ListItemGroup)
+    func onAddProduct(_ product: Product)
+    func onAddGroup(_ group: ListItemGroup)
     func onCloseQuickAddTap()
-    func onHasItems(hasItems: Bool)
+    func onHasItems(_ hasItems: Bool)
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
 }
 
 enum QuickAddItemType {
-    case Product, Group, ProductForList
+    case product, group, productForList
 }
 
 enum QuickAddContent {
-    case Items, AddProduct
+    case items, addProduct
 }
 
 
@@ -35,7 +35,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     weak var delegate: QuickAddListItemDelegate?
     
-    private var filteredQuickAddItems: [QuickAddItem] = [] {
+    fileprivate var filteredQuickAddItems: [QuickAddItem] = [] {
         didSet {
             collectionView.reloadData()
         }
@@ -43,7 +43,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     var open: Bool = false
     
-    var contentData: (itemType: QuickAddItemType, sortBy: QuickAddItemSortBy) = (.Product, .Fav) {
+    var contentData: (itemType: QuickAddItemType, sortBy: QuickAddItemSortBy) = (.product, .fav) {
         didSet {
 //            if contentData.itemType != oldValue.itemType || contentData.sortBy != oldValue.sortBy {
                 clearAndLoadFirstPage(false)
@@ -65,8 +65,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     var onViewDidLoad: VoidFunction? // ensure called after outlets set
     
-    private let paginator = Paginator(pageSize: 100)
-    private var loadingPage: Bool = false
+    fileprivate let paginator = Paginator(pageSize: 100)
+    fileprivate var loadingPage: Bool = false
     
     var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
     
@@ -75,60 +75,60 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         onViewDidLoad?()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 //        clearAndLoadFirstPage(false)
     }
     
-    private func clearAndLoadFirstPage(isSearchLoad: Bool) {
+    fileprivate func clearAndLoadFirstPage(_ isSearchLoad: Bool) {
         filteredQuickAddItems = []
         paginator.reset()
         loadPossibleNextPage(isSearchLoad)
     }
 
-    private func toGroupSortBy(sortBy: QuickAddItemSortBy) -> GroupSortBy {
+    fileprivate func toGroupSortBy(_ sortBy: QuickAddItemSortBy) -> GroupSortBy {
         switch sortBy {
-        case .Alphabetic: return .Alphabetic
-        case .Fav: return .Fav
+        case .alphabetic: return .alphabetic
+        case .fav: return .fav
         }
     }
     
-    private func toProductSortBy(sortBy: QuickAddItemSortBy) -> ProductSortBy {
+    fileprivate func toProductSortBy(_ sortBy: QuickAddItemSortBy) -> ProductSortBy {
         switch sortBy {
-        case .Alphabetic: return .Alphabetic
-        case .Fav: return .Fav
+        case .alphabetic: return .alphabetic
+        case .fav: return .fav
         }
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filteredQuickAddItems.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let item = filteredQuickAddItems[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let item = filteredQuickAddItems[(indexPath as NSIndexPath).row]
         
         var cell: UICollectionViewCell
         if let productItem = item as? QuickAddProduct {
-            let itemCell = collectionView.dequeueReusableCellWithReuseIdentifier("itemCell", forIndexPath: indexPath) as! QuickAddItemCell
+            let itemCell = collectionView.dequeueReusableCell(withReuseIdentifier: "itemCell", for: indexPath) as! QuickAddItemCell
             itemCell.item = productItem
             cell = itemCell
             
         } else if let groupItem = item as? QuickAddGroup {
-            let groupCell = collectionView.dequeueReusableCellWithReuseIdentifier("groupCell", forIndexPath: indexPath) as! QuickAddGroupCell
+            let groupCell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupCell", for: indexPath) as! QuickAddGroupCell
             groupCell.item = groupItem
             cell = groupCell
             
         } else {
             print("Error: invalid model type in quickAddItems: \(item)")
-            cell = collectionView.dequeueReusableCellWithReuseIdentifier("itemCell", forIndexPath: indexPath) // assign something so it compiles
-            cell.contentView.backgroundColor = UIColor.flatGrayColorDark()
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "itemCell", for: indexPath) // assign something so it compiles
+            cell.contentView.backgroundColor = UIColor.flatGrayDark
         }
      
         if !item.didAnimateAlready { // show cell grow animation while scrolling down
-            cell.transform = CGAffineTransformMakeScale(0.5, 0.5)
-            let delay = NSTimeInterval(Double(indexPath.row) * 0.4 / Double(filteredQuickAddItems.count))
-            UIView.animateWithDuration(0.2, delay: delay, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: [], animations: {
-                cell.transform = CGAffineTransformMakeScale(1, 1)
+            cell.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+            let delay = TimeInterval(Double((indexPath as NSIndexPath).row) * 0.4 / Double(filteredQuickAddItems.count))
+            UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: [], animations: {
+                cell.transform = CGAffineTransform(scaleX: 1, y: 1)
                 }, completion: {finished in
                     item.didAnimateAlready = true
             })
@@ -136,36 +136,36 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let item = filteredQuickAddItems[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+        let item = filteredQuickAddItems[(indexPath as NSIndexPath).row]
         
         if let textSize = item.textSize {
             return textSize
         } else {
-            let label1TextSize = item.labelText.size(UIFont.systemFontOfSize(LabelMore.mapToFontSize(30) ?? 12))
+            let label1TextSize = item.labelText.size(UIFont.systemFont(ofSize: LabelMore.mapToFontSize(30) ?? 12))
             
             // For now use same height for all items independently if they have 2nd label or not.
 //            let label2TextSize = item.label2Text?.size(Fonts.verySmallLight) ?? CGSizeZero
             let label2TextSize = item.label2Text.size(Fonts.verySmallLight)
             
-            let label3TextSize = item.label3Text.isEmpty ? CGSizeZero : item.label3Text.size(UIFont.systemFontOfSize(LabelMore.mapToFontSize(20) ?? 12))
+            let label3TextSize = item.label3Text.isEmpty ? CGSize.zero : item.label3Text.size(UIFont.systemFont(ofSize: LabelMore.mapToFontSize(20) ?? 12))
             
             let label2Size = min(label2TextSize.width, label1TextSize.width + 30) // allow label2 to be max. 30pt wider than label 1
             let cellWidth = max(label1TextSize.width, label2Size) + DimensionsManager.quickAddCollectionViewCellHPadding // the cell has to be as wide as the widest label, and add some inset (20)
             let finalCellWidth = max(cellWidth, 50) // don't allow cell to have less width than 50pt otherwise shape looks weird
             let cellHeight = label1TextSize.height + label2TextSize.height + label3TextSize.height + DimensionsManager.quickAddCollectionViewCellVPadding // 6: add some space
             
-            let textSize = CGSizeMake(finalCellWidth, cellHeight)
+            let textSize = CGSize(width: finalCellWidth, height: cellHeight)
             
-            filteredQuickAddItems[indexPath.row].textSize = textSize // cache calculated text size
+            filteredQuickAddItems[(indexPath as NSIndexPath).row].textSize = textSize // cache calculated text size
             
             return textSize
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let item = filteredQuickAddItems[indexPath.row]
+        let item = filteredQuickAddItems[(indexPath as NSIndexPath).row]
 
         // Comment for product and group items: Increment items immediately in memory, then do db update with the incremented items. We could do the increment in database (which is a bit more reliable), but this requires us to fetch first the item which makes the operation relatively slow. We also have to add list items at the same time and this operation should not slow others. And for favs reliability is not very important.
         // TODO!!! review when testing server sync that - when adding many items quickly - the list item count in server is the same. In the simulator it's visible how the updateFav operation for some reason "cuts" the adding of items, that is if we tap a product 20 times very quickly normally it will continue adding until 20 after we stop tapping. But with updateFav, it just adds until we stop tapping. This operation touches only the product, which makes this weird, as the increment list items affects the listitem but shouldn't affect the product. But for some reason it seems to "cut" the pending listitem increments (?). So problem is, maybe when we tap 20 times - we send 20 request to the server, which processes it correctly and adds 20 items, but due to the "cut" we add less than 20 in the client. So when we do sync we suddenly see more items than what we thought we added.
@@ -189,10 +189,10 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     }
     
     func scrollToBottom() {
-        collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: filteredQuickAddItems.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
+        collectionView.scrollToItem(at: IndexPath(row: filteredQuickAddItems.count - 1, section: 0), at: .top, animated: true)
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
@@ -201,28 +201,28 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
     }
     
-    func setEmptyViewVisible(visible: Bool) {
-        UIView.animateWithDuration(0.3) {[weak self] in
-            self?.emptyView.hidden = !visible
-        }
+    func setEmptyViewVisible(_ visible: Bool) {
+        UIView.animate(withDuration: 0.3, animations: {[weak self] in
+            self?.emptyView.isHidden = !visible
+        }) 
     }
     
-    override func setEditing(editing: Bool, animated: Bool) {
+    override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
 //        collectionView.editing = editing // TODO! collection view doesn't know this - for what did we need editing with tableview here anyway?
     }
     
     // isSearchLoad: true if load is triggered from search box, false if pagination/first load
-    private func loadPossibleNextPage(isSearchLoad: Bool) {
+    fileprivate func loadPossibleNextPage(_ isSearchLoad: Bool) {
         
 //        QL1("Called loadPossibleNextPage, isSearchLoad: \(isSearchLoad)")
         
-        func setLoading(loading: Bool) {
+        func setLoading(_ loading: Bool) {
             self.loadingPage = loading
 //            self.tableViewFooter.hidden = !loading
         }
         
-        func onItemsLoaded(items: [QuickAddItem]) {
+        func onItemsLoaded(_ items: [QuickAddItem]) {
             
             QL1("onItemsLoaded: \(items.count)")
             
@@ -259,7 +259,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 }
                 }, onError: {[weak self] result in
                     setLoading(false)
-                    self?.defaultErrorHandler()(providerResult: result)
+                    self?.defaultErrorHandler()(result)
                 })
             )
         }
@@ -286,7 +286,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 }
                 }, onError: {[weak self] result in
                     setLoading(false)
-                    self?.defaultErrorHandler()(providerResult: result)
+                    self?.defaultErrorHandler()(result)
                 })
             )
         }
@@ -305,7 +305,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 }
                 }, onError: {[weak self] result in
                     setLoading(false)
-                    self?.defaultErrorHandler()(providerResult: result)
+                    self?.defaultErrorHandler()(result)
                 })
             )
         }
@@ -323,11 +323,11 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     }
                 
                     switch weakSelf.contentData.itemType {
-                    case .Product:
+                    case .product:
                         loadProducts()
-                    case .Group:
+                    case .group:
                         loadGroups()
-                    case .ProductForList:
+                    case .productForList:
                         loadProductsForList()
                     }
                 }
@@ -335,7 +335,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
     }
     
-    @IBAction func onEmptyViewTap(sender: UIButton) {
+    @IBAction func onEmptyViewTap(_ sender: UIButton) {
         tabBarController?.selectedIndex = Constants.tabGroupsIndex
     }
     

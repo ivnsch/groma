@@ -14,7 +14,7 @@ class ManageProductCategoryCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
     var item: ItemWithCellAttributes<ProductCategory>? {
@@ -25,7 +25,7 @@ class ManageProductCategoryCell: UITableViewCell {
                 } else {
                     categoryNameLabel.text = item.item.name
                 }
-                backgroundColor = item.item.color.colorWithAlphaComponent(0.5)
+                backgroundColor = item.item.color.withAlphaComponent(0.5)
             }
         }
     }

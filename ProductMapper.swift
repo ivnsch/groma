@@ -10,7 +10,7 @@ import Foundation
 
 class ProductMapper {
 
-    class func productWithDB(dbProduct: DBProduct) -> Product {
+    class func productWithDB(_ dbProduct: DBProduct) -> Product {
         return Product(
             uuid: dbProduct.uuid,
             name: dbProduct.name,
@@ -21,7 +21,7 @@ class ProductMapper {
         )
     }
     
-    class func dbWithProduct(product: Product) -> DBProduct {
+    class func dbWithProduct(_ product: Product) -> DBProduct {
         let dbProduct = DBProduct()
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
@@ -34,7 +34,7 @@ class ProductMapper {
         return dbProduct
     }
     
-    class func productWithRemote(remoteProduct: RemoteProduct, categoriesDict: [String: RemoteProductCategory]) -> Product? {
+    class func productWithRemote(_ remoteProduct: RemoteProduct, categoriesDict: [String: RemoteProductCategory]) -> Product? {
         if let category = categoriesDict[remoteProduct.uuid] {
             return productWithRemote(remoteProduct, category: ProductCategoryMapper.categoryWithRemote(category))
         } else {
@@ -43,11 +43,11 @@ class ProductMapper {
         }
     }
     
-    class func productWithRemote(remoteProduct: RemoteProduct, category: RemoteProductCategory) -> Product {
+    class func productWithRemote(_ remoteProduct: RemoteProduct, category: RemoteProductCategory) -> Product {
         return productWithRemote(remoteProduct, category: ProductCategoryMapper.categoryWithRemote(category))
     }
     
-    class func productWithRemote(remoteProduct: RemoteProduct, category: ProductCategory) -> Product {
+    class func productWithRemote(_ remoteProduct: RemoteProduct, category: ProductCategory) -> Product {
         return Product(
             uuid: remoteProduct.uuid,
             name: remoteProduct.name,
@@ -58,7 +58,7 @@ class ProductMapper {
         )
     }
     
-    class func dbProductWithRemote(product: RemoteProduct, category: RemoteProductCategory) -> DBProduct {
+    class func dbProductWithRemote(_ product: RemoteProduct, category: RemoteProductCategory) -> DBProduct {
         let dbProduct = DBProduct()
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
@@ -70,7 +70,7 @@ class ProductMapper {
         return dbProduct
     }
     
-    class func listItemsWithRemote(remoteListItems: RemoteProductsWithDependencies) -> [Product] {
+    class func listItemsWithRemote(_ remoteListItems: RemoteProductsWithDependencies) -> [Product] {
         
         let productsCategoriesDict: [String: RemoteProductCategory] = remoteListItems.categories.toDictionary{($0.uuid, $0)}
         
@@ -81,7 +81,7 @@ class ProductMapper {
         return products
     }
     
-    class func dbListItemsWithRemote(remoteListItems: RemoteProductsWithDependencies) -> [DBProduct] {
+    class func dbListItemsWithRemote(_ remoteListItems: RemoteProductsWithDependencies) -> [DBProduct] {
         
         let productsCategoriesDict: [String: RemoteProductCategory] = remoteListItems.categories.toDictionary{($0.uuid, $0)}
         
@@ -92,9 +92,9 @@ class ProductMapper {
         return products
     }
     
-    class func productsWithRemote(remoteProducts: RemoteProductsWithDependencies) -> ProductsWithDependencies {
+    class func productsWithRemote(_ remoteProducts: RemoteProductsWithDependencies) -> ProductsWithDependencies {
         
-        func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
+        func toProductCategoryDict(_ remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
             var dict: [String: ProductCategory] = [:]
             var arr: [ProductCategory] = []
             for remoteProductCategory in remoteProductsCategories {

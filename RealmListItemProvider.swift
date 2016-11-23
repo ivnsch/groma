@@ -11,7 +11,7 @@ import RealmSwift
 import QorumLogs
 
 enum QuickAddItemSortBy {
-    case Alphabetic, Fav
+    case alphabetic, fav
 }
 
 class RealmListItemProvider: RealmProvider {
@@ -21,7 +21,7 @@ class RealmListItemProvider: RealmProvider {
     When used for add: incrementQuantity should be true, update: false. After clearing db (e.g. sync) also false (since there's nothing to increment)
     NOTE: Assumes all listItems belong to the same list (only the list of first list item is used for filtering)
     */
-    func addOrIncrementListItems(listItems: [ListItem], updateSection: Bool = true, handler: [ListItem]? -> ()) {
+    func addOrIncrementListItems(_ listItems: [ListItem], updateSection: Bool = true, handler: @escaping ([ListItem]?) -> ()) {
         doInWriteTransaction({[weak self] realm in
             self?.addOrIncrementListItemsSync(realm, listItems: listItems, updateSection: updateSection)
             }, finishHandler: {listItemsMaybe in
@@ -29,9 +29,10 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    func addOrIncrementListItemsSync(realm: Realm, var listItems: [ListItem], updateSection: Bool = true) -> [ListItem] {
+    func addOrIncrementListItemsSync(_ realm: Realm, listItems: [ListItem], updateSection: Bool = true) -> [ListItem] {
+        var listItems = listItems
         
-        let existingListItems = realm.objects(DBListItem).filter(DBListItem.createFilter(listItems))
+        let existingListItems = realm.objects(DBListItem.self).filter(DBListItem.createFilter(listItems))
         
         let uuidToDBListItemDict: [String: DBListItem] = existingListItems.toDictionary{
             ($0.product.uuid, $0)
@@ -54,7 +55,7 @@ class RealmListItemProvider: RealmProvider {
         return listItems
     }
     
-    func updateListItemsOrderLocal(orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: Bool -> Void) {
+    func updateListItemsOrderLocal(_ orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             
             // order update can change the section a list item is in, so we need to update the section too.
@@ -81,29 +82,45 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    func storeRemoteListItemSwitchResult(statusUpdate: ListItemStatusUpdate, result: RemoteSwitchListItemResult, _ handler: Bool -> Void) {
+    func storeRemoteListItemSwitchResult(_ statusUpdate: ListItemStatusUpdate, result: RemoteSwitchListItemResult, _ handler: @escaping (Bool) -> Void) {
 
         doInWriteTransaction({realm in
 
             let lastUpdate = result.lastUpdate
             
             let switchedItem = result.switchedItem
-            let itemDict = ["uuid": switchedItem.uuid, "todoQuantity": switchedItem.todoQuantity, "doneQuantity": switchedItem.doneQuantity, "todoOrder": switchedItem.todoOrder, "doneOrder": switchedItem.doneOrder, "stashOrder": switchedItem.stashOrder, DBSyncable.lastUpdateFieldName: lastUpdate]
+            let itemDict: [String: AnyObject] = [
+                "uuid": switchedItem.uuid as AnyObject,
+                "todoQuantity": switchedItem.todoQuantity as AnyObject,
+                "doneQuantity": switchedItem.doneQuantity as AnyObject,
+                "todoOrder": switchedItem.todoOrder as AnyObject,
+                "doneOrder": switchedItem.doneOrder as AnyObject,
+                "stashOrder": switchedItem.stashOrder as AnyObject,
+                DBSyncable.lastUpdateFieldName: lastUpdate as AnyObject
+            ]
             
             let srcOrderUpdateKey: String = {
                 switch statusUpdate.src {
-                case .Todo: return "todoOrder"
-                case .Done: return "doneOrder"
-                case .Stash: return "stashOrder"
+                case .todo: return "todoOrder"
+                case .done: return "doneOrder"
+                case .stash: return "stashOrder"
                 }
             }()
             
             let srcItemsOrderDicts = result.itemOrderUpdates.map {item in
-                return ["uuid": item.uuid, srcOrderUpdateKey: item.order, DBSyncable.lastUpdateFieldName: lastUpdate]
+                return ["uuid": item.uuid as AnyObject,
+                        srcOrderUpdateKey: item.order as AnyObject,
+                        DBSyncable.lastUpdateFieldName: lastUpdate as AnyObject
+                ]
             }
             
             let sectionsOrderDicts = result.sectionOrderUpdates.map {item in
-                return ["uuid": item.uuid, "todoOrder": item.todoOrder, "doneOrder": item.doneOrder, "stashOrder": item.stashOrder, DBSyncable.lastUpdateFieldName: lastUpdate]
+                return ["uuid": item.uuid as AnyObject,
+                        "todoOrder": item.todoOrder as AnyObject,
+                        "doneOrder": item.doneOrder as AnyObject,
+                        "stashOrder": item.stashOrder as AnyObject,
+                        DBSyncable.lastUpdateFieldName: lastUpdate
+                ]
             }
 
             realm.create(DBListItem.self, value: itemDict, update: true)
@@ -125,34 +142,41 @@ class RealmListItemProvider: RealmProvider {
     // TODO these are a bit weird, the data we store on switch all via rest and websockets should be the same? if we need same handling, needs server changes as the data sent is different
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    func storeRemoteAllListItemSwitchResult(statusUpdate: ListItemStatusUpdate, result: RemoteSwitchAllListItemsResult, _ handler: Bool -> Void) {
+    func storeRemoteAllListItemSwitchResult(_ statusUpdate: ListItemStatusUpdate, result: RemoteSwitchAllListItemsResult, _ handler: @escaping (Bool) -> Void) {
         
         doInWriteTransaction({realm in
             
             let lastUpdate = result.lastUpdate
             
-            func quantityKey(status: ListItemStatus) -> String {
+            func quantityKey(_ status: ListItemStatus) -> String {
                 switch status {
-                case .Todo: return "todoQuantity"
-                case .Done: return "doneQuantity"
-                case .Stash: return "stashQuantity"
+                case .todo: return "todoQuantity"
+                case .done: return "doneQuantity"
+                case .stash: return "stashQuantity"
                 }
             }
-            func orderKey(status: ListItemStatus) -> String {
+            func orderKey(_ status: ListItemStatus) -> String {
                 switch status {
-                case .Todo: return "todoOrder"
-                case .Done: return "doneOrder"
-                case .Stash: return "stashOrder"
+                case .todo: return "todoOrder"
+                case .done: return "doneOrder"
+                case .stash: return "stashOrder"
                 }
             }
             
             result.items.forEach {item in
-                let dict = ["uuid": item.uuid, orderKey(statusUpdate.dst): item.dstOrder, quantityKey(statusUpdate.dst): item.dstQuantity, DBSyncable.lastUpdateFieldName: NSNumber(longLong: Int64(lastUpdate))]
+                let dict = ["uuid": item.uuid as AnyObject,
+                            orderKey(statusUpdate.dst): item.dstOrder as AnyObject,
+                            quantityKey(statusUpdate.dst): item.dstQuantity as AnyObject,
+                            DBSyncable.lastUpdateFieldName: NSNumber(value: Int64(lastUpdate))
+                ]
                 realm.create(DBListItem.self, value: dict, update: true)
             }
             
             result.sections.forEach {section in
-                let dict = ["uuid": section.uuid, orderKey(statusUpdate.dst): section.dstOrder, DBSyncable.lastUpdateFieldName: NSNumber(longLong: Int64(lastUpdate))]
+                let dict = ["uuid": section.uuid as AnyObject,
+                            orderKey(statusUpdate.dst): section.dstOrder as AnyObject,
+                            DBSyncable.lastUpdateFieldName: NSNumber(value: Int64(lastUpdate))
+                ]
                 realm.create(DBSection.self, value: dict, update: true)
             }
             
@@ -164,10 +188,12 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // For websockets we just refresh the timestamps. For rest response we update quantity+order, the reason for this is bc concurrency etc. maybe the items get a different order or quantity in the server and we update then the client immediately, sending the state in the response. For websockets we don't have time and chose the most quick implementation which is to send just the timestamp and update the switched client list items with this timestamp.
-    func storeWebsocketAllListItemSwitchResult(listitems: [ListItem], lastUpdate: Int64, _ handler: Bool -> Void) {
+    func storeWebsocketAllListItemSwitchResult(_ listitems: [ListItem], lastUpdate: Int64, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             listitems.forEach {item in
-                let dict = ["uuid": item.uuid, DBSyncable.lastUpdateFieldName: NSNumber(longLong: Int64(lastUpdate))]
+                let dict = ["uuid": item.uuid as AnyObject,
+                            DBSyncable.lastUpdateFieldName: NSNumber(value: Int64(lastUpdate))
+                ]
                 realm.create(DBListItem.self, value: dict, update: true)
             }
 
@@ -182,13 +208,13 @@ class RealmListItemProvider: RealmProvider {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     
     
-    func addListItem(status: ListItemStatus, product: StoreProduct, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
+    func addListItem(_ status: ListItemStatus, product: StoreProduct, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: @escaping (ListItem?) -> Void) {
         
         doInWriteTransaction({realm in
             return syncedRet(self) {
                 
                 // see if there's already a listitem for this product in the list - if yes only increment it
-                if let existingListItem = realm.objects(DBListItem).filter(DBListItem.createFilterWithProductName(product.product.name)).first {
+                if let existingListItem = realm.objects(DBListItem.self).filter(DBListItem.createFilterWithProductName(product.product.name)).first {
                     existingListItem.increment(ListItemStatusQuantity(status: status, quantity: quantity))
                     
                     // possible updates (when user submits a new list item using add edit product controller)
@@ -206,14 +232,14 @@ class RealmListItemProvider: RealmProvider {
                 } else { // no list item for product in the list, create a new one
                     
                     // see if there's already a section for the new list item in the list, if not create a new one
-                    let listItemsInList = realm.objects(DBListItem).filter(DBListItem.createFilterList(list.uuid))
+                    let listItemsInList = realm.objects(DBListItem.self).filter(DBListItem.createFilterList(list.uuid))
                     let sectionName = sectionNameMaybe ?? product.product.category.name
                     let sectionColor = sectionColorMaybe ?? product.product.category.color
                     let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
                         return SectionMapper.sectionWithDB(item.section)
                         } ?? {
                             let sectionCount = Set(listItemsInList.map{$0.section}).count
-                            return Section(uuid: NSUUID().UUIDString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+                            return Section(uuid: NSUUID().uuidString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
                         }()
                     
                     
@@ -221,12 +247,12 @@ class RealmListItemProvider: RealmProvider {
                     var listItemOrder = 0
                     for existingListItem in listItemsInList {
                         if existingListItem.section.uuid == section.uuid {
-                            listItemOrder++
+                            listItemOrder += 1
                         }
                     }
                     
                     // create the list item and save it
-                    let listItem = ListItem(uuid: NSUUID().UUIDString, product: product, section: section, list: list, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
+                    let listItem = ListItem(uuid: NSUUID().uuidString, product: product, section: section, list: list, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
                     
                     let dbListItem = ListItemMapper.dbWithListItem(listItem)
                     realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
@@ -239,37 +265,37 @@ class RealmListItemProvider: RealmProvider {
     }
 
     
-    func loadListItems(list: List, handler: [ListItem] -> ()) {
+    func loadListItems(_ list: List, handler: @escaping ([ListItem]) -> ()) {
         loadListItems(list.uuid, handler: handler)
     }
 
-    func loadListItems(listUuid: String, handler: [ListItem] -> Void) {
+    func loadListItems(_ listUuid: String, handler: @escaping ([ListItem]) -> Void) {
         let mapper = {ListItemMapper.listItemWithDB($0)}
         self.load(mapper, filter: DBListItem.createFilterList(listUuid), handler: handler)
     }
     
-    func loadListItems(uuids: [String], handler: [ListItem] -> Void) {
+    func loadListItems(_ uuids: [String], handler: @escaping ([ListItem]) -> Void) {
         let mapper = {ListItemMapper.listItemWithDB($0)}
         self.load(mapper, filter: DBListItem.createFilterForUuids(uuids), handler: handler)
     }
     
-    func listItem(list: List, product: Product, handler: ListItem? -> Void) {
+    func listItem(_ list: List, product: Product, handler: @escaping (ListItem?) -> Void) {
         let mapper = {ListItemMapper.listItemWithDB($0)}
         self.loadFirst(mapper, filter: DBListItem.createFilter(list, product: product), handler: handler)
     }
     
-    func findListItem(uuid: String, _ handler: ListItem? -> Void) {
+    func findListItem(_ uuid: String, _ handler: @escaping (ListItem?) -> Void) {
         let mapper = {ListItemMapper.listItemWithDB($0)}
         self.loadFirst(mapper, filter: DBListItem.createFilter(uuid), handler: handler)
     }
 
-    func findListItemWithUnique(productName: String, productBrand: String, list: List, handler: ListItem? -> Void) {
+    func findListItemWithUnique(_ productName: String, productBrand: String, list: List, handler: @escaping (ListItem?) -> Void) {
         let mapper = {ListItemMapper.listItemWithDB($0)}
         self.loadFirst(mapper, filter: DBListItem.createFilterUniqueInList(productName, productBrand: productBrand, list: list), handler: handler)
     }
 
     // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
-    func deletePossibleListItemWithUnique(productName: String, productBrand: String, notUuid: String, list: List, handler: Bool -> Void) {
+    func deletePossibleListItemWithUnique(_ productName: String, productBrand: String, notUuid: String, list: List, handler: @escaping (Bool) -> Void) {
         removeReturnCount(DBListItem.createFilterUniqueInListNotUuid(productName, productBrand: productBrand, notUuid: notUuid, list: list), handler: {removedCountMaybe in
             if let removedCount = removedCountMaybe {
                 if removedCount > 0 {
@@ -284,20 +310,20 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // hm...
-    func loadAllListItems(handler: [ListItem] -> ()) {
+    func loadAllListItems(_ handler: @escaping ([ListItem]) -> ()) {
         let mapper = {ListItemMapper.listItemWithDB($0)}
         self.load(mapper, handler: handler)
     }
     
-    func remove(listItem: ListItem, markForSync: Bool, handler: Bool -> ()) {
+    func remove(_ listItem: ListItem, markForSync: Bool, handler: @escaping (Bool) -> ()) {
         remove(listItem.uuid, listUuid: listItem.list.uuid, sectionUuid: listItem.section.uuid, markForSync: markForSync, handler: handler)
     }
 
-    func remove(listItemUuid: String, listUuid: String, sectionUuid sectionUuidMaybe: String? = nil, markForSync: Bool, handler: Bool -> ()) {
+    func remove(_ listItemUuid: String, listUuid: String, sectionUuid sectionUuidMaybe: String? = nil, markForSync: Bool, handler: @escaping (Bool) -> ()) {
 
         doInWriteTransaction({realm in
             
-            let result = realm.objects(DBListItem).filter(DBListItem.createFilter(listItemUuid))
+            let result = realm.objects(DBListItem.self).filter(DBListItem.createFilter(listItemUuid))
             
             if markForSync { // add tombstone
                 if let dbListItem = result.first {
@@ -348,7 +374,7 @@ class RealmListItemProvider: RealmProvider {
 //        }
 //    }
     
-    func updateListItems(listItems: [ListItem], handler: Bool -> Void) {
+    func updateListItems(_ listItems: [ListItem], handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             return self?.updateListItemsSync(realm, listItems: listItems)
             }, finishHandler: {listItemsMaybe in
@@ -356,7 +382,7 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    func updateListItemsSync(realm: Realm, listItems: [ListItem]) -> Bool {
+    func updateListItemsSync(_ realm: Realm, listItems: [ListItem]) -> Bool {
         for listItem in listItems {
             let dbListItem = ListItemMapper.dbWithListItem(listItem)
             realm.add(dbListItem, update: true)
@@ -365,46 +391,46 @@ class RealmListItemProvider: RealmProvider {
         return true
     }
     
-    func overwrite(listItems: [ListItem], listUuid: String, clearTombstones: Bool, handler: Bool -> ()) {
+    func overwrite(_ listItems: [ListItem], listUuid: String, clearTombstones: Bool, handler: @escaping (Bool) -> ()) {
         let dbListItems = listItems.map{ListItemMapper.dbWithListItem($0)}
-        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveListItem.self, DBRemoveListItem.createFilterForList(listUuid))} : nil
+        let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveListItem.self, DBRemoveListItem.createFilterForList(listUuid))} : nil
         self.overwrite(dbListItems, deleteFilter: DBListItem.createFilterList(listUuid), resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
     
     /**
     Gets list items count with a certain status in a certain list
     */
-    func listItemCount(status: ListItemStatus, list: List, handler: Int? -> Void) {
-        let finished: Int? -> Void = {result in
-            dispatch_async(dispatch_get_main_queue(), {
+    func listItemCount(_ status: ListItemStatus, list: List, handler: @escaping (Int?) -> Void) {
+        let finished: (Int?) -> Void = {result in
+            DispatchQueue.main.async(execute: {
                 handler(result)
             })
         }
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        DispatchQueue.global(qos: .background).async {
             do {
                 let realm = try Realm()
-                let listItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(list.uuid))
+                let listItems = realm.objects(DBListItem.self).filter(DBListItem.createFilterList(list.uuid))
                 let count = listItems.filter{$0.hasStatus(status)}.count
                 finished(count)
             } catch _ {
                 print("Error: creating Realm() in load, returning empty results")
                 finished(nil) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
             }
-        })
+        }
     }
     
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
-    func incrementListItem(item: ListItem, delta: Int, status: ListItemStatus, handler: ListItem? -> Void) {
+    func incrementListItem(_ item: ListItem, delta: Int, status: ListItemStatus, handler: @escaping (ListItem?) -> Void) {
         incrementListItem(ItemIncrement(delta: delta, itemUuid: item.uuid), status: status, handler: handler)
     }
 
-    func incrementListItem(increment: ItemIncrement, status: ListItemStatus, handler: ListItem? -> Void) {
+    func incrementListItem(_ increment: ItemIncrement, status: ListItemStatus, handler: @escaping (ListItem?) -> Void) {
 
         doInWriteTransaction({realm in
 
             return syncedRet(self) {
 
-                let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilter(increment.itemUuid)).toArray()
+                let dbListItems = realm.objects(DBListItem.self).filter(DBListItem.createFilter(increment.itemUuid)).toArray()
                 let listItems = dbListItems.map{ListItemMapper.listItemWithDB($0)}
                 
                 if let listItem = listItems.first {
@@ -430,7 +456,7 @@ class RealmListItemProvider: RealmProvider {
     
     // MARK: - Sync
 
-    func clearListItemTombstone(uuid: String, handler: Bool -> Void) {
+    func clearListItemTombstone(_ uuid: String, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             realm.deleteForFilter(DBRemoveListItem.self, DBRemoveListItem.createFilter(uuid))
             return true
@@ -439,7 +465,7 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    func clearListItemTombstonesForList(listUuid: String, handler: Bool -> Void) {
+    func clearListItemTombstonesForList(_ listUuid: String, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             realm.deleteForFilter(DBRemoveListItem.self, DBRemoveListItem.createFilterForList(listUuid))
             return true
@@ -449,13 +475,13 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // TODO! is this method still necessary? we have global sync now
-    func saveListsSyncResult(syncResult: RemoteListWithListItemsSyncResult, handler: Bool -> ()) {
+    func saveListsSyncResult(_ syncResult: RemoteListWithListItemsSyncResult, handler: @escaping (Bool) -> ()) {
         
         doInWriteTransaction({realm in
             
-            let inventories = realm.objects(DBList)
-            let inventoryItems = realm.objects(DBListItem)
-            let sections = realm.objects(DBSection)
+            let inventories = realm.objects(DBList.self)
+            let inventoryItems = realm.objects(DBListItem.self)
+            let sections = realm.objects(DBSection.self)
 
             realm.delete(inventories)
             realm.delete(inventoryItems)
@@ -499,9 +525,9 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    func updateListItemWithIncrementResult(incrementResult: RemoteListItemIncrementResult, handler: Bool -> Void) {
+    func updateListItemWithIncrementResult(_ incrementResult: RemoteListItemIncrementResult, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
-            if let storedItem = (realm.objects(DBListItem).filter(DBListItem.createFilter(incrementResult.uuid)).first) {
+            if let storedItem = (realm.objects(DBListItem.self).filter(DBListItem.createFilter(incrementResult.uuid)).first) {
                 
                 // store the timestamp only if it matches with the current quantity. E.g. if user increments very quicky 1,2,3,4,5,6
                 // we may receive the response from server for 1 when the database is already at 4 - so we don't want to store 1's timestamp for 4. When the user stops at 6 only the timestamp with the response with 6 quantity will be stored.
@@ -532,7 +558,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     
-    func updateListItemLastSyncTimeStamp(updateDict: [String: AnyObject], handler: Bool -> Void) {
+    func updateListItemLastSyncTimeStamp(_ updateDict: [String: AnyObject], handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             self?.updateListItemLastSyncTimeStamp(realm, updateDict: updateDict)
             return true
@@ -541,7 +567,7 @@ class RealmListItemProvider: RealmProvider {
         })
     }
 
-    func updateListItemsLastSyncTimeStamps(updateDicts: [[String: AnyObject]], handler: Bool -> Void) {
+    func updateListItemsLastSyncTimeStamps(_ updateDicts: [[String: AnyObject]], handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             for updateDict in updateDicts {
                 self?.updateListItemLastSyncTimeStamp(realm, updateDict: updateDict)
@@ -552,11 +578,11 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    func updateListItemLastSyncTimeStamp(realm: Realm, updateDict: [String: AnyObject]) {
+    func updateListItemLastSyncTimeStamp(_ realm: Realm, updateDict: [String: AnyObject]) {
         realm.create(DBListItem.self, value: updateDict, update: true)
     }
     
-    func updateLastSyncTimeStamp(listItems: RemoteListItems, handler: Bool -> Void) {
+    func updateLastSyncTimeStamp(_ listItems: RemoteListItems, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self]realm in
             for listItem in listItems.listItems {
                 self?.updateListItemLastSyncTimeStamp(realm, updateDict: listItem.timestampUpdateDict)
@@ -578,7 +604,7 @@ class RealmListItemProvider: RealmProvider {
     }
 
     
-    func updateLastSyncTimeStamp(product: RemoteProduct, handler: Bool -> Void) {
+    func updateLastSyncTimeStamp(_ product: RemoteProduct, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             self?.updateLastSyncTimeStampSync(realm, product: product)
             return true
@@ -588,13 +614,13 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // FIXME repeated method with RealmListItemGroupProvider
-    func updateLastSyncTimeStampSync(realm: Realm, product: RemoteProduct) {
+    func updateLastSyncTimeStampSync(_ realm: Realm, product: RemoteProduct) {
         realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
     }
     
-    func updateStore(oldName: String, newName: String, _ handler: Bool -> Void) {
+    func updateStore(_ oldName: String, newName: String, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
-            let dbProducts = realm.objects(DBStoreProduct).filter(DBStoreProduct.createFilterStore(oldName))
+            let dbProducts = realm.objects(DBStoreProduct.self).filter(DBStoreProduct.createFilterStore(oldName))
             for dbProduct in dbProducts {
                 dbProduct.store = newName
                 realm.add(dbProduct, update: true)
@@ -605,24 +631,24 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    func removeStore(name: String, _ handler: Bool -> Void) {
+    func removeStore(_ name: String, _ handler: @escaping (Bool) -> Void) {
         updateStore(name, newName: "", handler)
     }
     
-    private func updateTimestampsSync(realm: Realm, listItems: [ListItem], lastUpdate: Int64) {
+    fileprivate func updateTimestampsSync(_ realm: Realm, listItems: [ListItem], lastUpdate: Int64) {
         for listItem in listItems {
             realm.create(DBListItem.self, value: DBListItem.timestampUpdateDict(listItem.uuid, lastUpdate: lastUpdate), update: true)
         }
     }
 
-    private func updateTimestampsSync(realm: Realm, items: [InventoryItemWithHistoryItem], lastUpdate: Int64) {
+    fileprivate func updateTimestampsSync(_ realm: Realm, items: [InventoryItemWithHistoryItem], lastUpdate: Int64) {
         for item in items {
             realm.create(DBInventoryItem.self, value: DBSyncable.timestampUpdateDict(item.inventoryItem.uuid, lastServerUpdate: lastUpdate), update: true)
             realm.create(DBHistoryItem.self, value: DBSyncable.timestampUpdateDict(item.historyItem.uuid, lastServerUpdate: lastUpdate), update: true)
         }
     }
     
-    func storeBuyCartResult(listItems: [ListItem], inventoryWithHistoryItems: [InventoryItemWithHistoryItem], lastUpdate: Int64, handler: Bool -> Void) {
+    func storeBuyCartResult(_ listItems: [ListItem], inventoryWithHistoryItems: [InventoryItemWithHistoryItem], lastUpdate: Int64, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             self?.updateTimestampsSync(realm, listItems: listItems, lastUpdate: lastUpdate)
             self?.updateTimestampsSync(realm, items: inventoryWithHistoryItems, lastUpdate: lastUpdate)
@@ -634,20 +660,20 @@ class RealmListItemProvider: RealmProvider {
     
     // adds inventory/history items and stores the switched list items in a transaction
     // Note "switched"ListItems -> The status of the passed list items is expected to be already updated, this transaction just saves them to the db.
-    func buyCart(listUuid: String, switchedItems: [ListItem], inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryItem]> -> Void) {
+    func buyCart(_ listUuid: String, switchedItems: [ListItem], inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: @escaping (ProviderResult<[InventoryItemWithHistoryItem]>) -> Void) {
         doInWriteTransaction({realm in
             
             let items = DBProviders.inventoryItemProvider.addOrIncrementInventoryItemsWithProductSync(realm, itemInputs: itemInputs, inventory: inventory, dirty: remote)
             
-            DBProviders.listItemProvider.updateListItemsSync(realm, listItems: switchedItems)
+            _ = DBProviders.listItemProvider.updateListItemsSync(realm, listItems: switchedItems)
             
             return items
             
             }) {(itemsMaybe: [InventoryItemWithHistoryItem]?) in
             if let items = itemsMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: items))
+                handler(ProviderResult(status: .success, sucessResult: items))
             } else {
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }

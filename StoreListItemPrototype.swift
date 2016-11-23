@@ -22,16 +22,16 @@ class StoreListItemPrototype: Equatable, Identifiable, CustomDebugStringConverti
         self.targetSectionColor = targetSectionColor
     }
     
-    func same(rhs: StoreListItemPrototype) -> Bool {
+    func same(_ rhs: StoreListItemPrototype) -> Bool {
         return product.same(rhs.product)
     }
     
-    func incrementQuantityCopy(delta: Int) -> ProductWithQuantity {
+    func incrementQuantityCopy(_ delta: Int) -> ProductWithQuantity {
         fatalError("override")
     }
     
     var debugDescription: String {
-        return "\(self.dynamicType), product: \(product), quantity: \(quantity), targetSectionName: \(targetSectionName), targetSectionColor: \(targetSectionColor.hexStr)"
+        return "\(type(of: self)), product: \(product), quantity: \(quantity), targetSectionName: \(targetSectionName), targetSectionColor: \(targetSectionColor.hexStr)"
     }
     
 }

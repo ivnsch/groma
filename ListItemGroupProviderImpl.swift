@@ -16,25 +16,25 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
 
     
     // TODO remove
-    func groups(handler: ProviderResult<[ListItemGroup]> -> Void) {
+    func groups(_ handler: @escaping (ProviderResult<[ListItemGroup]>) -> Void) {
         dbGroupsProvider.groups {groups in
-            handler(ProviderResult(status: .Success, sucessResult: groups))
+            handler(ProviderResult(status: .success, sucessResult: groups))
         }
     }
     
     // TODO don't use QuickAddItemSortBy here, map to a (new) group specific enum
-    func groups(range: NSRange, sortBy: GroupSortBy, _ handler: ProviderResult<[ListItemGroup]> -> Void) {
+    func groups(_ range: NSRange, sortBy: GroupSortBy, _ handler: @escaping (ProviderResult<[ListItemGroup]>) -> Void) {
         dbGroupsProvider.groups(range, sortBy: sortBy) {[weak self] dbGroups in
             
             let sotedDBGroups: [ListItemGroup] = {
-                if sortBy == .Order {
+                if sortBy == .order {
                     return dbGroups.sortedByOrder() // include name in sorting to guarantee equal ordering with remote result, in case of duplicate order fields
                 } else {
                     return dbGroups
                 }
             }()
             
-            handler(ProviderResult(status: .Success, sucessResult: sotedDBGroups))
+            handler(ProviderResult(status: .success, sucessResult: sotedDBGroups))
             
             self?.remoteGroupsProvider.groups {remoteResult in
                 
@@ -45,7 +45,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     if sotedDBGroups != sortedGroups {
                         self?.dbGroupsProvider.overwrite(groups, clearTombstones: true) {saved in
                             if saved {
-                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: sortedGroups))
+                                handler(ProviderResult(status: .success, sucessResult: sortedGroups))
                                 
                             } else {
                                 QL4("Error updating groups - coulnd't save remote groups")
@@ -61,15 +61,15 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func groups(text: String, range: NSRange, sortBy: GroupSortBy, _ handler: ProviderResult<(substring: String?, groups: [ListItemGroup])> -> Void) {
+    func groups(_ text: String, range: NSRange, sortBy: GroupSortBy, _ handler: @escaping (ProviderResult<(substring: String?, groups: [ListItemGroup])>) -> Void) {
         dbGroupsProvider.groups(text, range: range, sortBy: sortBy) {groups in
-            handler(ProviderResult(status: .Success, sucessResult: groups))
+            handler(ProviderResult(status: .success, sucessResult: groups))
         }
     }
 
-    func add(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func add(_ group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbGroupsProvider.add(group, dirty: remote) {[weak self] saved in
-            handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
+            handler(ProviderResult(status: saved ? .success : .databaseSavingError))
 
             if saved && remote {
                 self?.remoteGroupsProvider.addGroup(group) {remoteResult in
@@ -84,17 +84,17 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func addGroupItems(srcGroup: ListItemGroup, targetGroup: ListItemGroup, remote: Bool, _ handler: ProviderResult<[(groupItem: GroupItem, delta: Int)]> -> Void) {
-        groupItems(srcGroup, sortBy: .Alphabetic, fetchMode: .MemOnly) {[weak self] result in
+    func addGroupItems(_ srcGroup: ListItemGroup, targetGroup: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Int)]>) -> Void) {
+        groupItems(srcGroup, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
                 if groupItems.isEmpty {
-                    handler(ProviderResult(status: .IsEmpty))
+                    handler(ProviderResult(status: .isEmpty))
                 } else {
                     let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
                     self?.add(targetGroup, productsWithQuantities: productsWithQuantities, remote: remote) {result in
                         // return fetched group items to the caller
                         if let groupItems = result.sucessResult {
-                            handler(ProviderResult(status: .Success, sucessResult: groupItems))
+                            handler(ProviderResult(status: .success, sucessResult: groupItems))
                         } else {
                             print("Error: ListItemGroupProviderImpl.addGroupItems: Couldn't save group items for group: \(targetGroup)")
                             handler(ProviderResult(status: result.status))
@@ -103,14 +103,14 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 }
             } else {
                 print("Error: ListItemGroupProviderImpl.addGroupItems: Can't get group items for group: \(srcGroup)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
 
-    func update(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func update(_ group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         dbGroupsProvider.update(group, dirty: remote) {[weak self] saved in
-            handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
+            handler(ProviderResult(status: saved ? .success : .databaseSavingError))
             
             if saved && remote {
                 self?.remoteGroupsProvider.updateGroup(group) {remoteResult in
@@ -127,9 +127,9 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func update(groups: [ListItemGroup], remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func update(_ groups: [ListItemGroup], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbGroupsProvider.update(groups, dirty: remote) {[weak self] saved in
-            handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
+            handler(ProviderResult(status: saved ? .success : .databaseSavingError))
             
             if saved && remote {
                 self?.remoteGroupsProvider.updateGroups(groups) {remoteResult in
@@ -146,13 +146,13 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func remove(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func remove(_ group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         removeGroup(group.uuid, remote: remote, handler)
     }
 
-    func removeGroup(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func removeGroup(_ uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbGroupsProvider.removeGroup(uuid, markForSync: remote) {[weak self] saved in
-            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+            handler(ProviderResult(status: saved ? .success : .databaseUnknown))
             
             if saved && remote {
                 self?.remoteGroupsProvider.removeGroup(uuid) {remoteResult in
@@ -172,13 +172,13 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
 
-    func groupItems(group: ListItemGroup, sortBy: InventorySortBy, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[GroupItem]> -> Void) {
-        DBProviders.groupItemProvider.groupItems(group, sortBy: sortBy) {[weak self] (var dbItems) in
+    func groupItems(_ group: ListItemGroup, sortBy: InventorySortBy, fetchMode: ProviderFetchModus, _ handler: @escaping (ProviderResult<[GroupItem]>) -> Void) {
+        DBProviders.groupItemProvider.groupItems(group, sortBy: sortBy) {[weak self] dbItems in
             
-            dbItems = dbItems.sortBy(sortBy)
+            let sortedDbItems = dbItems.sortBy(sortBy)
             
-            handler(ProviderResult(status: .Success, sucessResult: dbItems))
-            if fetchMode == .MemOnly {
+            handler(ProviderResult(status: .success, sucessResult: sortedDbItems))
+            if fetchMode == .memOnly {
                 return
             }
             
@@ -188,11 +188,11 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     
                     let items: [GroupItem] = GroupItemMapper.groupItemsWithRemote(remoteItems).groupItems.sortBy(sortBy)
                     
-                    if dbItems != items {
+                    if sortedDbItems != items {
                         
                         DBProviders.groupItemProvider.overwrite(items, groupUuid: group.uuid, clearTombstones: true) {saved in
                             if saved {
-                                handler(ProviderResult(status: .Success, sucessResult: items))
+                                handler(ProviderResult(status: .success, sucessResult: items))
                                 
                             } else {
                                 print("Error overwriting group items - couldn't save")
@@ -208,10 +208,10 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     // TODO pass a prototype or product+quantity similar to list items. Don't pass a new group item, the creation of the new group item should happen in the db provider, only when one with given semantic unique doesn't exist already.
-    func add(item: GroupItem, remote: Bool, _ handler: ProviderResult<GroupItem> -> Void) {
+    func add(_ item: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<GroupItem>) -> Void) {
         DBProviders.groupItemProvider.addOrIncrement(item, dirty: remote) {[weak self] addedOrIncrementedGroupItemMaybe in
             if let addedOrIncrementedGroupItem = addedOrIncrementedGroupItemMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: addedOrIncrementedGroupItem))
+                handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedGroupItem))
                 
                 if remote {
                     self?.remoteGroupsProvider.addGroupItem(addedOrIncrementedGroupItem) {remoteResult in
@@ -228,7 +228,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 
             } else {
                 print("Error: InventoryItemsProviderImpl.add: Error adding group item")
-                handler(ProviderResult(status: .DatabaseSavingError))
+                handler(ProviderResult(status: .databaseSavingError))
             }
         }
     }
@@ -236,10 +236,10 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     ////////////////////////////////////////////////////////////////////////////////
     // new - decouple input from actual source by passing only product+quantity. TODO make other methods where this is usable also use it
     
-    func add(group: ListItemGroup, productsWithQuantities: [(product: Product, quantity: Int)], remote: Bool, _ handler: ProviderResult<[(groupItem: GroupItem, delta: Int)]> -> Void) {
+    func add(_ group: ListItemGroup, productsWithQuantities: [(product: Product, quantity: Int)], remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Int)]>) -> Void) {
         DBProviders.groupItemProvider.addOrIncrement(group, productsWithQuantities: productsWithQuantities, dirty: remote) {[weak self] addedOrIncrementedGroupItemsMaybe in
             if let addedOrIncrementedGroupItems = addedOrIncrementedGroupItemsMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: addedOrIncrementedGroupItems))
+                handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedGroupItems))
                 
                 let groupItems = addedOrIncrementedGroupItems.map{$0.groupItem}
                 
@@ -256,22 +256,22 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 
             } else {
                 QL4("Unknown error adding to group in local db, group: \(group), productsWithQuantities: \(productsWithQuantities)")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }
     ////////////////////////////////////////////////////////////////////////////////
     
-    func addOrUpdateLocal(groupItems: [GroupItem], _ handler: ProviderResult<Any> -> Void) {
+    func addOrUpdateLocal(_ groupItems: [GroupItem], _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProviders.groupItemProvider.addOrUpdate(groupItems, update: true, dirty: false) {updated in
-            handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
+            handler(ProviderResult(status: updated ? .success : .databaseUnknown))
         }
     }
     
-    func add(items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func add(_ items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProviders.groupItemProvider.addOrIncrement(items, dirty: remote) {[weak self] saved in
             if saved {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 if saved {
                     self?.remoteGroupsProvider.addGroupItems(items) {remoteResult in
@@ -285,51 +285,51 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 }
             } else {
                 QL4("Error saving items to local db: \(items)")
-                handler(ProviderResult(status: .DatabaseSavingError))
+                handler(ProviderResult(status: .databaseSavingError))
             }
         }
     }
     
-    func add(itemInput: GroupItemInput, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<GroupItem> -> Void) {
+    func add(_ itemInput: GroupItemInput, group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<GroupItem>) -> Void) {
         
-        func onHasProduct(product: Product) {
-            let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: 1, product: product, group: group)
+        func onHasProduct(_ product: Product) {
+            let groupItem = GroupItem(uuid: UUID().uuidString, quantity: 1, product: product, group: group)
             add(groupItem, remote: remote) {result in
                 if result.success {
-                    handler(ProviderResult(status: .Success, sucessResult: groupItem))
+                    handler(ProviderResult(status: .success, sucessResult: groupItem))
                 } else {
                     print("Error: InventoryItemsProviderImpl.addToInventory: couldn't add to inventory, result: \(result)")
-                    handler(ProviderResult(status: .DatabaseUnknown))
+                    handler(ProviderResult(status: .databaseUnknown))
                 }
             }
         }
         
         Providers.productProvider.product(itemInput.name, brand: itemInput.brand) {productResult in
             // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
-            if productResult.success || productResult.status == .NotFound {
+            if productResult.success || productResult.status == .notFound {
                 if let product = productResult.sucessResult {
                     onHasProduct(product)
                 } else {
                     Providers.productCategoryProvider.categoryWithName(itemInput.category) {result in
                         if let category = result.sucessResult {
-                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, category: category, brand: itemInput.brand)
+                            let product = Product(uuid: UUID().uuidString, name: itemInput.name, category: category, brand: itemInput.brand)
                             onHasProduct(product)
                         } else {
-                            let category = ProductCategory(uuid: NSUUID().UUIDString, name: itemInput.category, color: itemInput.categoryColor)
-                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, category: category, brand: itemInput.brand)
+                            let category = ProductCategory(uuid: UUID().uuidString, name: itemInput.category, color: itemInput.categoryColor)
+                            let product = Product(uuid: UUID().uuidString, name: itemInput.name, category: category, brand: itemInput.brand)
                             onHasProduct(product)
                         }
                     }
                 }
             } else {
                 print("Error: InventoryItemsProviderImpl.addToInventory: Error fetching product, result: \(productResult)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
     
     
-    func update(input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: ProviderResult<(groupItem: GroupItem, replaced: Bool)> -> Void) {
+    func update(_ input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<(groupItem: GroupItem, replaced: Bool)>) -> Void) {
         
         // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
         DBProviders.groupItemProvider.deletePossibleGroupItemWithUnique(input.name, productBrand: input.brand, group: updatingGroupItem.group, notUuid: updatingGroupItem.uuid) {foundAndDeletedGroupItem in
@@ -340,7 +340,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     let updatedGroupItem = updatingGroupItem.copy(quantity: input.quantity, product: product)
                     self?.update(updatedGroupItem, remote: remote) {result in
                         if result.success {
-                            handler(ProviderResult(status: .Success, sucessResult: (groupItem: updatedGroupItem, replaced: foundAndDeletedGroupItem)))
+                            handler(ProviderResult(status: .success, sucessResult: (groupItem: updatedGroupItem, replaced: foundAndDeletedGroupItem)))
                         } else {
                             QL4("Error updating group item: \(result)")
                             handler(ProviderResult(status: result.status))
@@ -348,16 +348,16 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     }
                 } else {
                     QL4("Error fetching product: \(result.status)")
-                    handler(ProviderResult(status: .DatabaseUnknown))
+                    handler(ProviderResult(status: .databaseUnknown))
                 }
             }
         }
     }
     
-    func update(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func update(_ item: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         DBProviders.groupItemProvider.update(item, dirty: remote) {[weak self] saved in
             if saved {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 if saved {
                     self?.remoteGroupsProvider.updateGroupItem(item) {remoteResult in
@@ -373,16 +373,16 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 }
                 
             } else {
-                handler(ProviderResult(status: .DatabaseSavingError))
+                handler(ProviderResult(status: .databaseSavingError))
             }
         }
     }
 
-    func updateGroupsOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func updateGroupsOrder(_ orderUpdates: [OrderUpdate], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         // dirty == remote: if we want to do a remote call, it means the update is client triggered (opposed to e.g. processing a websocket message) which means the data is not in the server yet, which means it's dirty.
         DBProviders.listItemGroupProvider.updateGroupsOrder(orderUpdates, dirty: remote) {[weak self] success in
             if success {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 if remote {
                     self?.remoteGroupsProvider.updateGroupsOrder(orderUpdates) {remoteResult in
@@ -394,14 +394,14 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 }
             } else {
                 QL4("Error updating lists order in local database, orderUpdates: \(orderUpdates)")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }
     
-    func incrementFav(groupUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func incrementFav(_ groupUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         DBProviders.listItemGroupProvider.incrementFav(groupUuid, {[weak self] saved in
-            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+            handler(ProviderResult(status: saved ? .success : .databaseUnknown))
             
             if remote {
                 self?.remoteGroupsProvider.incrementFav(groupUuid) {remoteResult in
@@ -417,14 +417,14 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         })
     }
     
-    func remove(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func remove(_ item: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         removeGroupItem(item.uuid, remote: remote, handler)
     }
     
-    func removeGroupItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func removeGroupItem(_ uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProviders.groupItemProvider.removeGroupItem(uuid, markForSync: true) {[weak self] saved in
             if saved {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 if remote {
                     if saved {
@@ -445,23 +445,23 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 }
                 
             } else {
-                handler(ProviderResult(status: .DatabaseSavingError))
+                handler(ProviderResult(status: .databaseSavingError))
             }
         }
     }
     
     // Copied from ListItemProviderImpl (which is copied from inventory provider) refactor?
-    func increment(groupItem: GroupItem, delta: Int, remote: Bool, _ handler: ProviderResult<Int> -> Void) {
+    func increment(_ groupItem: GroupItem, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<Int>) -> Void) {
         increment(ItemIncrement(delta: delta, itemUuid: groupItem.uuid), remote: remote, handler)
     }
     
-    func increment(increment: ItemIncrement, remote: Bool, _ handler: ProviderResult<Int> -> Void) {
+    func increment(_ increment: ItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<Int>) -> Void) {
         DBProviders.groupItemProvider.incrementGroupItem(increment, dirty: remote) {[weak self] updatedQuantityMaybe in
 
             if let updatedQuantity = updatedQuantityMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: updatedQuantity))
+                handler(ProviderResult(status: .success, sucessResult: updatedQuantity))
             } else {
-                handler(ProviderResult(status: .DatabaseSavingError))
+                handler(ProviderResult(status: .databaseSavingError))
             }
             
             if remote {

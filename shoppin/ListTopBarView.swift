@@ -10,26 +10,26 @@ import UIKit
 import QorumLogs
 
 protocol ListTopBarViewDelegate: class {
-    func onTopBarButtonTap(buttonId: ListTopBarViewButtonId)
+    func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId)
     func onTopBarTitleTap()
     func onTopBarBackButtonTap()
     
     // parameter: center => center, !center => left
-    func onCenterTitleAnimComplete(center: Bool)
+    func onCenterTitleAnimComplete(_ center: Bool)
 }
 
 enum ListTopBarViewButtonId: Int {
-    case Add = 0, Submit = 1, ToggleOpen = 2, Edit = 3
+    case add = 0, submit = 1, toggleOpen = 2, edit = 3
     
     var name: String {
         switch self {
-        case .Add:
+        case .add:
             return "add"
-        case .Submit:
+        case .submit:
             return "submit"
-        case .ToggleOpen:
+        case .toggleOpen:
             return "toggle"
-        case .Edit:
+        case .edit:
             return "edit"
         }
     }
@@ -50,15 +50,15 @@ struct TopBarButtonModel {
 class ListTopBarView: UIView {
 
     // Min space to left and right of title view to edges of parent view. For now hardcoded, note also that this assumes only 1 button at the left and right
-    private let titleMinLeftRightMargin: CGFloat = 60
+    fileprivate let titleMinLeftRightMargin: CGFloat = 60
     
-    private var backButton: UIButton?
+    fileprivate var backButton: UIButton?
     var backButtonText: String?
-    private var leftButtons: [UIButton] = []
-    private var rightButtons: [UIButton] = []
-    private var titleLabel: UILabel = UILabel()
+    fileprivate var leftButtons: [UIButton] = []
+    fileprivate var rightButtons: [UIButton] = []
+    fileprivate var titleLabel: UILabel = UILabel()
     
-    var titleLabelColor = UIColor.blackColor() {
+    var titleLabelColor = UIColor.black {
         didSet {
             titleLabel.textColor = titleLabelColor
         }
@@ -66,9 +66,9 @@ class ListTopBarView: UIView {
     
     weak var delegate: ListTopBarViewDelegate?
     
-    var fgColor: UIColor = UIColor.blackColor() {
+    var fgColor: UIColor = UIColor.black {
         didSet {
-            backButton?.setTitleColor(fgColor, forState: .Normal)
+            backButton?.setTitleColor(fgColor, for: UIControlState())
             for button in leftButtons {
                 button.imageView?.tintColor = fgColor
             }
@@ -79,25 +79,25 @@ class ListTopBarView: UIView {
         }
     }
     
-    private var titleLabelLeftConstraint: NSLayoutConstraint?
-    private var titleLabelWidthConstraint: NSLayoutConstraint?
-    private var titleLabelCentered = false
-    private let titleLabelLeftConstant: Float = Float(DimensionsManager.leftRightPaddingConstraint)
+    fileprivate var titleLabelLeftConstraint: NSLayoutConstraint?
+    fileprivate var titleLabelWidthConstraint: NSLayoutConstraint?
+    fileprivate var titleLabelCentered = false
+    fileprivate let titleLabelLeftConstant: Float = Float(DimensionsManager.leftRightPaddingConstraint)
     
-    private var titleLabelCenterYContraint: NSLayoutConstraint?
+    fileprivate var titleLabelCenterYContraint: NSLayoutConstraint?
     
-    private var bgColorLayer: CAShapeLayer?
+    fileprivate var bgColorLayer: CAShapeLayer?
     
     var dotColor: UIColor? {
         didSet {
-            self.bgColorLayer?.fillColor = dotColor?.CGColor
+            self.bgColorLayer?.fillColor = dotColor?.cgColor
         }
     }
     
-    private var centerYInExpandedState: Float = 0
-    private var centerYOffsetInExpandedState: Float = 0 // offset of center of available height to center of total height, derived from centerYInExpandedState
+    fileprivate var centerYInExpandedState: Float = 0
+    fileprivate var centerYOffsetInExpandedState: Float = 0 // offset of center of available height to center of total height, derived from centerYInExpandedState
     
-    private var titleLabelFont = Fonts.fontForSizeCategory(50)
+    fileprivate var titleLabelFont = Fonts.fontForSizeCategory(50)
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -144,7 +144,7 @@ class ListTopBarView: UIView {
         let shapeLayer = CAShapeLayer()
         shapeLayer.frame = self.bounds
         self.bgColorLayer = shapeLayer
-        layer.insertSublayer(shapeLayer, atIndex: 0)
+        layer.insertSublayer(shapeLayer, at: 0)
     }
     
     var title: String = "" {
@@ -154,7 +154,7 @@ class ListTopBarView: UIView {
         }
     }
     
-    private func generateCirclePath() -> UIBezierPath? {
+    fileprivate func generateCirclePath() -> UIBezierPath? {
         
         guard let titleTextSize = titleLabel.text?.size(titleLabelFont) else {return nil}
 
@@ -164,43 +164,43 @@ class ListTopBarView: UIView {
         let xMax = min(x, bounds.width - titleMinLeftRightMargin)
         let y = CGFloat(centerYInExpandedState) - (circleDiam / 2)
         
-        let circlePath = UIBezierPath(roundedRect: CGRectMake(xMax, y, circleDiam, circleDiam), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(cornerRadius, cornerRadius))
+        let circlePath = UIBezierPath(roundedRect: CGRect(x: xMax, y: y, width: circleDiam, height: circleDiam), byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
         //        circlePath.closePath()
         return circlePath
     }
     
     func showDot() {
         guard let circlePath = generateCirclePath() else {QL3("No circle path"); return }
-        bgColorLayer?.path = circlePath.CGPath
+        bgColorLayer?.path = circlePath.cgPath
     }
     
     // parameter: toDot: true: rect -> dot, false: dot -> rect
-    func animateRectDot(toDot: Bool, duration: CFTimeInterval) {
+    func animateRectDot(_ toDot: Bool, duration: CFTimeInterval) {
         
         guard let circlePath = generateCirclePath() else {QL3("No circle path"); return }
 
-        let rectPath = UIBezierPath(roundedRect: CGRectInset(self.bounds, -10, -10), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(5, 5))
+        let rectPath = UIBezierPath(roundedRect: self.bounds.insetBy(dx: -10, dy: -10), byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: 5, height: 5))
         
         if duration > 0 {
             let animationKey = "path"
             
             let pathAnimation = CABasicAnimation(keyPath: animationKey)
             pathAnimation.duration = duration
-            pathAnimation.fromValue = toDot ? rectPath.CGPath : circlePath.CGPath
+            pathAnimation.fromValue = toDot ? rectPath.cgPath : circlePath.cgPath
             
             // Disable implicit animation
             CATransaction.disableActions()
             
-            pathAnimation.toValue = toDot ? circlePath.CGPath : rectPath.CGPath
-            bgColorLayer?.addAnimation(pathAnimation, forKey: animationKey)
+            pathAnimation.toValue = toDot ? circlePath.cgPath : rectPath.cgPath
+            bgColorLayer?.add(pathAnimation, forKey: animationKey)
         }
         
-        bgColorLayer?.path = toDot ? circlePath.CGPath : rectPath.CGPath
+        bgColorLayer?.path = toDot ? circlePath.cgPath : rectPath.cgPath
     }
     
     // parameter: center => center, !center => left
     // TODO rename maybe "setState(open)" or something, this is not only animating the label now but also the background and the height
-    func positionTitleLabelLeft(center: Bool, animated: Bool, withDot: Bool, heightConstraint: NSLayoutConstraint? = nil) {
+    func positionTitleLabelLeft(_ center: Bool, animated: Bool, withDot: Bool, heightConstraint: NSLayoutConstraint? = nil) {
         
         if let heightConstraint = heightConstraint {
             // The cell and topbar have different heights so we hav to animate this too. Sometimes the topbar is used without animation (e.g. top bar from lists/inventories/groups controller - in this case heightConstraint is nil)
@@ -215,11 +215,11 @@ class ListTopBarView: UIView {
         titleLabelWidthConstraint = titleLabel.widthLessThanConstraint(bounds.width - (titleMinLeftRightMargin * 2))
         
         if animated {
-            UIView.animateWithDuration(0.3, animations: {[weak self] in
+            UIView.animate(withDuration: 0.3, animations: {[weak self] in
                 self?.layoutIfNeeded()
-                }) {[weak self] finished in
+                }, completion: {[weak self] finished in
                     self?.delegate?.onCenterTitleAnimComplete(center)
-            }
+            }) 
             
             if withDot {
                 animateRectDot(center, duration: 0.3)
@@ -235,46 +235,46 @@ class ListTopBarView: UIView {
         }
     }
     
-    private func addTitleButton() {
+    fileprivate func addTitleButton() {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         addSubview(button)
         button.fillSuperviewHeight()
         button.fillSuperviewWidth(70, rightConstant: -70)
-        button.addTarget(self, action: #selector(ListTopBarView.onTitleTap(_:)), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(ListTopBarView.onTitleTap(_:)), for: .touchUpInside)
     }
     
     /**
     * NOTE call this before setButtonModels! setButtonModels needs that the (possible) back button is initialised to calculate the offset of the buttons on the left side
     */
-    func setBackVisible(visible: Bool) {
+    func setBackVisible(_ visible: Bool) {
         if visible {
             if backButton == nil { // don't add again if called multiple times with visible == true
                 let button = UIButton()
                 button.translatesAutoresizingMaskIntoConstraints = false
                 button.imageView?.tintColor = fgColor
-                button.setImage(UIImage(named: "tb_back"), forState: .Normal)
+                button.setImage(UIImage(named: "tb_back"), for: UIControlState())
                 backButton = button
                 addSubview(button)
                 
                 let backLabel = UIButton()
                 backLabel.translatesAutoresizingMaskIntoConstraints = false
-                backLabel.setTitle(backButtonText ?? "", forState: .Normal)
+                backLabel.setTitle(backButtonText ?? "", for: UIControlState())
                 backLabel.titleLabel?.font = Fonts.fontForSizeCategory(50)
-                backLabel.setTitleColor(fgColor, forState: .Normal)
+                backLabel.setTitleColor(fgColor, for: UIControlState())
                 addSubview(backLabel)
 
                 let viewDictionary = ["back": button, "backLabel": backLabel]
                 
-                let hConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(6)-[back]-(4)-[backLabel]", options: [], metrics: nil, views: viewDictionary)
+                let hConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|-(6)-[back]-(4)-[backLabel]", options: [], metrics: nil, views: viewDictionary)
                 
-                button.centerYInParent(centerYOffsetInExpandedState)
-                backLabel.centerYInParent(centerYOffsetInExpandedState)
+                _ = button.centerYInParent(centerYOffsetInExpandedState)
+                _ = backLabel.centerYInParent(centerYOffsetInExpandedState)
 
                 addConstraints(hConstraints)
 
-                button.addTarget(self, action: #selector(ListTopBarView.onBackTap(_:)), forControlEvents: .TouchUpInside)
-                backLabel.addTarget(self, action: #selector(ListTopBarView.onBackTap(_:)), forControlEvents: .TouchUpInside)
+                button.addTarget(self, action: #selector(ListTopBarView.onBackTap(_:)), for: .touchUpInside)
+                backLabel.addTarget(self, action: #selector(ListTopBarView.onBackTap(_:)), for: .touchUpInside)
             }
 
         } else {
@@ -285,11 +285,11 @@ class ListTopBarView: UIView {
         layoutIfNeeded()
     }
     
-    func rightButton(identifier: ListTopBarViewButtonId) -> UIButton? {
+    func rightButton(_ identifier: ListTopBarViewButtonId) -> UIButton? {
         return rightButtons.findFirst({$0.tag == identifier.rawValue})
     }
 
-    private func setButtonModels(models: [TopBarButtonModel], left: Bool) {
+    fileprivate func setButtonModels(_ models: [TopBarButtonModel], left: Bool) {
 
         if left {
             for button in leftButtons {
@@ -308,12 +308,12 @@ class ListTopBarView: UIView {
 
             var modelsWithButtons: [(model: TopBarButtonModel, button: UIButton, inner: UIButton)] = []
             
-            func createButton(model: TopBarButtonModel, imgName: String, tintColor: UIColor) -> UIButton {
+            func createButton(_ model: TopBarButtonModel, imgName: String, tintColor: UIColor) -> UIButton {
                 let button = UIButton()
                 button.translatesAutoresizingMaskIntoConstraints = false
                 button.imageView?.tintColor = tintColor
                 
-                button.setImage(UIImage(named: imgName), forState: .Normal)
+                button.setImage(UIImage(named: imgName), for: UIControlState())
                 if left {
                     leftButtons.append(button)
                 } else {
@@ -322,7 +322,7 @@ class ListTopBarView: UIView {
                 
                 button.tag = model.buttonId.rawValue
                 
-                button.userInteractionEnabled = false
+                button.isUserInteractionEnabled = false
                 
                 let tapView = UIButton()
                 tapView.translatesAutoresizingMaskIntoConstraints = false
@@ -330,25 +330,25 @@ class ListTopBarView: UIView {
 //                QL1("model.buttonId: \(model.buttonId), tag: \(tapView.tag)")
                 tapView.addSubview(button)
 
-                button.centerYInParent(centerYOffsetInExpandedState)
-                button.centerXInParent()
+                _ = button.centerYInParent(centerYOffsetInExpandedState)
+                _ = button.centerXInParent()
 
                 modelsWithButtons.append((model: model, button: tapView, inner: button))
-                tapView.addTarget(self, action: "onActionButtonTap:", forControlEvents: .TouchUpInside)
+                tapView.addTarget(self, action: #selector(ListTopBarView.onActionButtonTap(_:)), for: .touchUpInside)
                 return button
             }
             
             
             for model in models {
                 switch model.buttonId {
-                case .Edit:
-                    createButton(model, imgName: "tb_edit", tintColor: fgColor)
-                case .Add:
-                    createButton(model, imgName: "tb_add", tintColor: fgColor)
-                case .Submit:
-                    createButton(model, imgName: "tb_done", tintColor: fgColor)
-                case .ToggleOpen:
-                    createButton(model, imgName: "tb_add", tintColor: Theme.navBarAddColor)
+                case .edit:
+                    _ = createButton(model, imgName: "tb_edit", tintColor: fgColor)
+                case .add:
+                    _ = createButton(model, imgName: "tb_add", tintColor: fgColor)
+                case .submit:
+                    _ = createButton(model, imgName: "tb_done", tintColor: fgColor)
+                case .toggleOpen:
+                    _ = createButton(model, imgName: "tb_add", tintColor: Theme.navBarAddColor)
                 }
             }
             
@@ -361,9 +361,9 @@ class ListTopBarView: UIView {
                     modelWithButton.inner.transform = initTransform
                 }
                 if let endTransform = modelWithButton.model.endTransform {
-                    UIView.animateWithDuration(0.3) {
+                    UIView.animate(withDuration: 0.3, animations: {
                         modelWithButton.inner.transform = endTransform
-                    }
+                    }) 
                 }
 
                 // TODO when button is at the same position as in a previous state it will re-grow which looks weird so we need a check if there's a button with same id at same index then don't do animation
@@ -384,7 +384,7 @@ class ListTopBarView: UIView {
             let hSpace: CGFloat = 10
             let leadingHSpace = backButton == nil ? hSpace : hSpace + backButton!.frame.width + hSpace
             var hConstraintStr: String = left ? "H:|-(\(leadingHSpace))-" : "H:"
-            for (index, entry) in viewsOrderedDictionary.enumerate() {
+            for (index, entry) in viewsOrderedDictionary.enumerated() {
                 var str = "\(hConstraintStr)[\(entry.0)]"
                 if index < viewsOrderedDictionary.count - 1 {
                     str += "-\(hSpace)-"
@@ -392,11 +392,11 @@ class ListTopBarView: UIView {
                 hConstraintStr = str
             }
             hConstraintStr = left ? hConstraintStr : "\(hConstraintStr)-\(hSpace)-|"
-            let hConstraints = NSLayoutConstraint.constraintsWithVisualFormat(hConstraintStr, options: [], metrics: nil, views: viewsDictionary)
+            let hConstraints = NSLayoutConstraint.constraints(withVisualFormat: hConstraintStr, options: [], metrics: nil, views: viewsDictionary)
             addConstraints(hConstraints)
             
             for vConstraintStr in viewsOrderedDictionary.keys {
-                let vConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[\(vConstraintStr)]|", options: [], metrics: nil, views: viewsDictionary)
+                let vConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|[\(vConstraintStr)]|", options: [], metrics: nil, views: viewsDictionary)
                 addConstraints(vConstraints)
             }
         }
@@ -406,32 +406,32 @@ class ListTopBarView: UIView {
     }
     
     // parameter left: true => left, false => right
-    private func setButtonIds(buttonIds: [ListTopBarViewButtonId], left: Bool) {
+    fileprivate func setButtonIds(_ buttonIds: [ListTopBarViewButtonId], left: Bool) {
         let models = buttonIds.map {TopBarButtonModel(buttonId: $0)}
         setButtonModels(models, left: left)
     }
     
-    func setLeftButtonModels(models: [TopBarButtonModel]) {
+    func setLeftButtonModels(_ models: [TopBarButtonModel]) {
         setButtonModels(models, left: true)
     }
 
-    func setRightButtonModels(models: [TopBarButtonModel]) {
+    func setRightButtonModels(_ models: [TopBarButtonModel]) {
         setButtonModels(models, left: false)
     }
     
-    func setLeftButtonIds(buttonIds: [ListTopBarViewButtonId]) {
+    func setLeftButtonIds(_ buttonIds: [ListTopBarViewButtonId]) {
         setButtonIds(buttonIds, left: true)
     }
     
-    func setRightButtonIds(buttonIds: [ListTopBarViewButtonId]) {
+    func setRightButtonIds(_ buttonIds: [ListTopBarViewButtonId]) {
         setButtonIds(buttonIds, left: false)
     }
     
-    func onTitleTap(sender: UIButton) {
+    func onTitleTap(_ sender: UIButton) {
         delegate?.onTopBarTitleTap()
     }
     
-    func onActionButtonTap(sender: UIButton) {
+    func onActionButtonTap(_ sender: UIButton) {
         if let buttonId = ListTopBarViewButtonId(rawValue: sender.tag) {
             delegate?.onTopBarButtonTap(buttonId)
         } else {
@@ -439,7 +439,7 @@ class ListTopBarView: UIView {
         }
     }
     
-    func onBackTap(sender: UIButton) {
+    func onBackTap(_ sender: UIButton) {
         delegate?.onTopBarBackButtonTap()
     }
 }

@@ -13,11 +13,11 @@ extension Array where Element: ListItem {
     /**
     Sorts increasingly by section and list item order
     */
-    func sortedByOrder(status: ListItemStatus) -> [Element] {
+    func sortedByOrder(_ status: ListItemStatus) -> [Element] {
         
         // src (sort by multiple criteria) http://stackoverflow.com/a/27596550/930450
         
-        let result = sort {
+        let result = sorted {
             // for now disabled as this is e.g. overwrites the list item memory cache so we get no items in the cart or stash
             // TODO review this method, sorting in general - this is not fully defined yet
 //        let result = self.filter{$0.hasStatus(status)}.sort {
@@ -32,17 +32,17 @@ extension Array where Element: ListItem {
         return result
     }
     
-    mutating func sortAndUpdateOrderFieldsMutating(status: ListItemStatus) {
+    mutating func sortAndUpdateOrderFieldsMutating(_ status: ListItemStatus) {
         
         self = filter{$0.hasStatus(status)}
         
         self = sortedByOrder(status)
         
         let orderedDict = groupBySectionOrdered()
-        orderedDict.enumerate().forEach {index, sectionWithListItems in
+        orderedDict.enumerated().forEach {index, sectionWithListItems in
             sectionWithListItems.1.section.updateOrderMutable(ListItemStatusOrder(status, index))
             
-            sectionWithListItems.1.listItems.enumerate().forEach {index, listItem in
+            sectionWithListItems.1.listItems.enumerated().forEach {index, listItem in
                 listItem.updateOrderMutable(ListItemStatusOrder(status, index))
             }
         }
@@ -87,11 +87,11 @@ extension Array where Element: ListItem {
         return dictionary
     }
     
-    func sectionCountDict(status: ListItemStatus) -> [String: Int] {
+    func sectionCountDict(_ status: ListItemStatus) -> [String: Int] {
         return filterStatus(status).groupBySection().map {($0, $1.count)}
     }
     
-    func sectionCount(status: ListItemStatus) -> Int {
+    func sectionCount(_ status: ListItemStatus) -> Int {
         
         let sectionsOfItemsWithStatus: [String] = collect({
             if $0.hasStatus(status) {
@@ -105,7 +105,7 @@ extension Array where Element: ListItem {
     }
     
     // How many list items with given section are in this array
-    func count(section: Section) -> Int {
+    func count(_ section: Section) -> Int {
         var count = 0
         for listItem in self {
             if listItem.section.same(section) {
@@ -115,7 +115,7 @@ extension Array where Element: ListItem {
         return count
     }
     
-    func sectionsInOrder(status: ListItemStatus) -> [Section] {
+    func sectionsInOrder(_ status: ListItemStatus) -> [Section] {
         var set = Set<String>()
         var sections = [Section]()
         for listItem in self {
@@ -127,7 +127,7 @@ extension Array where Element: ListItem {
         return sections.inOrder(status)
     }
     
-    func findFirstWithProductNameAndBrand(productName: String, brand: String) -> ListItem? {
+    func findFirstWithProductNameAndBrand(_ productName: String, brand: String) -> ListItem? {
         
         for listItem in self {
             if listItem.product.product.name == productName && listItem.product.product.brand == brand {
@@ -137,13 +137,13 @@ extension Array where Element: ListItem {
         return nil
     }
     
-    func totalPrice(status: ListItemStatus) -> Float {
+    func totalPrice(_ status: ListItemStatus) -> Float {
         return reduce(0) {price, listItem in
             price + listItem.totalPrice(status)
         }
     }
 
-    func totalQuanityAndPrice(status: ListItemStatus) -> (quantity: Int, price: Float) {
+    func totalQuanityAndPrice(_ status: ListItemStatus) -> (quantity: Int, price: Float) {
         return reduce((0, 0)) {priceAndQuantity, listItem in
             (
                 quantity: priceAndQuantity.0 + listItem.quantity(status),
@@ -154,7 +154,7 @@ extension Array where Element: ListItem {
     
     // Total price excluding stash
     var totalPriceTodoAndCart: Float {
-        return totalPrice(.Todo) + totalPrice(.Done)
+        return totalPrice(.todo) + totalPrice(.done)
     }
     
     func filterTodo() -> Array<Element> {
@@ -169,22 +169,22 @@ extension Array where Element: ListItem {
         return self.filter{$0.stashQuantity > 0}
     }
     
-    func filterStatus(status: ListItemStatus) -> Array<Element> {
+    func filterStatus(_ status: ListItemStatus) -> Array<Element> {
         return self.filter{$0.quantity(status) > 0}
     }
     
-    mutating func removeWithUuid(uuid: String) -> ListItem? {
+    mutating func removeWithUuid(_ uuid: String) -> ListItem? {
         for i in 0..<self.count {
             if self[i].uuid == uuid {
                 let listItem = self[i]
-                self.removeAtIndex(i)
+                self.remove(at: i)
                 return listItem
             }
         }
         return nil
     }
     
-    func hasSection(status: ListItemStatus, section: Section) -> Bool {
+    func hasSection(_ status: ListItemStatus, section: Section) -> Bool {
         return filterStatus(status).contains{$0.section.same(section)}
     }
 }

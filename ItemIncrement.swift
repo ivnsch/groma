@@ -19,6 +19,6 @@ class ItemIncrement: CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) delta: \(delta), itemUuid: \(itemUuid)}"
+        return "{\(type(of: self)) delta: \(delta), itemUuid: \(itemUuid)}"
     }
 }

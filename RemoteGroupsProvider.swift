@@ -10,133 +10,133 @@ import Foundation
 
 class RemoteGroupsProvider: RemoteProvider {
     
-    func groups(handler: RemoteResult<[RemoteGroup]> -> ()) {
-        RemoteProvider.authenticatedRequestArray(.GET, Urls.groups) {result in
+    func groups(_ handler: @escaping (RemoteResult<[RemoteGroup]>) -> ()) {
+        RemoteProvider.authenticatedRequestArray(.get, Urls.groups) {result in
             handler(result)
         }
     }
     
-    func addGroup(group: ListItemGroup, handler: RemoteResult<RemoteGroup> -> ()) {
+    func addGroup(_ group: ListItemGroup, handler: @escaping (RemoteResult<RemoteGroup>) -> ()) {
         let params = toRequestParams(group)
-        RemoteProvider.authenticatedRequest(.POST, Urls.group, params) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.group, params) {result in
             handler(result)
         }
     }
     
-    func updateGroup(group: ListItemGroup, handler: RemoteResult<RemoteGroup> -> ()) {
+    func updateGroup(_ group: ListItemGroup, handler: @escaping (RemoteResult<RemoteGroup>) -> ()) {
         let params = toRequestParams(group)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.group, params) {result in
+        RemoteProvider.authenticatedRequest(.put, Urls.group, params) {result in
             handler(result)
         }
     }
     
-    func updateGroupsOrder(orderUpdates: [OrderUpdate], handler: RemoteResult<[RemoteOrderUpdate]> -> ()) {
+    func updateGroupsOrder(_ orderUpdates: [OrderUpdate], handler: @escaping (RemoteResult<[RemoteOrderUpdate]>) -> ()) {
         let params: [[String: AnyObject]] = orderUpdates.map{
-            ["uuid": $0.uuid, "order": $0.order]
+            ["uuid": $0.uuid as AnyObject, "order": $0.order as AnyObject]
         }
-        RemoteProvider.authenticatedRequestArray(.PUT, Urls.groupsOrder, params) {result in
+        RemoteProvider.authenticatedRequestArray(.put, Urls.groupsOrder, params) {result in
             handler(result)
         }
     }
     
-    func incrementFav(groupUuid: String, handler: RemoteResult<RemoteProduct> -> ()) {
-        RemoteProvider.authenticatedRequest(.PUT, Urls.favGroup + "/\(groupUuid)") {result in
+    func incrementFav(_ groupUuid: String, handler: @escaping (RemoteResult<RemoteProduct>) -> ()) {
+        RemoteProvider.authenticatedRequest(.put, Urls.favGroup + "/\(groupUuid)") {result in
             handler(result)
         }
     }
 
-    func updateGroups(groups: [ListItemGroup], handler: RemoteResult<[RemoteGroup]> -> ()) {
+    func updateGroups(_ groups: [ListItemGroup], handler: @escaping (RemoteResult<[RemoteGroup]>) -> ()) {
         let params = groups.map{toRequestParams($0)}
-        RemoteProvider.authenticatedRequestArray(.PUT, Urls.groups, params) {result in
+        RemoteProvider.authenticatedRequestArray(.put, Urls.groups, params) {result in
             handler(result)
         }
     }
     
-    func removeGroup(group: ListItemGroup, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func removeGroup(_ group: ListItemGroup, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
         removeGroup(group.uuid, handler: handler)
     }
     
-    func removeGroup(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.group + "/\(uuid)") {result in
+    func removeGroup(_ uuid: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.group + "/\(uuid)") {result in
             handler(result)
         }
     }
     
-    func groupsItems(group: ListItemGroup, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
-        RemoteProvider.authenticatedRequest(.GET, Urls.groupItems, ["groupUuid": group.uuid]) {result in
+    func groupsItems(_ group: ListItemGroup, handler: @escaping (RemoteResult<RemoteGroupItemsWithDependencies>) -> ()) {
+        RemoteProvider.authenticatedRequest(.get, Urls.groupItems, ["groupUuid": group.uuid as AnyObject]) {result in
             handler(result)
         }
     }
     
-    func addGroupItem(groupItem: GroupItem, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
+    func addGroupItem(_ groupItem: GroupItem, handler: @escaping (RemoteResult<RemoteGroupItemsWithDependencies>) -> ()) {
         addGroupItems([groupItem], handler: handler)
     }
 
-    func addGroupItems(groupItems: [GroupItem], handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
+    func addGroupItems(_ groupItems: [GroupItem], handler: @escaping (RemoteResult<RemoteGroupItemsWithDependencies>) -> ()) {
         let params = groupItems.map{toRequestParams($0)}
-        RemoteProvider.authenticatedRequest(.POST, Urls.groupItems, params) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.groupItems, params) {result in
             handler(result)
         }
     }
     
-    func updateGroupItem(groupItem: GroupItem, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
+    func updateGroupItem(_ groupItem: GroupItem, handler: @escaping (RemoteResult<RemoteGroupItemsWithDependencies>) -> ()) {
         let params = toRequestParams(groupItem)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.groupItem, params) {result in
+        RemoteProvider.authenticatedRequest(.put, Urls.groupItem, params) {result in
             handler(result)
         }
     }
     
-    func incrementGroupItem(increment: ItemIncrement, handler: RemoteResult<RemoteIncrementResult> -> ()) {
+    func incrementGroupItem(_ increment: ItemIncrement, handler: @escaping (RemoteResult<RemoteIncrementResult>) -> ()) {
         let params: [String: AnyObject] = [
-            "delta": increment.delta,
-            "uuid": increment.itemUuid
+            "delta": increment.delta as AnyObject,
+            "uuid": increment.itemUuid as AnyObject
         ]
-        RemoteProvider.authenticatedRequest(.POST, Urls.incrementGroupItem, params) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.incrementGroupItem, params) {result in
             handler(result)
         }
     }
     
-    func removeGroupItem(groupItem: GroupItem, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func removeGroupItem(_ groupItem: GroupItem, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
         removeGroupItem(groupItem.uuid, handler: handler)
     }
     
-    func removeGroupItem(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.groupItem + "/\(uuid)") {result in
+    func removeGroupItem(_ uuid: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.groupItem + "/\(uuid)") {result in
             handler(result)
         }
     }
     
-    func toRequestParams(group: ListItemGroup) -> [String: AnyObject] {
+    func toRequestParams(_ group: ListItemGroup) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
-            "uuid": group.uuid,
-            "name": group.name,
-            "order": group.order,
-            "color": group.bgColor.hexStr,
-            "fav": group.fav
+            "uuid": group.uuid as AnyObject,
+            "name": group.name as AnyObject,
+            "order": group.order as AnyObject,
+            "color": group.bgColor.hexStr as AnyObject,
+            "fav": group.fav as AnyObject
         ]
         
         if let lastServerUpdate = group.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
 
         return dict
     }
     
-    func toRequestParams(groupItem: GroupItem) -> [String: AnyObject] {
+    func toRequestParams(_ groupItem: GroupItem) -> [String: AnyObject] {
         
         let productDict = RemoteListItemProvider().toRequestParams(groupItem.product)
         
         let groupDict = toRequestParams(groupItem.group)
         
         var dict: [String: AnyObject] = [
-            "uuid": groupItem.uuid,
-            "quantity": groupItem.quantity,
-            "product": productDict,
-            "group": groupDict
+            "uuid": groupItem.uuid as AnyObject,
+            "quantity": groupItem.quantity as AnyObject,
+            "product": productDict as AnyObject,
+            "group": groupDict as AnyObject
         ]
         
         if let lastServerUpdate = groupItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         
         return dict

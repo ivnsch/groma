@@ -10,7 +10,7 @@ import Foundation
 
 class InvitationsHandler {
     
-    static func handleInvitations(listInvitations: [RemoteListInvitation], inventoryInvitations: [RemoteInventoryInvitation], controller: UIViewController) {
+    static func handleInvitations(_ listInvitations: [RemoteListInvitation], inventoryInvitations: [RemoteInventoryInvitation], controller: UIViewController) {
         ListInvitationsHandler.handleInvitations(listInvitations, controller: controller)
         InventoryInvitationsHandler.handleInvitations(inventoryInvitations, controller: controller)
     }

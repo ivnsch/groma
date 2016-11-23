@@ -19,23 +19,23 @@ import RealmSwift
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
-    private let debugAddDummyData = false
-    private let debugGeneratePrefillDatabases = false
-    private let debugForceShowIntro = false
+    fileprivate let debugAddDummyData = false
+    fileprivate let debugGeneratePrefillDatabases = false
+    fileprivate let debugForceShowIntro = false
     
     var window: UIWindow?
     
-    private var reachability: Reachability!
+    fileprivate var reachability: Reachability!
     
-    private let userProvider = ProviderFactory().userProvider // arc
+    fileprivate let userProvider = ProviderFactory().userProvider // arc
 
-    private var suggestionsPrefiller: SuggestionsPrefiller? // arc
+    fileprivate var suggestionsPrefiller: SuggestionsPrefiller? // arc
 
-    private var ratingAlert: RatingAlert? // arc
+    fileprivate var ratingAlert: RatingAlert? // arc
     
-    private let websocketVisualNotificationDuration: Double = 2
+    fileprivate let websocketVisualNotificationDuration: Double = 2
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         configLog()
         
@@ -63,14 +63,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         checkMigrateRealm()
         
         Notification.subscribe(.LoginTokenExpired, selector: #selector(AppDelegate.onLoginTokenExpired(_:)), observer: self)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketConnectionChange(_:)), name: WSNotificationName.Connection.rawValue, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onWebsocketConnectionChange(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Connection.rawValue), object: nil)
 
         checkClearHistory()
         
         return initFb
     }
 
-    private func checkMigrateRealm() {
+    fileprivate func checkMigrateRealm() {
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
@@ -95,7 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 //        let realm = try! Realm()
     }
     
-    private func checkRatePopup() {
+    fileprivate func checkRatePopup() {
         if let controller = window?.rootViewController {
             ratingAlert = RatingAlert()
             ratingAlert?.delegate = self
@@ -105,12 +105,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    private func configLog() {
+    fileprivate func configLog() {
         
         func debugConfig() {
             QorumLogs.enabled = true
             QorumLogs.minimumLogLevelShown = 1
-            QorumLogs.KZLinkedConsoleSupportEnabled = true
+//            QorumLogs.KZLinkedConsoleSupportEnabled = true
 //            QorumLogs.onlyShowTheseFiles(MyWebSocket.self, MyWebsocketDispatcher.self)
             QorumLogs.test()
         }
@@ -141,29 +141,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         productionConfig()
     }
     
-    private func initWebsocket() {
-        WebsocketHelper.tryConnectWebsocket()
+    fileprivate func initWebsocket() {
+        _ = WebsocketHelper.tryConnectWebsocket()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketReceptionNotification(_:)), name: WSNotificationName.Reception.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketProcessingError(_:)), name: WSNotificationName.ProcessingError.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketList(_:)), name: WSNotificationName.List.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketInventory(_:)), name: WSNotificationName.Inventory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketSharedSync(_:)), name: WSNotificationName.SyncShared.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onShowShouldUpdateAppDialog(_:)), name: Notification.ShowShouldUpdateAppDialog.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onShowMustUpdateAppDialog(_:)), name: Notification.ShowMustUpdateAppDialog.rawValue, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onWebsocketReceptionNotification(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Reception.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onWebsocketProcessingError(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProcessingError.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onWebsocketList(_:)), name: NSNotification.Name(rawValue: WSNotificationName.List.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onWebsocketInventory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Inventory.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onWebsocketSharedSync(_:)), name: NSNotification.Name(rawValue: WSNotificationName.SyncShared.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onShowShouldUpdateAppDialog(_:)), name: NSNotification.Name(rawValue: Notification.ShowShouldUpdateAppDialog.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onShowMustUpdateAppDialog(_:)), name: NSNotification.Name(rawValue: Notification.ShowMustUpdateAppDialog.rawValue), object: nil)
     }
     
-    private func initHockey() {
-        BITHockeyManager.sharedHockeyManager().configureWithIdentifier("589348069297465892087104a6337407")
+    fileprivate func initHockey() {
+        BITHockeyManager.shared().configure(withIdentifier: "589348069297465892087104a6337407")
         // Do some additional configuration if needed here
-        BITHockeyManager.sharedHockeyManager().startManager()
-        BITHockeyManager.sharedHockeyManager().authenticator.authenticateInstallation()
+        BITHockeyManager.shared().start()
+        BITHockeyManager.shared().authenticator.authenticateInstallation()
     }
     
-    private func showController() {
+    fileprivate func showController() {
         
         let controller = UIStoryboard.mainTabController()
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = controller
         self.window?.makeKeyAndVisible()
         
@@ -177,18 +177,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                 }
             }
             
-            introController.mode = .Launch
+            introController.mode = .launch
             
-            self.window?.rootViewController?.presentViewController(introController, animated: false, completion: nil)
+            self.window?.rootViewController?.present(introController, animated: false, completion: nil)
         }
     }
     
-    private func initIsFirstLaunch() {
+    fileprivate func initIsFirstLaunch() {
         if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
             QL2("Initialising first app launch preferences")
             PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
             PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: true)
-            PreferencesManager.savePreference(PreferencesManagerKey.firstLaunchDate, value: NSDate())
+            PreferencesManager.savePreference(PreferencesManagerKey.firstLaunchDate, value: Date())
             
             // Ensure there's no login token from a previous app installation (token is stored in the keychain, which is not deleted when the app is uninstalled).
             AccessTokenHelper.removeToken()
@@ -199,43 +199,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    private func initGlobalAppearance() {
+    fileprivate func initGlobalAppearance() {
         
         let regularFont: UIFont = {
             if let fontSize = LabelMore.mapToFontSize(50) {
-                return UIFont.systemFontOfSize(fontSize)
+                return UIFont.systemFont(ofSize: fontSize)
             } else {
                 QL4("Not supported font size")
-                return UIFont.systemFontOfSize(18)
+                return UIFont.systemFont(ofSize: 18)
             }
         }()
         
 //        UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.superSmallLight, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
         UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: regularFont, NSForegroundColorAttributeName: Theme.tabBarTextColor]
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName: regularFont, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName: regularFont, NSForegroundColorAttributeName: Theme.navigationBarTextColor], for: UIControlState())
 //        UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.verySmallLight], forState: .Normal)
         
         UITabBar.appearance().tintColor = Theme.tabBarSelectedColor
         UITabBar.appearance().barTintColor = Theme.tabBarBackgroundColor
-        UITabBar.appearance().translucent = false
+        UITabBar.appearance().isTranslucent = false
 
         // Hide hairline
         UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         
         UINavigationBar.appearance().barTintColor = Theme.navigationBarBackgroundColor
         UINavigationBar.appearance().tintColor = Theme.navigationBarTextColor
-        UINavigationBar.appearance().translucent = false
+        UINavigationBar.appearance().isTranslucent = false
     }
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         
 //        print("AppDelegate open url: \(url)")
         
-        if url.scheme.contains("fb335124139955932") {
-            return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
-        } else if url.scheme.contains("google") {
-            return GIDSignIn.sharedInstance().handleURL(url, sourceApplication: sourceApplication, annotation: annotation)
+        if (url.scheme?.contains("fb335124139955932"))! {
+            return FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
+        } else if (url.scheme?.contains("google"))! {
+            return GIDSignIn.sharedInstance().handle(url, sourceApplication: sourceApplication, annotation: annotation)
         } else {
             return false
         }
@@ -243,7 +243,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
     // MARK: - Debug
     
-    private func isDebug() -> Bool {
+    fileprivate func isDebug() -> Bool {
         #if DEBUG
             return true
             #else
@@ -252,7 +252,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     }
     
     // Actions executed if app is in debug mode
-    private func ifDebugLaunchActions() {
+    fileprivate func ifDebugLaunchActions() {
         #if DEBUG
             if debugGeneratePrefillDatabases {
                 generatePrefillDatabase()
@@ -268,7 +268,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     * Create database which we embed in the app in order to prefill the app's database
     * TODO try to use test for this (PrefillDatabase - not working because sth with Realm). This should not be in of the app.
     */
-    private func generatePrefillDatabase() {
+    fileprivate func generatePrefillDatabase() {
         print("Creating prefilled databases")
         self.suggestionsPrefiller = SuggestionsPrefiller()
         self.suggestionsPrefiller?.prefill {
@@ -277,22 +277,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     }
 
     // A minimal dummy data setup with 1 inventory, 1 list and 1 list item (with corresponding product and category)
-    private func addDummyData() {
+    fileprivate func addDummyData() {
         
         var uuid: String {
-            return NSUUID().UUIDString
+            return UUID().uuidString
         }
-        let fruitsCat = ProductCategory(uuid: uuid, name: "Obst", color: UIColor.flatRedColor())
+        let fruitsCat = ProductCategory(uuid: uuid, name: "Obst", color: UIColor.flatRed)
         let product1 = Product(uuid: uuid, name: "Birnen", category: fruitsCat, brand: "")
 
-        let inventory1 = Inventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreenColor(), order: 0)
+        let inventory1 = Inventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreen, order: 0)
         DBProviders.inventoryProvider.saveInventory(inventory1, dirty: true) {saved in
         
-            let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1, store: nil)
+            let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.dark), order: 0, inventory: inventory1, store: nil)
             DBProviders.listProvider.saveList(list1) {result in
                 
-                let section1 = Section(uuid: uuid, name: "Obst", color: UIColor.flatRedColor(), list: list1, order: ListItemStatusOrder(status: .Todo, order: 0))
-                let storeProduct1 = StoreProduct(uuid: uuid, price: 1, baseQuantity: 1, unit: .None, store: "my store", product: product1)
+                let section1 = Section(uuid: uuid, name: "Obst", color: UIColor.flatRed, list: list1, order: ListItemStatusOrder(status: .todo, order: 0))
+                let storeProduct1 = StoreProduct(uuid: uuid, price: 1, baseQuantity: 1, unit: .none, store: "my store", product: product1)
                 let listItems = [
                     ListItem(uuid: uuid, product: storeProduct1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0)
                 ]
@@ -304,36 +304,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         QL2("applicationDidBecomeActive")
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
     
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         QL2("applicationWillResignActive")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         QL2("applicationWillEnterForeground")
         checkPing() // TODO!!!! applicationWillEnterForeground seems not to be called on launch - is this intended?
     }
     
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         QL2("applicationDidEnterBackground")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
-    private func checkPing() {
-        if let lastTokeUpdateDate: NSDate = PreferencesManager.loadPreference(PreferencesManagerKey.lastTokenUpdate) {
+    fileprivate func checkPing() {
+        if let lastTokeUpdateDate: Date = PreferencesManager.loadPreference(PreferencesManagerKey.lastTokenUpdate) {
             
             // Refresh the token, max 1 time in <days>
             // If we find a method to guarantee (background service?) that we refresh the token each x days, we can set this to a bigger value. Consult server for more details.
             let days = 1
-            let passedDays = lastTokeUpdateDate.daysUntil(NSDate())
+            let passedDays = lastTokeUpdateDate.daysUntil(Date())
             if passedDays >= days {
                 QL2("\(passedDays) days passed since last token refresh. Ping")
                 userProvider.ping()
@@ -345,18 +345,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         QL2("applicationWillTerminate")
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         Providers.userProvider.disconnectWebsocket()
         
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     // Remove history entries older than 1 year
-    private func checkClearHistory() {
-        Providers.historyProvider.removeHistoryItemsOlderThan(NSDate.inMonths(-12)) {providerResult in
+    fileprivate func checkClearHistory() {
+        Providers.historyProvider.removeHistoryItemsOlderThan(Date.inMonths(-12)) {providerResult in
             // Do nothing, it there's an error it's already logged in the provider. It doesn't make sense to show this to the user
         }
     }
@@ -364,13 +364,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     
     // MARK: - Reachability
     
-    private func initReachability() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.checkForReachability(_:)), name: kReachabilityChangedNotification, object: nil)
-        self.reachability = Reachability.reachabilityForInternetConnection()
+    fileprivate func initReachability() {
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.checkForReachability(_:)), name: NSNotification.Name.reachabilityChanged, object: nil)
+        self.reachability = Reachability.forInternetConnection()
         self.reachability.startNotifier()
     }
     
-    func checkForReachability(notification: NSNotification) {
+    func checkForReachability(_ notification: Foundation.Notification) {
         
         let networkReachability = notification.object as! Reachability
         let remoteHostStatus = networkReachability.currentReachabilityStatus()
@@ -411,20 +411,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         ratingAlert = nil
     }
     
-    func onLoginTokenExpired(note: NSNotification) {
-        guard let controller = window?.rootViewController else {"Can't show login modal, either window: \(window) or root controller: \(window?.rootViewController) is nil)"; return}
+    func onLoginTokenExpired(_ note: Foundation.Notification) {
+        guard let controller = window?.rootViewController else {QL4("Can't show login modal, either window: \(window) or root controller: \(window?.rootViewController) is nil)"); return}
 
         if !(Providers.userProvider is UserProviderMock) {
             let loginController = ModalLoginController()
-            controller.presentViewController(loginController, animated: true, completion: nil)
+            controller.present(loginController, animated: true, completion: nil)
         }
     }
     
     // MARK: - Websocket
     
-    func onWebsocketConnectionChange(note: NSNotification) {
+    func onWebsocketConnectionChange(_ note: Foundation.Notification) {
         
-        if let info = note.userInfo as? Dictionary<String, Bool> {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, Bool> {
             if let notification = info[WSNotificationValue] {
                 switch notification {
                 case true:
@@ -447,7 +447,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                                 Providers.globalProvider.sync(false, handler: controller.successHandler{invitations in
                                     QL3("Sync complete")
                                     // Broadcast such that controllers can e.g. reload items.
-                                    NSNotificationCenter.defaultCenter().postNotificationName(WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil, userInfo: info)
+                                    NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil, userInfo: info)
                                 })
                                 
                             } else {
@@ -459,7 +459,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                     }
                 case false:
                     if window?.viewWithTag(ViewTags.ConnectionLabel) == nil {
-                        showBottomNotification("No server connection. Trying to connect...", textColor: UIColor.flatRedColor(), tag: ViewTags.ConnectionLabel)
+                        _ = showBottomNotification("No server connection. Trying to connect...", textColor: UIColor.flatRed, tag: ViewTags.ConnectionLabel)
                     }
                 }
             } else {
@@ -469,15 +469,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
 
-    private func isShowingBottomNotification(tag: Int) -> Bool {
+    fileprivate func isShowingBottomNotification(_ tag: Int) -> Bool {
         return window?.viewWithTag(tag) != nil
     }
     
-    private func removeBottomNotification() {
+    fileprivate func removeBottomNotification() {
         window?.viewWithTag(ViewTags.ConnectionLabel)?.removeFromSuperview()
     }
     
-    private func showBottomNotification(text: String, textColor: UIColor, tag: Int) -> UIView? {
+    fileprivate func showBottomNotification(_ text: String, textColor: UIColor, tag: Int) -> UIView? {
         if let window = window
             //                        ,controller = window.rootViewController
             //                        , tabBarHeight = controller.tabBarController?.tabBar.frame.height // nil
@@ -485,11 +485,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             
             let tabBarHeight: CGFloat = 49
             let labelHeight: CGFloat = 20
-            let label = UILabel(frame: CGRectMake(0, window.frame.height - tabBarHeight - labelHeight, window.frame.width, labelHeight))
+            let label = UILabel(frame: CGRect(x: 0, y: window.frame.height - tabBarHeight - labelHeight, width: window.frame.width, height: labelHeight))
             label.tag = tag
             label.font = Fonts.smaller
-            label.textAlignment = .Center
-            label.backgroundColor = UIColor.whiteColor()
+            label.textAlignment = .center
+            label.backgroundColor = UIColor.white
             label.textColor = textColor
             label.text = text
             window.addSubview(label)
@@ -501,14 +501,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func onWebsocketReceptionNotification(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, String> {
-            if let sender = info["sender"], category = info["category"], _ = info["verb"] {
+    func onWebsocketReceptionNotification(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, String> {
+            if let sender = info["sender"], let _ = info["category"], let _ = info["verb"] {
                 
 //                let categoryText = category.capitalizedString
                 let msg = "\(sender) updated."
                 
-                let notificationView = showBottomNotification(msg, textColor: UIColor.blackColor(), tag: ViewTags.WebsocketSenderNotification)
+                let notificationView = showBottomNotification(msg, textColor: UIColor.black, tag: ViewTags.WebsocketSenderNotification)
                 delay(websocketVisualNotificationDuration) {
                     notificationView?.removeFromSuperview()
                 }
@@ -520,16 +520,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func onWebsocketProcessingError(note: NSNotification) {
-        let notificationView = showBottomNotification("Error processing incoming update", textColor: UIColor.whiteColor(), tag: ViewTags.WebsocketErrorNotification)
+    func onWebsocketProcessingError(_ note: Foundation.Notification) {
+        let notificationView = showBottomNotification("Error processing incoming update", textColor: UIColor.white, tag: ViewTags.WebsocketErrorNotification)
         delay(websocketVisualNotificationDuration) {
             notificationView?.removeFromSuperview()
         }
     }
     
-    func onWebsocketList(note: NSNotification) {
+    func onWebsocketList(_ note: Foundation.Notification) {
         
-        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteListInvitation>> {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteListInvitation>> {
             if let notification = info[WSNotificationValue] {
                 let invitation = notification.obj
                 switch notification.verb {
@@ -548,9 +548,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func onWebsocketInventory(note: NSNotification) {
+    func onWebsocketInventory(_ note: Foundation.Notification) {
         
-        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteInventoryInvitation>> {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteInventoryInvitation>> {
             if let notification = info[WSNotificationValue] {
                 let invitation = notification.obj
                 switch notification.verb {
@@ -570,9 +570,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     }
     
     // Process this here in AppDelegate because it's global and we have a controller, which we need to show possible invitations and maybe a progress indicator
-    func onWebsocketSharedSync(note: NSNotification) {
+    func onWebsocketSharedSync(_ note: Foundation.Notification) {
         
-        if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 let sender = notification.obj
                 switch notification.verb {
@@ -587,7 +587,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                             InvitationsHandler.handleInvitations(invitations.listInvites, inventoryInvitations: invitations.inventoryInvites, controller: controller)
                             
                             // Broadcast such that controllers can e.g. reload items.
-                            NSNotificationCenter.defaultCenter().postNotificationName(WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil, userInfo: info)
+                            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil, userInfo: info)
                         })
                         
                     } else {
@@ -602,24 +602,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func onShowShouldUpdateAppDialog(note: NSNotification) {
+    func onShowShouldUpdateAppDialog(_ note: Foundation.Notification) {
         guard window?.rootViewController?.presentedViewController == nil else {QL3("Root controller already showing a popup, return"); return}
 
         if let controller = window?.rootViewController {
             
-            func appInstallDate() -> NSDate {
+            func appInstallDate() -> Date {
                 return PreferencesManager.loadPreference(PreferencesManagerKey.firstLaunchDate) ?? {
                     QL4("Invalid state: There's no app first launch date stored.")
-                    return NSDate() // just to return something - note that with this we will never show the popup as the time offset will be ~0
+                    return Date() // just to return something - note that with this we will never show the popup as the time offset will be ~0
                 }()
             }
             
             // last time the we shown the dialog to the user, if it was never shown we return distant past such that it will be shown
-            let referenceDate = PreferencesManager.loadPreference(PreferencesManagerKey.lastShouldUpdateAppDialogDate).map {(date: NSDate) in
+            let referenceDate = PreferencesManager.loadPreference(PreferencesManagerKey.lastShouldUpdateAppDialogDate).map {(date: Date) in
                 return date
-            } ?? NSDate.distantPast()
+            } ?? Date.distantPast
             
-            let now = NSDate()
+            let now = Date()
 
             let showAfterDays = Constants.dayCountShouldUpdatAppDialog
             let passedDays = referenceDate.daysUntil(now)
@@ -631,9 +631,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                 
                 ConfirmationPopup.show(title: "Update", message: "You haven't updated the app in a while.\nTo continue accessing your user account, it's recommended to update.\nThe server will stop supporting this version soon, and you will not be able to log in with it anymore.", okTitle: "Update", cancelTitle: "Not now", controller: controller, onOk: {
                     
-                    if let url = NSURL(string: Constants.appStoreLink) {
+                    if let url = URL(string: Constants.appStoreLink) {
                         
-                        if UIApplication.sharedApplication().openURL(url) {
+                        if UIApplication.shared.openURL(url) {
                             QL1("Update dialog: opened app store")
                             
                         } else {
@@ -649,7 +649,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func onShowMustUpdateAppDialog(note: NSNotification) {
+    func onShowMustUpdateAppDialog(_ note: Foundation.Notification) {
         guard window?.rootViewController?.presentedViewController == nil else {QL3("Root controller already showing a popup, return"); return}
         
         if let controller = window?.rootViewController {
@@ -661,9 +661,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             
             ConfirmationPopup.show(title: trans("popup_title_required_update"), message: trans("popup_please_update_app_to_use_account"), okTitle: trans("popup_button_update"), cancelTitle: trans("popup_button_log_out"), controller: controller, onOk: {
                 
-                if let url = NSURL(string: Constants.appStoreLink) {
+                if let url = URL(string: Constants.appStoreLink) {
                     
-                    if UIApplication.sharedApplication().openURL(url) {
+                    if UIApplication.shared.openURL(url) {
                         QL1("Update dialog: opened app store")
                         
                     } else {

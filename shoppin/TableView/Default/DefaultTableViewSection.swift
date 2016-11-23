@@ -18,7 +18,7 @@ class DefaultTableViewSection: NSObject, TableViewSectionDelegate {
         return 0
     }
     
-    func cellReuseIdentifierForRow(row:Int) -> String {
+    func cellReuseIdentifierForRow(_ row:Int) -> String {
         fatalError("This method must be overridden")
     }
     
@@ -30,7 +30,7 @@ class DefaultTableViewSection: NSObject, TableViewSectionDelegate {
         return nil
     }
     
-    func heightForRow(row: Int) -> Float {
+    func heightForRow(_ row: Int) -> Float {
         return 0
     }
     
@@ -38,7 +38,7 @@ class DefaultTableViewSection: NSObject, TableViewSectionDelegate {
 //        return NSSet()
 //    }
     
-    func tableView(tableView: UITableView, cellForRow: NSInteger) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRow: NSInteger) -> UITableViewCell {
         fatalError("This method must be overridden")
     }
     
@@ -46,11 +46,11 @@ class DefaultTableViewSection: NSObject, TableViewSectionDelegate {
         return 0
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
         return 0
     }
     
-    func dividerViewWithTitle(title:String) -> UIView? {
+    func dividerViewWithTitle(_ title:String) -> UIView? {
         return nil
     }
 }

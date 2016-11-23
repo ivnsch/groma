@@ -18,7 +18,7 @@ class UserIdentity: Equatable {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType), uuid: \(self.uuid), email: \(self.email)}"
+        return "{\(type(of: self)), uuid: \(self.uuid), email: \(self.email)}"
     }
 }
 

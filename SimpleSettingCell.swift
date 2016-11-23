@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 
 protocol SimpleSettingCellDelegate {
-    func onSimpleSettingHelpTap(cell: SimpleSettingCell, setting: SimpleSetting)
+    func onSimpleSettingHelpTap(_ cell: SimpleSettingCell, setting: SimpleSetting)
 }
 
 class SimpleSettingCell: UITableViewCell {
@@ -25,12 +25,12 @@ class SimpleSettingCell: UITableViewCell {
             if let setting = setting {
                 label.text = setting.label
                 label.textColor = setting.labelColor
-                helpButton.hidden = !setting.hasHelp
+                helpButton.isHidden = !setting.hasHelp
             }
         }
     }
     
-    @IBAction func onHelpTap(sender: UIButton) {
+    @IBAction func onHelpTap(_ sender: UIButton) {
         if let setting = setting {
             delegate?.onSimpleSettingHelpTap(self, setting: setting)
         } else {

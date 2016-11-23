@@ -13,8 +13,8 @@ import QorumLogs
 
 //change
 protocol AddEditInventoryControllerDelegate: class {
-    func onAddInventory(inventory: Inventory)
-    func onUpdateInventory(inventory: Inventory)
+    func onAddInventory(_ inventory: Inventory)
+    func onUpdateInventory(_ inventory: Inventory)
 }
 
 // TODO try to refactor with AddEditListController, lot of repeated code
@@ -27,7 +27,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     @IBOutlet weak var colorButtonHCenterConstraint: NSLayoutConstraint!
     @IBOutlet weak var colorButtonRightPaddingConstraint: NSLayoutConstraint!
 
-    private var listInputsValidator: Validator?
+    fileprivate var listInputsValidator: Validator?
     
     weak var delegate: AddEditInventoryControllerDelegate?
     
@@ -43,11 +43,11 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         }
     }
     
-    private var showingColorPicker: FlatColorPickerController?
+    fileprivate var showingColorPicker: FlatColorPickerController?
     
-    private var addButtonHelper: AddButtonHelper?
+    fileprivate var addButtonHelper: AddButtonHelper?
 
-    private var users: [SharedUser] = [] {
+    fileprivate var users: [SharedUser] = [] {
         didSet {
             if !users.isEmpty {
                 let title: String = {
@@ -57,13 +57,13 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
                         return trans("participants_count_plural", "\(users.count)")
                     }
                 }()
-                sharedUsersButton.setTitle(title, forState: .Normal)
+                sharedUsersButton.setTitle(title, for: UIControlState())
             }
         }
     }
-    private var invitedUsers: [SharedUser] = []
+    fileprivate var invitedUsers: [SharedUser] = []
     
-    private func prefill(list: Inventory) {
+    fileprivate func prefill(_ list: Inventory) {
         listNameInputField.text = list.name
         
         users = list.users
@@ -81,14 +81,14 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         setBackgroundColor(list.bgColor)
     }
     
-    private func setSharedButtonVisibile(visible: Bool) {
-        sharedUsersButton.hidden = !visible
+    fileprivate func setSharedButtonVisibile(_ visible: Bool) {
+        sharedUsersButton.isHidden = !visible
         
         colorButtonHCenterConstraint.priority = visible ? 999 : 998
         colorButtonRightPaddingConstraint.priority = visible ? 998 : 999
     }
     
-    private func initValidator() {
+    fileprivate func initValidator() {
         let listInputsValidator = Validator()
         listInputsValidator.registerField(self.listNameInputField, rules: [NotEmptyTrimmedRule(message: trans("validation_inventory_name_not_empty"))])
         self.listInputsValidator = listInputsValidator
@@ -99,33 +99,33 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         
         initValidator()
         
-        listNameInputField.setPlaceholderWithColor(trans("placeholder_inventory_name"), color: UIColor.whiteColor())
+        listNameInputField.setPlaceholderWithColor(trans("placeholder_inventory_name"), color: UIColor.white)
         
-        setBackgroundColor(UIColor.randomFlatColor())
+        setBackgroundColor(UIColor.randomFlat)
         
         listNameInputField.becomeFirstResponder()
         
         setSharedButtonVisibile(ConnectionProvider.connectedAndLoggedIn)
     }
     
-    private func setBackgroundColor(color: UIColor) {
+    fileprivate func setBackgroundColor(_ color: UIColor) {
         
-        func setContrastingTextColor(color: UIColor) {
+        func setContrastingTextColor(_ color: UIColor) {
             guard listNameInputField != nil else {QL4("Outlets not initialised yet"); return}
             
             let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
             
             listNameInputField.setPlaceholderWithColor(trans("placeholder_inventory_name"), color: contrastingTextColor)
             listNameInputField.textColor = contrastingTextColor
-            colorButton.setTitleColor(contrastingTextColor, forState: .Normal)
-            sharedUsersButton.setTitleColor(contrastingTextColor, forState: .Normal)
+            colorButton.setTitleColor(contrastingTextColor, for: .normal)
+            sharedUsersButton.setTitleColor(contrastingTextColor, for: .normal)
         }
         
         view.backgroundColor = color
         setContrastingTextColor(color)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         
@@ -137,15 +137,15 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         addButtonHelper?.addObserver()
     }
     
-    private func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentView = parentViewController?.view else {QL4("No parentController"); return nil}
+    fileprivate func initAddButtonHelper() -> AddButtonHelper? {
+        guard let parentView = parent?.view else {QL4("No parentController"); return nil}
         let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
             self?.submit()
         }
         return addButtonHelper
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         addButtonHelper?.removeObserver()
     }
@@ -176,7 +176,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
                     // If it's a new inventory add myself as a participant, to be consistent with list after server updates it (server adds the caller as a participant)
                     let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
                     
-                    let inventory = Inventory(uuid: NSUUID().UUIDString, name: listName, users: totalUsers, bgColor: bgColor, order: currentListsCount)//change
+                    let inventory = Inventory(uuid: NSUUID().uuidString, name: listName, users: totalUsers, bgColor: bgColor, order: currentListsCount)//change
                     weakSelf.delegate?.onAddInventory(inventory)
                 } else {
                     print("Error: no currentListsCount")
@@ -185,20 +185,20 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         }
     }
     
-    private func validateInputs(validator: Validator?, onValid: () -> ()) {
+    fileprivate func validateInputs(_ validator: Validator?, onValid: () -> ()) {
         
         guard validator != nil else {return}
         
         if let errors = validator?.validate() {
-            for (field, _) in errors {
-                field.showValidationError()
+            for (_, error) in errors {
+                error.field.showValidationError()
             }
-            self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             
         } else {
-            if let lastErrors = validator?.lastErrors {
-                for (field, _) in lastErrors {
-                    field.clearValidationError()
+            if let lastErrors = validator?.errors {
+                for (_, error) in lastErrors {
+                    error.field.clearValidationError()
                 }
             }
             
@@ -210,29 +210,29 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         let picker = UIStoryboard.listColorPicker()
         self.view.layoutIfNeeded() // TODO is this necessary? don't think so check and remove
         
-        if let parentViewController = parentViewController {
+        if let parentViewController = parent {
             
             let topBarHeight: CGFloat = 64
             
-            picker.view.frame = CGRectMake(0, topBarHeight, parentViewController.view.frame.width, parentViewController.view.frame.height - topBarHeight)
+            picker.view.frame = CGRect(x: 0, y: topBarHeight, width: parentViewController.view.frame.width, height: parentViewController.view.frame.height - topBarHeight)
             
             parentViewController.addChildViewControllerAndView(picker) // add to superview (lists controller) because it has to occupy full space (navbar - tab)
             picker.delegate = self
             showingColorPicker = picker
             
-            let buttonPointInParent = parentViewController.view.convertPoint(CGPointMake(colorButton.center.x, colorButton.center.y - topBarHeight), fromView: view)
+            let buttonPointInParent = parentViewController.view.convert(CGPoint(x: colorButton.center.x, y: colorButton.center.y - topBarHeight), from: view)
             let fractionX = buttonPointInParent.x / parentViewController.view.frame.width
             let fractionY = buttonPointInParent.y / (parentViewController.view.frame.height - topBarHeight)
             
-            picker.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            picker.view.layer.anchorPoint = CGPoint(x: fractionX, y: fractionY)
             
-            picker.view.frame = CGRectMake(0, topBarHeight, parentViewController.view.frame.width, parentViewController.view.frame.height - topBarHeight)
+            picker.view.frame = CGRect(x: 0, y: topBarHeight, width: parentViewController.view.frame.width, height: parentViewController.view.frame.height - topBarHeight)
             
-            picker.view.transform = CGAffineTransformMakeScale(0, 0)
+            picker.view.transform = CGAffineTransform(scaleX: 0, y: 0)
             
-            UIView.animateWithDuration(0.3) {
-                picker.view.transform = CGAffineTransformMakeScale(1, 1)
-            }
+            UIView.animate(withDuration: 0.3, animations: {
+                picker.view.transform = CGAffineTransform(scaleX: 1, y: 1)
+            }) 
             
             view.endEditing(true)
 
@@ -244,8 +244,8 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     @IBAction func onSharedUsersTap() {
         if ConnectionProvider.connectedAndLoggedIn {
             let sharedUsersController = UIStoryboard.sharedUsersController()
-            self.parentViewController?.navigationController?.pushViewController(sharedUsersController, animated: true)
-            self.parentViewController?.navigationController?.setNavigationBarHidden(false, animated: false)
+            self.parent?.navigationController?.pushViewController(sharedUsersController, animated: true)
+            self.parent?.navigationController?.setNavigationBarHidden(false, animated: false)
             sharedUsersController.delegate = self
             sharedUsersController.onViewDidLoad = {[weak self] in guard let weakSelf = self else {return}
                 // we load the invited/known users on demand, so we load each time when we open the controller (we could also have a lazy variable but loading each time doesn't hurt, maybe we get updates of other users in the meantime).
@@ -265,7 +265,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         }
     }
     
-    func textFieldShouldReturn(sender: UITextField) -> Bool {
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
         if sender == listNameInputField {
             submit()
             sender.resignFirstResponder()
@@ -274,12 +274,12 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         return false
     }
     
-    private func loadKnownAndInvitedUsers(onLoaded: (known: [SharedUser], invited: [SharedUser]) -> Void) {
+    fileprivate func loadKnownAndInvitedUsers(_ onLoaded: @escaping (_ known: [SharedUser], _ invited: [SharedUser]) -> Void) {
         var allResult: [SharedUser]?
         var invitedResult: [SharedUser]?
         func check() {
-            if let allResult = allResult, invitedResult = invitedResult {
-                onLoaded(known: allResult, invited: invitedResult)
+            if let allResult = allResult, let invitedResult = invitedResult {
+                onLoaded(allResult, invitedResult)
             }
         }
         Providers.userProvider.findAllKnownSharedUsers(successHandler {sharedUsers in
@@ -300,7 +300,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     
     // MARK: - FlatColorPickerControllerDelegate
     
-    func onColorPicked(color: UIColor) {
+    func onColorPicked(_ color: UIColor) {
         dismissColorPicker(color)
     }
     
@@ -308,27 +308,27 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         //        dismissColorPicker(nil) // not used see FIXME in FlatColorPickerController.viewDidLoad
     }
     
-    private func dismissColorPicker(selectedColor: UIColor?) {
+    fileprivate func dismissColorPicker(_ selectedColor: UIColor?) {
         if let showingColorPicker = showingColorPicker {
             
-            UIView.animateWithDuration(0.3, animations: {
-                showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
+            UIView.animate(withDuration: 0.3, animations: {
+                showingColorPicker.view.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
                 
                 }, completion: {[weak self] finished in
                     self?.showingColorPicker = nil
                     self?.showingColorPicker?.removeFromParentViewControllerWithView()
                     
-                    UIView.animateWithDuration(0.3) {
+                    UIView.animate(withDuration: 0.3, animations: {
                         if let selectedColor = selectedColor {
                             self?.setBackgroundColor(selectedColor)
                         }
-                    }
-                    UIView.animateWithDuration(0.15) {
-                        self?.colorButton.transform = CGAffineTransformMakeScale(2, 2)
-                        UIView.animateWithDuration(0.15) {
-                            self?.colorButton.transform = CGAffineTransformMakeScale(1, 1)
-                        }
-                    }
+                    }) 
+                    UIView.animate(withDuration: 0.15, animations: {
+                        self?.colorButton.transform = CGAffineTransform(scaleX: 2, y: 2)
+                        UIView.animate(withDuration: 0.15, animations: {
+                            self?.colorButton.transform = CGAffineTransform(scaleX: 1, y: 1)
+                        }) 
+                    }) 
                     
                     self?.listNameInputField.becomeFirstResponder()
                 }
@@ -338,7 +338,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     
     // MARK: - SharedUsersControllerDelegate
     
-    func onPull(user: SharedUser) {
+    func onPull(_ user: SharedUser) {
         progressVisible(true)
         if let inventory = listToEdit {
             Providers.pullProvider.pullInventoryProducs(inventory.uuid, srcUser: user, successHandler{[weak self] products in  guard let weakSelf = self else {return}
@@ -348,12 +348,12 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         }
     }
     
-    func onUsersUpdated(exitingUsers: [SharedUser], invitedUsers: [SharedUser]) {
+    func onUsersUpdated(_ exitingUsers: [SharedUser], invitedUsers: [SharedUser]) {
         self.users = exitingUsers
         self.invitedUsers = invitedUsers
     }
     
-    func invitedUsers(handler: [SharedUser] -> Void) {
+    func invitedUsers(_ handler: @escaping ([SharedUser]) -> Void) {
         if let inventory = listToEdit {
             Providers.inventoryProvider.findInvitedUsers(inventory.uuid, successHandler {users in
                 handler(users)

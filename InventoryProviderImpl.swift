@@ -11,16 +11,16 @@ import QorumLogs
 
 class InventoryProviderImpl: InventoryProvider {
    
-    private let remoteProvider = RemoteInventoryProvider()
-    private let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
-    private let dbInventoryProvider = RealmInventoryProvider()
+    fileprivate let remoteProvider = RemoteInventoryProvider()
+    fileprivate let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
+    fileprivate let dbInventoryProvider = RealmInventoryProvider()
 
-    func inventories(remote: Bool = true, _ handler: ProviderResult<[Inventory]> -> ()) {
+    func inventories(_ remote: Bool = true, _ handler: @escaping (ProviderResult<[Inventory]>) -> ()) {
         self.dbInventoryProvider.loadInventories {dbInventories in
             
             let sotedDBInventories = dbInventories.sortedByOrder() // include name in sorting to guarantee equal ordering with remote result, in case of duplicate order fields
             
-            handler(ProviderResult(status: .Success, sucessResult: sotedDBInventories))
+            handler(ProviderResult(status: .success, sucessResult: sotedDBInventories))
             
             if remote {
                 self.remoteProvider.inventories {remoteResult in
@@ -33,7 +33,7 @@ class InventoryProviderImpl: InventoryProvider {
                             
                             self.dbInventoryProvider.overwrite(sortedInventories, clearTombstones: true, dirty: false) {saved in
                                 if saved {
-                                    handler(ProviderResult(status: .Success, sucessResult: sortedInventories))
+                                    handler(ProviderResult(status: .success, sucessResult: sortedInventories))
                                     
                                 } else {
                                     QL4("Error updating inventories - dbListsMaybe is nil")
@@ -49,14 +49,14 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func firstInventory(handler: ProviderResult<Inventory> -> ()) {
+    func firstInventory(_ handler: @escaping (ProviderResult<Inventory>) -> ()) {
         inventories {result in
             if let inventories = result.sucessResult {
                 if let firstInventory = inventories.first {
-                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: firstInventory))
+                    handler(ProviderResult(status: .success, sucessResult: firstInventory))
                 } else {
                     print("Warn firstInventory, success but there's no inventory")
-                    handler(ProviderResult(status: .NotFound))
+                    handler(ProviderResult(status: .notFound))
                 }
             } else {
                 handler(ProviderResult(status: result.status))
@@ -90,10 +90,10 @@ class InventoryProviderImpl: InventoryProvider {
 //        }
 //    }
     
-    func addInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func addInventory(_ inventory: Inventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         self.dbInventoryProvider.saveInventory(inventory, dirty: remote) {[weak self] saved in
             if saved {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 if remote {
                     self?.remoteProvider.addInventory(inventory) {remoteResult in
                         
@@ -110,14 +110,14 @@ class InventoryProviderImpl: InventoryProvider {
                 }
 
             } else {
-                handler(ProviderResult(status: .DatabaseSavingError))
+                handler(ProviderResult(status: .databaseSavingError))
             }
         }
     }
     
-    func updateInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func updateInventory(_ inventory: Inventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         dbInventoryProvider.saveInventory(inventory, update: true, dirty: remote) {[weak self] saved in
-            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+            handler(ProviderResult(status: saved ? .success : .databaseUnknown))
             if remote {
                 self?.remoteProvider.updateInventory(inventory) {remoteResult in
                     if let remoteInventory = remoteResult.successResult {
@@ -134,11 +134,11 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func updateInventoriesOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func updateInventoriesOrder(_ orderUpdates: [OrderUpdate], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         // dirty == remote: if we want to do a remote call, it means the update is client triggered (opposed to e.g. processing a websocket message) which means the data is not in the server yet, which means it's dirty.
         DBProviders.inventoryProvider.updateInventoriesOrder(orderUpdates, dirty: remote) {[weak self] success in
             if success {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 if remote {
                     self?.remoteProvider.updateInventoriesOrder(orderUpdates) {remoteResult in
@@ -150,21 +150,21 @@ class InventoryProviderImpl: InventoryProvider {
                 }
             } else {
                 QL4("Error updating inventories order in local database, orderUpdates: \(orderUpdates)")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }
     
-    func removeInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func removeInventory(_ inventory: Inventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         removeInventory(inventory.uuid, remote: remote, handler)
     }
 
-    func removeInventory(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func removeInventory(_ uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         dbInventoryProvider.removeInventory(uuid, markForSync: remote) {[weak self] removed in
-            handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
+            handler(ProviderResult(status: removed ? .success : .databaseUnknown))
             if removed {
                 
-                Notification.send(.ListRemoved, dict: [NotificationKey.list: uuid])
+                Notification.send(.ListRemoved, dict: [NotificationKey.list: uuid as AnyObject])
 
                 if remote {
                     self?.remoteProvider.removeInventory(uuid) {remoteResult in
@@ -185,18 +185,18 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func acceptInvitation(invitation: RemoteInventoryInvitation, _ handler: ProviderResult<Any> -> Void) {
+    func acceptInvitation(_ invitation: RemoteInventoryInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         remoteProvider.acceptInvitation(invitation) {remoteResult in
             if remoteResult.success {
                 QL1("Accept inventory invitation success")
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
             } else {
                 DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
             }
         }
     }
     
-    func rejectInvitation(invitation: RemoteInventoryInvitation, _ handler: ProviderResult<Any> -> Void) {
+    func rejectInvitation(_ invitation: RemoteInventoryInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         remoteProvider.rejectInvitation(invitation) {remoteResult in
             if remoteResult.success {
                 QL1("Reject inventory invitation success")
@@ -206,11 +206,11 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func findInvitedUsers(listUuid: String, _ handler: ProviderResult<[SharedUser]> -> Void) {
+    func findInvitedUsers(_ listUuid: String, _ handler: @escaping (ProviderResult<[SharedUser]>) -> Void) {
         remoteProvider.findInvitedUsers(listUuid) {remoteResult in
             if let remoteSharedUsers = remoteResult.successResult {
                 let sharedUsers: [SharedUser] = remoteSharedUsers.map{SharedUserMapper.sharedUserWithRemote($0)}
-                handler(ProviderResult(status: .Success, sucessResult: sharedUsers))
+                handler(ProviderResult(status: .success, sucessResult: sharedUsers))
             } else {
                 DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
             }

@@ -12,9 +12,9 @@ import Foundation
 protocol GlobalProvider {
 
     // isMathSync: If we are doing a sync because we received a websocket notification of another user (a user we share something with) having done a sync.
-    func sync(isMatchSync: Bool, handler: ProviderResult<SyncResult> -> Void)
+    func sync(_ isMatchSync: Bool, handler: @escaping (ProviderResult<SyncResult>) -> Void)
     
-    func clearAllData(remote: Bool, handler: ProviderResult<Any> -> Void)
+    func clearAllData(_ remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func fullDownload(handler: ProviderResult<SyncResult> -> Void)
+    func fullDownload(_ handler: @escaping (ProviderResult<SyncResult>) -> Void)
 }

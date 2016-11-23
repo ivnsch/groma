@@ -10,7 +10,7 @@ import Foundation
 
 class HistoryItemGroup: CustomDebugStringConvertible {
 
-    let date: NSDate
+    let date: Date
     let user: SharedUser
     var historyItems: [HistoryItem]
 
@@ -18,13 +18,13 @@ class HistoryItemGroup: CustomDebugStringConvertible {
         self.historyItems.reduce(0) {sum, e in sum + (Float(e.totalPaidPrice))}
     }()
 
-    init(date: NSDate, user: SharedUser, historyItems: [HistoryItem]) {
+    init(date: Date, user: SharedUser, historyItems: [HistoryItem]) {
         self.date = date
         self.user = user
         self.historyItems = historyItems
     }
     
-    func copy(date: NSDate? = nil, user: SharedUser? = nil, historyItems: [HistoryItem]? = nil) -> HistoryItemGroup {
+    func copy(_ date: Date? = nil, user: SharedUser? = nil, historyItems: [HistoryItem]? = nil) -> HistoryItemGroup {
         return HistoryItemGroup(
             date: date ?? self.date,
             user: user ?? self.user,

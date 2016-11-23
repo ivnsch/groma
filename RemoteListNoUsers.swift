@@ -20,12 +20,12 @@ struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionSerializ
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let name = representation.valueForKeyPath("name") as? String,
-            let order = representation.valueForKeyPath("order") as? Int,
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double,
-            let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
-            let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let name = representation.value(forKeyPath: "name") as? String,
+            let order = representation.value(forKeyPath: "order") as? Int,
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double,
+            let inventoryUuid = representation.value(forKeyPath: "inventoryUuid") as? String,
+            let color = ((representation.value(forKeyPath: "color") as? String).map{colorStr in
                 UIColor(hexString: colorStr)
             })
             else {
@@ -38,7 +38,7 @@ struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionSerializ
         self.inventoryUuid = inventoryUuid
         self.color = color
         
-        if let storeMaybe = representation.valueForKeyPath("store") {
+        if let storeMaybe = representation.value(forKeyPath: "store") {
             if let store = storeMaybe as? String {
                 self.store = store
             } else {
@@ -48,9 +48,9 @@ struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionSerializ
         }
     }
     
-    static func collection(representation: AnyObject) -> [RemoteListNoUsers]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteListNoUsers]? {
         var lists = [RemoteListNoUsers]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let list = RemoteListNoUsers(representation: obj) {
                 lists.append(list)
             } else {
@@ -62,6 +62,6 @@ struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionSerializ
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), inventoryUuid: \(inventoryUuid), lastUpdate: \(lastUpdate), color: \(color), store: \(store)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), order: \(order), inventoryUuid: \(inventoryUuid), lastUpdate: \(lastUpdate), color: \(color), store: \(store)}"
     }
 }

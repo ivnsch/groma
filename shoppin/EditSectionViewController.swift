@@ -11,7 +11,7 @@ import SwiftValidator
 import QorumLogs
 
 protocol EditSectionViewControllerDelegate: class {
-    func onSectionUpdated(section: Section)
+    func onSectionUpdated(_ section: Section)
 }
 
 class EditSectionViewController: UIViewController, FlatColorPickerControllerDelegate, UITextFieldDelegate {
@@ -19,13 +19,13 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var colorButton: UITextField!
     
-    private var showingColorPicker: FlatColorPickerController?
+    fileprivate var showingColorPicker: FlatColorPickerController?
     
     var open: Bool = false
     
-    private var validator: Validator?
+    fileprivate var validator: Validator?
     
-    private var keyboardHeight: CGFloat?
+    fileprivate var keyboardHeight: CGFloat?
     
     var section: Section? {
         didSet {
@@ -38,7 +38,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
         }
     }
     
-    private var addButtonHelper: AddButtonHelper?
+    fileprivate var addButtonHelper: AddButtonHelper?
     
     weak var delegate: EditSectionViewControllerDelegate?
     
@@ -53,7 +53,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        nameTextField.attributedPlaceholder = NSAttributedString(string: trans("placeholder_section_name"), attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        nameTextField.attributedPlaceholder = NSAttributedString(string: trans("placeholder_section_name"), attributes: [NSForegroundColorAttributeName: UIColor.gray])
         
         initValidator()
         
@@ -62,32 +62,32 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
         view.clipsToBounds = false
     }
     
-    private func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentView = parentViewController?.view else {QL4("No parentController"); return nil}
+    fileprivate func initAddButtonHelper() -> AddButtonHelper? {
+        guard let parentView = parent?.view else {QL4("No parentController"); return nil}
         let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
             self?.submit()
         }
         return addButtonHelper
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
         addButtonHelper?.addObserver()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         addButtonHelper?.removeObserver()
     }
     
-    private func initValidator() {
+    fileprivate func initValidator() {
         let validator = Validator()
         validator.registerField(nameTextField, rules: [MinLengthRule(length: 1, message: trans("validation_section_name_not_empty"))])
         self.validator = validator
     }
     
-    func textFieldShouldReturn(sender: UITextField) -> Bool {
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
         if sender == nameTextField {
             submit()
             sender.resignFirstResponder()
@@ -104,19 +104,17 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
         }
         
         if let errors = validator.validate() {
-            for (field, _) in errors {
-                field.showValidationError()
-                presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            for (_, error) in errors {
+                error.field.showValidationError()
+                present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             }
             
         } else {
-            if let lastErrors = validator.lastErrors {
-                for (field, _) in lastErrors {
-                    field.clearValidationError()
-                }
+            for (_, error) in validator.errors {
+                error.field.clearValidationError()
             }
             
-            if let name = nameTextField.text, color = view.backgroundColor {
+            if let name = nameTextField.text, let color = view.backgroundColor {
                 let updatedSection = section.copy(name: name, color: color)
                 Providers.sectionProvider.update([updatedSection], remote: true, successHandler {[weak self] in
                     self?.delegate?.onSectionUpdated(updatedSection)
@@ -130,31 +128,31 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
     
     // MARK: - FlatColorPickerControllerDelegate
     
-    func onColorPicked(color: UIColor) {
+    func onColorPicked(_ color: UIColor) {
         dismissColorPicker(color)
     }
     
-    private func dismissColorPicker(selectedColor: UIColor?) {
+    fileprivate func dismissColorPicker(_ selectedColor: UIColor?) {
         if let showingColorPicker = showingColorPicker {
             
-            UIView.animateWithDuration(0.3, animations: {
-                showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
+            UIView.animate(withDuration: 0.3, animations: {
+                showingColorPicker.view.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
                 
                 }, completion: {[weak self] finished in
                     self?.showingColorPicker = nil
                     self?.showingColorPicker?.removeFromParentViewControllerWithView()
                     
-                    UIView.animateWithDuration(0.3) {
+                    UIView.animate(withDuration: 0.3, animations: {
                         if let selectedColor = selectedColor {
                             self?.view.backgroundColor = selectedColor
                         }
-                    }
-                    UIView.animateWithDuration(0.15) {
-                        self?.colorButton.transform = CGAffineTransformMakeScale(2, 2)
-                        UIView.animateWithDuration(0.15) {
-                            self?.colorButton.transform = CGAffineTransformMakeScale(1, 1)
-                        }
-                    }
+                    }) 
+                    UIView.animate(withDuration: 0.15, animations: {
+                        self?.colorButton.transform = CGAffineTransform(scaleX: 2, y: 2)
+                        UIView.animate(withDuration: 0.15, animations: {
+                            self?.colorButton.transform = CGAffineTransform(scaleX: 1, y: 1)
+                        }) 
+                    }) 
                     
                     self?.nameTextField.becomeFirstResponder()
                 }
@@ -170,29 +168,29 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
         let picker = UIStoryboard.listColorPicker()
         self.view.layoutIfNeeded() // TODO is this necessary? don't think so check and remove
         
-        if let parentViewController = parentViewController {
+        if let parentViewController = parent {
             
             let topBarHeight: CGFloat = 64
             
-            picker.view.frame = CGRectMake(0, topBarHeight, parentViewController.view.frame.width, parentViewController.view.frame.height - topBarHeight)
+            picker.view.frame = CGRect(x: 0, y: topBarHeight, width: parentViewController.view.frame.width, height: parentViewController.view.frame.height - topBarHeight)
             
             parentViewController.addChildViewControllerAndView(picker) // add to superview (lists controller) because it has to occupy full space (navbar - tab)
             picker.delegate = self
             showingColorPicker = picker
             
-            let buttonPointInParent = parentViewController.view.convertPoint(CGPointMake(colorButton.center.x, colorButton.center.y - topBarHeight), fromView: view)
+            let buttonPointInParent = parentViewController.view.convert(CGPoint(x: colorButton.center.x, y: colorButton.center.y - topBarHeight), from: view)
             let fractionX = buttonPointInParent.x / parentViewController.view.frame.width
             let fractionY = buttonPointInParent.y / (parentViewController.view.frame.height - topBarHeight)
             
-            picker.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            picker.view.layer.anchorPoint = CGPoint(x: fractionX, y: fractionY)
             
-            picker.view.frame = CGRectMake(0, topBarHeight, parentViewController.view.frame.width, parentViewController.view.frame.height - topBarHeight)
+            picker.view.frame = CGRect(x: 0, y: topBarHeight, width: parentViewController.view.frame.width, height: parentViewController.view.frame.height - topBarHeight)
             
-            picker.view.transform = CGAffineTransformMakeScale(0, 0)
+            picker.view.transform = CGAffineTransform(scaleX: 0, y: 0)
             
-            UIView.animateWithDuration(0.3) {
-                picker.view.transform = CGAffineTransformMakeScale(1, 1)
-            }
+            UIView.animate(withDuration: 0.3, animations: {
+                picker.view.transform = CGAffineTransform(scaleX: 1, y: 1)
+            }) 
             
             view.endEditing(true)
 

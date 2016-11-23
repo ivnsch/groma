@@ -18,11 +18,11 @@ class TableViewListItem: CustomDebugStringConvertible, Identifiable {
         self.swiped = swiped
     }
     
-    func same(rhs: TableViewListItem) -> Bool {
+    func same(_ rhs: TableViewListItem) -> Bool {
         return listItem.same(rhs.listItem)
     }
     
-    func copy(listItem: ListItem? = nil, swiped: Bool? = nil) -> TableViewListItem {
+    func copy(_ listItem: ListItem? = nil, swiped: Bool? = nil) -> TableViewListItem {
         return TableViewListItem(
             listItem: listItem ?? self.listItem,
             swiped: swiped ?? self.swiped
@@ -31,6 +31,6 @@ class TableViewListItem: CustomDebugStringConvertible, Identifiable {
     
     
     var debugDescription: String {
-        return "{\(self.dynamicType) \(listItem)}"
+        return "{\(type(of: self)) \(listItem)}"
     }
 }

@@ -25,13 +25,13 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
 
-    private var sectionModels: [HelpItemSectionModel] = [] {
+    fileprivate var sectionModels: [HelpItemSectionModel] = [] {
         didSet {
             filteredModels = sectionModels
         }
     }
     
-    private var filteredModels: [HelpItemSectionModel] = [] {
+    fileprivate var filteredModels: [HelpItemSectionModel] = [] {
         didSet {
             tableView.reloadData()
         }
@@ -40,7 +40,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchBar.addTarget(self, action: #selector(HelpViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
+        searchBar.addTarget(self, action: #selector(HelpViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
         searchBarHeightConstraint.constant = DimensionsManager.searchBarHeight
         
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(HelpViewController.handleTap(_:)))
@@ -53,30 +53,30 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
     }
     
-    func handleTap(recognizer: UITapGestureRecognizer) {
+    func handleTap(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
     
     // MARK: - Table view data source
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return filteredModels.count
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionModel = filteredModels[section]
         return sectionModel.expanded ? 1 : 0
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! HelpCell
-        let sectionModel = self.filteredModels[indexPath.section]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) as! HelpCell
+        let sectionModel = self.filteredModels[(indexPath as NSIndexPath).section]
         cell.sectionModel = sectionModel
         return cell
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = NSBundle.loadView("HelpHeaderView", owner: self) as! HelpHeaderView
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = Bundle.loadView("HelpHeaderView", owner: self) as! HelpHeaderView
         let sectionModel = self.filteredModels[section]
         view.sectionModel = sectionModel
         view.delegate = self
@@ -86,12 +86,12 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return view
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return DimensionsManager.defaultCellHeight
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let sectionModel = self.filteredModels[indexPath.section]
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let sectionModel = self.filteredModels[(indexPath as NSIndexPath).section]
         if let textHeight = sectionModel.textHeight {
             return textHeight
         } else {
@@ -104,36 +104,36 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     // MARK: - HelpHeaderViewDelegate
     
-    func onHeaderTap(header: HelpHeaderView, sectionIndex: Int, sectionModel: HelpItemSectionModel) {
+    func onHeaderTap(_ header: HelpHeaderView, sectionIndex: Int, sectionModel: HelpItemSectionModel) {
         setHeaderExpanded(header, sectionIndex: sectionIndex, sectionModel: sectionModel)
     }
     
-    private func setHeaderExpanded(header: HelpHeaderView, sectionIndex: Int, sectionModel: HelpItemSectionModel) {
+    fileprivate func setHeaderExpanded(_ header: HelpHeaderView, sectionIndex: Int, sectionModel: HelpItemSectionModel) {
         
-        let sectionIndexPath: NSIndexPath = NSIndexPath(forRow: 0, inSection: sectionIndex)
+        let sectionIndexPath: IndexPath = IndexPath(row: 0, section: sectionIndex)
         
         if sectionModel.expanded { // collapse
             tableView.wrapUpdates {[weak self] in
-                self?.tableView.deleteRowsAtIndexPaths([sectionIndexPath], withRowAnimation: .Top)
+                self?.tableView.deleteRows(at: [sectionIndexPath], with: .top)
                 sectionModel.expanded = false
             }
         } else { // expand
             tableView.wrapUpdates {[weak self] in
-                self?.tableView.insertRowsAtIndexPaths([sectionIndexPath], withRowAnimation: .Top)
+                self?.tableView.insertRows(at: [sectionIndexPath], with: .top)
                 sectionModel.expanded = true
             }
-            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: NSNotFound, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+            tableView.scrollToRow(at: IndexPath(row: NSNotFound, section: sectionIndex), at: UITableViewScrollPosition.top, animated: true)
         }
     }
     
     // MARK: - Filter
     
     
-    func textFieldDidChange(textField: UITextField) {
+    func textFieldDidChange(_ textField: UITextField) {
         filter(textField.text ?? "")
     }
     
-    private func filter(searchText: String) {
+    fileprivate func filter(_ searchText: String) {
         if searchText.isEmpty {
             filteredModels = sectionModels
         } else {

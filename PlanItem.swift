@@ -45,7 +45,7 @@ class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
         self.quantityDelta = quantityDelta
     }
     
-    func copy(inventory inventory: Inventory? = nil, product: Product? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, usedQuantity: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> PlanItem {
+    func copy(inventory: Inventory? = nil, product: Product? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, usedQuantity: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> PlanItem {
         return PlanItem(
             inventory: inventory ?? self.inventory,
             product: product ?? self.product,
@@ -57,16 +57,16 @@ class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
-    func incrementQuantityCopy(delta: Int) -> PlanItem {
+    func incrementQuantityCopy(_ delta: Int) -> PlanItem {
         return copy(quantity: quantity + delta, quantityDelta: quantityDelta + delta)
     }
     
-    func same(rhs: PlanItem) -> Bool {
+    func same(_ rhs: PlanItem) -> Bool {
         return self.product.name == rhs.product.name
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) product: \(product), quantity: \(quantity), usedQuantity: \(usedQuantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
+        return "{\(type(of: self)) product: \(product), quantity: \(quantity), usedQuantity: \(usedQuantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
 }
 

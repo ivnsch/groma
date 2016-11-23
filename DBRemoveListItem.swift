@@ -36,11 +36,11 @@ class DBRemoveListItem: Object {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
-    static func createFilterForList(listUuid: String) -> String {
+    static func createFilterForList(_ listUuid: String) -> String {
         return "listUuid == '\(listUuid)'"
     }
     
@@ -48,8 +48,8 @@ class DBRemoveListItem: Object {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+        dict["uuid"] = uuid as AnyObject?
+        dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         return dict
     }
 }

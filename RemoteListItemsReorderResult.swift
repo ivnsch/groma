@@ -15,9 +15,9 @@ struct RemoteListItemsReorderResult: ResponseObjectSerializable, CustomDebugStri
     
     init?(representation: AnyObject) {
         guard
-            let unserializedSections = representation.valueForKeyPath("sections"),
+            let unserializedSections = representation.value(forKeyPath: "sections") as? [AnyObject],
             let sections = RemoteSection.collection(unserializedSections),
-            let unserializedItems = representation.valueForKeyPath("items"),
+            let unserializedItems = representation.value(forKeyPath: "items") as? [AnyObject],
             let items = RemoteListItemReorder.collection(unserializedItems)
             else {
                 QL4("Invalid json: \(representation)")
@@ -28,7 +28,7 @@ struct RemoteListItemsReorderResult: ResponseObjectSerializable, CustomDebugStri
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) sections: \(sections), items: \(items)}"
+        return "{\(type(of: self)) sections: \(sections), items: \(items)}"
     }
 }
 

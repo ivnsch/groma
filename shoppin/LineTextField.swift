@@ -12,20 +12,20 @@ class LineTextField: UITextField {
 
     @IBInspectable var fontType: Int = -1
     
-    private let lineWidth: CGFloat = 1
+    fileprivate let lineWidth: CGFloat = 1
     
-    private static let defaultLineColor = UIColor.grayColor()
-    private var lineColor = defaultLineColor
+    fileprivate static let defaultLineColor = UIColor.gray
+    fileprivate var lineColor = defaultLineColor
 
     override func awakeFromNib() {
         super.awakeFromNib()
         if let size = LabelMore.mapToFontSize(fontType) {
-            self.font = UIFont.systemFontOfSize(size)
+            self.font = UIFont.systemFont(ofSize: size)
         }
     }
     
     override func showValidationError() {
-        lineColor = UIColor.redColor()
+        lineColor = UIColor.flatRed
         setNeedsDisplay()
     }
     
@@ -34,14 +34,14 @@ class LineTextField: UITextField {
         setNeedsDisplay()
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetStrokeColorWithColor(context, lineColor.CGColor)
+        context?.setStrokeColor(lineColor.cgColor)
 
         let y = frame.height - lineWidth
-        CGContextSetLineWidth(context, lineWidth)
-        CGContextMoveToPoint(context, 0, y)
-        CGContextAddLineToPoint(context, frame.width, y)
-        CGContextDrawPath(context, .Stroke)
+        context?.setLineWidth(lineWidth)
+        context?.move(to: CGPoint(x: 0, y: y))
+        context?.addLine(to: CGPoint(x: frame.width, y: y))
+        context?.drawPath(using: .stroke)
     }
 }

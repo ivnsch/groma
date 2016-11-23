@@ -23,6 +23,6 @@ final class ProductInput: CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) name: \(name), category: \(category), categoryColor: \(categoryColor), brand: \(brand)}"
+        return "{\(type(of: self)) name: \(name), category: \(category), categoryColor: \(categoryColor), brand: \(brand)}"
     }
 }

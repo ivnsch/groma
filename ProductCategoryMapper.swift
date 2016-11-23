@@ -10,7 +10,7 @@ import UIKit
 
 class ProductCategoryMapper {
     
-    class func categoryWithDB(dbCategory: DBProductCategory) -> ProductCategory {
+    class func categoryWithDB(_ dbCategory: DBProductCategory) -> ProductCategory {
         return ProductCategory(
             uuid: dbCategory.uuid,
             name: dbCategory.name,
@@ -19,7 +19,7 @@ class ProductCategoryMapper {
         )
     }
     
-    class func dbWithCategory(category: ProductCategory) -> DBProductCategory {
+    class func dbWithCategory(_ category: ProductCategory) -> DBProductCategory {
         let dbCategory = DBProductCategory()
         dbCategory.uuid = category.uuid
         dbCategory.name = category.name
@@ -30,7 +30,7 @@ class ProductCategoryMapper {
         return dbCategory
     }
     
-    class func categoryWithRemote(remoteCategory: RemoteProductCategory) -> ProductCategory {
+    class func categoryWithRemote(_ remoteCategory: RemoteProductCategory) -> ProductCategory {
         return ProductCategory(
             uuid: remoteCategory.uuid,
             name: remoteCategory.name,
@@ -39,7 +39,7 @@ class ProductCategoryMapper {
         )
     }
     
-    class func dbCategoryWithRemote(category: RemoteProductCategory) -> DBProductCategory {
+    class func dbCategoryWithRemote(_ category: RemoteProductCategory) -> DBProductCategory {
         let dbCategory = DBProductCategory()
         dbCategory.uuid = category.uuid
         dbCategory.name = category.name

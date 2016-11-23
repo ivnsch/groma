@@ -14,7 +14,7 @@ class StashListItemsController: ListItemsController, UIGestureRecognizerDelegate
     @IBOutlet weak var emptyListView: UIView!
 
     override var status: ListItemStatus {
-        return .Stash
+        return .stash
     }
     
     override var isPullToAddEnabled: Bool {
@@ -37,7 +37,7 @@ class StashListItemsController: ListItemsController, UIGestureRecognizerDelegate
     // Fixes random, rare freezes when coming back to todo controller. See http://stackoverflow.com/a/28919337/930450
     // Curiously implementing gestureRecognizerShouldBegin and returning always true seemed to fix it (tested a long time after it and the bug didn't happen again - could be of course that this was just luck, though normally it appears after switching todo/cart 100 or so times and tested more than this). Letting the count check anyways, since this seems to be the proper fix.
     // Note: I also tried implementing a UI test for this but swipe doesn't work well so need to test manually.
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         
         guard let navigationController = navigationController else {QL3("No navigation controller"); return false}
         
@@ -55,20 +55,20 @@ class StashListItemsController: ListItemsController, UIGestureRecognizerDelegate
     }
     
     
-    override func onListItemsOrderChangedSection(tableViewListItems: [TableViewListItem]) {
+    override func onListItemsOrderChangedSection(_ tableViewListItems: [TableViewListItem]) {
         Providers.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
         })
     }
     
-    override func topBarTitle(list: List) -> String {
+    override func topBarTitle(_ list: List) -> String {
         return trans("title_stash")
     }
     
-    private func resetAllItems() {
+    fileprivate func resetAllItems() {
         if let list = currentList {
             listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
-                    Providers.listItemsProvider.switchAllToStatus(weakSelf.listItemsTableViewController.items, list: list, status1: .Stash, status: .Todo, remote: true) {result in
+                    Providers.listItemsProvider.switchAllToStatus(weakSelf.listItemsTableViewController.items, list: list, status1: .stash, status: .todo, remote: true) {result in
                         if result.success {
                             weakSelf.listItemsTableViewController.setListItems([])
                             weakSelf.close()
@@ -83,30 +83,30 @@ class StashListItemsController: ListItemsController, UIGestureRecognizerDelegate
         topBar.setBackVisible(true)
     }
     
-    private func close() {
+    fileprivate func close() {
         listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
-            self?.navigationController?.popViewControllerAnimated(true)
+            _ = self?.navigationController?.popViewController(animated: true)
         }
     }
     
-    override func setEmptyUI(visible: Bool, animated: Bool) {
+    override func setEmptyUI(_ visible: Bool, animated: Bool) {
         super.setEmptyUI(visible, animated: animated)
         let hidden = !visible
         if animated {
             emptyListView.setHiddenAnimated(hidden)
         } else {
-            emptyListView.hidden = hidden
+            emptyListView.isHidden = hidden
         }
     }
 
     override func onTopBarBackButtonTap() {
         super.onTopBarBackButtonTap()
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
-    override func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
+    override func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId) {
         switch buttonId {
-        case .Submit:
+        case .submit:
             resetAllItems()
         default: super.onTopBarButtonTap(buttonId)
         }
@@ -115,15 +115,15 @@ class StashListItemsController: ListItemsController, UIGestureRecognizerDelegate
     // MARK: - Right buttons
     
     override func rightButtonsDefault() -> [TopBarButtonModel] {
-        return [TopBarButtonModel(buttonId: .Submit)]
+        return [TopBarButtonModel(buttonId: .submit)]
     }
     
     override func rightButtonsOpeningQuickAdd() -> [TopBarButtonModel] {
-        return [TopBarButtonModel(buttonId: .Submit)]
+        return [TopBarButtonModel(buttonId: .submit)]
     }
     
     override func rightButtonsClosingQuickAdd() -> [TopBarButtonModel] {
-        return [TopBarButtonModel(buttonId: .Submit)]
+        return [TopBarButtonModel(buttonId: .submit)]
     }
     
     override func rightButtonsClosing() -> [TopBarButtonModel] {

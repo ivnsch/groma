@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 
 protocol TodoListItemsEditBottomViewDelegate: class {
-    func onExpandSections(expand: Bool)
+    func onExpandSections(_ expand: Bool)
 }
 
 
@@ -26,7 +26,7 @@ class TodoListItemsEditBottomView: UIView, ExpandCollapseButtonDelegate {
 
     weak var delegate: TodoListItemsEditBottomViewDelegate?
     
-    func setTotalPrice(totalPrice: Float) {
+    func setTotalPrice(_ totalPrice: Float) {
         if let totalPriceLabel = totalPriceLabel {
             totalPriceLabel.text = totalPrice.toLocalCurrencyString()
         } else {
@@ -51,7 +51,7 @@ class TodoListItemsEditBottomView: UIView, ExpandCollapseButtonDelegate {
     
     // MARK: - ExpandCollapseButtonDelegate
     
-    func onExpandButton(expanded: Bool) {
+    func onExpandButton(_ expanded: Bool) {
         delegate?.onExpandSections(expanded)
     }
 }

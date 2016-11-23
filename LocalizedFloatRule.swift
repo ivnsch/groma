@@ -9,18 +9,18 @@
 import Foundation
 import SwiftValidator
 
-public class LocalizedFloatRule: Rule {
+open class LocalizedFloatRule: Rule {
     
-    private var message: String
+    fileprivate var message: String
     
     public init(message: String = "This must be a number with or without a decimal") {
         self.message = message
     }
     
-    public func validate(value: String) -> Bool {
+    open func validate(_ value: String) -> Bool {
         do {
             let regex = try NSRegularExpression(pattern: "[-+]?(\\d*[.,])?\\d+", options: [])
-            let match = regex.numberOfMatchesInString(value, options: [], range: NSRange(location: 0, length: value.characters.count))
+            let match = regex.numberOfMatches(in: value, options: [], range: NSRange(location: 0, length: value.characters.count))
             return match == 1
             
         } catch _ {
@@ -28,7 +28,7 @@ public class LocalizedFloatRule: Rule {
         }
     }
     
-    public func errorMessage() -> String {
+    open func errorMessage() -> String {
         return message
     }
 }

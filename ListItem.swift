@@ -11,7 +11,7 @@ import QorumLogs
 
 enum ListItemStatus: Int {
     // Note: the raw values are used in server communication, don't change.
-    case Todo = 0, Done = 1, Stash = 2
+    case todo = 0, done = 1, stash = 2
 }
 
 typealias ListItemStatusQuantity = (status: ListItemStatus, quantity: Int)
@@ -42,23 +42,23 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
 
     // Returns the total price for listitem in a certain status
     // If e.g. we have 2x "tomatos" with a price of 2€ in "todo", we get a total price of 4€ for the status "todo".
-    func totalPrice(status: ListItemStatus) -> Float {
+    func totalPrice(_ status: ListItemStatus) -> Float {
         return Float(quantity(status)) * product.price / product.baseQuantity
     }
     
-    func quantity(status: ListItemStatus) -> Int {
+    func quantity(_ status: ListItemStatus) -> Int {
         switch status {
-        case .Todo: return todoQuantity
-        case .Done: return doneQuantity
-        case .Stash: return stashQuantity
+        case .todo: return todoQuantity
+        case .done: return doneQuantity
+        case .stash: return stashQuantity
         }
     }
     
-    func order(status: ListItemStatus) -> Int {
+    func order(_ status: ListItemStatus) -> Int {
         switch status {
-        case .Todo: return todoOrder
-        case .Done: return doneOrder
-        case .Stash: return stashOrder
+        case .todo: return todoOrder
+        case .done: return doneOrder
+        case .stash: return stashOrder
         }
     }
     
@@ -82,11 +82,11 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
 
     convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, statusOrder: ListItemStatusOrder, statusQuantity: ListItemStatusQuantity, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
-        func quantity(selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) -> Int {
+        func quantity(_ selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) -> Int {
             return statusQuantity.status == selfStatus ? statusQuantity.quantity : 0
         }
         
-        func order(selfStatus: ListItemStatus, _ statusOrder: ListItemStatusOrder) -> Int {
+        func order(_ selfStatus: ListItemStatus, _ statusOrder: ListItemStatusOrder) -> Int {
             return statusOrder.status == selfStatus ? statusOrder.order : 0
         }
         
@@ -96,12 +96,12 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
             section: section,
             list: list,
             note: note,
-            todoQuantity: quantity(.Todo, statusQuantity),
-            todoOrder: order(.Todo, statusOrder),
-            doneQuantity: quantity(.Done, statusQuantity),
-            doneOrder: order(.Done, statusOrder),
-            stashQuantity: quantity(.Stash, statusQuantity),
-            stashOrder: order(.Stash, statusOrder),
+            todoQuantity: quantity(.todo, statusQuantity),
+            todoOrder: order(.todo, statusOrder),
+            doneQuantity: quantity(.done, statusQuantity),
+            doneOrder: order(.done, statusOrder),
+            stashQuantity: quantity(.stash, statusQuantity),
+            stashOrder: order(.stash, statusOrder),
             lastServerUpdate: lastServerUpdate,
             removed: removed
         )
@@ -124,22 +124,22 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     // Quantity of listitem in a specific status
-    private func quantityForStatus(status: ListItemStatus) -> Int {
+    fileprivate func quantityForStatus(_ status: ListItemStatus) -> Int {
         switch status {
-        case .Todo: return todoQuantity
-        case .Done: return doneQuantity
-        case .Stash: return stashQuantity
+        case .todo: return todoQuantity
+        case .done: return doneQuantity
+        case .stash: return stashQuantity
         }
     }
     
     // If this listitem exist in a specific status
     // E.g. if status "done", return true means there is a listitem in done (there can also be one in todo and stash at the same time - this only tells us there's one in done). Return "false" means there's no item in "done"
     // An item is defined to be in a status when it has a quantity > 0 in this status.
-    func hasStatus(status: ListItemStatus) -> Bool {
+    func hasStatus(_ status: ListItemStatus) -> Bool {
         return quantityForStatus(status) > 0
     }
     
-    func same(listItem: ListItem) -> Bool {
+    func same(_ listItem: ListItem) -> Bool {
         return self.uuid == listItem.uuid
     }
     
@@ -154,7 +154,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return "[\(product.product.name)], todo: \(todoOrder), done: \(doneOrder), stash: \(stashOrder)"
     }
     
-    private var shortDebugDescription: String {
+    fileprivate var shortDebugDescription: String {
         return "[\(product.product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)"
     }
     
@@ -167,15 +167,15 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
 //        , section: \(section.shortOrderDebugDescription)
     }
     
-    private var quantityAndOrderDebugDescription: String {
+    fileprivate var quantityAndOrderDebugDescription: String {
         return "\(uuid), \(product.product.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)"
     }
     
-    private var longDebugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), note: \(note), productUuid: \(product), sectionUuid: \(section), listUuid: \(list), todoQuantity: \(todoQuantity), todoOrder: \(todoOrder), doneQuantity: \(doneQuantity), doneOrder: \(doneOrder), stashQuantity: \(stashQuantity), stashOrder: \(stashOrder), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
+    fileprivate var longDebugDescription: String {
+        return "{\(type(of: self)) uuid: \(uuid), note: \(note), productUuid: \(product), sectionUuid: \(section), listUuid: \(list), todoQuantity: \(todoQuantity), todoOrder: \(todoOrder), doneQuantity: \(doneQuantity), doneOrder: \(doneOrder), stashQuantity: \(stashQuantity), stashOrder: \(stashOrder), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
-    func copy(uuid uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String?, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> ListItem {
+    func copy(uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String?, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> ListItem {
         return ListItem(
             uuid: uuid ?? self.uuid,
             product: product ?? self.product,
@@ -196,11 +196,11 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     // Increments all the quantity fields (todo, done, stash) by the quantity fields of listItem
-    func increment(listItem: ListItem) -> ListItem {
+    func increment(_ listItem: ListItem) -> ListItem {
         return increment(listItem.todoQuantity, doneQuantity: listItem.doneQuantity, stashQuantity: listItem.stashQuantity)
     }
 
-    func increment(todoQuantity: Int, doneQuantity: Int, stashQuantity: Int) -> ListItem {
+    func increment(_ todoQuantity: Int, doneQuantity: Int, stashQuantity: Int) -> ListItem {
         
         let newTodo = self.todoQuantity + todoQuantity
         let newDone = self.doneQuantity + doneQuantity
@@ -228,21 +228,21 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
-    func increment(quantity: ListItemStatusQuantity) -> ListItem {
+    func increment(_ quantity: ListItemStatusQuantity) -> ListItem {
         let increments: (todo: Int, done: Int, stash: Int) = {
             switch quantity.status {
-                case .Todo: return (quantity.quantity, 0, 0)
-                case .Done: return (0, quantity.quantity, 0)
-                case .Stash: return (0, 0, quantity.quantity)
+                case .todo: return (quantity.quantity, 0, 0)
+                case .done: return (0, quantity.quantity, 0)
+                case .stash: return (0, 0, quantity.quantity)
             }
         }()
         return increment(increments.todo, doneQuantity: increments.done, stashQuantity: increments.stash)
     }
     
-    func copyIncrement(uuid uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String?, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, statusQuantity: ListItemStatusQuantity) -> ListItem {
+    func copyIncrement(uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String?, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, statusQuantity: ListItemStatusQuantity) -> ListItem {
         
         // returns self quantity incremented if self status is the same as statusQuantity status, or returns self quantity unchanged
-        func incr(selfQuantity: Int, _ selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) -> Int {
+        func incr(_ selfQuantity: Int, _ selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) -> Int {
             return statusQuantity.status == selfStatus ? (selfQuantity + statusQuantity.quantity) : selfQuantity
         }
         
@@ -252,16 +252,16 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
             section: section,
             list: list,
             note: note,
-            todoQuantity: incr(todoQuantity, .Todo, statusQuantity),
+            todoQuantity: incr(todoQuantity, .todo, statusQuantity),
             todoOrder: todoOrder,
-            doneQuantity: incr(doneQuantity, .Done, statusQuantity),
+            doneQuantity: incr(doneQuantity, .done, statusQuantity),
             doneOrder: doneOrder,
-            stashQuantity: incr(stashQuantity, .Stash, statusQuantity),
+            stashQuantity: incr(stashQuantity, .stash, statusQuantity),
             stashOrder: stashOrder
         )
     }
     
-    func updateOrder(order: ListItemStatusOrder) -> ListItem {
+    func updateOrder(_ order: ListItemStatusOrder) -> ListItem {
         return copy(
             uuid: uuid,
             product: product,
@@ -269,50 +269,50 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
             list: list,
             note: note,
             todoQuantity: todoQuantity,
-            todoOrder: order.status == .Todo ? order.order : todoOrder,
+            todoOrder: order.status == .todo ? order.order : todoOrder,
             doneQuantity: doneQuantity,
-            doneOrder: order.status == .Done ? order.order : doneOrder,
+            doneOrder: order.status == .done ? order.order : doneOrder,
             stashQuantity: stashQuantity,
-            stashOrder: order.status == .Stash ? order.order : stashOrder
+            stashOrder: order.status == .stash ? order.order : stashOrder
         )
     }
 
-    func updateOrderMutable(order: ListItemStatusOrder) {
+    func updateOrderMutable(_ order: ListItemStatusOrder) {
         switch order.status {
-        case .Todo: todoOrder = order.order
-        case .Done: doneOrder = order.order
-        case .Stash: stashOrder = order.order
+        case .todo: todoOrder = order.order
+        case .done: doneOrder = order.order
+        case .stash: stashOrder = order.order
         }
     }
     
-    func updateQuantity(quantity: ListItemStatusQuantity) -> ListItem {
+    func updateQuantity(_ quantity: ListItemStatusQuantity) -> ListItem {
         return copy(
             uuid: uuid,
             product: product,
             section: section,
             list: list,
             note: note,
-            todoQuantity: quantity.status == .Todo ? quantity.quantity : todoQuantity,
+            todoQuantity: quantity.status == .todo ? quantity.quantity : todoQuantity,
             todoOrder: todoOrder,
-            doneQuantity: quantity.status == .Done ? quantity.quantity : doneQuantity,
+            doneQuantity: quantity.status == .done ? quantity.quantity : doneQuantity,
             doneOrder: doneOrder,
-            stashQuantity: quantity.status == .Stash ? quantity.quantity : stashQuantity,
+            stashQuantity: quantity.status == .stash ? quantity.quantity : stashQuantity,
             stashOrder: stashOrder
         )
     }
     
     // Overwrite all fields with fields of listItem, except uuid
-    func update(listItem: ListItem) -> ListItem {
+    func update(_ listItem: ListItem) -> ListItem {
         return update(listItem, storeProduct: listItem.product)
     }
 
     // Updates self and its dependencies with listItem, the references to the dependencies (uuid) are not changed
-    func updateWithoutChangingReferences(listItem: ListItem) -> ListItem {
+    func updateWithoutChangingReferences(_ listItem: ListItem) -> ListItem {
         let updatedStoreProduct = product.updateWithoutChangingReferences(listItem.product)
         return update(listItem, storeProduct: updatedStoreProduct)
     }
     
-    private func update(listItem: ListItem, storeProduct: StoreProduct) -> ListItem {
+    fileprivate func update(_ listItem: ListItem, storeProduct: StoreProduct) -> ListItem {
         return copy(
             uuid: uuid,
             product: storeProduct,
@@ -336,18 +336,18 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
-    func update(product: StoreProduct) -> ListItem {
+    func update(_ product: StoreProduct) -> ListItem {
         return copy(product: product, note: nil)
     }
 
-    func update(product: Product) -> ListItem {
+    func update(_ product: Product) -> ListItem {
         let updatedStoreProduct = self.product.copy(product: product)
         return copy(product: updatedStoreProduct, note: nil)
     }
     
-    func switchStatusQuantity(status: ListItemStatus, targetStatus: ListItemStatus) -> ListItem {
+    func switchStatusQuantity(_ status: ListItemStatus, targetStatus: ListItemStatus) -> ListItem {
         
-        func updateFieldQuantity(fieldStatus: ListItemStatus, status: ListItemStatus, targetStatus: ListItemStatus) -> Int {
+        func updateFieldQuantity(_ fieldStatus: ListItemStatus, status: ListItemStatus, targetStatus: ListItemStatus) -> Int {
             
             // had to be rewriten to add bounds check, see TODO below
 //            return status == fieldStatus ? 0 : (targetStatus == fieldStatus ? quantity(status) + quantity(targetStatus) : quantity(targetStatus))
@@ -372,40 +372,40 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         
         return copy(
             note: note,
-            todoQuantity: updateFieldQuantity(.Todo, status: status, targetStatus: targetStatus),
-            doneQuantity: updateFieldQuantity(.Done, status: status, targetStatus: targetStatus),
-            stashQuantity: updateFieldQuantity(.Stash, status: status, targetStatus: targetStatus)
+            todoQuantity: updateFieldQuantity(.todo, status: status, targetStatus: targetStatus),
+            doneQuantity: updateFieldQuantity(.done, status: status, targetStatus: targetStatus),
+            stashQuantity: updateFieldQuantity(.stash, status: status, targetStatus: targetStatus)
         )
     }
     
-    static func quantityFieldName(status: ListItemStatus) -> String {
+    static func quantityFieldName(_ status: ListItemStatus) -> String {
         switch status {
-        case .Todo: return "todoQuantity"
-        case .Done: return "doneQuantity"
-        case .Stash: return "stashQuantity"
+        case .todo: return "todoQuantity"
+        case .done: return "doneQuantity"
+        case .stash: return "stashQuantity"
         }
     }
 
-    static func orderFieldName(status: ListItemStatus) -> String {
+    static func orderFieldName(_ status: ListItemStatus) -> String {
         switch status {
-        case .Todo: return "todoOrder"
-        case .Done: return "doneOrder"
-        case .Stash: return "stashOrder"
+        case .todo: return "todoOrder"
+        case .done: return "doneOrder"
+        case .stash: return "stashOrder"
         }
     }
     
-    func switchStatusQuantityMutable(status: ListItemStatus, targetStatus: ListItemStatus) {
+    func switchStatusQuantityMutable(_ status: ListItemStatus, targetStatus: ListItemStatus) {
         
         // Capture variables. We have to do this because when setting the fields they reference each other, and they all need to access the previous, not new state
-        let capturedQuantity: ListItemStatus -> Int = {[todoQuantity, doneQuantity, stashQuantity] status  in
+        let capturedQuantity: (ListItemStatus) -> Int = {[todoQuantity, doneQuantity, stashQuantity] status  in
             switch status {
-            case .Todo: return todoQuantity
-            case .Done: return doneQuantity
-            case .Stash: return stashQuantity
+            case .todo: return todoQuantity
+            case .done: return doneQuantity
+            case .stash: return stashQuantity
             }
         }
         
-        func fieldQuantity(fieldStatus: ListItemStatus, status: ListItemStatus, targetStatus: ListItemStatus) -> Int {
+        func fieldQuantity(_ fieldStatus: ListItemStatus, status: ListItemStatus, targetStatus: ListItemStatus) -> Int {
 
             // had to be rewriten to add bounds check, see TODO below
 //            return status == fieldStatus ? 0 : (targetStatus == fieldStatus ? capturedQuantity(status) + quantity(targetStatus) : quantity(fieldStatus))
@@ -427,12 +427,12 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
             }
         }
 
-        todoQuantity = fieldQuantity(.Todo, status: status, targetStatus: targetStatus)
-        doneQuantity = fieldQuantity(.Done, status: status, targetStatus: targetStatus)
-        stashQuantity = fieldQuantity(.Stash, status: status, targetStatus: targetStatus)
+        todoQuantity = fieldQuantity(.todo, status: status, targetStatus: targetStatus)
+        doneQuantity = fieldQuantity(.done, status: status, targetStatus: targetStatus)
+        stashQuantity = fieldQuantity(.stash, status: status, targetStatus: targetStatus)
     }
     
-    func equalsExcludingSyncAttributes(rhs: ListItem) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: ListItem) -> Bool {
         return uuid == rhs.uuid && product == rhs.product && section == rhs.section && list == rhs.list && note == rhs.note && todoQuantity == rhs.todoQuantity && todoOrder == rhs.todoOrder && doneQuantity == rhs.doneQuantity && doneOrder == rhs.doneOrder && stashQuantity == rhs.stashQuantity && stashOrder == rhs.stashOrder
     }
 }

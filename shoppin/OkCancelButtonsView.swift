@@ -30,21 +30,21 @@ class OkCancelButtonsView: UIView {
         xibSetup()
     }
     
-    private func xibSetup() {
-        let view = NSBundle.loadView("OkCancelButtonsView", owner: self)!
+    fileprivate func xibSetup() {
+        let view = Bundle.loadView("OkCancelButtonsView", owner: self)!
         
         view.frame = bounds
         // Make the view stretch with containing view
-        view.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
+        view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
         
         self.addSubview(view)
     }
     
-    @IBAction func onOkTap(sender: UIButton) {
+    @IBAction func onOkTap(_ sender: UIButton) {
         delegate?.onOkTap()
     }
     
-    @IBAction func onCancelTap(sender: UIButton) {
+    @IBAction func onCancelTap(_ sender: UIButton) {
         delegate?.onCancelTap()
     }
 }

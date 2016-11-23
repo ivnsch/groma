@@ -16,7 +16,7 @@ class RealmInventoryProvider: RealmProvider {
     let remoteInventoryProvider = RemoteInventoryProvider()
     let dbProductProvider = RealmProductProvider()
     
-    func loadInventories(handler: [Inventory] -> ()) {
+    func loadInventories(_ handler: @escaping ([Inventory]) -> ()) {
         let mapper = {InventoryMapper.inventoryWithDB($0)}
         self.load(mapper, sortDescriptor: NSSortDescriptor(key: "order", ascending: true), handler: handler)
     }
@@ -65,7 +65,7 @@ class RealmInventoryProvider: RealmProvider {
 //    }
 
     
-    func loadInventory(inventory: Inventory, sortBy: InventorySortBy, range: NSRange, handler: [InventoryItem] -> ()) {
+    func loadInventory(_ inventory: Inventory, sortBy: InventorySortBy, range: NSRange, handler: @escaping ([InventoryItem]) -> ()) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)} // TODO!!! Crash once accessing color() of category (in ProductCategoryMapper.categoryWithDB). Category is set but no color data, don't know why!
 //        let sortFieldStr: String = {
 //            switch sortBy {
@@ -77,11 +77,11 @@ class RealmInventoryProvider: RealmProvider {
         self.load(mapper, filter: DBInventoryItem.createFilterInventory(inventory.uuid), /*range: range, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
     }
     
-    func saveInventory(inventory: Inventory, update: Bool = true, dirty: Bool, handler: Bool -> ()) {
+    func saveInventory(_ inventory: Inventory, update: Bool = true, dirty: Bool, handler: @escaping (Bool) -> ()) {
         self.saveInventories([inventory], update: update, dirty: dirty, handler: handler)
     }
     
-    func updateInventoriesOrder(orderUpdates: [OrderUpdate], dirty: Bool, _ handler: Bool -> Void) {
+    func updateInventoriesOrder(_ orderUpdates: [OrderUpdate], dirty: Bool, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             for orderUpdate in orderUpdates {
                 realm.create(DBInventory.self, value: DBInventory.createOrderUpdateDict(orderUpdate, dirty: dirty), update: true)
@@ -92,7 +92,7 @@ class RealmInventoryProvider: RealmProvider {
         }
     }
     
-    func removeInventory(uuid: String, update: Bool =  true, markForSync: Bool, handler: Bool -> ()) {
+    func removeInventory(_ uuid: String, update: Bool =  true, markForSync: Bool, handler: @escaping (Bool) -> ()) {
         background({[weak self] in
             do {
                 let realm = try Realm()
@@ -109,18 +109,18 @@ class RealmInventoryProvider: RealmProvider {
         }
     }
     
-    func removeInventorySync(realm: Realm, inventoryUuid: String, markForSync: Bool) {
+    func removeInventorySync(_ realm: Realm, inventoryUuid: String, markForSync: Bool) {
    
         removeInventoryDependenciesSync(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
         
-        let inventoryResults = realm.objects(DBInventory).filter(DBInventory.createFilter(inventoryUuid))
+        let inventoryResults = realm.objects(DBInventory.self).filter(DBInventory.createFilter(inventoryUuid))
         if markForSync {
-            let toRemove = inventoryResults.map{DBRemoveInventory($0)}
+            let toRemove = Array(inventoryResults.map{DBRemoveInventory($0)})
             saveObjsSyncInt(realm, objs: toRemove, update: true)
         }
         
         // Update order. No synchonisation with server for this, since server also reorders on delete, and on sync. Not sure right now if reorder on sync covers all cases specially for multiple devices, for now looks sufficient.
-        let allSortedDbInventories = realm.objects(DBInventory).sort({$0.order < $1.order})
+        let allSortedDbInventories = realm.objects(DBInventory.self).sorted(by: {$0.order < $1.order})
         let updatedDbInventories: [DBInventory] = allSortedDbInventories.mapEnumerate {(index, dbList) in
             dbList.order = index
             return dbList
@@ -132,35 +132,35 @@ class RealmInventoryProvider: RealmProvider {
         realm.delete(inventoryResults)
     }
     
-    func removeInventoryDependenciesSync(realm: Realm, inventoryUuid: String, markForSync: Bool) {
-        DBProviders.listProvider.removeListsForInventory(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
-        DBProviders.historyProvider.removeHistoryItemsForInventory(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
-        DBProviders.inventoryItemProvider.removeInventoryItemsForInventorySync(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
+    func removeInventoryDependenciesSync(_ realm: Realm, inventoryUuid: String, markForSync: Bool) {
+        _ = DBProviders.listProvider.removeListsForInventory(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
+        _ = DBProviders.historyProvider.removeHistoryItemsForInventory(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
+        _ = DBProviders.inventoryItemProvider.removeInventoryItemsForInventorySync(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
     }
     
-    func saveInventories(inventories: [Inventory], update: Bool = true, dirty: Bool, handler: Bool -> ()) {
+    func saveInventories(_ inventories: [Inventory], update: Bool = true, dirty: Bool, handler: @escaping (Bool) -> ()) {
         let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0, dirty: dirty)}
         saveInventories(dbInventories, handler: handler)
     }
     
-    func saveInventories(inventories: [DBInventory], update: Bool = true, handler: Bool -> ()) {
+    func saveInventories(_ inventories: [DBInventory], update: Bool = true, handler: @escaping (Bool) -> ()) {
         self.saveObjs(inventories, update: update, handler: handler)
     }
     
-    func overwrite(inventories: [Inventory], clearTombstones: Bool, dirty: Bool, handler: Bool -> Void) {
+    func overwrite(_ inventories: [Inventory], clearTombstones: Bool, dirty: Bool, handler: @escaping (Bool) -> Void) {
         let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0, dirty: dirty)}
-        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveInventory)} : nil
+        let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveInventory.self)} : nil
         self.overwrite(dbInventories, resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
     
     // MARK: - Sync
     
-    func saveInventoriesSyncResult(syncResult: RemoteInventoriesWithInventoryItemsSyncResult, handler: Bool -> ()) {
+    func saveInventoriesSyncResult(_ syncResult: RemoteInventoriesWithInventoryItemsSyncResult, handler: @escaping (Bool) -> ()) {
         
         self.doInWriteTransaction({realm in
             
-            let inventories = realm.objects(DBInventory)
-            let inventoryItems = realm.objects(DBInventoryItem)
+            let inventories = realm.objects(DBInventory.self)
+            let inventoryItems = realm.objects(DBInventoryItem.self)
             
             realm.delete(inventories)
             realm.delete(inventoryItems)
@@ -195,7 +195,7 @@ class RealmInventoryProvider: RealmProvider {
         })
     }
     
-    func clearInventoryTombstone(uuid: String, handler: Bool -> Void) {
+    func clearInventoryTombstone(_ uuid: String, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             realm.deleteForFilter(DBRemoveInventory.self, DBRemoveInventory.createFilter(uuid))
             return true
@@ -204,7 +204,7 @@ class RealmInventoryProvider: RealmProvider {
         })
     }
     
-    func updateLastSyncTimeStamp(inventory: RemoteInventory, handler: Bool -> Void) {
+    func updateLastSyncTimeStamp(_ inventory: RemoteInventory, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             self?.updateLastSyncTimeStampSync(realm, inventory: inventory)
             return true
@@ -213,12 +213,12 @@ class RealmInventoryProvider: RealmProvider {
         })
     }
 
-    func updateLastSyncTimeStamp(inventory: RemoteInventoryWithDependencies, handler: Bool -> Void) {
+    func updateLastSyncTimeStamp(_ inventory: RemoteInventoryWithDependencies, handler: @escaping (Bool) -> Void) {
         self.updateLastSyncTimeStamp(inventory.inventory, handler: handler)
         // the users are not synced so only inventory
     }
     
-    func updateLastSyncTimeStampSync(realm: Realm, inventory: RemoteInventory) {
+    func updateLastSyncTimeStampSync(_ realm: Realm, inventory: RemoteInventory) {
         realm.create(DBInventory.self, value: inventory.timestampUpdateDict, update: true)
     }
 }

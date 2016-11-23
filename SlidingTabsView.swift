@@ -10,22 +10,22 @@ import UIKit
 import QorumLogs
 
 protocol SlidingTabsViewDelegate: class {
-    func onSlidingViewButtonTap(index: Int, button: UIButton)
+    func onSlidingViewButtonTap(_ index: Int, button: UIButton)
 }
 
 class SlidingTabsView: UIView {
 
-    private let lineHeight: CGFloat = 2
-    private let lineColor: UIColor = Theme.lightGrey2
-    private let selectedButtonColor: UIColor = UIColor.darkTextColor()
-    private let unselectedButtonColor: UIColor = UIColor.grayColor()
-    private let lineBottomOffset: CGFloat = DimensionsManager.quickAddSlidingLineBottomOffset
-    private let lineWidth: CGFloat = 70
-    private let linePadding: CGFloat = DimensionsManager.quickAddSlidingLeftRightPadding
+    fileprivate let lineHeight: CGFloat = 2
+    fileprivate let lineColor: UIColor = Theme.lightGrey2
+    fileprivate let selectedButtonColor: UIColor = UIColor.darkText
+    fileprivate let unselectedButtonColor: UIColor = UIColor.gray
+    fileprivate let lineBottomOffset: CGFloat = DimensionsManager.quickAddSlidingLineBottomOffset
+    fileprivate let lineWidth: CGFloat = 70
+    fileprivate let linePadding: CGFloat = DimensionsManager.quickAddSlidingLeftRightPadding
     
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
     
-    private var line: UIView?
+    fileprivate var line: UIView?
     
     weak var delegate: SlidingTabsViewDelegate?
     
@@ -33,7 +33,7 @@ class SlidingTabsView: UIView {
     
     var onViewsReady: VoidFunction?
     
-    private var addedViews: Bool = false
+    fileprivate var addedViews: Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,20 +46,20 @@ class SlidingTabsView: UIView {
     }
 
     // the available space where the center of the line can be located such that the complete line is still in bounds (- lineWidth) and has given padding (-linePadding)
-    private var availableWidthForCenter: CGFloat {
+    fileprivate var availableWidthForCenter: CGFloat {
         return bounds.width - lineWidth - linePadding
     }
 
     // offset to edge such that available width is horizontally centered inside bounds
-    private var availableWidthForCenterOffset: CGFloat {
+    fileprivate var availableWidthForCenterOffset: CGFloat {
         return (lineWidth / 2) + (linePadding / 2)
     }
     
-    private func sharedInit() {
+    fileprivate func sharedInit() {
     }
     
     // percentage 0...1 of total width, to position the center of the line
-    func moveLine(percentage: CGFloat) {
+    func moveLine(_ percentage: CGFloat) {
         if let line = line {
             let centerX = availableWidthForCenter * percentage // calculate location of center in available space
                 + availableWidthForCenterOffset
@@ -83,7 +83,7 @@ class SlidingTabsView: UIView {
             
             addButtons()
             
-            let line = UIView(frame: CGRectMake(0, bounds.height - lineHeight - lineBottomOffset, lineWidth, lineHeight))
+            let line = UIView(frame: CGRect(x: 0, y: bounds.height - lineHeight - lineBottomOffset, width: lineWidth, height: lineHeight))
             line.backgroundColor = lineColor
             addSubview(line)
             self.line = line
@@ -95,11 +95,11 @@ class SlidingTabsView: UIView {
     }
     
     // TODO generic!
-    private func addButtons() {
+    fileprivate func addButtons() {
         func createButton() -> HandlingButton {
             let button = HandlingButton()
-            button.titleLabel?.font = DimensionsManager.font(.Small, fontType: .Regular)
-            button.setTitleColor(unselectedButtonColor, forState: .Normal)
+            button.titleLabel?.font = DimensionsManager.font(.small, fontType: .regular)
+            button.setTitleColor(unselectedButtonColor, for: UIControlState())
             return button
         }
         
@@ -108,34 +108,34 @@ class SlidingTabsView: UIView {
         let centerXButton1 = availableWidthForCenterOffset
         
         let button1 = createButton()
-        button1.setTitle(trans("quick_add_slider_tab_products"), forState: .Normal)
+        button1.setTitle(trans("quick_add_slider_tab_products"), for: UIControlState())
         button1.tapHandler = {[weak self] in
             self?.delegate?.onSlidingViewButtonTap(0, button: button1)
         }
         addSubview(button1)
         button1.sizeToFit()
-        button1.center = CGPointMake(centerXButton1, centerY)
+        button1.center = CGPoint(x: centerXButton1, y: centerY)
         buttons.append(button1)
         
         let centerXButton2 = bounds.width - availableWidthForCenterOffset
         
         let button2 = createButton()
-        button2.setTitle(trans("quick_add_slider_tab_groups"), forState: .Normal)
+        button2.setTitle(trans("quick_add_slider_tab_groups"), for: UIControlState())
         button2.tapHandler = {[weak self] in
             self?.delegate?.onSlidingViewButtonTap(1, button: button2)
         }
         addSubview(button2)
         button2.sizeToFit()
-        button2.center = CGPointMake(centerXButton2, centerY)
+        button2.center = CGPoint(x: centerXButton2, y: centerY)
         buttons.append(button2)
     }
     
-    func setSelected(buttonIndex: Int) {
+    func setSelected(_ buttonIndex: Int) {
         if let button = buttons[safe: buttonIndex] {
             for b in buttons {
-                b.setTitleColor(unselectedButtonColor, forState: .Normal)
+                b.setTitleColor(unselectedButtonColor, for: UIControlState())
             }
-            button.setTitleColor(selectedButtonColor, forState: .Normal)
+            button.setTitleColor(selectedButtonColor, for: UIControlState())
         } else {
             QL3("Button not found: \(buttonIndex)")
         }

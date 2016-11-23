@@ -10,23 +10,23 @@ import Foundation
 
 protocol PlanProvider {
 
-    func planItems(handler: ProviderResult<[PlanItem]> -> Void)
+    func planItems(_ handler: @escaping (ProviderResult<[PlanItem]>) -> Void)
 
-    func planItem(productName: String, _ handler: ProviderResult<PlanItem?> -> Void)
+    func planItem(_ productName: String, _ handler: @escaping (ProviderResult<PlanItem?>) -> Void)
     
-    func addPlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void)
+    func addPlanItem(_ itemInput: PlanItemInput, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void)
 
-    func addGroupItems(groupItems: [GroupItem], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void)
+    func addGroupItems(_ groupItems: [GroupItem], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void)
 
-    func addPlanItems(planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void)
+    func addPlanItems(_ planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void)
 
-    func addProducts(products: [Product], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void)
+    func addProducts(_ products: [Product], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void)
 
-    func addProduct(product: Product, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void)
+    func addProduct(_ product: Product, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void)
 
-    func updatePlanItem(planItem: PlanItem, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void)
+    func updatePlanItem(_ planItem: PlanItem, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void)
     
-    func removePlanItem(item: PlanItem, _ handler: ProviderResult<Any> -> Void)
+    func removePlanItem(_ item: PlanItem, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func incrementPlanItem(item: PlanItem, delta: Int, _ handler: ProviderResult<Any> -> Void)
+    func incrementPlanItem(_ item: PlanItem, delta: Int, _ handler: @escaping (ProviderResult<Any>) -> Void)
 }

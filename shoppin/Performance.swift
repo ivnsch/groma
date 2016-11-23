@@ -8,7 +8,7 @@
 
 import Foundation
 
-func measure(title: String, block: (() -> ()) -> ()) {
+func measure(_ title: String, block: (() -> ()) -> ()) {
     
     let startTime = CFAbsoluteTimeGetCurrent()
     

@@ -8,103 +8,103 @@
 
 import Foundation
 
-extension NSDate: Comparable {
+extension Date {
 
     var dayMonthYear: (day: Int, month: Int, year: Int) {
-        let components = NSCalendar.currentCalendar().components([.Day, .Month, .Year], fromDate: self)
-        return (components.day, components.month, components.year)
+        let components = Calendar.current.dateComponents([.day, .month, .year], from: self)
+        return (components.day!, components.month!, components.year!)
     }
 
-    var startOfMonth: NSDate {
-        let calendar = NSCalendar.currentCalendar()
-        let components = calendar.components([.Month, .Year], fromDate: self)
-        return calendar.dateFromComponents(components)!
+    var startOfMonth: Date {
+        let calendar = Calendar.current
+        let components = (calendar as NSCalendar).components([.month, .year], from: self)
+        return calendar.date(from: components)!
     }
     
     var daysInMonth: Int {
-        let calendar = NSCalendar.currentCalendar()
-        let days = calendar.rangeOfUnit(.Day, inUnit: .Month, forDate: self)
+        let calendar = Calendar.current
+        let days = (calendar as NSCalendar).range(of: .day, in: .month, for: self)
         return days.length
     }
     
     // Note: this returns days according to exact hours passed not "formal" days, for example if we have Jan 1 and Jan 2 but only 20 hours difference, this returns 0
-    func daysUntil(date: NSDate) -> Int {
-        let components = NSCalendar.currentCalendar().components(.Day, fromDate: self, toDate: date, options: NSCalendarOptions(rawValue: 0))
-        return components.day
+    func daysUntil(_ date: Date) -> Int {
+        let components = (Calendar.current as NSCalendar).components(.day, from: self, to: date, options: NSCalendar.Options(rawValue: 0))
+        return components.day!
     }
 
     
-    static func startOfMonth(month: Int, year: Int) -> NSDate? {
-        let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let components = NSDateComponents()
+    static func startOfMonth(_ month: Int, year: Int) -> Date? {
+        let gregorian = Calendar(identifier: Calendar.Identifier.gregorian)
+        var components = DateComponents()
         components.month = month
         components.year = year
-        return gregorian!.dateFromComponents(components)
+        return gregorian.date(from: components)
     }
     
     // src http://stackoverflow.com/a/4482938/930450
-    static func endOfMonth(month: Int, year: Int) -> NSDate? {
-        let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let components = NSDateComponents()
+    static func endOfMonth(_ month: Int, year: Int) -> Date? {
+        let gregorian = Calendar(identifier: Calendar.Identifier.gregorian)
+        var components = DateComponents()
         components.month = month + 1
         components.year = year
         components.day = 0
-        return gregorian!.dateFromComponents(components)
+        return gregorian.date(from: components)
     }
     
     static func currentMonthName() -> String {
-        let formatter = NSDateFormatter()
+        let formatter = DateFormatter()
         formatter.dateFormat = "MMMM"
-        NSDate().dayMonthYear.month
-        formatter.locale = NSLocale.currentLocale()
-        return formatter.stringFromDate(NSDate())
+//        Date().dayMonthYear.month
+        formatter.locale = Locale.current
+        return formatter.string(from: Date())
     }
     
-    static func inMonths(months: Int) -> NSDate {
-        let today = NSDate()
-        return NSCalendar.currentCalendar().dateByAddingUnit(
-            .Month,
+    static func inMonths(_ months: Int) -> Date {
+        let today = Date()
+        return (Calendar.current as NSCalendar).date(
+            byAdding: .month,
             value: months,
-            toDate: today,
-            options: NSCalendarOptions(rawValue: 0))!
+            to: today,
+            options: NSCalendar.Options(rawValue: 0))!
     }
     
-    static func inYears(years: Int) -> NSDate {
-        let today = NSDate()
-        return NSCalendar.currentCalendar().dateByAddingUnit(
-            .Year,
+    static func inYears(_ years: Int) -> Date {
+        let today = Date()
+        return (Calendar.current as NSCalendar).date(
+            byAdding: .year,
             value: years,
-            toDate: today,
-            options: NSCalendarOptions(rawValue: 0))!
+            to: today,
+            options: NSCalendar.Options(rawValue: 0))!
     }
     
-    func inMonths(months: Int) -> NSDate {
-        return NSCalendar.currentCalendar().dateByAddingUnit(
-            .Month,
+    func inMonths(_ months: Int) -> Date {
+        return (Calendar.current as NSCalendar).date(
+            byAdding: .month,
             value: months,
-            toDate: self,
-            options: NSCalendarOptions(rawValue: 0))!
+            to: self,
+            options: NSCalendar.Options(rawValue: 0))!
     }
 
-    func inMinutes(minutes: Int) -> NSDate {
-        return NSCalendar.currentCalendar().dateByAddingUnit(
-            .Minute,
+    func inMinutes(_ minutes: Int) -> Date {
+        return (Calendar.current as NSCalendar).date(
+            byAdding: .minute,
             value: minutes,
-            toDate: self,
-            options: NSCalendarOptions(rawValue: 0))!
+            to: self,
+            options: NSCalendar.Options(rawValue: 0))!
     }
     
     // src http://stackoverflow.com/a/5330027/930450
-    func dateWithZeroSeconds() -> NSDate {
+    func dateWithZeroSeconds() -> Date {
         let time = floor(self.timeIntervalSinceReferenceDate / 60.0) * 60.0
-        return NSDate(timeIntervalSinceReferenceDate: time)
+        return Date(timeIntervalSinceReferenceDate: time)
     }
     
     func debugDateStr() -> String {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .LongStyle
-        dateFormatter.timeStyle = .MediumStyle
-        return dateFormatter.stringFromDate(self)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .medium
+        return dateFormatter.string(from: self)
     }
     
     func toMillis() -> Int64 {
@@ -112,10 +112,10 @@ extension NSDate: Comparable {
     }
 }
 
-public func <(a: NSDate, b: NSDate) -> Bool {
-    return a.compare(b) == NSComparisonResult.OrderedAscending
-}
-
-public func ==(a: NSDate, b: NSDate) -> Bool {
-    return a.compare(b) == NSComparisonResult.OrderedSame
-}
+//public func <(a: Date, b: Date) -> Bool {
+//    return a.compare(b) == ComparisonResult.orderedAscending
+//}
+//
+//public func ==(a: Date, b: Date) -> Bool {
+//    return a.compare(b) == ComparisonResult.orderedSame
+//}

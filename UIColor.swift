@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 extension UIColor {
 
@@ -24,36 +25,36 @@ extension UIColor {
     /////////////////////////////////////////////////////////////////////////////////////
     var red: CGFloat {
         get {
-            let components = CGColorGetComponents(self.CGColor)
-            return components[0]
+            let components = self.cgColor.components
+            return components![0]
         }
     }
     
     var green: CGFloat {
         get {
-            let components = CGColorGetComponents(self.CGColor)
-            return components[1]
+            let components = self.cgColor.components
+            return components![1]
         }
     }
     
     var blue: CGFloat {
         get {
-            let components = CGColorGetComponents(self.CGColor)
-            return components[2]
+            let components = self.cgColor.components
+            return components![2]
         }
     }
     
     var alpha: CGFloat {
         get {
-            return CGColorGetAlpha(self.CGColor)
+            return self.cgColor.alpha
         }
     }
     
-    func alpha(alpha: CGFloat) -> UIColor {
+    func alpha(_ alpha: CGFloat) -> UIColor {
         return UIColor(red: self.red, green: self.green, blue: self.blue, alpha: alpha)
     }
     
-    func white(scale: CGFloat) -> UIColor {
+    func white(_ scale: CGFloat) -> UIColor {
         return UIColor(
             red: self.red + (1.0 - self.red) * scale,
             green: self.green + (1.0 - self.green) * scale,
@@ -75,39 +76,46 @@ extension UIColor {
     
     /////////////////////////////////////////////////////////////////////////////////////
     
-    static func opaqueColorByApplyingTransparentColorOrBackground(transparentColor: UIColor, backgroundColor: UIColor) -> UIColor {
-        let bgView = UIView(frame: CGRectMake(0, 0, 1, 1))
+    static func opaqueColorByApplyingTransparentColorOrBackground(_ transparentColor: UIColor, backgroundColor: UIColor) -> UIColor {
+        let bgView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
         bgView.backgroundColor = backgroundColor
-        let overlayView = UIView(frame: CGRectMake(0, 0, 1, 1))
+        let overlayView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
         overlayView.backgroundColor = transparentColor
         bgView.addSubview(overlayView)
         
         let image = UIView.imageWithView(bgView)
         
-        let provider = CGImageGetDataProvider(image.CGImage)
-        let pixelData = CGDataProviderCopyData(provider)
-        let data = CFDataGetBytePtr(pixelData)
-        
-        let color = UIColor(
-            red: CGFloat(data[0]) / 255.0,
-            green: CGFloat(data[1]) / 255.0,
-            blue: CGFloat(data[2]) / 255.0,
-            alpha: 1
-        )
-        return color
+        if let provider = image.cgImage?.dataProvider {
+            let pixelData = provider.data
+            if let data = CFDataGetBytePtr(pixelData) {
+                return UIColor(
+                    red: CGFloat(data[0]) / 255.0,
+                    green: CGFloat(data[1]) / 255.0,
+                    blue: CGFloat(data[2]) / 255.0,
+                    alpha: 1
+                )
+            } else {
+                QL4("Couldn't get image data, returning black")
+                return UIColor.black
+            }
+            
+        } else {
+            QL4("Couldn't get cgImage, returning black")
+            return UIColor.black
+        }
     }
     
     // src: https://gist.github.com/yannickl/16f0ed38f0698d9a8ae7
     convenience init(hexString: String) {
-        let hexString = hexString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) as String
-        let scanner = NSScanner(string: hexString)
+        let hexString = hexString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) as String
+        let scanner = Scanner(string: hexString)
         
         if (hexString.hasPrefix("#")) {
             scanner.scanLocation = 1
         }
         
         var color: UInt32 = 0
-        scanner.scanHexInt(&color)
+        scanner.scanHexInt32(&color)
         
         let mask = 0x000000FF
         let r = Int(color >> 16) & mask

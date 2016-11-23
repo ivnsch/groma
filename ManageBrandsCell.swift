@@ -14,7 +14,7 @@ class ManageBrandsCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
     var item: ItemWithCellAttributes<String>? {

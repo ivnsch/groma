@@ -10,23 +10,23 @@ import UIKit
 
 class RemoteSectionProvider: RemoteProvider {
 
-    func removeSection(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.section + "/\(uuid)") {result in
+    func removeSection(_ uuid: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.section + "/\(uuid)") {result in
             handler(result)
         }
     }
     
-    func updateSections(sections: [Section], handler: RemoteResult<Int64> -> ()) {
+    func updateSections(_ sections: [Section], handler: @escaping (RemoteResult<Int64>) -> ()) {
         let listItemProvider = RemoteListItemProvider()
         let parameters: [[String: AnyObject]] = sections.map{listItemProvider.toRequestParams($0)}
-        RemoteProvider.authenticatedRequestArrayParamsTimestamp(.PUT, Urls.sections, parameters) {result in
+        RemoteProvider.authenticatedRequestArrayParamsTimestamp(.put, Urls.sections, parameters) {result in
             handler(result)
         }
     }
     
-    func removeSectionsWithName(name: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        let encodedName = name.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.sectionsName + "/\(encodedName)") {result in
+    func removeSectionsWithName(_ name: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        let encodedName = name.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        RemoteProvider.authenticatedRequest(.delete, Urls.sectionsName + "/\(encodedName)") {result in
             handler(result)
         }
     }

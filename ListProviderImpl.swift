@@ -14,12 +14,12 @@ class ListProviderImpl: ListProvider {
     let remoteListProvider = RemoteListItemProvider()
     
     // Note: programmatic sorting 2x. But users normally have only a few lists so it's ok
-    func lists(remote: Bool = true, _ handler: ProviderResult<[List]> -> ()) {
+    func lists(_ remote: Bool = true, _ handler: @escaping (ProviderResult<[List]>) -> ()) {
         DBProviders.listProvider.loadLists{dbLists in
             
             let sortedDBLists = dbLists.sortedByOrder()
             
-            handler(ProviderResult(status: .Success, sucessResult: sortedDBLists))
+            handler(ProviderResult(status: .success, sucessResult: sortedDBLists))
             
             if remote {
                 self.remoteListProvider.lists {remoteResult in
@@ -33,7 +33,7 @@ class ListProviderImpl: ListProvider {
                             DBProviders.listProvider.overwriteLists(lists, clearTombstones: true) {saved in
                                 if saved {
                                     if !sortedDBLists.equalsExcludingSyncAttributes(lists) { // the sync attributes are not relevant to the ui so notify ui only if sth else changed
-                                        handler(ProviderResult(status: .Success, sucessResult: lists))
+                                        handler(ProviderResult(status: .success, sucessResult: lists))
                                     }
                                 } else {
                                     QL4("Error overwriting lists - couldn't save")
@@ -49,21 +49,21 @@ class ListProviderImpl: ListProvider {
         }
     }
     
-    func list(listUuid: String, _ handler: ProviderResult<List> -> ()) {
+    func list(_ listUuid: String, _ handler: @escaping (ProviderResult<List>) -> ()) {
         // return the saved object, to get object with generated id
         DBProviders.listProvider.loadList(listUuid) {dbListMaybe in
             if let dbList = dbListMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: dbList))
+                handler(ProviderResult(status: .success, sucessResult: dbList))
                 
             } else {
                 QL4("Couldn't loadList: \(listUuid)")
-                handler(ProviderResult(status: .NotFound))
+                handler(ProviderResult(status: .notFound))
             }
             
         }
     }
 
-    func add(list: List, remote: Bool, _ handler: ProviderResult<List> -> ()) {
+    func add(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<List>) -> ()) {
         
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
@@ -72,9 +72,9 @@ class ListProviderImpl: ListProvider {
         DBProviders.listProvider.saveList(list, dirty: remote, handler: {[weak self] saved in
             
             if saved {
-                handler(ProviderResult(status: .Success, sucessResult: list))
+                handler(ProviderResult(status: .success, sucessResult: list))
             } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
             
             if remote {
@@ -94,14 +94,14 @@ class ListProviderImpl: ListProvider {
         })
     }
 
-    func update(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func update(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         update([list], remote: remote, handler)
     }
     
     // TODO! do we still need to update a list array? this use case should be covered now with updateListsOrder?
-    func update(lists: [List], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func update(_ lists: [List], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         DBProviders.listProvider.saveLists(lists, update: true, dirty: remote) {[weak self] updated in
-            handler(ProviderResult(status: updated ? .Success : .DatabaseSavingError))
+            handler(ProviderResult(status: updated ? .success : .databaseSavingError))
             if updated {
                 if remote {
                     self?.remoteListProvider.update(lists) {remoteResult in
@@ -124,11 +124,11 @@ class ListProviderImpl: ListProvider {
         }
     }
     
-    func updateListsOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func updateListsOrder(_ orderUpdates: [OrderUpdate], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         // dirty == remote: if we want to do a remote call, it means the update is client triggered (opposed to e.g. processing a websocket message) which means the data is not in the server yet, which means it's dirty.
         DBProviders.listProvider.updateListsOrder(orderUpdates, dirty: remote) {[weak self] success in
             if success {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 if remote {
                     self?.remoteListProvider.updateListsOrder(orderUpdates) {remoteResult in
@@ -140,16 +140,16 @@ class ListProviderImpl: ListProvider {
                 }
             } else {
                 QL4("Error updating lists order in local database, orderUpdates: \(orderUpdates)")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }
     
-    func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func remove(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         remove(list.uuid, remote: remote, handler)
     }
 
-    func remove(listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func remove(_ listUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
@@ -157,7 +157,7 @@ class ListProviderImpl: ListProvider {
         
         // TODO when removing and item doesn't exist shouldn't we return an error (currently at least local db returns success)?
         DBProviders.listProvider.remove(listUuid, markForSync: remote, handler: {[weak self] removed in
-            handler(ProviderResult(status: removed ? .Success : .DatabaseSavingError))
+            handler(ProviderResult(status: removed ? .success : .databaseSavingError))
             if removed {
                 if remote {
                     self?.remoteListProvider.remove(listUuid) {remoteResult in
@@ -180,18 +180,18 @@ class ListProviderImpl: ListProvider {
         })
     }
     
-    func acceptInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void) {
+    func acceptInvitation(_ invitation: RemoteListInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         remoteListProvider.acceptInvitation(invitation) {remoteResult in
             if remoteResult.success {
                 QL1("Accept list invitation success")
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
             } else {
                 DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
             }
         }
     }
     
-    func rejectInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void) {
+    func rejectInvitation(_ invitation: RemoteListInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         remoteListProvider.rejectInvitation(invitation) {remoteResult in
             if remoteResult.success {
                 QL1("Reject list invitation success")
@@ -202,11 +202,11 @@ class ListProviderImpl: ListProvider {
         }
     }
     
-    func findInvitedUsers(listUuid: String, _ handler: ProviderResult<[SharedUser]> -> Void) {
+    func findInvitedUsers(_ listUuid: String, _ handler: @escaping (ProviderResult<[SharedUser]>) -> Void) {
         remoteListProvider.findInvitedUsers(listUuid) {remoteResult in
             if let remoteSharedUsers = remoteResult.successResult {
                 let sharedUsers: [SharedUser] = remoteSharedUsers.map{SharedUserMapper.sharedUserWithRemote($0)}
-                handler(ProviderResult(status: .Success, sucessResult: sharedUsers))
+                handler(ProviderResult(status: .success, sucessResult: sharedUsers))
             } else {
                 DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
             }

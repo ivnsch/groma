@@ -17,10 +17,10 @@ import QorumLogs
 // do we really want this? or rather return also a status code (at least maybe an "either") so client can show error accordingly? Or maybe it's enough to send error to error tracking?
 class RealmProvider {
 
-    func saveObj<T: DBSyncable>(obj: T, update: Bool = false, handler: Bool -> ()) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
+    func saveObj<T: DBSyncable>(_ obj: T, update: Bool = false, handler: @escaping (Bool) -> ()) {
+        DispatchQueue.global(qos: .background).async {[weak self] in
             let resultMaybe = self?.saveObjSync(obj, update: update)
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 if let result = resultMaybe {
                     handler(result)
                 } else {
@@ -28,10 +28,10 @@ class RealmProvider {
                     handler(false)
                 }
             })
-        })
+        }
     }
     
-    func saveObjSync<T: DBSyncable>(obj: T, update: Bool = false) -> Bool {
+    func saveObjSync<T: DBSyncable>(_ obj: T, update: Bool = false) -> Bool {
         do {
 //            obj.lastUpdate = NSDate()
             let realm = try Realm()
@@ -51,10 +51,10 @@ class RealmProvider {
     /**
     * Batch save
     */
-    func saveObjs<T: Object>(objs: [T], update: Bool = false, onSaved: ((Realm) -> ())? = nil, handler: Bool -> ()) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
+    func saveObjs<T: Object>(_ objs: [T], update: Bool = false, onSaved: ((Realm) -> ())? = nil, handler: @escaping (Bool) -> ()) {
+        DispatchQueue.global(qos: .background).async {[weak self] in
             let resultMaybe = self?.saveObjsSync(objs, update: update)
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 if let result = resultMaybe {
                     handler(result)
                 } else {
@@ -62,10 +62,10 @@ class RealmProvider {
                     handler(false)
                 }
             })
-        })
+        }
     }
     
-    func saveObjsSync<T: Object>(objs: [T], update: Bool = false) -> Bool {
+    func saveObjsSync<T: Object>(_ objs: [T], update: Bool = false) -> Bool {
         do {
             let realm = try Realm()
             try realm.write {
@@ -83,7 +83,7 @@ class RealmProvider {
     
     // expected to be called in transaction and do catch block
     // Suffix "Int" like "internal" to differentiate from "Sync" that contains also creation of Realm / error handling
-    func saveObjsSyncInt<T: Object>(realm: Realm, objs: [T], update: Bool = false) {
+    func saveObjsSyncInt<T: Object>(_ realm: Realm, objs: [T], update: Bool = false) {
         for obj in objs {
             realm.add(obj, update: update)
         }
@@ -92,15 +92,15 @@ class RealmProvider {
     /**
     * Batch save, refreshing last update date
     */
-    func saveObjs<T: DBSyncable>(objs: [T], update: Bool = false, onSaved: ((Realm) -> ())? = nil, handler: Bool -> ()) {
+    func saveObjs<T: DBSyncable>(_ objs: [T], update: Bool = false, onSaved: ((Realm) -> ())? = nil, handler: @escaping (Bool) -> ()) {
         
         let finished: (Bool) -> () = {success in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 handler(success)
             })
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        DispatchQueue.global(qos: .background).async {
 
             do {
                 let realm = try Realm()
@@ -119,10 +119,10 @@ class RealmProvider {
             }
 
             finished(true)
-        })
+        }
     }
 
-    func loadFirst<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, handler: U? -> ()) {
+    func loadFirst<T: Object, U>(_ mapper: @escaping (T) -> U, filter filterMaybe: String? = nil, handler: @escaping (U?) -> ()) {
         self.load(mapper, filter: filterMaybe, handler: {results in
             if results.count > 1 {
                 QL2("Multiple items found in load first \(filterMaybe)") // sometimes we expect only 1 item to be in the database, log this just in case
@@ -132,15 +132,15 @@ class RealmProvider {
     }
     
     // TODO range: can't we just subscript result instead of do this programmatically (take a look into https://github.com/realm/realm-cocoa/issues/1904)
-    func load<T: Object, U>(mapper: T -> U, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: [U] -> ()) {
+    func load<T: Object, U>(_ mapper: @escaping (T) -> U, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: @escaping ([U]) -> ()) {
         
         let finished: ([U]) -> () = {result in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 handler(result)
             })
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        DispatchQueue.global(qos: .background).async {
             
             do {
                 let realm = try Realm()
@@ -151,23 +151,23 @@ class RealmProvider {
                 QL4("Error: creating Realm, returning empty results, error: \(e)")
                 finished([]) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
             }
-        })
+        }
     }
     
-    func loadSync<T: Object, U>(realm: Realm, mapper: T -> U, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [U] {
-        var results = realm.objects(T)
+    func loadSync<T: Object, U>(_ realm: Realm, mapper: @escaping (T) -> U, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [U] {
+        var results = realm.objects(T.self)
         if let predicate = predicateMaybe {
             results = results.filter(predicate)
         }
-        if let sortDescriptor = sortDescriptorMaybe, key = sortDescriptor.key {
-            results = results.sorted(key, ascending: sortDescriptor.ascending)
+        if let sortDescriptor = sortDescriptorMaybe, let key = sortDescriptor.key {
+            results = results.sorted(byProperty: key, ascending: sortDescriptor.ascending)
         }
         
         let objs: [T] = results.toArray(rangeMaybe)
         return objs.map{mapper($0)}
     }
 
-    func loadSync<T: Object, U>(realm: Realm, mapper: T -> U, filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [U] {
+    func loadSync<T: Object, U>(_ realm: Realm, mapper: @escaping (T) -> U, filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [U] {
         
         let predicateMaybe = filterMaybe.map {
             NSPredicate(format: $0, argumentArray: [])
@@ -176,7 +176,7 @@ class RealmProvider {
         return self.loadSync(realm, mapper: mapper, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe)
     }
     
-    func load<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: [U] -> ()) {
+    func load<T: Object, U>(_ mapper: @escaping (T) -> U, filter filterMaybe: String? = nil, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: @escaping ([U]) -> ()) {
 
         let predicateMaybe = filterMaybe.map {
             NSPredicate(format: $0, argumentArray: [])
@@ -187,20 +187,20 @@ class RealmProvider {
     
     // WARN: passing nil as pred will remove ALL objects of objType
     // additionalActions: optional actions to be executed after delete in the same transaction
-    func remove<T: Object>(pred: String?, handler: Bool -> (), objType: T.Type, additionalActions: (Realm -> Void)? = nil) {
+    func remove<T: Object>(_ pred: String?, handler: @escaping (Bool) -> (), objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) {
         
         let finished: (Bool) -> () = {success in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 handler(success)
             })
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in guard let weakSelf = self else {return}
+        DispatchQueue.global(qos: .background).async {[weak self] in guard let weakSelf = self else {return}
             finished(weakSelf.removeSync(pred, objType: objType, additionalActions: additionalActions))
-        })
+        }
     }
 
-    func removeSync<T: Object>(pred: String?, objType: T.Type, additionalActions: (Realm -> Void)? = nil) -> Bool {
+    func removeSync<T: Object>(_ pred: String?, objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) -> Bool {
         do {
             let realm = try Realm()
             return removeSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
@@ -210,9 +210,9 @@ class RealmProvider {
         }
     }
 
-    func removeSync<T: Object>(realm: Realm, pred: String?, objType: T.Type, additionalActions: (Realm -> Void)? = nil) -> Bool {
+    func removeSync<T: Object>(_ realm: Realm, pred: String?, objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) -> Bool {
         do {
-            var results: Results<T> = realm.objects(T)
+            var results: Results<T> = realm.objects(T.self)
             if let pred = pred {
                 results = results.filter(pred)
             }
@@ -232,7 +232,7 @@ class RealmProvider {
     // WARN: passing nil as pred will remove ALL objects of objType
     // additionalActions: optional actions to be executed after delete in the same transaction
     // Returns count of removed items or nil if there was an error.
-    func removeReturnCount<T: Object>(pred: String?, handler: Int? -> Void, objType: T.Type, additionalActions: (Realm -> Void)? = nil) {
+    func removeReturnCount<T: Object>(_ pred: String?, handler: @escaping (Int?) -> Void, objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) {
         doInWriteTransaction({[weak self] realm in
             return self?.removeReturnCountSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
         }, finishHandler: {countMaybe in
@@ -241,8 +241,8 @@ class RealmProvider {
     }
     
     // Expects to be executed in a transaction
-    func removeReturnCountSync<T: Object>(realm: Realm, pred: String?, objType: T.Type, additionalActions: (Realm -> Void)? = nil) -> Int? {
-        var results: Results<T> = realm.objects(T)
+    func removeReturnCountSync<T: Object>(_ realm: Realm, pred: String?, objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) -> Int? {
+        var results: Results<T> = realm.objects(T.self)
         if let pred = pred {
             results = results.filter(pred)
         }
@@ -255,15 +255,15 @@ class RealmProvider {
         return count
     }
     
-    func doInWriteTransaction<T>(f: Realm -> T?, finishHandler: T? -> Void) {
+    func doInWriteTransaction<T>(_ f: @escaping (Realm) -> T?, finishHandler: @escaping (T?) -> Void) {
         
-        let finished: T? -> Void = {obj in
-            dispatch_async(dispatch_get_main_queue(), {
+        let finished: (T?) -> Void = {obj in
+            DispatchQueue.main.async(execute: {
                 finishHandler(obj)
             })
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        DispatchQueue.global(qos: .background).async {
             do {
                 let realm = try Realm()
                 var obj: T?
@@ -279,10 +279,10 @@ class RealmProvider {
                 QL4("Realm error: \(error)")
                 finished(nil)
             }
-        })
+        }
     }
 
-    func doInWriteTransactionSync<T>(f: Realm -> T?) -> T? {
+    func doInWriteTransactionSync<T>(_ f: (Realm) -> T?) -> T? {
         do {
             let realm = try Realm()
             return doInWriteTransactionWithRealmSync(realm, f: f)
@@ -295,7 +295,7 @@ class RealmProvider {
         }
     }
 
-    func doInWriteTransactionWithRealmSync<T>(realm: Realm, f: Realm -> T?) -> T? {
+    func doInWriteTransactionWithRealmSync<T>(_ realm: Realm, f: (Realm) -> T?) -> T? {
         do {
             var obj: T?
             try realm.write {
@@ -312,7 +312,7 @@ class RealmProvider {
         }
     }
     
-    func withRealm<T>(f: Realm throws -> T?, resultHandler: T? -> Void) {
+    func withRealm<T>(_ f: @escaping (Realm) throws -> T?, resultHandler: @escaping (T?) -> Void) {
         background({[weak self] in
             return self?.withRealmSync(f)
             }) { (result: T?) in
@@ -320,7 +320,7 @@ class RealmProvider {
         }
     }
     
-    func withRealmSync<T>(f: Realm throws -> T?) -> T? {
+    func withRealmSync<T>(_ f: (Realm) throws -> T?) -> T? {
         do {
             let realm = try Realm()
             return try f(realm)
@@ -335,11 +335,11 @@ class RealmProvider {
     
     // resetLastUpdateToServer = true should be always used when this method is called for sync. TODO no resetLastUpdateToServer default = true, it's better to pass it explicitly
     // additionalActions: optional additional actions to be executed in the transaction
-    func overwrite<T: DBSyncable>(newObjects: [T], deleteFilter deleteFilterMaybe: String? = nil, resetLastUpdateToServer: Bool = true, idExtractor: T -> String, additionalActions: (Realm -> Void)? = nil, handler: Bool -> ()) {
+    func overwrite<T: Sequence>(_ newObjects: T, deleteFilter deleteFilterMaybe: String? = nil, resetLastUpdateToServer: Bool = true, idExtractor: @escaping (T.Iterator.Element) -> String, additionalActions: ((Realm) -> Void)? = nil, handler: @escaping (Bool) -> ()) where T.Iterator.Element: DBSyncable {
         
         self.doInWriteTransaction({realm in
             
-            var results: Results<T> = realm.objects(T)
+            var results: Results<T.Iterator.Element> = realm.objects(T.Iterator.Element.self)
 
             if let filter = deleteFilterMaybe {
                 results = results.filter(filter)
@@ -358,7 +358,7 @@ class RealmProvider {
                 }
                 
                 realm.add(obj, update: true) // update: true just in case some dependencies have repeated data (e.g. a shared user), if false the second shared user with same unique causes an exception
-                toDeleteDict.removeValueForKey(idExtractor(obj))
+                toDeleteDict.removeValue(forKey: idExtractor(obj))
             }
             
             for val in toDeleteDict.values {

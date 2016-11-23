@@ -24,7 +24,7 @@ struct Constants {
     
     static let dayCountShouldUpdatAppDialog = 7
     
-    private static let appId = "Groma"
+    fileprivate static let appId = "Groma"
 
     static let appStoreLink = "itms-apps://itunes.apple.com/app/id1121689899"
 }

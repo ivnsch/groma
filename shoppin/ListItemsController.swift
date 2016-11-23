@@ -18,7 +18,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // TODO remove fields that are not necessary anymore
     
-    private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
+    fileprivate let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
     
     
     weak var listItemsTableViewController: ListItemsTableViewController!
@@ -50,14 +50,14 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         return 0
     }
     
-    private var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
-    private var topEditSectionControllerManager: ExpandableTopViewController<EditSectionViewController>?
+    fileprivate var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
+    fileprivate var topEditSectionControllerManager: ExpandableTopViewController<EditSectionViewController>?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
+    fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
     
     var emptyView: UIView {
         fatalError("override")
@@ -77,33 +77,33 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
         topBar.delegate = self
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onListRemovedNotification(_:)), name: Notification.ListRemoved.rawValue, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onListRemovedNotification(_:)), name: NSNotification.Name(rawValue: Notification.ListRemoved.rawValue), object: nil)
         
         // websocket
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketListItems(_:)), name: WSNotificationName.ListItems.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketListItem(_:)), name: WSNotificationName.ListItem.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketSection(_:)), name: WSNotificationName.Section.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketProduct(_:)), name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketProductCategory(_:)), name: WSNotificationName.ProductCategory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketList(_:)), name: WSNotificationName.List.rawValue, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketListItems(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ListItems.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketListItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ListItem.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketSection(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Section.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketProduct(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Product.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketList(_:)), name: NSNotification.Name(rawValue: WSNotificationName.List.rawValue), object: nil)
     }
 
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     
     deinit {
         QL1("Deinit list items controller")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
-        let top = CGRectGetHeight(topBar.frame)
+    fileprivate func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
+        let top = topBar.frame.height
         let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
-            controller.itemType = .ProductForList
+            controller.itemType = .productForList
             controller.list = self?.currentList
             return controller
         }
@@ -111,8 +111,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         return manager
     }
     
-    private func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
-        let top = CGRectGetHeight(topBar.frame)
+    fileprivate func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
+        let top = topBar.frame.height
         let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 70, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = EditSectionViewController()
             controller.delegate = self
@@ -122,14 +122,14 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         return manager
     }
     
-    private func initTitleLabel() {
+    fileprivate func initTitleLabel() {
         let label = UILabel()
         label.font = Fonts.regular
-        label.textColor = UIColor.whiteColor()
+        label.textColor = UIColor.white
         topBar.addSubview(label)
     }
     
-    func onExpand(expanding: Bool) {
+    func onExpand(_ expanding: Bool) {
         if !expanding {
             clearPossibleNotePopup()
             topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()
@@ -143,19 +143,19 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         topBar.positionTitleLabelLeft(expanding, animated: true, withDot: true, heightConstraint: topBarHeightConstraint)
     }
     
-    func setThemeColor(color: UIColor) {
+    func setThemeColor(_ color: UIColor) {
         topBar.dotColor = color
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
     }
     
-    private func updatePossibleList() {
+    fileprivate func updatePossibleList() {
         if let list = self.currentList {
             //            self.navigationItem.title = list.name
             self.initWithList(list)
         }
     }
     
-    func setEmptyUI(empty: Bool, animated: Bool) {
+    func setEmptyUI(_ empty: Bool, animated: Bool) {
         if empty {
             topBar.setLeftButtonIds([])
         } else {
@@ -163,7 +163,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: true)
@@ -180,7 +180,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         emptyView.addGestureRecognizer(tapRecognizer)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
      
         toggleButtonRotator.reset(listItemsTableViewController.tableView, topBar: topBar)
@@ -189,29 +189,29 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         onViewDidAppear = nil
     }
     
-    func onEmptyListViewTap(sender: UITapGestureRecognizer) {
-        toggleTopAddController() // this is meant to only open the menu, but toggle is ok since if we can tap on empty view it means it's closed
+    func onEmptyListViewTap(_ sender: UITapGestureRecognizer) {
+        _ = toggleTopAddController() // this is meant to only open the menu, but toggle is ok since if we can tap on empty view it means it's closed
     }
 
     
-    private func initWithList(list: List) {
+    fileprivate func initWithList(_ list: List) {
         topBar.title = topBarTitle(list)
         udpateListItems(list)
     }
     
-    func topBarTitle(list: List) -> String {
+    func topBarTitle(_ list: List) -> String {
         return list.name
     }
     
-    private func udpateListItems(list: List, onFinish: VoidFunction? = nil) {
-        Providers.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly, successHandler{[weak self] listItems in guard let weakSelf = self else {return}
+    fileprivate func udpateListItems(_ list: List, onFinish: VoidFunction? = nil) {
+        Providers.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: .memOnly, successHandler{[weak self] listItems in guard let weakSelf = self else {return}
             weakSelf.listItemsTableViewController.setListItems(listItems.filter{$0.hasStatus(weakSelf.status)})
             weakSelf.onGetListItems(listItems)
             onFinish?()
         })
     }
     
-    func onGetListItems(listItems: [ListItem]) {
+    func onGetListItems(_ listItems: [ListItem]) {
         let i = listItems.filter{$0.hasStatus(status)}
         QL2("status: \(status), items: \(i)")
         onTableViewChangedQuantifiables()
@@ -222,7 +222,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         if listItemsTableViewController.items.isEmpty {
             topBar.setLeftButtonIds([])
         } else {
-            topBar.setLeftButtonIds([.Edit])
+            topBar.setLeftButtonIds([.edit])
         }
     }
     
@@ -235,7 +235,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     // MARK:
     
     // returns: is now open?
-    func toggleTopAddController(rotateTopBarButton: Bool = true) -> Bool {
+    func toggleTopAddController(_ rotateTopBarButton: Bool = true) -> Bool {
         
         clearPossibleUndo()
         
@@ -275,12 +275,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         clearPossibleUndo()
     }
     
     // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
-    func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
+    func setEditing(_ editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
         super.setEditing(editing, animated: animated)
         
         clearPossibleNotePopup()
@@ -307,7 +307,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         listItemsTableViewController.setEditing(editing, animated: animated)
         
         
-        listItemsTableViewController.cellMode = editing ? .Increment : .Note
+        listItemsTableViewController.cellMode = editing ? .increment : .note
     }
     
     // TODO do we still need this? This was prob used by done view controller to update our list
@@ -316,7 +316,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     //    }
     
     //    var refreshControl: UIRefreshControl?
-    private func initTableViewController() {
+    fileprivate func initTableViewController() {
         listItemsTableViewController = UIStoryboard.listItemsTableViewController()
         
         addChildViewControllerAndView(listItemsTableViewController, viewIndex: 0)
@@ -337,14 +337,14 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
         listItemsTableViewController.cellSwipeDirection = {
             switch self.status {
-            case .Todo: return .Right
-            case .Done: return .Left
-            case .Stash: return .Left
+            case .todo: return .right
+            case .done: return .left
+            case .stash: return .left
             }
         }()
     }
     
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         clearPossibleUndo()
     }
     
@@ -354,22 +354,22 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // MARK: - ListItemsTableViewDelegate
     
-    func onTableViewScroll(scrollView: UIScrollView) {
+    func onTableViewScroll(_ scrollView: UIScrollView) {
         toggleButtonRotator.rotateForOffset(-64, topBar: topBar, scrollView: scrollView)
     }
     
     func onPullToAdd() {
-        toggleTopAddController(false) // this is meant to only open the menu, but toggle is ok since if we can tap on empty view it means it's closed
+        _ = toggleTopAddController(false) // this is meant to only open the menu, but toggle is ok since if we can tap on empty view it means it's closed
     }
     
-    func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
-        listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
+    func onListItemClear(_ tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
+        listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .bottom)
         onTableViewChangedQuantifiables()
         onFinish()
     }
     
-    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
-        if self.editing { // open quick add in edit mode
+    func onListItemSelected(_ tableViewListItem: TableViewListItem, indexPath: IndexPath) {
+        if self.isEditing { // open quick add in edit mode
             topQuickAddControllerManager?.expand(true)
             topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
             
@@ -382,9 +382,9 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true, onFinish: {[weak self] in guard let weakSelf = self else {return}
                 let targetStatus: ListItemStatus = {
                     switch weakSelf.status {
-                    case .Todo: return .Done
-                    case .Done: return .Todo
-                    case .Stash: return .Todo
+                    case .todo: return .done
+                    case .done: return .todo
+                    case .stash: return .todo
                     }
                 }()
                 
@@ -400,7 +400,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     // Immediate swipe - websocket
-    private func swipeCell(listItemUuid: String) {
+    fileprivate func swipeCell(_ listItemUuid: String) {
         if let indexPath = listItemsTableViewController.getIndexPath(listItemUuid) {
             listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true, onFinish: {[weak self] in
                 self?.listItemsTableViewController.clearPendingSwipeItemIfAny(true)
@@ -417,25 +417,25 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         updateEmptyUI()
     }
     
-    private func updateEmptyUI() {
+    fileprivate func updateEmptyUI() {
         setEmptyUI(listItemsTableViewController.items.isEmpty, animated: true)
     }
     
     func updateQuantifiables() {
     }
     
-    func onListItemReset(tableViewListItem: TableViewListItem) {
+    func onListItemReset(_ tableViewListItem: TableViewListItem) {
         onListItemReset(tableViewListItem.listItem)
     }
     
-    func onListItemReset(listItem: ListItem) {
+    func onListItemReset(_ listItem: ListItem) {
 
         // revert list item operation
         let srcStatus: ListItemStatus = {
             switch status {
-            case .Todo: return .Done
-            case .Done: return .Todo
-            case .Stash: return .Todo
+            case .todo: return .done
+            case .done: return .todo
+            case .stash: return .todo
             }
         }()
         
@@ -450,11 +450,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         })
     }
     
-    func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
+    func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
         onSectionSelected(section.section)
     }
     
-    func onIncrementItem(tableViewListItem: TableViewListItem, delta: Int) {
+    func onIncrementItem(_ tableViewListItem: TableViewListItem, delta: Int) {
         Providers.listItemsProvider.increment(tableViewListItem.listItem, status: status, delta: delta, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
             self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
             self?.onTableViewChangedQuantifiables()
@@ -467,8 +467,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     // MARK: -
     
     // for tap on normal sections and edit mode sections (2 different tableviews)
-    private func onSectionSelectedShared(section: Section) {
-        if editing {
+    fileprivate func onSectionSelectedShared(_ section: Section) {
+        if isEditing {
             topEditSectionControllerManager?.tableView = sectionsTableViewController?.tableView ?? listItemsTableViewController.tableView
             topEditSectionControllerManager?.expand(true)
             topEditSectionControllerManager?.controller?.section = section
@@ -484,23 +484,23 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     //        return UIStatusBarStyle.LightContent
     //    }
     
-    private func getTableViewInset() -> CGFloat {
+    fileprivate func getTableViewInset() -> CGFloat {
         return topBar.frame.height
     }
     
-    func onListItemsOrderChangedSection(tableViewListItems: [TableViewListItem]) {
+    func onListItemsOrderChangedSection(_ tableViewListItems: [TableViewListItem]) {
         fatalError("override")
     }
     
     /**
      Update price labels (total, done) using state in provider
      */
-    func updatePrices(listItemsFetchMode: ProviderFetchModus = .Both) {
+    func updatePrices(_ listItemsFetchMode: ProviderFetchModus = .both) {
         // override
         QL3("No override for updatePrices")
     }
     
-    private func addItem(listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
+    fileprivate func addItem(_ listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         
         if let currentList = self.currentList {
             Providers.listItemsProvider.add(listItemInput, status: status, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
@@ -514,7 +514,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
     }
     
-    private func onListItemAddedToProvider(savedListItem: ListItem, status: ListItemStatus, scrollToSelection: Bool, notifyRemote: Bool = true) {
+    fileprivate func onListItemAddedToProvider(_ savedListItem: ListItem, status: ListItemStatus, scrollToSelection: Bool, notifyRemote: Bool = true) {
         // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
         listItemsTableViewController.updateOrAddListItem(savedListItem, status: status, increment: true, scrollToSelection: scrollToSelection, notifyRemote: notifyRemote)
         onTableViewChangedQuantifiables()
@@ -523,7 +523,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // Note: don't use this to reorder sections, this doesn't update section order
     // Note: concerning status - this only updates the current status related data (quantity, order). This means quantity and order of possible items in the other status is not affected
-    private func updateItem(updatingListItem: ListItem, listItemInput: ListItemInput) {
+    fileprivate func updateItem(_ updatingListItem: ListItem, listItemInput: ListItemInput) {
         if let currentList = self.currentList {
             
             Providers.listItemsProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, true, successHandler {[weak self] (listItem, replaced) in guard let weakSelf = self else {return}
@@ -542,7 +542,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
     }
     
-    func onListItemDeleted(tableViewListItem: TableViewListItem) {
+    func onListItemDeleted(_ tableViewListItem: TableViewListItem) {
         Providers.listItemsProvider.remove(tableViewListItem.listItem, remote: true, resultHandler(onSuccess: {[weak self] in
             self?.onTableViewChangedQuantifiables()
             }, onErrorAdditional: {[weak self] result in
@@ -560,7 +560,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         topEditSectionControllerManager?.controller?.onClose()
     }
     
-    func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
+    func onAddGroup(_ group: ListItemGroup, onFinish: VoidFunction?) {
         if let list = currentList {
             
             // TODO save "group list item" don't desintegrate group immediatly
@@ -579,10 +579,10 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 }
             }, onError: {[weak self] result in guard let weakSelf = self else {return}
                 switch result.status {
-                case .IsEmpty:
+                case .isEmpty:
                     AlertPopup.show(title: trans("popup_title_group_is_empty"), message: trans("popup_group_is_empty"), controller: weakSelf)
                 default:
-                    self?.defaultErrorHandler()(providerResult: result)
+                    self?.defaultErrorHandler()(result)
                 }
             }))
         } else {
@@ -590,7 +590,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func onAddProduct(product: Product) {
+    func onAddProduct(_ product: Product) {
         if let list = currentList {
             Providers.listItemsProvider.addListItem(product, status: status, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
                 weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
@@ -600,14 +600,14 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
+    func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
-        func onEditListItem(input: ListItemInput, editingListItem: ListItem) {
+        func onEditListItem(_ input: ListItemInput, editingListItem: ListItem) {
             // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
             updateItem(editingListItem, listItemInput: input)
         }
         
-        func onAddListItem(input: ListItemInput) {
+        func onAddListItem(_ input: ListItemInput) {
             addItem(input, successHandler: nil)
         }
         
@@ -632,7 +632,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         return self.view
     }
     
-    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void) {
+    func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
         if let list = currentList {
             Providers.sectionProvider.sections([name], list: list, handler: successHandler {[weak self] sections in guard let weakSelf = self else {return}
                 if let section = sections.first {
@@ -663,11 +663,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         topBar.setLeftButtonModels([])
     }
     
-    func onRemovedSectionCategoryName(name: String) {
+    func onRemovedSectionCategoryName(_ name: String) {
         updatePossibleList()
     }
     
-    func onRemovedBrand(name: String) {
+    func onRemovedBrand(_ name: String) {
         updatePossibleList()
     }
     
@@ -694,7 +694,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // MARK: - EditSectionViewControllerDelegate
     
-    func onSectionUpdated(section: Section) {
+    func onSectionUpdated(_ section: Section) {
         // use table view of controller which is showing
         let tableView: UITableView = sectionsTableViewController?.tableView ?? listItemsTableViewController.tableView
         topEditSectionControllerManager?.tableView = tableView
@@ -710,7 +710,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         //        listItemsTableViewController.sectionsExpanded = sectionsTableViewController == nil
     }
     
-    private func sendActionToTopController(action: FLoatingButtonAction) {
+    fileprivate func sendActionToTopController(_ action: FLoatingButtonAction) {
         if topQuickAddControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.controller?.handleFloatingButtonAction(action)
         }
@@ -718,15 +718,15 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // MARK: - Reorder sections
     
-    private weak var sectionsTableViewController: ReorderSectionTableViewController?
-    private var lockToggleSectionsTableView: Bool = false // prevent condition in which user presses toggle too quickly many times and sectionsTableViewController doesn't go away
+    fileprivate weak var sectionsTableViewController: ReorderSectionTableViewController?
+    fileprivate var lockToggleSectionsTableView: Bool = false // prevent condition in which user presses toggle too quickly many times and sectionsTableViewController doesn't go away
     
     // Toggles between expanded and collapsed section mode. For this a second tableview with only sections is added or removed from foreground. Animates floating button.
     func toggleReorderSections() {
         setReorderSections(sectionsTableViewController == nil)
     }
     
-    private func setReorderSections(reorderSections: Bool) {
+    fileprivate func setReorderSections(_ reorderSections: Bool) {
         
         if !lockToggleSectionsTableView {
             lockToggleSectionsTableView = true
@@ -787,7 +787,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func onToggleReorderSections(isNowInReorderSections: Bool) {
+    func onToggleReorderSections(_ isNowInReorderSections: Bool) {
         // override
     }
     
@@ -802,11 +802,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func onSectionSelected(section: Section) {
+    func onSectionSelected(_ section: Section) {
         onSectionSelectedShared(section)
     }
     
-    func canRemoveSection(section: Section, can: Bool -> Void) {
+    func canRemoveSection(_ section: Section, can: @escaping (Bool) -> Void) {
         ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_section_confirm", section.name), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {
             can(true)
         }, onCancel: {
@@ -814,7 +814,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         })
     }
     
-    func onSectionRemoved(section: Section) {
+    func onSectionRemoved(_ section: Section) {
         listItemsTableViewController.removeSection(section.uuid)
         Providers.sectionProvider.remove(section, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
@@ -826,9 +826,9 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // MARK: - ExpandableTopViewControllerDelegate
     
-    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+    func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
         if controller is QuickAddViewController || controller is AddEditListItemViewController {
-            view.frame.origin.y = CGRectGetHeight(topBar.frame)
+            view.frame.origin.y = topBar.frame.height
         }
     }
     
@@ -836,7 +836,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
 //        topBar.setBackVisible(false)
         setDefaultLeftButtons()
         toggleButtonRotator.enabled = true
-        rightButtonsClosing()
+        _ = rightButtonsClosing()
         topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
         topQuickAddControllerManager?.controller?.onClose()
         topEditSectionControllerManager?.controller?.onClose()
@@ -846,7 +846,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     // MARK: - ListTopBarViewDelegate
     
     func onTopBarBackButtonTap() {
-        sendActionToTopController(.Back)
+        sendActionToTopController(.back)
     }
     
     func onTopBarTitleTap() {
@@ -861,37 +861,37 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     
-    private func topBarOnCloseExpandable() {
+    fileprivate func topBarOnCloseExpandable() {
         setDefaultLeftButtons()
         topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
     }
     
-    private func closeTopController() {
+    fileprivate func closeTopController() {
         topQuickAddControllerManager?.expand(false)
         toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()
         topBarOnCloseExpandable()
     }
     
-    func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
+    func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId) {
         switch buttonId {
-        case .Add:
+        case .add:
             SizeLimitChecker.checkListItemsSizeLimit(listItemsTableViewController.items.count, controller: self) {[weak self] in
                 if let weakSelf = self {
-                    weakSelf.sendActionToTopController(.Add)
+                    weakSelf.sendActionToTopController(.add)
                 }
             }
-        case .ToggleOpen:
-            toggleTopAddController()
-        case .Edit:
+        case .toggleOpen:
+            _ = toggleTopAddController()
+        case .edit:
             clearPossibleUndo()
-            let editing = !self.listItemsTableViewController.editing
+            let editing = !self.listItemsTableViewController.isEditing
             self.setEditing(editing, animated: true, tryCloseTopViewController: true)
         default: QL4("Not handled: \(buttonId)")
         }
     }
     
-    func onCenterTitleAnimComplete(center: Bool) {
+    func onCenterTitleAnimComplete(_ center: Bool) {
         if center {
             setDefaultLeftButtons()
             topBar.setRightButtonModels(rightButtonsDefault())
@@ -901,15 +901,15 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     // MARK: - Right buttons
     
     func rightButtonsDefault() -> [TopBarButtonModel] {
-        return [TopBarButtonModel(buttonId: .ToggleOpen)]
+        return [TopBarButtonModel(buttonId: .toggleOpen)]
     }
     
     func rightButtonsOpeningQuickAdd() -> [TopBarButtonModel] {
-        return [TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))]
+        return [TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))]
     }
 
     func rightButtonsClosingQuickAdd() -> [TopBarButtonModel] {
-        return [TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)]
+        return [TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)]
     }
     
     func rightButtonsClosing() -> [TopBarButtonModel] {
@@ -918,8 +918,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // MARK: - Notification
     
-    func onListRemovedNotification(note: NSNotification) {
-        guard let info = note.userInfo as? Dictionary<String, String> else {QL4("Invalid info: \(note)"); return}
+    func onListRemovedNotification(_ note: Foundation.Notification) {
+        guard let info = (note as NSNotification).userInfo as? Dictionary<String, String> else {QL4("Invalid info: \(note)"); return}
         guard let listUuid = info[NotificationKey.list] else {QL4("No list uuid: \(info)"); return}
         guard let currentList = currentList else {QL3("No current list, ignoring list removed notification."); return}
         
@@ -932,8 +932,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // MARK: - Websocket
     
-    func onWebsocketList(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+    func onWebsocketList(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 let listUuid = notification.obj
                 switch notification.verb {
@@ -958,8 +958,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     // This is called on batch list item update, which is used when reordering list items
-    func onWebsocketListItems(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteListItemsReorderResult>> {
+    func onWebsocketListItems(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteListItemsReorderResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .TodoOrder:
@@ -973,7 +973,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 print("Error: ViewController.onWebsocketAddListItems: no value")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<[ListItem]>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[ListItem]>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Add:
@@ -989,8 +989,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func onWebsocketListItem(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<ListItem>> {
+    func onWebsocketListItem(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ListItem>> {
             if let notification = info[WSNotificationValue] {
                 
                 let listItem = notification.obj
@@ -1009,7 +1009,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 print("Error: ViewController.onWebsocketUpdateListItem: no value")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 
                 let itemUuid = notification.obj
@@ -1025,7 +1025,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 QL4("No value")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteListItemIncrement>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteListItemIncrement>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Increment:
@@ -1038,7 +1038,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 QL4("Mo value")
             }
 
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<(result: RemoteSwitchListItemFullResult, switchedListItem: ListItem)>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<(result: RemoteSwitchListItemFullResult, switchedListItem: ListItem)>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                     
@@ -1064,7 +1064,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             }
             
             //            RemoteSwitchListItemFullResult
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .BuyCart:
@@ -1077,7 +1077,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 QL4("Mo value")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteSwitchAllListItemsLightResult>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteSwitchAllListItemsLightResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .SwitchAll:
@@ -1095,8 +1095,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func onWebsocketSection(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<[Section]>> {
+    func onWebsocketSection(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[Section]>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                     // There's no direct add of section
@@ -1115,7 +1115,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             } else {
                 QL4("no value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -1138,19 +1138,19 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func onWebsocketProduct(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+    func onWebsocketProduct(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Update:
                     // TODO!!!!! websocket add/update must send status also
-                    listItemsTableViewController.updateProduct(notification.obj, status: .Todo)
+                    listItemsTableViewController.updateProduct(notification.obj, status: .todo)
                 default: break // no error msg here, since we will receive .Add but not handle it in this view controller
                 }
             } else {
                 print("Error: ViewController.onWebsocketProduct: no value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 let productUuid = notification.obj
                 switch notification.verb {
@@ -1170,11 +1170,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func onWebsocketProductCategory(note: NSNotification) {
+    func onWebsocketProductCategory(_ note: Foundation.Notification) {
         
         // category udpate not relevant for list items since items show only section, not category. The add/edit has also only section
         
-        if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -1190,7 +1190,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func onIncomingGlobalSyncFinished(note: NSNotification) {
+    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         updatePossibleList()
     }

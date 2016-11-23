@@ -29,7 +29,7 @@ final public class Try<T> {
         self.init(success: nil, error: error)
     }
     
-    private init(success: T?, error: NSError?) {
+    fileprivate init(success: T?, error: NSError?) {
         self.success = success
         self.error = error
     }

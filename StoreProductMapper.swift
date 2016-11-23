@@ -11,7 +11,7 @@ import QorumLogs
 
 class StoreProductMapper {
     
-    class func productWithDB(dbStoreProduct: DBStoreProduct) -> StoreProduct {
+    class func productWithDB(_ dbStoreProduct: DBStoreProduct) -> StoreProduct {
         let product = ProductMapper.productWithDB(dbStoreProduct.product)
         return StoreProduct(
             uuid: dbStoreProduct.uuid,
@@ -24,7 +24,7 @@ class StoreProductMapper {
         )
     }
     
-    class func dbWithProduct(storeProduct: StoreProduct) -> DBStoreProduct {
+    class func dbWithProduct(_ storeProduct: StoreProduct) -> DBStoreProduct {
         let dbProduct = DBStoreProduct()
         dbProduct.uuid = storeProduct.uuid
         dbProduct.price = storeProduct.price
@@ -51,7 +51,7 @@ class StoreProductMapper {
 //        return productWithRemote(remoteProduct, product: ProductMapper.productWithRemote(product))
 //    }
     
-    class func productWithRemote(storeProduct: RemoteStoreProduct, product: Product) -> StoreProduct {
+    class func productWithRemote(_ storeProduct: RemoteStoreProduct, product: Product) -> StoreProduct {
         return StoreProduct(
             uuid: storeProduct.uuid,
             price: storeProduct.price,

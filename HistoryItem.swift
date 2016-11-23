@@ -41,7 +41,7 @@ class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
         self.removed = removed
     }
     
-    func same(rhs: HistoryItem) -> Bool {
+    func same(_ rhs: HistoryItem) -> Bool {
         return uuid == rhs.uuid
     }
     
@@ -50,7 +50,7 @@ class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return "[uuid: \(uuid), product: \(product), paidPrice: \(paidPrice), quantity: \(quantity), addedDate: \(addedDate), user: \(user), inventory: \(inventory)]"
     }
     
-    func equalsExcludingSyncAttributes(rhs: HistoryItem) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: HistoryItem) -> Bool {
         return uuid == rhs.uuid && product == rhs.product && addedDate == rhs.addedDate && quantity == rhs.quantity && inventory == rhs.inventory && user == rhs.user && paidPrice == rhs.paidPrice
     }
 }

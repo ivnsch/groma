@@ -32,16 +32,16 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
         self.removed = removed
     }
     
-    func same(gropItem: GroupItem) -> Bool {
+    func same(_ gropItem: GroupItem) -> Bool {
         return self.uuid == gropItem.uuid
     }
     
     var shortDebugDescription: String {
-        return "{\(self.dynamicType) product: \(self.product.name), quantity: \(self.quantity)}"
+        return "{\(type(of: self)) product: \(self.product.name), quantity: \(self.quantity)}"
     }
     
     var completeDebugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), quantity: \(self.quantity), product: \(self.product), group: \(self.group), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(self.removed)}"
+        return "{\(type(of: self)) uuid: \(self.uuid), quantity: \(self.quantity), product: \(self.product), group: \(self.group), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(self.removed)}"
     }
     
     var debugDescription: String {
@@ -49,7 +49,7 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
 //        return completeDebugDescription
     }
     
-    func copy(uuid uuid: String? = nil, quantity: Int? = nil, product: Product? = nil, order: Int? = nil) -> GroupItem {
+    func copy(uuid: String? = nil, quantity: Int? = nil, product: Product? = nil, group: ListItemGroup? = nil, order: Int? = nil) -> GroupItem {
         return GroupItem(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
@@ -60,11 +60,11 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
-    func incrementQuantityCopy(delta: Int) -> GroupItem {
+    func incrementQuantityCopy(_ delta: Int) -> GroupItem {
         return copy(quantity: quantity + delta)
     }
     
-    func equalsExcludingSyncAttributes(rhs: GroupItem) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: GroupItem) -> Bool {
         return uuid == rhs.uuid && quantity == rhs.quantity && product == rhs.product && group == rhs.group
     }
 }

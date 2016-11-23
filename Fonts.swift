@@ -10,21 +10,21 @@ import UIKit
 import QorumLogs
 
 enum FontType {
-    case Light, Regular, Bold
+    case light, regular, bold
 }
 
 enum FontSize {
-    case SuperSmall, VerySmall, Smaller, Small, Regular, Large
+    case superSmall, verySmall, smaller, small, regular, large
 }
 
 class Fonts {
 
-    static func fontForSizeCategory(fontType: Int) -> UIFont {
+    static func fontForSizeCategory(_ fontType: Int) -> UIFont {
         if let fontSize = LabelMore.mapToFontSize(fontType) { // TODO move this out of LabelMore
-            return UIFont.systemFontOfSize(fontSize)
+            return UIFont.systemFont(ofSize: fontSize)
         } else {
             QL3("No fond size for size category: \(fontType)")
-            return UIFont.systemFontOfSize(15) // return something
+            return UIFont.systemFont(ofSize: 15) // return something
         }
     }
     
@@ -42,78 +42,78 @@ class Fonts {
     static let verySmallSize: CGFloat = 13
     static let superSmallSize: CGFloat = 11
 
-    static var large: UIFont = {UIFont(name: fontName, size: largeSize) ?? UIFont.systemFontOfSize(largeSize)}()
-    static var regular: UIFont = {UIFont(name: fontName, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
-    static var small: UIFont = {UIFont(name: fontName, size: smallSize) ?? UIFont.systemFontOfSize(smallSize)}()
-    static var smaller: UIFont = {UIFont(name: fontName, size: smallerSize) ?? UIFont.systemFontOfSize(smallerSize)}()
-    static var verySmall: UIFont = {UIFont(name: fontName, size: verySmallSize) ?? UIFont.systemFontOfSize(verySmallSize)}()
-    static var superSmall: UIFont = {UIFont(name: fontName, size: superSmallSize) ?? UIFont.systemFontOfSize(superSmallSize)}()
+    static var large: UIFont = {UIFont(name: fontName, size: largeSize) ?? UIFont.systemFont(ofSize: largeSize)}()
+    static var regular: UIFont = {UIFont(name: fontName, size: regularSize) ?? UIFont.systemFont(ofSize: regularSize)}()
+    static var small: UIFont = {UIFont(name: fontName, size: smallSize) ?? UIFont.systemFont(ofSize: smallSize)}()
+    static var smaller: UIFont = {UIFont(name: fontName, size: smallerSize) ?? UIFont.systemFont(ofSize: smallerSize)}()
+    static var verySmall: UIFont = {UIFont(name: fontName, size: verySmallSize) ?? UIFont.systemFont(ofSize: verySmallSize)}()
+    static var superSmall: UIFont = {UIFont(name: fontName, size: superSmallSize) ?? UIFont.systemFont(ofSize: superSmallSize)}()
     
-    static var largeLight: UIFont = {UIFont(name: fontNameLight, size: largeSize) ?? UIFont.systemFontOfSize(largeSize)}()
-    static var regularLight: UIFont = {UIFont(name: fontNameLight, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
-    static var smallLight: UIFont = {UIFont(name: fontNameLight, size: smallSize) ?? UIFont.systemFontOfSize(smallSize)}()
-    static var smallerLight: UIFont = {UIFont(name: fontNameLight, size: smallerSize) ?? UIFont.systemFontOfSize(smallerSize)}()
-    static var verySmallLight: UIFont = {UIFont(name: fontNameLight, size: verySmallSize) ?? UIFont.systemFontOfSize(verySmallSize)}()
-    static var superSmallLight: UIFont = {UIFont(name: fontNameLight, size: superSmallSize) ?? UIFont.systemFontOfSize(superSmallSize)}()
+    static var largeLight: UIFont = {UIFont(name: fontNameLight, size: largeSize) ?? UIFont.systemFont(ofSize: largeSize)}()
+    static var regularLight: UIFont = {UIFont(name: fontNameLight, size: regularSize) ?? UIFont.systemFont(ofSize: regularSize)}()
+    static var smallLight: UIFont = {UIFont(name: fontNameLight, size: smallSize) ?? UIFont.systemFont(ofSize: smallSize)}()
+    static var smallerLight: UIFont = {UIFont(name: fontNameLight, size: smallerSize) ?? UIFont.systemFont(ofSize: smallerSize)}()
+    static var verySmallLight: UIFont = {UIFont(name: fontNameLight, size: verySmallSize) ?? UIFont.systemFont(ofSize: verySmallSize)}()
+    static var superSmallLight: UIFont = {UIFont(name: fontNameLight, size: superSmallSize) ?? UIFont.systemFont(ofSize: superSmallSize)}()
     
-    static var largeBold: UIFont = {UIFont(name: fontNameBold, size: largeSize) ?? UIFont.systemFontOfSize(largeSize)}()
-    static var regularBold: UIFont = {UIFont(name: fontNameBold, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
-    static var smallBold: UIFont = {UIFont(name: fontNameBold, size: smallSize) ?? UIFont.systemFontOfSize(smallSize)}()
-    static var smallerBold: UIFont = {UIFont(name: fontNameBold, size: smallerSize) ?? UIFont.systemFontOfSize(smallerSize)}()
-    static var verySmallBold: UIFont = {UIFont(name: fontNameBold, size: verySmallSize) ?? UIFont.systemFontOfSize(verySmallSize)}()
-    static var superSmallBold: UIFont = {UIFont(name: fontNameBold, size: superSmallSize) ?? UIFont.systemFontOfSize(superSmallSize)}()
+    static var largeBold: UIFont = {UIFont(name: fontNameBold, size: largeSize) ?? UIFont.systemFont(ofSize: largeSize)}()
+    static var regularBold: UIFont = {UIFont(name: fontNameBold, size: regularSize) ?? UIFont.systemFont(ofSize: regularSize)}()
+    static var smallBold: UIFont = {UIFont(name: fontNameBold, size: smallSize) ?? UIFont.systemFont(ofSize: smallSize)}()
+    static var smallerBold: UIFont = {UIFont(name: fontNameBold, size: smallerSize) ?? UIFont.systemFont(ofSize: smallerSize)}()
+    static var verySmallBold: UIFont = {UIFont(name: fontNameBold, size: verySmallSize) ?? UIFont.systemFont(ofSize: verySmallSize)}()
+    static var superSmallBold: UIFont = {UIFont(name: fontNameBold, size: superSmallSize) ?? UIFont.systemFont(ofSize: superSmallSize)}()
 
-    static func fontSize(heightDimension: HeightDimension, size: FontSize) -> CGFloat {
+    static func fontSize(_ heightDimension: HeightDimension, size: FontSize) -> CGFloat {
         switch heightDimension {
-        case .VerySmall: // iPhone 4
+        case .verySmall: // iPhone 4
             switch size {
-            case .SuperSmall: return 11
-            case .VerySmall: return 13
-            case .Smaller: return 14
-            case .Small: return 15
-            case .Regular: return 17
-            case .Large: return 19
+            case .superSmall: return 11
+            case .verySmall: return 13
+            case .smaller: return 14
+            case .small: return 15
+            case .regular: return 17
+            case .large: return 19
             }
 
-        case .Small: // iPhone 5
+        case .small: // iPhone 5
             switch size {
-            case .SuperSmall: return 10
-            case .VerySmall: return 11
-            case .Smaller: return 12
-            case .Small: return 13
-            case .Regular: return 15
-            case .Large: return 17
+            case .superSmall: return 10
+            case .verySmall: return 11
+            case .smaller: return 12
+            case .small: return 13
+            case .regular: return 15
+            case .large: return 17
             }
-        case .Middle: // iPhone 6
+        case .middle: // iPhone 6
             switch size {
-            case .SuperSmall: return 11
-            case .VerySmall: return 13
-            case .Smaller: return 14
-            case .Small: return 15
-            case .Regular: return 17
-            case .Large: return 19
+            case .superSmall: return 11
+            case .verySmall: return 13
+            case .smaller: return 14
+            case .small: return 15
+            case .regular: return 17
+            case .large: return 19
             }
-        case .Large: // iPhone 6+
+        case .large: // iPhone 6+
             switch size {
-            case .SuperSmall: return 11
-            case .VerySmall: return 13
-            case .Smaller: return 14
-            case .Small: return 15
-            case .Regular: return 17
-            case .Large: return 19
+            case .superSmall: return 11
+            case .verySmall: return 13
+            case .smaller: return 14
+            case .small: return 15
+            case .regular: return 17
+            case .large: return 19
             }
         }
     }
     
-    private static func fontName(type: FontType) -> String {
+    fileprivate static func fontName(_ type: FontType) -> String {
         switch type {
-        case .Light: return fontNameLight
-        case .Regular: return fontName
-        case .Bold: return fontNameBold
+        case .light: return fontNameLight
+        case .regular: return fontName
+        case .bold: return fontNameBold
         }
     }
     
-    static func font(heightDimension: HeightDimension, size: FontSize, type: FontType) -> UIFont {
+    static func font(_ heightDimension: HeightDimension, size: FontSize, type: FontType) -> UIFont {
         
         // TODO optimisation: lazy variables for fonts?
         // would need to have a static variable for each variant, like this:
@@ -133,7 +133,7 @@ class Fonts {
 //        }
         
         let size = fontSize(heightDimension, size: size)
-        return UIFont(name: fontName(type), size: size) ?? UIFont.systemFontOfSize(size)
+        return UIFont(name: fontName(type), size: size) ?? UIFont.systemFont(ofSize: size)
     }
     //////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////

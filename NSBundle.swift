@@ -8,9 +8,9 @@
 
 import UIKit
 
-extension NSBundle {
+extension Bundle {
 
-    static func loadView(name: String, owner: AnyObject!) -> UIView? {
-        return NSBundle.mainBundle().loadNibNamed(name, owner: owner, options: nil).first as? UIView
+    static func loadView(_ name: String, owner: AnyObject!) -> UIView? {
+        return Bundle.main.loadNibNamed(name, owner: owner, options: nil)?.first as? UIView
     }
 }

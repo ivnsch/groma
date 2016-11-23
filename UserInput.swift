@@ -22,6 +22,6 @@ class UserInput {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType), email: \(self.email), password: \(self.password), firstName: \(self.firstName), lastName: \(self.lastName)}"
+        return "{\(type(of: self)), email: \(self.email), password: \(self.password), firstName: \(self.firstName), lastName: \(self.lastName)}"
     }
 }

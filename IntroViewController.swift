@@ -11,7 +11,7 @@ import SwipeView
 import QorumLogs
 
 enum IntroMode {
-    case Launch, More
+    case launch, more
 }
 
 class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, SwipeViewDataSource, SwipeViewDelegate {
@@ -27,17 +27,17 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     @IBOutlet weak var verticalCenterSlideConstraint: NSLayoutConstraint!
     
-    var mode: IntroMode = .Launch
+    var mode: IntroMode = .launch
     
-    private var pageModels: [(key: String, imageName: String)] = []
+    fileprivate var pageModels: [(key: String, imageName: String)] = []
     
     var onCreateExampleList: VoidFunction?
     
-    private var finishedSlider = false {
+    fileprivate var finishedSlider = false {
         didSet {
-            if mode == .Launch {
-                skipButton.setTitle(trans("intro_button_start"), forState: .Normal)
-                skipButton.setTitleColor(Theme.black, forState: .Normal)
+            if mode == .launch {
+                skipButton.setTitle(trans("intro_button_start"), for: UIControlState())
+                skipButton.setTitleColor(Theme.black, for: UIControlState())
             }
         }
     }
@@ -55,17 +55,17 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         
         pageControl.numberOfPages = pageModels.count
         
-        if mode == .Launch {
+        if mode == .launch {
             
             let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
 //            let initActions = true
             
             QL1("Will init database: \(initActions)")
 
-            func toggleButtons(canSkip: Bool) {
-                progressIndicator.hidden = canSkip
-                skipButton.hidden = !canSkip
-                if !progressIndicator.hidden {
+            func toggleButtons(_ canSkip: Bool) {
+                progressIndicator.isHidden = canSkip
+                skipButton.isHidden = !canSkip
+                if !progressIndicator.isHidden {
                     progressIndicator.startAnimating()
                 }
             }
@@ -82,8 +82,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             
         } else {
             navigationItem.title = trans("title_intro")
-            skipButton.hidden = true
-            progressIndicator.hidden = true
+            skipButton.isHidden = true
+            progressIndicator.isHidden = true
         }
     }
     
@@ -91,7 +91,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 //        startLogin(.Normal)
 //    }
     
-    private func startLogin(mode: LoginControllerMode) {
+    fileprivate func startLogin(_ mode: LoginControllerMode) {
         let loginController = UIStoryboard.loginViewController()
         loginController.delegate = self
         loginController.onUIReady = {
@@ -101,9 +101,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         self.navigationController?.pushViewController(loginController, animated: true)
     }
 
-    private func initDatabase(onComplete: VoidFunction) {
+    fileprivate func initDatabase(_ onComplete: @escaping VoidFunction) {
 
-        func prefillDatabase(onFinish: VoidFunction? = nil) {
+        func prefillDatabase(_ onFinish: VoidFunction? = nil) {
             let lang = LangManager().appLang // note that the prefill items are left permanently in whatever lang the device was when the user installed the app
             
             SuggestionsPrefiller().prefill(lang) {success in
@@ -112,12 +112,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }
         }
         
-        func initDefaultInventory(onFinish: (Inventory? -> Void)? = nil) {
+        func initDefaultInventory(_ onFinish: ((Inventory?) -> Void)? = nil) {
             Providers.inventoryProvider.inventories(false, resultHandler(onSuccess: {[weak self] inventories in
                 
                 if let weakSelf = self {
                     if inventories.isEmpty {
-                        let inventory = Inventory(uuid: NSUUID().UUIDString, name: trans("first_inventory_name"), bgColor: UIColor.flatBlueColor(), order: 0)
+                        let inventory = Inventory(uuid: UUID().uuidString, name: trans("first_inventory_name"), bgColor: UIColor.flatBlue, order: 0)
                         Providers.inventoryProvider.addInventory(inventory, remote: true, weakSelf.resultHandler(onSuccess: {
                             onFinish?(inventory)
                             }, onError: {result in
@@ -137,12 +137,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }))
         }
         
-        func initExampleGroup(onFinish: VoidFunction? = nil) {
+        func initExampleGroup(_ onFinish: VoidFunction? = nil) {
             Providers.listItemGroupsProvider.groups(resultHandler(onSuccess: {[weak self] groups in guard let weakSelf = self else {onFinish?(); return}
                 
                 if groups.isEmpty {
                     
-                    let exampleGroup = ListItemGroup(uuid: NSUUID().UUIDString, name: trans("example_group_fruits_salad"), bgColor: UIColor.flatYellowColor(), order: 0)
+                    let exampleGroup = ListItemGroup(uuid: UUID().uuidString, name: trans("example_group_fruits_salad"), bgColor: UIColor.flatYellow, order: 0)
                     
                     let ingredients: [(name: String, quantity: Int)] = [
                         (trans("pr_pineapple"), 1),
@@ -163,7 +163,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                             onFinish?()
                             
                         } else {
-                            Providers.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {
+                            Providers.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
                                 
                                 let productsIngredients: [(product: Product, quantity: Int)] = ingredients.flatMap {ingredient in
                                     if let product = products.findFirst({$0.name == ingredient.name}) {
@@ -174,10 +174,10 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                 }
                                 
                                 let groupItems = productsIngredients.map {productIngredient in
-                                    GroupItem(uuid: NSUUID().UUIDString, quantity: productIngredient.quantity, product: productIngredient.product, group: exampleGroup)
+                                    GroupItem(uuid: NSUUID().uuidString, quantity: productIngredient.quantity, product: productIngredient.product, group: exampleGroup)
                                 }
                                 
-                                Providers.listItemGroupsProvider.add(groupItems, group: exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {
+                                Providers.listItemGroupsProvider.add(groupItems, group: exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in 
                                     QL2("Finish adding example group")
                                     onFinish?()
                                     
@@ -202,12 +202,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }))
         }
 
-        func initExampleList(inventory: Inventory, onFinish: VoidFunction? = nil) {
+        func initExampleList(_ inventory: Inventory, onFinish: VoidFunction? = nil) {
             Providers.listProvider.lists(false, resultHandler(onSuccess: {[weak self] lists in guard let weakSelf = self else {onFinish?(); return}
                 
                 if lists.isEmpty {
                     
-                    let exampleList = List(uuid: NSUUID().UUIDString, name: trans("example_list_first_list"), bgColor: UIColor.flatOrangeColor(), order: 0, inventory: inventory, store: nil)
+                    let exampleList = List(uuid: UUID().uuidString, name: trans("example_list_first_list"), bgColor: UIColor.flatOrange, order: 0, inventory: inventory, store: nil)
                     
                     let productsWithQuantity: [(name: String, quantity: Int)] = [
                         (trans("pr_peaches"), 6),
@@ -235,12 +235,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                     }
                                 }
                                 
-                                let storeProductInput = StoreProductInput(price: 1, baseQuantity: 1, unit: .None)
+                                let storeProductInput = StoreProductInput(price: 1, baseQuantity: 1, unit: .none)
                                 let prototypes = productsIngredients.map {
                                     ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color, storeProductInput: storeProductInput)
                                 }
                                 
-                                Providers.listItemsProvider.add(prototypes, status: .Todo, list: exampleList, note: nil, order: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
+                                Providers.listItemsProvider.add(prototypes, status: .todo, list: exampleList, note: nil, order: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
                                     QL2("Finish adding example list")
                                     
                                     self?.onCreateExampleList?()
@@ -296,8 +296,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 //    }
 
     
-    @IBAction func skipTapped(sender: UIButton) {
-        if mode == .Launch {
+    @IBAction func skipTapped(_ sender: UIButton) {
+        if mode == .launch {
             PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
             exit()
         }
@@ -305,22 +305,22 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     // MARK: - RegisterDelegate
     
-    func onRegisterSuccess(email: String) {
-        self.navigationController?.popViewControllerAnimated(true)
-        startLogin(.AfterRegister)
+    func onRegisterSuccess(_ email: String) {
+        _ = navigationController?.popViewController(animated: true)
+        startLogin(.afterRegister)
     }
     
     func onSocialSignupInRegisterScreenSuccess() {
         // TODO review this - not tested. For now no signup buttons in intro so we let it like this, maybe we want to reenable it later.
-        self.navigationController?.popViewControllerAnimated(true)
-        startLogin(.AfterRegister)
+        _ = navigationController?.popViewController(animated: true)
+        startLogin(.afterRegister)
     }
     
     // MARK: -
     
-    private func exit() {
-        self.modalTransitionStyle = .CrossDissolve
-        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+    fileprivate func exit() {
+        self.modalTransitionStyle = .crossDissolve
+        presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     func onLoginSuccess() {
@@ -333,13 +333,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     // MARK: - SwipeViewDataSource
     
-    func numberOfItemsInSwipeView(swipeView: SwipeView!) -> Int {
+    func numberOfItems(in swipeView: SwipeView!) -> Int {
         return pageModels.count
     }
     
-    func swipeView(swipeView: SwipeView!, viewForItemAtIndex index: Int, reusingView view: UIView!) -> UIView! {
+    func swipeView(_ swipeView: SwipeView!, viewForItemAt index: Int, reusing view: UIView!) -> UIView! {
     
-        let v = (view ?? NSBundle.loadView("IntroPageView", owner: self)!) as! IntroPageView
+        let v = (view ?? Bundle.loadView("IntroPageView", owner: self)!) as! IntroPageView
         
         let pageModel = pageModels[index]
         
@@ -352,7 +352,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 
     // MARK: - SwipeViewDelegate
     
-    func swipeViewCurrentItemIndexDidChange(swipeView: SwipeView!) {
+    func swipeViewCurrentItemIndexDidChange(_ swipeView: SwipeView!) {
         pageControl.currentPage = swipeView.currentItemIndex
         if swipeView.currentItemIndex == pageModels.count - 1 {
             if !finishedSlider {
@@ -361,7 +361,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
     }
     
-    func swipeViewItemSize(swipeView: SwipeView!) -> CGSize {
+    func swipeViewItemSize(_ swipeView: SwipeView!) -> CGSize {
         return swipeView.frame.size
     }
     

@@ -15,9 +15,9 @@ struct RemoteSwitchAllListItemsLightResult: ResponseObjectSerializable, CustomDe
     
     init?(representation: AnyObject) {
         guard
-            let updateObj = representation.valueForKeyPath("update"),
-            let update = RemoteSwitchAllListItemsLightUpdate(representation: updateObj),
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
+            let updateObj = representation.value(forKeyPath: "update"),
+            let update = RemoteSwitchAllListItemsLightUpdate(representation: updateObj as AnyObject),
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -27,7 +27,7 @@ struct RemoteSwitchAllListItemsLightResult: ResponseObjectSerializable, CustomDe
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) update: \(update), lastUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) update: \(update), lastUpdate: \(lastUpdate)}"
     }
 }
 
@@ -40,11 +40,11 @@ struct RemoteSwitchAllListItemsLightUpdate: ResponseObjectSerializable, CustomDe
     
     init?(representation: AnyObject) {
         guard
-            let srcStatusInt = representation.valueForKeyPath("srcStatus") as? Int,
+            let srcStatusInt = representation.value(forKeyPath: "srcStatus") as? Int,
             let srcStatus = ListItemStatus(rawValue: srcStatusInt),
-            let dstStatusInt = representation.valueForKeyPath("dstStatus") as? Int,
+            let dstStatusInt = representation.value(forKeyPath: "dstStatus") as? Int,
             let dstStatus = ListItemStatus(rawValue: dstStatusInt),
-            let listUuid = representation.valueForKeyPath("listUuid") as? String
+            let listUuid = representation.value(forKeyPath: "listUuid") as? String
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -55,7 +55,7 @@ struct RemoteSwitchAllListItemsLightUpdate: ResponseObjectSerializable, CustomDe
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) srcStatus: \(srcStatus), dstStatus: \(dstStatus), listUuid: \(listUuid)}"
+        return "{\(type(of: self)) srcStatus: \(srcStatus), dstStatus: \(dstStatus), listUuid: \(listUuid)}"
     }
 }
 

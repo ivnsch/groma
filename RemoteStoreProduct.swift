@@ -20,13 +20,13 @@ struct RemoteStoreProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let price = representation.valueForKeyPath("price") as? Float,
-            let baseQuantity = representation.valueForKeyPath("baseQuantity") as? Float,
-            let unit = representation.valueForKeyPath("unit") as? Int,
-            let store = representation.valueForKeyPath("store") as? String,
-            let productUuid = representation.valueForKeyPath("productUuid") as? String,
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let price = representation.value(forKeyPath: "price") as? Float,
+            let baseQuantity = representation.value(forKeyPath: "baseQuantity") as? Float,
+            let unit = representation.value(forKeyPath: "unit") as? Int,
+            let store = representation.value(forKeyPath: "store") as? String,
+            let productUuid = representation.value(forKeyPath: "productUuid") as? String,
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -40,9 +40,9 @@ struct RemoteStoreProduct: ResponseObjectSerializable, ResponseCollectionSeriali
         self.lastUpdate = Int64(lastUpdate)
     }
     
-    static func collection(representation: AnyObject) -> [RemoteStoreProduct]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteStoreProduct]? {
         var products = [RemoteStoreProduct]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let product = RemoteStoreProduct(representation: obj) {
                 products.append(product)
             } else {
@@ -53,7 +53,7 @@ struct RemoteStoreProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), price: \(price), baseQuantity: \(baseQuantity), unit: \(unit), store: \(store), listUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) uuid: \(uuid), price: \(price), baseQuantity: \(baseQuantity), unit: \(unit), store: \(store), listUpdate: \(lastUpdate)}"
     }
 }
 

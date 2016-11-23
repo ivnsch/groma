@@ -13,16 +13,16 @@ class RemoteUserProvider {
     
     // TODO refactor providers to return remoteresult. mapping to try and NSError seems nonsensical
     
-    func login(loginData: LoginData, handler: RemoteResult<RemoteLoginResult> -> ()) {
+    func login(_ loginData: LoginData, handler: @escaping (RemoteResult<RemoteLoginResult>) -> ()) {
         let parameters: [String: AnyObject] = [
-            "email": loginData.email,
-            "password": loginData.password
+            "email": loginData.email as AnyObject,
+            "password": loginData.password as AnyObject
         ]
-        RemoteProvider.request(.POST, Urls.login, parameters) {[weak self] (result: RemoteResult<RemoteLoginResult>) in
+        RemoteProvider.request(.post, Urls.login, parameters) {[weak self] (result: RemoteResult<RemoteLoginResult>) in
             if let successResult = result.successResult {
                 self?.storeToken(successResult.token)
             } else {
-                if result.status != .InvalidCredentials {
+                if result.status != .invalidCredentials {
                     QL4("No token. Result: \(result)")
                 }
             }
@@ -30,11 +30,11 @@ class RemoteUserProvider {
         }
     }
     
-    func register(user: UserInput, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func register(_ user: UserInput, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
         
         let parameters = self.toRequestParams(user)
         
-        RemoteProvider.request(.POST, Urls.register, parameters) {(result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.request(.post, Urls.register, parameters) {(result: RemoteResult<NoOpSerializable>) in
             if result.success {
 
             } else {
@@ -44,8 +44,8 @@ class RemoteUserProvider {
         }
     }
     
-    func ping(handler: RemoteResult<RemotePingResult> -> ()) {
-        RemoteProvider.authenticatedRequest(.GET, Urls.ping) {(result: RemoteResult<RemotePingResult>) in
+    func ping(_ handler: @escaping (RemoteResult<RemotePingResult>) -> ()) {
+        RemoteProvider.authenticatedRequest(.get, Urls.ping) {(result: RemoteResult<RemotePingResult>) in
             if result.success {
                 if let successResult = result.successResult {
                     AccessTokenHelper.storeToken(successResult.token) // update (replace) the token
@@ -58,21 +58,21 @@ class RemoteUserProvider {
         }
     }
     
-    func isRegistered(email: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.POST, Urls.isRegistered + "/\(email)") {(result: RemoteResult<NoOpSerializable>) in
+    func isRegistered(_ email: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.post, Urls.isRegistered + "/\(email)") {(result: RemoteResult<NoOpSerializable>) in
             handler(result)
         }
     }
     
-    func forgotPassword(email: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        let parameters = ["email": email, "foo": ""] // foo is a filler parameter bc of a bug in the server
-        RemoteProvider.request(.POST, Urls.forgotPassword, parameters) {result in
+    func forgotPassword(_ email: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        let parameters: [String: AnyObject] = ["email": email as AnyObject, "foo": "" as AnyObject] // foo is a filler parameter bc of a bug in the server
+        RemoteProvider.request(.post, Urls.forgotPassword, parameters) {result in
             handler(result)
         }
     }
     
-    func removeAccount(handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.removeAccount) {(result: RemoteResult<NoOpSerializable>) in
+    func removeAccount(_ handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.removeAccount) {(result: RemoteResult<NoOpSerializable>) in
             if result.success {
                 AccessTokenHelper.removeToken()
             }
@@ -80,21 +80,21 @@ class RemoteUserProvider {
         }
     }
     
-    func findAllKnownSharedUsers(handler: RemoteResult<[RemoteSharedUser]> -> Void) {
-        RemoteProvider.authenticatedRequestArray(.GET, Urls.allKnownSharedUsers) {(result: RemoteResult<[RemoteSharedUser]>) in
+    func findAllKnownSharedUsers(_ handler: @escaping (RemoteResult<[RemoteSharedUser]>) -> Void) {
+        RemoteProvider.authenticatedRequestArray(.get, Urls.allKnownSharedUsers) {(result: RemoteResult<[RemoteSharedUser]>) in
             handler(result)
         }
     }
     
-    func logout(handler: RemoteResult<NoOpSerializable> -> ()) {
+    func logout(_ handler: (RemoteResult<NoOpSerializable>) -> ()) {
         // with JWT we just have to remove token from client no need to call the server TODO verify this
         AccessTokenHelper.removeToken()
-        handler(RemoteResult<NoOpSerializable>(status: .Success))
+        handler(RemoteResult<NoOpSerializable>(status: .success))
     }
     
-    func authenticateWithFacebook(token: String, handler: RemoteResult<RemoteSocialLoginResult> -> ()) {
-        let parameters = ["access_token": token]
-        RemoteProvider.request(.POST, Urls.authFacebook, parameters) {[weak self] (result: RemoteResult<RemoteSocialLoginResult>) in
+    func authenticateWithFacebook(_ token: String, handler: @escaping (RemoteResult<RemoteSocialLoginResult>) -> ()) {
+        let parameters: [String: AnyObject] = ["access_token": token as AnyObject]
+        RemoteProvider.request(.post, Urls.authFacebook, parameters) {[weak self] (result: RemoteResult<RemoteSocialLoginResult>) in
             if let successResult = result.successResult {
                 self?.storeToken(successResult.token)
             }
@@ -102,9 +102,9 @@ class RemoteUserProvider {
         }
     }
 
-    func authenticateWithGoogle(token: String, handler: RemoteResult<RemoteSocialLoginResult> -> ()) {
-        let parameters = ["access_token": token]
-        RemoteProvider.request(.POST, Urls.authGoogle, parameters) {[weak self] (result: RemoteResult<RemoteSocialLoginResult>) in
+    func authenticateWithGoogle(_ token: String, handler: @escaping (RemoteResult<RemoteSocialLoginResult>) -> ()) {
+        let parameters: [String: AnyObject] = ["access_token": token as AnyObject]
+        RemoteProvider.request(.post, Urls.authGoogle, parameters) {[weak self] (result: RemoteResult<RemoteSocialLoginResult>) in
             if let successResult = result.successResult {
                 self?.storeToken(successResult.token)
             }
@@ -112,16 +112,16 @@ class RemoteUserProvider {
         }
     }
     
-    private func storeToken(token: String) {
+    fileprivate func storeToken(_ token: String) {
         AccessTokenHelper.storeToken(token)
     }
     
-    func toRequestParams(user: UserInput) -> [String: AnyObject] {
+    func toRequestParams(_ user: UserInput) -> [String: AnyObject] {
         return [
-            "email": user.email,
-            "firstName": user.firstName,
-            "lastName": user.lastName,
-            "password": user.password
+            "email": user.email as AnyObject,
+            "firstName": user.firstName as AnyObject,
+            "lastName": user.lastName as AnyObject,
+            "password": user.password as AnyObject
         ]
     }
 

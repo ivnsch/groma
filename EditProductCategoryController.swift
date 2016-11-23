@@ -10,7 +10,7 @@ import UIKit
 import SwiftValidator
 
 protocol EditProductCategoryControllerDelegate: class {
-    func onCategoryUpdated(brand: AddEditCategoryControllerEditingData)
+    func onCategoryUpdated(_ brand: AddEditCategoryControllerEditingData)
 }
 
 class EditProductCategoryController: UIViewController, FlatColorPickerControllerDelegate {
@@ -20,14 +20,14 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
     
     var open: Bool = false
     
-    private var validator: Validator?
+    fileprivate var validator: Validator?
     
-    private var showingColorPicker: FlatColorPickerController?
+    fileprivate var showingColorPicker: FlatColorPickerController?
 
     var category: AddEditCategoryControllerEditingData? {
         didSet {
             nameTextField.text = category?.category.name
-            categoryColorButton.imageView?.tintColor = category?.category.color ?? UIColor.blackColor()
+            categoryColorButton.imageView?.tintColor = category?.category.color ?? UIColor.black
         }
     }
     
@@ -41,7 +41,7 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
         nameTextField.becomeFirstResponder()
     }
     
-    private func initValidator() {
+    fileprivate func initValidator() {
         let validator = Validator()
         // TODO!!!! crash here (also had this issue with the top edit section controller why??) maybe the fact we add first the view and then child controller, in expandable controller (no idea!)
         validator.registerField(nameTextField, rules: [MinLengthRule(length: 1, message: "validation_product_category_name_not_empty")])
@@ -56,19 +56,17 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
         }
         
         if let errors = validator.validate() {
-            for (field, _) in errors {
-                field.showValidationError()
-                presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            for (_, error) in errors {
+                error.field.showValidationError()
+                present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             }
             
         } else {
-            if let lastErrors = validator.lastErrors {
-                for (field, _) in lastErrors {
-                    field.clearValidationError()
-                }
+            for (_, error) in validator.errors {
+                error.field.clearValidationError()
             }
             
-            if let updatedName = nameTextField.text, color = categoryColorButton.imageView?.tintColor {
+            if let updatedName = nameTextField.text, let color = categoryColorButton.imageView?.tintColor {
                 
                 let updatedCategory = category.category.copy(name: updatedName, color: color)
                 let updated = AddEditCategoryControllerEditingData(category: updatedCategory, indexPath: category.indexPath)
@@ -88,29 +86,29 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
         let picker = UIStoryboard.listColorPicker()
         self.view.layoutIfNeeded() // TODO is this necessary? don't think so check and remove
         
-        if let parentViewController = parentViewController {
+        if let parentViewController = parent {
             
             let topBarHeight: CGFloat = 64
             
-            picker.view.frame = CGRectMake(0, topBarHeight, parentViewController.view.frame.width, parentViewController.view.frame.height - topBarHeight)
+            picker.view.frame = CGRect(x: 0, y: topBarHeight, width: parentViewController.view.frame.width, height: parentViewController.view.frame.height - topBarHeight)
             
             parentViewController.addChildViewControllerAndView(picker) // add to superview (lists controller) because it has to occupy full space (navbar - tab)
             picker.delegate = self
             showingColorPicker = picker
             
-            let buttonPointInParent = parentViewController.view.convertPoint(CGPointMake(categoryColorButton.center.x, categoryColorButton.center.y - topBarHeight), fromView: view)
+            let buttonPointInParent = parentViewController.view.convert(CGPoint(x: categoryColorButton.center.x, y: categoryColorButton.center.y - topBarHeight), from: view)
             let fractionX = buttonPointInParent.x / parentViewController.view.frame.width
             let fractionY = buttonPointInParent.y / (parentViewController.view.frame.height - topBarHeight)
             
-            picker.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            picker.view.layer.anchorPoint = CGPoint(x: fractionX, y: fractionY)
             
-            picker.view.frame = CGRectMake(0, topBarHeight, parentViewController.view.frame.width, parentViewController.view.frame.height - topBarHeight)
+            picker.view.frame = CGRect(x: 0, y: topBarHeight, width: parentViewController.view.frame.width, height: parentViewController.view.frame.height - topBarHeight)
             
-            picker.view.transform = CGAffineTransformMakeScale(0, 0)
+            picker.view.transform = CGAffineTransform(scaleX: 0, y: 0)
             
-            UIView.animateWithDuration(0.3) {
-                picker.view.transform = CGAffineTransformMakeScale(1, 1)
-            }
+            UIView.animate(withDuration: 0.3, animations: {
+                picker.view.transform = CGAffineTransform(scaleX: 1, y: 1)
+            }) 
             
             view.endEditing(true)
             
@@ -122,7 +120,7 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
     
     // MARK: - FlatColorPickerControllerDelegate
     
-    func onColorPicked(color: UIColor) {
+    func onColorPicked(_ color: UIColor) {
         dismissColorPicker(color)
     }
     
@@ -130,28 +128,28 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
 //        dismissColorPicker(nil) // not used see FIXME in FlatColorPickerController.viewDidLoad
     }
     
-    private func dismissColorPicker(selectedColor: UIColor?) {
+    fileprivate func dismissColorPicker(_ selectedColor: UIColor?) {
         if let showingColorPicker = showingColorPicker {
             
-            UIView.animateWithDuration(0.3, animations: {
-                showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
+            UIView.animate(withDuration: 0.3, animations: {
+                showingColorPicker.view.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
                 
                 }, completion: {[weak self] finished in
                     self?.showingColorPicker = nil
                     self?.showingColorPicker?.removeFromParentViewControllerWithView()
                     
-                    UIView.animateWithDuration(0.3) {
+                    UIView.animate(withDuration: 0.3, animations: {
                         if let selectedColor = selectedColor {
                             self?.categoryColorButton.tintColor = selectedColor
                             self?.categoryColorButton.imageView?.tintColor = selectedColor
                         }
-                    }
-                    UIView.animateWithDuration(0.15) {
-                        self?.categoryColorButton.transform = CGAffineTransformMakeScale(2, 2)
-                        UIView.animateWithDuration(0.15) {
-                            self?.categoryColorButton.transform = CGAffineTransformMakeScale(1, 1)
-                        }
-                    }
+                    }) 
+                    UIView.animate(withDuration: 0.15, animations: {
+                        self?.categoryColorButton.transform = CGAffineTransform(scaleX: 2, y: 2)
+                        UIView.animate(withDuration: 0.15, animations: {
+                            self?.categoryColorButton.transform = CGAffineTransform(scaleX: 1, y: 1)
+                        }) 
+                    }) 
 
                     self?.nameTextField.becomeFirstResponder()
                 }

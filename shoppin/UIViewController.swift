@@ -13,26 +13,26 @@ extension UIViewController {
 
     // MARK: - Hierachy
     
-    func addChildViewControllerAndView(viewController: UIViewController) {
+    func addChildViewControllerAndView(_ viewController: UIViewController) {
         self.addChildViewControllerAndView(viewController, viewIndex: self.view.subviews.count)
     }
 
-    func addChildViewControllerAndViewFill(viewController: UIViewController) {
+    func addChildViewControllerAndViewFill(_ viewController: UIViewController) {
         self.addChildViewControllerAndView(viewController, viewIndex: self.view.subviews.count)
         viewController.view.fillSuperview()
     }
 
-    func addChildViewControllerAndView(viewController: UIViewController, viewIndex:Int) {
+    func addChildViewControllerAndView(_ viewController: UIViewController, viewIndex:Int) {
         self.addChildViewController(viewController)
         
-        self.view.insertSubview(viewController.view, atIndex: viewIndex)
+        self.view.insertSubview(viewController.view, at: viewIndex)
         
-        viewController.didMoveToParentViewController(self)
+        viewController.didMove(toParentViewController: self)
     }
 
-    func addChildViewControllerAndMove(viewController: UIViewController) {
+    func addChildViewControllerAndMove(_ viewController: UIViewController) {
         addChildViewController(viewController)
-        viewController.didMoveToParentViewController(self)
+        viewController.didMove(toParentViewController: self)
     }
     
     func removeFromParentViewControllerWithView() {
@@ -53,22 +53,22 @@ extension UIViewController {
 
     // MARK: - Provider result handling
     
-    func successHandler(onSuccess: () -> ()) -> ((providerResult: ProviderResult<Any>) -> ()) {
+    func successHandler(_ onSuccess: @escaping () -> ()) -> ((_ providerResult: ProviderResult<Any>) -> ()) {
         return self.resultHandler(onSuccess: onSuccess, onError: nil)
     }
     
-    func successHandler<T>(onSuccess: (T) -> ()) -> ((providerResult: ProviderResult<T>) -> ()) {
+    func successHandler<T>(_ onSuccess: @escaping (T) -> ()) -> ((_ providerResult: ProviderResult<T>) -> ()) {
         return self.resultHandler(onSuccess: onSuccess, onError: nil)
     }
 
-    func resultHandler(resetProgress resetProgress: Bool = true, onSuccess: VoidFunction, onErrorAdditional: ((ProviderResult<Any>) -> Void)) -> (providerResult: ProviderResult<Any>) -> Void {
+    func resultHandler(resetProgress: Bool = true, onSuccess: @escaping VoidFunction, onErrorAdditional: @escaping ((ProviderResult<Any>) -> Void)) -> (_ providerResult: ProviderResult<Any>) -> Void {
         return {[weak self] providerResult in
             if providerResult.success {
                 onSuccess()
                 
             } else {
                 onErrorAdditional(providerResult)
-                self?.defaultErrorHandler()(providerResult: providerResult)
+                self?.defaultErrorHandler()(providerResult)
             }
             if resetProgress {
                 self?.progressVisible(false)
@@ -77,19 +77,19 @@ extension UIViewController {
     }
 
     // Result handler for result with payload
-    func resultHandler<T>(resetProgress resetProgress: Bool = true, onSuccess: (T) -> Void, onErrorAdditional: ((ProviderResult<T>) -> Void)) -> (providerResult: ProviderResult<T>) -> Void {
+    func resultHandler<T>(resetProgress: Bool = true, onSuccess: @escaping (T) -> Void, onErrorAdditional: @escaping ((ProviderResult<T>) -> Void)) -> (_ providerResult: ProviderResult<T>) -> Void {
         return {[weak self] providerResult in
             if providerResult.success {
                 if let successResult = providerResult.sucessResult {
                     onSuccess(successResult)
                 } else {
                     QL4("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
-                    self?.handleResultHelper(.Unknown, error: nil, errorObj: nil)
+                    self?.handleResultHelper(.unknown, error: nil, errorObj: nil)
                 }
                 
             } else {
                 onErrorAdditional(providerResult)
-                self?.defaultErrorHandler()(providerResult: providerResult)
+                self?.defaultErrorHandler()(providerResult)
             }
             if resetProgress {
                 self?.progressVisible(false)
@@ -97,7 +97,7 @@ extension UIViewController {
         }
     }
     
-    func resultHandler(resetProgress resetProgress: Bool = true, onSuccess: VoidFunction, onError: ((ProviderResult<Any>) -> Void)? = nil) -> (providerResult: ProviderResult<Any>) -> Void {
+    func resultHandler(resetProgress: Bool = true, onSuccess: @escaping VoidFunction, onError: ((ProviderResult<Any>) -> Void)? = nil) -> (_ providerResult: ProviderResult<Any>) -> Void {
         return {[weak self] providerResult in
             if providerResult.success {
                 onSuccess()
@@ -106,7 +106,7 @@ extension UIViewController {
                 if let onError = onError {
                     onError(providerResult)
                 } else {
-                    self?.defaultErrorHandler()(providerResult: providerResult)
+                    self?.defaultErrorHandler()(providerResult)
                 }
             }
             if resetProgress {
@@ -116,21 +116,21 @@ extension UIViewController {
     }
     
     // Result handler for result with payload
-    func resultHandler<T>(resetProgress resetProgress: Bool = true, onSuccess: (T) -> Void, onError: ((ProviderResult<T>) -> Void)? = nil) -> (providerResult: ProviderResult<T>) -> Void {
+    func resultHandler<T>(resetProgress: Bool = true, onSuccess: @escaping (T) -> Void, onError: ((ProviderResult<T>) -> Void)? = nil) -> (_ providerResult: ProviderResult<T>) -> Void {
         return {[weak self] providerResult in
             if providerResult.success {
                 if let successResult = providerResult.sucessResult {
                     onSuccess(successResult)
                 } else {
                     QL4("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
-                    self?.handleResultHelper(.Unknown, error: nil, errorObj: nil)
+                    self?.handleResultHelper(.unknown, error: nil, errorObj: nil)
                 }
                 
             } else {
                 if let onError = onError {
                     onError(providerResult)
                 } else {
-                    self?.defaultErrorHandler()(providerResult: providerResult)
+                    self?.defaultErrorHandler()(providerResult)
                 }
             }
             if resetProgress {
@@ -142,7 +142,7 @@ extension UIViewController {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // TODO how do we unify these functions? we don't need the to know possible payload's type here, so Any would be ok but it doesn't compile for resultHandler<T>
     
-    func defaultErrorHandler(ignore: [ProviderStatusCode] = []) -> (providerResult: ProviderResult<Any>) -> Void {
+    func defaultErrorHandler(_ ignore: [ProviderStatusCode] = []) -> (_ providerResult: ProviderResult<Any>) -> Void {
         return {[weak self] providerResult in
             if !ignore.contains(providerResult.status) {
                 self?.handleResultHelper(providerResult.status, error: providerResult.error, errorObj: providerResult.errorObj)
@@ -151,7 +151,7 @@ extension UIViewController {
         }
     }
 
-    func defaultErrorHandler<T>(ignore: [ProviderStatusCode] = []) -> (providerResult: ProviderResult<T>) -> Void {
+    func defaultErrorHandler<T>(_ ignore: [ProviderStatusCode] = []) -> (_ providerResult: ProviderResult<T>) -> Void {
         return {[weak self] providerResult in
             if !ignore.contains(providerResult.status) {
                 self?.handleResultHelper(providerResult.status, error: providerResult.error, errorObj: providerResult.errorObj)
@@ -163,41 +163,41 @@ extension UIViewController {
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     
-    private func handleResultHelper(status: ProviderStatusCode, error: RemoteInvalidParametersResult?, errorObj: Any?) {
+    fileprivate func handleResultHelper(_ status: ProviderStatusCode, error: RemoteInvalidParametersResult?, errorObj: Any?) {
         switch status {
-        case .ServerInvalidParamsError:
+        case .serverInvalidParamsError:
             if let error = error {
                 showRemoteValidationErrorAlert(status, error: error)
             } else {
                 QL4("Invalid state: Has invalid params status but no error, status: \(status), error: \(error), errorObj: \(errorObj)")
                 ProviderPopupManager.instance.showStatusPopup(status, controller: self)
             }
-        case .SizeLimit:
+        case .sizeLimit:
             let size = errorObj.map{$0}
             let sizeStr = size.map{"(\($0))"} ?? ""
             AlertPopup.show(title: title, message: trans("size_limit_exceeded", sizeStr), controller: self)
         
-        case .MustUpdateApp:
+        case .mustUpdateApp:
             QL1("Controller received: \(status), do nothing.") // popup in this case is shown by AppDelegate
             
         default: ProviderPopupManager.instance.showStatusPopup(status, controller: self)
         }
     }
     
-    private func showRemoteValidationErrorAlert(status: ProviderStatusCode, error: RemoteInvalidParametersResult) {
+    fileprivate func showRemoteValidationErrorAlert(_ status: ProviderStatusCode, error: RemoteInvalidParametersResult) {
         ProviderPopupManager.instance.showRemoteValidationPopup(status, error: error, controller: self)
     }
     
     // MARK: - Popup
     
-    func showInfoAlert(title title: String? = nil, message: String) {
+    func showInfoAlert(title: String? = nil, message: String) {
         AlertPopup.show(title: title, message: message, controller: self)
     }
     
     
     // MARK: - Utils
     
-    func progressVisible(visible: Bool = true) {
+    func progressVisible(_ visible: Bool = true) {
         self.view.defaultProgressVisible(visible)
     }
 }

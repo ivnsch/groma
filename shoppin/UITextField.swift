@@ -46,21 +46,21 @@ extension UITextField {
         }
         set {
             maxLengthDictionary[self] = newValue
-            addTarget(self, action: #selector(UITextField.checkMaxLength(_:)), forControlEvents: UIControlEvents.EditingChanged)
+            addTarget(self, action: #selector(UITextField.checkMaxLength(_:)), for: UIControlEvents.editingChanged)
         }
     }
     
-    func checkMaxLength(sender: UITextField) {
+    func checkMaxLength(_ sender: UITextField) {
         if let newText = sender.text {
             if newText.characters.count > maxLength {
                 let cursorPosition = selectedTextRange
-                text = (newText as NSString).substringWithRange(NSRange(location: 0, length: maxLength))
+                text = (newText as NSString).substring(with: NSRange(location: 0, length: maxLength))
                 selectedTextRange = cursorPosition
             }
         }
     }
     
-    func setPlaceholderWithColor(placeholder: String, color: UIColor) {
+    func setPlaceholderWithColor(_ placeholder: String, color: UIColor) {
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName: color])
     }
 }

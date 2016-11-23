@@ -15,21 +15,21 @@ class ModalLoginController: UINavigationController, LoginDelegate, ExpiredLoginD
         
         let loginController = UIStoryboard.loginViewController()
         loginController.onUIReady = {
-            loginController.mode = .Expired
+            loginController.mode = .expired
         }
         loginController.expiredLoginDelegate = self
         viewControllers = [loginController]
         
         loginController.navigationItem.title = trans("generic_login")
-        loginController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(ModalLoginController.onCancelTap(_:)))
+        loginController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(ModalLoginController.onCancelTap(_:)))
     }
     
-    func onCancelTap(sender: UIBarButtonItem) {
+    func onCancelTap(_ sender: UIBarButtonItem) {
         dismiss()
     }
     
-    private func dismiss() {
-        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+    fileprivate func dismiss() {
+        presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - LoginDelegate

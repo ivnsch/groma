@@ -9,8 +9,8 @@
 import UIKit
 
 protocol SimpleInputPopupControllerDelegate: class {
-    func onSubmitInput(text: String)
-    func onDismissSimpleInputPopupController(cancelled: Bool)
+    func onSubmitInput(_ text: String)
+    func onDismissSimpleInputPopupController(_ cancelled: Bool)
 }
 
 class SimpleInputPopupController: UIViewController {
@@ -31,7 +31,7 @@ class SimpleInputPopupController: UIViewController {
         textView.textContainer.maximumNumberOfLines = 2
         
         let overlay = UIView()
-        overlay.backgroundColor = UIColor.blackColor()
+        overlay.backgroundColor = UIColor.black
         overlay.alpha = 0
 
         self.overlay = overlay
@@ -42,7 +42,7 @@ class SimpleInputPopupController: UIViewController {
         onUIReady?()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if !animatedBG { // ensure fade-in animation is not shown again if e.g. user comes back from receiving a call
@@ -56,19 +56,19 @@ class SimpleInputPopupController: UIViewController {
         }
     }
     
-    private func animateOverlayAlpha(show: Bool, onComplete: VoidFunction? = nil) {
-        UIView.animateWithDuration(0.3) {[weak self] in
+    fileprivate func animateOverlayAlpha(_ show: Bool, onComplete: VoidFunction? = nil) {
+        UIView.animate(withDuration: 0.3, animations: {[weak self] in
             self?.overlay?.alpha = show ? 0.3 : 0
             onComplete?()
-        }
+        }) 
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         overlay.removeFromSuperview()
     }
     
-    @IBAction func onOkTap(sender: UIButton) {
+    @IBAction func onOkTap(_ sender: UIButton) {
         delegate?.onSubmitInput(textView.text)
     }
     
@@ -81,7 +81,7 @@ class SimpleInputPopupController: UIViewController {
     }
     
     // TODO popup should contain logic to animate back... not the parent controller
-    func onTapBG(recognizer: UITapGestureRecognizer) {
+    func onTapBG(_ recognizer: UITapGestureRecognizer) {
         delegate?.onDismissSimpleInputPopupController(true)
     }
 }

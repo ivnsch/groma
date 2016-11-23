@@ -12,7 +12,7 @@ import UIKit
 // src http://stackoverflow.com/a/24225065/930450
 protocol Addable {
     init()
-    func + (lhs: Self, rhs: Self) -> Self
+    static func + (lhs: Self, rhs: Self) -> Self
     static var identity: Self { get }
 }
 

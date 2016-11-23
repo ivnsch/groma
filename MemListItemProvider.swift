@@ -11,7 +11,7 @@ import QorumLogs
 
 class MemListItemProvider {
 
-    private var listItems: [String: [ListItem]]? = [String: [ListItem]]()
+    fileprivate var listItems: [String: [ListItem]]? = [String: [ListItem]]()
     
     let enabled: Bool
     
@@ -23,7 +23,7 @@ class MemListItemProvider {
         self.enabled = enabled
     }
     
-    func listItems(list: List) -> [ListItem]? {
+    func listItems(_ list: List) -> [ListItem]? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
 
@@ -32,7 +32,7 @@ class MemListItemProvider {
     
     // Adds or increments listitem. Note: in increment case this increments all the status fron listItem! (todo, done, stash)
     // returns nil only if memory cache is not enabled
-    func addListItem(listItem: ListItem) -> ListItem? {
+    func addListItem(_ listItem: ListItem) -> ListItem? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
 
@@ -48,7 +48,7 @@ class MemListItemProvider {
             
             if let existingListItem = self.listItems![listItem.list.uuid]?.findFirstWithProductNameAndBrand(listItem.product.product.name, brand: listItem.product.product.brand) {
                 let updatedListItem = existingListItem.increment(listItem)
-                self.listItems![listItem.list.uuid]?.update(updatedListItem)
+                _ = self.listItems![listItem.list.uuid]?.update(updatedListItem)
                 addedListItem = updatedListItem
                 
             } else {
@@ -61,7 +61,7 @@ class MemListItemProvider {
         }
     }
 
-    func addOrUpdateListItem(prototype: (prototype: StoreListItemPrototype, section: Section), status: ListItemStatus, list: List, note: String? = nil) -> ListItem? {
+    func addOrUpdateListItem(_ prototype: (prototype: StoreListItemPrototype, section: Section), status: ListItemStatus, list: List, note: String? = nil) -> ListItem? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
@@ -82,7 +82,7 @@ class MemListItemProvider {
             
             QL1("Item exists, updated it: \(updatedListItem)")
 
-            self.listItems?[list.uuid]?.update(updatedListItem)
+            _ = self.listItems?[list.uuid]?.update(updatedListItem)
             
             return updatedListItem
         } else {
@@ -101,7 +101,7 @@ class MemListItemProvider {
             }
             
             // create the list item and save it
-            let listItem = ListItem(uuid: NSUUID().UUIDString, product: prototype.prototype.product, section: prototype.section, list: list, note: note, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.prototype.quantity))
+            let listItem = ListItem(uuid: UUID().uuidString, product: prototype.prototype.product, section: prototype.section, list: list, note: note, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.prototype.quantity))
             
             QL1("Item didn't exist, created one: \(listItem)")
             
@@ -111,7 +111,7 @@ class MemListItemProvider {
         }
     }
 
-    func addOrUpdateListItems(prototypes: [(StoreListItemPrototype, Section)], status: ListItemStatus, list: List, note: String? = nil) -> [ListItem]? {
+    func addOrUpdateListItems(_ prototypes: [(StoreListItemPrototype, Section)], status: ListItemStatus, list: List, note: String? = nil) -> [ListItem]? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
@@ -132,7 +132,7 @@ class MemListItemProvider {
     }
     
     // returns nil only if memory cache is not enabled
-    func addListItems(listItems: [ListItem]) -> [ListItem]? {
+    func addListItems(_ listItems: [ListItem]) -> [ListItem]? {
         guard enabled else {return nil}
         guard self.listItems != nil else {return nil}
         
@@ -144,27 +144,27 @@ class MemListItemProvider {
         return addedListItems
     }
     
-    func removeListItem(listItem: ListItem) -> Bool {
+    func removeListItem(_ listItem: ListItem) -> Bool {
         guard enabled else {return false}
         guard listItems != nil else {return false}
         
         // TODO more elegant way to write this?
         if self.listItems![listItem.list.uuid] != nil {
-            self.listItems![listItem.list.uuid]!.remove(listItem)
+            _ = self.listItems![listItem.list.uuid]!.remove(listItem)
             return true
         } else {
             return false
         }
     }
 
-    func removeListItem(listUuid: String, uuid: String) -> Bool {
+    func removeListItem(_ listUuid: String, uuid: String) -> Bool {
         guard enabled else {return false}
         guard listItems != nil else {return false}
         
         if let list = (self.listItems?.keys.filter{$0 == listUuid})?.first {
             // TODO more elegant way to write this?
             if self.listItems![list] != nil {
-                self.listItems![list]!.removeWithUuid(uuid)
+                _ = self.listItems![list]!.removeWithUuid(uuid)
                 return true
             } else {
                 return false
@@ -175,20 +175,20 @@ class MemListItemProvider {
         }
     }
     
-    func updateListItem(listItem: ListItem) -> Bool {
+    func updateListItem(_ listItem: ListItem) -> Bool {
         guard enabled else {return false}
         guard listItems != nil else {return false}
         
         // TODO more elegant way to write this?
         if self.listItems![listItem.list.uuid] != nil {
-            self.listItems![listItem.list.uuid]?.update(listItem)
+            _ = self.listItems![listItem.list.uuid]?.update(listItem)
             return true
         } else {
             return false
         }
     }
 
-    func updateListItems(listItems: [ListItem]) -> Bool {
+    func updateListItems(_ listItems: [ListItem]) -> Bool {
         guard enabled else {return false}
         guard self.listItems != nil else {return false}
         
@@ -201,7 +201,7 @@ class MemListItemProvider {
         return true
     }
     
-    func overwrite(listItems: [ListItem]) -> Bool {
+    func overwrite(_ listItems: [ListItem]) -> Bool {
         guard enabled else {return false}
         
         invalidate()
@@ -211,7 +211,7 @@ class MemListItemProvider {
         return true
     }
     
-    func listItemCount(status: ListItemStatus, list: List) -> Int? {
+    func listItemCount(_ status: ListItemStatus, list: List) -> Int? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
@@ -223,11 +223,11 @@ class MemListItemProvider {
         }
     }
     
-    private func findListItem(uuid: String, list: List) -> ListItem? {
+    fileprivate func findListItem(_ uuid: String, list: List) -> ListItem? {
         return self.listItems?[list.uuid]?.findFirst({$0.uuid == uuid})
     }
     
-    func increment(listItem: ListItem, quantity: ListItemStatusQuantity) -> ListItem? {
+    func increment(_ listItem: ListItem, quantity: ListItemStatusQuantity) -> ListItem? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
@@ -251,7 +251,7 @@ class MemListItemProvider {
     
     // listUuid: this is only an optimisation, in case we have the list uuid we avoid iterating through all the lists. Passing list uuid or not doesn't affect the result.
     // Note that currently this optimisation doesn't matter since we clear the mem cache after we leave a list so we have only one list in mem cache at a time. But we let it just in case.
-    func removeSection(uuid: String, listUuid listUuidMaybe: String?) -> Bool {
+    func removeSection(_ uuid: String, listUuid listUuidMaybe: String?) -> Bool {
         guard enabled else {return false}
         guard listItems != nil else {return false}
         

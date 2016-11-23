@@ -10,7 +10,7 @@ import UIKit
 
 extension NSMutableAttributedString {
 
-    func setTextColor(color: UIColor) {
-        addAttributes([NSForegroundColorAttributeName: UIColor.blackColor()], range: string.fullRange)
+    func setTextColor(_ color: UIColor) {
+        addAttributes([NSForegroundColorAttributeName: UIColor.black], range: string.fullRange)
     }
 }

@@ -12,7 +12,7 @@ import SwipeView
 
 protocol QuickAddPageControllerDelegate: class {
 //    func onPagerScroll(xOffset: CGFloat)
-    func onPageChanged(newIndex: Int, pageType: QuickAddItemType)
+    func onPageChanged(_ newIndex: Int, pageType: QuickAddItemType)
 }
 
 
@@ -24,12 +24,12 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     weak var delegate: QuickAddPageControllerDelegate?
     weak var quickAddListItemDelegate: QuickAddListItemDelegate?
     
-    var itemTypeForFirstPage: QuickAddItemType = .Product // TODO improve this, no time now
+    var itemTypeForFirstPage: QuickAddItemType = .product // TODO improve this, no time now
     
     var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
 
-    private var addProductController: QuickAddListItemViewController?
-    private var addGroupController: QuickAddListItemViewController?
+    fileprivate var addProductController: QuickAddListItemViewController?
+    fileprivate var addGroupController: QuickAddListItemViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         slidingTabsView.delegate = self
         swipeView.delegate = self
         
-        swipeView.pagingEnabled = true
+        swipeView.isPagingEnabled = true
         swipeView.defersItemViewLoading = true
         
         slidingTabsView.onViewsReady = {[weak self] in
@@ -45,21 +45,21 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         slidingTabsView.onFinishLayout() // only here the bounds width is correct (maybe also in didMoveToParentViewController, which is called a bit earlier? - didn't test that one)
     }
     
     // MARK: - SwipeViewDataSource
     
-    func numberOfItemsInSwipeView(swipeView: SwipeView!) -> Int {
+    func numberOfItems(in swipeView: SwipeView!) -> Int {
         return 2
     }
     
-    private var currentSwipeController: QuickAddListItemViewController?
+    fileprivate var currentSwipeController: QuickAddListItemViewController?
     
-    func swipeView(swipeView: SwipeView!, viewForItemAtIndex index: Int, reusingView view: UIView!) -> UIView! {
+    func swipeView(_ swipeView: SwipeView!, viewForItemAt index: Int, reusing view: UIView!) -> UIView! {
         
-        if currentSwipeController?.parentViewController != nil {
+        if currentSwipeController?.parent != nil {
             currentSwipeController?.removeFromParentViewController()
         }
         
@@ -75,7 +75,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             let productsController = UIStoryboard.quickAddListItemViewController()
             productsController.delegate = quickAddListItemDelegate
             productsController.onViewDidLoad = {
-                productsController.contentData = (self.itemTypeForFirstPage, .Fav)
+                productsController.contentData = (self.itemTypeForFirstPage, .fav)
             }
             productsController.list = list
             currentSwipeController = productsController
@@ -89,7 +89,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             let productsController = UIStoryboard.quickAddListItemViewController()
             productsController.delegate = quickAddListItemDelegate
             productsController.onViewDidLoad = {
-                productsController.contentData = (.Group, .Fav)
+                productsController.contentData = (.group, .fav)
             }
             currentSwipeController = productsController
             addChildViewController(productsController)
@@ -100,7 +100,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         }
     }
     
-    func search(text: String) {
+    func search(_ text: String) {
         if let controller = currentSwipeController {
             controller.searchText = text
         } else {
@@ -108,7 +108,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         }
     }
     
-    func setEmptyViewVisible(visible: Bool) {
+    func setEmptyViewVisible(_ visible: Bool) {
         if let currentSwipeController = currentSwipeController {
             currentSwipeController.setEmptyViewVisible(visible)
         } else {
@@ -119,36 +119,36 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     
     // MARK: - SwipeViewDelegate
     
-    func swipeViewCurrentItemIndexDidChange(swipeView: SwipeView!) {
+    func swipeViewCurrentItemIndexDidChange(_ swipeView: SwipeView!) {
         let index = swipeView.currentItemIndex
         slidingTabsView.setSelected(index)
         
         if index == 0 {
             currentSwipeController = addProductController
-            delegate?.onPageChanged(index, pageType: .Product)
+            delegate?.onPageChanged(index, pageType: .product)
         } else {
             currentSwipeController = addGroupController
-            delegate?.onPageChanged(index, pageType: .Group)
+            delegate?.onPageChanged(index, pageType: .group)
         }
     }
     
-    func swipeViewItemSize(swipeView: SwipeView!) -> CGSize {
+    func swipeViewItemSize(_ swipeView: SwipeView!) -> CGSize {
         return swipeView.frame.size
     }
     
-    func swipeViewDidScroll(swipeView: SwipeView!) {
+    func swipeViewDidScroll(_ swipeView: SwipeView!) {
         slidingTabsView.moveLine(swipeView.scrollOffset)
     }
     
     // MARK: - SlidingTabsViewDelegate
     
-    func onSlidingViewButtonTap(index: Int, button: UIButton) {
-        swipeView.scrollToPage(index, duration: 0.5)
+    func onSlidingViewButtonTap(_ index: Int, button: UIButton) {
+        swipeView.scroll(toPage: index, duration: 0.5)
     }
     
     // MARK: - QuickAddPageControllerDelegate
     
-    func onPagerScroll(xOffset: CGFloat) {
+    func onPagerScroll(_ xOffset: CGFloat) {
         slidingTabsView.moveLine(xOffset)
     }
     

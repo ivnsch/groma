@@ -16,29 +16,29 @@ protocol RatingPopupDelegate: class {
 // A more customisable version of RatingAlert but without a decent UI yet
 class RatingPopup: RatingPopupControllerDelegate {
 
-    private let showLaterDays = 7
+    fileprivate let showLaterDays = 7
     
-    private var controller: UIViewController?
+    fileprivate var controller: UIViewController?
     
     weak var delegate: RatingPopupDelegate?
     
-    func checkShow(parentController: UIViewController) {
+    func checkShow(_ parentController: UIViewController) {
         
-        func appInstallDate() -> NSDate {
+        func appInstallDate() -> Date {
             return PreferencesManager.loadPreference(PreferencesManagerKey.firstLaunchDate) ?? {
                 QL4("Invalid state: There's no app first launch date stored.")
-                return NSDate() // just to return something - note that with this we will never show the popup as the time offset will be ~0
+                return Date() // just to return something - note that with this we will never show the popup as the time offset will be ~0
             }()
         }
         
         // When the user hasn't selected "never show again"
         func onCanShow() {
             // use last time user tapped "later" as reference date or the app install date if this hasn't happened yet
-            let referenceDate = PreferencesManager.loadPreference(PreferencesManagerKey.lastAppRatingDialogDate).map {(date: NSDate) in
+            let referenceDate = PreferencesManager.loadPreference(PreferencesManagerKey.lastAppRatingDialogDate).map {(date: Date) in
                 return date
             } ?? appInstallDate()
             
-            let passedDays = referenceDate.daysUntil(NSDate())
+            let passedDays = referenceDate.daysUntil(Date())
             QL1("\(passedDays) days passed since last reference date. Showing if >= \(showLaterDays)")
             if passedDays >= showLaterDays {
                 show(parentController)
@@ -57,17 +57,17 @@ class RatingPopup: RatingPopupControllerDelegate {
         }
     }
     
-    func show(parentController: UIViewController) {
+    func show(_ parentController: UIViewController) {
         let controller = UIStoryboard.ratingPopupController()
         
         let width = parentController.view.frame.width
         let height = parentController.view.frame.height
 
-        controller.view.frame = CGRectMake(0, 0, width, height)
+        controller.view.frame = CGRect(x: 0, y: 0, width: width, height: height)
     
         controller.delegate = self
     
-        parentController.presentViewController(controller, animated: true, completion: nil)
+        parentController.present(controller, animated: true, completion: nil)
 
         self.controller = controller
     }
@@ -75,7 +75,7 @@ class RatingPopup: RatingPopupControllerDelegate {
     // MARK: - RatingPopupControllerDelegate
     
     func dismiss() {
-        controller?.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        controller?.presentingViewController?.dismiss(animated: true, completion: nil)
         delegate?.onDismissRatingPopup()
     }
 }

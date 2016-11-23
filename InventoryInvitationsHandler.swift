@@ -10,11 +10,11 @@ import UIKit
 
 class InventoryInvitationsHandler {
     
-    static func handleInvitation(invitation: RemoteInventoryInvitation, controller: UIViewController) {
+    static func handleInvitation(_ invitation: RemoteInventoryInvitation, controller: UIViewController) {
         handleInvitations([invitation], controller: controller)
     }
     
-    static func handleInvitations(invitations: [RemoteInventoryInvitation], controller: UIViewController) {
+    static func handleInvitations(_ invitations: [RemoteInventoryInvitation], controller: UIViewController) {
         for invitation in invitations {
             ConfirmationPopup.show(
                 title: "Invitation",

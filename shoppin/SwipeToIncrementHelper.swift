@@ -11,19 +11,19 @@ import QorumLogs
 
 protocol SwipeToIncrementHelperDelegate: class {
     func currentQuantity() -> Int
-    func onQuantityUpdated(quantity: Int)
+    func onQuantityUpdated(_ quantity: Int)
     func onFinishSwipe()
 }
 
 
 class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
     
-    private weak var view: UIView?
+    fileprivate weak var view: UIView?
     
-    private var panRecognizer: UIPanGestureRecognizer!
-    private var panStartPoint: CGPoint!
+    fileprivate var panRecognizer: UIPanGestureRecognizer!
+    fileprivate var panStartPoint: CGPoint!
     
-    private var initQuantitySlider: Int = 0 // capture quantity when we start sliding
+    fileprivate var initQuantitySlider: Int = 0 // capture quantity when we start sliding
     
     weak var delegate: SwipeToIncrementHelperDelegate?
     
@@ -38,11 +38,11 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
         view.addGestureRecognizer(self.panRecognizer)
     }
     
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     
-    func onPanCell(recognizer: UIPanGestureRecognizer) {
+    func onPanCell(_ recognizer: UIPanGestureRecognizer) {
         
         guard enabled else {return}
         guard let delegate = delegate else {QL4("No delegate"); return}
@@ -53,27 +53,27 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
         }
         
         switch recognizer.state {
-        case .Began:
-            panStartPoint = recognizer.translationInView(view)
+        case .began:
+            panStartPoint = recognizer.translation(in: view)
             initQuantitySlider = delegate.currentQuantity()
             
-        case .Changed:
+        case .changed:
             
             if movingHorizontally {
-                let currentPoint = recognizer.translationInView(view)
+                let currentPoint = recognizer.translation(in: view)
                 let deltaX = currentPoint.x - panStartPoint.x
                 let deltaForQuantity = Int(deltaX / 20)
                 let updatedQuantity = max(0, initQuantitySlider + deltaForQuantity)
                 delegate.onQuantityUpdated(updatedQuantity)
             }
     
-        case .Failed:
+        case .failed:
             QL3("Failed pan")
 
-        case .Cancelled:
+        case .cancelled:
             QL3("Cancelled pan")
             
-        case .Ended:
+        case .ended:
             if movingHorizontally {
                 delegate.onFinishSwipe()
             }

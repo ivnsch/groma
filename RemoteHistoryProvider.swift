@@ -10,42 +10,42 @@ import Foundation
 
 class RemoteHistoryProvider {
 
-    func historyItems(inventory: Inventory? = nil, handler: RemoteResult<RemoteHistoryItems> -> ()) {
-        let params: [String: AnyObject] = inventory.map{["inventory": $0.uuid]} ?? [String: AnyObject]()
-        RemoteProvider.authenticatedRequest(.GET, Urls.historyItems, params) {result in
+    func historyItems(_ inventory: Inventory? = nil, handler: @escaping (RemoteResult<RemoteHistoryItems>) -> ()) {
+        let params: [String: AnyObject] = inventory.map{["inventory": $0.uuid as AnyObject]} ?? [String: AnyObject]()
+        RemoteProvider.authenticatedRequest(.get, Urls.historyItems, params) {result in
             handler(result)
         }
     }
     
-    func removeHistoryItem(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.historyItem + "/\(uuid)") {result in
+    func removeHistoryItem(_ uuid: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.historyItem + "/\(uuid)") {result in
             handler(result)
         }
     }
     
-    func removeHistoryItems(historyItemGroup: HistoryItemGroup, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func removeHistoryItems(_ historyItemGroup: HistoryItemGroup, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
         removeHistoryItems(historyItemGroup.historyItems.map{$0.uuid}, handler: handler)
     }
 
-    func removeHistoryItems(uuids: [String], handler: RemoteResult<NoOpSerializable> -> ()) {
-        let params: [String: AnyObject] = ["uuids": uuids, "foo": ""] // foo -> server workaround for 1 element json
-        RemoteProvider.authenticatedRequest(.POST, Urls.historyItems, params) {result in
+    func removeHistoryItems(_ uuids: [String], handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        let params: [String: AnyObject] = ["uuids": uuids as AnyObject, "foo": "" as AnyObject] // foo -> server workaround for 1 element json
+        RemoteProvider.authenticatedRequest(.post, Urls.historyItems, params) {result in
             handler(result)
         }
     }
     
-    func toRequestParamsToRemove(historyItem: HistoryItem) -> [String: AnyObject] {
-        var dict: [String: AnyObject] = ["uuid": historyItem.uuid]
+    func toRequestParamsToRemove(_ historyItem: HistoryItem) -> [String: AnyObject] {
+        var dict: [String: AnyObject] = ["uuid": historyItem.uuid as AnyObject]
         if let lastServerUpdate = historyItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         return dict
     }
     
-    private func toRequestParams(sharedUser: SharedUser) -> [String: AnyObject] {
+    fileprivate func toRequestParams(_ sharedUser: SharedUser) -> [String: AnyObject] {
         return [
-            "email": sharedUser.email,
-            "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
+            "email": sharedUser.email as AnyObject,
+            "foo": "" as AnyObject // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
         ]
     }
 }

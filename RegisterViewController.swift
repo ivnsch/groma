@@ -13,7 +13,7 @@ import FBSDKLoginKit
 import QorumLogs
 
 protocol RegisterDelegate: class {
-    func onRegisterSuccess(email: String)
+    func onRegisterSuccess(_ email: String)
     
     // can be login or register
     func onSocialSignupInRegisterScreenSuccess()
@@ -36,18 +36,18 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     
     weak var delegate: RegisterDelegate?
 
-    private var validator: Validator?
+    fileprivate var validator: Validator?
 
-    private var acceptedTerms: Bool = false
+    fileprivate var acceptedTerms: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = trans("title_register")
 
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
         
-        passwordField.secureTextEntry = true
+        passwordField.isSecureTextEntry = true
 
         GoogleSignInHelper.configure(uiDelegate: self, delegate: self)
 
@@ -63,31 +63,31 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         
         let buttonTranslation = trans("register_accept_terms")
         let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
-        termsButton.setAttributedTitle(attributedText, forState: .Normal)
+        termsButton.setAttributedTitle(attributedText, for: UIControlState())
         
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(RegisterViewController.handleTap(_:)))
         recognizer.delegate = self
         view.addGestureRecognizer(recognizer)
     }
     
-    private func staticLayout() {
+    fileprivate func staticLayout() {
         regButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         emailField.becomeFirstResponder()
     }
     
-    func handleTap(recognizer: UITapGestureRecognizer) {
+    func handleTap(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
 
-    @IBAction func onAcceptTermsChanged(sender: UISwitch) {
-        acceptedTerms = sender.on
+    @IBAction func onAcceptTermsChanged(_ sender: UISwitch) {
+        acceptedTerms = sender.isOn
     }
     
-    private func initValidator() {
+    fileprivate func initValidator() {
         let validator = Validator()
         validator.registerField(self.emailField, rules: [EmailRule(message: "validation_email_format")])
         validator.registerField(self.passwordField, rules: [PasswordRule(message: "validation_password_characters")]) // TODO repl with translation key, for now this so testers understand
@@ -96,26 +96,26 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         self.validator = validator
     }
     
-    private func fillTestInput() {
+    fileprivate func fillTestInput() {
         emailField.text = "ivanschuetz@gmail.com"
         passwordField.text = "test123Q"
 //        firstNameField.text = "Ivan"
 //        lastNameField.text = "Schuetz"
     }
 
-    @IBAction func onRegisterTap(sender: UIButton) {
+    @IBAction func onRegisterTap(_ sender: UIButton) {
         register()
     }
     
-    private func register() {
+    fileprivate func register() {
         
         guard self.validator != nil else {return}
         
         if let errors = self.validator?.validate() {
-            for (field, _) in errors {
-                field.showValidationError()
+            for (_, error) in errors {
+                error.field.showValidationError()
             }
-            self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             
         } else {
             
@@ -123,7 +123,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                 AlertPopup.show(message: trans("popup_please_accept_terms"), controller: self)
                 
             } else {
-                if let email = emailField.text, password = passwordField.text/*, firstName = firstNameField.text, lastName = lastNameField.text*/ {
+                if let email = emailField.text, let password = passwordField.text/*, firstName = firstNameField.text, lastName = lastNameField.text*/ {
                     
                     let user = UserInput(email: email, password: password, firstName: "", lastName: "")
                     
@@ -139,7 +139,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         }
     }
     
-    func textFieldShouldReturn(sender: UITextField) -> Bool {
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
         
         if sender == passwordField {
             register()
@@ -147,7 +147,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         } else {
             let textFields: [UITextField] = [emailField, passwordField/*, firstNameField, lastNameField*/]
 
-            if let index = textFields.indexOf(sender) {
+            if let index = textFields.index(of: sender) {
                 if let next = textFields[safe: index + 1] {
                     next.becomeFirstResponder()
                 }
@@ -158,10 +158,10 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     }
     
     // TODO refactor, same code as in LoginController
-    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {        
+    public func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         if let error = error {
             QL4("Facebook login error: \(error)")
-            defaultErrorHandler()(providerResult: ProviderResult(status: .SocialLoginError))
+            defaultErrorHandler()(ProviderResult(status: .socialLoginError))
             progressVisible(false)
             FBSDKLoginManager().logOut() // toggle "logout" label on button
         } else if result.isCancelled {
@@ -171,18 +171,21 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         } else {
             QL1("Facebook login success, calling our server...")
             progressVisible()
-            let tokenString = result.token.tokenString
-            Providers.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+            if let tokenString = result.token.tokenString {
+                Providers.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+            } else {
+                QL4("Facebook: No token")
+            }
         }
     }
     
-    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         FBSDKLoginManager().logOut()
     }
     
     // MARK: GIDSignInDelegate
     
-    func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
             QL1("Google login success, calling our server...")
             progressVisible()
@@ -192,46 +195,48 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         }
     }
     
-    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user: GIDGoogleUser!, withError error: NSError!) {
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
         // Perform any operations when the user disconnects from app here.
     }
     
-    func signIn(signIn: GIDSignIn!, presentViewController viewController: UIViewController!) {
-        presentViewController(viewController, animated: true, completion: nil)
+    func sign(_ signIn: GIDSignIn!, present viewController: UIViewController!) {
+        present(viewController, animated: true, completion: nil)
     }
     
-    func signIn(signIn: GIDSignIn!, dismissViewController viewController: UIViewController!) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func sign(_ signIn: GIDSignIn!, dismiss viewController: UIViewController!) {
+        dismiss(animated: true, completion: nil)
     }
     
     //    func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
     //    }
     
     // Common FB/Google handling for social login/register result of our own server
-    private func socialSignInResultHandler()(providerResult: ProviderResult<SyncResult>) {
-        resultHandler(
-            onSuccess: {[weak self] syncResult in
-                QL1("Login success")
-                self?.delegate?.onSocialSignupInRegisterScreenSuccess()
-                self?.progressVisible(false)
-                
-                if let weakSelf = self {
-                    InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
-                }
-            }, onError: {[weak self] providerResult in
-                QL1("Login error: \(providerResult)")
-                self?.progressVisible(false)
-                self?.defaultErrorHandler()(providerResult: providerResult)
-                if let weakSelf = self {
-                    Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
-                }
-            })(providerResult: providerResult)
+    fileprivate func socialSignInResultHandler() -> (ProviderResult<SyncResult>) -> Void {
+        return {[weak self] providerResult in
+            self?.resultHandler(
+                onSuccess: {[weak self] syncResult in
+                    QL1("Login success")
+                    self?.delegate?.onSocialSignupInRegisterScreenSuccess()
+                    self?.progressVisible(false)
+                    
+                    if let weakSelf = self {
+                        InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
+                    }
+                }, onError: {[weak self] providerResult in
+                    QL1("Login error: \(providerResult)")
+                    self?.progressVisible(false)
+                    self?.defaultErrorHandler()(providerResult)
+                    if let weakSelf = self {
+                        Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
+                    }
+                })(providerResult)
+        }
     }
     
     // MARK: - EyeViewDelegate
     
-    func onEyeChange(open: Bool) {
-        passwordField.secureTextEntry = open
+    func onEyeChange(_ open: Bool) {
+        passwordField.isSecureTextEntry = open
     }
     
     deinit {

@@ -41,7 +41,7 @@ class ExpandableItemsTableViewCell: UITableViewCell {
 //                    subtitleLabel?.hidden = false
 //                    nameVerticalCenterConstraint?.constant = -10
 //                } else {
-                    subtitleLabel?.hidden = true
+                    subtitleLabel?.isHidden = true
                     nameVerticalCenterConstraint?.constant = 0
 //                }
                 
@@ -49,8 +49,8 @@ class ExpandableItemsTableViewCell: UITableViewCell {
 //                let showUserInfo = model.users.count > 0
                 let showUserInfo = false
                 
-                usersIcon.hidden = !showUserInfo
-                userCountLabel.hidden = !showUserInfo
+                usersIcon.isHidden = !showUserInfo
+                userCountLabel.isHidden = !showUserInfo
                 
 //                if showUserInfo {
 //                    userCountLabel.text = "\(model.users.count)"

@@ -10,7 +10,7 @@ import Foundation
 
 class ListItemGroupMapper {
     
-    class func dbWith(listItemGroup: ListItemGroup, dirty: Bool = true) -> DBListItemGroup {
+    class func dbWith(_ listItemGroup: ListItemGroup, dirty: Bool = true) -> DBListItemGroup {
         let dbListItemGroup = DBListItemGroup()
         dbListItemGroup.uuid = listItemGroup.uuid
         dbListItemGroup.name = listItemGroup.name
@@ -25,7 +25,7 @@ class ListItemGroupMapper {
         return dbListItemGroup
     }
     
-    class func listItemGroupWith(dbListItemGroup: DBListItemGroup) -> ListItemGroup {
+    class func listItemGroupWith(_ dbListItemGroup: DBListItemGroup) -> ListItemGroup {
         return ListItemGroup(
             uuid: dbListItemGroup.uuid,
             name: dbListItemGroup.name,
@@ -36,7 +36,7 @@ class ListItemGroupMapper {
         )
     }
     
-    class func listItemGroupWithRemote(remoteGroup: RemoteGroup) -> ListItemGroup {
+    class func listItemGroupWithRemote(_ remoteGroup: RemoteGroup) -> ListItemGroup {
         return ListItemGroup(
             uuid: remoteGroup.uuid,
             name: remoteGroup.name,

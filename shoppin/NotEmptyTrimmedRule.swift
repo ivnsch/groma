@@ -8,19 +8,19 @@
 
 import SwiftValidator
 
-public class NotEmptyTrimmedRule: Rule {
+open class NotEmptyTrimmedRule: Rule {
     
-    private var message: String
+    fileprivate var message: String
 
     public init(message: String) {
         self.message = message
     }
     
-    public func validate(value: String) -> Bool {
+    open func validate(_ value: String) -> Bool {
         return !value.trim().characters.isEmpty
     }
     
-    public func errorMessage() -> String {
+    open func errorMessage() -> String {
         return message
     }
 }

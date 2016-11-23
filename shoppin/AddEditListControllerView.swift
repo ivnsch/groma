@@ -22,7 +22,7 @@ class AddEditListControllerView: UIView {
         super.init(coder: aDecoder)
     }
     
-    override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         
         let f = self.bounds
         
@@ -30,20 +30,20 @@ class AddEditListControllerView: UIView {
             
             let bezierPath = UIBezierPath()
             
-            bezierPath.moveToPoint(f.origin)
-            bezierPath.addLineToPoint(f.rightTop)
-            bezierPath.addLineToPoint(f.rightBottom)
+            bezierPath.move(to: f.origin)
+            bezierPath.addLine(to: f.rightTop)
+            bezierPath.addLine(to: f.rightBottom)
             
-            bezierPath.addLineToPoint(CGPointMake(pf.maxX, f.height)) // top right popup (starting from view's bottom)
-            bezierPath.addLineToPoint(CGPointMake(pf.maxX, pf.maxY)) // bottom right popup
-            bezierPath.addLineToPoint(CGPointMake(pf.minX, pf.maxY)) // bottom left popup
-            bezierPath.addLineToPoint(CGPointMake(pf.minX, f.height)) // top left popup
+            bezierPath.addLine(to: CGPoint(x: pf.maxX, y: f.height)) // top right popup (starting from view's bottom)
+            bezierPath.addLine(to: CGPoint(x: pf.maxX, y: pf.maxY)) // bottom right popup
+            bezierPath.addLine(to: CGPoint(x: pf.minX, y: pf.maxY)) // bottom left popup
+            bezierPath.addLine(to: CGPoint(x: pf.minX, y: f.height)) // top left popup
             
-            bezierPath.addLineToPoint(f.leftBottom)
+            bezierPath.addLine(to: f.leftBottom)
             
-            bezierPath.closePath()
+            bezierPath.close()
             
-            return bezierPath.containsPoint(point)
+            return bezierPath.contains(point)
             
         } else {
             return f.contains(point)

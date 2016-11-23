@@ -45,41 +45,41 @@ class DBInventoryItem: DBSyncable {
     
     // MARK: - Filters
 
-    static func createFilterUuid(uuid: String) -> String {
+    static func createFilterUuid(_ uuid: String) -> String {
         return "uuid = '\(uuid)'"
     }
     
-    static func createFilter(item: InventoryItem) -> String {
+    static func createFilter(_ item: InventoryItem) -> String {
         return createFilter(item.product.uuid, item.inventory.uuid)
     }
     
-    static func createFilter(product: Product, _ inventory: Inventory) -> String {
+    static func createFilter(_ product: Product, _ inventory: Inventory) -> String {
         return createFilter(ProductUnique(name: product.name, brand: product.brand), inventoryUuid: inventory.uuid)
     }
 
-    static func createFilter(productUnique: ProductUnique, inventoryUuid: String) -> String {
+    static func createFilter(_ productUnique: ProductUnique, inventoryUuid: String) -> String {
         return "\(createFilterInventory(inventoryUuid)) AND productOpt.name = '\(productUnique.name)' AND productOpt.brand = '\(productUnique.brand)'"
     }
 
-    static func createFilter(productUnique: ProductUnique, inventoryUuid: String, notUuid: String) -> String {
+    static func createFilter(_ productUnique: ProductUnique, inventoryUuid: String, notUuid: String) -> String {
         return "\(createFilterInventory(inventoryUuid)) AND productOpt.name = '\(productUnique.name)' AND productOpt.brand = '\(productUnique.brand)' AND uuid != '\(notUuid)'"
     }
     
-    static func createFilter(productUuid: String, _ inventoryUuid: String) -> String {
+    static func createFilter(_ productUuid: String, _ inventoryUuid: String) -> String {
         return "productOpt.uuid = '\(productUuid)' AND inventoryOpt.uuid = '\(inventoryUuid)'"
     }
     
-    static func createFilterInventory(inventoryUuid: String) -> String {
+    static func createFilterInventory(_ inventoryUuid: String) -> String {
         return "inventoryOpt.uuid = '\(inventoryUuid)'"
     }
     
-    static func createFilterWithProduct(productUuid: String) -> String {
+    static func createFilterWithProduct(_ productUuid: String) -> String {
         return "productOpt.uuid == '\(productUuid)'"
     }
     
     // MARK: -
     
-    static func fromDict(dict: [String: AnyObject], product: DBProduct, inventory: DBInventory) -> DBInventoryItem {
+    static func fromDict(_ dict: [String: AnyObject], product: DBProduct, inventory: DBInventory) -> DBInventoryItem {
         let item = DBInventoryItem()
         item.uuid = dict["uuid"]! as! String
         item.quantity = dict["quantity"]! as! Int
@@ -92,12 +92,12 @@ class DBInventoryItem: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["quantity"] = quantity
+        dict["uuid"] = uuid as AnyObject?
+        dict["quantity"] = quantity as AnyObject?
 //        dict["quantityDelta"] = quantityDelta
-        dict["product"] = product.toDict()
+        dict["product"] = product.toDict() as AnyObject?
 //        dict["inventory"] = inventory.toDict()
-        dict["inventoryUuid"] = inventory.uuid
+        dict["inventoryUuid"] = inventory.uuid as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
     }

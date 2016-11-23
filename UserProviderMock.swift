@@ -15,33 +15,33 @@ class UserProviderMock: UserProvider {
         return isLoggedIn
     }
     
-    private var isLoggedIn = false
+    fileprivate var isLoggedIn = false
     
-    private let requestDelay: Double = 2
+    fileprivate let requestDelay: Double = 2
     
-    private var email: String?
+    fileprivate var email: String?
     
     var hasSignedInOnce: Bool {
         return hasLoginToken
     }
     
-    func isDifferentUser(email: String) -> Bool {
+    func isDifferentUser(_ email: String) -> Bool {
         return self.email.map{$0 != email} ?? false
     }
     
-    func login(loginData: LoginData, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
+    func login(_ loginData: LoginData, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true
             self?.email = loginData.email
-            handler(ProviderResult(status: .Success, sucessResult: SyncResult(listInvites: [], inventoryInvites: [])))
+            handler(ProviderResult(status: .success, sucessResult: SyncResult(listInvites: [], inventoryInvites: [])))
         }
     }
     
-    func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
+    func register(_ user: UserInput, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true
             self?.email = user.email
-            handler(ProviderResult(status: .Success))
+            handler(ProviderResult(status: .success))
         }
     }
     
@@ -51,18 +51,18 @@ class UserProviderMock: UserProvider {
     func ping() {
     }
     
-    func isRegistered(email: String, _ handler: ProviderResult<Any> -> ()) {
+    func isRegistered(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         delay(requestDelay) {
-            handler(ProviderResult(status: .Success, sucessResult: true))
+            handler(ProviderResult(status: .success, sucessResult: true))
         }
     }
     
-    func logout(handler: ProviderResult<Any> -> ()) {
+    func logout(_ handler: @escaping (ProviderResult<Any>) -> ()) {
         isLoggedIn = false
-        handler(ProviderResult(status: .Success))
+        handler(ProviderResult(status: .success))
     }
     
-    func sync(handler: ProviderResult<SyncResult> -> Void) {
+    func sync(_ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         Providers.globalProvider.sync(false) {result in
             handler(result)
         }
@@ -78,16 +78,16 @@ class UserProviderMock: UserProvider {
         return false
     }
     
-    func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ()) {
+    func forgotPassword(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         delay(requestDelay) {
-            handler(ProviderResult(status: .Success, sucessResult: true))
+            handler(ProviderResult(status: .success, sucessResult: true))
         }
     }
     
-    func removeAccount(handler: ProviderResult<Any> -> ()) {
+    func removeAccount(_ handler: @escaping (ProviderResult<Any>) -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = false
-            handler(ProviderResult(status: .Success, sucessResult: true))
+            handler(ProviderResult(status: .success, sucessResult: true))
         }
     }
     
@@ -100,29 +100,29 @@ class UserProviderMock: UserProvider {
         }
     }
     
-    func findAllKnownSharedUsers(handler: ProviderResult<[SharedUser]> -> Void) {
+    func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[SharedUser]>) -> Void) {
         let dummies = [
             SharedUser(email: "goo@gar.com"),
             SharedUser(email: "lalala@werw.com"),
             SharedUser(email: "hello@hello.hello"),
         ]
-        handler(ProviderResult(status: .Success, sucessResult: dummies))
+        handler(ProviderResult(status: .success, sucessResult: dummies))
     }
     
     // MARK: - Social login
     
-    func authenticateWithFacebook(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
+    func authenticateWithFacebook(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         delay(requestDelay) {
             let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
-            handler(ProviderResult(status: .Success, sucessResult: syncResult))
+            handler(ProviderResult(status: .success, sucessResult: syncResult))
         }
     }
     
     
-    func authenticateWithGoogle(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
+    func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         delay(requestDelay) {
             let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
-            handler(ProviderResult(status: .Success, sucessResult: syncResult))
+            handler(ProviderResult(status: .success, sucessResult: syncResult))
         }
     }
 }

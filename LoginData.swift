@@ -19,7 +19,7 @@ class LoginData: Equatable {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType), email: \(self.email), password: \(self.password)}"
+        return "{\(type(of: self)), email: \(self.email), password: \(self.password)}"
     }
 }
 

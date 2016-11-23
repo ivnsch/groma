@@ -11,7 +11,7 @@ import SwiftValidator
 
 protocol SharedUsersViewControllerDelegate: class {
     // Note: this is only a table view update, no providers
-    func onSharedUsersUpdated(users: [SharedUser])
+    func onSharedUsersUpdated(_ users: [SharedUser])
 }
 
 class SharedUsersViewController: UIViewController {
@@ -19,7 +19,7 @@ class SharedUsersViewController: UIViewController {
     @IBOutlet weak var usersTableView: UITableView!
     @IBOutlet weak var addUserInputField: UITextField!
     
-    private var userInputsValidator: Validator?
+    fileprivate var userInputsValidator: Validator?
 
     weak var delegate: SharedUsersViewControllerDelegate?
 
@@ -35,7 +35,7 @@ class SharedUsersViewController: UIViewController {
         self.initValidator()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         usersTableView.setEditing(true, animated: false)
@@ -43,20 +43,20 @@ class SharedUsersViewController: UIViewController {
         
     }
     
-    private func validateInputs(validator: Validator?, onValid: () -> ()) {
+    fileprivate func validateInputs(_ validator: Validator?, onValid: () -> ()) {
         
         guard validator != nil else {return}
         
         if let errors = validator?.validate() {
-            for (field, _) in errors {
-                field.showValidationError()
+            for (_, error) in errors {
+                error.field.showValidationError()
             }
-            self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             
         } else {
-            if let lastErrors = validator?.lastErrors {
-                for (field, _) in lastErrors {
-                    field.clearValidationError()
+            if let lastErrors = validator?.errors {
+                for (_, error) in lastErrors {
+                    error.field.clearValidationError()
                 }
             }
             
@@ -64,7 +64,7 @@ class SharedUsersViewController: UIViewController {
         }
     }
     
-    @IBAction func onAddUserTap(sender: UIButton) {
+    @IBAction func onAddUserTap(_ sender: UIButton) {
         self.validateInputs(self.userInputsValidator) {[weak self] in
             if let weakSelf = self {
                 if let input = weakSelf.addUserInputField.text {
@@ -80,7 +80,7 @@ class SharedUsersViewController: UIViewController {
         }
     }
     
-    private func initValidator() {
+    fileprivate func initValidator() {
         let userInputsValidator = Validator()
         userInputsValidator.registerField(self.addUserInputField, rules: [MinLengthRule(length: 1, message: trans("validation_user_input_not_empty"))])
         
@@ -88,43 +88,43 @@ class SharedUsersViewController: UIViewController {
     }
 
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sharedUsers.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("userCell", forIndexPath: indexPath) as! InventorySharedUserCell
-        let sharedUser = sharedUsers[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath) as! InventorySharedUserCell
+        let sharedUser = sharedUsers[(indexPath as NSIndexPath).row]
         cell.sharedUser = sharedUser
         return cell
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAtIndexPath indexPath: IndexPath) -> Bool {
         return true
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    func tableView(_ tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: IndexPath) {
+        if editingStyle == .delete {
             self.usersTableView.wrapUpdates {[weak self] in
                 if let weakSelf = self {
-                    weakSelf.sharedUsers.removeAtIndex(indexPath.row)
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                    weakSelf.sharedUsers.remove(at: (indexPath as NSIndexPath).row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
                     weakSelf.delegate?.onSharedUsersUpdated(weakSelf.sharedUsers)
                 }
             }
         }
     }
     
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canMoveRowAtIndexPath indexPath: IndexPath) -> Bool {
         return false
     }
     
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.addUserInputField.resignFirstResponder() // hide keyboard
     }
 

@@ -9,13 +9,13 @@
 import UIKit
 import QorumLogs
 
-func trans(key: String) -> String {
+func trans(_ key: String) -> String {
     return NSLocalizedString(key, comment: "")
 }
 
-func trans(key: String, _ params: CVarArgType...) -> String {
+func trans(_ key: String, _ params: CVarArg...) -> String {
     return withVaList(params) {
-        NSString(format: NSLocalizedString(key, comment: ""), arguments: $0)
+        (NSString(format: NSLocalizedString(key, comment: ""), arguments: $0) as String)
     } as String
 }
 
@@ -27,7 +27,7 @@ class LangManager {
     let defaultLang = "en"
     
     var deviceLang: String {
-        return NSBundle.mainBundle().preferredLocalizations.first ?? defaultLang
+        return Bundle.main.preferredLocalizations.first ?? defaultLang
     }
     
     var appLang: String {

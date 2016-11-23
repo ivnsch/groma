@@ -16,26 +16,26 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     let memProvider = MemInventoryItemProvider(enabled: false)
 
     // TODO we are sorting 3x! Optimise this. Ponder if it makes sense to do the server objects sorting in the server (where it can be done at db level)
-    func inventoryItems(range: NSRange, inventory: Inventory, fetchMode: ProviderFetchModus = .Both, sortBy: InventorySortBy = .Count, _ handler: ProviderResult<[InventoryItem]> -> ()) {
+    func inventoryItems(_ range: NSRange, inventory: Inventory, fetchMode: ProviderFetchModus = .both, sortBy: InventorySortBy = .count, _ handler: @escaping (ProviderResult<[InventoryItem]>) -> ()) {
     
         // TODO!!! use range also in mem cache otherwise comparison below doesn't work
         let memItemsMaybe = memProvider.inventoryItems(inventory)
         if let memItems = memItemsMaybe {
-            handler(ProviderResult(status: .Success, sucessResult: memItems.sortBy(sortBy))) // TODO? cache the sorting? is it expensive to sort if already sorted?
-            if fetchMode == .MemOnly {
+            handler(ProviderResult(status: .success, sucessResult: memItems.sortBy(sortBy))) // TODO? cache the sorting? is it expensive to sort if already sorted?
+            if fetchMode == .memOnly {
                 return
             }
         }
         
         // FIXME: sortBy and range don't work in db (see notes in implementation). For now we have to do this programmatically
-        DBProviders.inventoryProvider.loadInventory(inventory, sortBy: sortBy, range: range) {[weak self] (var dbInventoryItems) in
+        DBProviders.inventoryProvider.loadInventory(inventory, sortBy: sortBy, range: range) {[weak self] (dbInventoryItems) in
             
-            dbInventoryItems = dbInventoryItems.sortBy(sortBy)
-            dbInventoryItems = dbInventoryItems[range]
+            let dbInventoryItemsSorted = dbInventoryItems.sortBy(sortBy)
+            let dbInventoryItemsInRange = dbInventoryItemsSorted[range]
             
-            if (memItemsMaybe.map {$0 != dbInventoryItems}) ?? true { // if memItems is not set or different than db items
-                handler(ProviderResult(status: .Success, sucessResult: dbInventoryItems))
-                self?.memProvider.overwrite(dbInventoryItems)
+            if (memItemsMaybe.map {$0 != dbInventoryItemsInRange}) ?? true { // if memItems is not set or different than db items
+                handler(ProviderResult(status: .success, sucessResult: dbInventoryItemsInRange))
+                _ = self?.memProvider.overwrite(dbInventoryItemsInRange)
             }
             
             self?.remoteInventoryItemsProvider.inventoryItems(inventory) {remoteResult in
@@ -44,10 +44,10 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     let inventoryItems: [InventoryItem] = remoteInventoryItems.map{InventoryItemMapper.inventoryItemWithRemote($0, inventory: inventory)}.sortBy(sortBy)
                     let inventoryItemsInRange = inventoryItems[range]
                     
-                    if (dbInventoryItems != inventoryItemsInRange) {
+                    if (dbInventoryItemsInRange != inventoryItemsInRange) {
                         DBProviders.inventoryItemProvider.overwrite(inventoryItems, inventoryUuid: inventory.uuid, clearTombstones: true, dirty: false) {saved in // if items in range are not equal overwritte with all the items
-                            handler(ProviderResult(status: .Success, sucessResult: inventoryItemsInRange))
-                            self?.memProvider.overwrite(inventoryItems)
+                            handler(ProviderResult(status: .success, sucessResult: inventoryItemsInRange))
+                            _ = self?.memProvider.overwrite(inventoryItems)
                         }
                     }
                     
@@ -58,77 +58,77 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func countInventoryItems(inventory: Inventory, _ handler: ProviderResult<Int> -> Void) {
+    func countInventoryItems(_ inventory: Inventory, _ handler: @escaping (ProviderResult<Int>) -> Void) {
         DBProviders.inventoryItemProvider.countInventoryItems(inventory) {countMaybe in
             if let count = countMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: count))
+                handler(ProviderResult(status: .success, sucessResult: count))
             } else {
                 QL4("No count")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
     
-    func addToInventoryLocal(inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: ProviderResult<Any> -> Void) {
+    func addToInventoryLocal(_ inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProviders.inventoryItemProvider.saveInventoryAndHistoryItem(inventoryItems, historyItems: historyItems, dirty: dirty) {success in
             if success {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
             } else {
                 QL4("Error adding to inventory: inventoryItems: \(inventoryItems), historyItems: \(historyItems)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
     
     // For now db only query
-    private func findInventoryItem(item: InventoryItem, _ handler: ProviderResult<InventoryItem> -> ()) {
+    fileprivate func findInventoryItem(_ item: InventoryItem, _ handler: @escaping (ProviderResult<InventoryItem>) -> ()) {
         
         if let memItem = memProvider.inventoryItem(item) {
-            handler(ProviderResult(status: .Success, sucessResult: memItem))
+            handler(ProviderResult(status: .success, sucessResult: memItem))
             
         } else {
             DBProviders.inventoryItemProvider.findInventoryItem(item) {inventoryItemMaybe in
                 if let inventoryItem = inventoryItemMaybe {
-                    handler(ProviderResult(status: .Success, sucessResult: inventoryItem))
+                    handler(ProviderResult(status: .success, sucessResult: inventoryItem))
                 } else {
-                    handler(ProviderResult(status: .NotFound))
+                    handler(ProviderResult(status: .notFound))
                 }
             }
         }
     }
     
     // only db no memory cache or remote, this is currently used only by websocket update (when receive websocket increment, fetch inventory item in order to increment it locally)
-    private func findInventoryItem(uuid: String, _ handler: ProviderResult<InventoryItem> -> ()) {
+    fileprivate func findInventoryItem(_ uuid: String, _ handler: @escaping (ProviderResult<InventoryItem>) -> ()) {
         DBProviders.inventoryItemProvider.findInventoryItem(uuid) {inventoryItemMaybe in
             if let inventoryItem = inventoryItemMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: inventoryItem))
+                handler(ProviderResult(status: .success, sucessResult: inventoryItem))
             } else {
-                handler(ProviderResult(status: .NotFound))
+                handler(ProviderResult(status: .notFound))
             }
         }
     }
 
     // TODO this can be optimised, such that we don't have to prefetch the item but increment directly at least in memory    
-    func incrementInventoryItem(item: ItemIncrement, remote: Bool, _ handler: ProviderResult<InventoryItem> -> ()) {
+    func incrementInventoryItem(_ item: ItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<InventoryItem>) -> ()) {
         findInventoryItem(item.itemUuid) {[weak self] result in
             if let inventoryItem = result.sucessResult {
                 
                 self?.incrementInventoryItem(inventoryItem, delta: item.delta, remote: remote) {result in
                     if result.success {
-                        handler(ProviderResult(status: .Success, sucessResult: inventoryItem))
+                        handler(ProviderResult(status: .success, sucessResult: inventoryItem))
                     } else {
-                        handler(ProviderResult(status: .DatabaseSavingError))
+                        handler(ProviderResult(status: .databaseSavingError))
                     }
                 }
                 
             } else {
                 print("InventoryItemsProviderImpl.incrementInventoryItem: Didn't find inventory item to increment, for: \(item)")
-                handler(ProviderResult(status: .NotFound))
+                handler(ProviderResult(status: .notFound))
             }
         }
     }
 
-    func incrementInventoryItem(item: InventoryItem, delta: Int, remote: Bool, _ handler: ProviderResult<Int> -> Void) {
+    func incrementInventoryItem(_ item: InventoryItem, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<Int>) -> Void) {
         
         // Get item from database with updated quantityDelta
         // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
@@ -138,14 +138,14 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         
         let memIncremented = memProvider.incrementInventoryItem(item, delta: delta)
         if memIncremented {
-            handler(ProviderResult(status: .Success))
+            handler(ProviderResult(status: .success))
         }
         
         DBProviders.inventoryItemProvider.incrementInventoryItem(item, delta: delta, onlyDelta: false, dirty: remote) {[weak self] dbResult in
 
             if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if let updatedQuantity = dbResult.sucessResult {
-                    handler(ProviderResult(status: .Success, sucessResult: updatedQuantity))
+                    handler(ProviderResult(status: .success, sucessResult: updatedQuantity))
                     
                     if remote {
                         let itemIncrement = ItemIncrement(delta: delta, itemUuid: item.uuid)
@@ -171,20 +171,20 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     
                     
                 } else {
-                    if dbResult.status == .NotFound {
+                    if dbResult.status == .notFound {
                         // When swiping many times quickly we get requests to increment items that have already been deleted, which triggers error alert - this may require a better fix but for now we ignore not found status
                         QL3("Item to increment not found: \(item), returning success anyway")
-                        handler(ProviderResult(status: .Success))
+                        handler(ProviderResult(status: .success))
                     } else {
                         QL4("Unknown error incrementing inventory item: \(item), delta: \(delta)")
-                        handler(ProviderResult(status: .DatabaseSavingError))
+                        handler(ProviderResult(status: .databaseSavingError))
                     }
                 }
             }
         }
     }
     
-    func updateInventoryItem(input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, _ handler: ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)> -> Void) {
+    func updateInventoryItem(_ input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)>) -> Void) {
         
         // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
         DBProviders.inventoryItemProvider.deletePossibleInventoryItemWithUnique(input.productPrototype.name, productBrand: input.productPrototype.brand, inventory: updatingInventoryItem.inventory, notUuid: updatingInventoryItem.uuid) {foundAndDeletedInventoryItem in
@@ -195,7 +195,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     let updatedInventoryItem = updatingInventoryItem.copy(quantity: input.quantity, product: product)
                     self?.updateInventoryItem(updatedInventoryItem, remote: remote) {result in
                         if result.success {
-                            handler(ProviderResult(status: .Success, sucessResult: (inventoryItem: updatedInventoryItem, replaced: foundAndDeletedInventoryItem)))
+                            handler(ProviderResult(status: .success, sucessResult: (inventoryItem: updatedInventoryItem, replaced: foundAndDeletedInventoryItem)))
                         } else {
                             QL4("Error updating inventory item: \(result)")
                             handler(ProviderResult(status: result.status))
@@ -203,21 +203,21 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     }
                 } else {
                     QL4("Error fetching product: \(result.status)")
-                    handler(ProviderResult(status: .DatabaseUnknown))
+                    handler(ProviderResult(status: .databaseUnknown))
                 }
             }
         }
     }
     
-    func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        memProvider.updateInventoryItem(item)
+    func updateInventoryItem(_ item: InventoryItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        _ = memProvider.updateInventoryItem(item)
         
         DBProviders.inventoryItemProvider.saveInventoryItems([item], dirty: remote) {[weak self] updated in
             if !updated {
                 self?.memProvider.invalidate()
             }
             
-            handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
+            handler(ProviderResult(status: updated ? .success : .databaseUnknown))
             
             if remote {
                 self?.remoteInventoryItemsProvider.updateInventoryItem(item) {remoteResult in
@@ -243,33 +243,33 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func addOrUpdateLocal(inventoryItems: [InventoryItem], _ handler: ProviderResult<Any> -> Void) {
+    func addOrUpdateLocal(_ inventoryItems: [InventoryItem], _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProviders.inventoryItemProvider.saveInventoryItems(inventoryItems, update: true, dirty: false) {[weak self] updated in
             if !updated {
                 self?.memProvider.invalidate()
             }
-            handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
+            handler(ProviderResult(status: updated ? .success : .databaseUnknown))
         }
     }
     
-    func removeInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func removeInventoryItem(_ item: InventoryItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         removeInventoryItem(item.uuid, inventoryUuid: item.inventory.uuid, remote: remote, handler)
     }
     
-    func removeInventoryItem(uuid: String, inventoryUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func removeInventoryItem(_ uuid: String, inventoryUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         
         let memUpdated = memProvider.removeInventoryItem(uuid, inventoryUuid: inventoryUuid)
         if memUpdated {
-            handler(ProviderResult(status: .Success))
+            handler(ProviderResult(status: .success))
         }
         
         DBProviders.inventoryItemProvider.removeInventoryItem(uuid, inventoryUuid: inventoryUuid, markForSync: true) {[weak self] removed in
             if removed {
                 if !memUpdated {
-                    handler(ProviderResult(status: .Success))
+                    handler(ProviderResult(status: .success))
                 }
             } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
                 self?.memProvider.invalidate()
             }
             
@@ -286,7 +286,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                             QL3("Error removing inventory item in uuid: productUuid: \(uuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
                             // When swiping many items quickly it may be that we send multiple requests to delete same item, so we get not found sometimes. Ignore.
                             // TODO is this really necessary - what can be do client side to prevent trying to delete same item multiple times?
-                            if remoteResult.status != .NotFound {
+                            if remoteResult.status != .notFound {
                                 self?.memProvider.invalidate()
                                 handler(remoteResult)
                             } else {
@@ -305,20 +305,20 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     
     // MARK: - Direct (no history)
     
-    func addToInventory(inventory: Inventory, product: Product, quantity: Int, remote: Bool, _ handler: ProviderResult<(inventoryItem: InventoryItem, delta: Int)> -> Void) {
+    func addToInventory(_ inventory: Inventory, product: Product, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
         addToInventory(inventory, productsWithQuantities: [(product: product, quantity: quantity)], remote: remote) {result in
             if let addedOrIncrementedInventoryItem = result.sucessResult?.first {
-                handler(ProviderResult(status: .Success, sucessResult: addedOrIncrementedInventoryItem))
+                handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItem))
             } else {
                 handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
             }
         }
     }
     
-    private func addToInventory(inventory: Inventory, productsWithQuantities: [(product: Product, quantity: Int)], remote: Bool, _ handler: ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]> -> Void) {
+    fileprivate func addToInventory(_ inventory: Inventory, productsWithQuantities: [(product: Product, quantity: Int)], remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
         DBProviders.inventoryItemProvider.addToInventory(inventory, productsWithQuantities: productsWithQuantities, dirty: remote) {[weak self] addedOrIncrementedInventoryItemsMaybe in
             if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItemsMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: addedOrIncrementedInventoryItems))
+                handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItems))
                 
                 if remote {
                     self?.remoteInventoryItemsProvider.addToInventory(addedOrIncrementedInventoryItems) {remoteResult in
@@ -338,7 +338,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 
             } else {
                 QL4("Unknown error adding to inventory in local db, inventory: \(inventory), productsWithQuantities: \(productsWithQuantities)")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
 
 //                DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
             }
@@ -346,49 +346,49 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
 
     
-    func addToInventory(inventory: Inventory, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]> -> Void) {
-        Providers.listItemGroupsProvider.groupItems(group, sortBy: .Alphabetic, fetchMode: .MemOnly) {[weak self] result in
+    func addToInventory(_ inventory: Inventory, group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
+        Providers.listItemGroupsProvider.groupItems(group, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
                 if groupItems.isEmpty {
-                    handler(ProviderResult(status: .IsEmpty))
+                    handler(ProviderResult(status: .isEmpty))
                 } else {
                     let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
                     self?.addToInventory(inventory, productsWithQuantities: productsWithQuantities, remote: remote, handler)
                 }
             } else {
                 QL4("Couldn't get items for group: \(group)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
     
     // Add inventory item input
-    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, remote: Bool, _ handler: ProviderResult<(inventoryItem: InventoryItem, delta: Int)> -> Void) {
+    func addToInventory(_ inventory: Inventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
         
-        func onHasProduct(product: Product) {
+        func onHasProduct(_ product: Product) {
             addToInventory(inventory, product: product, quantity: 1, remote: remote, handler)
         }
         
         Providers.productProvider.product(itemInput.productPrototype.name, brand: itemInput.productPrototype.brand) {productResult in
             // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
-            if productResult.success || productResult.status == .NotFound {
+            if productResult.success || productResult.status == .notFound {
                 if let product = productResult.sucessResult {
                     onHasProduct(product)
                 } else {
                     Providers.productCategoryProvider.categoryWithName(itemInput.productPrototype.category) {result in
                         if let category = result.sucessResult {
-                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.productPrototype.name, category: category, brand: itemInput.productPrototype.brand)
+                            let product = Product(uuid: UUID().uuidString, name: itemInput.productPrototype.name, category: category, brand: itemInput.productPrototype.brand)
                             onHasProduct(product)
                         } else {
-                            let category = ProductCategory(uuid: NSUUID().UUIDString, name: itemInput.productPrototype.category, color: itemInput.productPrototype.categoryColor)
-                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.productPrototype.name, category: category, brand: itemInput.productPrototype.brand)
+                            let category = ProductCategory(uuid: UUID().uuidString, name: itemInput.productPrototype.category, color: itemInput.productPrototype.categoryColor)
+                            let product = Product(uuid: UUID().uuidString, name: itemInput.productPrototype.name, category: category, brand: itemInput.productPrototype.brand)
                             onHasProduct(product)
                         }
                     }
                 }
             } else {
                 QL4("Error fetching product, result: \(productResult)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }

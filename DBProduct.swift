@@ -52,7 +52,7 @@ class DBProduct: DBSyncable {
     
     convenience init(prototype: ProductPrototype, category: DBProductCategory) {
         self.init(
-            uuid: NSUUID().UUIDString,
+            uuid: UUID().uuidString,
             name: prototype.name,
             category: category,
             fav: 0,
@@ -60,7 +60,7 @@ class DBProduct: DBSyncable {
         )
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, category: DBProductCategory? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> DBProduct {
+    func copy(uuid: String? = nil, name: String? = nil, category: DBProductCategory? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> DBProduct {
         return DBProduct(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -74,49 +74,49 @@ class DBProduct: DBSyncable {
     
     // Overwrites fields with corresponding fields of prototype.
     // NOTE: Does not update category fields.
-    func update(prototype: ProductPrototype) -> DBProduct {
+    func update(_ prototype: ProductPrototype) -> DBProduct {
         return copy(name: prototype.name, brand: prototype.brand)
     }
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
-    static func createFilterBrand(brand: String) -> String {
+    static func createFilterBrand(_ brand: String) -> String {
         return "brand == '\(brand)'"
     }
     
-    static func createFilterUnique(prototype: ProductPrototype) -> String {
+    static func createFilterUnique(_ prototype: ProductPrototype) -> String {
         return createFilterNameBrand(prototype.name, brand: prototype.brand)
     }
     
-    static func createFilterNameBrand(name: String, brand: String) -> String {
+    static func createFilterNameBrand(_ name: String, brand: String) -> String {
         return "\(createFilterName(name)) AND \(createFilterBrand(brand))"
     }
     
-    static func createFilterName(name: String) -> String {
+    static func createFilterName(_ name: String) -> String {
         return "name = '\(name)'"
     }
     
-    static func createFilterNameContains(text: String) -> String {
+    static func createFilterNameContains(_ text: String) -> String {
         return "name CONTAINS[c] '\(text)'"
     }
     
-    static func createFilterBrandContains(text: String) -> String {
+    static func createFilterBrandContains(_ text: String) -> String {
         return "brand CONTAINS[c] '\(text)'"
     }
     
-    static func createFilterStoreContains(text: String) -> String {
+    static func createFilterStoreContains(_ text: String) -> String {
         return "store CONTAINS[c] '\(text)'"
     }
     
-    static func createFilterCategory(categoryUuid: String) -> String {
+    static func createFilterCategory(_ categoryUuid: String) -> String {
         return "categoryOpt.uuid = '\(categoryUuid)'"
     }
     
-    static func createFilterCategoryNameContains(text: String) -> String {
+    static func createFilterCategoryNameContains(_ text: String) -> String {
         return "categoryOpt.name CONTAINS[c] '\(text)'"
     }
     
@@ -128,7 +128,7 @@ class DBProduct: DBSyncable {
     
     // MARK: -
     
-    static func fromDict(dict: [String: AnyObject], category: DBProductCategory) -> DBProduct {
+    static func fromDict(_ dict: [String: AnyObject], category: DBProductCategory) -> DBProduct {
         let item = DBProduct()
         item.uuid = dict["uuid"]! as! String
         item.name = dict["name"]! as! String
@@ -141,18 +141,18 @@ class DBProduct: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["name"] = name
-        dict["category"] = category.toDict()
-        dict["fav"] = fav
-        dict["brand"] = brand
+        dict["uuid"] = uuid as AnyObject?
+        dict["name"] = name as AnyObject?
+        dict["category"] = category.toDict() as AnyObject?
+        dict["fav"] = fav as AnyObject?
+        dict["brand"] = brand as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
     }
     
     // This function doesn't really have to here but don't have a better place yet
     // A key that can be used e.g. in dictionaries
-    static func nameBrandKey(name: String, brand: String) -> String {
+    static func nameBrandKey(_ name: String, brand: String) -> String {
         return name + "-.9#]A-" + brand // insert some random text in between to prevent possible cases where name or brand text matches what would be a combination, e.g. a product is called "soapMyBrand" has empty brand and other product is called "soap" and has a brand "MyBrand" these are different but simple text concatenation would result in the same key.
     }
 
@@ -160,8 +160,8 @@ class DBProduct: DBSyncable {
         return ["category"]
     }
 
-    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
-        DBProviders.productProvider.deleteProductDependenciesSync(realm, productUuid: uuid, markForSync: markForSync)
+    override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
+        _ = DBProviders.productProvider.deleteProductDependenciesSync(realm, productUuid: uuid, markForSync: markForSync)
         realm.delete(self)
     }
 }

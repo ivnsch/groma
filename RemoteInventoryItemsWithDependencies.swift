@@ -18,13 +18,13 @@ struct RemoteInventoryItemsWithDependencies: ResponseObjectSerializable, CustomD
     
     init?(representation: AnyObject) {
         guard
-            let inventoryItemsObj = representation.valueForKeyPath("inventoryItems"),
+            let inventoryItemsObj = representation.value(forKeyPath: "inventoryItems") as? [AnyObject],
             let inventoryItems = RemoteInventoryItem.collection(inventoryItemsObj),
-            let productsObj = representation.valueForKeyPath("products"),
+            let productsObj = representation.value(forKeyPath: "products") as? [AnyObject],
             let products = RemoteProduct.collection(productsObj),
-            let productsCategoriesObj = representation.valueForKeyPath("productsCategories"),
+            let productsCategoriesObj = representation.value(forKeyPath: "productsCategories") as? [AnyObject],
             let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
-            let inventoriesObj = representation.valueForKeyPath("inventories"),
+            let inventoriesObj = representation.value(forKeyPath: "inventories") as? [AnyObject],
             let inventories = RemoteInventoryWithDependencies.collection(inventoriesObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -37,6 +37,6 @@ struct RemoteInventoryItemsWithDependencies: ResponseObjectSerializable, CustomD
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventoryItems: \(inventoryItems), products: \(products), productsCategories: \(productsCategories), inventories: \(inventories)}"
+        return "{\(type(of: self)) inventoryItems: \(inventoryItems), products: \(products), productsCategories: \(productsCategories), inventories: \(inventories)}"
     }
 }

@@ -18,11 +18,11 @@ struct RemoteListItemsSyncResult: ResponseObjectSerializable, ResponseCollection
     
     init?(representation: AnyObject) {
         guard
-            let listUuid = representation.valueForKeyPath("listUuid") as? String,
-            let listItemsObj = representation.valueForKeyPath("listItems"),
-            let listItems = RemoteListItems(representation: listItemsObj),
-            let couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as? [String],
-            let couldNotDelete = representation.valueForKeyPath("couldNotDelete") as? [String]
+            let listUuid = representation.value(forKeyPath: "listUuid") as? String,
+            let listItemsObj = representation.value(forKeyPath: "listItems"),
+            let listItems = RemoteListItems(representation: listItemsObj as AnyObject),
+            let couldNotUpdate = representation.value(forKeyPath: "couldNotUpdate") as? [String],
+            let couldNotDelete = representation.value(forKeyPath: "couldNotDelete") as? [String]
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -33,9 +33,9 @@ struct RemoteListItemsSyncResult: ResponseObjectSerializable, ResponseCollection
         self.couldNotDelete = couldNotDelete
     }
     
-    static func collection(representation: AnyObject) -> [RemoteListItemsSyncResult]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteListItemsSyncResult]? {
         var listItemsSyncResult = [RemoteListItemsSyncResult]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let listItem = RemoteListItemsSyncResult(representation: obj) {
                 listItemsSyncResult.append(listItem)
             } else {
@@ -47,7 +47,7 @@ struct RemoteListItemsSyncResult: ResponseObjectSerializable, ResponseCollection
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) listUuid: \(listUuid), listItems: \(listItems), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete)}"
+        return "{\(type(of: self)) listUuid: \(listUuid), listItems: \(listItems), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete)}"
     }
 }
 
@@ -67,11 +67,11 @@ struct RemoteListWithListItemsSyncResult: ResponseObjectSerializable, CustomDebu
     
     init?(representation: AnyObject) {
         guard
-            let listsObj = representation.valueForKeyPath("lists"), // TODO!!! server
-            let lists = RemoteListsWithDependencies(representation: listsObj),
-            let couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as? [String],
-            let couldNotDelete = representation.valueForKeyPath("couldNotDelete") as? [String],
-            let listItemsSyncResultsObj = representation.valueForKeyPath("listItems") as? [AnyObject],
+            let listsObj = representation.value(forKeyPath: "lists"), // TODO!!! server
+            let lists = RemoteListsWithDependencies(representation: listsObj as AnyObject),
+            let couldNotUpdate = representation.value(forKeyPath: "couldNotUpdate") as? [String],
+            let couldNotDelete = representation.value(forKeyPath: "couldNotDelete") as? [String],
+            let listItemsSyncResultsObj = representation.value(forKeyPath: "listItems") as? [AnyObject],
             let listItemsSyncResults = RemoteListItemsSyncResult.collection(listItemsSyncResultsObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -84,6 +84,6 @@ struct RemoteListWithListItemsSyncResult: ResponseObjectSerializable, CustomDebu
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) lists: \(lists), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete), listItemsSyncResults: \(listItemsSyncResults)}"
+        return "{\(type(of: self)) lists: \(lists), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete), listItemsSyncResults: \(listItemsSyncResults)}"
     }
 }

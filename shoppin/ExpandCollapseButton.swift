@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ExpandCollapseButtonDelegate: class {
-    func onExpandButton(expanded: Bool)
+    func onExpandButton(_ expanded: Bool)
 }
 
 class ExpandCollapseButton: PathButton {
@@ -37,7 +37,7 @@ class ExpandCollapseButton: PathButton {
         strokeColor = UIColor(hexString: "2C3D50")
     }
     
-    override func onTap(on: Bool) {
+    override func onTap(_ on: Bool) {
         delegate?.onExpandButton(on)
     }
 }

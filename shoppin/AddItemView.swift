@@ -33,27 +33,27 @@ protocol AddItemViewDelegate: class {
         xibSetup()
     }
     
-    private func xibSetup() {
-        let view = NSBundle.loadView("AddItemView", owner: self)!
+    fileprivate func xibSetup() {
+        let view = Bundle.loadView("AddItemView", owner: self)!
 
         view.frame = bounds
         // Make the view stretch with containing view
-        view.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
+        view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
         
         self.addSubview(view)
     }
     
-    @IBAction func onAddTap(sender: UIButton) {
+    @IBAction func onAddTap(_ sender: UIButton) {
         delegate?.onAddTap()
     }
     
-    func setVisible(visible: Bool, animated: Bool = true) {
+    func setVisible(_ visible: Bool, animated: Bool = true) {
         if let bottomConstraint = self.bottomConstraint {
             bottomConstraint.constant = visible ? 0 : -100
             if animated {
-                UIView.animateWithDuration(0.2) {[weak self] () -> Void in
+                UIView.animate(withDuration: 0.2, animations: {[weak self] () -> Void in
                     self?.superview?.layoutIfNeeded()
-                }
+                }) 
             } else {
                 superview?.layoutIfNeeded()
             }
@@ -62,11 +62,11 @@ protocol AddItemViewDelegate: class {
         }
     }
     
-    func setButtonText(text: String) {
-        addButton.setTitle(text, forState: .Normal)
+    func setButtonText(_ text: String) {
+        addButton.setTitle(text, for: UIControlState())
     }
     
-    func setButtonColor(color: UIColor) {
+    func setButtonColor(_ color: UIColor) {
         addButton.backgroundColor = color
     }
 }

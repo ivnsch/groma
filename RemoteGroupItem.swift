@@ -19,11 +19,11 @@ struct RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializab
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let quantity = representation.valueForKeyPath("quantity") as? Int,
-            let productUuid = representation.valueForKeyPath("productUuid") as? String,
-            let groupUuid = representation.valueForKeyPath("groupUuid") as? String,
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let quantity = representation.value(forKeyPath: "quantity") as? Int,
+            let productUuid = representation.value(forKeyPath: "productUuid") as? String,
+            let groupUuid = representation.value(forKeyPath: "groupUuid") as? String,
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -35,9 +35,9 @@ struct RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializab
         self.lastUpdate = Int64(lastUpdate)
     }
     
-    static func collection(representation: AnyObject) -> [RemoteGroupItem]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteGroupItem]? {
         var listItems = [RemoteGroupItem]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let listItem = RemoteGroupItem(representation: obj) {
                 listItems.append(listItem)
             } else {
@@ -49,7 +49,7 @@ struct RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializab
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), productUuid: \(productUuid), groupUuid: \(groupUuid), listUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) uuid: \(uuid), productUuid: \(productUuid), groupUuid: \(groupUuid), listUpdate: \(lastUpdate)}"
     }
 }
 
@@ -58,7 +58,7 @@ extension RemoteGroupItem {
         return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
     
-    static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
+    static func createTimestampUpdateDict(uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
         return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

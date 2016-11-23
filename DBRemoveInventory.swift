@@ -30,7 +30,7 @@ class DBRemoveInventory: Object {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
@@ -38,8 +38,8 @@ class DBRemoveInventory: Object {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+        dict["uuid"] = uuid as AnyObject?
+        dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         return dict
     }
 }

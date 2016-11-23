@@ -53,37 +53,37 @@ class DBHistoryItem: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
-    static func createFilterWithProduct(productUuid: String) -> String {
+    static func createFilterWithProduct(_ productUuid: String) -> String {
         return "productOpt.uuid == '\(productUuid)'"
     }
     
-    static func createFilterWithInventory(inventoryUuid: String) -> String {
+    static func createFilterWithInventory(_ inventoryUuid: String) -> String {
         return "inventoryOpt.uuid == '\(inventoryUuid)'"
     }
 
-    static func createFilter(historyItemGroup: HistoryItemGroup) -> String {
-        let historyItemsUuidsStr: String = historyItemGroup.historyItems.map{"'\($0.uuid)'"}.joinWithSeparator(",")
+    static func createFilter(_ historyItemGroup: HistoryItemGroup) -> String {
+        let historyItemsUuidsStr: String = historyItemGroup.historyItems.map{"'\($0.uuid)'"}.joined(separator: ",")
         return "uuid IN {\(historyItemsUuidsStr)}"
     }
     
-    static func createPredicate(addedDate: Int64, inventoryUuid: String) -> NSPredicate {
-        return NSPredicate(format: "addedDate >= %@ AND inventoryOpt.uuid == %@", NSNumber(longLong: Int64(addedDate)), inventoryUuid)
+    static func createPredicate(_ addedDate: Int64, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "addedDate >= %@ AND inventoryOpt.uuid == %@", NSNumber(value: Int64(addedDate) as Int64), inventoryUuid)
     }
     
-    static func createPredicate(productName: String, addedDate: Int64, inventoryUuid: String) -> NSPredicate {
-        return NSPredicate(format: "productOpt.name == %@ AND addedDate >= %@ AND inventoryOpt.uuid == %@", productName, NSNumber(longLong: Int64(addedDate)), inventoryUuid)
+    static func createPredicate(_ productName: String, addedDate: Int64, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.name == %@ AND addedDate >= %@ AND inventoryOpt.uuid == %@", productName, NSNumber(value: Int64(addedDate) as Int64), inventoryUuid)
     }
     
-    static func createPredicate(startAddedDate: Int64, endAddedDate: Int64, inventoryUuid: String) -> NSPredicate {
-        return NSPredicate(format: "addedDate >= %@ AND addedDate <= %@ AND inventoryOpt.uuid == %@", NSNumber(longLong: Int64(startAddedDate)), NSNumber(longLong: Int64(endAddedDate)), inventoryUuid)
+    static func createPredicate(_ startAddedDate: Int64, endAddedDate: Int64, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "addedDate >= %@ AND addedDate <= %@ AND inventoryOpt.uuid == %@", NSNumber(value: Int64(startAddedDate) as Int64), NSNumber(value: Int64(endAddedDate) as Int64), inventoryUuid)
     }
     
-    static func createPredicateOlderThan(addedDate: Int64) -> NSPredicate {
-        return NSPredicate(format: "addedDate < %@", NSNumber(longLong: Int64(addedDate)))
+    static func createPredicateOlderThan(_ addedDate: Int64) -> NSPredicate {
+        return NSPredicate(format: "addedDate < %@", NSNumber(value: Int64(addedDate) as Int64))
     }
     
     
@@ -91,7 +91,7 @@ class DBHistoryItem: DBSyncable {
 
     
     // TODO!!!! failable
-    static func fromDict(dict: [String: AnyObject], inventory: DBInventory, product: DBProduct) -> DBHistoryItem {
+    static func fromDict(_ dict: [String: AnyObject], inventory: DBInventory, product: DBProduct) -> DBHistoryItem {
         let item = DBHistoryItem()
         item.uuid = dict["uuid"]! as! String
         item.inventory = inventory
@@ -109,13 +109,13 @@ class DBHistoryItem: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["inventoryUuid"] = inventory.uuid
-        dict["productInput"] = product.toDict()
-        dict["addedDate"] = NSNumber(longLong: Int64(addedDate))
-        dict["quantity"] = quantity
-        dict["paidPrice"] = paidPrice
-        dict["user"] = user.toDict()
+        dict["uuid"] = uuid as AnyObject?
+        dict["inventoryUuid"] = inventory.uuid as AnyObject?
+        dict["productInput"] = product.toDict() as AnyObject?
+        dict["addedDate"] = NSNumber(value: Int64(addedDate) as Int64)
+        dict["quantity"] = quantity as AnyObject?
+        dict["paidPrice"] = paidPrice as AnyObject?
+        dict["user"] = user.toDict() as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
     }

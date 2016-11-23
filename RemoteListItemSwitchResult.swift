@@ -17,13 +17,13 @@ struct RemoteSwitchListItemFullResult: ResponseObjectSerializable, CustomDebugSt
     
     init?(representation: AnyObject) {
         guard
-            let switchResultObj = representation.valueForKeyPath("result"),
-            let switchResult = RemoteSwitchListItemResult(representation: switchResultObj),
-            let srcStatusInt = representation.valueForKeyPath("srcStatus") as? Int,
+            let switchResultObj = representation.value(forKeyPath: "result"),
+            let switchResult = RemoteSwitchListItemResult(representation: switchResultObj as AnyObject),
+            let srcStatusInt = representation.value(forKeyPath: "srcStatus") as? Int,
             let srcStatus = ListItemStatus(rawValue: srcStatusInt),
-            let dstStatusInt = representation.valueForKeyPath("dstStatus") as? Int,
+            let dstStatusInt = representation.value(forKeyPath: "dstStatus") as? Int,
             let dstStatus = ListItemStatus(rawValue: dstStatusInt),
-            let switchedQuantity = representation.valueForKeyPath("switchedQuantity") as? Int
+            let switchedQuantity = representation.value(forKeyPath: "switchedQuantity") as? Int
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -35,7 +35,7 @@ struct RemoteSwitchListItemFullResult: ResponseObjectSerializable, CustomDebugSt
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) switchResult: \(switchResult), srcStatus: \(srcStatus), dstStatus: \(dstStatus), switchedQuantity: \(switchedQuantity)}"
+        return "{\(type(of: self)) switchResult: \(switchResult), srcStatus: \(srcStatus), dstStatus: \(dstStatus), switchedQuantity: \(switchedQuantity)}"
     }
 }
 

@@ -11,17 +11,17 @@ import QorumLogs
 
 class AddButtonHelper: NSObject {
 
-    private var addButton: UIButton?
+    fileprivate var addButton: UIButton?
     
-    private var keyboardHeight: CGFloat = 216
+    fileprivate var keyboardHeight: CGFloat = 216
     
-    private weak var parentView: UIView?
+    fileprivate weak var parentView: UIView?
     
-    private let buttonHeight: CGFloat = 40
+    fileprivate let buttonHeight: CGFloat = 40
     
-    private var tapHandler: VoidFunction?
+    fileprivate var tapHandler: VoidFunction?
     
-    private var centerYOverride: CGFloat? // quick fix - if it's necessary to override the default centerY which is calculated in this helper. Doesn't include -keyboardHeight and buttonHeight! keyboardHeight and buttonHeight/2  are subtracted from this value TODO better solution to position the button correctly in all cases. The default is just the result of trial and error.
+    fileprivate var centerYOverride: CGFloat? // quick fix - if it's necessary to override the default centerY which is calculated in this helper. Doesn't include -keyboardHeight and buttonHeight! keyboardHeight and buttonHeight/2  are subtracted from this value TODO better solution to position the button correctly in all cases. The default is just the result of trial and error.
     
     init(parentView: UIView, overrideCenterY: CGFloat? = nil, tapHandler: VoidFunction?) {
         
@@ -33,17 +33,17 @@ class AddButtonHelper: NSObject {
     }
     
     func addObserver() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(AddButtonHelper.keyboardWillChangeFrame(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(AddButtonHelper.keyboardWillDisappear(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(AddButtonHelper.keyboardWillChangeFrame(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(AddButtonHelper.keyboardWillDisappear(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func removeObserver() {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    func keyboardWillChangeFrame(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.CGRectValue() {
+    func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
+        if let userInfo = (notification as NSNotification).userInfo {
+            if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
                 QL1("keyboardWillChangeFrame, frame: \(frame)")
                 keyboardHeight = frame.height
             } else {
@@ -55,13 +55,13 @@ class AddButtonHelper: NSObject {
         animateVisible(true)
     }
     
-    func keyboardWillDisappear(notification: NSNotification) {
+    func keyboardWillDisappear(_ notification: Foundation.Notification) {
         // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
         QL3("add button - Keyboard will disappear - hiding")
         animateVisible(false)
     }
     
-    func animateVisible(visible: Bool) {
+    func animateVisible(_ visible: Bool) {
         if let centerY = centerY(visible) {
             animate(centerY, removeOnFinish: !visible)
         } else {
@@ -69,7 +69,7 @@ class AddButtonHelper: NSObject {
         }
     }
     
-    private func animate(endY: CGFloat, removeOnFinish: Bool) {
+    fileprivate func animate(_ endY: CGFloat, removeOnFinish: Bool) {
         
         if addButton == nil {
             addAddButton(false)
@@ -80,7 +80,7 @@ class AddButtonHelper: NSObject {
 
         if endY != addButton.center.y { // animate only if there's a change in the position (open, close keyboard / changed between normal and emoji keyboard)
             
-            UIView.animateWithDuration(0.4, animations: {
+            UIView.animate(withDuration: 0.4, animations: {
                 QL1("Animating add button to \(endY)")
                 addButton.center = addButton.center.copy(y: endY)
                 }, completion: {[weak self] finished in
@@ -94,7 +94,7 @@ class AddButtonHelper: NSObject {
         }
     }
     
-    private func centerY(visible: Bool) -> CGFloat? {
+    fileprivate func centerY(_ visible: Bool) -> CGFloat? {
         guard let window = parentView?.window else {QL3("No parentView: \(parentView) or window, can't calculate button's center"); return nil}
         if let centerYOverride = centerYOverride {
             switch visible {
@@ -109,16 +109,16 @@ class AddButtonHelper: NSObject {
         }
     }
     
-    private func center(keyboardHeight: CGFloat) -> CGFloat? {
+    fileprivate func center(_ keyboardHeight: CGFloat) -> CGFloat? {
         guard let window = parentView?.window else {QL3("No parentView: \(parentView) or window, can't calculate button's center"); return nil}
 
         return window.frame.height - keyboardHeight - buttonHeight / 2
     }
     
-    private func addAddButton(visible: Bool = true) {
-        if let parentView = parentView, window = parentView.window, centerY = centerY(visible) {
+    fileprivate func addAddButton(_ visible: Bool = true) {
+        if let parentView = parentView, let window = parentView.window, let centerY = centerY(visible) {
             let frameY = centerY - buttonHeight / 2
-            let addButton = AddItemButton(frame: CGRectMake(0, frameY, parentView.frame.width, buttonHeight))
+            let addButton = AddItemButton(frame: CGRect(x: 0, y: frameY, width: parentView.frame.width, height: buttonHeight))
             self.addButton = addButton
             parentView.addSubview(addButton)
             
@@ -127,7 +127,7 @@ class AddButtonHelper: NSObject {
             addButton.layoutIfNeeded()
             
 //            animateVisible(true)
-            parentView.bringSubviewToFront(addButton)
+            parentView.bringSubview(toFront: addButton)
             addButton.tapHandler = {[weak self] in
                 self?.tapHandler?()
             }

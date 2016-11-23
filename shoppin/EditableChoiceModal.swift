@@ -10,23 +10,23 @@ import UIKit
 
 class EditableChoiceModal: UIViewController, UIScrollViewDelegate {
     
-    private var tableViewController: EditablePlainTableViewController?
+    fileprivate var tableViewController: EditablePlainTableViewController?
     
     var list: List?
     
     var onDonePress: (() -> ())?
     
-    var onAddItemFunc: (String -> ())?
+    var onAddItemFunc: ((String) -> ())?
     
     @IBOutlet weak var participantInputField: UITextField!
     
-    @IBAction func onDonePress(sender: UIBarButtonItem) {
+    @IBAction func onDonePress(_ sender: UIBarButtonItem) {
         self.onDonePress?()
     }
     
     var listItems: [EditablePlainTableViewControllerModel<SharedUser>]? {
         set {
-            if let listItems = newValue, tableViewController = self.tableViewController {
+            if let listItems = newValue, let tableViewController = self.tableViewController {
                 tableViewController.listItems = listItems
             }
         }
@@ -35,21 +35,21 @@ class EditableChoiceModal: UIViewController, UIScrollViewDelegate {
         }
     }
 
-    func addItem(item: EditablePlainTableViewControllerModel<SharedUser>) {
+    func addItem(_ item: EditablePlainTableViewControllerModel<SharedUser>) {
         self.tableViewController?.addItem(item)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let segueName = segue.identifier
         if segueName == "tableViewControllerSegue" {
-            self.tableViewController = segue.destinationViewController as? EditablePlainTableViewController
+            self.tableViewController = segue.destination as? EditablePlainTableViewController
             self.tableViewController?.scrollViewDelegate = self
         }
     }
     
     
     // TODO rename add item this is a library candidate
-    @IBAction func onAddParticipantPress(sender: UIButton) {
+    @IBAction func onAddParticipantPress(_ sender: UIButton) {
         if let _ = self.list {
             
             if let input = participantInputField.text {
@@ -74,11 +74,11 @@ class EditableChoiceModal: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.hideKeyboard()
     }
     
-    private func hideKeyboard() {
+    fileprivate func hideKeyboard() {
         self.participantInputField.resignFirstResponder()
     }
     

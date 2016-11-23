@@ -30,12 +30,12 @@ class ProductCategory: Equatable, Identifiable, CustomDebugStringConvertible {
         self.removed = removed
     }
     
-    private var shortDescription: String {
-        return "{\(self.dynamicType) name: \(name)}"
+    fileprivate var shortDescription: String {
+        return "{\(type(of: self)) name: \(name)}"
     }
     
-    private var longDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
+    fileprivate var longDescription: String {
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), color: \(color), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
     var debugDescription: String {
@@ -46,7 +46,7 @@ class ProductCategory: Equatable, Identifiable, CustomDebugStringConvertible {
         return self.uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, color: UIColor? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> ProductCategory {
+    func copy(uuid: String? = nil, name: String? = nil, color: UIColor? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> ProductCategory {
         return ProductCategory(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -56,21 +56,21 @@ class ProductCategory: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
-    func same(rhs: ProductCategory) -> Bool {
+    func same(_ rhs: ProductCategory) -> Bool {
         return uuid == rhs.uuid
     }
     
-    func equalsExcludingSyncAttributes(rhs: ProductCategory) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: ProductCategory) -> Bool {
         return uuid == rhs.uuid && name == rhs.name && color == rhs.color
     }
 
-    private func update(category: ProductCategory) -> ProductCategory {
+    fileprivate func update(_ category: ProductCategory) -> ProductCategory {
         return copy(name: category.name, color: category.color, lastServerUpdate: category.lastServerUpdate, removed: category.removed)
     }
     
     // Updates self and its dependencies with category, the references to the dependencies (uuid) are not changed
     // In category we don't need this now as it doesn't have dependencies to other models, but it may in the future, in which case we would just have to change the implementation of this method + this way it's consistent with other models that also have this method.
-    func updateWithoutChangingReferences(category: ProductCategory) -> ProductCategory {
+    func updateWithoutChangingReferences(_ category: ProductCategory) -> ProductCategory {
         return update(category)
     }
 }

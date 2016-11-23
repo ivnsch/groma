@@ -10,22 +10,22 @@ import Foundation
 
 extension Float {
    
-    static let formatter = NSNumberFormatter()
-    static let currencyFormatter: NSNumberFormatter = {
-        let f = NSNumberFormatter()
-        f.numberStyle = .CurrencyStyle
-        f.locale = NSLocale.currentLocale()
+    static let formatter = NumberFormatter()
+    static let currencyFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.numberStyle = .currency
+        f.locale = Locale.current
         return f
     }()
     
-    func toString(maxFractionDigits: Int) -> String {
-        Float.formatter.numberStyle = .NoStyle
+    func toString(_ maxFractionDigits: Int) -> String {
+        Float.formatter.numberStyle = .none
         Float.formatter.maximumFractionDigits = maxFractionDigits
         Float.formatter.minimumFractionDigits = 0
-        return Float.formatter.stringFromNumber(NSNumber(float: self))!
+        return Float.formatter.string(from: NSNumber(value: self as Float))!
     }
     
     func toLocalCurrencyString() -> String {
-        return Float.currencyFormatter.stringFromNumber(self)!
+        return Float.currencyFormatter.string(from: NSNumber(value: self))!
     }
 }

@@ -10,53 +10,53 @@ import Foundation
 
 class RemotePlanItemsProvider {
     
-    func planItems(inventory: Inventory? = nil, handler: RemoteResult<RemoteHistoryItems> -> ()) {
-        let params: [String: AnyObject] = inventory.map{["inventory": $0.uuid]} ?? [String: AnyObject]()
-        RemoteProvider.authenticatedRequest(.GET, Urls.planItems, params) {result in
+    func planItems(_ inventory: Inventory? = nil, handler: @escaping (RemoteResult<RemoteHistoryItems>) -> ()) {
+        let params: [String: AnyObject] = inventory.map{["inventory": $0.uuid as AnyObject]} ?? [String: AnyObject]()
+        RemoteProvider.authenticatedRequest(.get, Urls.planItems, params) {result in
             handler(result)
         }
     }
 
-    func addPlanItem(planItem: PlanItem, handler: RemoteResult<NoOpSerializable> -> Void) {
+    func addPlanItem(_ planItem: PlanItem, handler: @escaping (RemoteResult<NoOpSerializable>) -> Void) {
         addUpdatePlanItem(planItem, handler: handler)
     }
     
-    func updatePlanItem(planItem: PlanItem, handler: RemoteResult<NoOpSerializable> -> Void) {
+    func updatePlanItem(_ planItem: PlanItem, handler: @escaping (RemoteResult<NoOpSerializable>) -> Void) {
         addUpdatePlanItem(planItem, handler: handler)
     }
 
-    func addUpdatePlanItem(planItem: PlanItem, handler: RemoteResult<NoOpSerializable> -> Void) {
+    func addUpdatePlanItem(_ planItem: PlanItem, handler: @escaping (RemoteResult<NoOpSerializable>) -> Void) {
         let params = toRequestParams(planItem)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.planItem, params) {result in
+        RemoteProvider.authenticatedRequest(.put, Urls.planItem, params) {result in
             handler(result)
         }
     }
     
-    func removePlanItem(planItem: PlanItem, handler: RemoteResult<NoOpSerializable> -> Void) {
+    func removePlanItem(_ planItem: PlanItem, handler: @escaping (RemoteResult<NoOpSerializable>) -> Void) {
         let params = toRequestParams(planItem)
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.planItem, params) {result in
+        RemoteProvider.authenticatedRequest(.delete, Urls.planItem, params) {result in
             handler(result)
         }
     }
     
-    func toRequestParams(planItems: [PlanItem]) -> [[String: AnyObject]] {
+    func toRequestParams(_ planItems: [PlanItem]) -> [[String: AnyObject]] {
         return planItems.map{toRequestParams($0)}
     }
     
-    func toRequestParams(planItem: PlanItem) -> [String: AnyObject] {
+    func toRequestParams(_ planItem: PlanItem) -> [String: AnyObject] {
         let inventory = RemoteInventoryProvider().toRequestParams(planItem.inventory)
         
         var dict: [String: AnyObject] = [
-            "inventory": inventory,
-            "quantity": planItem.quantity,
+            "inventory": inventory as AnyObject,
+            "quantity": planItem.quantity as AnyObject,
             "productInput": [
                 "uuid": planItem.product.uuid,
                 "name": planItem.product.name,
                 "category": RemoteListItemProvider().toRequestParams(planItem.product.category)
-            ]
+            ] as AnyObject
         ]
         if let lastServerUpdate = planItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         return dict
     }

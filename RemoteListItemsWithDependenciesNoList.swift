@@ -26,13 +26,13 @@ struct RemoteListItemsWithDependenciesNoList: ResponseObjectSerializable, Custom
     
     init?(representation: AnyObject) {
         guard
-            let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
+            let productsObj = representation.value(forKeyPath: "products") as? [AnyObject],
             let products = RemoteProduct.collection(productsObj),
-            let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
+            let productsCategoriesObj = representation.value(forKeyPath: "productsCategories") as? [AnyObject],
             let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
-            let sectionsObj = representation.valueForKeyPath("sections") as? [AnyObject],
+            let sectionsObj = representation.value(forKeyPath: "sections") as? [AnyObject],
             let sections = RemoteSection.collection(sectionsObj),
-            let listItemsObj = representation.valueForKeyPath("items") as? [AnyObject],
+            let listItemsObj = representation.value(forKeyPath: "items") as? [AnyObject],
             let listItems = RemoteListItem.collection(listItemsObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -45,6 +45,6 @@ struct RemoteListItemsWithDependenciesNoList: ResponseObjectSerializable, Custom
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) productsCategories: [\(productsCategories)], products: [\(products)], sections: [\(sections)], listItems: [\(listItems)}"
+        return "{\(type(of: self)) productsCategories: [\(productsCategories)], products: [\(products)], sections: [\(sections)], listItems: [\(listItems)}"
     }
 }

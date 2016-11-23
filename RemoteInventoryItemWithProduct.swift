@@ -20,14 +20,14 @@ struct RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseColle
     // if server for some reason doesn't send a field the app currently crashes
     init?(representation: AnyObject) {
         guard
-            let inventoryItemObj = representation.valueForKeyPath("inventoryItem"),
-            let inventoryItem = RemoteInventoryItem(representation: inventoryItemObj),
-            let productCategoryObj = representation.valueForKeyPath("productCategory"),
-            let productCategory = RemoteProductCategory(representation: productCategoryObj),
-            let productObj = representation.valueForKeyPath("product"),
-            let product = RemoteProduct(representation: productObj),
-            let inventoryObj = representation.valueForKeyPath("inventory"),
-            let inventory = RemoteInventory(representation: inventoryObj)
+            let inventoryItemObj = representation.value(forKeyPath: "inventoryItem"),
+            let inventoryItem = RemoteInventoryItem(representation: inventoryItemObj as AnyObject),
+            let productCategoryObj = representation.value(forKeyPath: "productCategory"),
+            let productCategory = RemoteProductCategory(representation: productCategoryObj as AnyObject),
+            let productObj = representation.value(forKeyPath: "product"),
+            let product = RemoteProduct(representation: productObj as AnyObject),
+            let inventoryObj = representation.value(forKeyPath: "inventory"),
+            let inventory = RemoteInventory(representation: inventoryObj as AnyObject)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -38,9 +38,9 @@ struct RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseColle
         self.inventory = inventory
     }
     
-    static func collection(representation: AnyObject) -> [RemoteInventoryItemWithProduct]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteInventoryItemWithProduct]? {
         var items = [RemoteInventoryItemWithProduct]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let item = RemoteInventoryItemWithProduct(representation: obj) {
                 items.append(item)
             } else {
@@ -51,6 +51,6 @@ struct RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseColle
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventoryItem: \(inventoryItem), productCategory: \(productCategory), product: \(product), inventory: \(inventory)}"
+        return "{\(type(of: self)) inventoryItem: \(inventoryItem), productCategory: \(productCategory), product: \(product), inventory: \(inventory)}"
     }
 }

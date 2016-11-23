@@ -33,7 +33,7 @@ class ExpandableTableViewListModel: ExpandableTableViewModel {
         return list.users
     }
     
-    override func same(rhs: ExpandableTableViewModel) -> Bool {
+    override func same(_ rhs: ExpandableTableViewModel) -> Bool {
         return list.same((rhs as! ExpandableTableViewListModel).list)
     }
     
@@ -52,20 +52,20 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         setNavTitle(trans("title_lists"))
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListsTableViewController.onWebsocketList(_:)), name: WSNotificationName.List.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListsTableViewController.onWebsocketLists(_:)), name: WSNotificationName.Lists.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListsTableViewController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListsTableViewController.onListInvitationAccepted(_:)), name: Notification.ListInvitationAccepted.rawValue, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListsTableViewController.onWebsocketList(_:)), name: NSNotification.Name(rawValue: WSNotificationName.List.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListsTableViewController.onWebsocketLists(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Lists.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListsTableViewController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListsTableViewController.onListInvitationAccepted(_:)), name: NSNotification.Name(rawValue: Notification.ListInvitationAccepted.rawValue), object: nil)
         
         initGlobalTabBar() // since ListsTableViewController is the always the first controller (that shows a tabbar) init tabBar insets here. Tried to do this in AppDelegate with root controller it doesn't have tabBarController.
     }
     
     deinit {
         QL1("Deinit lists controller")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
-    private func initGlobalTabBar() {
+    fileprivate func initGlobalTabBar() {
         if let tabBar = tabBarController?.tabBar {
             for tabBarItem in tabBar.items! {
                 tabBarItem.title = ""
@@ -82,8 +82,8 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         onAddTap(false)
     }
     
-    private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditListController> {
-        let top = CGRectGetHeight(topBar.frame)
+    fileprivate func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditListController> {
+        let top = topBar.frame.height
         let expandableTopViewController: ExpandableTopViewController<AddEditListController> = ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight + 40, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditList()
             controller.delegate = self
@@ -98,7 +98,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         return expandableTopViewController
     }
     
-    override func canRemoveModel(model: ExpandableTableViewModel, can: Bool -> Void) {
+    override func canRemoveModel(_ model: ExpandableTableViewModel, can: @escaping (Bool) -> Void) {
         let list = (model as! ExpandableTableViewListModel).list
         if list.users.count > 1 { // myself + 1
             ConfirmationPopup.show(title: trans("popup_title_warning"), message: trans("popup_remove_list_warning", list.name), okTitle: trans("popup_button_remove_list"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {
@@ -122,7 +122,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         topAddEditListControllerManager?.controller?.submit()
     }
     
-    override func onSelectCellInEditMode(model: ExpandableTableViewModel) {
+    override func onSelectCellInEditMode(_ model: ExpandableTableViewModel) {
         super.onSelectCellInEditMode(model)
         
         topAddEditListControllerManager?.expand(true)
@@ -148,7 +148,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         ))
     }
     
-    override func onRemoveModel(model: ExpandableTableViewModel) {
+    override func onRemoveModel(_ model: ExpandableTableViewModel) {
         Providers.listProvider.remove((model as! ExpandableTableViewListModel).list, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.initModels()
@@ -156,7 +156,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         ))
     }
     
-    override func initDetailController(cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
+    override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
         let listItemsController = UIStoryboard.todoItemsViewController()
         listItemsController.view.frame = view.frame
         addChildViewController(listItemsController)
@@ -176,14 +176,14 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         return listItemsController
     }
     
-    override func animationsComplete(wasExpanding: Bool, frontView: UIView) {
+    override func animationsComplete(_ wasExpanding: Bool, frontView: UIView) {
         super.animationsComplete(wasExpanding, frontView: frontView)
         if !wasExpanding {
             removeChildViewControllers()
         }
     }
 
-    override func onAddTap(rotateTopBarButton: Bool = true) {
+    override func onAddTap(_ rotateTopBarButton: Bool = true) {
         super.onAddTap()
         SizeLimitChecker.checkListItemsSizeLimit(models.count, controller: self) {[weak self] in
             if let weakSelf = self {
@@ -198,7 +198,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     
     // MARK: - AddEditListControllerDelegate
     
-    func onAddList(list: List) {
+    func onAddList(_ list: List) {
         Providers.listProvider.add(list, remote: true, resultHandler(onSuccess: {[weak self] list in
             self?.addListUI(list)
             }, onErrorAdditional: {[weak self] result in
@@ -207,7 +207,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         ))
     }
     
-    func onUpdateList(list: List) {
+    func onUpdateList(_ list: List) {
         Providers.listProvider.update([list], remote: true, resultHandler(onSuccess: {[weak self] in
             self?.updateListUI(list)
             }, onErrorAdditional: {[weak self] result in
@@ -216,7 +216,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         ))
     }
 
-    private func onListAddOrUpdateError(list: List) {
+    fileprivate func onListAddOrUpdateError(_ list: List) {
         initModels()
         // If the user quickly after adding the list opened its list items controller, close it.
         for childViewController in childViewControllers {
@@ -228,41 +228,41 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         }
     }
     
-    private func addListUI(list: List) {
+    fileprivate func addListUI(_ list: List) {
         tableView.wrapUpdates {[weak self] in
             if let weakSelf = self {
-                self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
+                self?.tableView.insertRows(at: [IndexPath(row: weakSelf.models.count, section: 0)], with: UITableViewRowAnimation.top)
                 self?.models.append(ExpandableTableViewListModel(list: list))
                 self?.topAddEditListControllerManager?.expand(false)
-                self?.setTopBarState(.NormalFromExpanded)
+                self?.setTopBarState(.normalFromExpanded)
             }
         }
     }
     
-    private func updateListUI(list: List) {
-        models.update(ExpandableTableViewListModel(list: list))
+    fileprivate func updateListUI(_ list: List) {
+        _ = models.update(ExpandableTableViewListModel(list: list))
         tableView.reloadData()
         topAddEditListControllerManager?.expand(false)
-        setTopBarState(.NormalFromExpanded)
+        setTopBarState(.normalFromExpanded)
     }
     
     
     // MARK: - ExpandableTopViewControllerDelegate
     
-    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+    func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
     }
     
     override func onExpandableClose() {
         super.onExpandableClose()
-        setTopBarState(.NormalFromExpanded)
+        setTopBarState(.normalFromExpanded)
     }
     
     // MARK:
 
-    override func onExpand(expanding: Bool) {
+    override func onExpand(_ expanding: Bool) {
     }
     
-    private func debugItems() {
+    fileprivate func debugItems() {
         if QorumLogs.minimumLogLevelShown < 2 {
             print("Lists:")
             (models as! [ExpandableTableViewListModel]).forEach{print("\($0.list.shortDebugDescription)")}
@@ -271,9 +271,9 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
 
     // MARK: - Websocket
     
-    func onWebsocketList(note: NSNotification) {
+    func onWebsocketList(_ note: Foundation.Notification) {
         
-        if let info = note.userInfo as? Dictionary<String, WSNotification<List>> {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<List>> {
             if let notification = info[WSNotificationValue] {
                 let list = notification.obj
                 switch notification.verb {
@@ -287,7 +287,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 QL4("No value")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 let listUuid = notification.obj
                 switch notification.verb {
@@ -304,12 +304,12 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             }
             
         } else {
-            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
+            QL4("userInfo not there or couldn't be casted: \((note as NSNotification).userInfo)")
         }
     }
     
-    func onWebsocketLists(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
+    func onWebsocketLists(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Order:
@@ -322,11 +322,11 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         }
     }
 
-    func onListInvitationAccepted(note: NSNotification) {
+    func onListInvitationAccepted(_ note: Foundation.Notification) {
         initModels()
     }
     
-    func onIncomingGlobalSyncFinished(note: NSNotification) {
+    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         initModels()
     }

@@ -15,14 +15,14 @@ class ProductWithQuantity: Equatable, Identifiable {
     var quantity: Int {
         fatalError("override")
     }
-    func same(rhs: ProductWithQuantity) -> Bool {
+    func same(_ rhs: ProductWithQuantity) -> Bool {
         return product.same(rhs.product)
     }
-    func incrementQuantityCopy(delta: Int) -> ProductWithQuantity {
+    func incrementQuantityCopy(_ delta: Int) -> ProductWithQuantity {
         fatalError("override")
     }
     
-    func updateQuantityCopy(quantity: Int) -> ProductWithQuantity {
+    func updateQuantityCopy(_ quantity: Int) -> ProductWithQuantity {
         fatalError("override")
     }
 }

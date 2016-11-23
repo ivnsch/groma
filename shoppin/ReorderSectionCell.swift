@@ -18,7 +18,7 @@ class ReorderSectionCell: UITableViewCell {
                 nameLabel.text = section.name
                 contentView.backgroundColor = section.color
                 backgroundColor = section.color
-                nameLabel.textColor = UIColor.whiteColor()
+                nameLabel.textColor = UIColor.white
             }
         }
     }
@@ -26,6 +26,6 @@ class ReorderSectionCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        selectionStyle = .None
+        selectionStyle = .none
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 
 enum MyAlertDismissAnimation {
-    case Fade, None
+    case fade, none
 }
 
 // TODO better structure, alert and confirm should be 2 different classes, which share part of the view and code. Frame/constraints calculations are also messy.
@@ -35,7 +35,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     
     
     var dismissWithSwipe = false
-    var dismissAnimation: MyAlertDismissAnimation = .Fade
+    var dismissAnimation: MyAlertDismissAnimation = .fade
 
     var minWidth: CGFloat = 250
     var minHeight: CGFloat = 160
@@ -66,7 +66,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     var buttonText: String = "" {
         didSet {
             if let okButton = okButton {
-                okButton.setTitle(buttonText, forState: .Normal)
+                okButton.setTitle(buttonText, for: UIControlState())
             } else {
                 QL3("Outlets not initialised, can't set text")
             }
@@ -80,7 +80,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     var confirmText: String = "Confirm" {
         didSet {
             if let confirmButton = confirmButton {
-                confirmButton.setTitle(confirmText, forState: .Normal)
+                confirmButton.setTitle(confirmText, for: UIControlState())
             } else {
                 QL3("Outlets not initialised")
             }
@@ -90,7 +90,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     var cancelText: String = "Cancel" {
         didSet {
             if let cancelButton = cancelButton {
-                cancelButton.setTitle(cancelText, forState: .Normal)
+                cancelButton.setTitle(cancelText, for: UIControlState())
             } else {
                 QL3("Outlets not initialised")
             }
@@ -100,9 +100,9 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     var isConfirm: Bool = true {
         didSet {
             if let confirmButton = confirmButton {
-                confirmButton.hidden = !isConfirm
-                cancelButton.hidden = !isConfirm
-                okButton.hidden = isConfirm
+                confirmButton.isHidden = !isConfirm
+                cancelButton.isHidden = !isConfirm
+                okButton.isHidden = isConfirm
             } else {
                 QL3("Outlets not initialised")
             }
@@ -112,7 +112,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     var hasOkButton: Bool = true {
         didSet {
             if let okButton = okButton {
-                okButton.hidden = !hasOkButton
+                okButton.isHidden = !hasOkButton
             } else {
                 QL3("No button")
             }
@@ -126,21 +126,21 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        okButton.setTitle(buttonText, forState: .Normal)
-        confirmButton.setTitle(confirmText, forState: .Normal)
-        cancelButton.setTitle(cancelText, forState: .Normal)
+        okButton.setTitle(buttonText, for: UIControlState())
+        confirmButton.setTitle(confirmText, for: UIControlState())
+        cancelButton.setTitle(cancelText, for: UIControlState())
         
         animateFade(true)
     }
     
-    private func animateFade(opening: Bool) {
+    fileprivate func animateFade(_ opening: Bool) {
         alpha = opening ? 0 : 1
-        UIView.animateWithDuration(0.3) {[weak self] in
+        UIView.animate(withDuration: 0.3, animations: {[weak self] in
             self?.alpha = opening ? 1 : 0
-        }
+        }) 
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         onTapAnywhere?()
     }
     
@@ -155,7 +155,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         }
     }
 
-    func animateScale(open: Bool, anchorPoint: CGPoint, parentView: UIView, frame: CGRect? = nil, onFinish: VoidFunction? = nil) {
+    func animateScale(_ open: Bool, anchorPoint: CGPoint, parentView: UIView, frame: CGRect? = nil, onFinish: VoidFunction? = nil) {
 
         let frame = frame ?? parentView.frame
         
@@ -163,25 +163,25 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
             let fractionX = anchorPoint.x / frame.width
             let fractionY = anchorPoint.y / frame.height
             
-            layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            layer.anchorPoint = CGPoint(x: fractionX, y: fractionY)
             
-            self.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.width, frame.height)
+            self.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: frame.height)
         }
         
-        transform = open ? CGAffineTransformMakeScale(0.001, 0.001) : CGAffineTransformMakeScale(1, 1)
+        transform = open ? CGAffineTransform(scaleX: 0.001, y: 0.001) : CGAffineTransform(scaleX: 1, y: 1)
 
-        UIView.animateWithDuration(0.3, animations: {[weak self] in
-            self?.transform = open ? CGAffineTransformMakeScale(1, 1) : CGAffineTransformMakeScale(0.001, 0.001)
+        UIView.animate(withDuration: 0.3, animations: {[weak self] in
+            self?.transform = open ? CGAffineTransform(scaleX: 1, y: 1) : CGAffineTransform(scaleX: 0.001, y: 0.001)
         }, completion: {finished in
             onFinish?()
         })
     }
     
-    func handleTap(recognizer: UITapGestureRecognizer) {
+    func handleTap(_ recognizer: UITapGestureRecognizer) {
         onTapAnywhere?()
     }
 
-    private func updateContainerSize() {
+    fileprivate func updateContainerSize() {
         label.sizeToFit()
 
         let paddingMaxSize: CGFloat = 40
@@ -194,7 +194,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         let maxHeight: CGFloat = frame.height - (paddingMaxSize * 2)
         
 //        let labelSize = label.bounds.size
-        let labelSize = CGSizeMake(maxWidth - (labelPadding * 2), text.heightWithConstrainedWidth(maxWidth, font: label.font))
+        let labelSize = CGSize(width: maxWidth - (labelPadding * 2), height: text.heightWithConstrainedWidth(maxWidth, font: label.font))
         
         let titleWithTopAndBottomSpaceHeight: CGFloat = title != nil ? 62 : 0
         let bottomButtonsWithTopAndButtonSpaceHeight: CGFloat = 62
@@ -217,60 +217,60 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         }
         
         switch dismissAnimation {
-        case .Fade:
-            UIView.animateWithDuration(0.2, animations: {[weak self] in
+        case .fade:
+            UIView.animate(withDuration: 0.2, animations: {[weak self] in
                 self?.background.alpha = 0
                 }, completion: {finished in
                     dismiss()
             })
-        case .None:
+        case .none:
             dismiss()
         }
     }
     
     // down 0 up 1
-    private func pointsToMove(view: UIView, direction: Int, angle: CGFloat) -> CGFloat {
+    fileprivate func pointsToMove(_ view: UIView, direction: Int, angle: CGFloat) -> CGFloat {
         let center = view.center
-        let halfHeight = CGRectGetHeight(frame) / 2
+        let halfHeight = frame.height / 2
         let newY = direction > 0 ? halfHeight + frame.maxY : -halfHeight
         return center.y - newY * (1 + abs(angle))
     }
     
-    func onPan(recognizer: UIPanGestureRecognizer) {
+    func onPan(_ recognizer: UIPanGestureRecognizer) {
         
         switch recognizer.state {
 
-        case .Changed:
-            let translation = recognizer.translationInView(self)
-            container.center = CGPointMake(container.center.x, container.center.y + (translation.y / 10))
+        case .changed:
+            let translation = recognizer.translation(in: self)
+            container.center = CGPoint(x: container.center.x, y: container.center.y + (translation.y / 10))
             
-        case .Failed:
+        case .failed:
             fallthrough
-        case .Cancelled:
+        case .cancelled:
             fallthrough
-        case .Ended:
+        case .ended:
 
             let kTranslationThreshold: CGFloat = 100
             let kVelocityThreshold: CGFloat = 500
             let offset = self.center.y - container.center.y
             
-            let vel = recognizer.velocityInView(self).y
+            let vel = recognizer.velocity(in: self).y
             if (abs(offset) > kTranslationThreshold || abs(vel) > kVelocityThreshold) {
                 var center = container.center;
-                let halfPopupHeight = CGRectGetHeight(container.frame) / 2;
-                let newY = vel > 0 ? halfPopupHeight + CGRectGetMaxY(self.frame) : -halfPopupHeight;
+                let halfPopupHeight = container.frame.height / 2;
+                let newY = vel > 0 ? halfPopupHeight + self.frame.maxY : -halfPopupHeight;
                 let pointsToMove = self.pointsToMove(container, direction: (vel > 0 ? 0 : 1), angle: 0)
-                let duration: NSTimeInterval = NSTimeInterval(pointsToMove / vel)
+                let duration: TimeInterval = TimeInterval(pointsToMove / vel)
                 
                 center.y = newY
             
-                UIView.animateWithDuration(min(0.3, duration), animations: {
+                UIView.animate(withDuration: min(0.3, duration), animations: {
                     self.container.center = center
                 }, completion: {finished in
                     self.dismiss()
                 })
             } else {
-                UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 2, options: [], animations: {
+                UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 2, options: [], animations: {
                     self.container.center = self.center
                 }, completion: nil)
             }

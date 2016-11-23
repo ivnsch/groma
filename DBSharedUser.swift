@@ -19,7 +19,7 @@ class DBSharedUser: Object {
         return "email"
     }
     
-    static func fromDict(dict: [String: AnyObject]) -> DBSharedUser {
+    static func fromDict(_ dict: [String: AnyObject]) -> DBSharedUser {
         let user = DBSharedUser()
         user.email = dict["email"] as! String
 //        user.setSyncableFieldswithRemoteDict(dict) // for now disabled as backend doesn't have specific last update of shared user, TODO think about this, maybe send the one of user?
@@ -28,8 +28,8 @@ class DBSharedUser: Object {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["email"] = email
-        dict["foo"] = "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
+        dict["email"] = email as AnyObject?
+        dict["foo"] = "" as AnyObject? // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
 //        setSyncableFieldsInDict(dict) // no syncable obj itself, just a part of other objects
         return dict
     }

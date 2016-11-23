@@ -40,7 +40,7 @@ class QuickAddItem: Identifiable {
         return QuickAddItem()
     }
     
-    func same(item: QuickAddItem) -> Bool {
+    func same(_ item: QuickAddItem) -> Bool {
         fatalError("Override")
     }
 }

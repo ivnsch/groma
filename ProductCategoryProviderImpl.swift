@@ -11,54 +11,54 @@ import QorumLogs
 
 class ProductCategoryProviderImpl: ProductCategoryProvider {
 
-    private let dbProductProvider = RealmProductProvider()
-    private let dbCategoryProvider = RealmProductCategoryProvider()
-    private let remoteCategoryProvider = RemoteProductCategoryProvider()
+    fileprivate let dbProductProvider = RealmProductProvider()
+    fileprivate let dbCategoryProvider = RealmProductCategoryProvider()
+    fileprivate let remoteCategoryProvider = RemoteProductCategoryProvider()
 
-    func categoryWithName(name: String, _ handler: ProviderResult<ProductCategory> -> Void) {
+    func categoryWithName(_ name: String, _ handler: @escaping (ProviderResult<ProductCategory>) -> Void) {
         dbProductProvider.categoryWithName(name) {categoryMaybe in
             if let category = categoryMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: category))
+                handler(ProviderResult(status: .success, sucessResult: category))
             } else {
-                handler(ProviderResult(status: .NotFound))
+                handler(ProviderResult(status: .notFound))
             }
         }
     }
     
-    func categoryWithNameOpt(name: String, _ handler: ProviderResult<ProductCategory?> -> Void) {
+    func categoryWithNameOpt(_ name: String, _ handler: @escaping (ProviderResult<ProductCategory?>) -> Void) {
         dbProductProvider.categoryWithName(name) {categoryMaybe in
-            handler(ProviderResult(status: .Success, sucessResult: categoryMaybe))
+            handler(ProviderResult(status: .success, sucessResult: categoryMaybe))
         }
     }
     
-    func categoriesContainingText(text: String,  _ handler: ProviderResult<[ProductCategory]> -> Void) {
+    func categoriesContainingText(_ text: String,  _ handler: @escaping (ProviderResult<[ProductCategory]>) -> Void) {
         dbCategoryProvider.categoriesContainingText(text) {categories in
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: categories))
+            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: categories))
         }
     }
     
-    func categoriesContainingText(text: String, range: NSRange, _ handler: ProviderResult<(text: String?, categories: [ProductCategory])> -> Void) {
+    func categoriesContainingText(_ text: String, range: NSRange, _ handler: @escaping (ProviderResult<(text: String?, categories: [ProductCategory])>) -> Void) {
         dbCategoryProvider.categoriesContainingText(text, range: range) {categories in
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: categories))
+            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: categories))
         }
     }
 
-    func categorySuggestions(handler: ProviderResult<[Suggestion]> -> ()) {
+    func categorySuggestions(_ handler: @escaping (ProviderResult<[Suggestion]>) -> ()) {
         dbProductProvider.loadCategorySuggestions {dbSuggestions in
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSuggestions))
+            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: dbSuggestions))
         }
     }
     
-    func categories(range: NSRange, _ handler: ProviderResult<[ProductCategory]> -> Void) {
+    func categories(_ range: NSRange, _ handler: @escaping (ProviderResult<[ProductCategory]>) -> Void) {
         dbCategoryProvider.categories(range) {categories in
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: categories))
+            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: categories))
             // For categories no background sync, not justified as this screen is not used frequently, also when there are new categories it's always because new list/inventory/group items were added, and we get these new categories already as a dependency in the respective background updates of these items (+ we have websocket - background sync is a "just in case" operation)
         }
     }
     
-    func update(category: ProductCategory, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func update(_ category: ProductCategory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbCategoryProvider.updateCategory(category) {[weak self] success in
-           handler(ProviderResult(status: success ? .Success : .Unknown))
+           handler(ProviderResult(status: success ? .success : .unknown))
             
             if remote {
                 self?.remoteCategoryProvider.updateCategory(category) {remoteResult in
@@ -75,13 +75,13 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
         }
     }
     
-    func remove(category: ProductCategory, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func remove(_ category: ProductCategory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         remove(category.uuid, remote: remote, handler)
     }
     
-    func remove(categoryUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func remove(_ categoryUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProviders.productCategoryProvider.removeCategory(categoryUuid, markForSync: true) {[weak self] success in
-            handler(ProviderResult(status: success ? .Success : .Unknown))
+            handler(ProviderResult(status: success ? .success : .unknown))
             
             if remote {
                 self?.remoteCategoryProvider.removeCategory(categoryUuid) {remoteResult in
@@ -99,10 +99,10 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
         }
     }
     
-    func removeAllCategoriesWithName(categoryName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func removeAllCategoriesWithName(_ categoryName: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProviders.productCategoryProvider.removeAllWithName(categoryName, markForSync: true) {[weak self] removedCategoriesMaybe in
             if let removedCategories = removedCategoriesMaybe {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 if remote {
                     self?.remoteCategoryProvider.removeCategoriesWithName(categoryName) {remoteResult in
@@ -121,7 +121,7 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
                 }
             } else {
                 QL4("Couldn't remove sections from db for name: \(categoryName)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }

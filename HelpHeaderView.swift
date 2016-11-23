@@ -9,7 +9,7 @@
 import UIKit
 
 protocol HelpHeaderViewDelegate: class {
-    func onHeaderTap(header: HelpHeaderView, sectionIndex: Int, sectionModel: HelpItemSectionModel)
+    func onHeaderTap(_ header: HelpHeaderView, sectionIndex: Int, sectionModel: HelpItemSectionModel)
 }
 
 class HelpHeaderView: UIView {
@@ -24,7 +24,7 @@ class HelpHeaderView: UIView {
         didSet {
             if let sectionModel = sectionModel {
                 
-                let textColor = sectionModel.obj.type == .Troubleshooting ? UIColor.redColor() : UIColor.darkTextColor()
+                let textColor = sectionModel.obj.type == .troubleshooting ? UIColor.flatRed : UIColor.darkText
                 
                 if let boldRange = sectionModel.boldRange {
                     helpTitleLabel.attributedText = sectionModel.obj.title.makeAttributed(boldRange, normalFont: Fonts.regular, font: Fonts.regularBold, textColor: textColor)
@@ -36,8 +36,8 @@ class HelpHeaderView: UIView {
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if let sectionIndex = sectionIndex, sectionModel = sectionModel {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let sectionIndex = sectionIndex, let sectionModel = sectionModel {
             delegate?.onHeaderTap(self, sectionIndex: sectionIndex, sectionModel: sectionModel)
         } else {
             print("Error: HelpHeaderView.touchesEnded: no sectionIndex or sectionModel")

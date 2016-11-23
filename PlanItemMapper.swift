@@ -10,7 +10,7 @@ import UIKit
 
 class PlanItemMapper {
 
-    class func dbWith(planItem: PlanItem) -> DBPlanItem {
+    class func dbWith(_ planItem: PlanItem) -> DBPlanItem {
         let dbPlanItem = DBPlanItem()
         dbPlanItem.inventory = InventoryMapper.dbWithInventory(planItem.inventory, dirty: true) // FIXME dirty: true no particular reason, since not using plan just want it to compile
         dbPlanItem.product  = ProductMapper.dbWithProduct(planItem.product)
@@ -21,7 +21,7 @@ class PlanItemMapper {
         return dbPlanItem
     }
     
-    class func planItemWith(dbPlanItem: DBPlanItem, usedQuantity: Int) -> PlanItem {
+    class func planItemWith(_ dbPlanItem: DBPlanItem, usedQuantity: Int) -> PlanItem {
         return PlanItem(
             inventory: InventoryMapper.inventoryWithDB(dbPlanItem.inventory),
             product: ProductMapper.productWithDB(dbPlanItem.product),
@@ -32,9 +32,9 @@ class PlanItemMapper {
     }
     
     // Note: letting variables with "list" instead of "plan" in names
-    class func planItemsWithRemote(remoteListItems: RemotePlanItems) -> PlanItemsWithRelations {
+    class func planItemsWithRemote(_ remoteListItems: RemotePlanItems) -> PlanItemsWithRelations {
         
-        func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
+        func toProductCategoryDict(_ remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
             var dict: [String: ProductCategory] = [:]
             var arr: [ProductCategory] = []
             for remoteProductCategory in remoteProductsCategories {
@@ -46,7 +46,7 @@ class PlanItemMapper {
             return (dict, arr)
         }
         
-        func toProductDict(remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
+        func toProductDict(_ remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
             var dict: [String: Product] = [:]
             var arr: [Product] = []
             for remoteProduct in remoteProducts {

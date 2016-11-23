@@ -32,11 +32,11 @@ class DBRemoveGroupItem: Object {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
-    static func createFilterWithGroup(groupUuid: String) -> String {
+    static func createFilterWithGroup(_ groupUuid: String) -> String {
         return "groupUuid == '\(groupUuid)'"
     }
     
@@ -44,8 +44,8 @@ class DBRemoveGroupItem: Object {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+        dict["uuid"] = uuid as AnyObject?
+        dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         return dict
     }
 }

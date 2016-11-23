@@ -15,19 +15,19 @@ protocol RatingProvideFeedbackControllerDelegate: class {
 
 class RatingProvideFeedbackController: UIViewController, EmailHelperDelegate {
 
-    private var emailHelper: EmailHelper?
+    fileprivate var emailHelper: EmailHelper?
     
     weak var delegate: RatingProvideFeedbackControllerDelegate?
     
-    @IBAction func onProvideFeedbackTap(sender: UIButton) {
-        PreferencesManager.savePreference(PreferencesManagerKey.lastAppRatingDialogDate, value: NSDate())
+    @IBAction func onProvideFeedbackTap(_ sender: UIButton) {
+        PreferencesManager.savePreference(PreferencesManagerKey.lastAppRatingDialogDate, value: Date())
 
         emailHelper = EmailHelper(controller: self)
         emailHelper?.showEmail()
     }
     
-    @IBAction func onCancelTap(sender: UIButton) {
-        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func onCancelTap(_ sender: UIButton) {
+        presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - EmailHelperDelegate

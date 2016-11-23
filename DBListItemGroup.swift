@@ -21,7 +21,7 @@ class DBListItemGroup: DBSyncable {
         return UIColor(hexString: bgColorHex)
     }
     
-    func setBgColor(bgColor: UIColor) {
+    func setBgColor(_ bgColor: UIColor) {
         bgColorHex = bgColor.hexStr
     }
     
@@ -31,28 +31,28 @@ class DBListItemGroup: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
-    static func createFilterName(name: String) -> String {
+    static func createFilterName(_ name: String) -> String {
         return "name = '\(name)'"
     }
     
-    static func createFilterNameContains(text: String) -> String {
+    static func createFilterNameContains(_ text: String) -> String {
         return "name CONTAINS[c] '\(text)'"
     }
     
     // MARK: - Update
     
     // Creates dictionary to update database entry for an order update
-    static func createOrderUpdateDict(orderUpdate: OrderUpdate, dirty: Bool) -> [String: AnyObject] {
-        return ["uuid": orderUpdate.uuid, "order": orderUpdate.order, DBSyncable.dirtyFieldName: dirty]
+    static func createOrderUpdateDict(_ orderUpdate: OrderUpdate, dirty: Bool) -> [String: AnyObject] {
+        return ["uuid": orderUpdate.uuid as AnyObject, "order": orderUpdate.order as AnyObject, DBSyncable.dirtyFieldName: dirty as AnyObject]
     }
     
     // MARK: -
     
-    static func fromDict(dict: [String: AnyObject]) -> DBListItemGroup {
+    static func fromDict(_ dict: [String: AnyObject]) -> DBListItemGroup {
         let item = DBListItemGroup()
         item.uuid = dict["uuid"]! as! String
         item.name = dict["name"]! as! String
@@ -68,17 +68,17 @@ class DBListItemGroup: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["name"] = name
+        dict["uuid"] = uuid as AnyObject?
+        dict["name"] = name as AnyObject?
         // TODO!!!! items? we don't need this here correct?
-        dict["order"] = order
-        dict["color"] = bgColorHex
-        dict["fav"] = fav
+        dict["order"] = order as AnyObject?
+        dict["color"] = bgColorHex as AnyObject?
+        dict["fav"] = fav as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
     }
     
-    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+    override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
         DBProviders.listItemGroupProvider.removeGroupDependenciesSync(realm, groupUuid: uuid, markForSync: markForSync)
         realm.delete(self)
     }

@@ -12,14 +12,14 @@ import UIKit
 class PullToAddHelper {
 
     // Creates default refresh control
-    static func createPullToAdd(parentController: UIViewController) -> UIRefreshControl {
+    static func createPullToAdd(_ parentController: UIViewController) -> UIRefreshControl {
         let refreshControl = UIRefreshControl()
-        let label = UILabel(frame: CGRectMake(0, 0, parentController.view.frame.width, refreshControl.bounds.height))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: parentController.view.frame.width, height: refreshControl.bounds.height))
         label.font = Fonts.fontForSizeCategory(40)
         label.textColor = Theme.grey
         label.text = trans("pull_to_add")
-        label.textAlignment = .Center
-        label.backgroundColor = UIColor.whiteColor()
+        label.textAlignment = .center
+        label.backgroundColor = UIColor.white
         refreshControl.addSubview(label)
         return refreshControl
     }

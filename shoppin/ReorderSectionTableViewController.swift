@@ -11,9 +11,9 @@ import QorumLogs
 
 protocol ReorderSectionTableViewControllerDelegate: class {
     func onSectionsUpdated()
-    func onSectionSelected(section: Section)
-    func canRemoveSection(section: Section, can: Bool -> Void)
-    func onSectionRemoved(section: Section)
+    func onSectionSelected(_ section: Section)
+    func canRemoveSection(_ section: Section, can: @escaping (Bool) -> Void)
+    func onSectionRemoved(_ section: Section)
 }
 
 class ReorderSectionTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -40,12 +40,12 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
 
     // MARK: - UITableViewDataSource
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     // Intentionally named setEdit not setEditing because onComplete optional parameter makes setEditing call ambiguous
-    func setEdit(editing: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
+    func setEdit(_ editing: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
         if let onComplete = onComplete {
             CATransaction.setCompletionBlock(onComplete)
         }
@@ -53,7 +53,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         super.setEditing(editing, animated: true)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         setEdit(true, animated: false)
         // cell starts small to blend with the collapsed original tableview and grows to normal size
         setCellHeight(DimensionsManager.defaultCellHeight, animated: true)
@@ -62,40 +62,40 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     }
     
     // Animate cell height
-    func setCellHeight(height: CGFloat, animated: Bool) {
+    func setCellHeight(_ height: CGFloat, animated: Bool) {
         cellHeight = height
         tableView.beginUpdates()
         tableView.endUpdates()
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sections.count
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("sectionCell", forIndexPath: indexPath) as! ReorderSectionCell
-        cell.section = sections[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "sectionCell", for: indexPath) as! ReorderSectionCell
+        cell.section = sections[(indexPath as NSIndexPath).row]
         return cell
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeight
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             
-            let section = sections[indexPath.row]
+            let section = sections[(indexPath as NSIndexPath).row]
             
             delegate?.canRemoveSection(section) {[weak self] can in
                 if can {
                     tableView.wrapUpdates {[weak self] in
-                        self?.sections.removeAtIndex(indexPath.row)
-                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                        self?.sections.remove(at: (indexPath as NSIndexPath).row)
+                        tableView.deleteRows(at: [indexPath], with: .fade)
                     }
                     self?.delegate?.onSectionRemoved(section)
                 }
@@ -104,15 +104,15 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     }
 
     // Note: status of itels in this list assumed to be .Todo! It's not possible to reorder sections in the other status
-    func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
         
         if let status = status {
-            let section = sections[fromIndexPath.row]
-            sections.removeAtIndex(fromIndexPath.row)
+            let section = sections[(fromIndexPath as NSIndexPath).row]
+            sections.remove(at: (fromIndexPath as NSIndexPath).row)
             
-            sections.insert(section, atIndex: toIndexPath.row)
+            sections.insert(section, at: (toIndexPath as NSIndexPath).row)
             
-            sections = sections.enumerate().map{index, section in
+            sections = sections.enumerated().map{index, section in
                 section.updateOrder(ListItemStatusOrder(status: status, order: index))
             }
             
@@ -125,17 +125,17 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         }
     }
 
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let section = sections[indexPath.row]
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let section = sections[(indexPath as NSIndexPath).row]
         delegate?.onSectionSelected(section)
     }
     
     // Updates a section based on identity (uuid). Note that this isn't usable for order update, as updating order requires to update the order field of sections below
-    func updateSection(section: Section) {
+    func updateSection(_ section: Section) {
         for i in 0..<sections.count {
             if sections[i].same(section) {
                 sections[i] = section
@@ -144,7 +144,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         tableView.reloadData()
     }
     
-    func removeSection(uuid: String) {
+    func removeSection(_ uuid: String) {
         if let index = getSectionIndex(uuid) {
             removeSection(uuid, index: index)
         } else {
@@ -152,8 +152,8 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         }
     }
     
-    func getSectionIndex(uuid: String) -> Int? {
-        for (i, s) in sections.enumerate() {
+    func getSectionIndex(_ uuid: String) -> Int? {
+        for (i, s) in sections.enumerated() {
             if s.uuid == uuid {
                 return i
             }
@@ -161,10 +161,10 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         return nil
     }
     
-    private func removeSection(uuid: String, index: Int) {
+    fileprivate func removeSection(_ uuid: String, index: Int) {
         tableView.wrapUpdates{[weak self] in
-            self?.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Bottom)
-            self?.sections.removeAtIndex(index)
+            self?.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .bottom)
+            self?.sections.remove(at: index)
         }
     }
 }

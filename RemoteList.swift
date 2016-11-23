@@ -21,9 +21,9 @@ struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, C
     
     init?(representation: AnyObject) {
         guard
-            let listObj = representation.valueForKeyPath("list"),
-            let list = RemoteListNoUsers(representation: listObj), // TODO list should be a field of this class don't copy the propertis like below. Maybe use computed properties
-            let unserializedUsers = representation.valueForKeyPath("users"),
+            let listObj = representation.value(forKeyPath: "list"),
+            let list = RemoteListNoUsers(representation: listObj as AnyObject), // TODO list should be a field of this class don't copy the propertis like below. Maybe use computed properties
+            let unserializedUsers = representation.value(forKeyPath: "users") as? [AnyObject],
             let users = RemoteSharedUser.collection(unserializedUsers)
             else {
                 QL4("Invalid json: \(representation)")
@@ -39,9 +39,9 @@ struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, C
         self.store = list.store
     }
     
-    static func collection(representation: AnyObject) -> [RemoteList]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteList]? {
         var lists = [RemoteList]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let list = RemoteList(representation: obj) {
                 lists.append(list)
             } else {
@@ -53,7 +53,7 @@ struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, C
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), users: \(users), inventoryUuid: \(inventoryUuid), lastUpdate: \(lastUpdate), color: \(color), store: \(store)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), order: \(order), users: \(users), inventoryUuid: \(inventoryUuid), lastUpdate: \(lastUpdate), color: \(color), store: \(store)}"
     }
 }
 

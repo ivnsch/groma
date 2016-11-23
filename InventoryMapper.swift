@@ -10,21 +10,21 @@ import Foundation
 
 class InventoryMapper {
     
-    class func inventoryWithDB(dbInventory: DBInventory) -> Inventory {
+    class func inventoryWithDB(_ dbInventory: DBInventory) -> Inventory {
         let users = dbInventory.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
         return Inventory(uuid: dbInventory.uuid, name: dbInventory.name, users: users, bgColor: dbInventory.bgColor(), order: dbInventory.order, lastServerUpdate: dbInventory.lastServerUpdate)
     }
     
-    class func inventoryWithRemote(remoteInventory: RemoteInventory, users: [RemoteSharedUser]) -> Inventory {
+    class func inventoryWithRemote(_ remoteInventory: RemoteInventory, users: [RemoteSharedUser]) -> Inventory {
         return Inventory(uuid: remoteInventory.uuid, name: remoteInventory.name, users: users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: remoteInventory.color, order: remoteInventory.order, lastServerUpdate: remoteInventory.lastUpdate)
     }
 
-    class func inventoryWithRemote(remoteInventoryWithDependencies: RemoteInventoryWithDependencies) -> Inventory {
+    class func inventoryWithRemote(_ remoteInventoryWithDependencies: RemoteInventoryWithDependencies) -> Inventory {
         let remoteInventory = remoteInventoryWithDependencies.inventory
         return inventoryWithRemote(remoteInventory, users: remoteInventoryWithDependencies.users)
     }
     
-    class func dbWithInventory(inventory: Inventory, dirty: Bool) -> DBInventory {
+    class func dbWithInventory(_ inventory: Inventory, dirty: Bool) -> DBInventory {
         let db = DBInventory()
         db.uuid = inventory.uuid
         db.name = inventory.name
@@ -42,11 +42,11 @@ class InventoryMapper {
         return db
     }
     
-    class func dbWithInventory(remoteInventoryWithDependencies: RemoteInventoryWithDependencies) -> DBInventory {
+    class func dbWithInventory(_ remoteInventoryWithDependencies: RemoteInventoryWithDependencies) -> DBInventory {
         return dbWithInventory(remoteInventoryWithDependencies.inventory, users: remoteInventoryWithDependencies.users)
     }
     
-    class func dbWithInventory(inventory: RemoteInventory, users: [RemoteSharedUser]) -> DBInventory {
+    class func dbWithInventory(_ inventory: RemoteInventory, users: [RemoteSharedUser]) -> DBInventory {
         let db = DBInventory()
         db.uuid = inventory.uuid
         db.name = inventory.name

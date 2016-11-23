@@ -19,10 +19,10 @@ struct RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSerializa
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let email = representation.valueForKeyPath("email") as? String,
-            let firstName = representation.valueForKeyPath("firstName") as? String,
-            let lastName = representation.valueForKeyPath("lastName") as? String
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let email = representation.value(forKeyPath: "email") as? String,
+            let firstName = representation.value(forKeyPath: "firstName") as? String,
+            let lastName = representation.value(forKeyPath: "lastName") as? String
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -33,9 +33,9 @@ struct RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSerializa
         self.lastName = lastName
     }
     
-    static func collection(representation: AnyObject) -> [RemoteSharedUser]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteSharedUser]? {
         var listItems = [RemoteSharedUser]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let listItem = RemoteSharedUser(representation: obj) {
                 listItems.append(listItem)
             } else {
@@ -47,6 +47,6 @@ struct RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSerializa
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), email: \(email), firstName: \(firstName), lastName: \(lastName)}"
+        return "{\(type(of: self)) uuid: \(uuid), email: \(email), firstName: \(firstName), lastName: \(lastName)}"
     }
 }

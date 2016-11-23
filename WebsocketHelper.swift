@@ -32,7 +32,7 @@ struct WebsocketHelper {
         return PreferencesManager.loadPreference(PreferencesManagerKey.userDisabledWebsocket) ?? false
     }
     
-    static func saveWebsocketDisabled(disabled: Bool) {
+    static func saveWebsocketDisabled(_ disabled: Bool) {
         // this if else is a quick fix because passing directly disabled doesn't compile TODO proper fix
         if disabled {
             PreferencesManager.savePreference(PreferencesManagerKey.userDisabledWebsocket, value: true)

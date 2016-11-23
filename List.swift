@@ -57,14 +57,14 @@ class List: Equatable, Identifiable, CustomDebugStringConvertible {
     
     var debugDescription: String {
 //        return shortDebugDescription
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor), order: \(order), inventory: \(inventory), store: \(store), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), bgColor: \(bgColor), order: \(order), inventory: \(inventory), store: \(store), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
-    func same(rhs: List) -> Bool {
+    func same(_ rhs: List) -> Bool {
         return self.uuid == rhs.uuid
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, listItems: [ListItem]? = nil, users: [SharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, inventory: Inventory? = nil, store: ListCopyStore? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> List {
+    func copy(uuid: String? = nil, name: String? = nil, listItems: [ListItem]? = nil, users: [SharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, inventory: Inventory? = nil, store: ListCopyStore? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> List {
         return List(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -80,7 +80,7 @@ class List: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     // WARN: doesn't include listItems. Actually, should we remove list items from list? this is never used?
-    func equalsExcludingSyncAttributes(rhs: List) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: List) -> Bool {
         return uuid == rhs.uuid && name == rhs.name && bgColor == rhs.bgColor && order == rhs.order && users == rhs.users && inventory == rhs.inventory && store == rhs.store
     }
 }

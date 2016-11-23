@@ -16,12 +16,12 @@ class ButtonMore: UIButton {
     
     var currentSelectedTintColor: UIColor?
     
-    let selectedTintColor: UIColor = UIColor.darkGrayColor()
-    let normalTintColor: UIColor = UIColor.lightGrayColor()
+    let selectedTintColor: UIColor = UIColor.darkGray
+    let normalTintColor: UIColor = UIColor.lightGray
     
-    override var highlighted: Bool {
+    override var isHighlighted: Bool {
         get {
-            return super.highlighted
+            return super.isHighlighted
         }
         set {
             if newValue {
@@ -36,13 +36,13 @@ class ButtonMore: UIButton {
                     tintColor = normalTintColor
                 }
             }
-            super.highlighted = newValue
+            super.isHighlighted = newValue
         }
     }
     
-    override var selected: Bool {
+    override var isSelected: Bool {
         get {
-            return super.selected
+            return super.isSelected
         }
         set {
             if newValue {
@@ -54,7 +54,7 @@ class ButtonMore: UIButton {
                 tintColor = normalTintColor
                 currentSelectedTintColor = nil
             }
-            super.selected = newValue
+            super.isSelected = newValue
         }
     }
     
@@ -65,9 +65,9 @@ class ButtonMore: UIButton {
             if let label = self.titleLabel {
                 label.font = {
                     if label.font.isBold {
-                        return UIFont.boldSystemFontOfSize(size)
+                        return UIFont.boldSystemFont(ofSize: size)
                     } else {
-                        return UIFont.systemFontOfSize(size)
+                        return UIFont.systemFont(ofSize: size)
                     }
                 }()
             } else {

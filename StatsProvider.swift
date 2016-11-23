@@ -9,7 +9,7 @@
 import Foundation
 
 enum TimeUnit {
-    case Month, Year
+    case month, year
 }
 
 struct TimePeriod: Equatable {
@@ -21,17 +21,17 @@ struct TimePeriod: Equatable {
         self.timeUnit = timeUnit
     }
     
-    func dateOffsetComponent() -> NSDateComponents {
+    func dateOffsetComponent() -> DateComponents {
         return dateOffsetComponent(quantity)
     }
     
-    func dateOffsetComponent(quantity: Int) -> NSDateComponents {
+    func dateOffsetComponent(_ quantity: Int) -> DateComponents {
         
-        let dateComponents = NSDateComponents()
+        var dateComponents = DateComponents()
         
         switch timeUnit {
-        case .Month: dateComponents.month = quantity
-        case .Year: dateComponents.year = quantity
+        case .month: dateComponents.month = quantity
+        case .year: dateComponents.year = quantity
         }
         
         return dateComponents
@@ -43,33 +43,33 @@ func ==(lhs: TimePeriod, rhs: TimePeriod) -> Bool {
 }
 
 enum GroupByAttribute {
-    case Name/*, Category*/ //TODO categories
+    case name/*, Category*/ //TODO categories
 }
 
 enum AggregateGroup: Equatable {
-    case All
+    case all
 //    case CategoryItem(Category) // TODO sth like this
-    case ProductItem(Product)
+    case productItem(Product)
 }
 func ==(lhs: AggregateGroup, rhs: AggregateGroup) -> Bool {
     switch (lhs, rhs) {
-    case (.ProductItem(_), .ProductItem(_)): return true
-    case (.All, .All): return true
+    case (.productItem(_), .productItem(_)): return true
+    case (.all, .all): return true
     default: return false
     }
 }
 
 protocol StatsProvider {
     
-    func aggregate(monthYear: MonthYear, groupBy: GroupByAttribute, inventory: Inventory, _ handler: ProviderResult<[ProductAggregate]> -> ())
+    func aggregate(_ monthYear: MonthYear, groupBy: GroupByAttribute, inventory: Inventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ())
 
-    func aggregate(timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: Inventory, _ handler: ProviderResult<[ProductAggregate]> -> ())
+    func aggregate(_ timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: Inventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ())
     
-    func history(timePeriod: TimePeriod, group: AggregateGroup, inventory: Inventory, _ handler: ProviderResult<GroupMonthYearAggregate> -> ())
+    func history(_ timePeriod: TimePeriod, group: AggregateGroup, inventory: Inventory, _ handler: @escaping (ProviderResult<GroupMonthYearAggregate>) -> ())
     
-    func hasDataForMonthYear(monthYear: MonthYear, inventory: Inventory, handler: ProviderResult<Bool> -> Void)
+    func hasDataForMonthYear(_ monthYear: MonthYear, inventory: Inventory, handler: @escaping (ProviderResult<Bool>) -> Void)
     
-    func clearMonthYearData(monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: ProviderResult<Any> -> Void)
+    func clearMonthYearData(_ monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func oldestDate(inventory: Inventory, _ handler: ProviderResult<NSDate> -> Void)
+    func oldestDate(_ inventory: Inventory, _ handler: @escaping (ProviderResult<Date>) -> Void)
 }

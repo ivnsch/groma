@@ -10,22 +10,22 @@ import Foundation
 
 class RemoteInventoryProvider: RemoteProvider {
     
-    func inventories(handler: RemoteResult<[RemoteInventoryWithDependencies]> -> ()) {
-        RemoteProvider.authenticatedRequestArray(.GET, Urls.inventory) {result in
+    func inventories(_ handler: @escaping (RemoteResult<[RemoteInventoryWithDependencies]>) -> ()) {
+        RemoteProvider.authenticatedRequestArray(.get, Urls.inventory) {result in
             handler(result)
         }
     }
     
-    func addInventory(inventory: Inventory, handler: RemoteResult<RemoteInventoryWithDependencies> -> ()) {
+    func addInventory(_ inventory: Inventory, handler: @escaping (RemoteResult<RemoteInventoryWithDependencies>) -> ()) {
         let params = self.toRequestParams(inventory)
-        RemoteProvider.authenticatedRequest(.POST, Urls.inventory, params) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.inventory, params) {result in
             handler(result)
         }
     }
     
-    func updateInventory(inventory: Inventory, handler: RemoteResult<RemoteInventoryWithDependencies> -> ()) {
+    func updateInventory(_ inventory: Inventory, handler: @escaping (RemoteResult<RemoteInventoryWithDependencies>) -> ()) {
         let params = self.toRequestParams(inventory)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.inventory, params) {result in
+        RemoteProvider.authenticatedRequest(.put, Urls.inventory, params) {result in
             handler(result)
         }
     }
@@ -39,46 +39,46 @@ class RemoteInventoryProvider: RemoteProvider {
 //        }
 //    }
 
-    func updateInventoriesOrder(orderUpdates: [OrderUpdate], handler: RemoteResult<[RemoteOrderUpdate]> -> ()) {
+    func updateInventoriesOrder(_ orderUpdates: [OrderUpdate], handler: @escaping (RemoteResult<[RemoteOrderUpdate]>) -> ()) {
         let params: [[String: AnyObject]] = orderUpdates.map{
-            ["uuid": $0.uuid, "order": $0.order]
+            ["uuid": $0.uuid as AnyObject, "order": $0.order as AnyObject]
         }
-        RemoteProvider.authenticatedRequestArray(.PUT, Urls.inventoriesOrder, params) {result in
+        RemoteProvider.authenticatedRequestArray(.put, Urls.inventoriesOrder, params) {result in
             handler(result)
         }
     }
     
-    func removeInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func removeInventory(_ inventory: Inventory, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
         removeInventory(inventory.uuid, handler: handler)
     }
 
-    func removeInventory(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.inventory + "/\(uuid)") {result in
+    func removeInventory(_ uuid: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.inventory + "/\(uuid)") {result in
             handler(result)
         }
     }
     
-    func acceptInvitation(invitation: RemoteInventoryInvitation, handler: RemoteResult<NoOpSerializable> -> Void) {
+    func acceptInvitation(_ invitation: RemoteInventoryInvitation, handler: @escaping (RemoteResult<NoOpSerializable>) -> Void) {
         let parameters = toRequestParams(invitation, accept: true)
-        RemoteProvider.authenticatedRequest(.POST, Urls.inventoryInvitation, parameters) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.inventoryInvitation, parameters) {result in
             handler(result)
         }
     }
     
-    func rejectInvitation(invitation: RemoteInventoryInvitation, handler: RemoteResult<NoOpSerializable> -> Void) {
+    func rejectInvitation(_ invitation: RemoteInventoryInvitation, handler: @escaping (RemoteResult<NoOpSerializable>) -> Void) {
         let parameters = toRequestParams(invitation, accept: false)
-        RemoteProvider.authenticatedRequest(.POST, Urls.inventoryInvitation, parameters) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.inventoryInvitation, parameters) {result in
             handler(result)
         }
     }
     
-    func findInvitedUsers(inventoryUuid: String, handler: RemoteResult<[RemoteSharedUser]> -> Void) {
-        RemoteProvider.authenticatedRequestArray(.GET, Urls.inventoryInvitedUsers + "/\(inventoryUuid)") {result in
+    func findInvitedUsers(_ inventoryUuid: String, handler: @escaping (RemoteResult<[RemoteSharedUser]>) -> Void) {
+        RemoteProvider.authenticatedRequestArray(.get, Urls.inventoryInvitedUsers + "/\(inventoryUuid)") {result in
             handler(result)
         }
     }
     
-    func syncInventoriesWithInventoryItems(inventoriesSync: InventoriesSync, handler: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult> -> ()) {
+    func syncInventoriesWithInventoryItems(_ inventoriesSync: InventoriesSync, handler: @escaping (RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult>) -> ()) {
         
         let inventoriesSyncDicts: [[String: AnyObject]] = inventoriesSync.inventoriesSyncs.map {inventorySync in
             
@@ -87,23 +87,23 @@ class RemoteInventoryProvider: RemoteProvider {
             let sharedUsers: [[String: AnyObject]] = inventory.users.map{self.toRequestParams($0)}
             
             var dict: [String: AnyObject] = [
-                "uuid": inventory.uuid,
-                "name": inventory.name,
-                "users": sharedUsers,
+                "uuid": inventory.uuid as AnyObject,
+                "name": inventory.name as AnyObject,
+                "users": sharedUsers as AnyObject,
             ]
             
             if let lastServerUpdate = inventory.lastServerUpdate {
-                dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+                dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
             }
             
             let inventoryItemsDicts = inventorySync.inventoryItemsSync.inventoryItems.map {toRequestParamsForSync($0)}
             let toRemoveDicts = inventorySync.inventoryItemsSync.toRemove.map{self.toRequestParamsToRemove($0)}
             let inventoryItemsSyncDict: [String: AnyObject] = [
-                "inventoryItems": inventoryItemsDicts,
-                "toRemove": toRemoveDicts
+                "inventoryItems": inventoryItemsDicts as AnyObject,
+                "toRemove": toRemoveDicts as AnyObject
             ]
             
-            dict["inventoryItems"] = inventoryItemsSyncDict
+            dict["inventoryItems"] = inventoryItemsSyncDict as AnyObject?
             
             return dict
         }
@@ -111,85 +111,85 @@ class RemoteInventoryProvider: RemoteProvider {
         let toRemoveDicts = inventoriesSync.toRemove.map{self.toRequestParamsToRemove($0)}
         
         let dictionary: [String: AnyObject] = [
-            "inventories": inventoriesSyncDicts,
-            "toRemove": toRemoveDicts
+            "inventories": inventoriesSyncDicts as AnyObject,
+            "toRemove": toRemoveDicts as AnyObject
         ]
         
-        AlamofireHelper.authenticatedRequest(.POST, Urls.inventoriesWithItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult>) in
+        _ = AlamofireHelper.authenticatedRequest(.post, Urls.inventoriesWithItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult>) in
             handler(result)
         }
     }
     
 
     // TODO maybe generally use this for inventoryItem request params?
-    func toRequestParamsForSync(inventoryItem: InventoryItem) -> [String: AnyObject] {
+    func toRequestParamsForSync(_ inventoryItem: InventoryItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
-            "quantityDelta": inventoryItem.quantityDelta,
+            "quantityDelta": inventoryItem.quantityDelta as AnyObject,
             "product": [
-                "uuid": inventoryItem.product.uuid,
-                "name": inventoryItem.product.name
-            ],
-            "inventoryUuid": inventoryItem.inventory.uuid
+                "uuid": inventoryItem.product.uuid as AnyObject,
+                "name": inventoryItem.product.name as AnyObject
+            ] as AnyObject,
+            "inventoryUuid": inventoryItem.inventory.uuid as AnyObject
         ]
         
         if let lastServerUpdate = inventoryItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         
         return dict
     }
     
-    func toRequestParamsToRemove(inventoryItem: InventoryItem) -> [String: AnyObject] {
-        var dict: [String: AnyObject] = ["inventoryUuid": inventoryItem.inventory.uuid, "productUuid": inventoryItem.product.uuid]
+    func toRequestParamsToRemove(_ inventoryItem: InventoryItem) -> [String: AnyObject] {
+        var dict: [String: AnyObject] = ["inventoryUuid": inventoryItem.inventory.uuid as AnyObject, "productUuid": inventoryItem.product.uuid as AnyObject]
         if let lastServerUpdate = inventoryItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         return dict
     }
     
-    func toRequestParamsToRemove(inventory: Inventory) -> [String: AnyObject] {
-        var dict: [String: AnyObject] = ["uuid": inventory.uuid]
+    func toRequestParamsToRemove(_ inventory: Inventory) -> [String: AnyObject] {
+        var dict: [String: AnyObject] = ["uuid": inventory.uuid as AnyObject]
         if let lastServerUpdate = inventory.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         return dict
     }
     
-    func toRequestParams(sharedUserInput: SharedUser) -> [String: AnyObject] {
+    func toRequestParams(_ sharedUserInput: SharedUser) -> [String: AnyObject] {
         return [
-            "email": sharedUserInput.email,
-            "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
+            "email": sharedUserInput.email as AnyObject,
+            "foo": "" as AnyObject // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
         ]
     }
 
     
-    func toRequestParams(inventoryInput: Inventory) -> [String: AnyObject] {
+    func toRequestParams(_ inventoryInput: Inventory) -> [String: AnyObject] {
         let sharedUsers: [[String: AnyObject]] = inventoryInput.users.map{self.toRequestParams($0)}
         
         var inventoryDict: [String: AnyObject] = [
-            "uuid": inventoryInput.uuid,
-            "name": inventoryInput.name,
-            "order": inventoryInput.order,
-            "color": inventoryInput.bgColor.hexStr
+            "uuid": inventoryInput.uuid as AnyObject,
+            "name": inventoryInput.name as AnyObject,
+            "order": inventoryInput.order as AnyObject,
+            "color": inventoryInput.bgColor.hexStr as AnyObject
         ]
 
         if let lastServerUpdate = inventoryInput.lastServerUpdate {
-            inventoryDict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            inventoryDict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
         }
         
-        inventoryDict["users"] = sharedUsers
+        inventoryDict["users"] = sharedUsers as AnyObject?
         
         return inventoryDict
     }
     
-    func toRequestParams(invitation: RemoteInventoryInvitation, accept: Bool) -> [String: AnyObject] {
+    func toRequestParams(_ invitation: RemoteInventoryInvitation, accept: Bool) -> [String: AnyObject] {
         
         let sharedUser = SharedUser(email: invitation.sender) // TODO as commented in the invitation objs, these should contain shared user not only email (this means the server has to send us the shared user)
         
         return [
-            "uuid": invitation.inventory.uuid,
-            "accept": accept,
-            "sender": toRequestParams(sharedUser)
+            "uuid": invitation.inventory.uuid as AnyObject,
+            "accept": accept as AnyObject,
+            "sender": toRequestParams(sharedUser) as AnyObject
         ]
     }
 }

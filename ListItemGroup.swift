@@ -35,7 +35,7 @@ class ListItemGroup: Identifiable, Equatable {
         self.removed = removed
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, bgColor: UIColor? = nil, order: Int? = nil, fav: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> ListItemGroup {
+    func copy(uuid: String? = nil, name: String? = nil, bgColor: UIColor? = nil, order: Int? = nil, fav: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> ListItemGroup {
         return ListItemGroup(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -47,7 +47,7 @@ class ListItemGroup: Identifiable, Equatable {
         )
     }
     
-    func same(rhs: ListItemGroup) -> Bool {
+    func same(_ rhs: ListItemGroup) -> Bool {
         return uuid == rhs.uuid
     }
 
@@ -56,10 +56,10 @@ class ListItemGroup: Identifiable, Equatable {
     }
 
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor.hexStr), order: \(order), fav: \(fav), removed: \(removed), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), bgColor: \(bgColor.hexStr), order: \(order), fav: \(fav), removed: \(removed), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
-    func equalsExcludingSyncAttributes(rhs: ListItemGroup) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: ListItemGroup) -> Bool {
         return uuid == rhs.uuid && name == rhs.name && bgColor == rhs.bgColor && order == rhs.order && fav == rhs.fav
     }
 }

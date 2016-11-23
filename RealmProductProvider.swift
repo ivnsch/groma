@@ -50,25 +50,25 @@ struct StoreProductUnique {
 
 class RealmProductProvider: RealmProvider {
     
-    func loadProductWithUuid(uuid: String, handler: Product? -> ()) {
+    func loadProductWithUuid(_ uuid: String, handler: @escaping (Product?) -> ()) {
         let mapper = {ProductMapper.productWithDB($0)}
         self.loadFirst(mapper, filter: DBProduct.createFilter(uuid), handler: handler)
     }
     
     // TODO rename method (uses now brand too)
-    func loadProductWithName(name: String, brand: String, handler: Product? -> ()) {
+    func loadProductWithName(_ name: String, brand: String, handler: @escaping (Product?) -> ()) {
         
         let mapper = {ProductMapper.productWithDB($0)}
         self.loadFirst(mapper, filter: DBProduct.createFilterNameBrand(name, brand: brand), handler: handler)
         
     }
 
-    func loadProductsWithNameBrands(nameBrands: [(name: String, brand: String)], handler: [Product]? -> Void) {
+    func loadProductsWithNameBrands(_ nameBrands: [(name: String, brand: String)], handler: @escaping ([Product]?) -> Void) {
         withRealm({realm in
             var products: [Product] = []
             for nameBrand in nameBrands {
-                let dbProduct: Results<DBProduct> = realm.objects(DBProduct).filter(DBProduct.createFilterNameBrand(nameBrand.name, brand: nameBrand.brand))
-                let product = dbProduct.map{ProductMapper.productWithDB($0)}
+                let dbProduct: Results<DBProduct> = realm.objects(DBProduct.self).filter(DBProduct.createFilterNameBrand(nameBrand.name, brand: nameBrand.brand))
+                let product = Array(dbProduct.map{ProductMapper.productWithDB($0)})
                 products.appendAll(product)
             }
             return products
@@ -77,32 +77,32 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func loadProducts(range: NSRange, sortBy: ProductSortBy, handler: [Product] -> ()) {
+    func loadProducts(_ range: NSRange, sortBy: ProductSortBy, handler: @escaping ([Product]) -> ()) {
         products(range: range, sortBy: sortBy) {tuple in
-            handler(tuple.products)
+            handler(tuple.1)
         }
     }
     
-    func products(substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: (substring: String?, products: [Product]) -> ()) {
+    func products(_ substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ products: [Product]) -> ()) {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
-            case .Alphabetic: return ("name", true)
-            case .Fav: return ("fav", false)
+            case .alphabetic: return ("name", true)
+            case .fav: return ("fav", false)
             }
         }()
         
         let filterMaybe = substring.map{DBProduct.createFilterNameContains($0)}
         let mapper = {ProductMapper.productWithDB($0)}
         self.load(mapper, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range) {products in
-            handler(substring: substring, products: products)
+            handler(substring, products)
         }
     }
 
-    func productsWithPosibleSections(substring: String? = nil, list: List, range: NSRange? = nil, sortBy: ProductSortBy, handler: (substring: String?, productsWithMaybeSections: [(product: Product, section: Section?)]?) -> Void) {
+    func productsWithPosibleSections(_ substring: String? = nil, list: List, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ productsWithMaybeSections: [(product: Product, section: Section?)]?) -> Void) {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
-            case .Alphabetic: return ("name", true)
-            case .Fav: return ("fav", false)
+            case .alphabetic: return ("name", true)
+            case .fav: return ("fav", false)
             }
         }()
         
@@ -116,7 +116,7 @@ class RealmProductProvider: RealmProvider {
             
             let categoryNames = products.map{$0.category.name}.distinct()
         
-            let sectionsDict: [String: DBSection] = realm.objects(DBSection).filter(DBSection.createFilterWithNames(categoryNames, listUuid: list.uuid)).toDictionary{($0.name, $0)}
+            let sectionsDict: [String: DBSection] = realm.objects(DBSection.self).filter(DBSection.createFilterWithNames(categoryNames, listUuid: list.uuid)).toDictionary{($0.name, $0)}
             
             let productsWithMaybeSections: [(product: Product, section: Section?)] = products.map {product in
                 let sectionMaybe = sectionsDict[product.category.name].map{SectionMapper.sectionWithDB($0)}
@@ -126,13 +126,13 @@ class RealmProductProvider: RealmProvider {
             return productsWithMaybeSections
             
         }, resultHandler: {(productsWithMaybeSections: [(product: Product, section: Section?)]?) in
-            handler(substring: substring, productsWithMaybeSections: productsWithMaybeSections)
+            handler(substring, productsWithMaybeSections)
         })
     }
     
-    func countProducts(handler: Int? -> Void) {
+    func countProducts(_ handler: @escaping (Int?) -> Void) {
         withRealm({realm in
-            realm.objects(DBProduct).count
+            realm.objects(DBProduct.self).count
             }) { (countMaybe: Int?) -> Void in
                 if let count = countMaybe {
                     handler(count)
@@ -143,7 +143,7 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func deleteProductAndDependencies(productUuid: String, markForSync: Bool, handler: Bool -> Void) {
+    func deleteProductAndDependencies(_ productUuid: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             if let weakSelf = self {
                 return weakSelf.deleteProductAndDependenciesSync(realm, productUuid: productUuid, markForSync: markForSync)
@@ -156,20 +156,20 @@ class RealmProductProvider: RealmProvider {
         })
     }
     
-    func deleteProductAndDependencies(product: Product, markForSync: Bool, handler: Bool -> Void) {
+    func deleteProductAndDependencies(_ product: Product, markForSync: Bool, handler: @escaping (Bool) -> Void) {
         deleteProductAndDependencies(product.uuid, markForSync: markForSync, handler: handler)
     }
     
     // Note: This is expected to be called from inside a transaction and in a background operation
-    func deleteProductAndDependenciesSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
-        if let productResult = realm.objects(DBProduct).filter(DBProduct.createFilter(productUuid)).first {
+    func deleteProductAndDependenciesSync(_ realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
+        if let productResult = realm.objects(DBProduct.self).filter(DBProduct.createFilter(productUuid)).first {
             return deleteProductAndDependenciesSync(realm, dbProduct: productResult, markForSync: markForSync)
         } else {
             return false
         }
     }
     
-    func deleteProductAndDependenciesSync(realm: Realm, dbProduct: DBProduct, markForSync: Bool) -> Bool {
+    func deleteProductAndDependenciesSync(_ realm: Realm, dbProduct: DBProduct, markForSync: Bool) -> Bool {
         if deleteProductDependenciesSync(realm, productUuid: dbProduct.uuid, markForSync: markForSync) {
             if markForSync {
                 let toRemove = DBProductToRemove(dbProduct)
@@ -183,27 +183,27 @@ class RealmProductProvider: RealmProvider {
     }
     
     // Note: This is expected to be called from inside a transaction and in a background operation
-    func deleteProductDependenciesSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
+    func deleteProductDependenciesSync(_ realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
         
-        DBProviders.storeProductProvider.deleteStoreProductsAndDependenciesForProductSync(realm, productUuid: productUuid, markForSync: markForSync)
+        _ = DBProviders.storeProductProvider.deleteStoreProductsAndDependenciesForProductSync(realm, productUuid: productUuid, markForSync: markForSync)
         
-        DBProviders.groupItemProvider.removeGroupItemsForProductSync(realm, productUuid: productUuid, markForSync: markForSync)
+        _ = DBProviders.groupItemProvider.removeGroupItemsForProductSync(realm, productUuid: productUuid, markForSync: markForSync)
         
-        let inventoryResult = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterWithProduct(productUuid))
+        let inventoryResult = realm.objects(DBInventoryItem.self).filter(DBInventoryItem.createFilterWithProduct(productUuid))
         if markForSync {
-            let toRemoteInventoryItems = inventoryResult.map{DBRemoveInventoryItem($0)}
+            let toRemoteInventoryItems = Array(inventoryResult.map{DBRemoveInventoryItem($0)})
             saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
         }
         realm.delete(inventoryResult)
         
-        let historyResult = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilterWithProduct(productUuid))
+        let historyResult = realm.objects(DBHistoryItem.self).filter(DBHistoryItem.createFilterWithProduct(productUuid))
         if markForSync {
-            let toRemoteHistoryItems = historyResult.map{DBRemoveHistoryItem($0)}
+            let toRemoteHistoryItems =  Array(historyResult.map{DBRemoveHistoryItem($0)})
             saveObjsSyncInt(realm, objs: toRemoteHistoryItems, update: true)
         }
         realm.delete(historyResult)
         
-        let planResult = realm.objects(DBPlanItem).filter(DBPlanItem.createFilterWithProduct(productUuid))
+        let planResult = realm.objects(DBPlanItem.self).filter(DBPlanItem.createFilterWithProduct(productUuid))
         if markForSync {
             // TODO plan items either complete or remove this table entirely
         }
@@ -213,15 +213,15 @@ class RealmProductProvider: RealmProvider {
     }
     
     // Expected to be executed in do/catch and write block
-    func removeProductsForCategorySync(realm: Realm, categoryUuid: String, markForSync: Bool) -> Bool {
-        let dbProducts = realm.objects(DBProduct).filter(DBProduct.createFilterCategory(categoryUuid))
+    func removeProductsForCategorySync(_ realm: Realm, categoryUuid: String, markForSync: Bool) -> Bool {
+        let dbProducts = realm.objects(DBProduct.self).filter(DBProduct.createFilterCategory(categoryUuid))
         for dbProduct in dbProducts {
-            deleteProductAndDependenciesSync(realm, dbProduct: dbProduct, markForSync: markForSync)
+            _ = deleteProductAndDependenciesSync(realm, dbProduct: dbProduct, markForSync: markForSync)
         }
         return true
     }
     
-    func saveProduct(productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: Product? -> ()) {
+    func saveProduct(_ productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: @escaping (Product?) -> ()) {
         
         loadProductWithName(productInput.name, brand: productInput.brand) {[weak self] productMaybe in
             
@@ -235,20 +235,20 @@ class RealmProductProvider: RealmProvider {
                 if let existingProduct = productMaybe { // since realm doesn't support unique besides primary key yet, we have to fetch first possibly existing product
                     return existingProduct.uuid
                 } else {
-                    return NSUUID().UUIDString
+                    return UUID().uuidString
                 }
             }()
             
             Providers.productCategoryProvider.categoryWithName(productInput.category) {result in
                 
-                if result.status == .Success || result.status == .NotFound  {
+                if result.status == .success || result.status == .notFound  {
                     
                     // Create a new category or update existing one
                     let category: ProductCategory? = {
                         if let existingCategory = result.sucessResult {
                             return existingCategory.copy(name: productInput.category, color: productInput.categoryColor)
-                        } else if result.status == .NotFound {
-                            return ProductCategory(uuid: NSUUID().UUIDString, name: productInput.category, color: productInput.categoryColor)
+                        } else if result.status == .notFound {
+                            return ProductCategory(uuid: UUID().uuidString, name: productInput.category, color: productInput.categoryColor)
                         } else {
                             print("Error: RealmListItemProvider.saveProductError, invalid state: status is .Success but there is not successResult")
                             return nil
@@ -279,7 +279,7 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func saveProducts(products: [Product], update: Bool = true, handler: Bool -> ()) {
+    func saveProducts(_ products: [Product], update: Bool = true, handler: @escaping (Bool) -> ()) {
         
         for product in products { // product marked as var to be able to update uuid
             
@@ -296,24 +296,24 @@ class RealmProductProvider: RealmProvider {
     
     // TODO: -
     
-    func categoriesContaining(text: String, handler: [String] -> Void) {
-        let mapper: DBProduct -> String = {$0.category.name}
+    func categoriesContaining(_ text: String, handler: @escaping ([String]) -> Void) {
+        let mapper: (DBProduct) -> String = {$0.category.name}
         self.load(mapper, filter: DBProduct.createFilterCategoryNameContains(text)) {categories in
             let distinctCategories = NSOrderedSet(array: categories).array as! [String] // TODO re-check: Realm can't distinct yet https://github.com/realm/realm-cocoa/issues/1103
             handler(distinctCategories)
         }
     }
 
-    func productWithUniqueSync(realm: Realm, name: String, brand: String) -> DBProduct? {
-        return realm.objects(DBProduct).filter(DBProduct.createFilterNameBrand(name, brand: brand)).first
+    func productWithUniqueSync(_ realm: Realm, name: String, brand: String) -> DBProduct? {
+        return realm.objects(DBProduct.self).filter(DBProduct.createFilterNameBrand(name, brand: brand)).first
     }
     
-    func categoryWithName(name: String, handler: ProductCategory? -> ()) {
+    func categoryWithName(_ name: String, handler: @escaping (ProductCategory?) -> ()) {
         let mapper = {ProductCategoryMapper.categoryWithDB($0)}
         self.loadFirst(mapper, filter: DBProductCategory.createFilterName(name), handler: handler)
     }
     
-    func loadCategorySuggestions(handler: [Suggestion] -> ()) {
+    func loadCategorySuggestions(_ handler: @escaping ([Suggestion]) -> ()) {
         // TODO review why section and product suggestion have their own database objects, was it performance, prefill etc? Do we also need this here?
         let mapper = {ProductCategoryMapper.categoryWithDB($0)}
         self.load(mapper) {dbCategories in
@@ -322,9 +322,9 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func incrementFav(productUuid: String, _ handler: Bool -> Void) {
+    func incrementFav(_ productUuid: String, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
-            if let existingProduct = realm.objects(DBProduct).filter(DBProduct.createFilter(productUuid)).first {
+            if let existingProduct = realm.objects(DBProduct.self).filter(DBProduct.createFilter(productUuid)).first {
                 existingProduct.fav += 1
                 realm.add(existingProduct, update: true)                
                 return true
@@ -336,7 +336,7 @@ class RealmProductProvider: RealmProvider {
         })
     }
     
-    func save(dbCategories: [DBProductCategory], dbProducts: [DBProduct], _ handler: Bool -> Void) {
+    func save(_ dbCategories: [DBProductCategory], dbProducts: [DBProduct], _ handler: @escaping (Bool) -> Void) {
         
         doInWriteTransaction({realm in
             for dbCategory in dbCategories {
@@ -358,7 +358,7 @@ class RealmProductProvider: RealmProvider {
         })
     }
     
-    func removeAllCategories(handler: Bool -> Void) {
+    func removeAllCategories(_ handler: @escaping (Bool) -> Void) {
         self.remove(nil, handler: {success in
             if !success {
                 print("Error: RealmProductProvider.removeAllCategories: couldn't remove categories")
@@ -371,7 +371,7 @@ class RealmProductProvider: RealmProvider {
     // WARN: This is only used for generating prefill database so no tombstones
     ///////////////////////////////////////////////////////////////////////////////////////
     
-    func removeAllProducts(handler: Bool -> Void) {
+    func removeAllProducts(_ handler: @escaping (Bool) -> Void) {
         self.remove(nil, handler: {success in
             if !success {
                 print("Error: RealmProductProvider.removeAllProducts: couldn't remove products")
@@ -381,7 +381,7 @@ class RealmProductProvider: RealmProvider {
     }
     
     // Removes all products and categories
-    func removeAllProductsAndCategories(handler: Bool -> Void) {
+    func removeAllProductsAndCategories(_ handler: @escaping (Bool) -> Void) {
         removeAllProducts {[weak self] success in
             if let weakSelf = self {
                 weakSelf.removeAllCategories {success in
@@ -398,8 +398,8 @@ class RealmProductProvider: RealmProvider {
     ///////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
     
-    func overwriteProducts(dbProducts: [DBProduct], clearTombstones: Bool, handler: Bool -> Void) {
-        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBProductToRemove)} : nil
+    func overwriteProducts(_ dbProducts: [DBProduct], clearTombstones: Bool, handler: @escaping (Bool) -> Void) {
+        let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBProductToRemove.self)} : nil
         self.overwrite(dbProducts, resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
     
@@ -409,13 +409,13 @@ class RealmProductProvider: RealmProvider {
      * Analogously for the category, inserts a new one if no one exists with the prototype's category name, or updates the existing one.
      * Ensures that the product points to the correct category which can be 1. The same which already was referenced by the product, if the product exists and the category name is unchanged, 2. An existing category which was not referenced by the product (input category name is different than the name of the category referenced by the existing product), 3. A new category, if no category with prototype's category name exists yet.
      */
-    func upsertProductSync(realm: Realm, prototype: ProductPrototype) -> DBProduct {
+    func upsertProductSync(_ realm: Realm, prototype: ProductPrototype) -> DBProduct {
         
-        func findOrCreateCategory(realm: Realm, prototype: ProductPrototype) -> DBProductCategory {
-            return realm.objects(DBProductCategory).filter(DBProductCategory.createFilterName(prototype.category)).first ?? DBProductCategory(uuid: NSUUID().UUIDString, name: prototype.name, bgColorHex: prototype.categoryColor.hexStr)
+        func findOrCreateCategory(_ realm: Realm, prototype: ProductPrototype) -> DBProductCategory {
+            return realm.objects(DBProductCategory.self).filter(DBProductCategory.createFilterName(prototype.category)).first ?? DBProductCategory(uuid: NSUUID().uuidString, name: prototype.name, bgColorHex: prototype.categoryColor.hexStr)
         }
         
-        func categoryForExistingProduct(existingProduct: DBProduct, prototype: ProductPrototype) -> DBProductCategory {
+        func categoryForExistingProduct(_ existingProduct: DBProduct, prototype: ProductPrototype) -> DBProductCategory {
             // Make the updated product point to correct category - if category name hasn't changed, no pointer update. If input category name is different, see if a category with this name already exists, and update pointer. Otherwise create a new category and udpate pointer.
             if existingProduct.category.name != prototype.category {
                 return findOrCreateCategory(realm, prototype:  prototype)
@@ -424,7 +424,7 @@ class RealmProductProvider: RealmProvider {
             }
         }
         
-        func updateExistingProduct(realm: Realm, existingProduct: DBProduct, prototype: ProductPrototype) -> DBProduct {
+        func updateExistingProduct(_ realm: Realm, existingProduct: DBProduct, prototype: ProductPrototype) -> DBProduct {
             
             let category = categoryForExistingProduct(existingProduct, prototype: prototype)
             let updatedCategory = category.copy(bgColorHex: prototype.categoryColor.hexStr)
@@ -438,14 +438,14 @@ class RealmProductProvider: RealmProvider {
             return updatedProduct
         }
         
-        func insertNewProduct(realm: Realm, prototype: ProductPrototype) -> DBProduct {
+        func insertNewProduct(_ realm: Realm, prototype: ProductPrototype) -> DBProduct {
             let category = findOrCreateCategory(realm, prototype: prototype)
             let newProduct = DBProduct(prototype: prototype, category: category)
             realm.add(newProduct, update: false)
             return newProduct
         }
         
-        if let existingProduct = realm.objects(DBProduct).filter(DBProduct.createFilterUnique(prototype)).first {
+        if let existingProduct = realm.objects(DBProduct.self).filter(DBProduct.createFilterUnique(prototype)).first {
             return updateExistingProduct(realm, existingProduct: existingProduct, prototype: prototype)
         } else {
             return insertNewProduct(realm, prototype: prototype)
@@ -454,7 +454,7 @@ class RealmProductProvider: RealmProvider {
     
     // MARK: - Sync
     
-    func clearProductTombstone(uuid: String, handler: Bool -> Void) {
+    func clearProductTombstone(_ uuid: String, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             realm.deleteForFilter(DBProductToRemove.self, DBProductToRemove.createFilter(uuid))
             return true
@@ -464,24 +464,24 @@ class RealmProductProvider: RealmProvider {
     }
     
     
-    func updateLastSyncTimeStampSync(realm: Realm, product: RemoteProduct) {
+    func updateLastSyncTimeStampSync(_ realm: Realm, product: RemoteProduct) {
         realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
     }
     
     // MARK: - Store
     
-    func storesContainingText(text: String, handler: [String] -> Void) {
+    func storesContainingText(_ text: String, handler: @escaping ([String]) -> Void) {
         // this is for now an "infinite" range. This method is ussed for autosuggestions, we assume use will not have more than 10000 brands. If yes it's not critical for autosuggestions.
         storesContainingText(text, range: NSRange(location: 0, length: 10000), handler)
     }
     
-    func storesContainingText(text: String, range: NSRange, _ handler: [String] -> Void) {
+    func storesContainingText(_ text: String, range: NSRange, _ handler: @escaping ([String]) -> Void) {
         background({
             do {
                 let realm = try Realm()
                 // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
                 // .sorted("store", ascending: true)
-                let stores = Array(Set(realm.objects(DBStoreProduct).filter(DBStoreProduct.createFilterStoreContains(text)).map{$0.store}))[range].filter{!$0.isEmpty}.sort()
+                let stores = Array(Set(realm.objects(DBStoreProduct.self).filter(DBStoreProduct.createFilterStoreContains(text)).map{$0.store}))[range].filter{!$0.isEmpty}.sorted()
                 return stores
             } catch let e {
                 QL4("Couldn't load stores, returning empty array. Error: \(e)")
@@ -493,7 +493,7 @@ class RealmProductProvider: RealmProvider {
     }
     
     // Returns: true if restored a product, false if didn't restore a product, nil if error ocurred
-    func restorePrefillProducts(handler: Bool? -> Void) {
+    func restorePrefillProducts(_ handler: @escaping (Bool?) -> Void) {
         
         doInWriteTransaction({realm in
             
@@ -502,7 +502,7 @@ class RealmProductProvider: RealmProvider {
             var restoredSomething: Bool = false
             
             for prefillProduct in prefillProducts {
-                if realm.objects(DBProduct).filter(DBProduct.createFilterNameBrand(prefillProduct.name, brand: prefillProduct.brand)).isEmpty {
+                if realm.objects(DBProduct.self).filter(DBProduct.createFilterNameBrand(prefillProduct.name, brand: prefillProduct.brand)).isEmpty {
                     QL1("Restoring prefill product: \(prefillProduct)")
                     realm.add(prefillProduct, update: false)
                     restoredSomething = true

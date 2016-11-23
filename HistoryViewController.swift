@@ -11,25 +11,25 @@ import QorumLogs
 
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, HistoryItemGroupHeaderViewDelegate {
     
-    private let paginator = Paginator(pageSize: 20)
-    private var loadingPage: Bool = false
+    fileprivate let paginator = Paginator(pageSize: 20)
+    fileprivate var loadingPage: Bool = false
     
     @IBOutlet var tableViewFooter: LoadingFooter!
     @IBOutlet var tableView: UITableView!
     
     @IBOutlet weak var emptyHistoryView: UIView!
 
-    private var dateFormatter: NSDateFormatter!
+    fileprivate var dateFormatter: DateFormatter!
     
-    private var sectionModels: [SectionModel<HistoryItemGroup>] = [] {
+    fileprivate var sectionModels: [SectionModel<HistoryItemGroup>] = [] {
         didSet {
             self.tableView.reloadData()
         }
     }
 
     @IBOutlet weak var inventoriesButton: UIButton!
-    private var inventoryPicker: InventoryPicker?
-    private var selectedInventory: Inventory? {
+    fileprivate var inventoryPicker: InventoryPicker?
+    fileprivate var selectedInventory: Inventory? {
         didSet {
             if (selectedInventory.map{$0 != oldValue} ?? true) { // load only if it's not set (?? true) or if it's a different inventory
                 loadHistory()
@@ -37,45 +37,45 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    private let cellHeight = DimensionsManager.defaultCellHeight
+    fileprivate let cellHeight = DimensionsManager.defaultCellHeight
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.topInset = 40 // (menu bar)
         
-        dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .FullStyle
-        dateFormatter.timeStyle = .ShortStyle
+        dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .full
+        dateFormatter.timeStyle = .short
         
         inventoryPicker = InventoryPicker(button: inventoriesButton, view: view) {[weak self] inventory in
             self?.selectedInventory = inventory
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryViewController.onWebsocketHistoryItem(_:)), name: WSNotificationName.HistoryItem.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryViewController.onWebsocketProduct(_:)), name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryViewController.onWebsocketProductCategory(_:)), name: WSNotificationName.ProductCategory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryViewController.onWebsocketListItem(_:)), name: WSNotificationName.ListItem.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HistoryViewController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
+        NotificationCenter.default.addObserver(self, selector: #selector(HistoryViewController.onWebsocketHistoryItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.HistoryItem.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(HistoryViewController.onWebsocketProduct(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Product.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(HistoryViewController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(HistoryViewController.onWebsocketListItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ListItem.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(HistoryViewController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)        
     }
     
     deinit {
         QL1("Deinit history controller")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadInventories()
     }
     
-    private func loadInventories() {
+    fileprivate func loadInventories() {
         Providers.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             self?.inventoryPicker?.inventories = inventories
         })
     }
     
-    private func loadHistory() {
+    fileprivate func loadHistory() {
         sectionModels = []
         paginator.reset() // TODO improvement either memory cache or reset only if history has changed (marked items as bought since last load)
         loadPossibleNextPage()
@@ -83,30 +83,30 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: - Table view data source
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return sectionModels.count
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionModel = sectionModels[section]
         return sectionModel.expanded ? sectionModel.obj.historyItems.count : 0
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeight
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return cellHeight
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionModel = sectionModels[section]
         let group = sectionModel.obj
-        let view = NSBundle.loadView("HistoryItemGroupHeaderView", owner: self) as! HistoryItemGroupHeaderView
+        let view = Bundle.loadView("HistoryItemGroupHeaderView", owner: self) as! HistoryItemGroupHeaderView
         
         view.userName = group.user.email
-        view.date = dateFormatter.stringFromDate(group.date)
+        view.date = dateFormatter.string(from: group.date)
         view.price = group.totalPrice.toLocalCurrencyString()
         
         view.sectionIndex = section
@@ -116,10 +116,10 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         return view
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("historyCell", forIndexPath: indexPath) as! HistoryItemCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryItemCell
         
-        let historyItem = sectionModels[indexPath.section].obj.historyItems[indexPath.row]
+        let historyItem = sectionModels[(indexPath as NSIndexPath).section].obj.historyItems[(indexPath as NSIndexPath).row]
         
         cell.itemNameLabel.text = historyItem.product.name
         cell.itemUnitLabel.text = "\(historyItem.quantity) x \(historyItem.paidPrice.toLocalCurrencyString())"
@@ -130,11 +130,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: - UITableViewDelegate
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("select: \(indexPath)")
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
@@ -143,13 +143,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    private func loadPossibleNextPage() {
+    fileprivate func loadPossibleNextPage() {
         
         if let inventory = selectedInventory {
             
-            func setLoading(loading: Bool) {
+            func setLoading(_ loading: Bool) {
                 self.loadingPage = loading
-                self.tableViewFooter.hidden = !loading
+                self.tableViewFooter.isHidden = !loading
             }
             
             synced(self) {[weak self] in
@@ -178,23 +178,23 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             
         } else {
             QL2("Can't load page because there's no selected inventory")
-            self.tableViewFooter.hidden = true
+            self.tableViewFooter.isHidden = true
         }
     }
 
     
     // Override to support conditional editing of the table view.
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
 
     // Override to support editing the table view.
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             
             func delete() {
-                let historyItem = sectionModels[indexPath.section].obj.historyItems[indexPath.row]
+                let historyItem = sectionModels[(indexPath as NSIndexPath).section].obj.historyItems[(indexPath as NSIndexPath).row]
                 Providers.historyProvider.removeHistoryItem(historyItem, successHandler({[weak self] result in
                     self?.removeHistoryItemUI(indexPath)
                 }))
@@ -210,29 +210,29 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             }
 
-        } else if editingStyle == .Insert {
+        } else if editingStyle == .insert {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
     
-    private func removeHistoryItemUI(indexPath: NSIndexPath) {
+    fileprivate func removeHistoryItemUI(_ indexPath: IndexPath) {
         tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
-            weakSelf.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Bottom)
-            let section = weakSelf.sectionModels[indexPath.section]
+            weakSelf.tableView.deleteRows(at: [indexPath], with: .bottom)
+            let section = weakSelf.sectionModels[(indexPath as NSIndexPath).section]
             let group = section.obj
             var historyItems = group.historyItems
-            historyItems.removeAtIndex(indexPath.row)
+            historyItems.remove(at: (indexPath as NSIndexPath).row)
             let updatedGroup = group.copy(historyItems: historyItems)
-            weakSelf.sectionModels[indexPath.section] = SectionModel(expanded: section.expanded, obj: updatedGroup)
+            weakSelf.sectionModels[(indexPath as NSIndexPath).section] = SectionModel(expanded: section.expanded, obj: updatedGroup)
         }
     }
 
-    private func removeHistoryItemUI(historyItemUuid: String) -> Bool {
-        for (sectionIndex, sectionModel) in sectionModels.enumerate() {
-            for (itemIndex, item) in sectionModel.obj.historyItems.enumerate() {
+    fileprivate func removeHistoryItemUI(_ historyItemUuid: String) -> Bool {
+        for (sectionIndex, sectionModel) in sectionModels.enumerated() {
+            for (itemIndex, item) in sectionModel.obj.historyItems.enumerated() {
                 if item.uuid == historyItemUuid {
-                    removeHistoryItemUI(NSIndexPath(forRow: itemIndex, inSection: sectionIndex))
-                    sectionModel.obj.historyItems.removeUsingIdentifiable(item)
+                    removeHistoryItemUI(IndexPath(row: itemIndex, section: sectionIndex))
+                    _ = sectionModel.obj.historyItems.removeUsingIdentifiable(item)
                     return true
                 }
             }
@@ -241,13 +241,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         return false
     }
     
-    private func removeHistoryItemUI(historyItem: HistoryItem) {
-        removeHistoryItemUI(historyItem.uuid)
+    fileprivate func removeHistoryItemUI(_ historyItem: HistoryItem) {
+        _ = removeHistoryItemUI(historyItem.uuid)
     }
 
     // MARK: - HistoryItemGroupHeaderViewDelegate
     
-    func onHeaderTap(header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>) {
+    func onHeaderTap(_ header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>) {
         if header.open {
             header.open = false
         } else {
@@ -255,7 +255,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func onDeleteGroupTap(sectionModel: SectionModel<HistoryItemGroup>, header: HistoryItemGroupHeaderView) {
+    func onDeleteGroupTap(_ sectionModel: SectionModel<HistoryItemGroup>, header: HistoryItemGroupHeaderView) {
         ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("history_delete_items_in_group"), okTitle: trans("popup_button_ok"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
             Providers.historyProvider.removeHistoryItemsGroup(sectionModel.obj, remote: true, weakSelf.successHandler{
                 weakSelf.loadHistory()
@@ -265,24 +265,24 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     // MARK: -
     
-    private func setHeaderExpanded(header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>) {
+    fileprivate func setHeaderExpanded(_ header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>) {
         
-        let sectionIndexPaths: [NSIndexPath] = (0..<sectionModel.obj.historyItems.count).map {
-            return NSIndexPath(forRow: $0, inSection: sectionIndex)
+        let sectionIndexPaths: [IndexPath] = (0..<sectionModel.obj.historyItems.count).map {
+            return IndexPath(row: $0, section: sectionIndex)
         }
         
         if sectionModel.expanded { // collapse
             tableView.wrapUpdates {[weak self] in
-                self?.tableView.deleteRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+                self?.tableView.deleteRows(at: sectionIndexPaths, with: .top)
                 sectionModel.expanded = false
             }
         } else { // expand
             
             tableView.wrapAnimationAndUpdates({[weak self] in
-                self?.tableView.insertRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+                self?.tableView.insertRows(at: sectionIndexPaths, with: .top)
                 sectionModel.expanded = true
             }, onComplete: {[weak self] in
-                self?.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: NSNotFound, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+                self?.tableView.scrollToRow(at: IndexPath(row: NSNotFound, section: sectionIndex), at: UITableViewScrollPosition.top, animated: true)
             })
         }
     }
@@ -290,8 +290,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: - Websocket
     
-    func onWebsocketHistoryItem(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<HistoryItem>> {
+    func onWebsocketHistoryItem(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<HistoryItem>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Add:
@@ -301,18 +301,18 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             } else {
                 QL4("No value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
-                    removeHistoryItemUI(notification.obj)
+                    _ = removeHistoryItemUI(notification.obj)
                     
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {
                 QL4("No value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<[String]>> { // group - see note in MyWebsocketDispatcher for explanation
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[String]>> { // group - see note in MyWebsocketDispatcher for explanation
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -327,8 +327,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func onWebsocketProduct(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+    func onWebsocketProduct(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Update:
@@ -338,7 +338,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             } else {
                 QL4("No value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -353,8 +353,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func onWebsocketProductCategory(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
+    func onWebsocketProductCategory(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Add:
@@ -364,7 +364,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             } else {
                 QL4("No value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -381,8 +381,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
 
-    func onWebsocketListItem(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
+    func onWebsocketListItem(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .BuyCart:
@@ -400,8 +400,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // This is called when added items to inventory / history, so we have to update
-    func onWebsocketInventoryWithHistoryAfterSave(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSEmptyNotification> {
+    func onWebsocketInventoryWithHistoryAfterSave(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSEmptyNotification> {
             
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
@@ -413,7 +413,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func onIncomingGlobalSyncFinished(note: NSNotification) {
+    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         selectedInventory = nil // cause to reload in all cases
         loadInventories()

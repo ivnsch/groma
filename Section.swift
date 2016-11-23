@@ -46,9 +46,9 @@ final class Section: Identifiable, CustomDebugStringConvertible {
     convenience init(uuid: String, name: String, color: UIColor, list: List, order: ListItemStatusOrder, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         let (todoOrder, doneOrder, stashOrder): (Int, Int, Int) = {
             switch(order.status) {
-            case .Todo: return (order.order, 0, 0)
-            case .Done: return (0, order.order, 0)
-            case .Stash: return (0, 0, order.order)
+            case .todo: return (order.order, 0, 0)
+            case .done: return (0, order.order, 0)
+            case .stash: return (0, 0, order.order)
             }
         }()
         self.init(uuid: uuid, name: name, color: color, list: list, todoOrder: todoOrder, doneOrder: doneOrder, stashOrder: stashOrder, lastServerUpdate: lastServerUpdate, removed: removed)
@@ -59,10 +59,10 @@ final class Section: Identifiable, CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color), listUuid: \(list), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), color: \(color), listUuid: \(list), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}}"
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, color: UIColor? = nil, list: List? = nil, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Section {
+    func copy(uuid: String? = nil, name: String? = nil, color: UIColor? = nil, list: List? = nil, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Section {
         return Section(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -78,35 +78,35 @@ final class Section: Identifiable, CustomDebugStringConvertible {
         )
     }
     
-    func same(section: Section) -> Bool {
+    func same(_ section: Section) -> Bool {
         return section.uuid == self.uuid
     }
     
-    func order(status: ListItemStatus) -> Int {
+    func order(_ status: ListItemStatus) -> Int {
         switch status {
-        case .Todo: return todoOrder
-        case .Done: return doneOrder
-        case .Stash: return stashOrder
+        case .todo: return todoOrder
+        case .done: return doneOrder
+        case .stash: return stashOrder
         }
     }
     
-    func updateOrderMutable(order: ListItemStatusOrder) {
+    func updateOrderMutable(_ order: ListItemStatusOrder) {
         switch order.status {
-        case .Todo: todoOrder = order.order
-        case .Done: doneOrder = order.order
-        case .Stash: stashOrder = order.order
+        case .todo: todoOrder = order.order
+        case .done: doneOrder = order.order
+        case .stash: stashOrder = order.order
         }
     }
     
-    func updateOrder(order: ListItemStatusOrder) -> Section {
+    func updateOrder(_ order: ListItemStatusOrder) -> Section {
         return copy(
-            todoOrder: order.status == .Todo ? order.order : todoOrder,
-            doneOrder: order.status == .Done ? order.order : doneOrder,
-            stashOrder: order.status == .Stash ? order.order : stashOrder
+            todoOrder: order.status == .todo ? order.order : todoOrder,
+            doneOrder: order.status == .done ? order.order : doneOrder,
+            stashOrder: order.status == .stash ? order.order : stashOrder
         )
     }
     
-    func equalsExcludingSyncAttributes(rhs: Section) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: Section) -> Bool {
         return uuid == rhs.uuid && name == rhs.name && color == rhs.color && list == rhs.list && todoOrder == rhs.todoOrder && doneOrder == rhs.doneOrder && stashOrder == rhs.stashOrder
     }
 }

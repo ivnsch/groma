@@ -11,7 +11,7 @@ import Foundation
 extension OrderedDictionary where ValueType: Addable {
     
     // Note: not thread safe!
-    mutating func addOrIncrementItem(key: KeyType, quantity: ValueType) {
+    mutating func addOrIncrementItem(_ key: KeyType, quantity: ValueType) {
         if self[key] != nil {
            self[key] = ValueType.identity
         } else {

@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 
 protocol SharedUserCellDelegate: class {
-    func onPullProductsTap(user: SharedUser, cell: ListSharedUserCell)
+    func onPullProductsTap(_ user: SharedUser, cell: ListSharedUserCell)
 }
 
 class SharedUserCellModel {
@@ -34,19 +34,19 @@ class ListSharedUserCell: UITableViewCell {
         didSet {
             if let cellModel = cellModel {
                 qemailLabel.text = cellModel.user.email
-                pullProductsButton.hidden = !cellModel.acceptedInvitation
+                pullProductsButton.isHidden = !cellModel.acceptedInvitation
             }
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        selectionStyle = .None
+        selectionStyle = .none
         
 //        contentView.backgroundColor = UICOlor
     }
     
-    @IBAction func onPullProductsTap(sender: UIBarButtonItem) {
+    @IBAction func onPullProductsTap(_ sender: UIBarButtonItem) {
         if let sharedUser = cellModel?.user {
             delegate?.onPullProductsTap(sharedUser, cell: self)
         } else {

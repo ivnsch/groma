@@ -16,29 +16,38 @@ import FBSDKLoginKit
 */
 class FacebookLogin {
     
-    static func login(controller: UIViewController, handler: ProviderResult<SyncResult> -> ()) {
+    static func login(_ controller: UIViewController, handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         let login = FBSDKLoginManager()
-        login.logInWithReadPermissions(["public_profile"]) {result, error in
+        login.logIn(withReadPermissions: ["public_profile"]) {result, error in
             if let error = error {
                 print("Error: Facebook login: error: \(error)")
-                handler(ProviderResult(status: .SocialLoginError))
+                handler(ProviderResult(status: .socialLoginError))
                 
-            } else if result.isCancelled {
-                print("Facebook login cancelled")
-                handler(ProviderResult(status: .SocialLoginCancelled))
-                
-            } else {
-                print("Facebook login success, calling our server...")
-                let tokenString = result.token.tokenString
-                Providers.userProvider.authenticateWithFacebook(tokenString, controller: controller) {result in
+            } else if let result = result {
+                if result.isCancelled {
+                    print("Facebook login cancelled")
+                    handler(ProviderResult(status: .socialLoginCancelled))
                     
-                    // map already exists status to "social aleready exists", to show a different error message
-                    if result.status == .AlreadyExists {
-                        handler(ProviderResult(status: .SocialAlreadyExists))
+                } else {
+                    print("Facebook login success, calling our server...")
+                    if let tokenString = result.token.tokenString {
+                        Providers.userProvider.authenticateWithFacebook(tokenString, controller: controller) {result in
+                            
+                            // map already exists status to "social aleready exists", to show a different error message
+                            if result.status == .alreadyExists {
+                                handler(ProviderResult(status: .socialAlreadyExists))
+                            } else {
+                                handler(result)
+                            }
+                        }
                     } else {
-                        handler(result)
+                        print("Facebook no token")
+                        handler(ProviderResult(status: .socialLoginError))
                     }
+                    
                 }
+            } else {
+                print("No result")
             }
         }
     }

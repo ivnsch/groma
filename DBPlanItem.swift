@@ -17,7 +17,7 @@ class DBPlanItem: DBSyncable {
     
     dynamic lazy var key: String = self.keyValue()
     
-    private func keyValue() -> String {
+    fileprivate func keyValue() -> String {
         return product.uuid
     }
     
@@ -45,7 +45,7 @@ class DBPlanItem: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilterWithProduct(productUuid: String) -> String {
+    static func createFilterWithProduct(_ productUuid: String) -> String {
         return "productOpt.uuid == '\(productUuid)'"
     }
     

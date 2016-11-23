@@ -9,7 +9,7 @@
 import UIKit
 
 protocol QuantityViewDelegate: class {
-    func onRequestUpdateQuantity(delta: Int)
+    func onRequestUpdateQuantity(_ delta: Int)
 }
 
 // TODO for some reason the buttons are not interactive! outlets are connected, all views up in the hierarchy have userInteractionEnables = yes (until the custom view -in storyboard- in which this was contained). But nothing happens on tap also no press effect on the button. It should not be anything related with the cell, only the custom view, because when the buttons are added directly to the cell (like now) there are no problems.
@@ -37,12 +37,12 @@ class QuantityView: UIView {
     }
     
     // TODO find a way to not have extra view here (add subview) since this is used in tableview cells.
-    private func xibSetup() {
-        let view = NSBundle.loadView("QuantityView", owner: self)!
+    fileprivate func xibSetup() {
+        let view = Bundle.loadView("QuantityView", owner: self)!
         
         view.frame = bounds
         // Make the view stretch with containing view
-        view.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
+        view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
 
 //        view.backgroundColor = UIColor.yellowColor()
 //        test.backgroundColor = UIColor.redColor()
@@ -55,11 +55,11 @@ class QuantityView: UIView {
 //        test.userInteractionEnabled = true
     }
     
-    @IBAction func onPlusTap(sender: UIButton) {
+    @IBAction func onPlusTap(_ sender: UIButton) {
         delegate?.onRequestUpdateQuantity(1)
     }
     
-    @IBAction func onMinusTap(sender: UIButton) {
+    @IBAction func onMinusTap(_ sender: UIButton) {
         delegate?.onRequestUpdateQuantity(-1)
     }
 }

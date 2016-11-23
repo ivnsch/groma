@@ -18,14 +18,14 @@ class ListItemProviderImpl: ListItemProvider {
 
     // MARK: - Get
     
-    func listItems(list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<[ListItem]> -> ()) {
+    func listItems(_ list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus = .both, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
 
         let memListItemsMaybe = memProvider.listItems(list)
         if let memListItems = memListItemsMaybe {
             // Sorting is for the case the list items order was updated (either with reorder or switch status) it's a bit easier right now to put the sorting here TODO resort when storing in mem cache
             let memSortedListItems = memListItems.sortedByOrder(sortOrderByStatus)
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: memSortedListItems))
-            if fetchMode == .MemOnly || fetchMode == .First {
+            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: memSortedListItems))
+            if fetchMode == .memOnly || fetchMode == .first {
                 return
             }
         }
@@ -43,10 +43,10 @@ class ListItemProviderImpl: ListItemProvider {
             // TODO there's no need to load the items from db before doing the remote call (confirm this), since we assume memory == database it would be enough to compare 
             // the server result with memory. Load from db only when there's no memory cache.
             if !memListItemsMaybe.isSet {
-                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: sotedDBListItems))
+                handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: sotedDBListItems))
             }
             
-            self?.memProvider.overwrite(sotedDBListItems)
+            _ = self?.memProvider.overwrite(sotedDBListItems)
             
             self?.remoteProvider.listItems(list: list) {[weak self] remoteResult in
                 
@@ -56,8 +56,8 @@ class ListItemProviderImpl: ListItemProvider {
                     if (sotedDBListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
                         self?.dbProvider.overwrite(listItemsWithRelations.listItems, listUuid: list.uuid, clearTombstones: true) {saved in
                             
-                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItemsWithRelations.listItems))
-                            self?.memProvider.overwrite(listItemsWithRelations.listItems)
+                            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: listItemsWithRelations.listItems))
+                            _ = self?.memProvider.overwrite(listItemsWithRelations.listItems)
                         }
                     }
                     
@@ -69,43 +69,43 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // This is currently used only to retrieve possible product's list item on receiving a websocket notification with a product update
-    func listItem(product: Product, list: List, _ handler: ProviderResult<ListItem?> -> ()) {
+    func listItem(_ product: Product, list: List, _ handler: @escaping (ProviderResult<ListItem?>) -> ()) {
         DBProviders.listItemProvider.listItem(list, product: product) {listItemMaybe in
             if let listItem = listItemMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: listItem))
+                handler(ProviderResult(status: .success, sucessResult: listItem))
             } else {
-                handler(ProviderResult(status: .NotFound))
+                handler(ProviderResult(status: .notFound))
             }
         }
     }
     
-    func listItems(uuids: [String], _ handler: ProviderResult<[ListItem]> -> ()) {
+    func listItems(_ uuids: [String], _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
         DBProviders.listItemProvider.loadListItems(uuids) {items in
-            handler(ProviderResult(status: .Success, sucessResult: items))
+            handler(ProviderResult(status: .success, sucessResult: items))
         }
     }
     
     // MARK: -
     
-    func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func remove(_ listItem: ListItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         removeListItem(listItem.uuid, listUuid: listItem.list.uuid, remote: remote, handler)
     }
 
-    func removeListItem(listItemUuid: String, listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func removeListItem(_ listItemUuid: String, listUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         
         let memUpdated = memProvider.removeListItem(listUuid, uuid: listItemUuid)
         if memUpdated {
-            handler(ProviderResult(status: ProviderStatusCode.Success))
+            handler(ProviderResult(status: ProviderStatusCode.success))
         }
         
         // remote -> markForSync: if we want to call remote it means we want to mark item for sync.
         self.dbProvider.remove(listItemUuid, listUuid: listUuid, markForSync: remote, handler: {[weak self] removed in
             if removed {
                 if !memUpdated {
-                    handler(ProviderResult(status: .Success))
+                    handler(ProviderResult(status: .success))
                 }
             } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
                 self?.memProvider.invalidate()
             }
             if remote {
@@ -124,14 +124,14 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func remove(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         remove(list.uuid, remote: remote, handler)
     }
     
-    func remove(listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func remove(_ listUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         memProvider.invalidate()
         DBProviders.listProvider.remove(listUuid, markForSync: true) {[weak self] removed in
-            handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+            handler(ProviderResult(status: removed ? ProviderStatusCode.success : ProviderStatusCode.databaseUnknown))
             
             if remote {
                 if removed {
@@ -153,23 +153,23 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func add(groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
+    func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
         let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color, storeProductInput: nil)}
         self.add(listItemPrototypes, status: status, list: list, handler)
     }
     
-    func addGroupItems(group: ListItemGroup, status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
-        Providers.listItemGroupsProvider.groupItems(group, sortBy: .Alphabetic, fetchMode: .MemOnly) {[weak self] result in
+    func addGroupItems(_ group: ListItemGroup, status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
+        Providers.listItemGroupsProvider.groupItems(group, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
                 if groupItems.isEmpty {
-                    handler(ProviderResult(status: .IsEmpty))
+                    handler(ProviderResult(status: .isEmpty))
                 } else {
                     self?.add(groupItems, status: status, list: list, handler)
                 }
                 
             } else {
                 print("Error: ListItemProviderImpl.addGroupItems: Can't get group items for group: \(group)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
@@ -179,18 +179,18 @@ class ListItemProviderImpl: ListItemProvider {
     // TODO these services now are only for the websockets - and websocket call is commented. We just added status parameter to all the add-calls, do we need it here also? Do we have to change sth in the backend? In any case these services probably need to be rewritten now, these services where implemented at the very beginning for sth different and "reused" for websockets. For example it may be that we don't need the increment functionality for websockets.
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    func add(listItems: [ListItem], remote: Bool = true, _ handler: ProviderResult<[ListItem]> -> ()) {
+    func add(_ listItems: [ListItem], remote: Bool = true, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
 
         let addedListItemsMaybe = memProvider.addListItems(listItems)
         if let addedListItems = addedListItemsMaybe {
-            handler(ProviderResult(status: .Success, sucessResult: addedListItems))
+            handler(ProviderResult(status: .success, sucessResult: addedListItems))
         }
         
         // TODO review carefully what happens if adding fails after memory cache is updated
         dbProvider.addOrIncrementListItems(listItems) {[weak self] savedListItemsMaybe in // currently the item returned by server is identically to the one we sent, so we just save our local item
             if let savedListItems = savedListItemsMaybe {
                 if !addedListItemsMaybe.isSet { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
-                    handler(ProviderResult(status: .Success, sucessResult: savedListItems))
+                    handler(ProviderResult(status: .success, sucessResult: savedListItems))
                 }
                 
                 if remote {
@@ -235,26 +235,26 @@ class ListItemProviderImpl: ListItemProvider {
             } else {
                 self?.memProvider.invalidate()
                 print("Error: ListItemProviderImpl.add: saving listItem to db: \(listItems)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
 
         }
     }
     
-    func add(listItem: ListItem, remote: Bool = true, _ handler: ProviderResult<ListItem> -> ()) {
+    func add(_ listItem: ListItem, remote: Bool = true, _ handler: @escaping (ProviderResult<ListItem>) -> ()) {
         add([listItem]) {result in
             if let listItems = result.sucessResult {
                 if let listItem = listItems.first {
-                    handler(ProviderResult(status: .Success, sucessResult: listItem))
+                    handler(ProviderResult(status: .success, sucessResult: listItem))
                     
                 } else {
                     print("Error: add listitem returned success result but it's an empty array. ListItem: \(listItem)")
-                    handler(ProviderResult(status: .Unknown))
+                    handler(ProviderResult(status: .unknown))
                 }
                 
             } else {
                 print("Error: add listitem didn't succeed, listItem: \(listItem), result: \(result)")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }
@@ -262,13 +262,13 @@ class ListItemProviderImpl: ListItemProvider {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     // Note: status assumed to be .Todo as we can add list item input only to .Todo
-    func add(listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void) {
+    func add(_ listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: possibleNewSectionOrder) {[weak self] result in
             if let (section, product) = result.sucessResult {
                 self?.addListItem(product, status: status, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, storeProductInput: listItemInput.storeProductInput, handler)
             } else {
                 QL4("Error fetching section and/or product: \(result.status)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
@@ -277,7 +277,7 @@ class ListItemProviderImpl: ListItemProvider {
     // We load product and section from db identified by uniques and update and link to them, instead of updating directly the product and section of the item
     // The reason for this, is that if we udpate a part of the unique say the product's brand, we have to look if a product with the new unique exist and link to that one - otherwise we may end with 2 products (or sections) with the same semantic unique (but different uuids) and this is invalid, among others it causes an error in the server. 
     // NOTE: for now assumes that the store is not updated (the app doesn't allow to edit the store of a list item). This means that we don't look if a store product with the name-brand-store exists and link to that one if it does like we do with product or category. We just update the current store product. TODO review this
-    func update(listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: ProviderResult<(listItem: ListItem, replaced: Bool)> -> Void) {
+    func update(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: @escaping (ProviderResult<(listItem: ListItem, replaced: Bool)>) -> Void) {
         
         // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
         DBProviders.listItemProvider.deletePossibleListItemWithUnique(listItemInput.name, productBrand: listItemInput.brand, notUuid: updatingListItem.uuid, list: list) {[weak self] foundAndDeletedListItem in
@@ -305,7 +305,7 @@ class ListItemProviderImpl: ListItemProvider {
                     
                     self?.update([listItem], remote: remote) {result in
                         if result.success {
-                            handler(ProviderResult(status: .Success, sucessResult: (listItem: listItem, replaced: foundAndDeletedListItem)))
+                            handler(ProviderResult(status: .success, sucessResult: (listItem: listItem, replaced: foundAndDeletedListItem)))
                         } else {
                             QL4("Error updating list item: \(result)")
                             handler(ProviderResult(status: result.status))
@@ -313,15 +313,15 @@ class ListItemProviderImpl: ListItemProvider {
                     }
                 } else {
                     QL4("Error fetching section and/or product: \(result.status)")
-                    handler(ProviderResult(status: .DatabaseUnknown))
+                    handler(ProviderResult(status: .databaseUnknown))
                 }
             }
         }
     }
     
     // Retrieves section and product identified by semantic unique, if they don't exist creates new ones
-    private func sectionAndProductForAddUpdate(listItemInput: ListItemInput, list: List, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<(Section, Product)> -> Void) {
-        Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .Todo, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
+    fileprivate func sectionAndProductForAddUpdate(_ listItemInput: ListItemInput, list: List, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: @escaping (ProviderResult<(Section, Product)>) -> Void) {
+        Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .todo, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
             
             if let section = result.sucessResult {
                 
@@ -330,41 +330,41 @@ class ListItemProviderImpl: ListItemProvider {
                 Providers.productProvider.mergeOrCreateProduct(listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, brand: listItemInput.brand, updateCategory: false) {result in
                     
                     if let product = result.sucessResult {
-                        handler(ProviderResult(status: .Success, sucessResult: (section, product)))
+                        handler(ProviderResult(status: .success, sucessResult: (section, product)))
                         
                     } else {
                         QL4("Error fetching product: \(result.status)")
-                        handler(ProviderResult(status: .DatabaseUnknown))
+                        handler(ProviderResult(status: .databaseUnknown))
                     }
                 }
             } else {
                 QL4("Error fetching section: \(result.status)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
     
 
     // Adds list item with todo status
-    func addListItem(product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, _ handler: ProviderResult<ListItem> -> Void) {
+    func addListItem(_ product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         let listItemPrototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionName, targetSectionColor: sectionColor, storeProductInput: storeProductInput)
         self.add(listItemPrototype, status: status, list: list, handler)
     }
     
-    private func addSync(prototype: ListItemPrototype) {
+    fileprivate func addSync(_ prototype: ListItemPrototype) {
     
     }
     
-    func add(prototype: ListItemPrototype, status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
+    func add(_ prototype: ListItemPrototype, status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         
         add([prototype], status: status, list: list, note: note, order: orderMaybe) {result in
             if let addedListItems = result.sucessResult {
                 
                 if let addedListItem = addedListItems.first {
-                    handler(ProviderResult(status: .Success, sucessResult: addedListItem))
+                    handler(ProviderResult(status: .success, sucessResult: addedListItem))
                 } else {
                     print("Error: ListItemProviderImpl.add:prototype: Invalid state: add returned success result but it's empty. Status (should be success): \(result.status)")
-                    handler(ProviderResult(status: .Unknown))
+                    handler(ProviderResult(status: .unknown))
                 }
             } else {
                 print("Error: ListItemProviderImpl.add:prototype: Add didn't return success result, status: \(result.status)")
@@ -375,9 +375,9 @@ class ListItemProviderImpl: ListItemProvider {
     
     // Adds list items to .Todo
     // TODO!!!! review parameters note and order, we are passing a list of prototypes so this doesn't make sense?   
-    func add(prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<[ListItem]> -> Void) {
+    func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
         
-        func getOrderForNewSection(existingListItems: Results<DBListItem>) -> Int {
+        func getOrderForNewSection(_ existingListItems: Results<DBListItem>) -> Int {
             let sectionsOfItemsWithStatus: [DBSection] = existingListItems.collect({
                 if $0.hasStatus(status) {
                     return $0.section
@@ -402,7 +402,7 @@ class ListItemProviderImpl: ListItemProvider {
                     let existingStoreProductsDict = existingStoreProducts.toDictionary{($0.product.uuid, $0)}
                     return prototypes.map {prototype in
                         let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
-                            let storeProduct = StoreProduct(uuid: NSUUID().UUIDString, price: 1, baseQuantity: 1, unit: StoreProductUnit.None, store: list.store ?? "", product: prototype.product)
+                            let storeProduct = StoreProduct(uuid: NSUUID().uuidString, price: 1, baseQuantity: 1, unit: StoreProductUnit.none, store: list.store ?? "", product: prototype.product)
                             QL1("Store product doesn't exist, created: \(storeProduct)")
                             return storeProduct
                         }()
@@ -426,12 +426,12 @@ class ListItemProviderImpl: ListItemProvider {
                     
                     let section = previousItemSectionMaybeWithSameName ?? {
                     
-                        let existingSectionMaybe = realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first.map {dbSection in
+                        let existingSectionMaybe = realm.objects(DBSection.self).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first.map {dbSection in
                             SectionMapper.sectionWithDB(dbSection)
                         }
                         return existingSectionMaybe ?? {
                             
-                            let newSection: Section = Section(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
+                            let newSection: Section = Section(uuid: NSUUID().uuidString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
                             QL1("Section for prototype: \(prototype) didn't exist, created a new one: \(newSection)")
                             return newSection
                         }()
@@ -442,10 +442,10 @@ class ListItemProviderImpl: ListItemProvider {
                 
                 let memAddedListItemsMaybe = weakSelf.memProvider.addOrUpdateListItems(prototypesWithSections, status: status, list: list, note: note)
                 if let addedListItems = memAddedListItemsMaybe {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.global(qos: .background).async {
                         // return in advance so our client is quick - the database update continues in the background
-                        handler(ProviderResult(status: .Success, sucessResult: addedListItems))
-                    })
+                        handler(ProviderResult(status: .success, sucessResult: addedListItems))
+                    }
                 }
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
@@ -457,7 +457,7 @@ class ListItemProviderImpl: ListItemProvider {
                     
                     // see if there's already a listitem for this product in the list - if yes only increment it
                     
-                    let existingListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(list.uuid))
+                    let existingListItems = realm.objects(DBListItem.self).filter(DBListItem.createFilterList(list.uuid))
                     let existingListItemsDict: [String: DBListItem] = existingListItems.toDictionary{(DBStoreProduct.nameBrandStoreKey($0.product.product.name, brand: $0.product.product.brand, store: $0.product.store), $0)}
                     
                     // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
@@ -505,7 +505,7 @@ class ListItemProviderImpl: ListItemProvider {
                                     let sectionCount = getOrderForNewSection(existingListItems)
                                     
                                     // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                    return memoryCacheItemsDict?[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+                                    return memoryCacheItemsDict?[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
                                 }()
                             
                             // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
@@ -528,7 +528,7 @@ class ListItemProviderImpl: ListItemProvider {
                                 }
                             }()
                             
-                            let uuid = memoryCacheItemsDict?[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.uuid ?? NSUUID().UUIDString
+                            let uuid = memoryCacheItemsDict?[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.uuid ?? NSUUID().uuidString
                             
                             
                             // create the list item and save it
@@ -565,7 +565,7 @@ class ListItemProviderImpl: ListItemProvider {
                     
                 } else {
                     // mem provider is not enabled - controller is waiting for result - return it
-                    handler(ProviderResult(status: .Success, sucessResult: bgResult.listItems))
+                    handler(ProviderResult(status: .success, sucessResult: bgResult.listItems))
                 }
                 
                 //                        if let addedListItem = bgResult.listItem { // bg returned a list item
@@ -593,12 +593,12 @@ class ListItemProviderImpl: ListItemProvider {
                 }
                 
             } else { // there was a database error
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
 
-    func addListItem(product: Product, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, _ handler: ProviderResult<ListItem> -> Void) {
+    func addListItem(_ product: Product, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         // for now call the other func, which will fetch the section again... review if this is bad for performance otherwise let like this
         addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, storeProductInput: storeProductInput, handler)
     }
@@ -606,9 +606,9 @@ class ListItemProviderImpl: ListItemProvider {
     // Common code for update single and batch list items switch status (in case of single listItems contains only 1 element)
     // Switches in memory status of listItems to target status, also updates order & quantity for which it loads list items from database
     // param: orderInDstStatus: To override default dst order with a manual order. This is used for undo cell, where we want to the item to be inserted back at the original position.
-    private func switchStatusInsertInDst(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int? = nil, remote: Bool, _ handler: (switchedItems: [ListItem], storedItems: [ListItem])? -> Void) {
+    fileprivate func switchStatusInsertInDst(_ listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int? = nil, remote: Bool, _ handler: @escaping ((switchedItems: [ListItem], storedItems: [ListItem])?) -> Void) {
         
-        self.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly) {result in // TODO review .First suitable here
+        self.listItems(list, sortOrderByStatus: status, fetchMode: .memOnly) {result in // TODO review .First suitable here
             
             if let storedListItems = result.sucessResult {
                 
@@ -650,7 +650,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
 
     // Websocket list item switch
-    func switchStatusLocal(listItemUuid: String, status1: ListItemStatus, status: ListItemStatus, _ handler: ProviderResult<ListItem> -> Void) {
+    func switchStatusLocal(_ listItemUuid: String, status1: ListItemStatus, status: ListItemStatus, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         findListItem(listItemUuid) {[weak self] result in
             if let listItem = result.sucessResult {
                 self?.switchStatus(listItem, list: listItem.list, status1: status1, status: status, remote: false, handler)
@@ -661,7 +661,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // param: orderInDstStatus: To override default dst order with a manual order. This is used for undo cell, where we want to the item to be inserted back at the original position.    
-    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int? = nil, remote: Bool, _ handler: ProviderResult<ListItem> -> Void) {
+    func switchStatus(_ listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int? = nil, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         
 //        QL2("Switching status from \(listItem.product.product.name) from status \(status1) to \(status)")
         
@@ -673,7 +673,7 @@ class ListItemProviderImpl: ListItemProvider {
                 let allItemsToUpdate: [ListItem] = {
                     if let switchedItem = switchedItems.first {
                         var items = storedListItems
-                        items.update(switchedItem) // Update switched item in this array such that it's count in src is 0 and reorder works correctly
+                        _ = items.update(switchedItem) // Update switched item in this array such that it's count in src is 0 and reorder works correctly
                         items.sortAndUpdateOrderFieldsMutating(status1) // This filters and sorts by src status, iterates through them setting order to index.
                         return switchedItems + items // Add again the switched list item to the array (it's lost when we filter by src status)
                     } else {
@@ -689,10 +689,10 @@ class ListItemProviderImpl: ListItemProvider {
                     
                     if result.success {
                         if let listItem = switchedItems.first {
-                            handler(ProviderResult(status: .Success, sucessResult: listItem))
+                            handler(ProviderResult(status: .success, sucessResult: listItem))
                         } else {
                             QL4("Invalid statue: No list item. We should have the switched list item here.")
-                            handler(ProviderResult(status: .Unknown))
+                            handler(ProviderResult(status: .unknown))
                         }
                         
                     } else {
@@ -723,13 +723,13 @@ class ListItemProviderImpl: ListItemProvider {
                 })
             } else {
                 QL4("Stored list items returned nil")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }
     
     // Switches status of passed items in memory and returns them. For this we loads the currrent list items either from memory or database if mem cache not available.
-    private func getSwitchedItemsForSwitchAll(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<[ListItem]> -> Void) {
+    fileprivate func getSwitchedItemsForSwitchAll(_ listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
         
         switchStatusInsertInDst(listItems, list: list, status1: status1, status: status, remote: remote) {switchResult in
             
@@ -741,18 +741,18 @@ class ListItemProviderImpl: ListItemProvider {
                     listItem.section.updateOrderMutable(ListItemStatusOrder(status1, order: 0)) // this may update sections multiple times but it doesn't matter
                 })
                 
-                handler(ProviderResult(status: .Success, sucessResult: switchedItems))
+                handler(ProviderResult(status: .success, sucessResult: switchedItems))
 
             } else {
                 QL4("Stored list items returned nil")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }
     
     // Websockets: stores inventory and history items corresponding to buy result and moves item to stash
     // For now not in a transaction, not very critical as this is only a matching operation and if the user reloads the list the data will be consistent again. Of course, before reloading the list the behaviour looks wrong to the user and using the list in this state leads to more weirdness. TODO! do this also in a transaction.
-    func storeBuyCartResult(switchedResult: RemoteBuyCartResult, _ handler: ProviderResult<Any> -> Void) {
+    func storeBuyCartResult(_ switchedResult: RemoteBuyCartResult, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         
         let listItemUuids = switchedResult.switchedItems.map{$0.uuid}
         Providers.listItemsProvider.listItems(listItemUuids) {listItemsResult in
@@ -766,24 +766,24 @@ class ListItemProviderImpl: ListItemProvider {
                     Providers.inventoryItemsProvider.addToInventoryLocal(inventoryItems, historyItems: historyItems, dirty: false) {saveInventoryAndHistoryItemsResult in
                         
                         if saveInventoryAndHistoryItemsResult.success {
-                            Providers.listItemsProvider.switchAllToStatus(listItems, list: list, status1: .Done, status: .Stash, remote: false) {switchListItemsResult in
+                            Providers.listItemsProvider.switchAllToStatus(listItems, list: list, status1: .done, status: .stash, remote: false) {switchListItemsResult in
                                 if switchListItemsResult.success {
-                                    handler(ProviderResult(status: .Success))
+                                    handler(ProviderResult(status: .success))
                                 } else {
                                     QL4("Error switching list items: \(switchListItemsResult)")
-                                    handler(ProviderResult(status: .Unknown))
+                                    handler(ProviderResult(status: .unknown))
                                 }
                             }
                             
                         } else {
                             QL4("Error saving inventory and history items: \(saveInventoryAndHistoryItemsResult)")
-                            handler(ProviderResult(status: .Unknown))
+                            handler(ProviderResult(status: .unknown))
                         }
                     }
                     
                 } else {
                     QL4("None of the items to be switched is in the list") // this is not entirely impossible but extremely unlikely
-                    handler(ProviderResult(status: .Success)) // For now just error log, maybe later we should return error status also
+                    handler(ProviderResult(status: .success)) // For now just error log, maybe later we should return error status also
                 }
             } else {
                 QL4("Error retrieving list items: \(listItemsResult)")
@@ -792,22 +792,22 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func buyCart(listItems: [ListItem], list: List, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func buyCart(_ listItems: [ListItem], list: List, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         
         // Generate inventory/history items first because list items may change
         let inventoryAndHistoryItemsInput = listItems.map{ProductWithQuantityInput(product: $0.product, quantity: $0.doneQuantity)}
 
         // If the todo list is empty, move items immediately to todo, otherwise to stash
-        listItemCount(.Todo, list: list, fetchMode: .MemOnly) {[weak self] result in
+        listItemCount(.todo, list: list, fetchMode: .memOnly) {[weak self] result in
             if let todoItemsCount = result.sucessResult {
                 
                 let todoISEmpty: Bool = todoItemsCount == 0
                 
-                let targetStatus: ListItemStatus = todoISEmpty ? .Todo : .Stash
+                let targetStatus: ListItemStatus = todoISEmpty ? .todo : .stash
             
-                self?.listItems(list, sortOrderByStatus: .Stash, fetchMode: .MemOnly) {stashListItems in
+                self?.listItems(list, sortOrderByStatus: .stash, fetchMode: .memOnly) {stashListItems in
                     
-                    self?.getSwitchedItemsForSwitchAll(listItems, list: list, status1: .Done, status: targetStatus, remote: remote) {result in
+                    self?.getSwitchedItemsForSwitchAll(listItems, list: list, status1: .done, status: targetStatus, remote: remote) {result in
                         
                         if let switchedItems = result.sucessResult {
                             
@@ -815,9 +815,9 @@ class ListItemProviderImpl: ListItemProvider {
                                 if let inventoryWithHistoryItems = dbBuyResult.sucessResult {
                                     
                                     // Called after we reset stash items, in case when todo list is left empty or immediately in case where the todo list is left non empty
-                                    func afterMaybeResetStash(resettedStashItems: [ListItem]? = nil) {
+                                    func afterMaybeResetStash(_ resettedStashItems: [ListItem]? = nil) {
                                 
-                                        handler(ProviderResult(status: .Success))
+                                        handler(ProviderResult(status: .success))
                                         
                                         self?.remoteProvider.buyCart(list.uuid, inventoryItems: inventoryWithHistoryItems) {remoteResult in
                                             
@@ -832,7 +832,7 @@ class ListItemProviderImpl: ListItemProvider {
                                                 if let resettedStashItems = resettedStashItems {
                                                     // Now that remote buyCart transaction finished, switch the stash also in remote.
                                                     // TODO!!! -- this should be in the same transaction from buyCart (in client and server) so this additional call is not necessary. Also ensure consistency with the client and server switch.
-                                                    Providers.listItemsProvider.switchAllToStatus(resettedStashItems, list: list, status1: .Stash, status: .Todo, remote: true) {result in
+                                                    Providers.listItemsProvider.switchAllToStatus(resettedStashItems, list: list, status1: .stash, status: .todo, remote: true) {result in
                                                         if !result.success {
                                                             QL4("Error switching stash items (remote) after buyCart: \(result)")
                                                         }
@@ -853,17 +853,17 @@ class ListItemProviderImpl: ListItemProvider {
                                     
                                     if todoISEmpty {
                                         // Do the possible stash emptying separately (not in the same transaction as switching items and inventory, history - reason is that switching items loads stored items from db, since we don't store the items until buyCart we can't use this method again to save the possible stash-to-todo switch. So for now we do this after the buy transaction, if it fails it's not critical if the stash items keep in the stash.
-                                        self?.listItems(list, sortOrderByStatus: .Stash, fetchMode: .MemOnly) {listItemsAfterSwitchResult in
+                                        self?.listItems(list, sortOrderByStatus: .stash, fetchMode: .memOnly) {listItemsAfterSwitchResult in
                                             if let listItemsAfterSwitch = listItemsAfterSwitchResult.sucessResult {
-                                                let stashItems = listItemsAfterSwitch.filter{$0.hasStatus(.Stash)}
+                                                let stashItems = listItemsAfterSwitch.filter{$0.hasStatus(.stash)}
             
                                                 // We don't send it to remote because don't have called buyCart yet, that should come first (stash items should be appended after the cart items, like in client). The reason we don't have called buyCart is that we want to first to all client side operations in order to return to controller as soon as possible.
-                                                Providers.listItemsProvider.switchAllToStatus(stashItems, list: list, status1: .Stash, status: .Todo, remote: false) {result in
+                                                Providers.listItemsProvider.switchAllToStatus(stashItems, list: list, status1: .stash, status: .todo, remote: false) {result in
                                                     if result.success {
                                                         afterMaybeResetStash(stashItems)
                                                     } else {
                                                         QL4("Couldn't reset stash list items")
-                                                        handler(ProviderResult(status: .DatabaseUnknown))
+                                                        handler(ProviderResult(status: .databaseUnknown))
                                                     }
                                                 }
                                             }
@@ -875,20 +875,20 @@ class ListItemProviderImpl: ListItemProvider {
                                     
                                 } else {
                                     QL4("db buy cart didn't return items") // this should not happen as we should not call this method with an empty cart, and if there are cart items there must be inventory/history items.
-                                    handler(ProviderResult(status: .Unknown))
+                                    handler(ProviderResult(status: .unknown))
                                 }
                             })
                             
                         } else {
                             QL4("No switched items")
-                            handler(ProviderResult(status: .Unknown))
+                            handler(ProviderResult(status: .unknown))
                         }
                     }
                 }
 
             } else {
                 QL4("Couldn't get items count")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
             
         }
@@ -896,7 +896,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     // IMPORTANT: Assumes that the passed list items are ALL the existing list items in src status. If this is not the case, the remaining items/sections in src status will likely be left with a wrong order.
     // Passes to handler the switched list items (state as stored in local db - no remote things like lastUpdate timestamp)
-    func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<[ListItem]> -> Void) {
+    func switchAllToStatus(_ listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
         
         getSwitchedItemsForSwitchAll(listItems, list: list, status1: status1, status: status, remote: remote) {result in
             
@@ -905,7 +905,7 @@ class ListItemProviderImpl: ListItemProvider {
                 // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
                 self.updateLocal(switchedItems, handler: {result in
                     if result.success {
-                        handler(ProviderResult(status: .Success, sucessResult: switchedItems))
+                        handler(ProviderResult(status: .success, sucessResult: switchedItems))
                     } else {
                         handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
                     }
@@ -935,18 +935,18 @@ class ListItemProviderImpl: ListItemProvider {
                 
             } else {
                 QL4("No switched items")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }
     
-    func switchAllStatusLocal(result: RemoteSwitchAllListItemsLightResult, _ handler: ProviderResult<Any> -> Void) {
+    func switchAllStatusLocal(_ result: RemoteSwitchAllListItemsLightResult, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProviders.listProvider.loadList(result.update.listUuid) {listMaybe in
             if let list = listMaybe {
                 DBProviders.listItemProvider.loadListItems(list.uuid) {listItems in
                     Providers.listItemsProvider.switchAllToStatus(listItems, list: list, status1: result.update.srcStatus, status: result.update.dstStatus, remote: false) {switchResult in
                         if let switchedListItems = switchResult.sucessResult {
-                            handler(ProviderResult(status: .Success))
+                            handler(ProviderResult(status: .success))
                             
                             DBProviders.listItemProvider.storeWebsocketAllListItemSwitchResult(switchedListItems, lastUpdate: result.lastUpdate) {success in
                                 if success {
@@ -963,7 +963,7 @@ class ListItemProviderImpl: ListItemProvider {
                 }
             } else {
                 QL2("List to switch items not found: \(result.update.listUuid)")
-                handler(ProviderResult(status: .Success)) // list can be removed shortly before we get the message so this is not an error
+                handler(ProviderResult(status: .success)) // list can be removed shortly before we get the message so this is not an error
             }
         }
     }
@@ -972,19 +972,19 @@ class ListItemProviderImpl: ListItemProvider {
     // Helper for common code of status switch update, order update and full update - the only difference of these method is the remote call, switch and order use optimised services.
     // The local call is in all cases a full update.
     // The local call could principially also be optimised but don't see it's worth it, probably the performance is not very different than updating the whole object.
-    private func updateLocal(listItems: [ListItem], remote: Bool = true, handler: ProviderResult<Any> -> Void, onFinishLocal: VoidFunction) {
+    fileprivate func updateLocal(_ listItems: [ListItem], remote: Bool = true, handler: @escaping (ProviderResult<Any>) -> Void, onFinishLocal: @escaping VoidFunction) {
         let memUpdated = memProvider.updateListItems(listItems)
         if memUpdated {
-            handler(ProviderResult(status: .Success))
+            handler(ProviderResult(status: .success))
         }
         
         self.dbProvider.updateListItems(listItems, handler: {[weak self] saved in
             if saved {
                 if !memUpdated {
-                    handler(ProviderResult(status: .Success))
+                    handler(ProviderResult(status: .success))
                 }
             } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
                 self?.memProvider.invalidate()
             }
           
@@ -992,7 +992,7 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    func update(listItems: [ListItem], remote: Bool = true, _ handler: ProviderResult<Any> -> ()) {
+    func update(_ listItems: [ListItem], remote: Bool = true, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         
         self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
             if remote {
@@ -1012,11 +1012,11 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    func update(listItem: ListItem, remote: Bool = true, _ handler: ProviderResult<Any> -> ()) {
+    func update(_ listItem: ListItem, remote: Bool = true, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         update([listItem], remote: remote, handler)
     }
     
-    func updateListItemsOrder(listItems: [ListItem], status: ListItemStatus, remote: Bool = true, _ handler: ProviderResult<Any> -> Void) {
+    func updateListItemsOrder(_ listItems: [ListItem], status: ListItemStatus, remote: Bool = true, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         
         self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
             if remote {
@@ -1037,20 +1037,20 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    func updateListItemsOrderLocal(orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: ProviderResult<Any> -> Void) {
+    func updateListItemsOrderLocal(_ orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProviders.listItemProvider.updateListItemsOrderLocal(orderUpdates, sections: sections, status: status) {success in
             if success {
                 Providers.listItemsProvider.invalidateMemCache()
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
             } else {
                 QL4("Couldn't store remote list items order update")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }
     
     // TODO!!!! remote? why did this service not have remote before, forgot or we don't need it there?
-    func increment(listItem: ListItem, status: ListItemStatus, delta: Int, remote: Bool, _ handler: ProviderResult<ListItem> -> ()) {
+    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ()) {
         
         // Get item from database with updated quantityDelta
         // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
@@ -1061,17 +1061,17 @@ class ListItemProviderImpl: ListItemProvider {
         let memIncremented = memProvider.increment(listItem, quantity: ListItemStatusQuantity(status: status, quantity: delta))
         if let memIncremented = memIncremented {
             
-            dispatch_async(dispatch_get_main_queue(), { // since the transaction is executed in the background we have to return to main thread here
-                handler(ProviderResult(status: .Success, sucessResult: memIncremented))
+            DispatchQueue.main.async(execute: { // since the transaction is executed in the background we have to return to main thread here
+                handler(ProviderResult(status: .success, sucessResult: memIncremented))
             })
         }
         dbProvider.incrementListItem(listItem, delta: delta, status: status) {[weak self] listItemMaybe in
             
             if memIncremented == nil { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if let listItem = listItemMaybe {
-                    handler(ProviderResult(status: .Success, sucessResult: listItem))
+                    handler(ProviderResult(status: .success, sucessResult: listItem))
                 } else {
-                    handler(ProviderResult(status: .DatabaseSavingError))
+                    handler(ProviderResult(status: .databaseSavingError))
                 }
             }
             
@@ -1096,42 +1096,42 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // only db no memory cache or remote, this is currently used only by websocket update (when receive websocket increment, fetch inventory item in order to increment it locally)
-    private func findListItem(uuid: String, _ handler: ProviderResult<ListItem> -> ()) {
+    fileprivate func findListItem(_ uuid: String, _ handler: @escaping (ProviderResult<ListItem>) -> ()) {
         DBProviders.listItemProvider.findListItem(uuid) {listItemMaybe in
             if let listItem = listItemMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: listItem))
+                handler(ProviderResult(status: .success, sucessResult: listItem))
             } else {
-                handler(ProviderResult(status: .NotFound))
+                handler(ProviderResult(status: .notFound))
             }
         }
     }
 
     // TODO this can be optimised, such that we don't have to prefetch the item but increment directly at least in memory
-    func increment(increment: RemoteListItemIncrement, remote: Bool, _ handler: ProviderResult<ListItem> -> Void) {
+    func increment(_ increment: RemoteListItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         findListItem(increment.uuid) {[weak self] result in
             if let listItem = result.sucessResult {
                 
                 self?.increment(listItem, status: increment.status, delta: increment.delta, remote: remote) {result in
 
                     if let statusQuantity = result.sucessResult {
-                        handler(ProviderResult(status: .Success, sucessResult: statusQuantity))
+                        handler(ProviderResult(status: .success, sucessResult: statusQuantity))
                     } else {
-                        handler(ProviderResult(status: .DatabaseSavingError))
+                        handler(ProviderResult(status: .databaseSavingError))
                     }
                 }
                 
             } else {
                 QL2("Didn't find inventory item to increment, for: \(increment)")
-                handler(ProviderResult(status: .NotFound))
+                handler(ProviderResult(status: .notFound))
             }
         }
     }
 
-    func listItemCount(status: ListItemStatus, list: List, fetchMode: ProviderFetchModus = .First, _ handler: ProviderResult<Int> -> Void) {
+    func listItemCount(_ status: ListItemStatus, list: List, fetchMode: ProviderFetchModus = .first, _ handler: @escaping (ProviderResult<Int>) -> Void) {
         let countMaybe = memProvider.listItemCount(status, list: list)
         if let count = countMaybe {
-            handler(ProviderResult(status: .Success, sucessResult: count))
-            if fetchMode == .MemOnly {
+            handler(ProviderResult(status: .success, sucessResult: count))
+            if fetchMode == .memOnly {
                 return
             }
         }
@@ -1141,10 +1141,10 @@ class ListItemProviderImpl: ListItemProvider {
                 // if for some reason the count in db is different than in memory return it again so the interface can update
                 // (only used for fetchmode .Both)
                 if (countMaybe.map{$0 != dbCount} ?? true) {
-                    handler(ProviderResult(status: .Success, sucessResult: dbCount))
+                    handler(ProviderResult(status: .success, sucessResult: dbCount))
                 }
             } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
@@ -1155,15 +1155,15 @@ class ListItemProviderImpl: ListItemProvider {
         memProvider.invalidate()
     }
     
-    func removeSectionFromListItemsMemCacheIfExistent(sectionUuid: String, listUuid: String?, handler: ProviderResult<Any> -> Void) {
+    func removeSectionFromListItemsMemCacheIfExistent(_ sectionUuid: String, listUuid: String?, handler: @escaping (ProviderResult<Any>) -> Void) {
         if memProvider.enabled {
             let success = memProvider.removeSection(sectionUuid, listUuid: listUuid)
             if !success {
                 QL4("Mem cache section removal returned false: sectionUuid: \(sectionUuid), listUuid: \(listUuid)")
             }
-            handler(ProviderResult(status: .Success))
+            handler(ProviderResult(status: .success))
         } else {
-            handler(ProviderResult(status: .Success))
+            handler(ProviderResult(status: .success))
         }
     }
 }

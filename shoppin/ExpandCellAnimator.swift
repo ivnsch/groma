@@ -10,16 +10,16 @@
 import UIKit
 
 protocol ExpandCellAnimatorDelegate: class {
-    func animationsForCellAnimator(isExpanding: Bool, frontView: UIView)
-    func animationsComplete(wasExpanding: Bool, frontView: UIView)
-    func prepareAnimations(willExpand: Bool, frontView: UIView)
+    func animationsForCellAnimator(_ isExpanding: Bool, frontView: UIView)
+    func animationsComplete(_ wasExpanding: Bool, frontView: UIView)
+    func prepareAnimations(_ willExpand: Bool, frontView: UIView)
 }
 
 class ExpandCellAnimator {
 
-    var collapsedFrame: CGRect = CGRectZero
-    private var topSlidingView: UIView?
-    private var bottomSlidingView: UIView?
+    var collapsedFrame: CGRect = CGRect.zero
+    fileprivate var topSlidingView: UIView?
+    fileprivate var bottomSlidingView: UIView?
 
     weak var fromView: UIView? = UIView()
     weak var toView: UIView? = UIView()
@@ -27,9 +27,9 @@ class ExpandCellAnimator {
     
     weak var delegate: ExpandCellAnimatorDelegate?
     
-    func animateTransition(isExpand: Bool, topOffsetY: CGFloat, expandedViewFrame: CGRect? = nil) {
+    func animateTransition(_ isExpand: Bool, topOffsetY: CGFloat, expandedViewFrame: CGRect? = nil) {
         
-        guard let fromView = fromView, toView = toView, inView = inView else {return}
+        guard let fromView = fromView, let toView = toView, let inView = inView else {return}
         
         
         fromView.layoutIfNeeded()
@@ -45,15 +45,15 @@ class ExpandCellAnimator {
         )
         
         let topSlidingView = self.topSlidingView ?? {
-            let view = fromView.resizableSnapshotViewFromRect(
-                topSlidingViewFrame,
+            let view = fromView.resizableSnapshotView(
+                from: topSlidingViewFrame,
                 afterScreenUpdates: false,
-                withCapInsets: UIEdgeInsetsZero
+                withCapInsets: UIEdgeInsets.zero
             )
             self.topSlidingView = view
-            return view
+            return view!
         }()
-        topSlidingView.frame = CGRectMake(topSlidingViewFrame.origin.x, topSlidingViewFrame.origin.y, topSlidingViewFrame.width, topSlidingViewFrame.height)
+        topSlidingView.frame = CGRect(x: topSlidingViewFrame.origin.x, y: topSlidingViewFrame.origin.y, width: topSlidingViewFrame.width, height: topSlidingViewFrame.height)
         
         
         let bottomSlidingViewOriginY = collapsedFrame.maxY
@@ -64,19 +64,19 @@ class ExpandCellAnimator {
             height: fromView.bounds.maxY - bottomSlidingViewOriginY
         )
         let bottomSlidingView = self.bottomSlidingView ?? {
-            let view = fromView.resizableSnapshotViewFromRect(
-                bottomSlidingViewFrame,
+            let view = fromView.resizableSnapshotView(
+                from: bottomSlidingViewFrame,
                 afterScreenUpdates: false,
-                withCapInsets: UIEdgeInsetsZero
+                withCapInsets: UIEdgeInsets.zero
             )
             self.bottomSlidingView = view
-            return view
+            return view!
             }()
         
         //        bottomSlidingView.frame = bottomSlidingViewFrame
-        bottomSlidingView.frame = CGRectMake(bottomSlidingViewFrame.origin.x, bottomSlidingViewFrame.origin.y, bottomSlidingViewFrame.width, bottomSlidingViewFrame.height)
+        bottomSlidingView.frame = CGRect(x: bottomSlidingViewFrame.origin.x, y: bottomSlidingViewFrame.origin.y, width: bottomSlidingViewFrame.width, height: bottomSlidingViewFrame.height)
 
-        let collapsedFrame2 = fromView.convertRect(collapsedFrame, toView: inView) // frame in main view
+        let collapsedFrame2 = fromView.convert(collapsedFrame, to: inView) // frame in main view
         
         
 //        let topSlidingDistance = collapsedFrame.origin.y - fromView.bounds.origin.y
@@ -87,8 +87,8 @@ class ExpandCellAnimator {
             bottomSlidingView.center.y += bottomSlidingDistance
         }
         
-        topSlidingView.frame = fromView.convertRect(topSlidingView.frame, toView: inView)
-        bottomSlidingView.frame = fromView.convertRect(bottomSlidingView.frame, toView: inView)
+        topSlidingView.frame = fromView.convert(topSlidingView.frame, to: inView)
+        bottomSlidingView.frame = fromView.convert(bottomSlidingView.frame, to: inView)
         inView.addSubview(topSlidingView)
         inView.addSubview(bottomSlidingView)
         
@@ -104,8 +104,8 @@ class ExpandCellAnimator {
         
         delegate?.prepareAnimations(isExpand, frontView: toView)
         
-        UIView.animateWithDuration(
-            0.3,
+        UIView.animate(
+            withDuration: 0.3,
             animations: {[weak self] in guard let weakSelf = self else {return}
                 if isExpand {
                     topSlidingView.center.y -= topSlidingDistance
@@ -119,7 +119,7 @@ class ExpandCellAnimator {
                     topSlidingView.center.y += topSlidingDistance
                     bottomSlidingView.center.y -= bottomSlidingDistance
                     //                    self.toView.frame = self.collapsedFrame
-                    toView.frame = CGRectMake(collapsedFrame2.origin.x, collapsedFrame2.origin.y, collapsedFrame2.width, collapsedFrame2.height)
+                    toView.frame = CGRect(x: collapsedFrame2.origin.x, y: collapsedFrame2.origin.y, width: collapsedFrame2.width, height: collapsedFrame2.height)
                     weakSelf.delegate?.animationsForCellAnimator(false, frontView: toView)
                     toView.layoutIfNeeded()
                     inView.layoutIfNeeded()

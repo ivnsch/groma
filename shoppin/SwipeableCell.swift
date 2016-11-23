@@ -24,11 +24,11 @@ import UIKit
 //}
 
 enum ListItemCellMode {
-    case Increment, Note // TODO rename Increment -> Edit, Note -> Normal
+    case increment, note // TODO rename Increment -> Edit, Note -> Normal
 }
 
 enum SwipeableCellDirection {
-    case Left, Right
+    case left, right
 }
 
 class SwipeableCell: UITableViewCell {
@@ -44,7 +44,7 @@ class SwipeableCell: UITableViewCell {
     @IBOutlet weak var contentViewRightConstraint:NSLayoutConstraint!
     @IBOutlet weak var contentViewLeftConstraint:NSLayoutConstraint!
 
-    var direction: SwipeableCellDirection = .Right
+    var direction: SwipeableCellDirection = .right
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -54,20 +54,20 @@ class SwipeableCell: UITableViewCell {
     
 
     func buttonTotalWidth() -> CGFloat {
-        return CGRectGetWidth(self.frame)
+        return self.frame.width
         //            - CGRectGetMinX(self.button2.frame)
     }
     
-    func setOpen(open: Bool, animated: Bool = false) {
+    func setOpen(_ open: Bool, animated: Bool = false) {
         if open {
-            backgroundColor = UIColor.clearColor()
+            backgroundColor = UIColor.clear
             setConstraintsToShowAllButtons(animated, notifyDelegateDidOpen: false)
         } else {
             resetConstraintContstantsToZero(animated, notifyDelegateDidClose: false)
         }
     }
     
-    func resetConstraintContstantsToZero(animated:Bool, notifyDelegateDidClose:Bool) {
+    func resetConstraintContstantsToZero(_ animated:Bool, notifyDelegateDidClose:Bool) {
         if self.startingLeftLayoutConstraint == 0 && self.contentViewLeftConstraint.constant == 0 {
             return
         }
@@ -80,19 +80,19 @@ class SwipeableCell: UITableViewCell {
                 weakSelf.updateConstraintsIfNeeded(animated, alpha: 1, onCompletion: {finished in
                     weakSelf.startingLeftLayoutConstraint = weakSelf.contentViewLeftConstraint.constant
                     
-                    weakSelf.backgroundColor = UIColor.whiteColor() // resetConstraintContstantsToZero is used to set back cell when tap on it while "undo" so reset color also here... (TODO colors in 1 place now we are setting white/clear in 3 different places)
+                    weakSelf.backgroundColor = UIColor.white // resetConstraintContstantsToZero is used to set back cell when tap on it while "undo" so reset color also here... (TODO colors in 1 place now we are setting white/clear in 3 different places)
                 })
             }
         })
     }
     
-    func setConstraintsToShowAllButtons(animated: Bool, notifyDelegateDidOpen: Bool) {
+    func setConstraintsToShowAllButtons(_ animated: Bool, notifyDelegateDidOpen: Bool) {
         if self.startingLeftLayoutConstraint == self.buttonTotalWidth() && self.contentViewLeftConstraint.constant == self.buttonTotalWidth() {
             return
         }
         
         self.updateConstraintsIfNeeded(animated, onCompletion: { (finished) -> Void in
-            let constant = self.direction == .Right ? self.buttonTotalWidth() : -self.buttonTotalWidth()
+            let constant = self.direction == .right ? self.buttonTotalWidth() : -self.buttonTotalWidth()
             self.contentViewLeftConstraint.constant = constant
             self.contentViewRightConstraint.constant = -constant
             
@@ -108,14 +108,14 @@ class SwipeableCell: UITableViewCell {
         })
     }
     
-    func updateConstraintsIfNeeded(animated:Bool, alpha: CGFloat? = nil, onCompletion:((Bool)->Void)?) {
-        var duration:NSTimeInterval = 0
+    func updateConstraintsIfNeeded(_ animated:Bool, alpha: CGFloat? = nil, onCompletion:((Bool)->Void)?) {
+        var duration:TimeInterval = 0
         if animated {
             duration = 0.3
         }
-        let delay:NSTimeInterval = 0
+        let delay:TimeInterval = 0
         
-        UIView.animateWithDuration(duration, delay: delay, options: UIViewAnimationOptions.CurveEaseOut, animations: {() -> Void in
+        UIView.animate(withDuration: duration, delay: delay, options: UIViewAnimationOptions.curveEaseOut, animations: {() -> Void in
             self.layoutIfNeeded()
             if let alpha = alpha {
                 self.myContentView.alpha = alpha
@@ -124,7 +124,7 @@ class SwipeableCell: UITableViewCell {
             }, completion: onCompletion)
     }
     
-    override func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     
@@ -134,13 +134,13 @@ class SwipeableCell: UITableViewCell {
         //        self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state
     }
     
-    @IBAction func buttonClicked(sender: AnyObject) {
+    @IBAction func buttonClicked(_ sender: AnyObject) {
 //        self.delegate.buttonTwoActionForItemText()
         onButtonTwoTap()
         self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)

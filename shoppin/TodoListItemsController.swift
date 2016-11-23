@@ -20,10 +20,10 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     @IBOutlet weak var emptyListViewLabel1: UILabel!
     @IBOutlet weak var emptyListViewLabel2: UILabel!
     
-    private weak var todoListItemsEditBottomView: TodoListItemsEditBottomView?
+    fileprivate weak var todoListItemsEditBottomView: TodoListItemsEditBottomView?
     
     override var status: ListItemStatus {
-        return .Todo
+        return .todo
     }
     
     override var tableViewBottomInset: CGFloat {
@@ -41,53 +41,53 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         todoListItemsEditBottomView?.delegate = self
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateStashView()
     }
     
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if todoListItemsEditBottomView == nil {
             initBottomEditView()
         }
     }
     
-    override func onExpand(expanding: Bool) {
+    override func onExpand(_ expanding: Bool) {
         super.onExpand(expanding)
         
         if !expanding {
-            pricesView.hidden = true
-            stashView.hidden = true
-            todoListItemsEditBottomView?.hidden = true
+            pricesView.isHidden = true
+            stashView.isHidden = true
+            todoListItemsEditBottomView?.isHidden = true
         }
     }
     
-    private func initBottomEditView() {
-        let view = NSBundle.loadView("TodoListItemsEditBottomView", owner: self) as! TodoListItemsEditBottomView
+    fileprivate func initBottomEditView() {
+        let view = Bundle.loadView("TodoListItemsEditBottomView", owner: self) as! TodoListItemsEditBottomView
         view.translatesAutoresizingMaskIntoConstraints = false
         view.delegate = self
         todoListItemsEditBottomView = view
-        view.hidden = true
+        view.isHidden = true
         self.view.addSubview(view)
         view.fillSuperviewWidth()
-        view.alignBottom(self.view)
-        view.heightConstraint(60)
+        _ = view.alignBottom(self.view)
+        _ = view.heightConstraint(60)
         view.setNeedsLayout()
         view.setNeedsUpdateConstraints()
         view.layoutIfNeeded()
         view.updateConstraintsIfNeeded()
     }
     
-    override func toggleTopAddController(rotateTopBarButton: Bool = true) -> Bool {
+    override func toggleTopAddController(_ rotateTopBarButton: Bool = true) -> Bool {
         let open = super.toggleTopAddController(rotateTopBarButton)
         
         if open { // opened quick add
             // don't show the reorder sections button during quick add is open because it stand in the way
             todoListItemsEditBottomView?.setHiddenAnimated(true)
         } else { // closed quick add
-            if editing {
+            if isEditing {
                 // if we are in edit mode, show the reorder sections button again (we hide it when we open the top controller)
                 todoListItemsEditBottomView?.setHiddenAnimated(false)
             }
@@ -95,17 +95,17 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         return open
     }
     
-    override func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
+    override func setEditing(_ editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
         super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
         
         todoListItemsEditBottomView?.setHiddenAnimated(!editing)
     }
     
-    override func onToggleReorderSections(isNowInReorderSections: Bool) {
+    override func onToggleReorderSections(_ isNowInReorderSections: Bool) {
         self.todoListItemsEditBottomView?.expandCollapseButtonExpanded = isNowInReorderSections
     }
     
-    override func onGetListItems(listItems: [ListItem]) {
+    override func onGetListItems(_ listItems: [ListItem]) {
         super.onGetListItems(listItems)
         
         // timing issues - when we query list items it may be that the server items are updated which causes the handler to be called again. In these cases, the updateStashView we call in view did appear doesn't get the server update as this only calls the local db. So now each time the handler is called (which calls onGetListItems) we do the stash call again. We could here just count the stash items from listItems (which contain list items for all status) but for now we keep the changes minimal and just call updateStashView() again.
@@ -114,13 +114,13 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     
     override func updateQuantifiables() {
         if let list = currentList {
-            Providers.listItemsProvider.listItems(list, sortOrderByStatus: ListItemStatus.Todo, fetchMode: .First, successHandler {listItems in
-                let (totalCartQuantity, totalCartPrice) = listItems.totalQuanityAndPrice(.Done)
+            Providers.listItemsProvider.listItems(list, sortOrderByStatus: ListItemStatus.todo, fetchMode: .first, successHandler {listItems in
+                let (totalCartQuantity, totalCartPrice) = listItems.totalQuanityAndPrice(.done)
 //                let itemsStr = listItems.reduce("") {str, item in
 //                    str + item.quantityDebugDescription + ","
 //                }
 
-                let stashQuantity = listItems.totalQuanityAndPrice(.Stash).quantity
+                let stashQuantity = listItems.totalQuanityAndPrice(.stash).quantity
                 
                 self.pricesView.quantities = (cart: totalCartQuantity, stash: stashQuantity)
                 
@@ -140,7 +140,7 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     
     func updateStashView() {
         if let list = currentList {
-            Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, fetchMode: .MemOnly, successHandler {[weak self] count in guard let weakSelf = self else {return}
+            Providers.listItemsProvider.listItemCount(.stash, list: list, fetchMode: .memOnly, successHandler {[weak self] count in guard let weakSelf = self else {return}
 //                    if count != self?.stashView.quantity { // don't animate if there's no change
                     weakSelf.stashView.quantity = count
                     weakSelf.pricesView.allowOpen = count > 0
@@ -156,18 +156,18 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         }
     }
     
-    override func onListItemsOrderChangedSection(tableViewListItems: [TableViewListItem]) {
+    override func onListItemsOrderChangedSection(_ tableViewListItems: [TableViewListItem]) {
         Providers.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
         })
     }
     
-    override func setEmptyUI(visible: Bool, animated: Bool) {
+    override func setEmptyUI(_ visible: Bool, animated: Bool) {
         super.setEmptyUI(visible, animated: animated)
         let hidden = !visible
         if animated {
             emptyListView.setHiddenAnimated(hidden)
         } else {
-            emptyListView.hidden = hidden
+            emptyListView.isHidden = hidden
         }
     }
     
@@ -175,17 +175,17 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         back()
     }
     
-    @IBAction func onCartTap(sender: UIButton) {
+    @IBAction func onCartTap(_ sender: UIButton) {
         if pricesView.open {
             pricesView.setOpen(false, animated: true)
         } else {
-            performSegueWithIdentifier("doneViewControllerSegue", sender: self)
+            performSegue(withIdentifier: "doneViewControllerSegue", sender: self)
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "doneViewControllerSegue" {
-            if let doneViewController = segue.destinationViewController as? CartListItemsController {
+            if let doneViewController = segue.destination as? CartListItemsController {
 //                doneViewController.navigationItemTextColor = titleLabel?.textColor
                 doneViewController.delegate = self
                 
@@ -205,7 +205,7 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
             }
             
         } else if segue.identifier == "stashSegue" {
-            if let stashViewController = segue.destinationViewController as? StashListItemsController {
+            if let stashViewController = segue.destination as? StashListItemsController {
 //                stashViewController.navigationItemTextColor = titleLabel?.textColor
                 stashViewController.onUIReady = {[weak stashViewController] in
                     stashViewController?.currentList = self.currentList
@@ -229,7 +229,7 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     
     // MARK: - CartListItemsControllerDelegate
     
-    func onCartSendItemsToStash(listItems: [ListItem]) {
+    func onCartSendItemsToStash(_ listItems: [ListItem]) {
         // Open quickly the stash view to show/remind users they can open it by swiping.
         // Note: Assumes the cart controller is closing when this is called otherwise the user will not see anything.
         if listItems.count > 0 {
@@ -248,7 +248,7 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     
     // MARK: - TodoListItemsEditBottomViewDelegate
     
-    func onExpandSections(expand: Bool) {
+    func onExpandSections(_ expand: Bool) {
         toggleReorderSections()
     }
 }

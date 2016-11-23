@@ -10,7 +10,7 @@ import Foundation
 
 class HistoryItemMapper {
 
-    class func dbWithHistoryItem(historyItem: HistoryItem, dirty: Bool) -> DBHistoryItem {
+    class func dbWithHistoryItem(_ historyItem: HistoryItem, dirty: Bool) -> DBHistoryItem {
         let dbHistoryItem = DBHistoryItem()
         dbHistoryItem.uuid = historyItem.uuid
         dbHistoryItem.inventory = InventoryMapper.dbWithInventory(historyItem.inventory, dirty: dirty)
@@ -26,7 +26,7 @@ class HistoryItemMapper {
         return dbHistoryItem
     }
     
-    class func historyItemWith(dbHistoryItem: DBHistoryItem) -> HistoryItem {
+    class func historyItemWith(_ dbHistoryItem: DBHistoryItem) -> HistoryItem {
         return HistoryItem(
             uuid: dbHistoryItem.uuid,
             inventory: InventoryMapper.inventoryWithDB(dbHistoryItem.inventory),
@@ -39,7 +39,7 @@ class HistoryItemMapper {
         )
     }
     
-    class func historyItemWithRemote(remoteHistoryItem: RemoteHistoryItem, inventory: Inventory, product: Product, user: SharedUser) -> HistoryItem {
+    class func historyItemWithRemote(_ remoteHistoryItem: RemoteHistoryItem, inventory: Inventory, product: Product, user: SharedUser) -> HistoryItem {
         return HistoryItem(
             uuid: remoteHistoryItem.uuid,
             inventory: inventory,
@@ -52,9 +52,9 @@ class HistoryItemMapper {
         )
     }
     
-    class func historyItemsWithRemote(remoteListItems: RemoteHistoryItems) -> HistoryItemsWithRelations {
+    class func historyItemsWithRemote(_ remoteListItems: RemoteHistoryItems) -> HistoryItemsWithRelations {
 
-        func toInventoryDict(remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: Inventory], [Inventory]) {
+        func toInventoryDict(_ remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: Inventory], [Inventory]) {
             var dict: [String: Inventory] = [:]
             var arr: [Inventory] = []
             for remoteInventory in remoteInventories {
@@ -66,7 +66,7 @@ class HistoryItemMapper {
             return (dict, arr)
         }
         
-        func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
+        func toProductCategoryDict(_ remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
             var dict: [String: ProductCategory] = [:]
             var arr: [ProductCategory] = []
             for remoteProductCategory in remoteProductsCategories {
@@ -78,7 +78,7 @@ class HistoryItemMapper {
             return (dict, arr)
         }
         
-        func toProductDict(remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
+        func toProductDict(_ remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
             var dict: [String: Product] = [:]
             var arr: [Product] = []
             for remoteProduct in remoteProducts {
@@ -93,7 +93,7 @@ class HistoryItemMapper {
             return (dict, arr)
         }
         
-        func toUserDict(remoteUsers: [RemoteSharedUser]) -> ([String: SharedUser], [SharedUser]) {
+        func toUserDict(_ remoteUsers: [RemoteSharedUser]) -> ([String: SharedUser], [SharedUser]) {
             var dict: [String: SharedUser] = [:]
             var arr: [SharedUser] = []
             for remoteSection in remoteUsers {

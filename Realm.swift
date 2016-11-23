@@ -11,11 +11,11 @@ import RealmSwift
 
 extension Realm {
 
-    func deleteAll<T: Object>(type: T.Type) {
-        delete(objects(T))
+    func deleteAll<T: Object>(_ type: T.Type) {
+        delete(objects(T.self))
     }
     
-    func deleteForFilter<T: Object>(type: T.Type, _ filter: String) {
-        delete(objects(T).filter(filter))
+    func deleteForFilter<T: Object>(_ type: T.Type, _ filter: String) {
+        delete(objects(T.self).filter(filter))
     }
 }

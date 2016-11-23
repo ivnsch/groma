@@ -10,13 +10,13 @@ import Foundation
 
 protocol BrandProvider {
 
-    func brandsContainingText(text: String, _ handler: ProviderResult<[String]> -> ())
+    func brandsContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> ())
     
-    func brands(range: NSRange, _ handler: ProviderResult<[String]> -> Void)
+    func brands(_ range: NSRange, _ handler: @escaping (ProviderResult<[String]>) -> Void)
     
-    func updateBrand(oldName: String, newName: String, _ handler: ProviderResult<Any> -> Void)
+    func updateBrand(_ oldName: String, newName: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func removeProductsWithBrand(name: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func removeProductsWithBrand(_ name: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func brandsContainingText(text: String, range: NSRange, _ handler: ProviderResult<[String]> -> Void)
+    func brandsContainingText(_ text: String, range: NSRange, _ handler: @escaping (ProviderResult<[String]>) -> Void)
 }

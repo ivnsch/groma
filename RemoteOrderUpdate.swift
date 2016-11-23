@@ -16,8 +16,8 @@ struct RemoteOrderUpdate: ResponseObjectSerializable, ResponseCollectionSerializ
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let order = representation.valueForKeyPath("order") as? Int
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let order = representation.value(forKeyPath: "order") as? Int
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -26,9 +26,9 @@ struct RemoteOrderUpdate: ResponseObjectSerializable, ResponseCollectionSerializ
         self.order = order
     }
     
-    static func collection(representation: AnyObject) -> [RemoteOrderUpdate]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteOrderUpdate]? {
         var sections = [RemoteOrderUpdate]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let section = RemoteOrderUpdate(representation: obj) {
                 sections.append(section)
             } else {
@@ -40,6 +40,6 @@ struct RemoteOrderUpdate: ResponseObjectSerializable, ResponseCollectionSerializ
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), order: \(order)}"
+        return "{\(type(of: self)) uuid: \(uuid), order: \(order)}"
     }
 }

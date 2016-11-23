@@ -14,17 +14,17 @@ struct RemoteSwitchListItemResult: ResponseObjectSerializable, CustomDebugString
     let switchedItem: RemoteSwitchListItemItemResult
     let itemOrderUpdates: [RemoteSwitchListItemOrderUpdateResult]
     let sectionOrderUpdates: [RemoteSwitchListItemSectionOrderUpdateResult]
-    let lastUpdate: NSDate
+    let lastUpdate: Date
     
     init?(representation: AnyObject) {
         guard
-            let switchedItemObj = representation.valueForKeyPath("item"),
-            let switchedItem = RemoteSwitchListItemItemResult(representation: switchedItemObj),
-            let itemOrderUpdatesObj = representation.valueForKeyPath("orderItems") as? [AnyObject],
+            let switchedItemObj = representation.value(forKeyPath: "item"),
+            let switchedItem = RemoteSwitchListItemItemResult(representation: switchedItemObj as AnyObject),
+            let itemOrderUpdatesObj = representation.value(forKeyPath: "orderItems") as? [AnyObject],
             let itemOrderUpdates = RemoteSwitchListItemOrderUpdateResult.collection(itemOrderUpdatesObj),
-            let sectionOrderUpdatesObj = representation.valueForKeyPath("orderSections") as? [AnyObject],
+            let sectionOrderUpdatesObj = representation.value(forKeyPath: "orderSections") as? [AnyObject],
             let sectionOrderUpdates = RemoteSwitchListItemSectionOrderUpdateResult.collection(sectionOrderUpdatesObj),
-            let lastUpdate = ((representation.valueForKeyPath("timestamp") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let lastUpdate = ((representation.value(forKeyPath: "timestamp") as? Double).map{d in Date(timeIntervalSince1970: d)})
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -36,7 +36,7 @@ struct RemoteSwitchListItemResult: ResponseObjectSerializable, CustomDebugString
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) switchedItem: \(switchedItem), itemOrderUpdates: \(itemOrderUpdates), sectionOrderUpdates: \(sectionOrderUpdates), lastUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) switchedItem: \(switchedItem), itemOrderUpdates: \(itemOrderUpdates), sectionOrderUpdates: \(sectionOrderUpdates), lastUpdate: \(lastUpdate)}"
     }
 }
 
@@ -51,13 +51,13 @@ struct RemoteSwitchListItemItemResult: ResponseObjectSerializable, CustomDebugSt
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let todoQuantity = representation.valueForKeyPath("todoQuantity") as? Int,
-            let doneQuantity = representation.valueForKeyPath("doneQuantity") as? Int,
-            let stashQuantity = representation.valueForKeyPath("stashQuantity") as? Int,
-            let todoOrder = representation.valueForKeyPath("todoOrder") as? Int,
-            let doneOrder = representation.valueForKeyPath("doneOrder") as? Int,
-            let stashOrder = representation.valueForKeyPath("stashOrder") as? Int
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let todoQuantity = representation.value(forKeyPath: "todoQuantity") as? Int,
+            let doneQuantity = representation.value(forKeyPath: "doneQuantity") as? Int,
+            let stashQuantity = representation.value(forKeyPath: "stashQuantity") as? Int,
+            let todoOrder = representation.value(forKeyPath: "todoOrder") as? Int,
+            let doneOrder = representation.value(forKeyPath: "doneOrder") as? Int,
+            let stashOrder = representation.value(forKeyPath: "stashOrder") as? Int
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -72,7 +72,7 @@ struct RemoteSwitchListItemItemResult: ResponseObjectSerializable, CustomDebugSt
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)}"
+        return "{\(type(of: self)) uuid: \(uuid), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)}"
     }
 }
 //extension RemoteSwitchListItemItemResult {
@@ -88,9 +88,9 @@ struct RemoteSwitchListItemOrderUpdateResult: ResponseObjectSerializable, Respon
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let status = representation.valueForKeyPath("status") as? Int,
-            let order = representation.valueForKeyPath("order") as? Int
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let status = representation.value(forKeyPath: "status") as? Int,
+            let order = representation.value(forKeyPath: "order") as? Int
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -100,9 +100,9 @@ struct RemoteSwitchListItemOrderUpdateResult: ResponseObjectSerializable, Respon
         self.order = order
     }
     
-    static func collection(representation: AnyObject) -> [RemoteSwitchListItemOrderUpdateResult]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteSwitchListItemOrderUpdateResult]? {
         var items = [RemoteSwitchListItemOrderUpdateResult]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let item = RemoteSwitchListItemOrderUpdateResult(representation: obj) {
                 items.append(item)
             } else {
@@ -113,7 +113,7 @@ struct RemoteSwitchListItemOrderUpdateResult: ResponseObjectSerializable, Respon
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), status: \(status), order: \(order)}"
+        return "{\(type(of: self)) uuid: \(uuid), status: \(status), order: \(order)}"
     }
 }
 
@@ -126,10 +126,10 @@ struct RemoteSwitchListItemSectionOrderUpdateResult: ResponseObjectSerializable,
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let todoOrder = representation.valueForKeyPath("todoOrder") as? Int,
-            let doneOrder = representation.valueForKeyPath("doneOrder") as? Int,
-            let stashOrder = representation.valueForKeyPath("stashOrder") as? Int
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let todoOrder = representation.value(forKeyPath: "todoOrder") as? Int,
+            let doneOrder = representation.value(forKeyPath: "doneOrder") as? Int,
+            let stashOrder = representation.value(forKeyPath: "stashOrder") as? Int
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -140,9 +140,9 @@ struct RemoteSwitchListItemSectionOrderUpdateResult: ResponseObjectSerializable,
         self.stashOrder = stashOrder
     }
     
-    static func collection(representation: AnyObject) -> [RemoteSwitchListItemSectionOrderUpdateResult]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteSwitchListItemSectionOrderUpdateResult]? {
         var items = [RemoteSwitchListItemSectionOrderUpdateResult]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let item = RemoteSwitchListItemSectionOrderUpdateResult(representation: obj) {
                 items.append(item)
             } else {
@@ -153,7 +153,7 @@ struct RemoteSwitchListItemSectionOrderUpdateResult: ResponseObjectSerializable,
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)}"
+        return "{\(type(of: self)) uuid: \(uuid), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)}"
     }
     
 }

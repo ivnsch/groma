@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import SwiftValidator
 import FBSDKCoreKit
@@ -25,7 +26,7 @@ protocol ExpiredLoginDelegate: class {
 }
 
 enum LoginControllerMode {
-    case Normal, Expired, AfterRegister
+    case normal, expired, afterRegister
 }
 
 class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, ExpiredLoginDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, EyeViewDelegate {
@@ -51,28 +52,28 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     weak var delegate: LoginDelegate?
     weak var expiredLoginDelegate: ExpiredLoginDelegate?
     
-    private var validator: Validator?
+    fileprivate var validator: Validator?
     
-    var mode: LoginControllerMode = .Normal {
+    var mode: LoginControllerMode = .normal {
         didSet {
             if registerButton != nil {
                 
-                let isNormal = mode == .Normal
-                pleaseLoginAgainLabel.hidden = isNormal
+                let isNormal = mode == .normal
+                pleaseLoginAgainLabel.isHidden = isNormal
                 firstFieldTopConstraint.constant = isNormal ? DimensionsManager.topConstraintFirstInputWhenClose : DimensionsManager.topConstraintFirstInputWhenOpen
                 
                 // on expired mode show below "use app offline" instead of register - there's no sense of registering here because the token just expired + we want to make clear to the users they can close the modal and continue using the app offline.
-                let isExpired = mode == .Expired
-                useAppOfflineButton.hidden = !isExpired
-                useAppOfflineLabel.hidden = !isExpired
-                registerButton.hidden = isExpired
+                let isExpired = mode == .expired
+                useAppOfflineButton.isHidden = !isExpired
+                useAppOfflineLabel.isHidden = !isExpired
+                registerButton.isHidden = isExpired
                 
                 switch mode {
-                case .Expired:
+                case .expired:
                     pleaseLoginAgainLabel.text = "Welcome back! Please log in again."
-                case .AfterRegister:
+                case .afterRegister:
                     pleaseLoginAgainLabel.text = "You will receive an email to confirm your registration soon.\nPlease confirm and login."
-                case .Normal: break
+                case .normal: break
                 }
                 
 
@@ -93,11 +94,11 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 
         navigationItem.title = trans("Login")
 
-        passwordField.secureTextEntry = true
+        passwordField.isSecureTextEntry = true
         
         GoogleSignInHelper.configure(uiDelegate: self, delegate: self)
         
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
         
         self.fillTestInput()
         
@@ -127,11 +128,11 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 //        }
 //    }
     
-    private func staticLayout() {
+    fileprivate func staticLayout() {
         loginButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let storedEmail = Providers.userProvider.mySharedUser?.email {
             userNameField.text = storedEmail
@@ -140,41 +141,41 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         // If there's no email stored, user in most cases wants to register so we don't focus a text field
     }
     
-    func handleTap(recognizer: UITapGestureRecognizer) {
+    func handleTap(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
 
-    private func initValidator() {
+    fileprivate func initValidator() {
         let validator = Validator()
         validator.registerField(self.userNameField, rules: [EmailRule(message: trans("validation_email_format"))])
         validator.registerField(self.passwordField, rules: [RequiredRule(message: trans("validation_missing_password"))]) // TODO repl with translation key, for now this so testers understand
         self.validator = validator
     }
     
-    private func fillTestInput() {
+    fileprivate func fillTestInput() {
         userNameField.text = "ivanschuetz@gmail.com"
         passwordField.text = "test123Q"
     }
     
-    @IBAction func loginTapped(sender: AnyObject) {
+    @IBAction func loginTapped(_ sender: AnyObject) {
         login()
     }
     
-    private func login() {
+    fileprivate func login() {
         
         
         guard self.validator != nil else {return}
         
         if let errors = self.validator?.validate() {
-            for (field, _) in errors {
-                field.showValidationError()
+            for (_, error) in errors {
+                error.field.showValidationError()
             }
-            self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             
         } else {
-            if let email = userNameField.text, password = passwordField.text {
+            if let email = userNameField.text, let password = passwordField.text {
 
-                guard let rootController = UIApplication.sharedApplication().delegate?.window??.rootViewController else {
+                guard let rootController = UIApplication.shared.delegate?.window??.rootViewController else {
                     QL4("No root view controller, can't show invitations popup")
                     return
                 }
@@ -190,15 +191,15 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                     }, onError: {[weak self] result in guard let weakSelf = self else {return}
                         
                         switch result.status {
-                        case .SyncFailed:
-                            rootController.defaultErrorHandler()(providerResult: result) // show alert (on root view controller since in login success we switch controller)
+                        case .syncFailed:
+                            rootController.defaultErrorHandler()(result) // show alert (on root view controller since in login success we switch controller)
                             self?.onLoginSuccess() // handle like success, this way user still can access settings like full download to try to solve sync problems.
-                        case .IsNewDeviceLoginAndDeclinedOverwrite:
+                        case .isNewDeviceLoginAndDeclinedOverwrite:
                             QL1("New device and declined overwrite") // if it's a new device login and user declined overwrite, nothing to do here, user stays in login form, provider logged user out.
-                        case .CancelledLoginWithDifferentAccount:
+                        case .cancelledLoginWithDifferentAccount:
                             QL1("New email and user cancelled clear local data popup") // nothing to do here, user stays in login form
                         default:
-                            self?.defaultErrorHandler()(providerResult: result)
+                            self?.defaultErrorHandler()(result)
                             Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
                         }
                     }
@@ -209,14 +210,14 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         }
     }
     
-    @IBAction func onForgotPasswordTap(sender: UIButton) {
+    @IBAction func onForgotPasswordTap(_ sender: UIButton) {
         let forgotPasswordViewController = UIStoryboard.forgotPasswordViewController()
         forgotPasswordViewController.delegate = self
         forgotPasswordViewController.email = userNameField.text
         self.navigationController?.pushViewController(forgotPasswordViewController, animated: true)
     }
     
-    @IBAction func onRegisterTap(sender: UIButton) {
+    @IBAction func onRegisterTap(_ sender: UIButton) {
         let registerController = UIStoryboard.registerViewController()
         registerController.delegate = self
         self.navigationController?.pushViewController(registerController, animated: true)
@@ -224,32 +225,32 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     // MARK: - RegisterDelegate
     
-    func onRegisterSuccess(email: String) {
-        self.mode = .AfterRegister
+    func onRegisterSuccess(_ email: String) {
+        self.mode = .afterRegister
         
         // Set the email in the input field so user don't have to type it again after confirming.
         // Note this is in memory only! If user leaves this screen and comes back this email is lost. The email in prefs is saved only after a successful login (this is a requirement for some checks to function correctly - don't change it!). If we see another email when we come back it should be an email of an account with which we previously logged in successfully.
         userNameField.text = email
         
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
         self.delegate?.onRegisterFromLoginSuccess()
     }
     
     func onSocialSignupInRegisterScreenSuccess() {
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
         self.delegate?.onLoginSuccess()
     }
     
     // MARK: -
     
-    func textFieldShouldReturn(sender: UITextField) -> Bool {
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
         
         if sender == passwordField {
             login()
             sender.resignFirstResponder()
         } else {
             let textFields: [UITextField] = [userNameField, passwordField]
-            if let index = textFields.indexOf(sender) {
+            if let index = textFields.index(of: sender) {
                 if let next = textFields[safe: index + 1] {
                     next.becomeFirstResponder()
                 }
@@ -277,10 +278,10 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     }
     
     // TODO refactor, same code as in LoginController
-    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         if let error = error {
             QL4("Facebook login error: \(error)")
-            defaultErrorHandler()(providerResult: ProviderResult(status: .SocialLoginError))
+            defaultErrorHandler()(ProviderResult(status: .socialLoginError))
             progressVisible(false)
             FBSDKLoginManager().logOut() // toggle "logout" label on button
         } else if result.isCancelled {
@@ -290,18 +291,21 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         } else {
             QL1("Facebook login success, calling our server...")
             progressVisible()
-            let tokenString = result.token.tokenString
-            Providers.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+            if let tokenString = result.token.tokenString {
+                Providers.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+            } else {
+                QL4("Facebook no token")
+            }
         }
     }
     
-    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         FBSDKLoginManager().logOut()
     }
     
     // MARK: GIDSignInDelegate
     
-    func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
             QL1("Google login success, calling our server...")
             progressVisible()
@@ -311,46 +315,48 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         }
     }
     
-    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user: GIDGoogleUser!, withError error: NSError!) {
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
         // Perform any operations when the user disconnects from app here.
     }
     
-    func signIn(signIn: GIDSignIn!, presentViewController viewController: UIViewController!) {
-        presentViewController(viewController, animated: true, completion: nil)
+    func sign(_ signIn: GIDSignIn!, present viewController: UIViewController!) {
+        present(viewController, animated: true, completion: nil)
     }
     
-    func signIn(signIn: GIDSignIn!, dismissViewController viewController: UIViewController!) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func sign(_ signIn: GIDSignIn!, dismiss viewController: UIViewController!) {
+        dismiss(animated: true, completion: nil)
     }
     
 //    func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
 //    }
     
     // Common FB/Google handling for social login/register result of our own server
-    private func socialSignInResultHandler()(providerResult: ProviderResult<SyncResult>) {
-        resultHandler(
-            onSuccess: {[weak self] syncResult in
-                QL1("Login success")
-                self?.onLoginSuccess() // TODO!!!! we should probably refactor the login result handler with the credentials login? For example .IsNewDeviceLoginAndDeclinedOverwrite handling seems to be missing here.
-                self?.progressVisible(false)
-                
-                if let weakSelf = self {
-                    InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
-                }
+    fileprivate func socialSignInResultHandler() -> (ProviderResult<SyncResult>) -> Void {
+        return {[weak self] providerResult in
+            self?.resultHandler(
+                onSuccess: {[weak self] syncResult in
+                    QL1("Login success")
+                    self?.onLoginSuccess() // TODO!!!! we should probably refactor the login result handler with the credentials login? For example .IsNewDeviceLoginAndDeclinedOverwrite handling seems to be missing here.
+                    self?.progressVisible(false)
+                    
+                    if let weakSelf = self {
+                        InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
+                    }
             }, onError: {[weak self] providerResult in
                 QL1("Login error: \(providerResult)")
                 self?.progressVisible(false)
-                self?.defaultErrorHandler()(providerResult: providerResult)
+                self?.defaultErrorHandler()(providerResult)
                 if let weakSelf = self {
                     Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
                 }
-            })(providerResult: providerResult)
+            })(providerResult)
+        }
     }
     
     // MARK: - EyeViewDelegate
     
-    func onEyeChange(open: Bool) {
-        passwordField.secureTextEntry = open
+    func onEyeChange(_ open: Bool) {
+        passwordField.isSecureTextEntry = open
     }
     
     deinit {

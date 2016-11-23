@@ -16,9 +16,9 @@ struct RemoteIncrement: ResponseObjectSerializable, CustomDebugStringConvertible
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let delta = representation.valueForKeyPath("delta") as? Int,
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let delta = representation.value(forKeyPath: "delta") as? Int,
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -29,6 +29,6 @@ struct RemoteIncrement: ResponseObjectSerializable, CustomDebugStringConvertible
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), delta: \(delta), lastUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) uuid: \(uuid), delta: \(delta), lastUpdate: \(lastUpdate)}"
     }
 }

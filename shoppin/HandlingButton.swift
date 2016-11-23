@@ -22,11 +22,11 @@ class HandlingButton: UIButton {
         sharedInit()
     }
     
-    private func sharedInit() {
-        addTarget(self, action: #selector(HandlingButton.onTap(_:)), forControlEvents: .TouchUpInside)
+    fileprivate func sharedInit() {
+        addTarget(self, action: #selector(HandlingButton.onTap(_:)), for: .touchUpInside)
     }
 
-    func onTap(sender: UIButton) {
+    func onTap(_ sender: UIButton) {
         tapHandler?()
     }
 }

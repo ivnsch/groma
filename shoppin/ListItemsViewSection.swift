@@ -10,48 +10,48 @@ import UIKit
 import ChameleonFramework
 
 enum ListItemsViewSectionStyle {
-    case Normal, Gray
+    case normal, gray
 }
 
 protocol ItemActionsDelegate: class {
-    func startItemSwipe(tableViewListItem: TableViewListItem)
-    func endItemSwipe(tableViewListItem: TableViewListItem)
-    func undoSwipe(tableViewListItem: TableViewListItem)
-    func onNoteTap(cell: ListItemCell, tableViewListItem: TableViewListItem)
-    func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection)
-    func onMinusTap(tableViewListItem: TableViewListItem)
-    func onPlusTap(tableViewListItem: TableViewListItem)
-    func onPanQuantityUpdate(tableViewListItem: TableViewListItem, newQuantity: Int)
+    func startItemSwipe(_ tableViewListItem: TableViewListItem)
+    func endItemSwipe(_ tableViewListItem: TableViewListItem)
+    func undoSwipe(_ tableViewListItem: TableViewListItem)
+    func onNoteTap(_ cell: ListItemCell, tableViewListItem: TableViewListItem)
+    func onHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection)
+    func onMinusTap(_ tableViewListItem: TableViewListItem)
+    func onPlusTap(_ tableViewListItem: TableViewListItem)
+    func onPanQuantityUpdate(_ tableViewListItem: TableViewListItem, newQuantity: Int)
 }
 
 class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListItemCellDelegate {
     
     var tableViewListItems: [TableViewListItem]
     
-    private let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
+    fileprivate let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
     
-    var headerBGColor: UIColor = UIColor.blackColor()
-    var headerFontColor: UIColor = UIColor.whiteColor()
-    var labelFontColor: UIColor = UIColor.blackColor()
+    var headerBGColor: UIColor = UIColor.black
+    var headerFontColor: UIColor = UIColor.white
+    var labelFontColor: UIColor = UIColor.black
     
     var section: Section // as var to mutate order in-place (ListItemsTableViewController)
     
     var expanded: Bool = true
     let status: ListItemStatus
     
-    private let hasHeader: Bool
+    fileprivate let hasHeader: Bool
     
-    var style: ListItemsTableViewControllerStyle = .Normal
+    var style: ListItemsTableViewControllerStyle = .normal
 
     weak var delegate: ItemActionsDelegate?
     
-    private let headerFont = Fonts.regular
+    fileprivate let headerFont = Fonts.regular
 
-    var cellMode: ListItemCellMode = .Note
-    var cellSwipeDirection: SwipeableCellDirection = .Right
+    var cellMode: ListItemCellMode = .note
+    var cellSwipeDirection: SwipeableCellDirection = .right
     
-    private let headerHeight = Float(DimensionsManager.listItemsHeaderHeight)
-    private let cellHeight = DimensionsManager.defaultCellHeight
+    fileprivate let headerHeight = Float(DimensionsManager.listItemsHeaderHeight)
+    fileprivate let cellHeight = DimensionsManager.defaultCellHeight
     
     /**
      Returns total price of shown items exluding those marked for undo
@@ -72,7 +72,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     }
     
     // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
-    private var finalLabelFontColor:UIColor {
+    fileprivate var finalLabelFontColor:UIColor {
         var color:UIColor
 //        if self.style == .Gray {
 //            color = UIColor.lightGrayColor()
@@ -97,13 +97,13 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
         return 0
     }
     
-    func cellReuseIdentifierForRow(row:Int) -> String {
+    func cellReuseIdentifierForRow(_ row:Int) -> String {
         return cellIdentifier
     }
     
     func viewForHeader() -> UIView? {
         if self.hasHeader {
-            let view = NSBundle.loadView("ListItemsSectionHeaderView", owner: self) as! ListItemsSectionHeaderView
+            let view = Bundle.loadView("ListItemsSectionHeaderView", owner: self) as! ListItemsSectionHeaderView
             view.section = section
             view.backgroundColor = headerBGColor
             view.nameLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: headerBGColor, isFlat: true)
@@ -120,7 +120,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
         return nil
     }
     
-    func heightForRow(row: Int) -> CGFloat {
+    func heightForRow(_ row: Int) -> CGFloat {
         return cellHeight
     }
     
@@ -130,9 +130,9 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     
     
     
-    func tableView(tableView: UITableView, row: NSInteger) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, row: NSInteger) -> UITableViewCell {
 
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! ListItemCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! ListItemCell
         cell.showsReorderControl = true
         cell.direction = cellSwipeDirection
         
@@ -147,7 +147,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
         return expanded ? tableViewListItems.count : 0
     }
     
-    func addItem(tableViewListItem:TableViewListItem) {
+    func addItem(_ tableViewListItem:TableViewListItem) {
         self.tableViewListItems.append(tableViewListItem)
     }
     
@@ -165,38 +165,38 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     
     // MARK: - ListItemsSectionHeaderViewDelegate
     
-    func onHeaderTap(header: ListItemsSectionHeaderView) {
+    func onHeaderTap(_ header: ListItemsSectionHeaderView) {
         delegate?.onHeaderTap(header, section: self)
     }
     
     // MARK: - 
     
-    func onItemSwiped(listItem: TableViewListItem) {
+    func onItemSwiped(_ listItem: TableViewListItem) {
         delegate?.endItemSwipe(listItem)
     }
     
-    func onStartItemSwipe(listItem: TableViewListItem) {
+    func onStartItemSwipe(_ listItem: TableViewListItem) {
         delegate?.startItemSwipe(listItem)
     }
     
-    func onButtonTwoTap(listItem: TableViewListItem) {
-        tableViewListItems.update(listItem.copy(swiped: false))
+    func onButtonTwoTap(_ listItem: TableViewListItem) {
+        _ = tableViewListItems.update(listItem.copy(swiped: false))
         delegate?.undoSwipe(listItem)
     }
     
-    func onNoteTap(cell: ListItemCell, listItem: TableViewListItem) {
+    func onNoteTap(_ cell: ListItemCell, listItem: TableViewListItem) {
         delegate?.onNoteTap(cell, tableViewListItem: listItem)
     }
     
-    func onMinusTap(listItem: TableViewListItem) {
+    func onMinusTap(_ listItem: TableViewListItem) {
         delegate?.onMinusTap(listItem)
     }
     
-    func onPlusTap(listItem: TableViewListItem) {
+    func onPlusTap(_ listItem: TableViewListItem) {
         delegate?.onPlusTap(listItem)
     }
     
-    func onPanQuantityUpdate(tableViewListItem: TableViewListItem, newQuantity: Int) {
+    func onPanQuantityUpdate(_ tableViewListItem: TableViewListItem, newQuantity: Int) {
         delegate?.onPanQuantityUpdate(tableViewListItem, newQuantity: newQuantity)
     }
 }

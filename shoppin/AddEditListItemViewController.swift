@@ -13,18 +13,18 @@ import QorumLogs
 protocol AddEditListItemViewControllerDelegate: class {
     
     // Returns nil if no errors, otherwise dictionary with errors. Important: Empty dictionary is invalid and the form will not be submitted!
-    func runAdditionalSubmitValidations() -> [UITextField: ValidationError]?
+    func runAdditionalSubmitValidations() -> ValidatorDictionary<ValidationError>?
     
-    func onValidationErrors(errors: [UITextField: ValidationError])
+    func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>)
     
-    func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?)
+    func onOkTap(_ price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?)
     
     func parentViewForAddButton() -> UIView?
     
-    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void)
+    func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void)
     
-    func onRemovedSectionCategoryName(name: String)
-    func onRemovedBrand(name: String)
+    func onRemovedSectionCategoryName(_ name: String)
+    func onRemovedBrand(_ name: String)
 
     func endEditing()
 //    func productNameAutocompletions(text: String, handler: [String] -> Void)
@@ -38,7 +38,7 @@ protocol AddEditListItemViewControllerDelegate: class {
 // FIXME use instead a "fragment" (custom view) with the common inputs and use this in 2 separate view controllers
 // then we can also use different delegates, now the delegate is passed "note" parameter for group item as well where it doesn't exist, not nice
 enum AddEditListItemControllerModus {
-    case ListItem, GroupItem, PlanItem, Product
+    case listItem, groupItem, planItem, product
 }
 
 typealias AddEditItemInput2 = (name: String, price: Float, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
@@ -150,7 +150,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     weak var delegate: AddEditListItemViewControllerDelegate?
     
-    private var showingColorPicker: FlatColorPickerController?
+    fileprivate var showingColorPicker: FlatColorPickerController?
 //    private var showingNoteInputPopup: SimpleInputPopupController?
 
     var editingItem: AddEditItem? {
@@ -176,13 +176,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
     
-    var modus: AddEditListItemControllerModus = .ListItem {
+    var modus: AddEditListItemControllerModus = .listItem {
         didSet {
             if let noteInput = noteInput {
                 
-                let isListItem = modus == .ListItem
-                noteInput.hidden = !isListItem
-                priceInput.hidden = !isListItem
+                let isListItem = modus == .listItem
+                noteInput.isHidden = !isListItem
+                priceInput.isHidden = !isListItem
                 
 //                let sectionText = "Section"
 //                let categoryText = "Category"
@@ -190,19 +190,19 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 let categoryPlaceHolderText = trans("placeholder_category")
                 
                 switch modus {
-                case .ListItem:
+                case .listItem:
                     fallthrough
-                case .GroupItem:
+                case .groupItem:
 //                    sectionLabel.text = sectionText
                     sectionInput.placeholder = sectionPlaceHolderText
-                case .PlanItem:
+                case .planItem:
 //                    sectionLabel.text = categoryText // plan items don't have section, but we need a category for the new product (note for list and group items we save the section as category - user can change the category later using the product manager. This is for simple usability, mostly section == category otherwise interface may be a bit confusing)
                     sectionInput.placeholder = categoryPlaceHolderText
-                case .Product:
+                case .product:
 //                    sectionLabel.text = categoryText
                     sectionInput.placeholder = categoryPlaceHolderText
 //                    quantityLabel.hidden = true
-                    quantityInput.hidden = true
+                    quantityInput.isHidden = true
 //                    quantityPlusButton.hidden = true
 //                    quantityMinusButton.hidden = true
                 }
@@ -214,13 +214,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     var open: Bool = false
     
-    private var validator: Validator?
+    fileprivate var validator: Validator?
     
     // TODO improve this, it's finicky.
     var onViewDidLoad: VoidFunction? // Called on view did load before custom logic, use e.g. to set mode from which other methods called in viewDidLoad may depend.
     var onDidLoad: VoidFunction? // Called on view did load at the end
     
-    private var addButtonHelper: AddButtonHelper?
+    fileprivate var addButtonHelper: AddButtonHelper?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -231,7 +231,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         initTextFieldPlaceholders()
         initAutocompletionTextFields()
         
-        sectionColorButton.textColor = UIColor.grayColor()
+        sectionColorButton.textColor = UIColor.gray
         sectionColorButton.text = trans("generic_color") // string from storyboard localization doesn't work, seems to be xcode bug
         
         onViewDidLoad?()
@@ -248,7 +248,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //        updatePlanLeftQuantity(0) // no quantity yet -> 0
     }
     
-    private func initAddButtonHelper() -> AddButtonHelper? {
+    fileprivate func initAddButtonHelper() -> AddButtonHelper? {
         guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
         let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton) {[weak self] in guard let weakSelf = self else {return}
             weakSelf.submit()
@@ -260,64 +260,64 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         brandInput.becomeFirstResponder()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         addButtonHelper?.addObserver()
         addButtonHelper?.animateVisible(true)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         addButtonHelper?.removeObserver()
         addButtonHelper?.animateVisible(false)
     }
     
-    private func initStaticLabels() {
-        addNewItemLabel.font = DimensionsManager.font(.Regular, fontType: .Regular)
+    fileprivate func initStaticLabels() {
+        addNewItemLabel.font = DimensionsManager.font(.regular, fontType: .regular)
         addNewItemLabel.text = trans("add_edit_list_item_add_new_item")
     }
     
-    private func prefill(item: AddEditItem) {
+    fileprivate func prefill(_ item: AddEditItem) {
         brandInput.text = item.product.brand
-        sectionInput.text = item.sectionName ?? item.product.category.name
-        sectionColorButton.textColor = item.sectionColor ?? item.product.category.color
+        sectionInput.text = item.sectionName
+        sectionColorButton.textColor = item.sectionColor
         quantityInput.text = String(item.quantity)
         priceInput.text = item.storeProduct?.price.toString(2)
         noteInput.text = item.note
     }
     
-    private func initTextFieldPlaceholders() {
-        brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
-        sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
-        quantityInput.attributedPlaceholder = NSAttributedString(string: quantityInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
-        priceInput.attributedPlaceholder = NSAttributedString(string: priceInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
-        noteInput.attributedPlaceholder = NSAttributedString(string: noteInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+    fileprivate func initTextFieldPlaceholders() {
+        brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        quantityInput.attributedPlaceholder = NSAttributedString(string: quantityInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        priceInput.attributedPlaceholder = NSAttributedString(string: priceInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        noteInput.attributedPlaceholder = NSAttributedString(string: noteInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
     }
     
-    private func initAutocompletionTextFields() {
+    fileprivate func initAutocompletionTextFields() {
         for textField in [brandInput, sectionInput] {
-            textField.defaultAutocompleteStyle()
-            textField.myDelegate = self
+            textField?.defaultAutocompleteStyle()
+            textField?.myDelegate = self
         }
     }
 
-    private func prefill(planItem: PlanItem) {
+    fileprivate func prefill(_ planItem: PlanItem) {
         brandInput.text = planItem.product.brand
         sectionInput.text = planItem.product.category.name
         sectionColorButton.textColor = planItem.product.category.color
         quantityInput.text = String(planItem.quantity)
     }
     
-    private func setInputsDefaultValues() {
+    fileprivate func setInputsDefaultValues() {
         quantityInput.text = "1"
     }
     
-    private func initValidator() {
+    fileprivate func initValidator() {
         let validator = Validator()
         validator.registerField(sectionInput, rules: [NotEmptyTrimmedRule(message: trans("validation_section_name_not_empty"))])
         validator.registerField(quantityInput, rules: [NotEmptyTrimmedRule(message: trans("validation_quantity_not_empty"))])
 
-        if modus == .ListItem {
+        if modus == .listItem {
             validator.registerField(priceInput, rules: [NotEmptyTrimmedRule(message: trans("validation_price_not_empty"))])
         }
         self.validator = validator
@@ -333,7 +333,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         if formValidationErrors != nil || externalValidationsErrors != nil {
            
-            var allValidationErrors = [UITextField: ValidationError]()
+            var allValidationErrors = ValidatorDictionary<ValidationError>()
             if let formValidationErrors = formValidationErrors {
                 allValidationErrors = formValidationErrors
             }
@@ -341,34 +341,35 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 allValidationErrors = allValidationErrors + externalValidationsErrors
             }
 
-            for (field, _) in allValidationErrors {
-                field.showValidationError()
-                delegate?.onValidationErrors(allValidationErrors)
+            for (_, error) in allValidationErrors {
+                error.field.showValidationError()
             }
             
+            delegate?.onValidationErrors(allValidationErrors)
+            
         } else {
-            if let lastErrors = validator?.lastErrors {
-                for (field, _) in lastErrors {
-                    field.clearValidationError()
+            if let lastErrors = validator?.errors {
+                for (_, error) in lastErrors {
+                    error.field.clearValidationError()
                 }
             }
             
             // For some items (e.g. group items) we don't have a price but our current implementation expects one so we just pass 0 in these case (it will not be used). // TODO improve
             let priceMaybe: Float? = {
-                if modus == .ListItem {
+                if modus == .listItem {
                     return priceInput.text?.floatValue
                 } else {
                     return 0
                 }
             }()
             
-            if let price = priceMaybe, quantityText = quantityInput.text, quantity = Int(quantityText), section = sectionInput.text?.trim(), brand = brandInput.text?.trim(), note = noteInput.text?.trim(), sectionColor = sectionColorButton.textColor {
+            if let price = priceMaybe, let quantityText = quantityInput.text, let quantity = Int(quantityText), let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
                 
                 // for now disabled due to new designs
 //                let baseQuantity = scaleInputs?.baseQuantity ?? 1
 //                let unit = scaleInputs?.unit ?? .None
                 let baseQuantity: Float = 1
-                let unit = StoreProductUnit.None
+                let unit = StoreProductUnit.none
                 
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
@@ -381,13 +382,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
     
-    func textFieldShouldReturn(sender: UITextField) -> Bool {
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
         if sender == noteInput {
             submit()
             sender.resignFirstResponder()
         } else {
-            let textFields = [brandInput, sectionInput, quantityInput, priceInput, noteInput]
-            if let index = textFields.indexOf(sender) {
+            let textFields = [brandInput, sectionInput, quantityInput, priceInput, noteInput] as [UITextField]
+            if let index = textFields.index(of: sender) {
                 if let next = textFields[safe: index + 1] {
                     next.becomeFirstResponder()
                 }
@@ -397,24 +398,26 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     func clearInputs() {
-        for field in [sectionInput, quantityInput, priceInput] {
+        for field in [sectionInput, quantityInput, priceInput] as [UITextField] {
             field.text = ""
         }
     }
     
-    func dismissKeyboard(sender: AnyObject?) {
-        for field in [sectionInput, quantityInput, priceInput] {
-            field.resignFirstResponder()
+    func dismissKeyboard(_ sender: AnyObject?) {
+        for field in [sectionInput, quantityInput, priceInput] as [UITextField] {
+            _ = field.resignFirstResponder()
         }
     }
     
     // MARK: - MLPAutoCompleteTextFieldDataSource
-    
-    func autoCompleteTextField(textField: MLPAutoCompleteTextField!, possibleCompletionsForString string: String!, completionHandler handler: (([AnyObject]!) -> Void)!) {
+
+//    func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, possibleCompletionsFor string: String!, completionHandler handler: (([AnyObject]?) -> Void)!) {
+//    func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, possibleCompletionsFor string: String!, completionHandler handler: @escaping (([Any]?) -> Void)!) {
+    func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, possibleCompletionsFor string: String!, completionHandler handler: @escaping (([Any]?) -> Void)) {
         switch textField {
         case sectionInput:
             switch modus {
-            case .ListItem:
+            case .listItem:
                 Providers.sectionProvider.sectionSuggestionsContainingText(string, successHandler{suggestions in
                     handler(suggestions)
                 })
@@ -424,7 +427,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                     handler(suggestions)
                 })
             }
-
+            
         case brandInput:
             Providers.brandProvider.brandsContainingText(string, successHandler{brands in
                 handler(brands)
@@ -437,20 +440,20 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     // MARK: - MLPAutoCompleteTextFieldDelegate
     
-    func autoCompleteTextField(textField: MLPAutoCompleteTextField!, didSelectAutoCompleteString selectedString: String!, withAutoCompleteObject selectedObject: MLPAutoCompletionObject!, forRowAtIndexPath indexPath: NSIndexPath!) {
+    func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, didSelectAutoComplete selectedString: String!, withAutoComplete selectedObject: MLPAutoCompletionObject!, forRowAt indexPath: IndexPath!) {
 
         if textField == sectionInput {
             delegate?.addEditSectionOrCategoryColor(selectedString) {[weak self] colorMaybe in
                 self?.sectionColorButton.textColor = colorMaybe ?? {
                     QL4("Invalid state: selected a section or category suggestion and there's no color.")
-                    return UIColor.blackColor()
+                    return UIColor.black
                 }()
             }
         }
     }
 
     
-    @IBAction func onSectionColorButtonTap(sender: UIButton) {
+    @IBAction func onSectionColorButtonTap(_ sender: UIButton) {
     
         let picker = UIStoryboard.listColorPicker()
         showPopup(sectionColorButton, controller: picker) {[weak self] in
@@ -464,14 +467,14 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
     
-    private func showPopup(button: UIView, controller: UIViewController, topOffset: CGFloat = 0, width: CGFloat? = nil, height: CGFloat? = nil, onWillShow: VoidFunction) {
+    fileprivate func showPopup(_ button: UIView, controller: UIViewController, topOffset: CGFloat = 0, width: CGFloat? = nil, height: CGFloat? = nil, onWillShow: VoidFunction) {
         
-        if let windowView = parentViewController?.view.superview?.superview?.superview {
+        if let windowView = parent?.view.superview?.superview?.superview {
             
             // TODO dynamic
             let topBarHeight: CGFloat = 64
             let pricesViewHeight: CGFloat = DimensionsManager.listItemsPricesViewHeight
-            let tabBarHeight: CGFloat = 49
+//            let tabBarHeight: CGFloat = 49
             
             let x: CGFloat = {
                 if let width = width {
@@ -483,25 +486,25 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             
             let w = width ?? windowView.frame.width
             let h = height ?? (windowView.frame.height - pricesViewHeight - topBarHeight)
-            controller.view.frame = CGRectMake(x, topBarHeight + topOffset, w, h)
+            controller.view.frame = CGRect(x: x, y: topBarHeight + topOffset, width: w, height: h)
             
             windowView.addSubview(controller.view)
             
-            let buttonPointInParent = windowView.convertPoint(CGPointMake(button.center.x, button.center.y - topBarHeight), fromView: view)
+            let buttonPointInParent = windowView.convert(CGPoint(x: button.center.x, y: button.center.y - topBarHeight), from: view)
             let fractionX = (buttonPointInParent.x - ((windowView.frame.width - w) / 2)) / w
             let fractionY = buttonPointInParent.y / h
             
-            controller.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            controller.view.layer.anchorPoint = CGPoint(x: fractionX, y: fractionY)
             
-            controller.view.frame = CGRectMake(x, topBarHeight + topOffset, w, h)
+            controller.view.frame = CGRect(x: x, y: topBarHeight + topOffset, width: w, height: h)
             
-            controller.view.transform = CGAffineTransformMakeScale(0, 0)
+            controller.view.transform = CGAffineTransform(scaleX: 0, y: 0)
             
             onWillShow()
             
-            UIView.animateWithDuration(0.3) {
-                controller.view.transform = CGAffineTransformMakeScale(1, 1)
-            }
+            UIView.animate(withDuration: 0.3, animations: {
+                controller.view.transform = CGAffineTransform(scaleX: 1, y: 1)
+            }) 
             
         } else {
             print("Warn: AddEditListItemViewController.onSectionColorButtonTap: unexpected: no window")
@@ -511,7 +514,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     // MARK: - FlatColorPickerControllerDelegate
     
-    func onColorPicked(color: UIColor) {
+    func onColorPicked(_ color: UIColor) {
         dismissColorPicker(color)
     }
     
@@ -519,18 +522,18 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         dismissColorPicker(nil) // not used see FIXME in FlatColorPickerController.viewDidLoad
     }
     
-    private func dismissColorPicker(selectedColor: UIColor?) {
+    fileprivate func dismissColorPicker(_ selectedColor: UIColor?) {
         if let showingColorPicker = showingColorPicker {
             
             dismissPopup(showingColorPicker) {[weak self] in
                 self?.showingColorPicker = nil
                 self?.showingColorPicker?.removeFromParentViewControllerWithView()
                 
-                UIView.animateWithDuration(0.3) {
+                UIView.animate(withDuration: 0.3, animations: {
                     if let selectedColor = selectedColor {
                         self?.sectionColorButton.textColor = selectedColor
                     }
-                }
+                }) 
 //                UIView.animateWithDuration(0.15) {
 //                    self.sectionColorButton.transform = CGAffineTransformMakeScale(2, 2)
 //                    UIView.animateWithDuration(0.15) {
@@ -543,9 +546,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
     
-    private func dismissPopup(controller: UIViewController, onComplete: VoidFunction? = nil) {
-        UIView.animateWithDuration(0.3, animations: {
-            controller.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
+    fileprivate func dismissPopup(_ controller: UIViewController, onComplete: VoidFunction? = nil) {
+        UIView.animate(withDuration: 0.3, animations: {
+            controller.view.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
             }, completion: {finished in
                 controller.view.removeFromSuperview()
                 onComplete?()
@@ -555,7 +558,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     // MARK: - MyAutoCompleteTextFieldDelegate
     
-    func onDeleteSuggestion(string: String, sender: MyAutoCompleteTextField) {
+    func onDeleteSuggestion(_ string: String, sender: MyAutoCompleteTextField) {
         switch sender {
         case sectionInput:
             ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_section_completion_confirm", string), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}

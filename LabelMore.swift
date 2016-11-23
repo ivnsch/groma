@@ -14,25 +14,25 @@ import QorumLogs
     @IBInspectable var fontType: NSNumber = -1
     
     // TODO enum for fontTypes? with the same name as the numbers such that we can add later 21, 22 etc. if necessary. For storyboards this is not very useful but when we set the font programmatically at least
-    static func mapToFontSize(fontType: Int) -> CGFloat? {
+    static func mapToFontSize(_ fontType: Int) -> CGFloat? {
         switch (DimensionsManager.widthDimension, fontType) {
-        case (.Small, 20): return 10
-        case (.Small, 30): return 12
-        case (.Small, 40): return 14
-        case (.Small, 50): return 16
-        case (.Small, 60): return 18
+        case (.small, 20): return 10
+        case (.small, 30): return 12
+        case (.small, 40): return 14
+        case (.small, 50): return 16
+        case (.small, 60): return 18
 
-        case (.Middle, 20): return 11
-        case (.Middle, 30): return 13
-        case (.Middle, 40): return 15
-        case (.Middle, 50): return 18
-        case (.Middle, 60): return 20
+        case (.middle, 20): return 11
+        case (.middle, 30): return 13
+        case (.middle, 40): return 15
+        case (.middle, 50): return 18
+        case (.middle, 60): return 20
 
-        case (.Large, 20): return 13
-        case (.Large, 30): return 15
-        case (.Large, 40): return 17
-        case (.Large, 50): return 20
-        case (.Large, 60): return 22
+        case (.large, 20): return 13
+        case (.large, 30): return 15
+        case (.large, 40): return 17
+        case (.large, 50): return 20
+        case (.large, 60): return 22
         
         default:
             QL3("Not handled fontType: \(fontType)")
@@ -49,27 +49,27 @@ import QorumLogs
             
             self.font = {
                 if font.isBold {
-                    return UIFont.boldSystemFontOfSize(size)
+                    return UIFont.boldSystemFont(ofSize: size)
                 } else {
-                    return UIFont.systemFontOfSize(size)
+                    return UIFont.systemFont(ofSize: size)
                 }
             }()
         }
     }
     
-    private func fontSize() -> CGFloat? {
-        return LabelMore.mapToFontSize(fontType.integerValue)
+    fileprivate func fontSize() -> CGFloat? {
+        return LabelMore.mapToFontSize(fontType.intValue)
     }
     
     func makeFontBold() {
         if let size = fontSize() {
-            font = UIFont.boldSystemFontOfSize(size)
+            font = UIFont.boldSystemFont(ofSize: size)
         }
     }
     
     func makeFontRegular() {
         if let size = fontSize() {
-            font = UIFont.systemFontOfSize(size)
+            font = UIFont.systemFont(ofSize: size)
         }
     }
 }

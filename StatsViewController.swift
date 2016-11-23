@@ -12,23 +12,23 @@ import SwiftCharts
 import QorumLogs
 
 private enum StatsType {
-    case Aggr, History
+    case aggr, history
 }
 
 private enum StatsPresentation {
-    case List, Graph
+    case list, graph
 }
 
 class StatsViewController: UIViewController
 //, UIPickerViewDataSource, UIPickerViewDelegate
 {
     
-    private typealias TimePeriodWithText = (timePeriod: TimePeriod, text: String)
+    fileprivate typealias TimePeriodWithText = (timePeriod: TimePeriod, text: String)
     
-    private static let defaultTimePeriod = TimePeriod(quantity: -6, timeUnit: .Month)
-    private let timePeriods: [TimePeriodWithText] = [
+    fileprivate static let defaultTimePeriod = TimePeriod(quantity: -6, timeUnit: .month)
+    fileprivate let timePeriods: [TimePeriodWithText] = [
         (defaultTimePeriod, "6 months"),
-        (TimePeriod(quantity: -12, timeUnit: .Month), "12 months")
+        (TimePeriod(quantity: -12, timeUnit: .month), "12 months")
     ]
     
 //    @IBOutlet weak var timePeriodButton: UIButton!
@@ -43,24 +43,24 @@ class StatsViewController: UIViewController
     
     @IBOutlet weak var emptyStatsView: UIView!
 
-    private var sortByPopup: CMPopTipView?
+    fileprivate var sortByPopup: CMPopTipView?
     
-    private var currentStatsType: StatsType = .Aggr
-    private var currentStatsPresentation: StatsPresentation = .List
-    private var currentTimePeriod: TimePeriod = defaultTimePeriod
+    fileprivate var currentStatsType: StatsType = .aggr
+    fileprivate var currentStatsPresentation: StatsPresentation = .list
+    fileprivate var currentTimePeriod: TimePeriod = defaultTimePeriod
     
-    private var chart: Chart?
+    fileprivate var chart: Chart?
     
-    private let gradientPicker: GradientPicker = GradientPicker(width: 200)
+    fileprivate let gradientPicker: GradientPicker = GradientPicker(width: 200)
 
-    private let avgLineDelay: Float = 0.3
-    private let avgLineDuration = 0.3
+    fileprivate let avgLineDelay: Float = 0.3
+    fileprivate let avgLineDuration = 0.3
     
-    private var aggregate: GroupMonthYearAggregate?
+    fileprivate var aggregate: GroupMonthYearAggregate?
     
     @IBOutlet weak var inventoriesButton: UIButton!
-    private var inventoryPicker: InventoryPicker?
-    private var selectedInventory: Inventory? {
+    fileprivate var inventoryPicker: InventoryPicker?
+    fileprivate var selectedInventory: Inventory? {
         didSet {
             loadChart()
             clearFirstMonthIfIncomplete()
@@ -74,25 +74,25 @@ class StatsViewController: UIViewController
             self?.selectedInventory = inventory
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatsViewController.onWebsocketListItem(_:)), name: WSNotificationName.ListItem.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatsViewController.onWebsocketProduct(_:)), name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatsViewController.onWebsocketProductCategory(_:)), name: WSNotificationName.ProductCategory.rawValue, object: nil)        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatsViewController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StatsViewController.onWebsocketListItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ListItem.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StatsViewController.onWebsocketProduct(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Product.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StatsViewController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)        
+        NotificationCenter.default.addObserver(self, selector: #selector(StatsViewController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
         
     }
     
     deinit {
         QL1("Deinit stats controller")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadInventories()
     }
     
     // TODO this logic is messy and for now disabled. Is there a reliable way to delete possible first incomplete month? - accross multiple devices, installations, shared users
-    private func clearFirstMonthIfIncomplete() {
+    fileprivate func clearFirstMonthIfIncomplete() {
         guard !(PreferencesManager.loadPreference(PreferencesManagerKey.clearedFirstIncompleteMonthStats) ?? false) else {
             QL2("Already cleared first incomplete month, nothing to do")
             return
@@ -105,78 +105,67 @@ class StatsViewController: UIViewController
         guard let inventory = selectedInventory else {QL3("No inventory"); return}
 
         // Get the date of the oldest history item
-        Providers.statsProvider.oldestDate(inventory, resultHandler(onSuccess: {[weak self] dateMaybe in guard let weakSelf = self else {return}
-            
-            if let oldestDate: NSDate = dateMaybe {
+        Providers.statsProvider.oldestDate(inventory, resultHandler(onSuccess: {[weak self] oldestDate in guard let weakSelf = self else {return}
+            if let firstLaunchDate: Date = PreferencesManager.loadPreference(PreferencesManagerKey.firstLaunchDate) {
                 
-                if let firstLaunchDate: NSDate = PreferencesManager.loadPreference(PreferencesManagerKey.firstLaunchDate) {
-                    
-                    let oldestDateDayMonthYear = oldestDate.dayMonthYear
-                    let firstLaunchDateDayMonthYear = firstLaunchDate.dayMonthYear
-                    
-                    // PROBLEM: This algorithm isn't entirely safe and can remove months that are complete:
-                    // if installation month == current oldest month && installed after first && today is more than 1 month after oldest month -> delete oldest month
-                    // Consider situation: With 3 months usage, user cleared on device A the oldest month (month 1). Now user on device B, where installed the app in month 2 (a day different than the 1st) and is in month 3 now (1 month after current oldest date (month 2)), will also delete month 2, which is actually complete.
-                    // As a compromise, not seeing for now another solution, adjusting text in popup to leave decision to the user - "if the previous month was incomplete..."
-                    
-                    guard oldestDateDayMonthYear.month == firstLaunchDateDayMonthYear.month && oldestDateDayMonthYear.year == firstLaunchDateDayMonthYear.year else {
-                        // The only way we can currently know if first month may be incomplete if by checking the app installation date. This is limited though, if user reinstalled app or is using multiple devices it doesn't necessarily match. In this case we just skip our check, user will have to notice average issue themselves and delete items from history manually.
-                        QL2("Oldest date month/year != installation date month/year. Can't make assumptions about first month completeness")
-                        return
-                    }
-                    
-                    // If we are after oldest month.
-                    if NSDate().dayMonthYear.month - oldestDateDayMonthYear.month > 1 {
-                        
-                        let oldestDateMonthYear = MonthYear(month: oldestDateDayMonthYear.month, year: oldestDateDayMonthYear.year)
-                        
-                        // if the app was installed on the 1st, we assume the first month was complete, so we don't clear it.
-                        if firstLaunchDate.dayMonthYear.day != 1 {
-                            
-                            // If there's actually data for this month, otherwise there's nothing to remove so we don't bother user asking
-                            Providers.statsProvider.hasDataForMonthYear(oldestDateMonthYear, inventory: inventory, handler: weakSelf.successHandler{hasData in
-                                
-                                ConfirmationPopup.show(title: "First month start", message: "Congrats! You started a complete month report. If the previous month is incomplete (you didn't use the app the full month) you can remove it now, to improve the average calculations.", okTitle: "Remove", cancelTitle: "Cancel", controller: weakSelf, onOk: {
-                                    
-                                    Providers.statsProvider.clearMonthYearData(oldestDateMonthYear, inventory: inventory, remote: true, handler: weakSelf.successHandler{[weak self] in
-                                        PreferencesManager.savePreference(PreferencesManagerKey.clearedFirstIncompleteMonthStats, value: true)
-                                        self?.loadChart()
-                                        })
-                                    
-                                    }, onCancel: {
-                                        PreferencesManager.savePreference(PreferencesManagerKey.cancelledClearFirstIncompleteMonthStats, value: true)
-                                })
-                            })
-                            
-                        } else {
-                            QL2("Different month than installation month but installed at day 1 - nothing to do")
-                        }
-                        
-                    } else {
-                        QL2("Same month as installation month")
-                    }
+                let oldestDateDayMonthYear = oldestDate.dayMonthYear
+                let firstLaunchDateDayMonthYear = firstLaunchDate.dayMonthYear
+                
+                // PROBLEM: This algorithm isn't entirely safe and can remove months that are complete:
+                // if installation month == current oldest month && installed after first && today is more than 1 month after oldest month -> delete oldest month
+                // Consider situation: With 3 months usage, user cleared on device A the oldest month (month 1). Now user on device B, where installed the app in month 2 (a day different than the 1st) and is in month 3 now (1 month after current oldest date (month 2)), will also delete month 2, which is actually complete.
+                // As a compromise, not seeing for now another solution, adjusting text in popup to leave decision to the user - "if the previous month was incomplete..."
+                
+                guard oldestDateDayMonthYear.month == firstLaunchDateDayMonthYear.month && oldestDateDayMonthYear.year == firstLaunchDateDayMonthYear.year else {
+                    // The only way we can currently know if first month may be incomplete if by checking the app installation date. This is limited though, if user reinstalled app or is using multiple devices it doesn't necessarily match. In this case we just skip our check, user will have to notice average issue themselves and delete items from history manually.
+                    QL2("Oldest date month/year != installation date month/year. Can't make assumptions about first month completeness")
+                    return
                 }
                 
-            } else {
-                QL2("No stats data yet / no oldest item")
+                // If we are after oldest month.
+                if Date().dayMonthYear.month - oldestDateDayMonthYear.month > 1 {
+                    
+                    let oldestDateMonthYear = MonthYear(month: oldestDateDayMonthYear.month, year: oldestDateDayMonthYear.year)
+                    
+                    // if the app was installed on the 1st, we assume the first month was complete, so we don't clear it.
+                    if firstLaunchDate.dayMonthYear.day != 1 {
+                        
+                        // If there's actually data for this month, otherwise there's nothing to remove so we don't bother user asking
+                        Providers.statsProvider.hasDataForMonthYear(oldestDateMonthYear, inventory: inventory, handler: weakSelf.successHandler{hasData in
+                            
+                            ConfirmationPopup.show(title: "First month start", message: "Congrats! You started a complete month report. If the previous month is incomplete (you didn't use the app the full month) you can remove it now, to improve the average calculations.", okTitle: "Remove", cancelTitle: "Cancel", controller: weakSelf, onOk: {
+                                
+                                Providers.statsProvider.clearMonthYearData(oldestDateMonthYear, inventory: inventory, remote: true, handler: weakSelf.successHandler{[weak self] in
+                                    PreferencesManager.savePreference(PreferencesManagerKey.clearedFirstIncompleteMonthStats, value: true)
+                                    self?.loadChart()
+                                    })
+                                
+                                }, onCancel: {
+                                    PreferencesManager.savePreference(PreferencesManagerKey.cancelledClearFirstIncompleteMonthStats, value: true)
+                            })
+                        })
+                        
+                    } else {
+                        QL2("Different month than installation month but installed at day 1 - nothing to do")
+                    }
+                    
+                } else {
+                    QL2("Same month as installation month")
+                }
             }
-
-            
+ 
         }, onError: {[weak self] result in
-            self?.defaultErrorHandler([.NotFound])(providerResult: result)
+            self?.defaultErrorHandler([.notFound])(result)
         }))
-        
-        
-        
     }
     
-    private func loadInventories() {
+    fileprivate func loadInventories() {
         Providers.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             self?.inventoryPicker?.inventories = inventories
         })
     }
     
-    private func loadChart() {
+    fileprivate func loadChart() {
 //        let timePeriod = (aggregate?.timePeriod).flatMap{findTimePeriodWithText($0)} ?? timePeriods[0]
         let timePeriod = timePeriods[1]
         setTimePeriod(timePeriod)
@@ -200,7 +189,7 @@ class StatsViewController: UIViewController
 //        }
 //    }
 //
-    private func findTimePeriodWithText(timePeriod: TimePeriod) -> TimePeriodWithText? {
+    fileprivate func findTimePeriodWithText(_ timePeriod: TimePeriod) -> TimePeriodWithText? {
         for timePeriodWithText in timePeriods {
             if timePeriodWithText.timePeriod == timePeriod {
                 return timePeriodWithText
@@ -231,9 +220,9 @@ class StatsViewController: UIViewController
 
     // MARK: -
     
-    private func updateChart(timePeriod: TimePeriod) {
+    fileprivate func updateChart(_ timePeriod: TimePeriod) {
         if let inventory = selectedInventory {
-            Providers.statsProvider.history(timePeriod, group: AggregateGroup.All, inventory: inventory, successHandler{[weak self] aggregate in
+            Providers.statsProvider.history(timePeriod, group: AggregateGroup.all, inventory: inventory, successHandler{[weak self] aggregate in
                 if self?.aggregate?.timePeriod != aggregate.timePeriod || self?.aggregate?.monthYearAggregates ?? [] != aggregate.monthYearAggregates { // don't reload if there are no changes
                     self?.emptyStatsView.setHiddenAnimated(!aggregate.monthYearAggregates.isEmpty)
                     self?.aggregate = aggregate
@@ -249,16 +238,16 @@ class StatsViewController: UIViewController
         }
     }
     
-    private func setTimePeriod(timePeriod: TimePeriodWithText) {
+    fileprivate func setTimePeriod(_ timePeriod: TimePeriodWithText) {
         currentTimePeriod = timePeriod.timePeriod
         updateChart(timePeriod.timePeriod)
 //        timePeriodButton.setTitle(timePeriod.text, forState: .Normal)
     }
     
-    private func initThisMonthSpendingsLabels(monthYearAggregate: GroupMonthYearAggregate) {
+    fileprivate func initThisMonthSpendingsLabels(_ monthYearAggregate: GroupMonthYearAggregate) {
         if let lastMonthYearAggregate = monthYearAggregate.monthYearAggregates.last { // the spendings of this month (which is always the last in the returned aggregate)
             
-            let today = NSDate()
+            let today = Date()
             let dailyAvgSpendingsThisMonth = lastMonthYearAggregate.totalPrice / Float(today.dayMonthYear.day)
             let projectedTotalSpendingsThisMonth = Float(today.daysInMonth) * dailyAvgSpendingsThisMonth
             
@@ -268,7 +257,7 @@ class StatsViewController: UIViewController
             monthEstimateLabelLabel.alpha = 0
             dailyAverageLabel.text = dailyAvgSpendingsThisMonth.toLocalCurrencyString()
             monthEstimateLabel.text = projectedTotalSpendingsThisMonth.toLocalCurrencyString()
-            UIView.animateWithDuration(NSTimeInterval(avgLineDuration), delay: NSTimeInterval(avgLineDelay), options: UIViewAnimationOptions.CurveLinear, animations: {[weak self] in
+            UIView.animate(withDuration: TimeInterval(avgLineDuration), delay: TimeInterval(avgLineDelay), options: UIViewAnimationOptions.curveLinear, animations: {[weak self] in
                 self?.dailyAverageLabel.alpha = 1
                 self?.monthEstimateLabel.alpha = 1
                 self?.dailyAverageLabelLabel.alpha = 1
@@ -280,11 +269,11 @@ class StatsViewController: UIViewController
         }
     }
     
-    private func initChart(monthYearAggregate: GroupMonthYearAggregate) {
+    fileprivate func initChart(_ monthYearAggregate: GroupMonthYearAggregate) {
         
         self.chart?.view.removeSubviews()
         
-        if monthYearAggregate.timePeriod.timeUnit != .Month {
+        if monthYearAggregate.timePeriod.timeUnit != .month {
             print("Error: currently only handles months")
             return
         }
@@ -292,10 +281,10 @@ class StatsViewController: UIViewController
         let font: UIFont = {
 //            if DimensionsManager.widthDimension == .Small {
                 if let fontSize = LabelMore.mapToFontSize(20) {
-                    return UIFont.systemFontOfSize(fontSize)
+                    return UIFont.systemFont(ofSize: fontSize)
                 } else {
                     QL4("No font for size")
-                    return UIFont.systemFontOfSize(10)
+                    return UIFont.systemFont(ofSize: 10)
                 }
 //            } else {
 //                
@@ -310,23 +299,23 @@ class StatsViewController: UIViewController
         
 //        let rotation: CGFloat = DimensionsManager.widthDimension == .Small ? 45 : 0
         let rotation: CGFloat = 0
-        let labelSettings = ChartLabelSettings(font: font, fontColor: UIColor.grayColor(), rotation: rotation, rotationKeep: .Top)
+        let labelSettings = ChartLabelSettings(font: font, fontColor: UIColor.gray, rotation: rotation, rotationKeep: .top)
         
-        let outputDateFormatter = NSDateFormatter()
+        let outputDateFormatter = DateFormatter()
         outputDateFormatter.dateFormat = "MMM"
         
         
         
         class MyAxisValueDate: ChartAxisValueDate {
             let isHighlighted: Bool
-            init(date: NSDate, formatter: NSDateFormatter, isHighlighted: Bool, labelSettings: ChartLabelSettings = ChartLabelSettings()) {
+            init(date: Date, formatter: DateFormatter, isHighlighted: Bool, labelSettings: ChartLabelSettings = ChartLabelSettings()) {
                 self.isHighlighted = isHighlighted
-                super.init(date: date, formatter: formatter, labelSettings: labelSettings)
+                super.init(date: date, formatter: {formatter.string(from: $0)}, labelSettings: labelSettings)
             }
             override var labels: [ChartAxisLabel] {
                 let settings: ChartLabelSettings = {
                     if isHighlighted {
-                        return labelSettings.copy(fontColor: UIColor.darkTextColor())
+                        return labelSettings.copy(fontColor: UIColor.darkText)
                     } else {
                         return labelSettings
                     }
@@ -368,12 +357,12 @@ class StatsViewController: UIViewController
         
         
         
-        let (sum, maxSpendings): (Double, Double) = chartPoints.reduce((Double(0), Double(0))) {tuple, chartPoint in
+        let (sum, _): (Double, Double) = chartPoints.reduce((Double(0), Double(0))) {tuple, chartPoint in
             
             let newSum = tuple.0 + chartPoint.y.scalar
-            let newMax = max(chartPoint.y.scalar, tuple.1)
+            let newMaxSpendings = max(chartPoint.y.scalar, tuple.1)
             
-            return (newSum, newMax)
+            return (newSum, newMaxSpendings)
         }
         
         let monthlyAverage: Double = {
@@ -424,9 +413,9 @@ class StatsViewController: UIViewController
         
         
         let barViewGenerator = {(chartPointModel: ChartPointLayerModel<AggrChartPoint>, layer: ChartPointsViewsLayer<AggrChartPoint, UIView>, chart: Chart) -> UIView? in
-            let bottomLeft = CGPointMake(layer.innerFrame.origin.x, layer.innerFrame.origin.y + layer.innerFrame.height)
+            let bottomLeft = CGPoint(x: layer.innerFrame.origin.x, y: layer.innerFrame.origin.y + layer.innerFrame.height)
             
-            let (p1, p2): (CGPoint, CGPoint) =  (CGPointMake(chartPointModel.screenLoc.x, bottomLeft.y), CGPointMake(chartPointModel.screenLoc.x, chartPointModel.screenLoc.y))
+            let (p1, p2): (CGPoint, CGPoint) =  (CGPoint(x: chartPointModel.screenLoc.x, y: bottomLeft.y), CGPoint(x: chartPointModel.screenLoc.x, y: chartPointModel.screenLoc.y))
 
             
 //            let percentage: CGFloat = {
@@ -449,9 +438,9 @@ class StatsViewController: UIViewController
                     print("Error: invalid state: tapping a bar without aggr (bars without aggregate means there's no data for axis value which means bar's height is 0 which means is not tappable.")
                 }
                 
-                barView.backgroundColor = barView.backgroundColor?.colorWithAlphaComponent(0.5)
+                barView.backgroundColor = barView.backgroundColor?.withAlphaComponent(0.5)
                 delay(0.5) {
-                    barView.backgroundColor = barView.backgroundColor?.colorWithAlphaComponent(1)
+                    barView.backgroundColor = barView.backgroundColor?.withAlphaComponent(1)
                 }
             }
             
@@ -459,15 +448,15 @@ class StatsViewController: UIViewController
         }
         let barsLayer = ChartPointsViewsLayer<AggrChartPoint, UIView>(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: chartPoints, viewGenerator: barViewGenerator)
         
-        let formatter = NSNumberFormatter()
+        let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 2
         
         let barTotalLabelFont: UIFont = {   
             if let fontSize = LabelMore.mapToFontSize(20) {
-                return UIFont.systemFontOfSize(fontSize)
+                return UIFont.systemFont(ofSize: fontSize)
             } else {
                 QL4("No font for size")
-                return UIFont.systemFontOfSize(11)
+                return UIFont.systemFont(ofSize: 11)
             }
         }()
         
@@ -479,13 +468,13 @@ class StatsViewController: UIViewController
                 let yOffset: CGFloat = -15
                 label.text = "\(Float(chartPointModel.chartPoint.y.scalar).toLocalCurrencyString())"
                 label.font = barTotalLabelFont
-                label.textColor = UIColor.darkGrayColor()
+                label.textColor = UIColor.darkGray
                 label.sizeToFit()
-                label.center = CGPointMake(chartPointModel.screenLoc.x, innerFrame.origin.y)
+                label.center = CGPoint(x: chartPointModel.screenLoc.x, y: innerFrame.origin.y)
                 label.alpha = 0
                 
                 label.movedToSuperViewHandler = {[weak label] in
-                    UIView.animateWithDuration(0.3, animations: {
+                    UIView.animate(withDuration: 0.3, animations: {
                         label?.alpha = 1
                         label?.center.y = chartPointModel.screenLoc.y + yOffset
                     })
@@ -521,7 +510,7 @@ class StatsViewController: UIViewController
             averageLabel.alpha = 0
             averageLabelLabel.alpha = 0
             averageLabel.text = monthlyAverage.toLocalCurrencyString()
-            UIView.animateWithDuration(NSTimeInterval(avgLineDuration), delay: NSTimeInterval(avgLineDelay), options: UIViewAnimationOptions.CurveLinear, animations: {[weak self] in
+            UIView.animate(withDuration: TimeInterval(avgLineDuration), delay: TimeInterval(avgLineDelay), options: UIViewAnimationOptions.curveLinear, animations: {[weak self] in
                 self?.averageLabel.alpha = 1
                 self?.averageLabelLabel.alpha = 1
                 }, completion: nil)
@@ -538,7 +527,7 @@ class StatsViewController: UIViewController
     }
 
     
-    func onBarTap(aggr: MonthYearAggregate) {
+    func onBarTap(_ aggr: MonthYearAggregate) {
         if let inventory = selectedInventory {
             let detailsController = UIStoryboard.statsDetailsViewController()
             detailsController.onViewDidLoad = {
@@ -550,8 +539,8 @@ class StatsViewController: UIViewController
         }
     }
     
-    func onWebsocketListItem(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
+    func onWebsocketListItem(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .BuyCart:
@@ -568,8 +557,8 @@ class StatsViewController: UIViewController
         }
     }
     
-    func onWebsocketProduct(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+    func onWebsocketProduct(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Update:
@@ -579,7 +568,7 @@ class StatsViewController: UIViewController
             } else {
                 QL4("No value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -596,8 +585,8 @@ class StatsViewController: UIViewController
         }
     }
     
-    func onWebsocketProductCategory(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
+    func onWebsocketProductCategory(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Add:
@@ -607,7 +596,7 @@ class StatsViewController: UIViewController
             } else {
                 QL4("No value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -622,7 +611,7 @@ class StatsViewController: UIViewController
         }
     }
     
-    func onIncomingGlobalSyncFinished(note: NSNotification) {
+    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         loadChart()
     }
@@ -645,7 +634,7 @@ class MyChartPointViewBar: ChartPointViewBar {
     
     var onViewTap: VoidFunction?
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         onViewTap?()
     }
 }
@@ -655,18 +644,18 @@ private class GradientPicker {
     let gradientImg: UIImage
     
     lazy var imgData: UnsafePointer<UInt8> = {
-        let provider = CGImageGetDataProvider(self.gradientImg.CGImage)
-        let pixelData = CGDataProviderCopyData(provider)
+        let provider = self.gradientImg.cgImage?.dataProvider
+        let pixelData = provider?.data
         return CFDataGetBytePtr(pixelData)
     }()
     
     init(width: CGFloat) {
         
         let gradient: CAGradientLayer = CAGradientLayer()
-        gradient.frame = CGRectMake(0, 0, width, 1)
-        gradient.colors = [UIColor.greenColor().CGColor, UIColor.redColor().CGColor]
-        gradient.startPoint = CGPointMake(0, 0.5)
-        gradient.endPoint = CGPointMake(1.0, 0.5)
+        gradient.frame = CGRect(x: 0, y: 0, width: width, height: 1)
+        gradient.colors = [UIColor.flatGreen.cgColor, UIColor.flatRed.cgColor]
+        gradient.startPoint = CGPoint(x: 0, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1.0, y: 0.5)
         
         let imgHeight = 1
         let imgWidth = Int(gradient.bounds.size.width)
@@ -674,26 +663,26 @@ private class GradientPicker {
         let bitmapBytesPerRow = imgWidth * 4
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue).rawValue
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue).rawValue
         
-        let context = CGBitmapContextCreate (nil,
-            imgWidth,
-            imgHeight,
-            8,
-            bitmapBytesPerRow,
-            colorSpace,
-            bitmapInfo)
+        let context = CGContext (data: nil,
+            width: imgWidth,
+            height: imgHeight,
+            bitsPerComponent: 8,
+            bytesPerRow: bitmapBytesPerRow,
+            space: colorSpace,
+            bitmapInfo: bitmapInfo)
         
         UIGraphicsBeginImageContext(gradient.bounds.size)
-        gradient.renderInContext(context!)
+        gradient.render(in: context!)
         
-        let gradientImg = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
+        let gradientImg = UIImage(cgImage: (context?.makeImage()!)!)
         
         UIGraphicsEndImageContext()
         self.gradientImg = gradientImg
     }
     
-    func colorForPercentage(percentage: CGFloat) -> UIColor {
+    func colorForPercentage(_ percentage: CGFloat) -> UIColor {
         
         let data = self.imgData
         

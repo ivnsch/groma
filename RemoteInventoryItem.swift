@@ -18,11 +18,11 @@ struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerial
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let quantity = representation.valueForKeyPath("quantity") as? Int,
-            let productUuid = representation.valueForKeyPath("productUuid") as? String,
-            let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let quantity = representation.value(forKeyPath: "quantity") as? Int,
+            let productUuid = representation.value(forKeyPath: "productUuid") as? String,
+            let inventoryUuid = representation.value(forKeyPath: "inventoryUuid") as? String,
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -34,9 +34,9 @@ struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerial
         self.lastUpdate = Int64(lastUpdate)
     }
     
-    static func collection(representation: AnyObject) -> [RemoteInventoryItem]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteInventoryItem]? {
         var items = [RemoteInventoryItem]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let item = RemoteInventoryItem(representation: obj) {
                 items.append(item)
             } else {
@@ -47,7 +47,7 @@ struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerial
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), quantity: \(quantity), productUuid: \(productUuid), invnetoryUuid: \(inventoryUuid), listUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) uuid: \(uuid), quantity: \(quantity), productUuid: \(productUuid), invnetoryUuid: \(inventoryUuid), listUpdate: \(lastUpdate)}"
     }
 }
 
@@ -56,7 +56,7 @@ extension RemoteInventoryItem {
         return RemoteInventoryItem.createTimestampUpdateDict(uuid: uuid, lastUpdate: lastUpdate)
     }
     
-    static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
+    static func createTimestampUpdateDict(uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
         return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

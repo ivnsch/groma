@@ -11,7 +11,7 @@ import ChameleonFramework
 
 class ListMapper {
     
-    class func dbWithList(list: List, dirty: Bool = true) -> DBList {
+    class func dbWithList(_ list: List, dirty: Bool = true) -> DBList {
         let dbList = DBList()
         dbList.uuid = list.uuid
         dbList.name = list.name
@@ -30,7 +30,7 @@ class ListMapper {
         return dbList
     }
 
-    class func dbWithLists(remoteLists: RemoteListsWithDependencies) -> [DBList] {
+    class func dbWithLists(_ remoteLists: RemoteListsWithDependencies) -> [DBList] {
         let inventoriesDict = remoteLists.inventories.toDictionary{($0.inventory.uuid, InventoryMapper.dbWithInventory($0))}
         
         return remoteLists.lists.map {remoteList in
@@ -51,13 +51,13 @@ class ListMapper {
         }
     }
     
-    class func listWithDB(dbList: DBList) -> List {
+    class func listWithDB(_ dbList: DBList) -> List {
         let users = dbList.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
         let inventory = InventoryMapper.inventoryWithDB(dbList.inventory)
         return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor(), order: dbList.order, inventory: inventory, store: dbList.storeOpt, lastServerUpdate: dbList.lastServerUpdate)
     }
     
-    class func listsWithRemote(remoteLists: RemoteListsWithDependencies) -> [List] {
+    class func listsWithRemote(_ remoteLists: RemoteListsWithDependencies) -> [List] {
 
         let inventoriesDict = remoteLists.inventories.toDictionary{($0.inventory.uuid, InventoryMapper.inventoryWithRemote($0))}
         
@@ -77,7 +77,7 @@ class ListMapper {
         return lists.sortedByOrder()
     }
     
-    class func listWithRemote(remoteList: RemoteListWithDependencies) -> List {
+    class func listWithRemote(_ remoteList: RemoteListWithDependencies) -> List {
         let inventory = InventoryMapper.inventoryWithRemote(remoteList.inventory)
         return List(
             uuid: remoteList.list.uuid,

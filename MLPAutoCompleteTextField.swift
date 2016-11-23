@@ -11,8 +11,8 @@ import UIKit
 extension MLPAutoCompleteTextField {
 
     func defaultAutocompleteStyle() {
-        borderStyle = .Line
-        autoCompleteTableBorderColor = UIColor.grayColor()
+        borderStyle = .line
+        autoCompleteTableBorderColor = UIColor.gray
         autoCompleteTableBorderWidth = 0.3
 //        autoCompleteTableCornerRadius = 8
         autoCompleteBoldFontName = Fonts.fontNameBold
@@ -22,8 +22,8 @@ extension MLPAutoCompleteTextField {
         maximumNumberOfAutoCompleteRows = 4
         sortAutoCompleteSuggestionsByClosestMatch = true
         shouldResignFirstResponderFromKeyboardAfterSelectionOfAutoCompleteRows = false
-        autoCompleteTableBackgroundColor = UIColor.whiteColor()
-        autoCompleteTableOriginOffset = CGSizeMake(0, -1.5)
+        autoCompleteTableBackgroundColor = UIColor.white
+        autoCompleteTableOriginOffset = CGSize(width: 0, height: -1.5)
         partOfAutoCompleteRowHeightToCut = 0.8
     }
 }

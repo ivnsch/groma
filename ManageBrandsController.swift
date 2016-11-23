@@ -17,29 +17,29 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var searchBar: UISearchBar!
-    private var editButton: UIBarButtonItem!
+    fileprivate var editButton: UIBarButtonItem!
     
-    private let paginator = Paginator(pageSize: 100)
-    private var loadingPage: Bool = false
+    fileprivate let paginator = Paginator(pageSize: 100)
+    fileprivate var loadingPage: Bool = false
     
-    private var searchText: String = ""
+    fileprivate var searchText: String = ""
     
-    private var filteredBrands: [ItemWithCellAttributes<String>] = [] {
+    fileprivate var filteredBrands: [ItemWithCellAttributes<String>] = [] {
         didSet {
             tableView.reloadData()
         }
     }
 
     
-    private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
-    private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
-    private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
+    fileprivate let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .toggle, alpha: 0.05, rotation: 0, xRight: 20)
+    fileprivate let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .toggle, alpha: 1, rotation: 0, xRight: 20)
+    fileprivate let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
     
-    private var addEditBrandControllerManager: ExpandableTopViewController<EditBrandController>?
+    fileprivate var addEditBrandControllerManager: ExpandableTopViewController<EditBrandController>?
     
-    private var updatingBrand: AddEditBrandControllerEditingData?
+    fileprivate var updatingBrand: AddEditBrandControllerEditingData?
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         clearAndLoadFirstPage()
@@ -59,41 +59,41 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         
         addEditBrandControllerManager = initAddEditBrandControllerManager()
         
-        initNavBar([.Edit])
+        initNavBar([.edit])
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    func onSubmitTap(sender: UIBarButtonItem) {
-        if tableView.editing {
+    func onSubmitTap(_ sender: UIBarButtonItem) {
+        if tableView.isEditing {
             addEditBrandControllerManager?.controller?.submit()
         }
     }
     
-    func onEditTap(sender: UIBarButtonItem) {
+    func onEditTap(_ sender: UIBarButtonItem) {
         toggleEditing()
     }
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
-    private func initNavBar(actions: [UIBarButtonSystemItem]) {
+    fileprivate func initNavBar(_ actions: [UIBarButtonSystemItem]) {
         navigationItem.title = "Brands"
         
         var buttons: [UIBarButtonItem] = []
         
         for action in actions {
             switch action {
-            case .Save:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .Plain, target: self, action: #selector(ManageBrandsController.onSubmitTap(_:)))
+            case .save:
+                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .plain, target: self, action: #selector(ManageBrandsController.onSubmitTap(_:)))
                 buttons.append(button)
-            case .Edit:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: #selector(ManageBrandsController.onEditTap(_:)))
+            case .edit:
+                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .plain, target: self, action: #selector(ManageBrandsController.onEditTap(_:)))
                 buttons.append(button)
             default: break
             }
@@ -101,7 +101,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         navigationItem.rightBarButtonItems = buttons
     }
     
-    private func initAddEditBrandControllerManager() -> ExpandableTopViewController<EditBrandController> {
+    fileprivate func initAddEditBrandControllerManager() -> ExpandableTopViewController<EditBrandController> {
         let top: CGFloat = 64
         let manager: ExpandableTopViewController<EditBrandController> =  ExpandableTopViewController(top: top, height: 60, parentViewController: self, tableView: tableView) {
             let controller = EditBrandController()
@@ -114,35 +114,35 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     
     // MARK: - Table view data source
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredBrands.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("brandCell", forIndexPath: indexPath) as! ManageBrandsCell
-        let brand = filteredBrands[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "brandCell", for: indexPath) as! ManageBrandsCell
+        let brand = filteredBrands[(indexPath as NSIndexPath).row]
         cell.item = brand
         return cell
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            let brand = filteredBrands[indexPath.row]
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let brand = filteredBrands[(indexPath as NSIndexPath).row]
             Providers.brandProvider.removeProductsWithBrand(brand.item, remote: true, successHandler {[weak self] in
                 self?.removeBrandUI(brand, indexPath: indexPath)
             })
         }
     }
     
-    private func removeBrandUI(brand: String) {
+    fileprivate func removeBrandUI(_ brand: String) {
         if let indexPath = indexPathForBrand(brand) {
             let wrappedBrand = ItemWithCellAttributes<String>(item: brand, boldRange: nil)
             removeBrandUI(wrappedBrand, indexPath: indexPath)
@@ -151,59 +151,59 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    private func removeBrandUI(brand: ItemWithCellAttributes<String>, indexPath: NSIndexPath) {
+    fileprivate func removeBrandUI(_ brand: ItemWithCellAttributes<String>, indexPath: IndexPath) {
         tableView.wrapUpdates {[weak self] in
-            self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            self?.filteredBrands.remove(brand)
+            self?.tableView.deleteRows(at: [indexPath], with: .fade)
+            _ = self?.filteredBrands.remove(brand)
         }
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filter(searchText)
     }
     
-    private func filter(searchText: String) {
+    fileprivate func filter(_ searchText: String) {
         self.searchText = searchText
         clearAndLoadFirstPage()
     }
     
-    private func onUpdatedBrands() {
+    fileprivate func onUpdatedBrands() {
         if let searchText = searchBar.text {
             filter(searchText)
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if tableView.editing {
-            let inventoryItem = filteredBrands[indexPath.row].item
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
+            let inventoryItem = filteredBrands[(indexPath as NSIndexPath).row].item
             updatingBrand = AddEditBrandControllerEditingData(brand: inventoryItem, indexPath: indexPath)
             addEditBrandControllerManager?.expand(true)
             addEditBrandControllerManager?.controller?.brand = updatingBrand
-            initNavBar([.Edit, .Save])
+            initNavBar([.edit, .save])
         }
     }
     
-    private func clearSearch() {
+    fileprivate func clearSearch() {
         searchBar.text = ""
         filteredBrands = []
     }
     
     // MARK: - EditBrandControllerDelegate
     
-    func onValidationErrors(errors: [UITextField: ValidationError]) {
-        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+    func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>) {
+        present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onBrandUpdated(brand: AddEditBrandControllerEditingData) {
+    func onBrandUpdated(_ brand: AddEditBrandControllerEditingData) {
         updateBrandUI(brand.brand, indexPath: brand.indexPath)
     }
     
-    private func indexPathForBrand(brand: String) -> NSIndexPath? {
-        let indexMaybe = filteredBrands.enumerate().filter{$0.element.item == brand}.first?.index
-        return indexMaybe.map{NSIndexPath(forRow: $0, inSection: 0)}
+    fileprivate func indexPathForBrand(_ brand: String) -> IndexPath? {
+        let indexMaybe = filteredBrands.enumerated().filter{$0.element.item == brand}.first?.offset
+        return indexMaybe.map{IndexPath(row: $0, section: 0)}
     }
     
-    private func updateBrandUI(brand: String) {
+    fileprivate func updateBrandUI(_ brand: String) {
         if let indexPath = indexPathForBrand(brand) {
             updateBrandUI(brand, indexPath: indexPath)
         } else {
@@ -211,31 +211,31 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    private func updateBrandUI(brand: String, indexPath: NSIndexPath) {
+    fileprivate func updateBrandUI(_ brand: String, indexPath: IndexPath) {
         // for now we will not do "content based" update like everywhere else in the app for these cases - content based it's a bit better than indexpath based, since maybe while we have the edit controller open we update the list (e.g remove an item on another device -> websocket notificaton) which makes index path invalid. We can't do this here because we use only strings.
 //        brands.update(brand)
-        guard indexPath.row < filteredBrands.count else {return}
+        guard (indexPath as NSIndexPath).row < filteredBrands.count else {return}
         
         let itemWithCellAttributes = ItemWithCellAttributes(item: brand, boldRange: brand.range(brand, caseInsensitive: true))
         
-        filteredBrands[indexPath.row] = itemWithCellAttributes
+        filteredBrands[(indexPath as NSIndexPath).row] = itemWithCellAttributes
 
         onUpdatedBrands()
         
-        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         addEditBrandControllerManager?.expand(false)
-        initNavBar([.Edit])
+        initNavBar([.edit])
     }
     
-    private func setAddEditBrandControllerOpen(open: Bool) {
+    fileprivate func setAddEditBrandControllerOpen(_ open: Bool) {
         addEditBrandControllerManager?.expand(open)
     }
     
-    private func loadPossibleNextPage() {
+    fileprivate func loadPossibleNextPage() {
         
-        func setLoading(loading: Bool) {
+        func setLoading(_ loading: Bool) {
             self.loadingPage = loading
-            self.tableViewFooter.hidden = !loading
+            self.tableViewFooter.isHidden = !loading
         }
         
         synced(self) {[weak self] in
@@ -268,53 +268,53 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     // MARK: - ListTopBarViewDelegate
     
     func onTopBarBackButtonTap() {
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     func onTopBarTitleTap() {
     }
     
-    func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
+    func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId) {
         switch buttonId {
-        case .Submit:
-            if tableView.editing {
+        case .submit:
+            if tableView.isEditing {
                 addEditBrandControllerManager?.controller?.submit()
             }
-        case .ToggleOpen:
+        case .toggleOpen:
             toggleTopAddController()
-        case .Edit:
+        case .edit:
             toggleEditing()
         default: print("Error: ManageProductsViewController.onTopBarButtonTap: No handled action: \(buttonId)")
         }
     }
     
-    private func toggleEditing() {
-        tableView.setEditing(!tableView.editing, animated: true)
+    fileprivate func toggleEditing() {
+        tableView.setEditing(!tableView.isEditing, animated: true)
     }
     
-    private func toggleTopAddController() {
+    fileprivate func toggleTopAddController() {
         
         if addEditBrandControllerManager?.expanded ?? false { // it's open - close
             addEditBrandControllerManager?.expand(false)
-            initNavBar([.Edit])
+            initNavBar([.edit])
 
         } else { // it's closed - open
             addEditBrandControllerManager?.expand(true)
-            initNavBar([.Edit])
+            initNavBar([.edit])
         }
     }
     
     
     // MARK: - ExpandableTopViewControllerDelegate
     
-    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+    func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
     }
     
     func onExpandableClose() {
-        initNavBar([.Edit])
+        initNavBar([.edit])
     }
     
-    func onCenterTitleAnimComplete(center: Bool) {
+    func onCenterTitleAnimComplete(_ center: Bool) {
     }
     
     // MARK: - Websocket
@@ -341,8 +341,8 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
 
 struct AddEditBrandControllerEditingData {
     let brand: String
-    let indexPath: NSIndexPath
-    init(brand: String, indexPath: NSIndexPath) {
+    let indexPath: IndexPath
+    init(brand: String, indexPath: IndexPath) {
         self.brand = brand
         self.indexPath = indexPath
     }

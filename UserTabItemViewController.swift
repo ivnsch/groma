@@ -20,7 +20,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
             self.showLoginController()
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UserTabItemViewController.onLogoutNotification(_:)), name: Notification.LogoutUI.rawValue, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(UserTabItemViewController.onLogoutNotification(_:)), name: NSNotification.Name(rawValue: Notification.LogoutUI.rawValue), object: nil)
     }
     
     // MARK: - LoginDelegate
@@ -50,7 +50,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
         print("login error!") // TODO handle
     }
     
-    private func showUserDetailsController() {
+    fileprivate func showUserDetailsController() {
         let userDetailsController = UIStoryboard.userDetailsViewController()
         userDetailsController.delegate = self
         navigationItem.title = trans("title_user")
@@ -59,17 +59,17 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     
     // MARK:
     
-    private func showLoginController() {
+    fileprivate func showLoginController() {
         let loginController = UIStoryboard.loginViewController()
         loginController.delegate = self
         loginController.onUIReady = {[weak loginController] in
-            loginController?.mode = .Normal
+            loginController?.mode = .normal
         }
         navigationItem.title = trans("title_login")
         self.replaceController(loginController)
     }
     
-    private func replaceController(newController: UIViewController) {
+    fileprivate func replaceController(_ newController: UIViewController) {
 
         let currentChildControllers = childViewControllers // normally this should be only 1 - the login controller or user details view
         
@@ -78,7 +78,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
         addChildViewControllerAndViewFill(newController)
         
         // cross fade
-        UIView.animateWithDuration(0.3, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             for controller in currentChildControllers {
                 controller.view.alpha = 0
             }
@@ -92,7 +92,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     
     // MARK: - Notification
     
-    func onLogoutNotification(note: NSNotification) {
+    func onLogoutNotification(_ note: Foundation.Notification) {
         if !(childViewControllers.first is LoginViewController) {
             showLoginController()
         }
@@ -100,6 +100,6 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     
     deinit {
         QL1("Deinit user tab controller")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 }

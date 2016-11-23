@@ -9,13 +9,13 @@
 import Foundation
 
 // src: http://stackoverflow.com/a/24103086/930450
-func synced(lock: AnyObject, closure: () -> ()) {
+func synced(_ lock: AnyObject, closure: () -> ()) {
     objc_sync_enter(lock)
     closure()
     objc_sync_exit(lock)
 }
 
-func syncedRet<T>(lock: AnyObject, closure: () -> T) -> T {
+func syncedRet<T>(_ lock: AnyObject, closure: () -> T) -> T {
     objc_sync_enter(lock)
     let t = closure()
     objc_sync_exit(lock)

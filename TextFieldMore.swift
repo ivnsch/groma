@@ -15,7 +15,7 @@ class TextFieldMore: UITextField {
     override func awakeFromNib() {
         super.awakeFromNib()
         if let size = LabelMore.mapToFontSize(fontType) {
-            self.font = UIFont.systemFontOfSize(size)
+            self.font = UIFont.systemFont(ofSize: size)
         }
     }
 }

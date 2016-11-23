@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 
 protocol SwitchSettingCellDelegate: class {
-    func onSwitch(setting: SwitchSetting, on: Bool)
+    func onSwitch(_ setting: SwitchSetting, on: Bool)
 }
 
 class SwitchSettingCell: UITableViewCell {
@@ -30,12 +30,12 @@ class SwitchSettingCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
-    @IBAction func onSwitchChanged(sender: UISwitch) {
+    @IBAction func onSwitchChanged(_ sender: UISwitch) {
         if let setting = setting {
-            delegate?.onSwitch(setting, on: sender.on)
+            delegate?.onSwitch(setting, on: sender.isOn)
         } else {
             QL3("No setting")
         }

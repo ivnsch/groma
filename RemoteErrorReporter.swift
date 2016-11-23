@@ -10,17 +10,17 @@ import Foundation
 
 class RemoteErrorReporter {
     
-    func report(error: ErrorReport, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func report(_ error: ErrorReport, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
         let parameters = self.toRequestParams(error)
-        RemoteProvider.authenticatedRequest(.POST, Urls.error, parameters) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.error, parameters) {result in
             handler(result)
         }
     }
     
-    private func toRequestParams(error: ErrorReport) -> [String: AnyObject] {
+    fileprivate func toRequestParams(_ error: ErrorReport) -> [String: AnyObject] {
         return [
-            "title": error.title,
-            "body": error.body
+            "title": error.title as AnyObject,
+            "body": error.body as AnyObject
         ]
     }
 }

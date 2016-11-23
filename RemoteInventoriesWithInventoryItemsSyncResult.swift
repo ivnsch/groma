@@ -24,10 +24,10 @@ struct RemoteInventoryItemsSyncResult: ResponseObjectSerializable, ResponseColle
     
     init?(representation: AnyObject) {
         guard
-            let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
-            let inventoryItemsObj = representation.valueForKeyPath("inventoryItems") as? [AnyObject],
+            let inventoryUuid = representation.value(forKeyPath: "inventoryUuid") as? String,
+            let inventoryItemsObj = representation.value(forKeyPath: "inventoryItems") as? [AnyObject],
             let inventoryItems = RemoteInventoryItemWithProduct.collection(inventoryItemsObj),
-            let couldNotDelete = representation.valueForKeyPath("couldNotDelete") as? [String]
+            let couldNotDelete = representation.value(forKeyPath: "couldNotDelete") as? [String]
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -38,9 +38,9 @@ struct RemoteInventoryItemsSyncResult: ResponseObjectSerializable, ResponseColle
         self.couldNotDelete = couldNotDelete
     }
     
-    static func collection(representation: AnyObject) -> [RemoteInventoryItemsSyncResult]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteInventoryItemsSyncResult]? {
         var inventoryItemsSyncResult = [RemoteInventoryItemsSyncResult]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let inventoryItem = RemoteInventoryItemsSyncResult(representation: obj) {
                 inventoryItemsSyncResult.append(inventoryItem)
             } else {
@@ -52,7 +52,7 @@ struct RemoteInventoryItemsSyncResult: ResponseObjectSerializable, ResponseColle
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventoryUuid: \(self.inventoryUuid), inventoryItems: \(self.inventoryItems), couldNotDelete: \(self.couldNotDelete)}"
+        return "{\(type(of: self)) inventoryUuid: \(self.inventoryUuid), inventoryItems: \(self.inventoryItems), couldNotDelete: \(self.couldNotDelete)}"
     }
 }
 
@@ -72,11 +72,11 @@ struct RemoteInventoriesWithInventoryItemsSyncResult: ResponseObjectSerializable
     
     init?(representation: AnyObject) {
         guard
-            let inventoriesObj = representation.valueForKeyPath("inventories") as? [AnyObject],
+            let inventoriesObj = representation.value(forKeyPath: "inventories") as? [AnyObject],
             let inventories = RemoteInventoryWithDependencies.collection(inventoriesObj),
-            let couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as? [String],
-            let couldNotDelete = representation.valueForKeyPath("couldNotDelete") as? [String],
-            let inventoryItemsSyncResultsObj = representation.valueForKeyPath("inventoryItems") as? [AnyObject],
+            let couldNotUpdate = representation.value(forKeyPath: "couldNotUpdate") as? [String],
+            let couldNotDelete = representation.value(forKeyPath: "couldNotDelete") as? [String],
+            let inventoryItemsSyncResultsObj = representation.value(forKeyPath: "inventoryItems") as? [AnyObject],
             let inventoryItemsSyncResults = RemoteInventoryItemsSyncResult.collection(inventoryItemsSyncResultsObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -89,6 +89,6 @@ struct RemoteInventoriesWithInventoryItemsSyncResult: ResponseObjectSerializable
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventories: \(inventories), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete), inventoryItemsSyncResults: \(inventoryItemsSyncResults)}"
+        return "{\(type(of: self)) inventories: \(inventories), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete), inventoryItemsSyncResults: \(inventoryItemsSyncResults)}"
     }
 }

@@ -24,18 +24,18 @@ extension Array where Element: InventoryItem {
         return dictionary
     }
     
-    func sortBy(sortBy: InventorySortBy) -> [Element] {
+    func sortBy(_ sortBy: InventorySortBy) -> [Element] {
         switch sortBy {
-        case .Alphabetic:
-            return self.sort{
+        case .alphabetic:
+            return self.sorted{
                 if $0.0.product.name == $0.1.product.name {
                     return $0.0.quantity < $0.1.quantity
                 } else {
                     return $0.0.product.name < $0.1.product.name
                 }
             }
-        case .Count:
-            return self.sort{
+        case .count:
+            return self.sorted{
                 if $0.0.quantity == $0.1.quantity {
                     return $0.0.product.name < $0.1.product.name
                 } else {

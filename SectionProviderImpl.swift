@@ -14,9 +14,9 @@ class SectionProviderImpl: SectionProvider {
     let dbProvider = RealmListItemProvider()
     let remoteProvider = RemoteSectionProvider()
     
-    func loadSection(name: String, list: List, handler: ProviderResult<Section?> -> ()) {
+    func loadSection(_ name: String, list: List, handler: @escaping (ProviderResult<Section?>) -> ()) {
         DBProviders.sectionProvider.loadSection(name, list: list) {dbSectionMaybe in
-            handler(ProviderResult(status: .Success, sucessResult: dbSectionMaybe))
+            handler(ProviderResult(status: .success, sucessResult: dbSectionMaybe))
             
             //            // TODO is this necessary here?
             //            self.remoteProvider.section(name, list: list) {remoteResult in
@@ -33,10 +33,10 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func remove(sectionUuid: String, listUuid: String?, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func remove(_ sectionUuid: String, listUuid: String?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         
         DBProviders.sectionProvider.remove(sectionUuid, markForSync: true) {[weak self] removed in
-            handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
+            handler(ProviderResult(status: removed ? .success : .databaseUnknown))
             if removed {
                 
                 Providers.listItemsProvider.removeSectionFromListItemsMemCacheIfExistent(sectionUuid, listUuid: listUuid) {result in
@@ -62,7 +62,7 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func remove(_ section: Section, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         remove(section.uuid, listUuid: section.list.uuid, remote: remote) {result in
             if result.success {
                 handler(result)
@@ -73,14 +73,14 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func removeAllWithName(sectionName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func removeAllWithName(_ sectionName: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
 
         DBProviders.sectionProvider.removeAllWithName(sectionName, markForSync: remote) {[weak self] removedSectionsMaybe in
             if let removedSections = removedSectionsMaybe {
                 
                 Providers.listItemsProvider.invalidateMemCache()
                 
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 if remote {
                     self?.remoteProvider.removeSectionsWithName(sectionName) {remoteResult in
@@ -99,17 +99,17 @@ class SectionProviderImpl: SectionProvider {
                 }
             } else {
                 QL4("Couldn't remove sections from db for name: \(sectionName)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
     
-    func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func update(_ sections: [Section], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
 
         DBProviders.sectionProvider.update(sections) {[weak self] updated in
             if updated {
                 Providers.listItemsProvider.invalidateMemCache()
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 
                 if remote {
                     
@@ -133,28 +133,28 @@ class SectionProviderImpl: SectionProvider {
                     }
                 }
             } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
 
-    func update(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func update(_ section: Section, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         update([section], remote: remote, handler)
     }
     
-    func sectionSuggestionsContainingText(text: String, _ handler: ProviderResult<[String]> -> ()) {
+    func sectionSuggestionsContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> ()) {
         DBProviders.sectionProvider.sectionSuggestionsContainingText(text) {dbSuggestions in
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSuggestions))
+            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: dbSuggestions))
         }
     }
 
-    func sections(names: [String], list: List, handler: ProviderResult<[Section]> -> ()) {
+    func sections(_ names: [String], list: List, handler: @escaping (ProviderResult<[Section]>) -> ()) {
         DBProviders.sectionProvider.loadSections(names, list: list) {dbSections in
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSections))
+            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: dbSections))
         }
     }
     
-    func mergeOrCreateSection(sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, _ handler: ProviderResult<Section> -> Void) {
+    func mergeOrCreateSection(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, _ handler: @escaping (ProviderResult<Section>) -> Void) {
         
         // load section or create one (there's no more section data in the input besides of the name, so there's nothing to update).
         loadSection(sectionName, list: list) {result in
@@ -165,28 +165,28 @@ class SectionProviderImpl: SectionProvider {
              if let existingSectionMaybe = result.sucessResult {
                 if let existingSection = existingSectionMaybe {
                     let updatedSection = existingSection.copy(color: sectionColor)
-                    handler(ProviderResult(status: .Success, sucessResult: updatedSection))
+                    handler(ProviderResult(status: .success, sucessResult: updatedSection))
                     
                 } else {
                     if let order = possibleNewOrder {
-                        let section = Section(uuid: NSUUID().UUIDString, name: sectionName, color: sectionColor, list: list, order: order)
-                        handler(ProviderResult(status: .Success, sucessResult: section))
+                        let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: order)
+                        handler(ProviderResult(status: .success, sucessResult: section))
                         
                     } else { // no order known in advance - fetch listItems to count how many sections, order at the end
                         
-                        Providers.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: ProviderFetchModus.First) {result in
+                        Providers.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: ProviderFetchModus.first) {result in
                             
                             if let listItems = result.sucessResult {
                                 let order = listItems.sectionCount(status)
                                 
-                                let section = Section(uuid: NSUUID().UUIDString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order))
+                                let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order))
                                 
                                 QL1("Section: \(sectionName) doesn't exist, will create a new one. New uuid: \(section.uuid). List uuid: \(list.uuid)")
-                                handler(ProviderResult(status: .Success, sucessResult: section))
+                                handler(ProviderResult(status: .success, sucessResult: section))
                                 
                             } else {
                                 print("Error: loading section: \(result.status)")
-                                handler(ProviderResult(status: .DatabaseUnknown))
+                                handler(ProviderResult(status: .databaseUnknown))
                             }
                         }
                     }
@@ -194,7 +194,7 @@ class SectionProviderImpl: SectionProvider {
                 
             } else {
                 print("Error: loading section: \(result.status)")
-                handler(ProviderResult(status: .DatabaseUnknown))
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }

@@ -9,8 +9,8 @@
 import UIKit
 
 protocol QuantityCellDelegate: class {
-    func onPlusTap(cell: QuantityCell, indexPath: NSIndexPath)
-    func onMinusTap(cell: QuantityCell, indexPath: NSIndexPath)
+    func onPlusTap(_ cell: QuantityCell, indexPath: IndexPath)
+    func onMinusTap(_ cell: QuantityCell, indexPath: IndexPath)
 }
 
 class QuantityCell: UITableViewCell {
@@ -18,7 +18,7 @@ class QuantityCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
     
-    var indexPath: NSIndexPath?
+    var indexPath: IndexPath?
     
     weak var delegate: QuantityCellDelegate?
     
@@ -43,9 +43,9 @@ class QuantityCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        selectionStyle = .None
+        selectionStyle = .none
         
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
     }
     
     @IBAction func onPlusTap() {

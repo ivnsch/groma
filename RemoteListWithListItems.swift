@@ -16,10 +16,10 @@ struct RemoteListWithListItems: ResponseObjectSerializable, ResponseCollectionSe
     
     init?(representation: AnyObject) {
         guard
-            let listObj = representation.valueForKeyPath("list") as? [AnyObject],
-            let list = RemoteList(representation: listObj),
-            let listItemsObjs = representation.valueForKeyPath("listItems") as? [AnyObject],
-            let listItems = RemoteListItemsWithDependenciesNoList(representation: listItemsObjs)
+            let listObj = representation.value(forKeyPath: "list") as? [AnyObject],
+            let list = RemoteList(representation: listObj as AnyObject),
+            let listItemsObjs = representation.value(forKeyPath: "listItems") as? [AnyObject],
+            let listItems = RemoteListItemsWithDependenciesNoList(representation: listItemsObjs as AnyObject)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -28,9 +28,9 @@ struct RemoteListWithListItems: ResponseObjectSerializable, ResponseCollectionSe
         self.listItems = listItems
     }
     
-    static func collection(representation: AnyObject) -> [RemoteListWithListItems]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteListWithListItems]? {
         var listItems = [RemoteListWithListItems]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let listItem = RemoteListWithListItems(representation: obj) {
                 listItems.append(listItem)
             } else {
@@ -42,6 +42,6 @@ struct RemoteListWithListItems: ResponseObjectSerializable, ResponseCollectionSe
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) list: \(list), listItems: [\(listItems)]}"
+        return "{\(type(of: self)) list: \(list), listItems: [\(listItems)]}"
     }
 }

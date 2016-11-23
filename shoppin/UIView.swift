@@ -10,80 +10,80 @@ import UIKit
 
 extension UIView {
    
-    func centerInParent(constantX:Float = 0, constantY:Float = 0) {
-        self.centerXInParent(constantX)
-        self.centerYInParent(constantY)
+    func centerInParent(_ constantX:Float = 0, constantY:Float = 0) {
+        _ = centerXInParent(constantX)
+        _ = centerYInParent(constantY)
     }
     
-    func centerYInView(view: UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: CGFloat(constant))
+    func centerYInView(_ view: UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: CGFloat(constant))
         view.addConstraint(c)
         return c
     }
 
-    func centerXInView(view: UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: CGFloat(constant))
+    func centerXInView(_ view: UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: CGFloat(constant))
         view.addConstraint(c)
         return c
     }
     
-    func centerYInParent(constant:Float = 0) -> NSLayoutConstraint {
+    func centerYInParent(_ constant:Float = 0) -> NSLayoutConstraint {
         return centerYInView(superview!, constant: constant)
     }
     
-    func centerXInParent(constant:Float = 0) -> NSLayoutConstraint {
+    func centerXInParent(_ constant:Float = 0) -> NSLayoutConstraint {
         return centerXInView(superview!, constant: constant)
     }
     
-    func positionBelowView(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: CGFloat(constant))
+    func positionBelowView(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
     
-    func alignTop(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: CGFloat(constant))
+    func alignTop(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
 
-    func alignLeft(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: CGFloat(constant))
+    func alignLeft(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.left, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
     
-    func alignRight(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Right, multiplier: 1, constant: CGFloat(constant))
+    func alignRight(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.right, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
     
-    func alignBottom(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: CGFloat(constant))
+    func alignBottom(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)
         return c
     }
     
-    func widthConstraint(width: CGFloat) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: width)
+    func widthConstraint(_ width: CGFloat) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: width)
         self.addConstraint(c)
         return c
     }
     
-    func widthLessThanConstraint(width: CGFloat) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: .Width, relatedBy: .LessThanOrEqual, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: width)
+    func widthLessThanConstraint(_ width: CGFloat) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: .width, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: width)
         self.addConstraint(c)
         return c
     }
     
-    func heightConstraint(height: CGFloat) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: height)
+    func heightConstraint(_ height: CGFloat) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: height)
         self.addConstraint(c)
         return c
     }
     
-    func matchSize(view: UIView) {
+    func matchSize(_ view: UIView) {
         self.superview?.addConstraints([
             NSLayoutConstraint.matchWidth(view: self, otherView: view),
             NSLayoutConstraint.matchHeight(view: self, otherView: view)])
@@ -97,7 +97,7 @@ extension UIView {
         }
     }
 
-    func fillSuperviewWidth(leftConstant: Float = 0, rightConstant: Float = 0) {
+    func fillSuperviewWidth(_ leftConstant: Float = 0, rightConstant: Float = 0) {
         if let superview = superview {
             fillWidth(superview, leftConstant: leftConstant, rightConstant: rightConstant)
         } else {
@@ -113,24 +113,24 @@ extension UIView {
         }
     }
     
-    func fillWidth(view: UIView, leftConstant: Float = 0, rightConstant: Float = 0) {
-        alignLeft(view, constant: leftConstant)
-        alignRight(view, constant: rightConstant)
+    func fillWidth(_ view: UIView, leftConstant: Float = 0, rightConstant: Float = 0) {
+        _ = alignLeft(view, constant: leftConstant)
+        _ = alignRight(view, constant: rightConstant)
     }
     
-    func fillHeight(view: UIView) {
-        alignTop(view)
-        alignBottom(view)
+    func fillHeight(_ view: UIView) {
+        _ = alignTop(view)
+        _ = alignBottom(view)
     }
     
-    func fill(view: UIView) {
-        alignTop(view)
-        alignLeft(view)
-        alignRight(view)
-        alignBottom(view)
+    func fill(_ view: UIView) {
+        _ = alignTop(view)
+        _ = alignLeft(view)
+        _ = alignRight(view)
+        _ = alignBottom(view)
     }
     
-    func addSubviewFill(view: UIView) {
+    func addSubviewFill(_ view: UIView) {
         addSubview(view)
         fill(view)
         layoutIfNeeded()
@@ -140,14 +140,14 @@ extension UIView {
     /**
     Toggles a semi-transparent, blocking progress indicator overlay on this view
     */
-    func defaultProgressVisible(visible: Bool = false) {
+    func defaultProgressVisible(_ visible: Bool = false) {
         if visible {
             if self.viewWithTag(ViewTags.GlobalActivityIndicator) == nil {
                 let view = UIView(frame: self.bounds)
-                view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
+                view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
                 view.tag = ViewTags.GlobalActivityIndicator
                 
-                let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+                let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.white)
                 let size: CGFloat = 50
                 let sizeH: CGFloat = size/2
                 activityIndicator.frame = CGRect(x: self.frame.width / 2 - sizeH, y: self.frame.height / 2 - sizeH, width: size, height: size)
@@ -155,7 +155,7 @@ extension UIView {
                 
                 view.addSubview(activityIndicator)
                 self.addSubview(view)
-                self.bringSubviewToFront(view)
+                self.bringSubview(toFront: view)
             }
         } else {
             self.viewWithTag(ViewTags.GlobalActivityIndicator)?.removeFromSuperview()
@@ -169,78 +169,78 @@ extension UIView {
     }
     
     // src http://stackoverflow.com/a/32042439/930450
-    class func imageWithView(view: UIView) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0)
-        view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
+    class func imageWithView(_ view: UIView) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, 0.0)
+        view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
         let img = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return img
+        return img!
     }
     
-    func setHiddenAnimated(hidden: Bool) {
-        if hidden != self.hidden {
-            self.hidden = false
+    func setHiddenAnimated(_ hidden: Bool) {
+        if hidden != self.isHidden {
+            self.isHidden = false
             alpha = hidden ? 1 : 0
-            UIView.animateWithDuration(0.3, animations: {[weak self] in
+            UIView.animate(withDuration: 0.3, animations: {[weak self] in
                 self?.alpha = hidden ? 0 : 1
-                }) {[weak self] complete in
-                    self?.hidden = hidden
-            }
+                }, completion: {[weak self] complete in
+                    self?.isHidden = hidden
+            }) 
         }
     }
     
-    func rotate(degrees: Double) {
-        transform = CGAffineTransformMakeRotation(CGFloat(degrees * M_PI / Double(180)))
+    func rotate(_ degrees: Double) {
+        transform = CGAffineTransform(rotationAngle: CGFloat(degrees * M_PI / Double(180)))
     }
     
     // MARK: - Borders
     // Add borders using layers. Src: http://stackoverflow.com/a/30764398/930450
     
-    func addTopBorderWithColor(color: UIColor, width: CGFloat) {
+    func addTopBorderWithColor(_ color: UIColor, width: CGFloat) {
         let border = CALayer()
-        border.backgroundColor = color.CGColor
-        border.frame = CGRectMake(0, 0, self.frame.size.width, width)
+        border.backgroundColor = color.cgColor
+        border.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: width)
         self.layer.addSublayer(border)
     }
     
-    func addRightBorderWithColor(color: UIColor, width: CGFloat) {
+    func addRightBorderWithColor(_ color: UIColor, width: CGFloat) {
         let border = CALayer()
-        border.backgroundColor = color.CGColor
-        border.frame = CGRectMake(self.frame.size.width - width, 0, width, self.frame.size.height)
+        border.backgroundColor = color.cgColor
+        border.frame = CGRect(x: self.frame.size.width - width, y: 0, width: width, height: self.frame.size.height)
         self.layer.addSublayer(border)
     }
     
-    func addBottomBorderWithColor(color: UIColor, width: CGFloat) {
+    func addBottomBorderWithColor(_ color: UIColor, width: CGFloat) {
         let border = CALayer()
-        border.backgroundColor = color.CGColor
-        border.frame = CGRectMake(0, self.bounds.size.height - width, self.bounds.size.width, width)
+        border.backgroundColor = color.cgColor
+        border.frame = CGRect(x: 0, y: self.bounds.size.height - width, width: self.bounds.size.width, height: width)
         self.layer.addSublayer(border)
     }
     
-    func addLeftBorderWithColor(color: UIColor, width: CGFloat) {
+    func addLeftBorderWithColor(_ color: UIColor, width: CGFloat) {
         let border = CALayer()
-        border.backgroundColor = color.CGColor
-        border.frame = CGRectMake(0, 0, width, self.frame.size.height)
+        border.backgroundColor = color.cgColor
+        border.frame = CGRect(x: 0, y: 0, width: width, height: self.frame.size.height)
         self.layer.addSublayer(border)
     }
     
-    func addBorderWithYOffset(color: UIColor, width: CGFloat, offset: CGFloat) {
+    func addBorderWithYOffset(_ color: UIColor, width: CGFloat, offset: CGFloat) {
         let border = CALayer()
-        border.backgroundColor = color.CGColor
+        border.backgroundColor = color.cgColor
         
         // FIXME! hack - self.bounds.size.width. Quick fix for full width in cells, in iPhone6+ the border not complete - because file in IB is for iPhone6 screen size and when we retrieve bounds the final size is not calculated yet.
-        border.frame = CGRectMake(0, offset - width, DimensionsManager.fullWidth, width)
+        border.frame = CGRect(x: 0, y: offset - width, width: DimensionsManager.fullWidth, height: width)
 //        border.frame = CGRectMake(0, offset - width, self.bounds.size.width, width)
         
         self.layer.addSublayer(border)
     }
     
     func scaleUpAndDown() {
-        UIView.animateWithDuration(0.15, animations: {[weak self] in
-            self?.transform = CGAffineTransformMakeScale(1.2, 1.2)
+        UIView.animate(withDuration: 0.15, animations: {[weak self] in
+            self?.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         }, completion: {[weak self] finished in
-            UIView.animateWithDuration(0.15, animations: {[weak self] in
-                self?.transform = CGAffineTransformMakeScale(1, 1)
+            UIView.animate(withDuration: 0.15, animations: {[weak self] in
+                self?.transform = CGAffineTransform(scaleX: 1, y: 1)
             })
         })
     }

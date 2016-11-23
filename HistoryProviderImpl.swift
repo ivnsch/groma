@@ -14,49 +14,49 @@ class HistoryProviderImpl: HistoryProvider {
     let dbProvider = RealmHistoryProvider()
     let remoteProvider = RemoteHistoryProvider()
 
-    func historyItems(range: NSRange, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> ()) {
+    func historyItems(_ range: NSRange, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ()) {
 
         self.dbProvider.loadHistoryItems(range, inventory: inventory) {dbHistoryItems in
-            handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
+            handler(ProviderResult(status: .success, sucessResult: dbHistoryItems))
             
             // no background update - the history is too long to be fetched each time, and paginated update is too complicated
             // so we update the history only on sync (and later on push notification)
         }
     }
     
-    func historyItems(startDate: Int64, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> ()) {
+    func historyItems(_ startDate: Int64, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ()) {
         self.dbProvider.loadHistoryItems(startDate: startDate, inventory: inventory) {dbHistoryItems in
-            handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
+            handler(ProviderResult(status: .success, sucessResult: dbHistoryItems))
         }
     }
     
-    func historyItems(monthYear: MonthYear, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> Void) {
+    func historyItems(_ monthYear: MonthYear, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> Void) {
         dbProvider.loadHistoryItems(monthYear, inventory: inventory) {dbHistoryItems in
-            handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
+            handler(ProviderResult(status: .success, sucessResult: dbHistoryItems))
         }
     }
     
-    func historyItemsGroups(range: NSRange, inventory: Inventory, _ handler: ProviderResult<[HistoryItemGroup]> -> ()) {
+    func historyItemsGroups(_ range: NSRange, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItemGroup]>) -> ()) {
         dbProvider.loadHistoryItemsGroups(range, inventory: inventory) {groups in
-            handler(ProviderResult(status: .Success, sucessResult: groups))
+            handler(ProviderResult(status: .success, sucessResult: groups))
         }
     }
     
-    func historyItem(uuid: String, handler: ProviderResult<HistoryItem?> -> Void) {
+    func historyItem(_ uuid: String, handler: @escaping (ProviderResult<HistoryItem?>) -> Void) {
         dbProvider.loadHistoryItem(uuid) {historyItemMaybe in
-            handler(ProviderResult(status: .Success, sucessResult: historyItemMaybe))
+            handler(ProviderResult(status: .success, sucessResult: historyItemMaybe))
         }
     }
     
-    func removeHistoryItem(historyItem: HistoryItem, _ handler: ProviderResult<Any> -> ()) {
+    func removeHistoryItem(_ historyItem: HistoryItem, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         removeHistoryItem(historyItem.uuid, remote: true, handler)
     }
     
-    func removeHistoryItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func removeHistoryItem(_ uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         // remote -> markForSync: if it's a call that's meant to be synced with the server, it means we want to add tombstones.
         dbProvider.removeHistoryItem(uuid, markForSync: remote) {[weak self] success in
             if success {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 if remote {
                     self?.remoteProvider.removeHistoryItem(uuid) {result in
                         if result.success {
@@ -76,18 +76,18 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
-    func removeAllHistoryItems(handler: ProviderResult<Any> -> Void) {
+    func removeAllHistoryItems(_ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbProvider.removeAllHistoryItems(true) {success in
-            handler(ProviderResult(status: success ? .Success : .DatabaseUnknown))
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
             
             // TODO!!!! server
         }
     }
     
-    func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func removeHistoryItemsGroup(_ historyItemGroup: HistoryItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbProvider.removeHistoryItemsGroup(historyItemGroup, markForSync: true) {[weak self] success in
             if success {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 if remote {
                     self?.remoteProvider.removeHistoryItems(historyItemGroup) {result in
                         if result.success {
@@ -107,51 +107,51 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
-    func removeHistoryItemGroupForHistoryItemLocal(uuid: String, _ handler: ProviderResult<Any> -> Void) {
+    func removeHistoryItemGroupForHistoryItemLocal(_ uuid: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         historyItem(uuid) {[weak self] result in
             if let historyItemMaybe = result.sucessResult {
                 if let historyItem = historyItemMaybe {
                     self?.dbProvider.removeHistoryItemsForGroupDate(historyItem.addedDate, inventoryUuid: historyItem.inventory.uuid) {removeSuccess in
                         if removeSuccess {
-                            handler(ProviderResult(status: .Success))
+                            handler(ProviderResult(status: .success))
                         } else {
                             QL4("Couldn't remove local history group items for iem: \(uuid)")
-                            handler(ProviderResult(status: .Unknown))
+                            handler(ProviderResult(status: .unknown))
                         }
                     }
                 } else {
                     QL2("History item to remove group was not found: \(uuid)")
-                    handler(ProviderResult(status: .Success))
+                    handler(ProviderResult(status: .success))
                 }
             } else {
                 QL2("History item to remove group was not found: \(uuid) (second optional?)") // TODO does unwrapping the optional twice make sense?
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
             }
         }
     }
 
-    func addHistoryItems(historyItems: [HistoryItem], _ handler: ProviderResult<Any> -> Void) {
+    func addHistoryItems(_ historyItems: [HistoryItem], _ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbProvider.addHistoryItems(historyItems) {success in
-            handler(ProviderResult(status: success ? .Success : .DatabaseUnknown))
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
         }
     }
     
-    func oldestDate(inventory: Inventory, handler: ProviderResult<NSDate> -> Void) {
+    func oldestDate(_ inventory: Inventory, handler: @escaping (ProviderResult<Date>) -> Void) {
         DBProviders.historyProvider.oldestDate(inventory) {oldestDateMaybe in
             if let oldestDate = oldestDateMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: oldestDate))
+                handler(ProviderResult(status: .success, sucessResult: oldestDate))
             } else {
-                handler(ProviderResult(status: .NotFound))
+                handler(ProviderResult(status: .notFound))
             }
         }
     }
     
-    func removeHistoryItemsForMonthYear(monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: ProviderResult<Any> -> Void) {
+    func removeHistoryItemsForMonthYear(_ monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void) {
         
         DBProviders.historyProvider.removeHistoryItems(monthYear, inventory: inventory, markForSync: remote) {[weak self] removedHistoryItemsUuidsMaybe in
             
             if let removedHistoryItemsUuids = removedHistoryItemsUuidsMaybe {
-                handler(ProviderResult(status: .Success))
+                handler(ProviderResult(status: .success))
                 if remote {
                     self?.remoteProvider.removeHistoryItems(removedHistoryItemsUuids) {result in
                         if result.success {
@@ -172,11 +172,11 @@ class HistoryProviderImpl: HistoryProvider {
     }
     
     // For now local only
-    func removeHistoryItemsOlderThan(date: NSDate, handler: ProviderResult<Bool> -> Void) {
+    func removeHistoryItemsOlderThan(_ date: Date, handler: @escaping (ProviderResult<Bool>) -> Void) {
         DBProviders.historyProvider.removeHistoryItemsOlderThan(date) {removedSomething in
             if let removedSomething = removedSomething {
                 QL2("Removed history items older than: \(date), removed something: \(removedSomething)")
-                handler(ProviderResult(status: .Success, sucessResult: removedSomething))
+                handler(ProviderResult(status: .success, sucessResult: removedSomething))
             } else {
                 QL4("Coult not remove history items older than: \(date)")
             }

@@ -10,7 +10,7 @@ import Foundation
 
 class Paginator {
     let pageSize: Int
-    private var currentIndex = 0
+    fileprivate var currentIndex = 0
     
     var reachedEnd = false
     
@@ -30,7 +30,7 @@ class Paginator {
         self.currentIndex += 1
     }
     
-    func update(resultCount: Int) {
+    func update(_ resultCount: Int) {
         if resultCount < pageSize || resultCount == 0 {
             reachedEnd = true
         } else {

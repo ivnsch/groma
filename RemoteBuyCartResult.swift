@@ -16,10 +16,10 @@ struct RemoteBuyCartResult: ResponseObjectSerializable, CustomDebugStringConvert
     
     init?(representation: AnyObject) {
         guard
-            let itemsObj = representation.valueForKeyPath("listItems"),
+            let itemsObj = representation.value(forKeyPath: "listItems") as? [AnyObject],
             let items = RemoteSwitchAllListItemResult.collection(itemsObj),
-            let inventoryAndHistoryItemsObj = representation.valueForKeyPath("inventoryAndHistoryItems"),
-            let inventoryAndHistoryItems = RemoteInventoryItemsWithHistoryAndDependencies(representation: inventoryAndHistoryItemsObj)
+            let inventoryAndHistoryItemsObj = representation.value(forKeyPath: "inventoryAndHistoryItems"),
+            let inventoryAndHistoryItems = RemoteInventoryItemsWithHistoryAndDependencies(representation: inventoryAndHistoryItemsObj as AnyObject)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -29,7 +29,7 @@ struct RemoteBuyCartResult: ResponseObjectSerializable, CustomDebugStringConvert
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) items: \(switchedItems), inventoryAndHistoryItems: [\(inventoryAndHistoryItems)]}"
+        return "{\(type(of: self)) items: \(switchedItems), inventoryAndHistoryItems: [\(inventoryAndHistoryItems)]}"
     }
 }
 

@@ -36,10 +36,10 @@ private class Keys {
 
 class MyWebSocket: WebSocketDelegate {
     
-    private var socket: WebSocket?
+    fileprivate var socket: WebSocket?
     
-    private var reconnectDelayK: Double = 1
-    private var maxReconnectDelay: Double = 30 // seconds
+    fileprivate var reconnectDelayK: Double = 1
+    fileprivate var maxReconnectDelay: Double = 30 // seconds
     
     var isConnected: Bool {
         return socket?.isConnected ?? false
@@ -49,7 +49,7 @@ class MyWebSocket: WebSocketDelegate {
         if ConnectionProvider.connected {
 
             if let token = AccessTokenHelper.loadToken() {
-                socket = WebSocket(url: NSURL(string: "ws://\(Urls.hostIPPort)/ws")!)
+                socket = WebSocket(url: URL(string: "ws://\(Urls.hostIPPort)/ws")!)
                 socket?.delegate = self
                 socket?.headers["X-Auth-Token"] = token
                 socket?.headers["Content-Type"] = "application/json"
@@ -75,11 +75,11 @@ class MyWebSocket: WebSocketDelegate {
         }
     }
     
-    private func sendMaybeMsg(msg: String?) {
+    fileprivate func sendMaybeMsg(_ msg: String?) {
         if let msg = msg {
             if isConnected {
                 QL1("Websocket: Sending msg: \(msg)")
-                socket?.writeString(msg)
+                socket?.write(string: msg)
             } else {
                 QL3("Websocket: Trying to send a message: \(msg), but socket is not connected or initialised: \(socket?.isConnected)")
             }
@@ -88,12 +88,12 @@ class MyWebSocket: WebSocketDelegate {
         }
     }
     
-    private func msgDict(action: String, payload: [String: AnyObject]) -> [String: AnyObject] {
-        return [Keys.action: action, Keys.data: payload]
+    fileprivate func msgDict(_ action: String, payload: [String: AnyObject]) -> [String: AnyObject] {
+        return [Keys.action: action as AnyObject, Keys.data: payload as AnyObject]
     }
     
-    private func subscribeDict(listsUuids: [String], inventoriesUuids: [String], deviceId: String) -> [String: AnyObject] {
-        let payload: [String: AnyObject] = [Keys.lists: listsUuids, Keys.inventories: inventoriesUuids, Keys.deviceId: deviceId]
+    fileprivate func subscribeDict(_ listsUuids: [String], inventoriesUuids: [String], deviceId: String) -> [String: AnyObject] {
+        let payload: [String: AnyObject] = [Keys.lists: listsUuids as AnyObject, Keys.inventories: inventoriesUuids as AnyObject, Keys.deviceId: deviceId as AnyObject]
         return msgDict(Keys.subscribe, payload: payload)
     }
     
@@ -103,36 +103,36 @@ class MyWebSocket: WebSocketDelegate {
 //        return msgDict(Keys.unsubscribe, payload: payload)
 //    }
 
-    private func unsubscribeDict(deviceId: String) -> [String: AnyObject] {
-        let payload: [String: AnyObject] = [Keys.deviceId: deviceId, Keys.fooParam: ""]
+    fileprivate func unsubscribeDict(_ deviceId: String) -> [String: AnyObject] {
+        let payload: [String: AnyObject] = [Keys.deviceId: deviceId as AnyObject, Keys.fooParam: "" as AnyObject]
         return msgDict(Keys.unsubscribe, payload: payload)
     }
     
-    private func subscribeMsg(listsUuids: [String], inventoriesUuids: [String], deviceId: String) -> String? {
+    fileprivate func subscribeMsg(_ listsUuids: [String], inventoriesUuids: [String], deviceId: String) -> String? {
         let dict = subscribeDict(listsUuids, inventoriesUuids: inventoriesUuids, deviceId: deviceId)
         return toMsgStr(dict)
     }
     
-    private func unsubscribeMsg(deviceId: String) -> String? {
+    fileprivate func unsubscribeMsg(_ deviceId: String) -> String? {
         let dict = unsubscribeDict(deviceId)
         return toMsgStr(dict)
     }
     
-    private func toMsgStr(dict: [String: AnyObject]) -> String? {
+    fileprivate func toMsgStr(_ dict: [String: AnyObject]) -> String? {
         do {
-            let data = try NSJSONSerialization.dataWithJSONObject(dict, options: NSJSONWritingOptions())
-            return NSString(data: data, encoding: NSUTF8StringEncoding) as? String
+            let data = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions())
+            return NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
         } catch let e as NSError {
             QL4("Error serializing json: \(e). dict: \(dict)")
             return nil
         }
     }
     
-    private var websocketDeviceId: String {
+    fileprivate var websocketDeviceId: String {
         if let websocketUuid: String = PreferencesManager.loadPreference(PreferencesManagerKey.websocketUuid) {
             return websocketUuid
         } else {
-            let websocketUuid: String = NSUUID().UUIDString
+            let websocketUuid: String = UUID().uuidString
             PreferencesManager.savePreference(PreferencesManagerKey.websocketUuid, value: NSString(string: websocketUuid))
             return websocketUuid
         }
@@ -210,14 +210,14 @@ class MyWebSocket: WebSocketDelegate {
         }
     }
     
-    private func tryReconnectIfLoggedIn() {
+    fileprivate func tryReconnectIfLoggedIn() {
         if Providers.userProvider.hasLoginToken {
             notifyConnected(false)
             tryReconnectAndIncrementDelay()
         }
     }
 
-    private func tryReconnectAndIncrementDelay() {
+    fileprivate func tryReconnectAndIncrementDelay() {
         
         /** 
          Calculate delays using exponential backoff algorithm
@@ -245,11 +245,11 @@ class MyWebSocket: WebSocketDelegate {
         }
     }
     
-    private func notifyConnected(connected: Bool) {
-        NSNotificationCenter.defaultCenter().postNotificationName(WSNotificationName.Connection.rawValue, object: nil, userInfo: ["value": connected])
+    fileprivate func notifyConnected(_ connected: Bool) {
+        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: WSNotificationName.Connection.rawValue), object: nil, userInfo: ["value": connected])
     }
     
-    private func connectAfterDelay(delaySecs: Double) {
+    fileprivate func connectAfterDelay(_ delaySecs: Double) {
         delay(delaySecs) {[weak self] in
             
             guard let weakSelf = self else {return}
@@ -262,7 +262,7 @@ class MyWebSocket: WebSocketDelegate {
         }
     }
     
-    private func onSubscribed() {
+    fileprivate func onSubscribed() {
         notifyConnected(true)
         reconnectDelayK = 1
     }
@@ -270,9 +270,9 @@ class MyWebSocket: WebSocketDelegate {
     func websocketDidReceiveMessage(socket: WebSocket, text: String) {
         QL1("Websocket: Received text: \(text)")
 
-        if let data = (text as NSString).dataUsingEncoding(NSUTF8StringEncoding) {
+        if let data = (text as NSString).data(using: String.Encoding.utf8.rawValue) {
             do {
-                let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions())
+                let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions())
                 if let dict =  json as? Dictionary<String, AnyObject> {
                     
                     // TODO unsubscribe ack - do we need this, if yes implement (this snippet is from old code when parsing was done in this class)
@@ -293,7 +293,7 @@ class MyWebSocket: WebSocketDelegate {
                         
                     } else {
                         // If the dictionary has no action key we expected it to be a standard message
-                        if let verb = dict[Keys.verb] as? String, category = dict[Keys.category] as? String, topic = dict[Keys.topic] as? String, sender = dict[Keys.sender] as? String, data = dict[Keys.message] {
+                        if let verb = dict[Keys.verb] as? String, let category = dict[Keys.category] as? String, let topic = dict[Keys.topic] as? String, let sender = dict[Keys.sender] as? String, let data = dict[Keys.message] {
                             QL1("Websocket: Verb: \(verb), category: \(category), topic: \(topic), sender: \(sender), data: \(data)")
                             MyWebsocketDispatcher.processCategory(category, verb: verb, topic: topic, sender: sender, data: data)
                         } else {
@@ -314,7 +314,7 @@ class MyWebSocket: WebSocketDelegate {
         }
     }
     
-    func websocketDidReceiveData(socket: WebSocket, data: NSData) {
-        QL1("Websocket: Received data: \(data.length)")
+    func websocketDidReceiveData(socket: WebSocket, data: Data) {
+        QL1("Websocket: Received data: \(data.count)")
     }
 }

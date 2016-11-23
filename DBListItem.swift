@@ -79,24 +79,24 @@ class DBListItem: DBSyncable {
     }
     
     // Quantity of listitem in a specific status
-    func quantityForStatus(status: ListItemStatus) -> Int {
+    func quantityForStatus(_ status: ListItemStatus) -> Int {
         switch status {
-        case .Todo: return todoQuantity
-        case .Done: return doneQuantity
-        case .Stash: return stashQuantity
+        case .todo: return todoQuantity
+        case .done: return doneQuantity
+        case .stash: return stashQuantity
         }
     }
 
-    func hasStatus(status: ListItemStatus) -> Bool {
+    func hasStatus(_ status: ListItemStatus) -> Bool {
         return quantityForStatus(status) > 0
     }
     
-    func increment(quantity: ListItemStatusQuantity) {
+    func increment(_ quantity: ListItemStatusQuantity) {
         
         switch quantity.status {
-        case .Todo: todoQuantity += quantity.quantity
-        case .Done: doneQuantity += quantity.quantity
-        case .Stash: stashQuantity += quantity.quantity
+        case .todo: todoQuantity += quantity.quantity
+        case .done: doneQuantity += quantity.quantity
+        case .stash: stashQuantity += quantity.quantity
         }
         
         // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
@@ -114,7 +114,7 @@ class DBListItem: DBSyncable {
         }
     }
     
-    func copy(uuid uuid: String? = nil, product: DBStoreProduct? = nil, section: DBSection? = nil, list: DBList? = nil, note: String? = nil, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> DBListItem {
+    func copy(uuid: String? = nil, product: DBStoreProduct? = nil, section: DBSection? = nil, list: DBList? = nil, note: String? = nil, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> DBListItem {
         return DBListItem(
             uuid: uuid ?? self.uuid,
             product: product ?? self.product,
@@ -136,52 +136,52 @@ class DBListItem: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
 
-    static func createFilterForUuids(uuids: [String]) -> String {
-        let uuidsStr: String = uuids.map{"'\($0)'"}.joinWithSeparator(",")
+    static func createFilterForUuids(_ uuids: [String]) -> String {
+        let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
         return "uuid IN {\(uuidsStr)}"
     }
     
-    static func createFilterList(listUuid: String) -> String {
+    static func createFilterList(_ listUuid: String) -> String {
         return "listOpt.uuid == '\(listUuid)'"
     }
     
-    static func createFilter(list: List, product: Product) -> String {
+    static func createFilter(_ list: List, product: Product) -> String {
         return createFilterUniqueInList(product.name, productBrand: product.brand, list: list)
     }
 
-    static func createFilterUniqueInList(productName: String, productBrand: String, list: List) -> String {
+    static func createFilterUniqueInList(_ productName: String, productBrand: String, list: List) -> String {
         return "\(createFilterList(list.uuid)) AND productOpt.productOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)'"
     }
 
-    static func createFilterUniqueInListNotUuid(productName: String, productBrand: String, notUuid: String, list: List) -> String {
+    static func createFilterUniqueInListNotUuid(_ productName: String, productBrand: String, notUuid: String, list: List) -> String {
         return "\(createFilterList(list.uuid)) AND productOpt.productOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)' AND uuid != '\(notUuid)'"
     }
     
-    static func createFilterWithProducts(productUuids: [String]) -> String {
-        let productUuidsStr: String = productUuids.map{"'\($0)'"}.joinWithSeparator(",")
+    static func createFilterWithProducts(_ productUuids: [String]) -> String {
+        let productUuidsStr: String = productUuids.map{"'\($0)'"}.joined(separator: ",")
         return "productOpt.uuid IN {\(productUuidsStr)}"
     }
     
-    static func createFilterWithProduct(productUuid: String) -> String {
+    static func createFilterWithProduct(_ productUuid: String) -> String {
         return "productOpt.uuid == '\(productUuid)'"
     }
     
-    static func createFilterWithProductName(productName: String) -> String {
+    static func createFilterWithProductName(_ productName: String) -> String {
         return "productOpt.name == '\(productName)'"
     }
 
-    static func createFilterWithSection(sectionUuid: String) -> String {
+    static func createFilterWithSection(_ sectionUuid: String) -> String {
         return "sectionOpt.uuid == '\(sectionUuid)'"
     }
     
     // Finds list items that have the same product names as listItems and are in the same list
     // WARN: Assumes all the list items belong to the same list (list uuid of first list item is used)
-    static func createFilter(listItems: [ListItem]) -> String {
-        let productNamesStr: String = listItems.map{"'\($0.product.product.name)'"}.joinWithSeparator(",")
+    static func createFilter(_ listItems: [ListItem]) -> String {
+        let productNamesStr: String = listItems.map{"'\($0.product.product.name)'"}.joined(separator: ",")
         let listUuid = listItems.first?.list.uuid ?? ""
         return "productOpt.name IN {\(productNamesStr)} AND listOpt.uuid = '\(listUuid)'"
     }
@@ -189,10 +189,10 @@ class DBListItem: DBSyncable {
     // MARK: - CustomDebugStringConvertible
     
     override var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), \(product.product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)}"
+        return "{\(type(of: self)) uuid: \(uuid), \(product.product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)}"
     }
     
-    static func fromDict(dict: [String: AnyObject], section: DBSection, product: DBStoreProduct, list: DBList) -> DBListItem {
+    static func fromDict(_ dict: [String: AnyObject], section: DBSection, product: DBStoreProduct, list: DBList) -> DBListItem {
         let item = DBListItem()
         item.uuid = dict["uuid"]! as! String
         item.section = section
@@ -211,37 +211,37 @@ class DBListItem: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["sectionInput"] = section.toDict()
-        dict["storeProductInput"] = product.toDict()
+        dict["uuid"] = uuid as AnyObject?
+        dict["sectionInput"] = section.toDict() as AnyObject?
+        dict["storeProductInput"] = product.toDict() as AnyObject?
         // TODO fix sync input models
 //        dict["list"] = list.toDict()
-        dict["listUuid"] = list.uuid
-        dict["listName"] = list.name
+        dict["listUuid"] = list.uuid as AnyObject?
+        dict["listName"] = list.name as AnyObject?
         
-        dict["note"] = note
-        dict["todoQuantity"] = todoQuantity
-        dict["todoOrder"] = todoOrder
-        dict["doneQuantity"] = doneQuantity
-        dict["doneOrder"] = doneOrder
-        dict["stashQuantity"] = stashQuantity
-        dict["stashOrder"] = stashOrder
+        dict["note"] = note as AnyObject?
+        dict["todoQuantity"] = todoQuantity as AnyObject?
+        dict["todoOrder"] = todoOrder as AnyObject?
+        dict["doneQuantity"] = doneQuantity as AnyObject?
+        dict["doneOrder"] = doneOrder as AnyObject?
+        dict["stashQuantity"] = stashQuantity as AnyObject?
+        dict["stashOrder"] = stashOrder as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
     }
     
-    static func quantityFieldName(status: ListItemStatus) -> String {
+    static func quantityFieldName(_ status: ListItemStatus) -> String {
         switch status {
-        case .Todo: return "todoQuantity"
-        case .Done: return "doneQuantity"
-        case .Stash: return "stashQuantity"
+        case .todo: return "todoQuantity"
+        case .done: return "doneQuantity"
+        case .stash: return "stashQuantity"
         }
     }
     override static func ignoredProperties() -> [String] {
         return ["list", "section", "product"]
     }
     
-    static func timestampUpdateDict(uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
+    static func timestampUpdateDict(_ uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
         return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

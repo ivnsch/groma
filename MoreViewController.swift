@@ -10,16 +10,16 @@ import UIKit
 import QorumLogs
 
 enum MoreItemType {
-    case History, ManageProduct, User, Settings, Help, Share, Feedback, WatchIntro, About
+    case history, manageProduct, user, settings, help, share, feedback, watchIntro, about
 }
 
 typealias MoreItem = (type: MoreItemType, text: String)
 
 class MoreViewController: UITableViewController {
    
-    private var emailHelper: EmailHelper?
+    fileprivate var emailHelper: EmailHelper?
     
-    private var items: [MoreItem] = []
+    fileprivate var items: [MoreItem] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,29 +27,29 @@ class MoreViewController: UITableViewController {
         styleBackButton()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         items = [
-            MoreItem(type: .History, text: trans("more_history")),
-            MoreItem(type: .ManageProduct, text: trans("more_products")),
-            MoreItem(type: .Settings, text: trans("more_settings")),
-            MoreItem(type: .Help, text: trans("more_help")),
-            MoreItem(type: .Share, text: trans("more_share")),
-            MoreItem(type: .Feedback, text: trans("more_feedback")),
-            MoreItem(type: .WatchIntro, text: trans("more_intro")),
-            MoreItem(type: .About, text: trans("more_about"))
+            MoreItem(type: .history, text: trans("more_history")),
+            MoreItem(type: .manageProduct, text: trans("more_products")),
+            MoreItem(type: .settings, text: trans("more_settings")),
+            MoreItem(type: .help, text: trans("more_help")),
+            MoreItem(type: .share, text: trans("more_share")),
+            MoreItem(type: .feedback, text: trans("more_feedback")),
+            MoreItem(type: .watchIntro, text: trans("more_intro")),
+            MoreItem(type: .about, text: trans("more_about"))
         ]
         
         if CountryHelper.isInServerSupportedCountry() {
-            items.insert((type: .User, text: trans("more_user")), atIndex: 2)
+            items.insert((type: .user, text: trans("more_user")), at: 2)
         }
         
         tableView.reloadData()
     }
     
-    private func styleBackButton() {
-        let backBtn = UIImage(named: "tb_back")?.imageWithRenderingMode(.AlwaysOriginal)
+    fileprivate func styleBackButton() {
+        let backBtn = UIImage(named: "tb_back")?.withRenderingMode(.alwaysOriginal)
         navigationController?.navigationBar.backIndicatorImage = backBtn
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = backBtn
         let backItem = UIBarButtonItem()
@@ -57,78 +57,78 @@ class MoreViewController: UITableViewController {
         navigationItem.backBarButtonItem = backItem
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let item = items[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = items[(indexPath as NSIndexPath).row]
         
         switch item.type {
             
-        case .History:
+        case .history:
             let controller = UIStoryboard.historyViewController()
             navigationController?.pushViewController(controller, animated: true)
             
-        case .ManageProduct:
+        case .manageProduct:
             let controller = UIStoryboard.manageProductsViewController()
             navigationController?.pushViewController(controller, animated: true)
             
-        case .User:
+        case .user:
             let controller = UIStoryboard.userTabItemViewController()
             navigationController?.pushViewController(controller, animated: true)
 
-        case .Settings:
+        case .settings:
             let controller = UIStoryboard.settingsViewController()
             navigationController?.pushViewController(controller, animated: true)
             
-        case .Help:
+        case .help:
             let controller = UIStoryboard.helpViewController()
             navigationController?.pushViewController(controller, animated: true)
             
-        case .Feedback:
+        case .feedback:
             emailHelper = EmailHelper(controller: self)
             emailHelper?.showEmail()
             
-        case .Share:
-            share(trans("sharing_message"), sharingImage: nil, sharingURL: NSURL(string: "https://itunes.apple.com/app/groma/id1121689899?&mt=8"))
+        case .share:
+            share(trans("sharing_message"), sharingImage: nil, sharingURL: URL(string: "https://itunes.apple.com/app/groma/id1121689899?&mt=8"))
             // Initially implemented this, which contains facebook sharing using its SDK. It seems with the default share we achieve the same functionality (Facebook seems to not allow to add title and description to links to the app store, which is what we want to link to, see https://developers.facebook.com/docs/sharing/ios - this would have been the only reason to use the SDK). Letting it commented just in case.
 //            let controller = UIStoryboard.shareAppViewController()
 //            navigationController?.setNavigationBarHidden(true, animated: false)
 //            navigationController?.pushViewController(controller, animated: true)
             
-        case .WatchIntro:
+        case .watchIntro:
             let controller = UIStoryboard.introViewController()
-            controller.mode = .More
+            controller.mode = .more
             navigationController?.pushViewController(controller, animated: true)
             
-        case .About:
+        case .about:
             let controller = UIStoryboard.aboutViewController()
             navigationController?.pushViewController(controller, animated: true)
         }
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return DimensionsManager.defaultCellHeight
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("moreCell", forIndexPath: indexPath) as! MoreCell
-        let item = items[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "moreCell", for: indexPath) as! MoreCell
+        let item = items[(indexPath as NSIndexPath).row]
         cell.moreItem = item
         return cell
     }
     
-    func share(sharingText: String?, sharingImage: UIImage?, sharingURL: NSURL?) {
+    func share(_ sharingText: String?, sharingImage: UIImage?, sharingURL: URL?) {
         var sharingItems = [AnyObject]()
         if let text = sharingText {
-            sharingItems.append(text)
+            sharingItems.append(text as AnyObject)
         }
         if let image = sharingImage {
             sharingItems.append(image)
         }
         if let url = sharingURL {
-            sharingItems.append(url)
+            sharingItems.append(url as AnyObject)
         }
         
         view.defaultProgressVisible(true)
@@ -139,7 +139,7 @@ class MoreViewController: UITableViewController {
             return controller
         }) {[weak self] (controller: UIViewController) in
             self?.view.defaultProgressVisible(false)
-            self?.presentViewController(controller, animated: true, completion: nil)
+            self?.present(controller, animated: true, completion: nil)
         }
     }
     

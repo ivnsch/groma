@@ -9,7 +9,7 @@
 import Foundation
 
 enum HelpItemType {
-    case Normal, Troubleshooting
+    case normal, troubleshooting
 }
 
 // Help screen content items
@@ -19,7 +19,7 @@ class HelpItem {
     let text: String
     let type: HelpItemType
     
-    init(title: String, text: String, type: HelpItemType = .Normal) {
+    init(title: String, text: String, type: HelpItemType = .normal) {
         self.title = title
         self.text = text
         self.type = type

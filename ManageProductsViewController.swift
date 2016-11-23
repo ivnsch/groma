@@ -23,26 +23,26 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     @IBOutlet weak var searchBar: UITextField!
 
-    private let paginator = Paginator(pageSize: 20)
-    private var loadingPage: Bool = false
+    fileprivate let paginator = Paginator(pageSize: 20)
+    fileprivate var loadingPage: Bool = false
     
-    private var searchText: String = "" {
+    fileprivate var searchText: String = "" {
         didSet {
             clearAndLoadFirstPage()
         }
     }
     
-    private var filteredProducts: [ItemWithCellAttributes<Product>] = [] {
+    fileprivate var filteredProducts: [ItemWithCellAttributes<Product>] = [] {
         didSet {
             tableView.reloadData()
         }
     }
     
-    var sortBy: ProductSortBy = .Fav {
+    var sortBy: ProductSortBy = .fav {
         didSet {
             if sortBy != oldValue {
                 if let option = sortByOption(sortBy) {
-                    sortByButton.setTitle(option.key, forState: .Normal)
+                    sortByButton.setTitle(option.key, for: UIControlState())
                 } else {
                     QL3("No option for \(sortBy)")
                 }
@@ -51,18 +51,18 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     @IBOutlet weak var sortByButton: UIButton!
-    private var sortByPopup: CMPopTipView?
-    private let sortByOptions: [(value: ProductSortBy, key: String)] = [
-        (.Fav, trans("sort_by_usage")), (.Alphabetic, trans("sort_by_alphabetic"))
+    fileprivate var sortByPopup: CMPopTipView?
+    fileprivate let sortByOptions: [(value: ProductSortBy, key: String)] = [
+        (.fav, trans("sort_by_usage")), (.alphabetic, trans("sort_by_alphabetic"))
     ]
     
-    private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
-    private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
-    private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
+    fileprivate let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .toggle, alpha: 0.05, rotation: 0, xRight: 20)
+    fileprivate let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .toggle, alpha: 1, rotation: 0, xRight: 20)
+    fileprivate let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
     
-    private var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
+    fileprivate var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         clearAndLoadFirstPage()
@@ -74,7 +74,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         loadPossibleNextPage()
     }
     
-    func sortByOption(sortBy: ProductSortBy) -> (value: ProductSortBy, key: String)? {
+    func sortByOption(_ sortBy: ProductSortBy) -> (value: ProductSortBy, key: String)? {
         return sortByOptions.findFirst{$0.value == sortBy}
     }
     
@@ -87,9 +87,9 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         topQuickAddControllerManager = initTopQuickAddControllerManager()
 
-        initNavBar([.Edit])
+        initNavBar([.edit])
         
-        searchBar.addTarget(self, action: #selector(ManageProductsViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
+        searchBar.addTarget(self, action: #selector(ManageProductsViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
 
         loadPossibleNextPage()
         
@@ -102,42 +102,42 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         recognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(recognizer)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ManageProductsViewController.onWebsocketProduct(_:)), name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ManageProductsViewController.onWebsocketProductCategory(_:)), name: WSNotificationName.ProductCategory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ManageProductsViewController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
+        NotificationCenter.default.addObserver(self, selector: #selector(ManageProductsViewController.onWebsocketProduct(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Product.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ManageProductsViewController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ManageProductsViewController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)        
     }
     
-    private func layout() {
+    fileprivate func layout() {
         searchBoxHeightConstraint.constant = DimensionsManager.searchBarHeight
     }
     
     deinit {
         QL1("Deinit manage products controller")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    func handleTap(recognizer: UITapGestureRecognizer) {
+    func handleTap(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
     
-    func onEditTap(sender: UIBarButtonItem) {
+    func onEditTap(_ sender: UIBarButtonItem) {
         toggleEditing()
     }
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
-    private func initNavBar(actions: [UIBarButtonSystemItem]) {
+    fileprivate func initNavBar(_ actions: [UIBarButtonSystemItem]) {
         navigationItem.title = trans("title_products")
         
         var buttons: [UIBarButtonItem] = []
         
         for action in actions {
             switch action {
-            case .Edit:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: #selector(ManageProductsViewController.onEditTap(_:)))
+            case .edit:
+                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .plain, target: self, action: #selector(ManageProductsViewController.onEditTap(_:)))
                 buttons.append(button)
             default: break
             }
@@ -145,13 +145,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         navigationItem.rightBarButtonItems = buttons
     }
     
-    private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
+    fileprivate func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
 //        let top: CGFloat = 55
         let top: CGFloat = 0
         let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddManageProductsHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
-            controller.modus = .Product
+            controller.modus = .product
             return controller
         }
         manager.delegate = self
@@ -160,18 +160,18 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     // MARK: - Table view data source
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredProducts.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("productCell", forIndexPath: indexPath) as! ManageProductsCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "productCell", for: indexPath) as! ManageProductsCell
 
-        let product = filteredProducts[indexPath.row]
+        let product = filteredProducts[(indexPath as NSIndexPath).row]
 
         cell.product = product
         
@@ -181,24 +181,24 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            let product = filteredProducts[indexPath.row]
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let product = filteredProducts[(indexPath as NSIndexPath).row]
             Providers.productProvider.delete(product.item, remote: true, successHandler{[weak self] in
                 self?.removeProductUI(product, indexPath: indexPath)
             })
         }
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return DimensionsManager.defaultCellHeight
     }
     
-    private func removeProductUI(product: Product) {
+    fileprivate func removeProductUI(_ product: Product) {
         if let indexPath = indexPathForProduct(product) {
             let wrappedProduct = ItemWithCellAttributes<Product>(item: product, boldRange: nil)
             removeProductUI(wrappedProduct, indexPath: indexPath)   
@@ -207,46 +207,46 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
-    private func removeProductUI(product: ItemWithCellAttributes<Product>, indexPath: NSIndexPath) {
+    fileprivate func removeProductUI(_ product: ItemWithCellAttributes<Product>, indexPath: IndexPath) {
         tableView.wrapUpdates {[weak self] in
-            self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            self?.filteredProducts.remove(product)
+            self?.tableView.deleteRows(at: [indexPath], with: .fade)
+            _ = self?.filteredProducts.remove(product)
         }
     }
     
     // MARK: - Filter
     
     
-    func textFieldDidChange(textField: UITextField) {
+    func textFieldDidChange(_ textField: UITextField) {
         filter(textField.text ?? "")
     }
     
-    private func filter(searchText: String) {
+    fileprivate func filter(_ searchText: String) {
         self.searchText = searchText
     }
     
     
     // MARK: -
     
-    private func onUpdatedProducts() {
+    fileprivate func onUpdatedProducts() {
         if let searchText = searchBar.text {
             filter(searchText)
         }
     }
     
-    func textFieldShouldReturn(sender: UITextField) -> Bool {
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
         view.endEditing(true)
         return false
     }
  
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if tableView.editing {
-            let product = filteredProducts[indexPath.row].item
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
+            let product = filteredProducts[(indexPath as NSIndexPath).row].item
             let productEditData = AddEditProductControllerEditingData(product: product, indexPath: indexPath)
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: productEditData))
-            initNavBar([.Edit, .Save])
-            tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+            initNavBar([.edit, .save])
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         }
     }
     
@@ -257,15 +257,15 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         topQuickAddControllerManager?.controller?.onClose()
     }
     
-    func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
+    func onAddGroup(_ group: ListItemGroup, onFinish: VoidFunction?) {
     }
     
-    func onAddProduct(product: Product) {
+    func onAddProduct(_ product: Product) {
     }
     
-    func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
+    func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
-        func onEditItem(input: ListItemInput, editingItem: AddEditProductControllerEditingData) {
+        func onEditItem(_ input: ListItemInput, editingItem: AddEditProductControllerEditingData) {
             let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
             let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
             Providers.productProvider.update(updatedProduct, remote: true, successHandler{[weak self] in
@@ -273,7 +273,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             })
         }
         
-        func onAddItem(input: ListItemInput) {
+        func onAddItem(_ input: ListItemInput) {
             let product = ProductInput(name: input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
             
             Providers.productProvider.countProducts(successHandler {[weak self] count in
@@ -315,28 +315,28 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         return view.superview ?? view
     }
     
-    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void) {
+    func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
         Providers.productCategoryProvider.categoryWithName(name, successHandler {category in
             handler(category.color)
         })
     }
     
-    func onRemovedSectionCategoryName(name: String) {
+    func onRemovedSectionCategoryName(_ name: String) {
         clearAndLoadFirstPage()
     }
     
-    func onRemovedBrand(name: String) {
+    func onRemovedBrand(_ name: String) {
         clearAndLoadFirstPage()
     }
     
     // MARK: -
     
-    private func indexPathForProduct(product: Product) -> NSIndexPath? {
-        let indexMaybe = filteredProducts.enumerate().filter{$0.element.item.same(product)}.first?.index
-        return indexMaybe.map{NSIndexPath(forRow: $0, inSection: 0)}
+    fileprivate func indexPathForProduct(_ product: Product) -> IndexPath? {
+        let indexMaybe = filteredProducts.enumerated().filter{$0.element.item.same(product)}.first?.offset
+        return indexMaybe.map{IndexPath(row: $0, section: 0)}
     }
 
-    private func updateProductUI(product: Product) {
+    fileprivate func updateProductUI(_ product: Product) {
         if let indexPath = indexPathForProduct(product) {
             updateProductUI(product, indexPath: indexPath)
         } else {
@@ -344,14 +344,14 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
-    private func updateProductUI(product: Product, indexPath: NSIndexPath) {
+    fileprivate func updateProductUI(_ product: Product, indexPath: IndexPath) {
 
         tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
             for i in 0..<weakSelf.filteredProducts.count {
                 if weakSelf.filteredProducts[i].item.same(product) {
                     let item = ItemWithCellAttributes(item: product, boldRange: product.name.range(weakSelf.searchText, caseInsensitive: true))
                     weakSelf.filteredProducts[i] = item
-                    if let cell = weakSelf.tableView.cellForRowAtIndexPath(indexPath) as? ManageProductsCell {
+                    if let cell = weakSelf.tableView.cellForRow(at: indexPath) as? ManageProductsCell {
                         cell.product = item
                     }
                 }
@@ -360,22 +360,22 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
 
         topQuickAddControllerManager?.expand(false)
         topQuickAddControllerManager?.controller?.onClose()
-        initNavBar([.Edit])
+        initNavBar([.edit])
     }
     
-    private func addProductUI(product: Product) {
+    fileprivate func addProductUI(_ product: Product) {
         let item = ItemWithCellAttributes(item: product, boldRange: product.name.range(searchText, caseInsensitive: true))
         filteredProducts.append(item)
         onUpdatedProducts()
         setAddEditProductControllerOpen(false)
     }
 
-    private func setAddEditProductControllerOpen(open: Bool) {
+    fileprivate func setAddEditProductControllerOpen(_ open: Bool) {
         topQuickAddControllerManager?.expand(open)
-        initNavBar([.Edit])
+        initNavBar([.edit])
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
@@ -384,11 +384,11 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
-    private func loadPossibleNextPage() {
+    fileprivate func loadPossibleNextPage() {
         
-        func setLoading(loading: Bool) {
+        func setLoading(_ loading: Bool) {
             self.loadingPage = loading
-            self.tableViewFooter.hidden = !loading
+            self.tableViewFooter.isHidden = !loading
         }
         
         synced(self) {[weak self] in guard let weakSelf = self else {return}
@@ -415,14 +415,14 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
-    private func toggleEditing() {
-        tableView.setEditing(!tableView.editing, animated: true)
+    fileprivate func toggleEditing() {
+        tableView.setEditing(!tableView.isEditing, animated: true)
     }
     
     
     // MARK: - ExpandableTopViewControllerDelegate
     
-    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+    func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
         topControlTopConstraint.constant = expand ? view.frame.height : 10
         searchBoxHeightConstraint.constant = expand ? 0 : DimensionsManager.searchBarHeight
         searchBoxMarginTopConstraint.constant = expand ? 0 : 10
@@ -434,13 +434,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         topQuickAddControllerManager?.controller?.onClose()
     }
     
-    func onCenterTitleAnimComplete(center: Bool) {
+    func onCenterTitleAnimComplete(_ center: Bool) {
     }
     
     // MARK: - Websocket
     
-    func onWebsocketProduct(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+    func onWebsocketProduct(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Add:
@@ -459,8 +459,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
-    func onWebsocketProductCategory(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
+    func onWebsocketProductCategory(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Add:
@@ -470,7 +470,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             } else {
                 QL4("No value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -485,49 +485,49 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
-    func onIncomingGlobalSyncFinished(note: NSNotification) {
+    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         clearAndLoadFirstPage()
     }
     
     // MARK: - UIPicker
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return sortByOptions.count
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let sortByOption = sortByOptions[row]
         sortBy = sortByOption.value
 
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let label = view as? UILabel ?? UILabel()
         label.font = Fonts.regularLight
         label.text = sortByOptions[row].key
         return label
     }
     
-    @IBAction func onSortByTap(sender: UIButton) {
+    @IBAction func onSortByTap(_ sender: UIButton) {
         if let popup = self.sortByPopup {
-            popup.dismissAnimated(true)
+            popup.dismiss(animated: true)
         } else {
             let picker = createPicker()
             let popup = MyTipPopup(customView: picker)
-            if let row = (sortByOptions.indexOf{$0.value == sortBy}) {
+            if let row = (sortByOptions.index{$0.value == sortBy}) {
                 picker.selectRow(row, inComponent: 0, animated: false)
             }
-            popup.presentPointingAtView(sortByButton, inView: view, animated: true)
+            popup.presentPointing(at: sortByButton, in: view, animated: true)
         }
     }
     
-    private func createPicker() -> UIPickerView {
-        let picker = UIPickerView(frame: CGRectMake(0, 0, 150, 100))
+    fileprivate func createPicker() -> UIPickerView {
+        let picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
         picker.delegate = self
         picker.dataSource = self
         return picker
@@ -536,8 +536,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
 
 struct AddEditProductControllerEditingData {
     let product: Product
-    let indexPath: NSIndexPath
-    init(product: Product, indexPath: NSIndexPath) {
+    let indexPath: IndexPath
+    init(product: Product, indexPath: IndexPath) {
         self.product = product
         self.indexPath = indexPath
     }

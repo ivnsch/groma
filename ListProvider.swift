@@ -10,27 +10,27 @@ import Foundation
 
 protocol ListProvider {
     
-    func lists(remote: Bool, _ handler: ProviderResult<[List]> -> ())
+    func lists(_ remote: Bool, _ handler: @escaping (ProviderResult<[List]>) -> ())
     
-    func list(listUuid: String, _ handler: ProviderResult<List> -> ())
+    func list(_ listUuid: String, _ handler: @escaping (ProviderResult<List>) -> ())
   
     // TODO move list-only methods from listitemsprovider here
 
-    func add(list: List, remote: Bool, _ handler: ProviderResult<List> -> ())
+    func add(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<List>) -> ())
 
-    func update(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func update(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
-    func update(lists: [List], remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func update(_ lists: [List], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func updateListsOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func updateListsOrder(_ orderUpdates: [OrderUpdate], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func remove(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func remove(listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func remove(_ listUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func acceptInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void)
+    func acceptInvitation(_ invitation: RemoteListInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func rejectInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void)
+    func rejectInvitation(_ invitation: RemoteListInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func findInvitedUsers(listUuid: String, _ handler: ProviderResult<[SharedUser]> -> Void)    
+    func findInvitedUsers(_ listUuid: String, _ handler: @escaping (ProviderResult<[SharedUser]>) -> Void)    
 }

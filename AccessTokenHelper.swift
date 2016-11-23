@@ -13,8 +13,8 @@ import QorumLogs
 struct AccessTokenHelper {
     
     static func loadToken() -> String? {
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        let maybeToken = valet?.stringForKey(KeychainKeys.token)
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
+        let maybeToken = valet?.string(forKey: KeychainKeys.token)
         QL1("Valet has token: \(maybeToken != nil)")
         
         return maybeToken ?? loadPrefsToken()
@@ -22,8 +22,8 @@ struct AccessTokenHelper {
     
     static func hasToken() -> Bool {
         
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        let valetHasTokenMaybe = valet?.containsObjectForKey(KeychainKeys.token)
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
+        let valetHasTokenMaybe = valet?.containsObject(forKey: KeychainKeys.token)
         
         func onValetIsNilOrCantAccess() -> Bool {
             let isInPrefs = loadPrefsToken() != nil
@@ -33,7 +33,7 @@ struct AccessTokenHelper {
         
         if let valet = valet {
             if valet.canAccessKeychain() {
-                return valet.containsObjectForKey(KeychainKeys.token)
+                return valet.containsObject(forKey: KeychainKeys.token)
             } else {
                 QL4("Valet can't access keychain")
                 return onValetIsNilOrCantAccess()
@@ -44,11 +44,11 @@ struct AccessTokenHelper {
         }
     }
     
-    static func storeToken(token: String) {
+    static func storeToken(_ token: String) {
         
         func afterStoredToken() {
             QL1("Stored token")
-            PreferencesManager.savePreference(PreferencesManagerKey.lastTokenUpdate, value: NSDate())
+            PreferencesManager.savePreference(PreferencesManagerKey.lastTokenUpdate, value: Date())
         }
         
         func onValetFailed() {
@@ -56,7 +56,7 @@ struct AccessTokenHelper {
             afterStoredToken()
         }
         
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
         if let valet = valet {
             if valet.setString(token, forKey: KeychainKeys.token) {
                 afterStoredToken()
@@ -75,9 +75,9 @@ struct AccessTokenHelper {
         
         QL1("Removing login token")
         
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.afterFirstUnlock)
         if let valet = valet {
-            if !valet.removeObjectForKey(KeychainKeys.token) {
+            if !valet.removeObject(forKey: KeychainKeys.token) {
                 QL4("Remove token returned false")
             }
             QL1("Removed login token")
@@ -91,12 +91,12 @@ struct AccessTokenHelper {
     
     // MARK: - Prefs
     
-    private static func loadPrefsToken() -> String? {
+    fileprivate static func loadPrefsToken() -> String? {
         QL1("Loading token from prefs")
         return PreferencesManager.loadPreference(PreferencesManagerKey.loginTokenFallback)
     }
     
-    private static func removePrefsToken() {
+    fileprivate static func removePrefsToken() {
         PreferencesManager.clearPreference(key: PreferencesManagerKey.loginTokenFallback)
     }
 }

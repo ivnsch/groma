@@ -19,7 +19,7 @@ struct ErrorReport: CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) title: \(title), body: \(body)"
+        return "{\(type(of: self)) title: \(title), body: \(body)"
     }
 
 }

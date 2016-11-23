@@ -22,7 +22,7 @@ class DBInventory: DBSyncable {
         return UIColor(hexString: bgColorHex)
     }
     
-    func setBgColor(bgColor: UIColor) {
+    func setBgColor(_ bgColor: UIColor) {
         bgColorHex = bgColor.hexStr
     }
     
@@ -32,20 +32,20 @@ class DBInventory: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilter(uuid: String) -> String {
+    static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
     
     // MARK: - Update
     
     // Creates dictionary to update database entry for order update
-    static func createOrderUpdateDict(orderUpdate: OrderUpdate, dirty: Bool) -> [String: AnyObject] {
-        return ["uuid": orderUpdate.uuid, "order": orderUpdate.order, DBSyncable.dirtyFieldName: dirty]
+    static func createOrderUpdateDict(_ orderUpdate: OrderUpdate, dirty: Bool) -> [String: AnyObject] {
+        return ["uuid": orderUpdate.uuid as AnyObject, "order": orderUpdate.order as AnyObject, DBSyncable.dirtyFieldName: dirty as AnyObject]
     }
 
     // MARK: -
     
-    static func fromDict(dict: [String: AnyObject]) -> DBInventory {
+    static func fromDict(_ dict: [String: AnyObject]) -> DBInventory {
         let item = DBInventory()
         let inventoryDict = dict["inventory"] as! [String: AnyObject]
         item.uuid = inventoryDict["uuid"]! as! String
@@ -67,16 +67,16 @@ class DBInventory: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid
-        dict["name"] = name
-        dict["color"] = bgColorHex
-        dict["order"] = order
-        dict["users"] = users.map{$0.toDict()}
+        dict["uuid"] = uuid as AnyObject?
+        dict["name"] = name as AnyObject?
+        dict["color"] = bgColorHex as AnyObject?
+        dict["order"] = order as AnyObject?
+        dict["users"] = users.map{$0.toDict()} as AnyObject
         setSyncableFieldsInDict(&dict)
         return dict
     }
     
-    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+    override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
         RealmInventoryProvider().removeInventoryDependenciesSync(realm, inventoryUuid: uuid, markForSync: markForSync)
         realm.delete(self)
     }

@@ -22,17 +22,17 @@ struct RemoteInventoryItemsWithHistoryAndDependencies: ResponseObjectSerializabl
     // if server for some reason doesn't send a field the app currently crashes
     init?(representation: AnyObject) {
         guard
-            let inventoryItemsObj = representation.valueForKeyPath("inventoryItems"),
+            let inventoryItemsObj = representation.value(forKeyPath: "inventoryItems") as? [AnyObject],
             let inventoryItems = RemoteInventoryItem.collection(inventoryItemsObj),
-            let historyItemsObj = representation.valueForKeyPath("historyItems"),
+            let historyItemsObj = representation.value(forKeyPath: "historyItems") as? [AnyObject],
             let historyItems = RemoteHistoryItem.collection(historyItemsObj),
-            let productsObj = representation.valueForKeyPath("products"),
+            let productsObj = representation.value(forKeyPath: "products") as? [AnyObject],
             let products = RemoteProduct.collection(productsObj),
-            let productsCategoriesObj = representation.valueForKeyPath("productsCategories"),
+            let productsCategoriesObj = representation.value(forKeyPath: "productsCategories") as? [AnyObject],
             let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
-            let inventoriesObj = representation.valueForKeyPath("inventories"),
+            let inventoriesObj = representation.value(forKeyPath: "inventories") as? [AnyObject],
             let inventories = RemoteInventoryWithDependencies.collection(inventoriesObj),
-            let usersObj = representation.valueForKeyPath("users"),
+            let usersObj = representation.value(forKeyPath: "users") as? [AnyObject],
             let users = RemoteSharedUser.collection(usersObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -47,6 +47,6 @@ struct RemoteInventoryItemsWithHistoryAndDependencies: ResponseObjectSerializabl
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventoryItems: \(inventoryItems), historyItems: \(historyItems), products: \(products), productsCategories: \(productsCategories), inventories: \(inventories), users: \(users)}"
+        return "{\(type(of: self)) inventoryItems: \(inventoryItems), historyItems: \(historyItems), products: \(products), productsCategories: \(productsCategories), inventories: \(inventories), users: \(users)}"
     }
 }

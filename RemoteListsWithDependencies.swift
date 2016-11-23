@@ -16,9 +16,9 @@ struct RemoteListsWithDependencies: ResponseObjectSerializable, CustomDebugStrin
     
     init?(representation: AnyObject) {
         guard
-        let inventoriesObj = representation.valueForKeyPath("inventories"),
+        let inventoriesObj = representation.value(forKeyPath: "inventories") as? [AnyObject],
         let inventories = RemoteInventoryWithDependencies.collection(inventoriesObj),
-        let listsObj = representation.valueForKeyPath("lists"),
+        let listsObj = representation.value(forKeyPath: "lists") as? [AnyObject],
         let lists = RemoteList.collection(listsObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -29,6 +29,6 @@ struct RemoteListsWithDependencies: ResponseObjectSerializable, CustomDebugStrin
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventories: \(inventories), lists: \(lists)}"
+        return "{\(type(of: self)) inventories: \(inventories), lists: \(lists)}"
     }
 }

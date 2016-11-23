@@ -11,7 +11,7 @@ import QorumLogs
 
 class ListItemMapper {
     
-    class func listItemWithDB(dbListItem: DBListItem) -> ListItem {
+    class func listItemWithDB(_ dbListItem: DBListItem) -> ListItem {
         let product = StoreProductMapper.productWithDB(dbListItem.product)
         let section = SectionMapper.sectionWithDB(dbListItem.section)
         let list = ListMapper.listWithDB(dbListItem.list)
@@ -31,7 +31,7 @@ class ListItemMapper {
         )
     }
     
-    class func dbWithListItem(listItem: ListItem) -> DBListItem {
+    class func dbWithListItem(_ listItem: ListItem) -> DBListItem {
         let dbListItem = DBListItem()
         dbListItem.uuid = listItem.uuid
         dbListItem.note = listItem.note ?? "" // TODO check if db obj can have optional if yes remove ??
@@ -57,9 +57,9 @@ class ListItemMapper {
     Parses the remote list items into model objects
     Note that the list items are sorted here by order field. The backend doesn't do this.
     */
-    class func listItemsWithRemote(remoteListItems: RemoteListItems, sortOrderByStatus: ListItemStatus?) -> ListItemsWithRelations {
+    class func listItemsWithRemote(_ remoteListItems: RemoteListItems, sortOrderByStatus: ListItemStatus?) -> ListItemsWithRelations {
 
-        func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
+        func toProductCategoryDict(_ remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
             var dict: [String: ProductCategory] = [:]
             var arr: [ProductCategory] = []
             for remoteProductCategory in remoteProductsCategories {
@@ -71,7 +71,7 @@ class ListItemMapper {
             return (dict, arr)
         }
         
-        func toProductDict(remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
+        func toProductDict(_ remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
             var dict: [String: Product] = [:]
             var arr: [Product] = []
             for remoteProduct in remoteProducts {
@@ -86,7 +86,7 @@ class ListItemMapper {
             return (dict, arr)
         }
         
-        func toStoreProductDict(remoteProducts: [RemoteStoreProduct], products: [String: Product]) -> ([String: StoreProduct], [StoreProduct]) {
+        func toStoreProductDict(_ remoteProducts: [RemoteStoreProduct], products: [String: Product]) -> ([String: StoreProduct], [StoreProduct]) {
             var dict: [String: StoreProduct] = [:]
             var arr: [StoreProduct] = []
             for remoteProduct in remoteProducts {
@@ -101,7 +101,7 @@ class ListItemMapper {
             return (dict, arr)
         }
         
-        func toSectionDict(remoteSections: [RemoteSection], lists: [String: List]) -> ([String: Section], [Section]) {
+        func toSectionDict(_ remoteSections: [RemoteSection], lists: [String: List]) -> ([String: Section], [Section]) {
             var dict: [String: Section] = [:]
             var arr: [Section] = []
             for remoteSection in remoteSections {

@@ -10,12 +10,12 @@ import UIKit
 
 extension CGRect {
 
-    func copy(x: CGFloat? = nil, y: CGFloat? = nil, width: CGFloat? = nil, height: CGFloat? = nil) -> CGRect {
-        return CGRectMake(
-            x ?? self.origin.x,
-            y ?? self.origin.y,
-            width ?? self.width,
-            height ?? self.height)
+    func copy(_ x: CGFloat? = nil, y: CGFloat? = nil, width: CGFloat? = nil, height: CGFloat? = nil) -> CGRect {
+        return CGRect(
+            x: x ?? self.origin.x,
+            y: y ?? self.origin.y,
+            width: width ?? self.width,
+            height: height ?? self.height)
     }
     
     /////////////////////////////////////////////////////////////////////////////////////
@@ -48,11 +48,11 @@ extension CGRect {
         }
     }
     
-    func inset(top: CGFloat = 0, bottom: CGFloat = 0, left: CGFloat = 0, right: CGFloat = 0) -> CGRect {
+    func inset(_ top: CGFloat = 0, bottom: CGFloat = 0, left: CGFloat = 0, right: CGFloat = 0) -> CGRect {
         return CGRect(x: origin.x + left, y: origin.y + top, width: width - left - right, height: height - top - bottom)
     }
     
-    func insetAll(inset: CGFloat) -> CGRect {
+    func insetAll(_ inset: CGFloat) -> CGRect {
         return self.inset(inset, bottom: inset, left: inset, right: inset)
     }
 }

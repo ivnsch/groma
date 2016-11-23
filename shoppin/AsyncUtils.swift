@@ -8,17 +8,17 @@
 
 import Foundation
 
-func background<T>(background: Void -> T, onFinish: T -> Void) {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+func background<T>(_ background: @escaping (Void) -> T, onFinish: @escaping (T) -> Void) {
+    DispatchQueue.global(qos: .background).async {
         let t: T = background()
         mainQueue {
             onFinish(t)
         }
-    })
+    }
 }
 
-func mainQueue(f: VoidFunction) {
-    dispatch_async(dispatch_get_main_queue(), {
+func mainQueue(_ f: @escaping VoidFunction) {
+    DispatchQueue.main.async(execute: {
         f()
     })
 }

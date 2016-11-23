@@ -17,7 +17,7 @@ protocol OkNextButtonsViewDelegate: class {
 }
 
 enum AddModus {
-    case Add, Update
+    case add, update
 }
 
 class OkNextButtonsView: UIView {
@@ -27,14 +27,14 @@ class OkNextButtonsView: UIView {
     @IBOutlet weak var addModusView: UIView!
     @IBOutlet weak var editModusView: UIView!
     
-    var addModus: AddModus = .Add {
+    var addModus: AddModus = .add {
         didSet {
-            if addModus == .Add {
-                addModusView.hidden = false
-                editModusView.hidden = true
+            if addModus == .add {
+                addModusView.isHidden = false
+                editModusView.isHidden = true
             } else {
-                addModusView.hidden = true
-                editModusView.hidden = false
+                addModusView.isHidden = true
+                editModusView.isHidden = false
             }
         }
     }
@@ -49,33 +49,33 @@ class OkNextButtonsView: UIView {
         xibSetup()
     }
     
-    private func xibSetup() {
-        let view = NSBundle.loadView("OkNextButtonsView", owner: self)!
+    fileprivate func xibSetup() {
+        let view = Bundle.loadView("OkNextButtonsView", owner: self)!
         
         view.frame = bounds
         // Make the view stretch with containing view
-        view.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
+        view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
         
         self.addSubview(view)
     }
     
-    @IBAction func onOkEditModusTap(sender: UIButton) {
+    @IBAction func onOkEditModusTap(_ sender: UIButton) {
         delegate?.onOkAddModusTap()
     }
     
-    @IBAction func onOkAddModusTap(sender: UIButton) {
+    @IBAction func onOkAddModusTap(_ sender: UIButton) {
         delegate?.onOkAddModusTap()
     }
 
-    @IBAction func onOkNextAddModusTap(sender: UIButton) {
+    @IBAction func onOkNextAddModusTap(_ sender: UIButton) {
         delegate?.onOkNextAddModusTap()
     }
     
-    @IBAction func onCancelAddModusTap(sender: UIButton) {
+    @IBAction func onCancelAddModusTap(_ sender: UIButton) {
         delegate?.onCancelAddModusTap()
     }
     
-    @IBAction func onCancelEditModusTap(sender: UIButton) {
+    @IBAction func onCancelEditModusTap(_ sender: UIButton) {
         delegate?.onCancelEditModusTap()
     }
 }

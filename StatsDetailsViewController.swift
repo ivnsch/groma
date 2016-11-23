@@ -20,9 +20,9 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     var onViewDidLoad: VoidFunction?
     
-    private var pieChart: XYPieChart?
+    fileprivate var pieChart: XYPieChart?
     
-    private var slices: [Slice] = [] {
+    fileprivate var slices: [Slice] = [] {
         didSet {
             pieChart?.selectedSliceOffsetRadius = slices.count <= 1 ? 0 : 10
         }
@@ -37,7 +37,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    private var productAggregates: [ProductAggregate] = [] {
+    fileprivate var productAggregates: [ProductAggregate] = [] {
         didSet {
             tableView?.reloadData()
             
@@ -51,7 +51,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    private func spentTotal(productAggregates: [ProductAggregate]) -> Float {
+    fileprivate func spentTotal(_ productAggregates: [ProductAggregate]) -> Float {
         return productAggregates.sum({$0.totalPrice})
     }
     
@@ -72,19 +72,19 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var circle6: UIView!
     @IBOutlet weak var label6: LabelMore!
     
-    private func initLegends(slices: [Slice]) {
-        circle1.hidden = true
-        label1.hidden = true
-        circle2.hidden = true
-        label2.hidden = true
-        circle3.hidden = true
-        label3.hidden = true
-        circle4.hidden = true
-        label4.hidden = true
-        circle5.hidden = true
-        label5.hidden = true
-        circle6.hidden = true
-        label6.hidden = true
+    fileprivate func initLegends(_ slices: [Slice]) {
+        circle1.isHidden = true
+        label1.isHidden = true
+        circle2.isHidden = true
+        label2.isHidden = true
+        circle3.isHidden = true
+        label3.isHidden = true
+        circle4.isHidden = true
+        label4.isHidden = true
+        circle5.isHidden = true
+        label5.isHidden = true
+        circle6.isHidden = true
+        label6.isHidden = true
         
         for i in 0..<slices.count {
             let slice = slices[i]
@@ -92,33 +92,33 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
             case 0:
                 circle1.backgroundColor = slice.color
                 label1.text = slice.text
-                circle1.hidden = false
-                label1.hidden = false
+                circle1.isHidden = false
+                label1.isHidden = false
             case 1:
                 circle2.backgroundColor = slice.color
                 label2.text = slice.text
-                circle2.hidden = false
-                label2.hidden = false
+                circle2.isHidden = false
+                label2.isHidden = false
             case 2:
                 circle3.backgroundColor = slice.color
                 label3.text = slice.text
-                circle3.hidden = false
-                label3.hidden = false
+                circle3.isHidden = false
+                label3.isHidden = false
             case 3:
                 circle4.backgroundColor = slice.color
                 label4.text = slice.text
-                circle4.hidden = false
-                label4.hidden = false
+                circle4.isHidden = false
+                label4.isHidden = false
             case 4:
                 circle5.backgroundColor = slice.color
                 label5.text = slice.text
-                circle5.hidden = false
-                label5.hidden = false
+                circle5.isHidden = false
+                label5.isHidden = false
             case 5:
                 circle6.backgroundColor = slice.color
                 label6.text = slice.text
-                circle6.hidden = false
-                label6.hidden = false
+                circle6.isHidden = false
+                label6.isHidden = false
             default: break
             }
         }
@@ -128,17 +128,17 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     
-    private func initAggregates(monthYear: MonthYear, inventory: Inventory) {
-        Providers.statsProvider.aggregate(monthYear, groupBy: GroupByAttribute.Name, inventory: inventory, successHandler {[weak self] productAggregates in
+    fileprivate func initAggregates(_ monthYear: MonthYear, inventory: Inventory) {
+        Providers.statsProvider.aggregate(monthYear, groupBy: GroupByAttribute.name, inventory: inventory, successHandler {[weak self] productAggregates in
             self?.productAggregates = productAggregates
         })
     }
     
-    private func initTitle() {
-        let inputDateFormatter = NSDateFormatter()
+    fileprivate func initTitle() {
+        let inputDateFormatter = DateFormatter()
         inputDateFormatter.dateFormat = "MMM yyyy"
         if let date = initData?.aggr.monthYear.toDate() {
-            navigationItem.title = inputDateFormatter.stringFromDate(date)
+            navigationItem.title = inputDateFormatter.string(from: date as Date)
         } else {
             print("Warn: StatsDetailsViewController: aggr not set or month year invalid")
         }
@@ -159,27 +159,27 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         QL1("Deinit stats details controller")
     }
     
-    private func initPieChart() {
+    fileprivate func initPieChart() {
         
         //        let radius: CGFloat = 100
         //        let center = CGPointMake(pieChartContainer.bounds.width / , <#T##y: CGFloat##CGFloat#>)
-        let pieChart = XYPieChart(frame: CGRectInset(pieChartContainer.bounds, 0, 0))
+        let pieChart = XYPieChart(frame: pieChartContainer.bounds.insetBy(dx: 0, dy: 0))
         pieChart.pieRadius = DimensionsManager.pieChartRadius
-        pieChart.pieCenter = CGPointMake(pieChart.pieRadius + 20, pieChart.pieRadius + 10)
+        pieChart.pieCenter = CGPoint(x: pieChart.pieRadius + 20, y: pieChart.pieRadius + 10)
         pieChart.labelRadius = DimensionsManager.pieChartLabelRadius
         //        pieChart.showPercentage = true
         pieChart.showLabel = true
         
         let font: UIFont = {
             if let fontSize = LabelMore.mapToFontSize(20) {
-                return UIFont.systemFontOfSize(fontSize)
+                return UIFont.systemFont(ofSize: fontSize)
             } else {
-                return UIFont.systemFontOfSize(13)
+                return UIFont.systemFont(ofSize: 13)
             }
         }()
 
         pieChart.labelFont = font
-        pieChart.labelColor = UIColor.blackColor()
+        pieChart.labelColor = UIColor.black
         //        pieChart.pieCenter = CGPointMake(100, 100)
         pieChartContainer.addSubview(pieChart)
         pieChart.dataSource = self
@@ -202,49 +202,49 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
 //        pieChartContainer.addSubview(centerView)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     
     // MARK: - UITableViewDataSource
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return productAggregates.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("aggrCell", forIndexPath: indexPath) as! ProductAggregateCell
-        let aggregate = self.productAggregates[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "aggrCell", for: indexPath) as! ProductAggregateCell
+        let aggregate = self.productAggregates[(indexPath as NSIndexPath).row]
         cell.productAggregate = aggregate
         return cell
     }
     
     // MARK: - XYPieChartDataSource
 
-    func numberOfSlicesInPieChart(pieChart: XYPieChart!) -> UInt {
+    func numberOfSlices(in pieChart: XYPieChart!) -> UInt {
         return UInt(slices.count)
     }
     
-    func pieChart(pieChart: XYPieChart!, valueForSliceAtIndex index: UInt) -> CGFloat {
+    func pieChart(_ pieChart: XYPieChart!, valueForSliceAt index: UInt) -> CGFloat {
         return CGFloat(slices[Int(index)].value)
     }
     
-    func pieChart(pieChart: XYPieChart!, colorForSliceAtIndex index: UInt) -> UIColor! {
+    func pieChart(_ pieChart: XYPieChart!, colorForSliceAt index: UInt) -> UIColor! {
         return slices[Int(index)].color
     }
     
-    func pieChart(pieChart: XYPieChart!, textForSliceAtIndex index: UInt) -> String! {
+    func pieChart(_ pieChart: XYPieChart!, textForSliceAt index: UInt) -> String! {
 //        return slices[Int(index)].text
         return "\(slices[Int(index)].value.toString(1))%"
     }
     
     // MARK: - XYPieChartDelegate
     
-    func pieChart(pieChart: XYPieChart!, didSelectSliceAtIndex index: UInt) {
+    func pieChart(_ pieChart: XYPieChart!, didSelectSliceAt index: UInt) {
         label1.makeFontRegular()
         label2.makeFontRegular()
         label3.makeFontRegular()
@@ -268,7 +268,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    func pieChart(pieChart: XYPieChart!, didDeselectSliceAtIndex index: UInt) {
+    func pieChart(_ pieChart: XYPieChart!, didDeselectSliceAt index: UInt) {
         label1.makeFontRegular()
         label2.makeFontRegular()
         label3.makeFontRegular()
@@ -277,7 +277,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         label6.makeFontRegular()
     }
     
-    private func generateSlices(aggregates: [ProductAggregate]) -> [Slice] {
+    fileprivate func generateSlices(_ aggregates: [ProductAggregate]) -> [Slice] {
 
         typealias CategoryData = (category: ProductCategory, price: Float, percentage: Float)
         
@@ -314,12 +314,12 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
             (tuple.0 + aggr.percentage, tuple.1 + aggr.price)
         }
         
-        var slices: [Slice] = top.enumerate().map{(index, element) in
-            Slice(value: element.percentage, text: "\(element.category.name)(\(element.price.toLocalCurrencyString()))", color: element.category.color.colorWithAlphaComponent(0.6))
+        var slices: [Slice] = top.enumerated().map{(index, element) in
+            Slice(value: element.percentage, text: "\(element.category.name)(\(element.price.toLocalCurrencyString()))", color: element.category.color.withAlphaComponent(0.6))
         }
         
         if restPercentage > 0 {
-            let restSlice = Slice(value: restPercentage, text: trans("stats_details_rest", restPrice.toLocalCurrencyString()), color: UIColor.grayColor())
+            let restSlice = Slice(value: restPercentage, text: trans("stats_details_rest", restPrice.toLocalCurrencyString()), color: UIColor.gray)
             slices.append(restSlice)
         }
 

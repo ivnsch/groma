@@ -24,9 +24,9 @@ struct ProductScaleData {
 }
 
 protocol ScaleViewControllerDelegate: class {
-    func onScaleViewControllerValidationErrors(errors: [UITextField: ValidationError])
-    func onScaleViewControllerSubmit(inputs: ProductScaleData)
-    func onDismissScaleViewController(cancelled: Bool)    
+    func onScaleViewControllerValidationErrors(_ errors: ValidatorDictionary<ValidationError>)
+    func onScaleViewControllerSubmit(_ inputs: ProductScaleData)
+    func onDismissScaleViewController(_ cancelled: Bool)    
 }
 
 
@@ -38,26 +38,26 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
 //    private var scaleUnitPopup: CMPopTipView?
 
-    private typealias ScaleUnitWithText = (scaleUnit: ProductUnit, text: String)
+    fileprivate typealias ScaleUnitWithText = (scaleUnit: ProductUnit, text: String)
     
-    private static let defaultUnit: ScaleUnitWithText = (.None, "None")
+    fileprivate static let defaultUnit: ScaleUnitWithText = (.none, "None")
     
     var overlay: UIView!
     var animatedBG = false
 
     var onUIReady: VoidFunction?
 
-    private let scaleUnits: [ScaleUnitWithText] = [
+    fileprivate let scaleUnits: [ScaleUnitWithText] = [
         defaultUnit,
-        (.Gram, "Gram"),
-        (.Kilogram, "Kilogram")
+        (.gram, "Gram"),
+        (.kilogram, "Kilogram")
     ]
     
     weak var delegate: ScaleViewControllerDelegate?
     
-    private var validator: Validator?
+    fileprivate var validator: Validator?
 
-    func prefill(scaleInput: ProductScaleData) {
+    func prefill(_ scaleInput: ProductScaleData) {
         baseQuantityInput.text = scaleInput.baseQuantity.toString(2)
         
         // find the scale unit with text for input's scale unit
@@ -74,10 +74,10 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         priceInput.text = scaleInput.price == 0 ? "" : scaleInput.price.toString(2)
     }
     
-    private var selectedScaleUnit: ScaleUnitWithText? {
+    fileprivate var selectedScaleUnit: ScaleUnitWithText? {
         didSet {
-            if let unitButton = unitButton, selectedScaleUnit = selectedScaleUnit {
-                unitButton.setTitle(selectedScaleUnit.text, forState: .Normal)
+            if let unitButton = unitButton, let selectedScaleUnit = selectedScaleUnit {
+                unitButton.setTitle(selectedScaleUnit.text, for: UIControlState())
             }
         }
     }
@@ -86,12 +86,12 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         super.viewDidLoad()
         
         let overlay = UIView()
-        overlay.backgroundColor = UIColor.blackColor()
+        overlay.backgroundColor = UIColor.black
         overlay.alpha = 0
         
         self.overlay = overlay
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTapBG:")
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ScaleViewController.onTapBG(_:)))
         overlay.addGestureRecognizer(tapRecognizer)
         
         initValidator()
@@ -99,7 +99,7 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         onUIReady?()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if !animatedBG { // ensure fade-in animation is not shown again if e.g. user comes back from receiving a call
@@ -113,14 +113,14 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         }
     }
     
-    private func animateOverlayAlpha(show: Bool, onComplete: VoidFunction? = nil) {
-        UIView.animateWithDuration(0.3) {[weak self] in
+    fileprivate func animateOverlayAlpha(_ show: Bool, onComplete: VoidFunction? = nil) {
+        UIView.animate(withDuration: 0.3, animations: {[weak self] in
             self?.overlay?.alpha = show ? 0.3 : 0
             onComplete?()
-        }
+        }) 
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         overlay.removeFromSuperview()
     }
@@ -134,18 +134,18 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     }
     
     // TODO popup should contain logic to animate back... not the parent controller
-    func onTapBG(recognizer: UITapGestureRecognizer) {
+    func onTapBG(_ recognizer: UITapGestureRecognizer) {
         delegate?.onDismissScaleViewController(true)
     }
     
-    private func createPicker() -> UIPickerView {
-        let picker = UIPickerView(frame: CGRectMake(0, 0, 150, 100))
+    fileprivate func createPicker() -> UIPickerView {
+        let picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
         picker.delegate = self
         picker.dataSource = self
         return picker
     }
 
-    private func initValidator() {
+    fileprivate func initValidator() {
         let validator = Validator()
         validator.registerField(baseQuantityInput, rules: [MinLengthRule(length: 1, message: "validation_item_name_not_empty"), FloatRule(message: "validation_price_number")])
         validator.registerField(priceInput, rules: [MinLengthRule(length: 1, message: "validation_item_category_not_empty"), FloatRule(message: "validation_price_number")])
@@ -153,16 +153,16 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         self.validator = validator
     }
     
-    @IBAction func onScaleUnitTap(sender: UIButton) {
-        if let windowView = UIApplication.sharedApplication().keyWindow {
-            let popup = MyTipPopup(customView: createPicker(), borderColor: UIColor.darkGrayColor())
-            popup.presentPointingAtView(unitButton, inView: windowView, animated: true)
+    @IBAction func onScaleUnitTap(_ sender: UIButton) {
+        if let windowView = UIApplication.shared.keyWindow {
+            let popup = MyTipPopup(customView: createPicker(), borderColor: UIColor.darkGray)
+            popup.presentPointing(at: unitButton, in: windowView, animated: true)
         } else {
             print("Warn: ScaleViewController.onScaleUnitTap: no window view")
         }
     }
     
-    @IBAction func onOkTap(sender: UIButton) {
+    @IBAction func onOkTap(_ sender: UIButton) {
         submit()
     }
     
@@ -170,19 +170,19 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         guard validator != nil else {return}
         
         if let errors = validator?.validate() {
-            for (field, _) in errors {
-                field.showValidationError()
+            for (_, error) in errors {
+                error.field.showValidationError()
                 delegate?.onScaleViewControllerValidationErrors(errors)
             }
             
         } else {
-            if let lastErrors = validator?.lastErrors {
-                for (field, _) in lastErrors {
-                    field.clearValidationError()
+            if let lastErrors = validator?.errors {
+                for (_, error) in lastErrors {
+                    error.field.clearValidationError()
                 }
             }
             
-            if let baseQuantity = baseQuantityInput.text?.floatValue, selectedUnit = selectedScaleUnit?.scaleUnit, price = priceInput.text?.floatValue {
+            if let baseQuantity = baseQuantityInput.text?.floatValue, let selectedUnit = selectedScaleUnit?.scaleUnit, let price = priceInput.text?.floatValue {
                 let scaleData = ProductScaleData(price: price, baseQuantity: baseQuantity, unit: selectedUnit)
                 delegate?.onScaleViewControllerSubmit(scaleData)
                 
@@ -194,22 +194,22 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     // MARK: - UIPicker
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return scaleUnits.count
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let label = view as? UILabel ?? UILabel()
         label.font = Fonts.regularLight
         label.text = scaleUnits[row].text
         return label
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let scaleUnit = scaleUnits[row]
         selectedScaleUnit = scaleUnit
     }

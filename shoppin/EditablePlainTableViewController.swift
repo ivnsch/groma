@@ -29,7 +29,7 @@ class EditablePlainTableViewController: UITableViewController {
 
     var scrollViewDelegate: UIScrollViewDelegate?
     
-    func addItem(model: EditablePlainTableViewControllerModel<SharedUser>) {
+    func addItem(_ model: EditablePlainTableViewControllerModel<SharedUser>) {
         self.listItems.append(model)
     }
     
@@ -45,19 +45,19 @@ class EditablePlainTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.listItems.count
     }
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) 
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) 
 
-        cell.textLabel?.text = self.listItems[indexPath.row].text
+        cell.textLabel?.text = self.listItems[(indexPath as NSIndexPath).row].text
         
         return cell
     }
@@ -65,19 +65,19 @@ class EditablePlainTableViewController: UITableViewController {
 
     
     // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return NO if you do not want the specified item to be editable.
         return true
     }
 
 
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            listItems.removeAtIndex(indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            listItems.remove(at: (indexPath as NSIndexPath).row)
             
-        } else if editingStyle == .Insert {
+        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
@@ -107,7 +107,7 @@ class EditablePlainTableViewController: UITableViewController {
     }
     */
 
-    override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.scrollViewDelegate?.scrollViewWillBeginDragging?(scrollView)
     }
     

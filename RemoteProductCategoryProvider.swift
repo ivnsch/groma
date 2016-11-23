@@ -10,35 +10,35 @@ import Foundation
 
 class RemoteProductCategoryProvider {
     
-    func categories(handler: RemoteResult<[RemoteProductCategory]> -> ()) {
-        RemoteProvider.authenticatedRequestArray(.GET, Urls.productCategories) {result in
+    func categories(_ handler: @escaping (RemoteResult<[RemoteProductCategory]>) -> ()) {
+        RemoteProvider.authenticatedRequestArray(.get, Urls.productCategories) {result in
             handler(result)
         }
     }
     
-    func addCategory(category: ProductCategory, handler: RemoteResult<RemoteProductCategory> -> ()) {
+    func addCategory(_ category: ProductCategory, handler: @escaping (RemoteResult<RemoteProductCategory>) -> ()) {
         let params = RemoteListItemProvider().toRequestParams(category)
-        RemoteProvider.authenticatedRequest(.POST, Urls.productCategory, params) {result in
+        RemoteProvider.authenticatedRequest(.post, Urls.productCategory, params) {result in
             handler(result)
         }
     }
     
-    func updateCategory(category: ProductCategory, handler: RemoteResult<RemoteProductCategory> -> ()) {
+    func updateCategory(_ category: ProductCategory, handler: @escaping (RemoteResult<RemoteProductCategory>) -> ()) {
         let params = RemoteListItemProvider().toRequestParams(category)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.productCategory, params) {result in
+        RemoteProvider.authenticatedRequest(.put, Urls.productCategory, params) {result in
             handler(result)
         }
     }
     
-    func removeCategory(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.productCategory + "/\(uuid)") {result in
+    func removeCategory(_ uuid: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        RemoteProvider.authenticatedRequest(.delete, Urls.productCategory + "/\(uuid)") {result in
             handler(result)
         }
     }
     
-    func removeCategoriesWithName(name: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        let encodedName = name.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.productCategoriesName + "/\(encodedName)") {result in
+    func removeCategoriesWithName(_ name: String, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+        let encodedName = name.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        RemoteProvider.authenticatedRequest(.delete, Urls.productCategoriesName + "/\(encodedName)") {result in
             handler(result)
         }
     }

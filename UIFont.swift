@@ -11,10 +11,10 @@ import UIKit
 extension UIFont {
     
     var isBold: Bool {
-        return fontDescriptor().symbolicTraits.contains(.TraitBold)
+        return fontDescriptor.symbolicTraits.contains(.traitBold)
     }
     
     var isItalic: Bool {
-        return fontDescriptor().symbolicTraits.contains(.TraitItalic)
+        return fontDescriptor.symbolicTraits.contains(.traitItalic)
     }
 }

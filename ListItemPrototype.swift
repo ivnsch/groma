@@ -24,11 +24,11 @@ class ListItemPrototype: Equatable, Identifiable, CustomDebugStringConvertible {
         self.storeProductInput = storeProductInput
     }
     
-    func same(rhs: ListItemPrototype) -> Bool {
+    func same(_ rhs: ListItemPrototype) -> Bool {
         return product.same(rhs.product)
     }
     
-    func incrementQuantityCopy(delta: Int) -> ProductWithQuantity {
+    func incrementQuantityCopy(_ delta: Int) -> ProductWithQuantity {
         fatalError("override")
     }
     
@@ -40,7 +40,7 @@ class ListItemPrototype: Equatable, Identifiable, CustomDebugStringConvertible {
 func ==(lhs: ListItemPrototype, rhs: ListItemPrototype) -> Bool {
     
     let storeProductInputsEqual: Bool = {
-        if let lhsStoreProductInput = lhs.storeProductInput, rhsStoreProductInput = rhs.storeProductInput {
+        if let lhsStoreProductInput = lhs.storeProductInput, let rhsStoreProductInput = rhs.storeProductInput {
             return lhsStoreProductInput == rhsStoreProductInput
         } else if lhs.storeProductInput == nil && rhs.storeProductInput == nil {
             return true

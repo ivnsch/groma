@@ -11,25 +11,25 @@ import Foundation
 
 //MARK: - Convertors
 
-private func string(object: AnyObject?) -> String? {
+private func string(_ object: AnyObject?) -> String? {
     return object as? String
 }
 
-private func stringToInt(object: AnyObject?) -> Int? {
+private func stringToInt(_ object: AnyObject?) -> Int? {
     return (object as? String).map{Int($0)} ?? nil
 }
 
-private func int(object: AnyObject?) -> Int? {
-    return (object as? NSNumber)?.integerValue
+private func int(_ object: AnyObject?) -> Int? {
+    return (object as? NSNumber)?.intValue
 }
 
-private func array<T>(object: AnyObject?) -> Array<T>? {
+private func array<T>(_ object: AnyObject?) -> Array<T>? {
     return object as? Array
 }
 
 public struct AppInfo {
     
-    private static let bundleInfo: Dictionary<String, AnyObject> = NSBundle.mainBundle().infoDictionary!
+    fileprivate static let bundleInfo: Dictionary<String, AnyObject> = Bundle.main.infoDictionary! as Dictionary<String, AnyObject>
     
     public static var CFBundleIdentifier: String? {
         return bundleInfo["CFBundleIdentifier"] >> string

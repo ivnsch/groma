@@ -20,31 +20,31 @@ import QorumLogs
 */
 
 enum WidthDimension {
-    case Small // iPhone 4 / 5 / SE
-    case Middle // iPhone 6
-    case Large // iPhone 6+
+    case small // iPhone 4 / 5 / SE
+    case middle // iPhone 6
+    case large // iPhone 6+
 }
 
 enum HeightDimension {
-    case VerySmall // iPhone 4
-    case Small // iPhone 5 / SE
-    case Middle // iPhone 6
-    case Large // iPhone 6+
+    case verySmall // iPhone 4
+    case small // iPhone 5 / SE
+    case middle // iPhone 6
+    case large // iPhone 6+
 }
 
 class DimensionsManager {
 
     static var screenSize: CGSize {
-        let bounds = UIScreen.mainScreen().bounds
-        return CGSizeMake(bounds.width, bounds.height)
+        let bounds = UIScreen.main.bounds
+        return CGSize(width: bounds.width, height: bounds.height)
     }
     
     static var widthDimension: WidthDimension {
         let dimension: WidthDimension = {
             switch screenSize.width {
-            case let w where w >= 413: return .Large // iPhone 6+
-            case let w where w >= 374: return .Middle // iPhone 6
-            default: return .Small // iPhone 4,5
+            case let w where w >= 413: return .large // iPhone 6+
+            case let w where w >= 374: return .middle // iPhone 6
+            default: return .small // iPhone 4,5
             }
         }()
 //        QL2("Screen width: \(screenSize.width), widthDimension: \(dimension)")
@@ -54,10 +54,10 @@ class DimensionsManager {
     static var heightDimension: HeightDimension {
         let dimension: HeightDimension = {
             switch screenSize.height {
-            case let h where h >= 735: return .Large // iPhone 6+
-            case let h where h >= 666: return .Middle // iPhone 6
-            case let h where h >= 567: return .Small // iPhone 5
-            default: return .VerySmall // iPhone 4
+            case let h where h >= 735: return .large // iPhone 6+
+            case let h where h >= 666: return .middle // iPhone 6
+            case let h where h >= 567: return .small // iPhone 5
+            default: return .verySmall // iPhone 4
             }
         }()
 //        QL2("Screen height: \(screenSize.height), heightDimension: \(dimension)")
@@ -66,7 +66,7 @@ class DimensionsManager {
 
     // MARK: Fonts
     
-    static func font(fontSize: FontSize, fontType: FontType) -> UIFont {
+    static func font(_ fontSize: FontSize, fontType: FontType) -> UIFont {
         return Fonts.font(heightDimension, size: fontSize, type: fontType)
     }
     
@@ -74,81 +74,81 @@ class DimensionsManager {
     
     static var quickAddHeight: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 150
-        case .Small: return 210
-        case .Middle: return 285
-        case .Large: return 310
+        case .verySmall: return 150
+        case .small: return 210
+        case .middle: return 285
+        case .large: return 310
         }
     }
 
     static var quickAddManageProductsHeight: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 150
-        case .Small: return 150
-        case .Middle: return 180
-        case .Large: return 200
+        case .verySmall: return 150
+        case .small: return 150
+        case .middle: return 180
+        case .large: return 200
         }
     }
     
     static var quickAddSlidingTabsViewHeight: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 30
-        case .Small: return 35
-        case .Middle: return 50
-        case .Large: return 50
+        case .verySmall: return 30
+        case .small: return 35
+        case .middle: return 50
+        case .large: return 50
         }
     }
     
     static var quickAddSlidingLineBottomOffset: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 0
-        case .Small: return 5
-        case .Middle: return 10
-        case .Large: return 10
+        case .verySmall: return 0
+        case .small: return 5
+        case .middle: return 10
+        case .large: return 10
         }
     }
 
     static var quickAddSlidingLeftRightPadding: CGFloat {
         switch widthDimension {
-        case .Small: return 120
-        case .Middle: return 140
-        case .Large: return 180
+        case .small: return 120
+        case .middle: return 140
+        case .large: return 180
         }
     }
     
     static var quickAddCollectionViewSpacing: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 10
-        case .Small: return 10
-        case .Middle: return 20
-        case .Large: return 20
+        case .verySmall: return 10
+        case .small: return 10
+        case .middle: return 20
+        case .large: return 20
         }
     }
 
     static var quickAddCollectionViewCellHPadding: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 10
-        case .Small: return 10
-        case .Middle: return 20
-        case .Large: return 20
+        case .verySmall: return 10
+        case .small: return 10
+        case .middle: return 20
+        case .large: return 20
         }
     }
 
     static var quickAddCollectionViewCellVPadding: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 0
-        case .Small: return 3
-        case .Middle: return 6
-        case .Large: return 6
+        case .verySmall: return 0
+        case .small: return 3
+        case .middle: return 6
+        case .large: return 6
         }
     }
 
     static var quickAddCollectionViewCellCornerRadius: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 16
-        case .Small: return 16
-        case .Middle: return 18
-        case .Large: return 18
+        case .verySmall: return 16
+        case .small: return 16
+        case .middle: return 18
+        case .large: return 18
         }
     }
 
@@ -156,20 +156,20 @@ class DimensionsManager {
     
     static var listItemsHeaderHeight: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 28
-        case .Small: return 30
-        case .Middle: return 43
-        case .Large: return 43
+        case .verySmall: return 28
+        case .small: return 30
+        case .middle: return 43
+        case .large: return 43
         }
     }
 
     // Note: used also for stats details - we now use this for all bottom info views to keep ui consistent
     static var listItemsPricesViewHeight: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 54
-        case .Small: return 54
-        case .Middle: return 60
-        case .Large: return 70
+        case .verySmall: return 54
+        case .small: return 54
+        case .middle: return 60
+        case .large: return 70
         }
     }
     
@@ -177,62 +177,62 @@ class DimensionsManager {
     
     static var defaultCellHeight: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 65
-        case .Small: return 67
-        case .Middle: return 82
-        case .Large: return 91
+        case .verySmall: return 65
+        case .small: return 67
+        case .middle: return 82
+        case .large: return 91
         }
     }
     
     static var searchBarHeight: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 30
-        case .Small: return 30
-        case .Middle: return 30
-        case .Large: return 35
+        case .verySmall: return 30
+        case .small: return 30
+        case .middle: return 30
+        case .large: return 35
         }
     }
     
     static var leftRightPaddingConstraint: CGFloat {
         switch widthDimension {
-        case .Small: return 20
-        case .Middle: return 25
-        case .Large: return 30
+        case .small: return 20
+        case .middle: return 25
+        case .large: return 30
         }
     }
 
     static var leftRightBigPaddingConstraint: CGFloat {
         switch widthDimension {
-        case .Small: return 30
-        case .Middle: return 45
-        case .Large: return 55
+        case .small: return 30
+        case .middle: return 45
+        case .large: return 55
         }
     }
     
     static var emptyViewTopConstraint: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 30
-        case .Small: return 70
-        case .Middle: return 160
-        case .Large: return 160
+        case .verySmall: return 30
+        case .small: return 70
+        case .middle: return 160
+        case .large: return 160
         }
     }
 
     static var textFieldHeightConstraint: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 20
-        case .Small: return 35
-        case .Middle: return 40
-        case .Large: return 40
+        case .verySmall: return 20
+        case .small: return 35
+        case .middle: return 40
+        case .large: return 40
         }
     }
     
     // The full width of the screen. Hack - we should not need to use hardcoded values for this. We need it now for bottom border of cells, bounds not calculated yet. TODO fix that and remove this.
     static var fullWidth: CGFloat {
         switch widthDimension {
-        case .Small: return 320
-        case .Middle: return 375
-        case .Large: return 414
+        case .small: return 320
+        case .middle: return 375
+        case .large: return 414
         }
     }
     
@@ -245,10 +245,10 @@ class DimensionsManager {
     // Rename - default button radius?
     static var userDetailsLogoutButtonRadius: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 18
-        case .Small: return 18
-        case .Middle: return 25
-        case .Large: return 25
+        case .verySmall: return 18
+        case .small: return 18
+        case .middle: return 25
+        case .large: return 25
         }
     }
     
@@ -256,19 +256,19 @@ class DimensionsManager {
     
     static var topConstraintFirstInputWhenClose: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 10
-        case .Small: return 30
-        case .Middle: return 60
-        case .Large: return 80
+        case .verySmall: return 10
+        case .small: return 30
+        case .middle: return 60
+        case .large: return 80
         }
     }
     
     static var topConstraintFirstInputWhenOpen: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 60
-        case .Small: return 60
-        case .Middle: return 60
-        case .Large: return 60
+        case .verySmall: return 60
+        case .small: return 60
+        case .middle: return 60
+        case .large: return 60
         }
     }
     
@@ -276,19 +276,19 @@ class DimensionsManager {
     
     static var pieChartRadius: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 70
-        case .Small: return 80
-        case .Middle: return 85
-        case .Large: return 85
+        case .verySmall: return 70
+        case .small: return 80
+        case .middle: return 85
+        case .large: return 85
         }
     }
 
     static var pieChartLabelRadius: CGFloat {
         switch heightDimension {
-        case .VerySmall: return 55
-        case .Small: return 65
-        case .Middle: return 70
-        case .Large: return 70
+        case .verySmall: return 55
+        case .small: return 65
+        case .middle: return 70
+        case .large: return 70
         }
     }
     
@@ -296,17 +296,17 @@ class DimensionsManager {
     
     static var colorCircleCellSize: CGFloat {
         switch widthDimension {
-        case .Small: return 45
-        case .Middle: return 60
-        case .Large: return 70
+        case .small: return 45
+        case .middle: return 60
+        case .large: return 70
         }
     }
     
     static var colorCircleSize: CGFloat {
         switch widthDimension {
-        case .Small: return 40
-        case .Middle: return 50
-        case .Large: return 50
+        case .small: return 40
+        case .middle: return 50
+        case .large: return 50
         }
     }
 }

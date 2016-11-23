@@ -10,11 +10,11 @@ import UIKit
 
 struct ListInvitationsHandler {
 
-    static func handleInvitation(invitation: RemoteListInvitation, controller: UIViewController) {
+    static func handleInvitation(_ invitation: RemoteListInvitation, controller: UIViewController) {
         handleInvitations([invitation], controller: controller)
     }
     
-    static func handleInvitations(invitations: [RemoteListInvitation], controller: UIViewController) {
+    static func handleInvitations(_ invitations: [RemoteListInvitation], controller: UIViewController) {
         for invitation in invitations {
             ConfirmationPopup.show(
                 title: "Invitation",

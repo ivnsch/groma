@@ -10,7 +10,7 @@ import UIKit
 import SwiftValidator
 
 protocol EditBrandControllerDelegate: class {
-    func onBrandUpdated(brand: AddEditBrandControllerEditingData)
+    func onBrandUpdated(_ brand: AddEditBrandControllerEditingData)
 }
 
 class EditBrandController: UIViewController {
@@ -19,7 +19,7 @@ class EditBrandController: UIViewController {
     
     var open: Bool = false
     
-    private var validator: Validator?
+    fileprivate var validator: Validator?
     
     var brand: AddEditBrandControllerEditingData? {
         didSet {
@@ -35,7 +35,7 @@ class EditBrandController: UIViewController {
         initValidator()
     }
     
-    private func initValidator() {
+    fileprivate func initValidator() {
         let validator = Validator()
         validator.registerField(nameTextField, rules: [MinLengthRule(length: 1, message: "validation_brand_name_not_empty")])
         self.validator = validator
@@ -49,16 +49,14 @@ class EditBrandController: UIViewController {
         }
         
         if let errors = validator.validate() {
-            for (field, _) in errors {
-                field.showValidationError()
-                presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            for (_, error) in errors {
+                error.field.showValidationError()
+                present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             }
             
         } else {
-            if let lastErrors = validator.lastErrors {
-                for (field, _) in lastErrors {
-                    field.clearValidationError()
-                }
+            for (_, error) in validator.errors {
+                error.field.clearValidationError()
             }
             
             if let updatedName = nameTextField.text {

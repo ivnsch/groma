@@ -8,9 +8,9 @@
 
 import Foundation
 
-func delay(seconds: Double, f: VoidFunction) {
-    let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
-    dispatch_after(delay, dispatch_get_main_queue()) {
+func delay(_ seconds: Double, f: @escaping VoidFunction) {
+    let delay = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+    DispatchQueue.main.asyncAfter(deadline: delay) {
         f()
     }
 }

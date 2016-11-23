@@ -19,37 +19,37 @@ import QorumLogs
 enum RemoteStatusCode: Int {
     
     // JSON Flag
-    case Success = 1
-    case InvalidParameters = 2
+    case success = 1
+    case invalidParameters = 2
 
-    case AlreadyExists = 4
-    case NotFound = 5
-    case InvalidCredentials = 6
-    case SizeLimit = 7
-    case RegisteredWithOtherProvider = 8
-    case Blacklisted = 10
-    case Unknown = 100 // Note that, like above cases this also is sent as status by the server - don't change raw value
+    case alreadyExists = 4
+    case notFound = 5
+    case invalidCredentials = 6
+    case sizeLimit = 7
+    case registeredWithOtherProvider = 8
+    case blacklisted = 10
+    case unknown = 100 // Note that, like above cases this also is sent as status by the server - don't change raw value
  
     // HTTP
-    case NotAuthenticated = 401
-    case BadRequest = 400 // e.g. post request with wrong json
-    case ActionNotFound = 404
-    case UnsupportedMediaType = 415
-    case InternalServerError = 500
+    case notAuthenticated = 401
+    case badRequest = 400 // e.g. post request with wrong json
+    case actionNotFound = 404
+    case unsupportedMediaType = 415
+    case internalServerError = 500
     
     // Client generated
-    case ParsingError = 10001
-    case NotRecognizedStatusFlag = 10002
-    case NoJson = 10003
-    case NotHandledHTTPStatusCode = 10004
-    case ResponseIsNil = 10005
-    case ServerNotReachable = 10006 // This is currently both server is down and no internet connection (detected when doing the request, opposed to .NoConnection).
-    case UnknownServerCommunicationError = 10007 // Communication errors other than .ServerNotReachable
-    case ClientParamsParsingError = 10008 // This should really not happen, but the serialization for some requests needs do catch so for overall consistency in catch we return this error
-    case NoConnection = 10009 // Used when we detect in advance that there's no connectivity and don't proceed making the request. When this is not used, the execution of a request without a connection results in .ServerNotReachable
-    case NotLoggedIn = 10010 // Returned when there's no login token stored. For caller normally same meaning as .NotAuthenticated - difference is that .NotAuthenticated is determined by the server
+    case parsingError = 10001
+    case notRecognizedStatusFlag = 10002
+    case noJson = 10003
+    case notHandledHTTPStatusCode = 10004
+    case responseIsNil = 10005
+    case serverNotReachable = 10006 // This is currently both server is down and no internet connection (detected when doing the request, opposed to .NoConnection).
+    case unknownServerCommunicationError = 10007 // Communication errors other than .ServerNotReachable
+    case clientParamsParsingError = 10008 // This should really not happen, but the serialization for some requests needs do catch so for overall consistency in catch we return this error
+    case noConnection = 10009 // Used when we detect in advance that there's no connectivity and don't proceed making the request. When this is not used, the execution of a request without a connection results in .ServerNotReachable
+    case notLoggedIn = 10010 // Returned when there's no login token stored. For caller normally same meaning as .NotAuthenticated - difference is that .NotAuthenticated is determined by the server
     
-    case MustUpdateApp = 10011 // Must update app, service response except status and app version info was not processed.
+    case mustUpdateApp = 10011 // Must update app, service response except status and app version info was not processed.
 }
 
 extension RemoteStatusCode: CustomStringConvertible {
@@ -76,8 +76,8 @@ final class RemoteValidationError: CustomDebugStringConvertible {
     let args: [String]
 
     init?(json: AnyObject) {
-        msg = json.valueForKeyPath("message") as! String
-        args = json.valueForKeyPath("args") as! [String]
+        msg = json.value(forKeyPath: "message") as! String
+        args = json.value(forKeyPath: "args") as! [String]
     }
     
     var debugDescription: String {
@@ -90,9 +90,9 @@ final class RemotePathValidationError: CustomDebugStringConvertible {
     let validationErrors: [RemoteValidationError]
     
     init?(json: AnyObject) {
-        path = json.valueForKeyPath("path") as! String
+        path = json.value(forKeyPath: "path") as! String
         
-        let validationErrorsObjs = json.valueForKeyPath("validationErrors") as! [AnyObject]
+        let validationErrorsObjs = json.value(forKeyPath: "validationErrors") as! [AnyObject]
         var validationErrors: [RemoteValidationError] = []
         for json in validationErrorsObjs {
             if let validationError = RemoteValidationError(json: json) {
@@ -142,12 +142,12 @@ public protocol ResponseObjectSerializable {
 }
 
 // dummy object to be able to use responseMyObject when there's no returned data
-public class NoOpSerializable: ResponseObjectSerializable {
+open class NoOpSerializable: ResponseObjectSerializable {
     @objc required public init?(representation: AnyObject) {}
 }
 
 
-public class RemoteResult<T>: CustomDebugStringConvertible {
+open class RemoteResult<T>: CustomDebugStringConvertible {
     
     let status: RemoteStatusCode
     
@@ -159,7 +159,7 @@ public class RemoteResult<T>: CustomDebugStringConvertible {
     let errorObj: Any? // TODO type safe error object, see also TODO of error above
     
     var success: Bool {
-        return self.status == .Success
+        return self.status == .success
     }
     
     convenience init(status: RemoteStatusCode, sucessResult: T?) {
@@ -178,16 +178,16 @@ public class RemoteResult<T>: CustomDebugStringConvertible {
         self.init(status: status, sucessResult: nil, error: nil, errorObj: nil)
     }
     
-    private init(status: RemoteStatusCode, sucessResult: T?, error: RemoteInvalidParametersResult?, errorObj: Any?) {
+    fileprivate init(status: RemoteStatusCode, sucessResult: T?, error: RemoteInvalidParametersResult?, errorObj: Any?) {
         self.status = status
         self.successResult = sucessResult
         self.error = error
         self.errorObj = errorObj
     }
     
-    public var debugDescription: String {
+    open var debugDescription: String {
         let errorText = error.map{$0.debugDescription} ?? ""
-        return "{\(self.dynamicType) status: \(status), model: \(successResult), error: \(errorText), errorObj: \(errorObj)}"
+        return "{\(type(of: self)) status: \(status), model: \(successResult), error: \(errorText), errorObj: \(errorObj)}"
     }
 }
 
@@ -195,7 +195,7 @@ public class RemoteResult<T>: CustomDebugStringConvertible {
 // The idea was to be called like Alamofire.request
 struct AlamofireHelper {
     
-    static func authenticatedRequest(method: Alamofire.Method, _ url: String, _ parameters: [String: AnyObject]? = nil) -> Request {
+    static func authenticatedRequest(_ method: HTTPMethod, _ url: String, _ parameters: [String: AnyObject]? = nil) -> DataRequest {
 
         if QorumLogs.minimumLogLevelShown == 1 {
             let unwrapedParams = parameters?.map{$0} ?? [:] // make more readable
@@ -209,8 +209,8 @@ struct AlamofireHelper {
 //            QL1("size dict: \(pars.count)")
 //        }
         
-        let mutableURLRequest = NSMutableURLRequest(URL: NSURL(string: url)!)
-        mutableURLRequest.HTTPMethod = method.rawValue
+        var mutableURLRequest = URLRequest(url: URL(string: url)!)
+        mutableURLRequest.httpMethod = method.rawValue
         
         if let token = AccessTokenHelper.loadToken() {
 //            QL1("Setting the token header: \(token)")
@@ -222,20 +222,26 @@ struct AlamofireHelper {
         }
         
         // TODO: server: when encoding is not supported the response is nil! It should send a valid response. Happened testing listItems (GET) with JSON encoding
-        let encoding = method == .GET ? Alamofire.ParameterEncoding.URL : Alamofire.ParameterEncoding.JSON
-            
-        let request: NSURLRequest = encoding.encode(mutableURLRequest, parameters: parameters).0
+//        let encoding = method == .get ? Alamofire.URLEncoding : Alamofire.JSONEncoding
+        
+        let request: URLRequest = {
+            if method == .get {
+                return try! Alamofire.URLEncoding.default.encode(mutableURLRequest, with: parameters)
+            } else {
+                return try! Alamofire.JSONEncoding.default.encode(mutableURLRequest, with: parameters)
+            }
+        }()
         
         return Alamofire.request(request)
     }
     
-    static func authenticatedRequest(method: Alamofire.Method, _ url: String, _ parameters: [[String: AnyObject]]) -> Request {
+    static func authenticatedRequest(_ method: HTTPMethod, _ url: String, _ parameters: [[String: AnyObject]]) -> DataRequest {
         
         QL1("\(method) \(url), parameters: \(parameters)")
         
         // this is handled differently because the parameters are an array and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
-        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        request.HTTPMethod = method.rawValue
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 
         if let token = AccessTokenHelper.loadToken() {
@@ -248,51 +254,51 @@ struct AlamofireHelper {
         }
         
         // TODO!!!! review, force try parameter serialization. For now like this because there's no known reason why this would fail, and simplifies code significantly
-        request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(parameters, options: [])
+        request.httpBody = try! JSONSerialization.data(withJSONObject: parameters, options: [])
         return Alamofire.request(request)
     }
 }
 
 
-public protocol ResponseObjectSerializable2 {
-    init?(response: NSHTTPURLResponse, representation: AnyObject)
-}
+//public protocol ResponseObjectSerializable2 {
+//    init?(response: HTTPURLResponse, representation: AnyObject)
+//}
+//
+//extension DataRequest {
+//    public func responseObject<T: ResponseObjectSerializable2>(_ completionHandler: (DataResponse<T>) -> Void) -> Self {
+//        let responseSerializer = DataResponseSerializer<T> { request, response, data, error in
+//            if let error = error {
+//                return .failure(error)
+//            }
+//
+//            let JSONResponseSerializer = DataRequest.jsonResponseSerializer(options: .allowFragments)
+//            let result = JSONResponseSerializer.serializeResponse(request, response, data, error)
+//            
+//            switch result {
+//            case .success(let value):
+//                if let
+//                    response = response,
+//                    let responseObject = T(response: response, representation: value as AnyObject)
+//                {
+//                    return .success(responseObject)
+//                } else {
+//                    return .failure(NSError(domain: "com.groma.error", code: RemoteStatusCode.parsingError.rawValue, userInfo: ["reason": "JSON could not be serialized into response object: \(value)"]))
+//                }
+//            case .failure(let error):
+//                return .failure(error)
+//            }
+//        }
+//        
+//        return response(responseSerializer: responseSerializer, completionHandler: completionHandler)
+//    }
+//}
+//
 
-extension Request {
-    public func responseObject<T: ResponseObjectSerializable2>(completionHandler: Response<T, NSError> -> Void) -> Self {
-        let responseSerializer = ResponseSerializer<T, NSError> { request, response, data, error in
-            guard error == nil else { return .Failure(error!) }
-            
-            let JSONResponseSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
-            let result = JSONResponseSerializer.serializeResponse(request, response, data, error)
-            
-            switch result {
-            case .Success(let value):
-                if let
-                    response = response,
-                    responseObject = T(response: response, representation: value)
-                {
-                    return .Success(responseObject)
-                } else {
-                    let failureReason = "JSON could not be serialized into response object: \(value)"
-                    let error = Error.errorWithCode(.JSONSerializationFailed, failureReason: failureReason)
-                    return .Failure(error)
-                }
-            case .Failure(let error):
-                return .Failure(error)
-            }
-        }
-        
-        return response(responseSerializer: responseSerializer, completionHandler: completionHandler)
-    }
-}
+extension DataRequest {
 
+    public func responseMyArray<T: ResponseObjectSerializable>(_ completionHandler: @escaping (URLRequest?, DataResponse<RemoteResult<[T]>>?, RemoteResult<[T]>) -> Void) -> Self {
 
-extension Alamofire.Request {
-
-    public func responseMyArray<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest?, Response<RemoteResult<[T]>, NSError>?, RemoteResult<[T]>) -> Void) -> Self {
-
-        let dataParser: (AnyObject, NSHTTPURLResponse) -> ([T]?) = {data, response in
+        let dataParser: (AnyObject, HTTPURLResponse) -> ([T]?) = {data, response in
             var objs = [T]()
             for obj in data as! [AnyObject] {
                 if let obj = T(representation: obj) {
@@ -309,19 +315,18 @@ extension Alamofire.Request {
         return self.responseHandler(dataParser, completionHandler: completionHandler)
     }
     
-    
-    public func responseMyObject<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest?, Response<RemoteResult<T>, NSError>?, RemoteResult<T>) -> Void) -> Self {
+    public func responseMyObject<T: ResponseObjectSerializable>(_ completionHandler: @escaping (URLRequest?, DataResponse<RemoteResult<T>>?, RemoteResult<T>) -> Void) -> Self {
         
-        let dataParser: (AnyObject, NSHTTPURLResponse) -> (T?) = {data, response in
+        let dataParser: (AnyObject, HTTPURLResponse) -> (T?) = {data, response in
             return T(representation: data)
         }
         
         return self.responseHandler(dataParser, completionHandler: completionHandler)
     }
 
-    public func responseMyTimestamp(completionHandler: (NSURLRequest?, Response<RemoteResult<Int64>, NSError>?, RemoteResult<Int64>) -> Void) -> Self {
+    public func responseMyTimestamp(_ completionHandler: @escaping (URLRequest?, DataResponse<RemoteResult<Int64>>?, RemoteResult<Int64>) -> Void) -> Self {
         
-        let dataParser: (AnyObject, NSHTTPURLResponse) -> (Int64?) = {data, response in
+        let dataParser: (AnyObject, HTTPURLResponse) -> (Int64?) = {data, response in
             return (data as? Double).map{Int64($0)}
         }
         
@@ -329,19 +334,19 @@ extension Alamofire.Request {
     }
     
     // Common method to parse json object and array
-    private func responseHandler<T>(dataParser: (AnyObject, NSHTTPURLResponse) -> (T?), completionHandler: (NSURLRequest?, Response<RemoteResult<T>, NSError>?, RemoteResult<T>) -> Void) -> Self {
+    fileprivate func responseHandler<T>(_ dataParser: @escaping (AnyObject, HTTPURLResponse) -> (T?), completionHandler: @escaping (URLRequest?, DataResponse<RemoteResult<T>>?, RemoteResult<T>) -> Void) -> Self {
 
-        let responseSerializer = ResponseSerializer<RemoteResult<T>, NSError> { request, responseMaybe, data, error in
+        let responseSerializer = DataResponseSerializer<RemoteResult<T>> { request, responseMaybe, data, error in
             
             // By default error is logged as error both in Qorum and server. We can also decide to output Qorum only as a warning and not report to server.
-            func logRequesstWarningOrError(msg: String, isWarning: Bool, reportToServer: Bool) {
+            func logRequesstWarningOrError(_ msg: String, isWarning: Bool, reportToServer: Bool) {
 
-                guard (request?.URL.map{$0.absoluteString != Urls.error}) ?? true else {return} // don't try to report error if an error report failed, to prevent infinite loop
+                guard (request?.url.map{$0.absoluteString != Urls.error}) ?? true else {return} // don't try to report error if an error report failed, to prevent infinite loop
 
                 let requestStr: String = {
                     if let request = request {
-                        let methodStr = request.HTTPMethod ?? "<Undefined HTTP method>"
-                        return "Called: \(methodStr), url: \(request.URL)"
+                        let methodStr = request.httpMethod ?? "<Undefined HTTP method>"
+                        return "Called: \(methodStr), url: \(request.url)"
                     } else {
                         return "Undefined request"
                     }
@@ -360,15 +365,15 @@ extension Alamofire.Request {
                 }
             }
 
-            func logRequesstError(msg: String) {
+            func logRequesstError(_ msg: String) {
                 logRequesstWarningOrError(msg, isWarning: false, reportToServer: true)
             }
             
-            func logRequesstWarning(msg: String) {
+            func logRequesstWarning(_ msg: String) {
                 logRequesstWarningOrError(msg, isWarning: true, reportToServer: false)
             }
             
-            func logRequesstErrorNoServer(msg: String) {
+            func logRequesstErrorNoServer(_ msg: String) {
                 logRequesstWarningOrError(msg, isWarning: false, reportToServer: false)
             }
             
@@ -378,19 +383,21 @@ extension Alamofire.Request {
                 let statusCode = response.statusCode
                 
                 if statusCode >= 200 && statusCode < 300 {
-                    let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
+                    let JSONSerializer = DataRequest.jsonResponseSerializer(options: .allowFragments)
                     let JSON = JSONSerializer.serializeResponse(request, response, data, error)
                     
                     switch JSON {
-                    case .Success(let dataObj):
+                    case .success(let dataObjAny):
+                        
+                        let dataObj = dataObjAny as AnyObject
                         
 //                        QL1("JSON (request \(request?.HTTPMethod), \(request?.URL): \(dataObj)")
 
-                        let statusInt = dataObj.valueForKeyPath("status") as! Int
+                        let statusInt = dataObj.value(forKeyPath: "status") as! Int
                         if let status = RemoteStatusCode(rawValue: statusInt) {
                             
                             // App version check. Note that this doesn't affect processing the rest of the response, not even if the fields are missing. In the future we may prefer to trigger an .Unknown if the fields are missing and not continue processing response.
-                            if let minRequiredAppVersion = dataObj.valueForKeyPath("minr") as? Int, minAdvisedAppVersion = dataObj.valueForKeyPath("mina") as? Int {
+                            if let minRequiredAppVersion = dataObj.value(forKeyPath: "minr") as? Int, let minAdvisedAppVersion = dataObj.value(forKeyPath: "mina") as? Int {
                                 if let appVersion = AppInfo.CFBundleVersion {
                                     QL1("Response app version, required: \(minRequiredAppVersion), min advised: \(minAdvisedAppVersion), app version: \(appVersion)")
                                     
@@ -412,7 +419,7 @@ extension Alamofire.Request {
                                     if isInvalidAppVersion() {
                                         // Log out - in case user taps on "Update" but comes back
                                         Providers.userProvider.removeLoginToken()
-                                        return Result.Success(RemoteResult<T>(status: .MustUpdateApp))
+                                        return Result.success(RemoteResult<T>(status: .mustUpdateApp))
                                     }
                                     
                                 } else {
@@ -422,143 +429,145 @@ extension Alamofire.Request {
                                 QL4("Server didn't send app minr and/or mina app version, data: \(dataObj)")
                             }
 
-                            if status == .Success || status == .InvalidParameters || status == .SizeLimit || status == .Blacklisted {
+                            if status == .success || status == .invalidParameters || status == .sizeLimit || status == .blacklisted {
                                 
-                                if status == .Success {
-                                    if let data: AnyObject = dataObj.valueForKeyPath("data") {
+                                if status == .success {
+                                    if let dataAny = dataObj.value(forKeyPath: "data") {
+                                        let data = dataAny as AnyObject
                                         
                                         if let sucessResult = dataParser(data, response) {
                                             let remoteResult = RemoteResult(status: status, sucessResult: sucessResult)
-                                            return Result.Success(remoteResult)
+                                            return Result.success(remoteResult)
                                             
                                         } else {
                                             logRequesstError("Error parsing result object: \(data)")
-                                            return Result.Success(RemoteResult<T>(status: .ParsingError))
+                                            return Result.success(RemoteResult<T>(status: .parsingError))
                                         }
                                         
                                     } else { // the result has no data
-                                        return Result.Success(RemoteResult<T>(status: status))
+                                        return Result.success(RemoteResult<T>(status: status))
                                     }
-                                } else if status == .InvalidParameters {
-                                    if let data: AnyObject = dataObj.valueForKeyPath("data") {
+                                } else if status == .invalidParameters {
+                                    if let dataAny = dataObj.value(forKeyPath: "data") {
+                                        let data = dataAny as AnyObject
                                         
                                         if let invalidParametersObj = RemoteInvalidParametersResult(json: data) {
                                             logRequesstError("Invalid parameters: \(invalidParametersObj.debugDescription)")
-                                            return Result.Success(RemoteResult<T>(status: .InvalidParameters, error: invalidParametersObj))
+                                            return Result.success(RemoteResult<T>(status: .invalidParameters, error: invalidParametersObj))
                                             
                                         } else {
                                             logRequesstError("Error parsing result object in invalid parameters response")
-                                            return Result.Success(RemoteResult<T>(status: .ParsingError))
+                                            return Result.success(RemoteResult<T>(status: .parsingError))
                                         }
                                         
                                     } else { // the result has no data
                                         logRequesstError("No data key: \(dataObj)")
-                                        return Result.Success(RemoteResult<T>(status: .ParsingError))
+                                        return Result.success(RemoteResult<T>(status: .parsingError))
                                     }
                                     
-                                } else if status == .SizeLimit {
-                                    if let error: AnyObject = dataObj.valueForKeyPath("error") { // TODO more generic implementation of error obj parsing? Maybe with other status too
+                                } else if status == .sizeLimit {
+                                    if let errorAny = dataObj.value(forKeyPath: "error") { // TODO more generic implementation of error obj parsing? Maybe with other status too
+                                        let error = errorAny as AnyObject
+                                        
                                         if let maxSize = error as? Int {
-                                            return Result.Success(RemoteResult<T>(status: .SizeLimit, errorObj: maxSize))
+                                            return Result.success(RemoteResult<T>(status: .sizeLimit, errorObj: maxSize))
                                             
                                         } else {
                                             logRequesstError("Error parsing error object in size limit response")
-                                            return Result.Success(RemoteResult<T>(status: .ParsingError))
+                                            return Result.success(RemoteResult<T>(status: .parsingError))
                                         }
                                         
                                     } else { // the result has no data
                                         logRequesstError("SizeLimit: unexpected format in invalid parameters response")
-                                        return Result.Success(RemoteResult<T>(status: .ParsingError))
+                                        return Result.success(RemoteResult<T>(status: .parsingError))
                                     }
                                     
-                                } else if status == .Blacklisted {
+                                } else if status == .blacklisted {
                                     logRequesstWarning("Blacklisted user")
                                     Providers.userProvider.removeLoginToken()
                                     mainQueue {
                                         Notification.send(Notification.LogoutUI)
                                     }
-                                    return Result.Success(RemoteResult<T>(status: status))
+                                    return Result.success(RemoteResult<T>(status: status))
                                     
                                 } else {
                                     logRequesstError("Forgot to handle a status in nested if: \(status)")
-                                    return Result.Success(RemoteResult<T>(status: .Unknown))
+                                    return Result.success(RemoteResult<T>(status: .unknown))
                                 }
                                 
                             } else { // status != success
                                 logRequesstWarning("Returned not success status: \(status)")
-                                return Result.Success(RemoteResult<T>(status: status))
+                                return Result.success(RemoteResult<T>(status: status))
                             }
                             
                         } else {
                             logRequesstError("Error: response: status flag not recognized: \(statusInt)")
-                            return Result.Success(RemoteResult<T>(status: .NotRecognizedStatusFlag))
+                            return Result.success(RemoteResult<T>(status: .notRecognizedStatusFlag))
                         }
                         
-                    case .Failure(let error):
+                    case .failure(let error):
                         logRequesstError("Error serializing response: \(response), request: \(request), data: \(data), serializationError: \(error)")
-                        return Result.Success(RemoteResult<T>(status: .ParsingError))
+                        return Result.success(RemoteResult<T>(status: .parsingError))
                     }
                     
                 } else if statusCode == 401 {
                     logRequesstWarning("Unauthorized")
                     Providers.userProvider.removeLoginToken()
-                    return Result.Success(RemoteResult<T>(status: .NotAuthenticated))
+                    return Result.success(RemoteResult<T>(status: .notAuthenticated))
                     
                 } else if statusCode == 400 {
                     logRequesstError("Bad request")
-                    return Result.Success(RemoteResult<T>(status: .BadRequest))
+                    return Result.success(RemoteResult<T>(status: .badRequest))
                     
                 } else if statusCode == 404 {
-                    let str = request?.URL.map{$0} ?? ""
-                    logRequesstError("Action not found: \(request?.HTTPMethod) \(str)")
-                    return Result.Success(RemoteResult<T>(status: .ActionNotFound))
+                    let str = request?.url.map{$0.absoluteString} ?? ""
+                    logRequesstError("Action not found: \(request?.httpMethod) \(str)")
+                    return Result.success(RemoteResult<T>(status: .actionNotFound))
                     
                 } else if statusCode == 415 {
                     logRequesstError("Unsupported media type")
-                    return Result.Success(RemoteResult<T>(status: .UnsupportedMediaType))
+                    return Result.success(RemoteResult<T>(status: .unsupportedMediaType))
                     
                 } else if statusCode == 500 {
                     logRequesstError("Internal server error: \(response)")
-                    return Result.Success(RemoteResult<T>(status: .InternalServerError))
+                    return Result.success(RemoteResult<T>(status: .internalServerError))
                     
                 } else {
                     logRequesstError("Error: Not handled status code: \(statusCode)")
-                    return Result.Success(RemoteResult<T>(status: .NotHandledHTTPStatusCode))
+                    return Result.success(RemoteResult<T>(status: .notHandledHTTPStatusCode))
                 }
                 
             } else { // So far this happened when the server was not reachable. This will be executed but the error is handled in the completionHandler block (Alamofire passes us a .Failure in this case). We return here .ResponseIsNil only as result of the serialization.
                 logRequesstErrorNoServer("Error: response == nil")
                 
                 if let error = error {
-                    if error.code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
+                    if error._code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
                         logRequesstErrorNoServer("Error calling remote service, error: \(error)")
-                            return Result.Success(RemoteResult<T>(status: .ServerNotReachable))
+                            return Result.success(RemoteResult<T>(status: .serverNotReachable))
                     } else {
                         logRequesstError("Error calling remote service, error: \(error)")
-                        return Result.Success(RemoteResult<T>(status: .UnknownServerCommunicationError))
+                        return Result.success(RemoteResult<T>(status: .unknownServerCommunicationError))
                     }
                 } else {
-                    return Result.Success(RemoteResult<T>(status: .ResponseIsNil))
+                    return Result.success(RemoteResult<T>(status: .responseIsNil))
                 }
             }
         }
-
-//        return response(responseSerializer: responseSerializer, completionHandler: { (response: Response<T, NSError>) in
+        
         return response(responseSerializer: responseSerializer, completionHandler: { response in
-//        return response(responseSerializer: responseSerializer, completionHandler: { (request: NSURLRequest?, response: NSHTTPURLResponse?, object: Result<RemoteResult<T>, NSError>) in
 
             let remoteResult: RemoteResult<T> = {
                 switch response.result {
                     
                 // TODO check if this error handling is still really necessary, after the alamo fire update, we had to put it in the parsing (above) so probably this is now never used.
-                case .Success(let remoteResult):
+                case .success(let remoteResult):
                     return remoteResult
-                case .Failure(let error):
+                case .failure(let error):
                     QL4("Error calling remote service, error: \(error)")
-                    if error.code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
-                        return RemoteResult<T>(status: .ServerNotReachable)
+                    if error._code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
+                        return RemoteResult<T>(status: .serverNotReachable)
                     } else {
-                        return RemoteResult<T>(status: .UnknownServerCommunicationError)
+                        return RemoteResult<T>(status: .unknownServerCommunicationError)
                     }
                 }
             }()
@@ -569,5 +578,5 @@ extension Alamofire.Request {
 }
 
 public protocol ResponseCollectionSerializable {
-    static func collection(representation: AnyObject) -> [Self]?
+    static func collection(_ representation: [AnyObject]) -> [Self]?
 }

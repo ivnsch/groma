@@ -16,10 +16,10 @@ struct RemoteIncrementResult: ResponseObjectSerializable, CustomDebugStringConve
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let delta = representation.valueForKeyPath("delta") as? Int,
-            let updatedQuantity = representation.valueForKeyPath("updatedQuantity") as? Int,
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let delta = representation.value(forKeyPath: "delta") as? Int,
+            let updatedQuantity = representation.value(forKeyPath: "updatedQuantity") as? Int,
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 print("Invalid json: \(representation)")
                 return nil}
@@ -31,6 +31,6 @@ struct RemoteIncrementResult: ResponseObjectSerializable, CustomDebugStringConve
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), delta: \(delta), updatedQuantity: \(updatedQuantity), lastUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) uuid: \(uuid), delta: \(delta), updatedQuantity: \(updatedQuantity), lastUpdate: \(lastUpdate)}"
     }
 }

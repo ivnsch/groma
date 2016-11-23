@@ -13,5 +13,5 @@ protocol Identifiable {
     /**
     If objects have the same semantic identity. Identity is equivalent to a primary key in a database.
     */
-    func same(rhs: Self) -> Bool
+    func same(_ rhs: Self) -> Bool
 }

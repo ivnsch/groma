@@ -25,7 +25,7 @@ extension UITableView {
     
     var topOffset: CGFloat {
         set {
-            self.contentOffset = CGPointMake(contentOffset.x, newValue)
+            self.contentOffset = CGPoint(x: contentOffset.x, y: newValue)
         }
         get {
             return self.contentOffset.y
@@ -50,21 +50,21 @@ extension UITableView {
         }
     }
     
-    func absoluteRow(indexPath: NSIndexPath) -> Int {
-        var absRow = indexPath.row
-        for section in 0..<indexPath.section {
-            absRow += self.numberOfRowsInSection(section)
+    func absoluteRow(_ indexPath: IndexPath) -> Int {
+        var absRow = (indexPath as NSIndexPath).row
+        for section in 0..<(indexPath as NSIndexPath).section {
+            absRow += self.numberOfRows(inSection: section)
         }
         return absRow
     }
     
-    func wrapUpdates(function: VoidFunction) {
+    func wrapUpdates(_ function: VoidFunction) {
         self.beginUpdates()
         function()
         self.endUpdates()
     }
     
-    func wrapAnimationAndUpdates(function: VoidFunction, onComplete: VoidFunction) {
+    func wrapAnimationAndUpdates(_ function: VoidFunction, onComplete: @escaping VoidFunction) {
         CATransaction.begin()
         CATransaction.setCompletionBlock {
             onComplete()

@@ -22,14 +22,14 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
     init?(representation: AnyObject) {
         
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
-            let productUuid = representation.valueForKeyPath("productUuid") as? String,
-            let quantity = representation.valueForKeyPath("quantity") as? Int,
-            let userUuid = representation.valueForKeyPath("userUuid") as? String,
-            let addedDate = representation.valueForKeyPath("addedDate") as? Double,
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double,
-            let paidPrice = representation.valueForKeyPath("paidPrice") as? Float
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let inventoryUuid = representation.value(forKeyPath: "inventoryUuid") as? String,
+            let productUuid = representation.value(forKeyPath: "productUuid") as? String,
+            let quantity = representation.value(forKeyPath: "quantity") as? Int,
+            let userUuid = representation.value(forKeyPath: "userUuid") as? String,
+            let addedDate = representation.value(forKeyPath: "addedDate") as? Double,
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double,
+            let paidPrice = representation.value(forKeyPath: "paidPrice") as? Float
             else {
                 print("Invalid json: \(representation)")
                 return nil}
@@ -44,9 +44,9 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
         self.paidPrice = paidPrice
     }
     
-    static func collection(representation: AnyObject) -> [RemoteHistoryItem]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteHistoryItem]? {
         var listItems = [RemoteHistoryItem]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let listItem = RemoteHistoryItem(representation: obj) {
                 listItems.append(listItem)
             } else {
@@ -57,7 +57,7 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), inventoryUuid: \(inventoryUuid), productUuid: \(productUuid), quantity: \(quantity), userUuid: \(userUuid), addedDate: \(addedDate), lastUpdate: \(lastUpdate), paidPrice: \(paidPrice)}"
+        return "{\(type(of: self)) uuid: \(uuid), inventoryUuid: \(inventoryUuid), productUuid: \(productUuid), quantity: \(quantity), userUuid: \(userUuid), addedDate: \(addedDate), lastUpdate: \(lastUpdate), paidPrice: \(paidPrice)}"
     }
 }
 

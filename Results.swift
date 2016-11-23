@@ -17,9 +17,9 @@ extension Results {
     If range is not fully contained in results count the returned array is determined by the intersection of range and results count
     If range starts beyond results count an empty array is returned
     */
-    func toArray(range: NSRange? = nil) -> [T] {
+    func toArray(_ range: NSRange? = nil) -> [T] {
         
-        guard range?.location < count else {
+        guard (range.map{$0.location < count} ?? false) else {
             print("Warning: Requesting out of bounds range of results. Range: \(range), results count: \(count)")
             return []
         }
@@ -39,7 +39,7 @@ extension Results {
     
     // Copied from Array extension - we need this for results also
     // mapFunc: maps element to a tuple key: value
-    func toDictionary<K: Hashable, V>(mapFunc: T -> (K, V)) -> [K: V] {
+    func toDictionary<K: Hashable, V>(_ mapFunc: (T) -> (K, V)) -> [K: V] {
         var dict = [K: V]()
         for e in self {
             let (k, v) = mapFunc(e)
@@ -48,16 +48,16 @@ extension Results {
         return dict
     }
     
-    func findFirst(function: (element: T) -> Bool) -> T? {
+    func findFirst(_ function: (_ element: T) -> Bool) -> T? {
         for e in self {
-            if function(element: e) {
+            if function(e) {
                 return e
             }
         }
         return nil
     }
     
-    func splitMap<U>(belongs: T -> Bool, mapper: T -> U) -> (belongs: [U], notBelongs: [U]) {
+    func splitMap<U>(_ belongs: (T) -> Bool, mapper: (T) -> U) -> (belongs: [U], notBelongs: [U]) {
         var belongsArr: [U] = []
         var notBelongsArr: [U] = []
         for element in self {
@@ -72,7 +72,7 @@ extension Results {
     
     // Filter + map
     // parameter f, mapping and filtering function if returns nil -> filter out
-    func collect<U>(f: T -> U?) -> [U] {
+    func collect<U>(_ f: (T) -> U?) -> [U] {
         var arr: [U] = []
         for e in self {
             if let e = f(e) {

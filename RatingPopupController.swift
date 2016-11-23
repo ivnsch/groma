@@ -15,13 +15,13 @@ protocol RatingPopupControllerDelegate: class {
 
 class RatingPopupController: UIViewController, RatingProvideFeedbackControllerDelegate {
     
-    private let appId = "Groma"
+    fileprivate let appId = "Groma"
     
     weak var delegate: RatingPopupControllerDelegate?
 
-    @IBAction func onGoodTap(sender: UIButton) {
-        if let url = NSURL(string : "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=\(appId)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1)") {
-            if !UIApplication.sharedApplication().openURL(url) {
+    @IBAction func onGoodTap(_ sender: UIButton) {
+        if let url = URL(string : "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=\(appId)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1)") {
+            if !UIApplication.shared.openURL(url) {
                 AlertPopup.show(message: trans("popup_couldnt_open_app_store_url"), controller: self)
                 PreferencesManager.savePreference(PreferencesManagerKey.dontShowAppRatingDialogAgain, value: true) // rating has practically the same meaning as selecting don't show again
             }
@@ -30,20 +30,20 @@ class RatingPopupController: UIViewController, RatingProvideFeedbackControllerDe
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let feedbackController = segue.destinationViewController as? RatingProvideFeedbackController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let feedbackController = segue.destination as? RatingProvideFeedbackController {
             feedbackController.delegate = self
         } else {
-            QL4("Unexpected controller: \(segue.destinationViewController)")
+            QL4("Unexpected controller: \(segue.destination)")
         }
     }
     
-    @IBAction func onAskLaterTap(sender: UIButton) {
-        PreferencesManager.savePreference(PreferencesManagerKey.lastAppRatingDialogDate, value: NSDate())
+    @IBAction func onAskLaterTap(_ sender: UIButton) {
+        PreferencesManager.savePreference(PreferencesManagerKey.lastAppRatingDialogDate, value: Date())
         delegate?.dismiss()
     }
     
-    @IBAction func onNeverAskAgainTap(sender: UIButton) {
+    @IBAction func onNeverAskAgainTap(_ sender: UIButton) {
         PreferencesManager.savePreference(PreferencesManagerKey.dontShowAppRatingDialogAgain, value: true)
         delegate?.dismiss()        
     }

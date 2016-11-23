@@ -10,5 +10,5 @@ import Foundation
 
 protocol ErrorProvider {
 
-    func reportError(error: ErrorReport)
+    func reportError(_ error: ErrorReport)
 }

@@ -15,8 +15,8 @@ struct RemoteContainedItemIdentifier: CustomDebugStringConvertible {
     
     init?(representation: AnyObject) {
         guard
-            let itemUuid = representation.valueForKeyPath("uuid") as? String,
-            let containerUuid = representation.valueForKeyPath("containerUuid") as? String
+            let itemUuid = representation.value(forKeyPath: "uuid") as? String,
+            let containerUuid = representation.value(forKeyPath: "containerUuid") as? String
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -27,6 +27,6 @@ struct RemoteContainedItemIdentifier: CustomDebugStringConvertible {
     
     
     var debugDescription: String {
-        return "{\(self.dynamicType) itemUuid: \(itemUuid), containerUuid: \(containerUuid)}"
+        return "{\(type(of: self)) itemUuid: \(itemUuid), containerUuid: \(containerUuid)}"
     }
 }

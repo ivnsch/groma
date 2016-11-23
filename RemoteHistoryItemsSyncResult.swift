@@ -22,10 +22,10 @@ struct RemoteHistoryItemsSyncResult: ResponseObjectSerializable, CustomDebugStri
     
     init?(representation: AnyObject) {
         guard
-            let historyItemsObj = representation.valueForKeyPath("historyItems") as? [AnyObject],
-            let historyItems = RemoteHistoryItems(representation: historyItemsObj),
-            let couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as? [String],
-            let couldNotDelete = representation.valueForKeyPath("couldNotDelete") as? [String]
+            let historyItemsObj = representation.value(forKeyPath: "historyItems") as? [AnyObject],
+            let historyItems = RemoteHistoryItems(representation: historyItemsObj as AnyObject),
+            let couldNotUpdate = representation.value(forKeyPath: "couldNotUpdate") as? [String],
+            let couldNotDelete = representation.value(forKeyPath: "couldNotDelete") as? [String]
             else {
                 print("Invalid json: \(representation)")
                 return nil}
@@ -36,6 +36,6 @@ struct RemoteHistoryItemsSyncResult: ResponseObjectSerializable, CustomDebugStri
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventoryItems: \(historyItems), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete)}"
+        return "{\(type(of: self)) inventoryItems: \(historyItems), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete)}"
     }
 }

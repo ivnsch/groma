@@ -40,22 +40,22 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
 
     var shortDebugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), product: \(product.name), quantity: \(quantity), quantityDelta: \(quantityDelta), quantity: \(quantity)}"
+        return "{\(type(of: self)) uuid: \(uuid), product: \(product.name), quantity: \(quantity), quantityDelta: \(quantityDelta), quantity: \(quantity)}"
     }
 
     var completeDebugDescription: String {
-        return "{\(self.dynamicType) product: \(product), quantity: \(quantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
+        return "{\(type(of: self)) product: \(product), quantity: \(quantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
     var debugDescription: String {
         return shortDebugDescription
     }
     
-    func same(inventoryItem: InventoryItem) -> Bool {
+    func same(_ inventoryItem: InventoryItem) -> Bool {
         return uuid == inventoryItem.uuid
     }
     
-    func copy(uuid uuid: String? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, product: Product? = nil, inventory: Inventory? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> InventoryItem {
+    func copy(uuid: String? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, product: Product? = nil, inventory: Inventory? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> InventoryItem {
         return InventoryItem(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
@@ -67,11 +67,11 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
-    func incrementQuantityCopy(delta: Int) -> InventoryItem {
+    func incrementQuantityCopy(_ delta: Int) -> InventoryItem {
         return copy(quantity: quantity + delta, quantityDelta: quantityDelta + delta)
     }
     
-    func equalsExcludingSyncAttributes(rhs: InventoryItem) -> Bool {
+    func equalsExcludingSyncAttributes(_ rhs: InventoryItem) -> Bool {
         return uuid == rhs.uuid && product == rhs.product && inventory.uuid == rhs.inventory.uuid && quantity == rhs.quantity
     }
 }

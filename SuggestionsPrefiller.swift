@@ -12,10 +12,10 @@ import QorumLogs
 
 class SuggestionsPrefiller {
 
-    private let dbProvider = RealmProductProvider()
+    fileprivate let dbProvider = RealmProductProvider()
 
     // Used to init database. This is meant to be called when the app starts.
-    func prefill(lang: String, onFinished: Bool -> Void) {
+    func prefill(_ lang: String, onFinished: @escaping (Bool) -> Void) {
         let (categories, products) = prefillProducts(lang)
         dbProvider.save(categories, dbProducts: products) {saved in
             onFinished(saved)
@@ -32,9 +32,9 @@ class SuggestionsPrefiller {
     *
     * This is not meant to be called during normal execution.
     */
-    func prefill(onFinished: VoidFunction? = nil) {
+    func prefill(_ onFinished: VoidFunction? = nil) {
 
-        func prefill(lang: String, onFinished: VoidFunction) {
+        func prefill(_ lang: String, onFinished: @escaping VoidFunction) {
             let (categories, products) = prefillProducts(lang)
             //        printStringsForTranslations(categories, products: products)
             dbProvider.save(categories, dbProducts: products) {[weak self] saved in
@@ -56,7 +56,7 @@ class SuggestionsPrefiller {
         
         let langs = LangManager().availableLangs
 
-        func prefillRec(index: Int) {
+        func prefillRec(_ index: Int) {
             guard index < langs.count else {
                 onFinished?()
                 return
@@ -70,7 +70,7 @@ class SuggestionsPrefiller {
         prefillRec(0)
     }
     
-    private func writeDBCopy(toPath: String) {
+    fileprivate func writeDBCopy(_ toPath: String) {
 //
 //        if let fromPath = Realm.Configuration.defaultConfiguration.path {
 //            do {
@@ -87,57 +87,57 @@ class SuggestionsPrefiller {
 //        }
     }
 
-    private var uuid: String {
-        return NSUUID().UUIDString
+    fileprivate var uuid: String {
+        return UUID().uuidString
     }
     
-    func prefillProducts(lang: String) -> (categories: [DBProductCategory], products: [DBProduct]) {
+    func prefillProducts(_ lang: String) -> (categories: [DBProductCategory], products: [DBProduct]) {
 
         func noResult() -> (categories: [DBProductCategory], products: [DBProduct]) {
             return (categories: [], products: [])
         }
         
-        guard let path = NSBundle.mainBundle().pathForResource(lang, ofType: "lproj") else {QL4("No path for lang: \(lang)"); return noResult()}
-        guard let bundle = NSBundle(path: path) else {QL4("No bundle for path: \(path)"); return noResult()}
+        guard let path = Bundle.main.path(forResource: lang, ofType: "lproj") else {QL4("No path for lang: \(lang)"); return noResult()}
+        guard let bundle = Bundle(path: path) else {QL4("No bundle for path: \(path)"); return noResult()}
         
-        func tr(key: String, _ lang: String) -> String {
-            return bundle.localizedStringForKey(key, value: nil, table: nil)
+        func tr(_ key: String, _ lang: String) -> String {
+            return bundle.localizedString(forKey: key, value: nil, table: nil)
         }
         
-        let fruitsCat = DBProductCategory(uuid: uuid, name: tr("pr_fruits", lang), bgColorHex: UIColor.flatRedColor().hexStr)
-        let frozenFruitsCat = DBProductCategory(uuid: uuid, name: tr("pr_fruits_frozen", lang), bgColorHex: UIColor.flatBlueColor().hexStr)
-        let vegetablesCat = DBProductCategory(uuid: uuid, name: tr("pr_vegetables", lang), bgColorHex: UIColor.flatGreenColor().hexStr)
-        let herbsCat = DBProductCategory(uuid: uuid, name: tr("pr_herbs", lang), bgColorHex: UIColor.flatGreenColorDark().hexStr)
-        let meatCat = DBProductCategory(uuid: uuid, name: tr("pr_meat", lang), bgColorHex: UIColor.flatRedColorDark().hexStr)
-        let petsCat = DBProductCategory(uuid: uuid, name: tr("pr_pets", lang), bgColorHex: UIColor.flatPowderBlueColor().hexStr)
-        let bakeryCat = DBProductCategory(uuid: uuid, name: tr("pr_bakery", lang), bgColorHex: UIColor.flatTealColor().hexStr)
-        let riceCat = DBProductCategory(uuid: uuid, name: tr("pr_rice", lang), bgColorHex: UIColor.flatGrayColor().hexStr)
-        let nutsCat = DBProductCategory(uuid: uuid, name: tr("pr_nuts", lang), bgColorHex: UIColor.flatBrownColor().hexStr)
-        let oilCat = DBProductCategory(uuid: uuid, name: tr("pr_oil", lang), bgColorHex: UIColor.flatForestGreenColor().hexStr)
-        let clothesCat = DBProductCategory(uuid: uuid, name: tr("pr_clothes", lang), bgColorHex: UIColor.flatBlueColorDark().hexStr)
-        let cleaningCat = DBProductCategory(uuid: uuid, name: tr("pr_cleaning", lang), bgColorHex: UIColor.flatMagentaColor().hexStr)
+        let fruitsCat = DBProductCategory(uuid: uuid, name: tr("pr_fruits", lang), bgColorHex: UIColor.flatRed.hexStr)
+        let frozenFruitsCat = DBProductCategory(uuid: uuid, name: tr("pr_fruits_frozen", lang), bgColorHex: UIColor.flatBlue.hexStr)
+        let vegetablesCat = DBProductCategory(uuid: uuid, name: tr("pr_vegetables", lang), bgColorHex: UIColor.flatGreen.hexStr)
+        let herbsCat = DBProductCategory(uuid: uuid, name: tr("pr_herbs", lang), bgColorHex: UIColor.flatGreenDark.hexStr)
+        let meatCat = DBProductCategory(uuid: uuid, name: tr("pr_meat", lang), bgColorHex: UIColor.flatRedDark.hexStr)
+        let petsCat = DBProductCategory(uuid: uuid, name: tr("pr_pets", lang), bgColorHex: UIColor.flatPowderBlue.hexStr)
+        let bakeryCat = DBProductCategory(uuid: uuid, name: tr("pr_bakery", lang), bgColorHex: UIColor.flatTeal.hexStr)
+        let riceCat = DBProductCategory(uuid: uuid, name: tr("pr_rice", lang), bgColorHex: UIColor.flatGray.hexStr)
+        let nutsCat = DBProductCategory(uuid: uuid, name: tr("pr_nuts", lang), bgColorHex: UIColor.flatBrown.hexStr)
+        let oilCat = DBProductCategory(uuid: uuid, name: tr("pr_oil", lang), bgColorHex: UIColor.flatForestGreen.hexStr)
+        let clothesCat = DBProductCategory(uuid: uuid, name: tr("pr_clothes", lang), bgColorHex: UIColor.flatBlueDark.hexStr)
+        let cleaningCat = DBProductCategory(uuid: uuid, name: tr("pr_cleaning", lang), bgColorHex: UIColor.flatMagenta.hexStr)
         
-        let milkCat = DBProductCategory(uuid: uuid, name: tr("pr_milk", lang), bgColorHex: UIColor.flatWhiteColorDark().hexStr)
+        let milkCat = DBProductCategory(uuid: uuid, name: tr("pr_milk", lang), bgColorHex: UIColor.flatWhiteDark.hexStr)
         
-        let fishCat = DBProductCategory(uuid: uuid, name: tr("pr_fish", lang), bgColorHex: UIColor.flatBlueColorDark().hexStr)
-        let pastaCat = DBProductCategory(uuid: uuid, name: tr("pr_pasta", lang), bgColorHex: UIColor.flatSandColorDark().hexStr)
-        let drinksCat = DBProductCategory(uuid: uuid, name: tr("pr_drinks", lang), bgColorHex: UIColor.flatBlueColor().lightenByPercentage(0.5).hexStr)
-        let alcoholCat = DBProductCategory(uuid: uuid, name: tr("pr_alcohol", lang), bgColorHex: UIColor.flatPurpleColorDark().hexStr)
-        let hygienicCat = DBProductCategory(uuid: uuid, name: tr("pr_hygienic", lang), bgColorHex: UIColor.flatMintColor().hexStr)
-        let dipsCat = DBProductCategory(uuid: uuid, name: tr("pr_dips", lang), bgColorHex: UIColor.flatMintColorDark().hexStr)
-        let spicesCat = DBProductCategory(uuid: uuid, name: tr("pr_spices", lang), bgColorHex: UIColor.flatBlackColor().hexStr)
-        let friedCat = DBProductCategory(uuid: uuid, name: tr("pr_fried", lang), bgColorHex: UIColor.flatMaroonColor().hexStr)
-        let breadCat = DBProductCategory(uuid: uuid, name: tr("pr_bread", lang), bgColorHex: UIColor.flatYellowColorDark().hexStr)
-        let sweetsCat = DBProductCategory(uuid: uuid, name: tr("pr_sweets", lang), bgColorHex: UIColor.flatPinkColor().hexStr)
-        let teaAndCoffeeCat = DBProductCategory(uuid: uuid, name: tr("pr_tea_coffee", lang), bgColorHex: UIColor.flatBrownColor().hexStr)
-        let cheeseCat = DBProductCategory(uuid: uuid, name: tr("pr_cheese", lang), bgColorHex: UIColor.flatYellowColor().hexStr)
-        let beansCat = DBProductCategory(uuid: uuid, name: tr("pr_beans", lang), bgColorHex: UIColor.flatRedColorDark().hexStr)
-        let eggsCat = DBProductCategory(uuid: uuid, name: tr("pr_eggs", lang), bgColorHex: UIColor.flatNavyBlueColor().hexStr)
-        let spreadCat = DBProductCategory(uuid: uuid, name: tr("pr_spread", lang), bgColorHex: UIColor.flatPlumColor().hexStr)
-        let cerealCat = DBProductCategory(uuid: uuid, name: tr("pr_cereal", lang), bgColorHex: UIColor.flatOrangeColor().hexStr)
-        let coldCutCat = DBProductCategory(uuid: uuid, name: tr("pr_cold_cut", lang), bgColorHex: UIColor.flatOrangeColorDark().hexStr)
-        let ovenCat = DBProductCategory(uuid: uuid, name: tr("pr_oven", lang), bgColorHex: UIColor.flatWatermelonColorDark().hexStr)
-        let stationeriesCat = DBProductCategory(uuid: uuid, name: tr("pr_stationeries", lang), bgColorHex: UIColor.flatNavyBlueColorDark().hexStr)
+        let fishCat = DBProductCategory(uuid: uuid, name: tr("pr_fish", lang), bgColorHex: UIColor.flatBlueDark.hexStr)
+        let pastaCat = DBProductCategory(uuid: uuid, name: tr("pr_pasta", lang), bgColorHex: UIColor.flatSandDark.hexStr)
+        let drinksCat = DBProductCategory(uuid: uuid, name: tr("pr_drinks", lang), bgColorHex: UIColor.flatBlue.lighten(byPercentage: 0.5)?.hexStr ?? "000000")
+        let alcoholCat = DBProductCategory(uuid: uuid, name: tr("pr_alcohol", lang), bgColorHex: UIColor.flatPurpleDark.hexStr)
+        let hygienicCat = DBProductCategory(uuid: uuid, name: tr("pr_hygienic", lang), bgColorHex: UIColor.flatMint.hexStr)
+        let dipsCat = DBProductCategory(uuid: uuid, name: tr("pr_dips", lang), bgColorHex: UIColor.flatMintDark.hexStr)
+        let spicesCat = DBProductCategory(uuid: uuid, name: tr("pr_spices", lang), bgColorHex: UIColor.flatBlack.hexStr)
+        let friedCat = DBProductCategory(uuid: uuid, name: tr("pr_fried", lang), bgColorHex: UIColor.flatMaroon.hexStr)
+        let breadCat = DBProductCategory(uuid: uuid, name: tr("pr_bread", lang), bgColorHex: UIColor.flatYellowDark.hexStr)
+        let sweetsCat = DBProductCategory(uuid: uuid, name: tr("pr_sweets", lang), bgColorHex: UIColor.flatPink.hexStr)
+        let teaAndCoffeeCat = DBProductCategory(uuid: uuid, name: tr("pr_tea_coffee", lang), bgColorHex: UIColor.flatBrown.hexStr)
+        let cheeseCat = DBProductCategory(uuid: uuid, name: tr("pr_cheese", lang), bgColorHex: UIColor.flatYellow.hexStr)
+        let beansCat = DBProductCategory(uuid: uuid, name: tr("pr_beans", lang), bgColorHex: UIColor.flatRedDark.hexStr)
+        let eggsCat = DBProductCategory(uuid: uuid, name: tr("pr_eggs", lang), bgColorHex: UIColor.flatNavyBlue.hexStr)
+        let spreadCat = DBProductCategory(uuid: uuid, name: tr("pr_spread", lang), bgColorHex: UIColor.flatPlum.hexStr)
+        let cerealCat = DBProductCategory(uuid: uuid, name: tr("pr_cereal", lang), bgColorHex: UIColor.flatOrange.hexStr)
+        let coldCutCat = DBProductCategory(uuid: uuid, name: tr("pr_cold_cut", lang), bgColorHex: UIColor.flatOrangeDark.hexStr)
+        let ovenCat = DBProductCategory(uuid: uuid, name: tr("pr_oven", lang), bgColorHex: UIColor.flatWatermelonDark.hexStr)
+        let stationeriesCat = DBProductCategory(uuid: uuid, name: tr("pr_stationeries", lang), bgColorHex: UIColor.flatNavyBlueDark.hexStr)
   
         let products: [DBProduct] = [
             // fruits
@@ -423,7 +423,7 @@ class SuggestionsPrefiller {
         return (categories, products)
     }
     
-    func printStringsForTranslations(categories: [ProductCategory], products: [Product]) {
+    func printStringsForTranslations(_ categories: [ProductCategory], products: [Product]) {
         print("#####################################")
         for category in categories {
             print("\(category.name) = \"\";")

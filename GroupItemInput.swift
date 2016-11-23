@@ -27,7 +27,7 @@ struct GroupItemInput: Equatable, Hashable {
         return name.hashValue
     }
     
-    func copy(name name: String? = nil, quantity: Int? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil) -> GroupItemInput {
+    func copy(name: String? = nil, quantity: Int? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil) -> GroupItemInput {
         return GroupItemInput(
             name: name ?? self.name,
             quantity: quantity ?? self.quantity,

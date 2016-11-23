@@ -18,14 +18,14 @@ struct RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializable, 
     
     init?(representation: AnyObject) {
         guard
-            let uuid = representation.valueForKeyPath("uuid") as? String,
-            let name = representation.valueForKeyPath("name") as? String,
-            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double,
-            let order = representation.valueForKeyPath("order") as? Int,
-            let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
+            let uuid = representation.value(forKeyPath: "uuid") as? String,
+            let name = representation.value(forKeyPath: "name") as? String,
+            let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double,
+            let order = representation.value(forKeyPath: "order") as? Int,
+            let color = ((representation.value(forKeyPath: "color") as? String).map{colorStr in
                 UIColor(hexString: colorStr)
             }),
-            let fav = representation.valueForKeyPath("fav") as? Int
+            let fav = representation.value(forKeyPath: "fav") as? Int
             else {
                 print("Invalid json: \(representation)")
                 return nil}
@@ -38,9 +38,9 @@ struct RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializable, 
         self.fav = fav
     }
     
-    static func collection(representation: AnyObject) -> [RemoteGroup]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteGroup]? {
         var items = [RemoteGroup]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let item = RemoteGroup(representation: obj) {
                 items.append(item)
             } else {
@@ -52,7 +52,7 @@ struct RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializable, 
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate), fav: \(fav)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate), fav: \(fav)}"
     }
 }
 

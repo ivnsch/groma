@@ -18,35 +18,35 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
 //    @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var searchBar: UISearchBar!
-    private var editButton: UIBarButtonItem!
-    private var addButton: UIBarButtonItem!
+    fileprivate var editButton: UIBarButtonItem!
+    fileprivate var addButton: UIBarButtonItem!
     
-    private let paginator = Paginator(pageSize: 20)
-    private var loadingPage: Bool = false
+    fileprivate let paginator = Paginator(pageSize: 20)
+    fileprivate var loadingPage: Bool = false
     
-    private var filteredCategories: [ItemWithCellAttributes<ProductCategory>] = [] {
+    fileprivate var filteredCategories: [ItemWithCellAttributes<ProductCategory>] = [] {
         didSet {
             tableView.reloadData()
         }
     }
     
-    private var searchText: String = ""
+    fileprivate var searchText: String = ""
 
-    private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
-    private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
-    private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
+    fileprivate let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .toggle, alpha: 0.05, rotation: 0, xRight: 20)
+    fileprivate let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .toggle, alpha: 1, rotation: 0, xRight: 20)
+    fileprivate let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
     
-    private var addEditCategoryControllerManager: ExpandableTopViewController<EditProductCategoryController>?
+    fileprivate var addEditCategoryControllerManager: ExpandableTopViewController<EditProductCategoryController>?
     
-    private var updatingProduct: AddEditCategoryControllerEditingData?
+    fileprivate var updatingProduct: AddEditCategoryControllerEditingData?
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         clearAndLoadFirstPage(false)
     }
     
-    func clearAndLoadFirstPage(isSearchLoad: Bool) {
+    func clearAndLoadFirstPage(_ isSearchLoad: Bool) {
         filteredCategories = []
         paginator.reset()
         tableView.reloadData()
@@ -60,43 +60,43 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         
         addEditCategoryControllerManager = initAddEditProductControllerManager()
         
-        initNavBar([.Edit])
+        initNavBar([.edit])
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ManageProductCategoriesController.onWebsocketProductCategory(_:)), name: WSNotificationName.ProductCategory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ManageProductCategoriesController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ManageProductCategoriesController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ManageProductCategoriesController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    func onSubmitTap(sender: UIBarButtonItem) {
-        if tableView.editing {
+    func onSubmitTap(_ sender: UIBarButtonItem) {
+        if tableView.isEditing {
             addEditCategoryControllerManager?.controller?.submit()
         }
     }
     
-    func onEditTap(sender: UIBarButtonItem) {
+    func onEditTap(_ sender: UIBarButtonItem) {
         toggleEditing()
     }
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
-    private func initNavBar(actions: [UIBarButtonSystemItem]) {
+    fileprivate func initNavBar(_ actions: [UIBarButtonSystemItem]) {
         navigationItem.title = "Categories"
         
         var buttons: [UIBarButtonItem] = []
         
         for action in actions {
             switch action {
-            case .Save:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .Plain, target: self, action: #selector(ManageProductCategoriesController.onSubmitTap(_:)))
+            case .save:
+                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .plain, target: self, action: #selector(ManageProductCategoriesController.onSubmitTap(_:)))
                 buttons.append(button)
-            case .Edit:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: #selector(ManageProductCategoriesController.onEditTap(_:)))
+            case .edit:
+                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .plain, target: self, action: #selector(ManageProductCategoriesController.onEditTap(_:)))
                 buttons.append(button)
             default: break
             }
@@ -104,7 +104,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         navigationItem.rightBarButtonItems = buttons
     }
     
-    private func initAddEditProductControllerManager() -> ExpandableTopViewController<EditProductCategoryController> {
+    fileprivate func initAddEditProductControllerManager() -> ExpandableTopViewController<EditProductCategoryController> {
         let top: CGFloat = 64
         let manager: ExpandableTopViewController<EditProductCategoryController> =  ExpandableTopViewController(top: top, height: 60, animateTableViewInset: false, parentViewController: self, tableView: tableView) {
             let controller = EditProductCategoryController()
@@ -117,18 +117,18 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     
     // MARK: - Table view data source
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredCategories.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("categoryCell", forIndexPath: indexPath) as! ManageProductCategoryCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! ManageProductCategoryCell
         
-        let item = filteredCategories[indexPath.row]
+        let item = filteredCategories[(indexPath as NSIndexPath).row]
         
         cell.item = item
         
@@ -136,16 +136,16 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     }
     
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             
             ConfirmationPopup.show(message: "Warning: This will remove all the list, group, inventory, history and stats items that reference this category", controller: self, onOk: {[weak self] in
                 if let weakSelf = self {
-                    let category = weakSelf.filteredCategories[indexPath.row]
+                    let category = weakSelf.filteredCategories[(indexPath as NSIndexPath).row]
                     Providers.productCategoryProvider.remove(category.item, remote: true, weakSelf.successHandler{
                         weakSelf.removeCategoryUI(category, indexPath: indexPath)
                     })
@@ -154,7 +154,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         }
     }
     
-    private func removeCategoryUI(category: ProductCategory) {
+    fileprivate func removeCategoryUI(_ category: ProductCategory) {
         if let indexPath = indexPathForCategory(category) {
             let wrappedCategory = ItemWithCellAttributes<ProductCategory>(item: category, boldRange: nil)
             removeCategoryUI(wrappedCategory, indexPath: indexPath)
@@ -163,60 +163,60 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         }
     }
     
-    private func removeCategoryUI(category: ItemWithCellAttributes<ProductCategory>, indexPath: NSIndexPath) {
+    fileprivate func removeCategoryUI(_ category: ItemWithCellAttributes<ProductCategory>, indexPath: IndexPath) {
         tableView.wrapUpdates {[weak self] in
-            self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            self?.filteredCategories.remove(category)
+            self?.tableView.deleteRows(at: [indexPath], with: .fade)
+            _ = self?.filteredCategories.remove(category)
         }
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filter(searchText)
     }
     
-    private func filter(searchText: String) {
+    fileprivate func filter(_ searchText: String) {
         self.searchText = searchText
         clearAndLoadFirstPage(true)
     }
     
-    private func onUpdatedCategories() {
+    fileprivate func onUpdatedCategories() {
         if let searchText = searchBar.text {
             filter(searchText)
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if tableView.editing {
-            let inventoryItem = filteredCategories[indexPath.row].item
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
+            let inventoryItem = filteredCategories[(indexPath as NSIndexPath).row].item
             updatingProduct = AddEditCategoryControllerEditingData(category: inventoryItem, indexPath: indexPath)
             addEditCategoryControllerManager?.expand(true)
             addEditCategoryControllerManager?.controller?.category = updatingProduct
-            initNavBar([.Edit, .Save])
+            initNavBar([.edit, .save])
         }
     }
     
-    private func clearSearch() {
+    fileprivate func clearSearch() {
         searchBar.text = ""
         filteredCategories = []
     }
     
     // MARK: - EditProductCategoryControllerDelegate
     
-    func onValidationErrors(errors: [UITextField: ValidationError]) {
+    func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>) {
         // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
-        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+        present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onCategoryUpdated(editingData: AddEditCategoryControllerEditingData) {
+    func onCategoryUpdated(_ editingData: AddEditCategoryControllerEditingData) {
         updateCategoryUI(editingData.category, indexPath: editingData.indexPath)
     }
     
-    private func indexPathForCategory(category: ProductCategory) -> NSIndexPath? {
-        let indexMaybe = filteredCategories.enumerate().filter{$0.element.item.same(category)}.first?.index
-        return indexMaybe.map{NSIndexPath(forRow: $0, inSection: 0)}
+    fileprivate func indexPathForCategory(_ category: ProductCategory) -> IndexPath? {
+        let indexMaybe = filteredCategories.enumerated().filter{$0.element.item.same(category)}.first?.offset
+        return indexMaybe.map{IndexPath(row: $0, section: 0)}
     }
     
-    private func updateCategoryUI(category: ProductCategory) {
+    fileprivate func updateCategoryUI(_ category: ProductCategory) {
         if let indexPath = indexPathForCategory(category) {
             updateCategoryUI(category, indexPath: indexPath)
         } else {
@@ -224,32 +224,32 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         }
     }
     
-    private func updateCategoryUI(category: ProductCategory, indexPath: NSIndexPath) {
+    fileprivate func updateCategoryUI(_ category: ProductCategory, indexPath: IndexPath) {
         // TODO content based not index based update. Index path can become invalid e.g. if in the meantime we get a websocket update that changes the list.
-        guard indexPath.row < filteredCategories.count else {return}
+        guard (indexPath as NSIndexPath).row < filteredCategories.count else {return}
         
         let itemWithCellAttributes = ItemWithCellAttributes(item: category, boldRange: category.name.range(searchText, caseInsensitive: true))
         
-        filteredCategories[indexPath.row] = itemWithCellAttributes
+        filteredCategories[(indexPath as NSIndexPath).row] = itemWithCellAttributes
         
-        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         addEditCategoryControllerManager?.expand(false)
-        initNavBar([.Edit])
+        initNavBar([.edit])
     }
     
-    private func addCategoryUI(category: ProductCategory) {
+    fileprivate func addCategoryUI(_ category: ProductCategory) {
         let wrappedCategory = ItemWithCellAttributes<ProductCategory>(item: category, boldRange: nil)
         filteredCategories.append(wrappedCategory)
         onUpdatedCategories()
-        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredCategories.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
+        tableView.scrollToRow(at: IndexPath(row: filteredCategories.count - 1, section: 0), at: .top, animated: true)
         setAddEditProductControllerOpen(false)
     }
     
-    private func setAddEditProductControllerOpen(open: Bool) {
+    fileprivate func setAddEditProductControllerOpen(_ open: Bool) {
         addEditCategoryControllerManager?.expand(open)
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
@@ -258,11 +258,11 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         }
     }
     
-    private func loadPossibleNextPage(isSearchLoad: Bool) {
+    fileprivate func loadPossibleNextPage(_ isSearchLoad: Bool) {
         
-        func setLoading(loading: Bool) {
+        func setLoading(_ loading: Bool) {
             self.loadingPage = loading
-            self.tableViewFooter.hidden = !loading
+            self.tableViewFooter.isHidden = !loading
         }
         
         synced(self) {[weak self] in
@@ -309,61 +309,61 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     // MARK: - ListTopBarViewDelegate
     
     func onTopBarBackButtonTap() {
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     func onTopBarTitleTap() {
     }
     
-    func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
+    func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId) {
         switch buttonId {
-        case .Submit:
-            if tableView.editing {
+        case .submit:
+            if tableView.isEditing {
                 addEditCategoryControllerManager?.controller?.submit()
             }
-        case .ToggleOpen:
+        case .toggleOpen:
             toggleTopAddController()
-        case .Edit:
+        case .edit:
             toggleEditing()
         default: print("Error: ManageProductsViewController.onTopBarButtonTap: No handled action: \(buttonId)")
         }
     }
     
-    private func toggleEditing() {
-        tableView.setEditing(!tableView.editing, animated: true)
+    fileprivate func toggleEditing() {
+        tableView.setEditing(!tableView.isEditing, animated: true)
     }
     
-    private func toggleTopAddController() {
+    fileprivate func toggleTopAddController() {
         
         if addEditCategoryControllerManager?.expanded ?? false { // it's open - close
             addEditCategoryControllerManager?.expand(false)
-            initNavBar([.Edit])
+            initNavBar([.edit])
             
         } else { // it's closed - open
             addEditCategoryControllerManager?.expand(true)
-            initNavBar([.Edit])
+            initNavBar([.edit])
         }
     }
     
     
     // MARK: - ExpandableTopViewControllerDelegate
     
-    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+    func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
 //        topControlTopConstraint.constant = view.frame.height
 //        self.view.layoutIfNeeded()
     }
     
     func onExpandableClose() {
-        initNavBar([.Edit])
+        initNavBar([.edit])
     }
     
-    func onCenterTitleAnimComplete(center: Bool) {
+    func onCenterTitleAnimComplete(_ center: Bool) {
     }
     
     // MARK: - Websocket
     
-    func onWebsocketProductCategory(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
+    func onWebsocketProductCategory(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Add:
@@ -373,7 +373,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
             } else {
                 QL4("No value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -388,7 +388,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         }
     }
     
-    func onIncomingGlobalSyncFinished(note: NSNotification) {
+    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         clearAndLoadFirstPage(true) // TODO parameter "isSearchLoad" bad naming - describe better what the flag is for, also in other controllers where this is used
     }
@@ -396,8 +396,8 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
 
 struct AddEditCategoryControllerEditingData {
     let category: ProductCategory
-    let indexPath: NSIndexPath
-    init(category: ProductCategory, indexPath: NSIndexPath) {
+    let indexPath: IndexPath
+    init(category: ProductCategory, indexPath: IndexPath) {
         self.category = category
         self.indexPath = indexPath
     }

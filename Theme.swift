@@ -26,15 +26,15 @@ struct Theme {
     static let orange = UIColor(hexString: "FFA83E")
     static var black = UIColor(hexString: "222222")
     
-    static var navigationBarTextColor = UIColor.blackColor()
+    static var navigationBarTextColor = UIColor.black
     static var navigationBarBackgroundColor = UIColor(hexString: "FFFFFF")
     static var tabBarBackgroundColor = blue
     static var navBarAddColor = blue
-    static var tabBarSelectedColor = UIColor.whiteColor()
-    static var tabBarIconsColor = UIColor.blackColor()
-    static var tabBarTextColor = UIColor.blackColor()
+    static var tabBarSelectedColor = UIColor.white
+    static var tabBarIconsColor = UIColor.black
+    static var tabBarTextColor = UIColor.black
     
     static var mainViewsBGColor = lightGrey
-    static var topSettingsBarsBackgroundColor = UIColor.whiteColor()
-    static var interleavedCellsBackgroundColor = UIColor.whiteColor()
+    static var topSettingsBarsBackgroundColor = UIColor.white
+    static var interleavedCellsBackgroundColor = UIColor.white
 }

@@ -30,7 +30,7 @@ class ExpandableTableViewGroupModel: ExpandableTableViewModel {
         return []
     }
     
-    override func same(rhs: ExpandableTableViewModel) -> Bool {
+    override func same(_ rhs: ExpandableTableViewModel) -> Bool {
         return group.same((rhs as! ExpandableTableViewGroupModel).group)
     }
     
@@ -41,11 +41,11 @@ class ExpandableTableViewGroupModel: ExpandableTableViewModel {
 
 class GroupsController: ExpandableItemsTableViewController, AddEditGroupControllerDelegate, ExpandableTopViewControllerDelegate {
     
-    private var editButton: UIBarButtonItem!
+    fileprivate var editButton: UIBarButtonItem!
     
     var expandDelegate: Foo?
     
-    private var topAddEditListControllerManager: ExpandableTopViewController<AddEditGroupViewController>?
+    fileprivate var topAddEditListControllerManager: ExpandableTopViewController<AddEditGroupViewController>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,18 +53,18 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         setNavTitle(trans("title_groups"))
         
         topAddEditListControllerManager = initTopAddEditListControllerManager()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupsController.onWebsocketGroup(_:)), name: WSNotificationName.Group.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupsController.onWebsocketGroups(_:)), name: WSNotificationName.Groups.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupsController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)    
+        NotificationCenter.default.addObserver(self, selector: #selector(GroupsController.onWebsocketGroup(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Group.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GroupsController.onWebsocketGroups(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Groups.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GroupsController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)    
     }
     
     deinit {
         QL1("Deinit groups controller")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditGroupViewController> {
-        let top = CGRectGetHeight(topBar.frame)
+    fileprivate func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditGroupViewController> {
+        let top = topBar.frame.height
         let expandableTopViewController: ExpandableTopViewController<AddEditGroupViewController> = ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditGroup()
             controller.delegate = self
@@ -81,7 +81,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     
     override func initModels() {
-        Providers.listItemGroupsProvider.groups(NSRange(location: 0, length: 1000), sortBy: .Order, successHandler{[weak self] groups in
+        Providers.listItemGroupsProvider.groups(NSRange(location: 0, length: 1000), sortBy: .order, successHandler{[weak self] groups in
             self?.models = groups.map{ExpandableTableViewGroupModel(group: $0)}
             self?.debugItems()
         })
@@ -92,7 +92,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     }
     
     
-    override func onSelectCellInEditMode(model: ExpandableTableViewModel) {
+    override func onSelectCellInEditMode(_ model: ExpandableTableViewModel) {
         super.onSelectCellInEditMode(model)
         topAddEditListControllerManager?.expand(true)
         topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewGroupModel).group
@@ -117,7 +117,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         ))
     }
     
-    override func onRemoveModel(model: ExpandableTableViewModel) {
+    override func onRemoveModel(_ model: ExpandableTableViewModel) {
         Providers.listItemGroupsProvider.remove((model as! ExpandableTableViewGroupModel).group, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.initModels()
@@ -125,7 +125,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         ))
     }
     
-    override func initDetailController(cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
+    override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
         let listItemsController = UIStoryboard.groupItemsController()
         listItemsController.view.frame = view.frame
         addChildViewController(listItemsController)
@@ -146,14 +146,14 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         return listItemsController
     }
     
-    override func animationsComplete(wasExpanding: Bool, frontView: UIView) {
+    override func animationsComplete(_ wasExpanding: Bool, frontView: UIView) {
         super.animationsComplete(wasExpanding, frontView: frontView)
         if !wasExpanding {
             removeChildViewControllers()
         }
     }
     
-    override func onAddTap(rotateTopBarButton: Bool = true) {
+    override func onAddTap(_ rotateTopBarButton: Bool = true) {
         super.onAddTap()
         SizeLimitChecker.checkGroupsSizeLimit(models.count, controller: self) {[weak self] in
             if let weakSelf = self {
@@ -166,12 +166,12 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         }
     }
     
-    func setThemeColor(color: UIColor) {
+    func setThemeColor(_ color: UIColor) {
         topBar.backgroundColor = color
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
     }
     
-    private func debugItems() {
+    fileprivate func debugItems() {
         if QorumLogs.minimumLogLevelShown < 2 {
             print("Groups:")
             (models as! [ExpandableTableViewGroupModel]).forEach{print("\($0.group.shortDebugDescription)")}
@@ -179,18 +179,18 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     }
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
-    private func initNavBar(actions: [UIBarButtonSystemItem]) {
+    fileprivate func initNavBar(_ actions: [UIBarButtonSystemItem]) {
         navigationItem.title = trans("title_products")
         
         var buttons: [UIBarButtonItem] = []
         
         for action in actions {
             switch action {
-            case .Add:
-                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(ExpandableItemsTableViewController.onAddTap(_:)))
+            case .add:
+                let button = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ExpandableItemsTableViewController.onAddTap(_:)))
                 buttons.append(button)
-            case .Edit:
-                let button = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(ExpandableItemsTableViewController.onEditTap(_:)))
+            case .edit:
+                let button = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(ExpandableItemsTableViewController.onEditTap(_:)))
                 self.editButton = button
                 buttons.append(button)
             default: break
@@ -199,7 +199,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         navigationItem.rightBarButtonItems = buttons
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
     
@@ -209,7 +209,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     // MARK: - EditListViewController
     //change
-    func onAddGroup(group: ListItemGroup) {
+    func onAddGroup(_ group: ListItemGroup) {
         Providers.listItemGroupsProvider.add(group, remote: true, resultHandler(onSuccess: {[weak self] in
             self?.addGroupUI(group)
             }, onErrorAdditional: {[weak self] result in
@@ -218,7 +218,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         ))
     }
     
-    func onUpdateGroup(group: ListItemGroup) {
+    func onUpdateGroup(_ group: ListItemGroup) {
         Providers.listItemGroupsProvider.update(group, remote: true, resultHandler(onSuccess: {[weak self] in
             self?.updateGroupUI(group)
             }, onErrorAdditional: {[weak self] result in
@@ -227,25 +227,25 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         ))
     }
     
-    private func addGroupUI(group: ListItemGroup) {
+    fileprivate func addGroupUI(_ group: ListItemGroup) {
         tableView.wrapUpdates {[weak self] in
             if let weakSelf = self {
-                self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
+                self?.tableView.insertRows(at: [IndexPath(row: weakSelf.models.count, section: 0)], with: UITableViewRowAnimation.top)
                 self?.models.append(ExpandableTableViewGroupModel(group: group))
                 self?.topAddEditListControllerManager?.expand(false)
-                self?.setTopBarState(.NormalFromExpanded)
+                self?.setTopBarState(.normalFromExpanded)
             }
         }
     }
     
-    private func updateGroupUI(group: ListItemGroup) {
-        models.update(ExpandableTableViewGroupModel(group: group))
+    fileprivate func updateGroupUI(_ group: ListItemGroup) {
+        _ = models.update(ExpandableTableViewGroupModel(group: group))
         tableView.reloadData()
         topAddEditListControllerManager?.expand(false)
-        setTopBarState(.NormalFromExpanded)
+        setTopBarState(.normalFromExpanded)
     }
     
-    private func onGroupAddOrUpdateError(group: ListItemGroup) {
+    fileprivate func onGroupAddOrUpdateError(_ group: ListItemGroup) {
         initModels()
         // If the user quickly after adding the group opened its group items controller, close it.
         for childViewController in childViewControllers {
@@ -259,18 +259,18 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     // MARK: - ExpandableTopViewControllerDelegate
     
-    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+    func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
     }
     
     override func onExpandableClose() {
         super.onExpandableClose()
-        setTopBarState(.NormalFromExpanded)
+        setTopBarState(.normalFromExpanded)
     }
     
     // MARK: - Websocket
     
-    func onWebsocketGroup(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<ListItemGroup>> {
+    func onWebsocketGroup(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ListItemGroup>> {
             if let notification = info[WSNotificationValue] {
                 let group = notification.obj
                 switch notification.verb {
@@ -286,7 +286,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
                 QL4("No value")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 
                 let groupUuid = notification.obj
@@ -310,8 +310,8 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         }
     }
     
-    func onWebsocketGroups(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
+    func onWebsocketGroups(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Order:
@@ -323,11 +323,11 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
             }
             
         } else {
-            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
+            QL4("userInfo not there or couldn't be casted: \((note as NSNotification).userInfo)")
         }
     }
     
-    func onIncomingGlobalSyncFinished(note: NSNotification) {
+    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         initModels()
     }

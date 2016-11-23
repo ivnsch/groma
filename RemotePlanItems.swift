@@ -18,13 +18,13 @@ struct RemotePlanItems: ResponseObjectSerializable, CustomDebugStringConvertible
     
     init?(representation: AnyObject) {
         guard
-            let planItemsObj = representation.valueForKeyPath("planItems") as? [AnyObject],
+            let planItemsObj = representation.value(forKeyPath: "planItems") as? [AnyObject],
             let planItems = RemoteHistoryItem.collection(planItemsObj),
-            let inventoriesObj = representation.valueForKeyPath("inventory") as? [AnyObject],
-            let inventory = RemoteInventoryWithDependencies(representation: inventoriesObj),
-            let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
+            let inventoriesObj = representation.value(forKeyPath: "inventory") as? [AnyObject],
+            let inventory = RemoteInventoryWithDependencies(representation: inventoriesObj as AnyObject),
+            let productsCategoriesObj = representation.value(forKeyPath: "productsCategories") as? [AnyObject],
             let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
-            let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
+            let productsObj = representation.value(forKeyPath: "products") as? [AnyObject],
             let products = RemoteProduct.collection(productsObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -37,6 +37,6 @@ struct RemotePlanItems: ResponseObjectSerializable, CustomDebugStringConvertible
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) planItems: [\(planItems)], inventory: [\(inventory)], productsCategories: [\(productsCategories)], products: [\(products)]]}"
+        return "{\(type(of: self)) planItems: [\(planItems)], inventory: [\(inventory)], productsCategories: [\(productsCategories)], products: [\(products)]]}"
     }
 }

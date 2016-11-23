@@ -22,16 +22,16 @@ struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable
     
     init?(representation: AnyObject) {
         guard
-        let uuid = representation.valueForKeyPath("uuid") as? String,
-        let name = representation.valueForKeyPath("name") as? String,
-        let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
+        let uuid = representation.value(forKeyPath: "uuid") as? String,
+        let name = representation.value(forKeyPath: "name") as? String,
+        let color = ((representation.value(forKeyPath: "color") as? String).map{colorStr in
             UIColor(hexString: colorStr)
         }),
-        let listUuid = representation.valueForKeyPath("listUuid") as? String,
-        let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double,
-        let todoOrder = representation.valueForKeyPath("todoOrder") as? Int,
-        let doneOrder = representation.valueForKeyPath("doneOrder") as? Int,
-        let stashOrder = representation.valueForKeyPath("stashOrder") as? Int
+        let listUuid = representation.value(forKeyPath: "listUuid") as? String,
+        let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double,
+        let todoOrder = representation.value(forKeyPath: "todoOrder") as? Int,
+        let doneOrder = representation.value(forKeyPath: "doneOrder") as? Int,
+        let stashOrder = representation.value(forKeyPath: "stashOrder") as? Int
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -48,9 +48,9 @@ struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable
         self.stashOrder = stashOrder
     }
     
-    static func collection(representation: AnyObject) -> [RemoteSection]? {
+    static func collection(_ representation: [AnyObject]) -> [RemoteSection]? {
         var sections = [RemoteSection]()
-        for obj in representation as! [AnyObject] {
+        for obj in representation {
             if let section = RemoteSection(representation: obj) {
                 sections.append(section)
             } else {
@@ -62,7 +62,7 @@ struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color), listUuid: \(listUuid), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastUpdate: \(lastUpdate)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), color: \(color), listUuid: \(listUuid), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastUpdate: \(lastUpdate)}"
     }
 }
 

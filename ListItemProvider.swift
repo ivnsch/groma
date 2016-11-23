@@ -8,15 +8,15 @@
 
 import Foundation
 
-enum SwitchListItemMode {case Single, All}
+enum SwitchListItemMode {case single, all}
 
 protocol ListItemProvider {
   
-    func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func remove(_ listItem: ListItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
-    func removeListItem(listItemUuid: String, listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func removeListItem(_ listItemUuid: String, listUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func remove(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
 //    func add(listItem: ListItem, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
 
@@ -30,34 +30,34 @@ protocol ListItemProvider {
     - parameter possibleNewSectionOrder: if the section is determined to be new, position of section in list. If the section already exists this is not used. If nil this will be at the end of the list (an additional database fetch will be made to count the sections).
     - parameter handler
     */
-    func add(listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int?, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void)
+    func add(_ listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int?, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
     
     // product/section same logic as add(listItemInput) (see doc above). TODO review other update methods maybe these should be removed or at least made private, since they don't have this product/section logic and there's no reason from outside of the provider to use a different logic (which would be to update the linked product/section directly).
-    func update(listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: ProviderResult<(listItem: ListItem, replaced: Bool)> -> Void)
+    func update(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: @escaping (ProviderResult<(listItem: ListItem, replaced: Bool)>) -> Void)
     
-    func addListItem(product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String?, order orderMaybe: Int?, storeProductInput: StoreProductInput?, _ handler: ProviderResult<ListItem> -> Void)
+    func addListItem(_ product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String?, order orderMaybe: Int?, storeProductInput: StoreProductInput?, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
     
-    func add(prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<[ListItem]> -> Void)
+    func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String?, order orderMaybe: Int?, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void)
 
-    func update(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func update(_ listItem: ListItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
-    func update(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func update(_ listItems: [ListItem], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func updateListItemsOrder(listItems: [ListItem], status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func updateListItemsOrder(_ listItems: [ListItem], status: ListItemStatus, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     // The counterpart of updateListItemsOrder to process the update when it comes via websocket. We need a special service because websockets sends us a reduced payload (only the order and sections).
-    func updateListItemsOrderLocal(orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: ProviderResult<Any> -> Void)
+    func updateListItemsOrderLocal(_ orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func listItems(list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[ListItem]> -> ())
+    func listItems(_ list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus, _ handler: @escaping (ProviderResult<[ListItem]>) -> ())
 
-    func listItems(uuids: [String], _ handler: ProviderResult<[ListItem]> -> Void)
+    func listItems(_ uuids: [String], _ handler: @escaping (ProviderResult<[ListItem]>) -> Void)
     
     // This is currently used only to retrieve possible product's list item on receiving a websocket notification with a product update
-    func listItem(product: Product, list: List, _ handler: ProviderResult<ListItem?> -> ())
+    func listItem(_ product: Product, list: List, _ handler: @escaping (ProviderResult<ListItem?>) -> ())
     
-    func increment(listItem: ListItem, status: ListItemStatus, delta: Int, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
+    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ())
 
-    func increment(increment: RemoteListItemIncrement, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
+    func increment(_ increment: RemoteListItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ())
     
     /**
     Updates done status of listItems, and their "order" field such that they are positioned at the end of the new section.
@@ -66,21 +66,21 @@ protocol ListItemProvider {
     TODO cleaner implementation, maybe split in smaller methods. The method should not lead to inconsistent result when used in wrong context (see explanation above)
     param: orderInDstStatus: To override default dst order with a manual order. This is used for undo cell, where we want to the item to be inserted back at the original position.
     */
-    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int?, remote: Bool, _ handler: ProviderResult<ListItem> -> Void)
+    func switchStatus(_ listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int?, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
     
-    func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<[ListItem]> -> Void)
+    func switchAllToStatus(_ listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void)
     
     // Websocket list item switch
-    func switchStatusLocal(listItemUuid: String, status1: ListItemStatus, status: ListItemStatus, _ handler: ProviderResult<ListItem> -> Void)
+    func switchStatusLocal(_ listItemUuid: String, status1: ListItemStatus, status: ListItemStatus, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
 
     // Websocket all list item switch
-    func switchAllStatusLocal(result: RemoteSwitchAllListItemsLightResult, _ handler: ProviderResult<Any> -> Void)
+    func switchAllStatusLocal(_ result: RemoteSwitchAllListItemsLightResult, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     // Adds inventory + history items and moves list items to stash
-    func buyCart(listItems: [ListItem], list: List, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func buyCart(_ listItems: [ListItem], list: List, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
     // Websocket
-    func storeBuyCartResult(switchedResult: RemoteBuyCartResult, _ handler: ProviderResult<Any> -> Void)
+    func storeBuyCartResult(_ switchedResult: RemoteBuyCartResult, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func invalidateMemCache()
     
@@ -89,14 +89,14 @@ protocol ListItemProvider {
     /**
     * Converts group items in list items and adds them to list
     */
-    func add(groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ())
+    func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ())
 
-    func addGroupItems(group: ListItemGroup, status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ())
+    func addGroupItems(_ group: ListItemGroup, status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ())
     
     /**
     Gets list items count with a certain status in a certain list
     */
-    func listItemCount(status: ListItemStatus, list: List, fetchMode: ProviderFetchModus, _ handler: ProviderResult<Int> -> Void)
+    func listItemCount(_ status: ListItemStatus, list: List, fetchMode: ProviderFetchModus, _ handler: @escaping (ProviderResult<Int>) -> Void)
     
-    func removeSectionFromListItemsMemCacheIfExistent(sectionUuid: String, listUuid: String?, handler: ProviderResult<Any> -> Void)
+    func removeSectionFromListItemsMemCacheIfExistent(_ sectionUuid: String, listUuid: String?, handler: @escaping (ProviderResult<Any>) -> Void)
 }

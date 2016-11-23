@@ -25,12 +25,12 @@ class ProductWithQuantityInv: ProductWithQuantity {
     init(inventoryItem: InventoryItem) {
         self.inventoryItem = inventoryItem
     }
-    override func incrementQuantityCopy(delta: Int) -> ProductWithQuantity {
+    override func incrementQuantityCopy(_ delta: Int) -> ProductWithQuantity {
         let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
         return ProductWithQuantityInv(inventoryItem: incrementedItem)
     }
     
-    override func updateQuantityCopy(quantity: Int) -> ProductWithQuantity {
+    override func updateQuantityCopy(_ quantity: Int) -> ProductWithQuantity {
         let udpatedItem = inventoryItem.copy(quantity: quantity)
         return ProductWithQuantityInv(inventoryItem: udpatedItem)
     }
@@ -45,7 +45,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
     
-    private var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
+    fileprivate var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
     
     var inventory: Inventory? {
         didSet {
@@ -60,9 +60,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     var onViewWillAppear: VoidFunction?
     var onViewDidAppear: VoidFunction?
 
-    private var productsWithQuantityController: ProductsWithQuantityViewController!
+    fileprivate var productsWithQuantityController: ProductsWithQuantityViewController!
 
-    private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
+    fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,18 +76,18 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topBar.delegate = self
 
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoryItemsController.onWebsocketInventory(_:)), name: WSNotificationName.Inventory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoryItemsController.onWebsocketInventoryItems(_:)), name: WSNotificationName.InventoryItems.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoryItemsController.onWebsocketInventoryItem(_:)), name: WSNotificationName.InventoryItem.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoryItemsController.onWebsocketListItem(_:)), name: WSNotificationName.ListItem.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoryItemsController.onWebsocketProduct(_:)), name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoryItemsController.onWebsocketProductCategory(_:)), name: WSNotificationName.ProductCategory.rawValue, object: nil)        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoryItemsController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketInventory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Inventory.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketInventoryItems(_:)), name: NSNotification.Name(rawValue: WSNotificationName.InventoryItems.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketInventoryItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.InventoryItem.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketListItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ListItem.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketProduct(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Product.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)        
+        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
     }
     
     deinit {
         QL1("Deinit inventory items")
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLayoutSubviews() {
@@ -106,33 +106,33 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
 
-    func setThemeColor(color: UIColor) {
+    func setThemeColor(_ color: UIColor) {
         topBar.dotColor = color
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
     }
     
-    private func initTitleLabel() {
+    fileprivate func initTitleLabel() {
         let label = UILabel()
         label.font = Fonts.regular
-        label.textColor = UIColor.whiteColor()
+        label.textColor = UIColor.white
         topBar.addSubview(label)
     }
     
-    private func initTopQuickAddControllerManager(tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {
-        let top = CGRectGetHeight(topBar.frame)
+    fileprivate func initTopQuickAddControllerManager(_ tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {
+        let top = topBar.frame.height
         let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
-            controller.modus = .PlanItem
+            controller.modus = .planItem
             return controller
         }
         manager.delegate = self
         return manager
     }
     
-    func onExpand(expanding: Bool) {
+    func onExpand(_ expanding: Bool) {
         if !expanding {
-            productsWithQuantityController?.emptyView.hidden = true
+            productsWithQuantityController?.emptyView.isHidden = true
             topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()            
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])
@@ -149,12 +149,12 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topQuickAddControllerManager?.controller?.onClose()        
     }
     
-    private func topBarOnCloseExpandable() {
+    fileprivate func topBarOnCloseExpandable() {
         setDefaultLeftButtons()
-        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)])
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: true)
@@ -163,7 +163,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         onViewWillAppear = nil
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         toggleButtonRotator.reset(productsWithQuantityController.tableView, topBar: topBar)
@@ -172,9 +172,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         onViewDidAppear = nil
     }
     
-    private func toggleEditing() {
+    fileprivate func toggleEditing() {
         if let productsWithQuantityController = productsWithQuantityController {
-            let editing = !productsWithQuantityController.editing // toggle
+            let editing = !productsWithQuantityController.isEditing // toggle
             productsWithQuantityController.setEditing(editing, animated: true)
         } else {
             print("Warn: InventoryItemsViewController.toggleEditing edit tap but no tableViewController")
@@ -188,7 +188,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topBarOnCloseExpandable()
     }
 
-    private func reload() {
+    fileprivate func reload() {
         productsWithQuantityController?.clearAndLoadFirstPage()
         //        addEditInventoryItemControllerManager?.controller?.clear()
 
@@ -210,9 +210,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         expandDelegate?.setExpanded(false)
     }
     
-    func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
+    func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId) {
         switch buttonId {
-        case .Add:
+        case .add:
             QL4("Outdated implementation - to add products to inventory we now have to fetch store product (to get the price)")
 //            if let inventory = inventory {
 //                Providers.inventoryItemsProvider.countInventoryItems(inventory, successHandler {[weak self] count in
@@ -225,15 +225,15 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 //            } else {
 //                print("InventoryItemsController.onTopBarButtonTap: No inventory")
 //            }
-        case .ToggleOpen:
+        case .toggleOpen:
             toggleTopAddController()
-        case .Edit:
+        case .edit:
             toggleEditing()
         default: QL4("Not handled: \(buttonId)")
         }
     }
     
-    private func toggleTopAddController(rotateTopBarButton: Bool = true) {
+    fileprivate func toggleTopAddController(_ rotateTopBarButton: Bool = true) {
         
         // if any top controller is open, close it
         if topQuickAddControllerManager?.expanded ?? false {
@@ -241,10 +241,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             toggleButtonRotator.enabled = true
             topQuickAddControllerManager?.controller?.onClose()
             
-            topBar.setLeftButtonIds([.Edit])
+            topBar.setLeftButtonIds([.edit])
             
             if rotateTopBarButton {
-                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)])
             }
             
         } else { // if there's no top controller open, open the quick add controller
@@ -257,7 +257,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 topBar.setLeftButtonIds([])
                 
                 if rotateTopBarButton {
-                    topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+                    topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))])
                 }
             }
             
@@ -267,7 +267,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    private func checkShowAddToInventoryExplanationPopup(onContinue: VoidFunction) {
+    fileprivate func checkShowAddToInventoryExplanationPopup(_ onContinue: @escaping VoidFunction) {
         
         let alreadyShowedPopup: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp) ?? false
         if alreadyShowedPopup {
@@ -281,16 +281,16 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     // TODO remove floating button things, we don't use floating button here
-    private func sendActionToTopController(action: FLoatingButtonAction) {
+    fileprivate func sendActionToTopController(_ action: FLoatingButtonAction) {
         if topQuickAddControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.controller?.handleFloatingButtonAction(action)
         }
     }
     
-    func onCenterTitleAnimComplete(center: Bool) {
+    func onCenterTitleAnimComplete(_ center: Bool) {
         if center {
             setDefaultLeftButtons()
-            topBar.setRightButtonIds([.ToggleOpen])
+            topBar.setRightButtonIds([.toggleOpen])
         }
     }
     
@@ -298,13 +298,13 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         if productsWithQuantityController.models.isEmpty {
             topBar.setLeftButtonIds([])
         } else {
-            topBar.setLeftButtonIds([.Edit])
+            topBar.setLeftButtonIds([.edit])
         }
     }
     
     // MARK: - ExpandableTopViewControllerDelegate
     
-    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+    func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
         // Fix top line looks slightly thicker after animation. Problem: We have to animate to min scale of 0.0001 because 0 doesn't work correctly (iOS bug) so the frame height passed here is not exactly 0, which leaves a little gap when we set it in the constraint
         topControlTopConstraint.constant = view.frame.height < 0.1 ? 0 : view.frame.height
         
@@ -320,7 +320,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topQuickAddControllerManager?.controller?.onClose()
     }
     
-    func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
+    func onAddGroup(_ group: ListItemGroup, onFinish: VoidFunction?) {
         if let inventory = inventory {
             Providers.inventoryItemsProvider.addToInventory(inventory, group: group, remote: true, resultHandler(onSuccess: {[weak self] inventoryItemsWithDelta in
                 let inventoryItems = inventoryItemsWithDelta.map{$0.inventoryItem}
@@ -332,16 +332,16 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 }
             }, onError: {[weak self] result in guard let weakSelf = self else {return}
                 switch result.status {
-                case .IsEmpty:
+                case .isEmpty:
                     AlertPopup.show(title: trans("popup_title_group_is_empty"), message: trans("popup_group_is_empty"), controller: weakSelf)
                 default:
-                    self?.defaultErrorHandler()(providerResult: result)
+                    self?.defaultErrorHandler()(result)
                 }
             }))
         }
     }
     
-    func onAddProduct(product: Product) {
+    func onAddProduct(_ product: Product) {
         if let inventory = inventory {
             Providers.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: 1, remote: true, successHandler{[weak self] addedItemWithDelta in
                 let addedItem = addedItemWithDelta.inventoryItem
@@ -350,19 +350,19 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    private func addOrUpdateUI(items: [InventoryItem]) {
+    fileprivate func addOrUpdateUI(_ items: [InventoryItem]) {
         productsWithQuantityController?.addOrUpdateUI(items.map{
             return ProductWithQuantityInv(inventoryItem: $0)
         })
     }
     
-    func updateItemUI(item: InventoryItem) {
-        productsWithQuantityController.updateModelUI({($0 as! ProductWithQuantityInv).inventoryItem.same(item)}, updatedModel: ProductWithQuantityInv(inventoryItem: item))
+    func updateItemUI(_ item: InventoryItem) {
+        _ = productsWithQuantityController.updateModelUI({($0 as! ProductWithQuantityInv).inventoryItem.same(item)}, updatedModel: ProductWithQuantityInv(inventoryItem: item))
     }
     
-    func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
+    func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
-        func onEditListItem(input: ListItemInput, editingItem: InventoryItem) {
+        func onEditListItem(_ input: ListItemInput, editingItem: InventoryItem) {
 
             let inventoryItemInput = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
             
@@ -375,11 +375,11 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 self?.closeTopController()
             }, onError: {[weak self] result in
                 self?.reload()
-                self?.defaultErrorHandler()(providerResult: result)
+                self?.defaultErrorHandler()(result)
             }))
         }
         
-        func onAddInventoryItem(input: ListItemInput) {
+        func onAddInventoryItem(_ input: ListItemInput) {
             if let inventory = inventory {
                 let input = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
                 
@@ -390,7 +390,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 }, onError: {[weak self] result in
                     self?.reload()
                     self?.closeTopController()
-                    self?.defaultErrorHandler()(providerResult: result)
+                    self?.defaultErrorHandler()(result)
                 }))
             } else {
                 QL4("Inventory isn't set, can't add item")
@@ -418,8 +418,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topBar.setBackVisible(false)
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .Add),
-            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+            TopBarButtonModel(buttonId: .add),
+            TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
         ])
     }
     
@@ -427,7 +427,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topBar.setBackVisible(true)
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+            TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
         ])
     }
     
@@ -435,33 +435,33 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         return self.view
     }
     
-    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void) {
+    func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
         Providers.productCategoryProvider.categoryWithName(name, successHandler {category in
             handler(category.color)
         })
     }
     
-    func onRemovedSectionCategoryName(name: String) {
+    func onRemovedSectionCategoryName(_ name: String) {
     }
     
-    func onRemovedBrand(name: String) {
+    func onRemovedBrand(_ name: String) {
     }
     
     // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "productsWithQuantityControllerSegue" {
-            productsWithQuantityController = segue.destinationViewController as? ProductsWithQuantityViewController
+            productsWithQuantityController = segue.destination as? ProductsWithQuantityViewController
             productsWithQuantityController?.delegate = self
         }
     }
     
     // MARK: - ProductsWithQuantityViewControllerDelegate
     
-    func loadModels(page: NSRange, sortBy: InventorySortBy, onSuccess: [ProductWithQuantity] -> Void) {
+    func loadModels(_ page: NSRange, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity]) -> Void) {
         if let inventory = inventory {
             // .MemOnly fetch mode prevents following - when we add items to the inventory and switch to inventory very quickly, the db has not finished writing the items yet! and the load request reads the items from db before the write finishes so if we pass fetchMode .Both, first the mem cache returns the correct items but then the call - to the db - returns still the old items. So we pass mem cache which has the correct state, ignoring the db result.
-            Providers.inventoryItemsProvider.inventoryItems(page, inventory: inventory, fetchMode: .MemOnly, sortBy: sortBy, successHandler{inventoryItems in
+            Providers.inventoryItemsProvider.inventoryItems(page, inventory: inventory, fetchMode: .memOnly, sortBy: sortBy, successHandler{inventoryItems in
                 let productsWithQuantity = inventoryItems.map{ProductWithQuantityInv(inventoryItem: $0)}
                 onSuccess(productsWithQuantity)
             })
@@ -470,37 +470,37 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func onLoadedModels(models: [ProductWithQuantity]) {
+    func onLoadedModels(_ models: [ProductWithQuantity]) {
         // TODO is this necessary?
     }
     
-    func remove(model: ProductWithQuantity, onSuccess: VoidFunction, onError: ProviderResult<Any> -> Void) {
+    func remove(_ model: ProductWithQuantity, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
         if let inventory = inventory {
             Providers.inventoryItemsProvider.removeInventoryItem((model as! ProductWithQuantityInv).inventoryItem.uuid, inventoryUuid: inventory.uuid, remote: true, resultHandler(onSuccess: {
                 onSuccess()
-                }, onError: {result in
-                    onError(result)
+            }, onError: {result in
+                onError(result)
             }))
         } else {
             print("Error: InventoryItemsController.remove: no inventory")
         }
     }
     
-    func increment(model: ProductWithQuantity, delta: Int, onSuccess: Int -> Void) {
+    func increment(_ model: ProductWithQuantity, delta: Int, onSuccess: @escaping (Int) -> Void) {
         Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, remote: true, successHandler({updatedQuantity in
             onSuccess(updatedQuantity)
         }))
     }
     
-    func onModelSelected(model: ProductWithQuantity, indexPath: NSIndexPath) {
-        if productsWithQuantityController.editing {
+    func onModelSelected(_ model: ProductWithQuantity, indexPath: IndexPath) {
+        if productsWithQuantityController.isEditing {
             let inventoryItem = (model as! ProductWithQuantityInv).inventoryItem
 
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: inventoryItem))
             
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+                TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
             ])
         }
     }
@@ -513,15 +513,15 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         toggleTopAddController()
     }
     
-    func onTableViewScroll(scrollView: UIScrollView) {
+    func onTableViewScroll(_ scrollView: UIScrollView) {
         toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
     }
     
-    func indexPathOfItem(model: ProductWithQuantityInv) -> NSIndexPath? {
+    func indexPathOfItem(_ model: ProductWithQuantityInv) -> IndexPath? {
         let models = productsWithQuantityController.models as! [ProductWithQuantityInv]
         for i in 0..<models.count {
             if models[i].same(model) {
-                return NSIndexPath(forRow: i, inSection: 0)
+                return IndexPath(row: i, section: 0)
             }
         }
         return nil
@@ -535,18 +535,18 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         toggleTopAddController(false)
     }
     
-    func onEmpty(empty: Bool) {
+    func onEmpty(_ empty: Bool) {
         if empty {
             topBar.setLeftButtonIds([])
         } else {
-            topBar.setLeftButtonIds([.Edit])
+            topBar.setLeftButtonIds([.edit])
         }
     }
     
     // MARK: - Websocket
     
-    func onWebsocketInventory(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<Inventory>> {
+    func onWebsocketInventory(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Inventory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                     //                case .Add: // we only use 1 inventory currently
@@ -572,7 +572,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 print("Error: ViewController.onWebsocketInventory: no userInfo")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
@@ -583,7 +583,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                         
                         if inventory.uuid == inventoryUuid {
                             AlertPopup.show(title: trans("popup_title_inventory_deleted"), message: trans("popup_inventory_was_deleted_in_other_device", inventory.name), controller: self, onDismiss: {[weak self] in
-                                self?.navigationController?.popViewControllerAnimated(true)
+                                _ = self?.navigationController?.popViewController(animated: true)
                             })
                         } else {
                             QL1("Websocket: Inventory items controller received a notification to delete an inventory which is not the one being currently shown")
@@ -601,8 +601,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func onWebsocketInventoryItems(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
+    func onWebsocketInventoryItems(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case WSNotificationVerb.Add:
@@ -628,7 +628,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             
         // User added/incremented inventory items using the quick add (product or group)
         // Note that we do an update instead of an increment, the reason is simply that the server object doesn't have delta information to do the increment. The only situation where update can cause problems is if we are incrementing the same items when the notification arrives, some of our increments may be overwritten. Not critical. Update has on the other side the advantage that if a message gets lost, when we receive the next the quantity is correctly updated.
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<[InventoryItem]>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[InventoryItem]>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case WSNotificationVerb.Add:
@@ -645,9 +645,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func onWebsocketInventoryItem(note: NSNotification) {
+    func onWebsocketInventoryItem(_ note: Foundation.Notification) {
         
-        if let info = note.userInfo as? Dictionary<String, WSNotification<InventoryItem>> {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<InventoryItem>> {
             
             if let notification = info[WSNotificationValue] {
                 
@@ -664,7 +664,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 print("Error: InventoryItemsViewController.onWebsocketUpdateListItem: no value")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 
                 let inventoryItemUuid = notification.obj
@@ -673,7 +673,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 case .Delete:
                     if let model = ((productsWithQuantityController.models as! [ProductWithQuantityInv]).filter{$0.inventoryItem.uuid == inventoryItemUuid}).first {
                         if let indexPath = indexPathOfItem(model) {
-                            productsWithQuantityController.removeItemUI(indexPath)
+                            _ = productsWithQuantityController.removeItemUI(indexPath)
                         } else {
                             QL2("Group item to remove is not in table view: \(inventoryItemUuid)")
                         }
@@ -687,7 +687,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 QL4("No value")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case WSNotificationVerb.Increment:
@@ -714,8 +714,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func onWebsocketListItem(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
+    func onWebsocketListItem(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .BuyCart:
@@ -730,8 +730,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func onWebsocketProduct(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+    func onWebsocketProduct(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Update:
@@ -741,7 +741,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             } else {
                 QL4("No value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -759,8 +759,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func onWebsocketProductCategory(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
+    func onWebsocketProductCategory(_ note: Foundation.Notification) {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Add:
@@ -770,7 +770,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             } else {
                 QL4("No value")
             }
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
@@ -785,7 +785,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func onIncomingGlobalSyncFinished(note: NSNotification) {
+    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         reload()
     }

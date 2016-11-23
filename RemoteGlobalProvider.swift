@@ -10,14 +10,14 @@ import UIKit
 
 class RemoteGlobalProvider {
 
-    func sync(params: [String: AnyObject], handler: RemoteResult<RemoteSyncResult> -> ()) {
-        RemoteProvider.authenticatedRequest(.POST, Urls.sync, params) {result in
+    func sync(_ params: [String: AnyObject], handler: @escaping (RemoteResult<RemoteSyncResult>) -> ()) {
+        RemoteProvider.authenticatedRequest(.post, Urls.sync, params) {result in
             handler(result)
         }
     }
     
-    func fullDownload(handler: RemoteResult<RemoteSyncResult> -> ()) {
-        RemoteProvider.authenticatedRequest(.GET, Urls.fullDownload) {result in
+    func fullDownload(_ handler: @escaping (RemoteResult<RemoteSyncResult>) -> ()) {
+        RemoteProvider.authenticatedRequest(.get, Urls.fullDownload) {result in
             handler(result)
         }
     }
