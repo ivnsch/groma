@@ -442,7 +442,7 @@ class ListItemProviderImpl: ListItemProvider {
                 
                 let memAddedListItemsMaybe = weakSelf.memProvider.addOrUpdateListItems(prototypesWithSections, status: status, list: list, note: note)
                 if let addedListItems = memAddedListItemsMaybe {
-                    DispatchQueue.global(qos: .background).async {
+                    DispatchQueue.main.async {
                         // return in advance so our client is quick - the database update continues in the background
                         handler(ProviderResult(status: .success, sucessResult: addedListItems))
                     }
