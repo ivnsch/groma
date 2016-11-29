@@ -19,7 +19,7 @@ extension Results {
     */
     func toArray(_ range: NSRange? = nil) -> [T] {
         
-        guard (range.map{$0.location < count} ?? false) else {
+        guard (range.map{$0.location < count} ?? true) else {
             print("Warning: Requesting out of bounds range of results. Range: \(range), results count: \(count)")
             return []
         }
