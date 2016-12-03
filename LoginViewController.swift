@@ -12,6 +12,7 @@ import SwiftValidator
 import FBSDKCoreKit
 import FBSDKLoginKit
 import QorumLogs
+import CloudKit
 
 protocol LoginDelegate: class {
     func onLoginSuccess()
@@ -91,14 +92,14 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.isNavigationBarHidden = false
 
         navigationItem.title = trans("Login")
 
         passwordField.isSecureTextEntry = true
         
         GoogleSignInHelper.configure(uiDelegate: self, delegate: self)
-        
-        self.navigationController?.isNavigationBarHidden = false
         
         self.fillTestInput()
         
@@ -108,6 +109,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(LoginViewController.handleTap(_:)))
         recognizer.delegate = self
+        recognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(recognizer)
         
         eyeView.delegate = self
@@ -147,14 +149,16 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 
     fileprivate func initValidator() {
         let validator = Validator()
-        validator.registerField(self.userNameField, rules: [EmailRule(message: trans("validation_email_format"))])
+//        validator.registerField(self.userNameField, rules: [EmailRule(message: trans("validation_email_format"))])
         validator.registerField(self.passwordField, rules: [RequiredRule(message: trans("validation_missing_password"))]) // TODO repl with translation key, for now this so testers understand
         self.validator = validator
     }
     
     fileprivate func fillTestInput() {
-        userNameField.text = "ivanschuetz@gmail.com"
-        passwordField.text = "test123Q"
+        userNameField.text = "test"
+        passwordField.text = "test"
+//        userNameField.text = "ivanschuetz@gmail.com"
+//        passwordField.text = "test123Q"
     }
     
     @IBAction func loginTapped(_ sender: AnyObject) {
@@ -236,6 +240,10 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         self.delegate?.onRegisterFromLoginSuccess()
     }
     
+    func onLoginFromRegisterSuccess() {
+        // TODO remove register from login
+    }
+    
     func onSocialSignupInRegisterScreenSuccess() {
         _ = navigationController?.popViewController(animated: true)
         self.delegate?.onLoginSuccess()
@@ -309,7 +317,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         if (error == nil) {
             QL1("Google login success, calling our server...")
             progressVisible()
-            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, controller: self, socialSignInResultHandler())
+            Providers.userProvider.authenticateWithGoogle(user.authentication.idToken, controller: self, socialSignInResultHandler())
         } else {
             QL4("Google login error: \(error.localizedDescription)")
         }
@@ -350,6 +358,43 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                     Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
                 }
             })(providerResult)
+        }
+    }
+    
+    // MARK: - iCloud
+    
+    // TODO
+    @IBAction func onICloudTap(_ sender: AnyObject) {
+        
+        CKContainer.default().accountStatus {[weak self] (accountStat, error) in guard let weakSelf = self else {return}
+            if (accountStat == .available) {
+                QL1("iCloud is available")
+                
+                if let token = FileManager.default.ubiquityIdentityToken?.description {
+                    QL1("iCloud token: \(token)")
+                    
+                    guard let rootController = UIApplication.shared.delegate?.window??.rootViewController else { // copied from credentials login, not sure root controller it's really necessary here
+                        QL4("No root view controller")
+                        return
+                    }
+                    
+                    Providers.userProvider.authenticateWithICloud(token, controller: rootController, rootController.resultHandler(onSuccess: {_ in
+                        weakSelf.onLoginSuccess()
+                    }, onError: {result in
+                        // Note: status from cred login not handled here, since we now are 99% we will not use custom server for sync. So that handling is not used.
+                        weakSelf.defaultErrorHandler()(result)
+                        Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
+                    }
+                    ))
+                } else {
+                    
+                }
+                
+            }
+            else {
+                QL4("iCloud is not available")
+                weakSelf.defaultErrorHandler()(ProviderResult(status: .iCloudLoginError)) // TODO specific status: show to user "iCloud is not available"
+            }
         }
     }
     

@@ -9,6 +9,7 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
+import QorumLogs
 
 /**
 * Helper class to use Facebook login service
@@ -16,38 +17,48 @@ import FBSDKLoginKit
 */
 class FacebookLogin {
     
-    static func login(_ controller: UIViewController, handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+    static func authenticate(_ controller: UIViewController, handler: @escaping (ProviderResult<String>) -> ()) {
         let login = FBSDKLoginManager()
         login.logIn(withReadPermissions: ["public_profile"]) {result, error in
             if let error = error {
-                print("Error: Facebook login: error: \(error)")
+                QL4("Error: Facebook login: error: \(error)")
                 handler(ProviderResult(status: .socialLoginError))
                 
             } else if let result = result {
                 if result.isCancelled {
-                    print("Facebook login cancelled")
+                    QL2("Facebook login cancelled")
                     handler(ProviderResult(status: .socialLoginCancelled))
                     
                 } else {
-                    print("Facebook login success, calling our server...")
+                    QL1("Facebook login success")
                     if let tokenString = result.token.tokenString {
-                        Providers.userProvider.authenticateWithFacebook(tokenString, controller: controller) {result in
-                            
-                            // map already exists status to "social aleready exists", to show a different error message
-                            if result.status == .alreadyExists {
-                                handler(ProviderResult(status: .socialAlreadyExists))
-                            } else {
-                                handler(result)
-                            }
-                        }
+                        handler(ProviderResult(status: .success, sucessResult: tokenString))
+                        
                     } else {
-                        print("Facebook no token")
+                        QL4("Facebook no token")
                         handler(ProviderResult(status: .socialLoginError))
                     }
-                    
                 }
             } else {
-                print("No result")
+                QL4("No result")
+            }
+        }
+    }
+    
+    /// Authenticates to FB and logs in to server
+    static func login(_ controller: UIViewController, handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+        authenticate(controller) {result in
+            if let tokenString = result.sucessResult {
+                Providers.userProvider.authenticateWithFacebook(tokenString, controller: controller) {result in
+                    // map already exists status to "social aleready exists", to show a different error message
+                    if result.status == .alreadyExists {
+                        handler(ProviderResult(status: .socialAlreadyExists))
+                    } else {
+                        handler(result)
+                    }
+                }
+            } else {
+                handler(ProviderResult(status: result.status))
             }
         }
     }

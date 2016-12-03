@@ -37,7 +37,7 @@ class UserProviderMock: UserProvider {
         }
     }
     
-    func register(_ user: UserInput, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+    func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true
             self?.email = user.email
@@ -120,6 +120,13 @@ class UserProviderMock: UserProvider {
     
     
     func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+        delay(requestDelay) {
+            let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
+            handler(ProviderResult(status: .success, sucessResult: syncResult))
+        }
+    }
+    
+    func authenticateWithICloud(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         delay(requestDelay) {
             let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
             handler(ProviderResult(status: .success, sucessResult: syncResult))

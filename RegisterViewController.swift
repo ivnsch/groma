@@ -17,9 +17,11 @@ protocol RegisterDelegate: class {
     
     // can be login or register
     func onSocialSignupInRegisterScreenSuccess()
+    
+    func onLoginFromRegisterSuccess()
 }
 
-class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, EyeViewDelegate {
+class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, EyeViewDelegate, LoginDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -45,7 +47,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         
         navigationItem.title = trans("title_register")
 
-        self.navigationController?.isNavigationBarHidden = false
+        navigationController?.isNavigationBarHidden = false
         
         passwordField.isSecureTextEntry = true
 
@@ -89,16 +91,19 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     
     fileprivate func initValidator() {
         let validator = Validator()
-        validator.registerField(self.emailField, rules: [EmailRule(message: "validation_email_format")])
-        validator.registerField(self.passwordField, rules: [PasswordRule(message: "validation_password_characters")]) // TODO repl with translation key, for now this so testers understand
+//        validator.registerField(self.emailField, rules: [EmailRule(message: "validation_email_format")])
+//        validator.registerField(self.passwordField, rules: [PasswordRule(message: "validation_password_characters")]) // TODO repl with translation key, for now this so testers understand
+        
 //        validator.registerField(self.firstNameField, rules: [MinLengthRule(length: 1, message: "validation_first_name_min_length")]) // TODO repl with translation key, for now this so testers understand
 //        validator.registerField(self.lastNameField, rules: [MinLengthRule(length: 1, message: "validation_last_name_min_length")]) // TODO repl with translation key, for now this so testers understand
         self.validator = validator
     }
     
     fileprivate func fillTestInput() {
-        emailField.text = "ivanschuetz@gmail.com"
-        passwordField.text = "test123Q"
+        emailField.text = "test"
+        passwordField.text = "test"
+//        emailField.text = "ivanschuetz@gmail.com"
+//        passwordField.text = "test123Q"
 //        firstNameField.text = "Ivan"
 //        lastNameField.text = "Schuetz"
     }
@@ -106,6 +111,29 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     @IBAction func onRegisterTap(_ sender: UIButton) {
         register()
     }
+    
+//    @IBAction func onLoginTap(_ sender: UIButton) {
+//        let loginController = UIStoryboard.loginViewController()
+//        loginController.delegate = self
+//        loginController.onUIReady = {
+//            loginController.mode = .normal
+//        }
+//        
+//        navigationController?.pushViewController(loginController, animated: true)
+//    }
+    
+    // MARK: LoginDelegate
+    
+    func onLoginSuccess() {
+        _ = navigationController?.popViewController(animated: true)
+        self.delegate?.onLoginFromRegisterSuccess()
+    }
+    
+    func onRegisterFromLoginSuccess() {
+        // TODO delete register link from login screen, since we now use register first
+    }
+    
+    // MARK: -
     
     fileprivate func register() {
         
@@ -128,7 +156,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     let user = UserInput(email: email, password: password, firstName: "", lastName: "")
                     
                     self.progressVisible()
-                    Providers.userProvider.register(user, successHandler{[weak self] in
+                    Providers.userProvider.register(user, controller: self, successHandler{[weak self] in
                         self?.delegate?.onRegisterSuccess(email)
                     })
                     

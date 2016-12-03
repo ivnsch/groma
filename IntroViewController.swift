@@ -22,8 +22,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
     @IBOutlet weak var skipButton: UIButton!
     // This works but for now disabled, no signup in intro
-//    @IBOutlet weak var loginButton: UIButton!
-//    @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var registerButton: UIButton!
     
     @IBOutlet weak var verticalCenterSlideConstraint: NSLayoutConstraint!
     
@@ -44,6 +44,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.isNavigationBarHidden = true
         
         pageModels = [(trans("intro_slide_lists"), "intro_lists"),
                       (trans("intro_slide_inventories"), "intro_inventory"),
@@ -87,9 +89,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
     }
     
-//    @IBAction func loginTapped(sender: UIButton) {
-//        startLogin(.Normal)
-//    }
+    @IBAction func loginTapped(sender: UIButton) {
+        startLogin(.normal)
+    }
     
     fileprivate func startLogin(_ mode: LoginControllerMode) {
         let loginController = UIStoryboard.loginViewController()
@@ -289,11 +291,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     }
 
     
-//    @IBAction func registerTapped(sender: UIButton) {
-//        let registerController = UIStoryboard.registerViewController()
-//        registerController.delegate = self
-//        self.navigationController?.pushViewController(registerController, animated: true)
-//    }
+    @IBAction func registerTapped(sender: UIButton) {
+        let registerController = UIStoryboard.registerViewController()
+        registerController.delegate = self
+        _ = navigationController?.pushViewController(registerController, animated: true)
+    }
 
     
     @IBAction func skipTapped(_ sender: UIButton) {
@@ -308,6 +310,10 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     func onRegisterSuccess(_ email: String) {
         _ = navigationController?.popViewController(animated: true)
         startLogin(.afterRegister)
+    }
+    
+    func onLoginFromRegisterSuccess() {
+        _ = navigationController?.popViewController(animated: true)
     }
     
     func onSocialSignupInRegisterScreenSuccess() {

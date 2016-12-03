@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Data Source-->
@@ -17,25 +21,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJR-Pk-tTx" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="170" y="541" width="35" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="Skip">
-                                    <color key="titleColor" red="0.67450980392156867" green="0.67450980392156867" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                        <integer key="value" value="50"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="skipTapped:" destination="k9Y-sO-uBl" eventType="touchUpInside" id="DUq-XT-1UN"/>
-                                </connections>
-                            </button>
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="6ZS-ry-WaI" customClass="SwipeView">
                                 <rect key="frame" x="0.0" y="164" width="375" height="300"/>
-                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="gWF-zF-RTt"/>
                                 </constraints>
@@ -46,14 +34,52 @@
                             </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="mkE-ao-QPc">
                                 <rect key="frame" x="168" y="474" width="39" height="37"/>
-                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="pageIndicatorTintColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="currentPageIndicatorTintColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </pageControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJR-Pk-tTx" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="170" y="598" width="35" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Skip">
+                                    <color key="titleColor" red="0.67450980392156867" green="0.67450980392156867" blue="0.67450980392156867" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="skipTapped:" destination="k9Y-sO-uBl" eventType="touchUpInside" id="DUq-XT-1UN"/>
+                                </connections>
+                            </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="pJ3-Ic-Ev2">
-                                <rect key="frame" x="177" y="548" width="20" height="20"/>
+                                <rect key="frame" x="177" y="605" width="20" height="20"/>
                             </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fmo-X8-j76" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="94" y="534" width="186" height="50"/>
+                                <color key="backgroundColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="186" id="TvX-MD-s4S"/>
+                                    <constraint firstAttribute="height" constant="50" id="hFT-WC-hoc"/>
+                                </constraints>
+                                <state key="normal" title="Sign in">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="loginTappedWithSender:" destination="k9Y-sO-uBl" eventType="touchUpInside" id="lgY-Wp-eco"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="6ZS-ry-WaI" secondAttribute="trailing" id="15Y-Bf-R9H"/>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="10" id="2Je-Xu-p9d"/>
@@ -76,25 +102,27 @@
                             </constraint>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="7sM-E7-U7q"/>
                             <constraint firstItem="pJ3-Ic-Ev2" firstAttribute="centerY" secondItem="NJR-Pk-tTx" secondAttribute="centerY" id="93w-fo-p1C"/>
-                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="dKg-jx-UjW" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="fmo-X8-j76" secondAttribute="bottom" constant="14" id="R55-z6-CfI"/>
+                            <constraint firstItem="pJ3-Ic-Ev2" firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="kq0-sL-AYj"/>
+                            <constraint firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="mK8-90-YtI"/>
+                            <constraint firstItem="fmo-X8-j76" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="23" id="qkV-BE-CrY" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                         <real key="value" value="5"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                        <integer key="value" value="30"/>
+                                        <integer key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                        <integer key="value" value="40"/>
+                                        <integer key="value" value="30"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
-                            <constraint firstItem="pJ3-Ic-Ev2" firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="kq0-sL-AYj"/>
-                            <constraint firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="mK8-90-YtI"/>
+                            <constraint firstItem="fmo-X8-j76" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="vJJ-bx-aTg"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="leading" secondItem="q6e-yE-ONc" secondAttribute="leading" id="xZ6-gy-O9O">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
@@ -112,10 +140,10 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="05r-p6-eT1"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="pageControl" destination="mkE-ao-QPc" id="fb6-Vq-8Za"/>
                         <outlet property="progressIndicator" destination="pJ3-Ic-Ev2" id="ShC-N5-xC0"/>
+                        <outlet property="registerButton" destination="fmo-X8-j76" id="e3I-dP-moy"/>
                         <outlet property="skipButton" destination="NJR-Pk-tTx" id="vOf-eA-cbw"/>
                         <outlet property="swipeView" destination="6ZS-ry-WaI" id="TgR-a1-308"/>
                         <outlet property="verticalCenterSlideConstraint" destination="3Tk-Zj-DvH" id="rMo-yr-l31"/>

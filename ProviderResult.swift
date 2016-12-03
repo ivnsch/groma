@@ -30,6 +30,7 @@ enum ProviderStatusCode: Int {
     case noConnection = 108 // Used when we detect in advance that there's no connectivity and don't proceed making the request. When this is not used, the execution of a request without a connection results in .ServerNotReachable
     case syncFailed = 109 // Generic status code for a failed sync - for whatever reason - note this is client generated, the server status code that leads to this can be anything.
     case mustUpdateApp = 111
+    case iCloudLoginError = 123
     
     
     // DB related

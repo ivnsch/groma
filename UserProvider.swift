@@ -38,7 +38,7 @@ protocol UserProvider {
     // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
     func login(_ loginData: LoginData, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
     
-    func register(_ user: UserInput, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func isRegistered(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
@@ -49,6 +49,8 @@ protocol UserProvider {
     
     // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
     func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
+
+    func authenticateWithICloud(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
 
     func forgotPassword(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
     

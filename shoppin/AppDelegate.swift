@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
     fileprivate let debugAddDummyData = false
     fileprivate let debugGeneratePrefillDatabases = false
-    fileprivate let debugForceShowIntro = false
+    fileprivate let debugForceShowIntro = true
     
     var window: UIWindow?
     
@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         initWebsocket()
 
-        checkMigrateRealm()
+        configRealm()
         
         Notification.subscribe(.LoginTokenExpired, selector: #selector(AppDelegate.onLoginTokenExpired(_:)), observer: self)
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onWebsocketConnectionChange(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Connection.rawValue), object: nil)
@@ -69,30 +69,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         return initFb
     }
+    var notificationToken: NotificationToken!
 
-    fileprivate func checkMigrateRealm() {
-        let config = Realm.Configuration(
-            // Set the new schema version. This must be greater than the previously used
-            // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 0,
-            
-            // Set the block which will be called automatically when opening a Realm with
-            // a schema version lower than the one set above
-            migrationBlock: { migration, oldSchemaVersion in
-                // We haven’t migrated anything yet, so oldSchemaVersion == 0
-                if (oldSchemaVersion < 1) {
-                    // Nothing to do!
-                    // Realm will automatically detect new properties and removed properties
-                    // And will update the schema on disk automatically
-                }
-        })
+    static var realmConfig = Realm.Configuration(
+        // Set the new schema version. This must be greater than the previously used
+        // version (if you've never set a schema version before, the version is 0).
+        schemaVersion: 0,
         
-        // Tell Realm to use this new configuration object for the default Realm
-        Realm.Configuration.defaultConfiguration = config
-        
-        // Now that we've told Realm how to handle the schema change, opening the file
-        // will automatically perform the migration
-//        let realm = try! Realm()
+        // Set the block which will be called automatically when opening a Realm with
+        // a schema version lower than the one set above
+        migrationBlock: { migration, oldSchemaVersion in
+            // We haven’t migrated anything yet, so oldSchemaVersion == 0
+            if (oldSchemaVersion < 1) {
+                // Nothing to do!
+                // Realm will automatically detect new properties and removed properties
+                // And will update the schema on disk automatically
+            }
+    })
+
+    
+    fileprivate func configRealm() {
+        Realm.Configuration.defaultConfiguration = AppDelegate.realmConfig
     }
     
     fileprivate func checkRatePopup() {
@@ -137,8 +134,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             QorumOnlineLogs.test()
         }
 
-//        debugConfig()
-        productionConfig()
+        debugConfig()
+//        productionConfig()
     }
     
     fileprivate func initWebsocket() {
@@ -179,7 +176,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             
             introController.mode = .launch
             
-            self.window?.rootViewController?.present(introController, animated: false, completion: nil)
+            let navController = UINavigationController()
+            navController.viewControllers = [introController]
+            
+            self.window?.rootViewController?.present(navController, animated: false, completion: nil)
         }
     }
     

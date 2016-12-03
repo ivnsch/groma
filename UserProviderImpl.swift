@@ -28,7 +28,7 @@ class UserProviderImpl: UserProvider {
         }
     }
     
-    func register(_ user: UserInput, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+    func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         self.remoteProvider.register(user) {result in
             if result.success {
                 PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
@@ -314,6 +314,12 @@ class UserProviderImpl: UserProvider {
         remoteProvider.authenticateWithGoogle(token) {[weak self] result in
             self?.handleSocialSignUpResult(controller, result: result, handler: handler)
         }
+    }
+
+    
+    func authenticateWithICloud(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+        QL4("Not supported")
+        handler(ProviderResult(status: .unknown))
     }
     
     // store email in prefs so we can e.g. prefill login controller, which is opened after registration
