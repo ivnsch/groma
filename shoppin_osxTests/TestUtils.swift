@@ -189,7 +189,7 @@ class TestUtils {
         }
     }
     
-    class func testRemoteSharedUserMatchesWithInput(remoteSharedUser: RemoteSharedUser, _ sharedUserInput: SharedUser) {
+    class func testRemoteSharedUserMatchesWithInput(remoteSharedUser: RemoteSharedUser, _ sharedUserInput: DBSharedUser) {
         expect(remoteSharedUser.email) == sharedUserInput.email
     }
 

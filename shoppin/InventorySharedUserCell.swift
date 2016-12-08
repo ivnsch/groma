@@ -12,7 +12,7 @@ class InventorySharedUserCell: UITableViewCell {
     
     @IBOutlet weak var emailLabel: UILabel!
     
-    var sharedUser: SharedUser? {
+    var sharedUser: DBSharedUser? {
         didSet {
             if let sharedUser = sharedUser {
                 emailLabel.text = sharedUser.email

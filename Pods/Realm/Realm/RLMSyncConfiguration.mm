@@ -19,6 +19,7 @@
 #import "RLMSyncConfiguration_Private.hpp"
 
 #import "RLMSyncManager_Private.h"
+#import "RLMSyncSession_Private.hpp"
 #import "RLMSyncUser_Private.hpp"
 #import "RLMSyncUtil_Private.hpp"
 #import "RLMUtil.hpp"
@@ -73,9 +74,9 @@ static BOOL isValidRealmURL(NSURL *url) {
         return NO;
     }
     RLMSyncConfiguration *that = (RLMSyncConfiguration *)object;
-    return ([self.realmURL isEqual:that.realmURL]
-            && [self.user isEqual:that.user]
-            && self.stopPolicy == that.stopPolicy);
+    return [self.realmURL isEqual:that.realmURL]
+        && [self.user isEqual:that.user]
+        && self.stopPolicy == that.stopPolicy;
 }
 
 - (realm::SyncConfig)rawConfiguration {
@@ -122,8 +123,11 @@ static BOOL isValidRealmURL(NSURL *url) {
                           isStandalone:NO];
         };
         if (!errorHandler) {
-            errorHandler = [=](int error_code, std::string message, realm::SyncSessionError error_type) {
-                RLMSyncSession *session = [user sessionForURL:url];
+            errorHandler = [=](std::shared_ptr<SyncSession> errored_session,
+                               int error_code,
+                               std::string message,
+                               realm::SyncSessionError error_type) {
+                RLMSyncSession *session = [[RLMSyncSession alloc] initWithSyncSession:errored_session];
                 [[RLMSyncManager sharedManager] _fireErrorWithCode:error_code
                                                            message:@(message.c_str())
                                                            session:session
@@ -131,11 +135,13 @@ static BOOL isValidRealmURL(NSURL *url) {
             };
         }
 
-        _config = std::make_unique<realm::SyncConfig>([user _syncUser],
-                                                      [[url absoluteString] UTF8String],
-                                                      translateStopPolicy(stopPolicy),
-                                                      std::move(bindHandler),
-                                                      std::move(errorHandler));
+        _config = std::make_unique<SyncConfig>(SyncConfig{
+            [user _syncUser],
+            [[url absoluteString] UTF8String],
+            translateStopPolicy(stopPolicy),
+            std::move(bindHandler),
+            std::move(errorHandler)
+        });
         self.customFileURL = customFileURL;
         return self;
     }

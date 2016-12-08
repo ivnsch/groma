@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import RealmSwift
+import QorumLogs
 
 class MemInventoryItemProvider {
     
@@ -18,7 +20,7 @@ class MemInventoryItemProvider {
         self.enabled = enabled
     }
     
-    func inventoryItems(_ inventory: Inventory) -> [InventoryItem]? {
+    func inventoryItems(_ inventory: DBInventory) -> [InventoryItem]? {
         guard enabled else {return nil}
         
         return inventoryItems[inventory.uuid]
@@ -150,6 +152,10 @@ class MemInventoryItemProvider {
         guard enabled else {return}
         
         inventoryItems = [String: [InventoryItem]]()
+    }
+    
+    func inventoriesRealm(_ remote: Bool, _ handler: @escaping (ProviderResult<Results<DBInventory>>) -> Void) {
+        QL4("Not implemented (TODO)")
     }
 }
 

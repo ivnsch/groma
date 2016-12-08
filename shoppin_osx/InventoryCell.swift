@@ -14,7 +14,7 @@ protocol InventoryCellDelegate: class {
 
 class InventoryCell: NSTableCellView {
     
-    var inventory: Inventory? {
+    var inventory: DBInventory? {
         didSet {
             if let inventory = self.inventory {
                 self.fill(inventory)
@@ -26,7 +26,7 @@ class InventoryCell: NSTableCellView {
     
     weak var delegate: InventoryCellDelegate?
     
-    private func fill(inventory: Inventory) {
+    private func fill(inventory: DBInventory) {
         self.nameLabel.stringValue = inventory.name
     }
     

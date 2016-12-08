@@ -69,7 +69,7 @@ class RealmPlanProvider: RealmProvider {
         return dict
     }
 
-    func addOrIncrementProducts(_ products: [Product], inventory: Inventory, _ handler: @escaping ([PlanItem]?) -> Void) {
+    func addOrIncrementProducts(_ products: [Product], inventory: DBInventory, _ handler: @escaping ([PlanItem]?) -> Void) {
         
         doInWriteTransaction ({[weak self] realm in
             if let weakSelf = self {
@@ -103,7 +103,7 @@ class RealmPlanProvider: RealmProvider {
                         } else { // plan item with same product name doesn't exist - create a new one
                             
                             let planItem = DBPlanItem()
-                            planItem.inventory = InventoryMapper.dbWithInventory(inventory, dirty: true) // TODO dirty: true just to compile quick
+                            planItem.inventory = inventory
                             planItem.product = ProductMapper.dbWithProduct(product)
                             
                             planItemsToSave.append(planItem)
@@ -135,7 +135,7 @@ class RealmPlanProvider: RealmProvider {
         }
     }
     
-    func addOrIncrementPlanItems(_ planItems: [PlanItem], inventory: Inventory, _ handler: @escaping ([PlanItem]?) -> Void) {
+    func addOrIncrementPlanItems(_ planItems: [PlanItem], inventory: DBInventory, _ handler: @escaping ([PlanItem]?) -> Void) {
         
         doInWriteTransaction ({[weak self] realm in
             if let weakSelf = self {
@@ -167,7 +167,7 @@ class RealmPlanProvider: RealmProvider {
                             
                         } else { // plan item with same product name doesn't exist - create a new one
                             let planItem = DBPlanItem()
-                            planItem.inventory = InventoryMapper.dbWithInventory(inventory, dirty: true) // TODO dirty: true just to compile quick
+                            planItem.inventory = inventory
                             planItem.product = ProductMapper.dbWithProduct(planItemInput.product)
                             planItem.quantity = planItemInput.quantity
                             planItem.quantityDelta = planItemInput.quantity // on a new obj quantity delta is always quantity (quantity which has not been synced yet)
@@ -201,7 +201,7 @@ class RealmPlanProvider: RealmProvider {
         }
     }
     
-    func addOrUpdateWithIncrement(_ planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: @escaping ([PlanItem]?) -> Void) {
+    func addOrUpdateWithIncrement(_ planItemsInput: [PlanItemInput], inventory: DBInventory, _ handler: @escaping ([PlanItem]?) -> Void) {
         
         doInWriteTransaction ({[weak self] realm in
             if let weakSelf = self {
@@ -271,7 +271,7 @@ class RealmPlanProvider: RealmProvider {
                             
                             // create the new plan item
                             let planItem = DBPlanItem()
-                            planItem.inventory = InventoryMapper.dbWithInventory(inventory, dirty: true) // TODO dirty: true just to compile quick
+                            planItem.inventory = inventory
                             planItem.product = product
                             planItem.quantity = planItemInput.quantity
                             planItem.quantityDelta = planItemInput.quantity // on a new obj quantity delta is always quantity (quantity which has not been synced yet)

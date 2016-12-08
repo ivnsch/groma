@@ -10,36 +10,18 @@ import Foundation
 
 class InventoryMapper {
     
-    class func inventoryWithDB(_ dbInventory: DBInventory) -> Inventory {
+    class func inventoryWithDB(_ dbInventory: DBInventory) -> DBInventory {
         let users = dbInventory.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
-        return Inventory(uuid: dbInventory.uuid, name: dbInventory.name, users: users, bgColor: dbInventory.bgColor(), order: dbInventory.order, lastServerUpdate: dbInventory.lastServerUpdate)
+        return DBInventory(uuid: dbInventory.uuid, name: dbInventory.name, users: users, bgColor: dbInventory.bgColor(), order: dbInventory.order)
     }
     
-    class func inventoryWithRemote(_ remoteInventory: RemoteInventory, users: [RemoteSharedUser]) -> Inventory {
-        return Inventory(uuid: remoteInventory.uuid, name: remoteInventory.name, users: users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: remoteInventory.color, order: remoteInventory.order, lastServerUpdate: remoteInventory.lastUpdate)
+    class func inventoryWithRemote(_ remoteInventory: RemoteInventory, users: [RemoteSharedUser]) -> DBInventory {
+        return DBInventory(uuid: remoteInventory.uuid, name: remoteInventory.name, users: users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: remoteInventory.color, order: remoteInventory.order)
     }
 
-    class func inventoryWithRemote(_ remoteInventoryWithDependencies: RemoteInventoryWithDependencies) -> Inventory {
+    class func inventoryWithRemote(_ remoteInventoryWithDependencies: RemoteInventoryWithDependencies) -> DBInventory {
         let remoteInventory = remoteInventoryWithDependencies.inventory
         return inventoryWithRemote(remoteInventory, users: remoteInventoryWithDependencies.users)
-    }
-    
-    class func dbWithInventory(_ inventory: Inventory, dirty: Bool) -> DBInventory {
-        let db = DBInventory()
-        db.uuid = inventory.uuid
-        db.name = inventory.name
-        db.setBgColor(inventory.bgColor)
-        db.order = inventory.order
-        db.setBgColor(inventory.bgColor)
-        if let lastServerUpdate = inventory.lastServerUpdate {
-            db.lastServerUpdate = lastServerUpdate
-        }
-        let dbSharedUsers = inventory.users.map{SharedUserMapper.dbWithSharedUser($0)}
-        for dbObj in dbSharedUsers {
-            db.users.append(dbObj)
-        }
-        db.dirty = dirty
-        return db
     }
     
     class func dbWithInventory(_ remoteInventoryWithDependencies: RemoteInventoryWithDependencies) -> DBInventory {

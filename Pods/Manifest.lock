@@ -53,11 +53,11 @@ PODS:
   - Nimble (5.0.0)
   - QorumLogs (0.9)
   - Reachability (3.2)
-  - Realm (2.0.4):
-    - Realm/Headers (= 2.0.4)
-  - Realm/Headers (2.0.4)
-  - RealmSwift (2.0.4):
-    - Realm (= 2.0.4)
+  - Realm (2.1.1):
+    - Realm/Headers (= 2.1.1)
+  - Realm/Headers (2.1.1)
+  - RealmSwift (2.1.1):
+    - Realm (= 2.1.1)
   - Starscream (2.0.2)
   - SwiftCharts (0.4)
   - SwiftValidator (4.0.0)
@@ -121,8 +121,8 @@ SPEC CHECKSUMS:
   Nimble: 56fc9f5020effa2206de22c3dd910f4fb011b92f
   QorumLogs: 9a484df6973a3697ac79fe2273140fde6b36dccc
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Realm: 9da97f48365f8b99dd95c28d45ad8222d62e1775
-  RealmSwift: 01e8db006035f16003e6307ae8eae1adccce68db
+  Realm: a55959c0b171a5fe5267406d17f314fec3cefaae
+  RealmSwift: 749fd955bf8d6471c21d218b9389a47aaeccfe3f
   Starscream: 6c135a34e0a6e60cedaa0b30db67a4c05cf7cd38
   SwiftCharts: 84b43d9d70b791459ff5f50ae5a6704326de309d
   SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af

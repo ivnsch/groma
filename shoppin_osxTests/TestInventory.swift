@@ -14,9 +14,9 @@ class TestInventory: XCTestCase {
     static let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
     static let remoteInventoryProvider = RemoteInventoryProvider()
     
-    static let inventory1 = Inventory(uuid: NSUUID().UUIDString, name: "foo")
+    static let inventory1 = DBInventory(uuid: NSUUID().UUIDString, name: "foo")
     
-    static func withAddedInventory(expectation: XCTestExpectation?, block: (addedInventory: Inventory) -> ()) {
+    static func withAddedInventory(expectation: XCTestExpectation?, block: (addedInventory: DBInventory) -> ()) {
         
         self.remoteInventoryProvider.addInventory(self.inventory1) {result in
             expect(result.success).to(beTrue())
@@ -35,7 +35,7 @@ class TestInventory: XCTestCase {
                         expect(remoteInventory.users).toNot(beEmpty())
                         // TODO test user in sharedusers is user1
                         
-                        let inventory = Inventory(uuid: remoteInventory.uuid, name: remoteInventory.name)
+                        let inventory = DBInventory(uuid: remoteInventory.uuid, name: remoteInventory.name)
                         
                         block(addedInventory: inventory)
                         
@@ -54,7 +54,7 @@ class TestInventory: XCTestCase {
         
         TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
             
-            let inventory = Inventory(uuid: NSUUID().UUIDString, name: "foo")
+            let inventory = DBInventory(uuid: NSUUID().UUIDString, name: "foo")
             
             TestInventory.remoteInventoryItemsProvider.inventoryItems(inventory) {result in
                 expect(result.success).to(beFalse())
@@ -135,8 +135,8 @@ class TestInventory: XCTestCase {
                     let inventoryItem1 = InventoryItem(quantity: 2, product: product1, inventory: addedInventory)
                     let product2 = Product(uuid: NSUUID().UUIDString, name: "bread", price: 0.7)
                     let inventoryItem2 = InventoryItem(quantity: 1, product: product2, inventory: addedInventory)
-                    let inventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
-                    let inventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
+                    let inventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: DBSharedUser(email: TestUtils.userInput1.email))
+                    let inventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: DBSharedUser(email: TestUtils.userInput1.email))
                     TestInventory.remoteInventoryItemsProvider.addToInventory(addedInventory, inventoryItems: [inventoryItemWithHistory1, inventoryItemWithHistory2]) {result in
                         expect(result.success).to(beTrue())
                         expect(result.successResult).to(beNil())
@@ -181,8 +181,8 @@ class TestInventory: XCTestCase {
                     let inventoryItem1 = InventoryItem(quantity: 2, product: product1, inventory: addedInventory)
                     let product2 = Product(uuid: NSUUID().UUIDString, name: "bread", price: 0.7)
                     let inventoryItem2 = InventoryItem(quantity: 1, product: product2, inventory: addedInventory)
-                    let inventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
-                    let inventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
+                    let inventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: DBSharedUser(email: TestUtils.userInput1.email))
+                    let inventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: DBSharedUser(email: TestUtils.userInput1.email))
                     
                     TestInventory.remoteInventoryItemsProvider.addToInventory(addedInventory, inventoryItems: [inventoryItemWithHistory1, inventoryItemWithHistory2]) {result in
                         expect(result.success).to(beTrue())
@@ -191,8 +191,8 @@ class TestInventory: XCTestCase {
                         print("Increment the 2 added items")
                         let moreInventoryItem1 = InventoryItem(quantity: 10, product: product1, inventory: addedInventory)
                         let moreInventoryItem2 = InventoryItem(quantity: 30, product: product2, inventory: addedInventory)
-                        let moreInventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: moreInventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
-                        let moreInventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: moreInventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
+                        let moreInventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: moreInventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: DBSharedUser(email: TestUtils.userInput1.email))
+                        let moreInventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: moreInventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: DBSharedUser(email: TestUtils.userInput1.email))
                         TestInventory.remoteInventoryItemsProvider.addToInventory(addedInventory, inventoryItems: [moreInventoryItemWithHistory1, moreInventoryItemWithHistory2]) {result in
                             expect(result.success).to(beTrue())
                             expect(result.successResult).to(beNil())

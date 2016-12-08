@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Array where Element: SharedUser {
+extension Array where Element: DBSharedUser {
     
     func containsMe() -> Bool {
         if let myEmail = Providers.userProvider.mySharedUser?.email {

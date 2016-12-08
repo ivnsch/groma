@@ -10,8 +10,8 @@ import UIKit
 import QorumLogs
 
 protocol ExistingSharedUserCellDelegate: class {
-    func onDeleteSharedUser(_ sharedUser: SharedUser, cell: ExistingSharedUserCell)
-    func onPullSharedUser(_ sharedUser: SharedUser, cell: ExistingSharedUserCell)
+    func onDeleteSharedUser(_ sharedUser: DBSharedUser, cell: ExistingSharedUserCell)
+    func onPullSharedUser(_ sharedUser: DBSharedUser, cell: ExistingSharedUserCell)
 }
 
 class ExistingSharedUserCell: UITableViewCell {
@@ -20,7 +20,7 @@ class ExistingSharedUserCell: UITableViewCell {
     
     weak var delegate: ExistingSharedUserCellDelegate?
     
-    var sharedUser: SharedUser? {
+    var sharedUser: DBSharedUser? {
         didSet {
             emailLabel.text = sharedUser?.email
         }

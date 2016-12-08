@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 
 protocol InvitedSharedUserCellDelegate: class {
-    func onInviteInfoSharedUser(_ sharedUser: SharedUser, cell: InvitedUserCell)
+    func onInviteInfoSharedUser(_ sharedUser: DBSharedUser, cell: InvitedUserCell)
 }
 
 class InvitedUserCell: UITableViewCell {
@@ -19,7 +19,7 @@ class InvitedUserCell: UITableViewCell {
     
     weak var delegate: InvitedSharedUserCellDelegate?
     
-    var sharedUser: SharedUser? {
+    var sharedUser: DBSharedUser? {
         didSet {
             emailLabel.text = sharedUser?.email
         }

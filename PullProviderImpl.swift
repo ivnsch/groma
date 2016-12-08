@@ -14,7 +14,7 @@ class PullProviderImpl: PullProvider {
     let listItemsDbProvider = RealmListItemProvider()
     let productsDbProvider = RealmProductProvider()
     
-    func pullListProducs(_ listUuid: String, srcUser: SharedUser, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
+    func pullListProducs(_ listUuid: String, srcUser: DBSharedUser, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
         
         remoteProvider.pullListProducs(listUuid, srcUser: srcUser) {[weak self] remoteResult in
             
@@ -34,7 +34,7 @@ class PullProviderImpl: PullProvider {
         }
     }
     
-    func pullInventoryProducs(_ listUuid: String, srcUser: SharedUser, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+    func pullInventoryProducs(_ listUuid: String, srcUser: DBSharedUser, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         
         remoteProvider.pullInventoryProducs(listUuid, srcUser: srcUser) {[weak self] remoteResult in
             

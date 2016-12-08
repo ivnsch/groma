@@ -114,12 +114,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }
         }
         
-        func initDefaultInventory(_ onFinish: ((Inventory?) -> Void)? = nil) {
+        func initDefaultInventory(_ onFinish: ((DBInventory?) -> Void)? = nil) {
             Providers.inventoryProvider.inventories(false, resultHandler(onSuccess: {[weak self] inventories in
                 
                 if let weakSelf = self {
                     if inventories.isEmpty {
-                        let inventory = Inventory(uuid: UUID().uuidString, name: trans("first_inventory_name"), bgColor: UIColor.flatBlue, order: 0)
+                        let inventory = DBInventory(uuid: UUID().uuidString, name: trans("first_inventory_name"), bgColor: UIColor.flatBlue, order: 0)
+                        
                         Providers.inventoryProvider.addInventory(inventory, remote: true, weakSelf.resultHandler(onSuccess: {
                             onFinish?(inventory)
                             }, onError: {result in
@@ -204,7 +205,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }))
         }
 
-        func initExampleList(_ inventory: Inventory, onFinish: VoidFunction? = nil) {
+        func initExampleList(_ inventory: DBInventory, onFinish: VoidFunction? = nil) {
             Providers.listProvider.lists(false, resultHandler(onSuccess: {[weak self] lists in guard let weakSelf = self else {onFinish?(); return}
                 
                 if lists.isEmpty {

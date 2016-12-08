@@ -16,7 +16,7 @@ class DBInventory: DBSyncable {
     dynamic var bgColorHex: String = "000000"
     dynamic var order: Int = 0
     
-    let users = RealmSwift.List<DBSharedUser>()
+    var users = RealmSwift.List<DBSharedUser>()
     
     func bgColor() -> UIColor {
         return UIColor(hexString: bgColorHex)
@@ -24,6 +24,19 @@ class DBInventory: DBSyncable {
     
     func setBgColor(_ bgColor: UIColor) {
         bgColorHex = bgColor.hexStr
+    }
+    
+    convenience init(uuid: String, name: String, users: [DBSharedUser] = [], bgColor: UIColor, order: Int) {
+        self.init()
+        
+        self.uuid = uuid
+        self.name = name
+
+        self.users = RealmSwift.List.list(users)
+        
+        self.order = order
+        
+        setBgColor(bgColor)
     }
     
     override static func primaryKey() -> String? {
@@ -79,5 +92,24 @@ class DBInventory: DBSyncable {
     override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
         RealmInventoryProvider().removeInventoryDependenciesSync(realm, inventoryUuid: uuid, markForSync: markForSync)
         realm.delete(self)
+    }
+    
+//    override var debugDescription: String {
+//        return "{\(type(of: self)) uuid: \(uuid), name: \(name), users: \(users), bgColor: \(bgColor), order: \(order)}"
+//    }
+    
+    func copy(uuid: String? = nil, name: String? = nil, users: [DBSharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil) -> DBInventory {
+        return DBInventory(
+            uuid: uuid ?? self.uuid,
+            name: name ?? self.name,
+            users: users ?? self.users.map{$0.copy()},
+            bgColor: bgColor ?? self.bgColor(),
+            order: order ?? self.order
+        )
+    }
+    
+    
+    func same(_ inventory: DBInventory) -> Bool {
+        return self.uuid == inventory.uuid
     }
 }

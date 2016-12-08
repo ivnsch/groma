@@ -9,7 +9,7 @@
 import Cocoa
 
 protocol InventoriesViewControllerDelegate: class {
-    func inventorySelected(inventory: Inventory)
+    func inventorySelected(inventory: DBInventory)
 }
 
 class InventoriesViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate, InventoryCellDelegate {
@@ -65,7 +65,7 @@ class InventoriesViewController: NSViewController, NSTableViewDataSource, NSTabl
         // when user opens account with lists like that, somehow we replace the dummy value with the email (client and server)
         // or maybe we can just use *always* a dummy identifier for myself. A general purpose string like "myself"
         // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
-        let inventory = Inventory(uuid: NSUUID().UUIDString, name: inventoryInput.name, users: [ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")])
+        let inventory = DBInventory(uuid: NSUUID().UUIDString, name: inventoryInput.name, users: [ProviderFactory().userProvider.mySharedUser ?? DBSharedUser(email: "unknown@e.mail")])
         
         self.inventoriesProvider.addInventory(inventory, successHandler{[weak self] in
             self?.loadInventories() // we modified list - reload everything
@@ -74,7 +74,7 @@ class InventoriesViewController: NSViewController, NSTableViewDataSource, NSTabl
             })
     }
     
-    private func selectTableViewRow(inventory: Inventory) {
+    private func selectTableViewRow(inventory: DBInventory) {
         if let rowIndex = (selectables.map{$0.model}).indexOf(inventory) {
             self.tableView.selectRowIndexes(NSIndexSet(index: rowIndex), byExtendingSelection: false)
         } else {
@@ -95,14 +95,14 @@ class InventoriesViewController: NSViewController, NSTableViewDataSource, NSTabl
         })
     }
     
-    private func selectInventory(inventory: Inventory) {
+    private func selectInventory(inventory: DBInventory) {
         self.selectedInventory = inventory
         self.selectTableViewRow(inventory) // this makes sense when selecting programmatically and is redundant when we come from selecting in table view (ok).
         
         self.delegate?.inventorySelected(inventory)
     }
     
-    private func removeInventory(inventory: Inventory) {
+    private func removeInventory(inventory: DBInventory) {
         // TODO!
 //        self.inventoriesProvider.remove(inventory, successHandler{[weak self] in
 //            self?.loadInventories()
@@ -110,7 +110,7 @@ class InventoriesViewController: NSViewController, NSTableViewDataSource, NSTabl
 //            })
     }
     
-    private func removeInventoryWithConfirm(inventory: Inventory) {
+    private func removeInventoryWithConfirm(inventory: DBInventory) {
         DialogUtils.confirmAlert(okTitle: "Yes", title: "Remove inventory: \(inventory.name)\nAre you sure?", msg: "This will also delete all the items in the inventory", okAction: {
             self.removeInventory(inventory)
         })

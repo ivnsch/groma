@@ -770,75 +770,75 @@ struct MyWebsocketDispatcher {
     }
     
     fileprivate static func processInventory(_ verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
-        switch verb {
-        case WSNotificationVerb.Add:
-            if let remoteInventory = RemoteInventoryWithDependencies(representation: data) {
-                let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
-                Providers.inventoryProvider.addInventory(inventory, remote: false) {result in
-                    if result.success {
-                        postNotification(.Inventory, verb, sender, inventory)
-                    } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory \(inventory)", result: result)
-                    }
-                }
-            } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Add inventory, data: \(data)")
-            }
-            
-        case WSNotificationVerb.Update:
-            if let remoteInventory = RemoteInventoryWithDependencies(representation: data) {
-                let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
-                Providers.inventoryProvider.updateInventory(inventory, remote: false) {result in
-                    if result.success {
-                        postNotification(.Inventory, verb, sender, inventory)
-                    } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory \(inventory)", result: result)
-                    }
-                }
-            } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventory, data: \(data)")
-            }
-            
-        case WSNotificationVerb.Delete:
-            if let inventoryUuid = data as? String {
-                Providers.inventoryProvider.removeInventory(inventoryUuid, remote: false) {result in
-                    if result.success {
-                        postNotification(.Inventory, verb, sender, inventoryUuid)
-                    } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete inventory \(inventoryUuid)", result: result)
-                    }
-                }
-            } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Delete inventory, data: \(data)")
-            }
-            
-        case WSNotificationVerb.Invite:
-            if let remoteInventoryInvitation = RemoteInventoryInvitation(representation: data) {
-                postNotification(.Inventory, verb, sender, remoteInventoryInvitation)
-            } else {
-                QL4("Couldn't parse data: \(data)")
-            }
-            
-        case WSNotificationVerb.Order:
-            guard let arr = data as? [AnyObject] else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventories order, data: \(data)")
-                return
-            }
-            if let remoteOrderUpdates = RemoteOrderUpdate.collection(arr) {
-                let orderUpdates = remoteOrderUpdates.map{OrderUpdate(uuid: $0.uuid, order: $0.order)}
-                Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: false) {result in
-                    if result.success {
-                        postNotification(.Inventories, verb, sender, remoteOrderUpdates)
-                    } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Update inventories order \(remoteOrderUpdates)", result: result)
-                    }
-                }
-            } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventories order, data: \(data)")
-            }
-            
-        default: QL4("Not handled verb: \(verb)")
-        }
+//        switch verb {
+//        case WSNotificationVerb.Add:
+//            if let remoteInventory = RemoteInventoryWithDependencies(representation: data) {
+//                let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
+//                Providers.inventoryProvider.addInventory(inventory, remote: false) {result in
+//                    if result.success {
+//                        postNotification(.Inventory, verb, sender, inventory)
+//                    } else {
+//                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory \(inventory)", result: result)
+//                    }
+//                }
+//            } else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Add inventory, data: \(data)")
+//            }
+//            
+//        case WSNotificationVerb.Update:
+//            if let remoteInventory = RemoteInventoryWithDependencies(representation: data) {
+//                let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
+//                Providers.inventoryProvider.updateInventory(inventory, remote: false) {result in
+//                    if result.success {
+//                        postNotification(.Inventory, verb, sender, inventory)
+//                    } else {
+//                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory \(inventory)", result: result)
+//                    }
+//                }
+//            } else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventory, data: \(data)")
+//            }
+//            
+//        case WSNotificationVerb.Delete:
+//            if let inventoryUuid = data as? String {
+//                Providers.inventoryProvider.removeInventory(inventoryUuid, remote: false) {result in
+//                    if result.success {
+//                        postNotification(.Inventory, verb, sender, inventoryUuid)
+//                    } else {
+//                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete inventory \(inventoryUuid)", result: result)
+//                    }
+//                }
+//            } else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Delete inventory, data: \(data)")
+//            }
+//            
+//        case WSNotificationVerb.Invite:
+//            if let remoteInventoryInvitation = RemoteInventoryInvitation(representation: data) {
+//                postNotification(.Inventory, verb, sender, remoteInventoryInvitation)
+//            } else {
+//                QL4("Couldn't parse data: \(data)")
+//            }
+//            
+//        case WSNotificationVerb.Order:
+//            guard let arr = data as? [AnyObject] else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventories order, data: \(data)")
+//                return
+//            }
+//            if let remoteOrderUpdates = RemoteOrderUpdate.collection(arr) {
+//                let orderUpdates = remoteOrderUpdates.map{OrderUpdate(uuid: $0.uuid, order: $0.order)}
+//                Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: false) {result in
+//                    if result.success {
+//                        postNotification(.Inventories, verb, sender, remoteOrderUpdates)
+//                    } else {
+//                        MyWebsocketDispatcher.reportWebsocketStoringError("Update inventories order \(remoteOrderUpdates)", result: result)
+//                    }
+//                }
+//            } else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventories order, data: \(data)")
+//            }
+//            
+//        default: QL4("Not handled verb: \(verb)")
+//        }
     }
     
 

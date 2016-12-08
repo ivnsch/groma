@@ -16,11 +16,20 @@ class RealmInventoryProvider: RealmProvider {
     let remoteInventoryProvider = RemoteInventoryProvider()
     let dbProductProvider = RealmProductProvider()
     
-    func loadInventories(_ handler: @escaping ([Inventory]) -> ()) {
+    func loadInventories(_ handler: @escaping ([DBInventory]) -> ()) {
         let mapper = {InventoryMapper.inventoryWithDB($0)}
         self.load(mapper, sortDescriptor: NSSortDescriptor(key: "order", ascending: true), handler: handler)
     }
 
+    
+    //////////////////
+    
+    func loadInventoriesRealm(_ handler: @escaping (Results<DBInventory>?) -> Void) {
+        handler(loadSyncRealm(filter: nil, sortDescriptor: NSSortDescriptor(key: "order", ascending: true)))
+    }
+    
+    
+    //////////////////
     
 //    func saveInventories(inventories: [DBInventory], handler: Bool -> ()) {
 //        self.saveObjs(inventories, update: true, handler: handler)
@@ -65,7 +74,7 @@ class RealmInventoryProvider: RealmProvider {
 //    }
 
     
-    func loadInventory(_ inventory: Inventory, sortBy: InventorySortBy, range: NSRange, handler: @escaping ([InventoryItem]) -> ()) {
+    func loadInventory(_ inventory: DBInventory, sortBy: InventorySortBy, range: NSRange, handler: @escaping ([InventoryItem]) -> ()) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)} // TODO!!! Crash once accessing color() of category (in ProductCategoryMapper.categoryWithDB). Category is set but no color data, don't know why!
 //        let sortFieldStr: String = {
 //            switch sortBy {
@@ -77,12 +86,12 @@ class RealmInventoryProvider: RealmProvider {
         self.load(mapper, filter: DBInventoryItem.createFilterInventory(inventory.uuid), /*range: range, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
     }
     
-    func saveInventory(_ inventory: Inventory, update: Bool = true, dirty: Bool, handler: @escaping (Bool) -> ()) {
+    func saveInventory(_ inventory: DBInventory, update: Bool = true, dirty: Bool, handler: @escaping (Bool) -> ()) {
         self.saveInventories([inventory], update: update, dirty: dirty, handler: handler)
     }
     
-    func updateInventoriesOrder(_ orderUpdates: [OrderUpdate], dirty: Bool, _ handler: @escaping (Bool) -> Void) {
-        doInWriteTransaction({realm in
+    func updateInventoriesOrder(_ orderUpdates: [OrderUpdate], withoutNotifying: [NotificationToken] = [], realm: Realm? = nil, dirty: Bool, _ handler: @escaping (Bool) -> Void) {
+        doInWriteTransaction(withoutNotifying: withoutNotifying, {realm in
             for orderUpdate in orderUpdates {
                 realm.create(DBInventory.self, value: DBInventory.createOrderUpdateDict(orderUpdate, dirty: dirty), update: true)
             }
@@ -138,17 +147,17 @@ class RealmInventoryProvider: RealmProvider {
         _ = DBProviders.inventoryItemProvider.removeInventoryItemsForInventorySync(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
     }
     
-    func saveInventories(_ inventories: [Inventory], update: Bool = true, dirty: Bool, handler: @escaping (Bool) -> ()) {
-        let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0, dirty: dirty)}
-        saveInventories(dbInventories, handler: handler)
+    func saveInventories(_ inventories: [DBInventory], update: Bool = true, dirty: Bool, handler: @escaping (Bool) -> ()) {
+        let inventories = update ? inventories.map{$0.copy()} : inventories
+        saveInventories(inventories, handler: handler)
     }
     
     func saveInventories(_ inventories: [DBInventory], update: Bool = true, handler: @escaping (Bool) -> ()) {
         self.saveObjs(inventories, update: update, handler: handler)
     }
     
-    func overwrite(_ inventories: [Inventory], clearTombstones: Bool, dirty: Bool, handler: @escaping (Bool) -> Void) {
-        let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0, dirty: dirty)}
+    func overwrite(_ inventories: [DBInventory], clearTombstones: Bool, dirty: Bool, handler: @escaping (Bool) -> Void) {
+        let dbInventories = inventories
         let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveInventory.self)} : nil
         self.overwrite(dbInventories, resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }

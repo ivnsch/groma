@@ -26,7 +26,7 @@ class ExpandableTableViewGroupModel: ExpandableTableViewModel {
         return group.bgColor
     }
     
-    override var users: [SharedUser] {
+    override var users: [DBSharedUser] {
         return []
     }
     

@@ -11,7 +11,7 @@ import SwiftValidator
 
 protocol SharedUsersViewControllerDelegate: class {
     // Note: this is only a table view update, no providers
-    func onSharedUsersUpdated(_ users: [SharedUser])
+    func onSharedUsersUpdated(_ users: [DBSharedUser])
 }
 
 class SharedUsersViewController: UIViewController {
@@ -23,7 +23,7 @@ class SharedUsersViewController: UIViewController {
 
     weak var delegate: SharedUsersViewControllerDelegate?
 
-    var sharedUsers: [SharedUser] = [] {
+    var sharedUsers: [DBSharedUser] = [] {
         didSet {
             usersTableView.reloadData()
         }
@@ -69,7 +69,7 @@ class SharedUsersViewController: UIViewController {
             if let weakSelf = self {
                 if let input = weakSelf.addUserInputField.text {
                     // TODO do later a verification here if email exists in the server
-                    weakSelf.sharedUsers.append(SharedUser(email: input))
+                    weakSelf.sharedUsers.append(DBSharedUser(email: input))
                     weakSelf.delegate?.onSharedUsersUpdated(weakSelf.sharedUsers)
                     weakSelf.addUserInputField.clear()
 

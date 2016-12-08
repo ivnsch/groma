@@ -13,7 +13,7 @@ class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let product: Product
     let quantity: Int
     let usedQuantity: Int
-    let inventory: Inventory
+    let inventory: DBInventory
     
     /** -- copied from InventoryItem --
     Quantity delta since last sync, to be able to do increment operation in server (if we would use a plain update instead we could overwrite possible quantity updates from other clients that participate in the inventory).
@@ -35,7 +35,7 @@ class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
 //        return Float(quantity) * product.price / product.baseQuantity
 //    }
     
-    init(inventory: Inventory, product: Product, quantity: Int, quantityDelta: Int = 0, usedQuantity: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    init(inventory: DBInventory, product: Product, quantity: Int, quantityDelta: Int = 0, usedQuantity: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.inventory = inventory
         self.product = product
         self.quantity = quantity
@@ -45,7 +45,7 @@ class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
         self.quantityDelta = quantityDelta
     }
     
-    func copy(inventory: Inventory? = nil, product: Product? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, usedQuantity: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> PlanItem {
+    func copy(inventory: DBInventory? = nil, product: Product? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, usedQuantity: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> PlanItem {
         return PlanItem(
             inventory: inventory ?? self.inventory,
             product: product ?? self.product,
@@ -78,4 +78,4 @@ func ==(lhs: PlanItem, rhs: PlanItem) -> Bool {
 // convenience (redundant) holder to avoid having to iterate through historyitems to find unique products and users
 // so products, users arrays are the result of extracting the unique products and users from historyItems array
 // TODO do we need this, it's for remote parsing etc. copied from inventory item.
-typealias PlanItemsWithRelations = (planItems: [PlanItem], inventory: Inventory, products: [Product])
+typealias PlanItemsWithRelations = (planItems: [PlanItem], inventory: DBInventory, products: [Product])

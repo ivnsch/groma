@@ -21,7 +21,7 @@ class EditablePlainTableViewControllerModel<T> {
 
 class EditablePlainTableViewController: UITableViewController {
 
-    var listItems: [EditablePlainTableViewControllerModel<SharedUser>] = [] {// for now enforce User as type parameter since obj-c class (UIViewController in this case) doesn't support generics
+    var listItems: [EditablePlainTableViewControllerModel<DBSharedUser>] = [] {// for now enforce User as type parameter since obj-c class (UIViewController in this case) doesn't support generics
         didSet {
             self.tableView.reloadData()
         }
@@ -29,7 +29,7 @@ class EditablePlainTableViewController: UITableViewController {
 
     var scrollViewDelegate: UIScrollViewDelegate?
     
-    func addItem(_ model: EditablePlainTableViewControllerModel<SharedUser>) {
+    func addItem(_ model: EditablePlainTableViewControllerModel<DBSharedUser>) {
         self.listItems.append(model)
     }
     

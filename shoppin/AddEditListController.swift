@@ -34,12 +34,12 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     @IBOutlet weak var storeAlignRightConstraint: NSLayoutConstraint!
     @IBOutlet weak var storeSpaceToParticipantsConstraint: NSLayoutConstraint!
     
-    fileprivate var inventories: [Inventory] = [] {
+    fileprivate var inventories: [DBInventory] = [] {
         didSet {
             selectedInventory = listToEdit?.inventory ?? inventories.first
         }
     }
-    fileprivate var selectedInventory: Inventory? {
+    fileprivate var selectedInventory: DBInventory? {
         didSet {
             let title = selectedInventory?.name ?? ""
             inventoriesButton.setTitle(title, for: UIControlState())
@@ -53,7 +53,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
 
     fileprivate var addButtonHelper: AddButtonHelper?
 
-    fileprivate var users: [SharedUser] = [] {
+    fileprivate var users: [DBSharedUser] = [] {
         didSet {
             if !users.isEmpty {
                 let title: String = {
@@ -68,7 +68,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         }
     }
     
-    fileprivate var invitedUsers: [SharedUser] = []
+    fileprivate var invitedUsers: [DBSharedUser] = []
 
     weak var delegate: AddEditListControllerDelegate?
     
@@ -315,6 +315,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                 if let currentListsCount = weakSelf.currentListsCount {
                     
                     // If it's a new list add myself as a participant, to be consistent with list after server updates it (server adds the caller as a participant)
+                    
                     let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
                     
                     let list = List(uuid: NSUUID().uuidString, name: listName, listItems: [], users: totalUsers, bgColor: bgColor, order: currentListsCount, inventory: inventory, store: store)
@@ -397,8 +398,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                     
                     // besides the users that have been already invited (submitted - come in server response), we also want to show possible invited users that have not been submitted yet (the user opened shared users controllers, added them, went back, opens again shared user controller, without leaving add/edit). Note that these appear equal to the submitted invitations. The difference, is that the not submitted ones will disappear after the user closes add/edit.
                     // we need to use distinct because the invited users we get from shared users controller(weakSelf.invitedUsers) of course contains both, and when we request invites from server(invited) there will be duplicates.
-                    let allInvited = (invited + weakSelf.invitedUsers).distinctUsingEquatable()
                     
+                    
+                    let allInvited = (invited + weakSelf.invitedUsers).distinctUsingEquatable()
                     sharedUsersController.initUsers(weakSelf.users, invited: allInvited, all: known)
                 }
             }
@@ -417,9 +419,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         return false
     }
     
-    fileprivate func loadKnownAndInvitedUsers(_ onLoaded: @escaping (_ known: [SharedUser], _ invited: [SharedUser]) -> Void) {
-        var allResult: [SharedUser]?
-        var invitedResult: [SharedUser]?
+    fileprivate func loadKnownAndInvitedUsers(_ onLoaded: @escaping (_ known: [DBSharedUser], _ invited: [DBSharedUser]) -> Void) {
+        var allResult: [DBSharedUser]?
+        var invitedResult: [DBSharedUser]?
         func check() {
             if let allResult = allResult, let invitedResult = invitedResult {
                 onLoaded(allResult, invitedResult)
@@ -481,8 +483,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     // MARK: - SharedUsersControllerDelegate
     
-    func onPull(_ user: SharedUser) {
+    func onPull(_ user: DBSharedUser) {
         parent?.progressVisible(true)
+        
         if let list = listToEdit {
             Providers.pullProvider.pullListProducs(list.uuid, srcUser: user, successHandler{[weak self] listItems in  guard let weakSelf = self else {return}
                 self?.parent?.progressVisible(false)
@@ -491,12 +494,12 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         }
     }
     
-    func onUsersUpdated(_ exitingUsers: [SharedUser], invitedUsers: [SharedUser]) {
+    func onUsersUpdated(_ exitingUsers: [DBSharedUser], invitedUsers: [DBSharedUser]) {
         self.users = exitingUsers
         self.invitedUsers = invitedUsers        
     }
     
-    func invitedUsers(_ handler: @escaping ([SharedUser]) -> Void) {
+    func invitedUsers(_ handler: @escaping ([DBSharedUser]) -> Void) {
         if let list = listToEdit {
             Providers.listProvider.findInvitedUsers(list.uuid, successHandler {users in
                 handler(users)

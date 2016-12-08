@@ -131,6 +131,72 @@ class RealmProvider {
         })
     }
     
+    //////////////////////
+
+    // TODO range: can't we just subscript result instead of do this programmatically (take a look into https://github.com/realm/realm-cocoa/issues/1904)
+    func loadRealm<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, handler: @escaping (Results<T>?) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            let result: Results<T>? = self.loadSyncRealm(predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
+            DispatchQueue.main.async(execute: {
+                handler(result)
+            })
+        }
+    }
+    
+    func loadRealm<T: Object>(filter filterMaybe: String? = nil, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, handler: @escaping (Results<T>?) -> Void) {
+        let predicateMaybe = filterMaybe.map {
+            NSPredicate(format: $0, argumentArray: [])
+        }
+        loadRealm(predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, handler: handler)
+    }
+    
+    
+    func loadSyncRealm<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T>? {
+        do {
+            let realm = try Realm()
+            let results: Results<T> = self.loadSyncRealm(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
+            return results
+            
+        } catch let e {
+            QL4("Error: creating Realm, returning empty results, error: \(e)")
+            return nil
+        }
+    }
+    
+    func loadSyncRealm<T: Object>(filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T>? {
+        do {
+            let realm = try Realm()
+            return loadSyncRealm(realm, filter: filterMaybe, sortDescriptor: sortDescriptorMaybe)
+            
+        } catch let e {
+            QL4("Error: creating Realm, returning empty results, error: \(e)")
+            return nil
+        }
+    }
+    
+    func loadSyncRealm<T: Object>(_ realm: Realm, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T> {
+        var results = realm.objects(T.self)
+        if let predicate = predicateMaybe {
+            results = results.filter(predicate)
+        }
+        if let sortDescriptor = sortDescriptorMaybe, let key = sortDescriptor.key {
+            results = results.sorted(byProperty: key, ascending: sortDescriptor.ascending)
+        }
+        
+        return results
+    }
+    
+    func loadSyncRealm<T: Object>(_ realm: Realm, filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T> {
+        let predicateMaybe = filterMaybe.map {
+            NSPredicate(format: $0, argumentArray: [])
+        }
+        return self.loadSyncRealm(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
+    }
+    
+    //////////////////////
+    
+    
+    
     // TODO range: can't we just subscript result instead of do this programmatically (take a look into https://github.com/realm/realm-cocoa/issues/1904)
     func load<T: Object, U>(_ mapper: @escaping (T) -> U, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: @escaping ([U]) -> ()) {
         
@@ -255,7 +321,7 @@ class RealmProvider {
         return count
     }
     
-    func doInWriteTransaction<T>(_ f: @escaping (Realm) -> T?, finishHandler: @escaping (T?) -> Void) {
+    func doInWriteTransaction<T>(withoutNotifying: [NotificationToken] = [], realm: Realm? = nil, _ f: @escaping (Realm) -> T?, finishHandler: @escaping (T?) -> Void) {
         
         let finished: (T?) -> Void = {obj in
             DispatchQueue.main.async(execute: {
@@ -265,9 +331,9 @@ class RealmProvider {
         
         DispatchQueue.global(qos: .background).async {
             do {
-                let realm = try Realm()
+                let realm = try realm ?? Realm()
                 var obj: T?
-                try realm.write {
+                try realm.write(withoutNotifying: withoutNotifying) {_ in 
                     obj = f(realm)
                 }
                 finished(obj)
@@ -282,9 +348,9 @@ class RealmProvider {
         }
     }
 
-    func doInWriteTransactionSync<T>(_ f: (Realm) -> T?) -> T? {
+    func doInWriteTransactionSync<T>(withoutNotifying: [NotificationToken] = [], realm: Realm? = nil, _ f: (Realm) -> T?) -> T? {
         do {
-            let realm = try Realm()
+            let realm = try realm ?? Realm()
             return doInWriteTransactionWithRealmSync(realm, f: f)
         } catch let error as NSError {
             QL4("Realm error: \(error)")
@@ -295,10 +361,10 @@ class RealmProvider {
         }
     }
 
-    func doInWriteTransactionWithRealmSync<T>(_ realm: Realm, f: (Realm) -> T?) -> T? {
+    func doInWriteTransactionWithRealmSync<T>(withoutNotifying: [NotificationToken] = [], _ realm: Realm, f: (Realm) -> T?) -> T? {
         do {
             var obj: T?
-            try realm.write {
+            try realm.write(withoutNotifying: withoutNotifying) {_ in
                 obj = f(realm)
             }
             return obj

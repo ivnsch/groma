@@ -15,9 +15,9 @@ enum InventorySortBy {
 
 protocol InventoryItemsProvider {
     
-    func inventoryItems(_ range: NSRange, inventory: Inventory, fetchMode: ProviderFetchModus, sortBy: InventorySortBy, _ handler: @escaping (ProviderResult<[InventoryItem]>) -> ())
+    func inventoryItems(_ range: NSRange, inventory: DBInventory, fetchMode: ProviderFetchModus, sortBy: InventorySortBy, _ handler: @escaping (ProviderResult<[InventoryItem]>) -> ())
 
-    func countInventoryItems(_ inventory: Inventory, _ handler: @escaping (ProviderResult<Int>) -> Void)
+    func countInventoryItems(_ inventory: DBInventory, _ handler: @escaping (ProviderResult<Int>) -> Void)
 
     // Add inventory and history items in a transaction. Used by e.g. websocket
     func addToInventoryLocal(_ inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: @escaping (ProviderResult<Any>) -> Void)
@@ -44,11 +44,11 @@ protocol InventoryItemsProvider {
     // MARK: - Direct (no history)
     
     // Add product
-    func addToInventory(_ inventory: Inventory, product: Product, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void)
+    func addToInventory(_ inventory: DBInventory, product: Product, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void)
     
     // Add group
-    func addToInventory(_ inventory: Inventory, group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void)
+    func addToInventory(_ inventory: DBInventory, group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void)
     
     // Add inventory item input
-    func addToInventory(_ inventory: Inventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void)
+    func addToInventory(_ inventory: DBInventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void)
 }

@@ -274,7 +274,7 @@ class RemoteListItemProvider {
     
     func toRequestParams(_ invitation: RemoteListInvitation, accept: Bool) -> [String: AnyObject] {
         
-        let sharedUser = SharedUser(email: invitation.sender) // TODO as commented in the invitation objs, these should contain shared user not only email (this means the server has to send us the shared user)
+        let sharedUser = DBSharedUser(email: invitation.sender) // TODO as commented in the invitation objs, these should contain shared user not only email (this means the server has to send us the shared user)
         
         return [
             "uuid": invitation.list.uuid as AnyObject,
@@ -306,7 +306,7 @@ class RemoteListItemProvider {
         return dict
     }
     
-    func toRequestParams(_ sharedUser: SharedUser) -> [String: AnyObject] {
+    func toRequestParams(_ sharedUser: DBSharedUser) -> [String: AnyObject] {
         return [
             "email": sharedUser.email as AnyObject,
             "foo": "" as AnyObject // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
@@ -339,26 +339,30 @@ class RemoteListItemProvider {
     }
     
     func toRequestParams(_ listItem: ListItem) -> [String: AnyObject] {
-        var dict: [String: AnyObject] = [
-            "uuid": listItem.uuid as AnyObject,
-            "note": listItem.note as AnyObject? ?? "" as AnyObject,
-            "todoQuantity": listItem.todoQuantity as AnyObject,
-            "todoOrder": listItem.todoOrder as AnyObject,
-            "doneQuantity": listItem.doneQuantity as AnyObject,
-            "doneOrder": listItem.doneOrder as AnyObject,
-            "stashQuantity": listItem.stashQuantity as AnyObject,
-            "stashOrder": listItem.stashOrder as AnyObject,
-            "storeProductInput": toRequestParams(listItem.product) as AnyObject,
-            "listUuid": listItem.list.uuid as AnyObject,
-            "listName": listItem.list.name as AnyObject,
-            "sectionInput": toRequestParams(listItem.section) as AnyObject,
-        ]
+        // Commented to improve compile time - we don't need this provider now
+//        var dict: [String: AnyObject] = [
+//            "uuid": listItem.uuid as AnyObject,
+//            "note": listItem.note as AnyObject? ?? "" as AnyObject,
+//            "todoQuantity": listItem.todoQuantity as AnyObject,
+//            "todoOrder": listItem.todoOrder as AnyObject,
+//            "doneQuantity": listItem.doneQuantity as AnyObject,
+//            "doneOrder": listItem.doneOrder as AnyObject,
+//            "stashQuantity": listItem.stashQuantity as AnyObject,
+//            "stashOrder": listItem.stashOrder as AnyObject,
+//            "storeProductInput": toRequestParams(listItem.product) as AnyObject,
+//            "listUuid": listItem.list.uuid as AnyObject,
+//            "listName": listItem.list.name as AnyObject,
+//            "sectionInput": toRequestParams(listItem.section) as AnyObject,
+//        ]
+//        
+//        if let lastServerUpdate = listItem.lastServerUpdate {
+//            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
+//        }
+//        
+//        return dict
         
-        if let lastServerUpdate = listItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
         
-        return dict
+        return [:]
 
     }
 

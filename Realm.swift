@@ -10,6 +10,12 @@ import Foundation
 import RealmSwift
 
 extension Realm {
+    
+    func write(withoutNotifying: [NotificationToken] = [], f: (Realm) -> Void) throws {
+        beginWrite()
+        f(self)
+        try commitWrite(withoutNotifying: withoutNotifying)
+    }
 
     func deleteAll<T: Object>(_ type: T.Type) {
         delete(objects(T.self))

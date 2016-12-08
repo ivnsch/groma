@@ -8,9 +8,9 @@
 
 import Foundation
 
-extension Array where Element: Inventory {
+extension Array where Element: DBInventory {
     
-    func sortedByOrder() -> [Inventory] {
+    func sortedByOrder() -> [DBInventory] {
         return sorted {
             switch ($0.order, $1.order) {
             case let (lhs, rhs) where lhs == rhs: // this should normally not happen, but just in case, get a fixed ordering anyway

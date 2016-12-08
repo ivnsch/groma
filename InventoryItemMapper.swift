@@ -17,7 +17,7 @@ class InventoryItemMapper {
         return InventoryItem(uuid: dbInventoryItem.uuid, quantity: dbInventoryItem.quantity, quantityDelta: dbInventoryItem.quantityDelta, product: product, inventory: inventory, lastServerUpdate: dbInventoryItem.lastServerUpdate)
     }
     
-    class func inventoryItemWithRemote(_ remoteItem: RemoteInventoryItemWithProduct, inventory: Inventory) -> InventoryItem {
+    class func inventoryItemWithRemote(_ remoteItem: RemoteInventoryItemWithProduct, inventory: DBInventory) -> InventoryItem {
         let product = ProductMapper.productWithRemote(remoteItem.product, category: remoteItem.productCategory)
         return InventoryItem(uuid: remoteItem.inventoryItem.uuid, quantity: remoteItem.inventoryItem.quantity, product: product, inventory: inventory, lastServerUpdate: remoteItem.inventoryItem.lastUpdate)
     }
@@ -28,7 +28,7 @@ class InventoryItemMapper {
         db.quantity = item.quantity
         db.quantityDelta = item.quantityDelta
         db.product = ProductMapper.dbWithProduct(item.product)
-        db.inventory = InventoryMapper.dbWithInventory(item.inventory, dirty: dirty)
+        db.inventory = item.inventory
         if let lastServerUpdate = item.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             db.lastServerUpdate = lastServerUpdate
         }
@@ -50,9 +50,9 @@ class InventoryItemMapper {
     }
 
     
-    fileprivate class func toInventoryDict(_ remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: Inventory], [Inventory]) {
-        var dict: [String: Inventory] = [:]
-        var arr: [Inventory] = []
+    fileprivate class func toInventoryDict(_ remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: DBInventory], [DBInventory]) {
+        var dict: [String: DBInventory] = [:]
+        var arr: [DBInventory] = []
         for remoteInventory in remoteInventories {
             let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
             dict[remoteInventory.inventory.uuid] = inventory
@@ -113,9 +113,9 @@ class InventoryItemMapper {
     
     class func itemsWithRemote(_ remoteItems: RemoteInventoryItemsWithHistoryAndDependencies) -> (inventoryItems: [InventoryItem], historyItems: [HistoryItem]) {
         
-        func toUserDict(_ remoteUsers: [RemoteSharedUser]) -> ([String: SharedUser], [SharedUser]) {
-            var dict: [String: SharedUser] = [:]
-            var arr: [SharedUser] = []
+        func toUserDict(_ remoteUsers: [RemoteSharedUser]) -> ([String: DBSharedUser], [DBSharedUser]) {
+            var dict: [String: DBSharedUser] = [:]
+            var arr: [DBSharedUser] = []
             for remoteSection in remoteUsers {
                 let section = SharedUserMapper.sharedUserWithRemote(remoteSection)
                 dict[remoteSection.uuid] = section
@@ -124,7 +124,7 @@ class InventoryItemMapper {
             return (dict, arr)
         }
         
-        func toHistoryItemDict(_ remoteHistoryItems: [RemoteHistoryItem], products: [String: Product], inventories: [String: Inventory], users: [String: SharedUser]) -> ([String: HistoryItem], [HistoryItem]) {
+        func toHistoryItemDict(_ remoteHistoryItems: [RemoteHistoryItem], products: [String: Product], inventories: [String: DBInventory], users: [String: DBSharedUser]) -> ([String: HistoryItem], [HistoryItem]) {
             var dict: [String: HistoryItem] = [:]
             var arr: [HistoryItem] = []
             for remoteHistoryItem in remoteHistoryItems {

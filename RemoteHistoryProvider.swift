@@ -10,7 +10,7 @@ import Foundation
 
 class RemoteHistoryProvider {
 
-    func historyItems(_ inventory: Inventory? = nil, handler: @escaping (RemoteResult<RemoteHistoryItems>) -> ()) {
+    func historyItems(_ inventory: DBInventory? = nil, handler: @escaping (RemoteResult<RemoteHistoryItems>) -> ()) {
         let params: [String: AnyObject] = inventory.map{["inventory": $0.uuid as AnyObject]} ?? [String: AnyObject]()
         RemoteProvider.authenticatedRequest(.get, Urls.historyItems, params) {result in
             handler(result)
@@ -42,7 +42,7 @@ class RemoteHistoryProvider {
         return dict
     }
     
-    fileprivate func toRequestParams(_ sharedUser: SharedUser) -> [String: AnyObject] {
+    fileprivate func toRequestParams(_ sharedUser: DBSharedUser) -> [String: AnyObject] {
         return [
             "email": sharedUser.email as AnyObject,
             "foo": "" as AnyObject // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field

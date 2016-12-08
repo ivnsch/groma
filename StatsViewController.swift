@@ -60,7 +60,7 @@ class StatsViewController: UIViewController
     
     @IBOutlet weak var inventoriesButton: UIButton!
     fileprivate var inventoryPicker: InventoryPicker?
-    fileprivate var selectedInventory: Inventory? {
+    fileprivate var selectedInventory: DBInventory? {
         didSet {
             loadChart()
             clearFirstMonthIfIncomplete()

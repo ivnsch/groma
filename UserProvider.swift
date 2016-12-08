@@ -31,7 +31,7 @@ protocol UserProvider {
     * This is never removed, only overwritten in case another user logs in or register
     * This can be useful to know if there was ever a synchronisation with the server - if there's no saved user it means all database data is local-only, but NOTE: no guarantee as sync is a separate request after login/register and maybe sth goes wrong with it, in which case we saved the user but didn't do sync. This is maybe temporary though as the next time user does sync (by either log out/in or toggle connection state) it may succeed.
     */
-    var mySharedUser: SharedUser? {get}
+    var mySharedUser: DBSharedUser? {get}
 
     func isDifferentUser(_ email: String) -> Bool
     
@@ -62,5 +62,5 @@ protocol UserProvider {
     
     func isWebsocketConnected() -> Bool
     
-    func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[SharedUser]>) -> Void)
+    func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[DBSharedUser]>) -> Void)
 }

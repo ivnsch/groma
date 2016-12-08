@@ -111,11 +111,3 @@ extension Results {
 //        return self.filter("dirty == \(dirty)")
 //    }
 //}
-
-extension RealmSwift.List {
-    
-    func toArray() -> [T] {
-        return self.map{$0}
-    }
-}
-

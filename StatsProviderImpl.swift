@@ -70,14 +70,14 @@ func ==(lhs: MonthYearAggregate, rhs: MonthYearAggregate) -> Bool {
 
 class StatsProviderImpl: StatsProvider {
 
-    func aggregate(_ monthYear: MonthYear, groupBy: GroupByAttribute, inventory: Inventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ()) {
+    func aggregate(_ monthYear: MonthYear, groupBy: GroupByAttribute, inventory: DBInventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ()) {
         RealmHistoryProvider().loadHistoryItems(monthYear, inventory: inventory) {historyItems in
             let productAggregates = self.toProductAggregates(historyItems)
             handler(ProviderResult(status: .success, sucessResult: productAggregates))
         }
     }
     
-    func aggregate(_ timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: Inventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ()) {
+    func aggregate(_ timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: DBInventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ()) {
         let dateComponents = timePeriod.dateOffsetComponent()
         
         if let startDate = (Calendar.current as NSCalendar).date(byAdding: dateComponents as DateComponents, to: Date(), options: .wrapComponents)?.toMillis() {
@@ -93,7 +93,7 @@ class StatsProviderImpl: StatsProvider {
         }
     }
     
-    func history(_ timePeriod: TimePeriod, group: AggregateGroup, inventory: Inventory, _ handler: @escaping (ProviderResult<GroupMonthYearAggregate>) -> ()) {
+    func history(_ timePeriod: TimePeriod, group: AggregateGroup, inventory: DBInventory, _ handler: @escaping (ProviderResult<GroupMonthYearAggregate>) -> ()) {
         let dateComponents = timePeriod.dateOffsetComponent()
         
         let referenceDate = Date() // today
@@ -188,7 +188,7 @@ class StatsProviderImpl: StatsProvider {
         return sortedByPrice
     }
     
-    func hasDataForMonthYear(_ monthYear: MonthYear, inventory: Inventory, handler: @escaping (ProviderResult<Bool>) -> Void) {
+    func hasDataForMonthYear(_ monthYear: MonthYear, inventory: DBInventory, handler: @escaping (ProviderResult<Bool>) -> Void) {
         Providers.historyProvider.historyItems(monthYear, inventory: inventory) {result in
             if let items = result.sucessResult {
                 handler(ProviderResult(status: .success, sucessResult: items.isEmpty))
@@ -199,11 +199,11 @@ class StatsProviderImpl: StatsProvider {
         }
     }
     
-    func clearMonthYearData(_ monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void) {
+    func clearMonthYearData(_ monthYear: MonthYear, inventory: DBInventory, remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void) {
         Providers.historyProvider.removeHistoryItemsForMonthYear(monthYear, inventory: inventory, remote: remote, handler: handler)
     }
     
-    func oldestDate(_ inventory: Inventory, _ handler: @escaping (ProviderResult<Date>) -> Void) {
+    func oldestDate(_ inventory: DBInventory, _ handler: @escaping (ProviderResult<Date>) -> Void) {
         Providers.historyProvider.oldestDate(inventory, handler: handler)
     }
     

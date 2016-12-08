@@ -660,7 +660,7 @@ class RealmListItemProvider: RealmProvider {
     
     // adds inventory/history items and stores the switched list items in a transaction
     // Note "switched"ListItems -> The status of the passed list items is expected to be already updated, this transaction just saves them to the db.
-    func buyCart(_ listUuid: String, switchedItems: [ListItem], inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: @escaping (ProviderResult<[InventoryItemWithHistoryItem]>) -> Void) {
+    func buyCart(_ listUuid: String, switchedItems: [ListItem], inventory: DBInventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: @escaping (ProviderResult<[InventoryItemWithHistoryItem]>) -> Void) {
         doInWriteTransaction({realm in
             
             let items = DBProviders.inventoryItemProvider.addOrIncrementInventoryItemsWithProductSync(realm, itemInputs: itemInputs, inventory: inventory, dirty: remote)

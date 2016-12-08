@@ -11,20 +11,20 @@ import Foundation
 class HistoryItemGroup: CustomDebugStringConvertible {
 
     let date: Date
-    let user: SharedUser
+    let user: DBSharedUser
     var historyItems: [HistoryItem]
 
     lazy var totalPrice: Float = {
         self.historyItems.reduce(0) {sum, e in sum + (Float(e.totalPaidPrice))}
     }()
 
-    init(date: Date, user: SharedUser, historyItems: [HistoryItem]) {
+    init(date: Date, user: DBSharedUser, historyItems: [HistoryItem]) {
         self.date = date
         self.user = user
         self.historyItems = historyItems
     }
     
-    func copy(_ date: Date? = nil, user: SharedUser? = nil, historyItems: [HistoryItem]? = nil) -> HistoryItemGroup {
+    func copy(_ date: Date? = nil, user: DBSharedUser? = nil, historyItems: [HistoryItem]? = nil) -> HistoryItemGroup {
         return HistoryItemGroup(
             date: date ?? self.date,
             user: user ?? self.user,

@@ -16,14 +16,14 @@ class RemoteInventoryProvider: RemoteProvider {
         }
     }
     
-    func addInventory(_ inventory: Inventory, handler: @escaping (RemoteResult<RemoteInventoryWithDependencies>) -> ()) {
+    func addInventory(_ inventory: DBInventory, handler: @escaping (RemoteResult<RemoteInventoryWithDependencies>) -> ()) {
         let params = self.toRequestParams(inventory)
         RemoteProvider.authenticatedRequest(.post, Urls.inventory, params) {result in
             handler(result)
         }
     }
     
-    func updateInventory(_ inventory: Inventory, handler: @escaping (RemoteResult<RemoteInventoryWithDependencies>) -> ()) {
+    func updateInventory(_ inventory: DBInventory, handler: @escaping (RemoteResult<RemoteInventoryWithDependencies>) -> ()) {
         let params = self.toRequestParams(inventory)
         RemoteProvider.authenticatedRequest(.put, Urls.inventory, params) {result in
             handler(result)
@@ -48,7 +48,7 @@ class RemoteInventoryProvider: RemoteProvider {
         }
     }
     
-    func removeInventory(_ inventory: Inventory, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+    func removeInventory(_ inventory: DBInventory, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
         removeInventory(inventory.uuid, handler: handler)
     }
 
@@ -92,9 +92,7 @@ class RemoteInventoryProvider: RemoteProvider {
                 "users": sharedUsers as AnyObject,
             ]
             
-            if let lastServerUpdate = inventory.lastServerUpdate {
-                dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-            }
+            dict["lastUpdate"] = NSNumber(value: Int64(inventory.lastServerUpdate) as Int64)
             
             let inventoryItemsDicts = inventorySync.inventoryItemsSync.inventoryItems.map {toRequestParamsForSync($0)}
             let toRemoveDicts = inventorySync.inventoryItemsSync.toRemove.map{self.toRequestParamsToRemove($0)}
@@ -147,15 +145,13 @@ class RemoteInventoryProvider: RemoteProvider {
         return dict
     }
     
-    func toRequestParamsToRemove(_ inventory: Inventory) -> [String: AnyObject] {
+    func toRequestParamsToRemove(_ inventory: DBInventory) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["uuid": inventory.uuid as AnyObject]
-        if let lastServerUpdate = inventory.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(inventory.lastServerUpdate) as Int64)
         return dict
     }
     
-    func toRequestParams(_ sharedUserInput: SharedUser) -> [String: AnyObject] {
+    func toRequestParams(_ sharedUserInput: DBSharedUser) -> [String: AnyObject] {
         return [
             "email": sharedUserInput.email as AnyObject,
             "foo": "" as AnyObject // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
@@ -163,19 +159,17 @@ class RemoteInventoryProvider: RemoteProvider {
     }
 
     
-    func toRequestParams(_ inventoryInput: Inventory) -> [String: AnyObject] {
+    func toRequestParams(_ inventoryInput: DBInventory) -> [String: AnyObject] {
         let sharedUsers: [[String: AnyObject]] = inventoryInput.users.map{self.toRequestParams($0)}
         
         var inventoryDict: [String: AnyObject] = [
             "uuid": inventoryInput.uuid as AnyObject,
             "name": inventoryInput.name as AnyObject,
             "order": inventoryInput.order as AnyObject,
-            "color": inventoryInput.bgColor.hexStr as AnyObject
+            "color": inventoryInput.bgColor().hexStr as AnyObject
         ]
 
-        if let lastServerUpdate = inventoryInput.lastServerUpdate {
-            inventoryDict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        inventoryDict["lastUpdate"] = NSNumber(value: Int64(inventoryInput.lastServerUpdate) as Int64)
         
         inventoryDict["users"] = sharedUsers as AnyObject?
         
@@ -184,7 +178,7 @@ class RemoteInventoryProvider: RemoteProvider {
     
     func toRequestParams(_ invitation: RemoteInventoryInvitation, accept: Bool) -> [String: AnyObject] {
         
-        let sharedUser = SharedUser(email: invitation.sender) // TODO as commented in the invitation objs, these should contain shared user not only email (this means the server has to send us the shared user)
+        let sharedUser = DBSharedUser(email: invitation.sender) // TODO as commented in the invitation objs, these should contain shared user not only email (this means the server has to send us the shared user)
         
         return [
             "uuid": invitation.inventory.uuid as AnyObject,

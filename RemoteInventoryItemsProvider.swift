@@ -11,7 +11,7 @@ import QorumLogs
 
 class RemoteInventoryItemsProvider: Any {
     
-    func inventoryItems(_ inventory: Inventory, handler: @escaping (RemoteResult<[RemoteInventoryItemWithProduct]>) -> ()) {
+    func inventoryItems(_ inventory: DBInventory, handler: @escaping (RemoteResult<[RemoteInventoryItemWithProduct]>) -> ()) {
         RemoteProvider.authenticatedRequestArray(.get, Urls.inventoryItems, ["inventory": inventory.uuid as AnyObject]) {result in
             handler(result)
         }
@@ -89,7 +89,7 @@ class RemoteInventoryItemsProvider: Any {
         ]
     }
     
-    fileprivate func toRequestParams(_ sharedUser: SharedUser) -> [String: AnyObject] {
+    fileprivate func toRequestParams(_ sharedUser: DBSharedUser) -> [String: AnyObject] {
         return [
             "email": sharedUser.email as AnyObject,
             "foo": "" as AnyObject // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field

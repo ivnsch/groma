@@ -12,7 +12,7 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
     let quantity: Int // TODO?
     let product: Product
-    let inventory: Inventory
+    let inventory: DBInventory
     
     /** 
     Quantity delta since last sync, to be able to do increment operation in server (if we would use a plain update instead we could overwrite possible quantity updates from other clients that participate in the inventory).
@@ -29,7 +29,7 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, quantity: Int = 0, quantityDelta: Int = 0, product: Product, inventory: Inventory, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    init(uuid: String, quantity: Int = 0, quantityDelta: Int = 0, product: Product, inventory: DBInventory, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.quantity = quantity
         self.product = product
@@ -55,7 +55,7 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return uuid == inventoryItem.uuid
     }
     
-    func copy(uuid: String? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, product: Product? = nil, inventory: Inventory? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> InventoryItem {
+    func copy(uuid: String? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, product: Product? = nil, inventory: DBInventory? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> InventoryItem {
         return InventoryItem(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,

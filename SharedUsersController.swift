@@ -11,17 +11,17 @@ import SwiftValidator
 import QorumLogs
 
 protocol SharedUsersControllerDelegate: class {
-    func onPull(_ user: SharedUser)
-    func onUsersUpdated(_ existingUsers: [SharedUser], invitedUsers: [SharedUser])
-    func invitedUsers(_ handler: @escaping ([SharedUser]) -> Void)
+    func onPull(_ user: DBSharedUser)
+    func onUsersUpdated(_ existingUsers: [DBSharedUser], invitedUsers: [DBSharedUser])
+    func invitedUsers(_ handler: @escaping ([DBSharedUser]) -> Void)
 }
 
 private enum SharedUserState {case new, existing, invited}
 
 private struct UserCellModel {
-    let user: SharedUser
+    let user: DBSharedUser
     let state: SharedUserState
-    init(user: SharedUser, state: SharedUserState) {
+    init(user: DBSharedUser, state: SharedUserState) {
         self.user = user
         self.state = state
     }
@@ -34,7 +34,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     fileprivate var userInputsValidator: Validator?
     
-    var users: [SharedUser] {
+    var users: [DBSharedUser] {
         return userModels.map{$0.user}
     }
     
@@ -46,13 +46,13 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    fileprivate var existingUsers: [SharedUser] = []
-    fileprivate var invitedUsers: [SharedUser] = []
-    fileprivate var allKnownUsers: [SharedUser] = []
+    fileprivate var existingUsers: [DBSharedUser] = []
+    fileprivate var invitedUsers: [DBSharedUser] = []
+    fileprivate var allKnownUsers: [DBSharedUser] = []
 
     var onViewDidLoad: VoidFunction?
 
-    func initUsers(_ existing: [SharedUser], invited: [SharedUser], all: [SharedUser]) {
+    func initUsers(_ existing: [DBSharedUser], invited: [DBSharedUser], all: [DBSharedUser]) {
         self.existingUsers = existing
         self.invitedUsers = invited
         self.allKnownUsers = all
@@ -112,7 +112,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
                 if let weakSelf = self {
                     if let inputEmail = weakSelf.addUserInputField.text {
                         SharedUserChecker.check(inputEmail, users: weakSelf.existingUsers, controller: weakSelf, onSuccess: {
-                            let sharedUser = SharedUser(email: inputEmail)
+                            let sharedUser = DBSharedUser(email: inputEmail)
                             weakSelf.addSharedUser(sharedUser)
                             weakSelf.addUserInputField.clear()
                             
@@ -198,7 +198,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         return false
     }
     
-    fileprivate func addSharedUser(_ sharedUser: SharedUser) {
+    fileprivate func addSharedUser(_ sharedUser: DBSharedUser) {
         invitedUsers.append(sharedUser)
         updateCellModels()
         usersTableView.reloadData()
@@ -217,13 +217,13 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     // MARK: - NewSharedUserCellDelegate
     
-    func onAddSharedUser(_ sharedUser: SharedUser, cell: NewSharedUserCell) {
+    func onAddSharedUser(_ sharedUser: DBSharedUser, cell: NewSharedUserCell) {
         addSharedUser(sharedUser)
     }
     
     // MARK: - ExistingSharedUserCellDelegate
     
-    func onDeleteSharedUser(_ sharedUser: SharedUser, cell: ExistingSharedUserCell) {
+    func onDeleteSharedUser(_ sharedUser: DBSharedUser, cell: ExistingSharedUserCell) {
         _ = existingUsers.remove(sharedUser)
         updateCellModels()
         usersTableView.reloadData()
@@ -234,13 +234,13 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         delegate?.onUsersUpdated(existingUsers, invitedUsers: invitedUsers)
     }
     
-    func onPullSharedUser(_ sharedUser: SharedUser, cell: ExistingSharedUserCell) {
+    func onPullSharedUser(_ sharedUser: DBSharedUser, cell: ExistingSharedUserCell) {
         delegate?.onPull(sharedUser)
     }
     
     // MARK: - InvitedSharedUserCellDelegate
     
-    func onInviteInfoSharedUser(_ sharedUser: SharedUser, cell: InvitedUserCell) {
+    func onInviteInfoSharedUser(_ sharedUser: DBSharedUser, cell: InvitedUserCell) {
         AlertPopup.show(message: trans("popups_invitation_pending"), controller: self)
     }
 }

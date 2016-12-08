@@ -28,7 +28,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    var initData: (aggr: MonthYearAggregate, inventory: Inventory)? {
+    var initData: (aggr: MonthYearAggregate, inventory: DBInventory)? {
         didSet {
             if let initData = initData {
                 initAggregates(initData.aggr.monthYear, inventory: initData.inventory)
@@ -128,7 +128,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     
-    fileprivate func initAggregates(_ monthYear: MonthYear, inventory: Inventory) {
+    fileprivate func initAggregates(_ monthYear: MonthYear, inventory: DBInventory) {
         Providers.statsProvider.aggregate(monthYear, groupBy: GroupByAttribute.name, inventory: inventory, successHandler {[weak self] productAggregates in
             self?.productAggregates = productAggregates
         })

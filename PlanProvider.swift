@@ -14,17 +14,17 @@ protocol PlanProvider {
 
     func planItem(_ productName: String, _ handler: @escaping (ProviderResult<PlanItem?>) -> Void)
     
-    func addPlanItem(_ itemInput: PlanItemInput, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void)
+    func addPlanItem(_ itemInput: PlanItemInput, inventory: DBInventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void)
 
-    func addGroupItems(_ groupItems: [GroupItem], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void)
+    func addGroupItems(_ groupItems: [GroupItem], inventory: DBInventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void)
 
-    func addPlanItems(_ planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void)
+    func addPlanItems(_ planItemsInput: [PlanItemInput], inventory: DBInventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void)
 
-    func addProducts(_ products: [Product], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void)
+    func addProducts(_ products: [Product], inventory: DBInventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void)
 
-    func addProduct(_ product: Product, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void)
+    func addProduct(_ product: Product, inventory: DBInventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void)
 
-    func updatePlanItem(_ planItem: PlanItem, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void)
+    func updatePlanItem(_ planItem: PlanItem, inventory: DBInventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void)
     
     func removePlanItem(_ item: PlanItem, _ handler: @escaping (ProviderResult<Any>) -> Void)
     

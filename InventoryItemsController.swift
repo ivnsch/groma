@@ -47,7 +47,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     fileprivate var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
     
-    var inventory: Inventory? {
+    var inventory: DBInventory? {
         didSet {
             if let inventory = inventory {
                 topBar.title = inventory.name
@@ -546,7 +546,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     // MARK: - Websocket
     
     func onWebsocketInventory(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Inventory>> {
+        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<DBInventory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                     //                case .Add: // we only use 1 inventory currently

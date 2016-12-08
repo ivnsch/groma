@@ -16,7 +16,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     let memProvider = MemInventoryItemProvider(enabled: false)
 
     // TODO we are sorting 3x! Optimise this. Ponder if it makes sense to do the server objects sorting in the server (where it can be done at db level)
-    func inventoryItems(_ range: NSRange, inventory: Inventory, fetchMode: ProviderFetchModus = .both, sortBy: InventorySortBy = .count, _ handler: @escaping (ProviderResult<[InventoryItem]>) -> ()) {
+    func inventoryItems(_ range: NSRange, inventory: DBInventory, fetchMode: ProviderFetchModus = .both, sortBy: InventorySortBy = .count, _ handler: @escaping (ProviderResult<[InventoryItem]>) -> ()) {
     
         // TODO!!! use range also in mem cache otherwise comparison below doesn't work
         let memItemsMaybe = memProvider.inventoryItems(inventory)
@@ -58,7 +58,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func countInventoryItems(_ inventory: Inventory, _ handler: @escaping (ProviderResult<Int>) -> Void) {
+    func countInventoryItems(_ inventory: DBInventory, _ handler: @escaping (ProviderResult<Int>) -> Void) {
         DBProviders.inventoryItemProvider.countInventoryItems(inventory) {countMaybe in
             if let count = countMaybe {
                 handler(ProviderResult(status: .success, sucessResult: count))
@@ -305,7 +305,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     
     // MARK: - Direct (no history)
     
-    func addToInventory(_ inventory: Inventory, product: Product, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
+    func addToInventory(_ inventory: DBInventory, product: Product, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
         addToInventory(inventory, productsWithQuantities: [(product: product, quantity: quantity)], remote: remote) {result in
             if let addedOrIncrementedInventoryItem = result.sucessResult?.first {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItem))
@@ -315,7 +315,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    fileprivate func addToInventory(_ inventory: Inventory, productsWithQuantities: [(product: Product, quantity: Int)], remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
+    fileprivate func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: Product, quantity: Int)], remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
         DBProviders.inventoryItemProvider.addToInventory(inventory, productsWithQuantities: productsWithQuantities, dirty: remote) {[weak self] addedOrIncrementedInventoryItemsMaybe in
             if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItems))
@@ -346,7 +346,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
 
     
-    func addToInventory(_ inventory: Inventory, group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
+    func addToInventory(_ inventory: DBInventory, group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
         Providers.listItemGroupsProvider.groupItems(group, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
                 if groupItems.isEmpty {
@@ -363,7 +363,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     // Add inventory item input
-    func addToInventory(_ inventory: Inventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
+    func addToInventory(_ inventory: DBInventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
         
         func onHasProduct(_ product: Product) {
             addToInventory(inventory, product: product, quantity: 1, remote: remote, handler)

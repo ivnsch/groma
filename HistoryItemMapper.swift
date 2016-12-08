@@ -13,7 +13,7 @@ class HistoryItemMapper {
     class func dbWithHistoryItem(_ historyItem: HistoryItem, dirty: Bool) -> DBHistoryItem {
         let dbHistoryItem = DBHistoryItem()
         dbHistoryItem.uuid = historyItem.uuid
-        dbHistoryItem.inventory = InventoryMapper.dbWithInventory(historyItem.inventory, dirty: dirty)
+        dbHistoryItem.inventory = historyItem.inventory
         dbHistoryItem.product  = ProductMapper.dbWithProduct(historyItem.product)
         dbHistoryItem.addedDate = historyItem.addedDate
         dbHistoryItem.quantity = historyItem.quantity
@@ -39,7 +39,7 @@ class HistoryItemMapper {
         )
     }
     
-    class func historyItemWithRemote(_ remoteHistoryItem: RemoteHistoryItem, inventory: Inventory, product: Product, user: SharedUser) -> HistoryItem {
+    class func historyItemWithRemote(_ remoteHistoryItem: RemoteHistoryItem, inventory: DBInventory, product: Product, user: DBSharedUser) -> HistoryItem {
         return HistoryItem(
             uuid: remoteHistoryItem.uuid,
             inventory: inventory,
@@ -54,9 +54,9 @@ class HistoryItemMapper {
     
     class func historyItemsWithRemote(_ remoteListItems: RemoteHistoryItems) -> HistoryItemsWithRelations {
 
-        func toInventoryDict(_ remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: Inventory], [Inventory]) {
-            var dict: [String: Inventory] = [:]
-            var arr: [Inventory] = []
+        func toInventoryDict(_ remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: DBInventory], [DBInventory]) {
+            var dict: [String: DBInventory] = [:]
+            var arr: [DBInventory] = []
             for remoteInventory in remoteInventories {
                 let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
                 dict[remoteInventory.inventory.uuid] = inventory
@@ -93,9 +93,9 @@ class HistoryItemMapper {
             return (dict, arr)
         }
         
-        func toUserDict(_ remoteUsers: [RemoteSharedUser]) -> ([String: SharedUser], [SharedUser]) {
-            var dict: [String: SharedUser] = [:]
-            var arr: [SharedUser] = []
+        func toUserDict(_ remoteUsers: [RemoteSharedUser]) -> ([String: DBSharedUser], [DBSharedUser]) {
+            var dict: [String: DBSharedUser] = [:]
+            var arr: [DBSharedUser] = []
             for remoteSection in remoteUsers {
                 let section = SharedUserMapper.sharedUserWithRemote(remoteSection)
                 dict[remoteSection.uuid] = section

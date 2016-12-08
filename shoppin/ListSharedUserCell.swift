@@ -10,13 +10,13 @@ import UIKit
 import QorumLogs
 
 protocol SharedUserCellDelegate: class {
-    func onPullProductsTap(_ user: SharedUser, cell: ListSharedUserCell)
+    func onPullProductsTap(_ user: DBSharedUser, cell: ListSharedUserCell)
 }
 
 class SharedUserCellModel {
-    let user: SharedUser
+    let user: DBSharedUser
     var acceptedInvitation: Bool // for now we assume that users passed in edit mode have accepted the invitation.
-    init(user: SharedUser, acceptedInvitation: Bool = false) {
+    init(user: DBSharedUser, acceptedInvitation: Bool = false) {
         self.user = user
         self.acceptedInvitation = acceptedInvitation
     }

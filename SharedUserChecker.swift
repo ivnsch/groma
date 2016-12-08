@@ -11,7 +11,7 @@ import Foundation
 
 struct SharedUserChecker {
 
-    static func check(_ email: String, users: [SharedUser], controller: UIViewController, onSuccess: @escaping VoidFunction) {
+    static func check(_ email: String, users: [DBSharedUser], controller: UIViewController, onSuccess: @escaping VoidFunction) {
         
         if (Providers.userProvider.mySharedUser.map{$0.email == email}) ?? false {
             AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_you_dont_have_to_add_yourself"), controller: controller)

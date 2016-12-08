@@ -31,10 +31,11 @@ class RealmUserProviderImpl: UserProvider {
     
     private func loginOrRegister(_ loginData: LoginData, register: Bool, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         let credentials = SyncCredentials.usernamePassword(username: loginData.email, password: loginData.password, register: register)
-        loginOrRegister(credentials, controller: controller, handler)
+        loginOrRegister(credentials, userName: loginData.email, controller: controller, handler)
     }
     
-    private func loginOrRegister(_ credentials: SyncCredentials, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    // We pass userName separately because it's not safely retrievable from SyncCredentials
+    private func loginOrRegister(_ credentials: SyncCredentials, userName: String? = nil, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         
         let syncHost = "192.168.0.12"
         let syncAuthURL = URL(string: "http://\(syncHost):9080")!
@@ -51,7 +52,10 @@ class RealmUserProviderImpl: UserProvider {
                     var config = AppDelegate.realmConfig
                     
                     config.syncConfiguration = SyncConfiguration(user: user, realmURL: syncServerURL)
-                    config.objectTypes = [DBList.self, DBInventory.self, DBSection.self, DBProduct.self, DBSharedUser.self, DBListItem.self, DBInventoryItem.self, DBSyncable.self, DBHistoryItem.self, DBPlanItem.self, DBListItemGroup.self, DBGroupItem.self, DBProductCategory.self, DBStoreProduct.self]
+                    config.objectTypes = [DBList.self, DBInventory.self, DBSection.self, DBProduct.self, DBSharedUser.self, DBRemoveList.self, DBRemoveInventory.self, DBListItem.self, DBInventoryItem.self, DBSyncable.self, DBHistoryItem.self, DBPlanItem.self, DBListItemGroup.self, DBGroupItem.self, DBProductCategory.self, DBStoreProduct.self,
+                        DBSectionToRemove.self, DBProductToRemove.self, DBStoreProductToRemove.self, DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self
+                    ]
+                        
                     Realm.Configuration.defaultConfiguration = config
                     
                     do {
@@ -59,8 +63,9 @@ class RealmUserProviderImpl: UserProvider {
                             QL2("Realm changed")
                         }
                         
-                        if let identity = user.identity {
-                            self?.storeEmail(identity)
+                        if let userName = userName { // for credentials login
+//                            self?.storeEmail(user.identity) // not the user name / email
+                            self?.storeEmail(userName)
                         } else {
                             QL3("User: \(user) has no identity")
                         }
@@ -88,12 +93,20 @@ class RealmUserProviderImpl: UserProvider {
     }
     
     func logout(_ handler: @escaping (ProviderResult<Any>) -> ()) {
-        if let user = SyncUser.current {
-            user.logOut()
-            
-        } else {
+
+        // TODO investigate why sometimes more than 1 user here (causes impl of SyncUser.current to throw an error). Happens when logging in, restarting app and trying to log in with invalid user id (both with credentials)
+        let allUsers = SyncUser.all.values
+        
+        if allUsers.isEmpty {
             QL3("No user to logout")
+        } else if allUsers.count > 1 {
+            QL4("Warning/error: more than 1 user logged in: \(allUsers)")
         }
+        
+        for user in allUsers {
+            user.logOut()
+        }
+        
         handler(ProviderResult(status: .success))
         
         // Sign out of social providers in case we are logged in with them
@@ -149,15 +162,15 @@ class RealmUserProviderImpl: UserProvider {
         return true
     }
     
-    var mySharedUser: SharedUser? {
+    var mySharedUser: DBSharedUser? {
         if let email: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
-            return SharedUser(email: email)
+            return DBSharedUser(email: email)
         } else {
             return nil
         }
     }
     
-    func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[SharedUser]>) -> Void) {
+    func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[DBSharedUser]>) -> Void) {
         QL4("Not implemented") // this method is not necessary for realm provider (for now, since we don't share items with real provider)
         handler(ProviderResult(status: .success))
     }

@@ -120,7 +120,7 @@ class RealmInventoryItemProvider: RealmProvider {
     
     
     
-    func addOrIncrementInventoryItemWithInput(_ itemInputs: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool, handler: @escaping ([InventoryItemWithHistoryItem]?) -> Void) {
+    func addOrIncrementInventoryItemWithInput(_ itemInputs: [ProductWithQuantityInput], inventory: DBInventory, dirty: Bool, handler: @escaping ([InventoryItemWithHistoryItem]?) -> Void) {
         
         self.doInWriteTransaction({[weak self] realm in
             return self?.addSync(realm, items: itemInputs, inventory: inventory, dirty: dirty)
@@ -131,13 +131,13 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     // TODO used? remove?
-    func addOrIncrementInventoryItemsWithProductSync(_ realm: Realm, itemInputs: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool) -> [InventoryItemWithHistoryItem] {
+    func addOrIncrementInventoryItemsWithProductSync(_ realm: Realm, itemInputs: [ProductWithQuantityInput], inventory: DBInventory, dirty: Bool) -> [InventoryItemWithHistoryItem] {
         return addSync(realm, items: itemInputs, inventory: inventory, dirty: dirty)
     }
     
     // Helper function for common code
     // This is only called when using quick add, not +/-.
-    fileprivate func addOrIncrementInventoryItemWithProductSync(_ realm: Realm, product: StoreProduct, inventory: Inventory, quantity: Int, dirty: Bool) -> InventoryItemWithHistoryItem? {
+    fileprivate func addOrIncrementInventoryItemWithProductSync(_ realm: Realm, product: StoreProduct, inventory: DBInventory, quantity: Int, dirty: Bool) -> InventoryItemWithHistoryItem? {
 
         // add/increment item and add history entry
         let items = addSync(realm, items: [ProductWithQuantityInput(product: product, quantity: quantity)], inventory: inventory, dirty: dirty)
@@ -197,7 +197,7 @@ class RealmInventoryItemProvider: RealmProvider {
         self.load(mapper, handler: handler)
     }
     
-    func countInventoryItems(_ inventory: Inventory, handler: @escaping (Int?) -> Void) {
+    func countInventoryItems(_ inventory: DBInventory, handler: @escaping (Int?) -> Void) {
         withRealm({realm in
             realm.objects(DBInventoryItem.self).filter(DBInventoryItem.self.createFilterInventory(inventory.uuid)).count
             }) { (countMaybe: Int?) -> Void in
@@ -241,7 +241,7 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
-    func deletePossibleInventoryItemWithUnique(_ productName: String, productBrand: String, inventory: Inventory, notUuid: String, handler: @escaping (Bool) -> Void) {
+    func deletePossibleInventoryItemWithUnique(_ productName: String, productBrand: String, inventory: DBInventory, notUuid: String, handler: @escaping (Bool) -> Void) {
         removeReturnCount(DBInventoryItem.createFilter(ProductUnique(name: productName, brand: productBrand), inventoryUuid: inventory.uuid, notUuid: notUuid), handler: {removedCountMaybe in
             if let removedCount = removedCountMaybe {
                 if removedCount > 0 {
@@ -258,7 +258,7 @@ class RealmInventoryItemProvider: RealmProvider {
     // MARK: - Direct (no history)
     
     // Add product
-    func addToInventory(_ inventory: Inventory, product: Product, quantity: Int, dirty: Bool, _ handler: @escaping ((inventoryItem: InventoryItem, delta: Int)?) -> Void) {
+    func addToInventory(_ inventory: DBInventory, product: Product, quantity: Int, dirty: Bool, _ handler: @escaping ((inventoryItem: InventoryItem, delta: Int)?) -> Void) {
         doInWriteTransaction({[weak self] realm in
             return self?.addOrIncrementInventoryItem(realm, inventory: inventory, product: product, quantity: quantity, dirty: dirty)
         }, finishHandler: {(inventoryItemWithDeltaMaybe: (inventoryItem: InventoryItem, delta: Int)?) in
@@ -266,7 +266,7 @@ class RealmInventoryItemProvider: RealmProvider {
         })
     }
 
-    func addToInventory(_ inventory: Inventory, productsWithQuantities: [(product: Product, quantity: Int)], dirty: Bool, _ handler: @escaping ([(inventoryItem: InventoryItem, delta: Int)]?) -> Void) {
+    func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: Product, quantity: Int)], dirty: Bool, _ handler: @escaping ([(inventoryItem: InventoryItem, delta: Int)]?) -> Void) {
         doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return nil}
             
             var addedOrIncrementedInventoryItems: [(inventoryItem: InventoryItem, delta: Int)] = []
@@ -283,11 +283,11 @@ class RealmInventoryItemProvider: RealmProvider {
     
     // MARK: - Sync
 
-    fileprivate func addSync(_ realm: Realm, items: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool) -> [(inventoryItem: InventoryItem, historyItem: HistoryItem)] {
+    fileprivate func addSync(_ realm: Realm, items: [ProductWithQuantityInput], inventory: DBInventory, dirty: Bool) -> [(inventoryItem: InventoryItem, historyItem: HistoryItem)] {
         
         let addedDate = Date().toMillis()
         
-        let sharedUser = ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "")
+        let sharedUser = ProviderFactory().userProvider.mySharedUser ?? DBSharedUser(email: "")
         
         var adddedOrUpdatedItems: [(inventoryItem: InventoryItem, historyItem: HistoryItem)] = []
         
@@ -305,7 +305,7 @@ class RealmInventoryItemProvider: RealmProvider {
         return adddedOrUpdatedItems
     }
     
-    fileprivate func addOrIncrementInventoryItem(_ realm: Realm, inventory: Inventory, product: Product, quantity: Int, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Int) {
+    fileprivate func addOrIncrementInventoryItem(_ realm: Realm, inventory: DBInventory, product: Product, quantity: Int, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Int) {
         
             // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
             let mapper: (DBInventoryItem) -> InventoryItem = {InventoryItemMapper.inventoryItemWithDB($0)}

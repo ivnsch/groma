@@ -34,7 +34,7 @@
 //    
 //    var inventories: [Inventory] = []
 //    
-//    var currentInventory: Inventory?
+//    var currentInventory: DBInventory?
 //
 //    var open: Bool = false
 //    

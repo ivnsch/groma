@@ -53,7 +53,7 @@ class DBInventoryItem: DBSyncable {
         return createFilter(item.product.uuid, item.inventory.uuid)
     }
     
-    static func createFilter(_ product: Product, _ inventory: Inventory) -> String {
+    static func createFilter(_ product: Product, _ inventory: DBInventory) -> String {
         return createFilter(ProductUnique(name: product.name, brand: product.brand), inventoryUuid: inventory.uuid)
     }
 

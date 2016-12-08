@@ -10,7 +10,7 @@ import Foundation
 
 class RemotePlanItemsProvider {
     
-    func planItems(_ inventory: Inventory? = nil, handler: @escaping (RemoteResult<RemoteHistoryItems>) -> ()) {
+    func planItems(_ inventory: DBInventory? = nil, handler: @escaping (RemoteResult<RemoteHistoryItems>) -> ()) {
         let params: [String: AnyObject] = inventory.map{["inventory": $0.uuid as AnyObject]} ?? [String: AnyObject]()
         RemoteProvider.authenticatedRequest(.get, Urls.planItems, params) {result in
             handler(result)

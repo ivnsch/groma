@@ -508,7 +508,7 @@ class PlanViewController: UIViewController
 //    func onCancelTap() {
 //    }
 //    
-//    private func updatePlanItem(planItem: PlanItem, inventory: Inventory, name: String, price: Float, quantity: Int, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+//    private func updatePlanItem(planItem: PlanItem, inventory: DBInventory, name: String, price: Float, quantity: Int, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
 //        let updatedCategory = planItem.product.category.copy(name: category, color: categoryColor)
 //        let updatedProduct = planItem.product.copy(name: name, price: price, category: updatedCategory, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
 //        let quantityDelta = quantity - planItem.quantity // TODO! this is not most likely not correct, needs to include also planItem.quantityDelta?

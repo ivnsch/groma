@@ -106,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         func debugConfig() {
             QorumLogs.enabled = true
-            QorumLogs.minimumLogLevelShown = 1
+            QorumLogs.minimumLogLevelShown = 2
 //            QorumLogs.KZLinkedConsoleSupportEnabled = true
 //            QorumLogs.onlyShowTheseFiles(MyWebSocket.self, MyWebsocketDispatcher.self)
             QorumLogs.test()
@@ -285,9 +285,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         let fruitsCat = ProductCategory(uuid: uuid, name: "Obst", color: UIColor.flatRed)
         let product1 = Product(uuid: uuid, name: "Birnen", category: fruitsCat, brand: "")
 
-        let inventory1 = Inventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreen, order: 0)
+        let inventory1 = DBInventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreen, order: 0)
         DBProviders.inventoryProvider.saveInventory(inventory1, dirty: true) {saved in
-        
+            
             let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.dark), order: 0, inventory: inventory1, store: nil)
             DBProviders.listProvider.saveList(list1) {result in
                 

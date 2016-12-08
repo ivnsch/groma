@@ -29,11 +29,11 @@ class PlanProviderImpl: PlanProvider {
         }
     }
 
-    func addPlanItem(_ itemInput: PlanItemInput, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
+    func addPlanItem(_ itemInput: PlanItemInput, inventory: DBInventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
         addOrIncrementPlanItem(itemInput, inventory: inventory, handler)
     }
 
-    func addGroupItems(_ groupItems: [GroupItem], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
+    func addGroupItems(_ groupItems: [GroupItem], inventory: DBInventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
         let planItems = groupItems.map{
             PlanItem(inventory: inventory, product: $0.product, quantity: $0.quantity, usedQuantity: 0)
         }
@@ -41,7 +41,7 @@ class PlanProviderImpl: PlanProvider {
     }
     
     // TODO remote
-    func addPlanItems(_ planItems: [PlanItem], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
+    func addPlanItems(_ planItems: [PlanItem], inventory: DBInventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
         dbProvider.addOrIncrementPlanItems(planItems, inventory: inventory) {planItemsMaybe in
             if let planItems = planItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: planItems))
@@ -52,7 +52,7 @@ class PlanProviderImpl: PlanProvider {
     }
     
     // TODO is this used? if yes needs remote
-    func addPlanItems(_ planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
+    func addPlanItems(_ planItemsInput: [PlanItemInput], inventory: DBInventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
         dbProvider.addOrUpdateWithIncrement(planItemsInput, inventory: inventory) {planItemsMaybe in
             if let planItems = planItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: planItems))
@@ -63,7 +63,7 @@ class PlanProviderImpl: PlanProvider {
     }
     
     // TODO is this used? if yes needs remote
-    func addProducts(_ products: [Product], inventory: Inventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
+    func addProducts(_ products: [Product], inventory: DBInventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
         dbProvider.addOrIncrementProducts(products, inventory: inventory) {planItemsMaybe in
             if let planItems = planItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: planItems))
@@ -73,7 +73,7 @@ class PlanProviderImpl: PlanProvider {
         }
     }
     
-    func addProduct(_ product: Product, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
+    func addProduct(_ product: Product, inventory: DBInventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
         addProducts([product], inventory: inventory) {[weak self] result in
             if let planItem = result.sucessResult?.first {
                 handler(ProviderResult(status: .success, sucessResult: planItem))
@@ -92,7 +92,7 @@ class PlanProviderImpl: PlanProvider {
         }
     }
 
-    func updatePlanItem(_ planItem: PlanItem, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
+    func updatePlanItem(_ planItem: PlanItem, inventory: DBInventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
         dbProvider.update(planItem) {[weak self] updated in
             if updated {
                 // update product can change the name or price, and the products can be referenced by list items, so we have to invalidate memory cache.
@@ -114,7 +114,7 @@ class PlanProviderImpl: PlanProvider {
     }
 
     // TODO review this, adding product with existing name shows a new items in list this shouldn't happen. Maybe it's only the tableview
-    fileprivate func addOrIncrementPlanItem(_ itemInput: PlanItemInput, inventory: Inventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
+    fileprivate func addOrIncrementPlanItem(_ itemInput: PlanItemInput, inventory: DBInventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
         
         func onHasProduct(_ product: Product, isUpdate: Bool) {
             let planItem = PlanItem(inventory: inventory, product: product, quantity: itemInput.quantity, usedQuantity: -1)

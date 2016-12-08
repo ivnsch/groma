@@ -26,8 +26,8 @@ class TestHistory: XCTestCase {
                 let inventoryItem1 = InventoryItem(quantity: 0, quantityDelta: 2, product: product1, inventory: addedInventory)
                 let product2 = Product(uuid: NSUUID().UUIDString, name: "bread", price: 0.7)
                 let inventoryItem2 = InventoryItem(quantity: 0, product: product2, inventory: addedInventory)
-                let inventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
-                let inventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
+                let inventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: DBSharedUser(email: TestUtils.userInput1.email))
+                let inventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: DBSharedUser(email: TestUtils.userInput1.email))
                 self!.remoteInventoryItemsProvider.addToInventory(addedInventory, inventoryItems: [inventoryItemWithHistory1, inventoryItemWithHistory2]) {result in
                     expect(result.success).to(beTrue())
                     expect(result.successResult).to(beNil())
@@ -83,8 +83,8 @@ class TestHistory: XCTestCase {
                 let product2 = Product(uuid: NSUUID().UUIDString, name: "bread", price: 0.7)
                 // TODO think about not sending inventory in the request (aggregate) is it safe to assume the inventory will be always there?
                 // If handling the foreign key exception enough (sending back an error) to cover e.g. concurrent access issues?
-                let historyItem1 = HistoryItem(uuid: NSUUID().UUIDString, inventory: TestInventory.inventory1, product: product1, addedDate: NSDate(), quantity: 1, user: SharedUser(email: TestUtils.userInput1.email))
-                let historyItem2 = HistoryItem(uuid: NSUUID().UUIDString, inventory: TestInventory.inventory1, product: product2, addedDate: NSDate(), quantity: 2, user: SharedUser(email: TestUtils.userInput1.email))
+                let historyItem1 = HistoryItem(uuid: NSUUID().UUIDString, inventory: TestInventory.inventory1, product: product1, addedDate: NSDate(), quantity: 1, user: DBSharedUser(email: TestUtils.userInput1.email))
+                let historyItem2 = HistoryItem(uuid: NSUUID().UUIDString, inventory: TestInventory.inventory1, product: product2, addedDate: NSDate(), quantity: 2, user: DBSharedUser(email: TestUtils.userInput1.email))
                 
                 let historyItemsSync = SyncUtils.toHistoryItemsSync([historyItem1, historyItem2])
                 

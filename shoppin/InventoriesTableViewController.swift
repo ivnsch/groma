@@ -9,11 +9,11 @@
 import UIKit
 import QorumLogs
 
-class ExpandableTableViewInventoryModel: ExpandableTableViewModel {
+class ExpandableTableViewInventoryModelRealm: ExpandableTableViewModel {
     
-    let inventory: Inventory
+    let inventory: DBInventory
     
-    init (inventory: Inventory) {
+    init (inventory: DBInventory) {
         self.inventory = inventory
     }
     
@@ -22,15 +22,15 @@ class ExpandableTableViewInventoryModel: ExpandableTableViewModel {
     }
     
     override var bgColor: UIColor {
-        return inventory.bgColor
+        return inventory.bgColor()
     }
     
-    override var users: [SharedUser] {
-        return inventory.users
+    override var users: [DBSharedUser] {
+        return inventory.users.toArray()
     }
     
     override func same(_ rhs: ExpandableTableViewModel) -> Bool {
-        return inventory.same((rhs as! ExpandableTableViewInventoryModel).inventory)
+        return inventory.same((rhs as! ExpandableTableViewInventoryModelRealm).inventory)
     }
     
     override var debugDescription: String {
@@ -38,9 +38,14 @@ class ExpandableTableViewInventoryModel: ExpandableTableViewModel {
     }
 }
 
+import RealmSwift
+
 class InventoriesTableViewController: ExpandableItemsTableViewController, AddEditInventoryControllerDelegate, ExpandableTopViewControllerDelegate {
     
     var topAddEditListControllerManager: ExpandableTopViewController<AddEditInventoryController>?
+
+    fileprivate var inventoriesResult: Results<DBInventory>?
+    fileprivate var notificationToken: NotificationToken?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,11 +53,6 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         setNavTitle(trans("title_inventories"))
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
-
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoriesTableViewController.onWebsockeInventory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Inventory.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoriesTableViewController.onWebsockeInventories(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Inventories.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoriesTableViewController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoriesTableViewController.onInventoryInvitationAccepted(_:)), name: NSNotification.Name(rawValue: Notification.InventoryInvitationAccepted.rawValue), object: nil)
     }
     
     deinit {
@@ -82,14 +82,43 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     override func initModels() {
-        Providers.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
-            if let weakSelf = self {
-                let authInventories = inventories.filter{InventoryAuthChecker.checkAccess($0)}
-                weakSelf.models = authInventories.map{ExpandableTableViewInventoryModel(inventory: $0)}
-//                weakSelf.debugItems()
+        Providers.inventoryProvider.inventoriesRealm(true, successHandler{[weak self] inventories in guard let weakSelf = self else {return}
+                
+            weakSelf.inventoriesResult = inventories
+            
+            self?.notificationToken = inventories.addNotificationBlock { changes in
+                switch changes {
+                case .initial:
+//                        // Results are now populated and can be accessed without blocking the UI
+//                        self.viewController.didUpdateList(reload: true)
+                    QL1("initial")
+                    
+                case .update(_, let deletions, let insertions, let modifications):
+                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                    
+                    weakSelf.tableView.beginUpdates()
+                    
+                    weakSelf.models = weakSelf.inventoriesResult!.map{ExpandableTableViewInventoryModelRealm(inventory: $0)}
+                    weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                    weakSelf.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                    weakSelf.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
+                    weakSelf.tableView.endUpdates()
+
+                    weakSelf.topAddEditListControllerManager?.expand(false)
+                    weakSelf.setTopBarState(.normalFromExpanded)
+                    
+                    
+                case .error(let error):
+                    // An error occurred while opening the Realm file on the background worker thread
+                    fatalError(String(describing: error))
+                }
             }
+            
+            let authInventories = inventories.filter{InventoryAuthChecker.checkAccess($0)} // TODO
+            weakSelf.models = authInventories.map{ExpandableTableViewInventoryModelRealm(inventory: $0)}
         })
     }
+    
     
     override func onSubmitTap() {
         topAddEditListControllerManager?.controller?.submit()
@@ -99,7 +128,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     override func onSelectCellInEditMode(_ model: ExpandableTableViewModel) {
         super.onSelectCellInEditMode(model)
         topAddEditListControllerManager?.expand(true)        
-        topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewInventoryModel).inventory
+        topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewInventoryModelRealm).inventory
     }
     
     override func topControllerIsExpanded() -> Bool {
@@ -107,22 +136,28 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     override func onReorderedModels() {
-        let inventories = (models as! [ExpandableTableViewInventoryModel]).map{$0.inventory}
+        let inventories = (models as! [ExpandableTableViewInventoryModelRealm]).map{$0.inventory}
         
         let reorderedInventories = inventories.mapEnumerate{index, inventory in inventory.copy(order: index)}
         let orderUpdates = reorderedInventories.map{inventory in OrderUpdate(uuid: inventory.uuid, order: inventory.order)}
         
-        models = reorderedInventories.map{ExpandableTableViewInventoryModel(inventory: $0)}
+        models = reorderedInventories.map{ExpandableTableViewInventoryModelRealm(inventory: $0)}
         
-        Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: true, resultHandler(onSuccess: {_ in
-            }, onErrorAdditional: {[weak self] result in
-                self?.initModels()
+
+        let withoutNotifying = notificationToken.map{[$0]} ?? []
+        
+        // For now in the foreground. When in bg get either wrong thread error or "only notifications for the Realm being modified can be skipped" error (instantiating a new realm in bg)
+        if let realm = inventoriesResult?.realm {
+            try! realm.write(withoutNotifying: withoutNotifying) {_ in
+                for orderUpdate in orderUpdates {
+                    realm.create(DBInventory.self, value: DBInventory.createOrderUpdateDict(orderUpdate, dirty: false), update: true)
+                }
             }
-        ))
+        }
     }
     
     override func canRemoveModel(_ model: ExpandableTableViewModel, can: @escaping (Bool) -> Void) {
-//        _ = (model as! ExpandableTableViewInventoryModel).inventory
+//        _ = (model as! ExpandableTableViewInventoryModelRealm).inventory
         ConfirmationPopup.show(title: trans("popup_title_warning"), message: trans("popup_remove_inventory_warning"), okTitle: trans("popup_button_remove"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {
                 can(true)
             }, onCancel: {
@@ -130,8 +165,11 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             })
     }
     
+    
+    
     override func onRemoveModel(_ model: ExpandableTableViewModel) {
-        let inventory = (model as! ExpandableTableViewInventoryModel).inventory
+        let inventory = (model as! ExpandableTableViewInventoryModelRealm).inventory
+
         Providers.inventoryProvider.removeInventory(inventory, remote: true, resultHandler(onSuccess: {_ in
             }, onError: {[weak self] result in
                 self?.initModels()
@@ -150,7 +188,9 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         
         listItemsController.onViewWillAppear = {[weak listItemsController, weak cell] in guard let weakCell = cell else {return} // FIXME crash here once when tapped on "edit"
             // Note: order of lines important here, inventory has to be set first for topbar dot to be positioned correctly right of the title
-            listItemsController?.inventory = (model as! ExpandableTableViewInventoryModel).inventory
+            
+            listItemsController?.inventory = (model as! ExpandableTableViewInventoryModelRealm).inventory
+            
             listItemsController?.setThemeColor(weakCell.backgroundColor!)
             listItemsController?.onExpand(true)
         }
@@ -185,7 +225,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     fileprivate func debugItems() {
         if QorumLogs.minimumLogLevelShown < 2 {
             print("Inventories:")
-            (models as! [ExpandableTableViewInventoryModel]).forEach{print("\($0.inventory.shortDebugDescription)")}
+            (models as! [ExpandableTableViewInventoryModelRealm]).forEach{print("\($0.inventory.debugDescription)")}
         }
     }
 
@@ -202,44 +242,27 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     // MARK: - AddEditInventoryControllerDelegate
     
-    func onAddInventory(_ inventory: Inventory) {
-        Providers.inventoryProvider.addInventory(inventory, remote: true, resultHandler(onSuccess: {[weak self] in
-            self?.addInventoryUI(inventory)
+    func onAddInventory(_ inventory: DBInventory) {
+        Providers.inventoryProvider.addInventory(inventory, remote: true, resultHandler(onSuccess: {
+            // do nothing - is handled in realm notification handler
             }, onErrorAdditional: {[weak self] result in
                 self?.onInventoryAddOrUpdateError(inventory)
             }
         ))
     }
     
-    func onUpdateInventory(_ inventory: Inventory) {
-        Providers.inventoryProvider.updateInventory(inventory, remote: true, resultHandler(onSuccess: {[weak self] in
-            self?.updateInventoryUI(inventory)
+    func onUpdateInventory(_ inventory: DBInventory) {
+        Providers.inventoryProvider.updateInventory(inventory, remote: true, resultHandler(onSuccess: {
+            // do nothing - is handled in realm notification handler
             }, onErrorAdditional: {[weak self] result in
                 self?.onInventoryAddOrUpdateError(inventory)
             }
         ))
     }
     
-    fileprivate func addInventoryUI(_ inventory: Inventory) {
-        tableView.wrapUpdates {[weak self] in
-            if let weakSelf = self {
-                self?.tableView.insertRows(at: [IndexPath(row: weakSelf.models.count, section: 0)], with: UITableViewRowAnimation.top)
-                self?.models.append(ExpandableTableViewInventoryModel(inventory: inventory))
-                self?.topAddEditListControllerManager?.expand(false)
-                self?.setTopBarState(.normalFromExpanded)
-            }
-        }
-    }
-    
-    fileprivate func updateInventoryUI(_ inventory: Inventory) {
-        _ = models.update(ExpandableTableViewInventoryModel(inventory: inventory))
-        tableView.reloadData()
-        topAddEditListControllerManager?.expand(false)
-        setTopBarState(.normalFromExpanded)
-    }
-    
-    fileprivate func onInventoryAddOrUpdateError(_ inventory: Inventory) {
+    fileprivate func onInventoryAddOrUpdateError(_ inventory: DBInventory) {
         initModels()
+        
         // If the user quickly after adding the inventory opened its inventory items controller, close it.
         for childViewController in childViewControllers {
             if let inventoryItemsController = childViewController as? InventoryItemsController {
@@ -248,71 +271,5 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                 }
             }
         }
-    }
-    
-    // MARK: - Websocket
-    
-    func onWebsockeInventory(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Inventory>> {
-            if let notification = info[WSNotificationValue] {
-                let inventory = notification.obj
-                switch notification.verb {
-                case .Add:
-                    addInventoryUI(inventory)
-                case .Update:
-                    Providers.inventoryProvider.updateInventory(inventory, remote: false, successHandler{[weak self] in
-                        self?.updateInventoryUI(inventory)
-                    })
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                let inventoryUuid = notification.obj
-                switch notification.verb {
-                case .Delete:
-                    if let model = ((models as! [ExpandableTableViewInventoryModel]).filter{$0.inventory.uuid == inventoryUuid}).first {
-                        removeModel(model)
-                    } else {
-                        QL3("Received notification to remove list but it wasn't in table view. Uuid: \(inventoryUuid)")
-                    }
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else {
-            QL4("userInfo not there or couldn't be casted: \((note as NSNotification).userInfo)")
-        }
-    }
-
-    func onWebsockeInventories(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Order:
-                    initModels()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else {
-            QL4("userInfo not there or couldn't be casted: \((note as NSNotification).userInfo)")
-        }
-    }
-
-    func onInventoryInvitationAccepted(_ note: Foundation.Notification) {
-        initModels()
-    }
-    
-    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
-        // TODO notification - note has the sender name
-        initModels()
     }
 }

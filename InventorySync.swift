@@ -9,10 +9,10 @@
 import Foundation
 
 class InventorySync {
-    let inventory: Inventory
+    let inventory: DBInventory
     let inventoryItemsSync: InventoryItemsSync
     
-    init(inventory: Inventory, inventoryItemsSync: InventoryItemsSync) {
+    init(inventory: DBInventory, inventoryItemsSync: InventoryItemsSync) {
         self.inventory = inventory
         self.inventoryItemsSync = inventoryItemsSync
     }
@@ -21,9 +21,9 @@ class InventorySync {
 class InventoriesSync {
     
     let inventoriesSyncs: [InventorySync]
-    let toRemove: [Inventory]
+    let toRemove: [DBInventory]
     
-    init(inventoriesSyncs: [InventorySync], toRemove: [Inventory]) {
+    init(inventoriesSyncs: [InventorySync], toRemove: [DBInventory]) {
         self.inventoriesSyncs = inventoriesSyncs
         self.toRemove = toRemove
     }

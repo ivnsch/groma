@@ -20,7 +20,7 @@ class ExpandableTableViewModel: NSObject, Identifiable {
     var bgColor: UIColor {
         fatalError("override")
     }
-    var users: [SharedUser] {
+    var users: [DBSharedUser] {
         fatalError("override")
     }
     
@@ -56,7 +56,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
             emptyView.isHidden = !models.isEmpty
             tableView.isHidden = !emptyView.isHidden
             if models != oldValue {
-                tableView.reloadData()
+//                tableView.reloadData()
             }
 //            printDebugModels()
         }
@@ -284,11 +284,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
             let model = models[(indexPath as NSIndexPath).row]
             canRemoveModel(model) {[weak self] can in
                 if can {
-                    // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
-                    tableView.wrapUpdates {
-                        _ = self?.models.remove(model)
-                        tableView.deleteRows(at: [indexPath], with: .top)
-                    }
                     self?.onRemoveModel(model)
                 }
             }

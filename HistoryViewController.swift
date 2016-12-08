@@ -29,7 +29,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     @IBOutlet weak var inventoriesButton: UIButton!
     fileprivate var inventoryPicker: InventoryPicker?
-    fileprivate var selectedInventory: Inventory? {
+    fileprivate var selectedInventory: DBInventory? {
         didSet {
             if (selectedInventory.map{$0 != oldValue} ?? true) { // load only if it's not set (?? true) or if it's a different inventory
                 loadHistory()

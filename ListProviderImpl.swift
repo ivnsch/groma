@@ -202,10 +202,10 @@ class ListProviderImpl: ListProvider {
         }
     }
     
-    func findInvitedUsers(_ listUuid: String, _ handler: @escaping (ProviderResult<[SharedUser]>) -> Void) {
+    func findInvitedUsers(_ listUuid: String, _ handler: @escaping (ProviderResult<[DBSharedUser]>) -> Void) {
         remoteListProvider.findInvitedUsers(listUuid) {remoteResult in
             if let remoteSharedUsers = remoteResult.successResult {
-                let sharedUsers: [SharedUser] = remoteSharedUsers.map{SharedUserMapper.sharedUserWithRemote($0)}
+                let sharedUsers: [DBSharedUser] = remoteSharedUsers.map{SharedUserMapper.sharedUserWithRemote($0)}
                 handler(ProviderResult(status: .success, sucessResult: sharedUsers))
             } else {
                 DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)

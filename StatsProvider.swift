@@ -61,15 +61,15 @@ func ==(lhs: AggregateGroup, rhs: AggregateGroup) -> Bool {
 
 protocol StatsProvider {
     
-    func aggregate(_ monthYear: MonthYear, groupBy: GroupByAttribute, inventory: Inventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ())
+    func aggregate(_ monthYear: MonthYear, groupBy: GroupByAttribute, inventory: DBInventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ())
 
-    func aggregate(_ timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: Inventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ())
+    func aggregate(_ timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: DBInventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ())
     
-    func history(_ timePeriod: TimePeriod, group: AggregateGroup, inventory: Inventory, _ handler: @escaping (ProviderResult<GroupMonthYearAggregate>) -> ())
+    func history(_ timePeriod: TimePeriod, group: AggregateGroup, inventory: DBInventory, _ handler: @escaping (ProviderResult<GroupMonthYearAggregate>) -> ())
     
-    func hasDataForMonthYear(_ monthYear: MonthYear, inventory: Inventory, handler: @escaping (ProviderResult<Bool>) -> Void)
+    func hasDataForMonthYear(_ monthYear: MonthYear, inventory: DBInventory, handler: @escaping (ProviderResult<Bool>) -> Void)
     
-    func clearMonthYearData(_ monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void)
+    func clearMonthYearData(_ monthYear: MonthYear, inventory: DBInventory, remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func oldestDate(_ inventory: Inventory, _ handler: @escaping (ProviderResult<Date>) -> Void)
+    func oldestDate(_ inventory: DBInventory, _ handler: @escaping (ProviderResult<Date>) -> Void)
 }

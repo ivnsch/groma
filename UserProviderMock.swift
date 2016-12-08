@@ -92,19 +92,19 @@ class UserProviderMock: UserProvider {
     }
     
 
-    var mySharedUser: SharedUser? {
+    var mySharedUser: DBSharedUser? {
         if let email = email {
-            return SharedUser(email: email)
+            return DBSharedUser(email: email)
         } else {
             return nil
         }
     }
     
-    func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[SharedUser]>) -> Void) {
+    func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[DBSharedUser]>) -> Void) {
         let dummies = [
-            SharedUser(email: "goo@gar.com"),
-            SharedUser(email: "lalala@werw.com"),
-            SharedUser(email: "hello@hello.hello"),
+            DBSharedUser(value: "goo@gar.com"),
+            DBSharedUser(email: "lalala@werw.com"),
+            DBSharedUser(email: "hello@hello.hello"),
         ]
         handler(ProviderResult(status: .success, sucessResult: dummies))
     }

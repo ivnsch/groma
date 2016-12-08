@@ -14,7 +14,7 @@ class HistoryProviderImpl: HistoryProvider {
     let dbProvider = RealmHistoryProvider()
     let remoteProvider = RemoteHistoryProvider()
 
-    func historyItems(_ range: NSRange, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ()) {
+    func historyItems(_ range: NSRange, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ()) {
 
         self.dbProvider.loadHistoryItems(range, inventory: inventory) {dbHistoryItems in
             handler(ProviderResult(status: .success, sucessResult: dbHistoryItems))
@@ -24,19 +24,19 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
-    func historyItems(_ startDate: Int64, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ()) {
+    func historyItems(_ startDate: Int64, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ()) {
         self.dbProvider.loadHistoryItems(startDate: startDate, inventory: inventory) {dbHistoryItems in
             handler(ProviderResult(status: .success, sucessResult: dbHistoryItems))
         }
     }
     
-    func historyItems(_ monthYear: MonthYear, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> Void) {
+    func historyItems(_ monthYear: MonthYear, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> Void) {
         dbProvider.loadHistoryItems(monthYear, inventory: inventory) {dbHistoryItems in
             handler(ProviderResult(status: .success, sucessResult: dbHistoryItems))
         }
     }
     
-    func historyItemsGroups(_ range: NSRange, inventory: Inventory, _ handler: @escaping (ProviderResult<[HistoryItemGroup]>) -> ()) {
+    func historyItemsGroups(_ range: NSRange, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItemGroup]>) -> ()) {
         dbProvider.loadHistoryItemsGroups(range, inventory: inventory) {groups in
             handler(ProviderResult(status: .success, sucessResult: groups))
         }
@@ -136,7 +136,7 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
-    func oldestDate(_ inventory: Inventory, handler: @escaping (ProviderResult<Date>) -> Void) {
+    func oldestDate(_ inventory: DBInventory, handler: @escaping (ProviderResult<Date>) -> Void) {
         DBProviders.historyProvider.oldestDate(inventory) {oldestDateMaybe in
             if let oldestDate = oldestDateMaybe {
                 handler(ProviderResult(status: .success, sucessResult: oldestDate))
@@ -146,7 +146,7 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
-    func removeHistoryItemsForMonthYear(_ monthYear: MonthYear, inventory: Inventory, remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void) {
+    func removeHistoryItemsForMonthYear(_ monthYear: MonthYear, inventory: DBInventory, remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void) {
         
         DBProviders.historyProvider.removeHistoryItems(monthYear, inventory: inventory, markForSync: remote) {[weak self] removedHistoryItemsUuidsMaybe in
             

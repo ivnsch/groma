@@ -24,7 +24,7 @@ class EditableChoiceModal: UIViewController, UIScrollViewDelegate {
         self.onDonePress?()
     }
     
-    var listItems: [EditablePlainTableViewControllerModel<SharedUser>]? {
+    var listItems: [EditablePlainTableViewControllerModel<DBSharedUser>]? {
         set {
             if let listItems = newValue, let tableViewController = self.tableViewController {
                 tableViewController.listItems = listItems
@@ -35,7 +35,7 @@ class EditableChoiceModal: UIViewController, UIScrollViewDelegate {
         }
     }
 
-    func addItem(_ item: EditablePlainTableViewControllerModel<SharedUser>) {
+    func addItem(_ item: EditablePlainTableViewControllerModel<DBSharedUser>) {
         self.tableViewController?.addItem(item)
     }
     

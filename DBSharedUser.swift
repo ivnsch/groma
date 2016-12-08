@@ -19,6 +19,12 @@ class DBSharedUser: Object {
         return "email"
     }
     
+    convenience init(email: String) {
+        self.init()
+        
+        self.email = email
+    }
+    
     static func fromDict(_ dict: [String: AnyObject]) -> DBSharedUser {
         let user = DBSharedUser()
         user.email = dict["email"] as! String
@@ -32,5 +38,11 @@ class DBSharedUser: Object {
         dict["foo"] = "" as AnyObject? // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
 //        setSyncableFieldsInDict(dict) // no syncable obj itself, just a part of other objects
         return dict
+    }
+    
+    func copy(email: String? = nil) -> DBSharedUser {
+        return DBSharedUser(
+            email: email ?? self.email
+        )
     }
 }

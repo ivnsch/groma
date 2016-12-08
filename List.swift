@@ -21,14 +21,14 @@ class List: Equatable, Identifiable, CustomDebugStringConvertible {
     let name: String
     let listItems: [ListItem] // TODO is this used? we get the items everywhere from the provider not the list object
     
-    let users: [SharedUser] // note that this will be empty if using the app offline (TODO think about showing myself in this list - right now also this will not appear offline)
+    let users: [DBSharedUser] // note that this will be empty if using the app offline (TODO think about showing myself in this list - right now also this will not appear offline)
     
     let bgColor: UIColor
     var order: Int
 
     let store: String?
     
-    let inventory: Inventory
+    let inventory: DBInventory
     
     //////////////////////////////////////////////
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
@@ -38,7 +38,7 @@ class List: Equatable, Identifiable, CustomDebugStringConvertible {
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, name: String, listItems: [ListItem] = [], users: [SharedUser] = [], bgColor: UIColor, order: Int, inventory: Inventory, store: String?, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    init(uuid: String, name: String, listItems: [ListItem] = [], users: [DBSharedUser] = [], bgColor: UIColor, order: Int, inventory: DBInventory, store: String?, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.name = name
         self.listItems = listItems
@@ -64,7 +64,7 @@ class List: Equatable, Identifiable, CustomDebugStringConvertible {
         return self.uuid == rhs.uuid
     }
     
-    func copy(uuid: String? = nil, name: String? = nil, listItems: [ListItem]? = nil, users: [SharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, inventory: Inventory? = nil, store: ListCopyStore? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> List {
+    func copy(uuid: String? = nil, name: String? = nil, listItems: [ListItem]? = nil, users: [DBSharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, inventory: DBInventory? = nil, store: ListCopyStore? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> List {
         return List(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,

@@ -11,7 +11,7 @@ import CMPopTipView
 
 class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
     
-    var inventories: [Inventory] = [] {
+    var inventories: [DBInventory] = [] {
         didSet {
             selectedInventory = inventories.first
         }
@@ -20,7 +20,7 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
     fileprivate weak var button: UIButton!
     fileprivate weak var view: UIView!
     
-    fileprivate var selectedInventory: Inventory? {
+    fileprivate var selectedInventory: DBInventory? {
         didSet {
             if let inventory = selectedInventory {
                 onInventorySelected?(inventory)
@@ -29,7 +29,7 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         }
     }
     
-    var onInventorySelected: ((Inventory) -> Void)?
+    var onInventorySelected: ((DBInventory) -> Void)?
     
     fileprivate var inventoriesPopup: CMPopTipView?
     
@@ -41,7 +41,7 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         return picker
     }
     
-    init(button: UIButton, view: UIView, onInventorySelected: ((Inventory) -> Void)?) {
+    init(button: UIButton, view: UIView, onInventorySelected: ((DBInventory) -> Void)?) {
         self.button = button
         self.view = view
         self.onInventorySelected = onInventorySelected

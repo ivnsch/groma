@@ -19,17 +19,17 @@ class RealmHistoryProvider: RealmProvider {
         self.saveObj(dbObj, update: false, handler: handler)
     }
     
-    func loadHistoryItems(_ range: NSRange? = nil, inventory: Inventory, handler: @escaping ([HistoryItem]) -> ()) {
+    func loadHistoryItems(_ range: NSRange? = nil, inventory: DBInventory, handler: @escaping ([HistoryItem]) -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
         self.load(mapper, sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
 
-    func loadHistoryItems(_ range: NSRange? = nil, startDate: Int64, inventory: Inventory, handler: @escaping ([HistoryItem]) -> ()) {
+    func loadHistoryItems(_ range: NSRange? = nil, startDate: Int64, inventory: DBInventory, handler: @escaping ([HistoryItem]) -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
         self.load(mapper, predicate: DBHistoryItem.createPredicate(startDate, inventoryUuid: inventory.uuid), sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
 
-    func loadHistoryItems(_ productName: String, startDate: Int64, inventory: Inventory, handler: @escaping ([HistoryItem]) -> ()) {
+    func loadHistoryItems(_ productName: String, startDate: Int64, inventory: DBInventory, handler: @escaping ([HistoryItem]) -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)}
         self.load(mapper, predicate: DBHistoryItem.createPredicate(productName, addedDate: startDate, inventoryUuid: inventory.uuid), sortDescriptor: historySortDescriptor, handler: handler)
     }
@@ -39,7 +39,7 @@ class RealmHistoryProvider: RealmProvider {
         self.load(mapper, sortDescriptor: historySortDescriptor, handler: handler)
     }
     
-    func loadHistoryItems(_ monthYear: MonthYear, inventory: Inventory, handler: @escaping ([HistoryItem]) -> Void) {
+    func loadHistoryItems(_ monthYear: MonthYear, inventory: DBInventory, handler: @escaping ([HistoryItem]) -> Void) {
         if let startDate = Date.startOfMonth(monthYear.month, year: monthYear.year)?.toMillis(), let endDate = Date.endOfMonth(monthYear.month, year: monthYear.year)?.toMillis() {
             loadHistoryItems(startDate, endDate: endDate, inventory: inventory, handler)
         } else {
@@ -48,14 +48,14 @@ class RealmHistoryProvider: RealmProvider {
         }
     }
     
-    func loadHistoryItems(_ startDate: Int64, endDate: Int64, inventory: Inventory, _ handler: @escaping ([HistoryItem]) -> Void) {
+    func loadHistoryItems(_ startDate: Int64, endDate: Int64, inventory: DBInventory, _ handler: @escaping ([HistoryItem]) -> Void) {
         let mapper = {HistoryItemMapper.historyItemWith($0)}
         self.load(mapper, predicate: DBHistoryItem.createPredicate(startDate, endAddedDate: endDate, inventoryUuid: inventory.uuid), sortDescriptor: historySortDescriptor, handler: handler)
     }
     
     // TODO change data model! one table with groups and the other with history items, 1:n (also in server)
     // this is very important as right now we fetch and iterate through ALL the history items, this is very inefficient
-    func loadHistoryItemsGroups(_ range: NSRange, inventory: Inventory, _ handler: @escaping ([HistoryItemGroup]) -> ()) {
+    func loadHistoryItemsGroups(_ range: NSRange, inventory: DBInventory, _ handler: @escaping ([HistoryItemGroup]) -> ()) {
 
         let finished: ([HistoryItemGroup]) -> () = {result in
             DispatchQueue.main.async(execute: {
@@ -179,8 +179,7 @@ class RealmHistoryProvider: RealmProvider {
         
         // save inventory items
         for inventory in historyItemsWithRelations.inventories {
-            let dbInventory = InventoryMapper.dbWithInventory(inventory, dirty: dirty)
-            realm.add(dbInventory, update: true) // since we don't delete products (see comment above) we do update
+            realm.add(inventory, update: true) // since we don't delete products (see comment above) we do update
         }
         
         for product in historyItemsWithRelations.products {
@@ -234,7 +233,7 @@ class RealmHistoryProvider: RealmProvider {
         return true
     }
     
-    func removeHistoryItems(_ monthYear: MonthYear, inventory: Inventory, markForSync: Bool, handler: @escaping ([String]?) -> Void) {
+    func removeHistoryItems(_ monthYear: MonthYear, inventory: DBInventory, markForSync: Bool, handler: @escaping ([String]?) -> Void) {
         
         doInWriteTransaction({[weak self] realm in
             
@@ -294,7 +293,7 @@ class RealmHistoryProvider: RealmProvider {
     }
 
     
-    func oldestDate(_ inventory: Inventory, handler: @escaping (Date?) -> Void) {
+    func oldestDate(_ inventory: DBInventory, handler: @escaping (Date?) -> Void) {
         
         withRealm({realm in
             

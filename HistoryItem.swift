@@ -14,8 +14,8 @@ class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let product: Product
     let addedDate: Int64
     let quantity: Int
-    let inventory: Inventory
-    let user: SharedUser // The user who added the item. This is rather "User" because there's sharing for history items doesn't make sense, but user has information (like pw) which is irrelevant for this
+    let inventory: DBInventory
+    let user: DBSharedUser // The user who added the item. This is rather "User" because there's sharing for history items doesn't make sense, but user has information (like pw) which is irrelevant for this
     let paidPrice: Float // product price at the moment of buying the item (per unit)
     //////////////////////////////////////////////
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
@@ -29,7 +29,7 @@ class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return paidPrice * Float(quantity)
     }
     
-    init(uuid: String, inventory: Inventory, product: Product, addedDate: Int64, quantity: Int, user: SharedUser, paidPrice: Float, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    init(uuid: String, inventory: DBInventory, product: Product, addedDate: Int64, quantity: Int, user: DBSharedUser, paidPrice: Float, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.inventory = inventory
         self.product = product
@@ -61,4 +61,4 @@ func ==(lhs: HistoryItem, rhs: HistoryItem) -> Bool {
 
 // convenience (redundant) holder to avoid having to iterate through historyitems to find unique products and users
 // so products, users arrays are the result of extracting the unique products and users from historyItems array
-typealias HistoryItemsWithRelations = (historyItems: [HistoryItem], inventories: [Inventory], products: [Product], users: [SharedUser])
+typealias HistoryItemsWithRelations = (historyItems: [HistoryItem], inventories: [DBInventory], products: [Product], users: [DBSharedUser])

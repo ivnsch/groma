@@ -8,6 +8,7 @@
 
 import Foundation
 import QorumLogs
+import RealmSwift
 
 class InventoryProviderImpl: InventoryProvider {
    
@@ -15,7 +16,7 @@ class InventoryProviderImpl: InventoryProvider {
     fileprivate let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
     fileprivate let dbInventoryProvider = RealmInventoryProvider()
 
-    func inventories(_ remote: Bool = true, _ handler: @escaping (ProviderResult<[Inventory]>) -> ()) {
+    func inventories(_ remote: Bool = true, _ handler: @escaping (ProviderResult<[DBInventory]>) -> ()) {
         self.dbInventoryProvider.loadInventories {dbInventories in
             
             let sotedDBInventories = dbInventories.sortedByOrder() // include name in sorting to guarantee equal ordering with remote result, in case of duplicate order fields
@@ -26,7 +27,7 @@ class InventoryProviderImpl: InventoryProvider {
                 self.remoteProvider.inventories {remoteResult in
                     
                     if let remoteInventories = remoteResult.successResult {
-                        let inventories: [Inventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
+                        let inventories: [DBInventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
                         let sortedInventories = inventories.sortedByOrder()
                         
                         if sotedDBInventories != sortedInventories {
@@ -49,7 +50,17 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func firstInventory(_ handler: @escaping (ProviderResult<Inventory>) -> ()) {
+    func inventoriesRealm(_ remote: Bool, _ handler: @escaping (ProviderResult<Results<DBInventory>>) -> Void) {
+        dbInventoryProvider.loadInventoriesRealm {dbInventories in
+            if let dbInventories = dbInventories {
+                handler(ProviderResult(status: .success, sucessResult: dbInventories))
+            } else {
+                handler(ProviderResult(status: .unknown))
+            }
+        }
+    }
+    
+    func firstInventory(_ handler: @escaping (ProviderResult<DBInventory>) -> ()) {
         inventories {result in
             if let inventories = result.sucessResult {
                 if let firstInventory = inventories.first {
@@ -64,7 +75,7 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-//    func addInventoryWithItems(inventory: Inventory, items: [InventoryItem], _ handler: ProviderResult<Any> -> ()) {
+//    func addInventoryWithItems(inventory: DBInventory, items: [InventoryItem], _ handler: ProviderResult<Any> -> ()) {
 //        
 //        self.dbInventoryProvider.saveInventory(inventory) {saved in
 //            if saved {
@@ -90,24 +101,26 @@ class InventoryProviderImpl: InventoryProvider {
 //        }
 //    }
     
-    func addInventory(_ inventory: Inventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        self.dbInventoryProvider.saveInventory(inventory, dirty: remote) {[weak self] saved in
+    func addInventory(_ inventory: DBInventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        self.dbInventoryProvider.saveInventory(inventory, update: true, dirty: remote) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .success))
-                if remote {
-                    self?.remoteProvider.addInventory(inventory) {remoteResult in
-                        
-                        if let remoteInventory = remoteResult.successResult {
-                            self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventory) {success in
-                                if !success {
-                                    QL4("Error storing last update timestamp")
-                                }
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                        }
-                    }
-                }
+                
+                // Remove all backend code?
+//                if remote {
+//                    self?.remoteProvider.addInventory(inventory) {remoteResult in
+//                        
+//                        if let remoteInventory = remoteResult.successResult {
+//                            self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventory) {success in
+//                                if !success {
+//                                    QL4("Error storing last update timestamp")
+//                                }
+//                            }
+//                        } else {
+//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                        }
+//                    }
+//                }
 
             } else {
                 handler(ProviderResult(status: .databaseSavingError))
@@ -115,39 +128,42 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func updateInventory(_ inventory: Inventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+    func updateInventory(_ inventory: DBInventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         dbInventoryProvider.saveInventory(inventory, update: true, dirty: remote) {[weak self] saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
-            if remote {
-                self?.remoteProvider.updateInventory(inventory) {remoteResult in
-                    if let remoteInventory = remoteResult.successResult {
-                        self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventory) {success in
-                            if !success {
-                                QL4("Error storing last update timestamp")
-                            }
-                        }
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                    }
-                }
-            }
+            
+            // Remove all backend code?
+//            if remote {
+//                self?.remoteProvider.updateInventory(inventory) {remoteResult in
+//                    if let remoteInventory = remoteResult.successResult {
+//                        self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventory) {success in
+//                            if !success {
+//                                QL4("Error storing last update timestamp")
+//                            }
+//                        }
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                    }
+//                }
+//            }
         }
     }
     
-    func updateInventoriesOrder(_ orderUpdates: [OrderUpdate], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+    func updateInventoriesOrder(_ orderUpdates: [OrderUpdate], withoutNotifying: [NotificationToken], realm: Realm?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         // dirty == remote: if we want to do a remote call, it means the update is client triggered (opposed to e.g. processing a websocket message) which means the data is not in the server yet, which means it's dirty.
-        DBProviders.inventoryProvider.updateInventoriesOrder(orderUpdates, dirty: remote) {[weak self] success in
+        DBProviders.inventoryProvider.updateInventoriesOrder(orderUpdates, withoutNotifying: withoutNotifying, realm: realm, dirty: remote) {[weak self] success in
             if success {
                 handler(ProviderResult(status: .success))
-                
-                if remote {
-                    self?.remoteProvider.updateInventoriesOrder(orderUpdates) {remoteResult in
-                        // Note: no server update timetamps here, because server implementation details, more info see note in RemoteOrderUpdate
-                        if !remoteResult.success {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                        }
-                    }
-                }
+            
+                // Remove all backend code?
+//                if remote {
+//                    self?.remoteProvider.updateInventoriesOrder(orderUpdates) {remoteResult in
+//                        // Note: no server update timetamps here, because server implementation details, more info see note in RemoteOrderUpdate
+//                        if !remoteResult.success {
+//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                        }
+//                    }
+//                }
             } else {
                 QL4("Error updating inventories order in local database, orderUpdates: \(orderUpdates)")
                 handler(ProviderResult(status: .unknown))
@@ -155,7 +171,7 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func removeInventory(_ inventory: Inventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+    func removeInventory(_ inventory: DBInventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         removeInventory(inventory.uuid, remote: remote, handler)
     }
 
@@ -166,19 +182,20 @@ class InventoryProviderImpl: InventoryProvider {
                 
                 Notification.send(.ListRemoved, dict: [NotificationKey.list: uuid as AnyObject])
 
-                if remote {
-                    self?.remoteProvider.removeInventory(uuid) {remoteResult in
-                        if remoteResult.success {
-                            self?.dbInventoryProvider.clearInventoryTombstone(uuid) {removeTombstoneSuccess in
-                                if !removeTombstoneSuccess {
-                                    QL4("Couldn't delete tombstone for inventory: \(uuid)")
-                                }
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                        }
-                    }
-                }
+                // Remove all backend code?
+//                if remote {
+//                    self?.remoteProvider.removeInventory(uuid) {remoteResult in
+//                        if remoteResult.success {
+//                            self?.dbInventoryProvider.clearInventoryTombstone(uuid) {removeTombstoneSuccess in
+//                                if !removeTombstoneSuccess {
+//                                    QL4("Couldn't delete tombstone for inventory: \(uuid)")
+//                                }
+//                            }
+//                        } else {
+//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                        }
+//                    }
+//                }
             } else {
                 QL4("DB remove didn't succeed")
             }
@@ -206,10 +223,10 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func findInvitedUsers(_ listUuid: String, _ handler: @escaping (ProviderResult<[SharedUser]>) -> Void) {
+    func findInvitedUsers(_ listUuid: String, _ handler: @escaping (ProviderResult<[DBSharedUser]>) -> Void) {
         remoteProvider.findInvitedUsers(listUuid) {remoteResult in
             if let remoteSharedUsers = remoteResult.successResult {
-                let sharedUsers: [SharedUser] = remoteSharedUsers.map{SharedUserMapper.sharedUserWithRemote($0)}
+                let sharedUsers: [DBSharedUser] = remoteSharedUsers.map{SharedUserMapper.sharedUserWithRemote($0)}
                 handler(ProviderResult(status: .success, sucessResult: sharedUsers))
             } else {
                 DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)

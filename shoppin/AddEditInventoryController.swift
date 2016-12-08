@@ -10,11 +10,12 @@ import UIKit
 import SwiftValidator
 import ChameleonFramework
 import QorumLogs
+import RealmSwift
 
 //change
 protocol AddEditInventoryControllerDelegate: class {
-    func onAddInventory(_ inventory: Inventory)
-    func onUpdateInventory(_ inventory: Inventory)
+    func onAddInventory(_ inventory: DBInventory)
+    func onUpdateInventory(_ inventory: DBInventory)
 }
 
 // TODO try to refactor with AddEditListController, lot of repeated code
@@ -35,7 +36,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     
     var currentListsCount: Int? // to determine order. For now we set this field at view controller level, don't do an extra fetch in provider. Maybe it's better like this.
     
-    var listToEdit: Inventory? {
+    var listToEdit: DBInventory? {
         didSet {
             if let listToEdit = listToEdit {
                 prefill(listToEdit)
@@ -47,7 +48,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     
     fileprivate var addButtonHelper: AddButtonHelper?
 
-    fileprivate var users: [SharedUser] = [] {
+    fileprivate var users: [DBSharedUser] = [] {
         didSet {
             if !users.isEmpty {
                 let title: String = {
@@ -61,12 +62,12 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
             }
         }
     }
-    fileprivate var invitedUsers: [SharedUser] = []
+    fileprivate var invitedUsers: [DBSharedUser] = []
     
-    fileprivate func prefill(_ list: Inventory) {
-        listNameInputField.text = list.name
+    fileprivate func prefill(_ inventory: DBInventory) {
+        listNameInputField.text = inventory.name
         
-        users = list.users
+        users = inventory.users.toArray()
         
         let sharedButtonVisible: Bool = {
             if ConnectionProvider.connectedAndLoggedIn {
@@ -78,7 +79,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         }()
         setSharedButtonVisibile(sharedButtonVisible)
         
-        setBackgroundColor(list.bgColor)
+        setBackgroundColor(inventory.bgColor())
     }
     
     fileprivate func setSharedButtonVisibile(_ visible: Bool) {
@@ -174,9 +175,11 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
                 if let currentListsCount = weakSelf.currentListsCount {
                     
                     // If it's a new inventory add myself as a participant, to be consistent with list after server updates it (server adds the caller as a participant)
+                    
                     let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
                     
-                    let inventory = Inventory(uuid: NSUUID().uuidString, name: listName, users: totalUsers, bgColor: bgColor, order: currentListsCount)//change
+                    let inventory = DBInventory(uuid: NSUUID().uuidString, name: listName, users: totalUsers, bgColor: bgColor, order: currentListsCount)
+                    
                     weakSelf.delegate?.onAddInventory(inventory)
                 } else {
                     print("Error: no currentListsCount")
@@ -274,9 +277,10 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         return false
     }
     
-    fileprivate func loadKnownAndInvitedUsers(_ onLoaded: @escaping (_ known: [SharedUser], _ invited: [SharedUser]) -> Void) {
-        var allResult: [SharedUser]?
-        var invitedResult: [SharedUser]?
+    fileprivate func loadKnownAndInvitedUsers(_ onLoaded: @escaping (_ known: [DBSharedUser], _ invited: [DBSharedUser]) -> Void) {
+
+        var allResult: [DBSharedUser]?
+        var invitedResult: [DBSharedUser]?
         func check() {
             if let allResult = allResult, let invitedResult = invitedResult {
                 onLoaded(allResult, invitedResult)
@@ -338,7 +342,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     
     // MARK: - SharedUsersControllerDelegate
     
-    func onPull(_ user: SharedUser) {
+    func onPull(_ user: DBSharedUser) {
         progressVisible(true)
         if let inventory = listToEdit {
             Providers.pullProvider.pullInventoryProducs(inventory.uuid, srcUser: user, successHandler{[weak self] products in  guard let weakSelf = self else {return}
@@ -348,12 +352,12 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         }
     }
     
-    func onUsersUpdated(_ exitingUsers: [SharedUser], invitedUsers: [SharedUser]) {
+    func onUsersUpdated(_ exitingUsers: [DBSharedUser], invitedUsers: [DBSharedUser]) {
         self.users = exitingUsers
         self.invitedUsers = invitedUsers
     }
     
-    func invitedUsers(_ handler: @escaping ([SharedUser]) -> Void) {
+    func invitedUsers(_ handler: @escaping ([DBSharedUser]) -> Void) {
         if let inventory = listToEdit {
             Providers.inventoryProvider.findInvitedUsers(inventory.uuid, successHandler {users in
                 handler(users)

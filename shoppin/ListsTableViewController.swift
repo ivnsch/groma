@@ -29,7 +29,7 @@ class ExpandableTableViewListModel: ExpandableTableViewModel {
         return list.bgColor
     }
     
-    override var users: [SharedUser] {
+    override var users: [DBSharedUser] {
         return list.users
     }
     

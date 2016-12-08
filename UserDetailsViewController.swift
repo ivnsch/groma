@@ -33,7 +33,7 @@ class UserDetailsViewController: UIViewController {
         logoutButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
     }
     
-    fileprivate func initContents(_ user: SharedUser) {
+    fileprivate func initContents(_ user: DBSharedUser) {
         if let userIdLabel = userIdLabel {
             userIdLabel.text = user.email
         } else {
