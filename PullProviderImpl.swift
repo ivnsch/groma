@@ -40,7 +40,7 @@ class PullProviderImpl: PullProvider {
             
             if let remoteProducts = remoteResult.successResult {
                 
-                let dbProducts: [DBProduct] = ProductMapper.dbListItemsWithRemote(remoteProducts)
+                let dbProducts: [Product] = ProductMapper.dbListItemsWithRemote(remoteProducts)
                 
                 // TODO!!!! overwrite the categories also
                 self?.productsDbProvider.overwriteProducts(dbProducts, clearTombstones: true) {saved in

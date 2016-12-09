@@ -13,7 +13,7 @@ class PlanItemMapper {
     class func dbWith(_ planItem: PlanItem) -> DBPlanItem {
         let dbPlanItem = DBPlanItem()
         dbPlanItem.inventory = planItem.inventory
-        dbPlanItem.product  = ProductMapper.dbWithProduct(planItem.product)
+        dbPlanItem.product  = planItem.product
         dbPlanItem.quantity = planItem.quantity
         if let lastServerUpdate = planItem.lastServerUpdate {
             dbPlanItem.lastServerUpdate = lastServerUpdate
@@ -24,7 +24,7 @@ class PlanItemMapper {
     class func planItemWith(_ dbPlanItem: DBPlanItem, usedQuantity: Int) -> PlanItem {
         return PlanItem(
             inventory: InventoryMapper.inventoryWithDB(dbPlanItem.inventory),
-            product: ProductMapper.productWithDB(dbPlanItem.product),
+            product: dbPlanItem.product,
             quantity: dbPlanItem.quantity,
             usedQuantity: usedQuantity,
             lastServerUpdate: dbPlanItem.lastServerUpdate

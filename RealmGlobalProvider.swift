@@ -17,8 +17,8 @@ class RealmGlobalProvider: RealmProvider {
         
         withRealm({realm in
 
-            let productCategories = realm.objects(DBProductCategory.self).filter(DBProductCategory.createFilterDirtyAndValid())
-            let products = realm.objects(DBProduct.self).filter(DBProduct.createFilterDirtyAndValid())
+            let productCategories = realm.objects(ProductCategory.self).filter(ProductCategory.createFilterDirtyAndValid())
+            let products = realm.objects(Product.self).filter(Product.createFilterDirtyAndValid())
             let storeProducts = realm.objects(DBStoreProduct.self).filter(DBStoreProduct.createFilterDirtyAndValid())
             let lists = realm.objects(DBList.self).filter(DBSyncable.dirtyFilter())
             let sections = realm.objects(DBSection.self).filter(DBSyncable.dirtyFilter())
@@ -48,7 +48,7 @@ class RealmGlobalProvider: RealmProvider {
             let historyToSync = history.map{$0.toDict()}
             
             let categoriesToRemove = realm.objects(DBRemoveProductCategory.self).map{$0.toDict()}
-            let productsToRemove = realm.objects(DBProductToRemove.self).map{$0.toDict()}
+            let productsToRemove = realm.objects(ProductToRemove.self).map{$0.toDict()}
             let storeProductsToRemove = realm.objects(DBStoreProductToRemove.self).map{$0.toDict()}
             let listsToRemove = realm.objects(DBRemoveList.self).map{$0.toDict()}
             let sectionsToRemove = realm.objects(DBSectionToRemove.self).map{$0.toDict()}
@@ -120,9 +120,9 @@ class RealmGlobalProvider: RealmProvider {
             // TODO!!!! write this code with proper optional handling and error logging
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
-            let (productCategoriesArr, productCategoriesDict): ([DBProductCategory], [String: DBProductCategory]) = toObjs(syncResult.productCategories, mapper: {DBProductCategory.fromDict($0)}, idExtractor: {$0.uuid})
+            let (productCategoriesArr, productCategoriesDict): ([ProductCategory], [String: ProductCategory]) = toObjs(syncResult.productCategories, mapper: {ProductCategory.fromDict($0)}, idExtractor: {$0.uuid})
             
-            let (productsArr, productsDict): ([DBProduct], [String: DBProduct]) = toObjs(syncResult.products, mapper: {DBProduct.fromDict($0, category: productCategoriesDict[$0["categoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+            let (productsArr, productsDict): ([Product], [String: Product]) = toObjs(syncResult.products, mapper: {Product.fromDict($0, category: productCategoriesDict[$0["categoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
 
             let (storeProductsArr, storeProductsDict): ([DBStoreProduct], [String: DBStoreProduct]) = toObjs(syncResult.storeProducts, mapper: {DBStoreProduct.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!)}, idExtractor: {$0.uuid})
 
@@ -196,8 +196,8 @@ class RealmGlobalProvider: RealmProvider {
         realm.delete(realm.objects(DBInventory.self))
         
         realm.delete(realm.objects(DBStoreProduct.self))
-        realm.delete(realm.objects(DBProduct.self))
-        realm.delete(realm.objects(DBProductCategory.self))
+        realm.delete(realm.objects(Product.self))
+        realm.delete(realm.objects(ProductCategory.self))
 
         realm.delete(realm.objects(DBSharedUser.self))
 
@@ -214,7 +214,7 @@ class RealmGlobalProvider: RealmProvider {
         realm.delete(realm.objects(DBRemoveInventory.self))
 
         realm.delete(realm.objects(DBStoreProductToRemove.self))
-        realm.delete(realm.objects(DBProductToRemove.self))
+        realm.delete(realm.objects(ProductToRemove.self))
         realm.delete(realm.objects(DBRemoveProductCategory.self))
 
         realm.delete(realm.objects(DBRemoveSharedUser.self))
@@ -259,8 +259,8 @@ class RealmGlobalProvider: RealmProvider {
             markObjsDirty(realm, obj: DBInventory.self, idExtractor: {$0.uuid})
 
             markObjsDirty(realm, obj: DBStoreProduct.self, idExtractor: {$0.uuid})
-            markObjsDirty(realm, obj: DBProduct.self, idExtractor: {$0.uuid})
-            markObjsDirty(realm, obj: DBProductCategory.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: Product.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: ProductCategory.self, idExtractor: {$0.uuid})
             
 //            this is not synced
 //            markObjsDirty(realm, obj: DBSharedUser.self, idExtractor: {$0.uuid})

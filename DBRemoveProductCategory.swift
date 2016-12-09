@@ -14,7 +14,7 @@ class DBRemoveProductCategory: Object {
     dynamic var uuid: String = ""
     dynamic var lastServerUpdate: Int64 = 0
 
-    convenience init(_ dbProductCategory: DBProductCategory) {
+    convenience init(_ dbProductCategory: ProductCategory) {
         self.init(uuid: dbProductCategory.uuid, lastServerUpdate: dbProductCategory.lastServerUpdate)
     }
     

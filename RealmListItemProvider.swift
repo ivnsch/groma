@@ -502,8 +502,7 @@ class RealmListItemProvider: RealmProvider {
                 let listItemsWithRelations = ListItemMapper.listItemsWithRemote(listItemsSyncResult.listItems, sortOrderByStatus: nil)
                 
                 for product in listItemsWithRelations.products {
-                    let dbProduct = ProductMapper.dbWithProduct(product)
-                    realm.add(dbProduct, update: true) // since we don't delete products (see comment above) we do update
+                    realm.add(product, update: true) // since we don't delete products (see comment above) we do update
                 }
                 
                 for section in listItemsWithRelations.sections {
@@ -588,10 +587,10 @@ class RealmListItemProvider: RealmProvider {
                 self?.updateListItemLastSyncTimeStamp(realm, updateDict: listItem.timestampUpdateDict)
             }
             for product in listItems.products {
-                realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
+                realm.create(Product.self, value: product.timestampUpdateDict, update: true)
             }
             for productCategory in listItems.productsCategories {
-                realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
+                realm.create(ProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
             }
             for section in listItems.sections {
                 realm.create(DBSection.self, value: section.timestampUpdateDict, update: true)
@@ -615,7 +614,7 @@ class RealmListItemProvider: RealmProvider {
     
     // FIXME repeated method with RealmListItemGroupProvider
     func updateLastSyncTimeStampSync(_ realm: Realm, product: RemoteProduct) {
-        realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
+        realm.create(Product.self, value: product.timestampUpdateDict, update: true)
     }
     
     func updateStore(_ oldName: String, newName: String, _ handler: @escaping (Bool) -> Void) {

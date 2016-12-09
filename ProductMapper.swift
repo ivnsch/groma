@@ -10,30 +10,6 @@ import Foundation
 
 class ProductMapper {
 
-    class func productWithDB(_ dbProduct: DBProduct) -> Product {
-        return Product(
-            uuid: dbProduct.uuid,
-            name: dbProduct.name,
-            category: ProductCategoryMapper.categoryWithDB(dbProduct.category),
-            fav: dbProduct.fav,
-            brand: dbProduct.brand,
-            lastServerUpdate: dbProduct.lastServerUpdate
-        )
-    }
-    
-    class func dbWithProduct(_ product: Product) -> DBProduct {
-        let dbProduct = DBProduct()
-        dbProduct.uuid = product.uuid
-        dbProduct.name = product.name
-        dbProduct.category = ProductCategoryMapper.dbWithCategory(product.category)
-        dbProduct.fav = product.fav
-        dbProduct.brand = product.brand
-        if let lastServerUpdate = product.lastServerUpdate {
-            dbProduct.lastServerUpdate = lastServerUpdate
-        }
-        return dbProduct
-    }
-    
     class func productWithRemote(_ remoteProduct: RemoteProduct, categoriesDict: [String: RemoteProductCategory]) -> Product? {
         if let category = categoriesDict[remoteProduct.uuid] {
             return productWithRemote(remoteProduct, category: ProductCategoryMapper.categoryWithRemote(category))
@@ -58,8 +34,8 @@ class ProductMapper {
         )
     }
     
-    class func dbProductWithRemote(_ product: RemoteProduct, category: RemoteProductCategory) -> DBProduct {
-        let dbProduct = DBProduct()
+    class func dbProductWithRemote(_ product: RemoteProduct, category: RemoteProductCategory) -> Product {
+        let dbProduct = Product()
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
         dbProduct.category = ProductCategoryMapper.dbCategoryWithRemote(category)
@@ -81,7 +57,7 @@ class ProductMapper {
         return products
     }
     
-    class func dbListItemsWithRemote(_ remoteListItems: RemoteProductsWithDependencies) -> [DBProduct] {
+    class func dbListItemsWithRemote(_ remoteListItems: RemoteProductsWithDependencies) -> [Product] {
         
         let productsCategoriesDict: [String: RemoteProductCategory] = remoteListItems.categories.toDictionary{($0.uuid, $0)}
         

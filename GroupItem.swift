@@ -53,7 +53,7 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return GroupItem(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
-            product: product ?? self.product,
+            product: product ?? self.product.copy(),
             group: group ?? self.group,
             lastServerUpdate: self.lastServerUpdate,
             removed: self.removed

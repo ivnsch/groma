@@ -356,8 +356,8 @@ class RealmInventoryItemProvider: RealmProvider {
     func updateInventoryItemLastUpdate(_ item: RemoteInventoryItemWithProduct, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             self?.updateInventoryItemLastUpdate(realm, updateDict: item.inventoryItem.timestampUpdateDict)
-            realm.create(DBProduct.self, value: item.product.timestampUpdateDict, update: true)
-            realm.create(DBProductCategory.self, value: item.productCategory.timestampUpdateDict, update: true)
+            realm.create(Product.self, value: item.product.timestampUpdateDict, update: true)
+            realm.create(ProductCategory.self, value: item.productCategory.timestampUpdateDict, update: true)
             return true
             }, finishHandler: {success in
                 handler(success ?? false)
@@ -370,10 +370,10 @@ class RealmInventoryItemProvider: RealmProvider {
                 self?.updateInventoryItemLastUpdate(realm, updateDict: listItem.timestampUpdateDict)
             }
             for product in items.products {
-                realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
+                realm.create(Product.self, value: product.timestampUpdateDict, update: true)
             }
             for productCategory in items.productsCategories {
-                realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
+                realm.create(ProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
             }
             for inventory in items.inventories {
                 DBProviders.inventoryProvider.updateLastSyncTimeStampSync(realm, inventory: inventory.inventory)
@@ -394,10 +394,10 @@ class RealmInventoryItemProvider: RealmProvider {
                 self?.updateInventoryItemLastUpdate(realm, updateDict: listItem.timestampUpdateDict)
             }
             for product in items.products {
-                realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
+                realm.create(Product.self, value: product.timestampUpdateDict, update: true)
             }
             for productCategory in items.productsCategories {
-                realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
+                realm.create(ProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
             }
             for inventory in items.inventories {
                 DBProviders.inventoryProvider.updateLastSyncTimeStampSync(realm, inventory: inventory.inventory)

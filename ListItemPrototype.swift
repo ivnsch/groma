@@ -36,6 +36,15 @@ class ListItemPrototype: Equatable, Identifiable, CustomDebugStringConvertible {
         return "\(product.name), \(quantity), \(targetSectionName)"
     }
     
+    func copy(product: Product? = nil, quantity: Int? = nil, targetSectionName: String? = nil, targetSectionColor: UIColor? = nil, storeProductInput: StoreProductInput? = nil) -> ListItemPrototype {
+        return ListItemPrototype(
+            product: product ?? self.product.copy(),
+            quantity: quantity ?? self.quantity,
+            targetSectionName: targetSectionName ?? self.targetSectionName,
+            targetSectionColor: targetSectionColor ?? self.targetSectionColor,
+            storeProductInput: storeProductInput ?? self.storeProductInput
+        )
+    }
 }
 func ==(lhs: ListItemPrototype, rhs: ListItemPrototype) -> Bool {
     

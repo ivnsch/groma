@@ -13,7 +13,7 @@ class DBGroupItem: DBSyncable {
     
     dynamic var uuid: String = ""
     dynamic var quantity: Int = 0
-    dynamic var productOpt: DBProduct? = DBProduct()
+    dynamic var productOpt: Product? = Product()
     dynamic var groupOpt: DBListItemGroup? = DBListItemGroup()
 
     static var quantityFieldName: String {
@@ -24,9 +24,9 @@ class DBGroupItem: DBSyncable {
         return "uuid"
     }
     
-    var product: DBProduct {
+    var product: Product {
         get {
-            return productOpt ?? DBProduct()
+            return productOpt ?? Product()
         }
         set(newProduct) {
             productOpt = newProduct
@@ -40,6 +40,15 @@ class DBGroupItem: DBSyncable {
         set(newGroup) {
             groupOpt = newGroup
         }
+    }
+    
+    convenience init(uuid: String, quantity: Int, product: Product, group: DBListItemGroup) {
+        self.init()
+        
+        self.uuid = uuid
+        self.quantity = quantity
+        self.product = product
+        self.group = group
     }
     
     // MARK: - Filters
@@ -75,7 +84,7 @@ class DBGroupItem: DBSyncable {
     
     // MARK: -
     
-    static func fromDict(_ dict: [String: AnyObject], product: DBProduct, group: DBListItemGroup) -> DBGroupItem {
+    static func fromDict(_ dict: [String: AnyObject], product: Product, group: DBListItemGroup) -> DBGroupItem {
         let item = DBGroupItem()
         item.uuid = dict["uuid"]! as! String
         item.quantity = dict["quantity"]! as! Int

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 enum ProductSortBy {
     case alphabetic, fav
@@ -15,7 +16,7 @@ enum ProductSortBy {
 // TODO move product-only method from list item provider here
 protocol ProductProvider {
 
-    func products(_ range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<[Product]>) -> Void)
+    func products(_ range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<Results<Product>>) -> Void)
     
     func product(_ name: String, brand: String, handler: @escaping (ProviderResult<Product>) -> ())
 
@@ -25,6 +26,8 @@ protocol ProductProvider {
     
     func productsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: Product, section: Section?)])>) -> Void)
     
+    func productsRes(_ text: String, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: Results<Product>)>) -> Void)
+
     func countProducts(_ handler: @escaping (ProviderResult<Int>) -> Void)
 
     // Note: this does not check name uniqueness! If need to add a new product use add(productInput), this checks name uniqueness

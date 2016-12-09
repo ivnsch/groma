@@ -1,5 +1,5 @@
 //
-//  DBSectionToRemove.swift
+//  ProductToRemove.swift
 //  shoppin
 //
 //  Created by ischuetz on 29/02/16.
@@ -9,12 +9,12 @@
 import Foundation
 import RealmSwift
 
-class DBProductToRemove: Object {
+class ProductToRemove: Object {
     
     dynamic var uuid: String = ""
     dynamic var lastServerUpdate: Int64 = 0
 
-    convenience init(_ dbProduct: DBProduct) {
+    convenience init(_ dbProduct: Product) {
         self.init(uuid: dbProduct.uuid, lastServerUpdate: dbProduct.lastServerUpdate)
     }
     

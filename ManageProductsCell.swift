@@ -12,8 +12,6 @@ class ManageProductsCell: UITableViewCell {
 
     @IBOutlet weak var productNameLabel: UILabel!
     @IBOutlet weak var productBrandLabel: UILabel!
-//    @IBOutlet weak var productCategoryLabel: UILabel!
-//    @IBOutlet weak var productPriceLabel: UILabel!
 
     @IBOutlet weak var productNameCenterConstraint: NSLayoutConstraint!
 
@@ -24,26 +22,22 @@ class ManageProductsCell: UITableViewCell {
         selectionStyle = .none
     }
     
-    var product: ItemWithCellAttributes<Product>? {
-        didSet {
-            if let product = product {
-                let productNameTranslation = NSLocalizedString(product.item.name, comment: "")
-                if let boldRange = product.boldRange {
-                    productNameLabel.attributedText = productNameTranslation.makeAttributedBoldRegular(boldRange)
-                } else {
-                    productNameLabel.text = productNameTranslation
-                }
-                
-//                productCategoryLabel.text = NSLocalizedString(product.item.category.name, comment: "")
-                productBrandLabel.text = product.item.brand
-                
-//                productCategoryLabelTopConstraint.constant = product.item.brand.isEmpty ? 0 : 2
-                
-                categoryColorView.backgroundColor = product.item.category.color
-                
-                productNameCenterConstraint.constant = product.item.brand.isEmpty ? 0 : -10
-            }
+    func setProduct(product: Product, bold: String?) {
+        
+        let productNameTranslation = NSLocalizedString(product.name, comment: "")
+        
+        if let boldRange = bold.flatMap({product.name.range($0, caseInsensitive: true)}) {
+            productNameLabel.attributedText = productNameTranslation.makeAttributedBoldRegular(boldRange)
+        } else {
+            productNameLabel.text = productNameTranslation
         }
+        
+        productBrandLabel.text = product.brand
+        
+        categoryColorView.backgroundColor = product.category.color
+        
+        productNameCenterConstraint.constant = product.brand.isEmpty ? 0 : -10
+    
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {

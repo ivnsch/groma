@@ -377,6 +377,8 @@ class ListItemProviderImpl: ListItemProvider {
     // TODO!!!! review parameters note and order, we are passing a list of prototypes so this doesn't make sense?   
     func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
         
+        let prototypesCopy = prototypes.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
+        
         func getOrderForNewSection(_ existingListItems: Results<DBListItem>) -> Int {
             let sectionsOfItemsWithStatus: [DBSection] = existingListItems.collect({
                 if $0.hasStatus(status) {
@@ -395,12 +397,12 @@ class ListItemProviderImpl: ListItemProvider {
             return syncedRet(weakSelf) {
         
                 let storePrototypes: [StoreListItemPrototype] = {
-                    let existingStoreProducts = DBProviders.storeProductProvider.storeProductsSync(prototypes.map{$0.product}, store: list.store ?? "") ?? {
+                    let existingStoreProducts = DBProviders.storeProductProvider.storeProductsSync(prototypesCopy.map{$0.product}, store: list.store ?? "") ?? {
                         QL4("An error ocurred fetching store products, array is nil")
                         return [] // maybe we should exit from method here - for now only error log and return empty array
                     }()
                     let existingStoreProductsDict = existingStoreProducts.toDictionary{($0.product.uuid, $0)}
-                    return prototypes.map {prototype in
+                    return prototypesCopy.map {prototype in
                         let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
                             let storeProduct = StoreProduct(uuid: NSUUID().uuidString, price: 1, baseQuantity: 1, unit: StoreProductUnit.none, store: list.store ?? "", product: prototype.product)
                             QL1("Store product doesn't exist, created: \(storeProduct)")

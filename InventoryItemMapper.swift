@@ -12,9 +12,8 @@ import QorumLogs
 class InventoryItemMapper {
     
     class func inventoryItemWithDB(_ dbInventoryItem: DBInventoryItem) -> InventoryItem {
-        let product = ProductMapper.productWithDB(dbInventoryItem.product)
         let inventory = InventoryMapper.inventoryWithDB(dbInventoryItem.inventory)
-        return InventoryItem(uuid: dbInventoryItem.uuid, quantity: dbInventoryItem.quantity, quantityDelta: dbInventoryItem.quantityDelta, product: product, inventory: inventory, lastServerUpdate: dbInventoryItem.lastServerUpdate)
+        return InventoryItem(uuid: dbInventoryItem.uuid, quantity: dbInventoryItem.quantity, quantityDelta: dbInventoryItem.quantityDelta, product: dbInventoryItem.product, inventory: inventory, lastServerUpdate: dbInventoryItem.lastServerUpdate)
     }
     
     class func inventoryItemWithRemote(_ remoteItem: RemoteInventoryItemWithProduct, inventory: DBInventory) -> InventoryItem {
@@ -27,7 +26,7 @@ class InventoryItemMapper {
         db.uuid = item.uuid
         db.quantity = item.quantity
         db.quantityDelta = item.quantityDelta
-        db.product = ProductMapper.dbWithProduct(item.product)
+        db.product = item.product
         db.inventory = item.inventory
         if let lastServerUpdate = item.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             db.lastServerUpdate = lastServerUpdate

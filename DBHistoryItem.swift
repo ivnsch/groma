@@ -12,7 +12,7 @@ class DBHistoryItem: DBSyncable {
 
     dynamic var uuid: String = ""
     dynamic var inventoryOpt: DBInventory? = DBInventory()
-    dynamic var productOpt: DBProduct? = DBProduct()
+    dynamic var productOpt: Product? = Product()
     dynamic var addedDate: Int64 = 0
     dynamic var quantity: Int = 0
     dynamic var userOpt: DBSharedUser? = DBSharedUser()
@@ -24,9 +24,9 @@ class DBHistoryItem: DBSyncable {
         return "uuid"
     }
     
-    var product: DBProduct {
+    var product: Product {
         get {
-            return productOpt ?? DBProduct()
+            return productOpt ?? Product()
         }
         set(newProduct) {
             productOpt = newProduct
@@ -91,7 +91,7 @@ class DBHistoryItem: DBSyncable {
 
     
     // TODO!!!! failable
-    static func fromDict(_ dict: [String: AnyObject], inventory: DBInventory, product: DBProduct) -> DBHistoryItem {
+    static func fromDict(_ dict: [String: AnyObject], inventory: DBInventory, product: Product) -> DBHistoryItem {
         let item = DBHistoryItem()
         item.uuid = dict["uuid"]! as! String
         item.inventory = inventory

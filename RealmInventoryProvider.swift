@@ -25,7 +25,7 @@ class RealmInventoryProvider: RealmProvider {
     //////////////////
     
     func loadInventoriesRealm(_ handler: @escaping (Results<DBInventory>?) -> Void) {
-        handler(loadSyncRealm(filter: nil, sortDescriptor: NSSortDescriptor(key: "order", ascending: true)))
+        handler(loadSync(filter: nil, sortDescriptor: NSSortDescriptor(key: "order", ascending: true)))
     }
     
     

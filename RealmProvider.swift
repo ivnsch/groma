@@ -134,27 +134,27 @@ class RealmProvider {
     //////////////////////
 
     // TODO range: can't we just subscript result instead of do this programmatically (take a look into https://github.com/realm/realm-cocoa/issues/1904)
-    func loadRealm<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, handler: @escaping (Results<T>?) -> Void) {
+    func load<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, handler: @escaping (Results<T>?) -> Void) {
         DispatchQueue.global(qos: .background).async {
-            let result: Results<T>? = self.loadSyncRealm(predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
+            let result: Results<T>? = self.loadSync(predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
             DispatchQueue.main.async(execute: {
                 handler(result)
             })
         }
     }
     
-    func loadRealm<T: Object>(filter filterMaybe: String? = nil, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, handler: @escaping (Results<T>?) -> Void) {
+    func load<T: Object>(filter filterMaybe: String? = nil, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, handler: @escaping (Results<T>?) -> Void) {
         let predicateMaybe = filterMaybe.map {
             NSPredicate(format: $0, argumentArray: [])
         }
-        loadRealm(predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, handler: handler)
+        load(predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, handler: handler)
     }
     
     
-    func loadSyncRealm<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T>? {
+    func loadSync<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T>? {
         do {
             let realm = try Realm()
-            let results: Results<T> = self.loadSyncRealm(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
+            let results: Results<T> = self.loadSync(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
             return results
             
         } catch let e {
@@ -163,10 +163,10 @@ class RealmProvider {
         }
     }
     
-    func loadSyncRealm<T: Object>(filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T>? {
+    func loadSync<T: Object>(filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T>? {
         do {
             let realm = try Realm()
-            return loadSyncRealm(realm, filter: filterMaybe, sortDescriptor: sortDescriptorMaybe)
+            return loadSync(realm, filter: filterMaybe, sortDescriptor: sortDescriptorMaybe)
             
         } catch let e {
             QL4("Error: creating Realm, returning empty results, error: \(e)")
@@ -174,7 +174,7 @@ class RealmProvider {
         }
     }
     
-    func loadSyncRealm<T: Object>(_ realm: Realm, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T> {
+    func loadSync<T: Object>(_ realm: Realm, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T> {
         var results = realm.objects(T.self)
         if let predicate = predicateMaybe {
             results = results.filter(predicate)
@@ -186,16 +186,82 @@ class RealmProvider {
         return results
     }
     
-    func loadSyncRealm<T: Object>(_ realm: Realm, filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T> {
+    func loadSync<T: Object>(_ realm: Realm, filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T> {
         let predicateMaybe = filterMaybe.map {
             NSPredicate(format: $0, argumentArray: [])
         }
-        return self.loadSyncRealm(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
+        return self.loadSync(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
+    }
+    
+    func loadFirst<T: Object>(filter filterMaybe: String? = nil, handler: @escaping (T?) -> Void) {
+        self.load(filter: filterMaybe, handler: {(results: Results<T>?) in
+            
+            guard let results = results else {QL4("No results"); handler(nil); return}
+            
+            if results.count > 1 {
+                QL2("Multiple items found in load first \(filterMaybe)") // sometimes we expect only 1 item to be in the database, log this just in case
+            }
+            handler(results.first)
+        })
     }
     
     //////////////////////
+    // Load array without mapper
+    // Special methods (with repeated code) for this, since on one side we want to do the conversion to array in the background together with loading the objs (so we can't use the methods that return Results) and on the other it was not possible to adjust the methods that return arrays and use mapper to make mapper optional. There seem to be a problem with the returned type "U" of the objects being the same as "T". TODO try to adjust methods with mapper. Or refactor in some other way.
     
+    func load<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: @escaping ([T]) -> Void) {
+        
+        let finished: ([T]) -> Void = {result in
+            DispatchQueue.main.async(execute: {
+                handler(result)
+            })
+        }
+        
+        DispatchQueue.global(qos: .background).async {
+            
+            do {
+                let realm = try Realm()
+                let models: [T] = self.loadSync(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe)
+                finished(models)
+                
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                finished([]) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
+            }
+        }
+    }
     
+    func loadSync<T: Object>(_ realm: Realm, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [T] {
+        var results = realm.objects(T.self)
+        if let predicate = predicateMaybe {
+            results = results.filter(predicate)
+        }
+        if let sortDescriptor = sortDescriptorMaybe, let key = sortDescriptor.key {
+            results = results.sorted(byProperty: key, ascending: sortDescriptor.ascending)
+        }
+        
+        return results.toArray(rangeMaybe)
+    }
+    
+    func loadSync<T: Object>(_ realm: Realm, filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [T] {
+        
+        let predicateMaybe = filterMaybe.map {
+            NSPredicate(format: $0, argumentArray: [])
+        }
+        
+        return loadSync(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe)
+    }
+    
+    func load<T: Object>(filter filterMaybe: String? = nil, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: @escaping ([T]) -> Void) {
+        
+        let predicateMaybe = filterMaybe.map {
+            NSPredicate(format: $0, argumentArray: [])
+        }
+        
+        load(predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe, handler: handler)
+    }
+    
+    //////////////////////
     
     // TODO range: can't we just subscript result instead of do this programmatically (take a look into https://github.com/realm/realm-cocoa/issues/1904)
     func load<T: Object, U>(_ mapper: @escaping (T) -> U, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: @escaping ([U]) -> ()) {

@@ -402,9 +402,7 @@ class RemoteListItemProvider {
             "fav": product.fav as AnyObject
         ]
         
-        if let lastServerUpdate = product.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(product.lastServerUpdate) as Int64)
         
         return dict
     }
@@ -416,9 +414,8 @@ class RemoteListItemProvider {
             "color": productCategory.color.hexStr as AnyObject
         ]
         
-        if let lastServerUpdate = productCategory.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        
+        dict["lastUpdate"] = NSNumber(value: Int64(productCategory.lastServerUpdate) as Int64)
         
         return dict
     }

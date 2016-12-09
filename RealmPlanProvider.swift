@@ -104,7 +104,7 @@ class RealmPlanProvider: RealmProvider {
                             
                             let planItem = DBPlanItem()
                             planItem.inventory = inventory
-                            planItem.product = ProductMapper.dbWithProduct(product)
+                            planItem.product = product
                             
                             planItemsToSave.append(planItem)
                         }
@@ -168,7 +168,7 @@ class RealmPlanProvider: RealmProvider {
                         } else { // plan item with same product name doesn't exist - create a new one
                             let planItem = DBPlanItem()
                             planItem.inventory = inventory
-                            planItem.product = ProductMapper.dbWithProduct(planItemInput.product)
+                            planItem.product = planItemInput.product
                             planItem.quantity = planItemInput.quantity
                             planItem.quantityDelta = planItemInput.quantity // on a new obj quantity delta is always quantity (quantity which has not been synced yet)
                             
@@ -227,7 +227,7 @@ class RealmPlanProvider: RealmProvider {
                             // update the product - if the new plan item has e.g. a different category, we overwrite the old one
                             // note that this will update the product for all the app
                             let existingPlanItemProduct = existingPlanItem.product
-                            let updatedCategory = DBProductCategory()
+                            let updatedCategory = ProductCategory()
                             updatedCategory.uuid = existingPlanItemProduct.category.uuid
                             updatedCategory.name = planItemInput.category
                             updatedCategory.setColor(planItemInput.categoryColor)
@@ -245,23 +245,23 @@ class RealmPlanProvider: RealmProvider {
                             // TODO this could be optimised by fetching all the products in advance, at once. But for now we do a single fetch for each product
                             // code would need some structure changes for this
                             //                            let productsNamesStr: String = ",".join(productNames.map{"'\($0)'"})
-                            //                            let existingProducts = realm.objects(DBProduct).filter("name IN {\(productsNamesStr)}")
+                            //                            let existingProducts = realm.objects(Product).filter("name IN {\(productsNamesStr)}")
                             
                             // check if a product with the plan item name's already exist, to reference it, otherwise create a new product
-                            let product: DBProduct = {
+                            let product: Product = {
                                
-                                return (realm.objects(DBProduct.self).filter("name == '\(planItemInput.name)'").first) ?? {
+                                return (realm.objects(Product.self).filter("name == '\(planItemInput.name)'").first) ?? {
                                     
                                     // check if category with given name exists or create a new one
-                                    let category: DBProductCategory = (realm.objects(DBProductCategory.self).filter("name == '\(planItemInput.category)'").first) ?? {
-                                        let category = DBProductCategory()
+                                    let category: ProductCategory = (realm.objects(ProductCategory.self).filter("name == '\(planItemInput.category)'").first) ?? {
+                                        let category = ProductCategory()
                                         category.uuid = NSUUID().uuidString
                                         category.name = planItemInput.category
                                         category.setColor(planItemInput.categoryColor)
                                         return category
                                     }()
                                     
-                                    let product = DBProduct()
+                                    let product = Product()
                                     product.uuid = NSUUID().uuidString
                                     product.name = planItemInput.name
                                     product.category = category

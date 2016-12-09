@@ -73,9 +73,9 @@ class RealmGroupItemProvider: RealmProvider {
             do {
                 // load items
                 let realm = try Realm()
-                let mapper = {GroupItemMapper.groupItemWith($0)}
+
+                let items: [GroupItem] = realm.objects(DBGroupItem.self).filter(DBGroupItem.createFilterGroupItemsUuids(groupItems)).map{GroupItemMapper.groupItemWith($0)}
                 
-                let items = loadSync(realm, mapper: mapper, filter: DBGroupItem.createFilterGroupItemsUuids(groupItems))
                 // decide if add/increment
                 let dict: [String: GroupItem] = items.toDictionary{($0.uuid, $0)}
                 let newOrIncrementedGroupItems: [DBGroupItem] = groupItems.map {groupItem in
@@ -88,8 +88,13 @@ class RealmGroupItemProvider: RealmProvider {
                     }()
                     return GroupItemMapper.dbWith(item, dirty: dirty)
                 }
+
                 //save
-                _ = saveObjsSync(newOrIncrementedGroupItems, update: true)
+                try realm.write {
+                    for obj in newOrIncrementedGroupItems {
+                        realm.add(obj, update: true)
+                    }
+                }
                 return true
                 
             } catch let error {
@@ -104,10 +109,12 @@ class RealmGroupItemProvider: RealmProvider {
             })
         }
 
+        let groupItemsCopy = groupItems.map{$0.copy()} // copy fixes Realm acces in incorrect thread exceptions
+        
         DispatchQueue.global(qos: .background).async {[weak self] in
             if let weakSelf = self {
                 let success = syncedRet(weakSelf) {
-                    addOrIncrement(groupItems)
+                    addOrIncrement(groupItemsCopy)
                 }
                 finished(success)
             } else {
@@ -318,7 +325,7 @@ class RealmGroupItemProvider: RealmProvider {
                 DBProviders.productProvider.updateLastSyncTimeStampSync(realm, product: product)
             }
             for productCategory in items.productsCategories {
-                realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
+                realm.create(ProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
             }
             for group in items.groups {
                 DBProviders.listItemGroupProvider.updateLastSyncTimeStampSync(realm, group: group)

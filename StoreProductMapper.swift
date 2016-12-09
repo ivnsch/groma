@@ -12,14 +12,13 @@ import QorumLogs
 class StoreProductMapper {
     
     class func productWithDB(_ dbStoreProduct: DBStoreProduct) -> StoreProduct {
-        let product = ProductMapper.productWithDB(dbStoreProduct.product)
         return StoreProduct(
             uuid: dbStoreProduct.uuid,
             price: dbStoreProduct.price,
             baseQuantity: dbStoreProduct.baseQuantity,
             unit: StoreProductUnit(rawValue: dbStoreProduct.unit)!,
             store: dbStoreProduct.store,
-            product: product,
+            product: dbStoreProduct.product,
             lastServerUpdate: dbStoreProduct.lastServerUpdate
         )
     }
@@ -31,7 +30,7 @@ class StoreProductMapper {
         dbProduct.baseQuantity = storeProduct.baseQuantity
         dbProduct.unit = storeProduct.unit.rawValue
         dbProduct.store = storeProduct.store
-        dbProduct.product = ProductMapper.dbWithProduct(storeProduct.product)
+        dbProduct.product = storeProduct.product
         if let lastServerUpdate = storeProduct.lastServerUpdate {
             dbProduct.lastServerUpdate = lastServerUpdate
         }
@@ -86,7 +85,7 @@ class StoreProductMapper {
 //        return products
 //    }
     
-//    class func dbListItemsWithRemote(remoteListItems: RemoteProductsWithDependencies) -> [DBProduct] {
+//    class func dbListItemsWithRemote(remoteListItems: RemoteProductsWithDependencies) -> [Product] {
 //        
 //        let productsCategoriesDict: [String: RemoteProductCategory] = remoteListItems.categories.toDictionary{($0.uuid, $0)}
 //        

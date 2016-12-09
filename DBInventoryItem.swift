@@ -14,7 +14,7 @@ class DBInventoryItem: DBSyncable {
     dynamic var uuid: String = ""
     dynamic var quantity: Int = 0
     dynamic var quantityDelta: Int = 0
-    dynamic var productOpt: DBProduct? = DBProduct()
+    dynamic var productOpt: Product? = Product()
     dynamic var inventoryOpt: DBInventory? = DBInventory()
 
     static var quantityFieldName: String {
@@ -25,9 +25,9 @@ class DBInventoryItem: DBSyncable {
         return "uuid"
     }
     
-    var product: DBProduct {
+    var product: Product {
         get {
-            return productOpt ?? DBProduct()
+            return productOpt ?? Product()
         }
         set(newProduct) {
             productOpt = newProduct
@@ -50,7 +50,7 @@ class DBInventoryItem: DBSyncable {
     }
     
     static func createFilter(_ item: InventoryItem) -> String {
-        return createFilter(item.product.uuid, item.inventory.uuid)
+        return createFilter(productUuid: item.product.uuid, inventoryUuid: item.inventory.uuid)
     }
     
     static func createFilter(_ product: Product, _ inventory: DBInventory) -> String {
@@ -65,7 +65,7 @@ class DBInventoryItem: DBSyncable {
         return "\(createFilterInventory(inventoryUuid)) AND productOpt.name = '\(productUnique.name)' AND productOpt.brand = '\(productUnique.brand)' AND uuid != '\(notUuid)'"
     }
     
-    static func createFilter(_ productUuid: String, _ inventoryUuid: String) -> String {
+    static func createFilter(productUuid: String, inventoryUuid: String) -> String {
         return "productOpt.uuid = '\(productUuid)' AND inventoryOpt.uuid = '\(inventoryUuid)'"
     }
     
@@ -79,7 +79,7 @@ class DBInventoryItem: DBSyncable {
     
     // MARK: -
     
-    static func fromDict(_ dict: [String: AnyObject], product: DBProduct, inventory: DBInventory) -> DBInventoryItem {
+    static func fromDict(_ dict: [String: AnyObject], product: Product, inventory: DBInventory) -> DBInventoryItem {
         let item = DBInventoryItem()
         item.uuid = dict["uuid"]! as! String
         item.quantity = dict["quantity"]! as! Int

@@ -11,7 +11,7 @@ import Foundation
 class DBPlanItem: DBSyncable {
     
     dynamic var inventoryOpt: DBInventory? = DBInventory()
-    dynamic var productOpt: DBProduct? = DBProduct()
+    dynamic var productOpt: Product? = Product()
     dynamic var quantity: Int = 0
     dynamic var quantityDelta: Int = 0
     
@@ -21,9 +21,9 @@ class DBPlanItem: DBSyncable {
         return "key"
     }
     
-    var product: DBProduct {
+    var product: Product {
         get {
-            return productOpt ?? DBProduct()
+            return productOpt ?? Product()
         }
         set(newProduct) {
             productOpt = newProduct

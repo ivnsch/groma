@@ -14,7 +14,7 @@ class HistoryItemMapper {
         let dbHistoryItem = DBHistoryItem()
         dbHistoryItem.uuid = historyItem.uuid
         dbHistoryItem.inventory = historyItem.inventory
-        dbHistoryItem.product  = ProductMapper.dbWithProduct(historyItem.product)
+        dbHistoryItem.product  = historyItem.product
         dbHistoryItem.addedDate = historyItem.addedDate
         dbHistoryItem.quantity = historyItem.quantity
         dbHistoryItem.paidPrice = historyItem.paidPrice
@@ -30,7 +30,7 @@ class HistoryItemMapper {
         return HistoryItem(
             uuid: dbHistoryItem.uuid,
             inventory: InventoryMapper.inventoryWithDB(dbHistoryItem.inventory),
-            product: ProductMapper.productWithDB(dbHistoryItem.product),
+            product: dbHistoryItem.product,
             addedDate: dbHistoryItem.addedDate,
             quantity: dbHistoryItem.quantity,
             user: SharedUserMapper.sharedUserWithDB(dbHistoryItem.user),

@@ -8,6 +8,7 @@
 
 import Foundation
 import QorumLogs
+import RealmSwift
 
 // TODO move product-only method from list item provider here
 class ProductProviderImpl: ProductProvider {
@@ -16,7 +17,7 @@ class ProductProviderImpl: ProductProvider {
     fileprivate let dbBrandProvider = RealmBrandProvider()
     fileprivate let remoteProvider = RemoteProductProvider()
     
-    func products(_ range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<[Product]>) -> Void) {
+    func products(_ range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<Results<Product>>) -> Void) {
         DBProviders.productProvider.loadProducts(range, sortBy: sortBy) {products in
             handler(ProviderResult(status: .success, sucessResult: products))
             // For products no background sync, this is a very long list and not justified as this screen is not used frequently. Also when there are new products mostly this is because new list/inventory/group items were added, and we get these new products already as a dependency in the respective background updates of these items.
@@ -24,8 +25,18 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func products(_ text: String, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: [Product])>) -> Void) {
-        DBProviders.productProvider.products(text, range: range, sortBy: sortBy) {products in
-            handler(ProviderResult(status: .success, sucessResult: products))
+        DBProviders.productProvider.products(text, range: range, sortBy: sortBy) {(substring: String?, products: [Product]?) in
+            if let products = products {
+                handler(ProviderResult(status: .success, sucessResult: (substring, products)))
+            }
+        }
+    }
+    
+    func productsRes(_ text: String, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: Results<Product>)>) -> Void) {
+        DBProviders.productProvider.products(text, sortBy: sortBy) {(substring: String?, products: Results<Product>?) in
+            if let products = products {
+                handler(ProviderResult(status: .success, sucessResult: (substring, products)))
+            }
         }
     }
     
@@ -51,12 +62,8 @@ class ProductProviderImpl: ProductProvider {
     }
 
     func products(_ nameBrands: [(name: String, brand: String)], _ handler: @escaping (ProviderResult<[Product]>) -> Void) {
-        DBProviders.productProvider.loadProductsWithNameBrands(nameBrands) {productsMaybe in
-            if let dbProducts = productsMaybe {
-                handler(ProviderResult(status: .success, sucessResult: dbProducts))
-            } else {
-                handler(ProviderResult(status: .notFound))
-            }
+        DBProviders.productProvider.loadProductsWithNameBrands(nameBrands) {products in
+            handler(ProviderResult(status: .success, sucessResult: products))            
         }
     }
     

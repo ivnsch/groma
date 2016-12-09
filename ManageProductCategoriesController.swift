@@ -259,50 +259,51 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     }
     
     fileprivate func loadPossibleNextPage(_ isSearchLoad: Bool) {
-        
-        func setLoading(_ loading: Bool) {
-            self.loadingPage = loading
-            self.tableViewFooter.isHidden = !loading
-        }
-        
-        synced(self) {[weak self] in
-            let weakSelf = self!
-            
-            if !weakSelf.paginator.reachedEnd || isSearchLoad { // if pagination, load only if we are not at the end, for search load always
-                
-                if (!weakSelf.loadingPage) {
-                    if !isSearchLoad { // block on pagination to avoid loading multiple times on scroll. No blocking on search - here we have to process each key stroke
-                        setLoading(true)
-                    }
-                
-                    Providers.productCategoryProvider.categoriesContainingText(weakSelf.searchText, range: weakSelf.paginator.currentPage, weakSelf.successHandler{tuple in
-                        
-                        // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
-                        // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
-                        
-                        print("current search in the box: \(weakSelf.searchText), result text: \(tuple.text). results: \(tuple.categories)")
-                        
-                        
-                        if tuple.text == weakSelf.searchText {
-
-                            let categoriesWithCellAttributes = tuple.categories.map {category in
-                                ItemWithCellAttributes(item: category, boldRange: category.name.range(weakSelf.searchText, caseInsensitive: true))
-                            }
-                            weakSelf.filteredCategories.appendAll(categoriesWithCellAttributes)
-                            
-                            weakSelf.paginator.update(tuple.categories.count)
-                            
-                            weakSelf.tableView.reloadData()
-                            
-                            setLoading(false)
-                            
-                        } else {
-                            setLoading(false)
-                        }
-                    })
-                }
-            }
-        }
+        // TODO: has to be adjusted to new Results api. Category controller is not enabled in the app yet so skipping for now
+//        
+//        func setLoading(_ loading: Bool) {
+//            self.loadingPage = loading
+//            self.tableViewFooter.isHidden = !loading
+//        }
+//        
+//        synced(self) {[weak self] in
+//            let weakSelf = self!
+//            
+//            if !weakSelf.paginator.reachedEnd || isSearchLoad { // if pagination, load only if we are not at the end, for search load always
+//                
+//                if (!weakSelf.loadingPage) {
+//                    if !isSearchLoad { // block on pagination to avoid loading multiple times on scroll. No blocking on search - here we have to process each key stroke
+//                        setLoading(true)
+//                    }
+//                
+//                    Providers.productCategoryProvider.categoriesContainingText(weakSelf.searchText, range: weakSelf.paginator.currentPage, weakSelf.successHandler{tuple in
+//                        
+//                        // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
+//                        // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
+//                        
+//                        print("current search in the box: \(weakSelf.searchText), result text: \(tuple.text). results: \(tuple.categories)")
+//                        
+//                        
+//                        if tuple.text == weakSelf.searchText {
+//
+//                            let categoriesWithCellAttributes = tuple.categories.map {category in
+//                                ItemWithCellAttributes(item: category, boldRange: category.name.range(weakSelf.searchText, caseInsensitive: true))
+//                            }
+//                            weakSelf.filteredCategories.appendAll(categoriesWithCellAttributes)
+//                            
+//                            weakSelf.paginator.update(tuple.categories.count)
+//                            
+//                            weakSelf.tableView.reloadData()
+//                            
+//                            setLoading(false)
+//                            
+//                        } else {
+//                            setLoading(false)
+//                        }
+//                    })
+//                }
+//            }
+//        }
     }
     
     

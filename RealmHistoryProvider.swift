@@ -183,8 +183,7 @@ class RealmHistoryProvider: RealmProvider {
         }
         
         for product in historyItemsWithRelations.products {
-            let dbProduct = ProductMapper.dbWithProduct(product)
-            realm.add(dbProduct, update: true) // since we don't delete products (see comment above) we do update
+            realm.add(product, update: true) // since we don't delete products (see comment above) we do update
         }
         
         for user in historyItemsWithRelations.users {

@@ -23,7 +23,7 @@ class RealmBrandProvider: RealmProvider {
             let realm = try Realm()
             // Note: range is at application level - we are loading all the brands from the database. Currently doesn't seem to be a way to do this at db level
             // we could take range from db results object, problem is that we first have to do "distinct" on product names - which is not supported by realm yet, so we have to load first everything into memory, do distinct and *then* slice to get the correct count.
-            let brands = Array(Set(realm.objects(DBProduct.self).map{$0.brand}))[range].filter{!$0.isEmpty}
+            let brands = Array(Set(realm.objects(Product.self).map{$0.brand}))[range].filter{!$0.isEmpty}
             handler(brands)
         } catch let e {
             print("Error: RealmListItemProvider.brands: Couldn't load brands, returning empty array. Error: \(e)")
@@ -33,7 +33,7 @@ class RealmBrandProvider: RealmProvider {
     
     func removeProductsWithBrand(_ brandName: String, markForSync: Bool, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
-            let dbProducts = realm.objects(DBProduct.self).filter(DBProduct.createFilterBrand(brandName))
+            let dbProducts = realm.objects(Product.self).filter(Product.createFilterBrand(brandName))
             for dbProduct in dbProducts {
                 _ = DBProviders.productProvider.deleteProductAndDependenciesSync(realm, dbProduct: dbProduct, markForSync: markForSync)
             }
@@ -45,7 +45,7 @@ class RealmBrandProvider: RealmProvider {
     
     func updateBrand(_ oldName: String, newName: String, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
-            let dbProducts = realm.objects(DBProduct.self).filter(DBProduct.createFilterBrand(oldName))
+            let dbProducts = realm.objects(Product.self).filter(Product.createFilterBrand(oldName))
             for dbProduct in dbProducts {
                 dbProduct.brand = newName
                 realm.add(dbProduct, update: true)
@@ -66,7 +66,7 @@ class RealmBrandProvider: RealmProvider {
                 let realm = try Realm()
                 // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
                 // .sorted("brand", ascending: true)
-                let brands = Array(Set(realm.objects(DBProduct.self).filter(DBProduct.createFilterBrandContains(text)).map{$0.brand}))[range].filter{!$0.isEmpty}.sorted()
+                let brands = Array(Set(realm.objects(Product.self).filter(Product.createFilterBrandContains(text)).map{$0.brand}))[range].filter{!$0.isEmpty}.sorted()
                 return brands
             } catch let e {
                 print("Error: RealmListItemProvider.brandsContainingText: Couldn't load brands, returning empty array. Error: \(e)")

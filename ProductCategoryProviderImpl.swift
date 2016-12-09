@@ -8,6 +8,7 @@
 
 import Foundation
 import QorumLogs
+import RealmSwift
 
 class ProductCategoryProviderImpl: ProductCategoryProvider {
 
@@ -31,27 +32,39 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
         }
     }
     
-    func categoriesContainingText(_ text: String,  _ handler: @escaping (ProviderResult<[ProductCategory]>) -> Void) {
+    func categoriesContainingText(_ text: String,  _ handler: @escaping (ProviderResult<Results<ProductCategory>>) -> Void) {
         dbCategoryProvider.categoriesContainingText(text) {categories in
-            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: categories))
+            if let categories = categories {
+                handler(ProviderResult(status: .success, sucessResult: categories))
+            } else {
+                handler(ProviderResult(status: .unknown))
+            }
         }
     }
     
-    func categoriesContainingText(_ text: String, range: NSRange, _ handler: @escaping (ProviderResult<(text: String?, categories: [ProductCategory])>) -> Void) {
-        dbCategoryProvider.categoriesContainingText(text, range: range) {categories in
-            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: categories))
+    func categoriesContainingText(_ text: String, range: NSRange, _ handler: @escaping (ProviderResult<(text: String?, categories: Results<ProductCategory>)>) -> Void) {
+        dbCategoryProvider.categoriesContainingText(text, range: range) {result in
+            if let categories = result.1 {
+                handler(ProviderResult(status: .success, sucessResult: (result.0, categories)))
+            } else {
+                handler(ProviderResult(status: .unknown))
+            }
         }
     }
 
     func categorySuggestions(_ handler: @escaping (ProviderResult<[Suggestion]>) -> ()) {
-        dbProductProvider.loadCategorySuggestions {dbSuggestions in
-            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: dbSuggestions))
+        dbProductProvider.loadCategorySuggestions {suggestions in
+            handler(ProviderResult(status: .success, sucessResult: suggestions))
         }
     }
     
-    func categories(_ range: NSRange, _ handler: @escaping (ProviderResult<[ProductCategory]>) -> Void) {
+    func categories(_ range: NSRange, _ handler: @escaping (ProviderResult<Results<ProductCategory>>) -> Void) {
         dbCategoryProvider.categories(range) {categories in
-            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: categories))
+            if let categories = categories {
+                handler(ProviderResult(status: .success, sucessResult: categories))
+            } else {
+                handler(ProviderResult(status: .unknown))
+            }
             // For categories no background sync, not justified as this screen is not used frequently, also when there are new categories it's always because new list/inventory/group items were added, and we get these new categories already as a dependency in the respective background updates of these items (+ we have websocket - background sync is a "just in case" operation)
         }
     }
@@ -103,22 +116,23 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
         DBProviders.productCategoryProvider.removeAllWithName(categoryName, markForSync: true) {[weak self] removedCategoriesMaybe in
             if let removedCategories = removedCategoriesMaybe {
                 handler(ProviderResult(status: .success))
-                
-                if remote {
-                    self?.remoteCategoryProvider.removeCategoriesWithName(categoryName) {remoteResult in
-                        if remoteResult.success {
-                            
-                            let removedCategoriesUuids = removedCategories.map{$0.uuid}
-                            DBProviders.productCategoryProvider.clearCategoriesTombstones(removedCategoriesUuids) {removeTombstoneSuccess in
-                                if !removeTombstoneSuccess {
-                                    QL4("Couldn't delete tombstones for categories: \(removedCategories)")
-                                }
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                        }
-                    }
-                }
+
+                // for now remote disabled
+//                if remote {
+//                    self?.remoteCategoryProvider.removeCategoriesWithName(categoryName) {remoteResult in
+//                        if remoteResult.success {
+//                            
+//                            let removedCategoriesUuids = removedCategories.map{$0.uuid}
+//                            DBProviders.productCategoryProvider.clearCategoriesTombstones(removedCategoriesUuids) {removeTombstoneSuccess in
+//                                if !removeTombstoneSuccess {
+//                                    QL4("Couldn't delete tombstones for categories: \(removedCategories)")
+//                                }
+//                            }
+//                        } else {
+//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                        }
+//                    }
+//                }
             } else {
                 QL4("Couldn't remove sections from db for name: \(categoryName)")
                 handler(ProviderResult(status: .databaseUnknown))

@@ -127,7 +127,7 @@ class RealmSectionProvider: RealmProvider {
     func sectionSuggestionsContainingText(_ text: String, handler: @escaping ([String]) -> Void) {
         withRealm({ realm in
             let sectionNames: [String] = realm.objects(DBSection.self).filter(DBSection.createFilterNameContains(text)).map{$0.name}
-            let categoryNames: [String] = realm.objects(DBProductCategory.self).filter(DBProductCategory.createFilterNameContains(text)).map{$0.name}
+            let categoryNames: [String] = realm.objects(ProductCategory.self).filter(ProductCategory.createFilterNameContains(text)).map{$0.name}
             let allNames: [String] = (sectionNames + categoryNames).distinct()
             return allNames
             

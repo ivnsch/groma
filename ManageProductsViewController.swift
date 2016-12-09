@@ -10,12 +10,12 @@ import UIKit
 import SwiftValidator
 import CMPopTipView
 import QorumLogs
+import RealmSwift
 
 class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet var tableViewFooter: LoadingFooter!
-
+    
     @IBOutlet weak var searchBoxHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var searchBoxMarginTopConstraint: NSLayoutConstraint!
@@ -23,21 +23,16 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     @IBOutlet weak var searchBar: UITextField!
 
-    fileprivate let paginator = Paginator(pageSize: 20)
-    fileprivate var loadingPage: Bool = false
     
     fileprivate var searchText: String = "" {
         didSet {
-            clearAndLoadFirstPage()
+            loadProducts()
         }
     }
     
-    fileprivate var filteredProducts: [ItemWithCellAttributes<Product>] = [] {
-        didSet {
-            tableView.reloadData()
-        }
-    }
-    
+    fileprivate var products: Results<Product>?
+    fileprivate var notificationToken: NotificationToken?
+
     var sortBy: ProductSortBy = .fav {
         didSet {
             if sortBy != oldValue {
@@ -46,7 +41,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                 } else {
                     QL3("No option for \(sortBy)")
                 }
-                clearAndLoadFirstPage()
+                loadProducts()
             }
         }
     }
@@ -65,13 +60,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        clearAndLoadFirstPage()
-    }
-    
-    func clearAndLoadFirstPage() {
-        filteredProducts = []
-        paginator.reset()
-        loadPossibleNextPage()
+        loadProducts()
     }
     
     func sortByOption(_ sortBy: ProductSortBy) -> (value: ProductSortBy, key: String)? {
@@ -91,8 +80,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         searchBar.addTarget(self, action: #selector(ManageProductsViewController.textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
 
-        loadPossibleNextPage()
-        
         navigationItem.backBarButtonItem?.title = ""
         
         layout()
@@ -101,10 +88,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         recognizer.delegate = self
         recognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(recognizer)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(ManageProductsViewController.onWebsocketProduct(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Product.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ManageProductsViewController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ManageProductsViewController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)        
     }
     
     fileprivate func layout() {
@@ -165,18 +148,20 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredProducts.count
+        return products?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "productCell", for: indexPath) as! ManageProductsCell
 
-        let product = filteredProducts[(indexPath as NSIndexPath).row]
+        if let product = products?[indexPath.row] {
+            cell.setProduct(product: product, bold: searchText)
+            cell.contentView.addBottomBorderWithColor(Theme.cellBottomBorderColor, width: 1)
+            
+        } else {
+            QL4("Invalid state: No product")
+        }
 
-        cell.product = product
-        
-        cell.contentView.addBottomBorderWithColor(Theme.cellBottomBorderColor, width: 1)
-        
         return cell
     }
     
@@ -187,31 +172,14 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let product = filteredProducts[(indexPath as NSIndexPath).row]
-            Providers.productProvider.delete(product.item, remote: true, successHandler{[weak self] in
-                self?.removeProductUI(product, indexPath: indexPath)
+            guard let product = products?[(indexPath as NSIndexPath).row] else {QL4("No product"); return}
+            Providers.productProvider.delete(product, remote: true, successHandler{
             })
         }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return DimensionsManager.defaultCellHeight
-    }
-    
-    fileprivate func removeProductUI(_ product: Product) {
-        if let indexPath = indexPathForProduct(product) {
-            let wrappedProduct = ItemWithCellAttributes<Product>(item: product, boldRange: nil)
-            removeProductUI(wrappedProduct, indexPath: indexPath)   
-        } else {
-            print("ManageProductsViewController.removeProductUI: Info: product to be updated was not in table view: \(product)")
-        }
-    }
-    
-    fileprivate func removeProductUI(_ product: ItemWithCellAttributes<Product>, indexPath: IndexPath) {
-        tableView.wrapUpdates {[weak self] in
-            self?.tableView.deleteRows(at: [indexPath], with: .fade)
-            _ = self?.filteredProducts.remove(product)
-        }
     }
     
     // MARK: - Filter
@@ -241,7 +209,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
  
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
-            let product = filteredProducts[(indexPath as NSIndexPath).row].item
+            guard let product = products?[(indexPath as NSIndexPath).row] else {QL4("No product"); return}
+            
             let productEditData = AddEditProductControllerEditingData(product: product, indexPath: indexPath)
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: productEditData))
@@ -269,7 +238,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
             let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
             Providers.productProvider.update(updatedProduct, remote: true, successHandler{[weak self] in
-                self?.updateProductUI(updatedProduct, indexPath: editingItem.indexPath)
             })
         }
         
@@ -280,7 +248,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                 if let weakSelf = self {
                     SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
                         Providers.productProvider.add(product, weakSelf.successHandler {product in
-                            weakSelf.addProductUI(product)
                         })
                     }
                 }
@@ -322,97 +289,59 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func onRemovedSectionCategoryName(_ name: String) {
-        clearAndLoadFirstPage()
+        loadProducts()
     }
     
     func onRemovedBrand(_ name: String) {
-        clearAndLoadFirstPage()
+        loadProducts()
     }
     
     // MARK: -
     
     fileprivate func indexPathForProduct(_ product: Product) -> IndexPath? {
-        let indexMaybe = filteredProducts.enumerated().filter{$0.element.item.same(product)}.first?.offset
+        let indexMaybe = products?.enumerated().filter{$0.element.same(product)}.first?.offset
         return indexMaybe.map{IndexPath(row: $0, section: 0)}
-    }
-
-    fileprivate func updateProductUI(_ product: Product) {
-        if let indexPath = indexPathForProduct(product) {
-            updateProductUI(product, indexPath: indexPath)
-        } else {
-            print("ManageProductsViewController.updateProductUI: Info: product to be updated was not in table view: \(product)")
-        }
-    }
-    
-    fileprivate func updateProductUI(_ product: Product, indexPath: IndexPath) {
-
-        tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
-            for i in 0..<weakSelf.filteredProducts.count {
-                if weakSelf.filteredProducts[i].item.same(product) {
-                    let item = ItemWithCellAttributes(item: product, boldRange: product.name.range(weakSelf.searchText, caseInsensitive: true))
-                    weakSelf.filteredProducts[i] = item
-                    if let cell = weakSelf.tableView.cellForRow(at: indexPath) as? ManageProductsCell {
-                        cell.product = item
-                    }
-                }
-            }
-        }
-
-        topQuickAddControllerManager?.expand(false)
-        topQuickAddControllerManager?.controller?.onClose()
-        initNavBar([.edit])
-    }
-    
-    fileprivate func addProductUI(_ product: Product) {
-        let item = ItemWithCellAttributes(item: product, boldRange: product.name.range(searchText, caseInsensitive: true))
-        filteredProducts.append(item)
-        onUpdatedProducts()
-        setAddEditProductControllerOpen(false)
     }
 
     fileprivate func setAddEditProductControllerOpen(_ open: Bool) {
         topQuickAddControllerManager?.expand(open)
         initNavBar([.edit])
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentOffset = scrollView.contentOffset.y
-        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
-        
-        if (maximumOffset - currentOffset) <= 40 {
-            loadPossibleNextPage()
-        }
-    }
-    
-    fileprivate func loadPossibleNextPage() {
-        
-        func setLoading(_ loading: Bool) {
-            self.loadingPage = loading
-            self.tableViewFooter.isHidden = !loading
-        }
-        
-        synced(self) {[weak self] in guard let weakSelf = self else {return}
+
+    fileprivate func loadProducts() {
+        Providers.productProvider.productsRes(searchText, sortBy: sortBy, successHandler{[weak self] products in guard let weakSelf = self else {return}
+            weakSelf.products = products.products
             
-            if !weakSelf.paginator.reachedEnd {
-                
-                if (!weakSelf.loadingPage) {
-                    setLoading(true)
+            weakSelf.notificationToken = weakSelf.products?.addNotificationBlock { changes in
+                switch changes {
+                case .initial:
+                    //                        // Results are now populated and can be accessed without blocking the UI
+                    //                        self.viewController.didUpdateList(reload: true)
+                    QL1("initial")
                     
-                    Providers.productProvider.products(weakSelf.searchText, range: weakSelf.paginator.currentPage, sortBy: weakSelf.sortBy, weakSelf.successHandler{products in
-                        
-                        let productWithCellAttributes = products.products.map{product in
-                            return ItemWithCellAttributes(item: product, boldRange: product.name.range(weakSelf.searchText, caseInsensitive: true))
-                        }
-                        weakSelf.filteredProducts.appendAll(productWithCellAttributes)
-                        
-                        weakSelf.paginator.update(products.products.count)
-                        
-                        weakSelf.tableView.reloadData()
-                        setLoading(false)
-                    })
+                case .update(_, let deletions, let insertions, let modifications):
+                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                    
+                    weakSelf.tableView.beginUpdates()
+                    
+//                    weakSelf.models = weakSelf.inventoriesResult!.map{ExpandableTableViewInventoryModelRealm(inventory: $0)}
+                    weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                    weakSelf.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                    weakSelf.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
+                    weakSelf.tableView.endUpdates()
+                    
+                    // TODO close only when receiving own notification, not from someone else (possible?)
+                    weakSelf.topQuickAddControllerManager?.expand(false)
+                    weakSelf.topQuickAddControllerManager?.controller?.onClose()
+                    
+                case .error(let error):
+                    // An error occurred while opening the Realm file on the background worker thread
+                    fatalError(String(describing: error))
                 }
             }
-        }
+            
+            self?.tableView.reloadData()
+        })
     }
     
     fileprivate func toggleEditing() {
@@ -435,59 +364,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func onCenterTitleAnimComplete(_ center: Bool) {
-    }
-    
-    // MARK: - Websocket
-    
-    func onWebsocketProduct(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Add:
-                    addProductUI(notification.obj)
-                case .Update:
-                    updateProductUI(notification.obj)
-                case .Delete:
-                    removeProductUI(notification.obj)
-                default: QL4("Not handled verb: \(notification.verb)")
-                }
-            } else {
-                QL4("Error: ManageProductsViewController.onWebsocketProduct: no value")
-            }
-        } else {
-            QL4("Error: ManageProductsViewController.onWebsocketProduct: no userInfo")
-        }
-    }
-    
-    func onWebsocketProductCategory(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Add:
-                    clearAndLoadFirstPage()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Delete:
-                    clearAndLoadFirstPage()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else {
-            print("Error: ViewController.onWebsocketProduct: no userInfo")
-        }
-    }
-    
-    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
-        // TODO notification - note has the sender name
-        clearAndLoadFirstPage()
     }
     
     // MARK: - UIPicker

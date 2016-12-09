@@ -13,14 +13,14 @@ class DBStoreProduct: DBSyncable {
     
     dynamic var uuid: String = ""
     dynamic var price: Float = 0
-    dynamic var productOpt: DBProduct? = DBProduct()
+    dynamic var productOpt: Product? = Product()
     dynamic var baseQuantity: Float = 0
     dynamic var unit: Int = 0
     dynamic var store: String = ""
     
-    var product: DBProduct {
+    var product: Product {
         get {
-            return productOpt ?? DBProduct()
+            return productOpt ?? Product()
         }
         set(newProduct) {
             productOpt = newProduct
@@ -35,7 +35,7 @@ class DBStoreProduct: DBSyncable {
         return ["name"]
     }
     
-    convenience init(uuid: String, price: Float, baseQuantity: Float, unit: Int, store: String = "", product: DBProduct, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    convenience init(uuid: String, price: Float, baseQuantity: Float, unit: Int, store: String = "", product: Product, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -52,7 +52,7 @@ class DBStoreProduct: DBSyncable {
         self.removed = removed
     }
 
-    func copy(uuid: String? = nil, price: Float? = nil, baseQuantity: Float? = nil, unit: Int? = nil, store: String? = nil, product: DBProduct? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> DBStoreProduct {
+    func copy(uuid: String? = nil, price: Float? = nil, baseQuantity: Float? = nil, unit: Int? = nil, store: String? = nil, product: Product? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> DBStoreProduct {
         return DBStoreProduct(
             uuid: uuid ?? self.uuid,
             price: price ?? self.price,
@@ -92,10 +92,6 @@ class DBStoreProduct: DBSyncable {
         return "productOpt.uuid IN {\(productsUuidsStr)} && store == '\(store)'"
     }
     
-//    static func createFilterUnique(prototype: ProductPrototype) -> String {
-//        return createFilterNameBrand(prototype.name, brand: prototype.brand, store: prototype.store)
-//    }
-    
     static func createFilterNameBrand(_ name: String, brand: String, store: String) -> String {
         return "\(createFilterName(name)) AND \(createFilterBrand(brand)) AND \(createFilterStore(store))"
     }
@@ -132,7 +128,7 @@ class DBStoreProduct: DBSyncable {
 
     // MARK: -
     
-    static func fromDict(_ dict: [String: AnyObject], product: DBProduct) -> DBStoreProduct {
+    static func fromDict(_ dict: [String: AnyObject], product: Product) -> DBStoreProduct {
         let item = DBStoreProduct()
         item.uuid = dict["uuid"]! as! String
         item.price = dict["price"]! as! Float
