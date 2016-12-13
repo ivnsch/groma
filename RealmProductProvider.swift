@@ -51,12 +51,52 @@ struct StoreProductUnique {
 class RealmProductProvider: RealmProvider {
     
     func loadProductWithUuid(_ uuid: String, handler: @escaping (Product?) -> ()) {
-        self.loadFirst(filter: Product.createFilter(uuid), handler: handler)
+        do {
+            let realm = try Realm()
+            // TODO review if it's necessary to pass the sort descriptor here again
+            let productMaybe: Product? = self.loadSync(realm, filter: Product.createFilter(uuid)).first
+            handler(productMaybe)
+            
+        } catch let e {
+            QL4("Error: creating Realm, returning empty results, error: \(e)")
+            handler(nil)
+        }
     }
     
     // TODO rename method (uses now brand too)
     func loadProductWithName(_ name: String, brand: String, handler: @escaping (Product?) -> ()) {
-        self.loadFirst(filter: Product.createFilterNameBrand(name, brand: brand), handler: handler)
+        
+        background({() -> String? in
+            do {
+                let realm = try Realm()
+                let product: Product? = self.loadSync(realm, filter: Product.createFilterNameBrand(name, brand: brand)).first
+                return product?.uuid
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                return nil
+            }
+            
+        }, onFinish: {productUuidMaybe in
+            do {
+                if let productUuid = productUuidMaybe {
+                    let realm = try Realm()
+                    // TODO review if it's necessary to pass the sort descriptor here again
+                    let productMaybe: Product? = self.loadSync(realm, filter: Product.createFilter(productUuid)).first
+                    if productMaybe == nil {
+                        QL4("Unexpected: product with just fetched uuid is not there")
+                    }
+                    handler(productMaybe)
+                    
+                } else {
+                    QL1("No product found for name: \(name), brand: \(brand)")
+                    handler(nil)
+                }
+                
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                handler(nil)
+            }
+        })
     }
 
     func loadProductsWithNameBrands(_ nameBrands: [(name: String, brand: String)], handler: @escaping ([Product]) -> Void) {
@@ -242,7 +282,7 @@ class RealmProductProvider: RealmProvider {
         
         _ = DBProviders.groupItemProvider.removeGroupItemsForProductSync(realm, productUuid: productUuid, markForSync: markForSync)
         
-        let inventoryResult = realm.objects(DBInventoryItem.self).filter(DBInventoryItem.createFilterWithProduct(productUuid))
+        let inventoryResult = realm.objects(InventoryItem.self).filter(InventoryItem.createFilterWithProduct(productUuid))
         if markForSync {
             let toRemoteInventoryItems = Array(inventoryResult.map{DBRemoveInventoryItem($0)})
             saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
@@ -363,7 +403,37 @@ class RealmProductProvider: RealmProvider {
     }
     
     func categoryWithName(_ name: String, handler: @escaping (ProductCategory?) -> ()) {
-        self.loadFirst(filter: ProductCategory.createFilterName(name), handler: handler)
+        background({() -> String? in
+            do {
+                let realm = try Realm()
+                let obj: ProductCategory? = self.loadSync(realm, filter: ProductCategory.createFilterName(name)).first
+                return obj?.uuid
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                return nil
+            }
+            
+        }, onFinish: {uuidMaybe in
+            do {
+                if let uuid = uuidMaybe {
+                    let realm = try Realm()
+                    // TODO review if it's necessary to pass the sort descriptor here again
+                    let objMaybe: ProductCategory? = self.loadSync(realm, filter: ProductCategory.createFilter(uuid)).first
+                    if objMaybe == nil {
+                        QL4("Unexpected: obj with just fetched uuid is not there")
+                    }
+                    handler(objMaybe)
+                    
+                } else {
+                    QL1("No category found for name: \(name)")
+                    handler(nil)
+                }
+                
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                handler(nil)
+            }
+        })
     }
     
     func loadCategorySuggestions(_ handler: @escaping ([Suggestion]) -> ()) {

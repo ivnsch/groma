@@ -26,10 +26,6 @@ class StoreListItemPrototype: Equatable, Identifiable, CustomDebugStringConverti
         return product.same(rhs.product)
     }
     
-    func incrementQuantityCopy(_ delta: Int) -> ProductWithQuantity {
-        fatalError("override")
-    }
-    
     var debugDescription: String {
         return "\(type(of: self)), product: \(product), quantity: \(quantity), targetSectionName: \(targetSectionName), targetSectionColor: \(targetSectionColor.hexStr)"
     }

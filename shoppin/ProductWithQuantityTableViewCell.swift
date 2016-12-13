@@ -30,7 +30,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     fileprivate var isAnimatingProgress: Bool = false
     fileprivate var animationCancelled: Bool = false
     
-    var model: ProductWithQuantity? {
+    var model: ProductWithQuantity2? {
         didSet {
             guard let model = model else {QL3("Model is nil"); return}
             

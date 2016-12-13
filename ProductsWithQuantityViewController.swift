@@ -11,10 +11,10 @@ import CMPopTipView
 import QorumLogs
 
 protocol ProductsWithQuantityViewControllerDelegate: class {
-    func loadModels(_ page: NSRange, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity]) -> Void)
-    func remove(_ model: ProductWithQuantity, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void)
-    func increment(_ model: ProductWithQuantity, delta: Int, onSuccess: @escaping (Int) -> Void)
-    func onModelSelected(_ model: ProductWithQuantity, indexPath: IndexPath)
+    func loadModels(_ page: NSRange?, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity2]) -> Void)
+    func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void)
+    func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void)
+    func onModelSelected(_ model: ProductWithQuantity2, indexPath: IndexPath)
     func emptyViewData() -> (text: String, text2: String, imgName: String)
     func onEmptyViewTap()
     func onEmpty(_ empty: Bool)
@@ -27,14 +27,14 @@ protocol ProductsWithQuantityViewControllerDelegate: class {
 
 /// Generic controller for sorted products with a quantity, which can be incremented and decremented
 class ProductsWithQuantityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
-
+    
     fileprivate weak var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
     
     var tableView: UITableView {
         return tableViewController.tableView
     }
     
-    fileprivate(set) var models: [ProductWithQuantity] = []
+    var models: [ProductWithQuantity2] = []
 
     @IBOutlet weak var topMenuView: UIView!
     
@@ -56,17 +56,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready
 
-    let paginator = Paginator(pageSize: 20)
-    fileprivate var loadingPage: Bool = false
     
     fileprivate let cellHeight = DimensionsManager.defaultCellHeight
-    
-    func clearAndLoadFirstPage() {
-        models = []
-        paginator.reset()
-        tableView.reloadData()
-        loadPossibleNextPage()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,7 +111,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             QL3("No tabBarController: \(tabBarController)")
         }
         
-        clearAndLoadFirstPage()
+        load()
     }
     
     // MARK: - Table view data source
@@ -163,89 +154,18 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            
-            // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
-            if let item = removeItemUI(indexPath) {
-                delegate?.remove(item, onSuccess: {}, onError: {[weak self] result in
-                    self?.clearAndLoadFirstPage()
-                    self?.defaultErrorHandler()(result)
-                })
-            } else {
-                QL4("Invalid state! no item: \(indexPath)")
-            }
+            delegate?.remove(models[indexPath.row], onSuccess: {}, onError: {_ in })
         }
     }
     
-    func indexPathOfItem(_ model: ProductWithQuantity) -> IndexPath? {
+    func indexPathOfItem(_ model: ProductWithQuantity2) -> IndexPath? {
         for i in 0..<models.count {
-            if models[i].same(model) {
+            let m = models[i]
+            if m.product == model.product && m.quantity == model.quantity {
                 return IndexPath(row: i, section: 0)
             }
         }
         return nil
-    }
-    
-    // The optional handling is not necessary for this class, but we write it like this for subclasses that remove item externally (e.g. websocket)
-    func removeItemUI(_ indexPath: IndexPath) -> ProductWithQuantity? {
-        let itemMaybe = models[safe: (indexPath as NSIndexPath).row]
-        if let item = itemMaybe {
-            tableView.wrapUpdates {[weak self] in
-                _ = self?.models.remove(item)
-                self?.tableView.deleteRows(at: [indexPath], with: .top)
-                self?.updateEmptyUI()
-            }
-        }
-        return itemMaybe
-    }
-
-    func appendItemUI(_ item: ProductWithQuantity, scrollToCell: Bool) {
-        
-        // Warning (depending where this is used): this adds the inventory item at the end of the current page - this may look a bit buggy and if user scrolls down the item may be "repeated", but for now don't have a better solution,
-        // the alternative which is loading all the pages until we are in the page where the position of the item is correct (according to current sorting criteria) is inefficient as well as difficult to implement
-        // a compromise is to choose a big enough page size where most users will have smaller inventories, so this can't happen
-        
-        var insertedIndexPath: IndexPath?
-        tableView.wrapUpdates {[weak self] in
-            if let weakSelf = self {
-                if let indexPathToInsert = weakSelf.findIndexPathForNewItem(item)  { // note: before append
-                    weakSelf.models.insert(item, at: (indexPathToInsert as NSIndexPath).row)
-                    weakSelf.tableView.insertRows(at: [indexPathToInsert], with: .top)
-                    weakSelf.updateEmptyUI()
-                    
-                    insertedIndexPath = indexPathToInsert
-                } else {
-                    QL4("No indexPathToInsert")
-                }
-            }
-        }
-        
-        if scrollToCell {
-            if let insertedIndexPath = insertedIndexPath {
-                tableView.scrollToRow(at: IndexPath(row: (insertedIndexPath as NSIndexPath).row, section: 0), at: .top, animated: true)
-            }
-        }
-    }
-    
-    func updateModelUI(_ same: (ProductWithQuantity) -> Bool, updatedModel: ProductWithQuantity) -> Bool {
-        for i in 0..<models.count {
-            if same(models[i]) {
-                models[i] = updatedModel
-                tableView.reloadData()
-                return true
-            }
-        }
-        return false
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentOffset = scrollView.contentOffset.y
-        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
-        
-        if (maximumOffset - currentOffset) <= 40 {
-            loadPossibleNextPage()
-        }
-        
-        delegate?.onTableViewScroll(scrollView)
     }
     
     func updateEmptyUI() {
@@ -303,25 +223,22 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    fileprivate func getIndexPath(_ model: ProductWithQuantity) -> IndexPath? {
+    fileprivate func getIndexPath(_ model: ProductWithQuantity2) -> IndexPath? {
         for (i, m) in models.enumerated() {
-            if m.same(model) {
+            if same(m, model) {
                 return IndexPath(row: i, section: 0)
             }
         }
         return nil
     }
     
-    fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, row: Int, inventoryItem: ProductWithQuantity, delta: Int) {
-        
+    fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, row: Int, inventoryItem: ProductWithQuantity2, delta: Int) {
+
         func remove() {
             cell.startDeleteProgress {[weak self] in
-                self?.remove(inventoryItem)
-                
                 self?.delegate?.remove(inventoryItem, onSuccess: {
-                    }, onError: {[weak self] result in
-                        QL4("Error ocurred - reloading first page")
-                        self?.clearAndLoadFirstPage()
+                    }, onError: {result in
+                        QL4("Error ocurred removing item: \(result)")
                 })
             }
         }
@@ -330,8 +247,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         
         if newQuantity >= 0 {
             delegate?.increment(inventoryItem, delta: delta, onSuccess: {[weak self] updatedQuantity in
-                self?.updateQuantityUI(inventoryItem, updatedQuantity: updatedQuantity)
-                if newQuantity == 0 {
+                if updatedQuantity == 0 {
                     remove()
                 }
             })
@@ -342,8 +258,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     }
 
     // Finds tableview related data of inventory item, if it's in tableview, otherwise returns nil
-    fileprivate func inventoryItemTableViewData(_ inventoryItem: ProductWithQuantity) -> (index: Int, item: ProductWithQuantity, cell: ProductWithQuantityTableViewCell?)? { // note item -> the item currently in tableview TODO why do we need to return this if it's "same" as parameter inventoryItem
-        if let (index, item) = (models.enumerated().filter{$0.element.same(inventoryItem)}.first) {
+    fileprivate func inventoryItemTableViewData(_ inventoryItem: ProductWithQuantity2) -> (index: Int, item: ProductWithQuantity2, cell: ProductWithQuantityTableViewCell?)? { // note item -> the item currently in tableview TODO why do we need to return this if it's "same" as parameter inventoryItem
+        if let (index, item) = (models.enumerated().filter{same($0.element, inventoryItem)}.first) {
             
             if let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) {
                 if let cell = cell as? ProductWithQuantityTableViewCell {
@@ -362,9 +278,9 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    fileprivate func findIndexPathForNewItem(_ inventoryItem: ProductWithQuantity) -> IndexPath? {
+    fileprivate func findIndexPathForNewItem(_ inventoryItem: ProductWithQuantity2) -> IndexPath? {
         
-        func findRow(_ isAfter: (ProductWithQuantity) -> Bool) -> IndexPath {
+        func findRow(_ isAfter: (ProductWithQuantity2) -> Bool) -> IndexPath {
             let row: Int = {
                 if let firstBiggerItemTuple = (models.enumerated().filter{isAfter($0.element)}).first {
                     return firstBiggerItemTuple.offset // insert in above the first biggest item
@@ -401,19 +317,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    func addOrIncrementUI(_ inventoryItems: [ProductWithQuantity]) {
-        for inventoryItem in inventoryItems {
-            addOrIncrementUI(inventoryItem)
-        }
-    }
-
-    func addOrUpdateUI(_ inventoryItems: [ProductWithQuantity]) {
-        for inventoryItem in inventoryItems {
-            addOrUpdateUI(inventoryItem, scrollToCell: false)
-        }
-    }
-    
-    func scrollToItem(_ item: ProductWithQuantity) {
+    func scrollToItem(_ item: ProductWithQuantity2) {
         if let indexPath = indexPathOfItem(item) {
             tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         } else {
@@ -421,7 +325,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
 
-    fileprivate func tryUpdateItem(_ inventoryItem: ProductWithQuantity, scrollToCell: Bool) -> Bool {
+    fileprivate func tryUpdateItem(_ inventoryItem: ProductWithQuantity2, scrollToCell: Bool) -> Bool {
         if let (index, _, cellMaybe) = inventoryItemTableViewData(inventoryItem) {
             models[index] = inventoryItem
             if let cell = cellMaybe {
@@ -437,116 +341,25 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    fileprivate func tryIncrementItem(_ inventoryItem: ProductWithQuantity) -> Bool {
-        if let (index, item, _) = inventoryItemTableViewData(inventoryItem) {
-            updateIncrementUI(item, delta: inventoryItem.quantity)
-            tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
-            return true
-        } else {
-            return false
-        }
-    }
 
-    func addOrUpdateUI(_ item: ProductWithQuantity, scrollToCell: Bool) {
-        if !tryUpdateItem(item, scrollToCell: scrollToCell) {
-            appendItemUI(item, scrollToCell: scrollToCell)
-        }
+    //////////////
+    // helpers needed because referencing Self / protocol in protocol doesn't compile
+    func same(_ p1: ProductWithQuantity2, _ p2: ProductWithQuantity2) -> Bool {
+        return p1.product.same(p2.product)
     }
     
-    func addOrIncrementUI(_ item: ProductWithQuantity) {
-        if !tryIncrementItem(item) {
-            appendItemUI(item, scrollToCell: false)
-        }
+    func equal(_ p1: ProductWithQuantity2, _ p2: ProductWithQuantity2) -> Bool  {
+        return p1.product == p2.product && p1.quantity == p2.quantity
     }
+    //////////////
     
-    fileprivate func updateQuantityUI(_ item: ProductWithQuantity, updatedQuantity: Int) {
-        if let (index, _, cellMaybe) = inventoryItemTableViewData(item) {
-            let updatedItem = item.updateQuantityCopy(updatedQuantity)
-            models[index] = updatedItem
-            if let cell = cellMaybe {
-                cell.model = updatedItem
-                cell.quantityLabel.text = "\(updatedItem.quantity)"
-            }
-        } else {
-            QL3("Warn: InventoryItemsTableViewController.remove: didn't find item: \(item)")
-        }
-    }
-    
-    func updateIncrementUI(_ inventoryItem: ProductWithQuantity, delta: Int) {
-        if let (index, _, cellMaybe) = inventoryItemTableViewData(inventoryItem) {
-            let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
-            models[index] = incrementedItem
-            if let cell = cellMaybe {
-                cell.model = incrementedItem
-                cell.quantityLabel.text = "\(incrementedItem.quantity)"
-            }
-        } else {
-            QL3("Warn: InventoryItemsTableViewController.remove: didn't find item: \(inventoryItem)")
-        }
-    }
-    
-    func remove(_ inventoryItem: ProductWithQuantity) {
-        if let (index, _) = (models.enumerated().filter{$0.element.same(inventoryItem)}.first) {
-            removeUI(index)
-        } else {
-            print("Warn: InventoryItemsTableViewController.remove: didn't find intentoryItme: \(inventoryItem)")
-        }
-    }
-    
-    func remove(_ inventoryItemInventoryUuid: String, inventoryItemProductUuid: String) {
-        if let (index, _) = (models.enumerated().filter{$0.element.product.uuid == inventoryItemProductUuid}.first) {
-            removeUI(index)
-        } else {
-            print("Warn: InventoryItemsTableViewController.remove: didn't find intentoryItme: inventoryItemInventoryUuid: \(inventoryItemInventoryUuid), inventoryItemProductUuid: \(inventoryItemProductUuid)")
-        }
-    }
-    
-    fileprivate func removeUI(_ row: Int) {
-        tableView.wrapUpdates {[weak self] in
-            self?.models.remove(at: row)
-            self?.tableView.deleteRows(at: [IndexPath(row: row, section: 0)], with: UITableViewRowAnimation.bottom)
-        }
-        updateEmptyUI()
-    }
-    
-    
-    fileprivate func loadPossibleNextPage() {
+    func load() {
+        guard let sortBy = sortBy else {QL4("Can't load page, sortBy not set"); return}
         
-        func setLoading(_ loading: Bool) {
-            self.loadingPage = loading
-            let tableViewFooter = tableViewController.view.viewWithTag(ViewTags.TableViewFooter) as? LoadingFooter
-            tableViewFooter?.isHidden = !loading
-        }
-        
-        if let sortBy = sortBy {
-            
-            synced(self) {[weak self] in
-                let weakSelf = self!
-                
-                if !weakSelf.paginator.reachedEnd {
-                    
-                    if (!weakSelf.loadingPage) {
-                        setLoading(true)
-                        
-                        weakSelf.delegate?.loadModels(weakSelf.paginator.currentPage, sortBy: sortBy) {inventoryItems in
-                            
-                            // Make sure if handler called multiple times (e.g. db result is different than mem cache result, which causes handler to be called again with db result) the items cleared, otherwise we get duplicates
-                            if weakSelf.paginator.isFirstPage {
-                                weakSelf.models = []
-                            }
-                            
-                            weakSelf.models.appendAll(inventoryItems)
-                            weakSelf.paginator.update(inventoryItems.count)
-                            weakSelf.tableView.reloadData()
-                            weakSelf.updateEmptyUI()
-                            setLoading(false)
-                        }
-                    }
-                }
-            }
-            
-        } else {
-            print("Warn: InventoryItemsTableViewController.loadPossibleNextPage: can't load page, sortBy not set")
+        delegate?.loadModels(nil, sortBy: sortBy) {[weak self] models in
+            self?.models = models
+            self?.tableView.reloadData()
+            self?.updateEmptyUI()
         }
     }
     
@@ -565,7 +378,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         sortBy = sortByOption.value
         sortByButton.setTitle(sortByOption.key, for: UIControlState())
         
-        clearAndLoadFirstPage()
+        load()
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {

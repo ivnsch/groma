@@ -28,62 +28,22 @@ class RealmInventoryProvider: RealmProvider {
         handler(loadSync(filter: nil, sortDescriptor: NSSortDescriptor(key: "order", ascending: true)))
     }
     
-    
     //////////////////
     
-//    func saveInventories(inventories: [DBInventory], handler: Bool -> ()) {
-//        self.saveObjs(inventories, update: true, handler: handler)
-//    }
-    
-//    func syncInventories(inventories incomingInventories: [DBInventory], handler: Bool -> ()) {
-//        // update my inventories such my newest items and updates are not lost
-//        
-//        self.loadInventories {myInventories in
-//            self.dbSyncProvider.loadSyncDate("inventory") {lastSyncDateMaybe in
-//                
-//                self.remoteInventoryProvider.syncInventories(myInventories) {
-//                    
-//                }
-//                
-//            }
-//            
-//            
-//            
-//            
-////            var myInventoriesDictionary: [String: Inventory] = [:]
-////            for inventory in myInventories {
-////                myInventoriesDictionary[inventory.uuid] = inventory
-////            }
-////            
-////            let inventoriesToSave = incomingInventories.filter {incomingInventory in
-////                if let myInventory = myInventoriesDictionary[incomingInventory.uuid] {
-////                    if myInventory.lastUpdate.timeIntervalSince1970 > incomingInventory.lastUpdate.timeIntervalSince1970 { // hm....
-////                        return true
-////                    } else {
-////                        return false
-////                    }
-////
-////                } else { // if the inventory is not in the local db yet, we want to save it
-////                    return true
-////                }
-////            }
-////            
-//            
-//            self.saveInventories(inventoriesToSave, handler: handler)
-//        }
-//    }
+    func loadInventory(_ inventory: DBInventory, sortBy: InventorySortBy, handler: @escaping (Results<InventoryItem>?) -> Void) {
+        // Fixes Realm acces in incorrect thread exceptions
+        let inventoryCopy = inventory.copy()
+        
+        do {
+            let realm = try Realm()
+            // TODO review if it's necessary to pass the sort descriptor here again
+            let items: Results<InventoryItem> = self.loadSync(realm, filter: InventoryItem.createFilterInventory(inventoryCopy.uuid))
+            handler(items)
 
-    
-    func loadInventory(_ inventory: DBInventory, sortBy: InventorySortBy, range: NSRange, handler: @escaping ([InventoryItem]) -> ()) {
-        let mapper = {InventoryItemMapper.inventoryItemWithDB($0)} // TODO!!! Crash once accessing color() of category (in ProductCategoryMapper.categoryWithDB). Category is set but no color data, don't know why!
-//        let sortFieldStr: String = {
-//            switch sortBy {
-//            case .Alphabetic: return "product.name" // Realm doesn't support this yet, see https://github.com/realm/realm-cocoa/issues/1277 so for now we do sorting in provider
-//            case .Count: return "quantity"
-//            }
-//        }()
-        // range also not possible because sorting is not psosible. If we can't sort first then range is incorrect.
-        self.load(mapper, filter: DBInventoryItem.createFilterInventory(inventory.uuid), /*range: range, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
+        } catch let e {
+            QL4("Error: creating Realm, returning empty results, error: \(e)")
+            handler(nil)
+        }
     }
     
     func saveInventory(_ inventory: DBInventory, update: Bool = true, dirty: Bool, handler: @escaping (Bool) -> ()) {
@@ -169,7 +129,7 @@ class RealmInventoryProvider: RealmProvider {
         self.doInWriteTransaction({realm in
             
             let inventories = realm.objects(DBInventory.self)
-            let inventoryItems = realm.objects(DBInventoryItem.self)
+            let inventoryItems = realm.objects(InventoryItem.self)
             
             realm.delete(inventories)
             realm.delete(inventoryItems)

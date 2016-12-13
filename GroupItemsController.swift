@@ -10,6 +10,7 @@ import UIKit
 import ChameleonFramework
 import SwiftValidator
 import QorumLogs
+import RealmSwift
 
 class ProductWithQuantityGroup: ProductWithQuantity {
     let groupItem: GroupItem
@@ -71,6 +72,9 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
 
+    fileprivate var results: Results<DBGroupItem>?
+    fileprivate var notificationToken: NotificationToken?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -81,13 +85,6 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         initTitleLabel()
         
         topBar.delegate = self
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(GroupItemsController.onWebsocketGroupItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.GroupItem.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(GroupItemsController.onWebsocketGroupItems(_:)), name: NSNotification.Name(rawValue: WSNotificationName.GroupItems.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(GroupItemsController.onWebsocketProduct(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Product.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(GroupItemsController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)        
-        NotificationCenter.default.addObserver(self, selector: #selector(GroupItemsController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(GroupItemsController.onWebsocketGroup(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Group.rawValue), object: nil)
     }
     
     deinit {
@@ -192,10 +189,6 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         topBarOnCloseExpandable()
     }
     
-    fileprivate func reload() {
-        productsWithQuantityController?.clearAndLoadFirstPage()
-    }
-    
     // MARK: - ListTopBarViewDelegate
     
     func onTopBarBackButtonTap() {
@@ -298,9 +291,8 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         if let currentGroup = self.group {
             Providers.listItemGroupsProvider.addGroupItems(group, targetGroup: currentGroup, remote: true, resultHandler(onSuccess: {[weak self] groupItemsWithDelta in
                 let groupItems = groupItemsWithDelta.map{$0.groupItem}
-                self?.addOrUpdateUI(groupItems)
                 if let firstGroupItem = groupItemsWithDelta.first {
-                    self?.productsWithQuantityController.scrollToItem(ProductWithQuantityGroup(groupItem: firstGroupItem.groupItem))
+                    self?.productsWithQuantityController.scrollToItem(firstGroupItem.groupItem)
                 } else {
                     QL3("Shouldn't be here without list items")
                 }
@@ -321,29 +313,15 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             let groupItem = GroupItem(uuid: UUID().uuidString, quantity: 1, product: product, group: group)
             
             Providers.listItemGroupsProvider.add(groupItem, remote: true, successHandler{[weak self] addedItem in
-                self?.productsWithQuantityController?.addOrUpdateUI(ProductWithQuantityGroup(groupItem: addedItem), scrollToCell: true)
             })
         }
-    }
-    
-    fileprivate func addOrUpdateUI(_ items: [GroupItem]) {
-        productsWithQuantityController?.addOrUpdateUI(items.map{
-            return ProductWithQuantityGroup(groupItem: $0)
-        })
     }
     
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditItem(_ input: ListItemInput, editingItem: GroupItem) {
             Providers.listItemGroupsProvider.update(input, updatingGroupItem: editingItem, remote: true, resultHandler (onSuccess: {[weak self] (inventoryItem, replaced) in
-                if replaced { // if an item was replaced (means: a previous item with same unique as the updated item already existed and was removed from the inventory) reload items to get rid of it.
-                    self?.reload()
-                } else {
-                    _ = self?.updateItemUI(inventoryItem)
-                }
-                self?.closeTopController()
             }, onError: {[weak self] result in
-                self?.reload()
                 self?.defaultErrorHandler()(result)
             }))
         }
@@ -352,11 +330,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             if let group = group {
                 let groupItemInput = GroupItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
                 Providers.listItemGroupsProvider.add(groupItemInput, group: group, remote: true, resultHandler (onSuccess: {[weak self] groupItem in
-                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end.
-                    self?.reload()
-                    self?.closeTopController()
                 }, onError: {[weak self] result in
-                    self?.reload()
                     self?.closeTopController()
                     self?.defaultErrorHandler()(result)
                 }))
@@ -410,21 +384,13 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func onRemovedSectionCategoryName(_ name: String) {
-        reload()
+        productsWithQuantityController.load()
     }
     
     func onRemovedBrand(_ name: String) {
-        reload()
+        productsWithQuantityController.load()
     }
-    
-    func appendItemUI(_ item: GroupItem) {
-        productsWithQuantityController.appendItemUI(ProductWithQuantityGroup(groupItem: item), scrollToCell: false)
-    }
-    
-    func updateItemUI(_ item: GroupItem) -> Bool {
-        return productsWithQuantityController.updateModelUI({($0 as! ProductWithQuantityGroup).groupItem.same(item)}, updatedModel: ProductWithQuantityGroup(groupItem: item))
-    }
-    
+
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -436,18 +402,50 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     // MARK: - ProductsWithQuantityViewControllerDelegate
     
-    func loadModels(_ page: NSRange, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity]) -> Void) {
+    func loadModels(_ page: NSRange?, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity2]) -> Void) {
         if let group = group {
-            Providers.listItemGroupsProvider.groupItems(group, sortBy: sortBy, fetchMode: .both, successHandler{groupItems in
-                let productsWithQuantity = groupItems.map{ProductWithQuantityGroup(groupItem: $0)}
-                onSuccess(productsWithQuantity)
+            Providers.listItemGroupsProvider.groupItems(group, sortBy: sortBy, fetchMode: .both, successHandler{[weak self] groupItems in guard let weakSelf = self else {return}
+                
+//                weakSelf.results = groupItems
+                onSuccess(groupItems)
+                
+//                weakSelf.productsWithQuantityController.models = weakSelf.results?.toArray() ?? [] // TODO!! use generic Results in productsWithQuantityController to not have to map to array
+                
+                weakSelf.notificationToken = weakSelf.results?.addNotificationBlock { changes in
+                    switch changes {
+                    case .initial:
+                        //                        // Results are now populated and can be accessed without blocking the UI
+                        //                        self.viewController.didUpdateList(reload: true)
+                        QL1("initial")
+                        
+                    case .update(_, let deletions, let insertions, let modifications):
+                        QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                        
+                        weakSelf.productsWithQuantityController.tableView.beginUpdates()
+                        
+                        //                    weakSelf.models = weakSelf.inventoriesResult!.map{ExpandableTableViewInventoryModelRealm(inventory: $0)}
+                        weakSelf.productsWithQuantityController.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                        weakSelf.productsWithQuantityController.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                        weakSelf.productsWithQuantityController.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
+                        weakSelf.productsWithQuantityController.tableView.endUpdates()
+                        
+                        // TODO close only when receiving own notification, not from someone else (possible?)
+                        weakSelf.topQuickAddControllerManager?.expand(false)
+                        weakSelf.topQuickAddControllerManager?.controller?.onClose()
+                        
+                    case .error(let error):
+                        // An error occurred while opening the Realm file on the background worker thread
+                        fatalError(String(describing: error))
+                    }
+                }
+                
             })
         } else {
             print("Error: InventoryItemsController.loadModels: no inventory")
         }
     }
     
-    func remove(_ model: ProductWithQuantity, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
+    func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
         Providers.listItemGroupsProvider.remove((model as! ProductWithQuantityGroup).groupItem, remote: true, resultHandler(onSuccess: {
             onSuccess()
         }, onError: {result in
@@ -455,13 +453,13 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }))
     }
     
-    func increment(_ model: ProductWithQuantity, delta: Int, onSuccess: @escaping (Int) -> Void) {
+    func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void) {
         Providers.listItemGroupsProvider.increment((model as! ProductWithQuantityGroup).groupItem, delta: delta, remote: true, successHandler({updatedQuantity in
             onSuccess(updatedQuantity)
         }))
     }
     
-    func onModelSelected(_ model: ProductWithQuantity, indexPath: IndexPath) {
+    func onModelSelected(_ model: ProductWithQuantity2, indexPath: IndexPath) {
         if productsWithQuantityController.isEditing {
             let groupItem = (model as! ProductWithQuantityGroup).groupItem
             updatingGroupItem = groupItem
@@ -493,10 +491,9 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         toggleTopAddController(false)
     }
     
-    func indexPathOfItem(_ model: ProductWithQuantityGroup) -> IndexPath? {
-        let models = productsWithQuantityController.models as! [ProductWithQuantityGroup]
-        for i in 0..<models.count {
-            if models[i].same(model) {
+    func indexPathOfItem(_ model: ProductWithQuantity2) -> IndexPath? {
+        for i in 0..<productsWithQuantityController.models.count {
+            if productsWithQuantityController.same(productsWithQuantityController.models[i], model) {
                 return IndexPath(row: i, section: 0)
             }
         }
@@ -509,185 +506,5 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         } else {
             topBar.setLeftButtonIds([.edit])
         }
-    }
-    
-    // MARK: - Websocket // TODO websocket group items?
-    
-    func onWebsocketGroupItem(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<GroupItem>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Add:
-                    // Update if item is in tableview, if it's not append at the end if we already scrolled until the last page. If we are not in last page and item is not in table view, it means it will appear when we load more pages so we don't have to do anything here for this case.
-                    if !updateItemUI(notification.obj) {
-                        if productsWithQuantityController.paginator.reachedEnd {
-                           appendItemUI(notification.obj)
-                        }
-                    }
-                case .Update:
-                    _ = updateItemUI(notification.obj)
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                
-                let groupItemUuid = notification.obj
-                
-                switch notification.verb {
-                case .Delete:
-                    if let model = ((productsWithQuantityController.models as! [ProductWithQuantityGroup]).filter{$0.groupItem.uuid == groupItemUuid}).first {
-                        if let indexPath = indexPathOfItem(model) {
-                            _ = productsWithQuantityController.removeItemUI(indexPath)
-                        } else {
-                            QL2("Group item to remove is not in table view: \(groupItemUuid)")
-                        }
-
-                    } else {
-                        QL3("Received notification to remove group item but it wasn't in table view. Uuid: \(groupItemUuid)")
-                    }
-
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case WSNotificationVerb.Increment:
-                    let incr = notification.obj
-                    if let groupItemModels = productsWithQuantityController?.models as? [ProductWithQuantityGroup] {
-                        if let groupItemModel = (groupItemModels.findFirst{$0.groupItem.uuid == incr.itemUuid}) {
-                            productsWithQuantityController?.updateIncrementUI(ProductWithQuantityGroup(groupItem: groupItemModel.groupItem), delta: incr.delta)
-                            
-                        } else {
-                            QL3("Didn't find group item, can't increment") // this is not forcibly an error, it can be e.g. that user just removed the item
-                        }
-                        
-                    } else {
-                        QL4("Couldn't cast models to [ProductWithQuantityGroup]")
-                    }
-                    
-                default: QL4("Not handled: \(notification.verb)")
-                }
-            } else {
-                QL4("Mo value")
-            }
-        } else {
-            QL4("No userInfo")
-        }
-    }
-    
-    
-    func onWebsocketGroupItems(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[GroupItem]>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case WSNotificationVerb.Add:
-                    let groupItems = notification.obj
-                    addOrUpdateUI(groupItems)
-                    
-                default: QL4("Not handled: \(notification.verb)")
-                }
-            } else {
-                QL4("N value")
-            }
-        } else {
-            QL4("No userInfo")
-        }
-    }
-    
-    func onWebsocketGroup(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case WSNotificationVerb.Delete:
-                    let groupUuid = notification.obj
-                    if let group = group {
-                        
-                        if group.uuid == groupUuid {
-                            AlertPopup.show(title: trans("popup_title_group_deleted"), message: trans("popup_group_was_deleted_in_other_device", group.name), controller: self, onDismiss: {[weak self] in
-                                _ = self?.navigationController?.popViewController(animated: true)
-                                })
-                        } else {
-                            QL1("Websocket: Group items controller received a notification to delete a group which is not the one being currently shown")
-                        }
-                    } else {
-                        QL4("Websocket: Can't process delete group notification because there's no group set")
-                    }
-                default: break
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else {
-            QL4("No userInfo")
-        }
-    }
-    
-    func onWebsocketProduct(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Update:
-                    reload()
-                default: break // no error msg here, since we will receive .Add but not handle it in this view controller
-                }
-            } else {
-                QL4("No value")
-            }
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Delete:
-                    reload()
-                case .DeleteWithBrand:
-                    // we can improve this by at least checking if there's a product that references this brand in the list, for now just reload
-                    reload()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else {
-            QL4("No userInfo")
-        }
-    }
-    
-    func onWebsocketProductCategory(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Add:
-                    reload()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Delete:
-                    reload()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else {
-            print("Error: ViewController.onWebsocketProduct: no userInfo")
-        }
-    }
-    
-    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
-        // TODO notification - note has the sender name
-        reload()
     }
 }

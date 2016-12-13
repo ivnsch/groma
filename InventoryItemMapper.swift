@@ -11,9 +11,9 @@ import QorumLogs
 
 class InventoryItemMapper {
     
-    class func inventoryItemWithDB(_ dbInventoryItem: DBInventoryItem) -> InventoryItem {
+    class func inventoryItemWithDB(_ dbInventoryItem: InventoryItem) -> InventoryItem {
         let inventory = InventoryMapper.inventoryWithDB(dbInventoryItem.inventory)
-        return InventoryItem(uuid: dbInventoryItem.uuid, quantity: dbInventoryItem.quantity, quantityDelta: dbInventoryItem.quantityDelta, product: dbInventoryItem.product, inventory: inventory, lastServerUpdate: dbInventoryItem.lastServerUpdate)
+        return InventoryItem(uuid: dbInventoryItem.uuid, quantity: dbInventoryItem.quantity, product: dbInventoryItem.product, inventory: inventory, lastServerUpdate: dbInventoryItem.lastServerUpdate)
     }
     
     class func inventoryItemWithRemote(_ remoteItem: RemoteInventoryItemWithProduct, inventory: DBInventory) -> InventoryItem {
@@ -21,24 +21,10 @@ class InventoryItemMapper {
         return InventoryItem(uuid: remoteItem.inventoryItem.uuid, quantity: remoteItem.inventoryItem.quantity, product: product, inventory: inventory, lastServerUpdate: remoteItem.inventoryItem.lastUpdate)
     }
     
-    class func dbWithInventoryItem(_ item: InventoryItem, dirty: Bool) -> DBInventoryItem {
-        let db = DBInventoryItem()
-        db.uuid = item.uuid
-        db.quantity = item.quantity
-        db.quantityDelta = item.quantityDelta
-        db.product = item.product
-        db.inventory = item.inventory
-        if let lastServerUpdate = item.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
-            db.lastServerUpdate = lastServerUpdate
-        }
-        db.dirty = dirty
-        return db
-    }
-    
-    class func dbInventoryItemWithRemote(_ item: RemoteInventoryItemWithProduct, inventory: DBInventory) -> DBInventoryItem {
+    class func dbInventoryItemWithRemote(_ item: RemoteInventoryItemWithProduct, inventory: DBInventory) -> InventoryItem {
         let product = ProductMapper.dbProductWithRemote(item.product, category: item.productCategory)
         
-        let db = DBInventoryItem()
+        let db = InventoryItem()
         db.uuid = item.inventoryItem.uuid
         db.quantity = item.inventoryItem.quantity
         db.product = product
@@ -100,7 +86,6 @@ class InventoryItemMapper {
             InventoryItem(
                 uuid: remoteInventoryItem.uuid,
                 quantity: remoteInventoryItem.quantity,
-                quantityDelta: 0,
                 product: productsDict[remoteInventoryItem.productUuid]!,
                 inventory: inventoriesDict[remoteInventoryItem.inventoryUuid]!,
                 lastServerUpdate: remoteInventoryItem.lastUpdate
@@ -153,7 +138,6 @@ class InventoryItemMapper {
             InventoryItem(
                 uuid: remoteInventoryItem.uuid,
                 quantity: remoteInventoryItem.quantity,
-                quantityDelta: 0,
                 product: productsDict[remoteInventoryItem.productUuid]!,
                 inventory: inventoriesDict[remoteInventoryItem.inventoryUuid]!,
                 lastServerUpdate: remoteInventoryItem.lastUpdate

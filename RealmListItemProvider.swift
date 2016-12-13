@@ -642,7 +642,7 @@ class RealmListItemProvider: RealmProvider {
 
     fileprivate func updateTimestampsSync(_ realm: Realm, items: [InventoryItemWithHistoryItem], lastUpdate: Int64) {
         for item in items {
-            realm.create(DBInventoryItem.self, value: DBSyncable.timestampUpdateDict(item.inventoryItem.uuid, lastServerUpdate: lastUpdate), update: true)
+            realm.create(InventoryItem.self, value: DBSyncable.timestampUpdateDict(item.inventoryItem.uuid, lastServerUpdate: lastUpdate), update: true)
             realm.create(DBHistoryItem.self, value: DBSyncable.timestampUpdateDict(item.historyItem.uuid, lastServerUpdate: lastUpdate), update: true)
         }
     }

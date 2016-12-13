@@ -8,6 +8,17 @@
 
 import Foundation
 
+protocol ProductWithQuantity2 {
+    
+    var product: Product {get}
+    
+    var quantity: Int {get}
+    
+    func incrementQuantityCopy(_ delta: Int) -> Self
+    
+    func updateQuantityCopy(_ quantity: Int) -> Self
+}
+
 class ProductWithQuantity: Equatable, Identifiable {
     var product: Product {
         fatalError("override")

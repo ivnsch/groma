@@ -172,13 +172,13 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         // One possible solution for this is to store the favs in this class, and do a batch update / fav increment only when the user exists quick add.
         
         if let productItem = item as? QuickAddProduct {
-            productItem.product.fav += 1
+//            productItem.product.fav += 1
             Providers.productProvider.incrementFav(productItem.product.uuid, remote: true, successHandler{})
             // don't wait for db incrementFav - this operation is not critical
             delegate?.onAddProduct(productItem.product)
             
         } else if let groupItem = item as? QuickAddGroup {
-            groupItem.group.fav += 1
+//            groupItem.group.fav += 1
             Providers.listItemGroupsProvider.incrementFav(groupItem.group.uuid, remote: true, successHandler{})
             // don't wait for db incrementFav - this operation is not critical
             delegate?.onAddGroup(groupItem.group)

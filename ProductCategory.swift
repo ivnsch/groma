@@ -73,6 +73,11 @@ class ProductCategory: DBSyncable, Identifiable {
         return "name CONTAINS[c] '\(text)'"
     }
     
+    static func createFilterUuids(_ uuids: [String]) -> String {
+        let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
+        return "uuid IN {\(uuidsStr)}"
+    }
+    
     // Sync - workaround for mysterious store products/products/categories that appear sometimes in sync reqeust
     // Note these invalid objects will be removed on sync response when db is overwritten
     static func createFilterDirtyAndValid() -> String {

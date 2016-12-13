@@ -122,7 +122,7 @@ class RemoteInventoryProvider: RemoteProvider {
     // TODO maybe generally use this for inventoryItem request params?
     func toRequestParamsForSync(_ inventoryItem: InventoryItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
-            "quantityDelta": inventoryItem.quantityDelta as AnyObject,
+//            "quantityDelta": inventoryItem.quantityDelta as AnyObject,
             "product": [
                 "uuid": inventoryItem.product.uuid as AnyObject,
                 "name": inventoryItem.product.name as AnyObject
@@ -130,18 +130,14 @@ class RemoteInventoryProvider: RemoteProvider {
             "inventoryUuid": inventoryItem.inventory.uuid as AnyObject
         ]
         
-        if let lastServerUpdate = inventoryItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(inventoryItem.lastServerUpdate) as Int64)
         
         return dict
     }
     
     func toRequestParamsToRemove(_ inventoryItem: InventoryItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["inventoryUuid": inventoryItem.inventory.uuid as AnyObject, "productUuid": inventoryItem.product.uuid as AnyObject]
-        if let lastServerUpdate = inventoryItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(inventoryItem.lastServerUpdate) as Int64)
         return dict
     }
     

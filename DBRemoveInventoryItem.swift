@@ -16,7 +16,7 @@ class DBRemoveInventoryItem: Object {
     dynamic var inventoryUuid: String = ""
     dynamic var lastServerUpdate: Int64 = 0
 
-    convenience init(_ dbInventoryItem: DBInventoryItem) {
+    convenience init(_ dbInventoryItem: InventoryItem) {
         self.init(uuid: dbInventoryItem.uuid, inventoryUuid: dbInventoryItem.inventory.uuid, lastServerUpdate: dbInventoryItem.lastServerUpdate)
     }
     

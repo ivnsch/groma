@@ -31,9 +31,8 @@ class RemoteInventoryItemsProvider: Any {
                 "product": productDict as AnyObject
             ]
             
-            if let lastServerUpdate = inventoryItemWithDelta.inventoryItem.lastServerUpdate {
-                dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-            }
+            dict["lastUpdate"] = NSNumber(value: Int64(inventoryItemWithDelta.inventoryItem.lastServerUpdate) as Int64)
+            
             return dict
         }
 
@@ -109,9 +108,7 @@ class RemoteInventoryItemsProvider: Any {
             "product": productDict as AnyObject
         ]
         
-        if let lastServerUpdate = inventoryItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(inventoryItem.lastServerUpdate) as Int64)
         
         return dict
     }

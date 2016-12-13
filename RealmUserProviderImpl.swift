@@ -39,7 +39,7 @@ class RealmUserProviderImpl: UserProvider {
         
         let syncHost = "192.168.0.12"
         let syncAuthURL = URL(string: "http://\(syncHost):9080")!
-        let syncRealmPath = "groma"
+        let syncRealmPath = "groma2"
         let syncServerURL = URL(string: "realm://\(syncHost):9080/~/\(syncRealmPath)")!
         
         QL1("Logging in with credentials: \(credentials), auth url: \(syncAuthURL)")
@@ -52,8 +52,8 @@ class RealmUserProviderImpl: UserProvider {
                     var config = AppDelegate.realmConfig
                     
                     config.syncConfiguration = SyncConfiguration(user: user, realmURL: syncServerURL)
-                    config.objectTypes = [DBList.self, DBInventory.self, DBSection.self, Product.self, DBSharedUser.self, DBRemoveList.self, DBRemoveInventory.self, DBListItem.self, DBInventoryItem.self, DBSyncable.self, DBHistoryItem.self, DBPlanItem.self, DBListItemGroup.self, DBGroupItem.self, ProductCategory.self, DBStoreProduct.self,
-                        DBSectionToRemove.self, ProductToRemove.self, DBStoreProductToRemove.self, DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self
+                    config.objectTypes = [DBList.self, DBInventory.self, DBSection.self, Product.self, DBSharedUser.self, DBRemoveList.self, DBRemoveInventory.self, DBListItem.self, InventoryItem.self, DBSyncable.self, DBHistoryItem.self, DBPlanItem.self, DBListItemGroup.self, DBGroupItem.self, ProductCategory.self, DBStoreProduct.self,
+                        DBSectionToRemove.self, ProductToRemove.self, DBStoreProductToRemove.self, DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self, DBRemoveInventoryItem.self
                     ]
                         
                     Realm.Configuration.defaultConfiguration = config

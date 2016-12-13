@@ -139,7 +139,8 @@ class ProductProviderImpl: ProductProvider {
     func delete(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         DBProviders.productProvider.deleteProductAndDependencies(productUuid, markForSync: true) {[weak self] saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
-            
+
+            // Disabled while impl. realm sync
             if remote {
                 self?.remoteProvider.deleteProduct(productUuid) {remoteResult in
                     if remoteResult.success {
@@ -161,18 +162,19 @@ class ProductProviderImpl: ProductProvider {
     func incrementFav(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         DBProviders.productProvider.incrementFav(productUuid, {[weak self] saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
-            
-            if remote {
-                self?.remoteProvider.incrementFav(productUuid) {remoteResult in
-                    if remoteResult.success {
-                        // no timestamp - for increment fav this looks like an overkill. If there's a conflict some favs may get lost - ok
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                            QL4("Remote call no success: \(remoteResult)")
-                        })
-                    }
-                }
-            }
+     
+            // Disabled while impl. realm sync
+//            if remote {
+//                self?.remoteProvider.incrementFav(productUuid) {remoteResult in
+//                    if remoteResult.success {
+//                        // no timestamp - for increment fav this looks like an overkill. If there's a conflict some favs may get lost - ok
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+//                            QL4("Remote call no success: \(remoteResult)")
+//                        })
+//                    }
+//                }
+//            }
         })
     }
     

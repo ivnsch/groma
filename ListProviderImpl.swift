@@ -21,31 +21,32 @@ class ListProviderImpl: ListProvider {
             
             handler(ProviderResult(status: .success, sucessResult: sortedDBLists))
             
-            if remote {
-                self.remoteListProvider.lists {remoteResult in
-                    
-                    if let remoteLists = remoteResult.successResult {
-                        let lists = ListMapper.listsWithRemote(remoteLists)
-                        
-                        // if there are no local lists or there's a difference, overwrite the local lists
-                        if sortedDBLists != lists {
-                            
-                            DBProviders.listProvider.overwriteLists(lists, clearTombstones: true) {saved in
-                                if saved {
-                                    if !sortedDBLists.equalsExcludingSyncAttributes(lists) { // the sync attributes are not relevant to the ui so notify ui only if sth else changed
-                                        handler(ProviderResult(status: .success, sucessResult: lists))
-                                    }
-                                } else {
-                                    QL4("Error overwriting lists - couldn't save")
-                                }
-                            }
-                        }
-                        
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                    }
-                }
-            }
+            // Disabled while impl. realm sync
+//            if remote {
+//                self.remoteListProvider.lists {remoteResult in
+//                    
+//                    if let remoteLists = remoteResult.successResult {
+//                        let lists = ListMapper.listsWithRemote(remoteLists)
+//                        
+//                        // if there are no local lists or there's a difference, overwrite the local lists
+//                        if sortedDBLists != lists {
+//                            
+//                            DBProviders.listProvider.overwriteLists(lists, clearTombstones: true) {saved in
+//                                if saved {
+//                                    if !sortedDBLists.equalsExcludingSyncAttributes(lists) { // the sync attributes are not relevant to the ui so notify ui only if sth else changed
+//                                        handler(ProviderResult(status: .success, sucessResult: lists))
+//                                    }
+//                                } else {
+//                                    QL4("Error overwriting lists - couldn't save")
+//                                }
+//                            }
+//                        }
+//                        
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                    }
+//                }
+//            }
         }
     }
     

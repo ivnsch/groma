@@ -9,7 +9,8 @@
 import Foundation
 import RealmSwift
 
-class DBGroupItem: DBSyncable {
+// TODO order?
+final class DBGroupItem: DBSyncable, ProductWithQuantity2 {
     
     dynamic var uuid: String = ""
     dynamic var quantity: Int = 0
@@ -107,5 +108,24 @@ class DBGroupItem: DBSyncable {
     
     override static func ignoredProperties() -> [String] {
         return ["product", "group"]
+    }
+    
+    // MARK: - ProductWithQuantity2
+    
+    func copy(uuid: String? = nil, quantity: Int? = nil, product: Product? = nil, group: DBListItemGroup? = nil) -> DBGroupItem {
+        return DBGroupItem(
+            uuid: uuid ?? self.uuid,
+            quantity: quantity ?? self.quantity,
+            product: product ?? self.product.copy(),
+            group: group ?? self.group
+        )
+    }
+    
+    func incrementQuantityCopy(_ delta: Int) -> DBGroupItem {
+        return copy(quantity: quantity + delta)
+    }
+    
+    func updateQuantityCopy(_ quantity: Int) -> DBGroupItem {
+        return copy(quantity: quantity)
     }
 }

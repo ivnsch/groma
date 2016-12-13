@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
+final class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible, ProductWithQuantity2 {
     let uuid: String
     let quantity: Int
     let product: Product
@@ -66,6 +66,12 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
     
     func equalsExcludingSyncAttributes(_ rhs: GroupItem) -> Bool {
         return uuid == rhs.uuid && quantity == rhs.quantity && product == rhs.product && group == rhs.group
+    }
+    
+    // MARK: - ProductWithQuantity2
+    
+    func updateQuantityCopy(_ quantity: Int) -> GroupItem {
+        return copy(quantity: quantity)
     }
 }
 

@@ -10,33 +10,12 @@ import UIKit
 import ChameleonFramework
 import SwiftValidator
 import QorumLogs
-
-class ProductWithQuantityInv: ProductWithQuantity {
-    let inventoryItem: InventoryItem
-    
-    override var product: Product {
-        return inventoryItem.product
-    }
-    
-    override var quantity: Int {
-        return inventoryItem.quantity
-    }
-    
-    init(inventoryItem: InventoryItem) {
-        self.inventoryItem = inventoryItem
-    }
-    override func incrementQuantityCopy(_ delta: Int) -> ProductWithQuantity {
-        let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
-        return ProductWithQuantityInv(inventoryItem: incrementedItem)
-    }
-    
-    override func updateQuantityCopy(_ quantity: Int) -> ProductWithQuantity {
-        let udpatedItem = inventoryItem.copy(quantity: quantity)
-        return ProductWithQuantityInv(inventoryItem: udpatedItem)
-    }
-}
+import RealmSwift
 
 class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
+    
+    fileprivate var inventoryItemsResult: Results<InventoryItem>?
+    fileprivate var notificationToken: NotificationToken?
     
     @IBOutlet weak var topBar: ListTopBarView!
     @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
@@ -74,15 +53,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         initTitleLabel()
         
         topBar.delegate = self
-
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketInventory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Inventory.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketInventoryItems(_:)), name: NSNotification.Name(rawValue: WSNotificationName.InventoryItems.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketInventoryItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.InventoryItem.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketListItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ListItem.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketProduct(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Product.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)        
-        NotificationCenter.default.addObserver(self, selector: #selector(InventoryItemsController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
     }
     
     deinit {
@@ -186,12 +156,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()
         topBarOnCloseExpandable()
-    }
-
-    fileprivate func reload() {
-        productsWithQuantityController?.clearAndLoadFirstPage()
-        //        addEditInventoryItemControllerManager?.controller?.clear()
-
     }
     
     // MARK: - ListTopBarViewDelegate
@@ -323,13 +287,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onAddGroup(_ group: ListItemGroup, onFinish: VoidFunction?) {
         if let inventory = inventory {
             Providers.inventoryItemsProvider.addToInventory(inventory, group: group, remote: true, resultHandler(onSuccess: {[weak self] inventoryItemsWithDelta in
-                let inventoryItems = inventoryItemsWithDelta.map{$0.inventoryItem}
-                self?.addOrUpdateUI(inventoryItems)
-                if let firstInventoryItem = inventoryItemsWithDelta.first {
-                    self?.productsWithQuantityController.scrollToItem(ProductWithQuantityInv(inventoryItem: firstInventoryItem.inventoryItem))
-                } else {
-                    QL3("Shouldn't be here without list items")
-                }
+
             }, onError: {[weak self] result in guard let weakSelf = self else {return}
                 switch result.status {
                 case .isEmpty:
@@ -344,22 +302,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onAddProduct(_ product: Product) {
         if let inventory = inventory {
             Providers.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: 1, remote: true, successHandler{[weak self] addedItemWithDelta in
-                let addedItem = addedItemWithDelta.inventoryItem
-                self?.productsWithQuantityController?.addOrUpdateUI(ProductWithQuantityInv(inventoryItem: addedItem), scrollToCell: true)
             })
         }
     }
-    
-    fileprivate func addOrUpdateUI(_ items: [InventoryItem]) {
-        productsWithQuantityController?.addOrUpdateUI(items.map{
-            return ProductWithQuantityInv(inventoryItem: $0)
-        })
-    }
-    
-    func updateItemUI(_ item: InventoryItem) {
-        _ = productsWithQuantityController.updateModelUI({($0 as! ProductWithQuantityInv).inventoryItem.same(item)}, updatedModel: ProductWithQuantityInv(inventoryItem: item))
-    }
-    
+
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditListItem(_ input: ListItemInput, editingItem: InventoryItem) {
@@ -367,14 +313,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             let inventoryItemInput = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
             
             Providers.inventoryItemsProvider.updateInventoryItem(inventoryItemInput, updatingInventoryItem: editingItem, remote: true, resultHandler (onSuccess: {[weak self]  (inventoryItem, replaced) in
-                if replaced { // if an item was replaced (means: a previous item with same unique as the updated item already existed and was removed from the inventory) reload items to get rid of it.
-                    self?.reload()
-                } else {
-                    self?.updateItemUI(inventoryItem)
-                }
-                self?.closeTopController()
+
             }, onError: {[weak self] result in
-                self?.reload()
                 self?.defaultErrorHandler()(result)
             }))
         }
@@ -384,11 +324,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 let input = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
                 
                 Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, remote: true, resultHandler (onSuccess: {[weak self] groupItem in
-                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end.
-                    self?.reload()
-                    self?.closeTopController()
                 }, onError: {[weak self] result in
-                    self?.reload()
                     self?.closeTopController()
                     self?.defaultErrorHandler()(result)
                 }))
@@ -458,25 +394,62 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     // MARK: - ProductsWithQuantityViewControllerDelegate
     
-    func loadModels(_ page: NSRange, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity]) -> Void) {
+    func loadModels(_ page: NSRange?, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity2]) -> Void) {
         if let inventory = inventory {
             // .MemOnly fetch mode prevents following - when we add items to the inventory and switch to inventory very quickly, the db has not finished writing the items yet! and the load request reads the items from db before the write finishes so if we pass fetchMode .Both, first the mem cache returns the correct items but then the call - to the db - returns still the old items. So we pass mem cache which has the correct state, ignoring the db result.
-            Providers.inventoryItemsProvider.inventoryItems(page, inventory: inventory, fetchMode: .memOnly, sortBy: sortBy, successHandler{inventoryItems in
-                let productsWithQuantity = inventoryItems.map{ProductWithQuantityInv(inventoryItem: $0)}
-                onSuccess(productsWithQuantity)
+            Providers.inventoryItemsProvider.inventoryItems(inventory: inventory, fetchMode: .memOnly, sortBy: sortBy, successHandler{[weak self] inventoryItems in guard let weakSelf = self else {return}
+                
+                weakSelf.inventoryItemsResult = inventoryItems
+                onSuccess(inventoryItems.toArray())
+
+                weakSelf.notificationToken = weakSelf.inventoryItemsResult?.addNotificationBlock { changes in
+                    
+                    switch changes {
+                    case .initial:
+                        //                        // Results are now populated and can be accessed without blocking the UI
+                        //                        self.viewController.didUpdateList(reload: true)
+                        QL1("initial")
+                        
+                    case .update(_, let deletions, let insertions, let modifications):
+                        QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                        
+                        weakSelf.productsWithQuantityController.tableView.beginUpdates()
+                    
+                        weakSelf.productsWithQuantityController.models = inventoryItems.toArray() // TODO! productsWithQuantityController should load also lazily
+                        
+                        weakSelf.productsWithQuantityController.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                        weakSelf.productsWithQuantityController.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                        weakSelf.productsWithQuantityController.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
+                        weakSelf.productsWithQuantityController.tableView.endUpdates()
+                        
+                        // TODO close only when receiving own notification, not from someone else (possible?)
+                        if !modifications.isEmpty { // close only if it's an update (for add user may want to add multiple products)
+                            weakSelf.topQuickAddControllerManager?.expand(false)
+                            weakSelf.topQuickAddControllerManager?.controller?.onClose()
+                        }
+                        
+                        if let firstInsertion = insertions.first { // when add, scroll to added item
+                            weakSelf.productsWithQuantityController.tableView.scrollToRow(at: IndexPath(row: firstInsertion, section: 0), at: .top, animated: true)
+                        }
+
+                    case .error(let error):
+                        // An error occurred while opening the Realm file on the background worker thread
+                        fatalError(String(describing: error))
+                    }
+                }
             })
         } else {
             print("Error: InventoryItemsController.loadModels: no inventory")
         }
     }
     
-    func onLoadedModels(_ models: [ProductWithQuantity]) {
+    func onLoadedModels(_ models: [ProductWithQuantity2]) {
         // TODO is this necessary?
     }
     
-    func remove(_ model: ProductWithQuantity, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
+    func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
         if let inventory = inventory {
-            Providers.inventoryItemsProvider.removeInventoryItem((model as! ProductWithQuantityInv).inventoryItem.uuid, inventoryUuid: inventory.uuid, remote: true, resultHandler(onSuccess: {
+            Providers.inventoryItemsProvider.removeInventoryItem((model as! InventoryItem).uuid, inventoryUuid: inventory.uuid, remote: true, resultHandler(onSuccess: {
                 onSuccess()
             }, onError: {result in
                 onError(result)
@@ -486,15 +459,15 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func increment(_ model: ProductWithQuantity, delta: Int, onSuccess: @escaping (Int) -> Void) {
-        Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, remote: true, successHandler({updatedQuantity in
+    func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void) {
+        Providers.inventoryItemsProvider.incrementInventoryItem(model as! InventoryItem, delta: delta, remote: true, successHandler({updatedQuantity in
             onSuccess(updatedQuantity)
         }))
     }
     
-    func onModelSelected(_ model: ProductWithQuantity, indexPath: IndexPath) {
+    func onModelSelected(_ model: ProductWithQuantity2, indexPath: IndexPath) {
         if productsWithQuantityController.isEditing {
-            let inventoryItem = (model as! ProductWithQuantityInv).inventoryItem
+            let inventoryItem = model as! InventoryItem
 
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: inventoryItem))
@@ -517,10 +490,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
     }
     
-    func indexPathOfItem(_ model: ProductWithQuantityInv) -> IndexPath? {
-        let models = productsWithQuantityController.models as! [ProductWithQuantityInv]
-        for i in 0..<models.count {
-            if models[i].same(model) {
+    func indexPathOfItem(_ model: ProductWithQuantity2) -> IndexPath? {
+        for i in 0..<productsWithQuantityController.models.count {
+            if productsWithQuantityController.same(productsWithQuantityController.models[i], model) {
                 return IndexPath(row: i, section: 0)
             }
         }
@@ -541,252 +513,5 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         } else {
             topBar.setLeftButtonIds([.edit])
         }
-    }
-    
-    // MARK: - Websocket
-    
-    func onWebsocketInventory(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<DBInventory>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                    //                case .Add: // we only use 1 inventory currently
-                case .Update:
-                    // TODO review this carefully, if we update the inventory here but the provider saving fails currently nothing happens
-                    // and changes the user do to this not saved inventory get lost
-                    // Ideally in the future we trigger also notifications when saving fails, such that the controllers revert their changes (and maybe show non-modal small error notification)
-                    // added following temporary uuid check just to help avoiding issues here (should not happen though!)
-                    if let inventory = inventory {
-                        if notification.obj.uuid == inventory.uuid {
-                            self.inventory = notification.obj
-                        } else {
-                            print("Error: Invalid state: we should not get updates for an inventory with a different uuid than our inventory")
-                        }
-                    } else {
-                        print("Info: Received a websocket inventory update before inventory is loaded. Doing nothing.")
-                    }
-                    
-                default: break
-                    
-                }
-            } else {
-                print("Error: ViewController.onWebsocketInventory: no userInfo")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-
-                case .Delete:
-                    let inventoryUuid = notification.obj
-                    if let inventory = inventory {
-                        
-                        if inventory.uuid == inventoryUuid {
-                            AlertPopup.show(title: trans("popup_title_inventory_deleted"), message: trans("popup_inventory_was_deleted_in_other_device", inventory.name), controller: self, onDismiss: {[weak self] in
-                                _ = self?.navigationController?.popViewController(animated: true)
-                            })
-                        } else {
-                            QL1("Websocket: Inventory items controller received a notification to delete an inventory which is not the one being currently shown")
-                        }
-                    } else {
-                        QL4("Websocket: Can't process delete inventory notification because there's no inventory set")
-                    }
-                    
-                default: print("Error: InventoryItemsViewController.onWebsocketInventory: not implemented: \(notification.verb)")
-                    
-                }
-            } else {
-                print("Error: ViewController.onWebsocketInventory: no userInfo")
-            }
-        }
-    }
-    
-    func onWebsocketInventoryItems(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case WSNotificationVerb.Add:
-                    let incr = notification.obj
-                    if let inventoryItemModels = productsWithQuantityController?.models as? [ProductWithQuantityInv] {
-                        if let inventoryItemModel = (inventoryItemModels.findFirst{$0.inventoryItem.uuid == incr.itemUuid}) {
-                            productsWithQuantityController?.updateIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItemModel.inventoryItem), delta: incr.delta)
-                            
-                        } else {
-                            QL3("Didn't find inventory item, can't increment") // this is not forcibly an error, it can be e.g. that user just removed the item
-                        }
-                        
-                        
-                    } else {
-                        QL4("Couldn't cast models to [ProductWithQuantityInv]")
-                    }
-
-                default: print("Error: ViewController.onWebsocketInventoryItems: Not handled: \(notification.verb)")
-                }
-            } else {
-                print("Error: ViewController.onWebsocketInventoryItems: no value")
-            }
-            
-        // User added/incremented inventory items using the quick add (product or group)
-        // Note that we do an update instead of an increment, the reason is simply that the server object doesn't have delta information to do the increment. The only situation where update can cause problems is if we are incrementing the same items when the notification arrives, some of our increments may be overwritten. Not critical. Update has on the other side the advantage that if a message gets lost, when we receive the next the quantity is correctly updated.
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[InventoryItem]>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case WSNotificationVerb.Add:
-                    let inventoryItems = notification.obj
-                    addOrUpdateUI(inventoryItems)
-                    
-                default: print("Error: ViewController.onWebsocketInventoryItems: Not handled: \(notification.verb)")
-                }
-            } else {
-                print("Error: ViewController.onWebsocketInventoryItems: no value")
-            }
-        } else {
-            print("Error: ViewController.onWebsocketInventoryItems: no userInfo")
-        }
-    }
-    
-    func onWebsocketInventoryItem(_ note: Foundation.Notification) {
-        
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<InventoryItem>> {
-            
-            if let notification = info[WSNotificationValue] {
-                
-                switch notification.verb {
-                case .Update:
-                    updateItemUI(notification.obj)
-                    
-                    // TODO? increment is covered in onWebsocketInventoryItems, but user can e.g. change name (update of product in this case, but still triggered from inventory...)
-                    
-                default: print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not implemented: \(notification.verb)")
-                }
-                
-            } else {
-                print("Error: InventoryItemsViewController.onWebsocketUpdateListItem: no value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                
-                let inventoryItemUuid = notification.obj
-                
-                switch notification.verb {
-                case .Delete:
-                    if let model = ((productsWithQuantityController.models as! [ProductWithQuantityInv]).filter{$0.inventoryItem.uuid == inventoryItemUuid}).first {
-                        if let indexPath = indexPathOfItem(model) {
-                            _ = productsWithQuantityController.removeItemUI(indexPath)
-                        } else {
-                            QL2("Group item to remove is not in table view: \(inventoryItemUuid)")
-                        }
-                    } else {
-                        QL3("Received notification to remove inventory item but it wasn't in table view. Uuid: \(inventoryItemUuid)")
-                    }
-                    
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case WSNotificationVerb.Increment:
-                    let incr = notification.obj
-                    if let inventoryItemModels = productsWithQuantityController?.models as? [ProductWithQuantityInv] {
-                        if let inventoryItemModel = (inventoryItemModels.findFirst{$0.inventoryItem.uuid == incr.itemUuid}) {
-                            productsWithQuantityController?.updateIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItemModel.inventoryItem), delta: incr.delta)
-                            
-                        } else {
-                            QL3("Didn't find inventory item, can't increment") // this is not forcibly an error, it can be e.g. that user just removed the item
-                        }
-
-                    } else {
-                        QL4("Couldn't cast models to [ProductWithQuantityInv]")
-                    }
-                    
-                default: QL4("Not handled: \(notification.verb)")
-                }
-            } else {
-                QL4("Mo value")
-            }
-        } else {
-            QL4("No userInfo")
-        }
-    }
-    
-    func onWebsocketListItem(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .BuyCart:
-                    reload()
-                    
-                default: QL4("Not handled: \(notification.verb)")
-                }
-            } else {
-                QL4("Mo value")
-            }
-            
-        }
-    }
-    
-    func onWebsocketProduct(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Update:
-                    reload()
-                default: break // no error msg here, since we will receive .Add but not handle it in this view controller
-                }
-            } else {
-                QL4("No value")
-            }
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Delete:
-                    reload()
-                case .DeleteWithBrand:
-                    // we can improve this by at least checking if there's a product that references this brand in the list, for now just reload
-                    reload()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else {
-            QL4("No userInfo")
-        }
-    }
-    
-    func onWebsocketProductCategory(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Add:
-                    reload()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Delete:
-                    reload()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else {
-            print("Error: ViewController.onWebsocketProduct: no userInfo")
-        }
-    }
-    
-    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
-        // TODO notification - note has the sender name
-        reload()
     }
 }

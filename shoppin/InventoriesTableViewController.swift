@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import RealmSwift
 
 class ExpandableTableViewInventoryModelRealm: ExpandableTableViewModel {
     
@@ -37,8 +38,6 @@ class ExpandableTableViewInventoryModelRealm: ExpandableTableViewModel {
         return inventory.debugDescription
     }
 }
-
-import RealmSwift
 
 class InventoriesTableViewController: ExpandableItemsTableViewController, AddEditInventoryControllerDelegate, ExpandableTopViewControllerDelegate {
     

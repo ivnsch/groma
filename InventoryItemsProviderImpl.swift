@@ -8,6 +8,7 @@
 
 import Foundation
 import QorumLogs
+import RealmSwift
 
 class InventoryItemsProviderImpl: InventoryItemsProvider {
    
@@ -16,45 +17,52 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     let memProvider = MemInventoryItemProvider(enabled: false)
 
     // TODO we are sorting 3x! Optimise this. Ponder if it makes sense to do the server objects sorting in the server (where it can be done at db level)
-    func inventoryItems(_ range: NSRange, inventory: DBInventory, fetchMode: ProviderFetchModus = .both, sortBy: InventorySortBy = .count, _ handler: @escaping (ProviderResult<[InventoryItem]>) -> ()) {
+    func inventoryItems(inventory: DBInventory, fetchMode: ProviderFetchModus = .both, sortBy: InventorySortBy = .count, _ handler: @escaping (ProviderResult<Results<InventoryItem>>) -> Void) {
     
-        // TODO!!! use range also in mem cache otherwise comparison below doesn't work
-        let memItemsMaybe = memProvider.inventoryItems(inventory)
-        if let memItems = memItemsMaybe {
-            handler(ProviderResult(status: .success, sucessResult: memItems.sortBy(sortBy))) // TODO? cache the sorting? is it expensive to sort if already sorted?
-            if fetchMode == .memOnly {
-                return
-            }
-        }
+        // For now comment mem cache as we can't compare array with Results. We are not using it anyway
+//        // TODO!!! use range also in mem cache otherwise comparison below doesn't work
+//        let memItemsMaybe = memProvider.inventoryItems(inventory)
+//        if let memItems = memItemsMaybe {
+//            handler(ProviderResult(status: .success, sucessResult: memItems.sortBy(sortBy))) // TODO? cache the sorting? is it expensive to sort if already sorted?
+//            if fetchMode == .memOnly {
+//                return
+//            }
+//        }
         
         // FIXME: sortBy and range don't work in db (see notes in implementation). For now we have to do this programmatically
-        DBProviders.inventoryProvider.loadInventory(inventory, sortBy: sortBy, range: range) {[weak self] (dbInventoryItems) in
+        DBProviders.inventoryProvider.loadInventory(inventory, sortBy: sortBy) {[weak self] (dbInventoryItems) in
             
-            let dbInventoryItemsSorted = dbInventoryItems.sortBy(sortBy)
-            let dbInventoryItemsInRange = dbInventoryItemsSorted[range]
+            guard let dbInventoryItems = dbInventoryItems else {QL4("No inventory items"); return}
             
-            if (memItemsMaybe.map {$0 != dbInventoryItemsInRange}) ?? true { // if memItems is not set or different than db items
-                handler(ProviderResult(status: .success, sucessResult: dbInventoryItemsInRange))
-                _ = self?.memProvider.overwrite(dbInventoryItemsInRange)
-            }
+//            let dbInventoryItemsSorted = dbInventoryItems.sortBy(sortBy)
+//            let dbInventoryItemsInRange = dbInventoryItemsSorted[range]
+
             
-            self?.remoteInventoryItemsProvider.inventoryItems(inventory) {remoteResult in
-                
-                if let remoteInventoryItems = remoteResult.successResult {
-                    let inventoryItems: [InventoryItem] = remoteInventoryItems.map{InventoryItemMapper.inventoryItemWithRemote($0, inventory: inventory)}.sortBy(sortBy)
-                    let inventoryItemsInRange = inventoryItems[range]
-                    
-                    if (dbInventoryItemsInRange != inventoryItemsInRange) {
-                        DBProviders.inventoryItemProvider.overwrite(inventoryItems, inventoryUuid: inventory.uuid, clearTombstones: true, dirty: false) {saved in // if items in range are not equal overwritte with all the items
-                            handler(ProviderResult(status: .success, sucessResult: inventoryItemsInRange))
-                            _ = self?.memProvider.overwrite(inventoryItems)
-                        }
-                    }
-                    
-                } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                }
-            }
+            // For now comment mem cache as we can't compare array with Results. We are not using it anyway
+//            if (memItemsMaybe.map {$0 != dbInventoryItems}) ?? true { // if memItems is not set or different than db items
+//                handler(ProviderResult(status: .success, sucessResult: dbInventoryItems))
+//                _ = self?.memProvider.overwrite(dbInventoryItems)
+//            }
+            handler(ProviderResult(status: .success, sucessResult: dbInventoryItems))
+            
+            
+            // Disabled while impl. realm sync - access of realm objs here causes wrong thread exception
+//            self?.remoteInventoryItemsProvider.inventoryItems(inventory) {remoteResult in
+//                
+//                if let remoteInventoryItems = remoteResult.successResult {
+//                    let inventoryItems: [InventoryItem] = remoteInventoryItems.map{InventoryItemMapper.inventoryItemWithRemote($0, inventory: inventory)}.sortBy(sortBy)
+//
+//                    if (dbInventoryItems != inventoryItems) {
+//                        DBProviders.inventoryItemProvider.overwrite(inventoryItems, inventoryUuid: inventory.uuid, clearTombstones: true, dirty: false) {saved in // if items in range are not equal overwritte with all the items
+//                            handler(ProviderResult(status: .success, sucessResult: inventoryItems))
+//                            _ = self?.memProvider.overwrite(inventoryItems)
+//                        }
+//                    }
+//                    
+//                } else {
+//                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                }
+//            }
         }
     }
     
@@ -147,27 +155,28 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 if let updatedQuantity = dbResult.sucessResult {
                     handler(ProviderResult(status: .success, sucessResult: updatedQuantity))
                     
-                    if remote {
-                        let itemIncrement = ItemIncrement(delta: delta, itemUuid: item.uuid)
-                        self?.remoteInventoryItemsProvider.incrementInventoryItem(itemIncrement) {remoteResult in
-                            
-                            if let incrementResult = remoteResult.successResult {
-                                DBProviders.inventoryItemProvider.updateInventoryItemWithIncrementResult(incrementResult) {success in
-                                    if !success {
-                                        QL4("Couldn't save increment result for item: \(item), remoteResult: \(remoteResult)")
-                                    }
-                                }
-                                
-                            } else {
-                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Int>) in
-                                    QL4("Error incrementing item: \(item) in remote, result: \(result)")
-                                    // if there's a not connection related server error, invalidate cache
-                                    self?.memProvider.invalidate()
-                                    handler(result)
-                                })
-                            }
-                        }
-                    }
+                    // Disabled while impl. realm sync - access of realm objs here causes wrong thread exception
+//                    if remote {
+//                        let itemIncrement = ItemIncrement(delta: delta, itemUuid: item.uuid)
+//                        self?.remoteInventoryItemsProvider.incrementInventoryItem(itemIncrement) {remoteResult in
+//                            
+//                            if let incrementResult = remoteResult.successResult {
+//                                DBProviders.inventoryItemProvider.updateInventoryItemWithIncrementResult(incrementResult) {success in
+//                                    if !success {
+//                                        QL4("Couldn't save increment result for item: \(item), remoteResult: \(remoteResult)")
+//                                    }
+//                                }
+//                                
+//                            } else {
+//                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Int>) in
+//                                    QL4("Error incrementing item: \(item) in remote, result: \(result)")
+//                                    // if there's a not connection related server error, invalidate cache
+//                                    self?.memProvider.invalidate()
+//                                    handler(result)
+//                                })
+//                            }
+//                        }
+//                    }
                     
                     
                 } else {
@@ -219,27 +228,28 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             
             handler(ProviderResult(status: updated ? .success : .databaseUnknown))
             
-            if remote {
-                self?.remoteInventoryItemsProvider.updateInventoryItem(item) {remoteResult in
-                    
-                    if let remoteInventoryItemsWithDependencies = remoteResult.successResult {
-
-                        DBProviders.inventoryItemProvider.updateInventoryItemLastUpdate(remoteInventoryItemsWithDependencies) {success in
-                            if !success {
-                                QL4("Couldn't save server timestamp for item: \(item), remoteResult: \(remoteResult)")
-                            }
-                        }
-                        
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                            QL4("Error updating item: \(item) in remote, result: \(result)")
-                            // if there's a not connection related server error, invalidate cache
-                            self?.memProvider.invalidate()
-                            handler(result)
-                        })
-                    }
-                }
-            }
+            // Disabled while impl. realm sync - access of realm objs here causes wrong thread exception
+//            if remote {
+//                self?.remoteInventoryItemsProvider.updateInventoryItem(item) {remoteResult in
+//                    
+//                    if let remoteInventoryItemsWithDependencies = remoteResult.successResult {
+//
+//                        DBProviders.inventoryItemProvider.updateInventoryItemLastUpdate(remoteInventoryItemsWithDependencies) {success in
+//                            if !success {
+//                                QL4("Couldn't save server timestamp for item: \(item), remoteResult: \(remoteResult)")
+//                            }
+//                        }
+//                        
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+//                            QL4("Error updating item: \(item) in remote, result: \(result)")
+//                            // if there's a not connection related server error, invalidate cache
+//                            self?.memProvider.invalidate()
+//                            handler(result)
+//                        })
+//                    }
+//                }
+//            }
         }
     }
     
@@ -273,29 +283,30 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 self?.memProvider.invalidate()
             }
             
-            if remote {
-                self?.remoteInventoryItemsProvider.removeInventoryItem(uuid) {remoteResult in
-                    if remoteResult.success {
-                        DBProviders.inventoryItemProvider.clearInventoryItemTombstone(uuid) {removeTombstoneSuccess in
-                            if !removeTombstoneSuccess {
-                                QL4("Couldn't delete tombstone for inventory item: \(uuid)::\(inventoryUuid)")
-                            }
-                        }
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                            QL3("Error removing inventory item in uuid: productUuid: \(uuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
-                            // When swiping many items quickly it may be that we send multiple requests to delete same item, so we get not found sometimes. Ignore.
-                            // TODO is this really necessary - what can be do client side to prevent trying to delete same item multiple times?
-                            if remoteResult.status != .notFound {
-                                self?.memProvider.invalidate()
-                                handler(remoteResult)
-                            } else {
-                                QL3("Inventory item to delete was not found in the server, ignoring")
-                            }
-                        }
-                    }
-                }
-            }
+            // Disabled while impl. realm sync - access of realm objs here causes wrong thread exception
+//            if remote {
+//                self?.remoteInventoryItemsProvider.removeInventoryItem(uuid) {remoteResult in
+//                    if remoteResult.success {
+//                        DBProviders.inventoryItemProvider.clearInventoryItemTombstone(uuid) {removeTombstoneSuccess in
+//                            if !removeTombstoneSuccess {
+//                                QL4("Couldn't delete tombstone for inventory item: \(uuid)::\(inventoryUuid)")
+//                            }
+//                        }
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+//                            QL3("Error removing inventory item in uuid: productUuid: \(uuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
+//                            // When swiping many items quickly it may be that we send multiple requests to delete same item, so we get not found sometimes. Ignore.
+//                            // TODO is this really necessary - what can be do client side to prevent trying to delete same item multiple times?
+//                            if remoteResult.status != .notFound {
+//                                self?.memProvider.invalidate()
+//                                handler(remoteResult)
+//                            } else {
+//                                QL3("Inventory item to delete was not found in the server, ignoring")
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 
@@ -319,22 +330,23 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         DBProviders.inventoryItemProvider.addToInventory(inventory, productsWithQuantities: productsWithQuantities, dirty: remote) {[weak self] addedOrIncrementedInventoryItemsMaybe in
             if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItems))
-                
-                if remote {
-                    self?.remoteInventoryItemsProvider.addToInventory(addedOrIncrementedInventoryItems) {remoteResult in
-                        if let remoteInventoryItems = remoteResult.successResult {
-                            DBProviders.inventoryItemProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) in
-                                QL4("Error addToInventory: \(remoteResult.status)")
-                                // if there's a not connection related server error, invalidate cache
-                                self?.memProvider.invalidate()
-                                handler(result)
-                            })
-                        }
-                    }
-                }
+
+                // Disabled while impl. realm sync - access of realm objs here causes wrong thread exception
+//                if remote {
+//                    self?.remoteInventoryItemsProvider.addToInventory(addedOrIncrementedInventoryItems) {remoteResult in
+//                        if let remoteInventoryItems = remoteResult.successResult {
+//                            DBProviders.inventoryItemProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
+//                            }
+//                        } else {
+//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) in
+//                                QL4("Error addToInventory: \(remoteResult.status)")
+//                                // if there's a not connection related server error, invalidate cache
+//                                self?.memProvider.invalidate()
+//                                handler(result)
+//                            })
+//                        }
+//                    }
+//                }
                 
             } else {
                 QL4("Unknown error adding to inventory in local db, inventory: \(inventory), productsWithQuantities: \(productsWithQuantities)")

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 // TODO generic name and put somewhere else, this is also being used by group items (e.g. ProductWithQuantitySortBy)
 enum InventorySortBy {
@@ -15,7 +16,7 @@ enum InventorySortBy {
 
 protocol InventoryItemsProvider {
     
-    func inventoryItems(_ range: NSRange, inventory: DBInventory, fetchMode: ProviderFetchModus, sortBy: InventorySortBy, _ handler: @escaping (ProviderResult<[InventoryItem]>) -> ())
+    func inventoryItems(inventory: DBInventory, fetchMode: ProviderFetchModus, sortBy: InventorySortBy, _ handler: @escaping (ProviderResult<Results<InventoryItem>>) -> Void)
 
     func countInventoryItems(_ inventory: DBInventory, _ handler: @escaping (ProviderResult<Int>) -> Void)
 

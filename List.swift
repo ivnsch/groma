@@ -69,10 +69,10 @@ class List: Equatable, Identifiable, CustomDebugStringConvertible {
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             listItems: listItems ?? self.listItems,
-            users: users ?? self.users,
+            users: users ?? self.users.map{$0.copy()},
             bgColor: bgColor ?? self.bgColor,
             order: order ?? self.order,
-            inventory: inventory ?? self.inventory,
+            inventory: inventory ?? self.inventory.copy(),
             store: store.map{$0.store} ?? self.store,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
