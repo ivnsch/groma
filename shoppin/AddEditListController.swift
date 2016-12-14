@@ -97,7 +97,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     fileprivate func prefill(_ list: List) {
         listNameInputField.text = list.name
 
-        users = list.users
+        users = list.users.toArray()
         
         let sharedButtonVisible: Bool = {
             if ConnectionProvider.connectedAndLoggedIn {
@@ -112,7 +112,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         inventoriesButton.setTitle(list.inventory.name, for: UIControlState())
         
         storeInputField.text = list.store ?? ""
-        setBackgroundColor(list.bgColor)
+        setBackgroundColor(list.color)
     }
     
     fileprivate func initValidator() {
@@ -308,7 +308,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                 let totalUsers = weakSelf.users + weakSelf.invitedUsers
 
                 // Note on shared users: if the shared users controller was not opened this will be nil so listToEdit is not affected (passing nil on copy is a noop)
-                let updatedList = listToEdit.copy(name: listName, users: totalUsers, bgColor: bgColor, inventory: inventory, store: ListCopyStore(store))
+                let updatedList = listToEdit.copy(name: listName, users: totalUsers, color: bgColor, inventory: inventory, store: ListCopyStore(store))
                 self?.delegate?.onUpdateList(updatedList)
             
             } else {
@@ -318,7 +318,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                     
                     let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
                     
-                    let list = List(uuid: NSUUID().uuidString, name: listName, listItems: [], users: totalUsers, bgColor: bgColor, order: currentListsCount, inventory: inventory, store: store)
+                    let list = List(uuid: NSUUID().uuidString, name: listName, users: totalUsers, color: bgColor, order: currentListsCount, inventory: inventory, store: store)
                     
                     self?.delegate?.onAddList(list)
                     

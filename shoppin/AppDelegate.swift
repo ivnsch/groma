@@ -74,7 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     static var realmConfig = Realm.Configuration(
         // Set the new schema version. This must be greater than the previously used
         // version (if you've never set a schema version before, the version is 0).
-        schemaVersion: 2,
+        schemaVersion: 4,
         
         // Set the block which will be called automatically when opening a Realm with
         // a schema version lower than the one set above
@@ -288,7 +288,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         let inventory1 = DBInventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreen, order: 0)
         DBProviders.inventoryProvider.saveInventory(inventory1, dirty: true) {saved in
             
-            let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.dark), order: 0, inventory: inventory1, store: nil)
+            let list1 = List(uuid: uuid, name: "My first list", color: RandomFlatColorWithShade(.dark), order: 0, inventory: inventory1, store: nil)
             DBProviders.listProvider.saveList(list1) {result in
                 
                 let section1 = Section(uuid: uuid, name: "Obst", color: UIColor.flatRed, list: list1, order: ListItemStatusOrder(status: .todo, order: 0))

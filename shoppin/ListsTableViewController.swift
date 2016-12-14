@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import RealmSwift
 
 class ExpandableTableViewListModel: ExpandableTableViewModel {
     
@@ -26,11 +27,11 @@ class ExpandableTableViewListModel: ExpandableTableViewModel {
     }
     
     override var bgColor: UIColor {
-        return list.bgColor
+        return list.color
     }
     
     override var users: [DBSharedUser] {
-        return list.users
+        return list.users.toArray()
     }
     
     override func same(_ rhs: ExpandableTableViewModel) -> Bool {
@@ -44,6 +45,9 @@ class ExpandableTableViewListModel: ExpandableTableViewModel {
 
 class ListsTableViewController: ExpandableItemsTableViewController, AddEditListControllerDelegate, ExpandableTopViewControllerDelegate {
 
+    fileprivate var listsResult: Results<List>?
+    fileprivate var notificationToken: NotificationToken?
+    
     var topAddEditListControllerManager: ExpandableTopViewController<AddEditListController>?
     
     override func viewDidLoad() {
@@ -52,10 +56,6 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         setNavTitle(trans("title_lists"))
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
-        NotificationCenter.default.addObserver(self, selector: #selector(ListsTableViewController.onWebsocketList(_:)), name: NSNotification.Name(rawValue: WSNotificationName.List.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ListsTableViewController.onWebsocketLists(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Lists.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ListsTableViewController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ListsTableViewController.onListInvitationAccepted(_:)), name: NSNotification.Name(rawValue: Notification.ListInvitationAccepted.rawValue), object: nil)
         
         initGlobalTabBar() // since ListsTableViewController is the always the first controller (that shows a tabbar) init tabBar insets here. Tried to do this in AppDelegate with root controller it doesn't have tabBarController.
     }
@@ -112,9 +112,44 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override func initModels() {
-        Providers.listProvider.lists(true, successHandler{[weak self] lists in
-            self?.models = lists.map{ExpandableTableViewListModel(list: $0)}
+        Providers.listProvider.lists(true, successHandler{[weak self] lists in guard let weakSelf = self else {return}
+//            self?.models = lists.map{ExpandableTableViewListModel(list: $0)}
 //            self?.debugItems()
+            
+            
+            weakSelf.listsResult = lists
+            
+            self?.notificationToken = lists.addNotificationBlock { changes in
+                switch changes {
+                case .initial:
+                    //                        // Results are now populated and can be accessed without blocking the UI
+                    //                        self.viewController.didUpdateList(reload: true)
+                    QL1("initial")
+                    
+                case .update(_, let deletions, let insertions, let modifications):
+                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(weakSelf.listsResult?.count)")
+                    
+                    weakSelf.tableView.beginUpdates()
+                    
+                    weakSelf.models = weakSelf.listsResult!.map{ExpandableTableViewListModel(list: $0)}
+                    weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
+                    weakSelf.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .top)
+                    weakSelf.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
+                    weakSelf.tableView.endUpdates()
+                    
+                    // TODO close only when receiving own notification, not from someone else (possible?)
+                    weakSelf.topAddEditListControllerManager?.expand(false)
+                    weakSelf.setTopBarState(.normalFromExpanded)
+                    
+                    
+                case .error(let error):
+                    // An error occurred while opening the Realm file on the background worker thread
+                    fatalError(String(describing: error))
+                }
+            }
+            
+            weakSelf.models = lists.map{ExpandableTableViewListModel(list: $0)} // TODO use results!
+            self?.debugItems()
         })
     }
     
@@ -199,8 +234,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     // MARK: - AddEditListControllerDelegate
     
     func onAddList(_ list: List) {
-        Providers.listProvider.add(list, remote: true, resultHandler(onSuccess: {[weak self] list in
-            self?.addListUI(list)
+        Providers.listProvider.add(list, remote: true, resultHandler(onSuccess: {_ in
             }, onErrorAdditional: {[weak self] result in
                 self?.onListAddOrUpdateError(list)
             }
@@ -208,8 +242,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     func onUpdateList(_ list: List) {
-        Providers.listProvider.update([list], remote: true, resultHandler(onSuccess: {[weak self] in
-            self?.updateListUI(list)
+        Providers.listProvider.update([list], remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.onListAddOrUpdateError(list)
             }
@@ -227,25 +260,6 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             }
         }
     }
-    
-    fileprivate func addListUI(_ list: List) {
-        tableView.wrapUpdates {[weak self] in
-            if let weakSelf = self {
-                self?.tableView.insertRows(at: [IndexPath(row: weakSelf.models.count, section: 0)], with: UITableViewRowAnimation.top)
-                self?.models.append(ExpandableTableViewListModel(list: list))
-                self?.topAddEditListControllerManager?.expand(false)
-                self?.setTopBarState(.normalFromExpanded)
-            }
-        }
-    }
-    
-    fileprivate func updateListUI(_ list: List) {
-        _ = models.update(ExpandableTableViewListModel(list: list))
-        tableView.reloadData()
-        topAddEditListControllerManager?.expand(false)
-        setTopBarState(.normalFromExpanded)
-    }
-    
     
     // MARK: - ExpandableTopViewControllerDelegate
     
@@ -267,67 +281,5 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             print("Lists:")
             (models as! [ExpandableTableViewListModel]).forEach{print("\($0.list.shortDebugDescription)")}
         }
-    }
-
-    // MARK: - Websocket
-    
-    func onWebsocketList(_ note: Foundation.Notification) {
-        
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<List>> {
-            if let notification = info[WSNotificationValue] {
-                let list = notification.obj
-                switch notification.verb {
-                case .Add:
-                    addListUI(list)
-                case .Update:
-                    updateListUI(list)
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                let listUuid = notification.obj
-                switch notification.verb {
-                case .Delete:
-                    if let model = ((models as! [ExpandableTableViewListModel]).filter{$0.list.uuid == listUuid}).first {
-                        removeModel(model)
-                    } else {
-                        QL3("Received notification to remove list but it wasn't in table view. Uuid: \(listUuid)")
-                    }
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else {
-            QL4("userInfo not there or couldn't be casted: \((note as NSNotification).userInfo)")
-        }
-    }
-    
-    func onWebsocketLists(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Order:
-                    initModels()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        }
-    }
-
-    func onListInvitationAccepted(_ note: Foundation.Notification) {
-        initModels()
-    }
-    
-    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
-        // TODO notification - note has the sender name
-        initModels()
     }
 }

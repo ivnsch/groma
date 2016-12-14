@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import RealmSwift
 
 protocol ListProvider {
     
-    func lists(_ remote: Bool, _ handler: @escaping (ProviderResult<[List]>) -> ())
+    func lists(_ remote: Bool, _ handler: @escaping (ProviderResult<Results<List>>) -> ())
     
     func list(_ listUuid: String, _ handler: @escaping (ProviderResult<List>) -> ())
   

@@ -10,37 +10,18 @@ import Foundation
 import ChameleonFramework
 
 class ListMapper {
-    
-    class func dbWithList(_ list: List, dirty: Bool = true) -> DBList {
-        let dbList = DBList()
-        dbList.uuid = list.uuid
-        dbList.name = list.name
-        dbList.setBgColor(list.bgColor)
-        dbList.order = list.order
-        dbList.inventory = list.inventory
-        dbList.storeOpt = list.store
-        let dbSharedUsers = list.users.map{SharedUserMapper.dbWithSharedUser($0)}
-        for dbObj in dbSharedUsers {
-            dbList.users.append(dbObj)
-        }
-        if let lastServerUpdate = list.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
-            dbList.lastServerUpdate = lastServerUpdate
-        }
-        dbList.dirty = dirty
-        return dbList
-    }
 
-    class func dbWithLists(_ remoteLists: RemoteListsWithDependencies) -> [DBList] {
+    class func dbWithLists(_ remoteLists: RemoteListsWithDependencies) -> [List] {
         let inventoriesDict = remoteLists.inventories.toDictionary{($0.inventory.uuid, InventoryMapper.dbWithInventory($0))}
         
         return remoteLists.lists.map {remoteList in
-            let dbList = DBList()
+            let dbList = List()
             dbList.uuid = remoteList.uuid
             dbList.name = remoteList.name
-            dbList.setBgColor(remoteList.color)
+            dbList.color = remoteList.color
             dbList.order = remoteList.order
             dbList.inventory = inventoriesDict[remoteList.inventoryUuid]!
-            dbList.storeOpt = remoteList.store
+            dbList.store = remoteList.store
             let dbSharedUsers = remoteList.users.map{SharedUserMapper.dbWithSharedUser($0)}
             dbList.dirty = false
             for dbObj in dbSharedUsers {
@@ -49,12 +30,6 @@ class ListMapper {
             dbList.lastServerUpdate = remoteList.lastUpdate
             return dbList
         }
-    }
-    
-    class func listWithDB(_ dbList: DBList) -> List {
-        let users = dbList.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
-        let inventory = InventoryMapper.inventoryWithDB(dbList.inventory)
-        return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor(), order: dbList.order, inventory: inventory, store: dbList.storeOpt, lastServerUpdate: dbList.lastServerUpdate)
     }
     
     class func listsWithRemote(_ remoteLists: RemoteListsWithDependencies) -> [List] {
@@ -66,7 +41,7 @@ class ListMapper {
                 uuid: remoteList.uuid,
                 name: remoteList.name,
                 users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)},
-                bgColor: remoteList.color,
+                color: remoteList.color,
                 order: remoteList.order,
                 inventory: inventoriesDict[remoteList.inventoryUuid]!,
                 store: remoteList.store,
@@ -83,7 +58,7 @@ class ListMapper {
             uuid: remoteList.list.uuid,
             name: remoteList.list.name,
             users: remoteList.list.users.map{SharedUserMapper.sharedUserWithRemote($0)},
-            bgColor: remoteList.list.color,
+            color: remoteList.list.color,
             order: remoteList.list.order,
             inventory: inventory,
             store: remoteList.list.store,

@@ -14,12 +14,11 @@ class ListItemMapper {
     class func listItemWithDB(_ dbListItem: DBListItem) -> ListItem {
         let product = StoreProductMapper.productWithDB(dbListItem.product)
         let section = SectionMapper.sectionWithDB(dbListItem.section)
-        let list = ListMapper.listWithDB(dbListItem.list)
         return ListItem(
             uuid: dbListItem.uuid,
-            product: product,
+            product: product.copy(),
             section: section,
-            list: list,
+            list: dbListItem.list.copy(),
             note: dbListItem.note,
             todoQuantity: dbListItem.todoQuantity,
             todoOrder: dbListItem.todoOrder,
@@ -45,7 +44,7 @@ class ListItemMapper {
         
         dbListItem.product = StoreProductMapper.dbWithProduct(listItem.product)
         dbListItem.section = SectionMapper.dbWithSection(listItem.section)
-        dbListItem.list = ListMapper.dbWithList(listItem.list)
+        dbListItem.list = listItem.list
         
         if let lastServerUpdate = listItem.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             dbListItem.lastServerUpdate = lastServerUpdate

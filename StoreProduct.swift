@@ -69,7 +69,7 @@ final class StoreProduct: Equatable, Identifiable, CustomDebugStringConvertible 
             baseQuantity: baseQuantity ?? self.baseQuantity,
             unit: unit ?? self.unit,
             store: store ?? self.store,
-            product: product ?? self.product,
+            product: product ?? self.product.copy(),
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
         )

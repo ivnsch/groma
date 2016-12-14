@@ -155,7 +155,7 @@ class MyWebSocket: WebSocketDelegate {
                     if let inventories = inventoriesResult.sucessResult {
                         
                         // TODO! new services that fetch only uuids from db
-                        let listsUuids = lists.map{$0.uuid}
+                        let listsUuids = Array(lists.map{$0.uuid})
                         let inventoriesUuids = inventories.map{$0.uuid}
 
                         weakSelf.sendMaybeMsg(weakSelf.subscribeMsg(listsUuids, inventoriesUuids: inventoriesUuids, deviceId: deviceId))

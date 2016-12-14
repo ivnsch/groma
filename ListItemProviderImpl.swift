@@ -37,23 +37,23 @@ class ListItemProviderImpl: ListItemProvider {
             // the server still needs (internally at least) the order column
             // TODO another optimization is to do the server items sorting in the server
     
-            let sotedDBListItems = dbListItems.sortedByOrder(sortOrderByStatus) // order is relative to section (0...n) so there will be repeated numbers.
+            let sotedListItems = dbListItems.sortedByOrder(sortOrderByStatus) // order is relative to section (0...n) so there will be repeated numbers.
             
             // we assume the database result is always == mem result, so if returned from mem already no need to return from db
             // TODO there's no need to load the items from db before doing the remote call (confirm this), since we assume memory == database it would be enough to compare 
             // the server result with memory. Load from db only when there's no memory cache.
             if !memListItemsMaybe.isSet {
-                handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: sotedDBListItems))
+                handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: sotedListItems))
             }
             
-            _ = self?.memProvider.overwrite(sotedDBListItems)
+            _ = self?.memProvider.overwrite(sotedListItems)
             
             self?.remoteProvider.listItems(list: list) {[weak self] remoteResult in
                 
                 if let remoteListItems = remoteResult.successResult {
                     let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: sortOrderByStatus)
                     
-                    if (sotedDBListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
+                    if (sotedListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
                         self?.dbProvider.overwrite(listItemsWithRelations.listItems, listUuid: list.uuid, clearTombstones: true) {saved in
                             
                             handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: listItemsWithRelations.listItems))
@@ -474,7 +474,7 @@ class ListItemProviderImpl: ListItemProvider {
                     for (prototype, section) in prototypesWithSections {
                         if var existingListItem = existingListItemsDict[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)] {
                             
-                            existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
+                            _ = existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
                             
                             // for some reason it crashes in this line (yes here not when saving) with reason: 'Can't set primary key property 'uuid' to existing value '03F949BB-AE2A-427A-B49B-D53FA290977D'.' (this is the uuid of the list), no idea why, so doing a copy.
                             //                                    existingListItem.section = section
@@ -498,7 +498,7 @@ class ListItemProviderImpl: ListItemProvider {
                         } else { // item doesn't exist
                             
                             // see if there's already a section for the new list item in the list, if not create a new one
-                            //                        let listItemsInList = realm.objects(DBListItem).filter(DBListItem.createFilter(list))
+                            //                        let listItemsInList = realm.objects(ListItem).filter(ListItem.createFilter(list))
                             let sectionName = prototype.targetSectionName
                             let section = existingListItems.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
                                 return SectionMapper.sectionWithDB(item.section)

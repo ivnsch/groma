@@ -17,7 +17,7 @@ class DBSection: DBSyncable {
     
 //    let listItems = RealmSwift.List<String>()
     
-    dynamic var listOpt: DBList? = DBList()
+    dynamic var listOpt: List? = List()
     dynamic var todoOrder: Int = 0
     dynamic var doneOrder: Int = 0
     dynamic var stashOrder: Int = 0
@@ -30,9 +30,9 @@ class DBSection: DBSyncable {
         bgColorHex = bgColor.hexStr
     }
     
-    var list: DBList {
+    var list: List {
         get {
-            return listOpt ?? DBList()
+            return listOpt ?? List()
         }
         set(newList) {
             listOpt = newList
@@ -47,7 +47,7 @@ class DBSection: DBSyncable {
         return ["name"]
     }
     
-    convenience init(uuid: String, name: String, bgColorHex: String, list: DBList, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastUpdate: Date = Date(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    convenience init(uuid: String, name: String, bgColorHex: String, list: List, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastUpdate: Date = Date(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -67,7 +67,7 @@ class DBSection: DBSyncable {
     }
     
     // NOTE: we reuse ListItemStatusOrder from list items, as content is what we need here also, maybe we should rename it
-    convenience init(uuid: String, name: String, bgColorHex: String, list: DBList, order: ListItemStatusOrder, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    convenience init(uuid: String, name: String, bgColorHex: String, list: List, order: ListItemStatusOrder, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         let (todoOrder, doneOrder, stashOrder): (Int, Int, Int) = {
             switch order.status {
@@ -109,7 +109,7 @@ class DBSection: DBSyncable {
     
     // MARK: -
     
-    static func fromDict(_ dict: [String: AnyObject], list: DBList) -> DBSection {
+    static func fromDict(_ dict: [String: AnyObject], list: List) -> DBSection {
         let item = DBSection()
         item.uuid = dict["uuid"]! as! String
         item.name = dict["name"]! as! String

@@ -23,30 +23,31 @@ class InventoryProviderImpl: InventoryProvider {
             
             handler(ProviderResult(status: .success, sucessResult: sotedDBInventories))
             
-            if remote {
-                self.remoteProvider.inventories {remoteResult in
-                    
-                    if let remoteInventories = remoteResult.successResult {
-                        let inventories: [DBInventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
-                        let sortedInventories = inventories.sortedByOrder()
-                        
-                        if sotedDBInventories != sortedInventories {
-                            
-                            self.dbInventoryProvider.overwrite(sortedInventories, clearTombstones: true, dirty: false) {saved in
-                                if saved {
-                                    handler(ProviderResult(status: .success, sucessResult: sortedInventories))
-                                    
-                                } else {
-                                    QL4("Error updating inventories - dbListsMaybe is nil")
-                                }
-                            }
-                        }
-                        
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                    }
-                }
-            }
+            // Disabled while impl. realm sync
+//            if remote {
+//                self.remoteProvider.inventories {remoteResult in
+//                    
+//                    if let remoteInventories = remoteResult.successResult {
+//                        let inventories: [DBInventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
+//                        let sortedInventories = inventories.sortedByOrder()
+//                        
+//                        if sotedDBInventories != sortedInventories {
+//                            
+//                            self.dbInventoryProvider.overwrite(sortedInventories, clearTombstones: true, dirty: false) {saved in
+//                                if saved {
+//                                    handler(ProviderResult(status: .success, sucessResult: sortedInventories))
+//                                    
+//                                } else {
+//                                    QL4("Error updating inventories - dbListsMaybe is nil")
+//                                }
+//                            }
+//                        }
+//                        
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                    }
+//                }
+//            }
         }
     }
     

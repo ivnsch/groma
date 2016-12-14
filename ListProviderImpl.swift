@@ -8,45 +8,48 @@
 
 import Foundation
 import QorumLogs
+import RealmSwift
 
 class ListProviderImpl: ListProvider {
    
     let remoteListProvider = RemoteListItemProvider()
     
     // Note: programmatic sorting 2x. But users normally have only a few lists so it's ok
-    func lists(_ remote: Bool = true, _ handler: @escaping (ProviderResult<[List]>) -> ()) {
-        DBProviders.listProvider.loadLists{dbLists in
-            
-            let sortedDBLists = dbLists.sortedByOrder()
-            
-            handler(ProviderResult(status: .success, sucessResult: sortedDBLists))
+    func lists(_ remote: Bool = true, _ handler: @escaping (ProviderResult<Results<List>>) -> ()) {
+        DBProviders.listProvider.loadLists {(lists: Results<List>?) in
+            if let lists = lists {
+                handler(ProviderResult(status: .success, sucessResult: lists))
+            } else {
+                QL4("Couldn't load lists")
+                handler(ProviderResult(status: .unknown, sucessResult: lists))
+            }
             
             // Disabled while impl. realm sync
-//            if remote {
-//                self.remoteListProvider.lists {remoteResult in
-//                    
-//                    if let remoteLists = remoteResult.successResult {
-//                        let lists = ListMapper.listsWithRemote(remoteLists)
-//                        
-//                        // if there are no local lists or there's a difference, overwrite the local lists
-//                        if sortedDBLists != lists {
-//                            
-//                            DBProviders.listProvider.overwriteLists(lists, clearTombstones: true) {saved in
-//                                if saved {
-//                                    if !sortedDBLists.equalsExcludingSyncAttributes(lists) { // the sync attributes are not relevant to the ui so notify ui only if sth else changed
-//                                        handler(ProviderResult(status: .success, sucessResult: lists))
-//                                    }
-//                                } else {
-//                                    QL4("Error overwriting lists - couldn't save")
-//                                }
-//                            }
-//                        }
-//                        
-//                    } else {
-//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-//                    }
-//                }
-//            }
+            //            if remote {
+            //                self.remoteListProvider.lists {remoteResult in
+            //
+            //                    if let remoteLists = remoteResult.successResult {
+            //                        let lists = ListMapper.listsWithRemote(remoteLists)
+            //
+            //                        // if there are no local lists or there's a difference, overwrite the local lists
+            //                        if sortedLists != lists {
+            //
+            //                            DBProviders.listProvider.overwriteLists(lists, clearTombstones: true) {saved in
+            //                                if saved {
+            //                                    if !sortedLists.equalsExcludingSyncAttributes(lists) { // the sync attributes are not relevant to the ui so notify ui only if sth else changed
+            //                                        handler(ProviderResult(status: .success, sucessResult: lists))
+            //                                    }
+            //                                } else {
+            //                                    QL4("Error overwriting lists - couldn't save")
+            //                                }
+            //                            }
+            //                        }
+            //                        
+            //                    } else {
+            //                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            //                    }
+            //                }
+            //            }
         }
     }
     
@@ -65,12 +68,11 @@ class ListProviderImpl: ListProvider {
     }
 
     func add(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<List>) -> ()) {
-        
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
         // remote -> dirty: if we want to upload to server, it means item has to be marked as dirty
-        DBProviders.listProvider.saveList(list, dirty: remote, handler: {[weak self] saved in
+        DBProviders.listProvider.saveList(list, dirty: remote, handler: {saved in
             
             if saved {
                 handler(ProviderResult(status: .success, sucessResult: list))
@@ -105,21 +107,22 @@ class ListProviderImpl: ListProvider {
         DBProviders.listProvider.saveLists(lists, update: true, dirty: remote) {[weak self] updated in
             handler(ProviderResult(status: updated ? .success : .databaseSavingError))
             if updated {
-                if remote {
-                    self?.remoteListProvider.update(lists) {remoteResult in
-                        if let timestamp = remoteResult.successResult {
-                            DBProviders.listProvider.updateLastSyncTimeStamp(lists, timestamp: timestamp) {success in
-                                if !success {
-                                    QL4("Error storing last update timestamp")
-                                }
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
-                                QL4(remoteResult)
-                            }
-                        }
-                    }
-                }
+                // Disabled while impl. realm sync
+//                if remote {
+//                    self?.remoteListProvider.update(lists) {remoteResult in
+//                        if let timestamp = remoteResult.successResult {
+//                            DBProviders.listProvider.updateLastSyncTimeStamp(lists, timestamp: timestamp) {success in
+//                                if !success {
+//                                    QL4("Error storing last update timestamp")
+//                                }
+//                            }
+//                        } else {
+//                            DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
+//                                QL4(remoteResult)
+//                            }
+//                        }
+//                    }
+//                }
             } else {
                 QL4("DB update didn't succeed")
             }
@@ -132,14 +135,15 @@ class ListProviderImpl: ListProvider {
             if success {
                 handler(ProviderResult(status: .success))
                 
-                if remote {
-                    self?.remoteListProvider.updateListsOrder(orderUpdates) {remoteResult in
-                        // Note: no server update timetamps here, because server implementation details, more info see note in RemoteOrderUpdate
-                        if !remoteResult.success {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                        }
-                    }
-                }
+                // Disabled while impl. realm sync
+//                if remote {
+//                    self?.remoteListProvider.updateListsOrder(orderUpdates) {remoteResult in
+//                        // Note: no server update timetamps here, because server implementation details, more info see note in RemoteOrderUpdate
+//                        if !remoteResult.success {
+//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                        }
+//                    }
+//                }
             } else {
                 QL4("Error updating lists order in local database, orderUpdates: \(orderUpdates)")
                 handler(ProviderResult(status: .unknown))
@@ -161,21 +165,22 @@ class ListProviderImpl: ListProvider {
         DBProviders.listProvider.remove(listUuid, markForSync: remote, handler: {[weak self] removed in
             handler(ProviderResult(status: removed ? .success : .databaseSavingError))
             if removed {
-                if remote {
-                    self?.remoteListProvider.remove(listUuid) {remoteResult in
-                        if remoteResult.success {
-                            DBProviders.listProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
-                                if !removeTombstoneSuccess {
-                                    QL4("Couldn't delete tombstone for list: \(listUuid)")
-                                }
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
-                                QL4(remoteResult)
-                            }
-                        }
-                    }
-                }
+                // Disabled while impl. realm sync
+//                if remote {
+//                    self?.remoteListProvider.remove(listUuid) {remoteResult in
+//                        if remoteResult.success {
+//                            DBProviders.listProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
+//                                if !removeTombstoneSuccess {
+//                                    QL4("Couldn't delete tombstone for list: \(listUuid)")
+//                                }
+//                            }
+//                        } else {
+//                            DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
+//                                QL4(remoteResult)
+//                            }
+//                        }
+//                    }
+//                }
             } else {
                 QL4("DB remove didn't succeed")
             }

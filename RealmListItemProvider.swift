@@ -34,14 +34,14 @@ class RealmListItemProvider: RealmProvider {
         
         let existingListItems = realm.objects(DBListItem.self).filter(DBListItem.createFilter(listItems))
         
-        let uuidToDBListItemDict: [String: DBListItem] = existingListItems.toDictionary{
+        let uuidToListItemDict: [String: DBListItem] = existingListItems.toDictionary{
             ($0.product.uuid, $0)
         }
         // merge list items with existing, in order to do update (increment quantity)
         // this means: use uuid of existing item, increment quantity, and for the rest copy fields of new item
         listItems = listItems.map {listItem in
-            if let existingDBListItem = uuidToDBListItemDict[listItem.product.uuid] {
-                return listItem.increment(existingDBListItem.todoQuantity, doneQuantity: existingDBListItem.doneQuantity, stashQuantity: existingDBListItem.stashQuantity)
+            if let existingListItem = uuidToListItemDict[listItem.product.uuid] {
+                return listItem.increment(existingListItem.todoQuantity, doneQuantity: existingListItem.doneQuantity, stashQuantity: existingListItem.stashQuantity)
             } else {
                 return listItem
             }
@@ -352,10 +352,10 @@ class RealmListItemProvider: RealmProvider {
 //            } : nil
 //        
 //        doInWriteTransaction({realm in
-//            realm.delete(realm.objects(DBSection).filter(DBListItem.createFilter(listItemUuid)))
+//            realm.delete(realm.objects(DBSection).filter(ListItem.createFilter(listItemUuid)))
 //            
 //            let sectionUuidMaybeAfterTryRetrieve: String? = sectionUuidMaybe ?? {
-//                return realm.objects(DBListItem).filter(DBListItem.createFilter(listItemUuid)).first?.section.uuid
+//                return realm.objects(ListItem).filter(ListItem.createFilter(listItemUuid)).first?.section.uuid
 //                }()
 //            
 //            additionalActions?(realm)
@@ -392,7 +392,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func overwrite(_ listItems: [ListItem], listUuid: String, clearTombstones: Bool, handler: @escaping (Bool) -> ()) {
-        let dbListItems = listItems.map{ListItemMapper.dbWithListItem($0)}
+        let dbListItems: [DBListItem] = listItems.map{ListItemMapper.dbWithListItem($0)}
         let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveListItem.self, DBRemoveListItem.createFilterForList(listUuid))} : nil
         self.overwrite(dbListItems, deleteFilter: DBListItem.createFilterList(listUuid), resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
@@ -401,6 +401,9 @@ class RealmListItemProvider: RealmProvider {
     Gets list items count with a certain status in a certain list
     */
     func listItemCount(_ status: ListItemStatus, list: List, handler: @escaping (Int?) -> Void) {
+        
+        let listCopy = list.copy() // Fixes Realm acces in incorrect thread exceptions
+        
         let finished: (Int?) -> Void = {result in
             DispatchQueue.main.async(execute: {
                 handler(result)
@@ -409,7 +412,7 @@ class RealmListItemProvider: RealmProvider {
         DispatchQueue.global(qos: .background).async {
             do {
                 let realm = try Realm()
-                let listItems = realm.objects(DBListItem.self).filter(DBListItem.createFilterList(list.uuid))
+                let listItems = realm.objects(DBListItem.self).filter(DBListItem.createFilterList(listCopy.uuid))
                 let count = listItems.filter{$0.hasStatus(status)}.count
                 finished(count)
             } catch _ {
@@ -479,7 +482,7 @@ class RealmListItemProvider: RealmProvider {
         
         doInWriteTransaction({realm in
             
-            let inventories = realm.objects(DBList.self)
+            let inventories = realm.objects(List.self)
             let inventoryItems = realm.objects(DBListItem.self)
             let sections = realm.objects(DBSection.self)
 
@@ -492,7 +495,7 @@ class RealmListItemProvider: RealmProvider {
             let lists = ListMapper.listsWithRemote(syncResult.lists)
             let remoteInventories = lists
             for remoteInventory in remoteInventories {
-                let dbInventory = ListMapper.dbWithList(remoteInventory)
+                let dbInventory = remoteInventory
                 realm.add(dbInventory, update: true)
             }
             

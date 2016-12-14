@@ -11,8 +11,7 @@ import Foundation
 class SectionMapper {
     
     class func sectionWithDB(_ dbSection: DBSection) -> Section {
-        let list = ListMapper.listWithDB(dbSection.list)
-        return Section(uuid: dbSection.uuid, name: dbSection.name, color: dbSection.color(), list: list, todoOrder: dbSection.todoOrder, doneOrder: dbSection.doneOrder, stashOrder: dbSection.stashOrder, lastServerUpdate: dbSection.lastServerUpdate)
+        return Section(uuid: dbSection.uuid, name: dbSection.name, color: dbSection.color(), list: dbSection.list, todoOrder: dbSection.todoOrder, doneOrder: dbSection.doneOrder, stashOrder: dbSection.stashOrder, lastServerUpdate: dbSection.lastServerUpdate)
     }
     
     class func SectionWithRemote(_ remoteSection: RemoteSection, list: List) -> Section {
@@ -24,7 +23,7 @@ class SectionMapper {
         dbSection.uuid = section.uuid
         dbSection.name = section.name
         dbSection.setColor(section.color)
-        dbSection.list = ListMapper.dbWithList(section.list)
+        dbSection.list = section.list
         dbSection.todoOrder = section.todoOrder
         dbSection.doneOrder = section.doneOrder
         dbSection.stashOrder = section.stashOrder
@@ -39,7 +38,7 @@ class SectionMapper {
         dbSection.uuid = section.uuid
         dbSection.name = section.name
         dbSection.setColor(section.color)
-        dbSection.list = ListMapper.dbWithList(list)
+        dbSection.list = list
         dbSection.todoOrder = section.todoOrder
         dbSection.doneOrder = section.doneOrder
         dbSection.stashOrder = section.stashOrder

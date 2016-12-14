@@ -178,9 +178,9 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     func copy(uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String?, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> ListItem {
         return ListItem(
             uuid: uuid ?? self.uuid,
-            product: product ?? self.product,
+            product: product ?? self.product.copy(),
             section: section ?? self.section,
-            list: list ?? self.list,
+            list: list ?? self.list.copy(),
             note: note ?? self.note,
             
             todoQuantity: todoQuantity ?? self.todoQuantity,

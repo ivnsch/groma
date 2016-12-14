@@ -210,7 +210,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                 
                 if lists.isEmpty {
                     
-                    let exampleList = List(uuid: UUID().uuidString, name: trans("example_list_first_list"), bgColor: UIColor.flatOrange, order: 0, inventory: inventory, store: nil)
+                    let exampleList = List(uuid: UUID().uuidString, name: trans("example_list_first_list"), color: UIColor.flatOrange, order: 0, inventory: inventory, store: nil)
                     
                     let productsWithQuantity: [(name: String, quantity: Int)] = [
                         (trans("pr_peaches"), 6),

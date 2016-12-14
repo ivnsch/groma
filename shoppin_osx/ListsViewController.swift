@@ -68,9 +68,6 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         let list = List(uuid: NSUUID().UUIDString, name: listInput.name, users: [ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")])
 
         self.listsProvider.add(list, successHandler{[weak self] addedList in
-            self?.loadLists() // we modified list - reload everything
-            self?.selectTableViewRow(addedList)
-            return
         })
     }
     
