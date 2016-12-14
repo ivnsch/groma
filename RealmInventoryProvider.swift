@@ -36,8 +36,15 @@ class RealmInventoryProvider: RealmProvider {
         
         do {
             let realm = try Realm()
-            // TODO review if it's necessary to pass the sort descriptor here again
-            let items: Results<InventoryItem> = self.loadSync(realm, filter: InventoryItem.createFilterInventory(inventoryCopy.uuid))
+            
+            let sortData: (key: String, ascending: Bool) = {
+                switch sortBy {
+                case .alphabetic: return ("name", true)
+                case .count: return ("quantity", false)
+                }
+            }()
+            
+            let items: Results<InventoryItem> = self.loadSync(realm, filter: InventoryItem.createFilterInventory(inventoryCopy.uuid), sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending))
             handler(items)
 
         } catch let e {

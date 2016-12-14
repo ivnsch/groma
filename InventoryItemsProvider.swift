@@ -48,7 +48,7 @@ protocol InventoryItemsProvider {
     func addToInventory(_ inventory: DBInventory, product: Product, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void)
     
     // Add group
-    func addToInventory(_ inventory: DBInventory, group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void)
+    func addToInventory(_ inventory: DBInventory, group: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void)
     
     // Add inventory item input
     func addToInventory(_ inventory: DBInventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void)

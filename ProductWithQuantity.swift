@@ -18,25 +18,3 @@ protocol ProductWithQuantity2 {
     
     func updateQuantityCopy(_ quantity: Int) -> Self
 }
-
-class ProductWithQuantity: Equatable, Identifiable {
-    var product: Product {
-        fatalError("override")
-    }
-    var quantity: Int {
-        fatalError("override")
-    }
-    func same(_ rhs: ProductWithQuantity) -> Bool {
-        return product.same(rhs.product)
-    }
-    func incrementQuantityCopy(_ delta: Int) -> ProductWithQuantity {
-        fatalError("override")
-    }
-    
-    func updateQuantityCopy(_ quantity: Int) -> ProductWithQuantity {
-        fatalError("override")
-    }
-}
-func ==(lhs: ProductWithQuantity, rhs: ProductWithQuantity) -> Bool {
-    return lhs.product == rhs.product && lhs.quantity == rhs.quantity
-}

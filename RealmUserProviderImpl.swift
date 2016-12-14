@@ -52,8 +52,8 @@ class RealmUserProviderImpl: UserProvider {
                     var config = AppDelegate.realmConfig
                     
                     config.syncConfiguration = SyncConfiguration(user: user, realmURL: syncServerURL)
-                    config.objectTypes = [DBList.self, DBInventory.self, DBSection.self, Product.self, DBSharedUser.self, DBRemoveList.self, DBRemoveInventory.self, DBListItem.self, InventoryItem.self, DBSyncable.self, DBHistoryItem.self, DBPlanItem.self, DBListItemGroup.self, DBGroupItem.self, ProductCategory.self, DBStoreProduct.self,
-                        DBSectionToRemove.self, ProductToRemove.self, DBStoreProductToRemove.self, DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self, DBRemoveInventoryItem.self
+                    config.objectTypes = [DBList.self, DBInventory.self, DBSection.self, Product.self, DBSharedUser.self, DBRemoveList.self, DBRemoveInventory.self, DBListItem.self, InventoryItem.self, DBSyncable.self, DBHistoryItem.self, DBPlanItem.self, ProductGroup.self, GroupItem.self, ProductCategory.self, DBStoreProduct.self,
+                        DBSectionToRemove.self, ProductToRemove.self, DBStoreProductToRemove.self, DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self, DBRemoveInventoryItem.self, DBRemoveProductGroup.self
                     ]
                         
                     Realm.Configuration.defaultConfiguration = config

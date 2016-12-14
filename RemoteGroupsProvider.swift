@@ -16,14 +16,14 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
-    func addGroup(_ group: ListItemGroup, handler: @escaping (RemoteResult<RemoteGroup>) -> ()) {
+    func addGroup(_ group: ProductGroup, handler: @escaping (RemoteResult<RemoteGroup>) -> ()) {
         let params = toRequestParams(group)
         RemoteProvider.authenticatedRequest(.post, Urls.group, params) {result in
             handler(result)
         }
     }
     
-    func updateGroup(_ group: ListItemGroup, handler: @escaping (RemoteResult<RemoteGroup>) -> ()) {
+    func updateGroup(_ group: ProductGroup, handler: @escaping (RemoteResult<RemoteGroup>) -> ()) {
         let params = toRequestParams(group)
         RemoteProvider.authenticatedRequest(.put, Urls.group, params) {result in
             handler(result)
@@ -45,14 +45,14 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
 
-    func updateGroups(_ groups: [ListItemGroup], handler: @escaping (RemoteResult<[RemoteGroup]>) -> ()) {
+    func updateGroups(_ groups: [ProductGroup], handler: @escaping (RemoteResult<[RemoteGroup]>) -> ()) {
         let params = groups.map{toRequestParams($0)}
         RemoteProvider.authenticatedRequestArray(.put, Urls.groups, params) {result in
             handler(result)
         }
     }
     
-    func removeGroup(_ group: ListItemGroup, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
+    func removeGroup(_ group: ProductGroup, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
         removeGroup(group.uuid, handler: handler)
     }
     
@@ -62,7 +62,7 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
-    func groupsItems(_ group: ListItemGroup, handler: @escaping (RemoteResult<RemoteGroupItemsWithDependencies>) -> ()) {
+    func groupsItems(_ group: ProductGroup, handler: @escaping (RemoteResult<RemoteGroupItemsWithDependencies>) -> ()) {
         RemoteProvider.authenticatedRequest(.get, Urls.groupItems, ["groupUuid": group.uuid as AnyObject]) {result in
             handler(result)
         }
@@ -106,18 +106,16 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
-    func toRequestParams(_ group: ListItemGroup) -> [String: AnyObject] {
+    func toRequestParams(_ group: ProductGroup) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
             "uuid": group.uuid as AnyObject,
             "name": group.name as AnyObject,
             "order": group.order as AnyObject,
-            "color": group.bgColor.hexStr as AnyObject,
+            "color": group.color.hexStr as AnyObject,
             "fav": group.fav as AnyObject
         ]
         
-        if let lastServerUpdate = group.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(group.lastServerUpdate) as Int64)
 
         return dict
     }
@@ -135,9 +133,7 @@ class RemoteGroupsProvider: RemoteProvider {
             "group": groupDict as AnyObject
         ]
         
-        if let lastServerUpdate = groupItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(groupItem.lastServerUpdate) as Int64)
         
         return dict
     }

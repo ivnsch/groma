@@ -284,7 +284,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topQuickAddControllerManager?.controller?.onClose()
     }
     
-    func onAddGroup(_ group: ListItemGroup, onFinish: VoidFunction?) {
+    func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
         if let inventory = inventory {
             Providers.inventoryItemsProvider.addToInventory(inventory, group: group, remote: true, resultHandler(onSuccess: {[weak self] inventoryItemsWithDelta in
 
@@ -400,7 +400,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             Providers.inventoryItemsProvider.inventoryItems(inventory: inventory, fetchMode: .memOnly, sortBy: sortBy, successHandler{[weak self] inventoryItems in guard let weakSelf = self else {return}
                 
                 weakSelf.inventoryItemsResult = inventoryItems
-                onSuccess(inventoryItems.toArray())
+                onSuccess(inventoryItems.toArray()) // TODO! productsWithQuantityController should load also lazily
 
                 weakSelf.notificationToken = weakSelf.inventoryItemsResult?.addNotificationBlock { changes in
                     
@@ -417,10 +417,12 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                     
                         weakSelf.productsWithQuantityController.models = inventoryItems.toArray() // TODO! productsWithQuantityController should load also lazily
                         
-                        weakSelf.productsWithQuantityController.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
-                        weakSelf.productsWithQuantityController.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                        weakSelf.productsWithQuantityController.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
+                        weakSelf.productsWithQuantityController.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .top)
                         weakSelf.productsWithQuantityController.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
                         weakSelf.productsWithQuantityController.tableView.endUpdates()
+                        
+                        weakSelf.productsWithQuantityController.updateEmptyUI()
                         
                         // TODO close only when receiving own notification, not from someone else (possible?)
                         if !modifications.isEmpty { // close only if it's an update (for add user may want to add multiple products)

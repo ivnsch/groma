@@ -1,5 +1,5 @@
 //
-//  RealmListItemGroupProvider.swift
+//  RealmProductGroupProvider.swift
 //  shoppin
 //
 //  Created by ischuetz on 13/10/15.
@@ -10,16 +10,16 @@ import Foundation
 import RealmSwift
 import QorumLogs
 
-class RealmListItemGroupProvider: RealmProvider {
+class RealmProductGroupProvider: RealmProvider {
     
     // TODO don't use QuickAddItemSortBy here, map to a (new) group specific enum
-    func groups(_ range: NSRange, sortBy: GroupSortBy, handler: @escaping ([ListItemGroup]) -> Void) {
+    func groups(_ range: NSRange, sortBy: GroupSortBy, handler: @escaping ([ProductGroup]) -> Void) {
         groups(range: range, sortBy: sortBy) {tuples in
             handler(tuples.1)
         }
     }
     
-    func groups(_ substring: String? = nil, range: NSRange? = nil, sortBy: GroupSortBy, handler: @escaping ((substring: String?, groups: [ListItemGroup])) -> Void) {
+    func groups(_ substring: String? = nil, range: NSRange? = nil, sortBy: GroupSortBy, handler: @escaping ((substring: String?, groups: [ProductGroup])) -> Void) {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
             case .alphabetic: return ("name", true)
@@ -27,38 +27,60 @@ class RealmListItemGroupProvider: RealmProvider {
             case .order: return ("order", true)
             }
         }()
-        let filterMaybe = substring.map{DBListItemGroup.createFilterNameContains($0)}
-        let mapper = {ListItemGroupMapper.listItemGroupWith($0)}
-        self.load(mapper, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range) {groups in
-            handler((substring, groups))
+        
+        
+        withRealm({realm -> [String]? in
+            let groups: Results<ProductGroup> = self.loadSync(realm, filter: substring.map{ProductGroup.createFilterNameContains($0)}, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending))
+            return groups.toArray(range).map{$0.uuid}
+            
+        }) {uuidsMaybe in
+            do {
+                if let uuids = uuidsMaybe {
+                    let realm = try Realm()
+                    // TODO review if it's necessary to pass the sort descriptor here again
+                    let groups: Results<ProductGroup> = self.loadSync(realm, filter: ProductGroup.createFilterUuids(uuids), sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending))
+                    handler(substring, groups.toArray())
+                    
+                } else {
+                    QL4("No product uuids")
+                    handler((substring, []))
+                }
+                
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                handler((substring, []))
+            }
         }
     }
 
-    // TODO remove
-    func groups(_ handler: @escaping ([ListItemGroup]) -> Void) {
-        let mapper = {ListItemGroupMapper.listItemGroupWith($0)}
-        self.load(mapper, handler: handler)
+    func groups(sortBy: GroupSortBy, _ handler: @escaping (Results<ProductGroup>?) -> Void) {
+        let sortData: (key: String, ascending: Bool) = {
+            switch sortBy {
+            case .alphabetic: return ("name", true)
+            case .fav: return ("fav", false)
+            case .order: return ("order", true)
+            }
+        }()
+        handler(loadSync(filter: nil, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending)))
     }
     
     // TODO add group -> update: false, but show an alert to the user that group already exists instead of crash
-    func add(_ group: ListItemGroup, dirty: Bool, handler: @escaping (Bool) -> Void) {
+    func add(_ group: ProductGroup, dirty: Bool, handler: @escaping (Bool) -> Void) {
         update(group, dirty: dirty, handler: handler)
     }
 
-    func update(_ group: ListItemGroup, dirty: Bool, handler: @escaping (Bool) -> Void) {
-        let dbObj = ListItemGroupMapper.dbWith(group, dirty: dirty)
-        saveObj(dbObj, update: true, handler: handler)
+    func update(_ group: ProductGroup, dirty: Bool, handler: @escaping (Bool) -> Void) {
+        saveObj(group.copy(), update: true, handler: handler)
     }
     
-    func update(_ groups: [ListItemGroup], dirty: Bool, handler: @escaping (Bool) -> Void) {
-        let dbObjs = groups.map{ListItemGroupMapper.dbWith($0, dirty: dirty)}
-        saveObjs(dbObjs, update: true, handler: handler)
+    func update(_ groups: [ProductGroup], dirty: Bool, handler: @escaping (Bool) -> Void) {
+        saveObjs(groups.map{$0.copy()}, update: true, handler: handler)
     }
     
     func updateGroupsOrder(_ orderUpdates: [OrderUpdate], dirty: Bool, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             for orderUpdate in orderUpdates {
-                realm.create(DBListItemGroup.self, value: DBListItemGroup.createOrderUpdateDict(orderUpdate, dirty: dirty), update: true)
+                realm.create(ProductGroup.self, value: ProductGroup.createOrderUpdateDict(orderUpdate, dirty: dirty), update: true)
             }
             return true
             }) {(successMaybe: Bool?) in
@@ -68,7 +90,7 @@ class RealmListItemGroupProvider: RealmProvider {
     
     func incrementFav(_ groupUuid: String, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
-            if let existingGroup = realm.objects(DBListItemGroup.self).filter(DBListItemGroup.createFilter(groupUuid)).first {
+            if let existingGroup = realm.objects(ProductGroup.self).filter(ProductGroup.createFilter(groupUuid)).first {
                 existingGroup.fav += 1
                 realm.add(existingGroup, update: true)
                 return true
@@ -80,13 +102,13 @@ class RealmListItemGroupProvider: RealmProvider {
         })
     }
     
-    func overwrite(_ groups: [ListItemGroup], clearTombstones: Bool, handler: @escaping (Bool) -> ()) {
-        let dbGroups = groups.map{ListItemGroupMapper.dbWith($0)}
-        let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveListItemGroup.self)} : nil
-        self.overwrite(dbGroups, resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
+    func overwrite(_ groups: [ProductGroup], clearTombstones: Bool, handler: @escaping (Bool) -> ()) {
+        let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveProductGroup.self)} : nil
+        let groupsCopy: [ProductGroup] = groups.map{$0.copy()}
+        self.overwrite(groupsCopy, resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
     
-    func remove(_ group: ListItemGroup, markForSync: Bool, handler: @escaping (Bool) -> Void) {
+    func remove(_ group: ProductGroup, markForSync: Bool, handler: @escaping (Bool) -> Void) {
         removeGroup(group.uuid, markForSync: markForSync, handler: handler)
     }
 
@@ -105,21 +127,21 @@ class RealmListItemGroupProvider: RealmProvider {
         
         removeGroupDependenciesSync(realm, groupUuid: groupUuid, markForSync: markForSync)
         
-        if let itemToRemove = realm.objects(DBListItemGroup.self).filter(DBListItemGroup.createFilter(groupUuid)).first {
+        if let itemToRemove = realm.objects(ProductGroup.self).filter(ProductGroup.createFilter(groupUuid)).first {
             if markForSync {
-                let toRemove = DBRemoveListItemGroup(uuid: groupUuid, lastServerUpdate: itemToRemove.lastServerUpdate)
+                let toRemove = DBRemoveProductGroup(uuid: groupUuid, lastServerUpdate: itemToRemove.lastServerUpdate)
                 realm.add(toRemove, update: true)
             }
             realm.delete(itemToRemove)
             
             // Update order. No synchonisation with server for this, since server also reorders on delete, and on sync. Not sure right now if reorder on sync covers all cases specially for multiple devices, for now looks sufficient.
-            let allSortedDbGroups = realm.objects(DBListItemGroup.self).sorted(by: {$0.order < $1.order})
-            let updatedDbGroups: [DBListItemGroup] = allSortedDbGroups.mapEnumerate {(index, dbList) in
+            let allSortedDbGroups = realm.objects(ProductGroup.self).sorted(by: {$0.order < $1.order})
+            let updatedDbGroups: [ProductGroup] = allSortedDbGroups.mapEnumerate {(index, dbList) in
                 dbList.order = index
                 return dbList
             }
             for updatedDbGroup in updatedDbGroups {
-                realm.create(DBListItemGroup.self, value: ["uuid": updatedDbGroup.uuid, "order": updatedDbGroup.order], update: true)
+                realm.create(ProductGroup.self, value: ["uuid": updatedDbGroup.uuid, "order": updatedDbGroup.order], update: true)
             }
 
         } else {
@@ -136,7 +158,7 @@ class RealmListItemGroupProvider: RealmProvider {
 
     func clearGroupTombstone(_ uuid: String, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
-            realm.deleteForFilter(DBRemoveListItemGroup.self, DBRemoveListItemGroup.createFilter(uuid))
+            realm.deleteForFilter(DBRemoveProductGroup.self, DBRemoveProductGroup.createFilter(uuid))
             return true
             }, finishHandler: {success in
                 handler(success ?? false)
@@ -165,6 +187,6 @@ class RealmListItemGroupProvider: RealmProvider {
     }
     
     func updateLastSyncTimeStampSync(_ realm: Realm, group: RemoteGroup) {
-        realm.create(DBListItemGroup.self, value: group.timestampUpdateDict, update: true)
+        realm.create(ProductGroup.self, value: group.timestampUpdateDict, update: true)
     }
 }

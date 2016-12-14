@@ -9,12 +9,13 @@
 import UIKit
 import SwiftValidator
 import QorumLogs
+import RealmSwift
 
 class ExpandableTableViewGroupModel: ExpandableTableViewModel {
     
-    let group: ListItemGroup
+    let group: ProductGroup
     
-    init (group: ListItemGroup) {
+    init (group: ProductGroup) {
         self.group = group
     }
     
@@ -23,7 +24,7 @@ class ExpandableTableViewGroupModel: ExpandableTableViewModel {
     }
     
     override var bgColor: UIColor {
-        return group.bgColor
+        return group.color
     }
     
     override var users: [DBSharedUser] {
@@ -47,15 +48,15 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     fileprivate var topAddEditListControllerManager: ExpandableTopViewController<AddEditGroupViewController>?
     
+    fileprivate var groupsResult: Results<ProductGroup>?
+    fileprivate var notificationToken: NotificationToken?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setNavTitle(trans("title_groups"))
         
         topAddEditListControllerManager = initTopAddEditListControllerManager()
-        NotificationCenter.default.addObserver(self, selector: #selector(GroupsController.onWebsocketGroup(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Group.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(GroupsController.onWebsocketGroups(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Groups.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(GroupsController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)    
     }
     
     deinit {
@@ -81,8 +82,40 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     
     override func initModels() {
-        Providers.listItemGroupsProvider.groups(NSRange(location: 0, length: 1000), sortBy: .order, successHandler{[weak self] groups in
-            self?.models = groups.map{ExpandableTableViewGroupModel(group: $0)}
+        Providers.listItemGroupsProvider.groups(sortBy: .order, successHandler{[weak self] groups in guard let weakSelf = self else {return}
+            
+            weakSelf.groupsResult = groups
+            
+            self?.notificationToken = groups.addNotificationBlock { changes in
+                switch changes {
+                case .initial:
+                    //                        // Results are now populated and can be accessed without blocking the UI
+                    //                        self.viewController.didUpdateList(reload: true)
+                    QL1("initial")
+                    
+                case .update(_, let deletions, let insertions, let modifications):
+                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(weakSelf.groupsResult?.count)")
+                    
+                    weakSelf.tableView.beginUpdates()
+                    
+                    weakSelf.models = weakSelf.groupsResult!.map{ExpandableTableViewGroupModel(group: $0)}
+                    weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
+                    weakSelf.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .top)
+                    weakSelf.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
+                    weakSelf.tableView.endUpdates()
+                    
+                    // TODO close only when receiving own notification, not from someone else (possible?)
+                    weakSelf.topAddEditListControllerManager?.expand(false)
+                    weakSelf.setTopBarState(.normalFromExpanded)
+                    
+                    
+                case .error(let error):
+                    // An error occurred while opening the Realm file on the background worker thread
+                    fatalError(String(describing: error))
+                }
+            }
+            
+            weakSelf.models = groups.map{ExpandableTableViewGroupModel(group: $0)} // TODO use results!
             self?.debugItems()
         })
     }
@@ -209,43 +242,23 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     // MARK: - EditListViewController
     //change
-    func onAddGroup(_ group: ListItemGroup) {
-        Providers.listItemGroupsProvider.add(group, remote: true, resultHandler(onSuccess: {[weak self] in
-            self?.addGroupUI(group)
+    func onAddGroup(_ group: ProductGroup) {
+        Providers.listItemGroupsProvider.add(group, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.onGroupAddOrUpdateError(group)
             }
         ))
     }
     
-    func onUpdateGroup(_ group: ListItemGroup) {
-        Providers.listItemGroupsProvider.update(group, remote: true, resultHandler(onSuccess: {[weak self] in
-            self?.updateGroupUI(group)
+    func onUpdateGroup(_ group: ProductGroup) {
+        Providers.listItemGroupsProvider.update(group, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.onGroupAddOrUpdateError(group)
             }
         ))
     }
     
-    fileprivate func addGroupUI(_ group: ListItemGroup) {
-        tableView.wrapUpdates {[weak self] in
-            if let weakSelf = self {
-                self?.tableView.insertRows(at: [IndexPath(row: weakSelf.models.count, section: 0)], with: UITableViewRowAnimation.top)
-                self?.models.append(ExpandableTableViewGroupModel(group: group))
-                self?.topAddEditListControllerManager?.expand(false)
-                self?.setTopBarState(.normalFromExpanded)
-            }
-        }
-    }
-    
-    fileprivate func updateGroupUI(_ group: ListItemGroup) {
-        _ = models.update(ExpandableTableViewGroupModel(group: group))
-        tableView.reloadData()
-        topAddEditListControllerManager?.expand(false)
-        setTopBarState(.normalFromExpanded)
-    }
-    
-    fileprivate func onGroupAddOrUpdateError(_ group: ListItemGroup) {
+    fileprivate func onGroupAddOrUpdateError(_ group: ProductGroup) {
         initModels()
         // If the user quickly after adding the group opened its group items controller, close it.
         for childViewController in childViewControllers {
@@ -265,70 +278,5 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     override func onExpandableClose() {
         super.onExpandableClose()
         setTopBarState(.normalFromExpanded)
-    }
-    
-    // MARK: - Websocket
-    
-    func onWebsocketGroup(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ListItemGroup>> {
-            if let notification = info[WSNotificationValue] {
-                let group = notification.obj
-                switch notification.verb {
-                case .Add:
-                    addGroupUI(group)
-                case .Update:
-                    Providers.listItemGroupsProvider.update(group, remote: false, successHandler{[weak self] in
-                        self?.updateGroupUI(group)
-                    })
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                
-                let groupUuid = notification.obj
-                
-                switch notification.verb {
-                case .Delete:
-                    if let model = ((models as! [ExpandableTableViewGroupModel]).filter{$0.group.uuid == groupUuid}).first {
-                        removeModel(model)
-                    } else {
-                        QL3("Received notification to remove group but it wasn't in table view. Uuid: \(groupUuid)")
-                    }
-                    
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else {
-            QL4("No userInfo")
-        }
-    }
-    
-    func onWebsocketGroups(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Order:
-                    initModels()
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else {
-            QL4("userInfo not there or couldn't be casted: \((note as NSNotification).userInfo)")
-        }
-    }
-    
-    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
-        // TODO notification - note has the sender name
-        initModels()
     }
 }

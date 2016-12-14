@@ -10,8 +10,8 @@ import Foundation
 
 final class GroupItemWithGroup {
     let groupItem: GroupItem
-    let group: ListItemGroup
-    init (groupItem: GroupItem, group: ListItemGroup) {
+    let group: ProductGroup
+    init (groupItem: GroupItem, group: ProductGroup) {
         self.groupItem = groupItem
         self.group = group
     }

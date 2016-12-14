@@ -12,35 +12,6 @@ import SwiftValidator
 import QorumLogs
 import RealmSwift
 
-class ProductWithQuantityGroup: ProductWithQuantity {
-    let groupItem: GroupItem
-    
-    override var product: Product {
-        return groupItem.product
-    }
-    
-    override var quantity: Int {
-        return groupItem.quantity
-    }
-    
-    func same(_ rhs: ProductWithQuantityGroup) -> Bool {
-        return groupItem.same(rhs.groupItem)
-    }
-    
-    init(groupItem: GroupItem) {
-        self.groupItem = groupItem
-    }
-    override func incrementQuantityCopy(_ delta: Int) -> ProductWithQuantity {
-        let incrementedItem = groupItem.incrementQuantityCopy(delta)
-        return ProductWithQuantityGroup(groupItem: incrementedItem)
-    }
-    
-    override func updateQuantityCopy(_ quantity: Int) -> ProductWithQuantity {
-        let udpatedItem = groupItem.copy(quantity: quantity)
-        return ProductWithQuantityGroup(groupItem: udpatedItem)
-    }
-}
-
 class GroupItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
 
     @IBOutlet weak var topBar: ListTopBarView!
@@ -53,7 +24,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     fileprivate var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
     
     // Warn: Setting this before prepareForSegue for tableViewController has no effect
-    var group: ListItemGroup? {
+    var group: ProductGroup? {
         didSet {
             if let group = group {
                 topBar.title = group.name
@@ -72,7 +43,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
 
-    fileprivate var results: Results<DBGroupItem>?
+    fileprivate var results: Results<GroupItem>?
     fileprivate var notificationToken: NotificationToken?
     
     override func viewDidLoad() {
@@ -287,15 +258,9 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         topQuickAddControllerManager?.controller?.onClose()
     }
     
-    func onAddGroup(_ group: ListItemGroup, onFinish: VoidFunction?) {
+    func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
         if let currentGroup = self.group {
             Providers.listItemGroupsProvider.addGroupItems(group, targetGroup: currentGroup, remote: true, resultHandler(onSuccess: {[weak self] groupItemsWithDelta in
-                let groupItems = groupItemsWithDelta.map{$0.groupItem}
-                if let firstGroupItem = groupItemsWithDelta.first {
-                    self?.productsWithQuantityController.scrollToItem(firstGroupItem.groupItem)
-                } else {
-                    QL3("Shouldn't be here without list items")
-                }
             }, onError: {[weak self] result in guard let weakSelf = self else {return}
                 switch result.status {
                 case .isEmpty:
@@ -312,7 +277,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             // TODO don't create group item here we don't know if it exists in the group already, if it does the new uuid is not used. Use a prototype class like in list items.
             let groupItem = GroupItem(uuid: UUID().uuidString, quantity: 1, product: product, group: group)
             
-            Providers.listItemGroupsProvider.add(groupItem, remote: true, successHandler{[weak self] addedItem in
+            Providers.listItemGroupsProvider.add(groupItem, remote: true, successHandler{addedItem in
             })
         }
     }
@@ -320,7 +285,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditItem(_ input: ListItemInput, editingItem: GroupItem) {
-            Providers.listItemGroupsProvider.update(input, updatingGroupItem: editingItem, remote: true, resultHandler (onSuccess: {[weak self] (inventoryItem, replaced) in
+            Providers.listItemGroupsProvider.update(input, updatingGroupItem: editingItem, remote: true, resultHandler (onSuccess: {(inventoryItem, replaced) in
             }, onError: {[weak self] result in
                 self?.defaultErrorHandler()(result)
             }))
@@ -329,7 +294,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         func onAddItem(_ input: ListItemInput) {
             if let group = group {
                 let groupItemInput = GroupItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
-                Providers.listItemGroupsProvider.add(groupItemInput, group: group, remote: true, resultHandler (onSuccess: {[weak self] groupItem in
+                Providers.listItemGroupsProvider.add(groupItemInput, group: group, remote: true, resultHandler (onSuccess: {groupItem in
                 }, onError: {[weak self] result in
                     self?.closeTopController()
                     self?.defaultErrorHandler()(result)
@@ -406,8 +371,8 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         if let group = group {
             Providers.listItemGroupsProvider.groupItems(group, sortBy: sortBy, fetchMode: .both, successHandler{[weak self] groupItems in guard let weakSelf = self else {return}
                 
-//                weakSelf.results = groupItems
-                onSuccess(groupItems)
+                weakSelf.results = groupItems
+                onSuccess(groupItems.toArray()) // TODO! productsWithQuantityController should load also lazily
                 
 //                weakSelf.productsWithQuantityController.models = weakSelf.results?.toArray() ?? [] // TODO!! use generic Results in productsWithQuantityController to not have to map to array
                 
@@ -423,16 +388,25 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                         
                         weakSelf.productsWithQuantityController.tableView.beginUpdates()
                         
-                        //                    weakSelf.models = weakSelf.inventoriesResult!.map{ExpandableTableViewInventoryModelRealm(inventory: $0)}
-                        weakSelf.productsWithQuantityController.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
-                        weakSelf.productsWithQuantityController.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                        weakSelf.productsWithQuantityController.models = groupItems.toArray() // TODO! productsWithQuantityController should load also lazily
+                        
+                        weakSelf.productsWithQuantityController.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
+                        weakSelf.productsWithQuantityController.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .top)
                         weakSelf.productsWithQuantityController.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
                         weakSelf.productsWithQuantityController.tableView.endUpdates()
+
+                        weakSelf.productsWithQuantityController.updateEmptyUI()
                         
                         // TODO close only when receiving own notification, not from someone else (possible?)
-                        weakSelf.topQuickAddControllerManager?.expand(false)
-                        weakSelf.topQuickAddControllerManager?.controller?.onClose()
+                        if !modifications.isEmpty { // close only if it's an update (for add user may want to add multiple products)
+                            weakSelf.topQuickAddControllerManager?.expand(false)
+                            weakSelf.topQuickAddControllerManager?.controller?.onClose()
+                        }
                         
+                        if let firstInsertion = insertions.first { // when add, scroll to added item
+                            weakSelf.productsWithQuantityController.tableView.scrollToRow(at: IndexPath(row: firstInsertion, section: 0), at: .top, animated: true)
+                        }
+
                     case .error(let error):
                         // An error occurred while opening the Realm file on the background worker thread
                         fatalError(String(describing: error))
@@ -446,7 +420,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
-        Providers.listItemGroupsProvider.remove((model as! ProductWithQuantityGroup).groupItem, remote: true, resultHandler(onSuccess: {
+        Providers.listItemGroupsProvider.remove(model as! GroupItem, remote: true, resultHandler(onSuccess: {
             onSuccess()
         }, onError: {result in
             onError(result)
@@ -454,14 +428,14 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void) {
-        Providers.listItemGroupsProvider.increment((model as! ProductWithQuantityGroup).groupItem, delta: delta, remote: true, successHandler({updatedQuantity in
+        Providers.listItemGroupsProvider.increment(model as! GroupItem, delta: delta, remote: true, successHandler({updatedQuantity in
             onSuccess(updatedQuantity)
         }))
     }
     
     func onModelSelected(_ model: ProductWithQuantity2, indexPath: IndexPath) {
         if productsWithQuantityController.isEditing {
-            let groupItem = (model as! ProductWithQuantityGroup).groupItem
+            let groupItem = model as! GroupItem
             updatingGroupItem = groupItem
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: groupItem))

@@ -13,8 +13,8 @@ import QorumLogs
 
 //change
 protocol AddEditGroupControllerDelegate: class {
-    func onAddGroup(_ group: ListItemGroup)
-    func onUpdateGroup(_ group: ListItemGroup)
+    func onAddGroup(_ group: ProductGroup)
+    func onUpdateGroup(_ group: ProductGroup)
 }
 
 // TODO after final design either remove color code or reenable it
@@ -33,7 +33,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     
     var currentListsCount: Int? // to determine order. For now we set this field at view controller level, don't do an extra fetch in provider. Maybe it's better like this.
     
-    var listToEdit: ListItemGroup? {
+    var listToEdit: ProductGroup? {
         didSet {
             if let listToEdit = listToEdit {
                 prefill(listToEdit)
@@ -67,9 +67,9 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     }
     
     
-    fileprivate func prefill(_ list: ListItemGroup) {
+    fileprivate func prefill(_ list: ProductGroup) {
         groupNameInputField.text = list.name
-        setBackgroundColor(list.bgColor)
+        setBackgroundColor(list.color)
     }
     
     fileprivate func initValidator() {
@@ -130,7 +130,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
                 weakSelf.delegate?.onUpdateGroup(updatedGroup)
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
-                    let group = ListItemGroup(uuid: NSUUID().uuidString, name: listName, bgColor: bgColor, order: currentListsCount)
+                    let group = ProductGroup(uuid: NSUUID().uuidString, name: listName, color: bgColor, order: currentListsCount)
                     weakSelf.delegate?.onAddGroup(group)
                 } else {
                     QL4("No currentListsCount")

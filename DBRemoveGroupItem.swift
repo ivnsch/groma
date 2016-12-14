@@ -15,7 +15,7 @@ class DBRemoveGroupItem: Object {
     dynamic var groupUuid: String = ""
     dynamic var lastServerUpdate: Int64 = 0
 
-    convenience init(_ dbGroupItem: DBGroupItem) {
+    convenience init(_ dbGroupItem: GroupItem) {
         self.init(uuid: dbGroupItem.uuid, groupUuid: dbGroupItem.group.uuid, lastServerUpdate: dbGroupItem.lastServerUpdate)
     }
     

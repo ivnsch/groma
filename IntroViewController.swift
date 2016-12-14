@@ -141,11 +141,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
         
         func initExampleGroup(_ onFinish: VoidFunction? = nil) {
-            Providers.listItemGroupsProvider.groups(resultHandler(onSuccess: {[weak self] groups in guard let weakSelf = self else {onFinish?(); return}
+            Providers.listItemGroupsProvider.groups(sortBy: .order, resultHandler(onSuccess: {[weak self] groups in guard let weakSelf = self else {onFinish?(); return}
                 
                 if groups.isEmpty {
                     
-                    let exampleGroup = ListItemGroup(uuid: UUID().uuidString, name: trans("example_group_fruits_salad"), bgColor: UIColor.flatYellow, order: 0)
+                    let exampleGroup = ProductGroup(uuid: UUID().uuidString, name: trans("example_group_fruits_salad"), color: UIColor.flatYellow, order: 0)
                     
                     let ingredients: [(name: String, quantity: Int)] = [
                         (trans("pr_pineapple"), 1),

@@ -91,7 +91,7 @@ protocol ListItemProvider {
     */
     func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ())
 
-    func addGroupItems(_ group: ListItemGroup, status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ())
+    func addGroupItems(_ group: ProductGroup, status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ())
     
     /**
     Gets list items count with a certain status in a certain list

@@ -15,7 +15,7 @@ class ManageGroupsCell: UITableViewCell {
     @IBOutlet weak var groupItemCountLabel: UILabel!
     @IBOutlet weak var groupPriceLabel: UILabel!
     
-    var group: ItemWithCellAttributes<ListItemGroup>? {
+    var group: ItemWithCellAttributes<ProductGroup>? {
         didSet {
             if let group = group {
                 if let boldRange = group.boldRange {

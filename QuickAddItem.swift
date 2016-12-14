@@ -9,7 +9,7 @@
 import Foundation
 
 // TODO check if this makes sense, if not remove
-// maybe we can use directly Product and ListItemGroup in table view - so we don't have to call map?
+// maybe we can use directly Product and ProductGroup in table view - so we don't have to call map?
 class QuickAddItem: Identifiable {
 
     var boldRange: NSRange?

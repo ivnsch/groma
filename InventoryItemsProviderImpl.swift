@@ -32,8 +32,6 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         // FIXME: sortBy and range don't work in db (see notes in implementation). For now we have to do this programmatically
         DBProviders.inventoryProvider.loadInventory(inventory, sortBy: sortBy) {[weak self] (dbInventoryItems) in
             
-            guard let dbInventoryItems = dbInventoryItems else {QL4("No inventory items"); return}
-            
 //            let dbInventoryItemsSorted = dbInventoryItems.sortBy(sortBy)
 //            let dbInventoryItemsInRange = dbInventoryItemsSorted[range]
 
@@ -43,7 +41,14 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //                handler(ProviderResult(status: .success, sucessResult: dbInventoryItems))
 //                _ = self?.memProvider.overwrite(dbInventoryItems)
 //            }
-            handler(ProviderResult(status: .success, sucessResult: dbInventoryItems))
+            
+            if let dbInventoryItems = dbInventoryItems {
+                handler(ProviderResult(status: .success, sucessResult: dbInventoryItems))
+            } else {
+                QL4("Inventory items is nil")
+                handler(ProviderResult(status: .unknown))
+            }
+            
             
             
             // Disabled while impl. realm sync - access of realm objs here causes wrong thread exception
@@ -358,7 +363,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
 
     
-    func addToInventory(_ inventory: DBInventory, group: ListItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
+    func addToInventory(_ inventory: DBInventory, group: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
         Providers.listItemGroupsProvider.groupItems(group, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
                 if groupItems.isEmpty {

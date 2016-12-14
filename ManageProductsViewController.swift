@@ -226,7 +226,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         topQuickAddControllerManager?.controller?.onClose()
     }
     
-    func onAddGroup(_ group: ListItemGroup, onFinish: VoidFunction?) {
+    func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
     }
     
     func onAddProduct(_ product: Product) {

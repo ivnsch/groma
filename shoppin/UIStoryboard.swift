@@ -11,7 +11,7 @@ import UIKit
 
 extension UIStoryboard {
     fileprivate class func mainStoryboard() -> UIStoryboard { return UIStoryboard(name: "Main", bundle: Bundle.main) }
-    fileprivate class func listItemGroupsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ListItemGroups", bundle: Bundle.main) }
+    fileprivate class func listItemGroupsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ProductGroups", bundle: Bundle.main) }
     fileprivate class func introStoryboard() -> UIStoryboard { return UIStoryboard(name: "Intro", bundle: Bundle.main) }
     fileprivate class func loginStoryboard() -> UIStoryboard { return UIStoryboard(name: "Login", bundle: Bundle.main) }
     fileprivate class func registerStoryboard() -> UIStoryboard { return UIStoryboard(name: "Register", bundle: Bundle.main) }
@@ -55,7 +55,7 @@ extension UIStoryboard {
     // MARK: - Groups
     
     class func listItemsGroupsNavigationController() -> UINavigationController {
-        return listItemGroupsStoryboard().instantiateViewController(withIdentifier: "ListItemGroupsNavigationController") as! UINavigationController
+        return listItemGroupsStoryboard().instantiateViewController(withIdentifier: "ProductGroupsNavigationController") as! UINavigationController
     }
     
     // MARK: - General

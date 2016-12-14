@@ -406,7 +406,7 @@ class PlanViewController: UIViewController
 //        })
 //    }
 //    
-//    func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
+//    func onAddGroup(group: ProductGroup, onFinish: VoidFunction?) {
 //        if let _ = currentInventory {
 ////            Providers.planProvider.addGroupItems(group.items, inventory: inventory, successHandler{[weak self] planItems in
 ////                self?.onGroupsAdded()

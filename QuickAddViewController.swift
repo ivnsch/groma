@@ -13,7 +13,7 @@ import QorumLogs
 
 protocol QuickAddDelegate: class {
     func onAddProduct(_ product: Product)
-    func onAddGroup(_ group: ListItemGroup, onFinish: VoidFunction?)
+    func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?)
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) // editingItem == nil -> add
 
 //    func onValidationErrors(errors: [UITextField: ValidationError])
@@ -231,7 +231,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     // MARK: - QuickAddListItemDelegate
     
     // group was selected in group quick list
-    func onAddGroup(_ group: ListItemGroup) {
+    func onAddGroup(_ group: ProductGroup) {
         delegate?.onAddGroup(group, onFinish: nil)
     }
     

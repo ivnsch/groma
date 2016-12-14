@@ -226,7 +226,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 <navigationController storyboardIdentifier="NavigationController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="c6K-Tm-JhD" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="list" selectedImage="list_selected" id="uJG-Eo-xiW"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="FPI-Ud-Czg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="FPI-Ud-Czg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -737,7 +737,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="7A1-RK-HJT" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="inventory" selectedImage="inventory_selected" id="yUm-WR-GoU"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QjE-wI-irz">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="QjE-wI-irz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -832,10 +832,6 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="68" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lPR-4v-QFA">
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="Nmw-ML-kCx" id="ATJ-OW-Jsi"/>
-                                    <outlet property="delegate" destination="Nmw-ML-kCx" id="eJJ-EC-HTT"/>
-                                </connections>
                             </tableView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RXy-3J-Yb9">
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
@@ -1739,7 +1735,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="B4w-vm-AVy" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="more" selectedImage="more_selected" id="cLJ-PG-GFJ"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ufI-Hd-Hpl">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="ufI-Hd-Hpl">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1758,7 +1754,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Tva-Bh-1q8" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="stats" selectedImage="stats_selected" id="omU-Id-l2V"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qy3-eD-XlX">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="qy3-eD-XlX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

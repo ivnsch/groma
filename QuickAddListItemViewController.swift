@@ -13,7 +13,7 @@ import QorumLogs
 
 protocol QuickAddListItemDelegate: class {
     func onAddProduct(_ product: Product)
-    func onAddGroup(_ group: ListItemGroup)
+    func onAddGroup(_ group: ProductGroup)
     func onCloseQuickAddTap()
     func onHasItems(_ hasItems: Bool)
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)

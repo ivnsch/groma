@@ -26,7 +26,7 @@ class DBProviders {
     
     static var historyProvider = RealmHistoryProvider()
     
-    static var listItemGroupProvider = RealmListItemGroupProvider()
+    static var listItemGroupProvider = RealmProductGroupProvider()
     static var groupItemProvider = RealmGroupItemProvider()
 
     static var globalProvider = RealmGlobalProvider()

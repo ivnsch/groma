@@ -560,7 +560,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         topEditSectionControllerManager?.controller?.onClose()
     }
     
-    func onAddGroup(_ group: ListItemGroup, onFinish: VoidFunction?) {
+    func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
         if let list = currentList {
             
             // TODO save "group list item" don't desintegrate group immediatly

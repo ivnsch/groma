@@ -29,7 +29,7 @@ protocol SectionProvider {
     func sections(_ names: [String], list: List, handler: @escaping (ProviderResult<[Section]>) -> ())
     
     /**
-    Utility method to refactor common code in ListItemsProviderImpl and ListItemGroupProviderImpl when adding new list or group items
+    Utility method to refactor common code in ListItemsProviderImpl and ProductGroupProviderImpl when adding new list or group items
     Tries to load using unique (name), if existent overrides fields with corresponding input, if not existent creates a new one
     TODO use results like everywhere else, maybe put in a different specific utility class this is rather provider-internal
     

@@ -158,13 +158,13 @@ class ListItemProviderImpl: ListItemProvider {
         self.add(listItemPrototypes, status: status, list: list, handler)
     }
     
-    func addGroupItems(_ group: ListItemGroup, status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
+    func addGroupItems(_ group: ProductGroup, status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
         Providers.listItemGroupsProvider.groupItems(group, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
                 if groupItems.isEmpty {
                     handler(ProviderResult(status: .isEmpty))
                 } else {
-                    self?.add(groupItems, status: status, list: list, handler)
+                    self?.add(groupItems.toArray(), status: status, list: list, handler)
                 }
                 
             } else {

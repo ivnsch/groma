@@ -612,7 +612,7 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    // FIXME repeated method with RealmListItemGroupProvider
+    // FIXME repeated method with RealmProductGroupProvider
     func updateLastSyncTimeStampSync(_ realm: Realm, product: RemoteProduct) {
         realm.create(Product.self, value: product.timestampUpdateDict, update: true)
     }

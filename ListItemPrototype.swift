@@ -28,10 +28,6 @@ class ListItemPrototype: Equatable, Identifiable, CustomDebugStringConvertible {
         return product.same(rhs.product)
     }
     
-    func incrementQuantityCopy(_ delta: Int) -> ProductWithQuantity {
-        fatalError("override")
-    }
-    
     var debugDescription: String {
         return "\(product.name), \(quantity), \(targetSectionName)"
     }

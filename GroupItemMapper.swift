@@ -9,27 +9,9 @@
 import Foundation
 
 class GroupItemMapper {
-    
-    class func dbWith(_ groupItem: GroupItem, dirty: Bool) -> DBGroupItem {
-        let dbListItemGroup = DBGroupItem()
-        dbListItemGroup.uuid = groupItem.uuid
-        dbListItemGroup.quantity = groupItem.quantity
-        dbListItemGroup.product = groupItem.product.copy()
-        dbListItemGroup.group = ListItemGroupMapper.dbWith(groupItem.group)
-        if let lastServerUpdate = groupItem.lastServerUpdate {
-            dbListItemGroup.lastServerUpdate = lastServerUpdate
-        }
-        dbListItemGroup.dirty = dirty
-        return dbListItemGroup
-    }
-    
-    class func groupItemWith(_ dbGroupItem: DBGroupItem) -> GroupItem {
-        let group = ListItemGroupMapper.listItemGroupWith(dbGroupItem.group)
-        return GroupItem(uuid: dbGroupItem.uuid, quantity: dbGroupItem.quantity, product: dbGroupItem.product, group: group, lastServerUpdate: dbGroupItem.lastServerUpdate)
-    }
-    
-    class func groupItemWithRemote(_ remoteGroupItem: RemoteGroupItem, product: Product, group: ListItemGroup) -> GroupItem {
-        return GroupItem(uuid: remoteGroupItem.uuid, quantity: remoteGroupItem.quantity, product: product, group: group, lastServerUpdate: remoteGroupItem.lastUpdate)
+
+    class func groupItemWithRemote(_ remoteGroupItem: RemoteGroupItem, product: Product, group: ProductGroup) -> GroupItem {
+        return GroupItem(uuid: remoteGroupItem.uuid, quantity: remoteGroupItem.quantity, product: product, group: group)
     }
     
     /**
@@ -64,11 +46,11 @@ class GroupItemMapper {
             return (dict, arr)
         }
         
-        func toGroupDict(_ remoteSections: [RemoteGroup]) -> ([String: ListItemGroup], [ListItemGroup]) {
-            var dict: [String: ListItemGroup] = [:]
-            var arr: [ListItemGroup] = []
+        func toGroupDict(_ remoteSections: [RemoteGroup]) -> ([String: ProductGroup], [ProductGroup]) {
+            var dict: [String: ProductGroup] = [:]
+            var arr: [ProductGroup] = []
             for remoteSection in remoteSections {
-                let group = ListItemGroupMapper.listItemGroupWithRemote(remoteSection)
+                let group = ProductGroupMapper.listItemGroupWithRemote(remoteSection)
                 dict[remoteSection.uuid] = group
                 arr.append(group)
             }

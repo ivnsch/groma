@@ -142,7 +142,7 @@ class RealmProductProvider: RealmProvider {
     }
     
     
-    
+    // IMPORTANT: This cannot be used for real time updates (add) since the final results are fetched using uuids, so these results don't notice products with new uuids
     func products(_ substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ products: Results<Product>?) -> Void) {
         
         let sortData: (key: String, ascending: Bool) = {

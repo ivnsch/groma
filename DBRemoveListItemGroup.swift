@@ -1,5 +1,5 @@
 //
-//  DBRemoveListItemGroup.swift
+//  DBRemoveProductGroup.swift
 //  shoppin
 //
 //  Created by ischuetz on 29/02/16.
@@ -9,13 +9,13 @@
 import Foundation
 import RealmSwift
 
-class DBRemoveListItemGroup: Object {
+class DBRemoveProductGroup: Object {
     
     dynamic var uuid: String = ""
     dynamic var lastServerUpdate: Int64 = 0
 
-    convenience init(_ dbListItemGroup: DBListItemGroup) {
-        self.init(uuid: dbListItemGroup.uuid, lastServerUpdate: dbListItemGroup.lastServerUpdate)
+    convenience init(_ dbProductGroup: ProductGroup) {
+        self.init(uuid: dbProductGroup.uuid, lastServerUpdate: dbProductGroup.lastServerUpdate)
     }
     
     convenience init(uuid: String, lastServerUpdate: Int64) {

@@ -10,9 +10,9 @@ import Foundation
 
 class QuickAddGroup: QuickAddItem {
     
-    let group: ListItemGroup
+    let group: ProductGroup
 
-    init(_ group: ListItemGroup, boldRange: NSRange? = nil) {
+    init(_ group: ProductGroup, boldRange: NSRange? = nil) {
         self.group = group
         super.init(boldRange: boldRange)
     }
@@ -30,7 +30,7 @@ class QuickAddGroup: QuickAddItem {
     }
     
     override var color: UIColor {
-        return group.bgColor
+        return group.color
     }
     
     override func clearBoldRangeCopy() -> QuickAddGroup {

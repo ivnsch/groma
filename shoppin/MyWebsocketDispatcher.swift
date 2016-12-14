@@ -290,7 +290,7 @@ struct MyWebsocketDispatcher {
         switch verb {
         case WSNotificationVerb.Add:
             if let remoteGroup = RemoteGroup(representation: data) {
-                let group = ListItemGroupMapper.listItemGroupWithRemote(remoteGroup)
+                let group = ProductGroupMapper.listItemGroupWithRemote(remoteGroup)
                 Providers.listItemGroupsProvider.add(group, remote: false) {result in
                     if result.success {
                         postNotification(.Group, verb, sender, group)
@@ -304,7 +304,7 @@ struct MyWebsocketDispatcher {
 
         case WSNotificationVerb.Update:
             if let remoteGroup = RemoteGroup(representation: data) {
-                let group = ListItemGroupMapper.listItemGroupWithRemote(remoteGroup)
+                let group = ProductGroupMapper.listItemGroupWithRemote(remoteGroup)
                 Providers.listItemGroupsProvider.update(group, remote: false) {result in
                     if result.success {
                         postNotification(.Group, verb, sender, group)
