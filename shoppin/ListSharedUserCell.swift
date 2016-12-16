@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol SharedUserCellDelegate: class {
     func onPullProductsTap(_ user: DBSharedUser, cell: ListSharedUserCell)

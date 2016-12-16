@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 class HelpItemSectionModel: SectionModel<HelpItem> {
     var boldRange: NSRange?
@@ -48,7 +49,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         recognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(recognizer)
         
-        Providers.helpProvider.helpItems(successHandler {[weak self] helpItems in
+        Prov.helpProvider.helpItems(successHandler {[weak self] helpItems in
             self?.sectionModels = helpItems.map{HelpItemSectionModel(obj: $0)}
         })
     }

@@ -67,13 +67,13 @@
 //    func autoCompleteTextField(textField: MLPAutoCompleteTextField!, possibleCompletionsForString string: String!, completionHandler handler: (([AnyObject]!) -> Void)!) {
 //        switch textField {
 //        case nameInput:
-//            Providers.productProvider.productSuggestions(successHandler{suggestions in
+//            Prov.productProvider.productSuggestions(successHandler{suggestions in
 //                // TODO move this filtering to the provider
 //                let names = suggestions.filterMap({$0.name.contains(string, caseInsensitive: true)}){$0.name}
 //                handler(names)
 //            })
 //        case categoryInput:
-//            Providers.productProvider.categoriesContaining(string, successHandler {categories in
+//            Prov.productProvider.categoriesContaining(string, successHandler {categories in
 //                handler(categories)
 //            })
 //        case _:
@@ -146,7 +146,7 @@
 //            let quantityDelta = quantity - planItem.quantity // TODO! this is not most likely not correct, needs to include also planItem.quantityDelta?
 //            let updatedPlanItem = planItem.copy(product: updatedProduct, quantity: quantity, quantityDelta: quantityDelta)
 //            
-//            Providers.planProvider.updatePlanItem(updatedPlanItem, inventory: inventory, successHandler{[weak self] planItem in
+//            Prov.planProvider.updatePlanItem(updatedPlanItem, inventory: inventory, successHandler{[weak self] planItem in
 //                self?.delegate?.onPlanItemUpdated(planItem)
 //            })
 //        } else {
@@ -156,7 +156,7 @@
 //
 //    private func addPlanItem(name: String, price priceText: String, quantity quantityText: String, category: String, baseQuantity: Float, unit: ProductUnit) {
 //        if let planItemInput = toPlanItemInput(name, priceText: priceText, quantityText: quantityText, category: category, baseQuantity: baseQuantity, unit: unit), inventory = currentInventory {
-//            Providers.planProvider.addPlanItem(planItemInput, inventory: inventory, successHandler{[weak self] planItem in
+//            Prov.planProvider.addPlanItem(planItemInput, inventory: inventory, successHandler{[weak self] planItem in
 //                self?.delegate?.onPlanItemAdded(planItem)
 //            })
 //        }

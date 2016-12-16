@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol RatingAlertDelegate: class {
     func onDismissRatingAlert()

@@ -10,6 +10,7 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 import QorumLogs
+import Providers
 
 protocol UserDetailsViewControllerDelegate: class {
     func onLogoutSuccess()
@@ -24,7 +25,7 @@ class UserDetailsViewController: UIViewController {
     @IBOutlet weak var logoutButton: UIButton!
     
     override func viewDidLoad() {
-        if let me = Providers.userProvider.mySharedUser {
+        if let me = Prov.userProvider.mySharedUser {
             initContents(me)
         } else {
             QL4("Invalid state, we are in user details but there's no stored user")
@@ -43,7 +44,7 @@ class UserDetailsViewController: UIViewController {
     
     @IBAction func onLogoutTap(_ sender: UIButton) {
         
-        Providers.userProvider.logout {[weak self] remoteResult in
+        Prov.userProvider.logout {[weak self] remoteResult in
             
             FBSDKLoginManager().logOut() // in case we logged in using fb
             GIDSignIn.sharedInstance().signOut()  // in case we logged in using google

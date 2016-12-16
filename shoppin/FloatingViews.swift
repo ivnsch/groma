@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 enum FLoatingButtonAction {
     case add, toggle, back, submit, expand

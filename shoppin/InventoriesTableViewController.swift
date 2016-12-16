@@ -9,6 +9,7 @@
 import UIKit
 import QorumLogs
 import RealmSwift
+import Providers
 
 class ExpandableTableViewInventoryModelRealm: ExpandableTableViewModel {
     
@@ -81,7 +82,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     override func initModels() {
-        Providers.inventoryProvider.inventoriesRealm(true, successHandler{[weak self] inventories in guard let weakSelf = self else {return}
+        Prov.inventoryProvider.inventoriesRealm(true, successHandler{[weak self] inventories in guard let weakSelf = self else {return}
                 
             weakSelf.inventoriesResult = inventories
             
@@ -143,17 +144,20 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         
         models = reorderedInventories.map{ExpandableTableViewInventoryModelRealm(inventory: $0)}
         
-
         let withoutNotifying = notificationToken.map{[$0]} ?? []
         
+        Prov.inventoryProvider.updateInventoriesOrder(orderUpdates, withoutNotifying: [], realm: nil, remote: false, successHandler {
+        })
+        
         // For now in the foreground. When in bg get either wrong thread error or "only notifications for the Realm being modified can be skipped" error (instantiating a new realm in bg)
-        if let realm = inventoriesResult?.realm {
-            try! realm.write(withoutNotifying: withoutNotifying) {_ in
-                for orderUpdate in orderUpdates {
-                    realm.create(DBInventory.self, value: DBInventory.createOrderUpdateDict(orderUpdate, dirty: false), update: true)
-                }
-            }
-        }
+        // TODO!!!!!!!!!!!!!!!!!!!!!!!! do this in Providers
+//        if let realm = inventoriesResult?.realm {
+//            try! realm.write(withoutNotifying: withoutNotifying) {_ in
+//                for orderUpdate in orderUpdates {
+//                    realm.create(DBInventory.self, value: DBInventory.createOrderUpdateDict(orderUpdate, dirty: false), update: true)
+//                }
+//            }
+//        }
     }
     
     override func canRemoveModel(_ model: ExpandableTableViewModel, can: @escaping (Bool) -> Void) {
@@ -170,7 +174,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     override func onRemoveModel(_ model: ExpandableTableViewModel) {
         let inventory = (model as! ExpandableTableViewInventoryModelRealm).inventory
 
-        Providers.inventoryProvider.removeInventory(inventory, remote: true, resultHandler(onSuccess: {_ in
+        Prov.inventoryProvider.removeInventory(inventory, remote: true, resultHandler(onSuccess: {_ in
             }, onError: {[weak self] result in
                 self?.initModels()
                 self?.defaultErrorHandler()(result)
@@ -243,7 +247,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     // MARK: - AddEditInventoryControllerDelegate
     
     func onAddInventory(_ inventory: DBInventory) {
-        Providers.inventoryProvider.addInventory(inventory, remote: true, resultHandler(onSuccess: {
+        Prov.inventoryProvider.addInventory(inventory, remote: true, resultHandler(onSuccess: {
             // do nothing - is handled in realm notification handler
             }, onErrorAdditional: {[weak self] result in
                 self?.onInventoryAddOrUpdateError(inventory)
@@ -252,7 +256,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     func onUpdateInventory(_ inventory: DBInventory) {
-        Providers.inventoryProvider.updateInventory(inventory, remote: true, resultHandler(onSuccess: {
+        Prov.inventoryProvider.updateInventory(inventory, remote: true, resultHandler(onSuccess: {
             // do nothing - is handled in realm notification handler
             }, onErrorAdditional: {[weak self] result in
                 self?.onInventoryAddOrUpdateError(inventory)

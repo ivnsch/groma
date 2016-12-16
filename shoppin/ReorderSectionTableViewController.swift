@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol ReorderSectionTableViewControllerDelegate: class {
     func onSectionsUpdated()
@@ -116,7 +117,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
                 section.updateOrder(ListItemStatusOrder(status: status, order: index))
             }
             
-            Providers.sectionProvider.update(sections, remote: true, successHandler{[weak self] in
+            Prov.sectionProvider.update(sections, remote: true, successHandler{[weak self] in
                 self?.delegate?.onSectionsUpdated()
             })
             

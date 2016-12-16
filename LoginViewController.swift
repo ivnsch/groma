@@ -13,6 +13,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import QorumLogs
 import CloudKit
+import Providers
 
 protocol LoginDelegate: class {
     func onLoginSuccess()
@@ -136,7 +137,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let storedEmail = Providers.userProvider.mySharedUser?.email {
+        if let storedEmail = Prov.userProvider.mySharedUser?.email {
             userNameField.text = storedEmail
             passwordField.becomeFirstResponder()
         }
@@ -188,7 +189,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 
                 let loginData = LoginData(email: email, password: password)
                 
-                Providers.userProvider.login(loginData, controller: self, rootController.resultHandler(onSuccess: {[weak self] syncResult in guard let weakSelf = self else {return}
+                Prov.userProvider.login(loginData, controller: self, rootController.resultHandler(onSuccess: {[weak self] syncResult in guard let weakSelf = self else {return}
                     
                     weakSelf.onLoginSuccess()
                     
@@ -204,7 +205,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                             QL1("New email and user cancelled clear local data popup") // nothing to do here, user stays in login form
                         default:
                             self?.defaultErrorHandler()(result)
-                            Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
+                            Prov.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
                         }
                     }
                 ))
@@ -300,7 +301,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
             QL1("Facebook login success, calling our server...")
             progressVisible()
             if let tokenString = result.token.tokenString {
-                Providers.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+                Prov.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
             } else {
                 QL4("Facebook no token")
             }
@@ -317,7 +318,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         if (error == nil) {
             QL1("Google login success, calling our server...")
             progressVisible()
-            Providers.userProvider.authenticateWithGoogle(user.authentication.idToken, controller: self, socialSignInResultHandler())
+            Prov.userProvider.authenticateWithGoogle(user.authentication.idToken, controller: self, socialSignInResultHandler())
         } else {
             QL4("Google login error: \(error.localizedDescription)")
         }
@@ -355,7 +356,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                 self?.progressVisible(false)
                 self?.defaultErrorHandler()(providerResult)
                 if let weakSelf = self {
-                    Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
+                    Prov.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
                 }
             })(providerResult)
         }
@@ -378,12 +379,12 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                         return
                     }
                     
-                    Providers.userProvider.authenticateWithICloud(token, controller: rootController, rootController.resultHandler(onSuccess: {_ in
+                    Prov.userProvider.authenticateWithICloud(token, controller: rootController, rootController.resultHandler(onSuccess: {_ in
                         weakSelf.onLoginSuccess()
                     }, onError: {result in
                         // Note: status from cred login not handled here, since we now are 99% we will not use custom server for sync. So that handling is not used.
                         weakSelf.defaultErrorHandler()(result)
-                        Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
+                        Prov.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
                     }
                     ))
                 } else {

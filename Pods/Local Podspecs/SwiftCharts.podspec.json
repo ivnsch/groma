@@ -1,6 +1,6 @@
 {
   "name": "SwiftCharts",
-  "version": "0.4",
+  "version": "0.5.1",
   "summary": "extensible, flexible charts library for iOS",
   "homepage": "https://github.com/i-schuetz/SwiftCharts",
   "license": {
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/i-schuetz/SwiftCharts.git",
-    "tag": "0.4"
+    "tag": "0.5.1"
   },
   "source_files": [
     "SwiftCharts/*.swift",

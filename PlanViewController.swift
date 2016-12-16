@@ -105,7 +105,7 @@ class PlanViewController: UIViewController
 //    override func viewWillAppear(animated: Bool) {
 //        super.viewWillAppear(animated)
 //        
-//        Providers.inventoryProvider.inventories(true, successHandler {[weak self] inventories in
+//        Prov.inventoryProvider.inventories(true, successHandler {[weak self] inventories in
 //            if let inventory = inventories.first {
 //                self?.currentInventory = inventory
 //                
@@ -131,7 +131,7 @@ class PlanViewController: UIViewController
 //    }
 //    
 //    private func initPlanItems(scrollToItem: PlanItem? = nil) {
-//        Providers.planProvider.planItems(successHandler {[weak self] planItems in
+//        Prov.planProvider.planItems(successHandler {[weak self] planItems in
 //            self?.planItems = planItems
 //            self?.updateEmptyPlanView()
 //            
@@ -189,7 +189,7 @@ class PlanViewController: UIViewController
 //            // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
 //            let planItem = planItems[indexPath.row]
 //            removePlanItemUI(planItem)
-//            Providers.planProvider.removePlanItem(planItem, resultHandler(onSuccess: {
+//            Prov.planProvider.removePlanItem(planItem, resultHandler(onSuccess: {
 //            }, onError: {[weak self] result in
 //                self?.initPlanItems()
 //                self?.defaultErrorHandler()(providerResult: result)
@@ -238,7 +238,7 @@ class PlanViewController: UIViewController
 //        
 //        if planItem.quantity + delta >= 0 {
 //            
-//            Providers.planProvider.incrementPlanItem(planItem, delta: delta, successHandler({[weak self] result in
+//            Prov.planProvider.incrementPlanItem(planItem, delta: delta, successHandler({[weak self] result in
 //                
 //                if let weakSelf = self {
 //                    
@@ -251,7 +251,7 @@ class PlanViewController: UIViewController
 //                            weakSelf.tableView.reloadData()
 //
 //                            // TODO is it necessary to have multiple [weak self] in nested blocks? (we one above in incrementInventoryItem)
-//                            Providers.planProvider.removePlanItem(planItem, weakSelf.successHandler{[weak self] result in
+//                            Prov.planProvider.removePlanItem(planItem, weakSelf.successHandler{[weak self] result in
 //                                self?.removeUI(row)
 //                            })
 ////                        }
@@ -401,14 +401,14 @@ class PlanViewController: UIViewController
 //
 //    
 //    func planItem(productName: String, handler: PlanItem? -> ()) {
-//        Providers.planProvider.planItem(productName, successHandler {planItemMaybe in
+//        Prov.planProvider.planItem(productName, successHandler {planItemMaybe in
 //            handler(planItemMaybe)
 //        })
 //    }
 //    
 //    func onAddGroup(group: ProductGroup, onFinish: VoidFunction?) {
 //        if let _ = currentInventory {
-////            Providers.planProvider.addGroupItems(group.items, inventory: inventory, successHandler{[weak self] planItems in
+////            Prov.planProvider.addGroupItems(group.items, inventory: inventory, successHandler{[weak self] planItems in
 ////                self?.onGroupsAdded()
 ////                // TODO!! show popover with "group added etc"
 ////            })
@@ -418,7 +418,7 @@ class PlanViewController: UIViewController
 //    
 //    func onAddProduct(product: Product) {
 //        if let inventory = currentInventory {
-//            Providers.planProvider.addProduct(product, inventory: inventory, successHandler {[weak self] planItem in
+//            Prov.planProvider.addProduct(product, inventory: inventory, successHandler {[weak self] planItem in
 //                self?.onProductsAdded(planItem)
 //            })
 //        }
@@ -469,7 +469,7 @@ class PlanViewController: UIViewController
 //            if let price = priceText.floatValue, quantity = Int(quantityText), inventory = currentInventory {
 //                let planItemInput = PlanItemInput(name: name, quantity: quantity, price: price, category: sectionName, categoryColor: sectionColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
 //                
-//                Providers.planProvider.addPlanItems([planItemInput], inventory: inventory, self.successHandler{[weak self] planItems in
+//                Prov.planProvider.addPlanItems([planItemInput], inventory: inventory, self.successHandler{[weak self] planItems in
 //                    self?.initPlanItems() // TODO update only added?
 //                })
 //            } else {
@@ -491,14 +491,14 @@ class PlanViewController: UIViewController
 //    }
 //    
 //    func productNameAutocompletions(text: String, handler: [String] -> ()) {
-//        Providers.productProvider.productSuggestions(successHandler{suggestions in
+//        Prov.productProvider.productSuggestions(successHandler{suggestions in
 //            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
 //            handler(names)
 //        })
 //    }
 //    
 //    func sectionNameAutocompletions(text: String, handler: [String] -> ()) {
-//        Providers.sectionProvider.sectionSuggestionsContainingText(text, successHandler{suggestions in
+//        Prov.sectionProvider.sectionSuggestionsContainingText(text, successHandler{suggestions in
 //            handler(suggestions)
 //        })
 //    }
@@ -514,7 +514,7 @@ class PlanViewController: UIViewController
 //        let quantityDelta = quantity - planItem.quantity // TODO! this is not most likely not correct, needs to include also planItem.quantityDelta?
 //        let updatedPlanItem = planItem.copy(product: updatedProduct, quantity: quantity, quantityDelta: quantityDelta)
 //        
-//        Providers.planProvider.updatePlanItem(updatedPlanItem, inventory: inventory, successHandler{[weak self] planItem in
+//        Prov.planProvider.updatePlanItem(updatedPlanItem, inventory: inventory, successHandler{[weak self] planItem in
 //            self?.onPlanItemUpdated(planItem)
 //        })
 //    }

@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsViewControllerDelegate {
 

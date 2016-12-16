@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 class StashListItemsController: ListItemsController, UIGestureRecognizerDelegate {
     
@@ -56,7 +57,7 @@ class StashListItemsController: ListItemsController, UIGestureRecognizerDelegate
     
     
     override func onListItemsOrderChangedSection(_ tableViewListItems: [TableViewListItem]) {
-        Providers.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
+        Prov.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
         })
     }
     
@@ -68,7 +69,7 @@ class StashListItemsController: ListItemsController, UIGestureRecognizerDelegate
         if let list = currentList {
             listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
-                    Providers.listItemsProvider.switchAllToStatus(weakSelf.listItemsTableViewController.items, list: list, status1: .stash, status: .todo, remote: true) {result in
+                    Prov.listItemsProvider.switchAllToStatus(weakSelf.listItemsTableViewController.items, list: list, status1: .stash, status: .todo, remote: true) {result in
                         if result.success {
                             weakSelf.listItemsTableViewController.setListItems([])
                             weakSelf.close()

@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftValidator
+import Providers
 
 class ManageBrandsController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, EditBrandControllerDelegate, ListTopBarViewDelegate, ExpandableTopViewControllerDelegate {
     
@@ -136,7 +137,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let brand = filteredBrands[(indexPath as NSIndexPath).row]
-            Providers.brandProvider.removeProductsWithBrand(brand.item, remote: true, successHandler {[weak self] in
+            Prov.brandProvider.removeProductsWithBrand(brand.item, remote: true, successHandler {[weak self] in
                 self?.removeBrandUI(brand, indexPath: indexPath)
             })
         }
@@ -246,7 +247,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
                 if (!weakSelf.loadingPage) {
                     setLoading(true)
 
-                    Providers.brandProvider.brandsContainingText(weakSelf.searchText, range: weakSelf.paginator.currentPage, weakSelf.successHandler{brands in
+                    Prov.brandProvider.brandsContainingText(weakSelf.searchText, range: weakSelf.paginator.currentPage, weakSelf.successHandler{brands in
                         
                         let brandsWithCellAttributes: [ItemWithCellAttributes] = brands.map {brand in
                             ItemWithCellAttributes(item: brand, boldRange: brand.range(weakSelf.searchText, caseInsensitive: true))

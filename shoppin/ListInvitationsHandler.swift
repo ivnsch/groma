@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 struct ListInvitationsHandler {
 
@@ -23,12 +24,12 @@ struct ListInvitationsHandler {
                 cancelTitle: "Reject",
                 controller: controller,
                 onOk: {
-                    Providers.listProvider.acceptInvitation(invitation, controller.successHandler{
+                    Prov.listProvider.acceptInvitation(invitation, controller.successHandler{
                         Notification.send(.ListInvitationAccepted)
                     })
                 },
                 onCancel: {
-                    Providers.listProvider.rejectInvitation(invitation, controller.successHandler{
+                    Prov.listProvider.rejectInvitation(invitation, controller.successHandler{
                     })
             })
         }

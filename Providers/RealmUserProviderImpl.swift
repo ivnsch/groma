@@ -1,0 +1,202 @@
+//
+//  RealmUserProviderImpl.swift
+//  shoppin
+//
+//  Created by Ivan Schütz on 01/12/2016.
+//  Copyright © 2016 ivanschuetz. All rights reserved.
+//
+
+import Foundation
+import RealmSwift
+import QorumLogs
+
+class RealmUserProviderImpl: UserProvider {
+
+    fileprivate var notificationToken: NotificationToken?
+
+    func login(_ loginData: LoginData, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+        loginOrRegister(loginData, register: false, controller: controller, handler)
+    }
+
+    
+    func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        let loginData = LoginData(email: user.email, password: user.password)
+        loginOrRegister(loginData, register: true, controller: controller) {result in
+            handler(ProviderResult(status: result.status))
+        }
+    }
+    
+    
+    private func loginOrRegister(_ loginData: LoginData, register: Bool, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+        let credentials = SyncCredentials.usernamePassword(username: loginData.email, password: loginData.password, register: register)
+        loginOrRegister(credentials, userName: loginData.email, controller: controller, handler)
+    }
+    
+    // We pass userName separately because it's not safely retrievable from SyncCredentials
+    private func loginOrRegister(_ credentials: SyncCredentials, userName: String? = nil, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+        
+        let syncHost = "192.168.0.12"
+        let syncAuthURL = URL(string: "http://\(syncHost):9080")!
+        let syncRealmPath = "groma4"
+        let syncServerURL = URL(string: "realm://\(syncHost):9080/~/\(syncRealmPath)")!
+        
+        QL1("Logging in with credentials: \(credentials), auth url: \(syncAuthURL)")
+        
+        SyncUser.logIn(with: credentials, server: syncAuthURL) {[weak self] user, error in
+            DispatchQueue.main.async {
+                if let user = user {
+                    QL1("\nlogged in user: \(user)")
+                    
+                    var config = RealmConfig.config
+                    
+                    config.syncConfiguration = SyncConfiguration(user: user, realmURL: syncServerURL)
+                    config.objectTypes = [List.self, DBInventory.self, DBSection.self, Product.self, DBSharedUser.self, DBRemoveList.self, DBRemoveInventory.self, DBListItem.self, InventoryItem.self, DBSyncable.self, DBHistoryItem.self, DBPlanItem.self, ProductGroup.self, GroupItem.self, ProductCategory.self, DBStoreProduct.self,
+                        DBSectionToRemove.self, ProductToRemove.self, DBStoreProductToRemove.self, DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self, DBRemoveInventoryItem.self, DBRemoveProductGroup.self
+                    ]
+                        
+                    Realm.Configuration.defaultConfiguration = config
+                    
+                    do {
+                        self?.notificationToken = try Realm().addNotificationBlock { _ in
+                            QL2("Realm changed")
+                        }
+                        
+                        if let userName = userName { // for credentials login
+//                            self?.storeEmail(user.identity) // not the user name / email
+                            self?.storeEmail(userName)
+                        } else {
+                            QL3("User: \(user) has no identity")
+                        }
+                        
+                        
+                        // Pass a sync result for compatibility with the protocol interface (originally written for own server)
+                        handler(ProviderResult(status: .success, sucessResult: SyncResult(listInvites: [], inventoryInvites: [])))
+                        
+                    } catch let error {
+                        QL4("Couldn't instantiate Realm during login/register: \(error)")
+                        handler(ProviderResult(status: .unknown))
+                    }
+
+                } else {
+                    QL4("Error during login/register, no user: \(error)")
+                    handler(ProviderResult(status: .unknown))
+                }
+            }
+        }
+    }
+    
+    func isRegistered(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        QL4("Not implemented")
+        handler(ProviderResult(status: .success))
+    }
+    
+    func logout(_ handler: @escaping (ProviderResult<Any>) -> ()) {
+
+        // TODO investigate why sometimes more than 1 user here (causes impl of SyncUser.current to throw an error). Happens when logging in, restarting app and trying to log in with invalid user id (both with credentials)
+        let allUsers = SyncUser.all.values
+        
+        if allUsers.isEmpty {
+            QL3("No user to logout")
+        } else if allUsers.count > 1 {
+            QL4("Warning/error: more than 1 user logged in: \(allUsers)")
+        }
+        
+        for user in allUsers {
+            user.logOut()
+        }
+        
+        handler(ProviderResult(status: .success))
+        
+        // Target specific logout (e.g. iOS has own FB, Google, etc. libraries). Logout can be called from core parts of library like when auth token expires, so a notification is suitable.
+        Notification.send(Notification.Logout)
+    }
+    
+    func sync(isMatchSync: Bool, onlyOverwriteLocal: Bool, additionalActionsOnSyncSuccess: VoidFunction? = nil, handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+        QL4("Not implemented") // this method is not necessary for realm provider
+        handler(ProviderResult(status: .success))
+    }
+    
+    func connectWebsocketIfLoggedIn() {
+        QL4("Not implemented") // this method is not necessary for realm provider
+    }
+    
+    func disconnectWebsocket() {
+        QL4("Not implemented") // this method is not necessary for realm provider
+    }
+    
+    func isWebsocketConnected() -> Bool {
+        QL4("Not implemented") // this method is not necessary for realm provider
+        return false
+    }
+    
+    func forgotPassword(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        QL4("Not implemented") // TODO
+        handler(ProviderResult(status: .success))
+    }
+    
+    func removeAccount(_ handler: @escaping (ProviderResult<Any>) -> ()) {
+        QL4("Not implemented") // TODO
+        handler(ProviderResult(status: .success))
+    }
+    
+    func removeLoginToken() {
+        QL4("Not implemented") // this method is not necessary for realm provider?
+    }
+    
+    func ping() {
+        QL4("Not implemented") // this method is not necessary for realm provider
+    }
+    
+    var hasLoginToken: Bool {
+        QL4("Not implemented") // this method is not necessary for realm provider
+        return true
+    }
+    
+    var hasSignedInOnce: Bool {
+        QL4("Not implemented") // this method is not necessary for realm provider
+        return true
+    }
+    
+    var mySharedUser: DBSharedUser? {
+        if let email: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
+            return DBSharedUser(email: email)
+        } else {
+            return nil
+        }
+    }
+    
+    func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[DBSharedUser]>) -> Void) {
+        QL4("Not implemented") // this method is not necessary for realm provider (for now, since we don't share items with real provider)
+        handler(ProviderResult(status: .success))
+    }
+    
+    func isDifferentUser(_ email: String) -> Bool {
+        return mySharedUser.map{$0.email != email} ?? false
+    }
+    
+    // MARK: - Social login
+    
+    
+    // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore --- is this todo also relevant for this new realm user provider?
+    func authenticateWithFacebook(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+        let credentials = SyncCredentials.facebook(token: token)
+        loginOrRegister(credentials, controller: controller, handler)
+    }
+    
+    // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore --- is this todo also relevant for this new realm user provider?
+    func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
+        let credentials = SyncCredentials.google(token: token)
+        loginOrRegister(credentials, controller: controller, handler)
+    }
+    
+    func authenticateWithICloud(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+        let credentials = SyncCredentials.iCloud(token: token)
+        loginOrRegister(credentials, controller: controller, handler)
+    }
+    
+    // store email in prefs so we can e.g. prefill login controller, which is opened after registration
+    // For now store it as simple preference, we need it to be added automatically to list shared users. This may change in the future
+    fileprivate func storeEmail(_ email: String) {
+        PreferencesManager.savePreference(PreferencesManagerKey.email, value: NSString(string: email))
+    }
+}

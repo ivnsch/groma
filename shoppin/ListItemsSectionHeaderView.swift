@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 protocol ListItemsSectionHeaderViewDelegate: class {
     func onHeaderTap(_ header: ListItemsSectionHeaderView)

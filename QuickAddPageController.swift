@@ -9,6 +9,7 @@
 import UIKit
 import QorumLogs
 import SwipeView
+import Providers
 
 protocol QuickAddPageControllerDelegate: class {
 //    func onPagerScroll(xOffset: CGFloat)

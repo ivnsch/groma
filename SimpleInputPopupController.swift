@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 protocol SimpleInputPopupControllerDelegate: class {
     func onSubmitInput(_ text: String)

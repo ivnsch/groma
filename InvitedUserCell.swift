@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol InvitedSharedUserCellDelegate: class {
     func onInviteInfoSharedUser(_ sharedUser: DBSharedUser, cell: InvitedUserCell)

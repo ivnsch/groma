@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol RatingPopupControllerDelegate: class {
     func dismiss()

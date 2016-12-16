@@ -9,6 +9,7 @@
 import UIKit
 import MessageUI
 import QorumLogs
+import Providers
 
 protocol EmailHelperDelegate: class {
     func onEmailSent()
@@ -39,7 +40,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
                     QL4("No device name for: \(device)")
                 }
                 
-                let userStrMaybe = Providers.userProvider.mySharedUser.map{"User id: \($0.email)"}
+                let userStrMaybe = Prov.userProvider.mySharedUser.map{"User id: \($0.email)"}
                 
                 let strMaybe: String? = {
                     switch (userStrMaybe, device) {

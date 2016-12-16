@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Providers
 
 protocol PlanTableViewCellDelegate: class {
     func onPlusTap(_ planItem: PlanItem, cell: PlanTableViewCell, row: Int)

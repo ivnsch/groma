@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol ListItemsTableViewDelegate: class {
     func onListItemClear(_ tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo

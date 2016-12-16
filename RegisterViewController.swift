@@ -11,6 +11,7 @@ import SwiftValidator
 import FBSDKCoreKit
 import FBSDKLoginKit
 import QorumLogs
+import Providers
 
 protocol RegisterDelegate: class {
     func onRegisterSuccess(_ email: String)
@@ -156,7 +157,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     let user = UserInput(email: email, password: password, firstName: "", lastName: "")
                     
                     self.progressVisible()
-                    Providers.userProvider.register(user, controller: self, successHandler{[weak self] in
+                    Prov.userProvider.register(user, controller: self, successHandler{[weak self] in
                         self?.delegate?.onRegisterSuccess(email)
                     })
                     
@@ -200,7 +201,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
             QL1("Facebook login success, calling our server...")
             progressVisible()
             if let tokenString = result.token.tokenString {
-                Providers.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+                Prov.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
             } else {
                 QL4("Facebook: No token")
             }
@@ -217,7 +218,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         if (error == nil) {
             QL1("Google login success, calling our server...")
             progressVisible()
-            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, controller: self, socialSignInResultHandler())
+            Prov.userProvider.authenticateWithGoogle(user.authentication.accessToken, controller: self, socialSignInResultHandler())
         } else {
             QL4("Google login error: \(error.localizedDescription)")
         }
@@ -255,7 +256,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     self?.progressVisible(false)
                     self?.defaultErrorHandler()(providerResult)
                     if let weakSelf = self {
-                        Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
+                        Prov.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
                     }
                 })(providerResult)
         }

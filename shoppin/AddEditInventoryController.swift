@@ -11,6 +11,7 @@ import SwiftValidator
 import ChameleonFramework
 import QorumLogs
 import RealmSwift
+import Providers
 
 //change
 protocol AddEditInventoryControllerDelegate: class {
@@ -176,7 +177,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
                     
                     // If it's a new inventory add myself as a participant, to be consistent with list after server updates it (server adds the caller as a participant)
                     
-                    let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
+                    let totalUsers = (Prov.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
                     
                     let inventory = DBInventory(uuid: NSUUID().uuidString, name: listName, users: totalUsers, bgColor: bgColor, order: currentListsCount)
                     
@@ -286,13 +287,13 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
                 onLoaded(allResult, invitedResult)
             }
         }
-        Providers.userProvider.findAllKnownSharedUsers(successHandler {sharedUsers in
+        Prov.userProvider.findAllKnownSharedUsers(successHandler {sharedUsers in
             allResult = sharedUsers
             check()
         })
         
         if let inventory = listToEdit {
-            Providers.inventoryProvider.findInvitedUsers(inventory.uuid, successHandler {sharedUsers in
+            Prov.inventoryProvider.findInvitedUsers(inventory.uuid, successHandler {sharedUsers in
                 invitedResult = sharedUsers
                 check()
             })
@@ -345,7 +346,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     func onPull(_ user: DBSharedUser) {
         progressVisible(true)
         if let inventory = listToEdit {
-            Providers.pullProvider.pullInventoryProducs(inventory.uuid, srcUser: user, successHandler{[weak self] products in  guard let weakSelf = self else {return}
+            Prov.pullProvider.pullInventoryProducs(inventory.uuid, srcUser: user, successHandler{[weak self] products in  guard let weakSelf = self else {return}
                 self?.progressVisible(false)
                 AlertPopup.show(title: trans("popup_title_success"), message: trans("popup_please_login_for_participants"), controller: weakSelf)
             })
@@ -359,7 +360,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     
     func invitedUsers(_ handler: @escaping ([DBSharedUser]) -> Void) {
         if let inventory = listToEdit {
-            Providers.inventoryProvider.findInvitedUsers(inventory.uuid, successHandler {users in
+            Prov.inventoryProvider.findInvitedUsers(inventory.uuid, successHandler {users in
                 handler(users)
             })
         } else { // adding inventory - there can't be invited users yet

@@ -1,0 +1,19 @@
+//
+//  InventoryItemInput.swift
+//  shoppin
+//
+//  Created by ischuetz on 11/11/15.
+//  Copyright © 2015 ivanschuetz. All rights reserved.
+//
+
+import Foundation
+
+public struct InventoryItemInput {
+    public let productPrototype: ProductPrototype
+    public let quantity: Int
+    
+    public init(name: String, quantity: Int, category: String, categoryColor: UIColor, brand: String) {
+        self.productPrototype = ProductPrototype(name: name, category: category, categoryColor: categoryColor, brand: brand)
+        self.quantity = quantity
+    }
+}

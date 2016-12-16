@@ -9,7 +9,7 @@
 import UIKit
 import SwiftValidator
 import QorumLogs
-
+import Providers
 
 protocol QuickAddDelegate: class {
     func onAddProduct(_ product: Product)
@@ -335,7 +335,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     // Not using plan for now
 //    func planItem(productName: String, handler: PlanItem? -> ()) {
-//        Providers.planProvider.planItem(productName, successHandler {planItemMaybe in
+//        Prov.planProvider.planItem(productName, successHandler {planItemMaybe in
 //            handler(planItemMaybe)
 //        })
 //    }

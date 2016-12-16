@@ -11,6 +11,7 @@ import ChameleonFramework
 import SwiftValidator
 import QorumLogs
 import RealmSwift
+import Providers
 
 class GroupItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
 
@@ -260,7 +261,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
         if let currentGroup = self.group {
-            Providers.listItemGroupsProvider.addGroupItems(group, targetGroup: currentGroup, remote: true, resultHandler(onSuccess: {[weak self] groupItemsWithDelta in
+            Prov.listItemGroupsProvider.addGroupItems(group, targetGroup: currentGroup, remote: true, resultHandler(onSuccess: {groupItemsWithDelta in
             }, onError: {[weak self] result in guard let weakSelf = self else {return}
                 switch result.status {
                 case .isEmpty:
@@ -277,7 +278,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             // TODO don't create group item here we don't know if it exists in the group already, if it does the new uuid is not used. Use a prototype class like in list items.
             let groupItem = GroupItem(uuid: UUID().uuidString, quantity: 1, product: product, group: group)
             
-            Providers.listItemGroupsProvider.add(groupItem, remote: true, successHandler{addedItem in
+            Prov.listItemGroupsProvider.add(groupItem, remote: true, successHandler{addedItem in
             })
         }
     }
@@ -285,7 +286,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditItem(_ input: ListItemInput, editingItem: GroupItem) {
-            Providers.listItemGroupsProvider.update(input, updatingGroupItem: editingItem, remote: true, resultHandler (onSuccess: {(inventoryItem, replaced) in
+            Prov.listItemGroupsProvider.update(input, updatingGroupItem: editingItem, remote: true, resultHandler (onSuccess: {(inventoryItem, replaced) in
             }, onError: {[weak self] result in
                 self?.defaultErrorHandler()(result)
             }))
@@ -294,7 +295,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         func onAddItem(_ input: ListItemInput) {
             if let group = group {
                 let groupItemInput = GroupItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
-                Providers.listItemGroupsProvider.add(groupItemInput, group: group, remote: true, resultHandler (onSuccess: {groupItem in
+                Prov.listItemGroupsProvider.add(groupItemInput, group: group, remote: true, resultHandler (onSuccess: {groupItem in
                 }, onError: {[weak self] result in
                     self?.closeTopController()
                     self?.defaultErrorHandler()(result)
@@ -343,7 +344,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
-        Providers.productCategoryProvider.categoryWithName(name, successHandler {category in
+        Prov.productCategoryProvider.categoryWithName(name, successHandler {category in
             handler(category.color)
         })
     }
@@ -369,7 +370,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func loadModels(_ page: NSRange?, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity2]) -> Void) {
         if let group = group {
-            Providers.listItemGroupsProvider.groupItems(group, sortBy: sortBy, fetchMode: .both, successHandler{[weak self] groupItems in guard let weakSelf = self else {return}
+            Prov.listItemGroupsProvider.groupItems(group, sortBy: sortBy, fetchMode: .both, successHandler{[weak self] groupItems in guard let weakSelf = self else {return}
                 
                 weakSelf.results = groupItems
                 onSuccess(groupItems.toArray()) // TODO! productsWithQuantityController should load also lazily
@@ -420,7 +421,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
-        Providers.listItemGroupsProvider.remove(model as! GroupItem, remote: true, resultHandler(onSuccess: {
+        Prov.listItemGroupsProvider.remove(model as! GroupItem, remote: true, resultHandler(onSuccess: {
             onSuccess()
         }, onError: {result in
             onError(result)
@@ -428,7 +429,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void) {
-        Providers.listItemGroupsProvider.increment(model as! GroupItem, delta: delta, remote: true, successHandler({updatedQuantity in
+        Prov.listItemGroupsProvider.increment(model as! GroupItem, delta: delta, remote: true, successHandler({updatedQuantity in
             onSuccess(updatedQuantity)
         }))
     }

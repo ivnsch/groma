@@ -1,0 +1,1669 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6A256B891E0401AE004F5028 /* Providers.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A256B871E0401AE004F5028 /* Providers.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6A256B8D1E0401D4004F5028 /* MemListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B7C1E0400A0004F5028 /* MemListItemProvider.swift */; };
+		6A256B8E1E0401D7004F5028 /* MemInventoryItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B7D1E0400A0004F5028 /* MemInventoryItemProvider.swift */; };
+		6A256BA21E0404E8004F5028 /* ListItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B8F1E0404E8004F5028 /* ListItemProviderImpl.swift */; };
+		6A256BA31E0404E8004F5028 /* InventoryItemsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B901E0404E8004F5028 /* InventoryItemsProviderImpl.swift */; };
+		6A256BA41E0404E8004F5028 /* UserProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B911E0404E8004F5028 /* UserProviderImpl.swift */; };
+		6A256BA51E0404E8004F5028 /* remoteResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B921E0404E8004F5028 /* remoteResultHandler.swift */; };
+		6A256BA61E0404E8004F5028 /* ListProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B931E0404E8004F5028 /* ListProviderImpl.swift */; };
+		6A256BA71E0404E8004F5028 /* ErrorProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B941E0404E8004F5028 /* ErrorProviderImpl.swift */; };
+		6A256BA81E0404E8004F5028 /* InventoryProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B951E0404E8004F5028 /* InventoryProviderImpl.swift */; };
+		6A256BA91E0404E8004F5028 /* HistoryProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B961E0404E8004F5028 /* HistoryProviderImpl.swift */; };
+		6A256BAA1E0404E8004F5028 /* StatsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B971E0404E8004F5028 /* StatsProviderImpl.swift */; };
+		6A256BAB1E0404E8004F5028 /* PlanProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B981E0404E8004F5028 /* PlanProviderImpl.swift */; };
+		6A256BAC1E0404E8004F5028 /* ProductGroupProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B991E0404E8004F5028 /* ProductGroupProviderImpl.swift */; };
+		6A256BAD1E0404E8004F5028 /* ProductProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B9A1E0404E8004F5028 /* ProductProviderImpl.swift */; };
+		6A256BAE1E0404E8004F5028 /* ProductCategoryProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B9B1E0404E8004F5028 /* ProductCategoryProviderImpl.swift */; };
+		6A256BAF1E0404E8004F5028 /* SectionProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B9C1E0404E8004F5028 /* SectionProviderImpl.swift */; };
+		6A256BB01E0404E8004F5028 /* HelpProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B9D1E0404E8004F5028 /* HelpProviderImpl.swift */; };
+		6A256BB11E0404E8004F5028 /* BrandProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B9E1E0404E8004F5028 /* BrandProviderImpl.swift */; };
+		6A256BB21E0404E8004F5028 /* GlobalProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B9F1E0404E8004F5028 /* GlobalProviderImpl.swift */; };
+		6A256BB31E0404E8004F5028 /* PullProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BA01E0404E8004F5028 /* PullProviderImpl.swift */; };
+		6A256BB41E0404E8004F5028 /* RealmUserProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BA11E0404E8004F5028 /* RealmUserProviderImpl.swift */; };
+		6A256BB81E04050F004F5028 /* ListItemProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BB61E04050F004F5028 /* ListItemProviderMock.swift */; };
+		6A256BB91E04050F004F5028 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BB71E04050F004F5028 /* UserProviderMock.swift */; };
+		6A256BCF1E040530004F5028 /* RealmProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BBB1E040530004F5028 /* RealmProvider.swift */; };
+		6A256BD01E040530004F5028 /* RealmListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BBC1E040530004F5028 /* RealmListItemProvider.swift */; };
+		6A256BD11E040530004F5028 /* RealmProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BBD1E040530004F5028 /* RealmProductProvider.swift */; };
+		6A256BD21E040530004F5028 /* RealmProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BBE1E040530004F5028 /* RealmProductCategoryProvider.swift */; };
+		6A256BD31E040530004F5028 /* RealmInventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BBF1E040530004F5028 /* RealmInventoryProvider.swift */; };
+		6A256BD41E040530004F5028 /* RealmInventoryItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BC01E040530004F5028 /* RealmInventoryItemProvider.swift */; };
+		6A256BD51E040530004F5028 /* RealmHistoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BC11E040530004F5028 /* RealmHistoryProvider.swift */; };
+		6A256BD61E040530004F5028 /* RealmProductGroupProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BC21E040530004F5028 /* RealmProductGroupProvider.swift */; };
+		6A256BD71E040530004F5028 /* RealmGroupItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BC31E040530004F5028 /* RealmGroupItemProvider.swift */; };
+		6A256BD81E040530004F5028 /* DBResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BC41E040530004F5028 /* DBResult.swift */; };
+		6A256BD91E040530004F5028 /* Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BC51E040530004F5028 /* Results.swift */; };
+		6A256BDA1E040530004F5028 /* Realm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BC61E040530004F5028 /* Realm.swift */; };
+		6A256BDB1E040530004F5028 /* List_Realm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BC71E040530004F5028 /* List_Realm.swift */; };
+		6A256BDC1E040530004F5028 /* RealmPlanProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BC81E040530004F5028 /* RealmPlanProvider.swift */; };
+		6A256BDD1E040530004F5028 /* RealmBrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BC91E040530004F5028 /* RealmBrandProvider.swift */; };
+		6A256BDE1E040530004F5028 /* RealmGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BCA1E040530004F5028 /* RealmGlobalProvider.swift */; };
+		6A256BDF1E040530004F5028 /* RealmSectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BCB1E040530004F5028 /* RealmSectionProvider.swift */; };
+		6A256BE01E040530004F5028 /* DBProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BCC1E040530004F5028 /* DBProviders.swift */; };
+		6A256BE11E040530004F5028 /* RealmListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BCD1E040530004F5028 /* RealmListProvider.swift */; };
+		6A256BE21E040530004F5028 /* RealmStoreProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BCE1E040530004F5028 /* RealmStoreProductProvider.swift */; };
+		6A256BF21E040540004F5028 /* RemoteProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BE41E040540004F5028 /* RemoteProvider.swift */; };
+		6A256BF31E040540004F5028 /* RemoteErrorReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BE51E040540004F5028 /* RemoteErrorReporter.swift */; };
+		6A256BF41E040540004F5028 /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BE61E040540004F5028 /* RemoteListItemProvider.swift */; };
+		6A256BF51E040540004F5028 /* RemoteSectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BE71E040540004F5028 /* RemoteSectionProvider.swift */; };
+		6A256BF61E040540004F5028 /* RemoteInventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BE81E040540004F5028 /* RemoteInventoryProvider.swift */; };
+		6A256BF71E040540004F5028 /* RemoteInventoryItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BE91E040540004F5028 /* RemoteInventoryItemsProvider.swift */; };
+		6A256BF81E040540004F5028 /* RemoteUserProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BEA1E040540004F5028 /* RemoteUserProvider.swift */; };
+		6A256BF91E040540004F5028 /* RemoteHistoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BEB1E040540004F5028 /* RemoteHistoryProvider.swift */; };
+		6A256BFA1E040540004F5028 /* RemotePlanItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BEC1E040540004F5028 /* RemotePlanItemsProvider.swift */; };
+		6A256BFB1E040540004F5028 /* RemoteGroupsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BED1E040540004F5028 /* RemoteGroupsProvider.swift */; };
+		6A256BFC1E040540004F5028 /* RemoteGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BEE1E040540004F5028 /* RemoteGlobalProvider.swift */; };
+		6A256BFD1E040540004F5028 /* RemoteProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BEF1E040540004F5028 /* RemoteProductProvider.swift */; };
+		6A256BFE1E040540004F5028 /* RemoteProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BF01E040540004F5028 /* RemoteProductCategoryProvider.swift */; };
+		6A256BFF1E040540004F5028 /* RemotePullProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256BF11E040540004F5028 /* RemotePullProvider.swift */; };
+		6A256C031E040556004F5028 /* Urls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C011E040556004F5028 /* Urls.swift */; };
+		6A256C041E040556004F5028 /* AlamofireExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C021E040556004F5028 /* AlamofireExtensions.swift */; };
+		6A256C091E04056C004F5028 /* ProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C061E04056C004F5028 /* ProviderFactory.swift */; };
+		6A256C0A1E04056C004F5028 /* ProviderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C071E04056C004F5028 /* ProviderResult.swift */; };
+		6A256C0B1E04056C004F5028 /* ProviderFetchModus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C081E04056C004F5028 /* ProviderFetchModus.swift */; };
+		6A256C201E040579004F5028 /* ListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C0D1E040579004F5028 /* ListItemProvider.swift */; };
+		6A256C211E040579004F5028 /* PullProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C0E1E040579004F5028 /* PullProvider.swift */; };
+		6A256C221E040579004F5028 /* ProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C0F1E040579004F5028 /* ProductProvider.swift */; };
+		6A256C231E040579004F5028 /* InventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C101E040579004F5028 /* InventoryProvider.swift */; };
+		6A256C241E040579004F5028 /* InventoryItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C111E040579004F5028 /* InventoryItemsProvider.swift */; };
+		6A256C251E040579004F5028 /* UserProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C121E040579004F5028 /* UserProvider.swift */; };
+		6A256C261E040579004F5028 /* ProductGroupProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C131E040579004F5028 /* ProductGroupProvider.swift */; };
+		6A256C271E040579004F5028 /* ProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C141E040579004F5028 /* ProductCategoryProvider.swift */; };
+		6A256C281E040579004F5028 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C151E040579004F5028 /* ConnectionProvider.swift */; };
+		6A256C291E040579004F5028 /* ListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C161E040579004F5028 /* ListProvider.swift */; };
+		6A256C2A1E040579004F5028 /* HistoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C171E040579004F5028 /* HistoryProvider.swift */; };
+		6A256C2B1E040579004F5028 /* StatsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C181E040579004F5028 /* StatsProvider.swift */; };
+		6A256C2C1E040579004F5028 /* PlanProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C191E040579004F5028 /* PlanProvider.swift */; };
+		6A256C2D1E040579004F5028 /* BrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C1A1E040579004F5028 /* BrandProvider.swift */; };
+		6A256C2E1E040579004F5028 /* Providers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C1B1E040579004F5028 /* Providers.swift */; };
+		6A256C2F1E040579004F5028 /* SectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C1C1E040579004F5028 /* SectionProvider.swift */; };
+		6A256C301E040579004F5028 /* HelpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C1D1E040579004F5028 /* HelpProvider.swift */; };
+		6A256C311E040579004F5028 /* GlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C1E1E040579004F5028 /* GlobalProvider.swift */; };
+		6A256C321E040579004F5028 /* ErrorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C1F1E040579004F5028 /* ErrorProvider.swift */; };
+		6A256C361E04059B004F5028 /* RemoteContainedItemIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C351E04059B004F5028 /* RemoteContainedItemIdentifier.swift */; };
+		6A256C401E0405A7004F5028 /* ListItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C381E0405A7004F5028 /* ListItemInput.swift */; };
+		6A256C411E0405A7004F5028 /* InventoryItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C391E0405A7004F5028 /* InventoryItemInput.swift */; };
+		6A256C421E0405A7004F5028 /* ProductWithQuantityInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C3A1E0405A7004F5028 /* ProductWithQuantityInput.swift */; };
+		6A256C431E0405A7004F5028 /* ProductInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C3B1E0405A7004F5028 /* ProductInput.swift */; };
+		6A256C441E0405A7004F5028 /* GroupItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C3C1E0405A7004F5028 /* GroupItemInput.swift */; };
+		6A256C451E0405A7004F5028 /* UserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C3D1E0405A7004F5028 /* UserInput.swift */; };
+		6A256C461E0405A7004F5028 /* PlanItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C3E1E0405A7004F5028 /* PlanItemInput.swift */; };
+		6A256C471E0405A7004F5028 /* StoreProductInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C3F1E0405A7004F5028 /* StoreProductInput.swift */; };
+		6A256C561E0405B6004F5028 /* ListItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C491E0405B6004F5028 /* ListItemMapper.swift */; };
+		6A256C571E0405B6004F5028 /* ProductMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C4A1E0405B6004F5028 /* ProductMapper.swift */; };
+		6A256C581E0405B6004F5028 /* StoreProductMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C4B1E0405B6004F5028 /* StoreProductMapper.swift */; };
+		6A256C591E0405B6004F5028 /* ProductCategoryMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C4C1E0405B6004F5028 /* ProductCategoryMapper.swift */; };
+		6A256C5A1E0405B6004F5028 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C4D1E0405B6004F5028 /* SectionMapper.swift */; };
+		6A256C5B1E0405B6004F5028 /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C4E1E0405B6004F5028 /* ListMapper.swift */; };
+		6A256C5C1E0405B6004F5028 /* InventoryItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C4F1E0405B6004F5028 /* InventoryItemMapper.swift */; };
+		6A256C5D1E0405B6004F5028 /* InventoryMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C501E0405B6004F5028 /* InventoryMapper.swift */; };
+		6A256C5E1E0405B6004F5028 /* SharedUserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C511E0405B6004F5028 /* SharedUserMapper.swift */; };
+		6A256C5F1E0405B6004F5028 /* HistoryItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C521E0405B6004F5028 /* HistoryItemMapper.swift */; };
+		6A256C601E0405B6004F5028 /* ListItemGroupMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C531E0405B6004F5028 /* ListItemGroupMapper.swift */; };
+		6A256C611E0405B6004F5028 /* GroupItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C541E0405B6004F5028 /* GroupItemMapper.swift */; };
+		6A256C621E0405B6004F5028 /* PlanItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C551E0405B6004F5028 /* PlanItemMapper.swift */; };
+		6A256C721E0405C6004F5028 /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C641E0405C6004F5028 /* DBSection.swift */; };
+		6A256C731E0405C6004F5028 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C651E0405C6004F5028 /* Product.swift */; };
+		6A256C741E0405C6004F5028 /* DBStoreProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C661E0405C6004F5028 /* DBStoreProduct.swift */; };
+		6A256C751E0405C6004F5028 /* DBSharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C671E0405C6004F5028 /* DBSharedUser.swift */; };
+		6A256C761E0405C6004F5028 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C681E0405C6004F5028 /* List.swift */; };
+		6A256C771E0405C6004F5028 /* DBListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C691E0405C6004F5028 /* DBListItem.swift */; };
+		6A256C781E0405C6004F5028 /* InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C6A1E0405C6004F5028 /* InventoryItem.swift */; };
+		6A256C791E0405C6004F5028 /* DBInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C6B1E0405C6004F5028 /* DBInventory.swift */; };
+		6A256C7A1E0405C6004F5028 /* DBSyncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C6C1E0405C6004F5028 /* DBSyncable.swift */; };
+		6A256C7B1E0405C6004F5028 /* DBHistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C6D1E0405C6004F5028 /* DBHistoryItem.swift */; };
+		6A256C7C1E0405C6004F5028 /* DBPlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C6E1E0405C6004F5028 /* DBPlanItem.swift */; };
+		6A256C7D1E0405C6004F5028 /* ProductGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C6F1E0405C6004F5028 /* ProductGroup.swift */; };
+		6A256C7E1E0405C6004F5028 /* GroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C701E0405C6004F5028 /* GroupItem.swift */; };
+		6A256C7F1E0405C6004F5028 /* ProductCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C711E0405C6004F5028 /* ProductCategory.swift */; };
+		6A256C8E1E0405D7004F5028 /* DBSectionToRemove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C811E0405D7004F5028 /* DBSectionToRemove.swift */; };
+		6A256C8F1E0405D7004F5028 /* ProductToRemove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C821E0405D7004F5028 /* ProductToRemove.swift */; };
+		6A256C901E0405D7004F5028 /* DBStoreProductToRemove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C831E0405D7004F5028 /* DBStoreProductToRemove.swift */; };
+		6A256C911E0405D7004F5028 /* DBRemoveSharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C841E0405D7004F5028 /* DBRemoveSharedUser.swift */; };
+		6A256C921E0405D7004F5028 /* DBRemoveList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C851E0405D7004F5028 /* DBRemoveList.swift */; };
+		6A256C931E0405D7004F5028 /* DBRemoveListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C861E0405D7004F5028 /* DBRemoveListItem.swift */; };
+		6A256C941E0405D7004F5028 /* DBRemoveInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C871E0405D7004F5028 /* DBRemoveInventoryItem.swift */; };
+		6A256C951E0405D7004F5028 /* DBRemoveInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C881E0405D7004F5028 /* DBRemoveInventory.swift */; };
+		6A256C961E0405D7004F5028 /* DBRemoveSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C891E0405D7004F5028 /* DBRemoveSection.swift */; };
+		6A256C971E0405D7004F5028 /* DBRemoveHistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C8A1E0405D7004F5028 /* DBRemoveHistoryItem.swift */; };
+		6A256C981E0405D7004F5028 /* DBRemoveListItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C8B1E0405D7004F5028 /* DBRemoveListItemGroup.swift */; };
+		6A256C991E0405D7004F5028 /* DBRemoveGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C8C1E0405D7004F5028 /* DBRemoveGroupItem.swift */; };
+		6A256C9A1E0405D7004F5028 /* DBRemoveProductCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C8D1E0405D7004F5028 /* DBRemoveProductCategory.swift */; };
+		6A256C9E1E0405EE004F5028 /* MonthYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C9C1E0405EE004F5028 /* MonthYear.swift */; };
+		6A256C9F1E0405EE004F5028 /* ListItemStatusUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C9D1E0405EE004F5028 /* ListItemStatusUpdate.swift */; };
+		6A256CAA1E0405FF004F5028 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CA11E0405FF004F5028 /* Array_ListItem.swift */; };
+		6A256CAB1E0405FF004F5028 /* Array_Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CA21E0405FF004F5028 /* Array_Section.swift */; };
+		6A256CAC1E0405FF004F5028 /* Array_GroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CA31E0405FF004F5028 /* Array_GroupItem.swift */; };
+		6A256CAD1E0405FF004F5028 /* Array_Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CA41E0405FF004F5028 /* Array_Inventory.swift */; };
+		6A256CAE1E0405FF004F5028 /* Array_ListItemsGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CA51E0405FF004F5028 /* Array_ListItemsGroup.swift */; };
+		6A256CAF1E0405FF004F5028 /* Array_HistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CA61E0405FF004F5028 /* Array_HistoryItem.swift */; };
+		6A256CB01E0405FF004F5028 /* Array_InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CA71E0405FF004F5028 /* Array_InventoryItem.swift */; };
+		6A256CB11E0405FF004F5028 /* Array_List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CA81E0405FF004F5028 /* Array_List.swift */; };
+		6A256CB21E0405FF004F5028 /* Array_Participant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CA91E0405FF004F5028 /* Array_Participant.swift */; };
+		6A256CD81E040612004F5028 /* RemotePlanItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CB41E040612004F5028 /* RemotePlanItems.swift */; };
+		6A256CD91E040612004F5028 /* RemotePlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CB51E040612004F5028 /* RemotePlanItem.swift */; };
+		6A256CDA1E040612004F5028 /* RemoteIncrementResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CB61E040612004F5028 /* RemoteIncrementResult.swift */; };
+		6A256CDB1E040612004F5028 /* RemoteHistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CB71E040612004F5028 /* RemoteHistoryItem.swift */; };
+		6A256CDC1E040612004F5028 /* RemoteListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CB81E040612004F5028 /* RemoteListItem.swift */; };
+		6A256CDD1E040612004F5028 /* RemoteListItemIncrementResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CB91E040612004F5028 /* RemoteListItemIncrementResult.swift */; };
+		6A256CDE1E040612004F5028 /* RemoteLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CBA1E040612004F5028 /* RemoteLoginResult.swift */; };
+		6A256CDF1E040612004F5028 /* RemoteRegisterResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CBB1E040612004F5028 /* RemoteRegisterResult.swift */; };
+		6A256CE01E040612004F5028 /* RemotePingResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CBC1E040612004F5028 /* RemotePingResult.swift */; };
+		6A256CE11E040612004F5028 /* RemoteProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CBD1E040612004F5028 /* RemoteProduct.swift */; };
+		6A256CE21E040612004F5028 /* RemoteStoreProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CBE1E040612004F5028 /* RemoteStoreProduct.swift */; };
+		6A256CE31E040612004F5028 /* RemoteProductCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CBF1E040612004F5028 /* RemoteProductCategory.swift */; };
+		6A256CE41E040612004F5028 /* RemoteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CC01E040612004F5028 /* RemoteList.swift */; };
+		6A256CE51E040612004F5028 /* RemoteListInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CC11E040612004F5028 /* RemoteListInvitation.swift */; };
+		6A256CE61E040612004F5028 /* RemoteInventoryInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CC21E040612004F5028 /* RemoteInventoryInvitation.swift */; };
+		6A256CE71E040612004F5028 /* RemoteListNoUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CC31E040612004F5028 /* RemoteListNoUsers.swift */; };
+		6A256CE81E040612004F5028 /* RemoteInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CC41E040612004F5028 /* RemoteInventoryItem.swift */; };
+		6A256CE91E040612004F5028 /* RemoteGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CC51E040612004F5028 /* RemoteGroupItem.swift */; };
+		6A256CEA1E040612004F5028 /* RemoteSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CC61E040612004F5028 /* RemoteSection.swift */; };
+		6A256CEB1E040613004F5028 /* RemoteSharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CC71E040612004F5028 /* RemoteSharedUser.swift */; };
+		6A256CEC1E040613004F5028 /* RemoteInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CC81E040612004F5028 /* RemoteInventory.swift */; };
+		6A256CED1E040613004F5028 /* RemoteInventoryWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CC91E040612004F5028 /* RemoteInventoryWithDependencies.swift */; };
+		6A256CEE1E040613004F5028 /* RemoteOrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CCA1E040612004F5028 /* RemoteOrderUpdate.swift */; };
+		6A256CEF1E040613004F5028 /* RemoteGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CCB1E040612004F5028 /* RemoteGroup.swift */; };
+		6A256CF01E040613004F5028 /* RemoteHistoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CCC1E040612004F5028 /* RemoteHistoryItemsSyncResult.swift */; };
+		6A256CF11E040613004F5028 /* RemoteSocialLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CCD1E040612004F5028 /* RemoteSocialLoginResult.swift */; };
+		6A256CF21E040613004F5028 /* ItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CCE1E040612004F5028 /* ItemIncrement.swift */; };
+		6A256CF31E040613004F5028 /* GroupItemWithGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CCF1E040612004F5028 /* GroupItemWithGroup.swift */; };
+		6A256CF41E040613004F5028 /* RemoteIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CD01E040612004F5028 /* RemoteIncrement.swift */; };
+		6A256CF51E040613004F5028 /* RemoteListItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CD11E040612004F5028 /* RemoteListItemIncrement.swift */; };
+		6A256CF61E040613004F5028 /* RemoteListItemsReorderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CD21E040612004F5028 /* RemoteListItemsReorderResult.swift */; };
+		6A256CF71E040613004F5028 /* RemoteListItemSwitchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CD31E040612004F5028 /* RemoteListItemSwitchResult.swift */; };
+		6A256CF81E040613004F5028 /* RemoteListItemReorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CD41E040612004F5028 /* RemoteListItemReorder.swift */; };
+		6A256CF91E040613004F5028 /* RemoteSwitchListItemResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CD51E040612004F5028 /* RemoteSwitchListItemResult.swift */; };
+		6A256CFA1E040613004F5028 /* RemoteSwitchAllListItemsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CD61E040612004F5028 /* RemoteSwitchAllListItemsResult.swift */; };
+		6A256CFB1E040613004F5028 /* RemoteSwitchAllListItemsLightResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CD71E040612004F5028 /* RemoteSwitchAllListItemsLightResult.swift */; };
+		6A256D081E040634004F5028 /* RemoteInventoryItemWithProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CFD1E040634004F5028 /* RemoteInventoryItemWithProduct.swift */; };
+		6A256D091E040634004F5028 /* RemoteInventoryItemsWithHistoryAndDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CFE1E040634004F5028 /* RemoteInventoryItemsWithHistoryAndDependencies.swift */; };
+		6A256D0A1E040634004F5028 /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256CFF1E040634004F5028 /* RemoteInventoriesWithInventoryItemsSyncResult.swift */; };
+		6A256D0B1E040634004F5028 /* RemoteListWithListItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D001E040634004F5028 /* RemoteListWithListItemsSyncResult.swift */; };
+		6A256D0C1E040634004F5028 /* RemoteListsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D011E040634004F5028 /* RemoteListsWithDependencies.swift */; };
+		6A256D0D1E040634004F5028 /* RemoteListWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D021E040634004F5028 /* RemoteListWithDependencies.swift */; };
+		6A256D0E1E040634004F5028 /* RemoteListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D031E040634004F5028 /* RemoteListItems.swift */; };
+		6A256D0F1E040634004F5028 /* RemoteHistoryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D041E040634004F5028 /* RemoteHistoryItems.swift */; };
+		6A256D101E040634004F5028 /* RemoteProductsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D051E040634004F5028 /* RemoteProductsWithDependencies.swift */; };
+		6A256D111E040634004F5028 /* RemoteBuyCartResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D061E040634004F5028 /* RemoteBuyCartResult.swift */; };
+		6A256D121E040634004F5028 /* RemoteInventoryItemsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D071E040634004F5028 /* RemoteInventoryItemsWithDependencies.swift */; };
+		6A256D1E1E04066D004F5028 /* RemoteSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D141E04066D004F5028 /* RemoteSyncResult.swift */; };
+		6A256D1F1E04066D004F5028 /* RemoteGlobalSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D151E04066D004F5028 /* RemoteGlobalSyncResult.swift */; };
+		6A256D201E04066D004F5028 /* RemoteListWithListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D161E04066D004F5028 /* RemoteListWithListItems.swift */; };
+		6A256D211E04066D004F5028 /* RemoteListItemsWithDependenciesNoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D171E04066D004F5028 /* RemoteListItemsWithDependenciesNoList.swift */; };
+		6A256D221E04066D004F5028 /* RemoteInventoryWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D181E04066D004F5028 /* RemoteInventoryWithItems.swift */; };
+		6A256D231E04066D004F5028 /* RemoteInventoryItemsWithDependenciesNoInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D191E04066D004F5028 /* RemoteInventoryItemsWithDependenciesNoInventory.swift */; };
+		6A256D241E04066D004F5028 /* RemoteGroupWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D1A1E04066D004F5028 /* RemoteGroupWithItems.swift */; };
+		6A256D251E04066D004F5028 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D1B1E04066D004F5028 /* RemoteGroupItemsWithDependenciesNoGroup.swift */; };
+		6A256D261E04066D004F5028 /* RemoteGroupItemsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D1C1E04066D004F5028 /* RemoteGroupItemsWithDependencies.swift */; };
+		6A256D271E04066D004F5028 /* RemoteSectionWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D1D1E04066D004F5028 /* RemoteSectionWithDependencies.swift */; };
+		6A256D411E040694004F5028 /* StoreProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D291E040694004F5028 /* StoreProduct.swift */; };
+		6A256D421E040694004F5028 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2A1E040694004F5028 /* ListItem.swift */; };
+		6A256D431E040694004F5028 /* OrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2B1E040694004F5028 /* OrderUpdate.swift */; };
+		6A256D441E040694004F5028 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2C1E040694004F5028 /* Section.swift */; };
+		6A256D451E040694004F5028 /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2D1E040694004F5028 /* UserIdentity.swift */; };
+		6A256D461E040694004F5028 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2E1E040694004F5028 /* User.swift */; };
+		6A256D471E040694004F5028 /* LoginData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2F1E040694004F5028 /* LoginData.swift */; };
+		6A256D481E040694004F5028 /* ListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D301E040694004F5028 /* ListSync.swift */; };
+		6A256D491E040694004F5028 /* InventorySync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D311E040694004F5028 /* InventorySync.swift */; };
+		6A256D4A1E040694004F5028 /* HistoryItemsSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D321E040694004F5028 /* HistoryItemsSync.swift */; };
+		6A256D4B1E040694004F5028 /* HistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D331E040694004F5028 /* HistoryItem.swift */; };
+		6A256D4C1E040694004F5028 /* HistoryItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D341E040694004F5028 /* HistoryItemGroup.swift */; };
+		6A256D4D1E040694004F5028 /* Suggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D351E040694004F5028 /* Suggestion.swift */; };
+		6A256D4E1E040694004F5028 /* PlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D361E040694004F5028 /* PlanItem.swift */; };
+		6A256D4F1E040694004F5028 /* QuickAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D371E040694004F5028 /* QuickAddItem.swift */; };
+		6A256D501E040694004F5028 /* QuickAddProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D381E040694004F5028 /* QuickAddProduct.swift */; };
+		6A256D511E040694004F5028 /* QuickAddGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D391E040694004F5028 /* QuickAddGroup.swift */; };
+		6A256D521E040694004F5028 /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D3A1E040694004F5028 /* HelpItem.swift */; };
+		6A256D531E040694004F5028 /* InventoryItemId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D3B1E040694004F5028 /* InventoryItemId.swift */; };
+		6A256D541E040694004F5028 /* ProductWithQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D3C1E040694004F5028 /* ProductWithQuantity.swift */; };
+		6A256D551E040694004F5028 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D3D1E040694004F5028 /* ListItemPrototype.swift */; };
+		6A256D561E040694004F5028 /* StoreListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D3E1E040694004F5028 /* StoreListItemPrototype.swift */; };
+		6A256D571E040694004F5028 /* SyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D3F1E040694004F5028 /* SyncResult.swift */; };
+		6A256D581E040694004F5028 /* ErrorReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D401E040694004F5028 /* ErrorReport.swift */; };
+		6A256D5C1E0406B8004F5028 /* MyWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D5A1E0406B8004F5028 /* MyWebSocket.swift */; };
+		6A256D5D1E0406B8004F5028 /* MyWebsocketDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D5B1E0406B8004F5028 /* MyWebsocketDispatcher.swift */; };
+		6A256D611E04077D004F5028 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D601E04077D004F5028 /* Identifiable.swift */; };
+		6A256D741E0407AC004F5028 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D631E0407AC004F5028 /* String.swift */; };
+		6A256D751E0407AC004F5028 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D641E0407AC004F5028 /* NSMutableAttributedString.swift */; };
+		6A256D761E0407AC004F5028 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D651E0407AC004F5028 /* Array.swift */; };
+		6A256D771E0407AC004F5028 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D661E0407AC004F5028 /* Float.swift */; };
+		6A256D781E0407AC004F5028 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D671E0407AC004F5028 /* UITextField.swift */; };
+		6A256D791E0407AC004F5028 /* UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D681E0407AC004F5028 /* UITextView.swift */; };
+		6A256D7A1E0407AC004F5028 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D691E0407AC004F5028 /* NSDate.swift */; };
+		6A256D7B1E0407AC004F5028 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D6A1E0407AC004F5028 /* Dictionary.swift */; };
+		6A256D7C1E0407AC004F5028 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D6B1E0407AC004F5028 /* Option.swift */; };
+		6A256D7D1E0407AC004F5028 /* OrderedDictionary_Quantities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D6C1E0407AC004F5028 /* OrderedDictionary_Quantities.swift */; };
+		6A256D7E1E0407AC004F5028 /* Addable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D6D1E0407AC004F5028 /* Addable.swift */; };
+		6A256D7F1E0407AC004F5028 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D6E1E0407AC004F5028 /* Int.swift */; };
+		6A256D801E0407AC004F5028 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D6F1E0407AC004F5028 /* Double.swift */; };
+		6A256D811E0407AC004F5028 /* Int64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D701E0407AC004F5028 /* Int64.swift */; };
+		6A256D821E0407AC004F5028 /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D711E0407AC004F5028 /* NSRange.swift */; };
+		6A256D831E0407AC004F5028 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D721E0407AC004F5028 /* CGRect.swift */; };
+		6A256D841E0407AC004F5028 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D731E0407AC004F5028 /* CGSize.swift */; };
+		6A256D8F1E040815004F5028 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D861E040815004F5028 /* Globals.swift */; };
+		6A256D901E040815004F5028 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D871E040815004F5028 /* Notification.swift */; };
+		6A256D911E040815004F5028 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D881E040815004F5028 /* Operators.swift */; };
+		6A256D921E040815004F5028 /* OrderedDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D891E040815004F5028 /* OrderedDictionary.swift */; };
+		6A256D931E040815004F5028 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D8A1E040815004F5028 /* Paginator.swift */; };
+		6A256D941E040815004F5028 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D8B1E040815004F5028 /* PreferencesManager.swift */; };
+		6A256D951E040815004F5028 /* Synced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D8C1E040815004F5028 /* Synced.swift */; };
+		6A256D961E040815004F5028 /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D8D1E040815004F5028 /* Try.swift */; };
+		6A256D971E040815004F5028 /* ViewTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D8E1E040815004F5028 /* ViewTags.swift */; };
+		6A256D9D1E04085B004F5028 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D981E04085B004F5028 /* KeychainKeys.swift */; };
+		6A256D9E1E04085B004F5028 /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D991E04085B004F5028 /* Performance.swift */; };
+		6A256D9F1E04085B004F5028 /* TimerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D9A1E04085B004F5028 /* TimerUtils.swift */; };
+		6A256DA01E04085B004F5028 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D9B1E04085B004F5028 /* AsyncUtils.swift */; };
+		6A256DA11E04085B004F5028 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D9C1E04085B004F5028 /* LangManager.swift */; };
+		6A256DA51E0408CE004F5028 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DA41E0408CE004F5028 /* UIColor.swift */; };
+		6A256DA71E0408F7004F5028 /* AccessTokenHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DA61E0408F7004F5028 /* AccessTokenHelper.swift */; };
+		6A256DA91E04090F004F5028 /* WebsocketHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DA81E04090F004F5028 /* WebsocketHelper.swift */; };
+		6A256DAB1E04092B004F5028 /* SuggestionsPrefiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DAA1E04092B004F5028 /* SuggestionsPrefiller.swift */; };
+		6A256DAD1E040944004F5028 /* LangHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DAC1E040944004F5028 /* LangHelper.swift */; };
+		6A256DAF1E04098D004F5028 /* ConfirmationPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DAE1E04098D004F5028 /* ConfirmationPopup.swift */; };
+		6A256DB11E040A04004F5028 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DB01E040A04004F5028 /* UIView.swift */; };
+		6A256DB31E040A6D004F5028 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DB21E040A6D004F5028 /* NSLayoutConstraint.swift */; };
+		6A256DB51E040BC5004F5028 /* DimensionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DB41E040BC5004F5028 /* DimensionsManager.swift */; };
+		6A256DB71E040C09004F5028 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DB61E040C09004F5028 /* AppInfo.swift */; };
+		6A256DB91E040C1F004F5028 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DB81E040C1F004F5028 /* Fonts.swift */; };
+		6A256DBB1E040C52004F5028 /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DBA1E040C52004F5028 /* CGPoint.swift */; };
+		6A256DBD1E040C74004F5028 /* LabelMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DBC1E040C74004F5028 /* LabelMore.swift */; };
+		6A256DBF1E040C91004F5028 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DBE1E040C91004F5028 /* UIFont.swift */; };
+		6A256DC11E040DDB004F5028 /* RealmConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DC01E040DDB004F5028 /* RealmConfig.swift */; };
+		6A256DC31E043BCD004F5028 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DC21E043BCD004F5028 /* Constants.swift */; };
+		6A256DC71E04464E004F5028 /* RequestErrorToMsgMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DC61E04464E004F5028 /* RequestErrorToMsgMapper.swift */; };
+		A017C1D3506C3F772B9F386F /* Pods_Providers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 999680B0DB094F9A28664E3C /* Pods_Providers.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		07C2602C5259E7890FCA54D7 /* Pods-Providers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Providers.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Providers/Pods-Providers.release.xcconfig"; sourceTree = "<group>"; };
+		6A256B7C1E0400A0004F5028 /* MemListItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemListItemProvider.swift; sourceTree = "<group>"; };
+		6A256B7D1E0400A0004F5028 /* MemInventoryItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemInventoryItemProvider.swift; sourceTree = "<group>"; };
+		6A256B841E0401AE004F5028 /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A256B871E0401AE004F5028 /* Providers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Providers.h; sourceTree = "<group>"; };
+		6A256B881E0401AE004F5028 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6A256B8F1E0404E8004F5028 /* ListItemProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B901E0404E8004F5028 /* InventoryItemsProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemsProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B911E0404E8004F5028 /* UserProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B921E0404E8004F5028 /* remoteResultHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = remoteResultHandler.swift; sourceTree = "<group>"; };
+		6A256B931E0404E8004F5028 /* ListProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B941E0404E8004F5028 /* ErrorProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B951E0404E8004F5028 /* InventoryProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B961E0404E8004F5028 /* HistoryProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B971E0404E8004F5028 /* StatsProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B981E0404E8004F5028 /* PlanProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B991E0404E8004F5028 /* ProductGroupProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductGroupProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B9A1E0404E8004F5028 /* ProductProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B9B1E0404E8004F5028 /* ProductCategoryProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCategoryProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B9C1E0404E8004F5028 /* SectionProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B9D1E0404E8004F5028 /* HelpProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B9E1E0404E8004F5028 /* BrandProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandProviderImpl.swift; sourceTree = "<group>"; };
+		6A256B9F1E0404E8004F5028 /* GlobalProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalProviderImpl.swift; sourceTree = "<group>"; };
+		6A256BA01E0404E8004F5028 /* PullProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullProviderImpl.swift; sourceTree = "<group>"; };
+		6A256BA11E0404E8004F5028 /* RealmUserProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmUserProviderImpl.swift; sourceTree = "<group>"; };
+		6A256BB61E04050F004F5028 /* ListItemProviderMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemProviderMock.swift; sourceTree = "<group>"; };
+		6A256BB71E04050F004F5028 /* UserProviderMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProviderMock.swift; sourceTree = "<group>"; };
+		6A256BBB1E040530004F5028 /* RealmProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProvider.swift; sourceTree = "<group>"; };
+		6A256BBC1E040530004F5028 /* RealmListItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmListItemProvider.swift; sourceTree = "<group>"; };
+		6A256BBD1E040530004F5028 /* RealmProductProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProductProvider.swift; sourceTree = "<group>"; };
+		6A256BBE1E040530004F5028 /* RealmProductCategoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProductCategoryProvider.swift; sourceTree = "<group>"; };
+		6A256BBF1E040530004F5028 /* RealmInventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmInventoryProvider.swift; sourceTree = "<group>"; };
+		6A256BC01E040530004F5028 /* RealmInventoryItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmInventoryItemProvider.swift; sourceTree = "<group>"; };
+		6A256BC11E040530004F5028 /* RealmHistoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmHistoryProvider.swift; sourceTree = "<group>"; };
+		6A256BC21E040530004F5028 /* RealmProductGroupProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProductGroupProvider.swift; sourceTree = "<group>"; };
+		6A256BC31E040530004F5028 /* RealmGroupItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmGroupItemProvider.swift; sourceTree = "<group>"; };
+		6A256BC41E040530004F5028 /* DBResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBResult.swift; sourceTree = "<group>"; };
+		6A256BC51E040530004F5028 /* Results.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Results.swift; sourceTree = "<group>"; };
+		6A256BC61E040530004F5028 /* Realm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Realm.swift; sourceTree = "<group>"; };
+		6A256BC71E040530004F5028 /* List_Realm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List_Realm.swift; sourceTree = "<group>"; };
+		6A256BC81E040530004F5028 /* RealmPlanProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmPlanProvider.swift; sourceTree = "<group>"; };
+		6A256BC91E040530004F5028 /* RealmBrandProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmBrandProvider.swift; sourceTree = "<group>"; };
+		6A256BCA1E040530004F5028 /* RealmGlobalProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmGlobalProvider.swift; sourceTree = "<group>"; };
+		6A256BCB1E040530004F5028 /* RealmSectionProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmSectionProvider.swift; sourceTree = "<group>"; };
+		6A256BCC1E040530004F5028 /* DBProviders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBProviders.swift; sourceTree = "<group>"; };
+		6A256BCD1E040530004F5028 /* RealmListProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmListProvider.swift; sourceTree = "<group>"; };
+		6A256BCE1E040530004F5028 /* RealmStoreProductProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmStoreProductProvider.swift; sourceTree = "<group>"; };
+		6A256BE41E040540004F5028 /* RemoteProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProvider.swift; sourceTree = "<group>"; };
+		6A256BE51E040540004F5028 /* RemoteErrorReporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteErrorReporter.swift; sourceTree = "<group>"; };
+		6A256BE61E040540004F5028 /* RemoteListItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemProvider.swift; sourceTree = "<group>"; };
+		6A256BE71E040540004F5028 /* RemoteSectionProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSectionProvider.swift; sourceTree = "<group>"; };
+		6A256BE81E040540004F5028 /* RemoteInventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryProvider.swift; sourceTree = "<group>"; };
+		6A256BE91E040540004F5028 /* RemoteInventoryItemsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryItemsProvider.swift; sourceTree = "<group>"; };
+		6A256BEA1E040540004F5028 /* RemoteUserProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteUserProvider.swift; sourceTree = "<group>"; };
+		6A256BEB1E040540004F5028 /* RemoteHistoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryProvider.swift; sourceTree = "<group>"; };
+		6A256BEC1E040540004F5028 /* RemotePlanItemsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotePlanItemsProvider.swift; sourceTree = "<group>"; };
+		6A256BED1E040540004F5028 /* RemoteGroupsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteGroupsProvider.swift; sourceTree = "<group>"; };
+		6A256BEE1E040540004F5028 /* RemoteGlobalProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteGlobalProvider.swift; sourceTree = "<group>"; };
+		6A256BEF1E040540004F5028 /* RemoteProductProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductProvider.swift; sourceTree = "<group>"; };
+		6A256BF01E040540004F5028 /* RemoteProductCategoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductCategoryProvider.swift; sourceTree = "<group>"; };
+		6A256BF11E040540004F5028 /* RemotePullProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotePullProvider.swift; sourceTree = "<group>"; };
+		6A256C011E040556004F5028 /* Urls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Urls.swift; sourceTree = "<group>"; };
+		6A256C021E040556004F5028 /* AlamofireExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireExtensions.swift; sourceTree = "<group>"; };
+		6A256C061E04056C004F5028 /* ProviderFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderFactory.swift; sourceTree = "<group>"; };
+		6A256C071E04056C004F5028 /* ProviderResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderResult.swift; sourceTree = "<group>"; };
+		6A256C081E04056C004F5028 /* ProviderFetchModus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderFetchModus.swift; sourceTree = "<group>"; };
+		6A256C0D1E040579004F5028 /* ListItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemProvider.swift; sourceTree = "<group>"; };
+		6A256C0E1E040579004F5028 /* PullProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullProvider.swift; sourceTree = "<group>"; };
+		6A256C0F1E040579004F5028 /* ProductProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductProvider.swift; sourceTree = "<group>"; };
+		6A256C101E040579004F5028 /* InventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryProvider.swift; sourceTree = "<group>"; };
+		6A256C111E040579004F5028 /* InventoryItemsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemsProvider.swift; sourceTree = "<group>"; };
+		6A256C121E040579004F5028 /* UserProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProvider.swift; sourceTree = "<group>"; };
+		6A256C131E040579004F5028 /* ProductGroupProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductGroupProvider.swift; sourceTree = "<group>"; };
+		6A256C141E040579004F5028 /* ProductCategoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCategoryProvider.swift; sourceTree = "<group>"; };
+		6A256C151E040579004F5028 /* ConnectionProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionProvider.swift; sourceTree = "<group>"; };
+		6A256C161E040579004F5028 /* ListProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListProvider.swift; sourceTree = "<group>"; };
+		6A256C171E040579004F5028 /* HistoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryProvider.swift; sourceTree = "<group>"; };
+		6A256C181E040579004F5028 /* StatsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsProvider.swift; sourceTree = "<group>"; };
+		6A256C191E040579004F5028 /* PlanProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanProvider.swift; sourceTree = "<group>"; };
+		6A256C1A1E040579004F5028 /* BrandProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandProvider.swift; sourceTree = "<group>"; };
+		6A256C1B1E040579004F5028 /* Providers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Providers.swift; sourceTree = "<group>"; };
+		6A256C1C1E040579004F5028 /* SectionProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionProvider.swift; sourceTree = "<group>"; };
+		6A256C1D1E040579004F5028 /* HelpProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpProvider.swift; sourceTree = "<group>"; };
+		6A256C1E1E040579004F5028 /* GlobalProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalProvider.swift; sourceTree = "<group>"; };
+		6A256C1F1E040579004F5028 /* ErrorProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorProvider.swift; sourceTree = "<group>"; };
+		6A256C351E04059B004F5028 /* RemoteContainedItemIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteContainedItemIdentifier.swift; sourceTree = "<group>"; };
+		6A256C381E0405A7004F5028 /* ListItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemInput.swift; sourceTree = "<group>"; };
+		6A256C391E0405A7004F5028 /* InventoryItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemInput.swift; sourceTree = "<group>"; };
+		6A256C3A1E0405A7004F5028 /* ProductWithQuantityInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWithQuantityInput.swift; sourceTree = "<group>"; };
+		6A256C3B1E0405A7004F5028 /* ProductInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductInput.swift; sourceTree = "<group>"; };
+		6A256C3C1E0405A7004F5028 /* GroupItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItemInput.swift; sourceTree = "<group>"; };
+		6A256C3D1E0405A7004F5028 /* UserInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInput.swift; sourceTree = "<group>"; };
+		6A256C3E1E0405A7004F5028 /* PlanItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanItemInput.swift; sourceTree = "<group>"; };
+		6A256C3F1E0405A7004F5028 /* StoreProductInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreProductInput.swift; sourceTree = "<group>"; };
+		6A256C491E0405B6004F5028 /* ListItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemMapper.swift; sourceTree = "<group>"; };
+		6A256C4A1E0405B6004F5028 /* ProductMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductMapper.swift; sourceTree = "<group>"; };
+		6A256C4B1E0405B6004F5028 /* StoreProductMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreProductMapper.swift; sourceTree = "<group>"; };
+		6A256C4C1E0405B6004F5028 /* ProductCategoryMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCategoryMapper.swift; sourceTree = "<group>"; };
+		6A256C4D1E0405B6004F5028 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
+		6A256C4E1E0405B6004F5028 /* ListMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMapper.swift; sourceTree = "<group>"; };
+		6A256C4F1E0405B6004F5028 /* InventoryItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemMapper.swift; sourceTree = "<group>"; };
+		6A256C501E0405B6004F5028 /* InventoryMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryMapper.swift; sourceTree = "<group>"; };
+		6A256C511E0405B6004F5028 /* SharedUserMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUserMapper.swift; sourceTree = "<group>"; };
+		6A256C521E0405B6004F5028 /* HistoryItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemMapper.swift; sourceTree = "<group>"; };
+		6A256C531E0405B6004F5028 /* ListItemGroupMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupMapper.swift; sourceTree = "<group>"; };
+		6A256C541E0405B6004F5028 /* GroupItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItemMapper.swift; sourceTree = "<group>"; };
+		6A256C551E0405B6004F5028 /* PlanItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanItemMapper.swift; sourceTree = "<group>"; };
+		6A256C641E0405C6004F5028 /* DBSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSection.swift; sourceTree = "<group>"; };
+		6A256C651E0405C6004F5028 /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
+		6A256C661E0405C6004F5028 /* DBStoreProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBStoreProduct.swift; sourceTree = "<group>"; };
+		6A256C671E0405C6004F5028 /* DBSharedUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSharedUser.swift; sourceTree = "<group>"; };
+		6A256C681E0405C6004F5028 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		6A256C691E0405C6004F5028 /* DBListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBListItem.swift; sourceTree = "<group>"; };
+		6A256C6A1E0405C6004F5028 /* InventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItem.swift; sourceTree = "<group>"; };
+		6A256C6B1E0405C6004F5028 /* DBInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBInventory.swift; sourceTree = "<group>"; };
+		6A256C6C1E0405C6004F5028 /* DBSyncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSyncable.swift; sourceTree = "<group>"; };
+		6A256C6D1E0405C6004F5028 /* DBHistoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBHistoryItem.swift; sourceTree = "<group>"; };
+		6A256C6E1E0405C6004F5028 /* DBPlanItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBPlanItem.swift; sourceTree = "<group>"; };
+		6A256C6F1E0405C6004F5028 /* ProductGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductGroup.swift; sourceTree = "<group>"; };
+		6A256C701E0405C6004F5028 /* GroupItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItem.swift; sourceTree = "<group>"; };
+		6A256C711E0405C6004F5028 /* ProductCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCategory.swift; sourceTree = "<group>"; };
+		6A256C811E0405D7004F5028 /* DBSectionToRemove.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSectionToRemove.swift; sourceTree = "<group>"; };
+		6A256C821E0405D7004F5028 /* ProductToRemove.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductToRemove.swift; sourceTree = "<group>"; };
+		6A256C831E0405D7004F5028 /* DBStoreProductToRemove.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBStoreProductToRemove.swift; sourceTree = "<group>"; };
+		6A256C841E0405D7004F5028 /* DBRemoveSharedUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBRemoveSharedUser.swift; sourceTree = "<group>"; };
+		6A256C851E0405D7004F5028 /* DBRemoveList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBRemoveList.swift; sourceTree = "<group>"; };
+		6A256C861E0405D7004F5028 /* DBRemoveListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBRemoveListItem.swift; sourceTree = "<group>"; };
+		6A256C871E0405D7004F5028 /* DBRemoveInventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBRemoveInventoryItem.swift; sourceTree = "<group>"; };
+		6A256C881E0405D7004F5028 /* DBRemoveInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBRemoveInventory.swift; sourceTree = "<group>"; };
+		6A256C891E0405D7004F5028 /* DBRemoveSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBRemoveSection.swift; sourceTree = "<group>"; };
+		6A256C8A1E0405D7004F5028 /* DBRemoveHistoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBRemoveHistoryItem.swift; sourceTree = "<group>"; };
+		6A256C8B1E0405D7004F5028 /* DBRemoveListItemGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBRemoveListItemGroup.swift; sourceTree = "<group>"; };
+		6A256C8C1E0405D7004F5028 /* DBRemoveGroupItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBRemoveGroupItem.swift; sourceTree = "<group>"; };
+		6A256C8D1E0405D7004F5028 /* DBRemoveProductCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBRemoveProductCategory.swift; sourceTree = "<group>"; };
+		6A256C9C1E0405EE004F5028 /* MonthYear.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthYear.swift; sourceTree = "<group>"; };
+		6A256C9D1E0405EE004F5028 /* ListItemStatusUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemStatusUpdate.swift; sourceTree = "<group>"; };
+		6A256CA11E0405FF004F5028 /* Array_ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_ListItem.swift; sourceTree = "<group>"; };
+		6A256CA21E0405FF004F5028 /* Array_Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_Section.swift; sourceTree = "<group>"; };
+		6A256CA31E0405FF004F5028 /* Array_GroupItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_GroupItem.swift; sourceTree = "<group>"; };
+		6A256CA41E0405FF004F5028 /* Array_Inventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_Inventory.swift; sourceTree = "<group>"; };
+		6A256CA51E0405FF004F5028 /* Array_ListItemsGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_ListItemsGroup.swift; sourceTree = "<group>"; };
+		6A256CA61E0405FF004F5028 /* Array_HistoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_HistoryItem.swift; sourceTree = "<group>"; };
+		6A256CA71E0405FF004F5028 /* Array_InventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_InventoryItem.swift; sourceTree = "<group>"; };
+		6A256CA81E0405FF004F5028 /* Array_List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_List.swift; sourceTree = "<group>"; };
+		6A256CA91E0405FF004F5028 /* Array_Participant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_Participant.swift; sourceTree = "<group>"; };
+		6A256CB41E040612004F5028 /* RemotePlanItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotePlanItems.swift; sourceTree = "<group>"; };
+		6A256CB51E040612004F5028 /* RemotePlanItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotePlanItem.swift; sourceTree = "<group>"; };
+		6A256CB61E040612004F5028 /* RemoteIncrementResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteIncrementResult.swift; sourceTree = "<group>"; };
+		6A256CB71E040612004F5028 /* RemoteHistoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItem.swift; sourceTree = "<group>"; };
+		6A256CB81E040612004F5028 /* RemoteListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItem.swift; sourceTree = "<group>"; };
+		6A256CB91E040612004F5028 /* RemoteListItemIncrementResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemIncrementResult.swift; sourceTree = "<group>"; };
+		6A256CBA1E040612004F5028 /* RemoteLoginResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteLoginResult.swift; sourceTree = "<group>"; };
+		6A256CBB1E040612004F5028 /* RemoteRegisterResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteRegisterResult.swift; sourceTree = "<group>"; };
+		6A256CBC1E040612004F5028 /* RemotePingResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotePingResult.swift; sourceTree = "<group>"; };
+		6A256CBD1E040612004F5028 /* RemoteProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProduct.swift; sourceTree = "<group>"; };
+		6A256CBE1E040612004F5028 /* RemoteStoreProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStoreProduct.swift; sourceTree = "<group>"; };
+		6A256CBF1E040612004F5028 /* RemoteProductCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductCategory.swift; sourceTree = "<group>"; };
+		6A256CC01E040612004F5028 /* RemoteList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteList.swift; sourceTree = "<group>"; };
+		6A256CC11E040612004F5028 /* RemoteListInvitation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListInvitation.swift; sourceTree = "<group>"; };
+		6A256CC21E040612004F5028 /* RemoteInventoryInvitation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryInvitation.swift; sourceTree = "<group>"; };
+		6A256CC31E040612004F5028 /* RemoteListNoUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListNoUsers.swift; sourceTree = "<group>"; };
+		6A256CC41E040612004F5028 /* RemoteInventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryItem.swift; sourceTree = "<group>"; };
+		6A256CC51E040612004F5028 /* RemoteGroupItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteGroupItem.swift; sourceTree = "<group>"; };
+		6A256CC61E040612004F5028 /* RemoteSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSection.swift; sourceTree = "<group>"; };
+		6A256CC71E040612004F5028 /* RemoteSharedUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSharedUser.swift; sourceTree = "<group>"; };
+		6A256CC81E040612004F5028 /* RemoteInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventory.swift; sourceTree = "<group>"; };
+		6A256CC91E040612004F5028 /* RemoteInventoryWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryWithDependencies.swift; sourceTree = "<group>"; };
+		6A256CCA1E040612004F5028 /* RemoteOrderUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteOrderUpdate.swift; sourceTree = "<group>"; };
+		6A256CCB1E040612004F5028 /* RemoteGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteGroup.swift; sourceTree = "<group>"; };
+		6A256CCC1E040612004F5028 /* RemoteHistoryItemsSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItemsSyncResult.swift; sourceTree = "<group>"; };
+		6A256CCD1E040612004F5028 /* RemoteSocialLoginResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSocialLoginResult.swift; sourceTree = "<group>"; };
+		6A256CCE1E040612004F5028 /* ItemIncrement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemIncrement.swift; sourceTree = "<group>"; };
+		6A256CCF1E040612004F5028 /* GroupItemWithGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItemWithGroup.swift; sourceTree = "<group>"; };
+		6A256CD01E040612004F5028 /* RemoteIncrement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteIncrement.swift; sourceTree = "<group>"; };
+		6A256CD11E040612004F5028 /* RemoteListItemIncrement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemIncrement.swift; sourceTree = "<group>"; };
+		6A256CD21E040612004F5028 /* RemoteListItemsReorderResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemsReorderResult.swift; sourceTree = "<group>"; };
+		6A256CD31E040612004F5028 /* RemoteListItemSwitchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemSwitchResult.swift; sourceTree = "<group>"; };
+		6A256CD41E040612004F5028 /* RemoteListItemReorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemReorder.swift; sourceTree = "<group>"; };
+		6A256CD51E040612004F5028 /* RemoteSwitchListItemResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSwitchListItemResult.swift; sourceTree = "<group>"; };
+		6A256CD61E040612004F5028 /* RemoteSwitchAllListItemsResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSwitchAllListItemsResult.swift; sourceTree = "<group>"; };
+		6A256CD71E040612004F5028 /* RemoteSwitchAllListItemsLightResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSwitchAllListItemsLightResult.swift; sourceTree = "<group>"; };
+		6A256CFD1E040634004F5028 /* RemoteInventoryItemWithProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryItemWithProduct.swift; sourceTree = "<group>"; };
+		6A256CFE1E040634004F5028 /* RemoteInventoryItemsWithHistoryAndDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryItemsWithHistoryAndDependencies.swift; sourceTree = "<group>"; };
+		6A256CFF1E040634004F5028 /* RemoteInventoriesWithInventoryItemsSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoriesWithInventoryItemsSyncResult.swift; sourceTree = "<group>"; };
+		6A256D001E040634004F5028 /* RemoteListWithListItemsSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListWithListItemsSyncResult.swift; sourceTree = "<group>"; };
+		6A256D011E040634004F5028 /* RemoteListsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListsWithDependencies.swift; sourceTree = "<group>"; };
+		6A256D021E040634004F5028 /* RemoteListWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListWithDependencies.swift; sourceTree = "<group>"; };
+		6A256D031E040634004F5028 /* RemoteListItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItems.swift; sourceTree = "<group>"; };
+		6A256D041E040634004F5028 /* RemoteHistoryItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItems.swift; sourceTree = "<group>"; };
+		6A256D051E040634004F5028 /* RemoteProductsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductsWithDependencies.swift; sourceTree = "<group>"; };
+		6A256D061E040634004F5028 /* RemoteBuyCartResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteBuyCartResult.swift; sourceTree = "<group>"; };
+		6A256D071E040634004F5028 /* RemoteInventoryItemsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryItemsWithDependencies.swift; sourceTree = "<group>"; };
+		6A256D141E04066D004F5028 /* RemoteSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSyncResult.swift; sourceTree = "<group>"; };
+		6A256D151E04066D004F5028 /* RemoteGlobalSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteGlobalSyncResult.swift; sourceTree = "<group>"; };
+		6A256D161E04066D004F5028 /* RemoteListWithListItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListWithListItems.swift; sourceTree = "<group>"; };
+		6A256D171E04066D004F5028 /* RemoteListItemsWithDependenciesNoList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemsWithDependenciesNoList.swift; sourceTree = "<group>"; };
+		6A256D181E04066D004F5028 /* RemoteInventoryWithItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryWithItems.swift; sourceTree = "<group>"; };
+		6A256D191E04066D004F5028 /* RemoteInventoryItemsWithDependenciesNoInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryItemsWithDependenciesNoInventory.swift; sourceTree = "<group>"; };
+		6A256D1A1E04066D004F5028 /* RemoteGroupWithItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteGroupWithItems.swift; sourceTree = "<group>"; };
+		6A256D1B1E04066D004F5028 /* RemoteGroupItemsWithDependenciesNoGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteGroupItemsWithDependenciesNoGroup.swift; sourceTree = "<group>"; };
+		6A256D1C1E04066D004F5028 /* RemoteGroupItemsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteGroupItemsWithDependencies.swift; sourceTree = "<group>"; };
+		6A256D1D1E04066D004F5028 /* RemoteSectionWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSectionWithDependencies.swift; sourceTree = "<group>"; };
+		6A256D291E040694004F5028 /* StoreProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreProduct.swift; sourceTree = "<group>"; };
+		6A256D2A1E040694004F5028 /* ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
+		6A256D2B1E040694004F5028 /* OrderUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderUpdate.swift; sourceTree = "<group>"; };
+		6A256D2C1E040694004F5028 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		6A256D2D1E040694004F5028 /* UserIdentity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserIdentity.swift; sourceTree = "<group>"; };
+		6A256D2E1E040694004F5028 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		6A256D2F1E040694004F5028 /* LoginData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginData.swift; sourceTree = "<group>"; };
+		6A256D301E040694004F5028 /* ListSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListSync.swift; sourceTree = "<group>"; };
+		6A256D311E040694004F5028 /* InventorySync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventorySync.swift; sourceTree = "<group>"; };
+		6A256D321E040694004F5028 /* HistoryItemsSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemsSync.swift; sourceTree = "<group>"; };
+		6A256D331E040694004F5028 /* HistoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItem.swift; sourceTree = "<group>"; };
+		6A256D341E040694004F5028 /* HistoryItemGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemGroup.swift; sourceTree = "<group>"; };
+		6A256D351E040694004F5028 /* Suggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Suggestion.swift; sourceTree = "<group>"; };
+		6A256D361E040694004F5028 /* PlanItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanItem.swift; sourceTree = "<group>"; };
+		6A256D371E040694004F5028 /* QuickAddItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddItem.swift; sourceTree = "<group>"; };
+		6A256D381E040694004F5028 /* QuickAddProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddProduct.swift; sourceTree = "<group>"; };
+		6A256D391E040694004F5028 /* QuickAddGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroup.swift; sourceTree = "<group>"; };
+		6A256D3A1E040694004F5028 /* HelpItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpItem.swift; sourceTree = "<group>"; };
+		6A256D3B1E040694004F5028 /* InventoryItemId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemId.swift; sourceTree = "<group>"; };
+		6A256D3C1E040694004F5028 /* ProductWithQuantity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWithQuantity.swift; sourceTree = "<group>"; };
+		6A256D3D1E040694004F5028 /* ListItemPrototype.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemPrototype.swift; sourceTree = "<group>"; };
+		6A256D3E1E040694004F5028 /* StoreListItemPrototype.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreListItemPrototype.swift; sourceTree = "<group>"; };
+		6A256D3F1E040694004F5028 /* SyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncResult.swift; sourceTree = "<group>"; };
+		6A256D401E040694004F5028 /* ErrorReport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorReport.swift; sourceTree = "<group>"; };
+		6A256D5A1E0406B8004F5028 /* MyWebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebSocket.swift; sourceTree = "<group>"; };
+		6A256D5B1E0406B8004F5028 /* MyWebsocketDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebsocketDispatcher.swift; sourceTree = "<group>"; };
+		6A256D601E04077D004F5028 /* Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		6A256D631E0407AC004F5028 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		6A256D641E0407AC004F5028 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
+		6A256D651E0407AC004F5028 /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		6A256D661E0407AC004F5028 /* Float.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Float.swift; sourceTree = "<group>"; };
+		6A256D671E0407AC004F5028 /* UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
+		6A256D681E0407AC004F5028 /* UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextView.swift; sourceTree = "<group>"; };
+		6A256D691E0407AC004F5028 /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
+		6A256D6A1E0407AC004F5028 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
+		6A256D6B1E0407AC004F5028 /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
+		6A256D6C1E0407AC004F5028 /* OrderedDictionary_Quantities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderedDictionary_Quantities.swift; sourceTree = "<group>"; };
+		6A256D6D1E0407AC004F5028 /* Addable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Addable.swift; sourceTree = "<group>"; };
+		6A256D6E1E0407AC004F5028 /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		6A256D6F1E0407AC004F5028 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
+		6A256D701E0407AC004F5028 /* Int64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int64.swift; sourceTree = "<group>"; };
+		6A256D711E0407AC004F5028 /* NSRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSRange.swift; sourceTree = "<group>"; };
+		6A256D721E0407AC004F5028 /* CGRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
+		6A256D731E0407AC004F5028 /* CGSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
+		6A256D861E040815004F5028 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		6A256D871E040815004F5028 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		6A256D881E040815004F5028 /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
+		6A256D891E040815004F5028 /* OrderedDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderedDictionary.swift; sourceTree = "<group>"; };
+		6A256D8A1E040815004F5028 /* Paginator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
+		6A256D8B1E040815004F5028 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
+		6A256D8C1E040815004F5028 /* Synced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synced.swift; sourceTree = "<group>"; };
+		6A256D8D1E040815004F5028 /* Try.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Try.swift; sourceTree = "<group>"; };
+		6A256D8E1E040815004F5028 /* ViewTags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewTags.swift; sourceTree = "<group>"; };
+		6A256D981E04085B004F5028 /* KeychainKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
+		6A256D991E04085B004F5028 /* Performance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Performance.swift; sourceTree = "<group>"; };
+		6A256D9A1E04085B004F5028 /* TimerUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerUtils.swift; sourceTree = "<group>"; };
+		6A256D9B1E04085B004F5028 /* AsyncUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncUtils.swift; sourceTree = "<group>"; };
+		6A256D9C1E04085B004F5028 /* LangManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LangManager.swift; sourceTree = "<group>"; };
+		6A256DA41E0408CE004F5028 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		6A256DA61E0408F7004F5028 /* AccessTokenHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessTokenHelper.swift; sourceTree = "<group>"; };
+		6A256DA81E04090F004F5028 /* WebsocketHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsocketHelper.swift; sourceTree = "<group>"; };
+		6A256DAA1E04092B004F5028 /* SuggestionsPrefiller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestionsPrefiller.swift; sourceTree = "<group>"; };
+		6A256DAC1E040944004F5028 /* LangHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LangHelper.swift; sourceTree = "<group>"; };
+		6A256DAE1E04098D004F5028 /* ConfirmationPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationPopup.swift; sourceTree = "<group>"; };
+		6A256DB01E040A04004F5028 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		6A256DB21E040A6D004F5028 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
+		6A256DB41E040BC5004F5028 /* DimensionsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DimensionsManager.swift; sourceTree = "<group>"; };
+		6A256DB61E040C09004F5028 /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
+		6A256DB81E040C1F004F5028 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		6A256DBA1E040C52004F5028 /* CGPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
+		6A256DBC1E040C74004F5028 /* LabelMore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelMore.swift; sourceTree = "<group>"; };
+		6A256DBE1E040C91004F5028 /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
+		6A256DC01E040DDB004F5028 /* RealmConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmConfig.swift; sourceTree = "<group>"; };
+		6A256DC21E043BCD004F5028 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		6A256DC61E04464E004F5028 /* RequestErrorToMsgMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestErrorToMsgMapper.swift; sourceTree = "<group>"; };
+		999680B0DB094F9A28664E3C /* Pods_Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9B2C9DFF72144BA2B5046ED /* Pods-Providers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Providers.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-Providers/Pods-Providers.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6A256B801E0401AE004F5028 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A017C1D3506C3F772B9F386F /* Pods_Providers.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		18E6BB45D80664C08826AEF7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D9B2C9DFF72144BA2B5046ED /* Pods-Providers.debug.xcconfig */,
+				07C2602C5259E7890FCA54D7 /* Pods-Providers.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		6A256B741E04004D004F5028 = {
+			isa = PBXGroup;
+			children = (
+				6A256DA21E04085F004F5028 /* utils */,
+				6A256D851E0407C9004F5028 /* helpers */,
+				6A256D621E040794004F5028 /* extensions */,
+				6A256D5F1E040766004F5028 /* protocols */,
+				6A256C341E040590004F5028 /* models */,
+				6A256B7B1E040076004F5028 /* providers */,
+				6A256B851E0401AE004F5028 /* Products */,
+				18E6BB45D80664C08826AEF7 /* Pods */,
+				74208BA8CBB1FD55A8B3EB53 /* Frameworks */,
+				6A256DA31E040894004F5028 /* ios_specific_should_not_be_here */,
+				6A256B861E0401AE004F5028 /* Providers */,
+			);
+			sourceTree = "<group>";
+		};
+		6A256B7B1E040076004F5028 /* providers */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C331E040581004F5028 /* protocol */,
+				6A256BB51E0404EE004F5028 /* impl */,
+				6A256BE31E040534004F5028 /* realm */,
+				6A256B7E1E0400A5004F5028 /* memory */,
+				6A256C001E040543004F5028 /* remote */,
+				6A256BBA1E040512004F5028 /* mock */,
+				6A256D5E1E0406BB004F5028 /* websocket */,
+				6A256C0C1E04056E004F5028 /* etc */,
+			);
+			name = providers;
+			sourceTree = "<group>";
+		};
+		6A256B7E1E0400A5004F5028 /* memory */ = {
+			isa = PBXGroup;
+			children = (
+				6A256B7C1E0400A0004F5028 /* MemListItemProvider.swift */,
+				6A256B7D1E0400A0004F5028 /* MemInventoryItemProvider.swift */,
+			);
+			name = memory;
+			sourceTree = "<group>";
+		};
+		6A256B851E0401AE004F5028 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6A256B841E0401AE004F5028 /* Providers.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6A256B861E0401AE004F5028 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				6A256B871E0401AE004F5028 /* Providers.h */,
+				6A256B881E0401AE004F5028 /* Info.plist */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		6A256BB51E0404EE004F5028 /* impl */ = {
+			isa = PBXGroup;
+			children = (
+				6A256B8F1E0404E8004F5028 /* ListItemProviderImpl.swift */,
+				6A256B901E0404E8004F5028 /* InventoryItemsProviderImpl.swift */,
+				6A256B911E0404E8004F5028 /* UserProviderImpl.swift */,
+				6A256B921E0404E8004F5028 /* remoteResultHandler.swift */,
+				6A256B931E0404E8004F5028 /* ListProviderImpl.swift */,
+				6A256B941E0404E8004F5028 /* ErrorProviderImpl.swift */,
+				6A256B951E0404E8004F5028 /* InventoryProviderImpl.swift */,
+				6A256B961E0404E8004F5028 /* HistoryProviderImpl.swift */,
+				6A256B971E0404E8004F5028 /* StatsProviderImpl.swift */,
+				6A256B981E0404E8004F5028 /* PlanProviderImpl.swift */,
+				6A256B991E0404E8004F5028 /* ProductGroupProviderImpl.swift */,
+				6A256B9A1E0404E8004F5028 /* ProductProviderImpl.swift */,
+				6A256B9B1E0404E8004F5028 /* ProductCategoryProviderImpl.swift */,
+				6A256B9C1E0404E8004F5028 /* SectionProviderImpl.swift */,
+				6A256B9D1E0404E8004F5028 /* HelpProviderImpl.swift */,
+				6A256B9E1E0404E8004F5028 /* BrandProviderImpl.swift */,
+				6A256B9F1E0404E8004F5028 /* GlobalProviderImpl.swift */,
+				6A256BA01E0404E8004F5028 /* PullProviderImpl.swift */,
+				6A256BA11E0404E8004F5028 /* RealmUserProviderImpl.swift */,
+			);
+			name = impl;
+			sourceTree = "<group>";
+		};
+		6A256BBA1E040512004F5028 /* mock */ = {
+			isa = PBXGroup;
+			children = (
+				6A256BB61E04050F004F5028 /* ListItemProviderMock.swift */,
+				6A256BB71E04050F004F5028 /* UserProviderMock.swift */,
+			);
+			name = mock;
+			sourceTree = "<group>";
+		};
+		6A256BE31E040534004F5028 /* realm */ = {
+			isa = PBXGroup;
+			children = (
+				6A256BBB1E040530004F5028 /* RealmProvider.swift */,
+				6A256BBC1E040530004F5028 /* RealmListItemProvider.swift */,
+				6A256BBD1E040530004F5028 /* RealmProductProvider.swift */,
+				6A256BBE1E040530004F5028 /* RealmProductCategoryProvider.swift */,
+				6A256BBF1E040530004F5028 /* RealmInventoryProvider.swift */,
+				6A256BC01E040530004F5028 /* RealmInventoryItemProvider.swift */,
+				6A256BC11E040530004F5028 /* RealmHistoryProvider.swift */,
+				6A256BC21E040530004F5028 /* RealmProductGroupProvider.swift */,
+				6A256BC31E040530004F5028 /* RealmGroupItemProvider.swift */,
+				6A256BC41E040530004F5028 /* DBResult.swift */,
+				6A256BC51E040530004F5028 /* Results.swift */,
+				6A256BC61E040530004F5028 /* Realm.swift */,
+				6A256BC71E040530004F5028 /* List_Realm.swift */,
+				6A256BC81E040530004F5028 /* RealmPlanProvider.swift */,
+				6A256BC91E040530004F5028 /* RealmBrandProvider.swift */,
+				6A256BCA1E040530004F5028 /* RealmGlobalProvider.swift */,
+				6A256BCB1E040530004F5028 /* RealmSectionProvider.swift */,
+				6A256BCC1E040530004F5028 /* DBProviders.swift */,
+				6A256BCD1E040530004F5028 /* RealmListProvider.swift */,
+				6A256BCE1E040530004F5028 /* RealmStoreProductProvider.swift */,
+			);
+			name = realm;
+			sourceTree = "<group>";
+		};
+		6A256C001E040543004F5028 /* remote */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C051E04055B004F5028 /* etc */,
+				6A256BE41E040540004F5028 /* RemoteProvider.swift */,
+				6A256BE51E040540004F5028 /* RemoteErrorReporter.swift */,
+				6A256BE61E040540004F5028 /* RemoteListItemProvider.swift */,
+				6A256BE71E040540004F5028 /* RemoteSectionProvider.swift */,
+				6A256BE81E040540004F5028 /* RemoteInventoryProvider.swift */,
+				6A256BE91E040540004F5028 /* RemoteInventoryItemsProvider.swift */,
+				6A256BEA1E040540004F5028 /* RemoteUserProvider.swift */,
+				6A256BEB1E040540004F5028 /* RemoteHistoryProvider.swift */,
+				6A256BEC1E040540004F5028 /* RemotePlanItemsProvider.swift */,
+				6A256BED1E040540004F5028 /* RemoteGroupsProvider.swift */,
+				6A256BEE1E040540004F5028 /* RemoteGlobalProvider.swift */,
+				6A256BEF1E040540004F5028 /* RemoteProductProvider.swift */,
+				6A256BF01E040540004F5028 /* RemoteProductCategoryProvider.swift */,
+				6A256BF11E040540004F5028 /* RemotePullProvider.swift */,
+			);
+			name = remote;
+			sourceTree = "<group>";
+		};
+		6A256C051E04055B004F5028 /* etc */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C011E040556004F5028 /* Urls.swift */,
+				6A256C021E040556004F5028 /* AlamofireExtensions.swift */,
+			);
+			name = etc;
+			sourceTree = "<group>";
+		};
+		6A256C0C1E04056E004F5028 /* etc */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C061E04056C004F5028 /* ProviderFactory.swift */,
+				6A256C071E04056C004F5028 /* ProviderResult.swift */,
+				6A256C081E04056C004F5028 /* ProviderFetchModus.swift */,
+			);
+			name = etc;
+			sourceTree = "<group>";
+		};
+		6A256C331E040581004F5028 /* protocol */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C0D1E040579004F5028 /* ListItemProvider.swift */,
+				6A256C0E1E040579004F5028 /* PullProvider.swift */,
+				6A256C0F1E040579004F5028 /* ProductProvider.swift */,
+				6A256C101E040579004F5028 /* InventoryProvider.swift */,
+				6A256C111E040579004F5028 /* InventoryItemsProvider.swift */,
+				6A256C121E040579004F5028 /* UserProvider.swift */,
+				6A256C131E040579004F5028 /* ProductGroupProvider.swift */,
+				6A256C141E040579004F5028 /* ProductCategoryProvider.swift */,
+				6A256C151E040579004F5028 /* ConnectionProvider.swift */,
+				6A256C161E040579004F5028 /* ListProvider.swift */,
+				6A256C171E040579004F5028 /* HistoryProvider.swift */,
+				6A256C181E040579004F5028 /* StatsProvider.swift */,
+				6A256C191E040579004F5028 /* PlanProvider.swift */,
+				6A256C1A1E040579004F5028 /* BrandProvider.swift */,
+				6A256C1B1E040579004F5028 /* Providers.swift */,
+				6A256C1C1E040579004F5028 /* SectionProvider.swift */,
+				6A256C1D1E040579004F5028 /* HelpProvider.swift */,
+				6A256C1E1E040579004F5028 /* GlobalProvider.swift */,
+				6A256C1F1E040579004F5028 /* ErrorProvider.swift */,
+			);
+			name = protocol;
+			sourceTree = "<group>";
+		};
+		6A256C341E040590004F5028 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				6A256D591E04069A004F5028 /* plain */,
+				6A256C801E0405CA004F5028 /* realm */,
+				6A256CFC1E040617004F5028 /* remote */,
+				6A256C631E0405BC004F5028 /* mapper */,
+				6A256C481E0405AA004F5028 /* input */,
+				6A256C371E04059D004F5028 /* websocket */,
+				6A256CB31E040603004F5028 /* extensions */,
+				6A256CA01E0405F1004F5028 /* internal */,
+			);
+			name = models;
+			sourceTree = "<group>";
+		};
+		6A256C371E04059D004F5028 /* websocket */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C351E04059B004F5028 /* RemoteContainedItemIdentifier.swift */,
+			);
+			name = websocket;
+			sourceTree = "<group>";
+		};
+		6A256C481E0405AA004F5028 /* input */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C381E0405A7004F5028 /* ListItemInput.swift */,
+				6A256C391E0405A7004F5028 /* InventoryItemInput.swift */,
+				6A256C3A1E0405A7004F5028 /* ProductWithQuantityInput.swift */,
+				6A256C3B1E0405A7004F5028 /* ProductInput.swift */,
+				6A256C3C1E0405A7004F5028 /* GroupItemInput.swift */,
+				6A256C3D1E0405A7004F5028 /* UserInput.swift */,
+				6A256C3E1E0405A7004F5028 /* PlanItemInput.swift */,
+				6A256C3F1E0405A7004F5028 /* StoreProductInput.swift */,
+			);
+			name = input;
+			sourceTree = "<group>";
+		};
+		6A256C631E0405BC004F5028 /* mapper */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C491E0405B6004F5028 /* ListItemMapper.swift */,
+				6A256C4A1E0405B6004F5028 /* ProductMapper.swift */,
+				6A256C4B1E0405B6004F5028 /* StoreProductMapper.swift */,
+				6A256C4C1E0405B6004F5028 /* ProductCategoryMapper.swift */,
+				6A256C4D1E0405B6004F5028 /* SectionMapper.swift */,
+				6A256C4E1E0405B6004F5028 /* ListMapper.swift */,
+				6A256C4F1E0405B6004F5028 /* InventoryItemMapper.swift */,
+				6A256C501E0405B6004F5028 /* InventoryMapper.swift */,
+				6A256C511E0405B6004F5028 /* SharedUserMapper.swift */,
+				6A256C521E0405B6004F5028 /* HistoryItemMapper.swift */,
+				6A256C531E0405B6004F5028 /* ListItemGroupMapper.swift */,
+				6A256C541E0405B6004F5028 /* GroupItemMapper.swift */,
+				6A256C551E0405B6004F5028 /* PlanItemMapper.swift */,
+			);
+			name = mapper;
+			sourceTree = "<group>";
+		};
+		6A256C801E0405CA004F5028 /* realm */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C9B1E0405DC004F5028 /* remove */,
+				6A256C641E0405C6004F5028 /* DBSection.swift */,
+				6A256C651E0405C6004F5028 /* Product.swift */,
+				6A256C661E0405C6004F5028 /* DBStoreProduct.swift */,
+				6A256C671E0405C6004F5028 /* DBSharedUser.swift */,
+				6A256C681E0405C6004F5028 /* List.swift */,
+				6A256C691E0405C6004F5028 /* DBListItem.swift */,
+				6A256C6A1E0405C6004F5028 /* InventoryItem.swift */,
+				6A256C6B1E0405C6004F5028 /* DBInventory.swift */,
+				6A256C6C1E0405C6004F5028 /* DBSyncable.swift */,
+				6A256C6D1E0405C6004F5028 /* DBHistoryItem.swift */,
+				6A256C6E1E0405C6004F5028 /* DBPlanItem.swift */,
+				6A256C6F1E0405C6004F5028 /* ProductGroup.swift */,
+				6A256C701E0405C6004F5028 /* GroupItem.swift */,
+				6A256C711E0405C6004F5028 /* ProductCategory.swift */,
+			);
+			name = realm;
+			sourceTree = "<group>";
+		};
+		6A256C9B1E0405DC004F5028 /* remove */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C811E0405D7004F5028 /* DBSectionToRemove.swift */,
+				6A256C821E0405D7004F5028 /* ProductToRemove.swift */,
+				6A256C831E0405D7004F5028 /* DBStoreProductToRemove.swift */,
+				6A256C841E0405D7004F5028 /* DBRemoveSharedUser.swift */,
+				6A256C851E0405D7004F5028 /* DBRemoveList.swift */,
+				6A256C861E0405D7004F5028 /* DBRemoveListItem.swift */,
+				6A256C871E0405D7004F5028 /* DBRemoveInventoryItem.swift */,
+				6A256C881E0405D7004F5028 /* DBRemoveInventory.swift */,
+				6A256C891E0405D7004F5028 /* DBRemoveSection.swift */,
+				6A256C8A1E0405D7004F5028 /* DBRemoveHistoryItem.swift */,
+				6A256C8B1E0405D7004F5028 /* DBRemoveListItemGroup.swift */,
+				6A256C8C1E0405D7004F5028 /* DBRemoveGroupItem.swift */,
+				6A256C8D1E0405D7004F5028 /* DBRemoveProductCategory.swift */,
+			);
+			name = remove;
+			sourceTree = "<group>";
+		};
+		6A256CA01E0405F1004F5028 /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				6A256C9C1E0405EE004F5028 /* MonthYear.swift */,
+				6A256C9D1E0405EE004F5028 /* ListItemStatusUpdate.swift */,
+			);
+			name = internal;
+			sourceTree = "<group>";
+		};
+		6A256CB31E040603004F5028 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6A256CA11E0405FF004F5028 /* Array_ListItem.swift */,
+				6A256CA21E0405FF004F5028 /* Array_Section.swift */,
+				6A256CA31E0405FF004F5028 /* Array_GroupItem.swift */,
+				6A256CA41E0405FF004F5028 /* Array_Inventory.swift */,
+				6A256CA51E0405FF004F5028 /* Array_ListItemsGroup.swift */,
+				6A256CA61E0405FF004F5028 /* Array_HistoryItem.swift */,
+				6A256CA71E0405FF004F5028 /* Array_InventoryItem.swift */,
+				6A256CA81E0405FF004F5028 /* Array_List.swift */,
+				6A256CA91E0405FF004F5028 /* Array_Participant.swift */,
+			);
+			name = extensions;
+			sourceTree = "<group>";
+		};
+		6A256CFC1E040617004F5028 /* remote */ = {
+			isa = PBXGroup;
+			children = (
+				6A256D131E040652004F5028 /* aggr */,
+				6A256CB41E040612004F5028 /* RemotePlanItems.swift */,
+				6A256CB51E040612004F5028 /* RemotePlanItem.swift */,
+				6A256CB61E040612004F5028 /* RemoteIncrementResult.swift */,
+				6A256CB71E040612004F5028 /* RemoteHistoryItem.swift */,
+				6A256CB81E040612004F5028 /* RemoteListItem.swift */,
+				6A256CB91E040612004F5028 /* RemoteListItemIncrementResult.swift */,
+				6A256CBA1E040612004F5028 /* RemoteLoginResult.swift */,
+				6A256CBB1E040612004F5028 /* RemoteRegisterResult.swift */,
+				6A256CBC1E040612004F5028 /* RemotePingResult.swift */,
+				6A256CBD1E040612004F5028 /* RemoteProduct.swift */,
+				6A256CBE1E040612004F5028 /* RemoteStoreProduct.swift */,
+				6A256CBF1E040612004F5028 /* RemoteProductCategory.swift */,
+				6A256CC01E040612004F5028 /* RemoteList.swift */,
+				6A256CC11E040612004F5028 /* RemoteListInvitation.swift */,
+				6A256CC21E040612004F5028 /* RemoteInventoryInvitation.swift */,
+				6A256CC31E040612004F5028 /* RemoteListNoUsers.swift */,
+				6A256CC41E040612004F5028 /* RemoteInventoryItem.swift */,
+				6A256CC51E040612004F5028 /* RemoteGroupItem.swift */,
+				6A256CC61E040612004F5028 /* RemoteSection.swift */,
+				6A256CC71E040612004F5028 /* RemoteSharedUser.swift */,
+				6A256CC81E040612004F5028 /* RemoteInventory.swift */,
+				6A256CCA1E040612004F5028 /* RemoteOrderUpdate.swift */,
+				6A256CCB1E040612004F5028 /* RemoteGroup.swift */,
+				6A256CCC1E040612004F5028 /* RemoteHistoryItemsSyncResult.swift */,
+				6A256CCD1E040612004F5028 /* RemoteSocialLoginResult.swift */,
+				6A256CCE1E040612004F5028 /* ItemIncrement.swift */,
+				6A256CCF1E040612004F5028 /* GroupItemWithGroup.swift */,
+				6A256CD01E040612004F5028 /* RemoteIncrement.swift */,
+				6A256CD11E040612004F5028 /* RemoteListItemIncrement.swift */,
+				6A256CD21E040612004F5028 /* RemoteListItemsReorderResult.swift */,
+				6A256CD31E040612004F5028 /* RemoteListItemSwitchResult.swift */,
+				6A256CD41E040612004F5028 /* RemoteListItemReorder.swift */,
+				6A256CD51E040612004F5028 /* RemoteSwitchListItemResult.swift */,
+				6A256CD61E040612004F5028 /* RemoteSwitchAllListItemsResult.swift */,
+				6A256CD71E040612004F5028 /* RemoteSwitchAllListItemsLightResult.swift */,
+			);
+			name = remote;
+			sourceTree = "<group>";
+		};
+		6A256D131E040652004F5028 /* aggr */ = {
+			isa = PBXGroup;
+			children = (
+				6A256D281E040676004F5028 /* sync */,
+				6A256CFD1E040634004F5028 /* RemoteInventoryItemWithProduct.swift */,
+				6A256CFE1E040634004F5028 /* RemoteInventoryItemsWithHistoryAndDependencies.swift */,
+				6A256CFF1E040634004F5028 /* RemoteInventoriesWithInventoryItemsSyncResult.swift */,
+				6A256D001E040634004F5028 /* RemoteListWithListItemsSyncResult.swift */,
+				6A256D011E040634004F5028 /* RemoteListsWithDependencies.swift */,
+				6A256D021E040634004F5028 /* RemoteListWithDependencies.swift */,
+				6A256D031E040634004F5028 /* RemoteListItems.swift */,
+				6A256D041E040634004F5028 /* RemoteHistoryItems.swift */,
+				6A256D051E040634004F5028 /* RemoteProductsWithDependencies.swift */,
+				6A256D061E040634004F5028 /* RemoteBuyCartResult.swift */,
+				6A256D071E040634004F5028 /* RemoteInventoryItemsWithDependencies.swift */,
+				6A256CC91E040612004F5028 /* RemoteInventoryWithDependencies.swift */,
+			);
+			name = aggr;
+			sourceTree = "<group>";
+		};
+		6A256D281E040676004F5028 /* sync */ = {
+			isa = PBXGroup;
+			children = (
+				6A256D141E04066D004F5028 /* RemoteSyncResult.swift */,
+				6A256D151E04066D004F5028 /* RemoteGlobalSyncResult.swift */,
+				6A256D161E04066D004F5028 /* RemoteListWithListItems.swift */,
+				6A256D171E04066D004F5028 /* RemoteListItemsWithDependenciesNoList.swift */,
+				6A256D181E04066D004F5028 /* RemoteInventoryWithItems.swift */,
+				6A256D191E04066D004F5028 /* RemoteInventoryItemsWithDependenciesNoInventory.swift */,
+				6A256D1A1E04066D004F5028 /* RemoteGroupWithItems.swift */,
+				6A256D1B1E04066D004F5028 /* RemoteGroupItemsWithDependenciesNoGroup.swift */,
+				6A256D1C1E04066D004F5028 /* RemoteGroupItemsWithDependencies.swift */,
+				6A256D1D1E04066D004F5028 /* RemoteSectionWithDependencies.swift */,
+			);
+			name = sync;
+			sourceTree = "<group>";
+		};
+		6A256D591E04069A004F5028 /* plain */ = {
+			isa = PBXGroup;
+			children = (
+				6A256D291E040694004F5028 /* StoreProduct.swift */,
+				6A256D2A1E040694004F5028 /* ListItem.swift */,
+				6A256D2B1E040694004F5028 /* OrderUpdate.swift */,
+				6A256D2C1E040694004F5028 /* Section.swift */,
+				6A256D2D1E040694004F5028 /* UserIdentity.swift */,
+				6A256D2E1E040694004F5028 /* User.swift */,
+				6A256D2F1E040694004F5028 /* LoginData.swift */,
+				6A256D301E040694004F5028 /* ListSync.swift */,
+				6A256D311E040694004F5028 /* InventorySync.swift */,
+				6A256D321E040694004F5028 /* HistoryItemsSync.swift */,
+				6A256D331E040694004F5028 /* HistoryItem.swift */,
+				6A256D341E040694004F5028 /* HistoryItemGroup.swift */,
+				6A256D351E040694004F5028 /* Suggestion.swift */,
+				6A256D361E040694004F5028 /* PlanItem.swift */,
+				6A256D371E040694004F5028 /* QuickAddItem.swift */,
+				6A256D381E040694004F5028 /* QuickAddProduct.swift */,
+				6A256D391E040694004F5028 /* QuickAddGroup.swift */,
+				6A256D3A1E040694004F5028 /* HelpItem.swift */,
+				6A256D3B1E040694004F5028 /* InventoryItemId.swift */,
+				6A256D3C1E040694004F5028 /* ProductWithQuantity.swift */,
+				6A256D3D1E040694004F5028 /* ListItemPrototype.swift */,
+				6A256D3E1E040694004F5028 /* StoreListItemPrototype.swift */,
+				6A256D3F1E040694004F5028 /* SyncResult.swift */,
+				6A256D401E040694004F5028 /* ErrorReport.swift */,
+			);
+			name = plain;
+			sourceTree = "<group>";
+		};
+		6A256D5E1E0406BB004F5028 /* websocket */ = {
+			isa = PBXGroup;
+			children = (
+				6A256D5A1E0406B8004F5028 /* MyWebSocket.swift */,
+				6A256D5B1E0406B8004F5028 /* MyWebsocketDispatcher.swift */,
+			);
+			name = websocket;
+			sourceTree = "<group>";
+		};
+		6A256D5F1E040766004F5028 /* protocols */ = {
+			isa = PBXGroup;
+			children = (
+				6A256D601E04077D004F5028 /* Identifiable.swift */,
+			);
+			name = protocols;
+			sourceTree = "<group>";
+		};
+		6A256D621E040794004F5028 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6A256D631E0407AC004F5028 /* String.swift */,
+				6A256D641E0407AC004F5028 /* NSMutableAttributedString.swift */,
+				6A256D651E0407AC004F5028 /* Array.swift */,
+				6A256D661E0407AC004F5028 /* Float.swift */,
+				6A256D671E0407AC004F5028 /* UITextField.swift */,
+				6A256D681E0407AC004F5028 /* UITextView.swift */,
+				6A256D691E0407AC004F5028 /* NSDate.swift */,
+				6A256D6A1E0407AC004F5028 /* Dictionary.swift */,
+				6A256D6B1E0407AC004F5028 /* Option.swift */,
+				6A256D6C1E0407AC004F5028 /* OrderedDictionary_Quantities.swift */,
+				6A256D6D1E0407AC004F5028 /* Addable.swift */,
+				6A256D6E1E0407AC004F5028 /* Int.swift */,
+				6A256D6F1E0407AC004F5028 /* Double.swift */,
+				6A256D701E0407AC004F5028 /* Int64.swift */,
+				6A256D711E0407AC004F5028 /* NSRange.swift */,
+				6A256D721E0407AC004F5028 /* CGRect.swift */,
+				6A256DBA1E040C52004F5028 /* CGPoint.swift */,
+				6A256D731E0407AC004F5028 /* CGSize.swift */,
+			);
+			name = extensions;
+			sourceTree = "<group>";
+		};
+		6A256D851E0407C9004F5028 /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				6A256DC21E043BCD004F5028 /* Constants.swift */,
+				6A256DA61E0408F7004F5028 /* AccessTokenHelper.swift */,
+				6A256D861E040815004F5028 /* Globals.swift */,
+				6A256D871E040815004F5028 /* Notification.swift */,
+				6A256D881E040815004F5028 /* Operators.swift */,
+				6A256D891E040815004F5028 /* OrderedDictionary.swift */,
+				6A256D8A1E040815004F5028 /* Paginator.swift */,
+				6A256D8B1E040815004F5028 /* PreferencesManager.swift */,
+				6A256D8C1E040815004F5028 /* Synced.swift */,
+				6A256D8D1E040815004F5028 /* Try.swift */,
+				6A256D8E1E040815004F5028 /* ViewTags.swift */,
+				6A256DA81E04090F004F5028 /* WebsocketHelper.swift */,
+				6A256DAC1E040944004F5028 /* LangHelper.swift */,
+			);
+			name = helpers;
+			sourceTree = "<group>";
+		};
+		6A256DA21E04085F004F5028 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				6A256DAA1E04092B004F5028 /* SuggestionsPrefiller.swift */,
+				6A256D981E04085B004F5028 /* KeychainKeys.swift */,
+				6A256D991E04085B004F5028 /* Performance.swift */,
+				6A256D9A1E04085B004F5028 /* TimerUtils.swift */,
+				6A256D9B1E04085B004F5028 /* AsyncUtils.swift */,
+				6A256D9C1E04085B004F5028 /* LangManager.swift */,
+				6A256DC01E040DDB004F5028 /* RealmConfig.swift */,
+				6A256DC61E04464E004F5028 /* RequestErrorToMsgMapper.swift */,
+			);
+			name = utils;
+			sourceTree = "<group>";
+		};
+		6A256DA31E040894004F5028 /* ios_specific_should_not_be_here */ = {
+			isa = PBXGroup;
+			children = (
+				6A256DA41E0408CE004F5028 /* UIColor.swift */,
+				6A256DAE1E04098D004F5028 /* ConfirmationPopup.swift */,
+				6A256DB01E040A04004F5028 /* UIView.swift */,
+				6A256DB21E040A6D004F5028 /* NSLayoutConstraint.swift */,
+				6A256DB41E040BC5004F5028 /* DimensionsManager.swift */,
+				6A256DB61E040C09004F5028 /* AppInfo.swift */,
+				6A256DB81E040C1F004F5028 /* Fonts.swift */,
+				6A256DBC1E040C74004F5028 /* LabelMore.swift */,
+				6A256DBE1E040C91004F5028 /* UIFont.swift */,
+			);
+			name = ios_specific_should_not_be_here;
+			sourceTree = "<group>";
+		};
+		74208BA8CBB1FD55A8B3EB53 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				999680B0DB094F9A28664E3C /* Pods_Providers.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		6A256B811E0401AE004F5028 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A256B891E0401AE004F5028 /* Providers.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		6A256B831E0401AE004F5028 /* Providers */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A256B8A1E0401AE004F5028 /* Build configuration list for PBXNativeTarget "Providers" */;
+			buildPhases = (
+				69D5280C531FD27CE815A168 /* [CP] Check Pods Manifest.lock */,
+				6A256B7F1E0401AE004F5028 /* Sources */,
+				6A256B801E0401AE004F5028 /* Frameworks */,
+				6A256B811E0401AE004F5028 /* Headers */,
+				6A256B821E0401AE004F5028 /* Resources */,
+				B04CC815DBA455439D1D7E1B /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Providers;
+			productName = Providers;
+			productReference = 6A256B841E0401AE004F5028 /* Providers.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6A256B751E04004D004F5028 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				TargetAttributes = {
+					6A256B831E0401AE004F5028 = {
+						CreatedOnToolsVersion = 8.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 6A256B781E04004D004F5028 /* Build configuration list for PBXProject "Providers" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 6A256B741E04004D004F5028;
+			productRefGroup = 6A256B851E0401AE004F5028 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6A256B831E0401AE004F5028 /* Providers */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6A256B821E0401AE004F5028 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		69D5280C531FD27CE815A168 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B04CC815DBA455439D1D7E1B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-Providers/Pods-Providers-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6A256B7F1E0401AE004F5028 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A256C9E1E0405EE004F5028 /* MonthYear.swift in Sources */,
+				6A256D511E040694004F5028 /* QuickAddGroup.swift in Sources */,
+				6A256C2E1E040579004F5028 /* Providers.swift in Sources */,
+				6A256CF21E040613004F5028 /* ItemIncrement.swift in Sources */,
+				6A256BDD1E040530004F5028 /* RealmBrandProvider.swift in Sources */,
+				6A256BE21E040530004F5028 /* RealmStoreProductProvider.swift in Sources */,
+				6A256D1E1E04066D004F5028 /* RemoteSyncResult.swift in Sources */,
+				6A256BF91E040540004F5028 /* RemoteHistoryProvider.swift in Sources */,
+				6A256D941E040815004F5028 /* PreferencesManager.swift in Sources */,
+				6A256CE21E040612004F5028 /* RemoteStoreProduct.swift in Sources */,
+				6A256D761E0407AC004F5028 /* Array.swift in Sources */,
+				6A256BAE1E0404E8004F5028 /* ProductCategoryProviderImpl.swift in Sources */,
+				6A256C611E0405B6004F5028 /* GroupItemMapper.swift in Sources */,
+				6A256C5D1E0405B6004F5028 /* InventoryMapper.swift in Sources */,
+				6A256D9E1E04085B004F5028 /* Performance.swift in Sources */,
+				6A256BD41E040530004F5028 /* RealmInventoryItemProvider.swift in Sources */,
+				6A256C5E1E0405B6004F5028 /* SharedUserMapper.swift in Sources */,
+				6A256BFC1E040540004F5028 /* RemoteGlobalProvider.swift in Sources */,
+				6A256BD31E040530004F5028 /* RealmInventoryProvider.swift in Sources */,
+				6A256C231E040579004F5028 /* InventoryProvider.swift in Sources */,
+				6A256C901E0405D7004F5028 /* DBStoreProductToRemove.swift in Sources */,
+				6A256BFF1E040540004F5028 /* RemotePullProvider.swift in Sources */,
+				6A256C971E0405D7004F5028 /* DBRemoveHistoryItem.swift in Sources */,
+				6A256BDB1E040530004F5028 /* List_Realm.swift in Sources */,
+				6A256D821E0407AC004F5028 /* NSRange.swift in Sources */,
+				6A256D7A1E0407AC004F5028 /* NSDate.swift in Sources */,
+				6A256D431E040694004F5028 /* OrderUpdate.swift in Sources */,
+				6A256D421E040694004F5028 /* ListItem.swift in Sources */,
+				6A256D251E04066D004F5028 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */,
+				6A256C931E0405D7004F5028 /* DBRemoveListItem.swift in Sources */,
+				6A256D901E040815004F5028 /* Notification.swift in Sources */,
+				6A256C311E040579004F5028 /* GlobalProvider.swift in Sources */,
+				6A256CDF1E040612004F5028 /* RemoteRegisterResult.swift in Sources */,
+				6A256C201E040579004F5028 /* ListItemProvider.swift in Sources */,
+				6A256D7D1E0407AC004F5028 /* OrderedDictionary_Quantities.swift in Sources */,
+				6A256C361E04059B004F5028 /* RemoteContainedItemIdentifier.swift in Sources */,
+				6A256C761E0405C6004F5028 /* List.swift in Sources */,
+				6A256C591E0405B6004F5028 /* ProductCategoryMapper.swift in Sources */,
+				6A256D801E0407AC004F5028 /* Double.swift in Sources */,
+				6A256DA71E0408F7004F5028 /* AccessTokenHelper.swift in Sources */,
+				6A256BA61E0404E8004F5028 /* ListProviderImpl.swift in Sources */,
+				6A256DB71E040C09004F5028 /* AppInfo.swift in Sources */,
+				6A256BD01E040530004F5028 /* RealmListItemProvider.swift in Sources */,
+				6A256C411E0405A7004F5028 /* InventoryItemInput.swift in Sources */,
+				6A256BCF1E040530004F5028 /* RealmProvider.swift in Sources */,
+				6A256BD61E040530004F5028 /* RealmProductGroupProvider.swift in Sources */,
+				6A256BFE1E040540004F5028 /* RemoteProductCategoryProvider.swift in Sources */,
+				6A256CAF1E0405FF004F5028 /* Array_HistoryItem.swift in Sources */,
+				6A256BF21E040540004F5028 /* RemoteProvider.swift in Sources */,
+				6A256D841E0407AC004F5028 /* CGSize.swift in Sources */,
+				6A256CD81E040612004F5028 /* RemotePlanItems.swift in Sources */,
+				6A256C5F1E0405B6004F5028 /* HistoryItemMapper.swift in Sources */,
+				6A256CD91E040612004F5028 /* RemotePlanItem.swift in Sources */,
+				6A256BA71E0404E8004F5028 /* ErrorProviderImpl.swift in Sources */,
+				6A256BA41E0404E8004F5028 /* UserProviderImpl.swift in Sources */,
+				6A256C441E0405A7004F5028 /* GroupItemInput.swift in Sources */,
+				6A256C031E040556004F5028 /* Urls.swift in Sources */,
+				6A256CF61E040613004F5028 /* RemoteListItemsReorderResult.swift in Sources */,
+				6A256D0F1E040634004F5028 /* RemoteHistoryItems.swift in Sources */,
+				6A256C981E0405D7004F5028 /* DBRemoveListItemGroup.swift in Sources */,
+				6A256C7F1E0405C6004F5028 /* ProductCategory.swift in Sources */,
+				6A256C451E0405A7004F5028 /* UserInput.swift in Sources */,
+				6A256C291E040579004F5028 /* ListProvider.swift in Sources */,
+				6A256CAE1E0405FF004F5028 /* Array_ListItemsGroup.swift in Sources */,
+				6A256D081E040634004F5028 /* RemoteInventoryItemWithProduct.swift in Sources */,
+				6A256D501E040694004F5028 /* QuickAddProduct.swift in Sources */,
+				6A256CAB1E0405FF004F5028 /* Array_Section.swift in Sources */,
+				6A256D111E040634004F5028 /* RemoteBuyCartResult.swift in Sources */,
+				6A256DA51E0408CE004F5028 /* UIColor.swift in Sources */,
+				6A256DB11E040A04004F5028 /* UIView.swift in Sources */,
+				6A256BB21E0404E8004F5028 /* GlobalProviderImpl.swift in Sources */,
+				6A256D611E04077D004F5028 /* Identifiable.swift in Sources */,
+				6A256D5C1E0406B8004F5028 /* MyWebSocket.swift in Sources */,
+				6A256CEA1E040612004F5028 /* RemoteSection.swift in Sources */,
+				6A256D9D1E04085B004F5028 /* KeychainKeys.swift in Sources */,
+				6A256D571E040694004F5028 /* SyncResult.swift in Sources */,
+				6A256C7A1E0405C6004F5028 /* DBSyncable.swift in Sources */,
+				6A256DC11E040DDB004F5028 /* RealmConfig.swift in Sources */,
+				6A256C2A1E040579004F5028 /* HistoryProvider.swift in Sources */,
+				6A256CFB1E040613004F5028 /* RemoteSwitchAllListItemsLightResult.swift in Sources */,
+				6A256BDA1E040530004F5028 /* Realm.swift in Sources */,
+				6A256CB21E0405FF004F5028 /* Array_Participant.swift in Sources */,
+				6A256C741E0405C6004F5028 /* DBStoreProduct.swift in Sources */,
+				6A256DB91E040C1F004F5028 /* Fonts.swift in Sources */,
+				6A256C211E040579004F5028 /* PullProvider.swift in Sources */,
+				6A256D0E1E040634004F5028 /* RemoteListItems.swift in Sources */,
+				6A256D781E0407AC004F5028 /* UITextField.swift in Sources */,
+				6A256BA51E0404E8004F5028 /* remoteResultHandler.swift in Sources */,
+				6A256D4A1E040694004F5028 /* HistoryItemsSync.swift in Sources */,
+				6A256C7B1E0405C6004F5028 /* DBHistoryItem.swift in Sources */,
+				6A256BD11E040530004F5028 /* RealmProductProvider.swift in Sources */,
+				6A256CDA1E040612004F5028 /* RemoteIncrementResult.swift in Sources */,
+				6A256BAD1E0404E8004F5028 /* ProductProviderImpl.swift in Sources */,
+				6A256BB81E04050F004F5028 /* ListItemProviderMock.swift in Sources */,
+				6A256C0B1E04056C004F5028 /* ProviderFetchModus.swift in Sources */,
+				6A256D911E040815004F5028 /* Operators.swift in Sources */,
+				6A256BF41E040540004F5028 /* RemoteListItemProvider.swift in Sources */,
+				6A256C321E040579004F5028 /* ErrorProvider.swift in Sources */,
+				6A256BAF1E0404E8004F5028 /* SectionProviderImpl.swift in Sources */,
+				6A256DBF1E040C91004F5028 /* UIFont.swift in Sources */,
+				6A256DAF1E04098D004F5028 /* ConfirmationPopup.swift in Sources */,
+				6A256BF71E040540004F5028 /* RemoteInventoryItemsProvider.swift in Sources */,
+				6A256CFA1E040613004F5028 /* RemoteSwitchAllListItemsResult.swift in Sources */,
+				6A256DC31E043BCD004F5028 /* Constants.swift in Sources */,
+				6A256C9F1E0405EE004F5028 /* ListItemStatusUpdate.swift in Sources */,
+				6A256D481E040694004F5028 /* ListSync.swift in Sources */,
+				6A256C561E0405B6004F5028 /* ListItemMapper.swift in Sources */,
+				6A256D211E04066D004F5028 /* RemoteListItemsWithDependenciesNoList.swift in Sources */,
+				6A256BE01E040530004F5028 /* DBProviders.swift in Sources */,
+				6A256C791E0405C6004F5028 /* DBInventory.swift in Sources */,
+				6A256D791E0407AC004F5028 /* UITextView.swift in Sources */,
+				6A256BD71E040530004F5028 /* RealmGroupItemProvider.swift in Sources */,
+				6A256D411E040694004F5028 /* StoreProduct.swift in Sources */,
+				6A256CE01E040612004F5028 /* RemotePingResult.swift in Sources */,
+				6A256C5B1E0405B6004F5028 /* ListMapper.swift in Sources */,
+				6A256DAD1E040944004F5028 /* LangHelper.swift in Sources */,
+				6A256C2C1E040579004F5028 /* PlanProvider.swift in Sources */,
+				6A256D0C1E040634004F5028 /* RemoteListsWithDependencies.swift in Sources */,
+				6A256D921E040815004F5028 /* OrderedDictionary.swift in Sources */,
+				6A256D951E040815004F5028 /* Synced.swift in Sources */,
+				6A256C2D1E040579004F5028 /* BrandProvider.swift in Sources */,
+				6A256BDE1E040530004F5028 /* RealmGlobalProvider.swift in Sources */,
+				6A256C911E0405D7004F5028 /* DBRemoveSharedUser.swift in Sources */,
+				6A256D971E040815004F5028 /* ViewTags.swift in Sources */,
+				6A256C261E040579004F5028 /* ProductGroupProvider.swift in Sources */,
+				6A256D461E040694004F5028 /* User.swift in Sources */,
+				6A256CEE1E040613004F5028 /* RemoteOrderUpdate.swift in Sources */,
+				6A256C7E1E0405C6004F5028 /* GroupItem.swift in Sources */,
+				6A256CDC1E040612004F5028 /* RemoteListItem.swift in Sources */,
+				6A256CE71E040612004F5028 /* RemoteListNoUsers.swift in Sources */,
+				6A256C041E040556004F5028 /* AlamofireExtensions.swift in Sources */,
+				6A256BA81E0404E8004F5028 /* InventoryProviderImpl.swift in Sources */,
+				6A256BE11E040530004F5028 /* RealmListProvider.swift in Sources */,
+				6A256CDE1E040612004F5028 /* RemoteLoginResult.swift in Sources */,
+				6A256BAA1E0404E8004F5028 /* StatsProviderImpl.swift in Sources */,
+				6A256C601E0405B6004F5028 /* ListItemGroupMapper.swift in Sources */,
+				6A256BA31E0404E8004F5028 /* InventoryItemsProviderImpl.swift in Sources */,
+				6A256D201E04066D004F5028 /* RemoteListWithListItems.swift in Sources */,
+				6A256D261E04066D004F5028 /* RemoteGroupItemsWithDependencies.swift in Sources */,
+				6A256BFD1E040540004F5028 /* RemoteProductProvider.swift in Sources */,
+				6A256D961E040815004F5028 /* Try.swift in Sources */,
+				6A256D581E040694004F5028 /* ErrorReport.swift in Sources */,
+				6A256DB51E040BC5004F5028 /* DimensionsManager.swift in Sources */,
+				6A256D7B1E0407AC004F5028 /* Dictionary.swift in Sources */,
+				6A256BAC1E0404E8004F5028 /* ProductGroupProviderImpl.swift in Sources */,
+				6A256D811E0407AC004F5028 /* Int64.swift in Sources */,
+				6A256D551E040694004F5028 /* ListItemPrototype.swift in Sources */,
+				6A256C581E0405B6004F5028 /* StoreProductMapper.swift in Sources */,
+				6A256D491E040694004F5028 /* InventorySync.swift in Sources */,
+				6A256D7C1E0407AC004F5028 /* Option.swift in Sources */,
+				6A256C731E0405C6004F5028 /* Product.swift in Sources */,
+				6A256CB01E0405FF004F5028 /* Array_InventoryItem.swift in Sources */,
+				6A256BF61E040540004F5028 /* RemoteInventoryProvider.swift in Sources */,
+				6A256D091E040634004F5028 /* RemoteInventoryItemsWithHistoryAndDependencies.swift in Sources */,
+				6A256CDD1E040612004F5028 /* RemoteListItemIncrementResult.swift in Sources */,
+				6A256C7D1E0405C6004F5028 /* ProductGroup.swift in Sources */,
+				6A256C751E0405C6004F5028 /* DBSharedUser.swift in Sources */,
+				6A256DBD1E040C74004F5028 /* LabelMore.swift in Sources */,
+				6A256C401E0405A7004F5028 /* ListItemInput.swift in Sources */,
+				6A256C961E0405D7004F5028 /* DBRemoveSection.swift in Sources */,
+				6A256D1F1E04066D004F5028 /* RemoteGlobalSyncResult.swift in Sources */,
+				6A256BA21E0404E8004F5028 /* ListItemProviderImpl.swift in Sources */,
+				6A256C281E040579004F5028 /* ConnectionProvider.swift in Sources */,
+				6A256B8E1E0401D7004F5028 /* MemInventoryItemProvider.swift in Sources */,
+				6A256CE31E040612004F5028 /* RemoteProductCategory.swift in Sources */,
+				6A256C461E0405A7004F5028 /* PlanItemInput.swift in Sources */,
+				6A256CE61E040612004F5028 /* RemoteInventoryInvitation.swift in Sources */,
+				6A256D0D1E040634004F5028 /* RemoteListWithDependencies.swift in Sources */,
+				6A256C951E0405D7004F5028 /* DBRemoveInventory.swift in Sources */,
+				6A256D451E040694004F5028 /* UserIdentity.swift in Sources */,
+				6A256DC71E04464E004F5028 /* RequestErrorToMsgMapper.swift in Sources */,
+				6A256C241E040579004F5028 /* InventoryItemsProvider.swift in Sources */,
+				6A256C271E040579004F5028 /* ProductCategoryProvider.swift in Sources */,
+				6A256D931E040815004F5028 /* Paginator.swift in Sources */,
+				6A256BD91E040530004F5028 /* Results.swift in Sources */,
+				6A256BAB1E0404E8004F5028 /* PlanProviderImpl.swift in Sources */,
+				6A256D7E1E0407AC004F5028 /* Addable.swift in Sources */,
+				6A256CE51E040612004F5028 /* RemoteListInvitation.swift in Sources */,
+				6A256C7C1E0405C6004F5028 /* DBPlanItem.swift in Sources */,
+				6A256C421E0405A7004F5028 /* ProductWithQuantityInput.swift in Sources */,
+				6A256BB01E0404E8004F5028 /* HelpProviderImpl.swift in Sources */,
+				6A256D471E040694004F5028 /* LoginData.swift in Sources */,
+				6A256DA11E04085B004F5028 /* LangManager.swift in Sources */,
+				6A256DB31E040A6D004F5028 /* NSLayoutConstraint.swift in Sources */,
+				6A256C2F1E040579004F5028 /* SectionProvider.swift in Sources */,
+				6A256B8D1E0401D4004F5028 /* MemListItemProvider.swift in Sources */,
+				6A256BDF1E040530004F5028 /* RealmSectionProvider.swift in Sources */,
+				6A256CEC1E040613004F5028 /* RemoteInventory.swift in Sources */,
+				6A256CF31E040613004F5028 /* GroupItemWithGroup.swift in Sources */,
+				6A256D531E040694004F5028 /* InventoryItemId.swift in Sources */,
+				6A256C9A1E0405D7004F5028 /* DBRemoveProductCategory.swift in Sources */,
+				6A256C301E040579004F5028 /* HelpProvider.swift in Sources */,
+				6A256D4E1E040694004F5028 /* PlanItem.swift in Sources */,
+				6A256CAD1E0405FF004F5028 /* Array_Inventory.swift in Sources */,
+				6A256D9F1E04085B004F5028 /* TimerUtils.swift in Sources */,
+				6A256D831E0407AC004F5028 /* CGRect.swift in Sources */,
+				6A256C771E0405C6004F5028 /* DBListItem.swift in Sources */,
+				6A256BD51E040530004F5028 /* RealmHistoryProvider.swift in Sources */,
+				6A256C221E040579004F5028 /* ProductProvider.swift in Sources */,
+				6A256DA91E04090F004F5028 /* WebsocketHelper.swift in Sources */,
+				6A256C941E0405D7004F5028 /* DBRemoveInventoryItem.swift in Sources */,
+				6A256C5A1E0405B6004F5028 /* SectionMapper.swift in Sources */,
+				6A256CED1E040613004F5028 /* RemoteInventoryWithDependencies.swift in Sources */,
+				6A256CE11E040612004F5028 /* RemoteProduct.swift in Sources */,
+				6A256D121E040634004F5028 /* RemoteInventoryItemsWithDependencies.swift in Sources */,
+				6A256BF51E040540004F5028 /* RemoteSectionProvider.swift in Sources */,
+				6A256D441E040694004F5028 /* Section.swift in Sources */,
+				6A256D521E040694004F5028 /* HelpItem.swift in Sources */,
+				6A256D4F1E040694004F5028 /* QuickAddItem.swift in Sources */,
+				6A256DAB1E04092B004F5028 /* SuggestionsPrefiller.swift in Sources */,
+				6A256D4D1E040694004F5028 /* Suggestion.swift in Sources */,
+				6A256CDB1E040612004F5028 /* RemoteHistoryItem.swift in Sources */,
+				6A256D5D1E0406B8004F5028 /* MyWebsocketDispatcher.swift in Sources */,
+				6A256CAA1E0405FF004F5028 /* Array_ListItem.swift in Sources */,
+				6A256BF31E040540004F5028 /* RemoteErrorReporter.swift in Sources */,
+				6A256D541E040694004F5028 /* ProductWithQuantity.swift in Sources */,
+				6A256BF81E040540004F5028 /* RemoteUserProvider.swift in Sources */,
+				6A256C2B1E040579004F5028 /* StatsProvider.swift in Sources */,
+				6A256C251E040579004F5028 /* UserProvider.swift in Sources */,
+				6A256BD81E040530004F5028 /* DBResult.swift in Sources */,
+				6A256CF71E040613004F5028 /* RemoteListItemSwitchResult.swift in Sources */,
+				6A256D101E040634004F5028 /* RemoteProductsWithDependencies.swift in Sources */,
+				6A256CF81E040613004F5028 /* RemoteListItemReorder.swift in Sources */,
+				6A256D4B1E040694004F5028 /* HistoryItem.swift in Sources */,
+				6A256BB11E0404E8004F5028 /* BrandProviderImpl.swift in Sources */,
+				6A256BFB1E040540004F5028 /* RemoteGroupsProvider.swift in Sources */,
+				6A256BB41E0404E8004F5028 /* RealmUserProviderImpl.swift in Sources */,
+				6A256CAC1E0405FF004F5028 /* Array_GroupItem.swift in Sources */,
+				6A256D7F1E0407AC004F5028 /* Int.swift in Sources */,
+				6A256C8F1E0405D7004F5028 /* ProductToRemove.swift in Sources */,
+				6A256D771E0407AC004F5028 /* Float.swift in Sources */,
+				6A256CF41E040613004F5028 /* RemoteIncrement.swift in Sources */,
+				6A256CE81E040612004F5028 /* RemoteInventoryItem.swift in Sources */,
+				6A256C781E0405C6004F5028 /* InventoryItem.swift in Sources */,
+				6A256BB91E04050F004F5028 /* UserProviderMock.swift in Sources */,
+				6A256C921E0405D7004F5028 /* DBRemoveList.swift in Sources */,
+				6A256C621E0405B6004F5028 /* PlanItemMapper.swift in Sources */,
+				6A256D741E0407AC004F5028 /* String.swift in Sources */,
+				6A256BD21E040530004F5028 /* RealmProductCategoryProvider.swift in Sources */,
+				6A256C091E04056C004F5028 /* ProviderFactory.swift in Sources */,
+				6A256CE91E040612004F5028 /* RemoteGroupItem.swift in Sources */,
+				6A256D241E04066D004F5028 /* RemoteGroupWithItems.swift in Sources */,
+				6A256D231E04066D004F5028 /* RemoteInventoryItemsWithDependenciesNoInventory.swift in Sources */,
+				6A256CEB1E040613004F5028 /* RemoteSharedUser.swift in Sources */,
+				6A256CEF1E040613004F5028 /* RemoteGroup.swift in Sources */,
+				6A256D0B1E040634004F5028 /* RemoteListWithListItemsSyncResult.swift in Sources */,
+				6A256D561E040694004F5028 /* StoreListItemPrototype.swift in Sources */,
+				6A256BFA1E040540004F5028 /* RemotePlanItemsProvider.swift in Sources */,
+				6A256CF51E040613004F5028 /* RemoteListItemIncrement.swift in Sources */,
+				6A256BA91E0404E8004F5028 /* HistoryProviderImpl.swift in Sources */,
+				6A256CF01E040613004F5028 /* RemoteHistoryItemsSyncResult.swift in Sources */,
+				6A256C431E0405A7004F5028 /* ProductInput.swift in Sources */,
+				6A256D8F1E040815004F5028 /* Globals.swift in Sources */,
+				6A256C5C1E0405B6004F5028 /* InventoryItemMapper.swift in Sources */,
+				6A256C471E0405A7004F5028 /* StoreProductInput.swift in Sources */,
+				6A256C571E0405B6004F5028 /* ProductMapper.swift in Sources */,
+				6A256CB11E0405FF004F5028 /* Array_List.swift in Sources */,
+				6A256CF11E040613004F5028 /* RemoteSocialLoginResult.swift in Sources */,
+				6A256BDC1E040530004F5028 /* RealmPlanProvider.swift in Sources */,
+				6A256D751E0407AC004F5028 /* NSMutableAttributedString.swift in Sources */,
+				6A256C8E1E0405D7004F5028 /* DBSectionToRemove.swift in Sources */,
+				6A256C991E0405D7004F5028 /* DBRemoveGroupItem.swift in Sources */,
+				6A256D4C1E040694004F5028 /* HistoryItemGroup.swift in Sources */,
+				6A256C721E0405C6004F5028 /* DBSection.swift in Sources */,
+				6A256DA01E04085B004F5028 /* AsyncUtils.swift in Sources */,
+				6A256DBB1E040C52004F5028 /* CGPoint.swift in Sources */,
+				6A256C0A1E04056C004F5028 /* ProviderResult.swift in Sources */,
+				6A256D0A1E040634004F5028 /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */,
+				6A256BB31E0404E8004F5028 /* PullProviderImpl.swift in Sources */,
+				6A256D271E04066D004F5028 /* RemoteSectionWithDependencies.swift in Sources */,
+				6A256D221E04066D004F5028 /* RemoteInventoryWithItems.swift in Sources */,
+				6A256CF91E040613004F5028 /* RemoteSwitchListItemResult.swift in Sources */,
+				6A256CE41E040612004F5028 /* RemoteList.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6A256B791E04004D004F5028 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		6A256B7A1E04004D004F5028 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
+		6A256B8B1E0401AE004F5028 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D9B2C9DFF72144BA2B5046ED /* Pods-Providers.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Providers/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.schuetz.groma.Providers;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		6A256B8C1E0401AE004F5028 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07C2602C5259E7890FCA54D7 /* Pods-Providers.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Providers/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.schuetz.groma.Providers;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6A256B781E04004D004F5028 /* Build configuration list for PBXProject "Providers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A256B791E04004D004F5028 /* Debug */,
+				6A256B7A1E04004D004F5028 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A256B8A1E0401AE004F5028 /* Build configuration list for PBXNativeTarget "Providers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A256B8B1E0401AE004F5028 /* Debug */,
+				6A256B8C1E0401AE004F5028 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6A256B751E04004D004F5028 /* Project object */;
+}

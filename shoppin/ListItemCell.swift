@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol ListItemCellDelegate: class {
     func onItemSwiped(_ listItem: TableViewListItem)

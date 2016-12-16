@@ -9,6 +9,7 @@
 import UIKit
 import SwiftValidator
 import QorumLogs
+import Providers
 
 protocol SharedUsersControllerDelegate: class {
     func onPull(_ user: DBSharedUser)

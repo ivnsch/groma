@@ -10,6 +10,7 @@ import UIKit
 import CMPopTipView
 import SwiftCharts
 import QorumLogs
+import Providers
 
 private enum StatsType {
     case aggr, history
@@ -105,7 +106,7 @@ class StatsViewController: UIViewController
         guard let inventory = selectedInventory else {QL3("No inventory"); return}
 
         // Get the date of the oldest history item
-        Providers.statsProvider.oldestDate(inventory, resultHandler(onSuccess: {[weak self] oldestDate in guard let weakSelf = self else {return}
+        Prov.statsProvider.oldestDate(inventory, resultHandler(onSuccess: {[weak self] oldestDate in guard let weakSelf = self else {return}
             if let firstLaunchDate: Date = PreferencesManager.loadPreference(PreferencesManagerKey.firstLaunchDate) {
                 
                 let oldestDateDayMonthYear = oldestDate.dayMonthYear
@@ -131,11 +132,11 @@ class StatsViewController: UIViewController
                     if firstLaunchDate.dayMonthYear.day != 1 {
                         
                         // If there's actually data for this month, otherwise there's nothing to remove so we don't bother user asking
-                        Providers.statsProvider.hasDataForMonthYear(oldestDateMonthYear, inventory: inventory, handler: weakSelf.successHandler{hasData in
+                        Prov.statsProvider.hasDataForMonthYear(oldestDateMonthYear, inventory: inventory, handler: weakSelf.successHandler{hasData in
                             
                             ConfirmationPopup.show(title: "First month start", message: "Congrats! You started a complete month report. If the previous month is incomplete (you didn't use the app the full month) you can remove it now, to improve the average calculations.", okTitle: "Remove", cancelTitle: "Cancel", controller: weakSelf, onOk: {
                                 
-                                Providers.statsProvider.clearMonthYearData(oldestDateMonthYear, inventory: inventory, remote: true, handler: weakSelf.successHandler{[weak self] in
+                                Prov.statsProvider.clearMonthYearData(oldestDateMonthYear, inventory: inventory, remote: true, handler: weakSelf.successHandler{[weak self] in
                                     PreferencesManager.savePreference(PreferencesManagerKey.clearedFirstIncompleteMonthStats, value: true)
                                     self?.loadChart()
                                     })
@@ -160,7 +161,7 @@ class StatsViewController: UIViewController
     }
     
     fileprivate func loadInventories() {
-        Providers.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
+        Prov.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             self?.inventoryPicker?.inventories = inventories
         })
     }
@@ -222,7 +223,7 @@ class StatsViewController: UIViewController
     
     fileprivate func updateChart(_ timePeriod: TimePeriod) {
         if let inventory = selectedInventory {
-            Providers.statsProvider.history(timePeriod, group: AggregateGroup.all, inventory: inventory, successHandler{[weak self] aggregate in
+            Prov.statsProvider.history(timePeriod, group: AggregateGroup.all, inventory: inventory, successHandler{[weak self] aggregate in
                 if self?.aggregate?.timePeriod != aggregate.timePeriod || self?.aggregate?.monthYearAggregates ?? [] != aggregate.monthYearAggregates { // don't reload if there are no changes
                     self?.emptyStatsView.setHiddenAnimated(!aggregate.monthYearAggregates.isEmpty)
                     self?.aggregate = aggregate

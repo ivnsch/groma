@@ -11,6 +11,7 @@ import CoreData
 import SwiftValidator
 import ChameleonFramework
 import QorumLogs
+import Providers
 
 class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate
     //    , UIBarPositioningDelegate
@@ -137,7 +138,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             topBar.setLeftButtonIds([])
             topBar.setRightButtonModels(rightButtonsClosing())
             // Clear list item memory cache when we leave controller. This is not really necessary but just "in case". The list item memory cache is there to smooth things *inside* a list, that is transitions between todo/done/stash, and adding/incrementing items. Causing a db-reload when we load the controller is totally ok.
-            Providers.listItemsProvider.invalidateMemCache()
+            Prov.listItemsProvider.invalidateMemCache()
         }
         
         topBar.positionTitleLabelLeft(expanding, animated: true, withDot: true, heightConstraint: topBarHeightConstraint)
@@ -204,7 +205,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     fileprivate func udpateListItems(_ list: List, onFinish: VoidFunction? = nil) {
-        Providers.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: .memOnly, successHandler{[weak self] listItems in guard let weakSelf = self else {return}
+        Prov.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: .memOnly, successHandler{[weak self] listItems in guard let weakSelf = self else {return}
             weakSelf.listItemsTableViewController.setListItems(listItems.filter{$0.hasStatus(weakSelf.status)})
             weakSelf.onGetListItems(listItems)
             onFinish?()
@@ -389,7 +390,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 }()
                 
                 // NOTE: For the provider the whole state is updated here - including possible section removal (if the current undo list item is the last one in the section) and the order field update of possible following sections. This means that the contents of the table view may be in a slightly inconsistent state with the data in the provider during the time cell is in undo (for the table view the section is still there, for the provider it's not). This is fine as the undo state is just a UI thing (local) and it should be cleared as soon as we try to start a new action (add, edit, delete, reorder etc) or go to the cart/stash.
-                Providers.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, orderInDstStatus: nil, remote: true, weakSelf.resultHandler(onSuccess: {switchedListItem in
+                Prov.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, orderInDstStatus: nil, remote: true, weakSelf.resultHandler(onSuccess: {switchedListItem in
                         weakSelf.onTableViewChangedQuantifiables()
                     }, onErrorAdditional: {result in
                         weakSelf.updatePossibleList()
@@ -444,7 +445,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             onTableViewChangedQuantifiables()
         }
         
-        Providers.listItemsProvider.switchStatus(listItem, list: listItem.list, status1: srcStatus, status: status, orderInDstStatus: listItem.order(status), remote: true, successHandler{switchedListItem in
+        Prov.listItemsProvider.switchStatus(listItem, list: listItem.list, status1: srcStatus, status: status, orderInDstStatus: listItem.order(status), remote: true, successHandler{switchedListItem in
             QL1("Undo successful")
             updateUI()
         })
@@ -455,7 +456,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onIncrementItem(_ tableViewListItem: TableViewListItem, delta: Int) {
-        Providers.listItemsProvider.increment(tableViewListItem.listItem, status: status, delta: delta, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
+        Prov.listItemsProvider.increment(tableViewListItem.listItem, status: status, delta: delta, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
             self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
             self?.onTableViewChangedQuantifiables()
         })
@@ -503,7 +504,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     fileprivate func addItem(_ listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         
         if let currentList = self.currentList {
-            Providers.listItemsProvider.add(listItemInput, status: status, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.add(listItemInput, status: status, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
                 self?.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
                 handler?()
             })
@@ -526,7 +527,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     fileprivate func updateItem(_ updatingListItem: ListItem, listItemInput: ListItemInput) {
         if let currentList = self.currentList {
             
-            Providers.listItemsProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, true, successHandler {[weak self] (listItem, replaced) in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, true, successHandler {[weak self] (listItem, replaced) in guard let weakSelf = self else {return}
                 if replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.
                     weakSelf.updatePossibleList()
                 } else {
@@ -543,7 +544,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onListItemDeleted(_ tableViewListItem: TableViewListItem) {
-        Providers.listItemsProvider.remove(tableViewListItem.listItem, remote: true, resultHandler(onSuccess: {[weak self] in
+        Prov.listItemsProvider.remove(tableViewListItem.listItem, remote: true, resultHandler(onSuccess: {[weak self] in
             self?.onTableViewChangedQuantifiables()
             }, onErrorAdditional: {[weak self] result in
                 self?.updatePossibleList()
@@ -566,7 +567,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             // TODO save "group list item" don't desintegrate group immediatly
             
             
-            Providers.listItemsProvider.addGroupItems(group, status: status, list: list, resultHandler(onSuccess: {[weak self] addedListItems in
+            Prov.listItemsProvider.addGroupItems(group, status: status, list: list, resultHandler(onSuccess: {[weak self] addedListItems in
                 if let list = self?.currentList {
                     self?.initWithList(list) // refresh list items
                     if let firstListItem = addedListItems.first {
@@ -592,7 +593,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     func onAddProduct(_ product: Product) {
         if let list = currentList {
-            Providers.listItemsProvider.addListItem(product, status: status, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
                 weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
             })
         } else {
@@ -634,12 +635,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
         if let list = currentList {
-            Providers.sectionProvider.sections([name], list: list, handler: successHandler {[weak self] sections in guard let weakSelf = self else {return}
+            Prov.sectionProvider.sections([name], list: list, handler: successHandler {[weak self] sections in guard let weakSelf = self else {return}
                 if let section = sections.first {
                     handler(section.color)
                 } else {
                     // Suggestions can be sections and/or categories. If there's no section with this name (which we look up first, since we are in list items so section has higher prio) we look for a category.
-                    Providers.productCategoryProvider.categoryWithNameOpt(name, weakSelf.successHandler {categoryMaybe in
+                    Prov.productCategoryProvider.categoryWithNameOpt(name, weakSelf.successHandler {categoryMaybe in
                         handler(categoryMaybe?.color)
                         
                         if categoryMaybe == nil {
@@ -816,7 +817,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     func onSectionRemoved(_ section: Section) {
         listItemsTableViewController.removeSection(section.uuid)
-        Providers.sectionProvider.remove(section, remote: true, resultHandler(onSuccess: {
+        Prov.sectionProvider.remove(section, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.updatePossibleList()
             }

@@ -8,12 +8,13 @@
 
 import UIKit
 import CoreData
-import FBSDKCoreKit
 import Reachability
 import ChameleonFramework
 import HockeySDK
 import QorumLogs
 import RealmSwift
+import Providers
+import FBSDKLoginKit
 
 @objc
 @UIApplicationMain
@@ -64,32 +65,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         Notification.subscribe(.LoginTokenExpired, selector: #selector(AppDelegate.onLoginTokenExpired(_:)), observer: self)
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onWebsocketConnectionChange(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Connection.rawValue), object: nil)
-
+        NotificationCenter.default.addObserver(self, selector: #selector(UserTabItemViewController.onLogoutNotification(_:)), name: NSNotification.Name(rawValue: Notification.Logout.rawValue), object: nil)
+        
         checkClearHistory()
         
         return initFb
     }
     var notificationToken: NotificationToken!
-
-    static var realmConfig = Realm.Configuration(
-        // Set the new schema version. This must be greater than the previously used
-        // version (if you've never set a schema version before, the version is 0).
-        schemaVersion: 4,
-        
-        // Set the block which will be called automatically when opening a Realm with
-        // a schema version lower than the one set above
-        migrationBlock: { migration, oldSchemaVersion in
-            // We haven’t migrated anything yet, so oldSchemaVersion == 0
-            if (oldSchemaVersion < 1) {
-                // Nothing to do!
-                // Realm will automatically detect new properties and removed properties
-                // And will update the schema on disk automatically
-            }
-    })
-
     
     fileprivate func configRealm() {
-        Realm.Configuration.defaultConfiguration = AppDelegate.realmConfig
+        Realm.Configuration.defaultConfiguration = RealmConfig.config
     }
     
     fileprivate func checkRatePopup() {
@@ -118,7 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                                             versionField: "entry.1897545847", userInfoField: "entry.748327727", methodInfoField: "entry.1497134983", textField: "entry.2103211608")
             
             var extraInfo = [String: String]()
-            if let email = Providers.userProvider.mySharedUser?.email {
+            if let email = Prov.userProvider.mySharedUser?.email {
                 extraInfo["user"] = email
             }
             if let deviceId: String = PreferencesManager.loadPreference(PreferencesManagerKey.deviceId) {
@@ -257,9 +242,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             if debugGeneratePrefillDatabases {
                 generatePrefillDatabase()
             }
-            if debugAddDummyData || !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
-//                addDummyData()
-            }
+//            if debugAddDummyData || !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
+////                addDummyData()
+//            }
             #else
         #endif
     }
@@ -276,33 +261,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
 
-    // A minimal dummy data setup with 1 inventory, 1 list and 1 list item (with corresponding product and category)
-    fileprivate func addDummyData() {
-        
-        var uuid: String {
-            return UUID().uuidString
-        }
-        let fruitsCat = ProductCategory(uuid: uuid, name: "Obst", color: UIColor.flatRed)
-        let product1 = Product(uuid: uuid, name: "Birnen", category: fruitsCat, brand: "")
-
-        let inventory1 = DBInventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreen, order: 0)
-        DBProviders.inventoryProvider.saveInventory(inventory1, dirty: true) {saved in
-            
-            let list1 = List(uuid: uuid, name: "My first list", color: RandomFlatColorWithShade(.dark), order: 0, inventory: inventory1, store: nil)
-            DBProviders.listProvider.saveList(list1) {result in
-                
-                let section1 = Section(uuid: uuid, name: "Obst", color: UIColor.flatRed, list: list1, order: ListItemStatusOrder(status: .todo, order: 0))
-                let storeProduct1 = StoreProduct(uuid: uuid, price: 1, baseQuantity: 1, unit: .none, store: "my store", product: product1)
-                let listItems = [
-                    ListItem(uuid: uuid, product: storeProduct1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0)
-                ]
-                
-                DBProviders.listItemProvider.addOrIncrementListItems(listItems) {saved in
-                    QL1("Done adding dummy data (mini)")
-                }
-            }
-        }
-    }
+//    // A minimal dummy data setup with 1 inventory, 1 list and 1 list item (with corresponding product and category)
+//    fileprivate func addDummyData() {
+//        
+//        var uuid: String {
+//            return UUID().uuidString
+//        }
+//        let fruitsCat = ProductCategory(uuid: uuid, name: "Obst", color: UIColor.flatRed)
+//        let product1 = Product(uuid: uuid, name: "Birnen", category: fruitsCat, brand: "")
+//
+//        let inventory1 = DBInventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreen, order: 0)
+//        DBProv.inventoryProvider.saveInventory(inventory1, dirty: true) {saved in
+//            
+//            let list1 = List(uuid: uuid, name: "My first list", color: RandomFlatColorWithShade(.dark), order: 0, inventory: inventory1, store: nil)
+//            DBProv.listProvider.saveList(list1) {result in
+//                
+//                let section1 = Section(uuid: uuid, name: "Obst", color: UIColor.flatRed, list: list1, order: ListItemStatusOrder(status: .todo, order: 0))
+//                let storeProduct1 = StoreProduct(uuid: uuid, price: 1, baseQuantity: 1, unit: .none, store: "my store", product: product1)
+//                let listItems = [
+//                    ListItem(uuid: uuid, product: storeProduct1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0)
+//                ]
+//                
+//                DBProv.listItemProvider.addOrIncrementListItems(listItems) {saved in
+//                    QL1("Done adding dummy data (mini)")
+//                }
+//            }
+//        }
+//    }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         QL2("applicationDidBecomeActive")
@@ -349,14 +334,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         QL2("applicationWillTerminate")
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        Providers.userProvider.disconnectWebsocket()
+        Prov.userProvider.disconnectWebsocket()
         
         NotificationCenter.default.removeObserver(self)
     }
     
     // Remove history entries older than 1 year
     fileprivate func checkClearHistory() {
-        Providers.historyProvider.removeHistoryItemsOlderThan(Date.inMonths(-12)) {providerResult in
+        Prov.historyProvider.removeHistoryItemsOlderThan(Date.inMonths(-12)) {providerResult in
             // Do nothing, it there's an error it's already logged in the provider. It doesn't make sense to show this to the user
         }
     }
@@ -383,7 +368,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             if userProvider.hasLoginToken {
                 QL2("User has login token, start sync")
                 window?.defaultProgressVisible(true)
-                Providers.globalProvider.sync(false) {[weak self] result in
+                Prov.globalProvider.sync(false) {[weak self] result in
                     QL2("Sync finished")
                     if !result.success {
                         QL4("Error: AppDelegate.checkForReachability: Sync didn't succeed: \(result)")
@@ -412,13 +397,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     }
     
     func onLoginTokenExpired(_ note: Foundation.Notification) {
-        guard let controller = window?.rootViewController else {QL4("Can't show login modal, either window: \(window) or root controller: \(window?.rootViewController) is nil)"); return}
-
-        if !(Providers.userProvider is UserProviderMock) {
-            let loginController = ModalLoginController()
-            controller.present(loginController, animated: true, completion: nil)
-        }
+        // Disabled to not have to declare mock as public in Prov.(we also don't need this functionality now)
+//        guard let controller = window?.rootViewController else {QL4("Can't show login modal, either window: \(window) or root controller: \(window?.rootViewController) is nil)"); return}
+//        if !(Prov.userProvider is UserProviderMock) {
+//            let loginController = ModalLoginController()
+//            controller.present(loginController, animated: true, completion: nil)
+//        }
     }
+
+    // MARK: - Logout
+    
+    
+    func logout(_ note: Foundation.Notification) {
+        FBSDKLoginManager().logOut()
+        GIDSignIn.sharedInstance().signOut()
+        GIDSignIn.sharedInstance().disconnect()
+    }
+    
     
     // MARK: - Websocket
     
@@ -444,7 +439,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                                 controller.progressVisible()
                                 QL2("Websocket reconnected. Starting sync...")
                                 
-                                Providers.globalProvider.sync(false, handler: controller.successHandler{invitations in
+                                Prov.globalProvider.sync(false, handler: controller.successHandler{invitations in
                                     QL3("Sync complete")
                                     // Broadcast such that controllers can e.g. reload items.
                                     NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil, userInfo: info)
@@ -582,7 +577,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                         QL2("Shared items sync request by \(sender)")
                         // text to user "Incoming sync request from x" or "Processing sync request from x" or "Sync request triggered by x" or "Sync request by x" or "x Sync request"
                         
-                        Providers.globalProvider.sync(true, handler: controller.successHandler{invitations in
+                        Prov.globalProvider.sync(true, handler: controller.successHandler{invitations in
                             QL3("Are we really expecting invitations here? (not sure if this should be a warning): \(invitations)")
                             InvitationsHandler.handleInvitations(invitations.listInvites, inventoryInvitations: invitations.inventoryInvites, controller: controller)
                             
@@ -654,7 +649,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         if let controller = window?.rootViewController {
             
-            Providers.userProvider.logout(controller.successHandler{
+            Prov.userProvider.logout(controller.successHandler{
                 QL2("Logout success")
                 Notification.send(Notification.LogoutUI) // in case we are currently in user screens
             })

@@ -8,7 +8,7 @@
 
 import UIKit
 import QorumLogs
-
+import Providers
 
 protocol CartListItemsControllerDelegate: class {
     func onCartSendItemsToStash(_ listItems: [ListItem])
@@ -113,7 +113,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
     }
     
     override func onListItemsOrderChangedSection(_ tableViewListItems: [TableViewListItem]) {
-        Providers.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
+        Prov.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
         })
     }
 
@@ -128,7 +128,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
                 if let weakSelf = self {
                     
                     if let controller = UIApplication.shared.delegate?.window??.rootViewController { // since we change controller on success need root controller in case we show error popup
-                        Providers.listItemsProvider.buyCart(weakSelf.listItemsTableViewController.items, list: list, remote: true, controller.successHandler{result in
+                        Prov.listItemsProvider.buyCart(weakSelf.listItemsTableViewController.items, list: list, remote: true, controller.successHandler{result in
                             weakSelf.delegate?.onCartSendItemsToStash(weakSelf.listItemsTableViewController.items)
                             weakSelf.close()
                         })
@@ -140,7 +140,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
         }
         
         if let list = currentList {
-            Providers.inventoryItemsProvider.countInventoryItems(list.inventory, successHandler {[weak self] count in
+            Prov.inventoryItemsProvider.countInventoryItems(list.inventory, successHandler {[weak self] count in
                 if let weakSelf = self {
                     SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
                         onSizeLimitOk(list)

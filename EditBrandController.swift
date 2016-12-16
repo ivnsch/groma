@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftValidator
+import Providers
 
 protocol EditBrandControllerDelegate: class {
     func onBrandUpdated(_ brand: AddEditBrandControllerEditingData)
@@ -62,7 +63,7 @@ class EditBrandController: UIViewController {
             if let updatedName = nameTextField.text {
                 if updatedName != brand.brand {
                     let updated = AddEditBrandControllerEditingData(brand: updatedName, indexPath: brand.indexPath)
-                    Providers.brandProvider.updateBrand(brand.brand, newName: updated.brand, successHandler {[weak self] in
+                    Prov.brandProvider.updateBrand(brand.brand, newName: updated.brand, successHandler {[weak self] in
                         self?.delegate?.onBrandUpdated(updated)
                     })
                 } else {

@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 class TodoListItemsController: ListItemsController, CartListItemsControllerDelegate, TodoListItemsEditBottomViewDelegate {
 
@@ -114,7 +115,7 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     
     override func updateQuantifiables() {
         if let list = currentList {
-            Providers.listItemsProvider.listItems(list, sortOrderByStatus: ListItemStatus.todo, fetchMode: .first, successHandler {listItems in
+            Prov.listItemsProvider.listItems(list, sortOrderByStatus: ListItemStatus.todo, fetchMode: .first, successHandler {listItems in
                 let (totalCartQuantity, totalCartPrice) = listItems.totalQuanityAndPrice(.done)
 //                let itemsStr = listItems.reduce("") {str, item in
 //                    str + item.quantityDebugDescription + ","
@@ -140,7 +141,7 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     
     func updateStashView() {
         if let list = currentList {
-            Providers.listItemsProvider.listItemCount(.stash, list: list, fetchMode: .memOnly, successHandler {[weak self] count in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.listItemCount(.stash, list: list, fetchMode: .memOnly, successHandler {[weak self] count in guard let weakSelf = self else {return}
 //                    if count != self?.stashView.quantity { // don't animate if there's no change
                     weakSelf.stashView.quantity = count
                     weakSelf.pricesView.allowOpen = count > 0
@@ -157,7 +158,7 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     }
     
     override func onListItemsOrderChangedSection(_ tableViewListItems: [TableViewListItem]) {
-        Providers.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
+        Prov.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
         })
     }
     

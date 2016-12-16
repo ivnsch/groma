@@ -8,6 +8,7 @@
 
 import UIKit
 import ChameleonFramework
+import Providers
 
 enum ListItemsViewSectionStyle {
     case normal, gray

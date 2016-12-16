@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 enum MoreItemType {
     case history, manageProduct, user, settings, help, share, feedback, watchIntro, about

@@ -9,7 +9,7 @@
 import UIKit
 import SwiftValidator
 import CMPopTipView
-
+import Providers
 
 struct ProductScaleData {
     let price: Float

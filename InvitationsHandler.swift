@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Providers
 
 class InvitationsHandler {
     

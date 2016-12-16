@@ -9,6 +9,7 @@
 import UIKit
 import SwiftValidator
 import QorumLogs
+import Providers
 
 protocol AddEditListItemViewControllerDelegate: class {
     
@@ -418,18 +419,18 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         case sectionInput:
             switch modus {
             case .listItem:
-                Providers.sectionProvider.sectionSuggestionsContainingText(string, successHandler{suggestions in
+                Prov.sectionProvider.sectionSuggestionsContainingText(string, successHandler{suggestions in
                     handler(suggestions)
                 })
             default:
-                Providers.productCategoryProvider.categoriesContainingText(string, successHandler{categories in
+                Prov.productCategoryProvider.categoriesContainingText(string, successHandler{categories in
                     let suggestions = categories.map{$0.name}.distinct()
                     handler(suggestions)
                 })
             }
             
         case brandInput:
-            Providers.brandProvider.brandsContainingText(string, successHandler{brands in
+            Prov.brandProvider.brandsContainingText(string, successHandler{brands in
                 handler(brands)
             })
         case _:
@@ -562,8 +563,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         switch sender {
         case sectionInput:
             ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_section_completion_confirm", string), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-                Providers.sectionProvider.removeAllWithName(string, remote: true, weakSelf.successHandler {
-                    Providers.productCategoryProvider.removeAllCategoriesWithName(string, remote: true, weakSelf.successHandler {
+                Prov.sectionProvider.removeAllWithName(string, remote: true, weakSelf.successHandler {
+                    Prov.productCategoryProvider.removeAllCategoriesWithName(string, remote: true, weakSelf.successHandler {
                         self?.delegate?.onRemovedSectionCategoryName(string)
                         AlertPopup.show(message: trans("popup_was_removed", string), controller: weakSelf)
                     })
@@ -571,7 +572,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             })
         case brandInput:
             ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_brand_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-                Providers.brandProvider.removeProductsWithBrand(string, remote: true, weakSelf.successHandler {
+                Prov.brandProvider.removeProductsWithBrand(string, remote: true, weakSelf.successHandler {
                     self?.delegate?.onRemovedBrand(string)
                     AlertPopup.show(message: trans("popup_was_removed", string), controller: weakSelf)
                 })

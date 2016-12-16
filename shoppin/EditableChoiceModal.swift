@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 class EditableChoiceModal: UIViewController, UIScrollViewDelegate {
     

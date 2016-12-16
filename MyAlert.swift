@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 enum MyAlertDismissAnimation {
     case fade, none

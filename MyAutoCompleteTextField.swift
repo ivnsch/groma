@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol MyAutoCompleteTextFieldDelegate {
     func onDeleteSuggestion(_ string: String, sender: MyAutoCompleteTextField)

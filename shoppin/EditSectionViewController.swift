@@ -9,6 +9,7 @@
 import UIKit
 import SwiftValidator
 import QorumLogs
+import Providers
 
 protocol EditSectionViewControllerDelegate: class {
     func onSectionUpdated(_ section: Section)
@@ -116,7 +117,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
             
             if let name = nameTextField.text, let color = view.backgroundColor {
                 let updatedSection = section.copy(name: name, color: color)
-                Providers.sectionProvider.update([updatedSection], remote: true, successHandler {[weak self] in
+                Prov.sectionProvider.update([updatedSection], remote: true, successHandler {[weak self] in
                     self?.delegate?.onSectionUpdated(updatedSection)
                 })
                 

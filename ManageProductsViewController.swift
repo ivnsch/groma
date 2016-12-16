@@ -11,6 +11,7 @@ import SwiftValidator
 import CMPopTipView
 import QorumLogs
 import RealmSwift
+import Providers
 
 class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UIGestureRecognizerDelegate {
 
@@ -173,7 +174,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let product = products?[(indexPath as NSIndexPath).row] else {QL4("No product"); return}
-            Providers.productProvider.delete(product, remote: true, successHandler{
+            Prov.productProvider.delete(product, remote: true, successHandler{
             })
         }
     }
@@ -237,17 +238,17 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         func onEditItem(_ input: ListItemInput, editingItem: AddEditProductControllerEditingData) {
             let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
             let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
-            Providers.productProvider.update(updatedProduct, remote: true, successHandler{[weak self] in
+            Prov.productProvider.update(updatedProduct, remote: true, successHandler{
             })
         }
         
         func onAddItem(_ input: ListItemInput) {
             let product = ProductInput(name: input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
             
-            Providers.productProvider.countProducts(successHandler {[weak self] count in
+            Prov.productProvider.countProducts(successHandler {[weak self] count in
                 if let weakSelf = self {
                     SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
-                        Providers.productProvider.add(product, weakSelf.successHandler {product in
+                        Prov.productProvider.add(product, weakSelf.successHandler {product in
                         })
                     }
                 }
@@ -283,7 +284,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
-        Providers.productCategoryProvider.categoryWithName(name, successHandler {category in
+        Prov.productCategoryProvider.categoryWithName(name, successHandler {category in
             handler(category.color)
         })
     }
@@ -309,7 +310,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     fileprivate func loadProducts() {
-        Providers.productProvider.productsRes(searchText, sortBy: sortBy, successHandler{[weak self] products in guard let weakSelf = self else {return}
+        Prov.productProvider.productsRes(searchText, sortBy: sortBy, successHandler{[weak self] products in guard let weakSelf = self else {return}
             weakSelf.products = products.products
             
             weakSelf.notificationToken = weakSelf.products?.addNotificationBlock { changes in

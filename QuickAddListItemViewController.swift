@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 // TODO rename this controller in only groups controller and remove the old groups controller. Also delegate methods not with "Add" but simply "Tap" - the implementation of this delegate decides what the tap means.
 
@@ -173,13 +174,13 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         
         if let productItem = item as? QuickAddProduct {
 //            productItem.product.fav += 1
-            Providers.productProvider.incrementFav(productItem.product.uuid, remote: true, successHandler{})
+            Prov.productProvider.incrementFav(productItem.product.uuid, remote: true, successHandler{})
             // don't wait for db incrementFav - this operation is not critical
             delegate?.onAddProduct(productItem.product)
             
         } else if let groupItem = item as? QuickAddGroup {
 //            groupItem.group.fav += 1
-            Providers.listItemGroupsProvider.incrementFav(groupItem.group.uuid, remote: true, successHandler{})
+            Prov.listItemGroupsProvider.incrementFav(groupItem.group.uuid, remote: true, successHandler{})
             // don't wait for db incrementFav - this operation is not critical
             delegate?.onAddGroup(groupItem.group)
             
@@ -243,7 +244,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         
         func loadProducts() {
             
-            Providers.productProvider.products(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
+            Prov.productProvider.products(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 
                 QL1("Loaded products, current search: \(self?.searchText), range: \(self?.paginator.currentPage), sortBy: \(self?.contentData.sortBy), result search: \(tuple.substring), results: \(tuple.products.count)")
 
@@ -268,7 +269,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             
             guard let list = list else {QL4("Can't load products for list, no list set"); return}
             
-            Providers.productProvider.productsWithPosibleSections(searchText, list: list, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
+            Prov.productProvider.productsWithPosibleSections(searchText, list: list, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 
                 // TODO bug: some times (rarely) it shows nothing after opening quickly and typing (maybe first time?). Log showed 23 results last time is happened. It shows nothing after this line, meaning that onListItems is not called, meaning tuple.substring == weakSelf.searchText is false?
                 QL1("Loaded products, current search: \(self?.searchText), range: \(self?.paginator.currentPage), sortBy: \(self?.contentData.sortBy), result search: \(tuple.substring), results: \(tuple.productsWithMaybeSections.count)")
@@ -293,7 +294,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         
         func loadGroups() {
             
-            Providers.listItemGroupsProvider.groups(searchText, range: paginator.currentPage, sortBy: toGroupSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
+            Prov.listItemGroupsProvider.groups(searchText, range: paginator.currentPage, sortBy: toGroupSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 if let weakSelf = self {
                     
                     if tuple.substring == weakSelf.searchText { // See comment about this above in products

@@ -9,6 +9,7 @@
 import UIKit
 import SwiftValidator
 import QorumLogs
+import Providers
 
 class ManageProductCategoriesController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, EditProductCategoryControllerDelegate, ListTopBarViewDelegate, ExpandableTopViewControllerDelegate {
     
@@ -146,7 +147,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
             ConfirmationPopup.show(message: "Warning: This will remove all the list, group, inventory, history and stats items that reference this category", controller: self, onOk: {[weak self] in
                 if let weakSelf = self {
                     let category = weakSelf.filteredCategories[(indexPath as NSIndexPath).row]
-                    Providers.productCategoryProvider.remove(category.item, remote: true, weakSelf.successHandler{
+                    Prov.productCategoryProvider.remove(category.item, remote: true, weakSelf.successHandler{
                         weakSelf.removeCategoryUI(category, indexPath: indexPath)
                     })
                 }
@@ -276,7 +277,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
 //                        setLoading(true)
 //                    }
 //                
-//                    Providers.productCategoryProvider.categoriesContainingText(weakSelf.searchText, range: weakSelf.paginator.currentPage, weakSelf.successHandler{tuple in
+//                    Prov.productCategoryProvider.categoriesContainingText(weakSelf.searchText, range: weakSelf.paginator.currentPage, weakSelf.successHandler{tuple in
 //                        
 //                        // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
 //                        // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.

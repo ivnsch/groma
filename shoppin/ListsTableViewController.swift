@@ -9,12 +9,13 @@
 import UIKit
 import QorumLogs
 import RealmSwift
+import Providers
 
 class ExpandableTableViewListModel: ExpandableTableViewModel {
     
-    let list: List
+    let list: Providers.List
     
-    init (list: List) {
+    init (list: Providers.List) {
         self.list = list
     }
     
@@ -45,7 +46,7 @@ class ExpandableTableViewListModel: ExpandableTableViewModel {
 
 class ListsTableViewController: ExpandableItemsTableViewController, AddEditListControllerDelegate, ExpandableTopViewControllerDelegate {
 
-    fileprivate var listsResult: Results<List>?
+    fileprivate var listsResult: Results<Providers.List>?
     fileprivate var notificationToken: NotificationToken?
     
     var topAddEditListControllerManager: ExpandableTopViewController<AddEditListController>?
@@ -112,7 +113,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override func initModels() {
-        Providers.listProvider.lists(true, successHandler{[weak self] lists in guard let weakSelf = self else {return}
+        Prov.listProvider.lists(true, successHandler{[weak self] lists in guard let weakSelf = self else {return}
 //            self?.models = lists.map{ExpandableTableViewListModel(list: $0)}
 //            self?.debugItems()
             
@@ -176,7 +177,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
 
         models = reorderedLists.map{ExpandableTableViewListModel(list: $0)}
         
-        Providers.listProvider.updateListsOrder(orderUpdates, remote: true, resultHandler(onSuccess: {
+        Prov.listProvider.updateListsOrder(orderUpdates, remote: true, resultHandler(onSuccess: {
         }, onErrorAdditional: {[weak self] result in
                 self?.initModels()
             }
@@ -184,7 +185,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override func onRemoveModel(_ model: ExpandableTableViewModel) {
-        Providers.listProvider.remove((model as! ExpandableTableViewListModel).list, remote: true, resultHandler(onSuccess: {
+        Prov.listProvider.remove((model as! ExpandableTableViewListModel).list, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.initModels()
             }
@@ -233,23 +234,23 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     
     // MARK: - AddEditListControllerDelegate
     
-    func onAddList(_ list: List) {
-        Providers.listProvider.add(list, remote: true, resultHandler(onSuccess: {_ in
+    func onAddList(_ list: Providers.List) {
+        Prov.listProvider.add(list, remote: true, resultHandler(onSuccess: {_ in
             }, onErrorAdditional: {[weak self] result in
                 self?.onListAddOrUpdateError(list)
             }
         ))
     }
     
-    func onUpdateList(_ list: List) {
-        Providers.listProvider.update([list], remote: true, resultHandler(onSuccess: {
+    func onUpdateList(_ list: Providers.List) {
+        Prov.listProvider.update([list], remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.onListAddOrUpdateError(list)
             }
         ))
     }
 
-    fileprivate func onListAddOrUpdateError(_ list: List) {
+    fileprivate func onListAddOrUpdateError(_ list: Providers.List) {
         initModels()
         // If the user quickly after adding the list opened its list items controller, close it.
         for childViewController in childViewControllers {

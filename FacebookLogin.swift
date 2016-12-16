@@ -10,6 +10,7 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 import QorumLogs
+import Providers
 
 /**
 * Helper class to use Facebook login service
@@ -49,7 +50,7 @@ class FacebookLogin {
     static func login(_ controller: UIViewController, handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         authenticate(controller) {result in
             if let tokenString = result.sucessResult {
-                Providers.userProvider.authenticateWithFacebook(tokenString, controller: controller) {result in
+                Prov.userProvider.authenticateWithFacebook(tokenString, controller: controller) {result in
                     // map already exists status to "social aleready exists", to show a different error message
                     if result.status == .alreadyExists {
                         handler(ProviderResult(status: .socialAlreadyExists))

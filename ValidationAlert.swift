@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftValidator
+import Providers
 
 struct ValidationAlertCreator { // had some problems subclassing UIAlertController because convenience init etc. so using creator instead
 

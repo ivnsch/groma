@@ -10,6 +10,7 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 import QorumLogs
+import Providers
 
 enum SettingId {
     case clearHistory, overwriteData, removeAccount, enableRealTime, addDummyHistoryItems, clearAllData, restorePrefillProducts, restoreHints
@@ -80,7 +81,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let showServerThings = ConnectionProvider.connectedAndLoggedIn
         
         if showServerThings {
-            let realTimeConnectionSetting = SwitchSetting(id: .enableRealTime, label: trans("setting_real_time_connection"), on: Providers.userProvider.isWebsocketConnected())
+            let realTimeConnectionSetting = SwitchSetting(id: .enableRealTime, label: trans("setting_real_time_connection"), on: Prov.userProvider.isWebsocketConnected())
             
             settings = [
 //                clearHistorySetting,
@@ -109,7 +110,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     // Debug only
     fileprivate func removeHistory() {
-        Providers.historyProvider.removeAllHistoryItems(successHandler{
+        Prov.historyProvider.removeAllHistoryItems(successHandler{
             AlertPopup.show(message: "The history was cleared", controller: self)
         })
     }
@@ -117,7 +118,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     fileprivate func overwriteData() {
         ConfirmationPopup.show(title: trans("popup_title_warning"), message: overwritePopupMessage, okTitle: trans("popup_button_continue"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
             weakSelf.progressVisible()
-            Providers.globalProvider.fullDownload(weakSelf.successHandler({result in
+            Prov.globalProvider.fullDownload(weakSelf.successHandler({result in
                 AlertPopup.show(message: trans("popup_your_data_was_overwritten"), controller: weakSelf)
             }))
         }, onCancel: nil)
@@ -128,7 +129,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             
             if let weakSelf = self {
                 
-                Providers.userProvider.removeAccount(weakSelf.successHandler({
+                Prov.userProvider.removeAccount(weakSelf.successHandler({
                     // note possible credentials login token deleted in removeAccount
                     FBSDKLoginManager().logOut() // in case we logged in using fb
                     GIDSignIn.sharedInstance().signOut()  // in case we logged in using google
@@ -145,9 +146,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     fileprivate func setWebsocketSettingEnabled(_ enabled: Bool) {
         WebsocketHelper.saveWebsocketDisabled(!enabled)
         if enabled {
-            Providers.userProvider.connectWebsocketIfLoggedIn()
+            Prov.userProvider.connectWebsocketIfLoggedIn()
         } else {
-            Providers.userProvider.disconnectWebsocket()
+            Prov.userProvider.disconnectWebsocket()
         }
     }
     
@@ -156,12 +157,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let user = DBSharedUser(email: "")
         
-        Providers.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
+        Prov.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             
             if let weakSelf = self {
                 
                 if let inventory = inventories.first {
-                    Providers.productProvider.products(NSRange(location: 0, length: 500), sortBy: .alphabetic, weakSelf.successHandler{products in
+                    Prov.productProvider.products(NSRange(location: 0, length: 500), sortBy: .alphabetic, weakSelf.successHandler{products in
                         
                         guard products.count > 0 else {
                             AlertPopup.show(message: "You need some products to be able to add history items", controller: weakSelf)
@@ -190,7 +191,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                         
                         // put the history items for past months in a flat array and save
                         let flattened: [HistoryItem] = Array(historyItems.joined())
-                        Providers.historyProvider.addHistoryItems(flattened, weakSelf.successHandler{
+                        Prov.historyProvider.addHistoryItems(flattened, weakSelf.successHandler{
                             AlertPopup.show(message: "Dummy history items added to inventory: \(inventory.name)", controller: weakSelf)
                             })
                         })
@@ -207,7 +208,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     // Debug only
     fileprivate func clearAllData() {
-        Providers.globalProvider.clearAllData(false, handler: successHandler{
+        Prov.globalProvider.clearAllData(false, handler: successHandler{
             AlertPopup.show(message: "The data was cleared", controller: self)
         })
     }
@@ -220,11 +221,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         ConfirmationPopup.show(title: trans("popup_title_restore_bundled_products"), message: restoreProductsMessage, okTitle: trans("popup_button_restore_bundled_product"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
         
-            Providers.productProvider.restorePrefillProductsLocal(weakSelf.resultHandler(resetProgress: false, onSuccess: {restoredSomething in
+            Prov.productProvider.restorePrefillProductsLocal(weakSelf.resultHandler(resetProgress: false, onSuccess: {restoredSomething in
                 if restoredSomething {
                     if ConnectionProvider.connectedAndLoggedIn {
                         weakSelf.progressVisible()
-                        Providers.globalProvider.sync(false, handler: weakSelf.successHandler{syncResult in
+                        Prov.globalProvider.sync(false, handler: weakSelf.successHandler{syncResult in
                             onRestored()
                         })
                     } else {

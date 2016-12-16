@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftValidator
+import Providers
 
 protocol EditProductCategoryControllerDelegate: class {
     func onCategoryUpdated(_ brand: AddEditCategoryControllerEditingData)
@@ -71,7 +72,7 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
                 let updatedCategory = category.category.copy(name: updatedName, color: color)
                 let updated = AddEditCategoryControllerEditingData(category: updatedCategory, indexPath: category.indexPath)
 
-                Providers.productCategoryProvider.update(updated.category, remote: true, successHandler {[weak self] in
+                Prov.productCategoryProvider.update(updated.category, remote: true, successHandler {[weak self] in
                     self?.delegate?.onCategoryUpdated(updated)
                 })
                 

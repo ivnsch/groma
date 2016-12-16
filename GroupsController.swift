@@ -10,6 +10,7 @@ import UIKit
 import SwiftValidator
 import QorumLogs
 import RealmSwift
+import Providers
 
 class ExpandableTableViewGroupModel: ExpandableTableViewModel {
     
@@ -82,7 +83,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     
     override func initModels() {
-        Providers.listItemGroupsProvider.groups(sortBy: .order, successHandler{[weak self] groups in guard let weakSelf = self else {return}
+        Prov.listItemGroupsProvider.groups(sortBy: .order, successHandler{[weak self] groups in guard let weakSelf = self else {return}
             
             weakSelf.groupsResult = groups
             
@@ -143,7 +144,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         
         models = reorderedGroups.map{ExpandableTableViewGroupModel(group: $0)}
         
-        Providers.listItemGroupsProvider.updateGroupsOrder(orderUpdates, remote: true, resultHandler(onSuccess: {
+        Prov.listItemGroupsProvider.updateGroupsOrder(orderUpdates, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.initModels()
             }
@@ -151,7 +152,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     }
     
     override func onRemoveModel(_ model: ExpandableTableViewModel) {
-        Providers.listItemGroupsProvider.remove((model as! ExpandableTableViewGroupModel).group, remote: true, resultHandler(onSuccess: {
+        Prov.listItemGroupsProvider.remove((model as! ExpandableTableViewGroupModel).group, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.initModels()
             }
@@ -243,7 +244,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     // MARK: - EditListViewController
     //change
     func onAddGroup(_ group: ProductGroup) {
-        Providers.listItemGroupsProvider.add(group, remote: true, resultHandler(onSuccess: {
+        Prov.listItemGroupsProvider.add(group, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.onGroupAddOrUpdateError(group)
             }
@@ -251,7 +252,8 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     }
     
     func onUpdateGroup(_ group: ProductGroup) {
-        Providers.listItemGroupsProvider.update(group, remote: true, resultHandler(onSuccess: {
+
+        Prov.listItemGroupsProvider.update(group, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.onGroupAddOrUpdateError(group)
             }

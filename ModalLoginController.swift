@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 class ModalLoginController: UINavigationController, LoginDelegate, ExpiredLoginDelegate {
     

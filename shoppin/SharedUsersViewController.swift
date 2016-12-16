@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftValidator
+import Providers
 
 protocol SharedUsersViewControllerDelegate: class {
     // Note: this is only a table view update, no providers

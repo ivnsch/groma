@@ -7,13 +7,13 @@
 //
 
 import Foundation
-
+import Providers
 
 struct SharedUserChecker {
 
     static func check(_ email: String, users: [DBSharedUser], controller: UIViewController, onSuccess: @escaping VoidFunction) {
         
-        if (Providers.userProvider.mySharedUser.map{$0.email == email}) ?? false {
+        if (Prov.userProvider.mySharedUser.map{$0.email == email}) ?? false {
             AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_you_dont_have_to_add_yourself"), controller: controller)
             
         } else {
@@ -22,7 +22,7 @@ struct SharedUserChecker {
                 
             } else {
                 controller.progressVisible()
-                Providers.userProvider.isRegistered(email) {result in
+                Prov.userProvider.isRegistered(email) {result in
                     
                     switch result.status {
                     case .success:

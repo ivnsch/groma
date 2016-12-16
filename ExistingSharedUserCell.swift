@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol ExistingSharedUserCellDelegate: class {
     func onDeleteSharedUser(_ sharedUser: DBSharedUser, cell: ExistingSharedUserCell)

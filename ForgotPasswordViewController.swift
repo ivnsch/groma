@@ -9,6 +9,7 @@
 import UIKit
 import SwiftValidator
 import QorumLogs
+import Providers
 
 protocol ForgotPasswordDelegate: class {
     func onForgotPasswordSuccess()
@@ -96,7 +97,7 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
         } else {
             if let email = emailField.text {
                 progressVisible()
-                Providers.userProvider.forgotPassword(email, successHandler{[weak self] in
+                Prov.userProvider.forgotPassword(email, successHandler{[weak self] in
                     self?.delegate?.onForgotPasswordSuccess()
                     })
                 

@@ -11,6 +11,7 @@ import ChameleonFramework
 import SwiftValidator
 import QorumLogs
 import RealmSwift
+import Providers
 
 class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
     
@@ -107,7 +108,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])
             // Clear memory cache when we leave controller. This is not really necessary but just "in case". The memory cache is there to smooth things *inside* an inventory, Basically quick adding/incrementing.
-            Providers.inventoryItemsProvider.invalidateMemCache()
+            Prov.inventoryItemsProvider.invalidateMemCache()
         }
         topBar.layoutIfNeeded() // FIXME weird effect and don't we need this in view controller
         topBar.positionTitleLabelLeft(expanding, animated: true, withDot: true, heightConstraint: topBarHeightConstraint)
@@ -179,7 +180,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         case .add:
             QL4("Outdated implementation - to add products to inventory we now have to fetch store product (to get the price)")
 //            if let inventory = inventory {
-//                Providers.inventoryItemsProvider.countInventoryItems(inventory, successHandler {[weak self] count in
+//                Prov.inventoryItemsProvider.countInventoryItems(inventory, successHandler {[weak self] count in
 //                    if let weakSelf = self {
 //                        SizeLimitChecker.checkInventoryItemsSizeLimit(weakSelf.productsWithQuantityController.models.count, controller: weakSelf) {
 //                            self?.sendActionToTopController(.Add)
@@ -286,7 +287,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
         if let inventory = inventory {
-            Providers.inventoryItemsProvider.addToInventory(inventory, group: group, remote: true, resultHandler(onSuccess: {[weak self] inventoryItemsWithDelta in
+            Prov.inventoryItemsProvider.addToInventory(inventory, group: group, remote: true, resultHandler(onSuccess: {inventoryItemsWithDelta in
 
             }, onError: {[weak self] result in guard let weakSelf = self else {return}
                 switch result.status {
@@ -301,7 +302,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onAddProduct(_ product: Product) {
         if let inventory = inventory {
-            Providers.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: 1, remote: true, successHandler{[weak self] addedItemWithDelta in
+            Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: 1, remote: true, successHandler{addedItemWithDelta in
             })
         }
     }
@@ -312,7 +313,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 
             let inventoryItemInput = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
             
-            Providers.inventoryItemsProvider.updateInventoryItem(inventoryItemInput, updatingInventoryItem: editingItem, remote: true, resultHandler (onSuccess: {[weak self]  (inventoryItem, replaced) in
+            Prov.inventoryItemsProvider.updateInventoryItem(inventoryItemInput, updatingInventoryItem: editingItem, remote: true, resultHandler (onSuccess: {  (inventoryItem, replaced) in
 
             }, onError: {[weak self] result in
                 self?.defaultErrorHandler()(result)
@@ -323,7 +324,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if let inventory = inventory {
                 let input = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
                 
-                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, remote: true, resultHandler (onSuccess: {[weak self] groupItem in
+                Prov.inventoryItemsProvider.addToInventory(inventory, itemInput: input, remote: true, resultHandler (onSuccess: {groupItem in
                 }, onError: {[weak self] result in
                     self?.closeTopController()
                     self?.defaultErrorHandler()(result)
@@ -372,7 +373,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
-        Providers.productCategoryProvider.categoryWithName(name, successHandler {category in
+        Prov.productCategoryProvider.categoryWithName(name, successHandler {category in
             handler(category.color)
         })
     }
@@ -397,7 +398,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func loadModels(_ page: NSRange?, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity2]) -> Void) {
         if let inventory = inventory {
             // .MemOnly fetch mode prevents following - when we add items to the inventory and switch to inventory very quickly, the db has not finished writing the items yet! and the load request reads the items from db before the write finishes so if we pass fetchMode .Both, first the mem cache returns the correct items but then the call - to the db - returns still the old items. So we pass mem cache which has the correct state, ignoring the db result.
-            Providers.inventoryItemsProvider.inventoryItems(inventory: inventory, fetchMode: .memOnly, sortBy: sortBy, successHandler{[weak self] inventoryItems in guard let weakSelf = self else {return}
+            Prov.inventoryItemsProvider.inventoryItems(inventory: inventory, fetchMode: .memOnly, sortBy: sortBy, successHandler{[weak self] inventoryItems in guard let weakSelf = self else {return}
                 
                 weakSelf.inventoryItemsResult = inventoryItems
                 onSuccess(inventoryItems.toArray()) // TODO! productsWithQuantityController should load also lazily
@@ -451,7 +452,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
         if let inventory = inventory {
-            Providers.inventoryItemsProvider.removeInventoryItem((model as! InventoryItem).uuid, inventoryUuid: inventory.uuid, remote: true, resultHandler(onSuccess: {
+            Prov.inventoryItemsProvider.removeInventoryItem((model as! InventoryItem).uuid, inventoryUuid: inventory.uuid, remote: true, resultHandler(onSuccess: {
                 onSuccess()
             }, onError: {result in
                 onError(result)
@@ -462,7 +463,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void) {
-        Providers.inventoryItemsProvider.incrementInventoryItem(model as! InventoryItem, delta: delta, remote: true, successHandler({updatedQuantity in
+        Prov.inventoryItemsProvider.incrementInventoryItem(model as! InventoryItem, delta: delta, remote: true, successHandler({updatedQuantity in
             onSuccess(updatedQuantity)
         }))
     }

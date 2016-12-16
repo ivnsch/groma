@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 // UIButton with utilities
 class ButtonMore: UIButton {

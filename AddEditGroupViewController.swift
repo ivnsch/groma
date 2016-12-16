@@ -10,6 +10,7 @@ import UIKit
 import SwiftValidator
 import ChameleonFramework
 import QorumLogs
+import Providers
 
 //change
 protocol AddEditGroupControllerDelegate: class {

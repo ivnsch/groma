@@ -1,16 +1,16 @@
 PODS:
-  - Alamofire (4.1.0)
+  - Alamofire (4.2.0)
   - ChameleonFramework/Default (2.1.0)
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
   - CMPopTipView (2.3.0)
-  - FirebaseAnalytics (3.5.1):
+  - FirebaseAnalytics (3.6.0):
     - FirebaseCore (~> 3.4)
     - FirebaseInstanceID (~> 1.0)
     - GoogleInterchangeUtilities (~> 1.2)
     - GoogleSymbolUtilities (~> 1.1)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-  - FirebaseCore (3.4.4):
+  - FirebaseCore (3.4.6):
     - GoogleInterchangeUtilities (~> 1.2)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
   - FirebaseInstanceID (1.0.8)
@@ -46,11 +46,10 @@ PODS:
   - GTMSessionFetcher/Core (1.1.7)
   - GTMSessionFetcher/Full (1.1.7):
     - GTMSessionFetcher/Core (= 1.1.7)
-  - HockeySDK (4.1.2):
-    - HockeySDK/DefaultLib (= 4.1.2)
-  - HockeySDK/DefaultLib (4.1.2)
+  - HockeySDK (4.1.3):
+    - HockeySDK/DefaultLib (= 4.1.3)
+  - HockeySDK/DefaultLib (4.1.3)
   - KLCPopup (1.0)
-  - Nimble (5.0.0)
   - QorumLogs (0.9)
   - Reachability (3.2)
   - Realm (2.1.1):
@@ -59,7 +58,7 @@ PODS:
   - RealmSwift (2.1.1):
     - Realm (= 2.1.1)
   - Starscream (2.0.2)
-  - SwiftCharts (0.4)
+  - SwiftCharts (0.5.1)
   - SwiftValidator (4.0.0)
   - SwipeView (1.3.2)
   - Valet (2.2.3)
@@ -71,7 +70,6 @@ DEPENDENCIES:
   - Google/SignIn
   - HockeySDK
   - KLCPopup (~> 1.0)
-  - Nimble (~> 5.0.0)
   - QorumLogs
   - Reachability (~> 3.2)
   - RealmSwift
@@ -95,18 +93,18 @@ CHECKOUT OPTIONS:
     :commit: dcf98f9bf3a632a7f40679b7da46f09681e48526
     :git: https://github.com/ViccAlexander/Chameleon.git
   SwiftCharts:
-    :commit: 1705b493b9239cbeb74c484eb9fa9694e42e5b7d
+    :commit: 573432e377b00557759b36469d7203b34634ec92
     :git: https://github.com/i-schuetz/SwiftCharts.git
   SwiftValidator:
     :commit: 159ba2ede3dbf2b8772ed0fbdf0124329f296308
     :git: https://github.com/i-schuetz/SwiftValidator.git
 
 SPEC CHECKSUMS:
-  Alamofire: e266cf991b933498df791e645e0d8ac294492153
+  Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   CMPopTipView: 774e0230b5c73abb3c39051da6d8a383373c4f7f
-  FirebaseAnalytics: 6e58fc9b397664369ac7617fb0ba93fab6ba7b5b
-  FirebaseCore: d0ed25f27b6f9158eccc439f1be6f92e81207e28
+  FirebaseAnalytics: 9c67af0ebeb8d2146c9b4ea2616439affa947b58
+  FirebaseCore: 03da1cb32615569bbc2830a22f9ad753d9a02ef5
   FirebaseInstanceID: ba1e640935235e5fac39dfa816fe7660e72e1a8a
   Google: 813c467362eabc11385f5a5cc9ad0cb651a58f4e
   GoogleAppUtilities: a8a552aa74f6597f805e45b5a3962766c3134973
@@ -116,19 +114,18 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
   GTMOAuth2: 7fc9c10f5c745f4d9850419ea88889fe3baa6b7d
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
-  HockeySDK: c7523379550a4305cefc1cdfa7b5f9a5a3538180
+  HockeySDK: 7dd8d7f5a4d71b7a5eebb320c8515cb22e99221b
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
-  Nimble: 56fc9f5020effa2206de22c3dd910f4fb011b92f
   QorumLogs: 9a484df6973a3697ac79fe2273140fde6b36dccc
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   Realm: a55959c0b171a5fe5267406d17f314fec3cefaae
   RealmSwift: 749fd955bf8d6471c21d218b9389a47aaeccfe3f
   Starscream: 6c135a34e0a6e60cedaa0b30db67a4c05cf7cd38
-  SwiftCharts: 84b43d9d70b791459ff5f50ae5a6704326de309d
+  SwiftCharts: 5c711f225e65bb967bf9ac952888670d461b80af
   SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009
   Valet: c78c7d2e4b2d104d29b9bc62c8f9aa38fbc901eb
 
-PODFILE CHECKSUM: 40bd62c50897e7a73f7e4e6549fb4884a063f134
+PODFILE CHECKSUM: efc873f18df130a8b93ce232f7b4c2fbaf4c02d8
 
-COCOAPODS: 1.2.0.beta.1
+COCOAPODS: 1.1.1

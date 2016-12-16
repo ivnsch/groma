@@ -9,6 +9,7 @@
 import UIKit
 import CMPopTipView
 import QorumLogs
+import Providers
 
 protocol ProductsWithQuantityViewControllerDelegate: class {
     func loadModels(_ page: NSRange?, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity2]) -> Void)
@@ -246,7 +247,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         let newQuantity = inventoryItem.quantity + delta
         
         if newQuantity >= 0 {
-            delegate?.increment(inventoryItem, delta: delta, onSuccess: {[weak self] updatedQuantity in
+            delegate?.increment(inventoryItem, delta: delta, onSuccess: {updatedQuantity in
                 if updatedQuantity == 0 {
                     remove()
                 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol SlidingTabsViewDelegate: class {
     func onSlidingViewButtonTap(_ index: Int, button: UIButton)

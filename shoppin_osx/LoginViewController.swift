@@ -90,7 +90,7 @@ class LoginViewController: NSViewController, RegisterDelegate, PhFacebookDelegat
                 
                 let tokenString = fb.accessToken()
 
-                Providers.userProvider.authenticateWithFacebook(tokenString, successHandler{[weak self] result in
+                Prov.userProvider.authenticateWithFacebook(tokenString, successHandler{[weak self] result in
                     
                     // FIXME "already exists@ on login? is it like this also in iOS?
                     // map already exists status to "social aleready exists", to show a different error message

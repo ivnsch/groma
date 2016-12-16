@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol ListTopBarViewDelegate: class {
     func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId)

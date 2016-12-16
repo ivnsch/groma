@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 protocol ProductWithQuantityTableViewCellDelegate: class {
     func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell)

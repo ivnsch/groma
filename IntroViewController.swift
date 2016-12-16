@@ -9,6 +9,7 @@
 import UIKit
 import SwipeView
 import QorumLogs
+import Providers
 
 enum IntroMode {
     case launch, more
@@ -115,13 +116,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
         
         func initDefaultInventory(_ onFinish: ((DBInventory?) -> Void)? = nil) {
-            Providers.inventoryProvider.inventories(false, resultHandler(onSuccess: {[weak self] inventories in
+            Prov.inventoryProvider.inventories(false, resultHandler(onSuccess: {[weak self] inventories in
                 
                 if let weakSelf = self {
                     if inventories.isEmpty {
                         let inventory = DBInventory(uuid: UUID().uuidString, name: trans("first_inventory_name"), bgColor: UIColor.flatBlue, order: 0)
                         
-                        Providers.inventoryProvider.addInventory(inventory, remote: true, weakSelf.resultHandler(onSuccess: {
+                        Prov.inventoryProvider.addInventory(inventory, remote: true, weakSelf.resultHandler(onSuccess: {
                             onFinish?(inventory)
                             }, onError: {result in
                                 // let the user start if there's an error (we don't expect any, but just in case!)
@@ -141,7 +142,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
         
         func initExampleGroup(_ onFinish: VoidFunction? = nil) {
-            Providers.listItemGroupsProvider.groups(sortBy: .order, resultHandler(onSuccess: {[weak self] groups in guard let weakSelf = self else {onFinish?(); return}
+            Prov.listItemGroupsProvider.groups(sortBy: .order, resultHandler(onSuccess: {[weak self] groups in guard let weakSelf = self else {onFinish?(); return}
                 
                 if groups.isEmpty {
                     
@@ -159,14 +160,14 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     
                     let ingredientsNameBrands: [(name: String, brand: String)] = ingredients.map{(name: $0.name, brand: "")}
                     
-                    Providers.productProvider.products(ingredientsNameBrands, weakSelf.resultHandler(onSuccess: {products in
+                    Prov.productProvider.products(ingredientsNameBrands, weakSelf.resultHandler(onSuccess: {products in
                         
                         if products.count != ingredientsNameBrands.count {
                             QL4("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products)")
                             onFinish?()
                             
                         } else {
-                            Providers.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
+                            Prov.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
                                 
                                 let productsIngredients: [(product: Product, quantity: Int)] = ingredients.flatMap {ingredient in
                                     if let product = products.findFirst({$0.name == ingredient.name}) {
@@ -180,7 +181,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                     GroupItem(uuid: NSUUID().uuidString, quantity: productIngredient.quantity, product: productIngredient.product, group: exampleGroup)
                                 }
                                 
-                                Providers.listItemGroupsProvider.add(groupItems, group: exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in 
+                                Prov.listItemGroupsProvider.add(groupItems, group: exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in 
                                     QL2("Finish adding example group")
                                     onFinish?()
                                     
@@ -206,7 +207,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
 
         func initExampleList(_ inventory: DBInventory, onFinish: VoidFunction? = nil) {
-            Providers.listProvider.lists(false, resultHandler(onSuccess: {[weak self] lists in guard let weakSelf = self else {onFinish?(); return}
+            Prov.listProvider.lists(false, resultHandler(onSuccess: {[weak self] lists in guard let weakSelf = self else {onFinish?(); return}
                 
                 if lists.isEmpty {
                     
@@ -221,14 +222,14 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     
                     let productsWithBrands: [(name: String, brand: String)] = productsWithQuantity.map{(name: $0.name, brand: "")}
                     
-                    Providers.productProvider.products(productsWithBrands, weakSelf.resultHandler(onSuccess: {products in
+                    Prov.productProvider.products(productsWithBrands, weakSelf.resultHandler(onSuccess: {products in
                         
                         if products.count != productsWithBrands.count {
                             QL4("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products)")
                             onFinish?()
                             
                         } else {
-                            Providers.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
+                            Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
                         
                                 let productsIngredients: [(product: Product, quantity: Int)] = productsWithQuantity.flatMap {ingredient in
                                     if let product = products.findFirst({$0.name == ingredient.name}) {
@@ -243,7 +244,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                     ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color, storeProductInput: storeProductInput)
                                 }
                                 
-                                Providers.listItemsProvider.add(prototypes, status: .todo, list: exampleList, note: nil, order: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
+                                Prov.listItemsProvider.add(prototypes, status: .todo, list: exampleList, note: nil, order: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
                                     QL2("Finish adding example list")
                                     
                                     self?.onCreateExampleList?()

@@ -11,6 +11,7 @@ import SwiftValidator
 import ChameleonFramework
 import CMPopTipView
 import QorumLogs
+import Providers
 
 protocol AddEditListControllerDelegate: class {
     func onAddList(_ list: List)
@@ -219,7 +220,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
     
     fileprivate func loadInventories() {
-        Providers.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
+        Prov.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             self?.inventories = inventories
         })
     }
@@ -316,7 +317,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                     
                     // If it's a new list add myself as a participant, to be consistent with list after server updates it (server adds the caller as a participant)
                     
-                    let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
+                    let totalUsers = (Prov.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
                     
                     let list = List(uuid: NSUUID().uuidString, name: listName, users: totalUsers, color: bgColor, order: currentListsCount, inventory: inventory, store: store)
                     
@@ -427,13 +428,13 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                 onLoaded(allResult, invitedResult)
             }
         }
-        Providers.userProvider.findAllKnownSharedUsers(successHandler {sharedUsers in
+        Prov.userProvider.findAllKnownSharedUsers(successHandler {sharedUsers in
             allResult = sharedUsers
             check()
         })
         
         if let list = listToEdit {
-            Providers.listProvider.findInvitedUsers(list.uuid, successHandler {sharedUsers in
+            Prov.listProvider.findInvitedUsers(list.uuid, successHandler {sharedUsers in
                 invitedResult = sharedUsers
                 check()
             })
@@ -487,7 +488,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         parent?.progressVisible(true)
         
         if let list = listToEdit {
-            Providers.pullProvider.pullListProducs(list.uuid, srcUser: user, successHandler{[weak self] listItems in  guard let weakSelf = self else {return}
+            Prov.pullProvider.pullListProducs(list.uuid, srcUser: user, successHandler{[weak self] listItems in  guard let weakSelf = self else {return}
                 self?.parent?.progressVisible(false)
                 AlertPopup.show(title: trans("popup_title_success"), message: trans("popup_list_products_updated_to_match_user", user.email), controller: weakSelf)
             })
@@ -501,7 +502,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     func invitedUsers(_ handler: @escaping ([DBSharedUser]) -> Void) {
         if let list = listToEdit {
-            Providers.listProvider.findInvitedUsers(list.uuid, successHandler {users in
+            Prov.listProvider.findInvitedUsers(list.uuid, successHandler {users in
                 handler(users)
             })
         } else { // adding a list - there can't be invited users yet

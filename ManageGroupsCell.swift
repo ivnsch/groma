@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 // TODO! old code, remove
 class ManageGroupsCell: UITableViewCell {

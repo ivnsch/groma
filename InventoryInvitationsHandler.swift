@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 class InventoryInvitationsHandler {
     
@@ -23,12 +24,12 @@ class InventoryInvitationsHandler {
                 cancelTitle: "Reject",
                 controller: controller,
                 onOk: {
-                    Providers.inventoryProvider.acceptInvitation(invitation, controller.successHandler{
+                    Prov.inventoryProvider.acceptInvitation(invitation, controller.successHandler{
                         Notification.send(Notification.InventoryInvitationAccepted)
                     })
                 },
                 onCancel: {
-                    Providers.inventoryProvider.rejectInvitation(invitation, controller.successHandler{
+                    Prov.inventoryProvider.rejectInvitation(invitation, controller.successHandler{
                     })
             })
         }

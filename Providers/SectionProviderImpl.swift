@@ -1,0 +1,202 @@
+//
+//  SectionProviderImpl.swift
+//  shoppin
+//
+//  Created by ischuetz on 05/11/15.
+//  Copyright © 2015 ivanschuetz. All rights reserved.
+//
+
+import Foundation
+import QorumLogs
+
+class SectionProviderImpl: SectionProvider {
+    
+    let dbProvider = RealmListItemProvider()
+    let remoteProvider = RemoteSectionProvider()
+    
+    func loadSection(_ name: String, list: List, handler: @escaping (ProviderResult<Section?>) -> ()) {
+        DBProv.sectionProvider.loadSection(name, list: list) {dbSectionMaybe in
+            handler(ProviderResult(status: .success, sucessResult: dbSectionMaybe))
+            
+            //            // TODO is this necessary here?
+            //            self.remoteProvider.section(name, list: list) {remoteResult in
+            //
+            //                if let remoteSection = remoteResult.successResult {
+            //                    let section = SectionMapper.SectionWithRemote(remoteSection)
+            //                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: section))
+            //                } else {
+            //                    print("Error getting remote product, status: \(remoteResult.status)")
+            //                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+            //                    handler(ProviderResult(status: providerStatus))
+            //                }
+            //            }
+        }
+    }
+    
+    func remove(_ sectionUuid: String, listUuid: String?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        
+        DBProv.sectionProvider.remove(sectionUuid, markForSync: true) {[weak self] removed in
+            handler(ProviderResult(status: removed ? .success : .databaseUnknown))
+            if removed {
+                
+                Prov.listItemsProvider.removeSectionFromListItemsMemCacheIfExistent(sectionUuid, listUuid: listUuid) {result in
+                    if !result.success {
+                        QL4("Couldn't remove section from mem cache: \(result)")
+                    }
+                }
+                
+                if remote {
+                    self?.remoteProvider.removeSection(sectionUuid) {remoteResult in
+                        if remoteResult.success {
+                            DBProv.sectionProvider.clearSectionTombstone(sectionUuid) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstone for section: \(sectionUuid)")
+                                }
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func remove(_ section: Section, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        remove(section.uuid, listUuid: section.list.uuid, remote: remote) {result in
+            if result.success {
+                handler(result)
+            } else {
+                QL3("Couldn't remove section: \(section), result: \(result)")
+                handler(result)
+            }
+        }
+    }
+    
+    func removeAllWithName(_ sectionName: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+
+        DBProv.sectionProvider.removeAllWithName(sectionName, markForSync: remote) {[weak self] removedSectionsMaybe in
+            if let removedSections = removedSectionsMaybe {
+                
+                Prov.listItemsProvider.invalidateMemCache()
+                
+                handler(ProviderResult(status: .success))
+                
+                if remote {
+                    self?.remoteProvider.removeSectionsWithName(sectionName) {remoteResult in
+                        if remoteResult.success {
+                            
+                            let removedSectionsUuids = removedSections.map{$0.uuid}
+                            DBProv.sectionProvider.clearSectionsTombstones(removedSectionsUuids) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstones for sections: \(removedSections)")
+                                }
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
+                    }
+                }
+            } else {
+                QL4("Couldn't remove sections from db for name: \(sectionName)")
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
+    }
+    
+    func update(_ sections: [Section], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+
+        DBProv.sectionProvider.update(sections) {[weak self] updated in
+            if updated {
+                Prov.listItemsProvider.invalidateMemCache()
+                handler(ProviderResult(status: .success))
+                
+                if remote {
+                    
+                    self?.remoteProvider.updateSections(sections) {remoteResult in
+                        if let timestamp = remoteResult.successResult {
+                            let updateDicts: [[String: AnyObject]] = sections.map {
+                                DBSyncable.timestampUpdateDict($0.uuid, lastServerUpdate: timestamp)
+                            }
+                            DBProv.sectionProvider.updateLastSyncTimeStamps(updateDicts) {success in
+                                if !success {
+                                    QL4("Couldn't update last server update timestamps for sections: \(sections)")
+                                }
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                                QL4("Remote call no success: \(remoteResult) items: \(sections)")
+                                Prov.listItemsProvider.invalidateMemCache()
+                                handler(result)
+                            })
+                        }
+                    }
+                }
+            } else {
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
+    }
+
+    func update(_ section: Section, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        update([section], remote: remote, handler)
+    }
+    
+    func sectionSuggestionsContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> ()) {
+        DBProv.sectionProvider.sectionSuggestionsContainingText(text) {dbSuggestions in
+            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: dbSuggestions))
+        }
+    }
+
+    func sections(_ names: [String], list: List, handler: @escaping (ProviderResult<[Section]>) -> ()) {
+        DBProv.sectionProvider.loadSections(names, list: list) {dbSections in
+            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: dbSections))
+        }
+    }
+    
+    func mergeOrCreateSection(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, _ handler: @escaping (ProviderResult<Section>) -> Void) {
+        
+        // load section or create one (there's no more section data in the input besides of the name, so there's nothing to update).
+        loadSection(sectionName, list: list) {result in
+            
+            // TODO!!!! check if the optional section from db works otherwise return to using .Success / .NotFound with non optional
+            // load section and update or create one
+            // if we find a section with the name we update it - this is for the case the user changes the color of section when editing item
+             if let existingSectionMaybe = result.sucessResult {
+                if let existingSection = existingSectionMaybe {
+                    let updatedSection = existingSection.copy(color: sectionColor)
+                    handler(ProviderResult(status: .success, sucessResult: updatedSection))
+                    
+                } else {
+                    if let order = possibleNewOrder {
+                        let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: order)
+                        handler(ProviderResult(status: .success, sucessResult: section))
+                        
+                    } else { // no order known in advance - fetch listItems to count how many sections, order at the end
+                        
+                        Prov.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: ProviderFetchModus.first) {result in
+                            
+                            if let listItems = result.sucessResult {
+                                let order = listItems.sectionCount(status)
+                                
+                                let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order))
+                                
+                                QL1("Section: \(sectionName) doesn't exist, will create a new one. New uuid: \(section.uuid). List uuid: \(list.uuid)")
+                                handler(ProviderResult(status: .success, sucessResult: section))
+                                
+                            } else {
+                                print("Error: loading section: \(result.status)")
+                                handler(ProviderResult(status: .databaseUnknown))
+                            }
+                        }
+                    }
+                }
+                
+            } else {
+                print("Error: loading section: \(result.status)")
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
+    }
+}
+

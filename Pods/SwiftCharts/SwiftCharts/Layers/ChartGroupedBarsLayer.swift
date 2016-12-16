@@ -45,38 +45,38 @@ open class ChartGroupedBarsLayer<T: ChartBarModel>: ChartCoordsSpaceLayer {
     }
     
     override open func chartInitialized(chart: Chart) {
-//
-//        let axis = self.horizontal ? self.yAxis : self.xAxis
-//        let groupAvailableLength = (axis.length  - (self.groupSpacing ?? 0) * CGFloat(self.groups.count)) / CGFloat(groups.count + 1)
-//        let maxBarCountInGroup = self.groups.reduce(CGFloat(0)) {maxCount, group in
-//            max(maxCount, CGFloat(group.bars.count))
-//        }
-//        
-//        let barWidth = ((groupAvailableLength - ((self.barSpacing ?? 0) * (maxBarCountInGroup - 1))) / CGFloat(maxBarCountInGroup))
-//
-//        let barsGenerator = self.barsGenerator(barWidth: barWidth)
-//        
-//        let calculateConstantScreenLoc: (_ axis: ChartAxisLayer, _ index: Int, _ group: ChartPointsBarGroup<T>) -> CGFloat = {axis, index, group in
-//            let totalWidth = CGFloat(group.bars.count) * barWidth + ((self.barSpacing ?? 0) * (maxBarCountInGroup - 1))
-//            let groupCenter = axis.screenLocForScalar(group.constant.scalar)
-//            let origin = groupCenter - totalWidth / 2
-//            return origin + CGFloat(index) * (barWidth + (self.barSpacing ?? 0)) + barWidth / 2
-//        }
-//        
-//        for group in self.groups {
-//            
-//            for (index, bar) in group.bars.enumerated() {
-//                
-//                let constantScreenLoc: CGFloat = {
-//                    if barsGenerator.direction == .leftToRight {
-//                        return calculateConstantScreenLoc(self.yAxis, index, group)
-//                    } else {
-//                        return calculateConstantScreenLoc(self.xAxis, index, group)
-//                    }
-//                }()
-//                chart.addSubview(barsGenerator.generateView(bar, constantScreenLoc: constantScreenLoc, bgColor: bar.bgColor, animDuration: self.animDuration))
-//            }
-//        }
+
+        let axis = self.horizontal ? self.yAxis : self.xAxis
+        let groupAvailableLength = (axis.length  - (self.groupSpacing ?? 0) * CGFloat(self.groups.count)) / CGFloat(groups.count + 1)
+        let maxBarCountInGroup = self.groups.reduce(CGFloat(0)) {maxCount, group in
+            max(maxCount, CGFloat(group.bars.count))
+        }
+        
+        let barWidth = ((groupAvailableLength - ((self.barSpacing ?? 0) * (maxBarCountInGroup - 1))) / CGFloat(maxBarCountInGroup))
+
+        let barsGenerator = self.barsGenerator(barWidth: barWidth)
+        
+        let calculateConstantScreenLoc: (_ axis: ChartAxisLayer, _ index: Int, _ group: ChartPointsBarGroup<T>) -> CGFloat = {axis, index, group in
+            let totalWidth = CGFloat(group.bars.count) * barWidth + ((self.barSpacing ?? 0) * (maxBarCountInGroup - 1))
+            let groupCenter = axis.screenLocForScalar(group.constant.scalar)
+            let origin = groupCenter - totalWidth / 2
+            return origin + CGFloat(index) * (barWidth + (self.barSpacing ?? 0)) + barWidth / 2
+        }
+        
+        for group in self.groups {
+            
+            for (index, bar) in group.bars.enumerated() {
+                
+                let constantScreenLoc: CGFloat = {
+                    if barsGenerator.direction == .leftToRight {
+                        return calculateConstantScreenLoc(self.yAxis, index, group)
+                    } else {
+                        return calculateConstantScreenLoc(self.xAxis, index, group)
+                    }
+                }()
+                chart.addSubview(barsGenerator.generateView(bar, constantScreenLoc: constantScreenLoc, bgColor: bar.bgColor, animDuration: self.animDuration))
+            }
+        }
     }
 }
 

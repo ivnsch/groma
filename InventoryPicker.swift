@@ -8,6 +8,7 @@
 
 import UIKit
 import CMPopTipView
+import Providers
 
 class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
     

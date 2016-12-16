@@ -8,6 +8,7 @@
 
 import UIKit
 import QorumLogs
+import Providers
 
 class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, XYPieChartDataSource, XYPieChartDelegate {
 
@@ -129,7 +130,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     
     fileprivate func initAggregates(_ monthYear: MonthYear, inventory: DBInventory) {
-        Providers.statsProvider.aggregate(monthYear, groupBy: GroupByAttribute.name, inventory: inventory, successHandler {[weak self] productAggregates in
+        Prov.statsProvider.aggregate(monthYear, groupBy: GroupByAttribute.name, inventory: inventory, successHandler {[weak self] productAggregates in
             self?.productAggregates = productAggregates
         })
     }
