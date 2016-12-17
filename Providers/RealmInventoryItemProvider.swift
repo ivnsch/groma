@@ -43,10 +43,9 @@ class RealmInventoryItemProvider: RealmProvider {
     
     func saveInventoryAndHistoryItem(_ inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: @escaping (Bool) -> Void) {
         let dbInventoryItem = inventoryItems.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
-
+        let dbHistorytem = historyItems.map{$0.copy()}
+        
         doInWriteTransaction({realm in
-            
-            let dbHistorytem = historyItems.map{HistoryItemMapper.dbWithHistoryItem($0, dirty: dirty)}
             realm.add(dbInventoryItem, update: true) // update true just in case
             realm.add(dbHistorytem, update: true) // update true just in case
             return true
@@ -291,8 +290,7 @@ class RealmInventoryItemProvider: RealmProvider {
             let addedOrIncrementedInventoryItem = addOrIncrementInventoryItem(realm, inventory: inventory, product: item.product.product, quantity: item.quantity, dirty: dirty)
 
             let historyItem = HistoryItem(uuid: UUID().uuidString, inventory: inventory, product: item.product.product, addedDate: addedDate, quantity: item.quantity, user: sharedUser, paidPrice: item.product.price)
-            let dbHistoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem, dirty: dirty)
-            realm.add(dbHistoryItem, update: true)
+            realm.add(historyItem, update: true)
             
             adddedOrUpdatedItems.append((inventoryItem: addedOrIncrementedInventoryItem.inventoryItem, historyItem: historyItem))
         }
@@ -372,7 +370,7 @@ class RealmInventoryItemProvider: RealmProvider {
                 DBProv.inventoryProvider.updateLastSyncTimeStampSync(realm, inventory: inventory.inventory)
             }
             for historyItem in items.historyItems {
-                realm.create(DBHistoryItem.self, value: historyItem.timestampUpdateDict, update: true)
+                realm.create(HistoryItem.self, value: historyItem.timestampUpdateDict, update: true)
             }
             // TODO shared users? - probably not as we can't edit shared users so there's nothing to sync
             return true

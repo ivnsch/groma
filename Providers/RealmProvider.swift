@@ -193,6 +193,10 @@ class RealmProvider {
         return self.loadSync(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
     }
     
+    func loadFirstSync<T: Object>(filter filterMaybe: String? = nil) -> T? {
+        return loadSync(filter: filterMaybe)?.first
+    }
+    
     //////////////////////
     // Load array without mapper
     // Special methods (with repeated code) for this, since on one side we want to do the conversion to array in the background together with loading the objs (so we can't use the methods that return Results) and on the other it was not possible to adjust the methods that return arrays and use mapper to make mapper optional. There seem to be a problem with the returned type "U" of the objects being the same as "T". TODO try to adjust methods with mapper. Or refactor in some other way.

@@ -8,6 +8,7 @@
 
 import Foundation
 import QorumLogs
+import RealmSwift
 
 public struct ProductAggregate {
     public let product: Product
@@ -72,8 +73,13 @@ class StatsProviderImpl: StatsProvider {
 
     func aggregate(_ monthYear: MonthYear, groupBy: GroupByAttribute, inventory: DBInventory, _ handler: @escaping (ProviderResult<[ProductAggregate]>) -> ()) {
         RealmHistoryProvider().loadHistoryItems(monthYear, inventory: inventory) {historyItems in
-            let productAggregates = self.toProductAggregates(historyItems)
-            handler(ProviderResult(status: .success, sucessResult: productAggregates))
+            if let historyItems = historyItems {
+                let productAggregates = self.toProductAggregates(historyItems)
+                handler(ProviderResult(status: .success, sucessResult: productAggregates))
+            } else {
+                QL4("Couldn't load items")
+                handler(ProviderResult(status: .unknown))
+            }
         }
     }
     
@@ -83,8 +89,13 @@ class StatsProviderImpl: StatsProvider {
         if let startDate = (Calendar.current as NSCalendar).date(byAdding: dateComponents as DateComponents, to: Date(), options: .wrapComponents)?.toMillis() {
             
             RealmHistoryProvider().loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
-                let productAggregates = self.toProductAggregates(historyItems)
-                handler(ProviderResult(status: .success, sucessResult: productAggregates))
+                if let historyItems = historyItems {
+                    let productAggregates = self.toProductAggregates(historyItems)
+                    handler(ProviderResult(status: .success, sucessResult: productAggregates))
+                } else {
+                    QL4("Couldn't load items")
+                    handler(ProviderResult(status: .unknown))
+                }
             }
             
         } else {
@@ -101,46 +112,53 @@ class StatsProviderImpl: StatsProvider {
             
             RealmHistoryProvider().loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
                 
-                var dict: OrderedDictionary<MonthYear, (price: Float, quantity: Int)> = OrderedDictionary()
-                
-                let (_, referenceDateMonth, referenceDateYear) = referenceDate.dayMonthYear
-                if timePeriod.timeUnit != .month {
-                    QL4("Error: not supported timeunit: \(timePeriod.timeUnit) - the calculations will be incorrect") // for now we only need months (TODO complete or remove the other enum values, maybe even remove the enum)
-                }
-                
-                // Prefill the dictionary with the month years in time period's range. We need all the months in the result independently if they have history items or not ("left join")
-                let monthYears = stride(from: min(timePeriod.quantity + 1, 0), through: max(timePeriod.quantity, 0), by: 1).map {quantity in
-                    MonthYear(month: referenceDateMonth, year: referenceDateYear).offsetMonths(quantity)
-                }
-                let monthYearsWithoutNils = monthYears.flatMap{$0} // we are not expecting nils here but we avoid ! (except in outlets) as general rule. There's an error log in offestMonths.
-                for monthYear in monthYearsWithoutNils {
-                    dict[monthYear] = nil
-                }
-                
-                for historyItem in historyItems {
+                if let historyItems = historyItems {
+
+                    var dict: OrderedDictionary<MonthYear, (price: Float, quantity: Int)> = OrderedDictionary()
                     
-                    let components = Calendar.current.dateComponents([.month, .year], from: historyItem.addedDate.millisToEpochDate())
-                    if let month = components.month, let year = components.year {
-                        let key = MonthYear(month: month, year: year)
-                        if let aggr = dict[key] {
-                            dict[key] = (price: aggr.price + historyItem.totalPaidPrice, quantity: aggr.quantity + historyItem.quantity)
-                        } else {
-                            dict[key] = (price: historyItem.totalPaidPrice, quantity: historyItem.quantity)
-                        }
-                    } else {
-                        QL4("No month/year in components")
-                        handler(ProviderResult(status: .unknown))
-                        break
+                    let (_, referenceDateMonth, referenceDateYear) = referenceDate.dayMonthYear
+                    if timePeriod.timeUnit != .month {
+                        QL4("Error: not supported timeunit: \(timePeriod.timeUnit) - the calculations will be incorrect") // for now we only need months (TODO complete or remove the other enum values, maybe even remove the enum)
                     }
+                    
+                    // Prefill the dictionary with the month years in time period's range. We need all the months in the result independently if they have history items or not ("left join")
+                    let monthYears = stride(from: min(timePeriod.quantity + 1, 0), through: max(timePeriod.quantity, 0), by: 1).map {quantity in
+                        MonthYear(month: referenceDateMonth, year: referenceDateYear).offsetMonths(quantity)
+                    }
+                    let monthYearsWithoutNils = monthYears.flatMap{$0} // we are not expecting nils here but we avoid ! (except in outlets) as general rule. There's an error log in offestMonths.
+                    for monthYear in monthYearsWithoutNils {
+                        dict[monthYear] = nil
+                    }
+                    
+                    for historyItem in historyItems {
+                        
+                        let components = Calendar.current.dateComponents([.month, .year], from: historyItem.addedDate.millisToEpochDate())
+                        if let month = components.month, let year = components.year {
+                            let key = MonthYear(month: month, year: year)
+                            if let aggr = dict[key] {
+                                dict[key] = (price: aggr.price + historyItem.totalPaidPrice, quantity: aggr.quantity + historyItem.quantity)
+                            } else {
+                                dict[key] = (price: historyItem.totalPaidPrice, quantity: historyItem.quantity)
+                            }
+                        } else {
+                            QL4("No month/year in components")
+                            handler(ProviderResult(status: .unknown))
+                            break
+                        }
+                    }
+                    
+                    let monthYearAggregates: [MonthYearAggregate] = dict.mapOpt {key, value in
+                        MonthYearAggregate(monthYear: key, totalCount: value?.quantity ?? 0, totalPrice: value?.price ?? 0)
+                    }
+                    
+                    let groupMonthYearAggregate = GroupMonthYearAggregate(group: group, timePeriod: timePeriod, referenceDate: referenceDate, monthYearAggregates: monthYearAggregates)
+                    
+                    handler(ProviderResult(status: .success, sucessResult: groupMonthYearAggregate))
+                    
+                } else {
+                    QL4("Couldn't load items")
+                    handler(ProviderResult(status: .unknown))
                 }
-                
-                let monthYearAggregates: [MonthYearAggregate] = dict.mapOpt {key, value in
-                    MonthYearAggregate(monthYear: key, totalCount: value?.quantity ?? 0, totalPrice: value?.price ?? 0)
-                }
-                
-                let groupMonthYearAggregate = GroupMonthYearAggregate(group: group, timePeriod: timePeriod, referenceDate: referenceDate, monthYearAggregates: monthYearAggregates)
-                
-                handler(ProviderResult(status: .success, sucessResult: groupMonthYearAggregate))
             }
             
         } else {
@@ -149,7 +167,7 @@ class StatsProviderImpl: StatsProvider {
         }
     }
     
-    fileprivate func toProductAggregates(_ historyItems: [HistoryItem]) -> [ProductAggregate] {
+    fileprivate func toProductAggregates(_ historyItems: Results<HistoryItem>) -> [ProductAggregate] {
         
         // extract from history items total quantity and price for each product (a product can appear in multiple history items)
         var dict: OrderedDictionary<String, (product: Product, price: Float, quantity: Int)> = OrderedDictionary()

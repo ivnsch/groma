@@ -9,35 +9,6 @@
 import Foundation
 
 class HistoryItemMapper {
-
-    class func dbWithHistoryItem(_ historyItem: HistoryItem, dirty: Bool) -> DBHistoryItem {
-        let dbHistoryItem = DBHistoryItem()
-        dbHistoryItem.uuid = historyItem.uuid
-        dbHistoryItem.inventory = historyItem.inventory
-        dbHistoryItem.product  = historyItem.product
-        dbHistoryItem.addedDate = historyItem.addedDate
-        dbHistoryItem.quantity = historyItem.quantity
-        dbHistoryItem.paidPrice = historyItem.paidPrice
-        dbHistoryItem.user = SharedUserMapper.dbWithSharedUser(historyItem.user)
-        if let lastServerUpdate = historyItem.lastServerUpdate {
-            dbHistoryItem.lastServerUpdate = lastServerUpdate
-        }
-        dbHistoryItem.dirty = dirty
-        return dbHistoryItem
-    }
-    
-    class func historyItemWith(_ dbHistoryItem: DBHistoryItem) -> HistoryItem {
-        return HistoryItem(
-            uuid: dbHistoryItem.uuid,
-            inventory: InventoryMapper.inventoryWithDB(dbHistoryItem.inventory),
-            product: dbHistoryItem.product,
-            addedDate: dbHistoryItem.addedDate,
-            quantity: dbHistoryItem.quantity,
-            user: SharedUserMapper.sharedUserWithDB(dbHistoryItem.user),
-            paidPrice: dbHistoryItem.paidPrice,
-            lastServerUpdate: dbHistoryItem.lastServerUpdate
-        )
-    }
     
     class func historyItemWithRemote(_ remoteHistoryItem: RemoteHistoryItem, inventory: DBInventory, product: Product, user: DBSharedUser) -> HistoryItem {
         return HistoryItem(

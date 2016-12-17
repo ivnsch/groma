@@ -67,7 +67,7 @@ public final class Section: Identifiable, CustomDebugStringConvertible {
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             color: color ?? self.color,
-            list: list ?? self.list,
+            list: list ?? self.list.copy(),
             
             todoOrder: todoOrder ?? self.todoOrder,
             doneOrder: doneOrder ?? self.doneOrder,

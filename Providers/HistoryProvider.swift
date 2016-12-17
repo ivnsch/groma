@@ -7,17 +7,18 @@
 //
 
 import Foundation
+import RealmSwift
 
 public protocol HistoryProvider {
     
-    func historyItems(_ range: NSRange, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ())
+    func historyItems(_ range: NSRange, inventory: DBInventory, _ handler: @escaping (ProviderResult<Results<HistoryItem>>) -> Void)
 
     /**
     * Get all history items with a date greater or equal than startDate, until today
     */
-    func historyItems(_ startDate: Int64, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ())
+    func historyItems(_ startDate: Int64, inventory: DBInventory, _ handler: @escaping (ProviderResult<Results<HistoryItem>>) -> Void)
 
-    func historyItems(_ monthYear: MonthYear, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> Void)
+    func historyItems(_ monthYear: MonthYear, inventory: DBInventory, _ handler: @escaping (ProviderResult<Results<HistoryItem>>) -> Void)
     
     func historyItemsGroups(_ range: NSRange, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItemGroup]>) -> ())
     

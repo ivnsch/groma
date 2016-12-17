@@ -8,31 +8,46 @@
 
 import Foundation
 import QorumLogs
+import RealmSwift
 
 class HistoryProviderImpl: HistoryProvider {
 
     let dbProvider = RealmHistoryProvider()
     let remoteProvider = RemoteHistoryProvider()
 
-    func historyItems(_ range: NSRange, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ()) {
-
-        self.dbProvider.loadHistoryItems(range, inventory: inventory) {dbHistoryItems in
-            handler(ProviderResult(status: .success, sucessResult: dbHistoryItems))
+    func historyItems(_ range: NSRange, inventory: DBInventory, _ handler: @escaping (ProviderResult<Results<HistoryItem>>) -> Void) {
+        dbProvider.loadHistoryItems(range, inventory: inventory) {historyItems in
+            if let historyItems = historyItems {
+                handler(ProviderResult(status: .success, sucessResult: historyItems))
+            } else {
+                QL4("Couldn't load history items")
+                handler(ProviderResult(status: .unknown))
+            }
             
             // no background update - the history is too long to be fetched each time, and paginated update is too complicated
             // so we update the history only on sync (and later on push notification)
         }
     }
     
-    func historyItems(_ startDate: Int64, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> ()) {
-        self.dbProvider.loadHistoryItems(startDate: startDate, inventory: inventory) {dbHistoryItems in
-            handler(ProviderResult(status: .success, sucessResult: dbHistoryItems))
+    func historyItems(_ startDate: Int64, inventory: DBInventory, _ handler: @escaping (ProviderResult<Results<HistoryItem>>) -> Void) {
+        self.dbProvider.loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
+            if let historyItems = historyItems {
+                handler(ProviderResult(status: .success, sucessResult: historyItems))
+            } else {
+                QL4("Couldn't load history items")
+                handler(ProviderResult(status: .unknown))
+            }
         }
     }
     
-    func historyItems(_ monthYear: MonthYear, inventory: DBInventory, _ handler: @escaping (ProviderResult<[HistoryItem]>) -> Void) {
-        dbProvider.loadHistoryItems(monthYear, inventory: inventory) {dbHistoryItems in
-            handler(ProviderResult(status: .success, sucessResult: dbHistoryItems))
+    func historyItems(_ monthYear: MonthYear, inventory: DBInventory, _ handler: @escaping (ProviderResult<Results<HistoryItem>>) -> Void) {
+        dbProvider.loadHistoryItems(monthYear, inventory: inventory) {historyItems in
+            if let historyItems = historyItems {
+                handler(ProviderResult(status: .success, sucessResult: historyItems))
+            } else {
+                QL4("Couldn't load history items")
+                handler(ProviderResult(status: .unknown))
+            }
         }
     }
     

@@ -8,28 +8,56 @@
 
 import Foundation
 
-public class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
+public class HistoryItem: DBSyncable, Identifiable {
+
+    public dynamic var uuid: String = ""
+    dynamic var inventoryOpt: DBInventory? = DBInventory()
+    dynamic var productOpt: Product? = Product()
+    public dynamic var addedDate: Int64 = 0
+    public dynamic var quantity: Int = 0
+    dynamic var userOpt: DBSharedUser? = DBSharedUser()
+    public dynamic var paidPrice: Float = 0 // product price at the moment of buying the item (per unit)
     
-    public let uuid: String
-    public let product: Product
-    public let addedDate: Int64
-    public let quantity: Int
-    public let inventory: DBInventory
-    public let user: DBSharedUser // The user who added the item. This is rather "User" because there's sharing for history items doesn't make sense, but user has information (like pw) which is irrelevant for this
-    public let paidPrice: Float // product price at the moment of buying the item (per unit)
-    //////////////////////////////////////////////
-    // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
-    // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
-    // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    public let lastServerUpdate: Int64?
-    public let removed: Bool
-    //////////////////////////////////////////////
+    public static let addedDateKey = "addedDate"
+    
+    public override static func primaryKey() -> String? {
+        return "uuid"
+    }
+    
+    public var product: Product {
+        get {
+            return productOpt ?? Product()
+        }
+        set(newProduct) {
+            productOpt = newProduct
+        }
+    }
+    
+    public var inventory: DBInventory {
+        get {
+            return inventoryOpt ?? DBInventory()
+        }
+        set(newInventory) {
+            inventoryOpt = newInventory
+        }
+    }
+    
+    public var user: DBSharedUser {
+        get {
+            return userOpt ?? DBSharedUser()
+        }
+        set(newUser) {
+            userOpt = newUser
+        }
+    }
     
     public var totalPaidPrice: Float {
         return paidPrice * Float(quantity)
     }
     
-    public init(uuid: String, inventory: DBInventory, product: Product, addedDate: Int64, quantity: Int, user: DBSharedUser, paidPrice: Float, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, inventory: DBInventory, product: Product, addedDate: Int64, quantity: Int, user: DBSharedUser, paidPrice: Float, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+        self.init()
+        
         self.uuid = uuid
         self.inventory = inventory
         self.product = product
@@ -37,26 +65,97 @@ public class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible 
         self.quantity = quantity
         self.user = user
         self.paidPrice = paidPrice
-        self.lastServerUpdate = lastServerUpdate
-        self.removed = removed
+//        self.lastServerUpdate = lastServerUpdate
+//        self.removed = removed
+    }
+
+    
+    // MARK: - Filters
+    
+    static func createFilter(_ uuid: String) -> String {
+        return "uuid == '\(uuid)'"
+    }
+    
+    static func createFilterWithProduct(_ productUuid: String) -> String {
+        return "productOpt.uuid == '\(productUuid)'"
+    }
+    
+    static func createFilterWithInventory(_ inventoryUuid: String) -> String {
+        return "inventoryOpt.uuid == '\(inventoryUuid)'"
+    }
+
+    static func createFilter(_ historyItemGroup: HistoryItemGroup) -> String {
+        let historyItemsUuidsStr: String = historyItemGroup.historyItems.map{"'\($0.uuid)'"}.joined(separator: ",")
+        return "uuid IN {\(historyItemsUuidsStr)}"
+    }
+    
+    static func createPredicate(_ addedDate: Int64, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "addedDate >= %@ AND inventoryOpt.uuid == %@", NSNumber(value: Int64(addedDate) as Int64), inventoryUuid)
+    }
+    
+    static func createPredicate(_ productName: String, addedDate: Int64, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.name == %@ AND addedDate >= %@ AND inventoryOpt.uuid == %@", productName, NSNumber(value: Int64(addedDate) as Int64), inventoryUuid)
+    }
+    
+    static func createPredicate(_ startAddedDate: Int64, endAddedDate: Int64, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "addedDate >= %@ AND addedDate <= %@ AND inventoryOpt.uuid == %@", NSNumber(value: Int64(startAddedDate) as Int64), NSNumber(value: Int64(endAddedDate) as Int64), inventoryUuid)
+    }
+    
+    static func createPredicateOlderThan(_ addedDate: Int64) -> NSPredicate {
+        return NSPredicate(format: "addedDate < %@", NSNumber(value: Int64(addedDate) as Int64))
+    }
+    
+    // MARK: -
+    
+    // TODO!!!! failable
+    static func fromDict(_ dict: [String: AnyObject], inventory: DBInventory, product: Product) -> HistoryItem {
+        let item = HistoryItem()
+        item.uuid = dict["uuid"]! as! String
+        item.inventory = inventory
+        item.product = product
+        item.addedDate = Int64(dict["addedDate"] as! Double)
+        item.quantity = dict["quantity"]! as! Int
+        item.paidPrice = dict["paidPrice"] as! Float
+        // TODO!!!! user -> the backend sends us the uuid, we should send for now the email instead
+        let user = DBSharedUser()
+        user.email = dict["userUuid"]! as! String
+        item.user = user
+        item.setSyncableFieldswithRemoteDict(dict)
+        return item
+    }
+    
+    func toDict() -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid as AnyObject?
+        dict["inventoryUuid"] = inventory.uuid as AnyObject?
+        dict["productInput"] = product.toDict() as AnyObject?
+        dict["addedDate"] = NSNumber(value: Int64(addedDate) as Int64)
+        dict["quantity"] = quantity as AnyObject?
+        dict["paidPrice"] = paidPrice as AnyObject?
+        dict["user"] = user.toDict() as AnyObject?
+        setSyncableFieldsInDict(&dict)
+        return dict
+    }
+    
+    public func copy(uuid: String? = nil, inventory: DBInventory? = nil, product: Product? = nil, addedDate: Int64? = nil, quantity: Int? = nil, user: DBSharedUser? = nil, paidPrice: Float? = nil, lastServerUpdate: Int64? = nil, removed: Bool = false) -> HistoryItem {
+        return HistoryItem(
+            uuid: uuid ?? self.uuid,
+            inventory: inventory ?? self.inventory.copy(),
+            product: product ?? self.product.copy(),
+            addedDate: addedDate ?? self.addedDate,
+            quantity: quantity ?? self.quantity,
+            user: user ?? self.user.copy(),
+            paidPrice: paidPrice ?? self.paidPrice
+        )
+    }
+
+    public override static func ignoredProperties() -> [String] {
+        return ["product", "inventory", "user"]
     }
     
     public func same(_ rhs: HistoryItem) -> Bool {
         return uuid == rhs.uuid
     }
-    
-    
-    public var debugDescription: String {
-        return "[uuid: \(uuid), product: \(product), paidPrice: \(paidPrice), quantity: \(quantity), addedDate: \(addedDate), user: \(user), inventory: \(inventory)]"
-    }
-    
-    public func equalsExcludingSyncAttributes(_ rhs: HistoryItem) -> Bool {
-        return uuid == rhs.uuid && product == rhs.product && addedDate == rhs.addedDate && quantity == rhs.quantity && inventory == rhs.inventory && user == rhs.user && paidPrice == rhs.paidPrice
-    }
-}
-
-public func ==(lhs: HistoryItem, rhs: HistoryItem) -> Bool {
-    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }
 
 // convenience (redundant) holder to avoid having to iterate through historyitems to find unique products and users

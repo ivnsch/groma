@@ -36,9 +36,7 @@ class RemoteHistoryProvider {
     
     func toRequestParamsToRemove(_ historyItem: HistoryItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["uuid": historyItem.uuid as AnyObject]
-        if let lastServerUpdate = historyItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(historyItem.lastServerUpdate) as Int64)
         return dict
     }
     

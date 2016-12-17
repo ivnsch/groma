@@ -289,7 +289,7 @@ class RealmProductProvider: RealmProvider {
         }
         realm.delete(inventoryResult)
         
-        let historyResult = realm.objects(DBHistoryItem.self).filter(DBHistoryItem.createFilterWithProduct(productUuid))
+        let historyResult = realm.objects(HistoryItem.self).filter(HistoryItem.createFilterWithProduct(productUuid))
         if markForSync {
             let toRemoteHistoryItems =  Array(historyResult.map{DBRemoveHistoryItem($0)})
             saveObjsSyncInt(realm, objs: toRemoteHistoryItems, update: true)
