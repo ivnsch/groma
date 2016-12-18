@@ -1,5 +1,5 @@
 //
-//  DBSectionToRemove.swift
+//  SectionToRemove.swift
 //  shoppin
 //
 //  Created by ischuetz on 29/02/16.
@@ -10,12 +10,12 @@ import Foundation
 import RealmSwift
 import QorumLogs
 
-class DBSectionToRemove: Object {
+class SectionToRemove: Object {
     
     dynamic var uuid: String = ""
     dynamic var lastServerUpdate: Int64 = 0
     
-    convenience init(_ dbSection: DBSection) {
+    convenience init(_ dbSection: Section) {
         self.init(uuid: dbSection.uuid, lastServerUpdate: dbSection.lastServerUpdate)
     }
     

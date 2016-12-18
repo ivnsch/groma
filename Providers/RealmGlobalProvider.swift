@@ -21,7 +21,7 @@ class RealmGlobalProvider: RealmProvider {
             let products = realm.objects(Product.self).filter(Product.createFilterDirtyAndValid())
             let storeProducts = realm.objects(DBStoreProduct.self).filter(DBStoreProduct.createFilterDirtyAndValid())
             let lists = realm.objects(List.self).filter(DBSyncable.dirtyFilter())
-            let sections = realm.objects(DBSection.self).filter(DBSyncable.dirtyFilter())
+            let sections = realm.objects(Section.self).filter(DBSyncable.dirtyFilter())
             let listsItems = realm.objects(DBListItem.self).filter(DBSyncable.dirtyFilter())
             let inventories = realm.objects(DBInventory.self).filter(DBSyncable.dirtyFilter())
             let inventoryItems = realm.objects(InventoryItem.self).filter(DBSyncable.dirtyFilter())
@@ -51,7 +51,7 @@ class RealmGlobalProvider: RealmProvider {
             let productsToRemove = realm.objects(ProductToRemove.self).map{$0.toDict()}
             let storeProductsToRemove = realm.objects(DBStoreProductToRemove.self).map{$0.toDict()}
             let listsToRemove = realm.objects(DBRemoveList.self).map{$0.toDict()}
-            let sectionsToRemove = realm.objects(DBSectionToRemove.self).map{$0.toDict()}
+            let sectionsToRemove = realm.objects(SectionToRemove.self).map{$0.toDict()}
             let listItemsToRemove = realm.objects(DBRemoveListItem.self).map{$0.toDict()}
             let inventoriesToRemove = realm.objects(DBRemoveInventory.self).map{$0.toDict()}
             let inventoryItemsToRemove = realm.objects(DBRemoveInventoryItem.self).map{$0.toDict()}
@@ -132,7 +132,7 @@ class RealmGlobalProvider: RealmProvider {
             
             let (listsArr, listsDict): ([List], [String: List]) = toObjs(syncResult.lists, mapper: {List.fromDict($0, inventory: inventoriesDict[$0["list"]!["inventoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
-            let (sectionsArr, sectionsDict): ([DBSection], [String: DBSection]) = toObjs(syncResult.sections, mapper: {DBSection.fromDict($0, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+            let (sectionsArr, sectionsDict): ([Section], [String: Section]) = toObjs(syncResult.sections, mapper: {Section.fromDict($0, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
             let (listItemsArr, listItemsDict): ([DBListItem], [String: DBListItem]) = toObjs(syncResult.listsItems, mapper: {DBListItem.fromDict($0, section: sectionsDict[$0["sectionUuid"]! as! String]!, product: storeProductsDict[$0["storeProductUuid"]! as! String]!, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
@@ -189,7 +189,7 @@ class RealmGlobalProvider: RealmProvider {
         realm.delete(realm.objects(InventoryItem.self))
         realm.delete(realm.objects(HistoryItem.self))
         
-        realm.delete(realm.objects(DBSection.self))
+        realm.delete(realm.objects(Section.self))
         
         realm.delete(realm.objects(ProductGroup.self))
         realm.delete(realm.objects(List.self))
@@ -207,7 +207,7 @@ class RealmGlobalProvider: RealmProvider {
         realm.delete(realm.objects(DBRemoveInventoryItem.self))
         realm.delete(realm.objects(DBRemoveHistoryItem.self))
 
-        realm.delete(realm.objects(DBSectionToRemove.self))
+        realm.delete(realm.objects(SectionToRemove.self))
         
         realm.delete(realm.objects(DBRemoveProductGroup.self))
         realm.delete(realm.objects(DBRemoveList.self))
@@ -252,7 +252,7 @@ class RealmGlobalProvider: RealmProvider {
             markObjsDirty(realm, obj: InventoryItem.self, idExtractor: {$0.uuid})
             markObjsDirty(realm, obj: HistoryItem.self, idExtractor: {$0.uuid})
             
-            markObjsDirty(realm, obj: DBSection.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: Section.self, idExtractor: {$0.uuid})
             
             markObjsDirty(realm, obj: ProductGroup.self, idExtractor: {$0.uuid})
             markObjsDirty(realm, obj: List.self, idExtractor: {$0.uuid})

@@ -111,7 +111,7 @@
 		6A256C601E0405B6004F5028 /* ListItemGroupMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C531E0405B6004F5028 /* ListItemGroupMapper.swift */; };
 		6A256C611E0405B6004F5028 /* GroupItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C541E0405B6004F5028 /* GroupItemMapper.swift */; };
 		6A256C621E0405B6004F5028 /* PlanItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C551E0405B6004F5028 /* PlanItemMapper.swift */; };
-		6A256C721E0405C6004F5028 /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C641E0405C6004F5028 /* DBSection.swift */; };
+		6A256C721E0405C6004F5028 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C641E0405C6004F5028 /* Section.swift */; };
 		6A256C731E0405C6004F5028 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C651E0405C6004F5028 /* Product.swift */; };
 		6A256C741E0405C6004F5028 /* DBStoreProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C661E0405C6004F5028 /* DBStoreProduct.swift */; };
 		6A256C751E0405C6004F5028 /* DBSharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256C671E0405C6004F5028 /* DBSharedUser.swift */; };
@@ -209,7 +209,6 @@
 		6A256D411E040694004F5028 /* StoreProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D291E040694004F5028 /* StoreProduct.swift */; };
 		6A256D421E040694004F5028 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2A1E040694004F5028 /* ListItem.swift */; };
 		6A256D431E040694004F5028 /* OrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2B1E040694004F5028 /* OrderUpdate.swift */; };
-		6A256D441E040694004F5028 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2C1E040694004F5028 /* Section.swift */; };
 		6A256D451E040694004F5028 /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2D1E040694004F5028 /* UserIdentity.swift */; };
 		6A256D461E040694004F5028 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2E1E040694004F5028 /* User.swift */; };
 		6A256D471E040694004F5028 /* LoginData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256D2F1E040694004F5028 /* LoginData.swift */; };
@@ -391,7 +390,7 @@
 		6A256C531E0405B6004F5028 /* ListItemGroupMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupMapper.swift; sourceTree = "<group>"; };
 		6A256C541E0405B6004F5028 /* GroupItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItemMapper.swift; sourceTree = "<group>"; };
 		6A256C551E0405B6004F5028 /* PlanItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanItemMapper.swift; sourceTree = "<group>"; };
-		6A256C641E0405C6004F5028 /* DBSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSection.swift; sourceTree = "<group>"; };
+		6A256C641E0405C6004F5028 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		6A256C651E0405C6004F5028 /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		6A256C661E0405C6004F5028 /* DBStoreProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBStoreProduct.swift; sourceTree = "<group>"; };
 		6A256C671E0405C6004F5028 /* DBSharedUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSharedUser.swift; sourceTree = "<group>"; };
@@ -489,7 +488,6 @@
 		6A256D291E040694004F5028 /* StoreProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreProduct.swift; sourceTree = "<group>"; };
 		6A256D2A1E040694004F5028 /* ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
 		6A256D2B1E040694004F5028 /* OrderUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderUpdate.swift; sourceTree = "<group>"; };
-		6A256D2C1E040694004F5028 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		6A256D2D1E040694004F5028 /* UserIdentity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserIdentity.swift; sourceTree = "<group>"; };
 		6A256D2E1E040694004F5028 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		6A256D2F1E040694004F5028 /* LoginData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginData.swift; sourceTree = "<group>"; };
@@ -834,7 +832,7 @@
 			isa = PBXGroup;
 			children = (
 				6A256C9B1E0405DC004F5028 /* remove */,
-				6A256C641E0405C6004F5028 /* DBSection.swift */,
+				6A256C641E0405C6004F5028 /* Section.swift */,
 				6A256C651E0405C6004F5028 /* Product.swift */,
 				6A256C661E0405C6004F5028 /* DBStoreProduct.swift */,
 				6A256C671E0405C6004F5028 /* DBSharedUser.swift */,
@@ -983,7 +981,6 @@
 				6A256D291E040694004F5028 /* StoreProduct.swift */,
 				6A256D2A1E040694004F5028 /* ListItem.swift */,
 				6A256D2B1E040694004F5028 /* OrderUpdate.swift */,
-				6A256D2C1E040694004F5028 /* Section.swift */,
 				6A256D2D1E040694004F5028 /* UserIdentity.swift */,
 				6A256D2E1E040694004F5028 /* User.swift */,
 				6A256D2F1E040694004F5028 /* LoginData.swift */,
@@ -1427,7 +1424,6 @@
 				6A256CE11E040612004F5028 /* RemoteProduct.swift in Sources */,
 				6A256D121E040634004F5028 /* RemoteInventoryItemsWithDependencies.swift in Sources */,
 				6A256BF51E040540004F5028 /* RemoteSectionProvider.swift in Sources */,
-				6A256D441E040694004F5028 /* Section.swift in Sources */,
 				6A256D521E040694004F5028 /* HelpItem.swift in Sources */,
 				6A256D4F1E040694004F5028 /* QuickAddItem.swift in Sources */,
 				6A256DAB1E04092B004F5028 /* SuggestionsPrefiller.swift in Sources */,
@@ -1483,7 +1479,7 @@
 				6A256C8E1E0405D7004F5028 /* DBSectionToRemove.swift in Sources */,
 				6A256C991E0405D7004F5028 /* DBRemoveGroupItem.swift in Sources */,
 				6A256D4C1E040694004F5028 /* HistoryItemGroup.swift in Sources */,
-				6A256C721E0405C6004F5028 /* DBSection.swift in Sources */,
+				6A256C721E0405C6004F5028 /* Section.swift in Sources */,
 				6A256DA01E04085B004F5028 /* AsyncUtils.swift in Sources */,
 				6A256DBB1E040C52004F5028 /* CGPoint.swift in Sources */,
 				6A256C0A1E04056C004F5028 /* ProviderResult.swift in Sources */,

@@ -10,34 +10,34 @@ import Foundation
 
 class SectionMapper {
     
-    class func sectionWithDB(_ dbSection: DBSection) -> Section {
-        return Section(uuid: dbSection.uuid, name: dbSection.name, color: dbSection.color(), list: dbSection.list, todoOrder: dbSection.todoOrder, doneOrder: dbSection.doneOrder, stashOrder: dbSection.stashOrder, lastServerUpdate: dbSection.lastServerUpdate)
-    }
+//    class func sectionWithDB(_ dbSection: Section) -> Section {
+//        return Section(uuid: dbSection.uuid, name: dbSection.name, color: dbSection.color(), list: dbSection.list, todoOrder: dbSection.todoOrder, doneOrder: dbSection.doneOrder, stashOrder: dbSection.stashOrder, lastServerUpdate: dbSection.lastServerUpdate)
+//    }
     
     class func SectionWithRemote(_ remoteSection: RemoteSection, list: List) -> Section {
         return Section(uuid: remoteSection.uuid, name: remoteSection.name, color: remoteSection.color, list: list, todoOrder: remoteSection.todoOrder, doneOrder: remoteSection.doneOrder, stashOrder: remoteSection.stashOrder, lastServerUpdate: remoteSection.lastUpdate)
     }
+//    
+//    class func dbWithSection(_ section: Section) -> Section {
+//        let dbSection = Section()
+//        dbSection.uuid = section.uuid
+//        dbSection.name = section.name
+//        dbSection.setColor(section.color)
+//        dbSection.list = section.list
+//        dbSection.todoOrder = section.todoOrder
+//        dbSection.doneOrder = section.doneOrder
+//        dbSection.stashOrder = section.stashOrder
+//        if let lastServerUpdate = section.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
+//            dbSection.lastServerUpdate = lastServerUpdate
+//        }
+//        return dbSection
+//    }
     
-    class func dbWithSection(_ section: Section) -> DBSection {
-        let dbSection = DBSection()
+    class func dbWithRemote(_ section: RemoteSection, list: List) -> Section {
+        let dbSection = Section()
         dbSection.uuid = section.uuid
         dbSection.name = section.name
-        dbSection.setColor(section.color)
-        dbSection.list = section.list
-        dbSection.todoOrder = section.todoOrder
-        dbSection.doneOrder = section.doneOrder
-        dbSection.stashOrder = section.stashOrder
-        if let lastServerUpdate = section.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
-            dbSection.lastServerUpdate = lastServerUpdate
-        }
-        return dbSection
-    }
-    
-    class func dbWithRemote(_ section: RemoteSection, list: List) -> DBSection {
-        let dbSection = DBSection()
-        dbSection.uuid = section.uuid
-        dbSection.name = section.name
-        dbSection.setColor(section.color)
+        dbSection.color = section.color
         dbSection.list = list
         dbSection.todoOrder = section.todoOrder
         dbSection.doneOrder = section.doneOrder

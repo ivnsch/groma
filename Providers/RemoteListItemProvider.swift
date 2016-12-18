@@ -328,9 +328,7 @@ class RemoteListItemProvider {
             "listInput": listDict as AnyObject
         ]
         
-        if let lastServerUpdate = section.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(section.lastServerUpdate) as Int64)
 
         return dict
     }

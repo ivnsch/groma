@@ -59,12 +59,11 @@ class RealmListItemProvider: RealmProvider {
         doInWriteTransaction({realm in
             
             // order update can change the section a list item is in, so we need to update the section too.
-            let dbSections = sections.map{SectionMapper.dbWithSection($0)}
-            let dbSectionDict = dbSections.toDictionary{($0.uuid, $0)}
+            let sectionDict = sections.toDictionary{($0.uuid, $0)}
             
             for orderUpdate in orderUpdates {
-                if let dbSection = dbSectionDict[orderUpdate.sectionUuid] {
-                    realm.create(DBListItem.self, value: orderUpdate.updateDict(status, dbSection: dbSection), update: true)
+                if let section = sectionDict[orderUpdate.sectionUuid] {
+                    realm.create(DBListItem.self, value: orderUpdate.updateDict(status, dbSection: section), update: true)
                 } else {
                     QL4("Invalid state, section object corresponding to uuid: \(orderUpdate.sectionUuid) was not found")
                 }
@@ -128,7 +127,7 @@ class RealmListItemProvider: RealmProvider {
                 realm.create(DBListItem.self, value: $0, update: true)
             }
             sectionsOrderDicts.forEach {
-                realm.create(DBSection.self, value: $0, update: true)
+                realm.create(Section.self, value: $0, update: true)
             }
             return true
             
@@ -177,7 +176,7 @@ class RealmListItemProvider: RealmProvider {
                             orderKey(statusUpdate.dst): section.dstOrder as AnyObject,
                             DBSyncable.lastUpdateFieldName: NSNumber(value: Int64(lastUpdate))
                 ]
-                realm.create(DBSection.self, value: dict, update: true)
+                realm.create(Section.self, value: dict, update: true)
             }
             
             return true
@@ -236,7 +235,7 @@ class RealmListItemProvider: RealmProvider {
                     let sectionName = sectionNameMaybe ?? product.product.category.name
                     let sectionColor = sectionColorMaybe ?? product.product.category.color
                     let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
-                        return SectionMapper.sectionWithDB(item.section)
+                        return item.section
                         } ?? {
                             let sectionCount = Set(listItemsInList.map{$0.section}).count
                             return Section(uuid: NSUUID().uuidString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
@@ -270,7 +269,6 @@ class RealmListItemProvider: RealmProvider {
     }
 
     func loadListItems(_ listUuid: String, handler: @escaping ([ListItem]) -> Void) {
-        let mapper = {ListItemMapper.listItemWithDB($0)}
         self.load(mapper, filter: DBListItem.createFilterList(listUuid), handler: handler)
     }
     
@@ -352,7 +350,7 @@ class RealmListItemProvider: RealmProvider {
 //            } : nil
 //        
 //        doInWriteTransaction({realm in
-//            realm.delete(realm.objects(DBSection).filter(ListItem.createFilter(listItemUuid)))
+//            realm.delete(realm.objects(Section).filter(ListItem.createFilter(listItemUuid)))
 //            
 //            let sectionUuidMaybeAfterTryRetrieve: String? = sectionUuidMaybe ?? {
 //                return realm.objects(ListItem).filter(ListItem.createFilter(listItemUuid)).first?.section.uuid
@@ -487,7 +485,7 @@ class RealmListItemProvider: RealmProvider {
             
             let inventories = realm.objects(List.self)
             let inventoryItems = realm.objects(DBListItem.self)
-            let sections = realm.objects(DBSection.self)
+            let sections = realm.objects(Section.self)
 
             realm.delete(inventories)
             realm.delete(inventoryItems)
@@ -512,8 +510,8 @@ class RealmListItemProvider: RealmProvider {
                 }
                 
                 for section in listItemsWithRelations.sections {
-                    let dbSection = SectionMapper.dbWithSection(section)
-                    realm.add(dbSection, update: true)
+//                    let dbSection = SectionMapper.dbWithSection(section)
+                    realm.add(section, update: true)
                 }
                 
                 for listItem in listItemsWithRelations.listItems {
@@ -599,7 +597,7 @@ class RealmListItemProvider: RealmProvider {
                 realm.create(ProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
             }
             for section in listItems.sections {
-                realm.create(DBSection.self, value: section.timestampUpdateDict, update: true)
+                realm.create(Section.self, value: section.timestampUpdateDict, update: true)
             }
             DBProv.listProvider.updateLastSyncTimeStampSync(realm, lists: listItems.lists)
             return true

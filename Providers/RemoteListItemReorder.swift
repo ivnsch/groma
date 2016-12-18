@@ -49,7 +49,7 @@ public struct RemoteListItemReorder: ResponseObjectSerializable, ResponseCollect
 
 public extension RemoteListItemReorder {
 
-    func updateDict(_ status: ListItemStatus, dbSection: DBSection) -> [String: AnyObject] {
+    func updateDict(_ status: ListItemStatus, dbSection: Section) -> [String: AnyObject] {
         return ["uuid": uuid as AnyObject, ListItem.orderFieldName(status): order as AnyObject, "sectionOpt": dbSection]
     }
 }

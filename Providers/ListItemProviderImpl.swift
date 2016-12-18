@@ -377,10 +377,12 @@ class ListItemProviderImpl: ListItemProvider {
     // TODO!!!! review parameters note and order, we are passing a list of prototypes so this doesn't make sense?   
     func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
         
-        let prototypesCopy = prototypes.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
+        // Fixes Realm acces in incorrect thread exceptions
+        let prototypes = prototypes.map{$0.copy()}
+        let list = list.copy()
         
         func getOrderForNewSection(_ existingListItems: Results<DBListItem>) -> Int {
-            let sectionsOfItemsWithStatus: [DBSection] = existingListItems.collect({
+            let sectionsOfItemsWithStatus: [Section] = existingListItems.collect({
                 if $0.hasStatus(status) {
                     return $0.section
                 } else {
@@ -390,19 +392,19 @@ class ListItemProviderImpl: ListItemProvider {
             return sectionsOfItemsWithStatus.distinctUsingEquatable().count
         }
         
-        typealias BGResult = (success: Bool, listItems: [ListItem]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
+        typealias BGResult = (success: Bool, listItemUuids: [String]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything). Returns uuids instead of list items because of Realm thread access limitations
         
         dbProvider.withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
             
             return syncedRet(weakSelf) {
         
                 let storePrototypes: [StoreListItemPrototype] = {
-                    let existingStoreProducts = DBProv.storeProductProvider.storeProductsSync(prototypesCopy.map{$0.product}, store: list.store ?? "") ?? {
+                    let existingStoreProducts = DBProv.storeProductProvider.storeProductsSync(prototypes.map{$0.product}, store: list.store ?? "") ?? {
                         QL4("An error ocurred fetching store products, array is nil")
                         return [] // maybe we should exit from method here - for now only error log and return empty array
                     }()
                     let existingStoreProductsDict = existingStoreProducts.toDictionary{($0.product.uuid, $0)}
-                    return prototypesCopy.map {prototype in
+                    return prototypes.map {prototype in
                         let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
                             let storeProduct = StoreProduct(uuid: NSUUID().uuidString, price: 1, baseQuantity: 1, unit: StoreProductUnit.none, store: list.store ?? "", product: prototype.product)
                             QL1("Store product doesn't exist, created: \(storeProduct)")
@@ -428,9 +430,7 @@ class ListItemProviderImpl: ListItemProvider {
                     
                     let section = previousItemSectionMaybeWithSameName ?? {
                     
-                        let existingSectionMaybe = realm.objects(DBSection.self).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first.map {dbSection in
-                            SectionMapper.sectionWithDB(dbSection)
-                        }
+                        let existingSectionMaybe = realm.objects(Section.self).filter(Section.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first
                         return existingSectionMaybe ?? {
                             
                             let newSection: Section = Section(uuid: NSUUID().uuidString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
@@ -478,8 +478,7 @@ class ListItemProviderImpl: ListItemProvider {
                             
                             // for some reason it crashes in this line (yes here not when saving) with reason: 'Can't set primary key property 'uuid' to existing value '03F949BB-AE2A-427A-B49B-D53FA290977D'.' (this is the uuid of the list), no idea why, so doing a copy.
                             //                                    existingListItem.section = section
-                            let dbSection = SectionMapper.dbWithSection(section)
-                            existingListItem = existingListItem.copy(section: dbSection)
+                            existingListItem = existingListItem.copy(section: section)
                             
                             if let note = note {
                                 existingListItem.note = note
@@ -501,7 +500,7 @@ class ListItemProviderImpl: ListItemProvider {
                             //                        let listItemsInList = realm.objects(ListItem).filter(ListItem.createFilter(list))
                             let sectionName = prototype.targetSectionName
                             let section = existingListItems.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
-                                return SectionMapper.sectionWithDB(item.section)
+                                return item.section
                                 } ?? { // section not existent create a new one
                                     
                                     let sectionCount = getOrderForNewSection(existingListItems)
@@ -554,7 +553,7 @@ class ListItemProviderImpl: ListItemProvider {
                             savedListItems.append(savedListItem)
                         }
                     }
-                    return (success: true, listItems: savedListItems)
+                    return (success: true, listItemUuids: savedListItems.map{$0.uuid}) // map to uuid fixes Realm acces in incorrect thread exceptions
                 })
             }
             
@@ -567,7 +566,13 @@ class ListItemProviderImpl: ListItemProvider {
                     
                 } else {
                     // mem provider is not enabled - controller is waiting for result - return it
-                    handler(ProviderResult(status: .success, sucessResult: bgResult.listItems))
+                    do {
+                        let listItems: [ListItem] = try Realm().objects(DBListItem.self).filter(DBListItem.createFilterForUuids(bgResult.listItemUuids)).map{ListItemMapper.listItemWithDB($0)}
+                        handler(ProviderResult(status: .success, sucessResult: listItems))
+                    } catch let e {
+                        QL4("Error retrieving saved list items with uuids: \(bgResultMaybe?.listItemUuids), error: \(e)")
+                        handler(ProviderResult(status: .databaseUnknown))
+                    }
                 }
                 
                 //                        if let addedListItem = bgResult.listItem { // bg returned a list item
@@ -581,18 +586,19 @@ class ListItemProviderImpl: ListItemProvider {
                 
                 
                 // add to server
-                self?.remoteProvider.add(bgResult.listItems) {remoteResult in
-                    if let remoteListItems = remoteResult.successResult {
-                        self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
-                        }
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
-                            QL4("Remote call no success: \(remoteResult)")
-                            self?.memProvider.invalidate()
-                            handler(result)
-                        })
-                    }
-                }
+                // Disabled while impl. realm sync
+//                self?.remoteProvider.add(bgResult.listItems) {remoteResult in
+//                    if let remoteListItems = remoteResult.successResult {
+//                        self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+//                        }
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
+//                            QL4("Remote call no success: \(remoteResult)")
+//                            self?.memProvider.invalidate()
+//                            handler(result)
+//                        })
+//                    }
+//                }
                 
             } else { // there was a database error
                 handler(ProviderResult(status: .databaseUnknown))

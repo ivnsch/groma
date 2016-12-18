@@ -1,5 +1,5 @@
 //
-//  DBSectionToRemove.swift
+//  SectionToRemove.swift
 //  shoppin
 //
 //  Created by ischuetz on 29/02/16.

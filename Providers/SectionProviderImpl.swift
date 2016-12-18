@@ -149,8 +149,13 @@ class SectionProviderImpl: SectionProvider {
     }
 
     func sections(_ names: [String], list: List, handler: @escaping (ProviderResult<[Section]>) -> ()) {
-        DBProv.sectionProvider.loadSections(names, list: list) {dbSections in
-            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: dbSections))
+        DBProv.sectionProvider.loadSections(names, list: list) {sections in
+            if let sections = sections {
+                handler(ProviderResult(status: .success, sucessResult: sections.toArray()))
+            } else {
+                QL4("Couldn't load items")
+                handler(ProviderResult(status: .unknown))
+            }
         }
     }
     

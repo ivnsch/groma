@@ -116,7 +116,7 @@ class RealmListProvider: RealmProvider {
         let dbListItems = realm.objects(DBListItem.self).filter(DBListItem.createFilterList(listUuid))
         realm.delete(dbListItems)
         // delete sections
-        let dbSections = realm.objects(DBSection.self).filter(DBSection.createFilterList(listUuid))
+        let dbSections = realm.objects(Section.self).filter(Section.createFilterList(listUuid))
         realm.delete(dbSections)
         // NOTE: it's not necessary to mark list items / section deletes for sync as syncing the list delete will also delete these in the server. TODO review if this note is still valid since we now split removeListDependencies from removeListSync and may be used in different context.
         return true

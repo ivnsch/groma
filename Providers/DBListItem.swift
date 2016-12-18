@@ -12,7 +12,7 @@ import RealmSwift
 public class DBListItem: DBSyncable {
     
     public dynamic var uuid: String = ""
-    dynamic var sectionOpt: DBSection? = DBSection()
+    dynamic var sectionOpt: Section? = Section()
     dynamic var productOpt: DBStoreProduct? = DBStoreProduct()
     dynamic var listOpt: List? = List()
     public dynamic var note: String = "" // TODO review if we can use optionals in realm, if not check if in newer version
@@ -33,9 +33,9 @@ public class DBListItem: DBSyncable {
         }
     }
     
-    public var section: DBSection {
+    public var section: Section {
         get {
-            return sectionOpt ?? DBSection()
+            return sectionOpt ?? Section()
         }
         set(newSection) {
             sectionOpt = newSection
@@ -55,7 +55,7 @@ public class DBListItem: DBSyncable {
         return "uuid"
     }
     
-    public convenience init(uuid: String, product: DBStoreProduct, section: DBSection, list: List, note: String, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, product: DBStoreProduct, section: Section, list: List, note: String, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -114,7 +114,7 @@ public class DBListItem: DBSyncable {
         }
     }
     
-    public func copy(uuid: String? = nil, product: DBStoreProduct? = nil, section: DBSection? = nil, list: List? = nil, note: String? = nil, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> DBListItem {
+    public func copy(uuid: String? = nil, product: DBStoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String? = nil, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> DBListItem {
         return DBListItem(
             uuid: uuid ?? self.uuid,
             product: product ?? self.product,
@@ -192,7 +192,7 @@ public class DBListItem: DBSyncable {
         return "{\(type(of: self)) uuid: \(uuid), \(product.product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)}"
     }
     
-    static func fromDict(_ dict: [String: AnyObject], section: DBSection, product: DBStoreProduct, list: List) -> DBListItem {
+    static func fromDict(_ dict: [String: AnyObject], section: Section, product: DBStoreProduct, list: List) -> DBListItem {
         let item = DBListItem()
         item.uuid = dict["uuid"]! as! String
         item.section = section

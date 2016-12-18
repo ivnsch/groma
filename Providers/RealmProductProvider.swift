@@ -204,22 +204,46 @@ class RealmProductProvider: RealmProvider {
         
         // Note that we are load the sections from db for each range - this could be optimised (load sections only once for all pages) but it shouldn't be an issue since usually there are not a lot of sections and it's performing well.
         
+        let list = list.copy() // Fixes Realm acces in incorrect thread exceptions
+        
         withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
             let products: Results<Product> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending)/*, range: range*/)
             
             let categoryNames = products.map{$0.category.name}.distinct()
         
-            let sectionsDict: [String: DBSection] = realm.objects(DBSection.self).filter(DBSection.createFilterWithNames(categoryNames, listUuid: list.uuid)).toDictionary{($0.name, $0)}
+            let sectionsDict: [String: Section] = realm.objects(Section.self).filter(Section.createFilterWithNames(categoryNames, listUuid: list.uuid)).toDictionary{($0.name, $0)}
             
-            let productsWithMaybeSections: [(product: Product, section: Section?)] = products.map {product in
-                let sectionMaybe = sectionsDict[product.category.name].map{SectionMapper.sectionWithDB($0)}
-                return (product, sectionMaybe)
+//            let productsWithMaybeSections: [(product: Product, section: Section?)] = products.map {product in
+//                let sectionMaybe = sectionsDict[product.category.name]
+//                return (product, sectionMaybe)
+//            }
+
+            let productsWithMaybeSectionsUuids: [(product: String, section: String?)] = products.map {product in
+                let sectionMaybe = sectionsDict[product.category.name]
+                return (product.uuid, sectionMaybe?.uuid)
             }
 
-            return productsWithMaybeSections
             
-        }, resultHandler: {(productsWithMaybeSections: [(product: Product, section: Section?)]?) in
-            handler(substring, productsWithMaybeSections)
+            return productsWithMaybeSectionsUuids
+            
+        }, resultHandler: {(productsWithMaybeSectionsUuids: [(product: String, section: String?)]?) in
+            do {
+                let realm = try Realm()
+                let productsWithMaybeSections: [(product: Product, section: Section?)]? = productsWithMaybeSectionsUuids?.flatMap {productUuid, sectionUuid in
+                    if let product = realm.objects(Product.self).filter(Product.createFilter(productUuid)).first {
+                        let section = sectionUuid.flatMap{realm.objects(Section.self).filter(Section.createFilter($0)).first}
+                        return (product, section)
+                    } else {
+                        QL4("Error/Warning: Product for just retrieved uuid is not there")
+                        return nil
+                    }
+                }
+                handler(substring, productsWithMaybeSections)
+                
+            } catch let e {
+                QL4("Error retrieving objects for uuids: \(productsWithMaybeSectionsUuids), error: \(e)")
+                handler(substring, nil)
+            }
         })
     }
     
