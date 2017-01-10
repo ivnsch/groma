@@ -46,6 +46,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
 
     fileprivate var results: Results<GroupItem>?
     fileprivate var notificationToken: NotificationToken?
+    fileprivate var submittedAddOrEdit: (add: Bool, edit: Bool) = (false, false) // to know if the (this) user submitted add/edit in order to close the top controller when receiving the realm notification
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -286,6 +287,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditItem(_ input: ListItemInput, editingItem: GroupItem) {
+            submittedAddOrEdit.edit = true
             Prov.listItemGroupsProvider.update(input, updatingGroupItem: editingItem, remote: true, resultHandler (onSuccess: {(inventoryItem, replaced) in
             }, onError: {[weak self] result in
                 self?.defaultErrorHandler()(result)
@@ -295,6 +297,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         func onAddItem(_ input: ListItemInput) {
             if let group = group {
                 let groupItemInput = GroupItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
+                submittedAddOrEdit.add = true
                 Prov.listItemGroupsProvider.add(groupItemInput, group: group, remote: true, resultHandler (onSuccess: {groupItem in
                 }, onError: {[weak self] result in
                     self?.closeTopController()
@@ -397,12 +400,12 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                         weakSelf.productsWithQuantityController.tableView.endUpdates()
 
                         weakSelf.productsWithQuantityController.updateEmptyUI()
-                        
-                        // TODO close only when receiving own notification, not from someone else (possible?)
-                        if !modifications.isEmpty { // close only if it's an update (for add user may want to add multiple products)
+
+                        if !modifications.isEmpty && weakSelf.submittedAddOrEdit.edit == true { // close only if it's an update (of current user) (explicit update, not increment which is internally also an update) (for add user may want to add multiple products)
                             weakSelf.topQuickAddControllerManager?.expand(false)
                             weakSelf.topQuickAddControllerManager?.controller?.onClose()
                         }
+                        weakSelf.submittedAddOrEdit = (false, false) // now that we have processed the notification, reset flags
                         
                         if let firstInsertion = insertions.first { // when add, scroll to added item
                             weakSelf.productsWithQuantityController.tableView.scrollToRow(at: IndexPath(row: firstInsertion, section: 0), at: .top, animated: true)
