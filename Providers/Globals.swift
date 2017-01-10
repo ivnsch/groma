@@ -7,5 +7,8 @@
 //
 
 import Foundation
+import RealmSwift
 
-public typealias VoidFunction = () -> ()  
+public typealias VoidFunction = () -> ()
+
+public typealias RealmToken = (token: NotificationToken, realm: Realm)

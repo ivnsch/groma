@@ -7,14 +7,15 @@
 //
 
 import Foundation
+import RealmSwift
 
 public enum SwitchListItemMode {case single, all}
 
 public protocol ListItemProvider {
   
-    func remove(_ listItem: ListItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
+    func remove(_ listItem: ListItem, remote: Bool, token: RealmToken?, _ handler: @escaping (ProviderResult<Any>) -> ())
 
-    func removeListItem(_ listItemUuid: String, listUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
+    func removeListItem(_ listItemUuid: String, listUuid: String, remote: Bool, token: RealmToken?, _ handler: @escaping (ProviderResult<Any>) -> ())
     
     func remove(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
@@ -30,14 +31,14 @@ public protocol ListItemProvider {
     - parameter possibleNewSectionOrder: if the section is determined to be new, position of section in list. If the section already exists this is not used. If nil this will be at the end of the list (an additional database fetch will be made to count the sections).
     - parameter handler
     */
-    func add(_ listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int?, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
+    func add(_ listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int?, possibleNewSectionOrder: ListItemStatusOrder?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
     
     // product/section same logic as add(listItemInput) (see doc above). TODO review other update methods maybe these should be removed or at least made private, since they don't have this product/section logic and there's no reason from outside of the provider to use a different logic (which would be to update the linked product/section directly).
     func update(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: @escaping (ProviderResult<(listItem: ListItem, replaced: Bool)>) -> Void)
     
-    func addListItem(_ product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String?, order orderMaybe: Int?, storeProductInput: StoreProductInput?, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
+    func addListItem(_ product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String?, order orderMaybe: Int?, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
     
-    func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String?, order orderMaybe: Int?, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void)
+    func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String?, order orderMaybe: Int?, token: RealmToken?, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void)
 
     func update(_ listItem: ListItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
@@ -48,7 +49,8 @@ public protocol ListItemProvider {
     // The counterpart of updateListItemsOrder to process the update when it comes via websocket. We need a special service because websockets sends us a reduced payload (only the order and sections).
     func updateListItemsOrderLocal(_ orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func listItems(_ list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus, _ handler: @escaping (ProviderResult<[ListItem]>) -> ())
+    // TODO rename sortOrderByStatus in only status since now this also filters by status
+    func listItems(_ list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus, _ handler: @escaping (ProviderResult<Results<ListItem>>) -> Void)
 
     func listItems(_ uuids: [String], _ handler: @escaping (ProviderResult<[ListItem]>) -> Void)
     

@@ -113,7 +113,7 @@ class RealmListProvider: RealmProvider {
     
     func removeListDependenciesSync(_ realm: Realm, listUuid: String, markForSync: Bool) -> Bool {
         // delete listItems
-        let dbListItems = realm.objects(DBListItem.self).filter(DBListItem.createFilterList(listUuid))
+        let dbListItems = realm.objects(ListItem.self).filter(ListItem.createFilterList(listUuid))
         realm.delete(dbListItems)
         // delete sections
         let dbSections = realm.objects(Section.self).filter(Section.createFilterList(listUuid))

@@ -107,7 +107,7 @@ class RealmSectionProvider: RealmProvider {
     
     func removeSectionDependenciesSync(_ realm: Realm, sectionUuid: String, markForSync: Bool) -> Bool {
         // delete list items referencing the section
-        let dbListItems = realm.objects(DBListItem.self).filter(DBListItem.createFilterWithSection(sectionUuid))
+        let dbListItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithSection(sectionUuid))
         if markForSync {
             let toRemoveListItems = Array(dbListItems.map{DBRemoveListItem($0)}) // create this before the delete or it crashes
             saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
@@ -140,7 +140,7 @@ class RealmSectionProvider: RealmProvider {
     }
     
     func removeSectionIfEmptySync(_ realm: Realm, sectionUuid: String) {
-        if realm.objects(DBListItem.self).filter(DBListItem.self.createFilterWithSection(sectionUuid)).isEmpty { // if no list items reference the section
+        if realm.objects(ListItem.self).filter(ListItem.self.createFilterWithSection(sectionUuid)).isEmpty { // if no list items reference the section
             let dbSection = realm.objects(Section.self).filter(Section.createFilter(sectionUuid))
             realm.delete(dbSection)
         }

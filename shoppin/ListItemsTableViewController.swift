@@ -9,6 +9,7 @@
 import UIKit
 import QorumLogs
 import Providers
+import RealmSwift
 
 protocol ListItemsTableViewDelegate: class {
     func onListItemClear(_ tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo
@@ -390,14 +391,38 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    func removeListItem(_ uuid: String, animation: UITableViewRowAnimation = .bottom) {
-        if let indexPath = self.getIndexPath(uuid) {
+    func removeListItem(uuid: String, animation: UITableViewRowAnimation = .bottom) {
+        if let indexPath = self.getIndexPath(listItemUuid: uuid) {
             self.removeListItem(uuid, indexPath: indexPath, animation: animation)
         }
     }
 
     fileprivate func removeListItem(_ listItem: ListItem, indexPath: IndexPath, animation: UITableViewRowAnimation = .bottom) {
-        removeListItem(listItem.uuid, animation: animation)
+        removeListItem(uuid: listItem.uuid, animation: animation)
+    }
+    
+    // Special entry point for reactive delete (Realm) - since after the item has been deleted from db it's marked as "invalid" attempting to access it (e.g. to get the uuid) causes a crash. So we have to work with index only. An alternative solution would be to store the uuid of item being deleted somewhere and use it when we get the notification. We try first with index and see how it goes.
+    func removeListItem(index: Int, animation: UITableViewRowAnimation = .bottom) {
+        
+        func findIndexPath(index: Int) -> IndexPath? {
+            var count = 0
+            for (i, s) in tableViewSections.enumerated() {
+                if index < count + s.tableViewListItems.count {
+                    return IndexPath(row: index - count, section: i)
+                } else {
+                    count += s.tableViewListItems.count
+                }
+            }
+            QL2("No index path for index: \(index)")
+            return nil
+        }
+        
+        if let indexPath = findIndexPath(index: index) {
+            QL1("Found list item for index: \(index), item: \(indexPath)")
+            removeListItem(index: index, indexPath: indexPath, animation: animation)
+        } else {
+            QL4("Didn't find index path for index: \(index)")
+        }
     }
     
     // TODO return bool
@@ -413,11 +438,15 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             }
         }
         
-        if let index = indexMaybe {
+        removeListItem(index: indexMaybe, indexPath: indexPath, animation: animation)
+    }
+    
+    fileprivate func removeListItem(index: Int?, indexPath: IndexPath, animation: UITableViewRowAnimation) {
+        if let index = index {
             // remove from model
             self.items.remove(at: index)
-            let tableViewSection = self.tableViewSections[(indexPath as NSIndexPath).section]
-            tableViewSection.tableViewListItems.remove(at: (indexPath as NSIndexPath).row)
+            let tableViewSection = self.tableViewSections[indexPath.section]
+            tableViewSection.tableViewListItems.remove(at: indexPath.row)
             
             // remove from table view
             self.tableView.beginUpdates()
@@ -449,7 +478,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     // Used by websocket, when receiving a notification of an updated product
     func updateProduct(_ product: Product, status: ListItemStatus) {
         if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.product.uuid == product.uuid}) {
-            let updated = tableViewListItem.listItem.update(product)
+            let updated = tableViewListItem.listItem.update(product: product)
             updateListItem(updated, status: status, notifyRemote: false)
         } else {
             QL1("updateProduct list item is not in list items table view. Product uuid: \(product.uuid)")
@@ -486,7 +515,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         clearPendingSwipeItemIfAny(true)
     }
     
-    func getIndexPath(_ listItemUuid: String) -> IndexPath? {
+    func getIndexPath(listItemUuid: String) -> IndexPath? {
         for (sectionIndex, s) in self.tableViewSections.enumerated() {
             for (listItemIndex, l) in s.tableViewListItems.enumerated() {
                 if (listItemUuid == l.listItem.uuid) {
@@ -529,7 +558,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     func getIndexPath(_ listItem: ListItem) -> IndexPath? {
-        return getIndexPath(listItem.uuid)
+        return getIndexPath(listItemUuid: listItem.uuid)
     }
     
     func getIndex(_ section: Section) -> Int? {
@@ -593,7 +622,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
 
     func onNoteTap(_ cell: ListItemCell, tableViewListItem: TableViewListItem) {
-        if let note = tableViewListItem.listItem.note {
+        if !tableViewListItem.listItem.note.isEmpty {
             
             // use parent controller otherwise popup scrolls with the table
             if let parentController = parent {
@@ -606,7 +635,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 // adjust the anchor point also for topOffset
                 let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
                 
-                AlertPopup.showCustom(message: note, controller: parentController, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
+                AlertPopup.showCustom(message: tableViewListItem.listItem.note, controller: parentController, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
             } else {
                 QL3("No parent controller, can't show note popup")
             }
@@ -751,10 +780,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             // remove from tableview and model
             let listItem = self.tableViewSections[(indexPath as NSIndexPath).section].tableViewListItems[(indexPath as NSIndexPath).row]
             self.removeListItem(listItem.listItem, indexPath: indexPath, animation: UITableViewRowAnimation.bottom)
-            
+
             // remove from content provider
             self.listItemsEditTableViewDelegate?.onListItemDeleted(listItem)
-            
+
             self.tableView.endUpdates()
         }
     }
@@ -798,49 +827,50 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             print("Warning: showCellOpen: \(open), no swipeable cell for indexPath: \(indexPath)")
         }
     }
-   
-    // updates list item models with current ordering in table view
-    // TODO review and remove commented / not necessary code
-    fileprivate func updateListItemsModelsOrder() {
-        var sectionRows = 0
-        for section in self.tableViewSections {
-            for (listItemIndex, tableViewListItem) in section.tableViewListItems.enumerated() {
-//                let absoluteRowIndex = listItemIndex + sectionRows
-//                tableViewListItem.listItem.order = absoluteRowIndex
-                tableViewListItem.listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: listItemIndex))
+
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        do {
+            if sourceIndexPath != destinationIndexPath {
+                
+                let srcSection = self.tableViewSections[(sourceIndexPath as NSIndexPath).section]
+                let tableViewListItem = srcSection.tableViewListItems[(sourceIndexPath as NSIndexPath).row]
+                srcSection.tableViewListItems.remove(at: (sourceIndexPath as NSIndexPath).row)
+                
+                let dstSection = self.tableViewSections[(destinationIndexPath as NSIndexPath).section]
+                
+                try Realm().write {
+                    tableViewListItem.listItem.section = dstSection.section
+                    
+                    //        let absoluteRow = tableView.absoluteRow(destinationIndexPath)
+                    dstSection.tableViewListItems.insert(tableViewListItem, at: (destinationIndexPath as NSIndexPath).row)
+                    
+                    // updates list item models with current ordering in table view
+                    for section in self.tableViewSections {
+                        for (listItemIndex, tableViewListItem) in section.tableViewListItems.enumerated() {
+                            tableViewListItem.listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: listItemIndex))
+                        }
+                    }
+                }
+
+                // update only list items in modified section(s)
+                var modifiedListItems = srcSection.tableViewListItems
+                if dstSection != srcSection {
+                    modifiedListItems += dstSection.tableViewListItems
+                }
+                
+                delay(0.4) {
+                    // show possible changes, e.g. new section color
+                    tableView.reloadData()
+                }
+                
+                self.listItemsEditTableViewDelegate?.onListItemsOrderChangedSection(modifiedListItems)
             }
-            sectionRows += section.numberOfRows()
+            
+        } catch let e {
+            QL4("Realm error: \(e)")
         }
     }
     
-    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        if sourceIndexPath != destinationIndexPath {
-            let srcSection = self.tableViewSections[(sourceIndexPath as NSIndexPath).section]
-            let tableViewListItem = srcSection.tableViewListItems[(sourceIndexPath as NSIndexPath).row]
-            srcSection.tableViewListItems.remove(at: (sourceIndexPath as NSIndexPath).row)
-            
-            let dstSection = self.tableViewSections[(destinationIndexPath as NSIndexPath).section]
-            tableViewListItem.listItem.section = dstSection.section //not superclean to update model data in this controller, but for simplicity...
-            
-            //        let absoluteRow = tableView.absoluteRow(destinationIndexPath)
-            dstSection.tableViewListItems.insert(tableViewListItem, at: (destinationIndexPath as NSIndexPath).row)
-            
-            self.updateListItemsModelsOrder()
-            
-            // update only list items in modified section(s)
-            var modifiedListItems = srcSection.tableViewListItems
-            if dstSection != srcSection {
-                modifiedListItems += dstSection.tableViewListItems
-            }
-            
-            delay(0.4) {
-                // show possible changes, e.g. new section color
-                tableView.reloadData()
-            }
-            
-            self.listItemsEditTableViewDelegate?.onListItemsOrderChangedSection(modifiedListItems)
-        }
-    }
     
     func hasSectionWith(_ f: (Section) -> Bool) -> Bool {
         return tableViewSections.contains(where: {tableViewSection in

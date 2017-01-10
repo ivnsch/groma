@@ -14,57 +14,57 @@ class ListItemProviderImpl: ListItemProvider {
 
     let dbProvider = RealmListItemProvider()
     let remoteProvider = RemoteListItemProvider()
-    let memProvider = MemListItemProvider(enabled: true)
+    let memProvider = MemListItemProvider(enabled: false)
 
     // MARK: - Get
     
-    func listItems(_ list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus = .both, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
+    func listItems(_ list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus = .both, _ handler: @escaping (ProviderResult<Results<ListItem>>) -> Void) {
 
         let memListItemsMaybe = memProvider.listItems(list)
-        if let memListItems = memListItemsMaybe {
-            // Sorting is for the case the list items order was updated (either with reorder or switch status) it's a bit easier right now to put the sorting here TODO resort when storing in mem cache
-            let memSortedListItems = memListItems.sortedByOrder(sortOrderByStatus)
-            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: memSortedListItems))
-            if fetchMode == .memOnly || fetchMode == .first {
-                return
-            }
-        }
+        // mem provider temporarily disabled - IMPORTANT uncomment this for it to work properly
+//        if let memListItems = memListItemsMaybe {
+//            // Sorting is for the case the list items order was updated (either with reorder or switch status) it's a bit easier right now to put the sorting here TODO resort when storing in mem cache
+//            let memSortedListItems = memListItems.sortedByOrder(sortOrderByStatus)
+//            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: memSortedListItems))
+//            if fetchMode == .memOnly || fetchMode == .first {
+//                return
+//            }
+//        }
 
-        self.dbProvider.loadListItems(list, handler: {[weak self] dbListItems in
-            
-            // reorder items by position
-            // TODO ? a possible optimization is to save the list to local db sorted instead of having order field, see http://stackoverflow.com/questions/25023826/reordering-realm-io-data-in-tableview-with-swift
-            // the server still needs (internally at least) the order column
-            // TODO another optimization is to do the server items sorting in the server
-    
-            let sotedListItems = dbListItems.sortedByOrder(sortOrderByStatus) // order is relative to section (0...n) so there will be repeated numbers.
+        dbProvider.loadListItems(list, status: sortOrderByStatus, handler: {listItems in
             
             // we assume the database result is always == mem result, so if returned from mem already no need to return from db
             // TODO there's no need to load the items from db before doing the remote call (confirm this), since we assume memory == database it would be enough to compare 
             // the server result with memory. Load from db only when there's no memory cache.
             if !memListItemsMaybe.isSet {
-                handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: sotedListItems))
-            }
-            
-            _ = self?.memProvider.overwrite(sotedListItems)
-            
-            self?.remoteProvider.listItems(list: list) {[weak self] remoteResult in
-                
-                if let remoteListItems = remoteResult.successResult {
-                    let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: sortOrderByStatus)
-                    
-                    if (sotedListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
-                        self?.dbProvider.overwrite(listItemsWithRelations.listItems, listUuid: list.uuid, clearTombstones: true) {saved in
-                            
-                            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: listItemsWithRelations.listItems))
-                            _ = self?.memProvider.overwrite(listItemsWithRelations.listItems)
-                        }
-                    }
-                    
+                if let listItems = listItems {
+                    handler(ProviderResult(status: .success, sucessResult: listItems))
                 } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                    QL4("Couldn't load groups")
+                    handler(ProviderResult(status: .unknown))
                 }
             }
+            
+//            _ = self?.memProvider.overwrite(listItems) mem provider temporarily disabled - IMPORTANT uncomment this for it to work properly
+            
+            // Disabled while impl. realm sync
+//            self?.remoteProvider.listItems(list: list) {[weak self] remoteResult in
+//                
+//                if let remoteListItems = remoteResult.successResult {
+//                    let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: sortOrderByStatus)
+//                    
+//                    if (sotedListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
+//                        self?.dbProvider.overwrite(listItemsWithRelations.listItems, listUuid: list.uuid, clearTombstones: true) {saved in
+//                            
+//                            handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: listItemsWithRelations.listItems))
+//                            _ = self?.memProvider.overwrite(listItemsWithRelations.listItems)
+//                        }
+//                    }
+//                    
+//                } else {
+//                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                }
+//            }
         })
     }
     
@@ -81,17 +81,22 @@ class ListItemProviderImpl: ListItemProvider {
     
     func listItems(_ uuids: [String], _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
         DBProv.listItemProvider.loadListItems(uuids) {items in
-            handler(ProviderResult(status: .success, sucessResult: items))
+            if let items = items {
+                handler(ProviderResult(status: .success, sucessResult: items.toArray()))
+            } else {
+                QL4("Couldn't load items")
+                handler(ProviderResult(status: .unknown))
+            }
         }
     }
     
     // MARK: -
     
-    func remove(_ listItem: ListItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        removeListItem(listItem.uuid, listUuid: listItem.list.uuid, remote: remote, handler)
+    func remove(_ listItem: ListItem, remote: Bool, token: RealmToken?, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        removeListItem(listItem.uuid, listUuid: listItem.list.uuid, remote: remote, token: token, handler)
     }
 
-    func removeListItem(_ listItemUuid: String, listUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+    func removeListItem(_ listItemUuid: String, listUuid: String, remote: Bool, token: RealmToken?, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         
         let memUpdated = memProvider.removeListItem(listUuid, uuid: listItemUuid)
         if memUpdated {
@@ -99,7 +104,7 @@ class ListItemProviderImpl: ListItemProvider {
         }
         
         // remote -> markForSync: if we want to call remote it means we want to mark item for sync.
-        self.dbProvider.remove(listItemUuid, listUuid: listUuid, markForSync: remote, handler: {[weak self] removed in
+        dbProvider.remove(listItemUuid, listUuid: listUuid, markForSync: remote, token: token, handler: {[weak self] removed in
             if removed {
                 if !memUpdated {
                     handler(ProviderResult(status: .success))
@@ -108,19 +113,21 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: .databaseUnknown))
                 self?.memProvider.invalidate()
             }
-            if remote {
-                self?.remoteProvider.removeListItem(listItemUuid) {result in
-                    if result.success {
-                        self?.dbProvider.clearListItemTombstone(listItemUuid) {removeTombstoneSuccess in
-                            if !removeTombstoneSuccess {
-                                QL4("Couldn't delete tombstone for: \(listItemUuid)")
-                            }
-                        }
-                    } else {
-                        DefaultRemoteErrorHandler.handle(result, handler: handler)
-                    }
-                }
-            }
+            
+            // Disabled while impl. realm sync
+//            if remote {
+//                self?.remoteProvider.removeListItem(listItemUuid) {result in
+//                    if result.success {
+//                        self?.dbProvider.clearListItemTombstone(listItemUuid) {removeTombstoneSuccess in
+//                            if !removeTombstoneSuccess {
+//                                QL4("Couldn't delete tombstone for: \(listItemUuid)")
+//                            }
+//                        }
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(result, handler: handler)
+//                    }
+//                }
+//            }
         })
     }
     
@@ -133,29 +140,30 @@ class ListItemProviderImpl: ListItemProvider {
         DBProv.listProvider.remove(listUuid, markForSync: true) {[weak self] removed in
             handler(ProviderResult(status: removed ? ProviderStatusCode.success : ProviderStatusCode.databaseUnknown))
             
-            if remote {
-                if removed {
-                    self?.remoteProvider.remove(listUuid) {remoteResult in
-                        if remoteResult.success {
-                            DBProv.listProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
-                                if !removeTombstoneSuccess {
-                                    QL4("Couldn't delete tombstone for list: \(listUuid)")
-                                }
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[Any]>) in
-                                QL4(remoteResult)
-                            })
-                        }
-                    }
-                }
-            }
+            // Disabled while impl. realm sync
+//            if remote {
+//                if removed {
+//                    self?.remoteProvider.remove(listUuid) {remoteResult in
+//                        if remoteResult.success {
+//                            DBProv.listProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
+//                                if !removeTombstoneSuccess {
+//                                    QL4("Couldn't delete tombstone for list: \(listUuid)")
+//                                }
+//                            }
+//                        } else {
+//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[Any]>) in
+//                                QL4(remoteResult)
+//                            })
+//                        }
+//                    }
+//                }
+//            }
         }
     }
     
     func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
         let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color, storeProductInput: nil)}
-        self.add(listItemPrototypes, status: status, list: list, handler)
+        self.add(listItemPrototypes, status: status, list: list, token: nil, handler)
     }
     
     func addGroupItems(_ group: ProductGroup, status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
@@ -262,10 +270,10 @@ class ListItemProviderImpl: ListItemProvider {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     // Note: status assumed to be .Todo as we can add list item input only to .Todo
-    func add(_ listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
+    func add(_ listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: possibleNewSectionOrder) {[weak self] result in
             if let (section, product) = result.sucessResult {
-                self?.addListItem(product, status: status, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, storeProductInput: listItemInput.storeProductInput, handler)
+                self?.addListItem(product, status: status, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, storeProductInput: listItemInput.storeProductInput, token: token, handler)
             } else {
                 QL4("Error fetching section and/or product: \(result.status)")
                 handler(ProviderResult(status: .databaseUnknown))
@@ -346,28 +354,36 @@ class ListItemProviderImpl: ListItemProvider {
     
 
     // Adds list item with todo status
-    func addListItem(_ product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
+    func addListItem(_ product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         let listItemPrototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionName, targetSectionColor: sectionColor, storeProductInput: storeProductInput)
-        self.add(listItemPrototype, status: status, list: list, handler)
+        self.add(listItemPrototype, status: status, list: list, token: token, handler)
     }
     
     fileprivate func addSync(_ prototype: ListItemPrototype) {
     
     }
     
-    func add(_ prototype: ListItemPrototype, status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
+    func add(_ prototype: ListItemPrototype, status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         
-        add([prototype], status: status, list: list, note: note, order: orderMaybe) {result in
+        add([prototype], status: status, list: list, note: note, order: orderMaybe, token: token) {result in
             if let addedListItems = result.sucessResult {
+                
+//                // TODO review this do we have to return added item or not
+//                let c = ProductCategory(uuid: "123", name: "", color: "")
+//                let p = Product(uuid: "123", name: "", category: c)
+//                let sp = StoreProduct(uuid: "123", price: 1, baseQuantity: 1, unit: .none, product: p)
+//                let section = Section(uuid: "123", name: "", color: UIColor.black, list: list.copy(), order: ListItemStatusOrder(status: .todo, order: 1))
+//                handler(ProviderResult(status: .success, sucessResult: ListItem(uuid: "", product: sp, section: section, list: list.copy(), note: nil, statusOrder: ListItemStatusOrder(status: .todo, order: 1), statusQuantity: ListItemStatusQuantity(status: .todo, quantity: 1))))
                 
                 if let addedListItem = addedListItems.first {
                     handler(ProviderResult(status: .success, sucessResult: addedListItem))
                 } else {
-                    print("Error: ListItemProviderImpl.add:prototype: Invalid state: add returned success result but it's empty. Status (should be success): \(result.status)")
+                    QL4("Error: ListItemProviderImpl.add:prototype: Invalid state: add returned success result but it's empty. Status (should be success): \(result.status)")
                     handler(ProviderResult(status: .unknown))
                 }
+
             } else {
-                print("Error: ListItemProviderImpl.add:prototype: Add didn't return success result, status: \(result.status)")
+                QL4("Error: ListItemProviderImpl.add:prototype: Add didn't return success result, status: \(result.status)")
                 handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
             }
         }
@@ -375,13 +391,13 @@ class ListItemProviderImpl: ListItemProvider {
     
     // Adds list items to .Todo
     // TODO!!!! review parameters note and order, we are passing a list of prototypes so this doesn't make sense?   
-    func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
+    func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, token: RealmToken?, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
         
         // Fixes Realm acces in incorrect thread exceptions
         let prototypes = prototypes.map{$0.copy()}
         let list = list.copy()
         
-        func getOrderForNewSection(_ existingListItems: Results<DBListItem>) -> Int {
+        func getOrderForNewSection(_ existingListItems: Results<ListItem>) -> Int {
             let sectionsOfItemsWithStatus: [Section] = existingListItems.collect({
                 if $0.hasStatus(status) {
                     return $0.section
@@ -392,17 +408,28 @@ class ListItemProviderImpl: ListItemProvider {
             return sectionsOfItemsWithStatus.distinctUsingEquatable().count
         }
         
+        func getItemCountInSection(listItems: Results<ListItem>, section: Section, status: ListItemStatus) -> Int {
+            var count = 0
+            for listItem in listItems {
+                if listItem.section.uuid == section.uuid && listItem.hasStatus(status) {
+                    count += 1
+                }
+            }
+            return count
+        }
+        
         typealias BGResult = (success: Bool, listItemUuids: [String]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything). Returns uuids instead of list items because of Realm thread access limitations
         
         dbProvider.withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
             
             return syncedRet(weakSelf) {
         
+                guard let existingStoreProducts: Results<StoreProduct> = DBProv.storeProductProvider.storeProductsSync(prototypes.map{$0.product}, store: list.store ?? "") else {
+                    QL4("Couldn't load store products")
+                    return (success: false, listItemUuids: [])
+                }
+                
                 let storePrototypes: [StoreListItemPrototype] = {
-                    let existingStoreProducts = DBProv.storeProductProvider.storeProductsSync(prototypes.map{$0.product}, store: list.store ?? "") ?? {
-                        QL4("An error ocurred fetching store products, array is nil")
-                        return [] // maybe we should exit from method here - for now only error log and return empty array
-                    }()
                     let existingStoreProductsDict = existingStoreProducts.toDictionary{($0.product.uuid, $0)}
                     return prototypes.map {prototype in
                         let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
@@ -452,29 +479,31 @@ class ListItemProviderImpl: ListItemProvider {
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 
                 
-                return weakSelf.dbProvider.doInWriteTransactionSync({realm in
+                let tokens = token.map{[$0.token]} ?? []
+                
+                return weakSelf.dbProvider.doInWriteTransactionSync(withoutNotifying: tokens, realm: token?.realm, {realm in
                     
                     // even if we have the possibly updated item from mem cache, do always a fetch to db and use this item - to guarantee max. consistency.s
                     // theoretically the state in mem should match the state in db so this fetch should not be necessary, but for now let's be secure.
                     
                     // see if there's already a listitem for this product in the list - if yes only increment it
                     
-                    let existingListItems = realm.objects(DBListItem.self).filter(DBListItem.createFilterList(list.uuid))
-                    let existingListItemsDict: [String: DBListItem] = existingListItems.toDictionary{(DBStoreProduct.nameBrandStoreKey($0.product.product.name, brand: $0.product.product.brand, store: $0.product.store), $0)}
+                    let existingListItems = realm.objects(ListItem.self).filter(ListItem.createFilterList(list.uuid))
+                    let existingListItemsDict: [String: ListItem] = existingListItems.toDictionary{(StoreProduct.nameBrandStoreKey($0.product.product.name, brand: $0.product.product.brand, store: $0.product.store), $0)}
                     
                     // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
-                    let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(DBStoreProduct.nameBrandStoreKey($0.product.product.name, brand: $0.product.product.brand, store: $0.product.store), $0)}
+                    let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(StoreProduct.nameBrandStoreKey($0.product.product.name, brand: $0.product.product.brand, store: $0.product.store), $0)}
                     
                     // Holds count of new items per section, which is incremented while we loop through prototypes
                     // we need this to determine the order of the items in the sections - which is the last index in existing items + new items count so far in section
-                    var sectionCountNewItemsDict: [String: Int] = [:]
+                    var sectionCountNewItemsDict: [String: Int] = [  :]
                     
                     var savedListItems: [ListItem] = []
 
                     for (prototype, section) in prototypesWithSections {
-                        if var existingListItem = existingListItemsDict[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)] {
+                        if var existingListItem = existingListItemsDict[StoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)] {
                             
-                            _ = existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
+                            existingListItem = existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
                             
                             // for some reason it crashes in this line (yes here not when saving) with reason: 'Can't set primary key property 'uuid' to existing value '03F949BB-AE2A-427A-B49B-D53FA290977D'.' (this is the uuid of the list), no idea why, so doing a copy.
                             //                                    existingListItem.section = section
@@ -484,14 +513,18 @@ class ListItemProviderImpl: ListItemProvider {
                                 existingListItem.note = note
                             }
                             
+                            // Item exists, but is not in status - append it to the end of section in status
+                            if !existingListItem.hasStatus(status) {
+                                let existingCountInSection = getItemCountInSection(listItems: existingListItems, section: existingListItem.section, status: status)
+                                existingListItem.updateOrder(ListItemStatusOrder(status: status, order: existingCountInSection))
+                            }
+                            
                             // let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
                             realm.add(existingListItem, update: true)
                             
-                            let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
+                            QL1("item exists, affter incrementent: \(existingListItem)")
                             
-                            QL1("item exists, affter incrementent: \(savedListItem)")
-                            
-                            savedListItems.append(savedListItem)
+                            savedListItems.append(existingListItem)
                             
                             
                         } else { // item doesn't exist
@@ -506,7 +539,7 @@ class ListItemProviderImpl: ListItemProvider {
                                     let sectionCount = getOrderForNewSection(existingListItems)
                                     
                                     // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                    return memoryCacheItemsDict?[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+                                    return memoryCacheItemsDict?[StoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
                                 }()
                             
                             // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
@@ -517,19 +550,13 @@ class ListItemProviderImpl: ListItemProvider {
                                     return order
                                     
                                 } else { // init to existing count
-                                    var existingCountInSection = 0
-                                    // Note that currently we are doing this iteration even if we just created the section, where order is always 0. Not a big issue in our case but can be optimised (TODO?)
-                                    for existingListItem in existingListItems {
-                                        if existingListItem.section.uuid == section.uuid && existingListItem.hasStatus(status) {
-                                            existingCountInSection += 1
-                                        }
-                                    }
+                                    let existingCountInSection = getItemCountInSection(listItems: existingListItems, section: section, status: status)
                                     sectionCountNewItemsDict[section.uuid] = existingCountInSection
                                     return existingCountInSection
                                 }
                             }()
                             
-                            let uuid = memoryCacheItemsDict?[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.uuid ?? NSUUID().uuidString
+                            let uuid = memoryCacheItemsDict?[StoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.uuid ?? NSUUID().uuidString
                             
                             
                             // create the list item and save it
@@ -546,13 +573,12 @@ class ListItemProviderImpl: ListItemProvider {
                             
                             QL1("item doesn't exist, created: \(listItem)")
                             
-                            let dbListItem = ListItemMapper.dbWithListItem(listItem)
-                            realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
+                            realm.add(listItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
                             
-                            let savedListItem = ListItemMapper.listItemWithDB(dbListItem)
-                            savedListItems.append(savedListItem)
+                            savedListItems.append(listItem)
                         }
                     }
+                    
                     return (success: true, listItemUuids: savedListItems.map{$0.uuid}) // map to uuid fixes Realm acces in incorrect thread exceptions
                 })
             }
@@ -567,8 +593,14 @@ class ListItemProviderImpl: ListItemProvider {
                 } else {
                     // mem provider is not enabled - controller is waiting for result - return it
                     do {
-                        let listItems: [ListItem] = try Realm().objects(DBListItem.self).filter(DBListItem.createFilterForUuids(bgResult.listItemUuids)).map{ListItemMapper.listItemWithDB($0)}
+                        let realm = try Realm()
+                        realm.refresh() // for the data we just wrote in background thread to become available
+
+                        let filter: String = ListItem.createFilterForUuids(bgResult.listItemUuids)
+                        let listItems: [ListItem] = realm.objects(ListItem.self).filter(filter).toArray()
+
                         handler(ProviderResult(status: .success, sucessResult: listItems))
+
                     } catch let e {
                         QL4("Error retrieving saved list items with uuids: \(bgResultMaybe?.listItemUuids), error: \(e)")
                         handler(ProviderResult(status: .databaseUnknown))
@@ -606,9 +638,9 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
-    func addListItem(_ product: Product, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
+    func addListItem(_ product: Product, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         // for now call the other func, which will fetch the section again... review if this is bad for performance otherwise let like this
-        addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, storeProductInput: storeProductInput, handler)
+        addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, storeProductInput: storeProductInput, token: token, handler)
     }
     
     // Common code for update single and batch list items switch status (in case of single listItems contains only 1 element)
@@ -648,7 +680,7 @@ class ListItemProviderImpl: ListItemProvider {
 //                    QL2("List item after status update: \(listItem.quantityDebugDescription)")
                 }
                 
-                handler((switchedItems: listItems, storedItems: storedListItems))
+                handler((switchedItems: listItems, storedItems: storedListItems.toArray()))
         
             } else {
                 QL4("Didn't get listItems: \(result.status), can't switch")
@@ -866,9 +898,9 @@ class ListItemProviderImpl: ListItemProvider {
                                                 let stashItems = listItemsAfterSwitch.filter{$0.hasStatus(.stash)}
             
                                                 // We don't send it to remote because don't have called buyCart yet, that should come first (stash items should be appended after the cart items, like in client). The reason we don't have called buyCart is that we want to first to all client side operations in order to return to controller as soon as possible.
-                                                Prov.listItemsProvider.switchAllToStatus(stashItems, list: list, status1: .stash, status: .todo, remote: false) {result in
+                                                Prov.listItemsProvider.switchAllToStatus(Array(stashItems), list: list, status1: .stash, status: .todo, remote: false) {result in
                                                     if result.success {
-                                                        afterMaybeResetStash(stashItems)
+                                                        afterMaybeResetStash(Array(stashItems))
                                                     } else {
                                                         QL4("Couldn't reset stash list items")
                                                         handler(ProviderResult(status: .databaseUnknown))
@@ -951,8 +983,11 @@ class ListItemProviderImpl: ListItemProvider {
     func switchAllStatusLocal(_ result: RemoteSwitchAllListItemsLightResult, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProv.listProvider.loadList(result.update.listUuid) {listMaybe in
             if let list = listMaybe {
-                DBProv.listItemProvider.loadListItems(list.uuid) {listItems in
-                    Prov.listItemsProvider.switchAllToStatus(listItems, list: list, status1: result.update.srcStatus, status: result.update.dstStatus, remote: false) {switchResult in
+                DBProv.listItemProvider.loadListItems(list.uuid) {(listItems: Results<ListItem>?) in
+                    
+                    guard let listItems = listItems else {QL4("No items"); handler(ProviderResult(status: .unknown)); return}
+                    
+                    Prov.listItemsProvider.switchAllToStatus(listItems.toArray(), list: list, status1: result.update.srcStatus, status: result.update.dstStatus, remote: false) {switchResult in
                         if let switchedListItems = switchResult.sucessResult {
                             handler(ProviderResult(status: .success))
                             

@@ -16,7 +16,7 @@ class DBRemoveListItem: Object {
     dynamic var listUuid: String = ""
     dynamic var lastServerUpdate: Int64 = 0
 
-    convenience init(_ dbListItem: DBListItem) {
+    convenience init(_ dbListItem: ListItem) {
         self.init(uuid: dbListItem.uuid, listUuid: dbListItem.list.uuid, lastServerUpdate: dbListItem.lastServerUpdate)
     }
     

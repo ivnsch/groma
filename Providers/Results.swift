@@ -102,6 +102,15 @@ extension Results {
         }
         return array
     }
+    
+    // NOTE: calls count - this may be not good for performance depending on implementation
+    public subscript (safe index: Int) -> T? {
+        if index < count {
+            return self[index]
+        } else {
+            return nil
+        }
+    }
 }
 
 // doesn't compile... TODO why? use this if it's possible

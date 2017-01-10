@@ -169,7 +169,7 @@ class RealmProductProvider: RealmProvider {
                 if let productUuids = productUuidsMaybe {
                     let realm = try Realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let products: Results<Product> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending))
+                    let products: Results<Product> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending))
                     handler(substring, products)
                     
                 } else {
@@ -207,7 +207,7 @@ class RealmProductProvider: RealmProvider {
         let list = list.copy() // Fixes Realm acces in incorrect thread exceptions
         
         withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
-            let products: Results<Product> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending)/*, range: range*/)
+            let products: Results<Product> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending)/*, range: range*/)
             
             let categoryNames = products.map{$0.category.name}.distinct()
         
@@ -632,7 +632,7 @@ class RealmProductProvider: RealmProvider {
                 let realm = try Realm()
                 // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
                 // .sorted("store", ascending: true)
-                let stores = Array(Set(realm.objects(DBStoreProduct.self).filter(DBStoreProduct.createFilterStoreContains(text)).map{$0.store}))[range].filter{!$0.isEmpty}.sorted()
+                let stores = Array(Set(realm.objects(StoreProduct.self).filter(StoreProduct.createFilterStoreContains(text)).map{$0.store}))[range].filter{!$0.isEmpty}.sorted()
                 return stores
             } catch let e {
                 QL4("Couldn't load stores, returning empty array. Error: \(e)")

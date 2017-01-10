@@ -121,7 +121,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
     
     fileprivate func updateModeItemsVisibility(_ mode: ListItemCellMode, status: ListItemStatus, tableViewListItem: TableViewListItem, animated: Bool) {
         
-        let hasNote = tableViewListItem.listItem.note.map{!$0.isEmpty} ?? false
+        let hasNote = !tableViewListItem.listItem.note.isEmpty
         let showNote = hasNote && mode == .note
         
         // Hide these labels during edit, for reordering (otherwise they stay visible while cell becomes semitransparent). We don't use undo in edit so it's ok to do this fix here. Otherwise private api like described here http://stackoverflow.com/a/10854018/930450, to get events when cell starts and ends moving works too (tested it on iOS 9). Prefer to do it here to avoid using private api.

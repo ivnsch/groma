@@ -11,32 +11,6 @@ import QorumLogs
 
 class StoreProductMapper {
     
-    class func productWithDB(_ dbStoreProduct: DBStoreProduct) -> StoreProduct {
-        return StoreProduct(
-            uuid: dbStoreProduct.uuid,
-            price: dbStoreProduct.price,
-            baseQuantity: dbStoreProduct.baseQuantity,
-            unit: StoreProductUnit(rawValue: dbStoreProduct.unit)!,
-            store: dbStoreProduct.store,
-            product: dbStoreProduct.product,
-            lastServerUpdate: dbStoreProduct.lastServerUpdate
-        )
-    }
-    
-    class func dbWithProduct(_ storeProduct: StoreProduct) -> DBStoreProduct {
-        let dbProduct = DBStoreProduct()
-        dbProduct.uuid = storeProduct.uuid
-        dbProduct.price = storeProduct.price
-        dbProduct.baseQuantity = storeProduct.baseQuantity
-        dbProduct.unit = storeProduct.unit.rawValue
-        dbProduct.store = storeProduct.store
-        dbProduct.product = storeProduct.product
-        if let lastServerUpdate = storeProduct.lastServerUpdate {
-            dbProduct.lastServerUpdate = lastServerUpdate
-        }
-        return dbProduct
-    }
-    
 //    class func productWithRemote(remoteProduct: RemoteStoreProduct, productsDict: [String: RemoteProduct]) -> StoreProduct? {
 //        if let product = productsDict[remoteProduct.uuid] {
 //            return productWithRemote(remoteProduct, category: ProductMapper.productWithRemote(productsDict))
@@ -62,8 +36,8 @@ class StoreProductMapper {
         )
     }
     
-//    class func dbProductWithRemote(storeProduct: RemoteStoreProduct, product: RemoteProduct) -> DBStoreProduct {
-//        let dbProduct = DBStoreProduct()
+//    class func dbProductWithRemote(storeProduct: RemoteStoreProduct, product: RemoteProduct) -> StoreProduct {
+//        let dbProduct = StoreProduct()
 //        dbProduct.uuid = storeProduct.uuid
 //        dbProduct.price = storeProduct.price
 //        dbProduct.product = ProductMapper.productWithRemote(product)

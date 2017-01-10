@@ -199,6 +199,14 @@ public class Section: DBSyncable, Identifiable {
     public override var debugDescription: String {
         return "{\(type(of: self)) uuid: \(uuid), name: \(name), color: \(color), listUuid: \(list), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)}}"
     }
+    
+    public static func orderFieldName(_ status: ListItemStatus) -> String {
+        switch status {
+        case .todo: return "todoOrder"
+        case .done: return "doneOrder"
+        case .stash: return "stashOrder"
+        }
+    }
 }
 
 

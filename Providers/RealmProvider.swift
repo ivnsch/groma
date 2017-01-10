@@ -164,9 +164,13 @@ class RealmProvider {
     }
     
     func loadSync<T: Object>(filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T>? {
+        return loadSync(filter: filterMaybe, sortDescriptors: sortDescriptorMaybe.flatMap{sc in sc.key.map{[SortDescriptor(property: $0, ascending: sc.ascending)]}} ?? [])
+    }
+    
+    func loadSync<T: Object>(filter filterMaybe: String?, sortDescriptors: [SortDescriptor]) -> Results<T>? {
         do {
             let realm = try Realm()
-            return loadSync(realm, filter: filterMaybe, sortDescriptor: sortDescriptorMaybe)
+            return loadSync(realm, filter: filterMaybe, sortDescriptors: sortDescriptors)
             
         } catch let e {
             QL4("Error: creating Realm, returning empty results, error: \(e)")
@@ -175,26 +179,42 @@ class RealmProvider {
     }
     
     func loadSync<T: Object>(_ realm: Realm, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T> {
+//        var results = realm.objects(T.self)
+//        if let predicate = predicateMaybe {
+//            results = results.filter(predicate)
+//        }
+//        if let sortDescriptor = sortDescriptorMaybe, let key = sortDescriptor.key {
+//            results = results.sorted(byProperty: key, ascending: sortDescriptor.ascending)
+//        }
+//        
+//        return results
+        
+        return loadSync(realm, predicate: predicateMaybe, sortDescriptors: sortDescriptorMaybe.flatMap{sc in sc.key.map{[SortDescriptor(property: $0, ascending: sc.ascending)]}} ?? [])
+    }
+    
+    func loadSync<T: Object>(_ realm: Realm, predicate predicateMaybe: NSPredicate?, sortDescriptors: [SortDescriptor]) -> Results<T> {
         var results = realm.objects(T.self)
         if let predicate = predicateMaybe {
             results = results.filter(predicate)
         }
-        if let sortDescriptor = sortDescriptorMaybe, let key = sortDescriptor.key {
-            results = results.sorted(byProperty: key, ascending: sortDescriptor.ascending)
-        }
+        results = results.sorted(by: sortDescriptors)
         
         return results
     }
+
+    func loadSync<T: Object>(_ realm: Realm, filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: SortDescriptor? = nil) -> Results<T> {
+        return self.loadSync(realm, filter: filterMaybe, sortDescriptors: sortDescriptorMaybe.map{[$0]} ?? [])
+    }
     
-    func loadSync<T: Object>(_ realm: Realm, filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T> {
+    func loadSync<T: Object>(_ realm: Realm, filter filterMaybe: String?, sortDescriptors: [SortDescriptor]) -> Results<T> {
         let predicateMaybe = filterMaybe.map {
             NSPredicate(format: $0, argumentArray: [])
         }
-        return self.loadSync(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
+        return self.loadSync(realm, predicate: predicateMaybe, sortDescriptors: sortDescriptors)
     }
     
     func loadFirstSync<T: Object>(filter filterMaybe: String? = nil) -> T? {
-        return loadSync(filter: filterMaybe)?.first
+        return loadSync(filter: filterMaybe, sortDescriptor: nil)?.first
     }
     
     //////////////////////
@@ -409,7 +429,7 @@ class RealmProvider {
     func doInWriteTransactionSync<T>(withoutNotifying: [NotificationToken] = [], realm: Realm? = nil, _ f: (Realm) -> T?) -> T? {
         do {
             let realm = try realm ?? Realm()
-            return doInWriteTransactionWithRealmSync(realm, f: f)
+            return doInWriteTransactionWithRealmSync(withoutNotifying: withoutNotifying, realm, f: f)
         } catch let error as NSError {
             QL4("Realm error: \(error)")
             return nil

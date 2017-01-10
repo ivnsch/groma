@@ -22,7 +22,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
                 handler(ProviderResult(status: .success, sucessResult: groups))
             } else {
                 QL4("Couldn't load groups")
-                handler(ProviderResult(status: .unknown, sucessResult: groups))
+                handler(ProviderResult(status: .unknown))
             }
         }
     }

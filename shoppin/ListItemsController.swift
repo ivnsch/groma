@@ -12,6 +12,7 @@ import SwiftValidator
 import ChameleonFramework
 import QorumLogs
 import Providers
+import RealmSwift
 
 class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate
     //    , UIBarPositioningDelegate
@@ -29,7 +30,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     weak var expandDelegate: Foo?
     
-    var currentList: List? {
+    var currentList: Providers.List? {
         didSet {
             updatePossibleList()
         }
@@ -38,6 +39,9 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     // TODO rename these blocks, which are meant to be executed only once after loading accordingly e.g. onViewWillAppearOnce
     var onViewWillAppear: VoidFunction?
     var onViewDidAppear: VoidFunction?
+    
+    fileprivate var listItemsResult: Results<ListItem>?
+    fileprivate var notificationToken: NotificationToken?
     
     var status: ListItemStatus {
         fatalError("override")
@@ -79,15 +83,6 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         topBar.delegate = self
 
         NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onListRemovedNotification(_:)), name: NSNotification.Name(rawValue: Notification.ListRemoved.rawValue), object: nil)
-        
-        // websocket
-        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketListItems(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ListItems.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketListItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ListItem.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketSection(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Section.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketProduct(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Product.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onWebsocketList(_:)), name: NSNotification.Name(rawValue: WSNotificationName.List.rawValue), object: nil)
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -195,19 +190,97 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
 
     
-    fileprivate func initWithList(_ list: List) {
+    fileprivate func initWithList(_ list: Providers.List) {
         topBar.title = topBarTitle(list)
         udpateListItems(list)
     }
     
-    func topBarTitle(_ list: List) -> String {
+    func topBarTitle(_ list: Providers.List) -> String {
         return list.name
     }
     
-    fileprivate func udpateListItems(_ list: List, onFinish: VoidFunction? = nil) {
+    fileprivate func udpateListItems(_ list: Providers.List, onFinish: VoidFunction? = nil) {
         Prov.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: .memOnly, successHandler{[weak self] listItems in guard let weakSelf = self else {return}
-            weakSelf.listItemsTableViewController.setListItems(listItems.filter{$0.hasStatus(weakSelf.status)})
-            weakSelf.onGetListItems(listItems)
+
+            weakSelf.listItemsTableViewController.setListItems(listItems.toArray())
+
+            weakSelf.listItemsResult = listItems
+            
+//            weakSelf.notificationToken = weakSelf.listItemsResult?.addNotificationBlock { changes in
+//                
+//                switch changes {
+//                case .initial:
+//                    //                        // Results are now populated and can be accessed without blocking the UI
+//                    //                        self.viewController.didUpdateList(reload: true)
+//                    QL1("initial")
+//                    
+//                case .update(_, let deletions, let insertions, let modifications):
+//                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+//                    
+//                    guard let results = weakSelf.listItemsResult else {QL4("No Results"); return}
+//                    
+//                    results.realm?.refresh()
+//                    
+//                    
+//                    QL2("results refreshed, count: \(results.count)")
+//                    
+////                    for deletion in deletions {
+////                        weakSelf.listItemsTableViewController?.removeListItem(index: deletion)
+////                    }
+//
+//                    
+//                    
+//                    
+////                    if deletions.isEmpty { // FIXME: in some cases, we delete an item and get insertions (!?) which can cause a crash if same index as deleted element, which is now invalid. Investigate why.
+////                        for insertion in insertions {
+////                            let listItem = results[insertion]
+////                            weakSelf.listItemsTableViewController?.updateOrAddListItem(listItem, status: weakSelf.status, increment: true, scrollToSelection: true, notifyRemote: false)
+////                        }
+////                    } else {
+////                        QL3("Got insertions with deletions, skipping insertions")
+////                    }
+//
+//                    
+////                    if let modification = modifications.first, modifications.count == 1 {
+////                        if let listItem = results[safe: modification] { // When we decrement item to 0 (update - TODO remove when todo, done and stash are 0?), Realm passes us here an index, but our filter has todo/done/stash count > 0, which means the item was removed already from results. So this index is not valid (crashes e.g. when we decrement the last element - we get index 0 but results is empty). This seems like a Realm bug, TODO ask.
+////                            weakSelf.listItemsTableViewController?.updateOrAddListItem(listItem, status: weakSelf.status, increment: true, scrollToSelection: true, notifyRemote: false)
+////                        } else {
+////                            QL3("Index to modify out of bounds - skipping: \(modification), results count: \(results.count)")
+////                        }
+////
+////                    } else {
+////                        weakSelf.listItemsTableViewController.setListItems(listItems.toArray())
+////                    }
+//
+//                    
+//
+//                    // TODO!!!!!!!!!!!!!!!: update
+////                    if replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.
+////                        weakSelf.updatePossibleList()
+////                    } else {
+////                        weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
+////                        //                    self?.updatePrices(.MemOnly)
+////                        weakSelf.onTableViewChangedQuantifiables()
+////                    }
+////                    weakSelf.closeTopController()
+//                    
+//                    
+//                    // TODO close only when receiving own notification, not from someone else (possible?)
+//                    if !modifications.isEmpty { // close only if it's an update (for add user may want to add multiple products)
+//                        weakSelf.topQuickAddControllerManager?.expand(false)
+//                        weakSelf.topQuickAddControllerManager?.controller?.onClose()
+//                    }
+//                    
+//                    QL2("self?.onTableViewChangedQuantifiables(")
+//
+////                    self?.onTableViewChangedQuantifiables()
+//                    
+//                case .error(let error):
+//                    // An error occurred while opening the Realm file on the background worker thread
+//                    fatalError(String(describing: error))
+//                }
+//            }
+            
             onFinish?()
         })
     }
@@ -391,7 +464,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 
                 // NOTE: For the provider the whole state is updated here - including possible section removal (if the current undo list item is the last one in the section) and the order field update of possible following sections. This means that the contents of the table view may be in a slightly inconsistent state with the data in the provider during the time cell is in undo (for the table view the section is still there, for the provider it's not). This is fine as the undo state is just a UI thing (local) and it should be cleared as soon as we try to start a new action (add, edit, delete, reorder etc) or go to the cart/stash.
                 Prov.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, orderInDstStatus: nil, remote: true, weakSelf.resultHandler(onSuccess: {switchedListItem in
-                        weakSelf.onTableViewChangedQuantifiables()
+//                        weakSelf.onTableViewChangedQuantifiables()
                     }, onErrorAdditional: {result in
                         weakSelf.updatePossibleList()
                     }
@@ -402,7 +475,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // Immediate swipe - websocket
     fileprivate func swipeCell(_ listItemUuid: String) {
-        if let indexPath = listItemsTableViewController.getIndexPath(listItemUuid) {
+        if let indexPath = listItemsTableViewController.getIndexPath(listItemUuid: listItemUuid) {
             listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true, onFinish: {[weak self] in
                 self?.listItemsTableViewController.clearPendingSwipeItemIfAny(true)
             })
@@ -502,11 +575,13 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     fileprivate func addItem(_ listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
-        
+
+        guard let notificationToken = notificationToken, let realm = listItemsResult?.realm else {QL4("No notification token: \(self.notificationToken) or result: \(listItemsResult)"); return}
+
         if let currentList = self.currentList {
-            Prov.listItemsProvider.add(listItemInput, status: status, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.add(listItemInput, status: status, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), token: RealmToken(token: notificationToken, realm: realm), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
                 self?.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
-                handler?()
+                handler?() // TODO!!!!!!!!!! whats this for?
             })
             
         } else {
@@ -544,7 +619,10 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onListItemDeleted(_ tableViewListItem: TableViewListItem) {
-        Prov.listItemsProvider.remove(tableViewListItem.listItem, remote: true, resultHandler(onSuccess: {[weak self] in
+        
+        guard let notificationToken = notificationToken, let realm = listItemsResult?.realm else {QL4("No notification token: \(self.notificationToken) or result: \(listItemsResult)"); return}
+        
+        Prov.listItemsProvider.remove(tableViewListItem.listItem, remote: true, token: RealmToken(token: notificationToken, realm: realm), resultHandler(onSuccess: {[weak self] in
             self?.onTableViewChangedQuantifiables()
             }, onErrorAdditional: {[weak self] result in
                 self?.updatePossibleList()
@@ -592,8 +670,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onAddProduct(_ product: Product) {
+
+//        guard let notificationToken = notificationToken, let realm = listItemsResult?.realm else {QL4("No notification token: \(self.notificationToken) or result: \(listItemsResult)"); return}
+        let token: RealmToken? = nil // quickfix
+
         if let list = currentList {
-            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
                 weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
             })
         } else {
@@ -929,270 +1011,5 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         if listUuid == currentList.uuid {
             back()
         }
-    }
-    
-    // MARK: - Websocket
-    
-    func onWebsocketList(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                let listUuid = notification.obj
-                switch notification.verb {
-                case .Delete:
-                    if let list = currentList {
-                        if list.uuid == listUuid {
-                            AlertPopup.show(title: trans("popup_title_list_deleted"), message: trans("popup_list_was_deleted_in_other_device", list.name), controller: self, onDismiss: {[weak self] in
-                                self?.back()
-                            })
-                        } else {
-                            QL1("Websocket: List items controller received a notification to delete a list which is not the one being currently shown")
-                        }
-                    } else {
-                        QL4("Websocket: Can't process delete list notification because there's no list set")
-                    }
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        }
-    }
-    
-    // This is called on batch list item update, which is used when reordering list items
-    func onWebsocketListItems(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteListItemsReorderResult>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .TodoOrder:
-                    fallthrough
-                case .DoneOrder:
-                    updatePossibleList() // reload list
-                    
-                default: print("Error: ViewController.onWebsocketUpdateListItems: Not handled: \(notification.verb)")
-                }
-            } else {
-                print("Error: ViewController.onWebsocketAddListItems: no value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[ListItem]>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Add:
-                    updatePossibleList() // reload list
-                    
-                default: print("Error: ViewController.onWebsocketUpdateListItems: Not handled: \(notification.verb)")
-                }
-            } else {
-                print("Error: ViewController.onWebsocketAddListItems: no value")
-            }
-        } else {
-            print("Error: ViewController.onWebsocketAddListItems: no userInfo")
-        }
-    }
-    
-    func onWebsocketListItem(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ListItem>> {
-            if let notification = info[WSNotificationValue] {
-                
-                let listItem = notification.obj
-
-                switch notification.verb {
-                case .Add:
-                    onListItemAddedToProvider(listItem, status: status, scrollToSelection: false, notifyRemote: false)
-                    
-                case .Update:
-                    listItemsTableViewController.updateListItem(listItem, status: status, notifyRemote: false)
-                    onTableViewChangedQuantifiables()
-                    
-                default: QL4("Not handled verb: \(notification.verb)")
-                }
-            } else {
-                print("Error: ViewController.onWebsocketUpdateListItem: no value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                
-                let itemUuid = notification.obj
-                
-                switch notification.verb {
-                case .Delete:
-                    listItemsTableViewController.removeListItem(itemUuid)
-                    onTableViewChangedQuantifiables()
-                    
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteListItemIncrement>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Increment:
-                    let incr = notification.obj
-                    listItemsTableViewController.updateQuantity(incr.uuid, quantity: incr.updatedQuantity, notifyRemote: false)
-                    
-                default: QL4("Not handled: \(notification.verb)")
-                }
-            } else {
-                QL4("Mo value")
-            }
-
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<(result: RemoteSwitchListItemFullResult, switchedListItem: ListItem)>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                    
-                case .Switch:
-                    
-                    let switchResult = notification.obj.result
-                    
-                    // If list item was switched from this status, just "swipe it out"
-                    if switchResult.srcStatus == status {
-                        swipeCell(switchResult.switchResult.switchedItem.uuid)
-                        
-                    // If list item was switched to this status, for the UI this is (for the most part) the same as add, so we call the same handler as add.
-                    // The only difference with add is that when switch back for the original user the item keeps at the original order, while for the receiver it's appended at the end of the section. At the end the order of the original user "wins" (if the users reload the list, the item is still at the undo position not at the end of the section), since the undo of this user is the last operation to be sent to the server.
-                    // For now we let it like this, otherwise we have to implement functionality to insert item at the original index.
-                    } else if switchResult.dstStatus == status {
-                        onListItemAddedToProvider(notification.obj.switchedListItem, status: status, scrollToSelection: false, notifyRemote: false)
-                    }
-
-                default: QL4("Not handled: \(notification.verb)")
-                }
-            } else {
-                QL4("Mo value")
-            }
-            
-            //            RemoteSwitchListItemFullResult
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .BuyCart:
-                    // This is relevant for all status - cart (list items removed), stash (added), todo (cart price view update)
-                    updatePossibleList() // reload list
-                    
-                default: QL4("Not handled: \(notification.verb)")
-                }
-            } else {
-                QL4("Mo value")
-            }
-            
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteSwitchAllListItemsLightResult>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .SwitchAll:
-                    guard (currentList.map{notification.obj.update.listUuid == $0.uuid}) ?? false else {return} // TODO!!!! add this check to all others, also in inventory and group items
-                    updatePossibleList() // reload list
-                    
-                default: QL4("Not handled: \(notification.verb)")
-                }
-            } else {
-                QL4("No value")
-            }
-            
-        } else {
-            QL4("No userInfo")
-        }
-    }
-    
-    func onWebsocketSection(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[Section]>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                    // There's no direct add of section
-                    //                case .Add:
-                case .Update:
-                    
-                    // Updated note: for now we just update everything immediately - later we think about how to improve UX.
-//                    // NOTE: this doesn't update order. Update reorder would require to reload the table view and this can e.g. revert undo cells or interfere with current action like swiping an item. So to update order the user has to reopen the list.
-//                    for section in notification.obj {
-//                        listItemsTableViewController.updateSection(section)
-//                    }
-                    updatePossibleList() // reload list
-
-                default: QL4("Not handled: \(notification.verb)")
-                }
-            } else {
-                QL4("no value")
-            }
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Delete:
-                    listItemsTableViewController.removeSection(notification.obj)
-                    sectionsTableViewController?.removeSection(notification.obj)
-                    
-                case .DeleteWithName:
-                    // This deletes sections but also categories so just reload
-//                    if listItemsTableViewController.hasSectionWith({$0.name == notification.obj}) {
-                        updatePossibleList() // reload list
-//                    }
-                    
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else {
-            QL4("No userInfo")
-        }
-    }
-    
-    func onWebsocketProduct(_ note: Foundation.Notification) {
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Update:
-                    // TODO!!!!! websocket add/update must send status also
-                    listItemsTableViewController.updateProduct(notification.obj, status: .todo)
-                default: break // no error msg here, since we will receive .Add but not handle it in this view controller
-                }
-            } else {
-                print("Error: ViewController.onWebsocketProduct: no value")
-            }
-        } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                let productUuid = notification.obj
-                switch notification.verb {
-                case .Delete:
-                    listItemsTableViewController.removeListItemReferencingProduct(productUuid)
-                case .DeleteWithBrand:
-                    // we can improve this by at least checking if there's a product that references this brand in the list, for now just reload
-                    updatePossibleList() // reload list
-                    
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else {
-            print("Error: ViewController.onWebsocketProduct: no userInfo")
-        }
-    }
-    
-    func onWebsocketProductCategory(_ note: Foundation.Notification) {
-        
-        // category udpate not relevant for list items since items show only section, not category. The add/edit has also only section
-        
-        if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
-            if let notification = info[WSNotificationValue] {
-                switch notification.verb {
-                case .Delete:
-                    let categoryUuid = notification.obj
-                    listItemsTableViewController.removeListItemsReferencingCategory(categoryUuid)
-                default: QL4("Not handled case: \(notification.verb))")
-                }
-            } else {
-                QL4("No value")
-            }
-        } else {
-            print("Error: ViewController.onWebsocketProduct: no userInfo")
-        }
-    }
-    
-    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
-        // TODO notification - note has the sender name
-        updatePossibleList()
     }
 }

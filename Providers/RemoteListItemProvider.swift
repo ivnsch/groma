@@ -381,9 +381,7 @@ class RemoteListItemProvider {
             "product": toRequestParams(product.product) as AnyObject
         ]
         
-        if let lastServerUpdate = product.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(product.lastServerUpdate) as Int64)
         
         return dict
     }
@@ -442,9 +440,7 @@ class RemoteListItemProvider {
     
     func toRequestParamsToRemove(_ listItem: ListItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["uuid": listItem.uuid as AnyObject]
-        if let lastServerUpdate = listItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(value: Int64(lastServerUpdate) as Int64)
-        }
+        dict["lastUpdate"] = NSNumber(value: Int64(listItem.lastServerUpdate) as Int64)
         return dict
     }
 

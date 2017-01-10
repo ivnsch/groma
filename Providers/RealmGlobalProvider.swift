@@ -19,10 +19,10 @@ class RealmGlobalProvider: RealmProvider {
 
             let productCategories = realm.objects(ProductCategory.self).filter(ProductCategory.createFilterDirtyAndValid())
             let products = realm.objects(Product.self).filter(Product.createFilterDirtyAndValid())
-            let storeProducts = realm.objects(DBStoreProduct.self).filter(DBStoreProduct.createFilterDirtyAndValid())
+            let storeProducts = realm.objects(StoreProduct.self).filter(StoreProduct.createFilterDirtyAndValid())
             let lists = realm.objects(List.self).filter(DBSyncable.dirtyFilter())
             let sections = realm.objects(Section.self).filter(DBSyncable.dirtyFilter())
-            let listsItems = realm.objects(DBListItem.self).filter(DBSyncable.dirtyFilter())
+            let listsItems = realm.objects(ListItem.self).filter(DBSyncable.dirtyFilter())
             let inventories = realm.objects(DBInventory.self).filter(DBSyncable.dirtyFilter())
             let inventoryItems = realm.objects(InventoryItem.self).filter(DBSyncable.dirtyFilter())
             let groups = realm.objects(ProductGroup.self).filter(DBSyncable.dirtyFilter())
@@ -49,7 +49,7 @@ class RealmGlobalProvider: RealmProvider {
             
             let categoriesToRemove = realm.objects(DBRemoveProductCategory.self).map{$0.toDict()}
             let productsToRemove = realm.objects(ProductToRemove.self).map{$0.toDict()}
-            let storeProductsToRemove = realm.objects(DBStoreProductToRemove.self).map{$0.toDict()}
+            let storeProductsToRemove = realm.objects(StoreProductToRemove.self).map{$0.toDict()}
             let listsToRemove = realm.objects(DBRemoveList.self).map{$0.toDict()}
             let sectionsToRemove = realm.objects(SectionToRemove.self).map{$0.toDict()}
             let listItemsToRemove = realm.objects(DBRemoveListItem.self).map{$0.toDict()}
@@ -124,7 +124,7 @@ class RealmGlobalProvider: RealmProvider {
             
             let (productsArr, productsDict): ([Product], [String: Product]) = toObjs(syncResult.products, mapper: {Product.fromDict($0, category: productCategoriesDict[$0["categoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
 
-            let (storeProductsArr, storeProductsDict): ([DBStoreProduct], [String: DBStoreProduct]) = toObjs(syncResult.storeProducts, mapper: {DBStoreProduct.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+            let (storeProductsArr, storeProductsDict): ([StoreProduct], [String: StoreProduct]) = toObjs(syncResult.storeProducts, mapper: {StoreProduct.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!)}, idExtractor: {$0.uuid})
 
             let (inventoriesArr, inventoriesDict): ([DBInventory], [String: DBInventory]) = toObjs(syncResult.inventories, mapper: {DBInventory.fromDict($0)}, idExtractor: {$0.uuid})
             
@@ -134,7 +134,7 @@ class RealmGlobalProvider: RealmProvider {
             
             let (sectionsArr, sectionsDict): ([Section], [String: Section]) = toObjs(syncResult.sections, mapper: {Section.fromDict($0, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
-            let (listItemsArr, listItemsDict): ([DBListItem], [String: DBListItem]) = toObjs(syncResult.listsItems, mapper: {DBListItem.fromDict($0, section: sectionsDict[$0["sectionUuid"]! as! String]!, product: storeProductsDict[$0["storeProductUuid"]! as! String]!, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+            let (listItemsArr, listItemsDict): ([ListItem], [String: ListItem]) = toObjs(syncResult.listsItems, mapper: {ListItem.fromDict($0, section: sectionsDict[$0["sectionUuid"]! as! String]!, product: storeProductsDict[$0["storeProductUuid"]! as! String]!, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
             //        // TODO!!!! set BOTH group in groups items and group items in group Realm needs both set to save correctly ............ this is needed also for lists and inventories probably
             let (groupsArr, groupsDict): ([ProductGroup], [String: ProductGroup]) = toObjs(syncResult.groups, mapper: {ProductGroup.fromDict($0)}, idExtractor: {$0.uuid})
@@ -185,7 +185,7 @@ class RealmGlobalProvider: RealmProvider {
     
     fileprivate func clearAllDataSync(_ realm: Realm) {
         realm.delete(realm.objects(GroupItem.self))
-        realm.delete(realm.objects(DBListItem.self))
+        realm.delete(realm.objects(ListItem.self))
         realm.delete(realm.objects(InventoryItem.self))
         realm.delete(realm.objects(HistoryItem.self))
         
@@ -195,7 +195,7 @@ class RealmGlobalProvider: RealmProvider {
         realm.delete(realm.objects(List.self))
         realm.delete(realm.objects(DBInventory.self))
         
-        realm.delete(realm.objects(DBStoreProduct.self))
+        realm.delete(realm.objects(StoreProduct.self))
         realm.delete(realm.objects(Product.self))
         realm.delete(realm.objects(ProductCategory.self))
 
@@ -213,7 +213,7 @@ class RealmGlobalProvider: RealmProvider {
         realm.delete(realm.objects(DBRemoveList.self))
         realm.delete(realm.objects(DBRemoveInventory.self))
 
-        realm.delete(realm.objects(DBStoreProductToRemove.self))
+        realm.delete(realm.objects(StoreProductToRemove.self))
         realm.delete(realm.objects(ProductToRemove.self))
         realm.delete(realm.objects(DBRemoveProductCategory.self))
 
@@ -248,7 +248,7 @@ class RealmGlobalProvider: RealmProvider {
         
         func markAllDirtySync(_ realm: Realm) {
             markObjsDirty(realm, obj: GroupItem.self, idExtractor: {$0.uuid})
-            markObjsDirty(realm, obj: DBListItem.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: ListItem.self, idExtractor: {$0.uuid})
             markObjsDirty(realm, obj: InventoryItem.self, idExtractor: {$0.uuid})
             markObjsDirty(realm, obj: HistoryItem.self, idExtractor: {$0.uuid})
             
@@ -258,7 +258,7 @@ class RealmGlobalProvider: RealmProvider {
             markObjsDirty(realm, obj: List.self, idExtractor: {$0.uuid})
             markObjsDirty(realm, obj: DBInventory.self, idExtractor: {$0.uuid})
 
-            markObjsDirty(realm, obj: DBStoreProduct.self, idExtractor: {$0.uuid})
+            markObjsDirty(realm, obj: StoreProduct.self, idExtractor: {$0.uuid})
             markObjsDirty(realm, obj: Product.self, idExtractor: {$0.uuid})
             markObjsDirty(realm, obj: ProductCategory.self, idExtractor: {$0.uuid})
             

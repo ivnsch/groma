@@ -11,47 +11,47 @@ import QorumLogs
 
 class ListItemMapper {
     
-    class func listItemWithDB(_ dbListItem: DBListItem) -> ListItem {
-        let product = StoreProductMapper.productWithDB(dbListItem.product)
-        let section = dbListItem.section
-        return ListItem(
-            uuid: dbListItem.uuid,
-            product: product.copy(),
-            section: section,
-            list: dbListItem.list.copy(),
-            note: dbListItem.note,
-            todoQuantity: dbListItem.todoQuantity,
-            todoOrder: dbListItem.todoOrder,
-            doneQuantity: dbListItem.doneQuantity,
-            doneOrder: dbListItem.doneOrder,
-            stashQuantity: dbListItem.stashQuantity,
-            stashOrder: dbListItem.stashOrder,
-            lastServerUpdate: dbListItem.lastServerUpdate
-        )
-    }
-    
-    class func dbWithListItem(_ listItem: ListItem) -> DBListItem {
-        let dbListItem = DBListItem()
-        dbListItem.uuid = listItem.uuid
-        dbListItem.note = listItem.note ?? "" // TODO check if db obj can have optional if yes remove ??
-
-        dbListItem.todoQuantity = listItem.todoQuantity
-        dbListItem.todoOrder = listItem.todoOrder
-        dbListItem.doneQuantity = listItem.doneQuantity
-        dbListItem.doneOrder = listItem.doneOrder
-        dbListItem.stashQuantity = listItem.stashQuantity
-        dbListItem.stashOrder = listItem.stashOrder
-        
-        dbListItem.product = StoreProductMapper.dbWithProduct(listItem.product)
-        dbListItem.section = listItem.section
-        dbListItem.list = listItem.list
-        
-        if let lastServerUpdate = listItem.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
-            dbListItem.lastServerUpdate = lastServerUpdate
-        }
-        return dbListItem
-    }
-    
+//    class func listItemWithDB(_ dbListItem: ListItem) -> ListItem {
+//        let product = StoreProductMapper.productWithDB(dbListItem.product)
+//        let section = dbListItem.section
+//        return ListItem(
+//            uuid: dbListItem.uuid,
+//            product: product.copy(),
+//            section: section,
+//            list: dbListItem.list.copy(),
+//            note: dbListItem.note,
+//            todoQuantity: dbListItem.todoQuantity,
+//            todoOrder: dbListItem.todoOrder,
+//            doneQuantity: dbListItem.doneQuantity,
+//            doneOrder: dbListItem.doneOrder,
+//            stashQuantity: dbListItem.stashQuantity,
+//            stashOrder: dbListItem.stashOrder,
+//            lastServerUpdate: dbListItem.lastServerUpdate
+//        )
+//    }
+//    
+//    class func dbWithListItem(_ listItem: ListItem) -> ListItem {
+//        let dbListItem = ListItem()
+//        dbListItem.uuid = listItem.uuid
+//        dbListItem.note = listItem.note ?? "" // TODO check if db obj can have optional if yes remove ??
+//
+//        dbListItem.todoQuantity = listItem.todoQuantity
+//        dbListItem.todoOrder = listItem.todoOrder
+//        dbListItem.doneQuantity = listItem.doneQuantity
+//        dbListItem.doneOrder = listItem.doneOrder
+//        dbListItem.stashQuantity = listItem.stashQuantity
+//        dbListItem.stashOrder = listItem.stashOrder
+//        
+//        dbListItem.product = StoreProductMapper.dbWithProduct(listItem.product)
+//        dbListItem.section = listItem.section
+//        dbListItem.list = listItem.list
+//        
+//        if let lastServerUpdate = listItem.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
+//            dbListItem.lastServerUpdate = lastServerUpdate
+//        }
+//        return dbListItem
+//    }
+//    
     /**
     Parses the remote list items into model objects
     Note that the list items are sorted here by order field. The backend doesn't do this.

@@ -590,7 +590,9 @@ struct MyWebsocketDispatcher {
             
         case WSNotificationVerb.Delete:
             if let containedItemIdentifier = RemoteContainedItemIdentifier(representation: data) {
-                Prov.listItemsProvider.removeListItem(containedItemIdentifier.itemUuid, listUuid: containedItemIdentifier.containerUuid, remote: false) {result in
+                
+                // Added token parameter only to compile - websocket is replaced now with realm sync
+                Prov.listItemsProvider.removeListItem(containedItemIdentifier.itemUuid, listUuid: containedItemIdentifier.containerUuid, remote: false, token: nil) {result in
                     if result.success {
                         postNotification(.ListItem, verb, sender, containedItemIdentifier.itemUuid)
                     } else {
