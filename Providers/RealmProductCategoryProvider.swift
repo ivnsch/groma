@@ -82,6 +82,45 @@ class RealmProductCategoryProvider: RealmProvider {
         }
     }
     
+    func category(name: String, handler: @escaping (ProductCategory?) -> Void) {
+        
+        categoriesWithName(name) {categoriesResult in
+            if let categoriesResult = categoriesResult {
+                if let category = categoriesResult.first {
+                    handler(category)
+                    
+                } else {
+                    QL4("Couldn't load categories")
+                    handler(nil)
+                }
+                
+            } else { // category doesn't exist
+                handler(nil)
+            }
+        }
+    }
+    
+    func updateOrCreateCategory(name: String, color: UIColor, handler: @escaping (ProductCategory?) -> Void) {
+        
+        func onHasNewOrUpdatedCategory(category: ProductCategory) {
+            doInWriteTransactionSync {realm in
+                realm.add(category, update: true)
+                handler(category)
+            }
+        }
+        
+        category(name: name) {categoryMaybe in
+            if let category = categoryMaybe {
+                onHasNewOrUpdatedCategory(category: category.copy(color: color))
+                
+            } else {
+                QL1("Category doesn't exists: \(name)")
+                let newCategory = ProductCategory(uuid: UUID().uuidString, name: name, color: color.hexStr)
+                onHasNewOrUpdatedCategory(category: newCategory)
+            }
+        }
+    }
+    
     fileprivate func removeCategorySync(_ realm: Realm, categoryUuid: String, markForSync: Bool) {
         let dbProducts: Results<Product> = realm.objects(Product.self).filter(Product.createFilterCategory(categoryUuid))
         // delete first dependencies of products (realm requires this order, otherwise db is inconsistent. There's no cascade delete yet also).

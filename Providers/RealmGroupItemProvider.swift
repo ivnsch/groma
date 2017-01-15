@@ -43,7 +43,7 @@ class RealmGroupItemProvider: RealmProvider {
     ///////////////////////////////////////////////////////////////
     // New - add/increment using only product + quantity, like in inventory, no fake/input group items
     
-    func addOrIncrement(_ group: ProductGroup, productsWithQuantities: [(product: Product, quantity: Int)], dirty: Bool, _ handler: @escaping ([(groupItem: GroupItem, delta: Int)]?) -> Void) {
+    func addOrIncrement(_ group: ProductGroup, productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)], dirty: Bool, _ handler: @escaping ([(groupItem: GroupItem, delta: Int)]?) -> Void) {
         doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return nil}
             
             var addedOrIncrementedItems: [(groupItem: GroupItem, delta: Int)] = []
@@ -58,7 +58,7 @@ class RealmGroupItemProvider: RealmProvider {
         })
     }
     
-    fileprivate func addOrIncrementGroupItem(_ realm: Realm, group: ProductGroup, product: Product, quantity: Int, dirty: Bool) -> (groupItem: GroupItem, delta: Int) {
+    fileprivate func addOrIncrementGroupItem(_ realm: Realm, group: ProductGroup, product: QuantifiableProduct, quantity: Int, dirty: Bool) -> (groupItem: GroupItem, delta: Int) {
         
         // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
         let existingGroupItems: [GroupItem] = loadSync(realm, filter: GroupItem.createFilter(product, group: group))
@@ -146,8 +146,9 @@ class RealmGroupItemProvider: RealmProvider {
         func addOrIncrement(_ item: GroupItem) -> GroupItem? {
             do {
                 let realm = try Realm()
+                // TODO!!!!!!!!!!!!!!!!!!! consider unit?
                 // TODO!! why looking here for unique instead of uuid? when add group item with product we should be able to find the product using only the uuid?
-                if let item: GroupItem = loadSync(realm, filter: GroupItem.createFilterGroupAndProductName(item.group.uuid, productName: item.product.name, productBrand: item.product.brand)).first {
+                if let item: GroupItem = loadSync(realm, filter: GroupItem.createFilterGroupAndProductName(item.group.uuid, productName: item.product.product.name, productBrand: item.product.product.brand)).first {
                     let incremented = item.incrementQuantityCopy(groupItem.quantity)
                     _ = saveObjSync(incremented, update: true)
                     return incremented

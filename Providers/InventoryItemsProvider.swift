@@ -45,7 +45,7 @@ public protocol InventoryItemsProvider {
     // MARK: - Direct (no history)
     
     // Add product
-    func addToInventory(_ inventory: DBInventory, product: Product, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void)
+    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void)
     
     // Add group
     func addToInventory(_ inventory: DBInventory, group: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void)

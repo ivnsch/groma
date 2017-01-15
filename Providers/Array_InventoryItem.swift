@@ -24,20 +24,21 @@ public extension Array where Element: InventoryItem {
         return dictionary
     }
     
+    // TODO!!!!!!!!!!!!!!! add unit to sorting when names/count are equal?
     public func sortBy(_ sortBy: InventorySortBy) -> [Element] {
         switch sortBy {
         case .alphabetic:
             return self.sorted{
-                if $0.0.product.name == $0.1.product.name {
+                if $0.0.product.product.name == $0.1.product.product.name {
                     return $0.0.quantity < $0.1.quantity
                 } else {
-                    return $0.0.product.name < $0.1.product.name
+                    return $0.0.product.product.name < $0.1.product.product.name
                 }
             }
         case .count:
             return self.sorted{
                 if $0.0.quantity == $0.1.quantity {
-                    return $0.0.product.name < $0.1.product.name
+                    return $0.0.product.product.name < $0.1.product.product.name
                 } else {
                     return $0.0.quantity < $0.1.quantity
                 }

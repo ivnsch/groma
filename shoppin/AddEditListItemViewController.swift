@@ -18,7 +18,7 @@ protocol AddEditListItemViewControllerDelegate: class {
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>)
     
-    func onOkTap(_ price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?)
+    func onOkTap(_ price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, editingItem: Any?)
     
     func parentViewForAddButton() -> UIView?
     
@@ -45,7 +45,7 @@ enum AddEditListItemControllerModus {
 typealias AddEditItemInput2 = (name: String, price: Float, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
 
 struct AddEditItem {
-    let product: Product
+    let product: QuantifiableProduct
     let storeProduct: StoreProduct? // TODO? no redundancy with product
     let quantity: Int
     let sectionName: String
@@ -53,7 +53,7 @@ struct AddEditItem {
     let note: String?
     let model: Any
     
-    init(product: Product, storeProduct: StoreProduct? = nil, quantity: Int, sectionName: String, sectionColor: UIColor, note: String?, model: Any) {
+    init(product: QuantifiableProduct, storeProduct: StoreProduct? = nil, quantity: Int, sectionName: String, sectionColor: UIColor, note: String?, model: Any) {
         self.product = product
         self.storeProduct = storeProduct
         self.quantity = quantity
@@ -77,8 +77,8 @@ struct AddEditItem {
         self.product = item.product
         self.storeProduct = nil
         self.quantity = item.quantity
-        self.sectionName = item.product.category.name
-        self.sectionColor = item.product.category.color
+        self.sectionName = item.product.product.category.name
+        self.sectionColor = item.product.product.category.color
         self.note = nil
         self.model = item
     }
@@ -87,8 +87,8 @@ struct AddEditItem {
         self.product = item.product
         self.storeProduct = nil
         self.quantity = item.quantity
-        self.sectionName = item.product.category.name
-        self.sectionColor = item.product.category.color
+        self.sectionName = item.product.product.category.name
+        self.sectionColor = item.product.product.category.color
         self.note = nil
         self.model = item
     }
@@ -97,8 +97,8 @@ struct AddEditItem {
         self.product = item.product
         self.storeProduct = nil
         self.quantity = 0
-        self.sectionName = item.product.category.name
-        self.sectionColor = item.product.category.color
+        self.sectionName = item.product.product.category.name
+        self.sectionColor = item.product.product.category.color
         self.note = nil
         self.model = item
     }
@@ -279,12 +279,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     fileprivate func prefill(_ item: AddEditItem) {
-        brandInput.text = item.product.brand
+        brandInput.text = item.product.product.brand
         sectionInput.text = item.sectionName
         sectionColorButton.textColor = item.sectionColor
         quantityInput.text = String(item.quantity)
         priceInput.text = item.storeProduct?.price.toString(2)
         noteInput.text = item.note
+        // TODO!!!!!!!!!!!!!!! quantifiable product - unit?
     }
     
     fileprivate func initTextFieldPlaceholders() {
@@ -369,8 +370,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 // for now disabled due to new designs
 //                let baseQuantity = scaleInputs?.baseQuantity ?? 1
 //                let unit = scaleInputs?.unit ?? .None
+                // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 let baseQuantity: Float = 1
-                let unit = StoreProductUnit.none
+                let unit = ProductUnit.none
                 
                 // the price from scaleInputs is inserted in price field, so we have it already
                 

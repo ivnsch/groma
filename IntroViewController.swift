@@ -150,11 +150,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     
                     let ingredients: [(name: String, quantity: Int)] = [
                         (trans("pr_pineapple"), 1),
-                        (trans("pr_peaches"), 4),
                         (trans("pr_plums"), 3),
                         (trans("pr_bananas"), 2),
-                        (trans("pr_oranges"), 2),
-                        (trans("pr_kiwis"), 4),
                         (trans("pr_strawberries"), 1)
                     ]
                     
@@ -169,9 +166,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         } else {
                             Prov.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
                                 
-                                let productsIngredients: [(product: Product, quantity: Int)] = ingredients.flatMap {ingredient in
+                                let productsIngredients: [(product: QuantifiableProduct, quantity: Int)] = ingredients.flatMap {ingredient in
                                     if let product = products.findFirst({$0.name == ingredient.name}) {
-                                        return (product, ingredient.quantity)
+                                        // for now use products without unit to prefill group
+                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: .none, product: product)
+                                        return (quanatifiableProduct, ingredient.quantity)
                                     } else {
                                         return nil
                                     }
@@ -231,9 +230,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         } else {
                             Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
                         
-                                let productsIngredients: [(product: Product, quantity: Int)] = productsWithQuantity.flatMap {ingredient in
+                                let productsIngredients: [(product: QuantifiableProduct, quantity: Int)] = productsWithQuantity.flatMap {ingredient in
                                     if let product = products.findFirst({$0.name == ingredient.name}) {
-                                        return (product, ingredient.quantity)
+                                        // for now use products without unit to prefill list
+                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: .none, product: product)
+                                        return (quanatifiableProduct, ingredient.quantity)
                                     } else {
                                         return nil
                                     }
@@ -241,7 +242,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                 
                                 let storeProductInput = StoreProductInput(price: 1, baseQuantity: 1, unit: .none)
                                 let prototypes = productsIngredients.map {
-                                    ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color, storeProductInput: storeProductInput)
+                                    ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.category.name, targetSectionColor: $0.product.product.category.color, storeProductInput: storeProductInput)
                                 }
                                 
                                 Prov.listItemsProvider.add(prototypes, status: .todo, list: exampleList, note: nil, order: nil, token: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in

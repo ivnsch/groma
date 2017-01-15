@@ -35,15 +35,17 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         didSet {
             guard let model = model else {QL3("Model is nil"); return}
             
-            nameLabel.text = NSLocalizedString(model.product.name, comment: "")
+            // TODO!!!!!!!!!!!!!!!! show unit
             
-            centerVerticallyNameLabelConstraint.constant = model.product.brand.isEmpty ? 0 : 10
-            brandLabel.text = model.product.brand
+            nameLabel.text = NSLocalizedString(model.product.product.name, comment: "")
+            
+            centerVerticallyNameLabelConstraint.constant = model.product.product.brand.isEmpty ? 0 : 10
+            brandLabel.text = model.product.product.brand
             
             quantityLabel.text = String(model.quantity)
             shownQuantity = model.quantity
             
-            categoryColorView.backgroundColor = model.product.category.color
+            categoryColorView.backgroundColor = model.product.product.category.color
             
             cancelDeleteProgress() // some recycled cells were showing red bar on top
             

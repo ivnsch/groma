@@ -34,10 +34,11 @@ class PlanProviderImpl: PlanProvider {
     }
 
     func addGroupItems(_ groupItems: [GroupItem], inventory: DBInventory, _ handler: @escaping (ProviderResult<[PlanItem]>) -> Void) {
-        let planItems = groupItems.map{
-            PlanItem(inventory: inventory, product: $0.product, quantity: $0.quantity, usedQuantity: 0)
-        }
-        addPlanItems(planItems, inventory: inventory, handler)
+        // Commented because structural changes
+//        let planItems = groupItems.map{
+//            PlanItem(inventory: inventory, product: $0.product, quantity: $0.quantity, usedQuantity: 0)
+//        }
+//        addPlanItems(planItems, inventory: inventory, handler)
     }
     
     // TODO remote

@@ -18,15 +18,23 @@ public protocol ProductProvider {
 
     func products(_ range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<Results<Product>>) -> Void)
     
+    func products(_ range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<Results<QuantifiableProduct>>) -> Void)
+
     func product(_ name: String, brand: String, handler: @escaping (ProviderResult<Product>) -> ())
+
+    func quantifiableProduct(_ unique: QuantifiableProductUnique, handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void)
 
     func products(_ text: String, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: [Product])>) -> Void)
 
+    func quantifiableProducts(_ text: String, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: [QuantifiableProduct])>) -> Void)
+    
     func products(_ nameBrands: [(name: String, brand: String)], _ handler: @escaping (ProviderResult<[Product]>) -> Void)
     
-    func productsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: Product, section: Section?)])>) -> Void)
+    func productsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)])>) -> Void)
     
     func productsRes(_ text: String, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: Results<Product>)>) -> Void)
+
+    func productsRes(_ text: String, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: Results<QuantifiableProduct>)>) -> Void)
 
     func countProducts(_ handler: @escaping (ProviderResult<Int>) -> Void)
 
@@ -40,8 +48,12 @@ public protocol ProductProvider {
     // Update product. Note: This invalidates the list item memory cache, in order to make listitems update stale product references.
     func update(_ product: Product, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
+    func update(_ product: QuantifiableProduct, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
     func delete(_ product: Product, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
+    func deleteQuantifiableProduct(uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
     func delete(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func incrementFav(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
@@ -61,9 +73,16 @@ public protocol ProductProvider {
     Tries to load using unique (name), if existent overrides fields with corresponding input, if not existent creates a new one
     param updateCategory if we want to overwrite the category data if a category with passed name exists already (currently this means updating the color). If the category exists and this value is false, the categoryColor parameter is ignored.
     TODO use results like everywhere else, maybe put in a different specific utility class this is rather provider-internal
+    NOTE: doesn't save the new/merged product
     */
     func mergeOrCreateProduct(_ productName: String, category: String, categoryColor: UIColor, brand: String, updateCategory: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void)
     
+    // NOTE: doesn't save the new/merged product
+    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void)
+    
+    // NOTE: doesn't save the new/merged product
+    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void)
+   
     // Returns if restored at least one product
     func restorePrefillProductsLocal(_ handler: @escaping (ProviderResult<Bool>) -> Void)
 }

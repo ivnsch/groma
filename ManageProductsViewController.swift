@@ -31,7 +31,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
-    fileprivate var products: Results<Product>?
+    fileprivate var products: Results<QuantifiableProduct>? // For now quantifiable products - maybe later we should show only products and quantifiable products grouped inside
     fileprivate var notificationToken: NotificationToken?
 
     var sortBy: ProductSortBy = .fav {
@@ -174,7 +174,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let product = products?[(indexPath as NSIndexPath).row] else {QL4("No product"); return}
-            Prov.productProvider.delete(product, remote: true, successHandler{
+            Prov.productProvider.deleteQuantifiableProduct(uuid: product.uuid, remote: true, successHandler{
             })
         }
     }
@@ -230,15 +230,20 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
     }
     
-    func onAddProduct(_ product: Product) {
+    func onAddProduct(_ product: QuantifiableProduct) {
     }
     
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditItem(_ input: ListItemInput, editingItem: AddEditProductControllerEditingData) {
-            let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
-            let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
-            Prov.productProvider.update(updatedProduct, remote: true, successHandler{
+            
+            // Assumption: When user edits a product in product screen, they want to modify the product itself. So for example, if they enter a new category, all items in the app referencing this product will also change their category. Or if they enter a new unit (say "box" instead of "packet") all items in the app using this quantifiable product, will now use "box". This maybe should be made clear to the user in some form, e.g. by explaining this when entering the product screen or when submitting an edit.
+            // This is different to when user edits items (list, inventory, etc) - in this case we assume the intention is to change data *of the item*, and not altering the referenced (store/quantifiable)products. If they e.g. enter a new category for an item, we assume they want only this item to be categorized differently, not manipulate the underlaying product, which would affect other items in the app.
+            let updatedCategory = editingItem.product.product.category.copy(name: input.section, color: input.sectionColor)
+            let updatedProduct = editingItem.product.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
+            let updatedQuantifiableProduct = editingItem.product.copy(baseQuantity: input.storeProductInput.baseQuantity, unit: input.storeProductInput.unit, product: updatedProduct)
+            
+            Prov.productProvider.update(updatedQuantifiableProduct, remote: true, successHandler{
             })
         }
         
@@ -299,7 +304,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     // MARK: -
     
-    fileprivate func indexPathForProduct(_ product: Product) -> IndexPath? {
+    fileprivate func indexPathForProduct(_ product: QuantifiableProduct) -> IndexPath? {
         let indexMaybe = products?.enumerated().filter{$0.element.same(product)}.first?.offset
         return indexMaybe.map{IndexPath(row: $0, section: 0)}
     }
@@ -310,8 +315,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     fileprivate func loadProducts() {
-        Prov.productProvider.productsRes(searchText, sortBy: sortBy, successHandler{[weak self] products in guard let weakSelf = self else {return}
-            weakSelf.products = products.products
+        Prov.productProvider.productsRes(searchText, sortBy: sortBy, successHandler{[weak self] (substring: String?, products: Results<QuantifiableProduct>) in guard let weakSelf = self else {return}
+            weakSelf.products = products
             
             weakSelf.notificationToken = weakSelf.products?.addNotificationBlock { changes in
                 switch changes {
@@ -412,9 +417,9 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
 }
 
 struct AddEditProductControllerEditingData {
-    let product: Product
+    let product: QuantifiableProduct
     let indexPath: IndexPath
-    init(product: Product, indexPath: IndexPath) {
+    init(product: QuantifiableProduct, indexPath: IndexPath) {
         self.product = product
         self.indexPath = indexPath
     }

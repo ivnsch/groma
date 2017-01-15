@@ -12,9 +12,9 @@ public class StoreProductInput {
     
     public let price: Float
     public let baseQuantity: Float
-    public let unit: StoreProductUnit
+    public let unit: ProductUnit
     
-    public init(price: Float, baseQuantity: Float, unit: StoreProductUnit) {
+    public init(price: Float, baseQuantity: Float, unit: ProductUnit) {
         self.price = price
         self.baseQuantity = baseQuantity
         self.unit = unit

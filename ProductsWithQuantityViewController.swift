@@ -297,17 +297,26 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             case .count:
                 return findRow({
                     if $0.quantity == inventoryItem.quantity {
-                        return $0.product.name > inventoryItem.product.name
+                        if $0.product.product.name == inventoryItem.product.product.name {
+                            return $0.product.unit.text > inventoryItem.product.unit.text
+                        } else {
+                            return $0.product.product.name > inventoryItem.product.product.name
+                        }
+                        
                     } else {
                         return $0.quantity > inventoryItem.quantity
                     }
                 })
             case .alphabetic:
                 return findRow({
-                    if $0.product.name == inventoryItem.product.name {
-                        return $0.quantity > inventoryItem.quantity
+                    if $0.product.product.name == inventoryItem.product.product.name {
+                        if $0.quantity == inventoryItem.quantity {
+                            return $0.product.unit.text > inventoryItem.product.unit.text
+                        } else {
+                            return $0.quantity > inventoryItem.quantity
+                        }
                     } else {
-                        return $0.product.name > inventoryItem.product.name
+                        return $0.product.product.name > inventoryItem.product.product.name
                     }
                     
                 })

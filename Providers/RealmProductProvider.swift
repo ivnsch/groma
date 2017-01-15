@@ -22,17 +22,36 @@ public struct ProductUnique {
     }
 }
 
+public typealias QuantifiableProductUnique = (name: String, brand: String, unit: ProductUnit, baseQuantity: Float)
+//public struct QuantifiableProductUnique {
+//    let name: String
+//    let brand: String
+//    let unit: ProductUnit
+//    
+//    init(name: String, brand: String, unit: ProductUnit) {
+//        self.name = name
+//        self.brand = brand
+//    }
+//}
+
+// TODO!!!!!!!!!!!!!! necessary to create separate implementation for ProductPrototype and QuantifiableProductPrototype? (current state)
 public struct ProductPrototype {
     let name: String
     let category: String
     let categoryColor: UIColor
     let brand: String
     
-    init(name: String, category: String, categoryColor: UIColor, brand: String) {
+    let baseQuantity: Float
+    let unit: ProductUnit
+    
+    // TODO!!!!!!!!!!!!! remove defaults
+    init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: Float = 1, unit: ProductUnit = .none) {
         self.name = name
         self.category = category
         self.categoryColor = categoryColor
         self.brand = brand
+        self.baseQuantity = baseQuantity
+        self.unit = unit
     }
 }
 
@@ -127,6 +146,42 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
+    func loadQuantifiableProductWithUnique(_ unique: QuantifiableProductUnique, handler: @escaping (QuantifiableProduct?) -> Void) {
+        
+        background({() -> String? in
+            do {
+                let realm = try Realm()
+                let product: QuantifiableProduct? = self.loadSync(realm, filter: QuantifiableProduct.createFilter(unique: unique)).first
+                return product?.uuid
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                return nil
+            }
+            
+        }, onFinish: {productUuidMaybe in
+            do {
+                if let productUuid = productUuidMaybe {
+                    let realm = try Realm()
+                    // TODO review if it's necessary to pass the sort descriptor here again
+                    let productMaybe: QuantifiableProduct? = self.loadSync(realm, filter: QuantifiableProduct.createFilter(productUuid)).first
+                    if productMaybe == nil {
+                        QL4("Unexpected: product with just fetched uuid is not there")
+                    }
+                    handler(productMaybe)
+                    
+                } else {
+                    QL1("No product found for unique: \(unique)")
+                    handler(nil)
+                }
+                
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                handler(nil)
+            }
+        })
+    }
+    
+    
     func loadProducts(_ range: NSRange, sortBy: ProductSortBy, handler: @escaping (Results<Product>?) -> ()) {
         // For now duplicate code with products, to use Results and plain objs api together (for search text for now it's easier to use plain obj api)
         let sortData: (key: String, ascending: Bool) = {
@@ -137,6 +192,21 @@ class RealmProductProvider: RealmProvider {
         }()
         
         load(filter: nil, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending)/*, range: range*/) {(products: Results<Product>?) in
+            handler(products)
+        }
+    }
+    
+    func loadQuantifiableProducts(_ range: NSRange, sortBy: ProductSortBy, handler: @escaping (Results<QuantifiableProduct>?) -> Void) {
+        // For now duplicate code with products, to use Results and plain objs api together (for search text for now it's easier to use plain obj api)
+        // TODO!!!!!!!!!!!!!!!!!!! include unit/base quantity in sorting
+        let sortData: (key: String, ascending: Bool) = {
+            switch sortBy {
+            case .alphabetic: return ("productOpt.name", true)
+            case .fav: return ("productOpt.fav", false) // TODO!!!!!!!!!!!!!!!!!!! move fav to quantifiable product? (it's the one we can select in the quick add...)
+            }
+        }()
+        
+        load(filter: nil, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending)/*, range: range*/) {(products: Results<QuantifiableProduct>?) in
             handler(products)
         }
     }
@@ -185,6 +255,58 @@ class RealmProductProvider: RealmProvider {
     
     }
 
+    // IMPORTANT: This cannot be used for real time updates (add) since the final results are fetched using uuids, so these results don't notice products with new uuids
+    // TODO!!!!!!!!!!!!!!!!!!! refactor with products() above? (this is a copy with few necessary changes for quantifiable product). Or maybe remove above, since now we need only this?
+    func products(_ substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ products: Results<QuantifiableProduct>?) -> Void) {
+        
+        let sortData: (key: String, ascending: Bool) = {
+            switch sortBy {
+            case .alphabetic: return ("productOpt.name", true)
+            case .fav: return ("productOpt.fav", false)
+            }
+        }()
+        
+        let filterMaybe = substring.map{QuantifiableProduct.createFilterNameContains($0)}
+        
+        background({() -> [String]? in
+            do {
+                let realm = try Realm()
+                let products: [Product] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
+                return products.map{$0.uuid}
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                return nil
+            }
+            
+        }, onFinish: {productUuidsMaybe in
+            do {
+                if let productUuids = productUuidsMaybe {
+                    let realm = try Realm()
+                    // TODO review if it's necessary to pass the sort descriptor here again
+                    let products: Results<QuantifiableProduct> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending))
+                    handler(substring, products)
+                    
+                } else {
+                    QL4("No product uuids")
+                    handler(substring, nil)
+                }
+                
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                handler(substring, nil)
+            }
+        })
+        
+    }
+    
+    
+
+    func quantifiableProducts(_ substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ products: [QuantifiableProduct]?) -> Void) {
+        products(substring, range: range, sortBy: sortBy) {(substring, result: Results<QuantifiableProduct>?) in
+            handler(substring, result?.toArray())
+        }
+    }
+    
     func products(_ substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ products: [Product]?) -> Void) {
         products(substring, range: range, sortBy: sortBy) {(substring, result) in
             handler(substring, result?.toArray())
@@ -192,7 +314,7 @@ class RealmProductProvider: RealmProvider {
     }
     
     // TODO range
-    func productsWithPosibleSections(_ substring: String? = nil, list: List, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ productsWithMaybeSections: [(product: Product, section: Section?)]?) -> Void) {
+    func productsWithPosibleSections(_ substring: String? = nil, list: List, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)]?) -> Void) {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
             case .alphabetic: return ("name", true)
@@ -229,8 +351,8 @@ class RealmProductProvider: RealmProvider {
         }, resultHandler: {(productsWithMaybeSectionsUuids: [(product: String, section: String?)]?) in
             do {
                 let realm = try Realm()
-                let productsWithMaybeSections: [(product: Product, section: Section?)]? = productsWithMaybeSectionsUuids?.flatMap {productUuid, sectionUuid in
-                    if let product = realm.objects(Product.self).filter(Product.createFilter(productUuid)).first {
+                let productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)]? = productsWithMaybeSectionsUuids?.flatMap {productUuid, sectionUuid in
+                    if let product = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(productUuid)).first {
                         let section = sectionUuid.flatMap{realm.objects(Section.self).filter(Section.createFilter($0)).first}
                         return (product, section)
                     } else {
@@ -302,25 +424,77 @@ class RealmProductProvider: RealmProvider {
     // Note: This is expected to be called from inside a transaction and in a background operation
     func deleteProductDependenciesSync(_ realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
         
-        _ = DBProv.storeProductProvider.deleteStoreProductsAndDependenciesForProductSync(realm, productUuid: productUuid, markForSync: markForSync)
+        let quantifiableProductsResult = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilterProduct(productUuid))
+        // Commented because structural changes
+//        if markForSync {
+//            let toRemoteInventoryItems = Array(inventoryResult.map{DBRemoveInventoryItem($0)})
+//            saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
+//        }
+        realm.delete(quantifiableProductsResult)
+
+        return true
+    }
+    
+    func deleteQuantifiableProductAndDependencies(_ quantifiableProductUuid: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            if let weakSelf = self {
+                return weakSelf.deleteQuantifiableProductAndDependenciesSync(realm, quantifiableProductUuid: quantifiableProductUuid, markForSync: markForSync)
+            } else {
+                print("WARN: RealmListItemProvider.deleteProductAndDependencies: self is nil")
+                return false
+            }
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteQuantifiableProductAndDependenciesSync(_ realm: Realm, quantifiableProductUuid: String, markForSync: Bool) -> Bool {
+        if let productResult = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(quantifiableProductUuid)).first {
+            return deleteQuantifiableProductAndDependenciesSync(realm, dbProduct: productResult, markForSync: markForSync)
+        } else {
+            return false
+        }
+    }
+    
+    func deleteQuantifiableProductAndDependenciesSync(_ realm: Realm, dbProduct: QuantifiableProduct, markForSync: Bool) -> Bool {
+        if deleteQuantifiableProductDependenciesSync(realm, quantifiableProductUuid: dbProduct.uuid, markForSync: markForSync) {
+            
+            // Commented because structural changes - there are no thombstones for quantifiable products as this class is new and it seems we will not use the custom backend anymore
+//            if markForSync {
+//                let toRemove = ProductToRemove(dbProduct)
+//                realm.add(toRemove, update: true)
+//            }
+            realm.delete(dbProduct)
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    
+    // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteQuantifiableProductDependenciesSync(_ realm: Realm, quantifiableProductUuid: String, markForSync: Bool) -> Bool {
         
-        _ = DBProv.groupItemProvider.removeGroupItemsForProductSync(realm, productUuid: productUuid, markForSync: markForSync)
+        _ = DBProv.storeProductProvider.deleteStoreProductsAndDependenciesForProductSync(realm, productUuid: quantifiableProductUuid, markForSync: markForSync)
         
-        let inventoryResult = realm.objects(InventoryItem.self).filter(InventoryItem.createFilterWithProduct(productUuid))
+        _ = DBProv.groupItemProvider.removeGroupItemsForProductSync(realm, productUuid: quantifiableProductUuid, markForSync: markForSync)
+        
+        let inventoryResult = realm.objects(InventoryItem.self).filter(InventoryItem.createFilterWithProduct(quantifiableProductUuid))
         if markForSync {
             let toRemoteInventoryItems = Array(inventoryResult.map{DBRemoveInventoryItem($0)})
             saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
         }
         realm.delete(inventoryResult)
         
-        let historyResult = realm.objects(HistoryItem.self).filter(HistoryItem.createFilterWithProduct(productUuid))
+        let historyResult = realm.objects(HistoryItem.self).filter(HistoryItem.createFilterWithProduct(quantifiableProductUuid))
         if markForSync {
             let toRemoteHistoryItems =  Array(historyResult.map{DBRemoveHistoryItem($0)})
             saveObjsSyncInt(realm, objs: toRemoteHistoryItems, update: true)
         }
         realm.delete(historyResult)
         
-        let planResult = realm.objects(DBPlanItem.self).filter(DBPlanItem.createFilterWithProduct(productUuid))
+        let planResult = realm.objects(DBPlanItem.self).filter(DBPlanItem.createFilterWithProduct(quantifiableProductUuid))
         if markForSync {
             // TODO plan items either complete or remove this table entirely
         }
@@ -328,6 +502,7 @@ class RealmProductProvider: RealmProvider {
         
         return true
     }
+    
     
     // Expected to be executed in do/catch and write block
     func removeProductsForCategorySync(_ realm: Realm, categoryUuid: String, markForSync: Bool) -> Bool {
@@ -338,6 +513,7 @@ class RealmProductProvider: RealmProvider {
         return true
     }
     
+    // TODO deprecate this?
     func saveProduct(_ productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: @escaping (Product?) -> ()) {
         
         loadProductWithName(productInput.name, brand: productInput.brand) {[weak self] productMaybe in
@@ -395,6 +571,93 @@ class RealmProductProvider: RealmProvider {
             }
         }
     }
+
+    
+    func updateOrCreateQuantifiableProduct(_ prototype: ProductPrototype, handler: @escaping (QuantifiableProduct?) -> Void) {
+
+        let productInput = ProductInput(name: prototype.name, category: prototype.category, categoryColor: prototype.categoryColor, brand: prototype.brand)
+        updateOrCreateProduct(productInput) {productMaybe in
+            
+            guard let product = productMaybe else {
+                QL4("Couldn't update/create product for prototype: \(prototype)")
+                handler(nil)
+                return
+            }
+            
+            self.loadQuantifiableProductWithUnique((name: prototype.name, brand: prototype.brand, unit: prototype.unit, baseQuantity: prototype.baseQuantity)) {quantifiableProductMaybe in
+             
+                if let existingQuantifiableProduct = quantifiableProductMaybe {
+                    // nothing to update (there are no fields in quantifiable product that don't belong to unique)
+                    handler(existingQuantifiableProduct)
+
+                } else {
+                    let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: product)
+                    self.doInWriteTransactionSync({realm in
+                        realm.add(newQuantifiableProduct)
+                    })
+                }
+            }
+        }
+    }
+    
+    
+    func updateOrCreateProduct(_ productInput: ProductInput, _ handler: @escaping (Product?) -> Void) {
+        
+        loadProductWithName(productInput.name, brand: productInput.brand) {[weak self] productMaybe in
+
+            func onHasNewOrUpdatedProduct(product: Product) {
+                self?.saveProducts([product], update: true) {saved in
+                    if saved {
+                        handler(product)
+                    } else {
+                        QL4("Could not save product: \(product)")
+                        handler(nil)
+                    }
+                }
+            }
+            
+            func onHasNewOrUpdatedCategory(category: ProductCategory) {
+                if let existingProduct = productMaybe {
+                    let updatedProduct = existingProduct.copy(name: productInput.name, category: category, brand: productInput.brand)
+                    onHasNewOrUpdatedProduct(product: updatedProduct)
+                    
+                } else {
+                    let newProduct = Product(uuid: UUID().uuidString, name: productInput.name, category: category, fav: 0, brand: productInput.brand)
+                    onHasNewOrUpdatedProduct(product: newProduct)
+                }
+            }
+            
+            // seach for existing category with unique (name) and use it or create new one. We don't simply update product's category (in the case where product exists) - imagine e.g. user wants to change the category of a list item, say, "meat" to "fish" - the intent is to assign the item a different category, not to update the category (otherwise the previous "meat" category would now be named "fish" and everything in the app classified as meat would now be fish). For category name update intent, we have (or will have at least) a dedicated screen to manage categories.
+            DBProv.productCategoryProvider.category(name: productInput.category) {categoryMaybe in
+                let category: ProductCategory = {
+                    if let category = categoryMaybe {
+                        return category.copy(color: productInput.categoryColor)
+                    } else { // category doesn't exist
+                        return ProductCategory(uuid: UUID().uuidString, name: productInput.category, color: productInput.categoryColor.hexStr)
+                    }
+                }()
+                
+                onHasNewOrUpdatedCategory(category: category)
+            }
+        }
+    }
+    
+    func saveQuantifiableProducts(_ products: [QuantifiableProduct], update: Bool = true, handler: @escaping (Bool) -> ()) {
+    
+        let productsCopy = products.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
+        
+        for product in productsCopy {
+            
+            doInWriteTransaction({realm in
+                realm.add(product, update: update)
+                return true
+                
+            }, finishHandler: {success in
+                handler(success ?? false)
+            })
+        }
+    }
+    
     
     func saveProducts(_ products: [Product], update: Bool = true, handler: @escaping (Bool) -> ()) {
         

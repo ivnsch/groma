@@ -11,10 +11,13 @@ import Foundation
 class HistoryItemMapper {
     
     class func historyItemWithRemote(_ remoteHistoryItem: RemoteHistoryItem, inventory: DBInventory, product: Product, user: DBSharedUser) -> HistoryItem {
+        // Structural changes. Quick fix to compile.
+        let dummy = QuantifiableProduct(uuid: "123", baseQuantity: 1, unit: .none, product: product)
+        
         return HistoryItem(
             uuid: remoteHistoryItem.uuid,
             inventory: inventory,
-            product: product,
+            product: dummy,
             addedDate: remoteHistoryItem.addedDate,
             quantity: remoteHistoryItem.quantity,
             user: user,
@@ -76,24 +79,26 @@ class HistoryItemMapper {
         }
 
         let (productsCategoriesDict, _) = toProductCategoryDict(remoteListItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
-        let (productsDict, products) = toProductDict(remoteListItems.products, categories: productsCategoriesDict)
-        let (usersDict, users) = toUserDict(remoteListItems.users)
-        let (inventoriesDict, inventories) = toInventoryDict(remoteListItems.inventories)
+        let (_, products) = toProductDict(remoteListItems.products, categories: productsCategoriesDict)
+        let (_, users) = toUserDict(remoteListItems.users)
+        let (_, inventories) = toInventoryDict(remoteListItems.inventories)
         
-        let remoteListItemsArr = remoteListItems.historyItems
+//        let remoteListItemsArr = remoteListItems.historyItems
         
-        let listItems = remoteListItemsArr.map {remoteListItem in
-            HistoryItem(
-                uuid: remoteListItem.uuid,
-                inventory: inventoriesDict[remoteListItem.inventoryUuid]!,
-                product: productsDict[remoteListItem.productUuid]!,
-                addedDate: remoteListItem.addedDate,
-                quantity: remoteListItem.quantity,
-                user: usersDict[remoteListItem.userUuid]!,
-                paidPrice: remoteListItem.paidPrice,
-                lastServerUpdate: remoteListItem.lastUpdate
-            )
-        }
+        let listItems: [HistoryItem] = []
+        // Commented because structural changes
+//        let listItems = remoteListItemsArr.map {remoteListItem in
+//            HistoryItem(
+//                uuid: remoteListItem.uuid,
+//                inventory: inventoriesDict[remoteListItem.inventoryUuid]!,
+//                product: productsDict[remoteListItem.productUuid]!,
+//                addedDate: remoteListItem.addedDate,
+//                quantity: remoteListItem.quantity,
+//                user: usersDict[remoteListItem.userUuid]!,
+//                paidPrice: remoteListItem.paidPrice,
+//                lastServerUpdate: remoteListItem.lastUpdate
+//            )
+//        }
         
         return (
             listItems,

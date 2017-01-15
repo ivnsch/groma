@@ -247,7 +247,7 @@ class RealmInventoryItemProvider: RealmProvider {
     // MARK: - Direct (no history)
     
     // Add product
-    func addToInventory(_ inventory: DBInventory, product: Product, quantity: Int, dirty: Bool, _ handler: @escaping ((inventoryItem: InventoryItem, delta: Int)?) -> Void) {
+    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Int, dirty: Bool, _ handler: @escaping ((inventoryItem: InventoryItem, delta: Int)?) -> Void) {
         doInWriteTransaction({[weak self] realm in
             return self?.addOrIncrementInventoryItem(realm, inventory: inventory, product: product, quantity: quantity, dirty: dirty)
         }, finishHandler: {(inventoryItemWithDeltaMaybe: (inventoryItem: InventoryItem, delta: Int)?) in
@@ -255,7 +255,7 @@ class RealmInventoryItemProvider: RealmProvider {
         })
     }
 
-    func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: Product, quantity: Int)], dirty: Bool, _ handler: @escaping ([(inventoryItem: InventoryItem, delta: Int)]?) -> Void) {
+    func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)], dirty: Bool, _ handler: @escaping ([(inventoryItem: InventoryItem, delta: Int)]?) -> Void) {
         
         // Fixes Realm acces in incorrect thread exceptions
         let inventoryCopy = inventory.copy()
@@ -298,11 +298,12 @@ class RealmInventoryItemProvider: RealmProvider {
         return adddedOrUpdatedItems
     }
     
-    fileprivate func addOrIncrementInventoryItem(_ realm: Realm, inventory: DBInventory, product: Product, quantity: Int, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Int) {
+    fileprivate func addOrIncrementInventoryItem(_ realm: Realm, inventory: DBInventory, product: QuantifiableProduct, quantity: Int, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Int) {
         
             // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
             let mapper: (InventoryItem) -> InventoryItem = {InventoryItemMapper.inventoryItemWithDB($0)}
             let existingInventoryItems: [InventoryItem] = loadSync(realm, mapper: mapper, filter:
+                // TODO!!!!!!!!!!!!!!!!!!!!!!!!! filter should use either uuid of quantifiable product or include unit - we should increment only product with specific unit
                 InventoryItem.createFilter(product, inventory))
             
             let addedOrIncrementedInventoryItem: InventoryItem = {

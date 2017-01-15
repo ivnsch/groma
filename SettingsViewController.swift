@@ -11,6 +11,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import QorumLogs
 import Providers
+import RealmSwift
 
 enum SettingId {
     case clearHistory, overwriteData, removeAccount, enableRealTime, addDummyHistoryItems, clearAllData, restorePrefillProducts, restoreHints
@@ -162,7 +163,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if let weakSelf = self {
                 
                 if let inventory = inventories.first {
-                    Prov.productProvider.products(NSRange(location: 0, length: 500), sortBy: .alphabetic, weakSelf.successHandler{products in
+                    
+                    Prov.productProvider.products(NSRange(location: 0, length: 500), sortBy: .alphabetic, weakSelf.successHandler{(products: Results<QuantifiableProduct>) in
                         
                         guard products.count > 0 else {
                             AlertPopup.show(message: "You need some products to be able to add history items", controller: weakSelf)

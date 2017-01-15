@@ -12,7 +12,7 @@ import QorumLogs
 import Providers
 
 protocol QuickAddDelegate: class {
-    func onAddProduct(_ product: Product)
+    func onAddProduct(_ product: QuantifiableProduct)
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?)
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) // editingItem == nil -> add
 
@@ -62,7 +62,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     fileprivate var editingItem: AddEditItem? {
         didSet {
             if let editingItem = editingItem {
-                searchBar.text = editingItem.product.name
+                searchBar.text = editingItem.product.product.name
             } else {
                 QL3("Setting a nil editingItem")
             }
@@ -236,7 +236,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
     
     // product was selected in product quick list
-    func onAddProduct(_ product: Product) {
+    func onAddProduct(_ product: QuantifiableProduct) {
         delegate?.onAddProduct(product)
     }
     
@@ -299,7 +299,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(_ price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?) {
+    func onOkTap(_ price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, editingItem: Any?) {
         
         if let name = searchBar.text?.trim() {
             

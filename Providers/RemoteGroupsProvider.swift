@@ -121,20 +121,21 @@ class RemoteGroupsProvider: RemoteProvider {
     }
     
     func toRequestParams(_ groupItem: GroupItem) -> [String: AnyObject] {
-        
-        let productDict = RemoteListItemProvider().toRequestParams(groupItem.product)
-        
-        let groupDict = toRequestParams(groupItem.group)
-        
-        var dict: [String: AnyObject] = [
-            "uuid": groupItem.uuid as AnyObject,
-            "quantity": groupItem.quantity as AnyObject,
-            "product": productDict as AnyObject,
-            "group": groupDict as AnyObject
-        ]
-        
-        dict["lastUpdate"] = NSNumber(value: Int64(groupItem.lastServerUpdate) as Int64)
-        
-        return dict
+        return [:]
+        // Commented because structural changes
+//        let productDict = RemoteListItemProvider().toRequestParams(groupItem.product)
+//        
+//        let groupDict = toRequestParams(groupItem.group)
+//        
+//        var dict: [String: AnyObject] = [
+//            "uuid": groupItem.uuid as AnyObject,
+//            "quantity": groupItem.quantity as AnyObject,
+//            "product": productDict as AnyObject,
+//            "group": groupDict as AnyObject
+//        ]
+//        
+//        dict["lastUpdate"] = NSNumber(value: Int64(groupItem.lastServerUpdate) as Int64)
+//        
+//        return dict
     }
 }

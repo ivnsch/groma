@@ -12,7 +12,7 @@ public class HistoryItem: DBSyncable, Identifiable {
 
     public dynamic var uuid: String = ""
     dynamic var inventoryOpt: DBInventory? = DBInventory()
-    dynamic var productOpt: Product? = Product()
+    dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
     public dynamic var addedDate: Int64 = 0
     public dynamic var quantity: Int = 0
     dynamic var userOpt: DBSharedUser? = DBSharedUser()
@@ -24,9 +24,9 @@ public class HistoryItem: DBSyncable, Identifiable {
         return "uuid"
     }
     
-    public var product: Product {
+    public var product: QuantifiableProduct {
         get {
-            return productOpt ?? Product()
+            return productOpt ?? QuantifiableProduct()
         }
         set(newProduct) {
             productOpt = newProduct
@@ -55,7 +55,7 @@ public class HistoryItem: DBSyncable, Identifiable {
         return paidPrice * Float(quantity)
     }
     
-    public convenience init(uuid: String, inventory: DBInventory, product: Product, addedDate: Int64, quantity: Int, user: DBSharedUser, paidPrice: Float, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, inventory: DBInventory, product: QuantifiableProduct, addedDate: Int64, quantity: Int, user: DBSharedUser, paidPrice: Float, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.init()
         
         self.uuid = uuid
@@ -110,34 +110,36 @@ public class HistoryItem: DBSyncable, Identifiable {
     // TODO!!!! failable
     static func fromDict(_ dict: [String: AnyObject], inventory: DBInventory, product: Product) -> HistoryItem {
         let item = HistoryItem()
-        item.uuid = dict["uuid"]! as! String
-        item.inventory = inventory
-        item.product = product
-        item.addedDate = Int64(dict["addedDate"] as! Double)
-        item.quantity = dict["quantity"]! as! Int
-        item.paidPrice = dict["paidPrice"] as! Float
-        // TODO!!!! user -> the backend sends us the uuid, we should send for now the email instead
-        let user = DBSharedUser()
-        user.email = dict["userUuid"]! as! String
-        item.user = user
-        item.setSyncableFieldswithRemoteDict(dict)
+        // for now disabled because structural changes
+//        item.uuid = dict["uuid"]! as! String
+//        item.inventory = inventory
+//        item.product = product
+//        item.addedDate = Int64(dict["addedDate"] as! Double)
+//        item.quantity = dict["quantity"]! as! Int
+//        item.paidPrice = dict["paidPrice"] as! Float
+//        // TODO!!!! user -> the backend sends us the uuid, we should send for now the email instead
+//        let user = DBSharedUser()
+//        user.email = dict["userUuid"]! as! String
+//        item.user = user
+//        item.setSyncableFieldswithRemoteDict(dict)
         return item
     }
     
     func toDict() -> [String: AnyObject] {
-        var dict = [String: AnyObject]()
-        dict["uuid"] = uuid as AnyObject?
-        dict["inventoryUuid"] = inventory.uuid as AnyObject?
-        dict["productInput"] = product.toDict() as AnyObject?
-        dict["addedDate"] = NSNumber(value: Int64(addedDate) as Int64)
-        dict["quantity"] = quantity as AnyObject?
-        dict["paidPrice"] = paidPrice as AnyObject?
-        dict["user"] = user.toDict() as AnyObject?
-        setSyncableFieldsInDict(&dict)
+        let dict = [String: AnyObject]()
+        // for now disabled because structural changes
+//        dict["uuid"] = uuid as AnyObject?
+//        dict["inventoryUuid"] = inventory.uuid as AnyObject?
+//        dict["productInput"] = product.toDict() as AnyObject?
+//        dict["addedDate"] = NSNumber(value: Int64(addedDate) as Int64)
+//        dict["quantity"] = quantity as AnyObject?
+//        dict["paidPrice"] = paidPrice as AnyObject?
+//        dict["user"] = user.toDict() as AnyObject?
+//        setSyncableFieldsInDict(&dict)
         return dict
     }
     
-    public func copy(uuid: String? = nil, inventory: DBInventory? = nil, product: Product? = nil, addedDate: Int64? = nil, quantity: Int? = nil, user: DBSharedUser? = nil, paidPrice: Float? = nil, lastServerUpdate: Int64? = nil, removed: Bool = false) -> HistoryItem {
+    public func copy(uuid: String? = nil, inventory: DBInventory? = nil, product: QuantifiableProduct? = nil, addedDate: Int64? = nil, quantity: Int? = nil, user: DBSharedUser? = nil, paidPrice: Float? = nil, lastServerUpdate: Int64? = nil, removed: Bool = false) -> HistoryItem {
         return HistoryItem(
             uuid: uuid ?? self.uuid,
             inventory: inventory ?? self.inventory.copy(),

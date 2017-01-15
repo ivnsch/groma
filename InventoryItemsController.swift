@@ -300,7 +300,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func onAddProduct(_ product: Product) {
+    func onAddProduct(_ product: QuantifiableProduct) {
         if let inventory = inventory {
             Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: 1, remote: true, successHandler{addedItemWithDelta in
             })

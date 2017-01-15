@@ -461,6 +461,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // TODO we are iterating multiple times through listitems, once to find the product and in removeListItem...
+    // TODO!!!!!!!!!!!!!!! review: is it fine that the productUuid (probably) is now quantifiable product uuid?
     func removeListItemReferencingProduct(_ productUuid: String) {
         if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.uuid == productUuid}) {
             removeListItem(tableViewListItem.listItem)
@@ -470,19 +471,21 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
 
     func removeListItemsReferencingCategory(_ categoryUuid: String) {
-        for (tableViewListItem, _) in findListItemsWithIndexPath({$0.product.product.category.uuid == categoryUuid}) {
+        for (tableViewListItem, _) in findListItemsWithIndexPath({$0.product.product.product.category.uuid == categoryUuid}) {
             removeListItem(tableViewListItem.listItem)
         }
     }
     
     // Used by websocket, when receiving a notification of an updated product
     func updateProduct(_ product: Product, status: ListItemStatus) {
-        if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.product.uuid == product.uuid}) {
-            let updated = tableViewListItem.listItem.update(product: product)
-            updateListItem(updated, status: status, notifyRemote: false)
-        } else {
-            QL1("updateProduct list item is not in list items table view. Product uuid: \(product.uuid)")
-        }
+        fatalError("disabled")
+        // Commented because structural changes
+//        if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.product.uuid == product.uuid}) {
+//            let updated = tableViewListItem.listItem.update(product: product)
+//            updateListItem(updated, status: status, notifyRemote: false)
+//        } else {
+//            QL1("updateProduct list item is not in list items table view. Product uuid: \(product.uuid)")
+//        }
     }
     
     // TODO why do we need indexPath and have to look for the index in the sections array using uuid, shouldn't both have the same index?

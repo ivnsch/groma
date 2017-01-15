@@ -173,7 +173,7 @@ class StatsProviderImpl: StatsProvider {
         var dict: OrderedDictionary<String, (product: Product, price: Float, quantity: Int)> = OrderedDictionary()
         var totalPrice: Float = 0
         for historyItem in historyItems {
-            let product = historyItem.product
+            let product = historyItem.product.product // the product units are irrelevant for this - we just want to know how much we spended e.g. for "apples" - whether we bought sometimes in "boxes" or others in "kg" doesn't make a difference
             let itemTotalPaidPrice = historyItem.totalPaidPrice
             if let aggr = dict[product.uuid] {
                 // we put the product in values which overwrites the product of the last entry for this uuid if existent, the product for one uuid is always the same so this doesn't matter.

@@ -137,7 +137,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     func remove(_ listUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         memProvider.invalidate()
-        DBProv.listProvider.remove(listUuid, markForSync: true) {[weak self] removed in
+        DBProv.listProvider.remove(listUuid, markForSync: true) {removed in
             handler(ProviderResult(status: removed ? ProviderStatusCode.success : ProviderStatusCode.databaseUnknown))
             
             // Disabled while impl. realm sync
@@ -162,7 +162,8 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
-        let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color, storeProductInput: nil)}
+        // TODO!!!!!!!!!!!!!!!!!!!! review: do we need unit, baseq here?
+        let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.category.name, targetSectionColor: $0.product.product.category.color, storeProductInput: nil)}
         self.add(listItemPrototypes, status: status, list: list, token: nil, handler)
     }
     
@@ -294,7 +295,8 @@ class ListItemProviderImpl: ListItemProvider {
                 
                 if let (section, product) = result.sucessResult {
 
-                    let storeProduct = StoreProduct(uuid: updatingListItem.product.uuid, price: listItemInput.storeProductInput.price, baseQuantity: listItemInput.storeProductInput.baseQuantity, unit: listItemInput.storeProductInput.unit, store: updatingListItem.list.store ?? "", product: product) // possible store product update
+//                    , baseQuantity: listItemInput.storeProductInput.baseQuantity, unit: listItemInput.storeProductInput.unit
+                    let storeProduct = StoreProduct(uuid: updatingListItem.product.uuid, price: listItemInput.storeProductInput.price, store: updatingListItem.list.store ?? "", product: product) // possible store product update
                     
                     let listItem = ListItem(
                         uuid: updatingListItem.uuid,
@@ -328,15 +330,15 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // Retrieves section and product identified by semantic unique, if they don't exist creates new ones
-    fileprivate func sectionAndProductForAddUpdate(_ listItemInput: ListItemInput, list: List, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: @escaping (ProviderResult<(Section, Product)>) -> Void) {
+    fileprivate func sectionAndProductForAddUpdate(_ listItemInput: ListItemInput, list: List, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: @escaping (ProviderResult<(Section, QuantifiableProduct)>) -> Void) {
         Prov.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .todo, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
             
             if let section = result.sucessResult {
                 
                 // updateCategory: false: we don't touch product's category from list items - our inputs affect only the section. We use them though to create a category in the case a category with the section's name doesn't exists already. A product needs a category and it's logical to simply default this to the section if it doesn't exist, instead of making user enter a second input for the category. From user's perspective, most times category = section.
                 //Prov.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store, updateCategory: false)
-                Prov.productProvider.mergeOrCreateProduct(listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, brand: listItemInput.brand, updateCategory: false) {result in
-                    
+                let prototype = ProductPrototype(name: listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, brand: listItemInput.brand, baseQuantity: listItemInput.storeProductInput.baseQuantity, unit: listItemInput.storeProductInput.unit)
+                Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false) {(result: ProviderResult<QuantifiableProduct>) in
                     if let product = result.sucessResult {
                         handler(ProviderResult(status: .success, sucessResult: (section, product)))
                         
@@ -354,7 +356,7 @@ class ListItemProviderImpl: ListItemProvider {
     
 
     // Adds list item with todo status
-    func addListItem(_ product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
+    func addListItem(_ product: QuantifiableProduct, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         let listItemPrototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionName, targetSectionColor: sectionColor, storeProductInput: storeProductInput)
         self.add(listItemPrototype, status: status, list: list, token: token, handler)
     }
@@ -433,7 +435,7 @@ class ListItemProviderImpl: ListItemProvider {
                     let existingStoreProductsDict = existingStoreProducts.toDictionary{($0.product.uuid, $0)}
                     return prototypes.map {prototype in
                         let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
-                            let storeProduct = StoreProduct(uuid: NSUUID().uuidString, price: 1, baseQuantity: 1, unit: StoreProductUnit.none, store: list.store ?? "", product: prototype.product)
+                            let storeProduct = StoreProduct(uuid: NSUUID().uuidString, price: 1, store: list.store ?? "", product: prototype.product)
                             QL1("Store product doesn't exist, created: \(storeProduct)")
                             return storeProduct
                         }()
@@ -489,10 +491,12 @@ class ListItemProviderImpl: ListItemProvider {
                     // see if there's already a listitem for this product in the list - if yes only increment it
                     
                     let existingListItems = realm.objects(ListItem.self).filter(ListItem.createFilterList(list.uuid))
-                    let existingListItemsDict: [String: ListItem] = existingListItems.toDictionary{(StoreProduct.nameBrandStoreKey($0.product.product.name, brand: $0.product.product.brand, store: $0.product.store), $0)}
+                    // TODO!!!!!!!!!!!!!!!!!!! consider unit?
+                    let existingListItemsDict: [String: ListItem] = existingListItems.toDictionary{(StoreProduct.nameBrandStoreKey($0.product.product.product.name, brand: $0.product.product.product.brand, store: $0.product.store), $0)}
                     
                     // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
-                    let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(StoreProduct.nameBrandStoreKey($0.product.product.name, brand: $0.product.product.brand, store: $0.product.store), $0)}
+                    // TODO!!!!!!!!!!!!!!!!!!! consider unit?
+                    let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(StoreProduct.nameBrandStoreKey($0.product.product.product.name, brand: $0.product.product.product.brand, store: $0.product.store), $0)}
                     
                     // Holds count of new items per section, which is incremented while we loop through prototypes
                     // we need this to determine the order of the items in the sections - which is the last index in existing items + new items count so far in section
@@ -501,7 +505,8 @@ class ListItemProviderImpl: ListItemProvider {
                     var savedListItems: [ListItem] = []
 
                     for (prototype, section) in prototypesWithSections {
-                        if var existingListItem = existingListItemsDict[StoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)] {
+                        // TODO!!!!!!!!!!!!!!!!!!! consider unit?
+                        if var existingListItem = existingListItemsDict[StoreProduct.nameBrandStoreKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store)] {
                             
                             existingListItem = existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
                             
@@ -539,7 +544,8 @@ class ListItemProviderImpl: ListItemProvider {
                                     let sectionCount = getOrderForNewSection(existingListItems)
                                     
                                     // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                    return memoryCacheItemsDict?[StoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+                                    // TODO!!!!!!!!!!!!!!!!!!! consider unit?
+                                    return memoryCacheItemsDict?[StoreProduct.nameBrandStoreKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
                                 }()
                             
                             // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
@@ -556,7 +562,8 @@ class ListItemProviderImpl: ListItemProvider {
                                 }
                             }()
                             
-                            let uuid = memoryCacheItemsDict?[StoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.uuid ?? NSUUID().uuidString
+                            // TODO!!!!!!!!!!!!!!!!!!! consider unit?
+                            let uuid = memoryCacheItemsDict?[StoreProduct.nameBrandStoreKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store)]?.uuid ?? NSUUID().uuidString
                             
                             
                             // create the list item and save it
@@ -638,7 +645,7 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
-    func addListItem(_ product: Product, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
+    func addListItem(_ product: QuantifiableProduct, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         // for now call the other func, which will fetch the section again... review if this is bad for performance otherwise let like this
         addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, storeProductInput: storeProductInput, token: token, handler)
     }

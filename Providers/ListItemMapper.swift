@@ -86,18 +86,20 @@ class ListItemMapper {
         }
         
         func toStoreProductDict(_ remoteProducts: [RemoteStoreProduct], products: [String: Product]) -> ([String: StoreProduct], [StoreProduct]) {
-            var dict: [String: StoreProduct] = [:]
-            var arr: [StoreProduct] = []
-            for remoteProduct in remoteProducts {
-                if let product = products[remoteProduct.productUuid] {
-                    let storeProduct = StoreProductMapper.productWithRemote(remoteProduct, product: product)
-                    dict[remoteProduct.uuid] = storeProduct
-                    arr.append(storeProduct)
-                } else {
-                    QL4("Got store product with product uuid: \(remoteProduct.productUuid) which is not in the products dict: \(products)")
-                }
-            }
-            return (dict, arr)
+            return ([:], [])
+            // Commented because structural changes
+//            var dict: [String: StoreProduct] = [:]
+//            var arr: [StoreProduct] = []
+//            for remoteProduct in remoteProducts {
+//                if let product = products[remoteProduct.productUuid] {
+//                    let storeProduct = StoreProductMapper.productWithRemote(remoteProduct, product: product)
+//                    dict[remoteProduct.uuid] = storeProduct
+//                    arr.append(storeProduct)
+//                } else {
+//                    QL4("Got store product with product uuid: \(remoteProduct.productUuid) which is not in the products dict: \(products)")
+//                }
+//            }
+//            return (dict, arr)
         }
         
         func toSectionDict(_ remoteSections: [RemoteSection], lists: [String: List]) -> ([String: Section], [Section]) {

@@ -13,7 +13,7 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
 
     public dynamic var uuid: String = ""
     public dynamic var quantity: Int = 0
-    dynamic var productOpt: Product? = Product()
+    dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
     dynamic var inventoryOpt: DBInventory? = DBInventory()
 
     public static var quantityFieldName: String {
@@ -24,9 +24,9 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
         return "uuid"
     }
     
-    public var product: Product {
+    public var product: QuantifiableProduct {
         get {
-            return productOpt ?? Product()
+            return productOpt ?? QuantifiableProduct()
         }
         set(newProduct) {
             productOpt = newProduct
@@ -42,7 +42,7 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
         }
     }
     
-    public convenience init(uuid: String, quantity: Int = 0, product: Product, inventory: DBInventory, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, quantity: Int = 0, product: QuantifiableProduct, inventory: DBInventory, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.init()
         
         self.uuid = uuid
@@ -66,8 +66,9 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
         return createFilter(productUuid: item.product.uuid, inventoryUuid: item.inventory.uuid)
     }
     
-    static func createFilter(_ product: Product, _ inventory: DBInventory) -> String {
-        return createFilter(ProductUnique(name: product.name, brand: product.brand), inventoryUuid: inventory.uuid)
+    static func createFilter(_ product: QuantifiableProduct, _ inventory: DBInventory) -> String {
+        // TODO!!!!!!!!!!!!!!!!!!!!!!!!! review - replaced product with store product here - is this valid for all use cases?
+        return createFilter(ProductUnique(name: product.product.name, brand: product.product.brand), inventoryUuid: inventory.uuid)
     }
 
     static func createFilter(_ productUnique: ProductUnique, inventoryUuid: String) -> String {
@@ -97,7 +98,7 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
     
     // MARK: -
     
-    static func fromDict(_ dict: [String: AnyObject], product: Product, inventory: DBInventory) -> InventoryItem {
+    static func fromDict(_ dict: [String: AnyObject], product: QuantifiableProduct, inventory: DBInventory) -> InventoryItem {
         let item = InventoryItem()
         item.uuid = dict["uuid"]! as! String
         item.quantity = dict["quantity"]! as! Int
@@ -109,14 +110,15 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
     }
     
     public func toDict() -> [String: AnyObject] {
-        var dict = [String: AnyObject]()
-        dict["uuid"] = uuid as AnyObject?
-        dict["quantity"] = quantity as AnyObject?
-//        dict["quantityDelta"] = quantityDelta
-        dict["product"] = product.toDict() as AnyObject?
-//        dict["inventory"] = inventory.toDict()
-        dict["inventoryUuid"] = inventory.uuid as AnyObject?
-        setSyncableFieldsInDict(&dict)
+        let dict = [String: AnyObject]()
+        // Disabled because structural changes
+//        dict["uuid"] = uuid as AnyObject?
+//        dict["quantity"] = quantity as AnyObject?
+////        dict["quantityDelta"] = quantityDelta
+//        dict["product"] = product.toDict() as AnyObject?
+////        dict["inventory"] = inventory.toDict()
+//        dict["inventoryUuid"] = inventory.uuid as AnyObject?
+//        setSyncableFieldsInDict(&dict)
         return dict
     }
     
@@ -124,7 +126,7 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
         return ["product", "inventory"]
     }
     
-    public func copy(uuid: String? = nil, quantity: Int? = nil, product: Product? = nil, inventory: DBInventory? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> InventoryItem {
+    public func copy(uuid: String? = nil, quantity: Int? = nil, product: QuantifiableProduct? = nil, inventory: DBInventory? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> InventoryItem {
         return InventoryItem(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,

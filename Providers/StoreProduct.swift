@@ -9,49 +9,55 @@
 import Foundation
 import RealmSwift
 
-public enum StoreProductUnit: Int {
-    case none = 0
-    case gram = 1
-    case kilogram = 2
-
-    public var text: String {
-        switch self {
-        case .none: return "None"
-        case .gram: return "Gram"
-        case .kilogram: return "Kilogram"
-        }
-    }
-
-    public var shortText: String {
-        switch self {
-        case .none: return ""
-        case .gram: return "g"
-        case .kilogram: return "kg"
-        }
-    }
-}
+//public enum StoreProductUnit: Int {
+//    case none = 0
+//    case gram = 1
+//    case kilogram = 2
+//
+//    public var text: String {
+//        switch self {
+//        case .none: return "None"
+//        case .gram: return "Gram"
+//        case .kilogram: return "Kilogram"
+//        }
+//    }
+//
+//    public var shortText: String {
+//        switch self {
+//        case .none: return ""
+//        case .gram: return "g"
+//        case .kilogram: return "kg"
+//        }
+//    }
+//}
 
 public class StoreProduct: DBSyncable, Identifiable {
     
     public dynamic var uuid: String = ""
     public dynamic var price: Float = 0
-    dynamic var productOpt: Product? = Product()
+    dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
+    
+    
+    // TODO remove
     public dynamic var baseQuantity: Float = 0
     public dynamic var unitVal: Int = 0
+    
+    
+    
     public dynamic var store: String = ""
     
-    public var product: Product {
+    public var product: QuantifiableProduct {
         get {
-            return productOpt ?? Product()
+            return productOpt ?? QuantifiableProduct()
         }
         set(newProduct) {
             productOpt = newProduct
         }
     }
     
-    public var unit: StoreProductUnit {
+    public var unit: ProductUnit {
         get {
-            return StoreProductUnit(rawValue: unitVal)!
+            return ProductUnit(rawValue: unitVal)!
         }
         set(newUnit) {
             unitVal = newUnit.rawValue
@@ -62,14 +68,12 @@ public class StoreProduct: DBSyncable, Identifiable {
         return "uuid"
     }
 
-    public convenience init(uuid: String, price: Float, baseQuantity: Float, unit: StoreProductUnit, store: String = "", product: Product, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, price: Float, store: String = "", product: QuantifiableProduct, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
         self.uuid = uuid
         self.price = price
-        self.baseQuantity = baseQuantity
-        self.unit = unit
         self.store = store
         self.product = product
         
@@ -79,12 +83,10 @@ public class StoreProduct: DBSyncable, Identifiable {
         self.removed = removed
     }
 
-    public func copy(uuid: String? = nil, price: Float? = nil, baseQuantity: Float? = nil, unit: StoreProductUnit? = nil, store: String? = nil, product: Product? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> StoreProduct {
+    public func copy(uuid: String? = nil, price: Float? = nil, store: String? = nil, product: QuantifiableProduct? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> StoreProduct {
         return StoreProduct(
             uuid: uuid ?? self.uuid,
             price: price ?? self.price,
-            baseQuantity: baseQuantity ?? self.baseQuantity,
-            unit: unit ?? self.unit,
             store: store ?? self.store,
             product: product ?? self.product.copy(),
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
@@ -99,40 +101,45 @@ public class StoreProduct: DBSyncable, Identifiable {
     }
     
     static func createFilterBrand(_ brand: String) -> String {
-        return "productOpt.brand == '\(brand)'"
+        return "productOpt.productOpt.brand == '\(brand)'"
     }
     
     static func createFilterStore(_ store: String) -> String {
         return "store == '\(store)'"
     }
 
-    static func createFilterProduct(_ productUuid: String) -> String {
-        return "productOpt.uuid == '\(productUuid)'"
-    }
-    
-    static func createFilterProductStore(_ productUuid: String, store: String) -> String {
-        return "\(createFilterProduct(productUuid)) && store == '\(store)'"
+    static func createFilterProduct(_ quantifiableProductUuid: String) -> String {
+        return "productOpt.uuid == '\(quantifiableProductUuid)'"
     }
 
-    static func createFilterProductsStores(_ products: [Product], store: String) -> String {
+    static func createFilterProductStore(quantifiableProductUuid: String, store: String) -> String {
+        return "\(createFilterProduct(quantifiableProductUuid)) && store == '\(store)'"
+    }
+
+    static func createFilterProductsStores(_ products: [QuantifiableProduct], store: String) -> String {
         let productsUuidsStr: String = products.map{"'\($0.uuid)'"}.joined(separator: ",")
         return "productOpt.uuid IN {\(productsUuidsStr)} && store == '\(store)'"
     }
+    
+//    static func createFilterProductsStores(_ products: [Product], store: String) -> String {
+//        let productsUuidsStr: String = products.map{"'\($0.uuid)'"}.joined(separator: ",")
+//        return "productOpt.uuid IN {\(productsUuidsStr)} && store == '\(store)'"
+//    }
     
     static func createFilterNameBrand(_ name: String, brand: String, store: String) -> String {
         return "\(createFilterName(name)) AND \(createFilterBrand(brand)) AND \(createFilterStore(store))"
     }
     
     static func createFilterName(_ name: String) -> String {
-        return "productOpt.name = '\(name)'"
+        return "productOpt.productOpt.name = '\(name)'"
     }
     
     static func createFilterNameContains(_ text: String) -> String {
-        return "productOpt.name CONTAINS[c] '\(text)'"
+        return "productOpt.productOpt.name CONTAINS[c] '\(text)'"
     }
     
     static func createFilterBrandContains(_ text: String) -> String {
-        return "productOpt.brand CONTAINS[c] '\(text)'"
+        return "productOpt.productOpt.brand CONTAINS[c] '\(text)'"
     }
     
     static func createFilterStoreContains(_ text: String) -> String {
@@ -140,11 +147,11 @@ public class StoreProduct: DBSyncable, Identifiable {
     }
     
     static func createFilterCategory(_ categoryUuid: String) -> String {
-        return "productOpt.categoryOpt.uuid = '\(categoryUuid)'"
+        return "productOpt.productOpt.categoryOpt.uuid = '\(categoryUuid)'"
     }
     
     static func createFilterCategoryNameContains(_ text: String) -> String {
-        return "productOpt.categoryOpt.name CONTAINS[c] '\(text)'"
+        return "productOpt.productOpt.categoryOpt.name CONTAINS[c] '\(text)'"
     }
     
     // Sync - workaround for mysterious store products/products/categories that appear sometimes in sync reqeust
@@ -157,25 +164,27 @@ public class StoreProduct: DBSyncable, Identifiable {
     
     static func fromDict(_ dict: [String: AnyObject], product: Product) -> StoreProduct {
         let item = StoreProduct()
-        item.uuid = dict["uuid"]! as! String
-        item.price = dict["price"]! as! Float
-        item.product = product
-        item.baseQuantity = dict["baseQuantity"]! as! Float
-        item.unitVal = dict["unit"]! as! Int // TODO check that is valid enum val before assigning
-        item.store = dict["store"]! as! String
-        item.setSyncableFieldswithRemoteDict(dict)
+        // Disabled because of structural changes (doesn't compile)
+//        item.uuid = dict["uuid"]! as! String
+//        item.price = dict["price"]! as! Float
+//        item.product = product
+//        item.baseQuantity = dict["baseQuantity"]! as! Float
+//        item.unitVal = dict["unit"]! as! Int // TODO check that is valid enum val before assigning
+//        item.store = dict["store"]! as! String
+//        item.setSyncableFieldswithRemoteDict(dict)
         return item
     }
     
     func toDict() -> [String: AnyObject] {
-        var dict = [String: AnyObject]()
-        dict["uuid"] = uuid as AnyObject?
-        dict["price"] = price as AnyObject?
-        dict["baseQuantity"] = baseQuantity as AnyObject?
-        dict["unit"] = unit as AnyObject?
-        dict["store"] = store as AnyObject?
-        dict["product"] = product.toDict() as AnyObject?
-        setSyncableFieldsInDict(&dict)
+        let dict = [String: AnyObject]()
+        // Disabled because of structural changes (doesn't compile)
+//        dict["uuid"] = uuid as AnyObject?
+//        dict["price"] = price as AnyObject?
+//        dict["baseQuantity"] = baseQuantity as AnyObject?
+//        dict["unit"] = unit as AnyObject?
+//        dict["store"] = store as AnyObject?
+//        dict["product"] = product.toDict() as AnyObject?
+//        setSyncableFieldsInDict(&dict)
         return dict
     }
     
@@ -202,7 +211,9 @@ public class StoreProduct: DBSyncable, Identifiable {
     }
 
     public func update(_ storeProductInput: StoreProductInput) -> StoreProduct {
-        return copy(price: storeProductInput.price, baseQuantity: storeProductInput.baseQuantity, unit: storeProductInput.unit)
+        // TODO!!!!!!!!!!!!!!! do we always want to update the underlaying quantifiableproduct here? note that this will overwrite its unit. Or maybe we want to create a new quantifiable product instead?
+        let updatedQuantifiableProduct = product.copy(baseQuantity: storeProductInput.baseQuantity, unit: storeProductInput.unit)
+        return copy(price: storeProductInput.price, product: updatedQuantifiableProduct)
     }
 
     // Updates self and its dependencies with storeProduct, the references to the dependencies (uuid) are not changed
@@ -211,12 +222,12 @@ public class StoreProduct: DBSyncable, Identifiable {
         return update(storeProduct, product: updatedProduct)
     }
 
-    fileprivate func update(_ storeProduct: StoreProduct, product: Product) -> StoreProduct {
-        return copy(price: storeProduct.price, baseQuantity: storeProduct.baseQuantity, unit: storeProduct.unit, store: storeProduct.store, product: product, lastServerUpdate: storeProduct.lastServerUpdate, removed: storeProduct.removed)
+    fileprivate func update(_ storeProduct: StoreProduct, product: QuantifiableProduct) -> StoreProduct {
+        return copy(price: storeProduct.price, store: storeProduct.store, product: product, lastServerUpdate: storeProduct.lastServerUpdate, removed: storeProduct.removed)
     }
 
-    fileprivate func copy(_ storeProduct: StoreProduct, product: Product) -> StoreProduct {
-        return copy(price: storeProduct.price, baseQuantity: storeProduct.baseQuantity, unit: storeProduct.unit, store: storeProduct.store, product: product, lastServerUpdate: storeProduct.lastServerUpdate, removed: storeProduct.removed)
+    fileprivate func copy(_ storeProduct: StoreProduct, product: QuantifiableProduct) -> StoreProduct {
+        return copy(price: storeProduct.price, store: storeProduct.store, product: product, lastServerUpdate: storeProduct.lastServerUpdate, removed: storeProduct.removed)
     }
     
     public func same(_ rhs: StoreProduct) -> Bool {

@@ -97,7 +97,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
                 if groupItems.isEmpty {
                     handler(ProviderResult(status: .isEmpty))
                 } else {
-                    let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
+                    let productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
                     self?.add(targetGroup, productsWithQuantities: productsWithQuantities, remote: remote) {result in
                         // return fetched group items to the caller
                         if let groupItems = result.sucessResult {
@@ -253,7 +253,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
     ////////////////////////////////////////////////////////////////////////////////
     // new - decouple input from actual source by passing only product+quantity. TODO make other methods where this is usable also use it
     
-    func add(_ group: ProductGroup, productsWithQuantities: [(product: Product, quantity: Int)], remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Int)]>) -> Void) {
+    func add(_ group: ProductGroup, productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)], remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Int)]>) -> Void) {
         DBProv.groupItemProvider.addOrIncrement(group, productsWithQuantities: productsWithQuantities, dirty: remote) {addedOrIncrementedGroupItemsMaybe in
             if let addedOrIncrementedGroupItems = addedOrIncrementedGroupItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedGroupItems))
@@ -312,7 +312,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
     
     func add(_ itemInput: GroupItemInput, group: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<GroupItem>) -> Void) {
         
-        func onHasProduct(_ product: Product) {
+        func onHasProduct(_ product: QuantifiableProduct) {
             let groupItem = GroupItem(uuid: UUID().uuidString, quantity: 1, product: product, group: group)
             add(groupItem, remote: remote) {result in
                 if result.success {
@@ -324,28 +324,31 @@ class ProductGroupProviderImpl: ProductGroupProvider {
             }
         }
         
-        Prov.productProvider.product(itemInput.name, brand: itemInput.brand) {productResult in
-            // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
-            if productResult.success || productResult.status == .notFound {
-                if let product = productResult.sucessResult {
-                    onHasProduct(product)
-                } else {
-                    Prov.productCategoryProvider.categoryWithName(itemInput.category) {result in
-                        if let category = result.sucessResult {
-                            let product = Product(uuid: UUID().uuidString, name: itemInput.name, category: category, brand: itemInput.brand)
-                            onHasProduct(product)
-                        } else {
-                            let category = ProductCategory(uuid: UUID().uuidString, name: itemInput.category, color: itemInput.categoryColor)
-                            let product = Product(uuid: UUID().uuidString, name: itemInput.name, category: category, brand: itemInput.brand)
-                            onHasProduct(product)
-                        }
-                    }
-                }
-            } else {
-                print("Error: InventoryItemsProviderImpl.addToInventory: Error fetching product, result: \(productResult)")
-                handler(ProviderResult(status: .databaseUnknown))
-            }
-        }
+        QL4("Outdated implementation")
+        handler(ProviderResult(status: .unknown))
+        // Commented because structural changes
+//        Prov.productProvider.product(itemInput.name, brand: itemInput.brand) {productResult in
+//            // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
+//            if productResult.success || productResult.status == .notFound {
+//                if let product = productResult.sucessResult {
+//                    onHasProduct(product)
+//                } else {
+//                    Prov.productCategoryProvider.categoryWithName(itemInput.category) {result in
+//                        if let category = result.sucessResult {
+//                            let product = Product(uuid: UUID().uuidString, name: itemInput.name, category: category, brand: itemInput.brand)
+//                            onHasProduct(product)
+//                        } else {
+//                            let category = ProductCategory(uuid: UUID().uuidString, name: itemInput.category, color: itemInput.categoryColor)
+//                            let product = Product(uuid: UUID().uuidString, name: itemInput.name, category: category, brand: itemInput.brand)
+//                            onHasProduct(product)
+//                        }
+//                    }
+//                }
+//            } else {
+//                print("Error: InventoryItemsProviderImpl.addToInventory: Error fetching product, result: \(productResult)")
+//                handler(ProviderResult(status: .databaseUnknown))
+//            }
+//        }
     }
     
     
@@ -354,7 +357,10 @@ class ProductGroupProviderImpl: ProductGroupProvider {
         // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
         DBProv.groupItemProvider.deletePossibleGroupItemWithUnique(input.name, productBrand: input.brand, group: updatingGroupItem.group, notUuid: updatingGroupItem.uuid) {foundAndDeletedGroupItem in
             // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
-            Prov.productProvider.mergeOrCreateProduct(input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand, updateCategory: false) {[weak self] result in
+            
+            // TODO units? for now doesn't matter since we are not going to continue using groups
+            let prototype = ProductPrototype(name: input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand, baseQuantity: 1, unit: .none)
+            Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
                 
                 if let product = result.sucessResult {
                     let updatedGroupItem = updatingGroupItem.copy(quantity: input.quantity, product: product)

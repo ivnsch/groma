@@ -10,7 +10,7 @@ import Foundation
 
 public protocol ProductWithQuantity2 {
     
-    var product: Product {get}
+    var product: QuantifiableProduct {get}
     
     var quantity: Int {get}
     

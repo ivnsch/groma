@@ -669,13 +669,13 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func onAddProduct(_ product: Product) {
+    func onAddProduct(_ product: QuantifiableProduct) {
 
 //        guard let notificationToken = notificationToken, let realm = listItemsResult?.realm else {QL4("No notification token: \(self.notificationToken) or result: \(listItemsResult)"); return}
         let token: RealmToken? = nil // quickfix
 
         if let list = currentList {
-            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.product.category.name, sectionColor: product.product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
                 weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
             })
         } else {

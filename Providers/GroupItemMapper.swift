@@ -10,7 +10,7 @@ import Foundation
 
 class GroupItemMapper {
 
-    class func groupItemWithRemote(_ remoteGroupItem: RemoteGroupItem, product: Product, group: ProductGroup) -> GroupItem {
+    class func groupItemWithRemote(_ remoteGroupItem: RemoteGroupItem, product: QuantifiableProduct, group: ProductGroup) -> GroupItem {
         return GroupItem(uuid: remoteGroupItem.uuid, quantity: remoteGroupItem.quantity, product: product, group: group)
     }
     
@@ -60,17 +60,19 @@ class GroupItemMapper {
         
         
         let (productsCategoriesDict, _) = toProductCategoryDict(remoteGroupItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
-        let (productsDict, products) = toProductDict(remoteGroupItems.products, categories: productsCategoriesDict)
-        let (groupsDict, groups) = toGroupDict(remoteGroupItems.groups)
+        let (_, products) = toProductDict(remoteGroupItems.products, categories: productsCategoriesDict)
+        let (_, groups) = toGroupDict(remoteGroupItems.groups)
         
-        let remoteListItemsArr = remoteGroupItems.groupItems
-        
-        let groupItems: [GroupItem] = remoteListItemsArr.map {remoteListItem in
-            let product = productsDict[remoteListItem.productUuid]!
-            let group = groupsDict[remoteListItem.groupUuid]!
-            
-            return GroupItemMapper.groupItemWithRemote(remoteListItem, product: product, group: group)
-        }
+//        let remoteListItemsArr = remoteGroupItems.groupItems
+
+        let groupItems: [GroupItem] = []
+        // Commented because structural changes
+//        let groupItems: [GroupItem] = remoteListItemsArr.map {remoteListItem in
+//            let product = productsDict[remoteListItem.productUuid]!
+//            let group = groupsDict[remoteListItem.groupUuid]!
+//            
+//            return GroupItemMapper.groupItemWithRemote(remoteListItem, product: product, group: group)
+//        }
         
         // TODO
 //        let sortedGroupItems: [GroupItem] = groupItems.sortedByOrder()

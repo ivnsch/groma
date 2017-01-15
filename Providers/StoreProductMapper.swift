@@ -24,12 +24,10 @@ class StoreProductMapper {
 //        return productWithRemote(remoteProduct, product: ProductMapper.productWithRemote(product))
 //    }
     
-    class func productWithRemote(_ storeProduct: RemoteStoreProduct, product: Product) -> StoreProduct {
+    class func productWithRemote(_ storeProduct: RemoteStoreProduct, product: QuantifiableProduct) -> StoreProduct {
         return StoreProduct(
             uuid: storeProduct.uuid,
             price: storeProduct.price,
-            baseQuantity: storeProduct.baseQuantity,
-            unit: StoreProductUnit(rawValue: storeProduct.unit)!,
             store: storeProduct.store,
             product: product,
             lastServerUpdate: storeProduct.lastUpdate

@@ -24,8 +24,23 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
+    func products(_ range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<Results<QuantifiableProduct>>) -> Void) {
+        DBProv.productProvider.loadQuantifiableProducts(range, sortBy: sortBy) {products in
+            handler(ProviderResult(status: .success, sucessResult: products))
+            // For products no background sync, this is a very long list and not justified as this screen is not used frequently. Also when there are new products mostly this is because new list/inventory/group items were added, and we get these new products already as a dependency in the respective background updates of these items.
+        }
+    }
+    
     func products(_ text: String, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: [Product])>) -> Void) {
         DBProv.productProvider.products(text, range: range, sortBy: sortBy) {(substring: String?, products: [Product]?) in
+            if let products = products {
+                handler(ProviderResult(status: .success, sucessResult: (substring, products)))
+            }
+        }
+    }
+
+    func quantifiableProducts(_ text: String, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: [QuantifiableProduct])>) -> Void) {
+        DBProv.productProvider.quantifiableProducts(text, range: range, sortBy: sortBy) {(substring: String?, products: [QuantifiableProduct]?) in
             if let products = products {
                 handler(ProviderResult(status: .success, sucessResult: (substring, products)))
             }
@@ -40,7 +55,12 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func productsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: Product, section: Section?)])>) -> Void) {
+    func productsRes(_ text: String, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: Results<QuantifiableProduct>)>) -> Void) {
+        
+    }
+
+    
+    func productsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)])>) -> Void) {
         
         DBProv.productProvider.productsWithPosibleSections(text, list: list, range: range, sortBy: sortBy) {result in
             if let productsWithMaybeSections = result.1 {
@@ -53,6 +73,16 @@ class ProductProviderImpl: ProductProvider {
     
     func product(_ name: String, brand: String, handler: @escaping (ProviderResult<Product>) -> ()) {
         DBProv.productProvider.loadProductWithName(name, brand: brand) {dbProduct in
+            if let dbProduct = dbProduct {
+                handler(ProviderResult(status: .success, sucessResult: dbProduct))
+            } else {
+                handler(ProviderResult(status: .notFound))
+            }
+        }
+    }
+    
+    func quantifiableProduct(_ unique: QuantifiableProductUnique, handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void) {
+        DBProv.productProvider.loadQuantifiableProductWithUnique(unique) {dbProduct in
             if let dbProduct = dbProduct {
                 handler(ProviderResult(status: .success, sucessResult: dbProduct))
             } else {
@@ -110,6 +140,12 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
+    func update(_ product: QuantifiableProduct, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.productProvider.saveQuantifiableProducts([product], update: true) {saved in
+            handler(ProviderResult(status: saved ? .success : .databaseUnknown))
+        }
+    }
+    
     func update(_ product: Product, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         DBProv.productProvider.saveProducts([product], update: true) {[weak self] saved in
             if saved {
@@ -136,6 +172,10 @@ class ProductProviderImpl: ProductProvider {
         delete(product.uuid, remote: remote, handler)
     }
     
+    func delete(_ product: QuantifiableProduct, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        delete(product.uuid, remote: remote, handler)
+    }
+    
     func delete(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         DBProv.productProvider.deleteProductAndDependencies(productUuid, markForSync: true) {[weak self] saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
@@ -159,6 +199,29 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
+    func deleteQuantifiableProduct(uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.productProvider.deleteProductAndDependencies(uuid, markForSync: true) {saved in
+            handler(ProviderResult(status: saved ? .success : .databaseUnknown))
+            
+            // Disabled while impl. realm sync
+//            if remote {
+//                self?.remoteProvider.deleteProduct(productUuid) {remoteResult in
+//                    if remoteResult.success {
+//                        DBProv.productProvider.clearProductTombstone(productUuid) {removeTombstoneSuccess in
+//                            if !removeTombstoneSuccess {
+//                                QL4("Couldn't delete tombstone for product: \(productUuid)")
+//                            }
+//                        }
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+//                            print("Error: removing product in remote: \(productUuid), result: \(remoteResult)")
+//                        }
+//                    }
+//                }
+//            }
+        }
+    }
+    
     func incrementFav(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         DBProv.productProvider.incrementFav(productUuid, {saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
@@ -176,6 +239,29 @@ class ProductProviderImpl: ProductProvider {
 //                }
 //            }
         })
+    }
+    
+    
+    func loadQuantifiableProduct(unique: QuantifiableProductUnique, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> ()) {
+        
+        
+        
+        
+        
+        
+    }
+    
+    
+    func updateOrCreateQuantifiableProduct(prototype: ProductPrototype, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void) {
+
+        DBProv.productProvider.updateOrCreateQuantifiableProduct(prototype) {quantifiableProductMaybe in
+            if let quantifiableProduct = quantifiableProductMaybe {
+                handler(ProviderResult(status: .success, sucessResult: quantifiableProduct))
+            } else {
+                QL4("Couldn't update/create quantifiable product for prototype: \(prototype)")
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
     }
     
     func loadProduct(_ name: String, brand: String, handler: @escaping (ProviderResult<Product>) -> ()) {
@@ -207,47 +293,78 @@ class ProductProviderImpl: ProductProvider {
     }
 
     func mergeOrCreateProduct(_ productName: String, category: String, categoryColor: UIColor, brand: String, updateCategory: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void) {
+        // TODO!!!!!!!!!!!!!!!!!!!
+        
+        
+        fatalError("Remove this")
+    }
 
+    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void) {
+        
         // load product and update or create one
         // if we find a product with the name/brand we update it - this is for the case the user changes the price etc for an existing product while adding an item
-        loadProduct(productName, brand: brand) {result in
+        self.loadProduct(prototype.name, brand: prototype.brand) {result in
             if let existingProduct = result.sucessResult {
-                let updatedCateogry = existingProduct.category.copy(name: category, color: categoryColor)
-                let updatedProduct = existingProduct.copy(category: updatedCateogry)
+                let updatedProduct = existingProduct.updateNonUniqueProperties(prototype: prototype)
                 handler(ProviderResult(status: .success, sucessResult: updatedProduct))
                 
             } else { // product doesn't exist
                 
                 // check if a category with given name already exist
-                Prov.productCategoryProvider.categoryWithName(category) {result in
+                Prov.productCategoryProvider.categoryWithName(prototype.category) {result in
                     
                     func onHasCategory(_ category: ProductCategory) {
                         // fav: 1 If we create a product we are "using" it so we start with fav: 1. This way, for example, when user creates new products in the quick add, these products will show in the quick add list above of prefilled products that have never been used.
-                        let newProduct = Product(uuid: UUID().uuidString, name: productName, category: category, fav: 1, brand: brand)
+                        let newProduct = Product(uuid: UUID().uuidString, name: prototype.name, category: category, fav: 1, brand: prototype.brand)
                         handler(ProviderResult(status: .success, sucessResult: newProduct))
                     }
                     
                     if let existingCategory = result.sucessResult {
                         if updateCategory {
-                            let udpatedCategory = existingCategory.copy(color: categoryColor)
+                            let udpatedCategory = existingCategory.copy(color: prototype.categoryColor)
                             onHasCategory(udpatedCategory)
                         } else {
                             onHasCategory(existingCategory)
                         }
                         
                     } else if result.status == .notFound {
-                        let newCategory = ProductCategory(uuid: UUID().uuidString, name: category, color: categoryColor)
+                        let newCategory = ProductCategory(uuid: UUID().uuidString, name: prototype.category, color: prototype.categoryColor)
                         onHasCategory(newCategory)
                         
                     } else {
                         print("Error: ProductProviderImpl.mergeOrCreateProduct: Couldn't fetch category: \(result)")
                         handler(ProviderResult(status: .databaseUnknown))
                     }
-
+                    
                 }
             }
         }
     }
+    
+    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void) {
+        loadQuantifiableProduct(unique: (name: prototype.name, brand: prototype.brand, unit: prototype.unit, baseQuantity: prototype.baseQuantity)) {quantifiableProductResult in
+            
+            if let existingQuantifiableProduct = quantifiableProductResult.sucessResult {
+                let updatedProduct = existingQuantifiableProduct.product.updateNonUniqueProperties(prototype: prototype)
+                let updatedQuantifiableProduct = existingQuantifiableProduct.copy(baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: updatedProduct)
+                handler(ProviderResult(status: .success, sucessResult: updatedQuantifiableProduct))
+                
+            } else { //quantifiable product doesn't exist
+                
+                
+                self.mergeOrCreateProduct(prototype: prototype, updateCategory: updateCategory) {(result: ProviderResult<Product>) in
+                    if let updatedProduct = result.sucessResult {
+                        let quantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: updatedProduct)
+                        handler(ProviderResult(status: .success, sucessResult: quantifiableProduct))
+                        
+                    } else {
+                        handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+                    }
+                }
+            }
+        }
+    }
+
     
     
     func countProducts(_ handler: @escaping (ProviderResult<Int>) -> Void) {

@@ -100,81 +100,85 @@ class RealmGlobalProvider: RealmProvider {
     }
     
     func saveSyncResult(_ syncResult: RemoteSyncResult, handler: @escaping (Bool) -> Void) {
-
-        // Maps an array of dictionaries(object representations from server) to an array of objects T by applying mapper to each dictionary
-        // Returns, together with the array also a dictionary which maps a unique identifier of the object to the object, for quick access.
-        func toObjs<T: DBSyncable>(_ dictArray: [[String: AnyObject]], mapper: ([String: AnyObject]) -> T, idExtractor: (T) -> String) -> ([T], [String: T]) {
-            var objArray = [T]()
-            var objDict = [String: T]()
-            for dict in dictArray {
-                let element = mapper(dict)
-                objArray.append(element)
-                objDict[idExtractor(element)] = element
-            }
-            return (objArray, objDict)
-        }
+        handler(true)
         
-        doInWriteTransaction({[weak self] realm in
-
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // TODO!!!! write this code with proper optional handling and error logging
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            
-            let (productCategoriesArr, productCategoriesDict): ([ProductCategory], [String: ProductCategory]) = toObjs(syncResult.productCategories, mapper: {ProductCategory.fromDict($0)}, idExtractor: {$0.uuid})
-            
-            let (productsArr, productsDict): ([Product], [String: Product]) = toObjs(syncResult.products, mapper: {Product.fromDict($0, category: productCategoriesDict[$0["categoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
-
-            let (storeProductsArr, storeProductsDict): ([StoreProduct], [String: StoreProduct]) = toObjs(syncResult.storeProducts, mapper: {StoreProduct.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!)}, idExtractor: {$0.uuid})
-
-            let (inventoriesArr, inventoriesDict): ([DBInventory], [String: DBInventory]) = toObjs(syncResult.inventories, mapper: {DBInventory.fromDict($0)}, idExtractor: {$0.uuid})
-            
-            let (inventoryItemsArr, inventoryItemsDict): ([InventoryItem], [String: InventoryItem]) = toObjs(syncResult.inventoriesItems, mapper: {InventoryItem.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!, inventory: inventoriesDict[$0["inventoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
-            
-            let (listsArr, listsDict): ([List], [String: List]) = toObjs(syncResult.lists, mapper: {List.fromDict($0, inventory: inventoriesDict[$0["list"]!["inventoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
-            
-            let (sectionsArr, sectionsDict): ([Section], [String: Section]) = toObjs(syncResult.sections, mapper: {Section.fromDict($0, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
-            
-            let (listItemsArr, listItemsDict): ([ListItem], [String: ListItem]) = toObjs(syncResult.listsItems, mapper: {ListItem.fromDict($0, section: sectionsDict[$0["sectionUuid"]! as! String]!, product: storeProductsDict[$0["storeProductUuid"]! as! String]!, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
-            
-            //        // TODO!!!! set BOTH group in groups items and group items in group Realm needs both set to save correctly ............ this is needed also for lists and inventories probably
-            let (groupsArr, groupsDict): ([ProductGroup], [String: ProductGroup]) = toObjs(syncResult.groups, mapper: {ProductGroup.fromDict($0)}, idExtractor: {$0.uuid})
-            let (groupItemsArr, groupItemsDict): ([GroupItem], [String: GroupItem]) = toObjs(syncResult.groupsItems, mapper: {GroupItem.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!, group: groupsDict[$0["groupUuid"]! as! String]!)}, idExtractor: {$0.uuid})
-            
-            let (historyItemsArr, historyItemsDict): ([HistoryItem], [String: HistoryItem]) = toObjs(syncResult.history, mapper: {HistoryItem.fromDict($0, inventory: inventoriesDict[$0["inventoryUuid"]! as! String]!, product: productsDict[$0["productUuid"] as! String]!)}, idExtractor: {$0.uuid})
-            
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            
-            self?.clearAllDataSync(realm)
-            
-            func saveObjs(_ objs: [Object]) {
-                for obj in objs {
-                    realm.add(obj, update: true)
-                }
-            }
-            saveObjs(productCategoriesArr)
-            saveObjs(productsArr)
-            saveObjs(storeProductsArr)
-            saveObjs(sectionsArr)
-            saveObjs(inventoriesArr)
-            saveObjs(inventoryItemsArr)
-            saveObjs(listsArr)
-            saveObjs(listItemsArr)
-            saveObjs(groupsArr)
-            saveObjs(groupItemsArr)
-            saveObjs(historyItemsArr)
-            
-            
-            return true
-            }) { (successMaybe: Bool?) in
-                if let success = successMaybe {
-                    handler(success)
-
-                } else {
-                    print("Error: RealmGlobalProvider.saveSyncResult: no success result")
-                    handler(false)
-                }
-        }
+        
+        // Commented because structural changes
+        
+//        // Maps an array of dictionaries(object representations from server) to an array of objects T by applying mapper to each dictionary
+//        // Returns, together with the array also a dictionary which maps a unique identifier of the object to the object, for quick access.
+//        func toObjs<T: DBSyncable>(_ dictArray: [[String: AnyObject]], mapper: ([String: AnyObject]) -> T, idExtractor: (T) -> String) -> ([T], [String: T]) {
+//            var objArray = [T]()
+//            var objDict = [String: T]()
+//            for dict in dictArray {
+//                let element = mapper(dict)
+//                objArray.append(element)
+//                objDict[idExtractor(element)] = element
+//            }
+//            return (objArray, objDict)
+//        }
+//        
+//        doInWriteTransaction({[weak self] realm in
+//
+//            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//            // TODO!!!! write this code with proper optional handling and error logging
+//            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//            
+//            let (productCategoriesArr, productCategoriesDict): ([ProductCategory], [String: ProductCategory]) = toObjs(syncResult.productCategories, mapper: {ProductCategory.fromDict($0)}, idExtractor: {$0.uuid})
+//            
+//            let (productsArr, productsDict): ([Product], [String: Product]) = toObjs(syncResult.products, mapper: {Product.fromDict($0, category: productCategoriesDict[$0["categoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+//
+//            let (storeProductsArr, storeProductsDict): ([StoreProduct], [String: StoreProduct]) = toObjs(syncResult.storeProducts, mapper: {StoreProduct.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+//
+//            let (inventoriesArr, inventoriesDict): ([DBInventory], [String: DBInventory]) = toObjs(syncResult.inventories, mapper: {DBInventory.fromDict($0)}, idExtractor: {$0.uuid})
+//            
+//            let (inventoryItemsArr, inventoryItemsDict): ([InventoryItem], [String: InventoryItem]) = toObjs(syncResult.inventoriesItems, mapper: {InventoryItem.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!, inventory: inventoriesDict[$0["inventoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+//            
+//            let (listsArr, listsDict): ([List], [String: List]) = toObjs(syncResult.lists, mapper: {List.fromDict($0, inventory: inventoriesDict[$0["list"]!["inventoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+//            
+//            let (sectionsArr, sectionsDict): ([Section], [String: Section]) = toObjs(syncResult.sections, mapper: {Section.fromDict($0, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+//            
+//            let (listItemsArr, listItemsDict): ([ListItem], [String: ListItem]) = toObjs(syncResult.listsItems, mapper: {ListItem.fromDict($0, section: sectionsDict[$0["sectionUuid"]! as! String]!, product: storeProductsDict[$0["storeProductUuid"]! as! String]!, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+//            
+//            //        // TODO!!!! set BOTH group in groups items and group items in group Realm needs both set to save correctly ............ this is needed also for lists and inventories probably
+//            let (groupsArr, groupsDict): ([ProductGroup], [String: ProductGroup]) = toObjs(syncResult.groups, mapper: {ProductGroup.fromDict($0)}, idExtractor: {$0.uuid})
+//            let (groupItemsArr, groupItemsDict): ([GroupItem], [String: GroupItem]) = toObjs(syncResult.groupsItems, mapper: {GroupItem.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!, group: groupsDict[$0["groupUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+//            
+//            let (historyItemsArr, historyItemsDict): ([HistoryItem], [String: HistoryItem]) = toObjs(syncResult.history, mapper: {HistoryItem.fromDict($0, inventory: inventoriesDict[$0["inventoryUuid"]! as! String]!, product: productsDict[$0["productUuid"] as! String]!)}, idExtractor: {$0.uuid})
+//            
+//            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//            
+//            self?.clearAllDataSync(realm)
+//            
+//            func saveObjs(_ objs: [Object]) {
+//                for obj in objs {
+//                    realm.add(obj, update: true)
+//                }
+//            }
+//            saveObjs(productCategoriesArr)
+//            saveObjs(productsArr)
+//            saveObjs(storeProductsArr)
+//            saveObjs(sectionsArr)
+//            saveObjs(inventoriesArr)
+//            saveObjs(inventoryItemsArr)
+//            saveObjs(listsArr)
+//            saveObjs(listItemsArr)
+//            saveObjs(groupsArr)
+//            saveObjs(groupItemsArr)
+//            saveObjs(historyItemsArr)
+//            
+//            
+//            return true
+//            }) { (successMaybe: Bool?) in
+//                if let success = successMaybe {
+//                    handler(success)
+//
+//                } else {
+//                    print("Error: RealmGlobalProvider.saveSyncResult: no success result")
+//                    handler(false)
+//                }
+//        }
     }
     
     func clearAllDataSync() {

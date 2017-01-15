@@ -20,25 +20,15 @@ class RealmStoreProductProvider: RealmProvider {
         return loadFirstSync(filter: StoreProduct.createFilter(uuid))
     }
 
-    func storeProduct(_ product: Product, store: String, handler: @escaping (StoreProduct?) -> Void) {
-        handler(loadFirstSync(filter: StoreProduct.createFilterProductStore(product.uuid, store: store)))
+    func storeProduct(_ product: QuantifiableProduct, store: String, handler: @escaping (StoreProduct?) -> Void) {
+        handler(loadFirstSync(filter: StoreProduct.createFilterProductStore(quantifiableProductUuid: product.uuid, store: store)))
     }
     
-    func storeProductSync(product: Product, store: String) -> StoreProduct? {
-        return loadFirstSync(filter: StoreProduct.createFilterProductStore(product.uuid, store: store))
+    func storeProductSync(product: QuantifiableProduct, store: String) -> StoreProduct? {
+        return loadFirstSync(filter: StoreProduct.createFilterProductStore(quantifiableProductUuid: product.uuid, store: store))
     }
     
-    func storeProductSync(_ product: Product, store: String) -> StoreProduct? {
-        return loadFirstSync(filter: StoreProduct.createFilterProductStore(product.uuid, store: store))
-
-//        
-//       return withRealmSync {[weak self] realm in
-//            let mapper = {StoreProductMapper.productWithDB($0)}
-//            return self?.loadSync(realm, mapper: mapper, filter: StoreProduct.createFilterProductStore(product.uuid, store: store)).first
-//        }
-    }
-    
-    func storeProductsSync(_ products: [Product], store: String) -> Results<StoreProduct>? {
+    func storeProductsSync(_ products: [QuantifiableProduct], store: String) -> Results<StoreProduct>? {
         return loadSync(filter: StoreProduct.createFilterProductsStores(products, store: store), sortDescriptor: nil)
         
 //        return withRealmSync {[weak self] realm in

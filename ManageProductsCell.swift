@@ -23,22 +23,23 @@ class ManageProductsCell: UITableViewCell {
         selectionStyle = .none
     }
     
-    func setProduct(product: Product, bold: String?) {
+    func setProduct(product: QuantifiableProduct, bold: String?) {
         
-        let productNameTranslation = NSLocalizedString(product.name, comment: "")
+        let productNameTranslation = NSLocalizedString(product.product.name, comment: "")
         
-        if let boldRange = bold.flatMap({product.name.range($0, caseInsensitive: true)}) {
+        if let boldRange = bold.flatMap({product.product.name.range($0, caseInsensitive: true)}) {
             productNameLabel.attributedText = productNameTranslation.makeAttributedBoldRegular(boldRange)
         } else {
             productNameLabel.text = productNameTranslation
         }
         
-        productBrandLabel.text = product.brand
+        productBrandLabel.text = product.product.brand
         
-        categoryColorView.backgroundColor = product.category.color
+        categoryColorView.backgroundColor = product.product.category.color
         
-        productNameCenterConstraint.constant = product.brand.isEmpty ? 0 : -10
-    
+        productNameCenterConstraint.constant = product.product.brand.isEmpty ? 0 : -10
+        
+        // TODO!!!!!!!!!!!!!!!!!!! show unit/base quantity
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {

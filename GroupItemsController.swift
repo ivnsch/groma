@@ -274,7 +274,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }
     }
     
-    func onAddProduct(_ product: Product) {
+    func onAddProduct(_ product: QuantifiableProduct) {
         if let group = group {
             // TODO don't create group item here we don't know if it exists in the group already, if it does the new uuid is not used. Use a prototype class like in list items.
             let groupItem = GroupItem(uuid: UUID().uuidString, quantity: 1, product: product, group: group)

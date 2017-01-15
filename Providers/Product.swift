@@ -200,6 +200,12 @@ public class Product: DBSyncable, Identifiable {
     public func update(_ product: Product) -> Product {
         return update(product, category: product.category)
     }
+    
+    // Updates product properties that don't belong to its unique with prototype
+    public func updateNonUniqueProperties(prototype: ProductPrototype) -> Product {
+        let updatedCateogry = category.copy(name: prototype.category, color: prototype.categoryColor)
+        return copy(category: updatedCateogry)
+    }
 
     // Updates self and its dependencies with product, the references to the dependencies (uuid) are not changed
     public func updateWithoutChangingReferences(_ product: Product) -> Product {

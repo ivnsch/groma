@@ -203,7 +203,10 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
         DBProv.inventoryItemProvider.deletePossibleInventoryItemWithUnique(input.productPrototype.name, productBrand: input.productPrototype.brand, inventory: updatingInventoryItem.inventory, notUuid: updatingInventoryItem.uuid) {foundAndDeletedInventoryItem in
             // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
-            Prov.productProvider.mergeOrCreateProduct(input.productPrototype.name, category: input.productPrototype.category, categoryColor: input.productPrototype.categoryColor, brand: input.productPrototype.brand, updateCategory: false) {[weak self] result in
+            
+            Prov.productProvider.mergeOrCreateProduct(prototype: input.productPrototype, updateCategory: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
+
+//            Prov.productProvider.mergeOrCreateProduct(input.productPrototype.name, category: input.productPrototype.category, categoryColor: input.productPrototype.categoryColor, brand: input.productPrototype.brand, updateCategory: false) {[weak self] result in
                 
                 if let product = result.sucessResult {
                     let updatedInventoryItem = updatingInventoryItem.copy(quantity: input.quantity, product: product)
@@ -321,7 +324,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     
     // MARK: - Direct (no history)
     
-    func addToInventory(_ inventory: DBInventory, product: Product, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
+    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
         addToInventory(inventory, productsWithQuantities: [(product: product, quantity: quantity)], remote: remote) {result in
             if let addedOrIncrementedInventoryItem = result.sucessResult?.first {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItem))
@@ -331,7 +334,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    fileprivate func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: Product, quantity: Int)], remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
+    fileprivate func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)], remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
         DBProv.inventoryItemProvider.addToInventory(inventory, productsWithQuantities: productsWithQuantities, dirty: remote) {addedOrIncrementedInventoryItemsMaybe in
             if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItems))
@@ -369,7 +372,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 if groupItems.isEmpty {
                     handler(ProviderResult(status: .isEmpty))
                 } else {
-                    let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
+                    let productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
                     self?.addToInventory(inventory, productsWithQuantities: productsWithQuantities, remote: remote, handler)
                 }
             } else {
@@ -382,24 +385,21 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     // Add inventory item input
     func addToInventory(_ inventory: DBInventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
         
-        func onHasProduct(_ product: Product) {
+        func onHasProduct(_ product: QuantifiableProduct) {
             addToInventory(inventory, product: product, quantity: 1, remote: remote, handler)
         }
         
-        Prov.productProvider.product(itemInput.productPrototype.name, brand: itemInput.productPrototype.brand) {productResult in
+        Prov.productProvider.quantifiableProduct(QuantifiableProductUnique(name: itemInput.productPrototype.name, brand: itemInput.productPrototype.brand, unit: itemInput.productPrototype.unit, baseQuantity: itemInput.productPrototype.baseQuantity)) {productResult in
             // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
             if productResult.success || productResult.status == .notFound {
                 if let product = productResult.sucessResult {
                     onHasProduct(product)
-                } else {
-                    Prov.productCategoryProvider.categoryWithName(itemInput.productPrototype.category) {result in
-                        if let category = result.sucessResult {
-                            let product = Product(uuid: UUID().uuidString, name: itemInput.productPrototype.name, category: category, brand: itemInput.productPrototype.brand)
-                            onHasProduct(product)
-                        } else {
-                            let category = ProductCategory(uuid: UUID().uuidString, name: itemInput.productPrototype.category, color: itemInput.productPrototype.categoryColor)
-                            let product = Product(uuid: UUID().uuidString, name: itemInput.productPrototype.name, category: category, brand: itemInput.productPrototype.brand)
-                            onHasProduct(product)
+                    
+                } else { // no quantifiable product with unique, create it
+                    
+                    Prov.productProvider.mergeOrCreateProduct(prototype: itemInput.productPrototype, updateCategory: true) { (result: ProviderResult<QuantifiableProduct>) in
+                        if let quantifiableProduct = result.sucessResult {
+                            self.addToInventory(inventory, product: quantifiableProduct, quantity: 1, remote: remote, handler)
                         }
                     }
                 }

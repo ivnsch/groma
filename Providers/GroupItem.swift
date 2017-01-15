@@ -14,7 +14,7 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
     
     public dynamic var uuid: String = ""
     public dynamic var quantity: Int = 0
-    dynamic var productOpt: Product? = Product()
+    dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
     dynamic var groupOpt: ProductGroup? = ProductGroup()
 
     public static var quantityFieldName: String {
@@ -25,9 +25,9 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
         return "uuid"
     }
     
-    public var product: Product {
+    public var product: QuantifiableProduct {
         get {
-            return productOpt ?? Product()
+            return productOpt ?? QuantifiableProduct()
         }
         set(newProduct) {
             productOpt = newProduct
@@ -43,7 +43,7 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
         }
     }
     
-    public convenience init(uuid: String, quantity: Int, product: Product, group: ProductGroup) {
+    public convenience init(uuid: String, quantity: Int, product: QuantifiableProduct, group: ProductGroup) {
         self.init()
         
         self.uuid = uuid
@@ -66,14 +66,16 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
         return "productOpt.uuid = '\(productUuid)'"
     }
     
-    static func createFilter(_ product: Product, group: ProductGroup) -> String {
-        return createFilterGroupAndProductName(group.uuid, productName: product.name, productBrand: product.brand)
+    static func createFilter(_ product: QuantifiableProduct, group: ProductGroup) -> String {
+        return createFilterGroupAndProductName(group.uuid, productName: product.product.name, productBrand: product.product.brand)
     }
 
+    // TODO!!!!!!!!!!!!!!!!!!!! consider unit?
     static func createFilterGroupAndProductName(_ groupUuid: String, productName: String, productBrand: String) -> String {
         return "\(createFilterGroup(groupUuid)) AND productOpt.name = '\(productName)' AND productOpt.brand = '\(productBrand)'"
     }
 
+    // TODO!!!!!!!!!!!!!!!!!!!! consider unit?
     static func createFilterGroupAndProductName(_ groupUuid: String, productName: String, productBrand: String, notUuid: String) -> String {
         return "\(createFilterGroup(groupUuid)) AND productOpt.name = '\(productName)' AND productOpt.brand = '\(productBrand)' AND uuid != '\(notUuid)'"
     }
@@ -87,23 +89,26 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
     
     static func fromDict(_ dict: [String: AnyObject], product: Product, group: ProductGroup) -> GroupItem {
         let item = GroupItem()
-        item.uuid = dict["uuid"]! as! String
-        item.quantity = dict["quantity"]! as! Int
-        item.product = product
-        item.group = group
-        item.product = product
-        item.setSyncableFieldswithRemoteDict(dict)
+        // Commented because structural changes
+//        item.uuid = dict["uuid"]! as! String
+//        item.quantity = dict["quantity"]! as! Int
+//        item.product = product
+//        item.group = group
+//        item.product = product
+//        item.setSyncableFieldswithRemoteDict(dict)
         return item
     }
     
     func toDict() -> [String: AnyObject] {
-        var dict = [String: AnyObject]()
-        dict["uuid"] = uuid as AnyObject?
-        dict["quantity"] = quantity as AnyObject?
-        dict["product"] = product.toDict() as AnyObject?
-        dict["group"] = group.toDict() as AnyObject?
-        setSyncableFieldsInDict(&dict)
-        return dict
+        return [:]
+        // Commented because structural changes
+//        var dict = [String: AnyObject]()
+//        dict["uuid"] = uuid as AnyObject?
+//        dict["quantity"] = quantity as AnyObject?
+//        dict["product"] = product.toDict() as AnyObject?
+//        dict["group"] = group.toDict() as AnyObject?
+//        setSyncableFieldsInDict(&dict)
+//        return dict
     }
     
     public override static func ignoredProperties() -> [String] {
@@ -112,7 +117,7 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
     
     // MARK: - ProductWithQuantity2
     
-    public func copy(uuid: String? = nil, quantity: Int? = nil, product: Product? = nil, group: ProductGroup? = nil) -> GroupItem {
+    public func copy(uuid: String? = nil, quantity: Int? = nil, product: QuantifiableProduct? = nil, group: ProductGroup? = nil) -> GroupItem {
         return GroupItem(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,

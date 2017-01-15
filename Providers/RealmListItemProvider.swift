@@ -220,7 +220,7 @@ class RealmListItemProvider: RealmProvider {
             return syncedRet(self) {
                 
                 // see if there's already a listitem for this product in the list - if yes only increment it
-                if let existingListItem = realm.objects(ListItem.self).filter(ListItem.createFilterWithProductName(product.product.name)).first {
+                if let existingListItem = realm.objects(ListItem.self).filter(ListItem.createFilterWithQuantifiableProduct(name: product.product.product.name, unit: product.product.unit)).first {
                     existingListItem.increment(ListItemStatusQuantity(status: status, quantity: quantity))
                     
                     // possible updates (when user submits a new list item using add edit product controller)
@@ -239,8 +239,8 @@ class RealmListItemProvider: RealmProvider {
                     
                     // see if there's already a section for the new list item in the list, if not create a new one
                     let listItemsInList = realm.objects(ListItem.self).filter(ListItem.createFilterList(list.uuid))
-                    let sectionName = sectionNameMaybe ?? product.product.category.name
-                    let sectionColor = sectionColorMaybe ?? product.product.category.color
+                    let sectionName = sectionNameMaybe ?? product.product.product.category.name
+                    let sectionColor = sectionColorMaybe ?? product.product.product.category.color
                     let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
                         return item.section
                         } ?? {
