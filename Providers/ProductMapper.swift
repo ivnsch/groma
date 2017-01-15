@@ -28,7 +28,7 @@ class ProductMapper {
             uuid: remoteProduct.uuid,
             name: remoteProduct.name,
             category: category,
-            fav: remoteProduct.fav,
+//            fav: remoteProduct.fav,
             brand: remoteProduct.brand,
             lastServerUpdate: remoteProduct.lastUpdate
         )
@@ -39,7 +39,7 @@ class ProductMapper {
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
         dbProduct.category = ProductCategoryMapper.dbCategoryWithRemote(category)
-        dbProduct.fav = product.fav
+//        dbProduct.fav = product.fav
         dbProduct.brand = product.brand
         dbProduct.dirty = false
         dbProduct.lastServerUpdate = product.lastUpdate

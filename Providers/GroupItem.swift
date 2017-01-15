@@ -67,17 +67,15 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
     }
     
     static func createFilter(_ product: QuantifiableProduct, group: ProductGroup) -> String {
-        return createFilterGroupAndProductName(group.uuid, productName: product.product.name, productBrand: product.product.brand)
+        return createFilter(groupUuid: group.uuid, quantifiableProductUnique: product.unique)
     }
 
-    // TODO!!!!!!!!!!!!!!!!!!!! consider unit?
-    static func createFilterGroupAndProductName(_ groupUuid: String, productName: String, productBrand: String) -> String {
-        return "\(createFilterGroup(groupUuid)) AND productOpt.name = '\(productName)' AND productOpt.brand = '\(productBrand)'"
+    static func createFilter(groupUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique) -> String {
+        return "\(createFilterGroup(groupUuid)) AND productOpt.productOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unit = '\(unique.unit)' AND productOpt.baseQuantity = '\(unique.baseQuantity)'"
     }
 
-    // TODO!!!!!!!!!!!!!!!!!!!! consider unit?
-    static func createFilterGroupAndProductName(_ groupUuid: String, productName: String, productBrand: String, notUuid: String) -> String {
-        return "\(createFilterGroup(groupUuid)) AND productOpt.name = '\(productName)' AND productOpt.brand = '\(productBrand)' AND uuid != '\(notUuid)'"
+    static func createFilter(groupUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique, notUuid: String) -> String {
+        return "\(createFilter(groupUuid: groupUuid, quantifiableProductUnique: unique)) AND uuid != '\(notUuid)'"
     }
     
     static func createFilterGroupItemsUuids(_ groupItems: [GroupItem]) -> String {

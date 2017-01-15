@@ -11,7 +11,8 @@ import RealmSwift
 import QorumLogs
 
 class RealmInventoryItemProvider: RealmProvider {
-    
+
+    // TODO does this function still makes sense (now InventoryItem is always a realm object)
     func findInventoryItem(_ item: InventoryItem, handler: @escaping (InventoryItem?) -> ()) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
         self.loadFirst(mapper, filter: InventoryItem.createFilter(item.product, item.inventory), handler: handler)
@@ -302,9 +303,7 @@ class RealmInventoryItemProvider: RealmProvider {
         
             // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
             let mapper: (InventoryItem) -> InventoryItem = {InventoryItemMapper.inventoryItemWithDB($0)}
-            let existingInventoryItems: [InventoryItem] = loadSync(realm, mapper: mapper, filter:
-                // TODO!!!!!!!!!!!!!!!!!!!!!!!!! filter should use either uuid of quantifiable product or include unit - we should increment only product with specific unit
-                InventoryItem.createFilter(product, inventory))
+            let existingInventoryItems: [InventoryItem] = loadSync(realm, mapper: mapper, filter: InventoryItem.createFilter(product, inventory))
             
             let addedOrIncrementedInventoryItem: InventoryItem = {
                 if let existingInventoryItem = existingInventoryItems.first {

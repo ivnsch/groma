@@ -46,8 +46,8 @@ class MemListItemProvider {
             // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
             var addedListItem: ListItem
             
-            // TODO!!!!!!!!!!!!!!!!!!! use unit / quantifiable product? (probably its needed here)
-            if let existingListItem = self.listItems![listItem.list.uuid]?.findFirstWithProductNameAndBrand(listItem.product.product.product.name, brand: listItem.product.product.product.brand) {
+            if let existingListItem = self.listItems![listItem.list.uuid]?.findFirstWith(quantifiableProductUnique: listItem.product.product.unique) {
+//            if let existingListItem = self.listItems![listItem.list.uuid]?.findFirstWithProductNameAndBrand(listItem.product.product.product.name, brand: listItem.product.product.product.brand) {
                 let updatedListItem = existingListItem.increment(listItem)
                 _ = self.listItems![listItem.list.uuid]?.update(updatedListItem)
                 addedListItem = updatedListItem
@@ -73,8 +73,7 @@ class MemListItemProvider {
         
         // TODO optimise this, for each list item we are iterating through the whole list items list. We should put listitems in dictionary with uuid or product name, or something
         // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
-        // TODO!!!!!!!!!!!!!!!! we need probably unit here
-        if let existingListItem = self.listItems![list.uuid]!.findFirstWithProductNameAndBrand(prototype.prototype.product.product.product.name, brand: prototype.prototype.product.product.product.brand) {
+        if let existingListItem = listItems![list.uuid]!.findFirstWith(storeProductUnique: prototype.prototype.product.unique) {
             
             let updatedSection = existingListItem.section.copy(name: prototype.prototype.targetSectionName) // TODO!!!! I think this is related with the bug with unwanted section update? for now letting like this since it's same functionality as before
             

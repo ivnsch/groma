@@ -76,8 +76,8 @@ public class HistoryItem: DBSyncable, Identifiable {
         return "uuid == '\(uuid)'"
     }
     
-    static func createFilterWithProduct(_ productUuid: String) -> String {
-        return "productOpt.uuid == '\(productUuid)'"
+    static func createFilter(quantifiableProductUuid: String) -> String {
+        return "productOpt.uuid == '\(quantifiableProductUuid)'"
     }
     
     static func createFilterWithInventory(_ inventoryUuid: String) -> String {

@@ -238,7 +238,8 @@ struct MyWebsocketDispatcher {
             
             case .Fav:
                 if let productUuid = data as? String {
-                    Prov.productProvider.incrementFav(productUuid, remote: false) {result in
+                    // Note: needs to be updated in backend. Fav belongs now to the new quantifiable product
+                    Prov.productProvider.incrementFav(quantifiableProductUuid: productUuid, remote: false) {result in
                         if result.success {
                             postNotification(.Product, verb, sender, productUuid)
                         } else {

@@ -127,12 +127,21 @@ extension Array where Element: ListItem {
         }
         return sections.inOrder(status)
     }
-    
-    // TODO!!!!!!!!!!!!!!! consider quantifiable product unique?
-    public func findFirstWithProductNameAndBrand(_ productName: String, brand: String) -> ListItem? {
+
+    public func findFirstWith(storeProductUnique: StoreProductUnique) -> ListItem? {
         
         for listItem in self {
-            if listItem.product.product.product.name == productName && listItem.product.product.product.brand == brand {
+            if listItem.product.matches(unique: storeProductUnique) {
+                return listItem
+            }
+        }
+        return nil
+    }
+    
+    public func findFirstWith(quantifiableProductUnique: QuantifiableProductUnique) -> ListItem? {
+        
+        for listItem in self {
+            if listItem.product.product.matches(unique: quantifiableProductUnique) {
                 return listItem
             }
         }
@@ -310,17 +319,6 @@ extension Results where T: ListItem {
             }
         }
         return sections.inOrder(status)
-    }
-    
-    // TODO!!!!!!!!!!!!!! use quantifiable product unique (+unit related)
-    public func findFirstWithProductNameAndBrand(_ productName: String, brand: String) -> ListItem? {
-        
-        for listItem in self {
-            if listItem.product.product.product.name == productName && listItem.product.product.product.brand == brand {
-                return listItem
-            }
-        }
-        return nil
     }
     
     public func totalPrice(_ status: ListItemStatus) -> Float {

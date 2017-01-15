@@ -461,12 +461,11 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // TODO we are iterating multiple times through listitems, once to find the product and in removeListItem...
-    // TODO!!!!!!!!!!!!!!! review: is it fine that the productUuid (probably) is now quantifiable product uuid?
-    func removeListItemReferencingProduct(_ productUuid: String) {
-        if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.uuid == productUuid}) {
+    func removeListItemReferencingProduct(quantifiableProductUuid: String) {
+        if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.uuid == quantifiableProductUuid}) {
             removeListItem(tableViewListItem.listItem)
         } else {
-            QL1("removeListItemReferencingProduct list item is not in list items table view. Product uuid: \(productUuid)")
+            QL1("removeListItemReferencingProduct list item is not in list items table view. Quantifiable product uuid: \(quantifiableProductUuid)")
         }
     }
 

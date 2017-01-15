@@ -31,6 +31,8 @@ import RealmSwift
 //    }
 //}
 
+public typealias StoreProductUnique = (quantifiableProductUnique: QuantifiableProductUnique, store: String)
+
 public class StoreProduct: DBSyncable, Identifiable {
     
     public dynamic var uuid: String = ""
@@ -194,8 +196,8 @@ public class StoreProduct: DBSyncable, Identifiable {
     
     // This function doesn't really have to here but don't have a better place yet
     // A key that can be used e.g. in dictionaries
-    static func nameBrandStoreKey(_ name: String, brand: String, store: String) -> String {
-        return name + "-.9#]A-" + brand + "-.9#]A-" + store // insert some random text in between to prevent possible cases where name or brand text matches what would be a combination, e.g. a product is called "soapMyBrand" has empty brand and other product is called "soap" and has a brand "MyBrand" these are different but simple text concatenation would result in the same key.
+    static func uniqueDictKey(_ name: String, brand: String, store: String, unit: ProductUnit, baseQuantity: Float) -> String {
+        return name + "-.9#]A-\(brand)-.9#]A-\(store)-.9#]A-\(unit)-.9#]A-\(baseQuantity)" // insert some random text in between to prevent possible cases where name or brand text matches what would be a combination, e.g. a product is called "soapMyBrand" has empty brand and other product is called "soap" and has a brand "MyBrand" these are different but simple text concatenation would result in the same key.
     }
     
     override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
@@ -210,10 +212,8 @@ public class StoreProduct: DBSyncable, Identifiable {
         return copy(storeProduct, product: storeProduct.product)
     }
 
-    public func update(_ storeProductInput: StoreProductInput) -> StoreProduct {
-        // TODO!!!!!!!!!!!!!!! do we always want to update the underlaying quantifiableproduct here? note that this will overwrite its unit. Or maybe we want to create a new quantifiable product instead?
-        let updatedQuantifiableProduct = product.copy(baseQuantity: storeProductInput.baseQuantity, unit: storeProductInput.unit)
-        return copy(price: storeProductInput.price, product: updatedQuantifiableProduct)
+    public func updateOnlyStoreAttributes(_ storeProductInput: StoreProductInput) -> StoreProduct {
+        return copy(price: storeProductInput.price)
     }
 
     // Updates self and its dependencies with storeProduct, the references to the dependencies (uuid) are not changed
@@ -232,5 +232,13 @@ public class StoreProduct: DBSyncable, Identifiable {
     
     public func same(_ rhs: StoreProduct) -> Bool {
         return uuid == rhs.uuid
+    }
+    
+    public var unique: StoreProductUnique {
+        return (quantifiableProductUnique: product.unique, store: store)
+    }
+    
+    public func matches(unique: StoreProductUnique) -> Bool {
+        return store == unique.store && product.matches(unique: unique.quantifiableProductUnique)
     }
 }

@@ -67,28 +67,32 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
     }
     
     static func createFilter(_ product: QuantifiableProduct, _ inventory: DBInventory) -> String {
-        // TODO!!!!!!!!!!!!!!!!!!!!!!!!! review - replaced product with store product here - is this valid for all use cases?
-        return createFilter(ProductUnique(name: product.product.name, brand: product.product.brand), inventoryUuid: inventory.uuid)
+        return createFilter(quantifiableProductUnique: product.unique, inventoryUuid: inventory.uuid)
     }
 
+    static func createFilter(quantifiableProductUnique: QuantifiableProductUnique, inventoryUuid: String) -> String {
+        let productUnique = ProductUnique(name: quantifiableProductUnique.name, brand: quantifiableProductUnique.brand)
+        return "\(createFilter(productUnique, inventoryUuid: inventoryUuid)) AND productOpt.unit = '\(quantifiableProductUnique.unit)' AND productOpt.baseQuantity = '\(quantifiableProductUnique.baseQuantity)'"
+    }
+    
     static func createFilter(_ productUnique: ProductUnique, inventoryUuid: String) -> String {
-        return "\(createFilterInventory(inventoryUuid)) AND productOpt.name = '\(productUnique.name)' AND productOpt.brand = '\(productUnique.brand)'"
+        return "\(createFilterInventory(inventoryUuid)) AND productOpt.productOpt.name = '\(productUnique.name)' AND productOpt.productOpt.brand = '\(productUnique.brand)'"
     }
 
     static func createFilter(_ productUnique: ProductUnique, inventoryUuid: String, notUuid: String) -> String {
-        return "\(createFilterInventory(inventoryUuid)) AND productOpt.name = '\(productUnique.name)' AND productOpt.brand = '\(productUnique.brand)' AND uuid != '\(notUuid)'"
+        return "\(createFilterInventory(inventoryUuid)) AND productOpt.productOpt.name = '\(productUnique.name)' AND productOpt.productOpt.brand = '\(productUnique.brand)' AND uuid != '\(notUuid)'"
     }
     
     static func createFilter(productUuid: String, inventoryUuid: String) -> String {
-        return "productOpt.uuid = '\(productUuid)' AND inventoryOpt.uuid = '\(inventoryUuid)'"
+        return "productOpt.productOpt.uuid = '\(productUuid)' AND inventoryOpt.uuid = '\(inventoryUuid)'"
     }
     
     static func createFilterInventory(_ inventoryUuid: String) -> String {
         return "inventoryOpt.uuid = '\(inventoryUuid)'"
     }
     
-    static func createFilterWithProduct(_ productUuid: String) -> String {
-        return "productOpt.uuid == '\(productUuid)'"
+    static func createFilter(quantifiableProductUuid: String) -> String {
+        return "productOpt.uuid == '\(quantifiableProductUuid)'"
     }
     
     static func createFilterUuids(_ uuids: [String]) -> String {

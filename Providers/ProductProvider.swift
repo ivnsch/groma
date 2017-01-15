@@ -56,7 +56,7 @@ public protocol ProductProvider {
     
     func delete(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func incrementFav(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func incrementFav(quantifiableProductUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
     func loadProduct(_ name: String, brand: String, handler: @escaping (ProviderResult<Product>) -> ())
     
@@ -75,7 +75,7 @@ public protocol ProductProvider {
     TODO use results like everywhere else, maybe put in a different specific utility class this is rather provider-internal
     NOTE: doesn't save the new/merged product
     */
-    func mergeOrCreateProduct(_ productName: String, category: String, categoryColor: UIColor, brand: String, updateCategory: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void)
+//    func mergeOrCreateProduct(_ productName: String, category: String, categoryColor: UIColor, brand: String, updateCategory: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void)
     
     // NOTE: doesn't save the new/merged product
     func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void)

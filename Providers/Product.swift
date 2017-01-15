@@ -38,7 +38,6 @@ public class Product: DBSyncable, Identifiable {
     public dynamic var uuid: String = ""
     public dynamic var name: String = ""
     dynamic var categoryOpt: ProductCategory? = ProductCategory()
-    public dynamic var fav: Int = 0
     public dynamic var brand: String = ""
     
     public var category: ProductCategory {
@@ -58,14 +57,13 @@ public class Product: DBSyncable, Identifiable {
         return ["name"]
     }
     
-    public convenience init(uuid: String, name: String, category: ProductCategory, fav: Int = 0, brand: String = "", lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, name: String, category: ProductCategory, brand: String = "", lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
         self.uuid = uuid
         self.name = name
         self.category = category
-        self.fav = fav
         self.brand = brand
         
         if let lastServerUpdate = lastServerUpdate {
@@ -79,17 +77,15 @@ public class Product: DBSyncable, Identifiable {
             uuid: UUID().uuidString,
             name: prototype.name,
             category: category,
-            fav: 0,
             brand: prototype.brand
         )
     }
     
-    public func copy(uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {
+    public func copy(uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, brand: String? = nil, store: String? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             category: category ?? self.category.copy(),
-            fav: fav ?? self.fav,
             brand: brand ?? self.brand,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
@@ -162,7 +158,7 @@ public class Product: DBSyncable, Identifiable {
         item.uuid = dict["uuid"]! as! String
         item.name = dict["name"]! as! String
         item.category = category
-        item.fav = dict["fav"]! as! Int
+//        item.fav = dict["fav"]! as! Int
         item.brand = dict["brand"]! as! String
         item.setSyncableFieldswithRemoteDict(dict)        
         return item
@@ -173,7 +169,7 @@ public class Product: DBSyncable, Identifiable {
         dict["uuid"] = uuid as AnyObject?
         dict["name"] = name as AnyObject?
         dict["category"] = category.toDict() as AnyObject?
-        dict["fav"] = fav as AnyObject?
+//        dict["fav"] = fav as AnyObject?
         dict["brand"] = brand as AnyObject?
         setSyncableFieldsInDict(&dict)
         return dict
@@ -214,7 +210,7 @@ public class Product: DBSyncable, Identifiable {
     }
 
     fileprivate func update(_ product: Product, category: ProductCategory) -> Product {
-        return copy(name: product.name, category: product.category, fav: product.fav, brand: product.brand, lastServerUpdate: product.lastServerUpdate, removed: product.removed)
+        return copy(name: product.name, category: product.category, brand: product.brand, lastServerUpdate: product.lastServerUpdate, removed: product.removed)
     }
 
     public func same(_ rhs: Product) -> Bool {

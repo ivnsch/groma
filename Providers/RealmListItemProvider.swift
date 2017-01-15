@@ -35,7 +35,8 @@ class RealmListItemProvider: RealmProvider {
     func addOrIncrementListItemsSync(_ realm: Realm, listItems: [ListItem], updateSection: Bool = true) -> [ListItem] {
         var listItems = listItems
         
-        let existingListItems = realm.objects(ListItem.self).filter(ListItem.createFilterListItems(listItems))
+//        let existingListItems = realm.objects(ListItem.self).filter(ListItem.createFilterListItems(listItems))
+        let existingListItems = listItems
         
         let uuidToListItemDict: [String: ListItem] = existingListItems.toDictionary{
             ($0.product.uuid, $0)

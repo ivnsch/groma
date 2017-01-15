@@ -355,7 +355,8 @@ class ProductGroupProviderImpl: ProductGroupProvider {
     func update(_ input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<(groupItem: GroupItem, replaced: Bool)>) -> Void) {
         
         // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
-        DBProv.groupItemProvider.deletePossibleGroupItemWithUnique(input.name, productBrand: input.brand, group: updatingGroupItem.group, notUuid: updatingGroupItem.uuid) {foundAndDeletedGroupItem in
+        let quantifiableProductUnique = QuantifiableProductUnique(name: input.name, brand: input.brand, unit: input.storeProductInput.unit, baseQuantity: input.storeProductInput.baseQuantity)
+        DBProv.groupItemProvider.deletePossibleGroupItem(quantifiableProductUnique: quantifiableProductUnique, group: updatingGroupItem.group, notUuid: updatingGroupItem.uuid) {foundAndDeletedGroupItem in
             // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
             
             // TODO units? for now doesn't matter since we are not going to continue using groups

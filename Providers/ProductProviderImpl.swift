@@ -222,8 +222,8 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func incrementFav(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        DBProv.productProvider.incrementFav(productUuid, {saved in
+    func incrementFav(quantifiableProductUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        DBProv.productProvider.incrementFav(quantifiableProductUuid: quantifiableProductUuid, {saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
      
             // Disabled while impl. realm sync
@@ -292,13 +292,6 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    func mergeOrCreateProduct(_ productName: String, category: String, categoryColor: UIColor, brand: String, updateCategory: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void) {
-        // TODO!!!!!!!!!!!!!!!!!!!
-        
-        
-        fatalError("Remove this")
-    }
-
     func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void) {
         
         // load product and update or create one
@@ -315,7 +308,7 @@ class ProductProviderImpl: ProductProvider {
                     
                     func onHasCategory(_ category: ProductCategory) {
                         // fav: 1 If we create a product we are "using" it so we start with fav: 1. This way, for example, when user creates new products in the quick add, these products will show in the quick add list above of prefilled products that have never been used.
-                        let newProduct = Product(uuid: UUID().uuidString, name: prototype.name, category: category, fav: 1, brand: prototype.brand)
+                        let newProduct = Product(uuid: UUID().uuidString, name: prototype.name, category: category, brand: prototype.brand)
                         handler(ProviderResult(status: .success, sucessResult: newProduct))
                     }
                     

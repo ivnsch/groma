@@ -162,8 +162,10 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
-        // TODO!!!!!!!!!!!!!!!!!!!! review: do we need unit, baseq here?
-        let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.category.name, targetSectionColor: $0.product.product.category.color, storeProductInput: nil)}
+        let listItemPrototypes: [ListItemPrototype] = groupItems.map{
+            let storeProductInput = StoreProductInput(price: 0, baseQuantity: $0.product.baseQuantity, unit: $0.product.unit)
+            return ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.category.name, targetSectionColor: $0.product.product.category.color, storeProductInput: storeProductInput)
+        }
         self.add(listItemPrototypes, status: status, list: list, token: nil, handler)
     }
     
@@ -441,8 +443,8 @@ class ListItemProviderImpl: ListItemProvider {
                         }()
                         
                         // Set possible passed store product properties in the store product we will save. These are passed only when we create list items, using the form
-                        let updatedStoreProduct = prototype.storeProductInput.map{storeProduct.update($0)} ?? storeProduct
-                        
+                        // We don't update e.g. quantifiable properties (unit, base quantity) because we assume in this method that we have up to date quantity product. On one side we can be here with quick-add - then there can't be changes, or with the form, in which case we fetch/create first the quantifiable product for the entered unique. And we just fetched/created the store product using the uuid of quantifiable product with said unique.
+                        let updatedStoreProduct = prototype.storeProductInput.map{storeProduct.updateOnlyStoreAttributes($0)} ?? storeProduct
                         return StoreListItemPrototype(product: updatedStoreProduct, quantity: prototype.quantity, targetSectionName: prototype.targetSectionName, targetSectionColor: prototype.targetSectionColor)
                     }
                 }()
@@ -491,12 +493,10 @@ class ListItemProviderImpl: ListItemProvider {
                     // see if there's already a listitem for this product in the list - if yes only increment it
                     
                     let existingListItems = realm.objects(ListItem.self).filter(ListItem.createFilterList(list.uuid))
-                    // TODO!!!!!!!!!!!!!!!!!!! consider unit?
-                    let existingListItemsDict: [String: ListItem] = existingListItems.toDictionary{(StoreProduct.nameBrandStoreKey($0.product.product.product.name, brand: $0.product.product.product.brand, store: $0.product.store), $0)}
+                    let existingListItemsDict: [String: ListItem] = existingListItems.toDictionary{(StoreProduct.uniqueDictKey($0.product.product.product.name, brand: $0.product.product.product.brand, store: $0.product.store, unit: $0.product.product.unit, baseQuantity: $0.product.product.baseQuantity), $0)}
                     
                     // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
-                    // TODO!!!!!!!!!!!!!!!!!!! consider unit?
-                    let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(StoreProduct.nameBrandStoreKey($0.product.product.product.name, brand: $0.product.product.product.brand, store: $0.product.store), $0)}
+                    let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(StoreProduct.uniqueDictKey($0.product.product.product.name, brand: $0.product.product.product.brand, store: $0.product.store, unit: $0.product.product.unit, baseQuantity: $0.product.product.baseQuantity), $0)}
                     
                     // Holds count of new items per section, which is incremented while we loop through prototypes
                     // we need this to determine the order of the items in the sections - which is the last index in existing items + new items count so far in section
@@ -505,8 +505,7 @@ class ListItemProviderImpl: ListItemProvider {
                     var savedListItems: [ListItem] = []
 
                     for (prototype, section) in prototypesWithSections {
-                        // TODO!!!!!!!!!!!!!!!!!!! consider unit?
-                        if var existingListItem = existingListItemsDict[StoreProduct.nameBrandStoreKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store)] {
+                        if var existingListItem = existingListItemsDict[StoreProduct.uniqueDictKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)] {
                             
                             existingListItem = existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
                             
@@ -544,8 +543,7 @@ class ListItemProviderImpl: ListItemProvider {
                                     let sectionCount = getOrderForNewSection(existingListItems)
                                     
                                     // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                    // TODO!!!!!!!!!!!!!!!!!!! consider unit?
-                                    return memoryCacheItemsDict?[StoreProduct.nameBrandStoreKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+                                    return memoryCacheItemsDict?[StoreProduct.uniqueDictKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
                                 }()
                             
                             // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
@@ -562,8 +560,7 @@ class ListItemProviderImpl: ListItemProvider {
                                 }
                             }()
                             
-                            // TODO!!!!!!!!!!!!!!!!!!! consider unit?
-                            let uuid = memoryCacheItemsDict?[StoreProduct.nameBrandStoreKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store)]?.uuid ?? NSUUID().uuidString
+                            let uuid = memoryCacheItemsDict?[StoreProduct.uniqueDictKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)]?.uuid ?? NSUUID().uuidString
                             
                             
                             // create the list item and save it

@@ -38,6 +38,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     dynamic var productOpt: Product? = Product()
     public dynamic var baseQuantity: Float = 0
     public dynamic var unitVal: Int = 0
+    public dynamic var fav: Int = 0
     
     public var product: Product {
         get {
@@ -61,7 +62,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         return "uuid"
     }
     
-    public convenience init(uuid: String, baseQuantity: Float, unit: ProductUnit, product: Product) {
+    public convenience init(uuid: String, baseQuantity: Float, unit: ProductUnit, product: Product, fav: Int = 0) {
         
         self.init()
         
@@ -69,14 +70,16 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         self.baseQuantity = baseQuantity
         self.unit = unit
         self.product = product
+        self.fav = fav
     }
     
-    public func copy(uuid: String? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil, product: Product? = nil) -> QuantifiableProduct {
+    public func copy(uuid: String? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil, product: Product? = nil, fav: Int? = nil) -> QuantifiableProduct {
         return QuantifiableProduct(
             uuid: uuid ?? self.uuid,
             baseQuantity: baseQuantity ?? self.baseQuantity,
             unit: unit ?? self.unit,
-            product: product ?? self.product.copy()
+            product: product ?? self.product.copy(),
+            fav: fav ?? self.fav
         )
     }
     
@@ -166,5 +169,13 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     
     public func same(_ rhs: QuantifiableProduct) -> Bool {
         return uuid == rhs.uuid
+    }
+
+    public var unique: QuantifiableProductUnique {
+        return (name: product.name, brand: product.brand, unit: unit, baseQuantity: baseQuantity)
+    }
+    
+    public func matches(unique: QuantifiableProductUnique) -> Bool {
+        return product.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit == unique.unit
     }
 }

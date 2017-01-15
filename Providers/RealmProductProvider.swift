@@ -34,7 +34,6 @@ public typealias QuantifiableProductUnique = (name: String, brand: String, unit:
 //    }
 //}
 
-// TODO!!!!!!!!!!!!!! necessary to create separate implementation for ProductPrototype and QuantifiableProductPrototype? (current state)
 public struct ProductPrototype {
     let name: String
     let category: String
@@ -55,17 +54,17 @@ public struct ProductPrototype {
     }
 }
 
-public struct StoreProductUnique {
-    let name: String
-    let brand: String
-    let store: String
-    
-    init(name: String, brand: String, store: String) {
-        self.name = name
-        self.brand = brand
-        self.store = store
-    }
-}
+//public struct StoreProductUnique {
+//    let name: String
+//    let brand: String
+//    let store: String
+//    
+//    init(name: String, brand: String, store: String) {
+//        self.name = name
+//        self.brand = brand
+//        self.store = store
+//    }
+//}
 
 class RealmProductProvider: RealmProvider {
     
@@ -198,7 +197,7 @@ class RealmProductProvider: RealmProvider {
     
     func loadQuantifiableProducts(_ range: NSRange, sortBy: ProductSortBy, handler: @escaping (Results<QuantifiableProduct>?) -> Void) {
         // For now duplicate code with products, to use Results and plain objs api together (for search text for now it's easier to use plain obj api)
-        // TODO!!!!!!!!!!!!!!!!!!! include unit/base quantity in sorting
+        // TODO? include unit/base quantity in sorting
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
             case .alphabetic: return ("productOpt.name", true)
@@ -256,7 +255,7 @@ class RealmProductProvider: RealmProvider {
     }
 
     // IMPORTANT: This cannot be used for real time updates (add) since the final results are fetched using uuids, so these results don't notice products with new uuids
-    // TODO!!!!!!!!!!!!!!!!!!! refactor with products() above? (this is a copy with few necessary changes for quantifiable product). Or maybe remove above, since now we need only this?
+    // TODO refactor with products() above? (this is a copy with few necessary changes for quantifiable product). Or maybe remove above, since now we need only this?
     func products(_ substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ products: Results<QuantifiableProduct>?) -> Void) {
         
         let sortData: (key: String, ascending: Bool) = {
@@ -271,7 +270,7 @@ class RealmProductProvider: RealmProvider {
         background({() -> [String]? in
             do {
                 let realm = try Realm()
-                let products: [Product] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
+                let products: [QuantifiableProduct] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
                 return products.map{$0.uuid}
             } catch let e {
                 QL4("Error: creating Realm, returning empty results, error: \(e)")
@@ -480,14 +479,14 @@ class RealmProductProvider: RealmProvider {
         
         _ = DBProv.groupItemProvider.removeGroupItemsForProductSync(realm, productUuid: quantifiableProductUuid, markForSync: markForSync)
         
-        let inventoryResult = realm.objects(InventoryItem.self).filter(InventoryItem.createFilterWithProduct(quantifiableProductUuid))
+        let inventoryResult = realm.objects(InventoryItem.self).filter(InventoryItem.createFilter(quantifiableProductUuid: quantifiableProductUuid))
         if markForSync {
             let toRemoteInventoryItems = Array(inventoryResult.map{DBRemoveInventoryItem($0)})
             saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
         }
         realm.delete(inventoryResult)
         
-        let historyResult = realm.objects(HistoryItem.self).filter(HistoryItem.createFilterWithProduct(quantifiableProductUuid))
+        let historyResult = realm.objects(HistoryItem.self).filter(HistoryItem.createFilter(quantifiableProductUuid: quantifiableProductUuid))
         if markForSync {
             let toRemoteHistoryItems =  Array(historyResult.map{DBRemoveHistoryItem($0)})
             saveObjsSyncInt(realm, objs: toRemoteHistoryItems, update: true)
@@ -622,7 +621,7 @@ class RealmProductProvider: RealmProvider {
                     onHasNewOrUpdatedProduct(product: updatedProduct)
                     
                 } else {
-                    let newProduct = Product(uuid: UUID().uuidString, name: productInput.name, category: category, fav: 0, brand: productInput.brand)
+                    let newProduct = Product(uuid: UUID().uuidString, name: productInput.name, category: category, brand: productInput.brand)
                     onHasNewOrUpdatedProduct(product: newProduct)
                 }
             }
@@ -736,9 +735,9 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func incrementFav(_ productUuid: String, _ handler: @escaping (Bool) -> Void) {
+    func incrementFav(quantifiableProductUuid: String, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
-            if let existingProduct = realm.objects(Product.self).filter(Product.createFilter(productUuid)).first {
+            if let existingProduct = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(quantifiableProductUuid)).first {
                 existingProduct.fav += 1
                 realm.add(existingProduct, update: true)                
                 return true

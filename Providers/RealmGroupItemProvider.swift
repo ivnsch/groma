@@ -146,9 +146,8 @@ class RealmGroupItemProvider: RealmProvider {
         func addOrIncrement(_ item: GroupItem) -> GroupItem? {
             do {
                 let realm = try Realm()
-                // TODO!!!!!!!!!!!!!!!!!!! consider unit?
                 // TODO!! why looking here for unique instead of uuid? when add group item with product we should be able to find the product using only the uuid?
-                if let item: GroupItem = loadSync(realm, filter: GroupItem.createFilterGroupAndProductName(item.group.uuid, productName: item.product.product.name, productBrand: item.product.product.brand)).first {
+                if let item: GroupItem = loadSync(realm, filter: GroupItem.createFilter(groupUuid: item.group.uuid, quantifiableProductUnique: groupItem.product.unique)).first {
                     let incremented = item.incrementQuantityCopy(groupItem.quantity)
                     _ = saveObjSync(incremented, update: true)
                     return incremented
@@ -220,14 +219,14 @@ class RealmGroupItemProvider: RealmProvider {
     }
     
     // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
-    func deletePossibleGroupItemWithUnique(_ productName: String, productBrand: String, group: ProductGroup, notUuid: String, handler: @escaping (Bool) -> Void) {
-        removeReturnCount(GroupItem.createFilterGroupAndProductName(group.uuid, productName: productName, productBrand: productBrand, notUuid: notUuid), handler: {removedCountMaybe in
+    func deletePossibleGroupItem(quantifiableProductUnique: QuantifiableProductUnique, group: ProductGroup, notUuid: String, handler: @escaping (Bool) -> Void) {
+        removeReturnCount(GroupItem.createFilter(groupUuid: group.uuid, quantifiableProductUnique: quantifiableProductUnique, notUuid: notUuid), handler: {removedCountMaybe in
             if let removedCount = removedCountMaybe {
                 if removedCount > 0 {
-                    QL2("Found group item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), group: {\(group.uuid), \(group.name)}")
+                    QL2("Found group item with same name+brand in list, deleted it. Unique: \(quantifiableProductUnique), group: {\(group.uuid), \(group.name)}")
                 }
             } else {
-                QL4("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(group.uuid), \(group.name)}")
+                QL4("Remove didn't succeed: Unique: \(quantifiableProductUnique), group: {\(group.uuid), \(group.name)}")
             }
             handler(removedCountMaybe.map{$0 > 0} ?? false)
         }, objType: GroupItem.self)

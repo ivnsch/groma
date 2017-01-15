@@ -393,7 +393,7 @@ class RemoteListItemProvider {
             "name": product.name as AnyObject,
             "brand": product.brand as AnyObject,
             "category": toRequestParams(product.category) as AnyObject,
-            "fav": product.fav as AnyObject
+//            "fav": product.fav as AnyObject
         ]
         
         dict["lastUpdate"] = NSNumber(value: Int64(product.lastServerUpdate) as Int64)

@@ -33,12 +33,14 @@ public class QuickAddProduct: QuickAddItem {
         return product.product.brand
     }
     
-    // TODO!!!!!!!!!!!!!!!!!! add unit
-    
-    
     // TODO!!!!!!!!!!!!!!!!! (not related with quantifiable prods refactoring but important) review this - is the store always showing? the store should not show when we are in a store-specific list! (if items have a store assigned iirc we should see the items in other stores, but without displayign the store? (i.e. stripped from store-related information)
     public override var label3Text: String {
         return storeProduct?.store ?? ""
+    }
+
+    public override var label4Text: String {
+        let firstPart: String = product.baseQuantity > 0 ? "\(product.baseQuantity)" : ""
+        return "\(firstPart)\(product.unit)"
     }
     
     public override var color: UIColor {

@@ -277,12 +277,12 @@ public class ListItem: DBSyncable, Identifiable {
     
     // Finds list items that have the same product names as listItems and are in the same list
     // WARN: Assumes all the list items belong to the same list (list uuid of first list item is used)
-    // TODO!!!!!!!!!!!! check if we need product unit here
-    public static func createFilterListItems(_ listItems: [ListItem]) -> String {
-        let productNamesStr: String = listItems.map{"'\($0.product.product.product.name)'"}.joined(separator: ",")
-        let listUuid = listItems.first?.list.uuid ?? ""
-        return "productOpt.name IN {\(productNamesStr)} AND listOpt.uuid = '\(listUuid)'"
-    }
+//    // TODO? in case we have to enable this again, check if we need product unit, store etc. here
+//    public static func createFilterListItems(_ listItems: [ListItem]) -> String {
+//        let productNamesStr: String = listItems.map{"'\($0.product.product.product.name)'"}.joined(separator: ",")
+//        let listUuid = listItems.first?.list.uuid ?? ""
+//        return "productOpt.name IN {\(productNamesStr)} AND listOpt.uuid = '\(listUuid)'"
+//    }
     
     // MARK: - CustomDebugStringConvertible
     

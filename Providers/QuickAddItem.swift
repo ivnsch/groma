@@ -31,6 +31,10 @@ public class QuickAddItem: Identifiable {
     public var label3Text: String {
         fatalError("Override")
     }
+
+    public var label4Text: String {
+        fatalError("Override")
+    }
     
     public var color: UIColor {
         fatalError("Override")
