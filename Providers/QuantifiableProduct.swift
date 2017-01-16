@@ -178,4 +178,15 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     public func matches(unique: QuantifiableProductUnique) -> Bool {
         return product.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit == unique.unit
     }
+    
+    fileprivate static var baseQuantityNumberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }()
+    
+    public var unitText: String {
+        let baseQuantityText = baseQuantity > 1 ? "x\(QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!)" : ""
+        return "\(baseQuantityText)\(unit.shortText)"
+    }
 }

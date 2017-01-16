@@ -35,14 +35,11 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         didSet {
             guard let model = model else {QL3("Model is nil"); return}
             
-            // TODO!!!!!!!!!!!!!!!! show unit
-            
             nameLabel.text = NSLocalizedString(model.product.product.name, comment: "")
             
             centerVerticallyNameLabelConstraint.constant = model.product.product.brand.isEmpty ? 0 : 10
             brandLabel.text = model.product.product.brand
             
-            quantityLabel.text = String(model.quantity)
             shownQuantity = model.quantity
             
             categoryColorView.backgroundColor = model.product.product.category.color
@@ -72,7 +69,8 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
 
     var shownQuantity: Int = 0 {
         didSet {
-            quantityLabel.text = String("\(shownQuantity)")
+            let unitText = model.map{$0.product.unitText} ?? ""
+            quantityLabel.text = String("\(shownQuantity)\(unitText)")
         }
     }
     
