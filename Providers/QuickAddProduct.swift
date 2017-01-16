@@ -39,8 +39,7 @@ public class QuickAddProduct: QuickAddItem {
     }
 
     public override var label4Text: String {
-        let firstPart: String = product.baseQuantity > 0 ? "\(product.baseQuantity)" : ""
-        return "\(firstPart)\(product.unit)"
+        return product.unitText
     }
     
     public override var color: UIColor {
