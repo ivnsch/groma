@@ -190,8 +190,9 @@ class RealmUserProviderImpl: UserProvider {
     }
     
     func authenticateWithICloud(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
-        let credentials = SyncCredentials.iCloud(token: token)
-        loginOrRegister(credentials, controller: controller, handler)
+        // TODO doesn't work since upgrade to Realm 2.2
+//        let credentials = SyncCredentials.iCloud(token: token)
+//        loginOrRegister(credentials, controller: controller, handler)
     }
     
     // store email in prefs so we can e.g. prefill login controller, which is opened after registration
