@@ -52,11 +52,11 @@ PODS:
   - KLCPopup (1.0)
   - QorumLogs (0.9)
   - Reachability (3.2)
-  - Realm (2.1.1):
-    - Realm/Headers (= 2.1.1)
-  - Realm/Headers (2.1.1)
-  - RealmSwift (2.1.1):
-    - Realm (= 2.1.1)
+  - Realm (2.2.0):
+    - Realm/Headers (= 2.2.0)
+  - Realm/Headers (2.2.0)
+  - RealmSwift (2.2.0):
+    - Realm (= 2.2.0)
   - Starscream (2.0.2)
   - SwiftCharts (0.5.1)
   - SwiftValidator (4.0.0)
@@ -72,7 +72,7 @@ DEPENDENCIES:
   - KLCPopup (~> 1.0)
   - QorumLogs
   - Reachability (~> 3.2)
-  - RealmSwift
+  - RealmSwift (~> 2.2)
   - Starscream
   - SwiftCharts (from `https://github.com/i-schuetz/SwiftCharts.git`)
   - SwiftValidator (from `https://github.com/i-schuetz/SwiftValidator.git`, branch `remove_delegate_callback`)
@@ -118,14 +118,14 @@ SPEC CHECKSUMS:
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
   QorumLogs: 9a484df6973a3697ac79fe2273140fde6b36dccc
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Realm: a55959c0b171a5fe5267406d17f314fec3cefaae
-  RealmSwift: 749fd955bf8d6471c21d218b9389a47aaeccfe3f
+  Realm: d95b8fb34c83f1e764b66d319277a62c2b6e4bf5
+  RealmSwift: a4fa52d06e946a32ec746b3388374f742e6b8731
   Starscream: 6c135a34e0a6e60cedaa0b30db67a4c05cf7cd38
   SwiftCharts: 5c711f225e65bb967bf9ac952888670d461b80af
   SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009
   Valet: c78c7d2e4b2d104d29b9bc62c8f9aa38fbc901eb
 
-PODFILE CHECKSUM: efc873f18df130a8b93ce232f7b4c2fbaf4c02d8
+PODFILE CHECKSUM: 7e7f5e1c5e903dc6527a64eba44d5dc799fcd0eb
 
 COCOAPODS: 1.1.1
