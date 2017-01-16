@@ -201,7 +201,7 @@ class RealmProductProvider: RealmProvider {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
             case .alphabetic: return ("productOpt.name", true)
-            case .fav: return ("productOpt.fav", false) // TODO!!!!!!!!!!!!!!!!!!! move fav to quantifiable product? (it's the one we can select in the quick add...)
+            case .fav: return ("fav", false)
             }
         }()
         
@@ -261,7 +261,7 @@ class RealmProductProvider: RealmProvider {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
             case .alphabetic: return ("productOpt.name", true)
-            case .fav: return ("productOpt.fav", false)
+            case .fav: return ("fav", false)
             }
         }()
         

@@ -300,24 +300,23 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     fileprivate func addOrIncrementInventoryItem(_ realm: Realm, inventory: DBInventory, product: QuantifiableProduct, quantity: Int, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Int) {
+    
+        // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
+        let existingInventoryItems: [InventoryItem] = loadSync(realm, filter: InventoryItem.createFilter(product, inventory))
         
-            // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
-            let mapper: (InventoryItem) -> InventoryItem = {InventoryItemMapper.inventoryItemWithDB($0)}
-            let existingInventoryItems: [InventoryItem] = loadSync(realm, mapper: mapper, filter: InventoryItem.createFilter(product, inventory))
-            
-            let addedOrIncrementedInventoryItem: InventoryItem = {
-                if let existingInventoryItem = existingInventoryItems.first {
-                    let existingQuantity = existingInventoryItem.quantity
-                    
-                    return existingInventoryItem.copy(quantity: quantity + existingQuantity)
-                    
-                } else { // if item doesn't exist there's nothing to increment
-                    return InventoryItem(uuid: UUID().uuidString, quantity: quantity, product: product, inventory: inventory)
-                }
-            }()
-            
-            // save
-            realm.add(addedOrIncrementedInventoryItem, update: true)
+        let addedOrIncrementedInventoryItem: InventoryItem = {
+            if let existingInventoryItem = existingInventoryItems.first {
+                let existingQuantity = existingInventoryItem.quantity
+                
+                return existingInventoryItem.copy(quantity: quantity + existingQuantity)
+                
+            } else { // if item doesn't exist there's nothing to increment
+                return InventoryItem(uuid: UUID().uuidString, quantity: quantity, product: product, inventory: inventory)
+            }
+        }()
+        
+        // save
+        realm.add(addedOrIncrementedInventoryItem, update: true)
         
         return (inventoryItem: addedOrIncrementedInventoryItem, delta: quantity)
     }
