@@ -29,6 +29,7 @@ public struct RequestErrorToMsgMapper {
             case .serverInvalidParamsError: return trans("error_server_invalid_params")
             case .databaseUnknown: return trans("error_unknown_database")
             case .databaseSavingError: return trans("error_unknown_database")
+            case .databaseCriticalInitError: return trans("error_database_critical_init")
             case .unknown: return trans("error_unknown")
             case .dateCalculationError: return trans("error_unknown")
             case .socialLoginCancelled: return trans("social_login_cancelled") // this is not used (not an error) but we need exhaustive switch (without default case)

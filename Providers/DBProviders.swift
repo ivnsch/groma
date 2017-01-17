@@ -29,5 +29,7 @@ class DBProv {
     static var listItemGroupProvider = RealmProductGroupProvider()
     static var groupItemProvider = RealmGroupItemProvider()
 
+    static var recipeProvider = RealmRecipeProvider()
+    
     static var globalProvider = RealmGlobalProvider()
 }

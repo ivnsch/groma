@@ -126,8 +126,8 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     
-    override func onSelectCellInEditMode(_ model: ExpandableTableViewModel) {
-        super.onSelectCellInEditMode(model)
+    override func onSelectCellInEditMode(_ model: ExpandableTableViewModel, index: Int) {
+        super.onSelectCellInEditMode(model, index: index)
         topAddEditListControllerManager?.expand(true)        
         topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewInventoryModelRealm).inventory
     }
@@ -136,7 +136,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         return topAddEditListControllerManager?.expanded ?? false
     }
     
-    override func onReorderedModels() {
+    override func onReorderedModels(from: Int, to: Int) {
         let inventories = (models as! [ExpandableTableViewInventoryModelRealm]).map{$0.inventory}
         
         let reorderedInventories = inventories.mapEnumerate{index, inventory in inventory.copy(order: index)}
@@ -171,7 +171,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     
     
-    override func onRemoveModel(_ model: ExpandableTableViewModel) {
+    override func onRemoveModel(_ model: ExpandableTableViewModel, index: Int) {
         let inventory = (model as! ExpandableTableViewInventoryModelRealm).inventory
 
         Prov.inventoryProvider.removeInventory(inventory, remote: true, resultHandler(onSuccess: {_ in

@@ -282,10 +282,11 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let model = models[(indexPath as NSIndexPath).row]
+            let model = models[indexPath.row]
             canRemoveModel(model) {[weak self] can in
                 if can {
-                    self?.onRemoveModel(model)
+                    tableView.deleteRows(at: [indexPath], with: .top)
+                    self?.onRemoveModel(model, index: indexPath.row)
                 }
             }
         }
@@ -295,7 +296,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         can(true)
     }
     
-    func onRemoveModel(_ model: ExpandableTableViewModel) {
+    func onRemoveModel(_ model: ExpandableTableViewModel, index: Int) {
         fatalError("override")
     }
     
@@ -305,10 +306,10 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         models.remove(at: (fromIndexPath as NSIndexPath).row)
         models.insert(list, at: (toIndexPath as NSIndexPath).row)
         
-        onReorderedModels()
+        onReorderedModels(from: fromIndexPath.row, to: toIndexPath.row)
     }
 
-    func onReorderedModels() {
+    func onReorderedModels(from: Int, to: Int) {
         fatalError("override")
     }
     
@@ -320,16 +321,16 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         fatalError("override")
     }
     
-    func onSelectCellInEditMode(_ model: ExpandableTableViewModel) {
+    func onSelectCellInEditMode(_ model: ExpandableTableViewModel, index: Int) {
         setTopBarState(.editItem)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let model = self.models[(indexPath as NSIndexPath).row]
+        let model = self.models[indexPath.row]
         
         if self.isEditing {
-            onSelectCellInEditMode(model)
+            onSelectCellInEditMode(model, index: indexPath.row)
             
         } else {
             if let cell = tableView.cellForRow(at: indexPath) {

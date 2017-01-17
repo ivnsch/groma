@@ -36,7 +36,8 @@ public enum ProviderStatusCode: Int {
     // DB related
     case databaseUnknown = 1000
     case databaseSavingError = 1001
-
+    case databaseCriticalInitError = 1002
+    
     // Other
     case unknown = 2000 // Note: This represents unknown client error. Unknown server error is mapped to .ServerError
     case dateCalculationError = 2001

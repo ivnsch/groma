@@ -17,4 +17,6 @@ public protocol GlobalProvider {
     func clearAllData(_ remote: Bool, handler: @escaping (ProviderResult<Any>) -> Void)
     
     func fullDownload(_ handler: @escaping (ProviderResult<SyncResult>) -> Void)
+    
+    func initContainers(handler: @escaping (ProviderResult<Any>) -> Void)
 }

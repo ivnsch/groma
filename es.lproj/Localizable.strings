@@ -311,6 +311,7 @@ error_server_not_reachable = "No se pudo conectar con el servidor. Por favor int
 error_server_communication_unknown = "Error desconocido de servidor. Por favor intenta de nuevo más tarde.";
 error_server_invalid_params = "Solicitud inválida.\nPor favor consulta las entradas de solución de problemas en la ayuda o contacta el soporte técnico (feedback email en la '...' tab).";
 error_unknown_database = "Error desconocido. Por favor intenta de nuevo más tarde.";
+error_database_critical_init = "Ocurrió un error crítico inicializando la base de datos. Hemos recibido un reporte y lo repararemos lo más pronto posible. ¡Lo sentimos!";
 error_unknown = "Error desconocido. Por favor intenta de nuevo más tarde.";
 social_login_cancelled = "Sesión con proveedor social cancelada";
 social_login_error = "Error con sesión social";

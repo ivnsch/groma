@@ -310,6 +310,7 @@ error_server_not_reachable = "Server nicht erreichbar. Bitte versuche es später
 error_server_communication_unknown = "Unbekannter Fehler. Bitte versuche es später nochmal.";
 error_server_invalid_params = "Ungültige Anfrage.\nBitte schaue dir die Fehlerbehebungsthemen in der Hilfe an, oder kontaktiere Support (beide kannst du im '...' Tab finden).";
 error_unknown_database = "Unbekannter Fehler. Bitte versuche es später nochmal.";
+error_database_critical_init = "Es ist ein kritischer Fehler aufgetreten. Wir haben einen Bericht empfangen und werden uns umgehend darum kümmern. Sorry!";
 error_unknown = "Unbekannter Fehler. Bitte versuche es später nochmal.";
 social_login_cancelled = "Social Signup abgebrochen";
 social_login_error = "Social Signup Fehler";

@@ -70,4 +70,13 @@ class GlobalProviderImpl: GlobalProvider {
             self?.handleSyncResult(remoteResult, handler: handler)
         }
     }
+    
+    func initContainers(handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.globalProvider.initContainers {success in
+            if !success {
+                QL4("Critical: couldn't initialize realm containers. App will be unusable!")
+            }
+            handler(ProviderResult(status: success ? .success : .databaseCriticalInitError))
+        }
+    }
 }

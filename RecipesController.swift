@@ -12,20 +12,20 @@ import QorumLogs
 import RealmSwift
 import Providers
 
-class ExpandableTableViewGroupModel: ExpandableTableViewModel {
+class ExpandableTableViewRecipeModel: ExpandableTableViewModel {
     
-    let group: ProductGroup
+    let recipe: Recipe
     
-    init (group: ProductGroup) {
-        self.group = group
+    init (recipe: Recipe) {
+        self.recipe = recipe
     }
     
     override var name: String {
-        return group.name
+        return recipe.name
     }
     
     override var bgColor: UIColor {
-        return group.color
+        return recipe.color
     }
     
     override var users: [DBSharedUser] {
@@ -33,18 +33,18 @@ class ExpandableTableViewGroupModel: ExpandableTableViewModel {
     }
     
     override func same(_ rhs: ExpandableTableViewModel) -> Bool {
-        return group.same((rhs as! ExpandableTableViewGroupModel).group)
+        return recipe.same((rhs as! ExpandableTableViewRecipeModel).recipe)
     }
     
     override var debugDescription: String {
-        return group.debugDescription
+        return recipe.debugDescription
     }
 }
 
-extension ProductGroup: SimpleFirstLevelListItem {
+extension Recipe: SimpleFirstLevelListItem {
 }
 
-class GroupsController: ExpandableItemsTableViewController, AddEditGroupControllerDelegate, ExpandableTopViewControllerDelegate {
+class RecipesController: ExpandableItemsTableViewController, AddEditGroupControllerDelegate, ExpandableTopViewControllerDelegate {
     
     fileprivate var editButton: UIBarButtonItem!
     
@@ -52,19 +52,19 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     fileprivate var topAddEditListControllerManager: ExpandableTopViewController<AddEditGroupViewController>?
     
-    fileprivate var groupsResult: Results<ProductGroup>?
+    fileprivate var itemsResult: RealmSwift.List<Recipe>?
     fileprivate var notificationToken: NotificationToken?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setNavTitle(trans("title_groups"))
+        setNavTitle(trans("title_recipes"))
         
         topAddEditListControllerManager = initTopAddEditListControllerManager()
     }
     
     deinit {
-        QL1("Deinit groups controller")
+        QL1("Deinit recipes controller")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -82,11 +82,11 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     
     override func initModels() {
-        Prov.listItemGroupsProvider.groups(sortBy: .order, successHandler{[weak self] groups in guard let weakSelf = self else {return}
+        Prov.recipeProvider.recipes(sortBy: .order, successHandler{[weak self] recipes in guard let weakSelf = self else {return}
             
-            weakSelf.groupsResult = groups
+            weakSelf.itemsResult = recipes
             
-            self?.notificationToken = groups.addNotificationBlock { changes in
+            self?.notificationToken = recipes.addNotificationBlock { changes in
                 switch changes {
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI
@@ -94,11 +94,11 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
                     QL1("initial")
                     
                 case .update(_, let deletions, let insertions, let modifications):
-                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(weakSelf.groupsResult?.count)")
+                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(weakSelf.itemsResult?.count)")
                     
                     weakSelf.tableView.beginUpdates()
                     
-                    weakSelf.models = weakSelf.groupsResult!.map{ExpandableTableViewGroupModel(group: $0)}
+                    weakSelf.models = weakSelf.itemsResult!.map{ExpandableTableViewRecipeModel(recipe: $0)}
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
                     weakSelf.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .top)
                     weakSelf.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
@@ -115,7 +115,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
                 }
             }
             
-            weakSelf.models = groups.map{ExpandableTableViewGroupModel(group: $0)} // TODO use results!
+            weakSelf.models = recipes.map{ExpandableTableViewRecipeModel(recipe: $0)} // TODO use results!
             self?.debugItems()
         })
     }
@@ -128,7 +128,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     override func onSelectCellInEditMode(_ model: ExpandableTableViewModel, index: Int) {
         super.onSelectCellInEditMode(model, index: index)
         topAddEditListControllerManager?.expand(true)
-        topAddEditListControllerManager?.controller?.modelToEdit = ((model as! ExpandableTableViewGroupModel).group, index)
+        topAddEditListControllerManager?.controller?.modelToEdit = ((model as! ExpandableTableViewRecipeModel).recipe, index)
     }
     
     override func topControllerIsExpanded() -> Bool {
@@ -136,47 +136,46 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     }
     
     override func onReorderedModels(from: Int, to: Int) {
-        let groups = (models as! [ExpandableTableViewGroupModel]).map{$0.group}
+        guard let itemsResult = itemsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         
-        let reorderedGroups = groups.mapEnumerate{index, group in group.copy(order: index)}
-        let orderUpdates = reorderedGroups.map{group in OrderUpdate(uuid: group.uuid, order: group.order)}
-        
-        models = reorderedGroups.map{ExpandableTableViewGroupModel(group: $0)}
-        
-        Prov.listItemGroupsProvider.updateGroupsOrder(orderUpdates, remote: true, resultHandler(onSuccess: {
-            }, onErrorAdditional: {[weak self] result in
-                self?.initModels()
-            }
-        ))
+        Prov.recipeProvider.move(from: from, to: to, recipes: itemsResult, notificationToken: notificationToken, successHandler {
+        })
     }
     
     override func onRemoveModel(_ model: ExpandableTableViewModel, index: Int) {
-        Prov.listItemGroupsProvider.remove((model as! ExpandableTableViewGroupModel).group, remote: true, resultHandler(onSuccess: {
-            }, onErrorAdditional: {[weak self] result in
-                self?.initModels()
+        guard let itemsResult = itemsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        
+        Prov.recipeProvider.delete(index: index, recipes: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+            self?.initModels()
             }
         ))
     }
     
     override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
-        let listItemsController = UIStoryboard.groupItemsController()
-        listItemsController.view.frame = view.frame
-        addChildViewController(listItemsController)
-        listItemsController.expandDelegate = self
-        listItemsController.view.clipsToBounds = true
+         return UIViewController()
         
-        listItemsController.onViewWillAppear = {[weak listItemsController, weak cell] in guard let weakCell = cell else {return} // FIXME crash here once when tapped on "edit"
-            // Note: order of lines important here, group has to be set first for topbar dot to be positioned correctly right of the title
-            listItemsController?.group = (model as! ExpandableTableViewGroupModel).group //change
-            listItemsController?.setThemeColor(weakCell.backgroundColor!)
-            listItemsController?.onExpand(true)
-        }
         
-        listItemsController.onViewDidAppear = {[weak listItemsController] in
-            listItemsController?.onExpand(true)
-        }
-        
-        return listItemsController
+//        let listItemsController = UIStoryboard.groupItemsController()
+//        listItemsController.view.frame = view.frame
+//        addChildViewController(listItemsController)
+//        listItemsController.expandDelegate = self
+//        listItemsController.view.clipsToBounds = true
+//        
+//        listItemsController.onViewWillAppear = {[weak listItemsController, weak cell] in guard let weakCell = cell else {return} // FIXME crash here once when tapped on "edit"
+//            // Note: order of lines important here, group has to be set first for topbar dot to be positioned correctly right of the title
+//            listItemsController?.group = (model as! ExpandableTableViewRecipeModel).recipe //change
+//            listItemsController?.setThemeColor(weakCell.backgroundColor!)
+//            listItemsController?.onExpand(true)
+//        }
+//        
+//        listItemsController.onViewDidAppear = {[weak listItemsController] in
+//            listItemsController?.onExpand(true)
+//        }
+//        
+//        return listItemsController
     }
     
     override func animationsComplete(_ wasExpanding: Bool, frontView: UIView) {
@@ -206,8 +205,8 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     fileprivate func debugItems() {
         if QorumLogs.minimumLogLevelShown < 2 {
-            print("Groups:")
-            (models as! [ExpandableTableViewGroupModel]).forEach{print("\($0.group.shortDebugDescription)")}
+            print("Recipes:")
+            (models as! [ExpandableTableViewRecipeModel]).forEach{print("\($0.recipe.debugDescription)")}
         }
     }
     
@@ -243,32 +242,44 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     // MARK: - EditListViewController
     //change
     func onAddGroup(_ input: AddEditSimpleItemInput) {
-        let group = ProductGroup(uuid: NSUUID().uuidString, name: input.name, color: input.color, order: models.count)
-        Prov.listItemGroupsProvider.add(group, remote: true, resultHandler(onSuccess: {
-            }, onErrorAdditional: {[weak self] result in
-                self?.onGroupAddOrUpdateError(group)
+        guard let results = itemsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+
+        tableView.insertRows(at: [IndexPath(row: results.count, section: 0)], with: .top)
+        
+        let recipe = Recipe(uuid: NSUUID().uuidString, name: input.name, color: input.color)
+
+        Prov.recipeProvider.add(recipe, recipes: results, notificationToken: notificationToken, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+            self?.onGroupAddOrUpdateError(recipe)
             }
         ))
     }
     
     func onUpdateGroup(_ input: AddEditSimpleItemInput, item: SimpleFirstLevelListItem, index: Int) {
-        let updatedGroup = (item as! ProductGroup).copy(name: input.name, bgColor: input.color)
-        Prov.listItemGroupsProvider.update(updatedGroup, remote: true, resultHandler(onSuccess: {
-            }, onErrorAdditional: {[weak self] result in
-                self?.onGroupAddOrUpdateError(updatedGroup)
+        guard let results = itemsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        
+        let recipe = item as! Recipe
+        let recipeInput = RecipeInput(name: input.name, color: input.color)
+        
+        Prov.recipeProvider.update(recipe, input: recipeInput, recipes: results, notificationToken: notificationToken, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+            self?.onGroupAddOrUpdateError(recipe)
             }
         ))
     }
     
-    fileprivate func onGroupAddOrUpdateError(_ group: ProductGroup) {
+    fileprivate func onGroupAddOrUpdateError(_ recipe: Recipe) {
         initModels()
         // If the user quickly after adding the group opened its group items controller, close it.
         for childViewController in childViewControllers {
-            if let groupItemsController = childViewController as? GroupItemsController {
-                if (groupItemsController.group.map{$0.same(group)}) ?? false {
-                    groupItemsController.back()
-                }
-            }
+            // TODO ingredients controller
+//            if let groupItemsController = childViewController as? GroupItemsController {
+//                if (groupItemsController.group.map{$0.same(group)}) ?? false {
+//                    groupItemsController.back()
+//                }
+//            }
         }
     }
     
@@ -282,3 +293,4 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         setTopBarState(.normalFromExpanded)
     }
 }
+

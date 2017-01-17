@@ -21,8 +21,9 @@ import FBSDKLoginKit
 class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
     fileprivate let debugAddDummyData = false
-    fileprivate let debugGeneratePrefillDatabases = false
+    fileprivate let debugGeneratePrefillDatabases = false // remove this?
     fileprivate let debugForceShowIntro = true
+    fileprivate let debugForceIsFirstAppLaunch = true
     
     var window: UIWindow?
     
@@ -169,6 +170,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     }
     
     fileprivate func initIsFirstLaunch() {
+        
+        if debugForceIsFirstAppLaunch {
+            PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: false)
+        }
+        
         if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
             QL2("Initialising first app launch preferences")
             PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)

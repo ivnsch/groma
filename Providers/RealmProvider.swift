@@ -438,7 +438,22 @@ class RealmProvider {
             return nil
         }
     }
-
+    
+// TODO remove?
+//    func commitWrite(object: Object, withoutNotifying: [NotificationToken] = []) -> Bool {
+//        do {
+//            guard let realm = object.realm else {
+//                QL4("Object has no realm: \(object), isInvalidated: \(object.isInvalidated)")
+//                return false
+//            }
+//            try realm.commitWrite(withoutNotifying: [])
+//            return true
+//        } catch let error {
+//            QL4("Realm error: \(error)")
+//            return false
+//        }
+//    }
+    
     func doInWriteTransactionWithRealmSync<T>(withoutNotifying: [NotificationToken] = [], _ realm: Realm, f: (Realm) -> T?) -> T? {
         do {
             var obj: T?

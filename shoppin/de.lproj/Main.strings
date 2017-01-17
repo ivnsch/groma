@@ -241,3 +241,6 @@
 
 /* Class = "UIButton"; text = "Loading"; ObjectID = "hkI-jx-bK6"; */
 "hkI-jx-bK6.normalTitle" = "Feedback, Fragen, usw.";
+
+/* Class = "UILabel"; text = "There are no Recipes"; ObjectID = "thF-z7-Ret"; */
+"Jve-6C-5eI.text" = "Hoppla! Es gibt noch keine Rezepte";

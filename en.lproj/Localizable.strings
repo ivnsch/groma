@@ -310,6 +310,7 @@ error_server_not_reachable = "Server nor reachable. Please try again later.";
 error_server_communication_unknown = "Unknown server error. Please try again later.";
 error_server_invalid_params = "Invalid request.\nPlease consult the troubleshooting section in help or contact support.";
 error_unknown_database = "Unknown error. Please try again later.";
+error_database_critical_init = "A critical error ocurred. We have received a report and will fix it as soon as possible. Sorry!";
 error_unknown = "Unknown error. Please try again later.";
 social_login_cancelled = "Social sign up cancelled";
 social_login_error = "Social sign up error";

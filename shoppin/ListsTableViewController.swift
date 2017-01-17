@@ -158,8 +158,8 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         topAddEditListControllerManager?.controller?.submit()
     }
     
-    override func onSelectCellInEditMode(_ model: ExpandableTableViewModel) {
-        super.onSelectCellInEditMode(model)
+    override func onSelectCellInEditMode(_ model: ExpandableTableViewModel, index: Int) {
+        super.onSelectCellInEditMode(model, index: index)
         
         topAddEditListControllerManager?.expand(true)
         topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewListModel).list
@@ -169,7 +169,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         return topAddEditListControllerManager?.expanded ?? false
     }
 
-    override func onReorderedModels() {
+    override func onReorderedModels(from: Int, to: Int) {
         let lists = (models as! [ExpandableTableViewListModel]).map{$0.list}
         
         let reorderedLists = lists.mapEnumerate{index, list in list.copy(order: index)}
@@ -184,7 +184,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         ))
     }
     
-    override func onRemoveModel(_ model: ExpandableTableViewModel) {
+    override func onRemoveModel(_ model: ExpandableTableViewModel, index: Int) {
         Prov.listProvider.remove((model as! ExpandableTableViewListModel).list, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.initModels()

@@ -61,7 +61,6 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         if mode == .launch {
             
             let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
-//            let initActions = true
             
             QL1("Will init database: \(initActions)")
 
@@ -106,6 +105,14 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 
     fileprivate func initDatabase(_ onComplete: @escaping VoidFunction) {
 
+        func initRealmContainers(_ onFinish: @escaping (Bool) -> Void) {
+            Prov.globalProvider.initContainers(handler: resultHandler(onSuccess: {
+                onFinish(true)
+            }, onErrorAdditional: {_ in
+                onFinish(false)
+            }))
+        }
+        
         func prefillDatabase(_ onFinish: VoidFunction? = nil) {
             let lang = LangManager().appLang // note that the prefill items are left permanently in whatever lang the device was when the user installed the app
             
@@ -131,6 +138,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                 onFinish?(nil)
                         }))
                     } else {
+                        QL2("User already has inventories, skipping")
                         onFinish?(nil)
                     }
                 }
@@ -198,6 +206,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                             QL4("Error querying products, result: \(result)")
                             onFinish?()
                     }))
+                } else {
+                    QL2("User already has groups, skipping")
+                    onFinish?()
                 }
                 }, onError: {result in
                     QL4("Error fetching groups, result: \(result)")
@@ -266,27 +277,40 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                             QL4("Error querying products, result: \(result)")
                             onFinish?()
                     }))
+                } else {
+                    QL2("User already has lists, skipping")
+                    onFinish?()
                 }
                 }, onError: {result in
                     QL4("Error fetching list, result: \(result)")
                     onFinish?()
             }))
         }
-        
-        prefillDatabase {
-            QL2("Finished copying prefill database")
-            initDefaultInventory {inventoryMaybe in
-                QL2("Finished adding default inventory")
-                initExampleGroup {
-                    QL2("Finished adding example group")
-                    if let inventory = inventoryMaybe {
-                        initExampleList(inventory) {
-                            QL2("Finished adding example list")
+
+            
+            
+        initRealmContainers {success in
+            guard success else {
+                onComplete()
+                return
+            }
+            
+            QL2("Finished init realm containers")
+            prefillDatabase {
+                QL2("Finished copying prefill database")
+                initDefaultInventory {inventoryMaybe in
+                    QL2("Finished adding default inventory")
+                    initExampleGroup {
+                        QL2("Finished adding example group")
+                        if let inventory = inventoryMaybe {
+                            initExampleList(inventory) {
+                                QL2("Finished adding example list")
+                                onComplete()
+                            }
+                        } else {
+                            QL2("Didn't add default inventory so can't add example list")
                             onComplete()
                         }
-                    } else {
-                        QL2("Didn't add default inventory so can't add example list")
-                        onComplete()
                     }
                 }
             }

@@ -284,4 +284,17 @@ class RealmGlobalProvider: RealmProvider {
             }
         }
     }
+    
+    func initContainers(handler: @escaping (Bool) -> Void) {
+        
+        doInWriteTransaction({realm in
+            let recipesContainer: RecipesContainer? = self.loadFirstSync()
+            if recipesContainer == nil {
+                realm.add(RecipesContainer())
+            }
+            return true
+        }) {successMaybe in
+            handler(successMaybe ?? false)
+        }
+    }
 }

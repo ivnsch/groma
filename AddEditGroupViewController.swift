@@ -14,11 +14,28 @@ import Providers
 
 //change
 protocol AddEditGroupControllerDelegate: class {
-    func onAddGroup(_ group: ProductGroup)
-    func onUpdateGroup(_ group: ProductGroup)
+    func onAddGroup(_ input: AddEditSimpleItemInput)
+    func onUpdateGroup(_ input: AddEditSimpleItemInput, item: SimpleFirstLevelListItem, index: Int)
+    
+//    func instance(name: String, color: UIColor, order: Int) -> SimpleFirstLevelListItem
 }
 
 // TODO after final design either remove color code or reenable it
+
+
+protocol SimpleFirstLevelListItem: class {
+    var name: String {get}
+    var color: UIColor {get}
+    
+//    func update(name: String, color: UIColor) -> Self
+}
+
+struct AddEditSimpleItemInput {
+    let name: String
+    let color: UIColor
+//    let order: Int // TODO remove order
+}
+
 
 class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDelegate, UITextFieldDelegate {
     
@@ -32,16 +49,16 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     
     var open: Bool = false
     
-    var currentListsCount: Int? // to determine order. For now we set this field at view controller level, don't do an extra fetch in provider. Maybe it's better like this.
+//    var currentListsCount: Int? // to determine order. For now we set this field at view controller level, don't do an extra fetch in provider. Maybe it's better like this.
     
-    var listToEdit: ProductGroup? {
+    var modelToEdit: (item: SimpleFirstLevelListItem, index: Int)? {
         didSet {
-            if let listToEdit = listToEdit {
-                prefill(listToEdit)
+            if let modelToEdit = modelToEdit {
+                prefill(modelToEdit.item)
             }
         }
     }
-    
+
     fileprivate var showingColorPicker: FlatColorPickerController?
     
     fileprivate var addButtonHelper: AddButtonHelper?
@@ -68,7 +85,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     }
     
     
-    fileprivate func prefill(_ list: ProductGroup) {
+    fileprivate func prefill(_ list: SimpleFirstLevelListItem) {
         groupNameInputField.text = list.name
         setBackgroundColor(list.color)
     }
@@ -125,17 +142,15 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
             guard let weakSelf = self else {return}
             guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
             guard let listName = weakSelf.groupNameInputField.text?.trim() else {QL4("Validation was not implemented correctly"); return}
+            guard let delegate = weakSelf.delegate else {QL4("No delegate"); return}
+            
+            let input = AddEditSimpleItemInput(name: listName, color: bgColor)
 
-            if let listToEdit = weakSelf.listToEdit {
-                let updatedGroup = listToEdit.copy(name: listName, bgColor: bgColor)
-                weakSelf.delegate?.onUpdateGroup(updatedGroup)
+            if let modelToEdit = weakSelf.modelToEdit {
+                delegate.onUpdateGroup(input, item: modelToEdit.item, index: modelToEdit.index)
             } else {
-                if let currentListsCount = weakSelf.currentListsCount {
-                    let group = ProductGroup(uuid: NSUUID().uuidString, name: listName, color: bgColor, order: currentListsCount)
-                    weakSelf.delegate?.onAddGroup(group)
-                } else {
-                    QL4("No currentListsCount")
-                }
+//                    let group = ProductGroup(uuid: NSUUID().uuidString, name: listName, color: bgColor, order: currentListsCount)
+                delegate.onAddGroup(input)
             }
         }
     }
@@ -216,7 +231,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     
     func clear() {
         groupNameInputField.clear()
-        listToEdit = nil
+        modelToEdit = nil
         
     }
     
