@@ -321,16 +321,16 @@ class RealmProductProvider: RealmProvider {
             }
         }()
         
-        let filterMaybe = substring.map{Product.createFilterNameContains($0)}
+        let filterMaybe = substring.map{QuantifiableProduct.createFilterNameContains($0)}
         
         // Note that we are load the sections from db for each range - this could be optimised (load sections only once for all pages) but it shouldn't be an issue since usually there are not a lot of sections and it's performing well.
         
         let list = list.copy() // Fixes Realm acces in incorrect thread exceptions
         
         withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
-            let products: Results<Product> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending)/*, range: range*/)
+            let products: Results<QuantifiableProduct> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending)/*, range: range*/)
             
-            let categoryNames = products.map{$0.category.name}.distinct()
+            let categoryNames = products.map{$0.product.category.name}.distinct()
         
             let sectionsDict: [String: Section] = realm.objects(Section.self).filter(Section.createFilterWithNames(categoryNames, listUuid: list.uuid)).toDictionary{($0.name, $0)}
             
@@ -340,7 +340,7 @@ class RealmProductProvider: RealmProvider {
 //            }
 
             let productsWithMaybeSectionsUuids: [(product: String, section: String?)] = products.map {product in
-                let sectionMaybe = sectionsDict[product.category.name]
+                let sectionMaybe = sectionsDict[product.product.category.name]
                 return (product.uuid, sectionMaybe?.uuid)
             }
 
