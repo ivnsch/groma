@@ -36,7 +36,8 @@ public struct Prov {
     public static var listItemGroupsProvider: ProductGroupProvider = ProductGroupProviderImpl()
 
     public static var recipeProvider: RecipeProvider = RecipeProviderImpl()
-
+    public static var ingredientProvider: IngredientProvider = IngredientProviderImpl()
+    
     public static var helpProvider: HelpProvider = HelpProviderImpl()
     
     public static var brandProvider: BrandProvider = BrandProviderImpl()

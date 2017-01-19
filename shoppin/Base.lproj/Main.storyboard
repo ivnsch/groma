@@ -226,7 +226,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 <navigationController storyboardIdentifier="NavigationController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="c6K-Tm-JhD" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="list" selectedImage="list_selected" id="uJG-Eo-xiW"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="FPI-Ud-Czg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="FPI-Ud-Czg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -737,7 +737,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="7A1-RK-HJT" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="inventory" selectedImage="inventory_selected" id="yUm-WR-GoU"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QjE-wI-irz">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="QjE-wI-irz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1735,7 +1735,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="B4w-vm-AVy" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="more" selectedImage="more_selected" id="cLJ-PG-GFJ"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ufI-Hd-Hpl">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="ufI-Hd-Hpl">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1754,7 +1754,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Tva-Bh-1q8" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="stats" selectedImage="stats_selected" id="omU-Id-l2V"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qy3-eD-XlX">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="qy3-eD-XlX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1827,7 +1827,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t68-5i-dsd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2807" y="2325"/>
+            <point key="canvasLocation" x="-3539" y="2489"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="kcF-B8-SPs">
@@ -2156,6 +2156,68 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2iH-54-2cX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-3538" y="1024"/>
+        </scene>
+        <!--Inventory-->
+        <scene sceneID="zUA-t0-oCj">
+            <objects>
+                <viewController storyboardIdentifier="IngredientsController" automaticallyAdjustsScrollViewInsets="NO" id="caS-f4-vAA" customClass="IngredientsController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="G9u-NJ-C9A"/>
+                        <viewControllerLayoutGuide type="bottom" id="TPZ-Pt-z2B"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8UG-ys-whV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wHj-hW-LYC">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </containerView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gz0-fo-5TX">
+                                <rect key="frame" x="0.0" y="64" width="375" height="0.0"/>
+                                <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="0.5" id="tza-Cw-0HE"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z9m-9G-Flh" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="Ngv-WN-kD5"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Gz0-fo-5TX" secondAttribute="trailing" id="8MG-Db-vGc"/>
+                            <constraint firstAttribute="trailing" secondItem="wHj-hW-LYC" secondAttribute="trailing" id="9UL-xL-Yxf"/>
+                            <constraint firstItem="wHj-hW-LYC" firstAttribute="leading" secondItem="8UG-ys-whV" secondAttribute="leading" id="Bhg-LC-Apv"/>
+                            <constraint firstItem="z9m-9G-Flh" firstAttribute="leading" secondItem="8UG-ys-whV" secondAttribute="leading" id="Tj4-18-epS"/>
+                            <constraint firstItem="z9m-9G-Flh" firstAttribute="top" secondItem="8UG-ys-whV" secondAttribute="top" id="a7Z-wp-bBK"/>
+                            <constraint firstItem="wHj-hW-LYC" firstAttribute="top" secondItem="z9m-9G-Flh" secondAttribute="bottom" id="apL-Zi-0uH"/>
+                            <constraint firstAttribute="bottom" secondItem="wHj-hW-LYC" secondAttribute="bottom" id="aui-V0-Jtk"/>
+                            <constraint firstAttribute="trailing" secondItem="z9m-9G-Flh" secondAttribute="trailing" id="gcJ-S0-38s"/>
+                            <constraint firstItem="Gz0-fo-5TX" firstAttribute="leading" secondItem="8UG-ys-whV" secondAttribute="leading" id="q8x-y5-mbe"/>
+                            <constraint firstItem="wHj-hW-LYC" firstAttribute="top" secondItem="Gz0-fo-5TX" secondAttribute="bottom" id="ueW-cu-PUE"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Inventory" id="Q5X-VI-gwK">
+                        <barButtonItem key="leftBarButtonItem" title="Edit" id="afR-4D-RQu">
+                            <connections>
+                                <action selector="onEditTap:" destination="caS-f4-vAA" id="Pr2-kg-3Dv"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="containerView" destination="wHj-hW-LYC" id="B6M-rw-EGU"/>
+                        <outlet property="topBar" destination="z9m-9G-Flh" id="mU6-f7-yDs"/>
+                        <outlet property="topBarHeightConstraint" destination="Ngv-WN-kD5" id="Tmw-7d-Tmj"/>
+                        <outlet property="topControlTopConstraint" destination="apL-Zi-0uH" id="1cc-ls-3om"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QPn-ID-6SR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4094" y="2489"/>
         </scene>
     </scenes>
     <resources>

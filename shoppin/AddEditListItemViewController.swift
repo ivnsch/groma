@@ -102,6 +102,16 @@ struct AddEditItem {
         self.note = nil
         self.model = item
     }
+    
+    init(item: Ingredient) {
+        self.product = item.product
+        self.storeProduct = nil
+        self.quantity = item.quantity
+        self.sectionName = item.product.product.category.name
+        self.sectionColor = item.product.product.category.color
+        self.note = nil
+        self.model = item
+    }
 }
 
 class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate

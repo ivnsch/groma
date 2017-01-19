@@ -174,7 +174,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         
         if let productItem = item as? QuickAddProduct {
 //            productItem.product.fav += 1
-            Prov.productProvider.incrementFav(quantifiableProductUuid: productItem.product.uuid, remote: true, successHandler{})
+//            Prov.productProvider.incrementFav(quantifiableProductUuid: productItem.product.uuid, remote: true, successHandler{})
             // don't wait for db incrementFav - this operation is not critical
             delegate?.onAddProduct(productItem.product)
             

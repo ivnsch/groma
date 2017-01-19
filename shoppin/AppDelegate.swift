@@ -92,7 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         func debugConfig() {
             QorumLogs.enabled = true
-            QorumLogs.minimumLogLevelShown = 2
+            QorumLogs.minimumLogLevelShown = 1
 //            QorumLogs.KZLinkedConsoleSupportEnabled = true
 //            QorumLogs.onlyShowTheseFiles(MyWebSocket.self, MyWebsocketDispatcher.self)
             QorumLogs.test()

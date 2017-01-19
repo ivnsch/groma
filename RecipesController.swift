@@ -155,27 +155,25 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     }
     
     override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
-         return UIViewController()
         
+        let listItemsController = UIStoryboard.ingredientsController()
+        listItemsController.view.frame = view.frame
+        addChildViewController(listItemsController)
+        listItemsController.expandDelegate = self
+        listItemsController.view.clipsToBounds = true
         
-//        let listItemsController = UIStoryboard.groupItemsController()
-//        listItemsController.view.frame = view.frame
-//        addChildViewController(listItemsController)
-//        listItemsController.expandDelegate = self
-//        listItemsController.view.clipsToBounds = true
-//        
-//        listItemsController.onViewWillAppear = {[weak listItemsController, weak cell] in guard let weakCell = cell else {return} // FIXME crash here once when tapped on "edit"
-//            // Note: order of lines important here, group has to be set first for topbar dot to be positioned correctly right of the title
-//            listItemsController?.group = (model as! ExpandableTableViewRecipeModel).recipe //change
-//            listItemsController?.setThemeColor(weakCell.backgroundColor!)
-//            listItemsController?.onExpand(true)
-//        }
-//        
-//        listItemsController.onViewDidAppear = {[weak listItemsController] in
-//            listItemsController?.onExpand(true)
-//        }
-//        
-//        return listItemsController
+        listItemsController.onViewWillAppear = {[weak listItemsController, weak cell] in guard let weakCell = cell else {return} // FIXME crash here once when tapped on "edit"
+            // Note: order of lines important here, group has to be set first for topbar dot to be positioned correctly right of the title
+            listItemsController?.recipe = (model as! ExpandableTableViewRecipeModel).recipe //change
+            listItemsController?.setThemeColor(weakCell.backgroundColor!)
+            listItemsController?.onExpand(true)
+        }
+        
+        listItemsController.onViewDidAppear = {[weak listItemsController] in
+            listItemsController?.onExpand(true)
+        }
+        
+        return listItemsController
     }
     
     override func animationsComplete(_ wasExpanding: Bool, frontView: UIView) {
@@ -245,15 +243,20 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
         guard let results = itemsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
 
+        let recipe = Recipe(uuid: NSUUID().uuidString, name: input.name, color: input.color)
+        
+        // TODO!!!!!!!!!!!!!!!!!! use results
+        models.insert(ExpandableTableViewRecipeModel(recipe: recipe), at: results.count)
         tableView.insertRows(at: [IndexPath(row: results.count, section: 0)], with: .top)
         
-        let recipe = Recipe(uuid: NSUUID().uuidString, name: input.name, color: input.color)
-
         Prov.recipeProvider.add(recipe, recipes: results, notificationToken: notificationToken, resultHandler(onSuccess: {
         }, onErrorAdditional: {[weak self] result in
             self?.onGroupAddOrUpdateError(recipe)
             }
         ))
+        
+        topAddEditListControllerManager?.expand(false)
+        setTopBarState(.normalFromExpanded)
     }
     
     func onUpdateGroup(_ input: AddEditSimpleItemInput, item: SimpleFirstLevelListItem, index: Int) {
@@ -268,18 +271,24 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
             self?.onGroupAddOrUpdateError(recipe)
             }
         ))
+        
+        // TODO!!!!!!!!!!!!!!!!!! use results
+        _ = models.update(ExpandableTableViewRecipeModel(recipe: recipe))
+        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+        
+        topAddEditListControllerManager?.expand(false)
+        setTopBarState(.normalFromExpanded)
     }
     
     fileprivate func onGroupAddOrUpdateError(_ recipe: Recipe) {
         initModels()
         // If the user quickly after adding the group opened its group items controller, close it.
         for childViewController in childViewControllers {
-            // TODO ingredients controller
-//            if let groupItemsController = childViewController as? GroupItemsController {
-//                if (groupItemsController.group.map{$0.same(group)}) ?? false {
-//                    groupItemsController.back()
-//                }
-//            }
+            if let ingredientsController = childViewController as? IngredientsController {
+                if (ingredientsController.recipe.map{$0.same(recipe)}) ?? false {
+                    ingredientsController.back()
+                }
+            }
         }
     }
     

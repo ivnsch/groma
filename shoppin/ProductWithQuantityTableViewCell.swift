@@ -64,6 +64,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
             selectionStyle = UITableViewCellSelectionStyle.none
         }
     }
+    var indexPath: IndexPath?
     
     weak var delegate: ProductWithQuantityTableViewCellDelegate?
 

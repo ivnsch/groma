@@ -260,7 +260,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.models.count
+        return models.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -285,8 +285,15 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
             let model = models[indexPath.row]
             canRemoveModel(model) {[weak self] can in
                 if can {
+                    
+                    _ = self?.models.remove(model) // TODO!!!!!!!!!!!! use results
                     tableView.deleteRows(at: [indexPath], with: .top)
+                    
+                    
                     self?.onRemoveModel(model, index: indexPath.row)
+                    
+                    
+                    
                 }
             }
         }

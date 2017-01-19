@@ -1,9 +1,9 @@
 //
-//  ProductsWithQuantityViewController.swift
+//  ProductsWithQuantityViewControllerNew.swift
 //  shoppin
 //
-//  Created by ischuetz on 03/01/16.
-//  Copyright © 2016 ivanschuetz. All rights reserved.
+//  Created by Ivan Schuetz on 18/01/2017.
+//  Copyright © 2017 ivanschuetz. All rights reserved.
 //
 
 import UIKit
@@ -11,11 +11,19 @@ import CMPopTipView
 import QorumLogs
 import Providers
 
-protocol ProductsWithQuantityViewControllerDelegate: class {
-    func loadModels(_ page: NSRange?, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity2]) -> Void)
-    func remove(_ model: ProductWithQuantity2, index: Int, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void)
-    func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void)
-    func onModelSelected(_ model: ProductWithQuantity2, indexPath: IndexPath)
+protocol ProductsWithQuantityViewControllerDelegateNew: class {
+    
+    func loadModels(sortBy: InventorySortBy, onSuccess: @escaping () -> Void)
+    
+    func itemForRow(row: Int) -> ProductWithQuantity2?
+    var itemsCount: Int {get}
+    
+    // This is not pretty but making ProductWithQuantity2 extend Identifiable causes the typical weird Swift generics errors so we cast and compare in the delegate instead
+    func same(lhs: ProductWithQuantity2, rhs: ProductWithQuantity2) -> Bool
+    
+    func remove(_ index: Int, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void)
+    func increment(_ index: Int, delta: Int, onSuccess: @escaping (Int) -> Void)
+    func onModelSelected(_ index: Int)
     func emptyViewData() -> (text: String, text2: String, imgName: String)
     func onEmptyViewTap()
     func onEmpty(_ empty: Bool)
@@ -27,7 +35,7 @@ protocol ProductsWithQuantityViewControllerDelegate: class {
 
 
 /// Generic controller for sorted products with a quantity, which can be incremented and decremented
-class ProductsWithQuantityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     fileprivate weak var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
     
@@ -35,13 +43,11 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         return tableViewController.tableView
     }
     
-    var models: [ProductWithQuantity2] = []
-
     @IBOutlet weak var topMenuView: UIView!
     
     var sortBy: InventorySortBy? = .count
     @IBOutlet weak var sortByButton: UIButton!
-//    private var sortByPopup: CMPopTipView?
+    //    private var sortByPopup: CMPopTipView?
     fileprivate let sortByOptions: [(value: InventorySortBy, key: String)] = [
         (.count, trans("sort_by_count")), (.alphabetic, trans("sort_by_alphabetic"))
     ]
@@ -53,10 +59,14 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     @IBOutlet weak var topMenusHeightConstraint: NSLayoutConstraint!
     
-    weak var delegate: ProductsWithQuantityViewControllerDelegate?
+    weak var delegate: ProductsWithQuantityViewControllerDelegateNew?
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready
-
+    
+    
+    var itemsCount: Int {
+        return delegate?.itemsCount ?? 0
+    }
     
     fileprivate let cellHeight = DimensionsManager.defaultCellHeight
     
@@ -86,7 +96,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         sender.endRefreshing()
         delegate?.onPullToAdd()
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "embedTableViewController" {
             tableViewController = segue.destination as! UITableViewController
@@ -106,7 +116,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         
         if let _ = tabBarController?.tabBar.frame.height {
             // TODO this is not enough, why?
-//            tableView.bottomInset = tabBarHeight + Constants.tableViewAdditionalBottomInset
+            //            tableView.bottomInset = tabBarHeight + Constants.tableViewAdditionalBottomInset
             tableView.bottomInset = 120
         } else {
             QL3("No tabBarController: \(tabBarController)")
@@ -122,16 +132,25 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.models.count
+        return itemsCount
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "inventoryCell", for: indexPath) as! ProductWithQuantityTableViewCell
         
-        let model = self.models[(indexPath as NSIndexPath).row]
+        if let model = delegate?.itemForRow(row: indexPath.row) {
+            cell.model = model
+        } else {
+            if delegate == nil {
+                QL4("No delegate")
+            } else {
+                QL4("Illegal state: No item for row: \(indexPath.row)")
+            }
+            
+        }
         
-        cell.model = model
+        cell.indexPath = indexPath
         cell.delegate = self
         
         return cell
@@ -155,33 +174,19 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            delegate?.remove(models[indexPath.row], index: indexPath.row, onSuccess: {}, onError: {_ in })
+            delegate?.remove(indexPath.row, onSuccess: {}, onError: {_ in })
         }
     }
-    
-    func indexPathOfItem(_ model: ProductWithQuantity2) -> IndexPath? {
-        for i in 0..<models.count {
-            let m = models[i]
-            if m.product == model.product && m.quantity == model.quantity {
-                return IndexPath(row: i, section: 0)
-            }
-        }
-        return nil
-    }
-    
+
     func updateEmptyUI() {
-        emptyView.setHiddenAnimated(!models.isEmpty)
-        delegate?.onEmpty(models.isEmpty)
-        topMenuView.setHiddenAnimated(models.isEmpty)
+        let isEmpty = itemsCount == 0
+        emptyView.setHiddenAnimated(!isEmpty)
+        delegate?.onEmpty(isEmpty)
+        topMenuView.setHiddenAnimated(isEmpty)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let model = models[(indexPath as NSIndexPath).row]
-        delegate?.onModelSelected(model, indexPath: indexPath)
-        
-        if let cell = tableView.cellForRow(at: IndexPath(row: (indexPath as NSIndexPath).row, section: 0)) as? ProductWithQuantityTableViewCell {
-            cell.cancelDeleteProgress()
-        }
+        delegate?.onModelSelected(indexPath.row)
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -193,115 +198,88 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
         cell.cancelDeleteProgress()
-        checkChangeInventoryItemQuantity(cell, delta: 1)
+//        checkChangeInventoryItemQuantity(cell, delta: 1) TODO!!!!!!!!!!!!!!!!!! ?
         SwipeToIncrementAlertHelper.check(self)
     }
     
     func onDecrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
         cell.cancelDeleteProgress()
-        checkChangeInventoryItemQuantity(cell, delta: -1)
+//        checkChangeInventoryItemQuantity(cell, delta: -1)  TODO!!!!!!!!!!!!!!!!!! ?
         SwipeToIncrementAlertHelper.check(self)
     }
     
     func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Int) {
         cell.cancelDeleteProgress()
-        if let model = cell.model {
-            checkChangeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)
+        if let model = cell.model { // TODO!!!!!!!!!!!!!!!!!!!
+//            checkChangeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)  TODO!!!!!!!!!!!!!!!!!! ?
         } else {
             QL4("No model, can't update quantity")
         }
     }
     
-    /**
-    Unwrap optionals safely
-    Note that despite implicitly unwrapped may look suitable here, we prefer working with ? as general approach
-    */
-    fileprivate func checkChangeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Int) {
-        if let inventoryItem = cell.model, let indexPath = getIndexPath(inventoryItem) {
-            changeInventoryItemQuantity(cell, row: (indexPath as NSIndexPath).row, inventoryItem: inventoryItem, delta: delta)
-        } else {
-            print("Error: Cell has invalid state, inventory item and row must not be nil at this point")
-        }
+    fileprivate func findFirstVisibleItem(_ f: (ProductWithQuantity2) -> Bool) -> (index: Int, model: ProductWithQuantity2, cell: ProductWithQuantityTableViewCell)? {
+        return (tableView.visibleCells.flatMap {cell in
+            let cell =  cell as! ProductWithQuantityTableViewCell
+            guard let model = cell.model else {QL4("Invalid state: no model"); return nil}
+            guard let indexPath = cell.indexPath else {QL4("Invalid state: no index path"); return nil}
+            
+            if f(model) {
+                return (indexPath.row, model, cell)
+            } else {
+                return nil
+            }
+        }).first
     }
     
-    fileprivate func getIndexPath(_ model: ProductWithQuantity2) -> IndexPath? {
-        for (i, m) in models.enumerated() {
-            if same(m, model) {
-                return IndexPath(row: i, section: 0)
+    fileprivate func findFirstItem(_ f: (ProductWithQuantity2) -> Bool) -> (index: Int, model: ProductWithQuantity2)? {
+        for itemIndex in 0..<itemsCount {
+            guard let item = delegate?.itemForRow(row: itemIndex) else {QL4("Illegal state: no item for index: \(itemIndex). Or delegate is nil: \(delegate)"); return nil}
+            if f(item) {
+                return (itemIndex, item)
             }
+            
         }
         return nil
     }
     
-    fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, row: Int, inventoryItem: ProductWithQuantity2, delta: Int) {
-
-        func remove() {
-            cell.startDeleteProgress {[weak self] in
-                self?.delegate?.remove(inventoryItem, index: row, onSuccess: {
-                    self?.models.remove(at: row) // TODO!!!!!!!!!!!!!!!!!!!! use results
-                    self?.tableView.deleteRows(at: [IndexPath(row: row, section: 0)], with: .top)
-                    }, onError: {result in
-                        QL4("Error ocurred removing item: \(result)")
-                })
-            }
-        }
-        
-        let newQuantity = inventoryItem.quantity + delta
-        
-        if newQuantity >= 0 {
-            delegate?.increment(inventoryItem, delta: delta, onSuccess: {updatedQuantity in
-                cell.shownQuantity = updatedQuantity
-                if updatedQuantity == 0 {
-                    remove()
-                }
-            })
-            
-        } else { // user tries to decrement when the quantity is already 0 (quantity + delta is a negative number) -> start remove animation
-            remove()
-        }
-    }
-
-    // Finds tableview related data of inventory item, if it's in tableview, otherwise returns nil
-    fileprivate func inventoryItemTableViewData(_ inventoryItem: ProductWithQuantity2) -> (index: Int, item: ProductWithQuantity2, cell: ProductWithQuantityTableViewCell?)? { // note item -> the item currently in tableview TODO why do we need to return this if it's "same" as parameter inventoryItem
-        if let (index, item) = (models.enumerated().filter{same($0.element, inventoryItem)}.first) {
-            
-            if let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) {
-                if let cell = cell as? ProductWithQuantityTableViewCell {
-                    return (index, item, cell)
-                    
-                } else {
-                    print("Error: InventoryItemsTableViewController.inventoryItemTableViewData: Cell cast failed: \(index)")
-                    return nil
-                }
-            } else { // cell is nil (not visible)
-                return (index, item, nil)
-            }
-            
-        } else { // inventory item is not there
-            return nil
-        }
-    }
     
     // Inserts item in table view, considering the current sortBy
     func insert(item: ProductWithQuantity2, scrollToRow: Bool) {
-        guard let indexPath = findIndexPathForNewItem(item) else {QL4("No index path for: \(item)"); return}
+        guard let indexPath = findIndexPathForNewItem(item) else {
+            QL1("No index path for: \(item), appending"); return;
+        }
+        QL1("Found index path: \(indexPath) for: \(item), sortBy: \(sortBy)")
         tableView.insertRows(at: [indexPath], with: .top)
+        
+        updateEmptyUI()
+        
         if scrollToRow {
             tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         }
     }
     
-    fileprivate func findIndexPathForNewItem(_ inventoryItem: ProductWithQuantity2) -> IndexPath? {
+    func update(item: ProductWithQuantity2, scrollToRow index: Int?) {
+        tableView.reloadData() // update with quantity change is tricky, since the sorting (by quantity) can cause the item to change positions. So we just reload the tableview
         
-        func findRow(_ isAfter: (ProductWithQuantity2) -> Bool) -> IndexPath {
-            let row: Int = {
-                if let firstBiggerItemTuple = (models.enumerated().filter{isAfter($0.element)}).first {
-                    return firstBiggerItemTuple.offset // insert in above the first biggest item
+        if let index = index {
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
+    }
+    
+    
+    // TODO!!!!!!!!!!!!!!!! insert at specific place: for realm it's not a problem we just have to append to the list (the results should continue being sorted so we don't need to do anything else). but we have to insert the item in the visible rows of the table - look for its place here using the cells instead of models.
+    fileprivate func findIndexPathForNewItem(_ inventoryItem: ProductWithQuantity2) -> IndexPath? {
+        func findRow(_ isAfter: (ProductWithQuantity2) -> Bool) -> IndexPath? {
+        
+            let row: Int? = {
+                if let firstBiggerItemTuple = findFirstItem({isAfter($0)}) {
+                    return firstBiggerItemTuple.index - 1 // insert in above the first biggest item (Note: -1 because our new item is already in the results, so we have to substract it). 
                 } else {
-                    return models.count // no biggest item - our item is the biggest - return end of page (about page see warning in addOrUpdateIncrementUI)
+                    return itemsCount - 1 // no biggest item - our item is the biggest - return end of page (about page see warning in addOrUpdateIncrementUI)
                 }
             }()
-            return IndexPath(row: row, section: 0)
+            return row.map{IndexPath(row: $0, section: 0)}
         }
         
         if let sortBy = sortBy {
@@ -339,31 +317,18 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    func scrollToItem(_ item: ProductWithQuantity2) {
-        if let indexPath = indexPathOfItem(item) {
-            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-        } else {
-            QL2("Didn't find item to scroll to")
-        }
-    }
-
-    fileprivate func tryUpdateItem(_ inventoryItem: ProductWithQuantity2, scrollToCell: Bool) -> Bool {
-        if let (index, _, cellMaybe) = inventoryItemTableViewData(inventoryItem) {
-            models[index] = inventoryItem
-            if let cell = cellMaybe {
-                cell.model = inventoryItem
-                cell.setNeedsLayout()
-            }
-            if scrollToCell {
-                tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
-            }
-            return true
-        } else {
-            return false
-        }
+    func scrollTo(_ index: Int) {
+        tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
     }
     
-
+    func update(index: Int) {
+        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+    }
+    
+    func reload() {
+        tableView.reloadData()
+    }
+    
     //////////////
     // helpers needed because referencing Self / protocol in protocol doesn't compile
     func same(_ p1: ProductWithQuantity2, _ p2: ProductWithQuantity2) -> Bool {
@@ -376,10 +341,12 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     //////////////
     
     func load() {
-        guard let sortBy = sortBy else {QL4("Can't load page, sortBy not set"); return}
+        guard let sortBy = sortBy else {QL4("Can't load models, sortBy not set"); return}
         
-        delegate?.loadModels(nil, sortBy: sortBy) {[weak self] models in
-            self?.models = models
+        tableView.reloadData()
+        updateEmptyUI()
+        
+        delegate?.loadModels(sortBy: sortBy) {[weak self] models in
             self?.tableView.reloadData()
             self?.updateEmptyUI()
         }
@@ -411,12 +378,12 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     }
     
     @IBAction func onSortByTap(_ sender: UIButton) {
-//        if let popup = self.sortByPopup {
-//            popup.dismissAnimated(true)
-//        } else {
-            let popup = MyTipPopup(customView: createPicker())
-            popup.presentPointing(at: sortByButton, in: view, animated: true)
-//        }
+        //        if let popup = self.sortByPopup {
+        //            popup.dismissAnimated(true)
+        //        } else {
+        let popup = MyTipPopup(customView: createPicker())
+        popup.presentPointing(at: sortByButton, in: view, animated: true)
+        //        }
     }
     
     fileprivate func createPicker() -> UIPickerView {

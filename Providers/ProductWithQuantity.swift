@@ -14,7 +14,8 @@ public protocol ProductWithQuantity2 {
     
     var quantity: Int {get}
     
-    func incrementQuantityCopy(_ delta: Int) -> Self
     
+    // TODO maybe remove these (also from implementations) now that we use Realm everywhere the immutable approach isn't useful
+    func incrementQuantityCopy(_ delta: Int) -> Self
     func updateQuantityCopy(_ quantity: Int) -> Self
 }

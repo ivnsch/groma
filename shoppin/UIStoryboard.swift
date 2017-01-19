@@ -209,8 +209,13 @@ extension UIStoryboard {
     
     // MARK: ProductsWithQuantityViewController
     
+    // TODO: remove
     class func productsWithQuantityViewController() -> ProductsWithQuantityViewController {
         return productsWithQuantityStoryboard().instantiateViewController(withIdentifier: "ProductsWithQuantityViewController") as! ProductsWithQuantityViewController
+    }
+    
+    class func productsWithQuantityViewControllerNew() -> ProductsWithQuantityViewControllerNew {
+        return productsWithQuantityStoryboard().instantiateViewController(withIdentifier: "ProductsWithQuantityViewControllerNew") as! ProductsWithQuantityViewControllerNew
     }
     
     // MARK: Share app
@@ -252,5 +257,11 @@ extension UIStoryboard {
     // TODO now that we don't use the segues in the main storyboard for more items anymore we should put them in their own storyboards
     class func settingsViewController() -> SettingsViewController {
         return mainStoryboard().instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+    }
+    
+    // MARK: Ingredients
+    
+    class func ingredientsController() -> IngredientsController {
+        return mainStoryboard().instantiateViewController(withIdentifier: "IngredientsController") as! IngredientsController
     }
 }

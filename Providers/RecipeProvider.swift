@@ -14,7 +14,8 @@ public enum RecipeSortBy {
 }
 
 public protocol RecipeProvider {
-    
+
+    // TODO!!!!!!!!!!!! is sortby being used?
     func recipes(sortBy: RecipeSortBy, _ handler: @escaping (ProviderResult<RealmSwift.List<Recipe>>) -> Void)
     
     func add(_ recipe: Recipe, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)

@@ -11,7 +11,6 @@ import RealmSwift
 
 // TODO order?
 public final class GroupItem: DBSyncable, ProductWithQuantity2 {
-    
     public dynamic var uuid: String = ""
     public dynamic var quantity: Int = 0
     dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
@@ -130,6 +129,15 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
     
     public func updateQuantityCopy(_ quantity: Int) -> GroupItem {
         return copy(quantity: quantity)
+    }
+    
+    // MARK: - Identifiable
+    
+    /**
+     If objects have the same semantic identity. Identity is equivalent to a primary key in a database.
+     */
+    public func same(_ rhs: GroupItem) -> Bool {
+        return uuid == rhs.uuid
     }
 }
 

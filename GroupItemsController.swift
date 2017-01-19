@@ -423,7 +423,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }
     }
     
-    func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
+    func remove(_ model: ProductWithQuantity2, index: Int, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
         Prov.listItemGroupsProvider.remove(model as! GroupItem, remote: true, resultHandler(onSuccess: {
             onSuccess()
         }, onError: {result in

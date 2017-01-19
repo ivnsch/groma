@@ -16,6 +16,7 @@
 		58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */; };
 		6AE34BE41E2E25B80039A2A8 /* RecipesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */; };
 		6AE34BF01E2EA7880039A2A8 /* IngredientsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */; };
+		6AE34BFC1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BFB1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift */; };
 		6AEA4EA41E0461660040557D /* Providers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AEA4EA31E0461660040557D /* Providers.framework */; };
 		6AEA4EA51E0461660040557D /* Providers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6AEA4EA31E0461660040557D /* Providers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AEC62C1551F853D52768B5A2 /* Pods_shoppin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B242A1FEAA96009C120C8E2A /* Pods_shoppin.framework */; };
@@ -372,6 +373,7 @@
 		58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipesController.swift; sourceTree = "<group>"; };
 		6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientsController.swift; sourceTree = "<group>"; };
+		6AE34BFB1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductsWithQuantityViewControllerNew.swift; sourceTree = "<group>"; };
 		6AEA4EA31E0461660040557D /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98053CCC7F57AECBD28D4F1D /* Pods_shoppin_osxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E255758FF7D0B9EA448C576 /* Pods_shoppin_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1424,6 +1426,7 @@
 				EBB655AA1CF3D13D00B49A55 /* ProductsWithQuantity.storyboard */,
 				EB8D1D101C389D6E00ADF884 /* ProductsWithQuantityViewController.swift */,
 				EB20FC061A599AE20058103B /* ProductWithQuantityTableViewCell.swift */,
+				6AE34BFB1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift */,
 			);
 			name = productWithQuantity;
 			sourceTree = "<group>";
@@ -2311,6 +2314,7 @@
 				EBEA0CE01CA6C69F00E68B81 /* SlidingTabsView.swift in Sources */,
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EBEBA6B71BF16492000E5653 /* FlatColorPickerController.swift in Sources */,
+				6AE34BFC1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift in Sources */,
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
 				EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */,
 				EB79AC271BF0E3B700685B30 /* AddEditListController.swift in Sources */,

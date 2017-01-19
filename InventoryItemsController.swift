@@ -450,7 +450,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         // TODO is this necessary?
     }
     
-    func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
+    func remove(_ model: ProductWithQuantity2, index: Int, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
         if let inventory = inventory {
             Prov.inventoryItemsProvider.removeInventoryItem((model as! InventoryItem).uuid, inventoryUuid: inventory.uuid, remote: true, resultHandler(onSuccess: {
                 onSuccess()
