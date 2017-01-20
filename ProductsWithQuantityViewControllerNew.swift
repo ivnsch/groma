@@ -21,8 +21,10 @@ protocol ProductsWithQuantityViewControllerDelegateNew: class {
     // This is not pretty but making ProductWithQuantity2 extend Identifiable causes the typical weird Swift generics errors so we cast and compare in the delegate instead
     func same(lhs: ProductWithQuantity2, rhs: ProductWithQuantity2) -> Bool
     
-    func remove(_ index: Int, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void)
-    func increment(_ index: Int, delta: Int, onSuccess: @escaping (Int) -> Void)
+    func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void)
+    
+    func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void)
+    
     func onModelSelected(_ index: Int)
     func emptyViewData() -> (text: String, text2: String, imgName: String)
     func onEmptyViewTap()
@@ -174,7 +176,9 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            delegate?.remove(indexPath.row, onSuccess: {}, onError: {_ in })
+            guard let model = delegate?.itemForRow(row: indexPath.row) else {QL4("Illegal state: no model"); return}
+            
+            delegate?.remove(model, onSuccess: {}, onError: {_ in })
         }
     }
 
@@ -197,21 +201,18 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     // MARK: - ProductWithQuantityTableViewCellDelegate
     
     func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
-        cell.cancelDeleteProgress()
-//        checkChangeInventoryItemQuantity(cell, delta: 1) TODO!!!!!!!!!!!!!!!!!! ?
+        changeInventoryItemQuantity(cell, delta: 1)
         SwipeToIncrementAlertHelper.check(self)
     }
     
     func onDecrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
-        cell.cancelDeleteProgress()
-//        checkChangeInventoryItemQuantity(cell, delta: -1)  TODO!!!!!!!!!!!!!!!!!! ?
+        changeInventoryItemQuantity(cell, delta: -1)
         SwipeToIncrementAlertHelper.check(self)
     }
     
     func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Int) {
-        cell.cancelDeleteProgress()
-        if let model = cell.model { // TODO!!!!!!!!!!!!!!!!!!!
-//            checkChangeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)  TODO!!!!!!!!!!!!!!!!!! ?
+        if let model = cell.model {
+            changeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)
         } else {
             QL4("No model, can't update quantity")
         }
@@ -315,6 +316,15 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             print("Warn: InventoryItemsTableViewController.findIndexPathForNewItem: sortBy is not set")
             return nil
         }
+    }
+    
+    fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Int) {
+        
+        guard let model = cell.model else {QL4("Invalid state: Cell must have model"); return}
+
+        delegate?.increment(model, delta: delta, onSuccess: {updatedQuantity in
+            cell.shownQuantity = updatedQuantity
+        })
     }
     
     func scrollTo(_ index: Int) {

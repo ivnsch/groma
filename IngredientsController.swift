@@ -459,25 +459,23 @@ class IngredientsController: UIViewController, ProductsWithQuantityViewControlle
         return itemsResult?[row]
     }
     
-    func remove(_ index: Int, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
+    func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         guard let itemsResult = itemsResult else {QL4("No result"); return}
 
-        let ingredient = itemsResult[index]
-        
-        Prov.ingredientProvider.delete(ingredient, ingredients: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        Prov.ingredientProvider.delete(model as! Ingredient, ingredients: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
             onSuccess()
         }, onError: {result in
             onError(result)
         }))
     }
     
-    func increment(_ index: Int, delta: Int, onSuccess: @escaping (Int) -> Void) {
+    func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void) {
         guard let itemsResult = itemsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         guard let ingredientsRealm = itemsResult.realm else {QL4("No realm"); return}
         
-        Prov.ingredientProvider.increment(itemsResult[index], quantity: delta, notificationToken: notificationToken, realm: ingredientsRealm, successHandler({updatedQuantity in
+        Prov.ingredientProvider.increment(model as! Ingredient, quantity: delta, notificationToken: notificationToken, realm: ingredientsRealm, successHandler({updatedQuantity in
             onSuccess(updatedQuantity)
         }))
     }

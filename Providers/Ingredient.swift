@@ -102,10 +102,9 @@ public final class Ingredient: Object, ProductWithQuantity2 {
         if updatedQuantity >= 0 {
             quantity = quantity + delta
         } else {
-            QL3("Trying to decrement quantity to less than zero. Current quantity: \(quantity), delta: \(delta). Setting it to 0.")
+            QL1("Trying to decrement quantity to less than zero. Current quantity: \(quantity), delta: \(delta). Setting it to 0.")
             quantity = 0
         }
-        
     }
     
     public func incrementQuantityCopy(_ delta: Int) -> Ingredient {
