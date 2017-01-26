@@ -443,3 +443,8 @@ email_device = "Device: %@";
 
 
 share_subject = "Groma";
+
+recipe_already_has = "Currently in list: %@";
+recipe_unit_singular = "unit";
+recipe_unit_plural = "units";
+recipe_you_will_add = "Will be added: %@";

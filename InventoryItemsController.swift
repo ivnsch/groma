@@ -14,7 +14,6 @@ import RealmSwift
 import Providers
 
 class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
-    
     fileprivate var inventoryItemsResult: Results<InventoryItem>?
     fileprivate var notificationToken: NotificationToken?
     
@@ -298,6 +297,16 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 }
             }))
         }
+    }
+    
+    internal func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+        // TODO!!!!!!!!!!!!!!!!! disable recipes from quick add
+         fatalError("Not supported") // It doesn't make sense to add recipes to the inventory
+    }
+    
+    func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
+        // TODO!!!!!!!!!!!!!!!!! disable recipes from quick add
+        fatalError("Not supported") // It doesn't make sense to add recipes to the inventory
     }
     
     func onAddProduct(_ product: QuantifiableProduct) {

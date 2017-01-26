@@ -8,6 +8,7 @@
 
 import Foundation
 import QorumLogs
+import RealmSwift
 
 class BrandProviderImpl: BrandProvider {
 
@@ -23,6 +24,17 @@ class BrandProviderImpl: BrandProvider {
     func brands(_ range: NSRange, _ handler: @escaping (ProviderResult<[String]>) -> Void) {
         dbProvider.brands(range) {brands in
             handler(ProviderResult(status: .success, sucessResult: brands))
+        }
+    }
+    
+    func brands(productName: String, handler: @escaping (ProviderResult<[String]>) -> Void) {
+        DBProv.brandProvider.brands(productName: productName) {brandsMaybe in
+            if let brands = brandsMaybe {
+                handler(ProviderResult(status: .success, sucessResult: brands))
+            } else {
+                QL4("Couldn't load brands")
+                handler(ProviderResult(status: .databaseUnknown))
+            }
         }
     }
     
@@ -66,6 +78,17 @@ class BrandProviderImpl: BrandProvider {
     func brandsContainingText(_ text: String, range: NSRange, _ handler: @escaping (ProviderResult<[String]>) -> Void) {
         dbProvider.brandsContainingText(text, range: range) {brands in
             handler(ProviderResult(status: .success, sucessResult: brands))
+        }
+    }
+ 
+    func brands(ingredients: Results<Ingredient>, handler: @escaping (ProviderResult<[String: [String]]>) -> Void) {
+        DBProv.brandProvider.brands(ingredients: ingredients) {dictMaybe in
+            if let dict = dictMaybe {
+                handler(ProviderResult(status: .success, sucessResult: dict))
+            } else {
+                QL4("Couldn't load brands")
+                handler(ProviderResult(status: .databaseUnknown))
+            }
         }
     }
 }

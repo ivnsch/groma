@@ -29,3 +29,11 @@ public struct ListItemInput {
         self.storeProductInput = StoreProductInput(price: price, baseQuantity: baseQuantity, unit: unit)
     }
 }
+
+
+extension ListItemInput {
+    
+    func toProductPrototype() -> ProductPrototype {
+        return ProductPrototype(name: name, category: section, categoryColor: sectionColor, brand: brand, baseQuantity: storeProductInput.baseQuantity, unit: storeProductInput.unit)
+    }
+}

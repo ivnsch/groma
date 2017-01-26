@@ -24,13 +24,13 @@ public class ProductCategory: DBSyncable, Identifiable {
     }
     
     public var color: UIColor {
-        return UIColor(hexString: bgColorHex)
+        get {
+            return UIColor(hexString: bgColorHex)
+        }
+        set {
+            bgColorHex = newValue.hexStr
+        }
     }
-    
-    public func setColor(_ bgColor: UIColor) {
-        bgColorHex = bgColor.hexStr
-    }
-
     public convenience init(uuid: String, name: String, color: UIColor, lastUpdate: Date = Date(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.init(uuid: uuid, name: name, color: color.hexStr, lastUpdate: lastUpdate, lastServerUpdate: lastServerUpdate, removed: removed)
     }
@@ -91,7 +91,7 @@ public class ProductCategory: DBSyncable, Identifiable {
         item.name = dict["name"]! as! String
         let colorStr = dict["color"]! as! String
         let color = UIColor(hexString: colorStr)
-        item.setColor(color)
+        item.color = color
         item.setSyncableFieldswithRemoteDict(dict)
         return item
     }

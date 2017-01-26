@@ -32,12 +32,15 @@ public protocol ListItemProvider {
     - parameter handler
     */
     func add(_ listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int?, possibleNewSectionOrder: ListItemStatusOrder?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
+
+    func add(_ listItemInputs: [ListItemInput], status: ListItemStatus, list: List, order orderMaybe: Int?, possibleNewSectionOrder: ListItemStatusOrder?, token: RealmToken?, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void)
     
     // product/section same logic as add(listItemInput) (see doc above). TODO review other update methods maybe these should be removed or at least made private, since they don't have this product/section logic and there's no reason from outside of the provider to use a different logic (which would be to update the linked product/section directly).
     func update(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: @escaping (ProviderResult<(listItem: ListItem, replaced: Bool)>) -> Void)
     
     func addListItem(_ product: QuantifiableProduct, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String?, order orderMaybe: Int?, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
     
+    // TODO what are note and order parameters here if we are adding an array?
     func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String?, order orderMaybe: Int?, token: RealmToken?, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void)
 
     func update(_ listItem: ListItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
@@ -60,6 +63,8 @@ public protocol ListItemProvider {
     func increment(_ listItem: ListItem, status: ListItemStatus, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ())
 
     func increment(_ increment: RemoteListItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ())
+    
+    func listItems<T>(list: List, ingredient: Ingredient, mapper: @escaping (Results<ListItem>) -> T, _ handler: @escaping (ProviderResult<T>) -> Void)
     
     /**
     Updates done status of listItems, and their "order" field such that they are positioned at the end of the new section.

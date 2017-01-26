@@ -13,7 +13,11 @@ import Providers
 
 protocol QuickAddDelegate: class {
     func onAddProduct(_ product: QuantifiableProduct)
-    func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?)
+    
+    func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) // TODO!!!!!!!!!!!!!! remove (from origin)
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController)
+    func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
+    
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) // editingItem == nil -> add
 
 //    func onValidationErrors(errors: [UITextField: ValidationError])
@@ -35,7 +39,7 @@ protocol QuickAddDelegate: class {
 }
 
 private enum AddProductOrGroupContent {
-    case product, group
+    case product, group, recipe
 }
 
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
@@ -235,6 +239,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         delegate?.onAddGroup(group, onFinish: nil)
     }
     
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickListController: QuickAddListItemViewController) {
+        delegate?.onAddRecipe(ingredientModels: ingredientModels, quickAddController: self)
+    }
+    
+    func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
+        delegate?.getAlreadyHaveText(ingredient: ingredient, handler)
+    }
+    
     // product was selected in product quick list
     func onAddProduct(_ product: QuantifiableProduct) {
         delegate?.onAddProduct(product)
@@ -256,7 +268,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             case .productForList:
                 searchBar.text = searchBar.text?.capitalizeFirst() // on has not items the search text becomes item name input, so we capitalize the first letter.
                 _ = showAddProductController()
-            case .group: quickAddListItemViewController?.setEmptyViewVisible(true)
+            case .group: fallthrough
+            case .recipe: quickAddListItemViewController?.setEmptyViewVisible(true)
             }
         }
     }
@@ -348,5 +361,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             }
         }
         return false
+    }
+    
+    /// Return true to consume the event (i.e. prevent closing of this controller)
+    func onTapNavBarCloseTap() -> Bool {
+        return quickAddListItemViewController?.onTapNavBarCloseTap() ?? false
+    }
+    
+    func closeRecipeController() {
+        quickAddListItemViewController?.addGroupController?.closeRecipeController()
     }
 }

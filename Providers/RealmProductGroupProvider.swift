@@ -94,7 +94,8 @@ class RealmProductGroupProvider: RealmProvider {
                 existingGroup.fav += 1
                 realm.add(existingGroup, update: true)
                 return true
-            } else { // product not found
+            } else { // group not found
+                QL4("Didn't find group to increment fav")
                 return false
             }
             }, finishHandler: {savedMaybe in

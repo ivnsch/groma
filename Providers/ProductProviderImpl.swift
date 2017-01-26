@@ -242,15 +242,15 @@ class ProductProviderImpl: ProductProvider {
     }
     
     
-    func loadQuantifiableProduct(unique: QuantifiableProductUnique, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> ()) {
-        
-        
-        
-        
-        
-        
+    func loadQuantifiableProduct(unique: QuantifiableProductUnique, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void) {
+        DBProv.productProvider.loadQuantifiableProductWithUnique(unique) {quantifiableProductMaybe in
+            if let quantifiableProduct = quantifiableProductMaybe {
+                handler(ProviderResult(status: .success, sucessResult: quantifiableProduct))
+            } else {
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
     }
-    
     
     func updateOrCreateQuantifiableProduct(prototype: ProductPrototype, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void) {
 
@@ -406,4 +406,27 @@ class ProductProviderImpl: ProductProvider {
             }
         }
     }
+    
+    func allUnits(_ handler: @escaping (ProviderResult<[ProductUnit]>) -> Void) {
+        DBProv.productProvider.allUnits {unitsMaybe in
+            if let units = unitsMaybe {
+                handler(ProviderResult(status: .success, sucessResult: units))
+            } else {
+                QL4("Couldn't retrieve units")
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
+    }
+    
+    func allBaseQuantities(_ handler: @escaping (ProviderResult<[Float]>) -> Void) {
+        DBProv.productProvider.allBaseQuantities {baseQuantitiesMaybe in
+            if let baseQuantities = baseQuantitiesMaybe {
+                handler(ProviderResult(status: .success, sucessResult: baseQuantities))
+            } else {
+                QL4("Couldn't retrieve base quantities")
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
+    }
+    
 }

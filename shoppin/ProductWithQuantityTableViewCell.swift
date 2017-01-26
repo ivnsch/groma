@@ -82,6 +82,8 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         
         swipeToIncrementHelper = SwipeToIncrementHelper(view: contentView)
         swipeToIncrementHelper?.delegate = self
+        
+        selectionStyle = .none
     }
     
     @IBAction func onIncrementTap(_ sender: UIButton) {

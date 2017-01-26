@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="267" id="KGk-i7-Jjw" customClass="AddRecipeIngredientCell" customModule="shoppin" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="372" height="267"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="372" height="266"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2x chicken breast" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qd6-eV-Zpm" customClass="LabelMore" customModule="Providers">
+                        <rect key="frame" x="25" y="15" width="107" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="0.49019607843137253" green="0.54509803921568623" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="30"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1x500g" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dO9-oa-KP9" customClass="LabelMore" customModule="Providers">
+                        <rect key="frame" x="25" y="205" width="45" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="30"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </label>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Chicken breast " placeholder="Name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="KAK-sU-TMz" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
+                        <rect key="frame" x="25" y="51" width="322" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="oRz-YJ-X8f" customClass="TextFieldHeightConstraint" customModule="shoppin" customModuleProvider="target"/>
+                        </constraints>
+                        <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                                <integer key="value" value="30"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="40"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </textField>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Ivan's Farms GmbH" placeholder="Brand (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="wf2-UD-agf" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
+                        <rect key="frame" x="25" y="101" width="322" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="6k4-rP-v6O" customClass="TextFieldHeightConstraint" customModule="shoppin" customModuleProvider="target"/>
+                        </constraints>
+                        <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                                <integer key="value" value="30"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="40"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </textField>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="500" placeholder="Base" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="j9B-Z2-Wvv" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                        <rect key="frame" x="213" y="151" width="80" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="80" id="8ZB-3n-8p5"/>
+                            <constraint firstAttribute="height" constant="40" id="SFr-ch-hbl" customClass="TextFieldHeightConstraint" customModule="shoppin" customModuleProvider="target"/>
+                        </constraints>
+                        <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numberPad" returnKeyType="done"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                                <integer key="value" value="10"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="40"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </textField>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iiY-8r-gh8" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                        <rect key="frame" x="25" y="151" width="80" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="80" id="MQ2-zQ-T9Y"/>
+                            <constraint firstAttribute="height" constant="40" id="fWl-zv-Pen"/>
+                        </constraints>
+                        <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numberPad" returnKeyType="done"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                                <integer key="value" value="4"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="40"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </textField>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You have currently 1x250g chicken breast in the list" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HoV-Lx-ei4" customClass="LabelMore" customModule="Providers">
+                        <rect key="frame" x="25" y="235" width="322" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="0.83137254901960778" green="0.33333333333333331" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="30"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cqc-3R-1h3" userLabel="Divider">
+                        <rect key="frame" x="0.0" y="265.5" width="372" height="1"/>
+                        <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="B2d-nl-VYU">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                        <real key="value" value="0.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
+                        </constraints>
+                    </view>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="g" placeholder="Unit" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="HJu-rB-WRe" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                        <rect key="frame" x="119" y="151" width="80" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="80" id="6T4-cw-CEP"/>
+                            <constraint firstAttribute="height" constant="40" id="Frv-AM-12w"/>
+                        </constraints>
+                        <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                                <integer key="value" value="10"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="40"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </textField>
+                </subviews>
+                <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="Cqc-3R-1h3" secondAttribute="trailing" id="2nx-cm-p4g"/>
+                    <constraint firstAttribute="bottom" secondItem="Cqc-3R-1h3" secondAttribute="bottom" id="5DN-Wp-XH0"/>
+                    <constraint firstItem="iiY-8r-gh8" firstAttribute="leading" secondItem="KAK-sU-TMz" secondAttribute="leading" id="5Dj-ww-AVA"/>
+                    <constraint firstAttribute="trailing" secondItem="KAK-sU-TMz" secondAttribute="trailing" constant="25" id="6jp-qd-Prq" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                    <constraint firstItem="iiY-8r-gh8" firstAttribute="top" secondItem="wf2-UD-agf" secondAttribute="bottom" constant="10" id="73x-X9-j7X"/>
+                    <constraint firstItem="KAK-sU-TMz" firstAttribute="leading" secondItem="Qd6-eV-Zpm" secondAttribute="leading" id="8RN-tx-9sS"/>
+                    <constraint firstItem="dO9-oa-KP9" firstAttribute="leading" secondItem="KAK-sU-TMz" secondAttribute="leading" id="98Q-n8-Xvt"/>
+                    <constraint firstItem="HJu-rB-WRe" firstAttribute="top" secondItem="wf2-UD-agf" secondAttribute="bottom" constant="10" id="BIr-R1-zht"/>
+                    <constraint firstItem="HJu-rB-WRe" firstAttribute="leading" secondItem="iiY-8r-gh8" secondAttribute="trailing" constant="14" id="Ehd-P7-c3E"/>
+                    <constraint firstItem="Cqc-3R-1h3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="F9I-Vt-u8x"/>
+                    <constraint firstItem="dO9-oa-KP9" firstAttribute="top" secondItem="j9B-Z2-Wvv" secondAttribute="bottom" constant="14" id="ITL-a5-RmX"/>
+                    <constraint firstItem="HoV-Lx-ei4" firstAttribute="top" secondItem="dO9-oa-KP9" secondAttribute="bottom" constant="14" id="UAc-KS-0WO"/>
+                    <constraint firstItem="j9B-Z2-Wvv" firstAttribute="leading" secondItem="HJu-rB-WRe" secondAttribute="trailing" constant="14" id="dKH-1a-qWv"/>
+                    <constraint firstItem="HoV-Lx-ei4" firstAttribute="leading" secondItem="KAK-sU-TMz" secondAttribute="leading" id="db9-sy-2V7"/>
+                    <constraint firstItem="wf2-UD-agf" firstAttribute="trailing" secondItem="KAK-sU-TMz" secondAttribute="trailing" id="j3h-z0-HUh"/>
+                    <constraint firstItem="HoV-Lx-ei4" firstAttribute="trailing" secondItem="KAK-sU-TMz" secondAttribute="trailing" id="lzz-Gm-xHc"/>
+                    <constraint firstItem="Qd6-eV-Zpm" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="25" id="pwz-Gr-edS" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                    <constraint firstItem="KAK-sU-TMz" firstAttribute="top" secondItem="Qd6-eV-Zpm" secondAttribute="bottom" constant="20" id="s9J-0u-2C6"/>
+                    <constraint firstItem="wf2-UD-agf" firstAttribute="leading" secondItem="KAK-sU-TMz" secondAttribute="leading" id="sW3-Z8-m34"/>
+                    <constraint firstItem="HJu-rB-WRe" firstAttribute="centerY" secondItem="j9B-Z2-Wvv" secondAttribute="centerY" id="sfe-Ck-aou"/>
+                    <constraint firstItem="wf2-UD-agf" firstAttribute="top" secondItem="KAK-sU-TMz" secondAttribute="bottom" constant="10" id="uz5-ZC-w5h"/>
+                    <constraint firstItem="Qd6-eV-Zpm" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="w3k-Xy-prc"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="alreadyHaveLabel" destination="HoV-Lx-ei4" id="C09-7Z-Q4v"/>
+                <outlet property="baseQuantityTextField" destination="j9B-Z2-Wvv" id="dBV-Hk-TZt"/>
+                <outlet property="brandTextField" destination="wf2-UD-agf" id="UNd-uM-sEi"/>
+                <outlet property="ingredientNameLabel" destination="Qd6-eV-Zpm" id="R1Q-Lt-kIg"/>
+                <outlet property="productNameTextField" destination="KAK-sU-TMz" id="EX1-58-WUF"/>
+                <outlet property="quantitySummaryLabel" destination="dO9-oa-KP9" id="leG-Lr-mq6"/>
+                <outlet property="quantityTextField" destination="iiY-8r-gh8" id="o1I-9R-gmi"/>
+                <outlet property="unitTextField" destination="HJu-rB-WRe" id="rtt-Vi-urX"/>
+            </connections>
+            <point key="canvasLocation" x="-28" y="130.5"/>
+        </tableViewCell>
+    </objects>
+</document>

@@ -17,7 +17,9 @@ public protocol RecipeProvider {
 
     // TODO!!!!!!!!!!!! is sortby being used?
     func recipes(sortBy: RecipeSortBy, _ handler: @escaping (ProviderResult<RealmSwift.List<Recipe>>) -> Void)
-    
+
+    func recipes(substring: String, range: NSRange, sortBy: RecipeSortBy, _ handler: @escaping (ProviderResult<(substring: String?, recipes: [Recipe])>) -> Void)
+
     func add(_ recipe: Recipe, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func update(_ recipe: Recipe, input: RecipeInput, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
@@ -25,4 +27,6 @@ public protocol RecipeProvider {
     func move(from: Int, to: Int, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func delete(index: Int, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    func incrementFav(_ recipeUuid: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
 }

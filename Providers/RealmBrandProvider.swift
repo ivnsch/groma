@@ -30,6 +30,16 @@ class RealmBrandProvider: RealmProvider {
             handler([])
         }
     }
+
+    
+    /// Returns all the brands of products with a specified name
+    func brands(productName: String, handler: @escaping ([String]?) -> Void) {
+        withRealm({realm -> [String] in
+            return Array(Set(realm.objects(Product.self).filter(Product.createFilterName(productName)).map{$0.brand}))
+        }) {brandsMaybe in
+            handler(brandsMaybe)
+        }
+    }
     
     func removeProductsWithBrand(_ brandName: String, markForSync: Bool, _ handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
@@ -74,6 +84,22 @@ class RealmBrandProvider: RealmProvider {
             }
         }) {(result: [String]) in
             handler(result)
+        }
+    }
+    
+    /// Returns ingredient uuid : associated brands
+    func brands(ingredients: Results<Ingredient>, handler: @escaping ([String: [String]]?) -> Void) {
+        let tuples: [(String, String)] = ingredients.map{($0.uuid, $0.product.product.name)} // fixes realm thread exception
+        
+        withRealm({realm in
+            var ingredientsDict = Dictionary<String, [String]>()
+            for tuple in tuples {
+                let brands: [String] = Array(Set(realm.objects(Product.self).filter(Product.createFilterName(tuple.1)).map{$0.brand}))
+                ingredientsDict[tuple.0] = brands
+            }
+            return ingredientsDict
+        }) {brandsMaybe in
+            handler(brandsMaybe)
         }
     }
 }

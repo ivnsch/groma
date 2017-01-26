@@ -23,7 +23,7 @@ class ProductCategoryMapper {
         let dbCategory = ProductCategory()
         dbCategory.uuid = category.uuid
         dbCategory.name = category.name
-        dbCategory.setColor(category.color)
+        dbCategory.color = category.color
         dbCategory.dirty = false
         dbCategory.lastServerUpdate = category.lastUpdate
         return dbCategory

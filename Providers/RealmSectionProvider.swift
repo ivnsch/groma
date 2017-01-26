@@ -17,9 +17,16 @@ class RealmSectionProvider: RealmProvider {
     }
     
     func loadSection(_ name: String, list: List, handler: @escaping (Section?) -> ()) {
-        loadSections([name], list: list) {sections in
-            handler(sections?.first)
-        }
+        handler(loadSectionSync(name, list: list).getOk()?.flatMap{$0}) // backwards compatibility - transform result to optional. Note that we should change all these methods to use result
+    }
+    
+    // TODO use database specific result types to return, signal error, instead of tuple with success
+    func loadSectionSync(_ name: String, list: List) -> ProvResult<Section?, DatabaseError> {
+        return loadSectionsSync([name], list: list).map{$0?.first}
+    }
+
+    func loadSectionsSync(_ names: [String], list: List) -> ProvResult<Results<Section>?, DatabaseError> {
+        return .ok(loadSync(filter: Section.createFilterWithNames(names, listUuid: list.uuid)))
     }
     
     func loadSections(_ names: [String], list: List, handler: @escaping (Results<Section>?) -> Void) {
@@ -181,4 +188,25 @@ class RealmSectionProvider: RealmProvider {
                 handler(success ?? false)
         })
     }
+    
+    func mergeOrCreateSectionSync(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List) -> ProvResult<Section, DatabaseError> {
+        
+        let result: ProvResult<Section, DatabaseError> = loadSectionSync(sectionName, list: list).map ({
+            if let section = $0 {
+                return section.copy(color: sectionColor)
+            } else {
+                return Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: status, order: 123)) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
+            }
+        })
+        
+        return result.flatMap {section in
+            let writeSuccess: Bool? = self.doInWriteTransactionSync({realm in
+                realm.add(section, update: true)
+                return true
+            })
+            
+            return (writeSuccess ?? false) ? .ok(section) : .err(.unknown)
+        }
+    }
+    
 }

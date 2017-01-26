@@ -85,6 +85,10 @@ class FlatColorPickerController: UIViewController, UICollectionViewDataSource, U
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         return CGSize(width: DimensionsManager.colorCircleCellSize, height: DimensionsManager.colorCircleCellSize)
     }
+    
+    deinit {
+        print("Deinit color picker")
+    }
 }
 
 

@@ -233,6 +233,16 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func onAddProduct(_ product: QuantifiableProduct) {
     }
     
+    internal func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+        // TODO!!!!!!!!!!!!!!!!! disable recipes from quick add
+        fatalError("Not supported") // It doesn't make sense to add recipes to products
+    }
+    
+    func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
+        // TODO!!!!!!!!!!!!!!!!! disable recipes from quick add
+        fatalError("Not supported") // It doesn't make sense to add recipes to products
+    }
+    
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditItem(_ input: ListItemInput, editingItem: AddEditProductControllerEditingData) {

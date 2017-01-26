@@ -17,7 +17,7 @@ public enum ProductUnit: Int {
 
     public var text: String {
         switch self {
-        case .none: return "None"
+        case .none: return ""
         case .gram: return "Gram"
         case .kilogram: return "Kilogram"
         }
@@ -28,6 +28,15 @@ public enum ProductUnit: Int {
         case .none: return ""
         case .gram: return "g"
         case .kilogram: return "kg"
+        }
+    }
+    
+    public static func fromString(_ string: String) -> ProductUnit? {
+        switch string {
+        case "": return ProductUnit.none // note prefix otherwise it's processed as Option.none
+        case "g": return .gram
+        case "kg": return .kilogram
+        default: return nil
         }
     }
 }
@@ -108,8 +117,8 @@ public class Product: DBSyncable, Identifiable {
         return "brand == '\(brand)'"
     }
     
-    static func createFilterUnique(_ prototype: ProductPrototype) -> String {
-        return createFilterNameBrand(prototype.name, brand: prototype.brand)
+    static func createFilter(unique: ProductUnique) -> String {
+        return createFilterNameBrand(unique.name, brand: unique.brand)
     }
     
     static func createFilterNameBrand(_ name: String, brand: String) -> String {

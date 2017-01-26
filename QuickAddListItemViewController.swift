@@ -14,14 +14,18 @@ import Providers
 
 protocol QuickAddListItemDelegate: class {
     func onAddProduct(_ product: QuantifiableProduct)
+    
     func onAddGroup(_ group: ProductGroup)
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickListController: QuickAddListItemViewController)
+    func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
+    
     func onCloseQuickAddTap()
     func onHasItems(_ hasItems: Bool)
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
 }
 
 enum QuickAddItemType {
-    case product, group, productForList
+    case product, group, recipe, productForList
 }
 
 enum QuickAddContent {
@@ -71,6 +75,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
     
+    fileprivate var recipeControllerAnimator: GromFromViewControlerAnimator?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         onViewDidLoad?()
@@ -79,6 +85,14 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 //        clearAndLoadFirstPage(false)
+        
+        initAddRecipeAnimator()
+    }
+    
+    fileprivate func initAddRecipeAnimator() {
+        guard let parent = parent?.parent?.parent?.parent else {QL4("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
+        
+        recipeControllerAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self)
     }
     
     fileprivate func clearAndLoadFirstPage(_ isSearchLoad: Bool) {
@@ -88,6 +102,13 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     }
 
     fileprivate func toGroupSortBy(_ sortBy: QuickAddItemSortBy) -> GroupSortBy {
+        switch sortBy {
+        case .alphabetic: return .alphabetic
+        case .fav: return .fav
+        }
+    }
+    
+    fileprivate func toRecipeSortBy(_ sortBy: QuickAddItemSortBy) -> RecipeSortBy {
         switch sortBy {
         case .alphabetic: return .alphabetic
         case .fav: return .fav
@@ -119,8 +140,13 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             groupCell.item = groupItem
             cell = groupCell
             
+        } else if let recipe = item as? QuickAddRecipe {
+            let groupCell = collectionView.dequeueReusableCell(withReuseIdentifier: "groupCell", for: indexPath) as! QuickAddGroupCell
+            groupCell.item = recipe
+            cell = groupCell
+            
         } else {
-            print("Error: invalid model type in quickAddItems: \(item)")
+            QL4("Error: invalid model type in quickAddItems: \(item)")
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "itemCell", for: indexPath) // assign something so it compiles
             cell.contentView.backgroundColor = UIColor.flatGrayDark
         }
@@ -178,11 +204,20 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             // don't wait for db incrementFav - this operation is not critical
             delegate?.onAddProduct(productItem.product)
             
-        } else if let groupItem = item as? QuickAddGroup {
+        } else if let recipeItem = item as? QuickAddRecipe {
 //            groupItem.group.fav += 1
-            Prov.listItemGroupsProvider.incrementFav(groupItem.group.uuid, remote: true, successHandler{})
-            // don't wait for db incrementFav - this operation is not critical
-            delegate?.onAddGroup(groupItem.group)
+//            don't wait for db incrementFav - this operation is not critical
+            Prov.recipeProvider.incrementFav(recipeItem.recipe.uuid, successHandler{})
+            
+            guard let cell = collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
+            
+            recipeControllerAnimator?.open (button: cell, controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
+                let controller = AddRecipeController()
+                controller.delegate = weakSelf
+                controller.list = weakSelf.list
+                controller.recipe = recipeItem.recipe
+                return controller
+            })
             
         } else {
             print("Error: invalid model type in quickAddItems, select cell. \(item)")
@@ -311,6 +346,25 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             )
         }
         
+        func loadRecipes() {
+            
+            Prov.recipeProvider.recipes(substring: searchText, range: paginator.currentPage, sortBy: toRecipeSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
+                if let weakSelf = self {
+                    
+                    if tuple.substring == weakSelf.searchText { // See comment about this above in products
+                        let quickAddItems = tuple.recipes.map{QuickAddRecipe($0, boldRange: $0.name.range(weakSelf.searchText, caseInsensitive: true))}
+                        onItemsLoaded(quickAddItems)
+                    } else {
+                        setLoading(false)
+                    }
+                }
+                }, onError: {[weak self] result in
+                    setLoading(false)
+                    self?.defaultErrorHandler()(result)
+            })
+            )
+        }
+        
         synced(self) {[weak self] in
             let weakSelf = self!
             
@@ -328,6 +382,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                         loadProducts()
                     case .group:
                         loadGroups()
+                    case .recipe:
+                        loadRecipes()
                     case .productForList:
                         loadProductsForList()
                     }
@@ -339,8 +395,34 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     @IBAction func onEmptyViewTap(_ sender: UIButton) {
         tabBarController?.selectedIndex = Constants.tabGroupsIndex
     }
+ 
+    /// Return true to consume the event (i.e. prevent closing of this controller)
+    func onTapNavBarCloseTap() -> Bool {
+        if recipeControllerAnimator?.isShowing ?? false {
+            recipeControllerAnimator?.close()
+            return true
+        }
+        return false
+    }
+    
+    func closeRecipeController() {
+        recipeControllerAnimator?.close()
+    }
     
     deinit {
         QL1("Deinit quick add item controller")
+    }
+}
+
+// MARK: - AddRecipeControllerDelegate
+
+extension QuickAddListItemViewController: AddRecipeControllerDelegate {
+    
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], addRecipeController: AddRecipeController) {
+        delegate?.onAddRecipe(ingredientModels: ingredientModels, quickListController: self)
+    }
+    
+    func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
+        delegate?.getAlreadyHaveText(ingredient: ingredient, handler)
     }
 }

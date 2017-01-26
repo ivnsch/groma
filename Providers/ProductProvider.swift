@@ -85,4 +85,9 @@ public protocol ProductProvider {
    
     // Returns if restored at least one product
     func restorePrefillProductsLocal(_ handler: @escaping (ProviderResult<Bool>) -> Void)
+    
+    
+    func allUnits(_ handler: @escaping (ProviderResult<[ProductUnit]>) -> Void)
+    
+    func allBaseQuantities(_ handler: @escaping (ProviderResult<[Float]>) -> Void)
 }

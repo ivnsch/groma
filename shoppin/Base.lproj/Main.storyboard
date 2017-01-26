@@ -2042,8 +2042,8 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="Etn-lg-6Ma"/>
                                                 <exclude reference="3gS-ca-M7T"/>
+                                                <exclude reference="Etn-lg-6Ma"/>
                                                 <exclude reference="oUZ-Np-aul"/>
                                             </mask>
                                         </variation>

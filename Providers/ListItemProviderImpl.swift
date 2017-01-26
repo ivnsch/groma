@@ -90,6 +90,17 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
+    func listItems<T>(list: List, ingredient: Ingredient, mapper: @escaping (Results<ListItem>) -> T, _ handler: @escaping (ProviderResult<T>) -> Void) {
+        DBProv.listItemProvider.listItems(list: list, ingredient: ingredient, mapper: mapper) {items in
+            if let items = items {
+                handler(ProviderResult(status: .success, sucessResult: items))
+            } else {
+                QL4("Couldn't load items")
+                handler(ProviderResult(status: .unknown))
+            }
+        }
+    }
+    
     // MARK: -
     
     func remove(_ listItem: ListItem, remote: Bool, token: RealmToken?, _ handler: @escaping (ProviderResult<Any>) -> ()) {
@@ -274,15 +285,38 @@ class ListItemProviderImpl: ListItemProvider {
     
     // Note: status assumed to be .Todo as we can add list item input only to .Todo
     func add(_ listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
-        sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: possibleNewSectionOrder) {[weak self] result in
-            if let (section, product) = result.sucessResult {
-                self?.addListItem(product, status: status, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, storeProductInput: listItemInput.storeProductInput, token: token, handler)
+        add([listItemInput], status: status, list: list, possibleNewSectionOrder: possibleNewSectionOrder, token: token) {result in
+            if let listItems = result.sucessResult {
+                
+                if let first =  listItems.first {
+                    handler(ProviderResult(status: .success, sucessResult: first))
+                    
+                } else {
+                    QL4("Didn't return list item: \(result)")
+                    handler(ProviderResult(status: .databaseUnknown))
+                }
+                
             } else {
-                QL4("Error fetching section and/or product: \(result.status)")
+                QL4("Error adding list item: \(result)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
+            
         }
     }
+    
+    
+    func add(_ listItemInputs: [ListItemInput], status: ListItemStatus, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, token: RealmToken?, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
+
+        // TODO async? - toListItemProtoypes is executed in the main thread. Note that there could be problems with realm's thread handling
+        DBProv.listItemProvider.toListItemProtoypes(inputs: listItemInputs, status: status, list: list).onOk {listItemPrototypes in
+            self.add(listItemPrototypes, status: status, list: list, token: token, handler)
+            
+        }.onErr { error in
+            QL4("Error adding list item inputs: \(error)")
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+
     
     // Updates list item
     // We load product and section from db identified by uniques and update and link to them, instead of updating directly the product and section of the item
@@ -437,14 +471,20 @@ class ListItemProviderImpl: ListItemProvider {
                     let existingStoreProductsDict = existingStoreProducts.toDictionary{($0.product.uuid, $0)}
                     return prototypes.map {prototype in
                         let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
-                            let storeProduct = StoreProduct(uuid: NSUUID().uuidString, price: 1, store: list.store ?? "", product: prototype.product)
+                            let storeProduct = StoreProduct(uuid: NSUUID().uuidString, price: prototype.storeProductInput?.price ?? 0, store: list.store ?? "", product: prototype.product)
                             QL1("Store product doesn't exist, created: \(storeProduct)")
                             return storeProduct
                         }()
                         
                         // Set possible passed store product properties in the store product we will save. These are passed only when we create list items, using the form
                         // We don't update e.g. quantifiable properties (unit, base quantity) because we assume in this method that we have up to date quantity product. On one side we can be here with quick-add - then there can't be changes, or with the form, in which case we fetch/create first the quantifiable product for the entered unique. And we just fetched/created the store product using the uuid of quantifiable product with said unique.
-                        let updatedStoreProduct = prototype.storeProductInput.map{storeProduct.updateOnlyStoreAttributes($0)} ?? storeProduct
+                        let updatedStoreProduct = prototype.storeProductInput.map{
+                            if $0.price == -1 {
+                                return storeProduct // don't update store product (the only attribute that can currently be updated is price)
+                            } else {
+                                return storeProduct.copy(price: $0.price) // update store product with price
+                            }
+                        } ?? storeProduct
                         return StoreListItemPrototype(product: updatedStoreProduct, quantity: prototype.quantity, targetSectionName: prototype.targetSectionName, targetSectionColor: prototype.targetSectionColor)
                     }
                 }()

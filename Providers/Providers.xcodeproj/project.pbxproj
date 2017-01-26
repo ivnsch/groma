@@ -278,7 +278,10 @@
 		6A256DC11E040DDB004F5028 /* RealmConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DC01E040DDB004F5028 /* RealmConfig.swift */; };
 		6A256DC31E043BCD004F5028 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DC21E043BCD004F5028 /* Constants.swift */; };
 		6A256DC71E04464E004F5028 /* RequestErrorToMsgMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256DC61E04464E004F5028 /* RequestErrorToMsgMapper.swift */; };
+		6A407AB81E32CB4700D77405 /* AddableIngredientProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407AB71E32CB4700D77405 /* AddableIngredientProviderImpl.swift */; };
+		6A407ABA1E33A14B00D77405 /* AddableIngredientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407AB91E33A14B00D77405 /* AddableIngredientProvider.swift */; };
 		6AC842731E26D18200444C91 /* QuantifiableProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC842721E26D18200444C91 /* QuantifiableProduct.swift */; };
+		6AD126691E37C31F009DFEDF /* ProvResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD126681E37C31F009DFEDF /* ProvResult.swift */; };
 		6AE34BE61E2E25F50039A2A8 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE51E2E25F50039A2A8 /* Recipe.swift */; };
 		6AE34BE81E2E27980039A2A8 /* RecipeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE71E2E27980039A2A8 /* RecipeProvider.swift */; };
 		6AE34BEA1E2E28280039A2A8 /* RecipeProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE91E2E28280039A2A8 /* RecipeProviderImpl.swift */; };
@@ -567,7 +570,10 @@
 		6A256DC01E040DDB004F5028 /* RealmConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmConfig.swift; sourceTree = "<group>"; };
 		6A256DC21E043BCD004F5028 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		6A256DC61E04464E004F5028 /* RequestErrorToMsgMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestErrorToMsgMapper.swift; sourceTree = "<group>"; };
+		6A407AB71E32CB4700D77405 /* AddableIngredientProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddableIngredientProviderImpl.swift; sourceTree = "<group>"; };
+		6A407AB91E33A14B00D77405 /* AddableIngredientProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddableIngredientProvider.swift; sourceTree = "<group>"; };
 		6AC842721E26D18200444C91 /* QuantifiableProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuantifiableProduct.swift; sourceTree = "<group>"; };
+		6AD126681E37C31F009DFEDF /* ProvResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProvResult.swift; sourceTree = "<group>"; };
 		6AE34BE51E2E25F50039A2A8 /* Recipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		6AE34BE71E2E27980039A2A8 /* RecipeProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeProvider.swift; sourceTree = "<group>"; };
 		6AE34BE91E2E28280039A2A8 /* RecipeProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeProviderImpl.swift; sourceTree = "<group>"; };
@@ -685,6 +691,7 @@
 				6A256BA11E0404E8004F5028 /* RealmUserProviderImpl.swift */,
 				6AE34BE91E2E28280039A2A8 /* RecipeProviderImpl.swift */,
 				6AE34BF51E2EB28D0039A2A8 /* IngredientProviderImpl.swift */,
+				6A407AB71E32CB4700D77405 /* AddableIngredientProviderImpl.swift */,
 			);
 			name = impl;
 			sourceTree = "<group>";
@@ -764,6 +771,7 @@
 				6A256C061E04056C004F5028 /* ProviderFactory.swift */,
 				6A256C071E04056C004F5028 /* ProviderResult.swift */,
 				6A256C081E04056C004F5028 /* ProviderFetchModus.swift */,
+				6AD126681E37C31F009DFEDF /* ProvResult.swift */,
 			);
 			name = etc;
 			sourceTree = "<group>";
@@ -792,6 +800,7 @@
 				6A256C1D1E040579004F5028 /* HelpProvider.swift */,
 				6A256C1E1E040579004F5028 /* GlobalProvider.swift */,
 				6A256C1F1E040579004F5028 /* ErrorProvider.swift */,
+				6A407AB91E33A14B00D77405 /* AddableIngredientProvider.swift */,
 			);
 			name = protocol;
 			sourceTree = "<group>";
@@ -1371,6 +1380,7 @@
 				6A256C2D1E040579004F5028 /* BrandProvider.swift in Sources */,
 				6A256BDE1E040530004F5028 /* RealmGlobalProvider.swift in Sources */,
 				6A256C911E0405D7004F5028 /* DBRemoveSharedUser.swift in Sources */,
+				6A407AB81E32CB4700D77405 /* AddableIngredientProviderImpl.swift in Sources */,
 				6A256D971E040815004F5028 /* ViewTags.swift in Sources */,
 				6AE34BEE1E2E70400039A2A8 /* RecipeInput.swift in Sources */,
 				6A256C261E040579004F5028 /* ProductGroupProvider.swift in Sources */,
@@ -1410,6 +1420,7 @@
 				6A256DBD1E040C74004F5028 /* LabelMore.swift in Sources */,
 				6A256C401E0405A7004F5028 /* ListItemInput.swift in Sources */,
 				6A256C961E0405D7004F5028 /* DBRemoveSection.swift in Sources */,
+				6A407ABA1E33A14B00D77405 /* AddableIngredientProvider.swift in Sources */,
 				6A256D1F1E04066D004F5028 /* RemoteGlobalSyncResult.swift in Sources */,
 				6A256BA21E0404E8004F5028 /* ListItemProviderImpl.swift in Sources */,
 				6A256C281E040579004F5028 /* ConnectionProvider.swift in Sources */,
@@ -1427,6 +1438,7 @@
 				6A256D931E040815004F5028 /* Paginator.swift in Sources */,
 				6AE34BFA1E2FECAD0039A2A8 /* IngredientInput.swift in Sources */,
 				6A256BD91E040530004F5028 /* Results.swift in Sources */,
+				6AD126691E37C31F009DFEDF /* ProvResult.swift in Sources */,
 				6A256BAB1E0404E8004F5028 /* PlanProviderImpl.swift in Sources */,
 				6AE34BE61E2E25F50039A2A8 /* Recipe.swift in Sources */,
 				6A256D7E1E0407AC004F5028 /* Addable.swift in Sources */,

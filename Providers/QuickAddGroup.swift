@@ -45,3 +45,42 @@ public class QuickAddGroup: QuickAddItem {
         }
     }
 }
+
+
+public class QuickAddRecipe: QuickAddItem {
+    
+    public let recipe: Recipe
+    
+    public init(_ recipe: Recipe, boldRange: NSRange? = nil) {
+        self.recipe = recipe
+        super.init(boldRange: boldRange)
+    }
+    
+    public override var labelText: String {
+        return recipe.name
+    }
+    
+    public override var label2Text: String {
+        return ""
+    }
+    
+    public override var label3Text: String {
+        return ""
+    }
+    
+    public override var color: UIColor {
+        return recipe.color
+    }
+    
+    public override func clearBoldRangeCopy() -> QuickAddRecipe {
+        return QuickAddRecipe(recipe)
+    }
+    
+    public override func same(_ item: QuickAddItem) -> Bool {
+        if let groupItem = item as? QuickAddRecipe {
+            return recipe.same(groupItem.recipe)
+        } else {
+            return false
+        }
+    }
+}

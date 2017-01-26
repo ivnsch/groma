@@ -127,4 +127,9 @@ public final class Ingredient: Object, ProductWithQuantity2 {
     public func same(_ rhs: Ingredient) -> Bool {
         return uuid == rhs.uuid
     }
+    
+    public static func unitText(quantity: Int, baseQuantity: Float, unit: ProductUnit, showNoneText: Bool = false) -> String {
+        let quantifiableProductUnitText = QuantifiableProduct.unitText(baseQuantity: baseQuantity, unit: unit, showNoneText: showNoneText, pluralUnit: quantity > 1)
+        return "\(quantity)\(quantifiableProductUnitText)"
+    }
 }

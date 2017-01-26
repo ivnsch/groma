@@ -244,4 +244,43 @@ extension UIView {
             })
         })
     }
+    
+    // MARK: - Convenience frame
+
+    public var x: CGFloat {
+        get {
+            return frame.origin.x
+        }
+        set {
+            frame.origin.x = newValue
+        }
+    }
+    
+    public var y: CGFloat {
+        get {
+            return frame.origin.y
+        }
+        set {
+            frame.origin.y = newValue
+        }
+    }
+    
+    public var width: CGFloat {
+        get {
+            return frame.width
+        }
+        set {
+            frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: newValue, height: frame.height)
+        }
+    }
+    
+    public var height: CGFloat {
+        get {
+            return frame.height
+        }
+        set {
+            frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: newValue)
+        }
+    }
+    
 }

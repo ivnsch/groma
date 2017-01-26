@@ -50,8 +50,6 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
 
     fileprivate var listInputsValidator: Validator?
     
-    fileprivate var showingColorPicker: FlatColorPickerController?
-
     fileprivate var addButtonHelper: AddButtonHelper?
 
     fileprivate var users: [DBSharedUser] = [] {
@@ -94,6 +92,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     var isEdit: Bool {
         return listToEdit != nil
     }
+    
+    
+    fileprivate var growColorPickerAnimator: GromFromViewControlerAnimator?
     
     fileprivate func prefill(_ list: List) {
         listNameInputField.text = list.name
@@ -176,6 +177,18 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             addButtonHelper = initAddButtonHelper() // in view did load parentViewController is nil
         }
         addButtonHelper?.addObserver()
+        
+        initGrowColorAnimator()
+    }
+    
+    fileprivate func initGrowColorAnimator() {
+        guard let parent = parent else {QL4("Parent is not set"); return}
+
+        growColorPickerAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self) {
+            let controller = UIStoryboard.listColorPicker()
+            controller.delegate = self
+            return controller
+        }
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
@@ -352,37 +365,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
 
     @IBAction func onColorTap() {
-        let picker = UIStoryboard.listColorPicker()
-        self.view.layoutIfNeeded() // TODO is this necessary? don't think so check and remove
-        
-        if let parentViewController = parent {
-            
-            let topBarHeight: CGFloat = 64
-            
-            picker.view.frame = CGRect(x: 0, y: topBarHeight, width: parentViewController.view.frame.width, height: parentViewController.view.frame.height - topBarHeight)
-
-            parentViewController.addChildViewControllerAndView(picker) // add to superview (lists controller) because it has to occupy full space (navbar - tab)
-            picker.delegate = self
-            showingColorPicker = picker
-
-            let buttonPointInParent = parentViewController.view.convert(CGPoint(x: colorButton.center.x, y: colorButton.center.y - topBarHeight), from: view)
-            let fractionX = buttonPointInParent.x / parentViewController.view.frame.width
-            let fractionY = buttonPointInParent.y / (parentViewController.view.frame.height - topBarHeight)
-            
-            picker.view.layer.anchorPoint = CGPoint(x: fractionX, y: fractionY)
-            
-            picker.view.frame = CGRect(x: 0, y: topBarHeight, width: parentViewController.view.frame.width, height: parentViewController.view.frame.height - topBarHeight)
-
-            picker.view.transform = CGAffineTransform(scaleX: 0, y: 0)
-
-            UIView.animate(withDuration: 0.3, animations: {
-                picker.view.transform = CGAffineTransform(scaleX: 1, y: 1)
-            }) 
-            
-            view.endEditing(true)
-            
-        } else {
-            print("Warning: AddEditListController.onColorTap: no parentViewController")
+        growColorPickerAnimator?.open(button: colorButton) {[weak self] in
+            self?.view.endEditing(true)
         }
     }
     
@@ -455,30 +439,13 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
     
     fileprivate func dismissColorPicker(_ selectedColor: UIColor?) {
-        if let showingColorPicker = showingColorPicker {
-            
-            UIView.animate(withDuration: 0.3, animations: {
-                showingColorPicker.view.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
-                
-                }, completion: {[weak self] finished in
-                    self?.showingColorPicker = nil
-                    self?.showingColorPicker?.removeFromParentViewControllerWithView()
-                    
-                    UIView.animate(withDuration: 0.3, animations: {
-                        if let selectedColor = selectedColor {
-                            self?.setBackgroundColor(selectedColor)
-                        }
-                    }) 
-                    UIView.animate(withDuration: 0.15, animations: {
-                        self?.colorButton.transform = CGAffineTransform(scaleX: 2, y: 2)
-                        UIView.animate(withDuration: 0.15, animations: {
-                            self?.colorButton.transform = CGAffineTransform(scaleX: 1, y: 1)
-                        }) 
-                    }) 
-                    
-                    self?.listNameInputField.becomeFirstResponder()
+        growColorPickerAnimator?.close() {[weak self] in
+            UIView.animate(withDuration: 0.3, animations: {[weak self] in
+                if let selectedColor = selectedColor {
+                    self?.setBackgroundColor(selectedColor)
                 }
-            )
+            })
+            self?.listNameInputField.becomeFirstResponder()
         }
     }
     

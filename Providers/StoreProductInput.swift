@@ -10,7 +10,7 @@ import Foundation
 
 public class StoreProductInput {
     
-    public let price: Float
+    public let price: Float // Pass -1 to signalize no update of price if store product already exists. TODO use optional
     public let baseQuantity: Float
     public let unit: ProductUnit
     

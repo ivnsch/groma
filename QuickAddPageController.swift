@@ -29,8 +29,8 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     
     var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
 
-    fileprivate var addProductController: QuickAddListItemViewController?
-    fileprivate var addGroupController: QuickAddListItemViewController?
+    var addProductController: QuickAddListItemViewController?
+    var addGroupController: QuickAddListItemViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,7 +90,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             let productsController = UIStoryboard.quickAddListItemViewController()
             productsController.delegate = quickAddListItemDelegate
             productsController.onViewDidLoad = {
-                productsController.contentData = (.group, .fav)
+                productsController.contentData = (.recipe, .fav)
             }
             currentSwipeController = productsController
             addChildViewController(productsController)
@@ -116,6 +116,10 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             QL3("setEmptyViewVisible: no controller")
         }
         
+    }
+    
+    func onTapNavBarCloseTap() -> Bool {
+        return currentSwipeController?.onTapNavBarCloseTap() ?? false
     }
     
     // MARK: - SwipeViewDelegate

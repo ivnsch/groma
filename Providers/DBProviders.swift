@@ -14,6 +14,7 @@ class DBProv {
 
     static var productProvider = RealmProductProvider()
     static var storeProductProvider = RealmStoreProductProvider()
+    static var brandProvider = RealmBrandProvider()
     
     static var productCategoryProvider = RealmProductCategoryProvider()
     

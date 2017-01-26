@@ -295,6 +295,22 @@ class RealmListItemProvider: RealmProvider {
         handler(loadSync(filter: ListItem.createFilterForUuids(uuids), sortDescriptor: nil))
     }
     
+    
+    func listItems<T>(list: List, ingredient: Ingredient, mapper: @escaping (Results<ListItem>) -> T, _ handler: @escaping (T?) -> Void) {
+        
+        // Realm threads
+        let list = list.copy()
+        let ingredient = ingredient.copy()
+        
+        withRealm({realm -> T? in
+            let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithProductName(ingredient.product.product.name))
+            return mapper(listItems)
+
+        }) {mappingResultMaybe in
+            handler(mappingResultMaybe)
+        }
+    }
+    
     func listItem(_ list: List, product: Product, handler: @escaping (ListItem?) -> Void) {
         handler(loadFirstSync(filter: ListItem.createFilter(list, product: product)))
     }
@@ -704,4 +720,23 @@ class RealmListItemProvider: RealmProvider {
             }
         }
     }
+    
+    // MARK: - Sync
+    
+    
+    func toListItemProtoypes(inputs: [ListItemInput], status: ListItemStatus, list: List) -> ProvResult<[ListItemPrototype], DatabaseError>  {
+        
+        let listItemPrototypes = inputs.map {input -> ProvResult<ListItemPrototype, DatabaseError> in
+            
+            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(input.section, sectionColor: input.sectionColor, status: status, possibleNewOrder: nil, list: list)
+            let quantifiableProductResult = DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: input.toProductPrototype(), updateCategory: true, save: false)
+            
+            return sectionResult.join(result: quantifiableProductResult).map {(section, quantifiableProduct) in
+                ListItemPrototype(product: quantifiableProduct, quantity: input.quantity, targetSectionName: section.name, targetSectionColor: section.color, storeProductInput: nil)
+            }
+        }
+        
+        return ProvResult<ListItemPrototype, DatabaseError>.seq(results: listItemPrototypes)
+    }
+    
 }

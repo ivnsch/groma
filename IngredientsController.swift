@@ -280,6 +280,14 @@ class IngredientsController: UIViewController, ProductsWithQuantityViewControlle
 //        }
     }
     
+    internal func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+        // TODO!!!!!!!!!!!!!!!!!
+    }
+    
+    func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
+        // TODO!!!!!!!!!!!!!!!!!
+    }
+    
     func onAddProduct(_ product: QuantifiableProduct) {
         guard let itemsResult = itemsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}

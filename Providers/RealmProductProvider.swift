@@ -35,16 +35,24 @@ public typealias QuantifiableProductUnique = (name: String, brand: String, unit:
 //}
 
 public struct ProductPrototype {
-    let name: String
-    let category: String
-    let categoryColor: UIColor
-    let brand: String
+    public var name: String
+    public var category: String
+    public var categoryColor: UIColor
+    public var brand: String
     
-    let baseQuantity: Float
-    let unit: ProductUnit
+    public var baseQuantity: Float
+    public var unit: ProductUnit
+
+    var productUnique: ProductUnique {
+        return ProductUnique(name: name, brand: brand)
+    }
+    
+    var quantifiableProductUnique: QuantifiableProductUnique {
+        return QuantifiableProductUnique(name: name, brand: brand, unit: unit, baseQuantity: baseQuantity)
+    }
     
     // TODO!!!!!!!!!!!!! remove defaults
-    init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: Float = 1, unit: ProductUnit = .none) {
+    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: Float = 1, unit: ProductUnit = .none) {
         self.name = name
         self.category = category
         self.categoryColor = categoryColor
@@ -144,13 +152,12 @@ class RealmProductProvider: RealmProvider {
             }
         }
     }
-    
+
     func loadQuantifiableProductWithUnique(_ unique: QuantifiableProductUnique, handler: @escaping (QuantifiableProduct?) -> Void) {
         
         background({() -> String? in
             do {
-                let realm = try Realm()
-                let product: QuantifiableProduct? = self.loadSync(realm, filter: QuantifiableProduct.createFilter(unique: unique)).first
+                let product: QuantifiableProduct? = self.loadQuantifiableProductWithUniqueSync(unique)
                 return product?.uuid
             } catch let e {
                 QL4("Error: creating Realm, returning empty results, error: \(e)")
@@ -858,7 +865,7 @@ class RealmProductProvider: RealmProvider {
             return newProduct
         }
         
-        if let existingProduct = realm.objects(Product.self).filter(Product.createFilterUnique(prototype)).first {
+        if let existingProduct = realm.objects(Product.self).filter(Product.createFilter(unique: prototype.productUnique)).first {
             return updateExistingProduct(realm, existingProduct: existingProduct, prototype: prototype)
         } else {
             return insertNewProduct(realm, prototype: prototype)
@@ -926,5 +933,96 @@ class RealmProductProvider: RealmProvider {
             }, finishHandler: {successMaybe in
                 handler(successMaybe)
         })
+    }
+    
+    func allUnits(_ handler: @escaping ([ProductUnit]?) -> Void) {
+        withRealm({(realm) -> [ProductUnit] in
+            let units = realm.objects(QuantifiableProduct.self).flatMap{quantifiableProduct in
+                return ProductUnit(rawValue: quantifiableProduct.unitVal) ?? {
+                    QL4("No product unit for raw value: \(quantifiableProduct.unitVal). Skipping.")
+                    return nil
+                }()
+            }
+            return Array(units).distinct()
+            
+        }) { unitsMaybe in
+            if unitsMaybe == nil {
+                QL4("Couldn't retrieve units")
+            }
+            handler(unitsMaybe ?? [])
+        }
+    }
+    
+    func allBaseQuantities(_ handler: @escaping ([Float]?) -> Void) {
+        withRealm({(realm) -> [Float] in
+            let units = realm.objects(QuantifiableProduct.self).flatMap{quantifiableProduct in
+                quantifiableProduct.baseQuantity
+            }
+            return Array(units).distinct()
+            
+        }) { unitsMaybe in
+            if unitsMaybe == nil {
+                QL4("Couldn't retrieve base quantities")
+            }
+            handler(unitsMaybe ?? [])
+        }
+    }
+
+    
+    // MARK: - Sync
+    
+    func loadProductWithUniqueSync(_ unique: ProductUnique) -> Product? {
+        return withRealmSync {(realm) -> Product? in
+            return self.loadSync(realm, filter: Product.createFilter(unique: unique)).first
+        }
+    }
+    
+    func loadQuantifiableProductWithUniqueSync(_ unique: QuantifiableProductUnique) -> QuantifiableProduct? {
+        return withRealmSync {(realm) -> QuantifiableProduct? in
+            return self.loadSync(realm, filter: QuantifiableProduct.createFilter(unique: unique)).first
+        }
+    }
+    
+    func mergeOrCreateeProductSync(prototype: ProductPrototype, updateCategory: Bool, save: Bool) -> ProvResult<Product, DatabaseError> {
+    
+        if let existingProduct = loadProductWithUniqueSync(prototype.productUnique) {
+            return .ok(existingProduct.updateNonUniqueProperties(prototype: prototype))
+            
+        } else {
+            let result: ProvResult<Product, DatabaseError> = DBProv.productCategoryProvider.mergeOrCreateCategorySync(name: prototype.category, color: prototype.categoryColor, save: false).map {category in
+                return Product(uuid: UUID().uuidString, name: prototype.name, category: category, brand: prototype.brand)
+            }
+            
+            return !save ? result : result.flatMap {product in
+                let writeSuccess: Bool? = self.doInWriteTransactionSync({realm in
+                    realm.add(product, update: true)
+                    return true
+                })
+                return (writeSuccess ?? false) ? .ok(product) : .err(.unknown)
+            }
+        }
+    }
+    
+    // Similar to mergeOrCreateProductSync in product provider except: 1. This method does actually save the created/merged product, 2. Synchronous, so it can be executed as part of a write transaction.
+    func mergeOrCreateQuantifiableProductSync(prototype: ProductPrototype, updateCategory: Bool, save: Bool) -> ProvResult<QuantifiableProduct, DatabaseError> {
+        
+        if let existingProduct = loadQuantifiableProductWithUniqueSync(prototype.quantifiableProductUnique) {
+            let updatedProduct = existingProduct.product.updateNonUniqueProperties(prototype: prototype)
+            let updatedQuantifiableProduct = existingProduct.copy(baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: updatedProduct) // NOTE this does update unique properties TODO!!!!!!!!!!!!!!!! review
+            return .ok(updatedQuantifiableProduct)
+
+        } else {
+            let result: ProvResult<QuantifiableProduct, DatabaseError> = mergeOrCreateeProductSync(prototype: prototype, updateCategory: true, save: false).map {product in
+                return QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: product)
+            }
+
+            return !save ? result : result.flatMap {product in
+                let writeSuccess: Bool? = self.doInWriteTransactionSync({realm in
+                    realm.add(product, update: true)
+                    return true
+                })
+                return (writeSuccess ?? false) ? .ok(product) : .err(.unknown)
+            }
+        }
     }
 }

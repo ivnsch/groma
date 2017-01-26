@@ -669,6 +669,45 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+        guard let list = currentList else {QL4("No list"); return}
+        
+        let listItemInputs = ingredientModels.map {model in
+
+            ListItemInput(
+                name: model.productPrototype.name,
+                quantity: model.quantity,
+                price: -1, // No prices here - use existing store product or default for new store product
+                section: model.ingredient.product.product.category.name,
+                sectionColor: model.ingredient.product.product.category.color,
+                note: nil,
+                baseQuantity: model.productPrototype.baseQuantity,
+                unit: model.productPrototype.unit,
+                brand: model.productPrototype.brand
+            )
+        }
+
+        Prov.listItemsProvider.add(listItemInputs, status: .todo, list: list, order: nil, possibleNewSectionOrder: nil, token: nil, successHandler{(addedListItems: [ListItem]) in
+            // The list will update automatically with realm notification
+            quickAddController.closeRecipeController()
+        })
+    }
+    
+    func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
+        guard let list = currentList else {QL4("No list"); return}
+        
+        Prov.listItemsProvider.listItems(list: list, ingredient: ingredient, mapper: {listItems -> String in
+            if listItems.isEmpty {
+                return ""
+            } else {
+                return trans("recipe_already_has", listItems.map{$0.quantityTextWithoutName(status: self.status)}.joined(separator: ", "))
+            }
+        }, successHandler {text in
+            handler(text)
+        })
+    }
+    
+    
     func onAddProduct(_ product: QuantifiableProduct) {
 
 //        guard let notificationToken = notificationToken, let realm = listItemsResult?.realm else {QL4("No notification token: \(self.notificationToken) or result: \(listItemsResult)"); return}
@@ -965,7 +1004,9 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 }
             }
         case .toggleOpen:
-            _ = toggleTopAddController()
+            if !(topQuickAddControllerManager?.controller?.onTapNavBarCloseTap() ?? false) { // if the event is not consumed by quick add
+                _ = toggleTopAddController()
+            }
         case .edit:
             clearPossibleUndo()
             let editing = !self.listItemsTableViewController.isEditing

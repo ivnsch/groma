@@ -14,6 +14,11 @@
 		58FBD9B21DDCDA19002242D6 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */; };
 		58FBD9B31DDCDA19002242D6 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */; };
 		58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */; };
+		6A407AB31E32ACDF00D77405 /* AddRecipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407AB11E32ACDF00D77405 /* AddRecipeController.swift */; };
+		6A407AB41E32ACE000D77405 /* AddRecipeController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A407AB21E32ACDF00D77405 /* AddRecipeController.xib */; };
+		6A407ABD1E33A44400D77405 /* AddRecipeIngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407ABB1E33A44400D77405 /* AddRecipeIngredientCell.swift */; };
+		6A407ABE1E33A44400D77405 /* AddRecipeIngredientCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A407ABC1E33A44400D77405 /* AddRecipeIngredientCell.xib */; };
+		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
 		6AE34BE41E2E25B80039A2A8 /* RecipesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */; };
 		6AE34BF01E2EA7880039A2A8 /* IngredientsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */; };
 		6AE34BFC1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BFB1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift */; };
@@ -371,6 +376,11 @@
 		58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
 		58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
+		6A407AB11E32ACDF00D77405 /* AddRecipeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecipeController.swift; sourceTree = "<group>"; };
+		6A407AB21E32ACDF00D77405 /* AddRecipeController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddRecipeController.xib; sourceTree = "<group>"; };
+		6A407ABB1E33A44400D77405 /* AddRecipeIngredientCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecipeIngredientCell.swift; sourceTree = "<group>"; };
+		6A407ABC1E33A44400D77405 /* AddRecipeIngredientCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddRecipeIngredientCell.xib; sourceTree = "<group>"; };
+		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
 		6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipesController.swift; sourceTree = "<group>"; };
 		6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientsController.swift; sourceTree = "<group>"; };
 		6AE34BFB1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductsWithQuantityViewControllerNew.swift; sourceTree = "<group>"; };
@@ -781,6 +791,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A407AB01E32ACBC00D77405 /* addRecipe */ = {
+			isa = PBXGroup;
+			children = (
+				6A407AB11E32ACDF00D77405 /* AddRecipeController.swift */,
+				6A407AB21E32ACDF00D77405 /* AddRecipeController.xib */,
+				6A407ABB1E33A44400D77405 /* AddRecipeIngredientCell.swift */,
+				6A407ABC1E33A44400D77405 /* AddRecipeIngredientCell.xib */,
+			);
+			name = addRecipe;
+			sourceTree = "<group>";
+		};
 		6AE34BE21E2E255C0039A2A8 /* recipes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1231,6 +1252,7 @@
 		EB55675A1A8622E600CD3EC6 /* shoppin_ios */ = {
 			isa = PBXGroup;
 			children = (
+				6A407AB01E32ACBC00D77405 /* addRecipe */,
 				EB85F44F1BD538FC00E19E9B /* quickAdd */,
 				EB1B363C1BC1CFE6003519F2 /* libraryCouldNotLink */,
 				EB0C1B841B3DA2DD00F24C85 /* user */,
@@ -1288,6 +1310,7 @@
 				EBB2CBC91CF20AD50040C619 /* LeftRightBigPaddingConstraint.swift */,
 				EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */,
 				EB4B39C31CEBF05300B41063 /* TopEmptyViewConstraint.swift */,
+				6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -2079,6 +2102,7 @@
 				EBA575651BCECC0000A0A825 /* QuantityView.xib in Resources */,
 				EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */,
 				EBD668041CED4D440055EE0B /* Stats.storyboard in Resources */,
+				6A407AB41E32ACE000D77405 /* AddRecipeController.xib in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
 				EBD667F61CED4C920055EE0B /* AddEditInventory.storyboard in Resources */,
 				EBD668121CED4DE00055EE0B /* ManageProducts.storyboard in Resources */,
@@ -2087,6 +2111,7 @@
 				EB5AD1961BEE2ED400BC6A2F /* EditSectionViewController.xib in Resources */,
 				EB0F5F861B962D2100035175 /* GoogleService-Info.plist in Resources */,
 				EB76A7A51BEE8CD700486F30 /* AddEditPlanItemController.xib in Resources */,
+				6A407ABE1E33A44400D77405 /* AddRecipeIngredientCell.xib in Resources */,
 				EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */,
 				EB4B39E01CED43B400B41063 /* Register.storyboard in Resources */,
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
@@ -2232,6 +2257,7 @@
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
 				EBA9E5EA1C6380ED00A85610 /* SettingsViewController.swift in Sources */,
 				EB75E54B1CA424E1006AAEAF /* NewSharedUserCell.swift in Sources */,
+				6A407AB31E32ACDF00D77405 /* AddRecipeController.swift in Sources */,
 				EB80CE4D1C3F5F10001DF159 /* InventoryAuthChecker.swift in Sources */,
 				EB3E92EF1CD9347F0048DA0D /* EyeView.swift in Sources */,
 				EBB5267D1BEFE21F0002A286 /* HelpCell.swift in Sources */,
@@ -2239,6 +2265,7 @@
 				EB33D5561CDFA2000097AD58 /* CountryHelper.swift in Sources */,
 				6AE34BF01E2EA7880039A2A8 /* IngredientsController.swift in Sources */,
 				EB76A7A41BEE8CD700486F30 /* AddEditPlanItemController.swift in Sources */,
+				6A407ABD1E33A44400D77405 /* AddRecipeIngredientCell.swift in Sources */,
 				EB0587E01BBEDAA600080626 /* NSBundle.swift in Sources */,
 				EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
@@ -2358,6 +2385,7 @@
 				EBB6D7581CD6D67C00F9C711 /* SwipeToIncrementHelper.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
 				EB92082D1C4ECE3D00332332 /* EditBrandController.swift in Sources */,
+				6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */,
 				EBEA0CCF1CA5B24C00E68B81 /* MyAutocompleteCell.swift in Sources */,
 				EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */,
 				EB2433EA1BC5A04D00986897 /* AddItemView.swift in Sources */,

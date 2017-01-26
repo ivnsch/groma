@@ -230,7 +230,7 @@ class RealmPlanProvider: RealmProvider {
                             let updatedCategory = ProductCategory()
                             updatedCategory.uuid = existingPlanItemProduct.category.uuid
                             updatedCategory.name = planItemInput.category
-                            updatedCategory.setColor(planItemInput.categoryColor)
+                            updatedCategory.color = planItemInput.categoryColor
                             existingPlanItemProduct.category = updatedCategory
                             
                             // update the plan item
@@ -257,7 +257,7 @@ class RealmPlanProvider: RealmProvider {
                                         let category = ProductCategory()
                                         category.uuid = NSUUID().uuidString
                                         category.name = planItemInput.category
-                                        category.setColor(planItemInput.categoryColor)
+                                        category.color = planItemInput.categoryColor
                                         return category
                                     }()
                                     

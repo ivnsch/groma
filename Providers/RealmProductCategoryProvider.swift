@@ -206,4 +206,36 @@ class RealmProductCategoryProvider: RealmProvider {
     func removeCategoryDependenciesSync(_ realm: Realm, categoryUuid: String, markForSync: Bool) {
         _ = DBProv.productProvider.removeProductsForCategorySync(realm, categoryUuid: categoryUuid, markForSync: markForSync)
     }
+    
+    
+    // MARK: - Sync
+    
+    func loadCategoryWithUniqueSync(_ name: String) -> ProvResult<ProductCategory?, DatabaseError> {
+        return withRealmSync {realm in
+            let categoryMaybe: ProductCategory? = self.loadSync(realm, filter: ProductCategory.createFilterName(name)).first
+            return .ok(categoryMaybe)
+        }!
+    }
+    
+    func mergeOrCreateCategorySync(name: String, color: UIColor, save: Bool) -> ProvResult<ProductCategory, DatabaseError> {
+        
+        let result: ProvResult<ProductCategory, DatabaseError> = loadCategoryWithUniqueSync(name).map ({
+            if let existingCategory = $0 {
+                existingCategory.name = name
+                existingCategory.color = color
+                return existingCategory
+            } else {
+                return ProductCategory(uuid: UUID().uuidString, name: name, color: color)
+            }
+        })
+        
+        return !save ? result : result.flatMap {category in
+            let writeSuccess: Bool? = self.doInWriteTransactionSync({realm in
+                realm.add(category, update: true)
+                return true
+            })
+            return (writeSuccess ?? false) ? .ok(category) : .err(.unknown)
+        }
+    }
+    
 }

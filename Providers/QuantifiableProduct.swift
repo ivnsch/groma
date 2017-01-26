@@ -16,7 +16,7 @@ public enum ItemUnit: Int {
     
     public var text: String {
         switch self {
-        case .none: return "None"
+        case .none: return ""
         case .gram: return "Gram"
         case .kilogram: return "Kilogram"
         }
@@ -90,7 +90,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
     
     static func createFilter(unique: QuantifiableProductUnique) -> String {
-        return "productOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND unitVal == '\(unique.unit.rawValue)'"
+        return "productOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND unitVal == \(unique.unit.rawValue)"
     }
     
     static func createFilterBrand(_ brand: String) -> String {
@@ -186,7 +186,29 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }()
     
     public var unitText: String {
+        return QuantifiableProduct.unitText(baseQuantity: baseQuantity, unit: unit)
+    }
+    
+    public func unitText(showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+        return QuantifiableProduct.unitText(baseQuantity: baseQuantity, unit: unit, showNoneText: showNoneText, pluralUnit: pluralUnit)
+    }
+    
+    public static func unitText(baseQuantity: Float, unit: ProductUnit, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
         let baseQuantityText = baseQuantity > 1 ? "x\(QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!)" : ""
-        return "\(baseQuantityText)\(unit.shortText)"
+        
+        let unitText: String = {
+            if showNoneText && unit == .none {
+                if pluralUnit {
+                    return trans("recipe_unit_plural")
+                } else {
+                    return trans("recipe_unit_singular")
+                }
+            } else {
+                return unit.shortText
+            }
+        }()
+
+        let unitSeparator = unit == .none ? " " : ""
+        return "\(baseQuantityText)\(unitSeparator)\(unitText)"
     }
 }

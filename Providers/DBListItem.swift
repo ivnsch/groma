@@ -254,21 +254,23 @@ public class ListItem: DBSyncable, Identifiable {
         return "\(createFilterList(list.uuid)) AND productOpt.productOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)' AND uuid != '\(notUuid)'"
     }
     
+    // TODO!!!!!!!!!!!!!!!! is this store / quantifiable / product?
     static func createFilterWithProducts(_ productUuids: [String]) -> String {
         let productUuidsStr: String = productUuids.map{"'\($0)'"}.joined(separator: ",")
         return "productOpt.uuid IN {\(productUuidsStr)}"
     }
     
+    // TODO!!!!!!!!!!!!!!!! is this store / quantifiable / product?
     static func createFilterWithProduct(_ productUuid: String) -> String {
         return "productOpt.uuid == '\(productUuid)'"
     }
     
     static func createFilterWithProductName(_ productName: String) -> String {
-        return "productOpt.name == '\(productName)'"
+        return "productOpt.productOpt.productOpt.name == '\(productName)'"
     }
     
     static func createFilterWithQuantifiableProduct(name: String, unit: ProductUnit) -> String {
-        return "productOpt.name == '\(name)' AND productOpt.unitVal == '\(unit.rawValue)'"
+        return "productOpt.productOpt.productOpt.name == '\(name)' AND productOpt.productOpt.unitVal == '\(unit.rawValue)'"
     }
 
     static func createFilterWithSection(_ sectionUuid: String) -> String {
@@ -510,6 +512,17 @@ public class ListItem: DBSyncable, Identifiable {
     
     public func same(_ listItem: ListItem) -> Bool {
         return self.uuid == listItem.uuid
+    }
+    
+    public func quantityText(status: ListItemStatus) -> String {
+        let unitText = product.product.unitText
+        return "\(quantity(status)) x \(product.product.product.name)\(unitText)"
+    }
+    
+    public func quantityTextWithoutName(status: ListItemStatus) -> String {
+        let statusQuantity = quantity(status)
+        let unitText = product.product.unitText(showNoneText: true, pluralUnit: statusQuantity > 1)
+        return "\(statusQuantity)\(unitText)"
     }
 }
 
