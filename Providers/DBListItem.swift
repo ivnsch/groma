@@ -64,7 +64,7 @@ public class ListItem: DBSyncable, Identifiable {
     // Returns the total price for listitem in a certain status
     // If e.g. we have 2x "tomatos" with a price of 2€ in "todo", we get a total price of 4€ for the status "todo".
     public func totalPrice(_ status: ListItemStatus) -> Float {
-        return Float(quantity(status)) * product.price / product.baseQuantity
+        return Float(quantity(status)) * product.price / product.product.baseQuantityFloat
     }
 
     public override static func primaryKey() -> String? {

@@ -464,6 +464,7 @@ class IngredientsController: UIViewController, ProductsWithQuantityViewControlle
     }
     
     func itemForRow(row: Int) -> ProductWithQuantity2? {
+        guard row < (itemsResult?.count ?? 0) else {QL4("Out of bounds: row: \(row), result count: \(itemsResult?.count). Returning nil"); return nil}
         return itemsResult?[row]
     }
     

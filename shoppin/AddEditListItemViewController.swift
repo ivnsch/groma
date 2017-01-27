@@ -18,7 +18,7 @@ protocol AddEditListItemViewControllerDelegate: class {
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>)
     
-    func onOkTap(_ price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, editingItem: Any?)
+    func onOkTap(_ price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: ProductUnit, brand: String, editingItem: Any?)
     
     func parentViewForAddButton() -> UIView?
     
@@ -381,7 +381,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //                let baseQuantity = scaleInputs?.baseQuantity ?? 1
 //                let unit = scaleInputs?.unit ?? .None
                 // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                let baseQuantity: Float = 1
+                let baseQuantity = "1"
                 let unit = ProductUnit.none
                 
                 // the price from scaleInputs is inserted in price field, so we have it already

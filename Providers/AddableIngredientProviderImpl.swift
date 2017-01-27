@@ -14,7 +14,7 @@ public struct AddableIngredients {
     public let results: Results<Ingredient>
     public let brands: [String: [String]] // ingredient uuid - brands (which are associated with products with the same name as the ingredient product)
     public let units: [ProductUnit] // for now this is all the units that exist in all products
-    public let baseQuantities: [Float] // for now this is all base quantities that exist in all products
+    public let baseQuantities: [String] // for now this is all base quantities that exist in all products
 }
 
 

@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import QorumLogs
 
 public enum ItemUnit: Int {
     case none = 0
@@ -36,7 +37,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     
     public dynamic var uuid: String = ""
     dynamic var productOpt: Product? = Product()
-    public dynamic var baseQuantity: Float = 0
+    public dynamic var baseQuantity: String = "1"
     public dynamic var unitVal: Int = 0
     public dynamic var fav: Int = 0
     
@@ -58,11 +59,28 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         }
     }
     
+    // For text matching (autosuggestions) is more convenient to store as string, so we can let realm do it
+    public var baseQuantityFloat: Float {
+        get {
+            return baseQuantity.floatValue ?? {
+                QL4("Invalid base quantity string: \(baseQuantity)")
+                return 1
+            }()
+        }
+        set(newValue) {
+            baseQuantity = String(newValue)
+        }
+    }
+    
     public override static func primaryKey() -> String? {
         return "uuid"
     }
     
     public convenience init(uuid: String, baseQuantity: Float, unit: ProductUnit, product: Product, fav: Int = 0) {
+        self.init(uuid: uuid, baseQuantity: String(baseQuantity), unit: unit, product: product, fav: fav)
+    }
+    
+    public convenience init(uuid: String, baseQuantity: String, unit: ProductUnit, product: Product, fav: Int = 0) {
         
         self.init()
         
@@ -73,7 +91,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         self.fav = fav
     }
     
-    public func copy(uuid: String? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil, product: Product? = nil, fav: Int? = nil) -> QuantifiableProduct {
+    public func copy(uuid: String? = nil, baseQuantity: String? = nil, unit: ProductUnit? = nil, product: Product? = nil, fav: Int? = nil) -> QuantifiableProduct {
         return QuantifiableProduct(
             uuid: uuid ?? self.uuid,
             baseQuantity: baseQuantity ?? self.baseQuantity,
@@ -134,9 +152,13 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
     
     public override static func ignoredProperties() -> [String] {
-        return ["product", "unit"]
+        return ["product", "unit", "baseQuantityFloat"]
     }
 
+    static func createFilterBaseQuantityContains(_ text: String) -> String {
+        return "baseQuantity CONTAINS[c] '\(text)'"
+    }
+    
     override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
         _ = RealmStoreProductProvider().deleteStoreProductDependenciesSync(realm, storeProductUuid: uuid, markForSync: markForSync)
         realm.delete(self)
@@ -186,11 +208,11 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }()
     
     public var unitText: String {
-        return QuantifiableProduct.unitText(baseQuantity: baseQuantity, unit: unit)
+        return QuantifiableProduct.unitText(baseQuantity: baseQuantityFloat, unit: unit)
     }
     
     public func unitText(showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
-        return QuantifiableProduct.unitText(baseQuantity: baseQuantity, unit: unit, showNoneText: showNoneText, pluralUnit: pluralUnit)
+        return QuantifiableProduct.unitText(baseQuantity: baseQuantityFloat, unit: unit, showNoneText: showNoneText, pluralUnit: pluralUnit)
     }
     
     public static func unitText(baseQuantity: Float, unit: ProductUnit, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {

@@ -22,7 +22,7 @@ public struct ProductUnique {
     }
 }
 
-public typealias QuantifiableProductUnique = (name: String, brand: String, unit: ProductUnit, baseQuantity: Float)
+public typealias QuantifiableProductUnique = (name: String, brand: String, unit: ProductUnit, baseQuantity: String)
 //public struct QuantifiableProductUnique {
 //    let name: String
 //    let brand: String
@@ -40,7 +40,7 @@ public struct ProductPrototype {
     public var categoryColor: UIColor
     public var brand: String
     
-    public var baseQuantity: Float
+    public var baseQuantity: String
     public var unit: ProductUnit
 
     var productUnique: ProductUnique {
@@ -52,7 +52,7 @@ public struct ProductPrototype {
     }
     
     // TODO!!!!!!!!!!!!! remove defaults
-    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: Float = 1, unit: ProductUnit = .none) {
+    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: String = "1", unit: ProductUnit = .none) {
         self.name = name
         self.category = category
         self.categoryColor = categoryColor
@@ -393,7 +393,42 @@ class RealmProductProvider: RealmProvider {
             if let weakSelf = self {
                 return weakSelf.deleteProductAndDependenciesSync(realm, productUuid: productUuid, markForSync: markForSync)
             } else {
-                print("WARN: RealmListItemProvider.deleteProductAndDependencies: self is nil")
+                return false
+            }
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func deleteProductsAndDependencies(name: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            if let weakSelf = self {
+                return weakSelf.deleteProductsAndDependenciesSync(realm, productName: name, markForSync: markForSync)
+            } else {
+                return false
+            }
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func deleteProductsAndDependencies(base: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            if let weakSelf = self {
+                return weakSelf.deleteProductsAndDependenciesSync(realm, base: base, markForSync: markForSync)
+            } else {
+                return false
+            }
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func deleteProductsAndDependencies(unit: ProductUnit, markForSync: Bool, handler: @escaping (Bool) -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            if let weakSelf = self {
+                return weakSelf.deleteProductsAndDependenciesSync(realm, unit: unit, markForSync: markForSync)
+            } else {
                 return false
             }
             }, finishHandler: {success in
@@ -414,6 +449,33 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
+    // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteProductsAndDependenciesSync(_ realm: Realm, productName: String, markForSync: Bool) -> Bool {
+        let productsResult = realm.objects(Product.self).filter(Product.createFilterName(productName))
+        for product in productsResult {
+            deleteProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
+        }
+        return true
+    }
+    
+    // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteProductsAndDependenciesSync(_ realm: Realm, base: String, markForSync: Bool) -> Bool {
+        let productsResult = realm.objects(Product.self).filter(Product.createFilter(base: base))
+        for product in productsResult {
+            deleteProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
+        }
+        return true
+    }
+    
+    // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteProductsAndDependenciesSync(_ realm: Realm, unit: ProductUnit, markForSync: Bool) -> Bool {
+        let productsResult = realm.objects(Product.self).filter(Product.createFilter(unit: unit))
+        for product in productsResult {
+            deleteProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
+        }
+        return true
+    }
+    
     func deleteProductAndDependenciesSync(_ realm: Realm, dbProduct: Product, markForSync: Bool) -> Bool {
         if deleteProductDependenciesSync(realm, productUuid: dbProduct.uuid, markForSync: markForSync) {
             if markForSync {
@@ -431,13 +493,11 @@ class RealmProductProvider: RealmProvider {
     func deleteProductDependenciesSync(_ realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
         
         let quantifiableProductsResult = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilterProduct(productUuid))
-        // Commented because structural changes
-//        if markForSync {
-//            let toRemoteInventoryItems = Array(inventoryResult.map{DBRemoveInventoryItem($0)})
-//            saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
-//        }
-        realm.delete(quantifiableProductsResult)
 
+        for quantifiableProduct in quantifiableProductsResult {
+            deleteQuantifiableProductAndDependenciesSync(realm, quantifiableProductUuid: quantifiableProduct.uuid, markForSync: markForSync)
+        }
+        
         return true
     }
     
@@ -485,6 +545,14 @@ class RealmProductProvider: RealmProvider {
         _ = DBProv.storeProductProvider.deleteStoreProductsAndDependenciesForProductSync(realm, productUuid: quantifiableProductUuid, markForSync: markForSync)
         
         _ = DBProv.groupItemProvider.removeGroupItemsForProductSync(realm, productUuid: quantifiableProductUuid, markForSync: markForSync)
+
+        let ingredientsResult = realm.objects(Ingredient.self).filter(Ingredient.createFilterProduct(quantifiableProductUuid))
+        // Commented because structural changes - there are no thombstones for quantifiable products as this class is new and it seems we will not use the custom backend anymore
+//        if markForSync {
+//            let toRemoteInventoryItems = Array(inventoryResult.map{DBRemoveInventoryItem($0)})
+//            saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
+//        }
+        realm.delete(ingredientsResult)
         
         let inventoryResult = realm.objects(InventoryItem.self).filter(InventoryItem.createFilter(quantifiableProductUuid: quantifiableProductUuid))
         if markForSync {
@@ -953,21 +1021,54 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func allBaseQuantities(_ handler: @escaping ([Float]?) -> Void) {
-        withRealm({(realm) -> [Float] in
-            let units = realm.objects(QuantifiableProduct.self).flatMap{quantifiableProduct in
+    func allBaseQuantities(_ handler: @escaping ([String]?) -> Void) {
+        withRealm({(realm) -> [String] in
+            let baseQuanties = realm.objects(QuantifiableProduct.self).flatMap{quantifiableProduct in
                 quantifiableProduct.baseQuantity
             }
-            return Array(units).distinct()
+            return Array(baseQuanties).distinct()
             
-        }) { unitsMaybe in
-            if unitsMaybe == nil {
+        }) { baseQuantiesMaybe in
+            if baseQuantiesMaybe == nil {
                 QL4("Couldn't retrieve base quantities")
             }
-            handler(unitsMaybe ?? [])
+            handler(baseQuantiesMaybe ?? [])
         }
     }
-
+    
+    func baseQuantitiesContainingText(_ text: String, _ handler: @escaping ([String]) -> Void) {
+        background({
+            do {
+                let realm = try Realm()
+                // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
+                // .sorted("baseQuantity", ascending: true)
+                let baseQuantities = Array(Set(realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilterBaseQuantityContains(text)).map{$0.baseQuantity})).sorted()
+                return baseQuantities
+            } catch let e {
+                QL4("Couldn't load stores, returning empty array. Error: \(e)")
+                return []
+            }
+        }) {(result: [String]) in
+            handler(result)
+        }
+    }
+    
+    func unitsContainingText(_ text: String, _ handler: @escaping ([String]) -> Void) {
+        background({
+            do {
+                let realm = try Realm()
+                // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
+                // .sorted("unitVal", ascending: true)
+                let baseQuantities = Array(Set(realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilterBaseQuantityContains(text)).flatMap{ProductUnit(rawValue: $0.unitVal)})).map{$0.shortText}.sorted()
+                return baseQuantities
+            } catch let e {
+                QL4("Couldn't load stores, returning empty array. Error: \(e)")
+                return []
+            }
+        }) {(result: [String]) in
+            handler(result)
+        }
+    }
     
     // MARK: - Sync
     

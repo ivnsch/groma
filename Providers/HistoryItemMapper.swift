@@ -12,7 +12,7 @@ class HistoryItemMapper {
     
     class func historyItemWithRemote(_ remoteHistoryItem: RemoteHistoryItem, inventory: DBInventory, product: Product, user: DBSharedUser) -> HistoryItem {
         // Structural changes. Quick fix to compile.
-        let dummy = QuantifiableProduct(uuid: "123", baseQuantity: 1, unit: .none, product: product)
+        let dummy = QuantifiableProduct(uuid: "123", baseQuantity: "1", unit: .none, product: product)
         
         return HistoryItem(
             uuid: remoteHistoryItem.uuid,

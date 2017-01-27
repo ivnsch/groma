@@ -56,6 +56,13 @@ public protocol ProductProvider {
     
     func delete(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
+    func delete(productName: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
+
+    func deleteProductsWith(base: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
+
+    func deleteProductsWith(unit: ProductUnit, _ handler: @escaping (ProviderResult<Any>) -> Void)
+
+    
     func incrementFav(quantifiableProductUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
     func loadProduct(_ name: String, brand: String, handler: @escaping (ProviderResult<Product>) -> ())
@@ -89,5 +96,9 @@ public protocol ProductProvider {
     
     func allUnits(_ handler: @escaping (ProviderResult<[ProductUnit]>) -> Void)
     
-    func allBaseQuantities(_ handler: @escaping (ProviderResult<[Float]>) -> Void)
+    func allBaseQuantities(_ handler: @escaping (ProviderResult<[String]>) -> Void)
+    
+    func baseQuantitiesContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> Void)
+    
+    func unitsContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> Void)
 }

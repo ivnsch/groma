@@ -41,7 +41,7 @@ public class StoreProduct: DBSyncable, Identifiable {
     
     
     // TODO remove
-    public dynamic var baseQuantity: Float = 0
+    public dynamic var baseQuantity: String = ""
     public dynamic var unitVal: Int = 0
     
     
@@ -196,7 +196,7 @@ public class StoreProduct: DBSyncable, Identifiable {
     
     // This function doesn't really have to here but don't have a better place yet
     // A key that can be used e.g. in dictionaries
-    static func uniqueDictKey(_ name: String, brand: String, store: String, unit: ProductUnit, baseQuantity: Float) -> String {
+    static func uniqueDictKey(_ name: String, brand: String, store: String, unit: ProductUnit, baseQuantity: String) -> String {
         return name + "-.9#]A-\(brand)-.9#]A-\(store)-.9#]A-\(unit)-.9#]A-\(baseQuantity)" // insert some random text in between to prevent possible cases where name or brand text matches what would be a combination, e.g. a product is called "soapMyBrand" has empty brand and other product is called "soap" and has a brand "MyBrand" these are different but simple text concatenation would result in the same key.
     }
     

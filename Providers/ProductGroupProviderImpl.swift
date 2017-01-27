@@ -360,7 +360,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
             // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
             
             // TODO units? for now doesn't matter since we are not going to continue using groups
-            let prototype = ProductPrototype(name: input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand, baseQuantity: 1, unit: .none)
+            let prototype = ProductPrototype(name: input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand, baseQuantity: "1", unit: .none)
             Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
                 
                 if let product = result.sucessResult {

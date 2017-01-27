@@ -129,6 +129,14 @@ public class Product: DBSyncable, Identifiable {
         return "name = '\(name)'"
     }
     
+    static func createFilter(base: String) -> String {
+        return "baseQuantity = '\(base)'"
+    }
+
+    static func createFilter(unit: ProductUnit) -> String {
+        return "unitVal = '\(unit.rawValue)'"
+    }
+    
     static func createFilterNameContains(_ text: String) -> String {
         return "name CONTAINS[c] '\(text)'"
     }

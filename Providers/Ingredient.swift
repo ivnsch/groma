@@ -70,7 +70,7 @@ public final class Ingredient: Object, ProductWithQuantity2 {
     }
     
     static func createFilter(recipeUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique) -> String {
-        return "\(createFilter(recipeUuid: recipeUuid)) AND productOpt.productOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unitVal = \(unique.unit.rawValue) AND productOpt.baseQuantity = \(unique.baseQuantity)"
+        return "\(createFilter(recipeUuid: recipeUuid)) AND productOpt.productOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unitVal = \(unique.unit.rawValue) AND productOpt.baseQuantity = '\(unique.baseQuantity)'"
     }
     
     static func createFilter(recipeUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique, notUuid: String) -> String {

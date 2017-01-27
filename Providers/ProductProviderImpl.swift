@@ -177,25 +177,43 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func delete(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        DBProv.productProvider.deleteProductAndDependencies(productUuid, markForSync: true) {[weak self] saved in
+        DBProv.productProvider.deleteProductAndDependencies(productUuid, markForSync: true) {saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
 
             // Disabled while impl. realm sync
-            if remote {
-                self?.remoteProvider.deleteProduct(productUuid) {remoteResult in
-                    if remoteResult.success {
-                        DBProv.productProvider.clearProductTombstone(productUuid) {removeTombstoneSuccess in
-                            if !removeTombstoneSuccess {
-                                QL4("Couldn't delete tombstone for product: \(productUuid)")
-                            }
-                        }
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                            print("Error: removing product in remote: \(productUuid), result: \(remoteResult)")
-                        }
-                    }
-                }
-            }
+//            if remote {
+//                self?.remoteProvider.deleteProduct(productUuid) {remoteResult in
+//                    if remoteResult.success {
+//                        DBProv.productProvider.clearProductTombstone(productUuid) {removeTombstoneSuccess in
+//                            if !removeTombstoneSuccess {
+//                                QL4("Couldn't delete tombstone for product: \(productUuid)")
+//                            }
+//                        }
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+//                            print("Error: removing product in remote: \(productUuid), result: \(remoteResult)")
+//                        }
+//                    }
+//                }
+//            }
+        }
+    }
+    
+    func delete(productName: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.productProvider.deleteProductsAndDependencies(name: productName, markForSync: true) {saved in
+            handler(ProviderResult(status: saved ? .success : .databaseUnknown))
+        }
+    }
+    
+    func deleteProductsWith(base: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.productProvider.deleteProductsAndDependencies(base: base, markForSync: true) {saved in
+            handler(ProviderResult(status: saved ? .success : .databaseUnknown))
+        }
+    }
+    
+    func deleteProductsWith(unit: ProductUnit, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.productProvider.deleteProductsAndDependencies(unit: unit, markForSync: true) {saved in
+            handler(ProviderResult(status: saved ? .success : .databaseUnknown))
         }
     }
     
@@ -418,7 +436,7 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func allBaseQuantities(_ handler: @escaping (ProviderResult<[Float]>) -> Void) {
+    func allBaseQuantities(_ handler: @escaping (ProviderResult<[String]>) -> Void) {
         DBProv.productProvider.allBaseQuantities {baseQuantitiesMaybe in
             if let baseQuantities = baseQuantitiesMaybe {
                 handler(ProviderResult(status: .success, sucessResult: baseQuantities))
@@ -428,5 +446,16 @@ class ProductProviderImpl: ProductProvider {
             }
         }
     }
+
+    func baseQuantitiesContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> Void) {
+        DBProv.productProvider.baseQuantitiesContainingText(text) {stores in
+            handler(ProviderResult(status: .success, sucessResult: stores))
+        }
+    }
     
+    func unitsContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> Void) {
+        DBProv.productProvider.unitsContainingText(text) {units in
+            handler(ProviderResult(status: .success, sucessResult: units))
+        }
+    }
 }

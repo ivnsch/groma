@@ -11,10 +11,14 @@ import Foundation
 public class StoreProductInput {
     
     public let price: Float // Pass -1 to signalize no update of price if store product already exists. TODO use optional
-    public let baseQuantity: Float
+    public let baseQuantity: String
     public let unit: ProductUnit
     
-    public init(price: Float, baseQuantity: Float, unit: ProductUnit) {
+    public convenience init(price: Float, baseQuantity: Float, unit: ProductUnit) {
+        self.init(price: price, baseQuantity: String(baseQuantity), unit: unit)
+    }
+    
+    public init(price: Float, baseQuantity: String, unit: ProductUnit) {
         self.price = price
         self.baseQuantity = baseQuantity
         self.unit = unit

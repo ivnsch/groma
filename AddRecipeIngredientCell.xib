@@ -56,6 +56,10 @@
                                 <integer key="value" value="40"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
+                        <connections>
+                            <outlet property="autoCompleteDataSource" destination="KGk-i7-Jjw" id="hby-T8-J2l"/>
+                            <outlet property="autoCompleteDelegate" destination="KGk-i7-Jjw" id="PwK-iQ-Dkf"/>
+                        </connections>
                     </textField>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Ivan's Farms GmbH" placeholder="Brand (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="wf2-UD-agf" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
                         <rect key="frame" x="25" y="101" width="322" height="40"/>
@@ -73,8 +77,12 @@
                                 <integer key="value" value="40"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
+                        <connections>
+                            <outlet property="autoCompleteDataSource" destination="KGk-i7-Jjw" id="NQZ-lw-IOU"/>
+                            <outlet property="autoCompleteDelegate" destination="KGk-i7-Jjw" id="hkH-AA-kvi"/>
+                        </connections>
                     </textField>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="500" placeholder="Base" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="j9B-Z2-Wvv" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="500" placeholder="Base" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="j9B-Z2-Wvv" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
                         <rect key="frame" x="213" y="151" width="80" height="40"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="80" id="8ZB-3n-8p5"/>
@@ -91,6 +99,10 @@
                                 <integer key="value" value="40"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
+                        <connections>
+                            <outlet property="autoCompleteDataSource" destination="KGk-i7-Jjw" id="Ln1-D5-HaB"/>
+                            <outlet property="autoCompleteDelegate" destination="KGk-i7-Jjw" id="mTS-ZM-hLd"/>
+                        </connections>
                     </textField>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iiY-8r-gh8" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
                         <rect key="frame" x="25" y="151" width="80" height="40"/>
@@ -134,7 +146,7 @@
                             </constraint>
                         </constraints>
                     </view>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="g" placeholder="Unit" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="HJu-rB-WRe" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="g" placeholder="Unit" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="HJu-rB-WRe" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
                         <rect key="frame" x="119" y="151" width="80" height="40"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="80" id="6T4-cw-CEP"/>
@@ -151,6 +163,10 @@
                                 <integer key="value" value="40"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
+                        <connections>
+                            <outlet property="autoCompleteDataSource" destination="KGk-i7-Jjw" id="Yeo-nF-hDH"/>
+                            <outlet property="autoCompleteDelegate" destination="KGk-i7-Jjw" id="CyB-Jm-NPg"/>
+                        </connections>
                     </textField>
                 </subviews>
                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

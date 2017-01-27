@@ -43,7 +43,7 @@ class AddRecipeController: UIViewController {
     // If they were to change in the background it's not critical, as the user submitting the ingredients will re-create products with any brands/units/base quantities that could have been deleted/changed(which is equivalent to a delete, being the brand/unit/base its own "unique")
     fileprivate var ingredientsToBrands = Dictionary<String, [String]>()
     fileprivate var units: [ProductUnit] = []
-    fileprivate var baseQuantities: [Float] = []
+    fileprivate var baseQuantities: [String] = []
     
     weak var delegate: AddRecipeControllerDelegate?
     
@@ -58,6 +58,8 @@ class AddRecipeController: UIViewController {
         loadIngredients()
         
         let tap = UITapGestureRecognizer()
+        tap.cancelsTouchesInView = false
+        tap.delegate = self
         tap.addTarget(self, action: #selector(onTapView(_:)))
         view.addGestureRecognizer(tap)
     }
@@ -218,11 +220,90 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         models[indexPath.row].quantity = quantity
     }
     
-    func onUpdate(baseQuantity: Float, indexPath: IndexPath) {
+    func onUpdate(baseQuantity: String, indexPath: IndexPath) {
         models[indexPath.row].productPrototype.baseQuantity = baseQuantity
     }
     
     func onUpdate(unit: ProductUnit, indexPath: IndexPath) {
         models[indexPath.row].productPrototype.unit = unit
+    }
+    
+    
+    func productNamesContaining(text: String, handler: @escaping ([String]) -> Void) {
+        Prov.productProvider.products(text, range: NSRange(location: 0, length: 10000), sortBy: .alphabetic, successHandler {tuple in
+            let names = tuple.products.map{$0.name}
+            handler(names)
+        })
+    }
+    
+    func brandsContaining(text: String, handler: @escaping ([String]) -> Void) {
+        Prov.brandProvider.brandsContainingText(text, successHandler{brands in
+            handler(brands)
+        })
+    }
+    
+    func baseQuantitiesContaining(text: String, handler: @escaping ([String]) -> Void) {
+        Prov.productProvider.baseQuantitiesContainingText(text, successHandler{baseQuantities in
+            handler(baseQuantities)
+        })
+    }
+    
+    func unitsContaining(text: String, handler: @escaping ([String]) -> Void) {
+        Prov.productProvider.unitsContainingText(text, successHandler{units in
+            handler(units)
+        })
+    }
+    
+    func delete(productName: String, handler: @escaping () -> Void) {
+        Prov.productProvider.delete(productName: productName, successHandler{
+            handler()
+        })
+    }
+    
+    func delete(brand: String, handler: @escaping () -> Void) {
+        ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_brand_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+            Prov.brandProvider.removeProductsWithBrand(brand, remote: true, weakSelf.successHandler {
+                AlertPopup.show(message: trans("popup_was_removed", brand), controller: weakSelf)
+                handler()
+            })
+        })
+    }
+    
+    func delete(unit: String, handler: @escaping () -> Void) {
+        guard let unitEnum = ProductUnit.fromString(unit) else {QL4("Invalid unit input: \(unit)"); handler(); return} // TODO!!!!!!!!!!!!!!! remove this after non enum units
+        
+        ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_unit_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+            Prov.productProvider.deleteProductsWith(unit: unitEnum, weakSelf.successHandler {
+                AlertPopup.show(message: trans("popup_was_removed", unit), controller: weakSelf)
+                handler()
+            })
+        })
+    }
+    
+    func delete(baseQuantity: String, handler: @escaping () -> Void) {
+        ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_base_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+            Prov.productProvider.deleteProductsWith(base: baseQuantity, weakSelf.successHandler {
+                AlertPopup.show(message: trans("popup_was_removed", baseQuantity), controller: weakSelf)
+                handler()
+            })
+        })
+    }
+    
+}
+
+// MARK: - Touch
+
+extension AddRecipeController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    /// Tap to dismiss shouldn't block the autocompletion cells to receive touch
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if (touch.view.map{$0.hasAncestor(type: MyAutocompleteCell.self)} ?? false) {
+            return false
+        }
+        return true
     }
 }
