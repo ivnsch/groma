@@ -1253,4 +1253,83 @@ class ListItemProviderImpl: ListItemProvider {
             handler(ProviderResult(status: .success))
         }
     }
+    
+    
+    
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // New
+    
+    func addNew(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void) {
+        if let tuple = DBProv.listItemProvider.addSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData) {
+            handler(ProviderResult(status: .success, sucessResult: tuple))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
+    func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void) {
+        if let tuples = DBProv.listItemProvider.addSync(listItemInputs: listItemInputs, list: list, status: status, realmData: realmData) {
+            handler(ProviderResult(status: .success, sucessResult: tuples))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
+    func addNew(listItem: ListItem, section: Section, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        fatalError("does this need to be in provider (probably only in realm provider) if no remove")
+        //DBProv.listItemProvider.addSync(listItem: listItem, section: section, notificationToken: notificationToken) {success in
+        //    handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        //}
+    }
+    
+    // TODO rename add or increment
+    // TODO maybe remove references to section, list of list items so we don't have to pass them here
+    func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Int, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void) {
+       
+        if let tuple = DBProv.listItemProvider.addSync(quantifiableProduct: quantifiableProduct, store: store, list: list, quantity: quantity, status: status, realmData: realmData) {
+            handler(ProviderResult(status: .success, sucessResult: tuple))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
+    func switchStatusNew(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void) {
+        if let result = DBProv.listItemProvider.switchSync(listItem: listItem, from: from, srcStatus: srcStatus, dstStatus: dstStatus, realmData: realmData) {
+            handler(ProviderResult(status: .success, sucessResult: result))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
+    func deleteNew(indexPath: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<DeleteListItemResult>) -> Void) {
+        if let result = DBProv.listItemProvider.deleteSync(indexPath: indexPath, status: status, list: list, realmData: realmData) {
+            handler(ProviderResult(status: .success, sucessResult: result))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
+    func move(from: IndexPath, to: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<MoveListItemResult>) -> Void) {
+        if let result = DBProv.listItemProvider.move(from: from, to: to, status: status, list: list, realmData: realmData) {
+            handler(ProviderResult(status: .success, sucessResult: result))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+
+    func calculateCartStashAggregate(list: List, _ handler: @escaping (ProviderResult<ListItemsCartStashAggregate>) -> Void) {
+        let listUuid = list.uuid // We retrieve list in background, to not get Realm thread exception
+        background({
+            return DBProv.listItemProvider.calculateCartStashAggregate(listUuid: listUuid)
+        }) {aggregateMaybe in
+            if let aggregate = aggregateMaybe {
+                handler(ProviderResult(status: .success, sucessResult: aggregate))
+            } else {
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
+    }
 }

@@ -47,9 +47,16 @@ extension UIStoryboard {
     class func todoItemsViewController() -> TodoListItemsController {
         return listItemsStoryboard().instantiateViewController(withIdentifier: "TodoListItemsController") as! TodoListItemsController
     }
+    class func todoItemsViewControllerNew() -> TodoListItemsControllerNew {
+        return listItemsStoryboard().instantiateViewController(withIdentifier: "TodoListItemsController") as! TodoListItemsControllerNew
+    }
     
     class func listItemsTableViewController() -> ListItemsTableViewController {
         return listItemsStoryboard().instantiateViewController(withIdentifier: "ListItemsTableViewController") as! ListItemsTableViewController
+    }
+    class func listItemsTableViewControllerNew() -> ListItemsTableViewControllerNew {
+        // TODO
+        return listItemsStoryboard().instantiateViewController(withIdentifier: "ListItemsTableViewController") as! ListItemsTableViewControllerNew
     }
     
     // MARK: - Groups
@@ -177,6 +184,10 @@ extension UIStoryboard {
     
     class func reorderSectionTableViewController() -> ReorderSectionTableViewController {
         return reorderSectionsStoryboard().instantiateViewController(withIdentifier: "ReorderSectionTableViewController") as! ReorderSectionTableViewController
+    }
+    
+    class func reorderSectionTableViewControllerNew() -> ReorderSectionTableViewControllerNew {
+        return reorderSectionsStoryboard().instantiateViewController(withIdentifier: "ReorderSectionTableViewController") as! ReorderSectionTableViewControllerNew
     }
     
     // MARK: Add edit list

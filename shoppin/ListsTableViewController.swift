@@ -193,7 +193,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
-        let listItemsController = UIStoryboard.todoItemsViewController()
+        let listItemsController = UIStoryboard.todoItemsViewControllerNew()
         listItemsController.view.frame = view.frame
         addChildViewController(listItemsController)
         listItemsController.expandDelegate = self

@@ -22,6 +22,8 @@ public class Section: DBSyncable, Identifiable {
     public dynamic var doneOrder: Int = 0
     public dynamic var stashOrder: Int = 0
 
+    public let listItems = RealmSwift.List<ListItem>()
+    
     public var color: UIColor {
         get {
             return UIColor(hexString: bgColorHex)

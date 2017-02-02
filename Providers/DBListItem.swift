@@ -21,18 +21,25 @@ public typealias ListItemStatusOrder = (status: ListItemStatus, order: Int) // T
 
 public class ListItem: DBSyncable, Identifiable {
     
+    // TODO maybe remove references to Section and List
+    
     public dynamic var uuid: String = ""
     dynamic var sectionOpt: Section? = Section()
     dynamic var productOpt: StoreProduct? = StoreProduct()
     dynamic var listOpt: List? = List()
     public dynamic var note: String = "" // TODO review if we can use optionals in realm, if not check if in newer version
     
+    
+    // TODO!!!!!!!!!!!!!!!!! remove this
     public dynamic var todoQuantity: Int = 0
     public dynamic var todoOrder: Int = 0
     public dynamic var doneQuantity: Int = 0
     public dynamic var doneOrder: Int = 0
     public dynamic var stashQuantity: Int = 0
     public dynamic var stashOrder: Int = 0
+    
+    
+    public dynamic var quantity: Int = 0
     
     public var list: List {
         get {
@@ -66,10 +73,26 @@ public class ListItem: DBSyncable, Identifiable {
     public func totalPrice(_ status: ListItemStatus) -> Float {
         return Float(quantity(status)) * product.price / product.product.baseQuantityFloat
     }
-
+    
     public override static func primaryKey() -> String? {
         return "uuid"
     }
+    
+
+    // TODO use only this initializer?
+    public convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String?, quantity: Int) {
+        
+        self.init()
+        
+        self.uuid = uuid
+        self.product = product
+        self.section = section
+        self.list = list
+        self.note = note ?? ""
+        
+        self.quantity = quantity
+    }
+    
     
     public convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String?, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
@@ -270,12 +293,25 @@ public class ListItem: DBSyncable, Identifiable {
     }
     
     static func createFilterWithQuantifiableProduct(name: String, unit: ProductUnit) -> String {
-        return "productOpt.productOpt.productOpt.name == '\(name)' AND productOpt.productOpt.unitVal == '\(unit.rawValue)'"
+        return "productOpt.productOpt.productOpt.name == '\(name)' AND productOpt.productOpt.unitVal == \(unit.rawValue)"
     }
 
     static func createFilterWithSection(_ sectionUuid: String) -> String {
         return "sectionOpt.uuid == '\(sectionUuid)'"
     }
+    
+    
+    
+    
+    
+    
+    
+    static func createFilter(quantifiableProductUnique: QuantifiableProductUnique) -> String {
+        return "productOpt.productOpt.productOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitVal == \(quantifiableProductUnique.unit.rawValue) AND productOpt.productOpt.baseQuantity == '\(quantifiableProductUnique.baseQuantity)'"
+    }
+   
+    
+    
     
     // Finds list items that have the same product names as listItems and are in the same list
     // WARN: Assumes all the list items belong to the same list (list uuid of first list item is used)
@@ -359,7 +395,7 @@ public class ListItem: DBSyncable, Identifiable {
     }
     
     public override static func ignoredProperties() -> [String] {
-        return ["list", "section", "product"]
+        return ["list", "section", "product", "swiped"]
     }
     
     static func timestampUpdateDict(_ uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
@@ -510,6 +546,16 @@ public class ListItem: DBSyncable, Identifiable {
         return copy(product: updatedStoreProduct, note: nil)
     }
     
+    public func incrementQuantity(_ delta: Int) {
+        let updatedQuantity = quantity + delta
+        if updatedQuantity >= 0 {
+            quantity = quantity + delta
+        } else {
+            QL1("Trying to decrement quantity to less than zero. Current quantity: \(quantity), delta: \(delta). Setting it to 0.")
+            quantity = 0
+        }
+    }
+    
     public func same(_ listItem: ListItem) -> Bool {
         return self.uuid == listItem.uuid
     }
@@ -524,6 +570,11 @@ public class ListItem: DBSyncable, Identifiable {
         let unitText = product.product.unitText(showNoneText: true, pluralUnit: statusQuantity > 1)
         return "\(statusQuantity)\(unitText)"
     }
+    
+    // MARK: - UI additions
+    // For now we will avoid having to create additional classes to manage UI related state and will just put it here
+    
+    public var swiped: Bool = false // rename in open?
 }
 
 // convenience (redundant) holder to avoid having to iterate through listitems to find unique products, sections, list

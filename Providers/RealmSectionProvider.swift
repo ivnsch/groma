@@ -10,7 +10,19 @@ import Foundation
 import RealmSwift
 import QorumLogs
 
+
+public struct AddSectionResult {
+    public let section: Section
+    public let isNew: Bool
+    public let index: Int
+}
+
+
 class RealmSectionProvider: RealmProvider {
+    
+    func sections(list: List, handler: @escaping (ProvResult<RealmSwift.List<Section>, DatabaseError>) -> Void) {
+        handler(loadSectionsSync(list: list))
+    }
     
     func loadSectionWithUuid(_ uuid: String, handler: @escaping (Section?) -> Void) {
         handler(loadFirstSync(filter: Section.createFilter(uuid)))
@@ -27,6 +39,15 @@ class RealmSectionProvider: RealmProvider {
 
     func loadSectionsSync(_ names: [String], list: List) -> ProvResult<Results<Section>?, DatabaseError> {
         return .ok(loadSync(filter: Section.createFilterWithNames(names, listUuid: list.uuid)))
+    }
+    
+    func loadSectionsSync(list: List) -> ProvResult<RealmSwift.List<Section>, DatabaseError> {
+        fatalError("Remove this?")
+//        if let list: RealmSwift.List<Section> = loadSync(filter: Section.createFilterList(list.uuid)) { // if let - backwards compatibility (TODO return Results also in RealmProvider methods)
+//            return .ok(sections)
+//        } else {
+//            return .err(.unknown)
+//        }
     }
     
     func loadSections(_ names: [String], list: List, handler: @escaping (Results<Section>?) -> Void) {
@@ -189,24 +210,64 @@ class RealmSectionProvider: RealmProvider {
         })
     }
     
-    func mergeOrCreateSectionSync(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List) -> ProvResult<Section, DatabaseError> {
+    // add/update and save (TODO better method name)
+    func mergeOrCreateSectionSync(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, realmData: RealmData?, doTransaction: Bool = true) -> ProvResult<AddSectionResult, DatabaseError> {
         
-        let result: ProvResult<Section, DatabaseError> = loadSectionSync(sectionName, list: list).map ({
-            if let section = $0 {
-                return section.copy(color: sectionColor)
-            } else {
-                return Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: status, order: 123)) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
-            }
-        })
-        
-        return result.flatMap {section in
-            let writeSuccess: Bool? = self.doInWriteTransactionSync({realm in
-                realm.add(section, update: true)
-                return true
-            })
+        let sections = list.sections(status: status)
+
+        func transactionContent(realm: Realm) -> ProvResult<AddSectionResult, DatabaseError>? {
             
-            return (writeSuccess ?? false) ? .ok(section) : .err(.unknown)
+            let addResult: AddSectionResult = {
+                if let section = sections.filter(Section.createFilterWithName(sectionName)).first, let index = sections.index(of: section) {
+                    section.color = sectionColor
+                    realm.add(section, update: true) // TODO is this necessary?
+                    return AddSectionResult(section: section, isNew: false, index: index)
+                } else {
+                    let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: status, order: 123)) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
+                    sections.append(section)
+                    return AddSectionResult(section: section, isNew: true, index: sections.count - 1)
+                }
+            }()
+            
+            return .ok(addResult)
         }
+        
+        let resultMaybe: ProvResult<AddSectionResult, DatabaseError>? = {
+            if doTransaction {
+                return self.doInWriteTransactionSync(realmData: realmData) {realm in
+                    return transactionContent(realm: realm)
+                }
+            } else {
+                return self.withRealmSync(realm: realmData?.realm) {realm in
+                    return transactionContent(realm: realm)
+                }
+            }
+        }()
+
+        return resultMaybe ?? .err(.unknown)
     }
     
+    public func move(from: Int, to: Int, sections: RealmSwift.List<Section>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: sections.realm) {realm -> Bool in
+            sections.move(from: from, to: to)
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    // MARK: - Sync
+    
+    func getOrCreate(name: String, color: UIColor, list: List, status: ListItemStatus, notificationToken: NotificationToken, realm: Realm) -> Section? {
+        
+        if let section = list.sections(status: status).filter(Section.createFilterWithName(name)).first {
+            return section
+            
+        } else {
+            let section = Section(uuid: UUID().uuidString, name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0)) // TODO!!!!!!!!! remove order from sections
+            return doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: realm, {realm in
+                list.sections(status: status).append(section)
+                return section
+            })
+        }
+    }
 }

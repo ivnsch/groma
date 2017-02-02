@@ -36,4 +36,8 @@ extension ListItemInput {
     func toProductPrototype() -> ProductPrototype {
         return ProductPrototype(name: name, category: section, categoryColor: sectionColor, brand: brand, baseQuantity: storeProductInput.baseQuantity, unit: storeProductInput.unit)
     }
+    
+    var quantifiableProductUnique: QuantifiableProductUnique {
+        return (name: name, brand: brand, unit: storeProductInput.unit, baseQuantity: storeProductInput.baseQuantity)
+    }
 }

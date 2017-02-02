@@ -14,10 +14,15 @@
 		58FBD9B21DDCDA19002242D6 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */; };
 		58FBD9B31DDCDA19002242D6 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */; };
 		58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */; };
+		6A0DE19B1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */; };
+		6A2D506B1E3F5D0300B0F7EA /* ListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */; };
+		6A2D506D1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */; };
+		6A2D506F1E3F611F00B0F7EA /* ListItemCellNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */; };
 		6A407AB31E32ACDF00D77405 /* AddRecipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407AB11E32ACDF00D77405 /* AddRecipeController.swift */; };
 		6A407AB41E32ACE000D77405 /* AddRecipeController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A407AB21E32ACDF00D77405 /* AddRecipeController.xib */; };
 		6A407ABD1E33A44400D77405 /* AddRecipeIngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407ABB1E33A44400D77405 /* AddRecipeIngredientCell.swift */; };
 		6A407ABE1E33A44400D77405 /* AddRecipeIngredientCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A407ABC1E33A44400D77405 /* AddRecipeIngredientCell.xib */; };
+		6A66D3461E413A300028240C /* TodoListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */; };
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
 		6AE34BE41E2E25B80039A2A8 /* RecipesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */; };
 		6AE34BF01E2EA7880039A2A8 /* IngredientsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */; };
@@ -376,10 +381,15 @@
 		58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
 		58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
+		6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderSectionTableViewControllerNew.swift; sourceTree = "<group>"; };
+		6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsControllerNew.swift; sourceTree = "<group>"; };
+		6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsTableViewControllerNew.swift; sourceTree = "<group>"; };
+		6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellNew.swift; sourceTree = "<group>"; };
 		6A407AB11E32ACDF00D77405 /* AddRecipeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecipeController.swift; sourceTree = "<group>"; };
 		6A407AB21E32ACDF00D77405 /* AddRecipeController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddRecipeController.xib; sourceTree = "<group>"; };
 		6A407ABB1E33A44400D77405 /* AddRecipeIngredientCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecipeIngredientCell.swift; sourceTree = "<group>"; };
 		6A407ABC1E33A44400D77405 /* AddRecipeIngredientCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddRecipeIngredientCell.xib; sourceTree = "<group>"; };
+		6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
 		6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipesController.swift; sourceTree = "<group>"; };
 		6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientsController.swift; sourceTree = "<group>"; };
@@ -791,6 +801,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A2D50691E3F5CF100B0F7EA /* listItems */ = {
+			isa = PBXGroup;
+			children = (
+				6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */,
+				6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */,
+				6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */,
+				6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */,
+				6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */,
+			);
+			name = listItems;
+			sourceTree = "<group>";
+		};
 		6A407AB01E32ACBC00D77405 /* addRecipe */ = {
 			isa = PBXGroup;
 			children = (
@@ -1057,6 +1079,7 @@
 		EB20FC021A59986C0058103B /* list */ = {
 			isa = PBXGroup;
 			children = (
+				6A2D50691E3F5CF100B0F7EA /* listItems */,
 				EBDF8D0D1BFB7DC700F6830A /* topbar */,
 				EB5AD1921BEE2EA500BC6A2F /* editSection */,
 				EB85F47D1BD6ED9500E19E9B /* addEditListItem */,
@@ -2245,6 +2268,7 @@
 				EB4B39BF1CEB942A00B41063 /* SwipeToIncrementAlertHelper.swift in Sources */,
 				EB0C1B9C1B3DBF9600F24C85 /* RegisterViewController.swift in Sources */,
 				EBF1A1591B823A1100F34105 /* StatsViewController.swift in Sources */,
+				6A2D506B1E3F5D0300B0F7EA /* ListItemsControllerNew.swift in Sources */,
 				EB0A05901BDFCE8200D1E29D /* ManageProductsViewController.swift in Sources */,
 				EB1B36541BC31B16003519F2 /* HistoryItemGroupHeaderView.swift in Sources */,
 				EB1B365D1BC4653C003519F2 /* PlanTableViewCell.swift in Sources */,
@@ -2284,6 +2308,7 @@
 				EB7032851BEBBD5D00779EBB /* ReorderSectionCell.swift in Sources */,
 				EBA18C201BF5638D009291F2 /* QuickAddListItemViewController.swift in Sources */,
 				EB1D696A1CABE71A004892A2 /* ListItemsController.swift in Sources */,
+				6A66D3461E413A300028240C /* TodoListItemsControllerNew.swift in Sources */,
 				EB33D5581CDFAB640097AD58 /* LocalizedFloatRule.swift in Sources */,
 				EBD558CB1BF3C1090048F287 /* ScaleViewController.swift in Sources */,
 				EB37ABA21C9F249300FE9D7A /* LineTextField.swift in Sources */,
@@ -2316,6 +2341,7 @@
 				EBD828051BEA441B0072F9FA /* UINavigationController.swift in Sources */,
 				EB5737B91BF27B0700D52FB8 /* SharedUsersViewController.swift in Sources */,
 				EB620DC61C7F85CF0095BFB9 /* InvitationsHandler.swift in Sources */,
+				6A2D506D1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift in Sources */,
 				EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */,
 				EBBC232B1BB600DF0002F6B1 /* ConfirmationPopup.swift in Sources */,
 				EBED0D091C82213600A1EEC4 /* RatingPopup.swift in Sources */,
@@ -2356,6 +2382,7 @@
 				EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */,
 				EB33D55E1CDFFC8D0097AD58 /* UIDevice.swift in Sources */,
 				EB4612BA1BE56D970049DAD1 /* ExpandCellAnimator.swift in Sources */,
+				6A2D506F1E3F611F00B0F7EA /* ListItemCellNew.swift in Sources */,
 				EB5737B31BF25DFB00D52FB8 /* AddEditInventoryController.swift in Sources */,
 				EBED0CE31C7FB8E200A1EEC4 /* InventoryInvitationsHandler.swift in Sources */,
 				EB741A5C1C22185900E1585D /* ListsTableViewController.swift in Sources */,
@@ -2379,6 +2406,7 @@
 				5819FB5E1DDDF59500FB2CC1 /* Validatable.swift in Sources */,
 				EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
 				EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */,
+				6A0DE19B1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift in Sources */,
 				EB97032F1CCBFABB00A5B284 /* StashListItemsController.swift in Sources */,
 				EBD7A7E01CC0323200B56C41 /* RatingAlert.swift in Sources */,
 				EB4147B81BDFE9FB00549CE4 /* ManageProductsCell.swift in Sources */,

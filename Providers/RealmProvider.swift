@@ -426,6 +426,20 @@ class RealmProvider {
         }
     }
 
+    func doInWriteTransactionSync<T>(realmData: RealmData?, _ f: (Realm) -> T?) -> T? {
+        do {
+            let realm = try realmData?.realm ?? Realm()
+            return doInWriteTransactionWithRealmSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm, f: f)
+        } catch let error as NSError {
+            QL4("Realm error: \(error)")
+            return nil
+        } catch let error {
+            QL4("Realm error: \(error)")
+            return nil
+        }
+    }
+    
+    // TODO refactor with doInWriteTransactionSync(realmData...)
     func doInWriteTransactionSync<T>(withoutNotifying: [NotificationToken] = [], realm: Realm? = nil, _ f: (Realm) -> T?) -> T? {
         do {
             let realm = try realm ?? Realm()
@@ -479,10 +493,9 @@ class RealmProvider {
         }
     }
     
-    func withRealmSync<T>(_ f: (Realm) throws -> T?) -> T? {
+    func withRealmSync<T>(realm: Realm? = nil, _ f: (Realm) throws -> T?) -> T? {
         do {
-            let realm = try Realm()
-            return try f(realm)
+            return try f(realm ?? Realm())
         } catch let error as NSError {
             QL4("Realm error: \(error)")
             return nil

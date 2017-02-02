@@ -21,7 +21,7 @@ class RealmStoreProductProvider: RealmProvider {
     }
 
     func storeProduct(_ product: QuantifiableProduct, store: String, handler: @escaping (StoreProduct?) -> Void) {
-        handler(loadFirstSync(filter: StoreProduct.createFilterProductStore(quantifiableProductUuid: product.uuid, store: store)))
+        handler(storeProductSync(product, store: store))
     }
     
     func storeProductSync(product: QuantifiableProduct, store: String) -> StoreProduct? {
@@ -64,5 +64,11 @@ class RealmStoreProductProvider: RealmProvider {
         realm.delete(storeProducts)
         
         return true
+    }
+    
+    // MARK: - Sync
+    
+    func storeProductSync(_ product: QuantifiableProduct, store: String) -> StoreProduct? {
+        return loadFirstSync(filter: StoreProduct.createFilterProductStore(quantifiableProductUuid: product.uuid, store: store))
     }
 }

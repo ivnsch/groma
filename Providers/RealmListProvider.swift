@@ -43,18 +43,9 @@ class RealmListProvider: RealmProvider {
     }
     
     func loadList(_ uuid: String, handler: @escaping (List?) -> Void) {
-        do {
-            let realm = try Realm()
-            // TODO review if it's necessary to pass the sort descriptor here again
-            let productMaybe: List? = self.loadSync(realm, filter: List.createFilter(uuid)).first
-            handler(productMaybe)
-            
-        } catch let e {
-            QL4("Error: creating Realm, returning empty results, error: \(e)")
-            handler(nil)
-        }
+        handler(loadListSync(uuid))
     }
-    
+
     func loadLists(_ handler: @escaping (Results<List>?) -> Void) {
         handler(loadSync(filter: nil, sortDescriptor: NSSortDescriptor(key: "order", ascending: true)))
     }
@@ -173,4 +164,11 @@ class RealmListProvider: RealmProvider {
                 handler(success ?? false)
         })
     }
+    
+    // MARK: - Sync
+    
+    func loadListSync(_ uuid: String) -> List? {
+        return loadFirstSync(filter: List.createFilter(uuid))
+    }
+    
 }

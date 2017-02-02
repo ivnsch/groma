@@ -268,10 +268,10 @@
             </objects>
             <point key="canvasLocation" x="1336" y="379"/>
         </scene>
-        <!--Todo List Items Controller-->
+        <!--Todo List Items Controller New-->
         <scene sceneID="u1H-x0-K3I">
             <objects>
-                <viewController storyboardIdentifier="TodoListItemsController" automaticallyAdjustsScrollViewInsets="NO" id="QHZ-uV-ZSM" customClass="TodoListItemsController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TodoListItemsController" automaticallyAdjustsScrollViewInsets="NO" id="QHZ-uV-ZSM" customClass="TodoListItemsControllerNew" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="uXF-H0-GQY"/>
                         <viewControllerLayoutGuide type="bottom" id="peQ-Fh-dVX"/>
@@ -527,17 +527,17 @@
             </objects>
             <point key="canvasLocation" x="674" y="375"/>
         </scene>
-        <!--List Items Table View Controller-->
+        <!--List Items Table View Controller New-->
         <scene sceneID="afQ-am-JE1">
             <objects>
-                <tableViewController storyboardIdentifier="ListItemsTableViewController" id="MUh-dr-wEg" customClass="ListItemsTableViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ListItemsTableViewController" id="MUh-dr-wEg" customClass="ListItemsTableViewControllerNew" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="91" sectionHeaderHeight="22" sectionFooterHeight="22" id="h1K-3W-SBz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="listItemCell" id="qDe-gS-G77" customClass="ListItemCell" customModule="shoppin" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="listItemCell" id="qDe-gS-G77" customClass="ListItemCellNew" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="22" width="375" height="91"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qDe-gS-G77" id="6dg-3t-A2g">

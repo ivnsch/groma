@@ -242,3 +242,15 @@ public class StoreProduct: DBSyncable, Identifiable {
         return store == unique.store && product.matches(unique: unique.quantifiableProductUnique)
     }
 }
+
+extension StoreProduct {
+    
+    static func createDefault(quantifiableProduct: QuantifiableProduct, store: String) -> StoreProduct {
+        return StoreProduct(
+            uuid: UUID().uuidString,
+            price: 0, // TODO!!!!!!!!!!!!!!!! ensure store products are always initialized with price 0
+            store: store,
+            product: quantifiableProduct
+        )
+    }
+}

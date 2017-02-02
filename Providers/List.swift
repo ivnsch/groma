@@ -44,6 +44,10 @@ public class List: DBSyncable, Identifiable {
             bgColorHex = newValue.hexStr
         }
     }
+
+    public var todoSections = RealmSwift.List<Section>()
+    public var doneSections = RealmSwift.List<Section>()
+    public var stashSections = RealmSwift.List<Section>()
     
     public convenience init(uuid: String, name: String, users: [DBSharedUser] = [], color: UIColor, order: Int, inventory: DBInventory, store: String?, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.init()
@@ -156,7 +160,14 @@ public class List: DBSyncable, Identifiable {
         //        return shortDebugDescription
         return "{\(type(of: self)) uuid: \(uuid), name: \(name), color: \(color), order: \(order), inventory: \(inventory), store: \(store), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate.millisToEpochDate()), removed: \(removed)}"
     }
-
+    
+    public func sections(status: ListItemStatus) -> RealmSwift.List<Section> {
+        switch status {
+        case .todo: return todoSections
+        case .done: return doneSections
+        case .stash: return stashSections
+        }
+    }
     
     // WARN: doesn't include listItems. Actually, should we remove list items from list? this is never used?
     public func equalsExcludingSyncAttributes(_ rhs: List) -> Bool {

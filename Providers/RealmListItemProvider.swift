@@ -14,6 +14,34 @@ public enum QuickAddItemSortBy {
     case alphabetic, fav
 }
 
+
+public struct AddListItemResult {
+    public let listItem: ListItem
+    public let section: Section
+    public let isNewItem: Bool
+    public let isNewSection: Bool
+    public let listItemIndex: Int
+    public let sectionIndex: Int
+}
+
+public struct MoveListItemResult {
+    public let deletedSrcSection: Bool
+}
+
+public struct DeleteListItemResult {
+    public let deletedSection: Bool
+}
+
+public struct SwitchListItemResult {
+    public let deletedSection: Bool
+}
+
+public struct ListItemsCartStashAggregate {
+    public let cartQuantity: Int
+    public let cartPrice: Float
+    public let stashQuantity: Int
+}
+
 class RealmListItemProvider: RealmProvider {
     
     /**
@@ -728,15 +756,354 @@ class RealmListItemProvider: RealmProvider {
         
         let listItemPrototypes = inputs.map {input -> ProvResult<ListItemPrototype, DatabaseError> in
             
-            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(input.section, sectionColor: input.sectionColor, status: status, possibleNewOrder: nil, list: list)
+            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(input.section, sectionColor: input.sectionColor, status: status, possibleNewOrder: nil, list: list, realmData: nil)
             let quantifiableProductResult = DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: input.toProductPrototype(), updateCategory: true, save: false)
             
-            return sectionResult.join(result: quantifiableProductResult).map {(section, quantifiableProduct) in
-                ListItemPrototype(product: quantifiableProduct, quantity: input.quantity, targetSectionName: section.name, targetSectionColor: section.color, storeProductInput: nil)
+            return sectionResult.join(result: quantifiableProductResult).map {(tuple, quantifiableProduct) in
+                ListItemPrototype(product: quantifiableProduct, quantity: input.quantity, targetSectionName: tuple.section.name, targetSectionColor: tuple.section.color, storeProductInput: nil)
             }
         }
         
         return ProvResult<ListItemPrototype, DatabaseError>.seq(results: listItemPrototypes)
     }
+
     
+    
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // New
+
+    public func add(listItem: ListItem, section: Section, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: section.realm) {realm -> Bool in
+            section.listItems.append(listItem)
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    public func update(listItem: ListItem, listItemInput: ListItemInput, listItems: RealmSwift.List<ListItem>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: listItems.realm) {realm -> Bool in
+//            listItem.name = input.name
+//            listItem.color = input.color
+            // TODO!!!!!!!!!!!!!!!!!!!!!!!!!
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    public func delete(index: Int, listItems: RealmSwift.List<ListItem>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        // TODO!!!!!!!!!!!!!!! realm data or remove this method (there's a delete in new part)
+//        handler(deleteSync(index: index, listItems: listItems, notificationToken: realmData.notificationToken))
+    }
+    
+    // TODO!!!!!!!!!!!!!!! either remove this or remove listItems paremeter (are in section now)
+    func add(quantifiableProduct: QuantifiableProduct, store: String, section: Section, list: List, quantity: Int, status: ListItemStatus, listItems: RealmSwift.List<ListItem>, notificationToken: NotificationToken, _ handler: @escaping ((listItem: ListItem, isNew: Bool)?) -> Void) {
+        // TODO!!!!!!!!!!!!!!! realm data or remove this method (there's a delete in new part)
+//        if let result = addSync(quantifiableProduct: quantifiableProduct, store: store, list: list, quantity: quantity, status: status, notificationToken: realmData.notificationToken) {
+//            handler((result.listItem, result.isNewItem))
+//        } else {
+//            handler(nil)
+//        }
+    }
+    
+    func increment(_ listItem: ListItem, quantity: Int, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (Int?) -> Void) {
+        handler(incrementSync(listItem, quantity: quantity, realmData: RealmData(realm: realm, token: notificationToken)))
+    }
+    
+    // MARK: - Sync
+    
+    func incrementSync(_ listItem: ListItem, quantity: Int, realmData: RealmData, doTransaction: Bool = true) -> Int? {
+        
+        func transactionContent() -> Int {
+            listItem.incrementQuantity(quantity)
+            return listItem.quantity
+        }
+        
+        if doTransaction {
+            return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Int in
+                return transactionContent()
+            }
+        } else {
+            return transactionContent()
+        }
+    }
+    
+    // TODO maybe remove references to section, list of list items so we don't have to pass them here
+    fileprivate func createSync(_ quantifiableProduct: QuantifiableProduct, store: String, section: Section, list: List, quantity: Int, realmData: RealmData, doTransaction: Bool = true) -> ListItem? {
+        let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store)
+        return createSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
+    }
+    
+    // TODO maybe remove references to section, list of list items so we don't have to pass them here
+    fileprivate func createSync(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Int, realmData: RealmData, doTransaction: Bool = true) -> ListItem? {
+        // TODO note? we use separate methods for quick add/form
+        let listItem = ListItem(uuid: UUID().uuidString, product: storeProduct, section: section, list: list, note: nil, quantity: quantity)
+        return createSync(listItem, section: section, realmData: realmData, doTransaction: doTransaction)
+    }
+    
+    fileprivate func createSync(_ listItem: ListItem, section: Section, realmData: RealmData, doTransaction: Bool = true) -> ListItem? {
+        
+        func transactionContent() -> Bool {
+            section.listItems.append(listItem)
+            return true
+        }
+        
+        let successMaybe: Bool? = {
+            if doTransaction {
+                return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Bool in
+                    return transactionContent()
+                }
+            } else {
+                return transactionContent()
+            }
+        }()
+
+        return (successMaybe ?? false) ? listItem : nil
+    }
+    
+    /// Quick add
+    func addSync(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Int, status: ListItemStatus, realmData: RealmData, doTransaction: Bool = true) -> (AddListItemResult)? {
+        
+        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.category.name, sectionColor: quantifiableProduct.product.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData) {
+        
+        case .ok(let sectionResult):
+            
+            let section = sectionResult.section
+            
+            let existingListItemMaybe = section.listItems.filter(ListItem.createFilter(quantifiableProductUnique: quantifiableProduct.unique)).first
+            
+            if let existingListItem = existingListItemMaybe, let listItemIndex = section.listItems.index(of: existingListItem) {
+                let quantityMaybe = incrementSync(existingListItem, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
+                if quantityMaybe != nil {
+                    
+                    return AddListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, listItemIndex: listItemIndex, sectionIndex: sectionResult.index)
+                    //return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
+                } else {
+                    QL4("Couldn't increment existing list item")
+                    return nil
+                }
+                
+            } else { // new list item
+                
+                
+                print("list items before create list item: \(section.listItems.count)")
+                
+                // TODO section, list - see note on create
+                if let createdListItem = createSync(quantifiableProduct, store: store, section: section, list: list, quantity: quantity, realmData: realmData, doTransaction: doTransaction) {
+                    
+                    print("list items after create list item: \(section.listItems.count)")
+                    
+                    
+                    return AddListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, listItemIndex: section.listItems.count - 1, sectionIndex: sectionResult.index)
+                } else {
+                    QL4("Couldn't create list item, quantifiableProduct: \(quantifiableProduct)")
+                    return nil
+                }
+            }
+         
+            case .err(let error):
+                QL4("Error: \(error), quantifiableProduct: \(quantifiableProduct)")
+                return nil
+        }
+    }
+    
+    
+    /// Input form
+    func addSync(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, doTransaction: Bool = true) -> AddListItemResult? {
+return nil // TODO reenable commented code, only for test of section notification
+//        //guard let listItemsRealm = listItems.realm else {QL4("List items have no realm"); return nil}
+//        
+//        switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false) {
+//        case .ok(let quantifiableProduct):
+//            
+//            return addSync(quantifiableProduct: quantifiableProduct, store: list.store ?? "", list: list, quantity: listItemInput.quantity, status: status, realmData: realmData)
+//            
+//            //switch DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, status: status, possibleNewOrder: nil, list: list) {
+//            //case .ok(let section, let isNewSection):
+//            //    return addSync(quantifiableProduct: quantifiableProduct, store: list.store ?? "", list: list, quantity: listItemInput.quantity, status: status, notificationToken: notificationToken)
+//            //case .err(let error):
+//            //    QL4("Couldn't add/update section: \(error)")
+//            //    return nil
+//            //}
+//        case .err(let error):
+//            QL4("Couldn't add/update quantifiable product: \(error)")
+//            return nil
+//        }
+    }
+    
+    /// Input form / recipes
+    func addSync(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData, doTransaction: Bool = true) -> [(listItem: ListItem, isNew: Bool)]? {
+        
+        //guard let listItemsRealm = listItems.realm else {QL4("List items have no realm"); return nil}
+        
+        var addedListItems = [(listItem: ListItem, isNew: Bool)]()
+        
+        for listItemInput in listItemInputs {
+            if let result = addSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData, doTransaction: doTransaction) {
+                addedListItems.append((result.listItem, result.isNewItem))
+            } else {
+                QL4("Couldn't add list item for input: \(listItemInput), list: \(list), status: \(status). Skipping") // we could also break instead of skip but why not skip
+            }
+        }
+        return addedListItems
+    }
+
+    
+    /// Internal (switch)
+    // TODO!!!!!!!!! do we need to pass Realm around everywhere so notificationToken works?
+    /// used in switch status, where we already have a list item and just want to move it to a different status (todo/done/stash). Parameter listItems -> dst list items TODO rename
+    // NOTE: section --> target section
+    func addSync(listItem: ListItem, section: Section, list: List, quantity: Int, realmData: RealmData, doTransaction: Bool = true) -> (listItem: ListItem, isNew: Bool)? {
+        
+//        guard let listItemsRealm = section.listItems.realm else {QL4("List items have no realm"); return nil}
+        
+        let existingListItemMaybe = section.listItems.filter(ListItem.createFilter(quantifiableProductUnique: listItem.product.product.unique)).first // we should be able to use the uuid of the store product or quantifiable product too, but let's for now stick to the semantic unique for consistency and since it's the easiest to reason about. (TODO review this)
+        
+        if let existingListItem = existingListItemMaybe {
+            let quantityMaybe = incrementSync(existingListItem, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
+            if quantityMaybe != nil {
+                return (listItem: existingListItem, isNew: false)
+            } else {
+                QL4("Couldn't increment existing list item")
+                return nil
+            }
+            
+        } else {
+            let createdListItem = createSync(listItem, section: section, realmData: realmData, doTransaction: doTransaction)
+            return createdListItem.map{(listItem: $0, isNew: true)}
+        }
+    }
+    
+    // TODO do we need list item parameter or is "from" enough
+    func switchSync(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData) -> SwitchListItemResult? {
+
+        guard let realm = listItem.section.realm else {QL4("No realm"); return nil}
+        
+        let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
+        
+        let srcSection = listItem.section
+        
+        guard let dstSection = DBProv.sectionProvider.getOrCreate(name: listItem.section.name, color: listItem.section.color, list: list, status: dstStatus, notificationToken: realmData.token, realm: realm) else {QL4("Invalid state - couldn't get or create section"); return nil}
+        
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {(realm) -> SwitchListItemResult? in
+            
+            // append/increment in dst section
+            if self.addSync(listItem: listItem, section: dstSection, list: list, quantity: listItem.quantity, realmData: realmData, doTransaction: false) == nil {
+                QL4("Add sync returned nil, exit")
+                return nil // interrupt transaction
+            }
+            
+            // delete from src section
+            srcSection.listItems.remove(objectAtIndex: from.row)
+            
+            if self.deleteSectionIfEmpty(sections: list.sections(status: srcStatus), section: srcSection) {
+                return SwitchListItemResult(deletedSection: true)
+            } else {
+                return SwitchListItemResult(deletedSection: false)
+            }
+        }
+    }
+
+    
+    // TODO maybe remove references to section, list of list items so we don't have to pass them here
+    fileprivate func create(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Int, realmData: RealmData, _ handler: @escaping (ListItem?) -> Void) {
+        handler(createSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData))
+    }
+    
+    public func deleteSync(indexPath: IndexPath, status: ListItemStatus, list: List, realmData: RealmData) -> DeleteListItemResult? {
+        let sections = list.sections(status: status)
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> DeleteListItemResult? in
+            
+            let section = sections[indexPath.section]
+            section.listItems.remove(objectAtIndex: indexPath.row)
+            
+            if self.deleteSectionIfEmpty(sections: list.sections(status: status), section: section) {
+                return DeleteListItemResult(deletedSection: true)
+            } else {
+                return DeleteListItemResult(deletedSection: false)
+            }
+        }
+    }
+    
+    /// Returns if section was empty and removed. Note both section not empty and error removing return false.
+    /// NOTE: Has to be executed in a write transaction
+    fileprivate func deleteSectionIfEmpty(sections: RealmSwift.List<Section>, section: Section) -> Bool {
+        if section.listItems.isEmpty {
+            if let sectionIndex = sections.index(of: section) {
+                sections.remove(objectAtIndex: sectionIndex)
+                return true
+            } else {
+                QL4("Invalid state: Src section isn't in the list: srcSection: \(section), sections: \(sections)")
+                return false
+            }
+        } else {
+            return false
+        }
+    }
+    
+    public func move(from: IndexPath, to: IndexPath, status: ListItemStatus, list: List, realmData: RealmData) -> MoveListItemResult? {
+
+        let srcSection = list.sections(status: status)[from.section]
+        let dstSection = list.sections(status: status)[to.section]
+        
+        let listItem = srcSection.listItems[from.row]
+        
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {[weak self] (realm) -> MoveListItemResult? in
+
+            // delete from src section
+            srcSection.listItems.remove(objectAtIndex: from.row)
+            
+            dstSection.listItems.insert(listItem, at: to.row)
+            
+            if srcSection != dstSection {
+                listItem.section = dstSection
+            }
+
+            if srcSection.listItems.isEmpty {
+                if let sectionIndex = list.sections(status: status).index(of: srcSection) {
+                    list.sections(status: status).remove(objectAtIndex: sectionIndex)
+                    return MoveListItemResult(deletedSrcSection: true)
+                } else {
+                    QL4("Invalid state: Src section isn't in the list: srcSection: \(srcSection), status: \(status), list: \(list)")
+                    return nil
+                }
+            }
+            
+            return MoveListItemResult(deletedSrcSection: false)
+        }
+    }
+    
+    
+    public func calculateCartStashAggregate(listUuid: String) -> ListItemsCartStashAggregate? {
+        
+        guard let list = DBProv.listProvider.loadListSync(listUuid) else {
+            QL4("couldn't load list with uuid: \(listUuid)")
+            return nil
+        }
+        
+        let cartSections = list.sections(status: .done)
+        let stashSections = list.sections(status: .stash)
+        
+        let (totalCartQuantity, totalCartPrice) = cartSections.reduce((0, Float(0))) {sum, section in
+            
+            let sectionSum = section.listItems.reduce((0, Float(0))) {sectionSum, listItem in
+                (sectionSum.0 + listItem.quantity, sectionSum.1 + listItem.totalPrice(.done))
+            }
+            
+            return (sum.0 + sectionSum.0, sum.1 + sectionSum.1)
+        }
+        
+        let totalStashQuantity = stashSections.reduce(0) {sum, section in
+            
+            let sectionSum = section.listItems.reduce(0) {sectionSum, listItem in
+                sectionSum + listItem.quantity
+            }
+            
+            return (sum + sectionSum)
+        }
+
+        return ListItemsCartStashAggregate(cartQuantity: totalCartQuantity, cartPrice: totalCartPrice, stashQuantity: totalStashQuantity)
+    }
 }

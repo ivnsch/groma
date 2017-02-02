@@ -9,6 +9,17 @@
 import Foundation
 import RealmSwift
 
+// TODO own file
+public struct RealmData {
+    public var realm: Realm
+    public var token: NotificationToken
+    
+    public init(realm: Realm, token: NotificationToken) {
+        self.realm = realm
+        self.token = token
+    }
+}
+
 public enum SwitchListItemMode {case single, all}
 
 public protocol ListItemProvider {
@@ -106,4 +117,24 @@ public protocol ListItemProvider {
     func listItemCount(_ status: ListItemStatus, list: List, fetchMode: ProviderFetchModus, _ handler: @escaping (ProviderResult<Int>) -> Void)
     
     func removeSectionFromListItemsMemCacheIfExistent(_ sectionUuid: String, listUuid: String?, handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    
+    
+    
+    
+    
+    
+    func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Int, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
+    
+    func addNew(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
+
+    func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void)
+    
+    func switchStatusNew(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void)
+    
+    func deleteNew(indexPath: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<DeleteListItemResult>) -> Void)
+    
+    func move(from: IndexPath, to: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<MoveListItemResult>) -> Void)
+    
+    func calculateCartStashAggregate(list: List, _ handler: @escaping (ProviderResult<ListItemsCartStashAggregate>) -> Void)
 }

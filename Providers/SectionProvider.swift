@@ -7,8 +7,11 @@
 //
 
 import Foundation
+import RealmSwift
 
 public protocol SectionProvider {
+
+//    func sections(list: List, handler: @escaping (ProviderResult<Results<Section>>) -> Void)
 
     func loadSection(_ name: String, list: List, handler: @escaping (ProviderResult<Section?>) -> ())
 
@@ -27,6 +30,8 @@ public protocol SectionProvider {
     func sectionSuggestionsContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> ())
     
     func sections(_ names: [String], list: List, handler: @escaping (ProviderResult<[Section]>) -> ())
+    
+    func move(from: Int, to: Int, sections: RealmSwift.List<Section>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     /**
     Utility method to refactor common code in ListItemsProviderImpl and ProductGroupProviderImpl when adding new list or group items

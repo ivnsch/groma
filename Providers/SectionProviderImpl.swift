@@ -8,6 +8,7 @@
 
 import Foundation
 import QorumLogs
+import RealmSwift
 
 class SectionProviderImpl: SectionProvider {
     
@@ -203,5 +204,11 @@ class SectionProviderImpl: SectionProvider {
             }
         }
     }
+    
+    
+    public func move(from: Int, to: Int, sections: RealmSwift.List<Section>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.sectionProvider.move(from: from, to: to, sections: sections, notificationToken: notificationToken) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
 }
-
