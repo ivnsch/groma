@@ -77,7 +77,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
         expand(expanded)
     }
     
-    func expand(_ expanded: Bool) {
+    func expand(_ expanded: Bool, onFinish: (() -> Void)? = nil) {
 
         guard !blocked else {return}
         guard self.expanded != expanded else {return}
@@ -145,6 +145,8 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                     
                     self?.expanded = expanded
                     self?.blocked = false
+                    
+                    onFinish?()
             }) 
         }
         

@@ -345,6 +345,8 @@ title_groups = "Groups";
 title_participants = "Participants";
 
 
+empty_list_line1 = "Oops, there are no items yet";
+empty_list_line2 = "Just add some, will ya?";
 empty_inventory_line1 = "Oops, there are no items yet";
 empty_inventory_line2 = "You can add items directly or using 'buy' in the cart.";
 empty_group_line1 = "Oops, there are no items yet";

@@ -345,6 +345,8 @@ title_groups = "Gruppen";
 title_participants = "Teilnehmer";
 
 
+empty_list_line1 = "Hoppla! Es gibt noch keine Items";
+empty_list_line2 = "Tappe um Items hinzuzufügen!";
 empty_inventory_line1 = "Hoppla! Es gibt noch keine Items";
 empty_inventory_line2 = "Tappe um welche hinzuzufügen\noder kaufe sie im Einkaufswagen!";
 empty_group_line1 = "Hoppla! Es gibt noch keine Items";

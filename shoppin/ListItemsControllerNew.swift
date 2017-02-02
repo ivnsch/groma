@@ -14,7 +14,7 @@ import QorumLogs
 import Providers
 import RealmSwift
 
-class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegateNew, ListItemsEditTableViewDelegateNew, QuickAddDelegate, ReorderSectionTableViewControllerDelegateNew, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate
+class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegateNew, ListItemsEditTableViewDelegateNew, ReorderSectionTableViewControllerDelegateNew, EditSectionViewControllerDelegate
     //    , UIBarPositioningDelegate
 {
     
@@ -25,10 +25,6 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
     
     weak var listItemsTableViewController: ListItemsTableViewControllerNew!
     
-    @IBOutlet weak var topBar: ListTopBarView!
-    @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
-    
-    weak var expandDelegate: Foo?
     
     var currentList: Providers.List? {
         didSet {
@@ -36,9 +32,6 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         }
     }
     
-    // TODO rename these blocks, which are meant to be executed only once after loading accordingly e.g. onViewWillAppearOnce
-    var onViewWillAppear: VoidFunction?
-    var onViewDidAppear: VoidFunction?
     
     fileprivate var listItemsResult: Results<ListItem>?
 
@@ -50,47 +43,48 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
     var status: ListItemStatus {
         fatalError("override")
     }
+
+    override var tableView: UITableView {
+        return listItemsTableViewController.tableView
+    }
     
-    var isPullToAddEnabled: Bool {
-        return true
+    override var isEmpty: Bool {
+        return currentList?.sections(status: status).isEmpty ?? true
+    }
+    
+    override var list: Providers.List? {
+        return currentList
+    }
+    
+    override var isAnyTopControllerExpanded: Bool {
+        return super.isAnyTopControllerExpanded || (topEditSectionControllerManager?.expanded ?? false)
     }
     
     var tableViewBottomInset: CGFloat {
         return 0
     }
     
-    fileprivate var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
     fileprivate var topEditSectionControllerManager: ExpandableTopViewController<EditSectionViewController>?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
-    
-    var emptyView: UIView {
-        fatalError("override")
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initTableViewController()
-        
-        setEditing(false, animated: false, tryCloseTopViewController: false)
-        
-        initTitleLabel()
-        
-        topQuickAddControllerManager = initTopQuickAddControllerManager()
         topEditSectionControllerManager = initEditSectionControllerManager()
         
-        topBar.delegate = self
+        _ = topBar.dotColor
+        
+        initEmptyView(line1: trans("empty_list_line1"), line2: trans("empty_list_line2"))
         
         NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onListRemovedNotification(_:)), name: NSNotification.Name(rawValue: Notification.ListRemoved.rawValue), object: nil)
     }
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+ 
+    override func initProgrammaticViews() {
+        initTableViewController()
     }
     
     deinit {
@@ -98,19 +92,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         NotificationCenter.default.removeObserver(self)
     }
     
-    fileprivate func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
-        let top = topBar.frame.height
-        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
-            let controller = UIStoryboard.quickAddViewController()
-            controller.delegate = self
-            controller.itemType = .productForList
-            controller.list = self?.currentList
-            return controller
-        }
-        manager.delegate = self
-        return manager
-    }
-    
+
     fileprivate func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
         let top = topBar.frame.height
         let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 70, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
@@ -121,32 +103,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         manager.delegate = self
         return manager
     }
-    
-    fileprivate func initTitleLabel() {
-        let label = UILabel()
-        label.font = Fonts.regular
-        label.textColor = UIColor.white
-        topBar.addSubview(label)
-    }
-    
-    func onExpand(_ expanding: Bool) {
-        if !expanding {
-            clearPossibleNotePopup()
-            topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()
-            setEmptyUI(false, animated: false)
-            topBar.setLeftButtonIds([])
-            topBar.setRightButtonModels(rightButtonsClosing())
-            // Clear list item memory cache when we leave controller. This is not really necessary but just "in case". The list item memory cache is there to smooth things *inside* a list, that is transitions between todo/done/stash, and adding/incrementing items. Causing a db-reload when we load the controller is totally ok.
-            Prov.listItemsProvider.invalidateMemCache()
-        }
-        
-        topBar.positionTitleLabelLeft(expanding, animated: true, withDot: true, heightConstraint: topBarHeightConstraint)
-    }
-    
-    func setThemeColor(_ color: UIColor) {
-        topBar.dotColor = color
-        view.backgroundColor = UIColor.white
-    }
+
     
     fileprivate func updatePossibleList() {
         if let list = self.currentList {
@@ -154,43 +111,16 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
             self.initWithList(list)
         }
     }
-    
-    func setEmptyUI(_ empty: Bool, animated: Bool) {
-        if empty {
-            topBar.setLeftButtonIds([])
-        } else {
-            setDefaultLeftButtons()
-        }
-    }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        navigationController?.setNavigationBarHidden(true, animated: true)
-        
         updatePossibleList() // if there's a list already (e.g. come back from cart or stash - reload. If not (come from lists) onViewWillAppear triggers it.
         
-        onViewWillAppear?()
-        onViewWillAppear = nil
         
         //        updatePrices(.First)
         
-        // TODO custom empty view, put this there
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ListItemsController.onEmptyListViewTap(_:)))
-        emptyView.addGestureRecognizer(tapRecognizer)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        toggleButtonRotator.reset(listItemsTableViewController.tableView, topBar: topBar)
-        
-        onViewDidAppear?()
-        onViewDidAppear = nil
-    }
-    
-    func onEmptyListViewTap(_ sender: UITapGestureRecognizer) {
-        _ = toggleTopAddController() // this is meant to only open the menu, but toggle is ok since if we can tap on empty view it means it's closed
     }
     
     
@@ -257,11 +187,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
 //                    weakSelf.closeTopController()
 
 
-                // TODO close only when receiving own notification, not from someone else (possible?)
-                if !modifications.isEmpty { // close only if it's an update (for add user may want to add multiple products)
-                    self?.topQuickAddControllerManager?.expand(false)
-                    self?.topQuickAddControllerManager?.controller?.onClose()
-                }
+
 
 //                QL2("self?.onTableViewChangedQuantifiables(")
 
@@ -275,105 +201,8 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         
         realmData = RealmData(realm: sectionsRealm, token: notificationToken)
     }
-    
-//    func onGetListItems(_ listItems: [ListItem]) {
-//        let i = listItems.filter{$0.hasStatus(status)}
-//        QL2("status: \(status), items: \(i)")
-//        onTableViewChangedQuantifiables()
-//    }
-    
-    // buttons for left nav bar side in default state (e.g. not while the top controller is open)
-    func setDefaultLeftButtons() {
-        if listItemsTableViewController.sections?.isEmpty ?? true {
-            topBar.setLeftButtonIds([])
-        } else {
-            topBar.setLeftButtonIds([.edit])
-        }
-    }
-    
-    func clearPossibleNotePopup() {
-        if let popup = view.viewWithTag(ViewTags.NotePopup) {
-            popup.removeFromSuperview()
-        }
-    }
-    
-    // MARK:
-    
-    // returns: is now open?
-    func toggleTopAddController(_ rotateTopBarButton: Bool = true) -> Bool {
-        
-        clearPossibleUndo()
-        
-        clearPossibleNotePopup()
-        
-        // if any top controller is open, close it
-        if topQuickAddControllerManager?.expanded ?? false || topEditSectionControllerManager?.expanded ?? false {
-            topQuickAddControllerManager?.expand(false)
-            toggleButtonRotator.enabled = true
-            topQuickAddControllerManager?.controller?.onClose()
-            topEditSectionControllerManager?.expand(false)
-            topEditSectionControllerManager?.controller?.onClose()
-            
-            setDefaultLeftButtons()
-            
-            if rotateTopBarButton {
-                topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
-            }
-            
-            return false
-            
-        } else { // if there's no top controller open, open the quick add controller
-            topQuickAddControllerManager?.expand(true)
-            toggleButtonRotator.enabled = false
-            topQuickAddControllerManager?.controller?.initContent()
-            
-            topBar.setLeftButtonIds([])
-            
-            if rotateTopBarButton {
-                topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
-            }
-            
-            // in case we are in reorder sections mode, come back to normal. This mode doesn't make sense while adding list items as we can't see the list items.
-            setReorderSections(false)
-            
-            return true
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        clearPossibleUndo()
-    }
-    
-    // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
-    func setEditing(_ editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
-        super.setEditing(editing, animated: animated)
-        
-        clearPossibleNotePopup()
-        
-        if editing == false {
-            view.endEditing(true)
-        }
-        
-        if tryCloseTopViewController {
-            topQuickAddControllerManager?.expand(false)
-            toggleButtonRotator.enabled = true
-            topQuickAddControllerManager?.controller?.onClose()
-            topEditSectionControllerManager?.controller?.onClose()
-        }
-        
-        if !editing {
-            // in case we are in reorder sections mode, come back to normal. This is an edit specific mode.
-            setReorderSections(false)
-            
-            setDefaultLeftButtons()
-            topBar.setRightButtonModels(rightButtonsDefault())
-        }
-        
-        listItemsTableViewController.setEditing(editing, animated: animated)
-        
-        
-        listItemsTableViewController.cellMode = editing ? .increment : .note
-    }
+
+
     
     // TODO do we still need this? This was prob used by done view controller to update our list
     //    func itemsChanged() {
@@ -408,24 +237,30 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
             }
         }()
     }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        clearPossibleUndo()
+
+    override func setEditing(_ editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
+        super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
+        
+        listItemsTableViewController.setEditing(editing, animated: animated)
+        listItemsTableViewController.cellMode = editing ? .increment : .note
+        
+        if !editing {
+            // in case we are in reorder sections mode, come back to normal. This is an edit specific mode.
+            setReorderSections(false)
+        }
     }
     
-    func clearPossibleUndo() {
-        // TODO!!!!!!!!!!!!!!!!!!!!! remove?
-//        self.listItemsTableViewController.clearPendingSwipeItemIfAny(true)
+    override func closeTopControllers(rotateTopBarButton: Bool = true) {
+        super.closeTopControllers(rotateTopBarButton: rotateTopBarButton)
+        topEditSectionControllerManager?.expand(false)
+        topEditSectionControllerManager?.controller?.onClose()
     }
     
-    // MARK: - ListItemsTableViewDelegate
-    
-    func onTableViewScroll(_ scrollView: UIScrollView) {
-        toggleButtonRotator.rotateForOffset(-64, topBar: topBar, scrollView: scrollView)
-    }
-    
-    func onPullToAdd() {
-        _ = toggleTopAddController(false) // this is meant to only open the menu, but toggle is ok since if we can tap on empty view it means it's closed
+    override func openQuickAdd(rotateTopBarButton: Bool = true, itemToEdit: AddEditItem? = nil) {
+        super.openQuickAdd(rotateTopBarButton: rotateTopBarButton, itemToEdit: itemToEdit)
+        
+        // in case we are in reorder sections mode, come back to normal. This mode doesn't make sense while adding list items as we can't see the list items.
+        setReorderSections(false)
     }
     
     func onListItemClear(_ tableViewListItem: ListItem, notifyRemote: Bool, onFinish: VoidFunction) {
@@ -441,11 +276,12 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         guard let realmData = realmData else {QL4("No realm data"); return}
         
        if self.isEditing { // open quick add in edit mode
-           topQuickAddControllerManager?.expand(true)
-           topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
-           
-           topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: tableViewListItem, currentStatus: status))
-           
+            // TODO!!!!!!!!!!!!!! is this correct?
+            openQuickAdd(itemToEdit: AddEditItem(item: tableViewListItem, currentStatus: status))
+//            topQuickAddControllerManager?.expand(true)
+//            topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+//            topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: tableViewListItem, currentStatus: status))
+        
        } else { // switch list item
            
            // TODO!!!! when receive switch status via websocket we will *not* show undo (undo should be only for the device doing the switch) but submit immediately this means:
@@ -489,12 +325,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
     // Callen when table view contents affecting list items quantity/price is modified
     func onTableViewChangedQuantifiables() {
         updateQuantifiables()
-        
         updateEmptyUI()
-    }
-    
-    fileprivate func updateEmptyUI() {
-        setEmptyUI(listItemsTableViewController.sections?.isEmpty ?? true, animated: true)
     }
     
     func updateQuantifiables() {
@@ -669,7 +500,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
                     //                    self?.updatePrices(.MemOnly)
                     weakSelf.onTableViewChangedQuantifiables()
                 }
-                weakSelf.closeTopController()
+                weakSelf.closeTopControllers()
             })
         } else {
             print("Error: Invalid state: trying to update list item without current list")
@@ -679,15 +510,17 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
 
     
     // MARK: - QuickAddDelegate
+
+    // TODO!!!!!!!!!!! only close top controllers?
+//    override func onCloseQuickAddTap() {
+//        super.onCloseQuickAddTap()
+//        topQuickAddControllerManager?.expand(false)
+//        toggleButtonRotator.enabled = true
+//        topQuickAddControllerManager?.controller?.onClose()
+//        topEditSectionControllerManager?.controller?.onClose()
+//    }
     
-    func onCloseQuickAddTap() {
-        topQuickAddControllerManager?.expand(false)
-        toggleButtonRotator.enabled = true
-        topQuickAddControllerManager?.controller?.onClose()
-        topEditSectionControllerManager?.controller?.onClose()
-    }
-    
-    func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
+    override func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
         if let list = currentList {
             
             // TODO save "group list item" don't desintegrate group immediatly
@@ -718,7 +551,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         }
     }
     
-    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+    override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
         guard let list = currentList else {QL4("No list"); return}
         guard let realmData = realmData else {QL4("No realm data"); return}
 
@@ -748,7 +581,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         //})
     }
     
-    func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
+    override func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
         guard let list = currentList else {QL4("No list"); return}
         
         Prov.listItemsProvider.listItems(list: list, ingredient: ingredient, mapper: {listItems -> String in
@@ -763,7 +596,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
     }
     
     
-    func onAddProduct(_ product: QuantifiableProduct) {
+    override func onAddProduct(_ product: QuantifiableProduct) {
         guard let realmData = realmData else {QL4("No realm data"); return}
      
         if let list = currentList {
@@ -779,7 +612,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
                     self?.listItemsTableViewController.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex))
                 }
                  
-                
+                self?.updateEmptyUI()
             })
 //            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.product.category.name, sectionColor: product.product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
 //                weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
@@ -789,7 +622,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         }
     }
     
-    func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
+    override func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditListItem(_ input: ListItemInput, editingListItem: ListItem) {
             // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
@@ -811,17 +644,17 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         }
     }
     
-    func onQuickListOpen() {
+    override func onQuickListOpen() {
     }
     
-    func onAddProductOpen() {
+    override func onAddProductOpen() {
     }
     
-    func parentViewForAddButton() -> UIView {
-        return self.view
-    }
+//    override func parentViewForAddButton() -> UIView {
+//        return self.view
+//    }
     
-    func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
+    override func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
         if let list = currentList {
             // TODO filter the list sections instead of calling provider?
             Prov.sectionProvider.sections([name], list: list, handler: successHandler {[weak self] sections in guard let weakSelf = self else {return}
@@ -843,44 +676,13 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         }
     }
     
-    func onAddGroupOpen() {
-        topBar.setBackVisible(false)
-        topBar.setLeftButtonModels([])
-    }
-    
-    func onAddGroupItemsOpen() {
-        topBar.setBackVisible(true)
-        topBar.setLeftButtonModels([])
-    }
-    
-    func onRemovedSectionCategoryName(_ name: String) {
+    override func onRemovedSectionCategoryName(_ name: String) {
         updatePossibleList()
     }
     
-    func onRemovedBrand(_ name: String) {
+    override func onRemovedBrand(_ name: String) {
         updatePossibleList()
     }
-    
-    // was used to expand the quick add embedded view controller to fill available space when adding group items. Maybe will be used again in the future.
-    //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect) {
-    //
-    //        let topOffset = myTopOffset + pricesView.frame.height
-    //
-    //        UIView.animateWithDuration(0.3) {[weak self] in
-    //            if let weakSelf = self {
-    //                if expanded {
-    //                    weakSelf.quickAddController.view.frame = CGRectMake(originalFrame.origin.x, originalFrame.origin.y - topOffset, originalFrame.width, weakSelf.view.frame.height)
-    ////                    weakSelf.quickAddController.view.frame.origin = CGPointMake(originalFrame.origin.x, originalFrame.origin.y - topOffset)
-    ////                    weakSelf.quickAddController.view.transform = CGAffineTransformMakeScale(1, 1.5)
-    //                } else {
-    //                    weakSelf.quickAddController.view.frame = CGRectMake(originalFrame.origin.x, originalFrame.origin.y, originalFrame.width, originalFrame.height)
-    ////                    weakSelf.quickAddController.view.frame.origin = CGPointMake(originalFrame.origin.x, originalFrame.origin.y)
-    ////                    weakSelf.quickAddController.view.transform = CGAffineTransformMakeScale(1, 1.0)
-    //                }
-    ////                            self?.view.layoutIfNeeded()
-    //            }
-    //        }
-    //    }
     
     // MARK: - EditSectionViewControllerDelegate
     
@@ -900,12 +702,7 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         // because updateSection/reloadData listItemsTableViewController sets back expanded to true, set correct state. If sectionsTableViewController is not visible it means it's expanded.
         //        listItemsTableViewController.sectionsExpanded = sectionsTableViewController == nil
     }
-    
-    fileprivate func sendActionToTopController(_ action: FLoatingButtonAction) {
-        if topQuickAddControllerManager?.expanded ?? false {
-            topQuickAddControllerManager?.controller?.handleFloatingButtonAction(action)
-        }
-    }
+
     
     // MARK: - Reorder sections
     
@@ -1017,99 +814,9 @@ class ListItemsControllerNew: UIViewController, UITextFieldDelegate, UIScrollVie
         ))
     }
     
-    
-    // MARK: - ExpandableTopViewControllerDelegate
-    
-    func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
-        if controller is QuickAddViewController || controller is AddEditListItemViewController {
-            view.frame.origin.y = topBar.frame.height
-        }
-    }
-    
-    func onExpandableClose() {
-        //        topBar.setBackVisible(false)
-        setDefaultLeftButtons()
-        toggleButtonRotator.enabled = true
-        _ = rightButtonsClosing()
-        topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
-        topQuickAddControllerManager?.controller?.onClose()
+    override func back() {
+        super.back()
         topEditSectionControllerManager?.controller?.onClose()
-        
-    }
-    
-    // MARK: - ListTopBarViewDelegate
-    
-    func onTopBarBackButtonTap() {
-        sendActionToTopController(.back)
-    }
-    
-    func onTopBarTitleTap() {
-        // override
-    }
-    
-    func back() {
-        onExpand(false)
-        topQuickAddControllerManager?.controller?.onClose()
-        topEditSectionControllerManager?.controller?.onClose()
-        expandDelegate?.setExpanded(false)
-    }
-    
-    
-    fileprivate func topBarOnCloseExpandable() {
-        setDefaultLeftButtons()
-        topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
-    }
-    
-    fileprivate func closeTopController() {
-        topQuickAddControllerManager?.expand(false)
-        toggleButtonRotator.enabled = true
-        topQuickAddControllerManager?.controller?.onClose()
-        topBarOnCloseExpandable()
-    }
-    
-    func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId) {
-        switch buttonId {
-        case .add:
-//            SizeLimitChecker.checkListItemsSizeLimit(listItemsTableViewController.items.count, controller: self) {[weak self] in
-//                if let weakSelf = self {
-                    sendActionToTopController(.add)
-//                }
-//            }
-        case .toggleOpen:
-            if !(topQuickAddControllerManager?.controller?.onTapNavBarCloseTap() ?? false) { // if the event is not consumed by quick add
-                _ = toggleTopAddController()
-            }
-        case .edit:
-            clearPossibleUndo()
-            let editing = !self.listItemsTableViewController.isEditing
-            self.setEditing(editing, animated: true, tryCloseTopViewController: true)
-        default: QL4("Not handled: \(buttonId)")
-        }
-    }
-    
-    func onCenterTitleAnimComplete(_ center: Bool) {
-        if center {
-            setDefaultLeftButtons()
-            topBar.setRightButtonModels(rightButtonsDefault())
-        }
-    }
-    
-    // MARK: - Right buttons
-    
-    func rightButtonsDefault() -> [TopBarButtonModel] {
-        return [TopBarButtonModel(buttonId: .toggleOpen)]
-    }
-    
-    func rightButtonsOpeningQuickAdd() -> [TopBarButtonModel] {
-        return [TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))]
-    }
-    
-    func rightButtonsClosingQuickAdd() -> [TopBarButtonModel] {
-        return [TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)]
-    }
-    
-    func rightButtonsClosing() -> [TopBarButtonModel] {
-        return []
     }
     
     // MARK: - Notification

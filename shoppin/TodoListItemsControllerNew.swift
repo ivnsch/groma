@@ -15,12 +15,6 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     @IBOutlet weak var pricesView: PricesView!
     @IBOutlet weak var stashView: StashView!
     
-    // TODO 1 custom view for empty
-    @IBOutlet weak var emptyListView: UIView!
-    @IBOutlet weak var emptyListViewImg: UIImageView!
-    @IBOutlet weak var emptyListViewLabel1: UILabel!
-    @IBOutlet weak var emptyListViewLabel2: UILabel!
-    
     fileprivate weak var todoListItemsEditBottomView: TodoListItemsEditBottomView?
     
     override var status: ListItemStatus {
@@ -31,11 +25,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         //        return pricesView.frame.height // can be open or closed, for now just return fixed height of prices view - when it's closed we have a bigger inset
         return DimensionsManager.listItemsPricesViewHeight
     }
-    
-    override var emptyView: UIView {
-        return emptyListView
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -176,16 +166,6 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     //    Prov.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
     //    })
     //}
-    
-    override func setEmptyUI(_ visible: Bool, animated: Bool) {
-        super.setEmptyUI(visible, animated: animated)
-        let hidden = !visible
-        if animated {
-            emptyListView.setHiddenAnimated(hidden)
-        } else {
-            emptyListView.isHidden = hidden
-        }
-    }
     
     override func onTopBarTitleTap() {
         back()

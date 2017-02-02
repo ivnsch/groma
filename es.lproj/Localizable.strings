@@ -346,6 +346,8 @@ title_groups = "Grupos";
 title_participants = "Participantes";
 
 
+empty_list_line1 = "Tu lista está vacía";
+empty_list_line2 = "Pulsa para agregar ítems";
 empty_inventory_line1 = "Tu inventario está vacío";
 empty_inventory_line2 = "Para agregar ítems,\nusa \"comprar\" en el carrito.";
 empty_group_line1 = "Tu grupo está vacío";
