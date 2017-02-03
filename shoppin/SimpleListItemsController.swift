@@ -639,8 +639,23 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
 extension SimpleListItemsController: ListItemCellDelegateNew {
     
     func onItemSwiped(_ listItem: ListItem) {
-        // TODO!!!!!!!!!!!!!!!!!!! move item to .todo - (note swipe in this case is to the left)
+        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem)"); return}
+        
+        onListItemSelected(listItem, indexPath: indexPath)
+        tableView.deleteRows(at: [indexPath], with: .top)
     }
+    
+    func indexPathFor(listItem: ListItem) -> IndexPath? {
+        guard let listItems = listItems else {QL4("No listItems"); return nil}
+
+        for (index, item) in listItems.enumerated() {
+            if item.same(listItem) {
+                return IndexPath(row: index, section: 0)
+            }
+        }
+        return nil
+    }
+    
     
     func onStartItemSwipe(_ listItem: ListItem) {
         // Do nothing
@@ -721,6 +736,7 @@ class SimpleListItemsTableViewController: UITableViewController {
         
         if let listItem = listItems?[indexPath.row], let cellDelegate = cellDelegate {
             cell.setup(status, mode: cellMode, tableViewListItem: listItem, delegate: cellDelegate)
+            cell.direction = .left
             
         } else {
             QL4("Invalid state: no listitem for: \(indexPath) or no cell delegate: \(cellDelegate)")
@@ -746,17 +762,16 @@ class SimpleListItemsTableViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return isEditing
+    }
+    
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return isEditing
     }
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         listItemsEditTableViewDelegate?.onListItemMoved(from: sourceIndexPath, to: destinationIndexPath)
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let listItem = listItems?[indexPath.row] else {QL4("No listItem"); return}
-        listItemsTableViewDelegate?.onListItemSelected(listItem, indexPath: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

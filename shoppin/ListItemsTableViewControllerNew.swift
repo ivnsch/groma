@@ -13,7 +13,7 @@ import RealmSwift
 
 protocol ListItemsTableViewDelegateNew: class {
     func onListItemClear(_ tableViewListItem: ListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo
-    func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath) // mark as undo
+    func onListItemSelected(_ tableViewListItem: ListItem) // mark as undo
     func onListItemReset(_ tableViewListItem: ListItem) // revert undo
     func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection)
     func onIncrementItem(_ model: ListItem, delta: Int)
@@ -188,11 +188,6 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {QL4("No listItem"); return}
-        listItemsTableViewDelegate?.onListItemSelected(listItem, indexPath: indexPath)
-    }
-    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 
         if editingStyle == .delete {
@@ -266,11 +261,34 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     // MARK: - ListItemCellDelegateNew
     
     
-    func onItemSwiped(_ listItem: ListItem) {
-        //        self.swipedTableViewListItem = tableViewListItem
-        // TODO!!!!!!!!!!!!!!!!!!! submit item here
+    func onItemSwiped(_ listItem: ListItem, indexPath: IndexPath) {
+        
+        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem)"); return}
+        
+        listItemsTableViewDelegate?.onListItemSelected(listItem)
+        
+        if tableView.numberOfRows(inSection: indexPath.section) == 1 {
+            tableView.deleteSections(IndexSet([indexPath.section]), with: .top)
+        } else {
+            tableView.deleteRows(at: [indexPath], with: .top)
+        }
     }
     
+    func indexPathFor(listItem: ListItem) -> IndexPath? {
+        guard let sections = sections else {QL4("No sections"); return nil}
+        
+        for (sectionIndex, section) in sections.enumerated() {
+            let listItems = section.listItems
+            for (index, item) in listItems.enumerated() {
+                if item.same(listItem) {
+                    return IndexPath(row: index, section: sectionIndex)
+                }
+            }
+        }
+        
+        return nil
+    }
+
     func onStartItemSwipe(_ listItem: ListItem) {
         //        clearPendingSwipeItemIfAny(true)
     }

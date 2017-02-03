@@ -40,8 +40,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     @IBOutlet weak var plusButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var minusButtonWidthConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var undoLabel1: UILabel!
-    @IBOutlet weak var undoLabel2: UILabel!
+//    @IBOutlet weak var undoLabel1: UILabel!
+//    @IBOutlet weak var undoLabel2: UILabel!
     
     @IBOutlet weak var minusTrailingConstraint: NSLayoutConstraint!
     
@@ -82,7 +82,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
                 
                 updateModeItemsVisibility(false)
                 
-                undoLabel1.text = listItem.product.product.product.name
+//                undoLabel1.text = listItem.product.product.product.name
                 
                 setOpen(tableViewListItem.swiped)
                 if tableViewListItem.swiped {
@@ -121,8 +121,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         
         // Hide these labels during edit, for reordering (otherwise they stay visible while cell becomes semitransparent). We don't use undo in edit so it's ok to do this fix here. Otherwise private api like described here http://stackoverflow.com/a/10854018/930450, to get events when cell starts and ends moving works too (tested it on iOS 9). Prefer to do it here to avoid using private api.
         let isEdit = mode == .increment
-        undoLabel1.isHidden = isEdit
-        undoLabel2.isHidden = isEdit
+//        undoLabel1.isHidden = isEdit
+//        undoLabel2.isHidden = isEdit
         
         let (itemsDelay, priceDelay): (TimeInterval, TimeInterval) = {
             if animated {
@@ -216,7 +216,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         quantityLabelCenterVerticallyConstraint.constant = 0
         priceLabel.alpha = 0
         
-        undoLabel2.text = trans("generic_undo")
+//        undoLabel2.text = trans("generic_undo")
         
         selectionStyle = UITableViewCellSelectionStyle.none
         
@@ -269,20 +269,18 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         }
     }
     
-    override func onButtonTwoTap() {
-        if let tableViewListItem = tableViewListItem{
-            delegate?.onButtonTwoTap(tableViewListItem)
-        } else {
-            print("Warn: ListItemCell.onButtonTwoTap: no tableViewListItem")
-        }
-    }
+//    override func onButtonTwoTap() {
+//        if let tableViewListItem = tableViewListItem{
+//            delegate?.onButtonTwoTap(tableViewListItem)
+//        } else {
+//            print("Warn: ListItemCell.onButtonTwoTap: no tableViewListItem")
+//        }
+//    }
     
     override func onItemSwiped() {
-        if let tableViewListItem = tableViewListItem{
-            delegate?.onItemSwiped(tableViewListItem)
-        } else {
-            print("Warn: ListItemCell.onItemSwiped: no tableViewListItem")
-        }
+        guard let listItem = tableViewListItem else {QL4("No list item"); return}
+        
+        delegate?.onItemSwiped(listItem)
     }
     
     // MARK: - SwipeToIncrementHelperDelegate

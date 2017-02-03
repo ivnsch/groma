@@ -15,42 +15,17 @@
             <rect key="frame" x="0.0" y="0.0" width="390" height="89"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="390" height="88.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="390" height="88"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uva-aS-wz7" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                        <rect key="frame" x="176" y="35" width="38" height="18"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                <integer key="value" value="40"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aXE-DC-OSP" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                        <rect key="frame" x="173" y="33" width="44" height="22"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                        <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                <integer key="value" value="50"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                    </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ut-wP-JDC">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="88.5"/>
-                        <state key="normal" title="Undo">
-                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        </state>
-                    </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="undo" translatesAutoresizingMaskIntoConstraints="NO" id="U2m-oG-dVp">
+                        <rect key="frame" x="347" y="32" width="23" height="24"/>
+                    </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qsx-FZ-N7Z">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="88.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="88"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="omP-yo-uwI">
-                                <rect key="frame" x="0.0" y="0.0" width="4" height="88.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="4" height="88"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="4" id="80W-W4-dVl"/>
@@ -79,14 +54,14 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q2i-tR-Ja4">
-                                <rect key="frame" x="316" y="0.0" width="0.0" height="88.5"/>
+                                <rect key="frame" x="316" y="0.0" width="0.0" height="88"/>
                                 <constraints>
                                     <constraint firstAttribute="width" id="EE4-Nx-uNa"/>
                                 </constraints>
                                 <state key="normal" image="plus"/>
                             </button>
                             <button opaque="NO" alpha="0.0" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KBs-ef-XHn">
-                                <rect key="frame" x="255" y="0.0" width="61" height="88.5"/>
+                                <rect key="frame" x="255" y="0.0" width="61" height="88"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="61" id="2Om-Al-QIK"/>
@@ -117,7 +92,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hlg-oE-uD3">
-                                <rect key="frame" x="365" y="0.0" width="0.0" height="88.5"/>
+                                <rect key="frame" x="365" y="0.0" width="0.0" height="88"/>
                                 <constraints>
                                     <constraint firstAttribute="width" id="kjg-05-4c9"/>
                                 </constraints>
@@ -157,19 +132,14 @@
                         </variation>
                     </view>
                 </subviews>
+                <color key="backgroundColor" red="0.15686274510000001" green="0.78039215689999997" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="qsx-FZ-N7Z" secondAttribute="trailing" id="12w-c0-6Pn"/>
                     <constraint firstItem="qsx-FZ-N7Z" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="48m-MO-3dm"/>
-                    <constraint firstItem="aXE-DC-OSP" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="8KA-wu-USM"/>
-                    <constraint firstAttribute="bottom" secondItem="9ut-wP-JDC" secondAttribute="bottom" id="ENX-53-G2C"/>
-                    <constraint firstAttribute="trailing" secondItem="9ut-wP-JDC" secondAttribute="trailing" id="FaZ-RN-zR2"/>
+                    <constraint firstAttribute="trailing" secondItem="U2m-oG-dVp" secondAttribute="trailing" constant="20" id="5Us-PV-yHF" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                     <constraint firstItem="qsx-FZ-N7Z" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Gyi-Al-dLt"/>
-                    <constraint firstItem="aXE-DC-OSP" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="LLv-dj-Ht7"/>
-                    <constraint firstItem="9ut-wP-JDC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="NhB-ZG-a6F"/>
-                    <constraint firstItem="uva-aS-wz7" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="PZT-Dj-qci"/>
-                    <constraint firstItem="9ut-wP-JDC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="pcy-Td-ZW7"/>
+                    <constraint firstItem="U2m-oG-dVp" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="a3U-ax-LkM"/>
                     <constraint firstAttribute="bottom" secondItem="qsx-FZ-N7Z" secondAttribute="bottom" id="wzQ-D7-c0K"/>
-                    <constraint firstItem="uva-aS-wz7" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="zbD-Ae-Mh3"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -189,8 +159,6 @@
                 <outlet property="quantityLabel" destination="tWT-lo-PEo" id="tJf-F2-HwE"/>
                 <outlet property="quantityLabelCenterVerticallyConstraint" destination="6Tn-lh-b0c" id="ayc-Dr-huy"/>
                 <outlet property="sectionColorView" destination="omP-yo-uwI" id="a0O-XX-YMv"/>
-                <outlet property="undoLabel1" destination="uva-aS-wz7" id="Nqx-Fl-il9"/>
-                <outlet property="undoLabel2" destination="aXE-DC-OSP" id="Y9f-P9-MRd"/>
             </connections>
             <point key="canvasLocation" x="36" y="63.5"/>
         </tableViewCell>
@@ -199,5 +167,6 @@
         <image name="minus" width="9" height="3"/>
         <image name="plus" width="15" height="14"/>
         <image name="speechbubble" width="23" height="23"/>
+        <image name="undo" width="23" height="24"/>
     </resources>
 </document>
