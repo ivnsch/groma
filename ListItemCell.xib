@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="89" id="KGk-i7-Jjw" customClass="ListItemCellNew" customModule="shoppin" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="390" height="89"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="390" height="88.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qsx-FZ-N7Z">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="88.5"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="omP-yo-uwI">
+                                <rect key="frame" x="0.0" y="0.0" width="4" height="88.5"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="4" id="80W-W4-dVl"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="G1L-C6-XHI" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="29" y="24" width="237" height="22"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWT-lo-PEo" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="316" y="33" width="49" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="60"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q2i-tR-Ja4">
+                                <rect key="frame" x="316" y="0.0" width="0.0" height="88.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" id="EE4-Nx-uNa"/>
+                                </constraints>
+                                <state key="normal" image="plus"/>
+                            </button>
+                            <button opaque="NO" alpha="0.0" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KBs-ef-XHn">
+                                <rect key="frame" x="255" y="0.0" width="61" height="88.5"/>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="61" id="2Om-Al-QIK"/>
+                                </constraints>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" image="speechbubble"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="249" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="ETO-cG-1dT" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="29" y="46" width="237" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hGa-Px-tk0" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="324" y="57" width="33" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hlg-oE-uD3">
+                                <rect key="frame" x="365" y="0.0" width="0.0" height="88.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" id="kjg-05-4c9"/>
+                                </constraints>
+                                <state key="normal" image="minus"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="omP-yo-uwI" firstAttribute="top" secondItem="qsx-FZ-N7Z" secondAttribute="top" id="0wW-bw-Yb8"/>
+                            <constraint firstItem="G1L-C6-XHI" firstAttribute="leading" secondItem="omP-yo-uwI" secondAttribute="trailing" constant="25" id="2T2-Yr-LHZ" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                            <constraint firstItem="KBs-ef-XHn" firstAttribute="centerY" secondItem="qsx-FZ-N7Z" secondAttribute="centerY" id="3Am-bA-0Cb"/>
+                            <constraint firstItem="Hlg-oE-uD3" firstAttribute="top" secondItem="qsx-FZ-N7Z" secondAttribute="top" id="5Kc-gW-NtV"/>
+                            <constraint firstAttribute="bottom" secondItem="q2i-tR-Ja4" secondAttribute="bottom" id="60k-4y-b8T"/>
+                            <constraint firstAttribute="centerY" secondItem="tWT-lo-PEo" secondAttribute="centerY" id="6Tn-lh-b0c"/>
+                            <constraint firstAttribute="bottom" secondItem="Hlg-oE-uD3" secondAttribute="bottom" id="8U4-X1-abO"/>
+                            <constraint firstItem="ETO-cG-1dT" firstAttribute="trailing" secondItem="G1L-C6-XHI" secondAttribute="trailing" id="E9E-eQ-sqV"/>
+                            <constraint firstItem="tWT-lo-PEo" firstAttribute="leading" secondItem="G1L-C6-XHI" secondAttribute="trailing" priority="999" constant="50" id="EdA-JD-DSt"/>
+                            <constraint firstItem="tWT-lo-PEo" firstAttribute="leading" secondItem="q2i-tR-Ja4" secondAttribute="trailing" id="N4R-lq-Df5"/>
+                            <constraint firstItem="ETO-cG-1dT" firstAttribute="centerY" secondItem="qsx-FZ-N7Z" secondAttribute="centerY" constant="10" id="OxT-A4-Yad"/>
+                            <constraint firstItem="Hlg-oE-uD3" firstAttribute="leading" secondItem="tWT-lo-PEo" secondAttribute="trailing" id="QfM-gb-KkM"/>
+                            <constraint firstItem="hGa-Px-tk0" firstAttribute="top" secondItem="tWT-lo-PEo" secondAttribute="bottom" id="VO7-QH-RZL"/>
+                            <constraint firstAttribute="bottom" secondItem="KBs-ef-XHn" secondAttribute="bottom" id="W83-4s-2Zb"/>
+                            <constraint firstItem="omP-yo-uwI" firstAttribute="leading" secondItem="qsx-FZ-N7Z" secondAttribute="leading" id="Zra-53-7hZ"/>
+                            <constraint firstItem="tWT-lo-PEo" firstAttribute="leading" secondItem="KBs-ef-XHn" secondAttribute="trailing" id="dOc-12-UlJ"/>
+                            <constraint firstAttribute="centerY" secondItem="G1L-C6-XHI" secondAttribute="centerY" constant="10" id="esy-ni-fkJ"/>
+                            <constraint firstItem="q2i-tR-Ja4" firstAttribute="top" secondItem="qsx-FZ-N7Z" secondAttribute="top" id="fqR-8X-I2O"/>
+                            <constraint firstAttribute="trailing" secondItem="Hlg-oE-uD3" secondAttribute="trailing" constant="25" id="gYH-wC-Dyt" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                            <constraint firstAttribute="bottom" secondItem="omP-yo-uwI" secondAttribute="bottom" id="hQh-4Q-u0P"/>
+                            <constraint firstItem="hGa-Px-tk0" firstAttribute="centerX" secondItem="tWT-lo-PEo" secondAttribute="centerX" id="m2M-0y-ndd"/>
+                            <constraint firstItem="ETO-cG-1dT" firstAttribute="leading" secondItem="G1L-C6-XHI" secondAttribute="leading" id="mfO-FF-dzB"/>
+                            <constraint firstItem="KBs-ef-XHn" firstAttribute="top" secondItem="qsx-FZ-N7Z" secondAttribute="top" id="yLi-vj-KiW"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="3Am-bA-0Cb"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uva-aS-wz7" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                        <rect key="frame" x="176" y="35.5" width="38" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="40"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aXE-DC-OSP" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                        <rect key="frame" x="173" y="33.5" width="44" height="22"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="50"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ut-wP-JDC">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="88.5"/>
+                        <state key="normal" title="Undo">
+                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="qsx-FZ-N7Z" secondAttribute="trailing" id="12w-c0-6Pn"/>
+                    <constraint firstItem="qsx-FZ-N7Z" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="48m-MO-3dm"/>
+                    <constraint firstItem="aXE-DC-OSP" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="8KA-wu-USM"/>
+                    <constraint firstAttribute="bottom" secondItem="9ut-wP-JDC" secondAttribute="bottom" id="ENX-53-G2C"/>
+                    <constraint firstAttribute="trailing" secondItem="9ut-wP-JDC" secondAttribute="trailing" id="FaZ-RN-zR2"/>
+                    <constraint firstItem="qsx-FZ-N7Z" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Gyi-Al-dLt"/>
+                    <constraint firstItem="aXE-DC-OSP" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="LLv-dj-Ht7"/>
+                    <constraint firstItem="9ut-wP-JDC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="NhB-ZG-a6F"/>
+                    <constraint firstItem="uva-aS-wz7" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="PZT-Dj-qci"/>
+                    <constraint firstItem="9ut-wP-JDC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="pcy-Td-ZW7"/>
+                    <constraint firstAttribute="bottom" secondItem="qsx-FZ-N7Z" secondAttribute="bottom" id="wzQ-D7-c0K"/>
+                    <constraint firstItem="uva-aS-wz7" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="zbD-Ae-Mh3"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="brandLabel" destination="ETO-cG-1dT" id="5NB-C9-Zg1"/>
+                <outlet property="centerVerticallyNameLabelConstraint" destination="esy-ni-fkJ" id="WzT-AR-ykM"/>
+                <outlet property="contentViewLeftConstraint" destination="48m-MO-3dm" id="h4S-8N-DRq"/>
+                <outlet property="contentViewRightConstraint" destination="12w-c0-6Pn" id="Kkh-cR-etc"/>
+                <outlet property="minusButton" destination="Hlg-oE-uD3" id="yP2-Ad-iaJ"/>
+                <outlet property="minusButtonWidthConstraint" destination="kjg-05-4c9" id="lq1-Zl-0n8"/>
+                <outlet property="minusTrailingConstraint" destination="gYH-wC-Dyt" id="UAc-8v-hdd"/>
+                <outlet property="myContentView" destination="qsx-FZ-N7Z" id="5z0-e2-a9Y"/>
+                <outlet property="nameLabel" destination="G1L-C6-XHI" id="Sjp-6s-go0"/>
+                <outlet property="noteButton" destination="KBs-ef-XHn" id="T8B-Zw-Y8o"/>
+                <outlet property="plusButton" destination="q2i-tR-Ja4" id="98B-T6-sbj"/>
+                <outlet property="plusButtonWidthConstraint" destination="EE4-Nx-uNa" id="ugf-2e-paH"/>
+                <outlet property="priceLabel" destination="hGa-Px-tk0" id="5o5-AK-SSN"/>
+                <outlet property="quantityLabel" destination="tWT-lo-PEo" id="tJf-F2-HwE"/>
+                <outlet property="quantityLabelCenterVerticallyConstraint" destination="6Tn-lh-b0c" id="ayc-Dr-huy"/>
+                <outlet property="sectionColorView" destination="omP-yo-uwI" id="a0O-XX-YMv"/>
+                <outlet property="undoLabel1" destination="uva-aS-wz7" id="Nqx-Fl-il9"/>
+                <outlet property="undoLabel2" destination="aXE-DC-OSP" id="Y9f-P9-MRd"/>
+            </connections>
+            <point key="canvasLocation" x="36" y="63.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="minus" width="9" height="3"/>
+        <image name="plus" width="15" height="14"/>
+        <image name="speechbubble" width="23" height="23"/>
+    </resources>
+</document>

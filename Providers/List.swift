@@ -46,8 +46,8 @@ public class List: DBSyncable, Identifiable {
     }
 
     public var todoSections = RealmSwift.List<Section>()
-    public var doneSections = RealmSwift.List<Section>()
-    public var stashSections = RealmSwift.List<Section>()
+    public var doneListItems = RealmSwift.List<ListItem>()
+    public var stashListItems = RealmSwift.List<ListItem>()
     
     public convenience init(uuid: String, name: String, users: [DBSharedUser] = [], color: UIColor, order: Int, inventory: DBInventory, store: String?, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.init()
@@ -164,8 +164,16 @@ public class List: DBSyncable, Identifiable {
     public func sections(status: ListItemStatus) -> RealmSwift.List<Section> {
         switch status {
         case .todo: return todoSections
-        case .done: return doneSections
-        case .stash: return stashSections
+        case .done: fallthrough
+        case .stash: fatalError("Sections only supported in TODO") // backwards compatibility - for now like this, to keep the interface generic, in case we want to re-add the sections to cart/stash later
+        }
+    }
+    
+    public func listItems(status: ListItemStatus) -> RealmSwift.List<ListItem> {
+        switch status {
+        case .todo: fatalError("List items not supported in TODO")  // backwards compatibility - for now like this, to keep the interface generic, in case we want to re-add the sections to cart/stash later
+        case .done: return doneListItems
+        case .stash: return stashListItems
         }
     }
     

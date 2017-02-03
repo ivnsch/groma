@@ -97,7 +97,7 @@
         <!--Cart-->
         <scene sceneID="wnA-PV-n69">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Jkv-5K-pqw" customClass="CartListItemsController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Jkv-5K-pqw" customClass="CartListItemsControllerNew" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5H0-4q-wYx"/>
                         <viewControllerLayoutGuide type="bottom" id="LyR-1z-msh"/>
@@ -253,12 +253,10 @@
                         <barButtonItem key="rightBarButtonItem" title="Buy" id="bc8-rn-N1i"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="buyLabel" destination="oYb-WW-vJz" id="qxH-Lx-ZuQ"/>
-                        <outlet property="buyRightConstraint" destination="1hJ-0X-jxp" id="RhD-yO-JeI"/>
-                        <outlet property="buyView" destination="Juy-Wa-8fi" id="8dK-bt-Wso"/>
                         <outlet property="buyViewHeightConstraint" destination="LsL-Ma-0NL" id="JKN-cL-vSY"/>
-                        <outlet property="emptyListView" destination="blz-rx-aVz" id="mXI-w9-FJN"/>
-                        <outlet property="expandCollapseButton" destination="i9d-jj-Bdy" id="YTL-yi-3KG"/>
+                        <outlet property="emptyView" destination="blz-rx-aVz" id="Vlj-Jb-X2u"/>
+                        <outlet property="emptyViewLabel1" destination="hAl-pb-QcH" id="Nvq-Nn-Xob"/>
+                        <outlet property="emptyViewLabel2" destination="Xde-nJ-NKG" id="VhH-GY-IjC"/>
                         <outlet property="topBar" destination="Dhe-Wt-ZWJ" id="OKD-Rj-Ta9"/>
                         <outlet property="topBarHeightConstraint" destination="H5W-Wr-6WR" id="ltK-FE-McL"/>
                         <outlet property="totalDonePriceLabel" destination="Lzh-3J-7ty" id="pad-Ca-PAm"/>
@@ -420,7 +418,7 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="so5-bY-yhM">
                                 <rect key="frame" x="0.0" y="64" width="375" height="543"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="1ECADBE3-1995-4496-B8B0-68A8DC0BC44B" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="A7638ED5-AF77-4195-A0AF-0F963733D162" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
                                         <rect key="frame" x="75" y="150" width="225" height="206"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -745,7 +743,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="1ECADBE3-1995-4496-B8B0-68A8DC0BC44B" width="240" height="206">
+        <image name="A7638ED5-AF77-4195-A0AF-0F963733D162" width="240" height="206">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

@@ -20,7 +20,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     // TODO remove fields that are not necessary anymore
     
-    fileprivate let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
+//    fileprivate let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
     
     
     weak var listItemsTableViewController: ListItemsTableViewControllerNew!
@@ -32,9 +32,6 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         }
     }
     
-    
-    fileprivate var listItemsResult: Results<ListItem>?
-
     fileprivate var realmData: RealmData?
     fileprivate var notificationToken: NotificationToken? {
         return realmData?.token
@@ -138,9 +135,6 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         guard let list = currentList else {QL4("No list"); return}
         
         listItemsTableViewController.sections = list.sections(status: status)
-//        Prov.sectionProvider.sections(list: list, handler: successHandler {sections in
-//            self.listItemsTableViewController.sections = sections
-//        })
         
         QL1("Initialized sections: \(listItemsTableViewController.sections?.count)")
         
@@ -297,9 +291,9 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                
                // NOTE: For the provider the whole state is updated here - including possible section removal (if the current undo list item is the last one in the section) and the order field update of possible following sections. This means that the contents of the table view may be in a slightly inconsistent state with the data in the provider during the time cell is in undo (for the table view the section is still there, for the provider it's not). This is fine as the undo state is just a UI thing (local) and it should be cleared as soon as we try to start a new action (add, edit, delete, reorder etc) or go to the cart/stash.
             
-            Prov.listItemsProvider.switchStatusNew(listItem: tableViewListItem, from: indexPath, srcStatus: weakSelf.status, dstStatus: targetStatus, realmData: realmData, weakSelf.successHandler{[weak self] switchedListItem in
-                    self?.onTableViewChangedQuantifiables()
-                })
+            Prov.listItemsProvider.switchTodoToCartSync(listItem: tableViewListItem, from: indexPath, realmData: realmData, weakSelf.successHandler{[weak self] switchedListItem in
+                self?.onTableViewChangedQuantifiables()
+            })
                // Prov.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, orderInDstStatus: nil, remote: true, weakSelf.resultHandler(onSuccess: {switchedListItem in
                //     //                        weakSelf.onTableViewChangedQuantifiables()
                // }, onErrorAdditional: {result in

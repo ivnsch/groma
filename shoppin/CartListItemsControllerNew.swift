@@ -1,0 +1,114 @@
+//
+//  CartListItemsControllerNew.swift
+//  shoppin
+//
+//  Created by Ivan Schuetz on 02/02/2017.
+//  Copyright © 2017 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+import Providers
+import QorumLogs
+
+class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizerDelegate {
+
+    @IBOutlet weak var totalDonePriceLabel: UILabel!
+    @IBOutlet weak var buyViewHeightConstraint: NSLayoutConstraint!
+    
+    override var status: ListItemStatus {
+        return .done
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        topBar.setBackVisible(true)
+
+        buyViewHeightConstraint.constant = DimensionsManager.listItemsPricesViewHeight
+
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    override func updateQuantifiables() {
+        guard let list = currentList else {QL4("No list"); return}
+
+        Prov.listItemsProvider.calculateCartStashAggregate(list: list, successHandler {aggregate in
+            self.totalDonePriceLabel.text = aggregate.cartPrice.toLocalCurrencyString()
+        })
+    }
+    
+    // Fixes random, rare freezes when coming back to todo controller. See http://stackoverflow.com/a/28919337/930450
+    // Curiously implementing gestureRecognizerShouldBegin and returning always true seemed to fix it (tested a long time after it and the bug didn't happen again - could be of course that this was just luck, though normally it appears after switching todo/cart 100 or so times and tested more than this). Letting the count check anyways, since this seems to be the proper fix.
+    // Note: I also tried implementing a UI test for this but swipe doesn't work well so need to test manually.
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        
+        guard let navigationController = navigationController else {QL3("No navigation controller"); return false}
+        
+        if navigationController.viewControllers.count > 1 {
+            return true
+        }
+        
+        // Not really a warning, just curious to see when this actually happens, see method comment.
+        QL3("Only info: Navigation controller viewControllers.count: \(navigationController.viewControllers.count)")
+        return false
+    }
+    
+    override func topBarTitle(_ list: List) -> String {
+        return trans("title_cart")
+    }
+    
+    fileprivate func addAllItemsToInventory() {
+        
+        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let list = currentList else {QL4("No list"); return}
+        
+        func onSizeLimitOk(_ list: List) {
+//            listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
+//                if let weakSelf = self {
+            
+                    if let controller = UIApplication.shared.delegate?.window??.rootViewController { // since we change controller on success need root controller in case we show error popup
+                        
+                        Prov.listItemsProvider.buyCart(list: list, realmData: realmData, controller.successHandler{[weak self] result in
+                            // TODO!!!!!!!!!!!!!!!! is this still necessary?
+//                            self?.delegate?.onCartSendItemsToStash(weakSelf.listItemsTableViewController.items)
+                            self?.close()
+                        })
+                    } else {
+                        QL4("No root view controller, can't handle buy cart success result")
+                    }
+//                }
+//            }
+        }
+        
+        Prov.inventoryItemsProvider.countInventoryItems(list.inventory, successHandler {count in
+//                if let weakSelf = self {
+//                    SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
+            onSizeLimitOk(list)
+//                    }
+//                }
+        })
+    }
+    
+    fileprivate func close() {
+        _ = navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func onAddToInventoryTap(_ sender: UIBarButtonItem) {
+        if let list = currentList {
+            if InventoryAuthChecker.checkAccess(list.inventory) {
+                ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_buy_will_add_to_history_stats", list.inventory.name), okTitle: trans("popup_button_buy"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in
+                    self?.addAllItemsToInventory()
+                    }, onCancel: nil)
+            } else {
+                AlertPopup.show(message: trans("popup_you_cant_buy_cart", list.inventory.name), controller: self)
+            }
+        } else {
+            QL3("Warn: DoneViewController.onAddToInventoryTap: list is not set, can't add to inventory")
+        }
+    }
+    
+    override func onTopBarBackButtonTap() {
+        super.onTopBarBackButtonTap()
+        _ = navigationController?.popViewController(animated: true)
+    }
+}

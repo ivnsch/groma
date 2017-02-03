@@ -1295,15 +1295,7 @@ class ListItemProviderImpl: ListItemProvider {
             handler(ProviderResult(status: .databaseUnknown))
         }
     }
-    
-    func switchStatusNew(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void) {
-        if let result = DBProv.listItemProvider.switchSync(listItem: listItem, from: from, srcStatus: srcStatus, dstStatus: dstStatus, realmData: realmData) {
-            handler(ProviderResult(status: .success, sucessResult: result))
-        } else {
-            handler(ProviderResult(status: .databaseUnknown))
-        }
-    }
-    
+
     func deleteNew(indexPath: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<DeleteListItemResult>) -> Void) {
         if let result = DBProv.listItemProvider.deleteSync(indexPath: indexPath, status: status, list: list, realmData: realmData) {
             handler(ProviderResult(status: .success, sucessResult: result))
@@ -1331,5 +1323,45 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
+    }
+    
+    // MARK: - Buy
+    
+    func buyCart(list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void) {
+        let success = DBProv.listItemProvider.buyCart(list: list, realmData: realmData)
+        handler(ProviderResult(status: success ? .success : .databaseUnknown))
+    }
+    
+    // MARK: - Switch
+    
+    func switchStatusNew(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void) {
+        if let result = DBProv.listItemProvider.switchSync(listItem: listItem, from: from, srcStatus: srcStatus, dstStatus: dstStatus, realmData: realmData) {
+            handler(ProviderResult(status: .success, sucessResult: result))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
+    func switchTodoToCartSync(listItem: ListItem, from: IndexPath, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void) {
+        if let result = DBProv.listItemProvider.switchTodoToCartSync(listItem: listItem, from: from, realmData: realmData) {
+            handler(ProviderResult(status: .success, sucessResult: result))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
+    func switchCartToStashSync(listItems: [ListItem], list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        let success = DBProv.listItemProvider.switchCartToStashSync(listItems: listItems, list: list, realmData: realmData)
+        handler(ProviderResult(status: success ? .success : .databaseUnknown))
+    }
+    
+    func switchStashToTodoSync(listItem: ListItem, from: IndexPath, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        let success = DBProv.listItemProvider.switchStashToTodoSync(listItem: listItem, from: from, realmData: realmData)
+        handler(ProviderResult(status: success ? .success : .databaseUnknown))
+    }
+    
+    func switchCartToTodoSync(listItem: ListItem, from: IndexPath, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        let success = DBProv.listItemProvider.switchCartToTodoSync(listItem: listItem, from: from, realmData: realmData)
+        handler(ProviderResult(status: success ? .success : .databaseUnknown))
     }
 }

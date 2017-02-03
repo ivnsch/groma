@@ -19,6 +19,7 @@ protocol ListItemsTableViewDelegateNew: class {
     func onIncrementItem(_ model: ListItem, delta: Int)
     func onTableViewScroll(_ scrollView: UIScrollView)
     func onPullToAdd()
+    func showPopup(text: String, cell: UITableViewCell, button: UIView)
 }
 
 protocol ListItemsEditTableViewDelegateNew: class {
@@ -86,9 +87,15 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     
     func enablePullToAdd() {
         let refreshControl = PullToAddHelper.createPullToAdd(self)
-        refreshControl.addTarget(self, action: #selector(ListItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
         self.refreshControl = refreshControl
     }
+    
+    func onPullRefresh(_ sender: UIRefreshControl) {
+        sender.endRefreshing()
+        listItemsTableViewDelegate?.onPullToAdd()
+    }
+    
     
     /**
      Sets pending item (mark as undo" if open and shows cell open state. Submits currently pending item if existent.
@@ -212,31 +219,6 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         listItemsEditTableViewDelegate?.onListItemMoved(from: sourceIndexPath, to: destinationIndexPath)
     }
     
-    
-    // MARK: - Table view row manipulation
-    
-    func addRow(indexPath: IndexPath, isNewSection: Bool) {
-        
-        tableView.beginUpdates()
-        if isNewSection {
-            tableView.insertSections([indexPath.section], with: .top)
-        }
-        tableView.insertRows(at: [IndexPath(row: indexPath.row, section: indexPath.section)], with: .top)
-        tableView.endUpdates()
-    }
-
-    func updateRow(indexPath: IndexPath) {
-        tableView.reloadRows(at: [indexPath], with: .none)
-    }
-    
-    func deleteSection(index: Int) {
-        tableView.deleteSections(IndexSet([index]), with: .top)
-    }
-    
-    func reload() {
-        tableView.reloadData()
-    }
-    
     // MARK: - Expand sections
     
     func setAllSectionsExpanded(_ expanded: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
@@ -301,25 +283,11 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     
     func onNoteTap(_ cell: ListItemCellNew, listItem: ListItem) {
         if !listItem.note.isEmpty {
-            
-            // use parent controller otherwise popup scrolls with the table
-            if let parentController = parent {
-                let noteButton = cell.noteButton
-                
-                let topOffset: CGFloat = 64
-                let frame = parentController.view.bounds.copy(y: topOffset, height: parentController.view.bounds.height)
-                
-                let noteButtonPointParentController = parentController.view.convert(CGPoint(x: (noteButton?.center.x)!, y: (noteButton?.center.y)!), from: cell)
-                // adjust the anchor point also for topOffset
-                let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
-                
-                AlertPopup.showCustom(message: listItem.note, controller: parentController, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
+            if let noteButton = cell.noteButton {
+                listItemsTableViewDelegate?.showPopup(text: listItem.note, cell: cell, button: noteButton)
             } else {
-                QL3("No parent controller, can't show note popup")
+                QL3("No note button")
             }
-            
-            
-            
         } else {
             QL4("Invalid state: There's no note. When there's no note there should be no button so we shouldn't be here.")
         }

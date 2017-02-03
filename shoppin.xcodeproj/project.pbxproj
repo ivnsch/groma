@@ -15,6 +15,8 @@
 		58FBD9B31DDCDA19002242D6 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */; };
 		58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */; };
 		6A0DE19B1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */; };
+		6A1BBADA1E44AF5E00BC7404 /* UITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */; };
+		6A1BBAE01E44B57300BC7404 /* ListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */; };
 		6A2D506B1E3F5D0300B0F7EA /* ListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */; };
 		6A2D506D1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */; };
 		6A2D506F1E3F611F00B0F7EA /* ListItemCellNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */; };
@@ -27,6 +29,8 @@
 		6A66D3461E413A300028240C /* TodoListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */; };
 		6A7C54B91E439B2800300F8D /* ItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7C54B71E439B2800300F8D /* ItemsController.swift */; };
 		6A7C54BA1E439B2800300F8D /* ItemsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A7C54B81E439B2800300F8D /* ItemsController.xib */; };
+		6A7C54BC1E43EFFB00300F8D /* CartListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7C54BB1E43EFFB00300F8D /* CartListItemsControllerNew.swift */; };
+		6A7C54BE1E43F03A00300F8D /* StashListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7C54BD1E43F03A00300F8D /* StashListItemsControllerNew.swift */; };
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
 		6AE34BE41E2E25B80039A2A8 /* RecipesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */; };
 		6AE34BF01E2EA7880039A2A8 /* IngredientsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */; };
@@ -386,6 +390,8 @@
 		58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
 		58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderSectionTableViewControllerNew.swift; sourceTree = "<group>"; };
+		6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewController.swift; sourceTree = "<group>"; };
+		6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ListItemCell.xib; path = ../ListItemCell.xib; sourceTree = "<group>"; };
 		6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsTableViewControllerNew.swift; sourceTree = "<group>"; };
 		6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellNew.swift; sourceTree = "<group>"; };
@@ -398,6 +404,8 @@
 		6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A7C54B71E439B2800300F8D /* ItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsController.swift; sourceTree = "<group>"; };
 		6A7C54B81E439B2800300F8D /* ItemsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemsController.xib; sourceTree = "<group>"; };
+		6A7C54BB1E43EFFB00300F8D /* CartListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartListItemsControllerNew.swift; sourceTree = "<group>"; };
+		6A7C54BD1E43F03A00300F8D /* StashListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StashListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
 		6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipesController.swift; sourceTree = "<group>"; };
 		6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientsController.swift; sourceTree = "<group>"; };
@@ -818,6 +826,8 @@
 				6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */,
 				6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */,
 				6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */,
+				6A7C54BB1E43EFFB00300F8D /* CartListItemsControllerNew.swift */,
+				6A7C54BD1E43F03A00300F8D /* StashListItemsControllerNew.swift */,
 			);
 			name = listItems;
 			sourceTree = "<group>";
@@ -840,6 +850,7 @@
 				6A42C3841E437C4900F8E0E6 /* SimpleListItemsController.xib */,
 				6A7C54B71E439B2800300F8D /* ItemsController.swift */,
 				6A7C54B81E439B2800300F8D /* ItemsController.xib */,
+				6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */,
 			);
 			name = generic;
 			sourceTree = "<group>";
@@ -1365,6 +1376,7 @@
 				EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */,
 				EB0587DF1BBEDAA600080626 /* NSBundle.swift */,
 				EB6A207C1ACC079000B9BCB2 /* UITableView.swift */,
+				6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */,
 				EBD828041BEA441B0072F9FA /* UINavigationController.swift */,
 				EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */,
 				5819FB5D1DDDF59500FB2CC1 /* Validatable.swift */,
@@ -2114,6 +2126,7 @@
 			files = (
 				EBEA0CE21CA6C6BC00E68B81 /* SlidingTabsView.xib in Resources */,
 				EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */,
+				6A1BBAE01E44B57300BC7404 /* ListItemCell.xib in Resources */,
 				EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */,
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
 				EBB0A8071CD39821003CB7BA /* TodoListItemsEditBottomView.xib in Resources */,
@@ -2296,6 +2309,7 @@
 				EB1B365D1BC4653C003519F2 /* PlanTableViewCell.swift in Sources */,
 				EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */,
 				EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */,
+				6A7C54BE1E43F03A00300F8D /* StashListItemsControllerNew.swift in Sources */,
 				EB21A3001D00A638000C594C /* AboutController.swift in Sources */,
 				EB6E3D131C56D0ED00D65DD5 /* PathButton.swift in Sources */,
 				EB8D1D091C37318500ADF884 /* GroupsController.swift in Sources */,
@@ -2321,6 +2335,7 @@
 				EB7032801BEBBBB100779EBB /* ReorderSectionTableViewController.swift in Sources */,
 				EBB526891BF016910002A286 /* ButtonMore.swift in Sources */,
 				EB3E92F11CDA3A620048DA0D /* LangHelper.swift in Sources */,
+				6A1BBADA1E44AF5E00BC7404 /* UITableViewController.swift in Sources */,
 				EB0A058D1BDFCD6B00D1E29D /* MoreViewController.swift in Sources */,
 				EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */,
 				EB135B961BED5F130093DE70 /* ItemWithCellAttributes.swift in Sources */,
@@ -2435,6 +2450,7 @@
 				EBD7A7E01CC0323200B56C41 /* RatingAlert.swift in Sources */,
 				EB4147B81BDFE9FB00549CE4 /* ManageProductsCell.swift in Sources */,
 				EBB6D7581CD6D67C00F9C711 /* SwipeToIncrementHelper.swift in Sources */,
+				6A7C54BC1E43EFFB00300F8D /* CartListItemsControllerNew.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
 				EB92082D1C4ECE3D00332332 /* EditBrandController.swift in Sources */,
 				6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */,

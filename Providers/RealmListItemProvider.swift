@@ -976,37 +976,6 @@ return nil // TODO reenable commented code, only for test of section notificatio
         }
     }
     
-    // TODO do we need list item parameter or is "from" enough
-    func switchSync(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData) -> SwitchListItemResult? {
-
-        guard let realm = listItem.section.realm else {QL4("No realm"); return nil}
-        
-        let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
-        
-        let srcSection = listItem.section
-        
-        guard let dstSection = DBProv.sectionProvider.getOrCreate(name: listItem.section.name, color: listItem.section.color, list: list, status: dstStatus, notificationToken: realmData.token, realm: realm) else {QL4("Invalid state - couldn't get or create section"); return nil}
-        
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {(realm) -> SwitchListItemResult? in
-            
-            // append/increment in dst section
-            if self.addSync(listItem: listItem, section: dstSection, list: list, quantity: listItem.quantity, realmData: realmData, doTransaction: false) == nil {
-                QL4("Add sync returned nil, exit")
-                return nil // interrupt transaction
-            }
-            
-            // delete from src section
-            srcSection.listItems.remove(objectAtIndex: from.row)
-            
-            if self.deleteSectionIfEmpty(sections: list.sections(status: srcStatus), section: srcSection) {
-                return SwitchListItemResult(deletedSection: true)
-            } else {
-                return SwitchListItemResult(deletedSection: false)
-            }
-        }
-    }
-
-    
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
     fileprivate func create(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Int, realmData: RealmData, _ handler: @escaping (ListItem?) -> Void) {
         handler(createSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData))
@@ -1082,28 +1051,136 @@ return nil // TODO reenable commented code, only for test of section notificatio
             QL4("couldn't load list with uuid: \(listUuid)")
             return nil
         }
-        
-        let cartSections = list.sections(status: .done)
-        let stashSections = list.sections(status: .stash)
-        
-        let (totalCartQuantity, totalCartPrice) = cartSections.reduce((0, Float(0))) {sum, section in
-            
-            let sectionSum = section.listItems.reduce((0, Float(0))) {sectionSum, listItem in
-                (sectionSum.0 + listItem.quantity, sectionSum.1 + listItem.totalPrice(.done))
-            }
-            
-            return (sum.0 + sectionSum.0, sum.1 + sectionSum.1)
+        let (totalCartQuantity, totalCartPrice) = list.doneListItems.reduce((0, Float(0))) {sum, listItem in
+            (sum.0 + listItem.quantity, sum.1 + listItem.totalPrice(.done))
         }
         
-        let totalStashQuantity = stashSections.reduce(0) {sum, section in
-            
-            let sectionSum = section.listItems.reduce(0) {sectionSum, listItem in
-                sectionSum + listItem.quantity
-            }
-            
-            return (sum + sectionSum)
+        let totalStashQuantity = list.stashListItems.reduce(0) {sum, listItem in
+            sum + listItem.quantity
         }
 
         return ListItemsCartStashAggregate(cartQuantity: totalCartQuantity, cartPrice: totalCartPrice, stashQuantity: totalStashQuantity)
+    }
+    
+    // MARK: - Buy
+
+    func buyCart(list: List, realmData: RealmData) -> Bool {
+        
+        let inventory = list.inventory
+        
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Bool? in
+            for listItem in list.doneListItems {
+                list.stashListItems.append(listItem)
+                // TODO!!!!!!!!!!!!!!!!!! inventory needs RealmSwift.List for items
+                //inventory.listItems.addOrIncrement(listItem)
+            }
+            list.doneListItems.removeAll()
+            return true
+            
+        } ?? false
+    }
+    
+    
+    // MARK: - Switch
+    
+    func switchTodoToCartSync(listItem: ListItem, from: IndexPath, realmData: RealmData) -> SwitchListItemResult? {
+        
+        guard let realm = listItem.section.realm else {QL4("No realm"); return nil}
+        
+        let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
+        
+        let srcSection = listItem.section
+        
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {(realm) -> SwitchListItemResult? in
+            
+            list.doneListItems.insert(listItem, at: 0)
+            
+            // delete from src section
+            srcSection.listItems.remove(objectAtIndex: from.row)
+            
+            if self.deleteSectionIfEmpty(sections: list.todoSections, section: srcSection) {
+                return SwitchListItemResult(deletedSection: true)
+            } else {
+                return SwitchListItemResult(deletedSection: false)
+            }
+        }
+    }
+
+    // TODO!!!!!!!!!!!!!!!!!!! remove this, duplicate, only needed in buy
+    func switchCartToStashSync(listItems: [ListItem], list: List, realmData: RealmData) -> Bool {
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Bool? in
+            for listItem in listItems {
+                list.stashListItems.append(listItem)
+            }
+            list.doneListItems.removeAll()
+            return true
+            
+        } ?? false
+    }
+
+    func switchStashToTodoSync(listItem: ListItem, from: IndexPath, realmData: RealmData) -> Bool {
+        let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
+        
+        return switchCartOrStashToTodoSync(listItem: listItem, from: from, cartOrStashListItems: list.stashListItems, realmData: realmData)
+    }
+
+    func switchCartToTodoSync(listItem: ListItem, from: IndexPath, realmData: RealmData) -> Bool {
+        let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
+        
+        return switchCartOrStashToTodoSync(listItem: listItem, from: from, cartOrStashListItems: list.doneListItems, realmData: realmData)
+    }
+
+    
+    // TODO do we need list item parameter or is "from" enough
+    func switchSync(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData) -> SwitchListItemResult? {
+        
+        guard let realm = listItem.section.realm else {QL4("No realm"); return nil}
+        
+        let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
+        
+        let srcSection = listItem.section
+        
+        guard let dstSection = DBProv.sectionProvider.getOrCreate(name: listItem.section.name, color: listItem.section.color, list: list, status: dstStatus, notificationToken: realmData.token, realm: realm) else {QL4("Invalid state - couldn't get or create section"); return nil}
+        
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {(realm) -> SwitchListItemResult? in
+            
+            // append/increment in dst section
+            if self.addSync(listItem: listItem, section: dstSection, list: list, quantity: listItem.quantity, realmData: realmData, doTransaction: false) == nil {
+                QL4("Add sync returned nil, exit")
+                return nil // interrupt transaction
+            }
+            
+            // delete from src section
+            srcSection.listItems.remove(objectAtIndex: from.row)
+            
+            if self.deleteSectionIfEmpty(sections: list.sections(status: srcStatus), section: srcSection) {
+                return SwitchListItemResult(deletedSection: true)
+            } else {
+                return SwitchListItemResult(deletedSection: false)
+            }
+        }
+    }
+    
+    fileprivate func switchCartOrStashToTodoSync(listItem: ListItem, from: IndexPath, cartOrStashListItems: RealmSwift.List<ListItem>, realmData: RealmData) -> Bool {
+        guard let realm = listItem.section.realm else {QL4("No realm"); return false}
+        
+        let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
+        
+        guard let dstSection = DBProv.sectionProvider.getOrCreate(name: listItem.section.name, color: listItem.section.color, list: list, status: .todo, notificationToken: realmData.token, realm: realm) else {QL4("Invalid state - couldn't get or create section"); return false}
+        
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {realm -> Bool? in
+            
+            // append/increment in dst section
+            if self.addSync(listItem: listItem, section: dstSection, list: list, quantity: listItem.quantity, realmData: realmData, doTransaction: false) == nil {
+                QL4("Add sync returned nil, exit")
+                return nil // interrupt transaction
+            }
+            
+            // delete from src list items
+            cartOrStashListItems.remove(objectAtIndex: from.row)
+            
+            return true
+            
+        } ?? false
     }
 }

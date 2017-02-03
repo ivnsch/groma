@@ -437,4 +437,17 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     func rightButtonsClosing() -> [TopBarButtonModel] {
         return []
     }
+    
+    // MARK: - Popup
+    
+    func showPopup(text: String, cell: UITableViewCell, button: UIView) {
+        let topOffset: CGFloat = 64
+        let frame = view.bounds.copy(y: topOffset, height: view.bounds.height)
+        
+        let noteButtonPointParentController = view.convert(CGPoint(x: button.center.x, y: button.center.y), from: cell)
+        // adjust the anchor point also for topOffset
+        let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
+        
+        AlertPopup.showCustom(message: text, controller: self, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
+    }
 }

@@ -181,18 +181,30 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "doneViewControllerSegue" {
-            if let doneViewController = segue.destination as? CartListItemsController {
+            
+            if let doneViewController = segue.destination as? CartListItemsControllerNew {
                 //                doneViewController.navigationItemTextColor = titleLabel?.textColor
-                doneViewController.delegate = self
                 
+                // TODO!!!!!!!!!!!!!!!!!!!!!!!
+//                doneViewController.delegate = self
                 
-                doneViewController.onUIReady = {[weak doneViewController] in
-                    doneViewController?.currentList = self.currentList
-                }
+//????????????????
+//                doneViewController.onUIReady = {[weak doneViewController] in
+//                    doneViewController?.currentList = self.currentList
+//                }
                 doneViewController.onViewWillAppear = {[weak self, weak doneViewController] in guard let weakSelf = self else {return}
                     if let dotColor = weakSelf.topBar.dotColor {
+                        
+                        doneViewController?.currentList = weakSelf.currentList
+
+                        
+                        
                         doneViewController?.topBar.showDot()
                         doneViewController?.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
+                        
+                        
+                        
+                        
                     } else {
                         QL4("Invalid state: top bar has no dot color")
                     }

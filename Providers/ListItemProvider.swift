@@ -121,9 +121,6 @@ public protocol ListItemProvider {
     
     
     
-    
-    
-    
     func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Int, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
     
     func addNew(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
@@ -137,4 +134,18 @@ public protocol ListItemProvider {
     func move(from: IndexPath, to: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<MoveListItemResult>) -> Void)
     
     func calculateCartStashAggregate(list: List, _ handler: @escaping (ProviderResult<ListItemsCartStashAggregate>) -> Void)
+    
+    // MARK: - Buy
+    
+    func buyCart(list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void)
+    
+    // MARK: - Switch
+    
+    func switchTodoToCartSync(listItem: ListItem, from: IndexPath, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void)
+    
+    func switchCartToStashSync(listItems: [ListItem], list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    func switchStashToTodoSync(listItem: ListItem, from: IndexPath, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    func switchCartToTodoSync(listItem: ListItem, from: IndexPath, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void)
 }
