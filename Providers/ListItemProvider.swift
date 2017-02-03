@@ -137,7 +137,7 @@ public protocol ListItemProvider {
     
     // MARK: - Buy
     
-    func buyCart(list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void)
+    func buyCart(list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     // MARK: - Switch
     

@@ -257,17 +257,39 @@ class RealmSectionProvider: RealmProvider {
     
     // MARK: - Sync
     
-    func getOrCreate(name: String, color: UIColor, list: List, status: ListItemStatus, notificationToken: NotificationToken, realm: Realm) -> Section? {
+    func getOrCreate(name: String, color: UIColor, list: List, status: ListItemStatus, notificationToken: NotificationToken, realm: Realm, doTransaction: Bool = true) -> Section? {
         
-        if let section = list.sections(status: status).filter(Section.createFilterWithName(name)).first {
-            return section
+        func appendSection(section: Section) -> Section? {
             
-        } else {
-            let section = Section(uuid: UUID().uuidString, name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0)) // TODO!!!!!!!!! remove order from sections
-            return doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: realm, {realm in
+            func transactionContent(realm: Realm) -> Section? {
                 list.sections(status: status).append(section)
                 return section
-            })
+            }
+            
+            
+            let sectionMaybe: Section? = {
+                if doTransaction {
+                    return doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: realm, {realm in
+                        return transactionContent(realm: realm)
+                    })
+                } else {
+                    return transactionContent(realm: realm)
+                }
+            }()
+         
+            return sectionMaybe
+        }
+        
+        
+        if let section = list.sections(status: status).filter(Section.createFilterWithName(name)).first { // The target status already contains the section
+            return section
+        
+        } else if let section = loadSectionSync(name, list: list).getOk().flatMap({$0}) { // The target status doesn't contain the section, but it exists
+            return appendSection(section: section)
+            
+        } else { // The section doesn't exist
+            let section = Section(uuid: UUID().uuidString, name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0)) // TODO!!!!!!!!! remove order from sections
+            return appendSection(section: section)
         }
     }
 }

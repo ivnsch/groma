@@ -68,7 +68,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
             
                     if let controller = UIApplication.shared.delegate?.window??.rootViewController { // since we change controller on success need root controller in case we show error popup
                         
-                        Prov.listItemsProvider.buyCart(list: list, realmData: realmData, controller.successHandler{[weak self] result in
+                        Prov.listItemsProvider.buyCart(list: list, realmData: realmData, controller.successHandler{[weak self] in
                             // TODO!!!!!!!!!!!!!!!! is this still necessary?
 //                            self?.delegate?.onCartSendItemsToStash(weakSelf.listItemsTableViewController.items)
                             self?.close()
@@ -80,13 +80,13 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
 //            }
         }
         
-        Prov.inventoryItemsProvider.countInventoryItems(list.inventory, successHandler {count in
+//        Prov.inventoryItemsProvider.countInventoryItems(list.inventory, successHandler {count in
 //                if let weakSelf = self {
 //                    SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
             onSizeLimitOk(list)
 //                    }
 //                }
-        })
+//        })
     }
     
     fileprivate func close() {

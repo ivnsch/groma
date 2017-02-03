@@ -1327,7 +1327,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     // MARK: - Buy
     
-    func buyCart(list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void) {
+    func buyCart(list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         let success = DBProv.listItemProvider.buyCart(list: list, realmData: realmData)
         handler(ProviderResult(status: success ? .success : .databaseUnknown))
     }

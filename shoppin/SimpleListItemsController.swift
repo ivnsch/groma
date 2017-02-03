@@ -275,7 +275,8 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
                 
                 // NOTE: For the provider the whole state is updated here - including possible section removal (if the current undo list item is the last one in the section) and the order field update of possible following sections. This means that the contents of the table view may be in a slightly inconsistent state with the data in the provider during the time cell is in undo (for the table view the section is still there, for the provider it's not). This is fine as the undo state is just a UI thing (local) and it should be cleared as soon as we try to start a new action (add, edit, delete, reorder etc) or go to the cart/stash.
                 
-                Prov.listItemsProvider.switchStatusNew(listItem: tableViewListItem, from: indexPath, srcStatus: weakSelf.status, dstStatus: targetStatus, realmData: realmData, weakSelf.successHandler{[weak self] switchedListItem in
+                
+                Prov.listItemsProvider.switchCartToTodoSync(listItem: tableViewListItem, from: indexPath, realmData: realmData, weakSelf.successHandler{[weak self] switchedListItem in
                     self?.onTableViewChangedQuantifiables()
                 })
                 // Prov.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, orderInDstStatus: nil, remote: true, weakSelf.resultHandler(onSuccess: {switchedListItem in
@@ -749,9 +750,13 @@ class SimpleListItemsTableViewController: UITableViewController {
         return isEditing
     }
     
-    
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         listItemsEditTableViewDelegate?.onListItemMoved(from: sourceIndexPath, to: destinationIndexPath)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let listItem = listItems?[indexPath.row] else {QL4("No listItem"); return}
+        listItemsTableViewDelegate?.onListItemSelected(listItem, indexPath: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -1069,12 +1069,14 @@ return nil // TODO reenable commented code, only for test of section notificatio
         let inventory = list.inventory
         
         return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Bool? in
-            for listItem in list.doneListItems {
-                list.stashListItems.append(listItem)
-                // TODO!!!!!!!!!!!!!!!!!! inventory needs RealmSwift.List for items
-                //inventory.listItems.addOrIncrement(listItem)
-            }
-            list.doneListItems.removeAll()
+            
+            // For now we move items back to the todo list - stash ("backstore") may be too complicated to grasp for users at least for the first releases, especially with the current design.
+            self.switchCartOrStashToTodoSync(cartOrStashListItems: list.doneListItems, list: list, realmData: realmData, doTransaction: false)
+            
+            // NOTE: maybe we can pass a block to add the inventory item for each list item to switchCartOrStashToTodoSync instead of iterating through the list items again
+            // TODO!!!!!!!!!!!!!!!!!! inventory needs RealmSwift.List for items
+            //inventory.listItems.addOrIncrement(listItem)
+            
             return true
             
         } ?? false
@@ -1090,9 +1092,10 @@ return nil // TODO reenable commented code, only for test of section notificatio
         let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
         
         let srcSection = listItem.section
+
         
         return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {(realm) -> SwitchListItemResult? in
-            
+      
             list.doneListItems.insert(listItem, at: 0)
             
             // delete from src section
@@ -1159,6 +1162,43 @@ return nil // TODO reenable commented code, only for test of section notificatio
                 return SwitchListItemResult(deletedSection: false)
             }
         }
+    }
+    
+    fileprivate func switchCartOrStashToTodoSync(cartOrStashListItems: RealmSwift.List<ListItem>, list: List, realmData: RealmData, doTransaction: Bool) -> Bool {
+        
+        func transactionContent() -> Bool {
+            
+            for (index, listItem) in cartOrStashListItems.enumerated() {
+                
+                guard let dstSection = DBProv.sectionProvider.getOrCreate(name: listItem.section.name, color: listItem.section.color, list: list, status: .todo, notificationToken: realmData.token, realm: realmData.realm, doTransaction: false) else {QL4("Invalid state - couldn't get or create section"); return false}
+                
+                // append/increment in dst section
+                if self.addSync(listItem: listItem, section: dstSection, list: list, quantity: listItem.quantity, realmData: realmData, doTransaction: false) == nil {
+                    QL4("Add sync returned nil, exit")
+                    return false // interrupt transaction
+                }
+                
+                
+                // delete from src list items
+                cartOrStashListItems.remove(objectAtIndex: 0)
+            }
+            return true
+        }
+        
+        let success: Bool = {
+           
+            if doTransaction {
+                return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Bool? in
+                    return transactionContent()
+                } ?? false
+                
+            } else {
+                return transactionContent()
+            }
+            
+        }()
+       
+        return success
     }
     
     fileprivate func switchCartOrStashToTodoSync(listItem: ListItem, from: IndexPath, cartOrStashListItems: RealmSwift.List<ListItem>, realmData: RealmData) -> Bool {
