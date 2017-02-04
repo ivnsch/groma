@@ -156,10 +156,10 @@ class DimensionsManager {
     
     static var listItemsHeaderHeight: CGFloat {
         switch heightDimension {
-        case .verySmall: return 28
-        case .small: return 30
-        case .middle: return 43
-        case .large: return 43
+        case .verySmall: return 26
+        case .small: return 26
+        case .middle: return 28
+        case .large: return 28
         }
     }
 
@@ -177,10 +177,10 @@ class DimensionsManager {
     
     static var defaultCellHeight: CGFloat {
         switch heightDimension {
-        case .verySmall: return 65
-        case .small: return 67
-        case .middle: return 82
-        case .large: return 91
+        case .verySmall: return 55
+        case .small: return 60
+        case .middle: return 72
+        case .large: return 82
         }
     }
     
@@ -204,9 +204,9 @@ class DimensionsManager {
     
     static var leftRightPaddingConstraint: CGFloat {
         switch widthDimension {
-        case .small: return 20
-        case .middle: return 25
-        case .large: return 30
+        case .small: return 15
+        case .middle: return 20
+        case .large: return 25
         }
     }
 
