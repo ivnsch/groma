@@ -13,7 +13,7 @@ import RealmSwift
 
 protocol ListItemsTableViewDelegateNew: class {
     func onListItemClear(_ tableViewListItem: ListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo
-    func onListItemSelected(_ tableViewListItem: ListItem) // mark as undo
+    func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath) // mark as undo
     func onListItemReset(_ tableViewListItem: ListItem) // revert undo
     func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection)
     func onIncrementItem(_ model: ListItem, delta: Int)
@@ -261,11 +261,11 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     // MARK: - ListItemCellDelegateNew
     
     
-    func onItemSwiped(_ listItem: ListItem, indexPath: IndexPath) {
+    func onItemSwiped(_ listItem: ListItem) {
         
         guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem)"); return}
         
-        listItemsTableViewDelegate?.onListItemSelected(listItem)
+        listItemsTableViewDelegate?.onListItemSelected(listItem, indexPath: indexPath)
         
         if tableView.numberOfRows(inSection: indexPath.section) == 1 {
             tableView.deleteSections(IndexSet([indexPath.section]), with: .top)

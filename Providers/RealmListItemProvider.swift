@@ -1070,14 +1070,13 @@ return nil // TODO reenable commented code, only for test of section notificatio
         
         return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Bool? in
             
-            // For now we move items back to the todo list - stash ("backstore") may be too complicated to grasp for users at least for the first releases, especially with the current design.
-            self.switchCartOrStashToTodoSync(cartOrStashListItems: list.doneListItems, list: list, realmData: realmData, doTransaction: false)
-            
             // NOTE: maybe we can pass a block to add the inventory item for each list item to switchCartOrStashToTodoSync instead of iterating through the list items again
-            // TODO!!!!!!!!!!!!!!!!!! inventory needs RealmSwift.List for items
-            //inventory.listItems.addOrIncrement(listItem)
             
-            return true
+            let productWithQuantityInputs = list.doneListItems.toArray().map{ProductWithQuantityInput(product: $0.product, quantity: $0.quantity)}
+            _ = DBProv.inventoryItemProvider.addOrIncrementInventoryItemsWithProductSync(realm, itemInputs: productWithQuantityInputs, inventory: inventory, dirty: true)
+
+            // For now we move items back to the todo list - stash ("backstore") may be too complicated to grasp for users at least for the first releases, especially with the current design.
+            return self.switchCartOrStashToTodoSync(cartOrStashListItems: list.doneListItems, list: list, realmData: realmData, doTransaction: false)
             
         } ?? false
     }

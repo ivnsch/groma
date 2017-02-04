@@ -72,7 +72,7 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
 
     static func createFilter(quantifiableProductUnique: QuantifiableProductUnique, inventoryUuid: String) -> String {
         let productUnique = ProductUnique(name: quantifiableProductUnique.name, brand: quantifiableProductUnique.brand)
-        return "\(createFilter(productUnique, inventoryUuid: inventoryUuid)) AND productOpt.unitVal = \(quantifiableProductUnique.unit.rawValue) AND productOpt.baseQuantity = \(quantifiableProductUnique.baseQuantity)"
+        return "\(createFilter(productUnique, inventoryUuid: inventoryUuid)) AND productOpt.unitVal = \(quantifiableProductUnique.unit.rawValue) AND productOpt.baseQuantity = '\(quantifiableProductUnique.baseQuantity)'"
     }
     
     static func createFilter(_ productUnique: ProductUnique, inventoryUuid: String) -> String {
