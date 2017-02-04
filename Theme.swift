@@ -39,4 +39,8 @@ struct Theme {
     static var interleavedCellsBackgroundColor = UIColor.white
     
     static let lightBlue = UIColor(hexString: "e8f0f9")
+    static let lightGreyBackground = UIColor(hexString: "F0F0F0")
+    static let green = UIColor(hexString: "1FAC6A")
+    static let lighterGreen = UIColor(hexString: "28c75d")
+    
 }

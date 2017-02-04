@@ -12,13 +12,13 @@ import Providers
 
 class AddButtonHelper: NSObject {
 
-    fileprivate var addButton: UIButton?
+    fileprivate var addButton: UIView?
     
     fileprivate var keyboardHeight: CGFloat = 216
     
     fileprivate weak var parentView: UIView?
     
-    fileprivate let buttonHeight: CGFloat = 40
+    fileprivate let buttonHeight: CGFloat = 60
     
     fileprivate var tapHandler: VoidFunction?
     
@@ -119,7 +119,7 @@ class AddButtonHelper: NSObject {
     fileprivate func addAddButton(_ visible: Bool = true) {
         if let parentView = parentView, let window = parentView.window, let centerY = centerY(visible) {
             let frameY = centerY - buttonHeight / 2
-            let addButton = AddItemButton(frame: CGRect(x: 0, y: frameY, width: parentView.frame.width, height: buttonHeight))
+            let addButton = AddItemViewNew(frame: CGRect(x: 0, y: frameY, width: parentView.frame.width, height: buttonHeight))
             self.addButton = addButton
             parentView.addSubview(addButton)
             
