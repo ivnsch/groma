@@ -300,11 +300,10 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gco-Oy-7Vf">
-                                            <rect key="frame" x="0.0" y="0.0" width="4" height="76"/>
+                                            <rect key="frame" x="0.0" y="4" width="4" height="68"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="4" id="6zY-e9-a9R"/>
-                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="4" id="M1y-AJ-jGH"/>
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sa5-bI-suW">
@@ -320,7 +319,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="centerY" secondItem="0Eg-VM-sQM" secondAttribute="centerY" constant="10" id="1vM-IJ-rPZ"/>
-                                        <constraint firstAttribute="bottom" secondItem="Gco-Oy-7Vf" secondAttribute="bottom" id="5BW-sr-Bmh"/>
+                                        <constraint firstAttribute="bottom" secondItem="Gco-Oy-7Vf" secondAttribute="bottom" constant="4" id="5BW-sr-Bmh"/>
                                         <constraint firstAttribute="trailing" secondItem="K7p-Hq-ZSp" secondAttribute="trailing" constant="25" id="9u4-3K-bV9" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                         <constraint firstAttribute="centerY" secondItem="esW-fo-yUS" secondAttribute="centerY" id="C8z-jm-0Yn"/>
                                         <constraint firstItem="sa5-bI-suW" firstAttribute="top" secondItem="PSh-4D-BZZ" secondAttribute="bottom" id="DKn-EC-O0t"/>
@@ -333,7 +332,7 @@
                                         <constraint firstItem="PSh-4D-BZZ" firstAttribute="leading" secondItem="Adh-8H-A6B" secondAttribute="leading" id="cGr-yX-iy4"/>
                                         <constraint firstItem="Gco-Oy-7Vf" firstAttribute="leading" secondItem="Adh-8H-A6B" secondAttribute="leading" id="eIo-PB-2ji"/>
                                         <constraint firstAttribute="trailing" secondItem="PSh-4D-BZZ" secondAttribute="trailing" id="jWU-vS-sB7"/>
-                                        <constraint firstItem="Gco-Oy-7Vf" firstAttribute="top" secondItem="Adh-8H-A6B" secondAttribute="top" id="joI-ef-Bqa"/>
+                                        <constraint firstItem="Gco-Oy-7Vf" firstAttribute="top" secondItem="Adh-8H-A6B" secondAttribute="top" constant="4" id="joI-ef-Bqa"/>
                                         <constraint firstItem="BUa-eS-yfp" firstAttribute="leading" secondItem="Gco-Oy-7Vf" secondAttribute="trailing" constant="6" id="kYC-Pv-PKa"/>
                                         <constraint firstItem="K7p-Hq-ZSp" firstAttribute="leading" secondItem="esW-fo-yUS" secondAttribute="trailing" id="mjU-3u-t6R"/>
                                         <constraint firstItem="esW-fo-yUS" firstAttribute="leading" secondItem="sa5-bI-suW" secondAttribute="trailing" id="s1y-sY-iw2"/>
@@ -446,8 +445,8 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="y0G-Ud-9gB"/>
                                                 <exclude reference="tKK-ZL-cZ5"/>
+                                                <exclude reference="y0G-Ud-9gB"/>
                                             </mask>
                                         </variation>
                                     </imageView>
@@ -656,11 +655,10 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I6W-x1-2IM">
-                                            <rect key="frame" x="0.0" y="0.0" width="4" height="76"/>
+                                            <rect key="frame" x="0.0" y="4" width="4" height="68"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="4" id="gFs-C8-etq"/>
-                                                <constraint firstAttribute="width" constant="4" id="hdJ-MQ-QZf"/>
+                                                <constraint firstAttribute="width" constant="4" id="gFs-C8-etq"/>
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EfN-cF-UNd">
@@ -679,9 +677,9 @@
                                         <constraint firstItem="RtH-jb-k5N" firstAttribute="top" secondItem="jov-l0-4Qz" secondAttribute="bottom" id="9yO-nl-7VW"/>
                                         <constraint firstAttribute="centerY" secondItem="j26-uq-DjU" secondAttribute="centerY" constant="10" id="C7J-vj-XSm"/>
                                         <constraint firstAttribute="trailing" secondItem="RtH-jb-k5N" secondAttribute="trailing" constant="25" id="CGy-jY-zAR" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
-                                        <constraint firstItem="I6W-x1-2IM" firstAttribute="top" secondItem="DnU-YT-E5L" secondAttribute="top" id="CxL-dS-dLa"/>
+                                        <constraint firstItem="I6W-x1-2IM" firstAttribute="top" secondItem="DnU-YT-E5L" secondAttribute="top" constant="4" id="CxL-dS-dLa"/>
                                         <constraint firstItem="I6W-x1-2IM" firstAttribute="leading" secondItem="DnU-YT-E5L" secondAttribute="leading" id="JdI-E5-CqQ"/>
-                                        <constraint firstAttribute="bottom" secondItem="I6W-x1-2IM" secondAttribute="bottom" id="Jvu-l1-BTG"/>
+                                        <constraint firstAttribute="bottom" secondItem="I6W-x1-2IM" secondAttribute="bottom" constant="4" id="Jvu-l1-BTG"/>
                                         <constraint firstItem="2R5-6Q-YBr" firstAttribute="leading" secondItem="I6W-x1-2IM" secondAttribute="trailing" constant="6" id="KmG-0g-dIJ"/>
                                         <constraint firstItem="2R5-6Q-YBr" firstAttribute="centerY" secondItem="DnU-YT-E5L" secondAttribute="centerY" constant="10" id="N2d-ur-OuB"/>
                                         <constraint firstAttribute="bottom" secondItem="EfN-cF-UNd" secondAttribute="bottom" id="Ve6-Xx-yUr"/>
