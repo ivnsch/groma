@@ -82,6 +82,8 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         // TODO!!!!!!!!!!!! still necessary?
 //        self.tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         self.tableView.allowsSelectionDuringEditing = true
+        
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
     
     

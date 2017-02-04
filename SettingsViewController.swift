@@ -70,6 +70,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
 
     override func viewWillAppear(_ animated: Bool) {

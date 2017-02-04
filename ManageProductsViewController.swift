@@ -74,6 +74,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         navigationItem.title = trans("title_products")
         
         tableView.allowsSelectionDuringEditing = true
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
         
         topQuickAddControllerManager = initTopQuickAddControllerManager()
 

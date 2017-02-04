@@ -43,4 +43,5 @@ struct Theme {
     static let green = UIColor(hexString: "1FAC6A")
     static let lighterGreen = UIColor(hexString: "28c75d")
     
+    static let defaultTableViewBGColor = lightGreyBackground
 }

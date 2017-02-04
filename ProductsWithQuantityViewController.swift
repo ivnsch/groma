@@ -64,6 +64,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         super.viewDidLoad()
         
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
         
         if delegate?.isPullToAddEnabled() ?? false {
             let refreshControl = PullToAddHelper.createPullToAdd(self)

@@ -91,7 +91,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         super.viewDidLoad()
         
         tableView.allowsSelectionDuringEditing = true
-
+        
         let refreshControl = PullToAddHelper.createPullToAdd(self)
         tableViewController.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(ExpandableItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)

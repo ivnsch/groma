@@ -26,6 +26,8 @@ class MoreViewController: UITableViewController {
         super.viewDidLoad()
         
         styleBackButton()
+        
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
     
     override func viewWillAppear(_ animated: Bool) {
