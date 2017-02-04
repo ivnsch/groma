@@ -37,4 +37,6 @@ struct Theme {
     static var mainViewsBGColor = lightGrey
     static var topSettingsBarsBackgroundColor = UIColor.white
     static var interleavedCellsBackgroundColor = UIColor.white
+    
+    static let lightBlue = UIColor(hexString: "e8f0f9")
 }

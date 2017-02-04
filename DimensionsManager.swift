@@ -184,6 +184,15 @@ class DimensionsManager {
         }
     }
     
+    static var cartStashCellHeight: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 45
+        case .small: return 45
+        case .middle: return 52
+        case .large: return 66
+        }
+    }
+    
     static var searchBarHeight: CGFloat {
         switch heightDimension {
         case .verySmall: return 30
