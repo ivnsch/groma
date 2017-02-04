@@ -97,7 +97,7 @@
         <!--Cart-->
         <scene sceneID="wnA-PV-n69">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Jkv-5K-pqw" customClass="CartListItemsControllerNew" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CartListItemsControllerNew" automaticallyAdjustsScrollViewInsets="NO" id="Jkv-5K-pqw" customClass="CartListItemsControllerNew" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5H0-4q-wYx"/>
                         <viewControllerLayoutGuide type="bottom" id="LyR-1z-msh"/>
@@ -418,7 +418,7 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="so5-bY-yhM">
                                 <rect key="frame" x="0.0" y="64" width="375" height="543"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="5AC22A85-C51A-4CA4-9569-CD6F4F970D76" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="C7077E0B-84F6-4056-A6D5-0C89CCDC9D57" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
                                         <rect key="frame" x="75" y="150" width="225" height="206"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -512,6 +512,7 @@
                         <outlet property="emptyViewLabel1" destination="sxW-16-sQo" id="NbD-gE-baq"/>
                         <outlet property="emptyViewLabel2" destination="fPp-Ci-147" id="p1B-dD-AjT"/>
                         <outlet property="pricesView" destination="iVM-Kg-U2m" id="ggY-N4-cSC"/>
+                        <outlet property="pricesViewBottomConstraint" destination="IrT-Je-DDy" id="rke-Ap-85C"/>
                         <outlet property="stashView" destination="5T4-jf-M2R" id="8VN-fu-N77"/>
                         <outlet property="topBar" destination="CzC-OK-nPG" id="oXI-vs-Kwq"/>
                         <outlet property="topBarHeightConstraint" destination="1ni-VY-RBO" id="X31-Hb-6DF"/>
@@ -707,7 +708,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="5AC22A85-C51A-4CA4-9569-CD6F4F970D76" width="240" height="206">
+        <image name="C7077E0B-84F6-4056-A6D5-0C89CCDC9D57" width="240" height="206">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

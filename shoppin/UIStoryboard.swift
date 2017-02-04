@@ -51,6 +51,11 @@ extension UIStoryboard {
         return listItemsStoryboard().instantiateViewController(withIdentifier: "TodoListItemsController") as! TodoListItemsControllerNew
     }
     
+    class func cartViewControllerNew() -> CartListItemsControllerNew {
+        return listItemsStoryboard().instantiateViewController(withIdentifier: "CartListItemsControllerNew") as! CartListItemsControllerNew
+    }
+    
+    
     class func listItemsTableViewController() -> ListItemsTableViewController {
         return listItemsStoryboard().instantiateViewController(withIdentifier: "ListItemsTableViewController") as! ListItemsTableViewController
     }

@@ -14,7 +14,8 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     @IBOutlet weak var pricesView: PricesView!
     @IBOutlet weak var stashView: StashView!
-    
+    @IBOutlet weak var pricesViewBottomConstraint: NSLayoutConstraint!
+
     fileprivate weak var todoListItemsEditBottomView: TodoListItemsEditBottomView?
     
     override var status: ListItemStatus {
@@ -37,12 +38,21 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         updateStashView()
     }
     
+    fileprivate func initPriceCart() {
+        pricesView.bottomConstraint = pricesViewBottomConstraint
+        // For now 70 hardcoded because pricesView hasn't animated in yet
+        // NOTE this calculation works only in viewDidAppear, in viewDidLoad view includes tab bar height (but tab controller isn't set) and willAppear has a very small view height, probably because of the expand animation
+        pricesView.bottomConstraintMax = view.height - topBar.height - 70 /*pricesView.height*/
+        addCartController()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if todoListItemsEditBottomView == nil {
             initBottomEditView()
         }
+        
+        initPriceCart()
     }
     
     override func onExpand(_ expanding: Bool) {
@@ -172,48 +182,11 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     @IBAction func onCartTap(_ sender: UIButton) {
-        if pricesView.open {
-            pricesView.setOpen(false, animated: true)
-        } else {
-            performSegue(withIdentifier: "doneViewControllerSegue", sender: self)
-        }
+        pricesView.toggleExpanded(todoController: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "doneViewControllerSegue" {
-            
-            if let doneViewController = segue.destination as? CartListItemsControllerNew {
-                //                doneViewController.navigationItemTextColor = titleLabel?.textColor
-                
-                // TODO!!!!!!!!!!!!!!!!!!!!!!!
-//                doneViewController.delegate = self
-                
-//????????????????
-//                doneViewController.onUIReady = {[weak doneViewController] in
-//                    doneViewController?.currentList = self.currentList
-//                }
-                doneViewController.onViewWillAppear = {[weak self, weak doneViewController] in guard let weakSelf = self else {return}
-                    if let dotColor = weakSelf.topBar.dotColor {
-                        
-                        doneViewController?.currentList = weakSelf.currentList
-
-                        
-                        
-                        doneViewController?.topBar.showDot()
-                        doneViewController?.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
-                        
-                        
-                        
-                        
-                    } else {
-                        QL4("Invalid state: top bar has no dot color")
-                    }
-                }
-                // TODO!!!!!!!!!!!!!!!!
-                //self.listItemsTableViewController.clearPendingSwipeItemIfAny(true) {}
-            }
-            
-        } else if segue.identifier == "stashSegue" {
+        if segue.identifier == "stashSegue" {
             if let stashViewController = segue.destination as? StashListItemsController {
                 //                stashViewController.navigationItemTextColor = titleLabel?.textColor
                 stashViewController.onUIReady = {[weak stashViewController] in
@@ -261,5 +234,27 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     func onExpandSections(_ expand: Bool) {
         toggleReorderSections()
     }
-
+    
+    fileprivate func addCartController() {
+        let cartController = UIStoryboard.cartViewControllerNew()
+        cartController.onViewWillAppear = {[weak self, weak cartController] in guard let weakSelf = self else {return}
+            if let dotColor = weakSelf.topBar.dotColor {
+                cartController?.currentList = weakSelf.currentList
+                cartController?.topBar.showDot()
+                cartController?.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
+            } else {
+                QL4("Invalid state: top bar has no dot color")
+            }
+        }
+        
+        cartController.view.translatesAutoresizingMaskIntoConstraints = false
+        addChildViewControllerAndView(cartController)
+        
+        print("frame: \(pricesView.frame)")
+        
+        _ = cartController.view.positionBelowView(pricesView)
+        _ = cartController.view.heightConstraint(view.height - topBar.height - pricesView.height)
+        _ = cartController.view.alignLeft(view)
+        _ = cartController.view.alignRight(view)
+    }
 }

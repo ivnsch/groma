@@ -49,6 +49,13 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     @IBOutlet weak var leftLayoutConstraint: NSLayoutConstraint!
     fileprivate var cellUncoverer: CellUncoverer?
 
+    weak var bottomConstraint: NSLayoutConstraint? // set by parent view
+    
+    fileprivate var panRecognizer: UIPanGestureRecognizer!
+    fileprivate var panStartPoint: CGPoint!
+    fileprivate var startBottomConstraintConstant: CGFloat?
+    var bottomConstraintMax: CGFloat = 0
+
     fileprivate var cartQuantity: Int = 0 {
         didSet {
             if let cartQuantityLabel = quantityLabel {
@@ -104,9 +111,16 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         setExpandedVerticalSimple(false, animated: false)
         
         clipsToBounds = true
+
+        // For now disabled as we don't use stash
+//        cellUncoverer = CellUncoverer(parentView: self, button: button, leftLayoutConstraint: leftLayoutConstraint)
+//        cellUncoverer?.delegate = self
         
-        cellUncoverer = CellUncoverer(parentView: self, button: button, leftLayoutConstraint: leftLayoutConstraint)
-        cellUncoverer?.delegate = self
+        
+        panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPanCell(_:)))
+        panRecognizer.delegate = self
+        addGestureRecognizer(self.panRecognizer)
+//        translatesAutoresizingMaskIntoConstraints = false
     }
     
     // MARK: - CellUncovererDelegate
@@ -234,4 +248,64 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
             }
         }
     }
+    
+    func toggleExpanded(todoController: TodoListItemsControllerNew) {
+        
+        guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
+        
+        if open {
+            setOpen(false, animated: true)
+        } else {
+            if bottomConstraint.constant < todoController.view.height / 2 { // it's currently in bottom part of view
+                bottomConstraint.constant = y - todoController.topBar.height
+            } else { // it's currently in upper part
+                bottomConstraint.constant = 0
+            }
+            
+            UIView.animate(withDuration: 0.3) {
+                todoController.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    func onPanCell(_ recognizer: UIPanGestureRecognizer) {
+
+        switch recognizer.state {
+        case .began:
+            panStartPoint = recognizer.translation(in: self)
+            startBottomConstraintConstant = bottomConstraint?.constant
+
+        case .changed:
+            
+            guard let startBottomConstraintConstant = startBottomConstraintConstant else {QL4("Illegal state: No constraint constant"); return}
+
+            let currentPoint = recognizer.translation(in: self)
+            let deltaY = currentPoint.y - panStartPoint.y
+        
+            let newConstant = min(max(startBottomConstraintConstant - deltaY, 0), bottomConstraintMax)
+            
+            bottomConstraint?.constant = newConstant
+            
+        case .ended: snap()
+        case .cancelled: snap()
+            
+        default: print("Not handled")
+        }
+        
+    }
+    
+    fileprivate func snap() {
+        guard let bottomConstant = bottomConstraint?.constant else {QL4("Illegal state: No bottom constraing"); return}
+        
+        if bottomConstant > bottomConstraintMax / 2 {
+            bottomConstraint?.constant = bottomConstraintMax
+        } else {
+            bottomConstraint?.constant = 0
+        }
+        UIView.animate(withDuration: 0.1) {
+            self.superview?.layoutIfNeeded()
+        }
+        
+    }
+
 }
