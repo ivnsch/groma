@@ -14,10 +14,12 @@ import QorumLogs
 import Providers
 import RealmSwift
 
-class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegateNew, ListItemsEditTableViewDelegateNew {
+class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegateNew, ListItemsEditTableViewDelegateNew, QuickAddDelegate {
     
     weak var listItemsTableViewController: SimpleListItemsTableViewController!
     
+    var onViewWillAppear: VoidFunction?
+    var onViewDidAppear: VoidFunction?
     
     var currentList: Providers.List? {
         didSet {
@@ -38,18 +40,10 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
         fatalError("override")
     }
     
-    override var tableView: UITableView {
+    var tableView: UITableView {
         return listItemsTableViewController.tableView
     }
-    
-    override var isEmpty: Bool {
-        return currentList?.listItems(status: status).isEmpty ?? true
-    }
-    
-    override var list: Providers.List? {
-        return currentList
-    }
-    
+
     var tableViewBottomInset: CGFloat {
         return 0
     }
@@ -76,25 +70,23 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setEditing(false, animated: false, tryCloseTopViewController: false)
+        initProgrammaticViews()
         
-        topBar.positionTitleLabelLeft(true, animated: false, withDot: true)
-
-        initEmptyView(line1: trans("empty_list_line1"), line2: trans("empty_list_line2"))
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onListRemovedNotification(_:)), name: NSNotification.Name(rawValue: Notification.ListRemoved.rawValue), object: nil)
+        setEditing(false, animated: false)
     }
     
     
-    override func initProgrammaticViews() {
+    func initProgrammaticViews() {
         initTableViewController()
     }
     
     fileprivate func initTableViewController() {
-//        listItemsTableViewController = UIStoryboard.listItemsTableViewControllerNew()
         let listItemsTableViewController = SimpleListItemsTableViewController()
         
         addChildViewControllerAndView(listItemsTableViewController, viewIndex: 0)
+        
+        listItemsTableViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        listItemsTableViewController.view.fillSuperview()
         
         listItemsTableViewController.status = status
         listItemsTableViewController.scrollViewDelegate = self
@@ -102,14 +94,14 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
         listItemsTableViewController.listItemsEditTableViewDelegate = self
         listItemsTableViewController.cellDelegate = self
         
-        let navbarHeight = topBar.frame.height
-        let topInset = navbarHeight
+        let topInset: CGFloat = 0
         let bottomInset: CGFloat = tableViewBottomInset + 10 // 10 - show a little empty space between the last item and the prices view
         listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0)
         listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
-        if isPullToAddEnabled {
-            listItemsTableViewController.enablePullToAdd()
-        }
+
+        listItemsTableViewController.enablePullToAdd()
+
+        view.sendSubview(toBack: listItemsTableViewController.view)
         
         // TODO!!!!!!!!!!!!!!!!! still necessary?
 //        listItemsTableViewController.cellSwipeDirection = {
@@ -131,7 +123,6 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
     
     fileprivate func updatePossibleList() {
         if let list = self.currentList {
-            //            self.navigationItem.title = list.name
             self.initWithList(list)
         }
     }
@@ -140,16 +131,22 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        onViewWillAppear?()
+        onViewWillAppear = nil
+        
         updatePossibleList() // if there's a list already (e.g. come back from cart or stash - reload. If not (come from lists) onViewWillAppear triggers it.
         
         
-        //        updatePrices(.First)
-        
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        onViewDidAppear?()
+        onViewDidAppear = nil
+    }
     
     fileprivate func initWithList(_ list: Providers.List) {
-        topBar.title = topBarTitle(list)
         udpateListItems(list)
     }
     
@@ -192,8 +189,8 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
                 // TODO pass modifications to listItemsTableViewController, don't access table view directly
                 weakSelf.listItemsTableViewController.tableView.beginUpdates()
                 weakSelf.listItemsTableViewController.tableView.insertRows(at: insertions.map{IndexPath(row: $0, section: 0)}, with: .top)
-                weakSelf.listItemsTableViewController.tableView.deleteRows(at: insertions.map{IndexPath(row: $0, section: 0)}, with: .top)
-                weakSelf.listItemsTableViewController.tableView.reloadRows(at: insertions.map{IndexPath(row: $0, section: 0)}, with: .none)
+                weakSelf.listItemsTableViewController.tableView.deleteRows(at: deletions.map{IndexPath(row: $0, section: 0)}, with: .top)
+                weakSelf.listItemsTableViewController.tableView.reloadRows(at: modifications.map{IndexPath(row: $0, section: 0)}, with: .none)
 //                weakSelf.listItemsTableViewController.tableView.insertSections(IndexSet(insertions), with: .top)
 //                weakSelf.listItemsTableViewController.tableView.deleteSections(IndexSet(deletions), with: .top)
 //                weakSelf.listItemsTableViewController.tableView.reloadSections(IndexSet(modifications), with: .none)
@@ -226,18 +223,20 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
         realmData = RealmData(realm: sectionsRealm, token: notificationToken)
     }
 
-    override func setEditing(_ editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
-        super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        
+        clearPossibleNotePopup()
         
         listItemsTableViewController.setEditing(editing, animated: animated)
         listItemsTableViewController.cellMode = editing ? .increment : .note
-
     }
     
-    override func openQuickAdd(rotateTopBarButton: Bool = true, itemToEdit: AddEditItem? = nil) {
-        super.openQuickAdd(rotateTopBarButton: rotateTopBarButton, itemToEdit: itemToEdit)
-    }
     
+    func clearPossibleNotePopup() {
+        if let popup = view.viewWithTag(ViewTags.NotePopup) {
+            popup.removeFromSuperview()
+        }
+    }
     
     // MARK: - ListItemsTableViewDelegateNew
     
@@ -255,7 +254,7 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
         
         if self.isEditing { // open quick add in edit mode
             // TODO!!!!!!!!!!!!!! is this correct?
-            openQuickAdd(itemToEdit: AddEditItem(item: tableViewListItem, currentStatus: status))
+//            openQuickAdd(itemToEdit: AddEditItem(item: tableViewListItem, currentStatus: status))
             //            topQuickAddControllerManager?.expand(true)
             //            topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
             //            topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: tableViewListItem, currentStatus: status))
@@ -304,7 +303,6 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
     // Callen when table view contents affecting list items quantity/price is modified
     func onTableViewChangedQuantifiables() {
         updateQuantifiables()
-        updateEmptyUI()
     }
     
     func updateQuantifiables() {
@@ -351,15 +349,7 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
     func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
         fatalError("Not supported")
     }
-    
-    
-    // MARK: -
 
-    
-    fileprivate func getTableViewInset() -> CGFloat {
-        return topBar.frame.height
-    }
-    
     
     // MARK: - ListItemsEditTableViewDelegateNew
     
@@ -452,19 +442,34 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
                     //                    self?.updatePrices(.MemOnly)
                     weakSelf.onTableViewChangedQuantifiables()
                 }
-                weakSelf.closeTopControllers()
+//                weakSelf.closeTopControllers()
             })
         } else {
             print("Error: Invalid state: trying to update list item without current list")
         }
-        
     }
     
     
+    func onTableViewScroll(_ scrollView: UIScrollView) {
+    }
+    
+    func onPullToAdd() {
+    }
+    
+    func showPopup(text: String, cell: UITableViewCell, button: UIView) {
+        let topOffset: CGFloat = 64
+        let frame = view.bounds.copy(y: topOffset, height: view.bounds.height)
+        
+        let noteButtonPointParentController = view.convert(CGPoint(x: button.center.x, y: button.center.y), from: cell)
+        // adjust the anchor point also for topOffset
+        let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
+        
+        AlertPopup.showCustom(message: text, controller: self, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
+    }
+    
     // MARK: - QuickAddDelegate
 
-    
-    override func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
+    func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
         if let list = currentList {
             
             // TODO save "group list item" don't desintegrate group immediatly
@@ -494,8 +499,8 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
             QL4("Add product from quick list but there's no current list in ViewController'")
         }
     }
-    
-    override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
         guard let list = currentList else {QL4("No list"); return}
         guard let realmData = realmData else {QL4("No realm data"); return}
         
@@ -520,7 +525,7 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
         })
     }
     
-    override func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
+    func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
         guard let list = currentList else {QL4("No list"); return}
         
         Prov.listItemsProvider.listItems(list: list, ingredient: ingredient, mapper: {listItems -> String in
@@ -533,9 +538,8 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
             handler(text)
         })
     }
-    
-    
-    override func onAddProduct(_ product: QuantifiableProduct) {
+
+    func onAddProduct(_ product: QuantifiableProduct) {
         guard let realmData = realmData else {QL4("No realm data"); return}
         
         if let list = currentList {
@@ -551,7 +555,7 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
                     self?.listItemsTableViewController.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex))
                 }
                 
-                self?.updateEmptyUI()
+//                self?.updateEmptyUI()
             })
             //            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.product.category.name, sectionColor: product.product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
             //                weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
@@ -561,7 +565,7 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
         }
     }
     
-    override func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
+    func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditListItem(_ input: ListItemInput, editingListItem: ListItem) {
             // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
@@ -583,14 +587,27 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
         }
     }
     
-    override func onQuickListOpen() {
+    func onCloseQuickAddTap() {
     }
     
-    override func onAddProductOpen() {
+    func onQuickListOpen() {
     }
     
+    func onAddProductOpen() {
+    }
 
-    override func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
+    func onAddGroupItemsOpen() {
+    }
+    
+    func onAddGroupOpen() {
+        fatalError("Not supported")
+    }
+    
+    func parentViewForAddButton() -> UIView {
+        return self.view
+    }
+    
+    func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
         if let list = currentList {
             // TODO filter the list sections instead of calling provider?
             Prov.sectionProvider.sections([name], list: list, handler: successHandler {[weak self] sections in guard let weakSelf = self else {return}
@@ -612,26 +629,12 @@ class SimpleListItemsController: ItemsController, UITextFieldDelegate, UIScrollV
         }
     }
     
-    override func onRemovedSectionCategoryName(_ name: String) {
+    func onRemovedSectionCategoryName(_ name: String) {
         updatePossibleList()
     }
     
-    override func onRemovedBrand(_ name: String) {
+    func onRemovedBrand(_ name: String) {
         updatePossibleList()
-    }
-    
-    // MARK: - Notification
-    
-    func onListRemovedNotification(_ note: Foundation.Notification) {
-        guard let info = (note as NSNotification).userInfo as? Dictionary<String, String> else {QL4("Invalid info: \(note)"); return}
-        guard let listUuid = info[NotificationKey.list] else {QL4("No list uuid: \(info)"); return}
-        guard let currentList = currentList else {QL3("No current list, ignoring list removed notification."); return}
-        
-        // If we happen to be showing a list that was just removed (e.g. because user removed an inventory the list was associated to), exit.
-        // In this case (opposed to websocket notification) we don't show an alert, as this is triggered by an action of the user in the same device and user should know it was removed.
-        if listUuid == currentList.uuid {
-            back()
-        }
     }
 }
 

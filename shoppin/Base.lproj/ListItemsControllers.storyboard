@@ -106,65 +106,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dhe-Wt-ZWJ" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="64" id="H5W-Wr-6WR"/>
-                                </constraints>
-                            </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="blz-rx-aVz">
-                                <rect key="frame" x="0.0" y="64" width="375" height="543"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="QQF-1r-ms4">
-                                        <rect key="frame" x="75" y="150" width="225" height="206"/>
-                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="aKL-Rf-ABt"/>
-                                            <constraint firstAttribute="height" constant="60" id="wbc-f8-TGB"/>
-                                        </constraints>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="aKL-Rf-ABt"/>
-                                                <exclude reference="wbc-f8-TGB"/>
-                                            </mask>
-                                        </variation>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You cart is empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hAl-pb-QcH" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="117" y="376" width="141" height="22"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                <integer key="value" value="50"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Move items from the todo list or add directly using the top menu!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xde-nJ-NKG" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="40" y="406" width="295" height="36"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                <integer key="value" value="40"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="hAl-pb-QcH" firstAttribute="centerX" secondItem="blz-rx-aVz" secondAttribute="centerX" id="Ovg-7x-shh"/>
-                                    <constraint firstItem="Xde-nJ-NKG" firstAttribute="centerX" secondItem="blz-rx-aVz" secondAttribute="centerX" id="Q2C-2s-Vrg"/>
-                                    <constraint firstItem="Xde-nJ-NKG" firstAttribute="top" secondItem="hAl-pb-QcH" secondAttribute="bottom" constant="8" id="T3j-xI-qyM"/>
-                                    <constraint firstItem="QQF-1r-ms4" firstAttribute="top" secondItem="blz-rx-aVz" secondAttribute="top" constant="150" id="VB9-kT-mz0" customClass="TopEmptyViewConstraint" customModule="shoppin" customModuleProvider="target"/>
-                                    <constraint firstItem="QQF-1r-ms4" firstAttribute="width" secondItem="blz-rx-aVz" secondAttribute="width" multiplier="0.6" id="ado-Zr-PIx"/>
-                                    <constraint firstItem="QQF-1r-ms4" firstAttribute="centerX" secondItem="blz-rx-aVz" secondAttribute="centerX" id="flY-N8-nWW"/>
-                                    <constraint firstItem="hAl-pb-QcH" firstAttribute="top" secondItem="QQF-1r-ms4" secondAttribute="bottom" constant="20" id="pB3-yS-vOf"/>
-                                    <constraint firstItem="Xde-nJ-NKG" firstAttribute="leading" secondItem="blz-rx-aVz" secondAttribute="leading" constant="40" id="wFV-rI-2Tu"/>
-                                </constraints>
-                            </view>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i9d-jj-Bdy" customClass="ExpandCollapseButton" customModule="shoppin">
                                 <rect key="frame" x="321" y="617" width="40" height="40"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -228,37 +169,20 @@
                                 </variation>
                             </view>
                         </subviews>
+                        <color key="backgroundColor" red="0.70147118040000001" green="1" blue="0.50635161220000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="LyR-1z-msh" firstAttribute="top" secondItem="blz-rx-aVz" secondAttribute="bottom" constant="60" id="0ar-12-Vyc"/>
                             <constraint firstAttribute="trailing" secondItem="Xxj-JB-Bmd" secondAttribute="trailing" id="1hJ-0X-jxp"/>
                             <constraint firstItem="Xxj-JB-Bmd" firstAttribute="leading" secondItem="0tl-vv-fHn" secondAttribute="leading" id="4xL-Qc-HVv"/>
-                            <constraint firstItem="blz-rx-aVz" firstAttribute="top" secondItem="Dhe-Wt-ZWJ" secondAttribute="bottom" id="6IN-qJ-cKC"/>
-                            <constraint firstItem="Dhe-Wt-ZWJ" firstAttribute="top" secondItem="5H0-4q-wYx" secondAttribute="bottom" id="8IX-Cg-Vqc"/>
                             <constraint firstItem="LyR-1z-msh" firstAttribute="top" secondItem="i9d-jj-Bdy" secondAttribute="bottom" constant="10" id="Ckv-Rw-F5I"/>
-                            <constraint firstItem="blz-rx-aVz" firstAttribute="leading" secondItem="0tl-vv-fHn" secondAttribute="leading" id="FxV-m2-fsd"/>
-                            <constraint firstItem="LyR-1z-msh" firstAttribute="top" secondItem="Xxj-JB-Bmd" secondAttribute="bottom" id="Kzh-VA-RKg"/>
-                            <constraint firstItem="Dhe-Wt-ZWJ" firstAttribute="top" secondItem="0tl-vv-fHn" secondAttribute="top" id="PyZ-3L-cdU"/>
-                            <constraint firstItem="Dhe-Wt-ZWJ" firstAttribute="leading" secondItem="0tl-vv-fHn" secondAttribute="leading" id="QIL-lA-ZYV"/>
-                            <constraint firstAttribute="trailing" secondItem="blz-rx-aVz" secondAttribute="trailing" id="Wrm-Mg-bSd"/>
-                            <constraint firstAttribute="trailing" secondItem="Dhe-Wt-ZWJ" secondAttribute="trailing" id="p2k-VW-M1h"/>
+                            <constraint firstAttribute="bottom" secondItem="Xxj-JB-Bmd" secondAttribute="bottom" id="HRn-t5-Sdo"/>
                             <constraint firstAttribute="trailing" secondItem="i9d-jj-Bdy" secondAttribute="trailing" constant="14" id="xys-aA-70p"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="8IX-Cg-Vqc"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Cart" id="e5V-gC-Nfp">
                         <barButtonItem key="rightBarButtonItem" title="Buy" id="bc8-rn-N1i"/>
                     </navigationItem>
                     <connections>
                         <outlet property="buyViewHeightConstraint" destination="LsL-Ma-0NL" id="JKN-cL-vSY"/>
-                        <outlet property="emptyView" destination="blz-rx-aVz" id="Vlj-Jb-X2u"/>
-                        <outlet property="emptyViewLabel1" destination="hAl-pb-QcH" id="Nvq-Nn-Xob"/>
-                        <outlet property="emptyViewLabel2" destination="Xde-nJ-NKG" id="VhH-GY-IjC"/>
-                        <outlet property="topBar" destination="Dhe-Wt-ZWJ" id="OKD-Rj-Ta9"/>
-                        <outlet property="topBarHeightConstraint" destination="H5W-Wr-6WR" id="ltK-FE-McL"/>
                         <outlet property="totalDonePriceLabel" destination="Lzh-3J-7ty" id="pad-Ca-PAm"/>
                     </connections>
                 </viewController>
@@ -418,7 +342,7 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="so5-bY-yhM">
                                 <rect key="frame" x="0.0" y="64" width="375" height="543"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="C7077E0B-84F6-4056-A6D5-0C89CCDC9D57" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0A484D1F-B824-4DBA-9B06-B8720D15DC43" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
                                         <rect key="frame" x="75" y="150" width="225" height="206"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -708,7 +632,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="C7077E0B-84F6-4056-A6D5-0C89CCDC9D57" width="240" height="206">
+        <image name="0A484D1F-B824-4DBA-9B06-B8720D15DC43" width="240" height="206">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

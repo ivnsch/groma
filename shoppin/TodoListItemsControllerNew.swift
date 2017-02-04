@@ -18,6 +18,8 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 
     fileprivate weak var todoListItemsEditBottomView: TodoListItemsEditBottomView?
     
+    fileprivate var cartController: CartListItemsControllerNew?
+    
     override var status: ListItemStatus {
         return .todo
     }
@@ -238,13 +240,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     fileprivate func addCartController() {
         let cartController = UIStoryboard.cartViewControllerNew()
         cartController.onViewWillAppear = {[weak self, weak cartController] in guard let weakSelf = self else {return}
-            if let dotColor = weakSelf.topBar.dotColor {
-                cartController?.currentList = weakSelf.currentList
-                cartController?.topBar.showDot()
-                cartController?.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
-            } else {
-                QL4("Invalid state: top bar has no dot color")
-            }
+            cartController?.currentList = weakSelf.currentList
         }
         
         cartController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -253,8 +249,104 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         print("frame: \(pricesView.frame)")
         
         _ = cartController.view.positionBelowView(pricesView)
-        _ = cartController.view.heightConstraint(view.height - topBar.height - pricesView.height)
+        _ = cartController.view.heightConstraint(view.height - topBar.height - pricesView.height - 70) // 70 is the height of the buy button - not quite sure yet why we have to substract this
         _ = cartController.view.alignLeft(view)
         _ = cartController.view.alignRight(view)
+        
+        self.cartController = cartController
+    }
+
+    
+    // MARK: - QuickAddDelegate
+    // IMPORTANT: Make sure all the QuickAddDelegate methods are overriden here, since the cart has to consume everything while it's open. With more time we can think about a better solution for this.
+    
+    override func onAddProduct(_ product: QuantifiableProduct) {
+        if pricesView.expandedNew {
+            cartController?.onAddProduct(product)
+        }
+    }
+    
+    override func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
+        if pricesView.expandedNew {
+            cartController?.onAddGroup(group, onFinish: onFinish)
+        }
+    }
+    
+    override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
+        if pricesView.expandedNew {
+            cartController?.onAddRecipe(ingredientModels: ingredientModels, quickAddController: quickAddController)
+        }
+    }
+    
+    override func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
+        if pricesView.expandedNew {
+            cartController?.getAlreadyHaveText(ingredient: ingredient, handler)
+        }
+    }
+
+    
+    override func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
+        if pricesView.expandedNew {
+            cartController?.onSubmitAddEditItem(input, editingItem: editingItem)
+        }
+    }
+    
+    override func onCloseQuickAddTap() {
+        if pricesView.expandedNew {
+            cartController?.onCloseQuickAddTap()
+        }
+    }
+    
+    override func onQuickListOpen() {
+        if pricesView.expandedNew {
+            cartController?.onQuickListOpen()
+        }
+    }
+    
+    override func onAddProductOpen() {
+        if pricesView.expandedNew {
+            cartController?.onAddProductOpen()
+        }
+    }
+    
+    override func onAddGroupOpen() {
+        if pricesView.expandedNew {
+            cartController?.onAddGroupOpen()
+        }
+    }
+    
+    override func onAddGroupItemsOpen() {
+        if pricesView.expandedNew {
+            cartController?.onAddGroupItemsOpen()
+        }
+    }
+    
+    override func parentViewForAddButton() -> UIView {
+        var view: UIView?
+        if pricesView.expandedNew {
+            view = cartController?.parentViewForAddButton()
+        }
+        return view ?? {
+            QL4("Invalid state: price view expanded but no cart controller - returning a dummy view")
+            return UIView()
+        }()
+    }
+    
+    override func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
+        if pricesView.expandedNew {
+            cartController?.addEditSectionOrCategoryColor(name, handler: handler)
+        }
+    }
+    
+    override func onRemovedSectionCategoryName(_ name: String) {
+        if pricesView.expandedNew {
+            cartController?.onRemovedSectionCategoryName(name)
+        }
+    }
+    
+    override func onRemovedBrand(_ name: String) {
+        if pricesView.expandedNew {
+            cartController?.onRemovedBrand(name)
+        }
     }
 }

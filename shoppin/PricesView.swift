@@ -56,6 +56,8 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     fileprivate var startBottomConstraintConstant: CGFloat?
     var bottomConstraintMax: CGFloat = 0
 
+    var expandedNew: Bool = false /// if at the top or bottom - other expanded is deprecated
+    
     fileprivate var cartQuantity: Int = 0 {
         didSet {
             if let cartQuantityLabel = quantityLabel {
@@ -253,18 +255,17 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         
         guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
         
-        if open {
-            setOpen(false, animated: true)
-        } else {
-            if bottomConstraint.constant < todoController.view.height / 2 { // it's currently in bottom part of view
-                bottomConstraint.constant = y - todoController.topBar.height
-            } else { // it's currently in upper part
-                bottomConstraint.constant = 0
-            }
+        if bottomConstraint.constant < todoController.view.height / 2 { // it's currently in bottom part of view
+            bottomConstraint.constant = y - todoController.topBar.height
+            expandedNew = true
             
-            UIView.animate(withDuration: 0.3) {
-                todoController.view.layoutIfNeeded()
-            }
+        } else { // it's currently in upper part
+            bottomConstraint.constant = 0
+            expandedNew = false
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            todoController.view.layoutIfNeeded()
         }
     }
     
@@ -297,7 +298,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     fileprivate func snap() {
         guard let bottomConstant = bottomConstraint?.constant else {QL4("Illegal state: No bottom constraing"); return}
         
-        if bottomConstant > bottomConstraintMax / 2 {
+        if bottomConstant > bottomConstraintMax / 3 {
             bottomConstraint?.constant = bottomConstraintMax
         } else {
             bottomConstraint?.constant = 0

@@ -22,8 +22,6 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        topBar.setBackVisible(true)
-
         buyViewHeightConstraint.constant = DimensionsManager.listItemsPricesViewHeight
 
         navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -105,10 +103,5 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
         } else {
             QL3("Warn: DoneViewController.onAddToInventoryTap: list is not set, can't add to inventory")
         }
-    }
-    
-    override func onTopBarBackButtonTap() {
-        super.onTopBarBackButtonTap()
-        _ = navigationController?.popViewController(animated: true)
     }
 }
