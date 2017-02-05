@@ -62,7 +62,7 @@
                         <action selector="onGotItTapWithSender:" destination="-1" eventType="touchUpInside" id="3YI-3x-Krv"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="scrub0" translatesAutoresizingMaskIntoConstraints="NO" id="9ST-0v-X4Y">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="longpress0" translatesAutoresizingMaskIntoConstraints="NO" id="9ST-0v-X4Y">
                     <rect key="frame" x="163" y="42.5" width="16" height="16"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="st5-Mi-LsF" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
@@ -76,7 +76,7 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tF8-kh-Vuf" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tF8-kh-Vuf" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
                     <rect key="frame" x="124" y="58.5" width="94" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -104,6 +104,6 @@
         </view>
     </objects>
     <resources>
-        <image name="scrub0" width="16" height="16"/>
+        <image name="longpress0" width="16" height="16"/>
     </resources>
 </document>

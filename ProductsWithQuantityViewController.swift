@@ -88,10 +88,12 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     }
     
     fileprivate func initExplanationManager() {
-        let contents = ExplanationContents(title: "Did you know?", text: "You can scrub an item left\nor right to change quantities", imageName: "scrub", buttonTitle: "Got it!")
+        let contents = ExplanationContents(title: "Did you know?", text: "You can scrub an item left\nor right to change quantities", imageName: "scrub", buttonTitle: "Got it!", frameCount: 180)
+        let checker = SwipeToIncrementAlertHelperNew()
+        checker.preference = .showedCanSwipeToIncrementCounter
         explanationManager.explanationContents = contents
+        explanationManager.checker = checker
     }
-    
     
     func onPullRefresh(_ sender: UIRefreshControl) {
         sender.endRefreshing()
@@ -147,13 +149,15 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             explanationView.frame = cell.contentView.bounds
             explanationView.fillSuperview()
             explanationView.delegate = self
+            explanationView.imageView.startAnimating()
             return cell
             
         } else { // Normal cell
-            
+            let row = explanationManager.showExplanation ? indexPath.row - 1 : indexPath.row
+
             let cell = tableView.dequeueReusableCell(withIdentifier: "inventoryCell", for: indexPath) as! ProductWithQuantityTableViewCell
             
-            let model = self.models[(indexPath as NSIndexPath).row - (explanationManager.showExplanation ? 1 : 0)]
+            let model = self.models[row]
             
             cell.model = model
             cell.delegate = self

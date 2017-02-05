@@ -248,7 +248,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         PreferencesManager.clearPreference(key: .shownCanSwipeToOpenStash)
         PreferencesManager.clearPreference(key: .showedAddDirectlyToInventoryHelp)
         PreferencesManager.clearPreference(key: .showedDeleteHistoryItemHelp)
-        PreferencesManager.savePreference(.showedCanSwipeToIncrementCounter, value: NSNumber(value: SwipeToIncrementAlertHelper.countToShowPopup as Int)) // show first time user tries to increment after this
+        PreferencesManager.savePreference(.showedCanSwipeToIncrementCounter, value: NSNumber(value: SwipeToIncrementAlertHelperNew.countToShowPopup as Int)) // show first time user tries to increment after this
+        PreferencesManager.savePreference(.showedLongTapToEditCounter, value: NSNumber(value: SwipeToIncrementAlertHelperNew.countToShowPopup as Int)) // show first time user tries to increment after this
         AlertPopup.show(message: trans("popup_hints_restored"), controller: self)
     }
     

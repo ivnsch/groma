@@ -99,8 +99,11 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     }
     
     fileprivate func initExplanationManager() {
-        let contents = ExplanationContents(title: "Did you know?", text: "You can scrub an item left\nor right to change quantities", imageName: "scrub", buttonTitle: "Got it!")
+        let contents = ExplanationContents(title: "Did you know?", text: "You can press and hold\nto set individual items in edit mode", imageName: "longpressedit", buttonTitle: "Got it!", frameCount: 210)
+        let checker = SwipeToIncrementAlertHelperNew()
+        checker.preference = .showedLongTapToEditCounter
         explanationManager.explanationContents = contents
+        explanationManager.checker = checker
     }
     
     func onPullRefresh(_ sender: UIRefreshControl) {
@@ -157,18 +160,20 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             explanationView.frame = cell.contentView.bounds
             explanationView.fillSuperview()
             explanationView.delegate = self
+            explanationView.imageView.startAnimating()
             return cell
             
         } else { // Normal cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "inventoryCell", for: indexPath) as! ProductWithQuantityTableViewCell
             
-            if let model = delegate?.itemForRow(row: indexPath.row) {
+            let row = explanationManager.showExplanation ? indexPath.row - 1 : indexPath.row
+            if let model = delegate?.itemForRow(row: row) {
                 cell.model = model
             } else {
                 if delegate == nil {
                     QL4("No delegate")
                 } else {
-                    QL4("Illegal state: No item for row: \(indexPath.row)")
+                    QL4("Illegal state: No item for row: \(row)")
                 }
                 
             }
@@ -433,8 +438,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     // MARK: - ExplanationViewDelegate
     
     func onGotItTap(sender: UIButton) {
-        tableView.deleteRows(at: [IndexPath(row: 0, section: 0)], with: .top)
         explanationManager.dontShowAgain()
+        tableView.deleteRows(at: [IndexPath(row: 0, section: 0)], with: .top)
     }
 }
 
@@ -444,11 +449,12 @@ struct ExplanationContents {
     var text: String
     var imageName: String
     var buttonTitle: String
+    var frameCount: Int
 }
 
 class ExplanationManager {
 
-    fileprivate var view: ExplanationView?
+    var view: ExplanationView?
     
     var row: Int {
         return 0
@@ -459,33 +465,43 @@ class ExplanationManager {
     }
     
     var showExplanation: Bool {
-        return SwipeToIncrementAlertHelper.showPopup()
+        guard let checker = checker else {QL4("Invalid state: No checker"); return false}
+        
+        return checker.showPopup()
     }
     
     var explanationContents: ExplanationContents?
+    var checker: SwipeToIncrementAlertHelperNew? // TODO naming, etc. (quickly recycled old class)
     
     func generateExplanationView() -> ExplanationView {
         
         guard let contents = explanationContents else {QL4("Invalid state: No explanation contents, returning dummy view"); return ExplanationView()}
-        
+
         return view ?? {
             let view = ExplanationView()
             view.titleLabel.text = contents.title
             view.msgLabel.text = contents.text
             view.msgLabel.sizeToFit()
             view.gotItButton.setTitle(contents.buttonTitle, for: .normal)
-            
-            let image = UIImage.animatedImageNamed(contents.imageName, duration: 5)
-            view.imageView.image = image
-            
+
             self.view = view
+            
+            var arr = [UIImage]()
+            for i in 0...contents.frameCount {
+                guard let img = UIImage(named: "\(contents.imageName)\(i)") else {QL4("No image for: \(i), returning dummy view"); return ExplanationView()}
+                arr.append(img)
+            }
+            
+            view.imageView.animationImages = arr
             
             return view
         }()
     }
     
     func dontShowAgain() {
-        SwipeToIncrementAlertHelper.dontShowAgain()
+        guard let checker = checker else {QL4("Invalid state: No checker"); return}
+        
+        checker.dontShowAgain()
     }
     
 }
