@@ -46,7 +46,7 @@ class ExpandableTableViewListModel: ExpandableTableViewModel {
 
 class ListsTableViewController: ExpandableItemsTableViewController, AddEditListControllerDelegate, ExpandableTopViewControllerDelegate {
 
-    fileprivate var listsResult: Results<Providers.List>?
+    fileprivate var listsResult: RealmSwift.List<Providers.List>?
     fileprivate var notificationToken: NotificationToken?
     
     var topAddEditListControllerManager: ExpandableTopViewController<AddEditListController>?
@@ -170,24 +170,23 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
 
     override func onReorderedModels(from: Int, to: Int) {
-        let lists = (models as! [ExpandableTableViewListModel]).map{$0.list}
+        guard let listsResult = listsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         
-        let reorderedLists = lists.mapEnumerate{index, list in list.copy(order: index)}
-        let orderUpdates = reorderedLists.map{list in OrderUpdate(uuid: list.uuid, order: list.order)}
-
-        models = reorderedLists.map{ExpandableTableViewListModel(list: $0)}
-        
-        Prov.listProvider.updateListsOrder(orderUpdates, remote: true, resultHandler(onSuccess: {
+        Prov.listProvider.move(from: from, to: to, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
         }, onErrorAdditional: {[weak self] result in
-                self?.initModels()
+            self?.initModels()
             }
         ))
     }
     
     override func onRemoveModel(_ model: ExpandableTableViewModel, index: Int) {
-        Prov.listProvider.remove((model as! ExpandableTableViewListModel).list, remote: true, resultHandler(onSuccess: {
-            }, onErrorAdditional: {[weak self] result in
-                self?.initModels()
+        guard let listsResult = listsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        
+        Prov.listProvider.delete(index: index, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+            self?.initModels()
             }
         ))
     }
@@ -235,19 +234,47 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     // MARK: - AddEditListControllerDelegate
     
     func onAddList(_ list: Providers.List) {
-        Prov.listProvider.add(list, remote: true, resultHandler(onSuccess: {_ in
-            }, onErrorAdditional: {[weak self] result in
-                self?.onListAddOrUpdateError(list)
+        guard let listsResult = listsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        
+        // TODO!!!!!!!!!!!!!!!!!! use results
+        models.insert(ExpandableTableViewListModel(list: list), at: listsResult.count)
+        tableView.insertRows(at: [IndexPath(row: listsResult.count, section: 0)], with: .top)
+        
+        Prov.listProvider.add(list, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {_ in
+        }, onErrorAdditional: {[weak self] result in
+            self?.onListAddOrUpdateError(list)
             }
         ))
     }
     
     func onUpdateList(_ list: Providers.List) {
-        Prov.listProvider.update([list], remote: true, resultHandler(onSuccess: {
-            }, onErrorAdditional: {[weak self] result in
-                self?.onListAddOrUpdateError(list)
+        guard let listsResult = listsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        
+        let input = ListInput(name: list.name, color: list.color, store: list.store ?? "", inventory: list.inventory.copy())
+        
+        Prov.listProvider.update(list, input: input, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+            self?.onListAddOrUpdateError(list)
             }
         ))
+        
+        // TODO!!!!!!!!!!!!!!!!!! find index using item also in recipes.
+        var row: Int?
+        for (index, item) in listsResult.enumerated(){
+            if item.uuid == list.uuid {
+                row = index
+            }
+        }
+        
+        if let row = row {
+            // TODO!!!!!!!!!!!!!!!!!! use results
+            _ = models.update(ExpandableTableViewListModel(list: list))
+            tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+        } else {
+            QL4("Invalid state: can't find list: \(list)")
+        }
     }
 
     fileprivate func onListAddOrUpdateError(_ list: Providers.List) {

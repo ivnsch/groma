@@ -57,6 +57,7 @@ class RealmRecipeProvider: RealmProvider {
 
     public func add(_ recipe: Recipe, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: recipes.realm) {realm -> Bool in
+            realm.add(recipe, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
             recipes.append(recipe)
             return true
         }

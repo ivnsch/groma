@@ -14,9 +14,14 @@ class ListProviderImpl: ListProvider {
    
     let remoteListProvider = RemoteListItemProvider()
     
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    
+    // NEW
+    
     // Note: programmatic sorting 2x. But users normally have only a few lists so it's ok
-    func lists(_ remote: Bool = true, _ handler: @escaping (ProviderResult<Results<List>>) -> ()) {
-        DBProv.listProvider.loadLists {(lists: Results<List>?) in
+    func lists(_ remote: Bool = true, _ handler: @escaping (ProviderResult<RealmSwift.List<List>>) -> Void) {
+        DBProv.listProvider.loadLists {lists in
             if let lists = lists {
                 handler(ProviderResult(status: .success, sucessResult: lists))
             } else {
@@ -53,6 +58,33 @@ class ListProviderImpl: ListProvider {
         }
     }
     
+    public func add(_ list: List, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.listProvider.add(list, lists: lists, notificationToken: notificationToken) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+    
+    public func update(_ list: List, input: ListInput, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.listProvider.update(list, input: input, lists: lists, notificationToken: notificationToken) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+    
+    public func move(from: Int, to: Int, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.listProvider.move(from: from, to: to, lists: lists, notificationToken: notificationToken) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+    
+    public func delete(index: Int, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.listProvider.delete(index: index, lists: lists, notificationToken: notificationToken) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+    
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    
     func list(_ listUuid: String, _ handler: @escaping (ProviderResult<List>) -> ()) {
         // return the saved object, to get object with generated id
         DBProv.listProvider.loadList(listUuid) {dbListMaybe in
@@ -85,7 +117,7 @@ class ListProviderImpl: ListProvider {
 //                self?.remoteListProvider.add(list, handler: {remoteResult in
 //                    if let timestamp = remoteResult.successResult {
 //                        // We update only the timestamp of the lists as the server doesn't update the inventory, only sends it, as dependency. TODO (server/client) use timestamp-only response.
-//                        DBProv.listProvider.updateLastSyncTimeStamp([list], timestamp: timestamp) {success in
+//                        DBProvrealProvider.updateLastSyncTimeStamp([list], timestamp: timestamp) {success in
 //                            if !success {
 //                                QL4("Error storing last update timestamp")
 //                            }

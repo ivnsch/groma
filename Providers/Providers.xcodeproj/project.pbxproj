@@ -282,6 +282,8 @@
 		6A407ABA1E33A14B00D77405 /* AddableIngredientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407AB91E33A14B00D77405 /* AddableIngredientProvider.swift */; };
 		6AC842731E26D18200444C91 /* QuantifiableProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC842721E26D18200444C91 /* QuantifiableProduct.swift */; };
 		6AD126691E37C31F009DFEDF /* ProvResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD126681E37C31F009DFEDF /* ProvResult.swift */; };
+		6AD8DDAF1E47CEB9000A4C36 /* ListsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD8DDAE1E47CEB9000A4C36 /* ListsContainer.swift */; };
+		6AD8DDB11E47D242000A4C36 /* ListInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD8DDB01E47D242000A4C36 /* ListInput.swift */; };
 		6AE34BE61E2E25F50039A2A8 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE51E2E25F50039A2A8 /* Recipe.swift */; };
 		6AE34BE81E2E27980039A2A8 /* RecipeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE71E2E27980039A2A8 /* RecipeProvider.swift */; };
 		6AE34BEA1E2E28280039A2A8 /* RecipeProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE91E2E28280039A2A8 /* RecipeProviderImpl.swift */; };
@@ -574,6 +576,8 @@
 		6A407AB91E33A14B00D77405 /* AddableIngredientProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddableIngredientProvider.swift; sourceTree = "<group>"; };
 		6AC842721E26D18200444C91 /* QuantifiableProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuantifiableProduct.swift; sourceTree = "<group>"; };
 		6AD126681E37C31F009DFEDF /* ProvResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProvResult.swift; sourceTree = "<group>"; };
+		6AD8DDAE1E47CEB9000A4C36 /* ListsContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsContainer.swift; sourceTree = "<group>"; };
+		6AD8DDB01E47D242000A4C36 /* ListInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListInput.swift; sourceTree = "<group>"; };
 		6AE34BE51E2E25F50039A2A8 /* Recipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		6AE34BE71E2E27980039A2A8 /* RecipeProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeProvider.swift; sourceTree = "<group>"; };
 		6AE34BE91E2E28280039A2A8 /* RecipeProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeProviderImpl.swift; sourceTree = "<group>"; };
@@ -840,6 +844,7 @@
 				6A256C3E1E0405A7004F5028 /* PlanItemInput.swift */,
 				6A256C3F1E0405A7004F5028 /* StoreProductInput.swift */,
 				6AE34BED1E2E70400039A2A8 /* RecipeInput.swift */,
+				6AD8DDB01E47D242000A4C36 /* ListInput.swift */,
 				6AE34BF91E2FECAD0039A2A8 /* IngredientInput.swift */,
 			);
 			name = input;
@@ -868,6 +873,7 @@
 		6A256C801E0405CA004F5028 /* realm */ = {
 			isa = PBXGroup;
 			children = (
+				6AD8DDAD1E47CEA2000A4C36 /* container */,
 				6A256C9B1E0405DC004F5028 /* remove */,
 				6A256C641E0405C6004F5028 /* Section.swift */,
 				6A256C651E0405C6004F5028 /* Product.swift */,
@@ -1136,6 +1142,14 @@
 			name = ios_specific_should_not_be_here;
 			sourceTree = "<group>";
 		};
+		6AD8DDAD1E47CEA2000A4C36 /* container */ = {
+			isa = PBXGroup;
+			children = (
+				6AD8DDAE1E47CEB9000A4C36 /* ListsContainer.swift */,
+			);
+			name = container;
+			sourceTree = "<group>";
+		};
 		74208BA8CBB1FD55A8B3EB53 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1281,11 +1295,13 @@
 				6A256C901E0405D7004F5028 /* DBStoreProductToRemove.swift in Sources */,
 				6A256BFF1E040540004F5028 /* RemotePullProvider.swift in Sources */,
 				6A256C971E0405D7004F5028 /* DBRemoveHistoryItem.swift in Sources */,
+				6AD8DDB11E47D242000A4C36 /* ListInput.swift in Sources */,
 				6A256BDB1E040530004F5028 /* List_Realm.swift in Sources */,
 				6A256D821E0407AC004F5028 /* NSRange.swift in Sources */,
 				6A256D7A1E0407AC004F5028 /* NSDate.swift in Sources */,
 				6A256D431E040694004F5028 /* OrderUpdate.swift in Sources */,
 				6A256D421E040694004F5028 /* ListItem.swift in Sources */,
+				6AD8DDAF1E47CEB9000A4C36 /* ListsContainer.swift in Sources */,
 				6A256D251E04066D004F5028 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */,
 				6A256C931E0405D7004F5028 /* DBRemoveListItem.swift in Sources */,
 				6A256D901E040815004F5028 /* Notification.swift in Sources */,

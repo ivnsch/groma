@@ -46,10 +46,62 @@ class RealmListProvider: RealmProvider {
         handler(loadListSync(uuid))
     }
 
-    func loadLists(_ handler: @escaping (Results<List>?) -> Void) {
-        handler(loadSync(filter: nil, sortDescriptor: NSSortDescriptor(key: "order", ascending: true)))
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+
+    // NEW
+    
+    func loadLists(_ handler: @escaping (RealmSwift.List<List>?) -> Void) {
+        guard let listsContainer: ListsContainer = loadSync(predicate: nil)?.first else {
+            handler(nil)
+            QL4("Invalid state: no container")
+            return
+        }
+        handler(listsContainer.lists)
     }
     
+    
+    public func add(_ list: List, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: list.realm) {realm -> Bool in
+            realm.add(list, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
+            lists.append(list)
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    public func update(_ list: List, input: ListInput, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: list.realm) {realm -> Bool in
+            list.name = input.name
+            list.color = input.color
+            list.store = input.store
+            list.inventory = input.inventory
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    public func move(from: Int, to: Int, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: lists.realm) {realm -> Bool in
+            lists.move(from: from, to: to)
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    public func delete(index: Int, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: lists.realm) {realm -> Bool in
+            lists.remove(objectAtIndex: index)
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+
+    
+
     func remove(_ list: List, markForSync: Bool, handler: @escaping (Bool) -> ()) {
         let list = list.copy() // Fixes Realm acces in incorrect thread exceptions
         remove(list.uuid, markForSync: markForSync, handler: handler)

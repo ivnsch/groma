@@ -10,8 +10,25 @@ import Foundation
 import RealmSwift
 
 public protocol ListProvider {
+
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
     
-    func lists(_ remote: Bool, _ handler: @escaping (ProviderResult<Results<List>>) -> ())
+    // NEW
+    
+    func lists(_ remote: Bool, _ handler: @escaping (ProviderResult<RealmSwift.List<List>>) -> Void)
+
+    func add(_ list: List, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    func update(_ list: List, input: ListInput, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    func move(from: Int, to: Int, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    func delete(index: Int, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    
     
     func list(_ listUuid: String, _ handler: @escaping (ProviderResult<List>) -> ())
   
