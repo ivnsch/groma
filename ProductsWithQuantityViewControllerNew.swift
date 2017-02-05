@@ -37,7 +37,7 @@ protocol ProductsWithQuantityViewControllerDelegateNew: class {
 
 
 /// Generic controller for sorted products with a quantity, which can be incremented and decremented
-class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ExplanationViewDelegate {
     
     fileprivate weak var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
     
@@ -72,8 +72,12 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     fileprivate let cellHeight = DimensionsManager.defaultCellHeight
     
+    fileprivate var explanationManager: ExplanationManager = ExplanationManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        initExplanationManager()
         
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         
@@ -92,6 +96,11 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             emptyViewLabel2.text = emptyViewData.text2
             emptyViewImg.image = UIImage(named: emptyViewData.imgName)
         }
+    }
+    
+    fileprivate func initExplanationManager() {
+        let contents = ExplanationContents(title: "Did you know?", text: "You can scrub an item left\nor right to change quantities", imageName: "scrub", buttonTitle: "Got it!")
+        explanationManager.explanationContents = contents
     }
     
     func onPullRefresh(_ sender: UIRefreshControl) {
@@ -134,32 +143,50 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemsCount
+        return itemsCount + (explanationManager.showExplanation ? 1 : 0)
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "inventoryCell", for: indexPath) as! ProductWithQuantityTableViewCell
         
-        if let model = delegate?.itemForRow(row: indexPath.row) {
-            cell.model = model
-        } else {
-            if delegate == nil {
-                QL4("No delegate")
+        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "defaultCell", for: indexPath)
+            
+            let explanationView = explanationManager.generateExplanationView()
+            cell.contentView.addSubview(explanationView)
+            explanationView.frame = cell.contentView.bounds
+            explanationView.fillSuperview()
+            explanationView.delegate = self
+            return cell
+            
+        } else { // Normal cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "inventoryCell", for: indexPath) as! ProductWithQuantityTableViewCell
+            
+            if let model = delegate?.itemForRow(row: indexPath.row) {
+                cell.model = model
             } else {
-                QL4("Illegal state: No item for row: \(indexPath.row)")
+                if delegate == nil {
+                    QL4("No delegate")
+                } else {
+                    QL4("Illegal state: No item for row: \(indexPath.row)")
+                }
+                
             }
             
+            cell.indexPath = indexPath
+            cell.delegate = self
+            
+            return cell
         }
-        
-        cell.indexPath = indexPath
-        cell.delegate = self
-        
-        return cell
+
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellHeight
+        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
+            return explanationManager.rowHeight
+        } else {
+            return cellHeight
+        }
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -402,4 +429,63 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         picker.dataSource = self
         return picker
     }
+    
+    // MARK: - ExplanationViewDelegate
+    
+    func onGotItTap(sender: UIButton) {
+        tableView.deleteRows(at: [IndexPath(row: 0, section: 0)], with: .top)
+        explanationManager.dontShowAgain()
+    }
+}
+
+
+struct ExplanationContents {
+    var title: String
+    var text: String
+    var imageName: String
+    var buttonTitle: String
+}
+
+class ExplanationManager {
+
+    fileprivate var view: ExplanationView?
+    
+    var row: Int {
+        return 0
+    }
+    
+    var rowHeight: CGFloat {
+        return 270
+    }
+    
+    var showExplanation: Bool {
+        return SwipeToIncrementAlertHelper.showPopup()
+    }
+    
+    var explanationContents: ExplanationContents?
+    
+    func generateExplanationView() -> ExplanationView {
+        
+        guard let contents = explanationContents else {QL4("Invalid state: No explanation contents, returning dummy view"); return ExplanationView()}
+        
+        return view ?? {
+            let view = ExplanationView()
+            view.titleLabel.text = contents.title
+            view.msgLabel.text = contents.text
+            view.msgLabel.sizeToFit()
+            view.gotItButton.setTitle(contents.buttonTitle, for: .normal)
+            
+            let image = UIImage.animatedImageNamed(contents.imageName, duration: 5)
+            view.imageView.image = image
+            
+            self.view = view
+            
+            return view
+        }()
+    }
+    
+    func dontShowAgain() {
+        SwipeToIncrementAlertHelper.dontShowAgain()
+    }
+    
 }

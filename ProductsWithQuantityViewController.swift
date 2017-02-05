@@ -27,7 +27,7 @@ protocol ProductsWithQuantityViewControllerDelegate: class {
 
 
 /// Generic controller for sorted products with a quantity, which can be incremented and decremented
-class ProductsWithQuantityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class ProductsWithQuantityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ExplanationViewDelegate {
     
     fileprivate weak var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
     
@@ -60,8 +60,12 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     fileprivate let cellHeight = DimensionsManager.defaultCellHeight
     
+    fileprivate var explanationManager: ExplanationManager = ExplanationManager()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        initExplanationManager()
         
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         tableView.backgroundColor = Theme.defaultTableViewBGColor
@@ -82,6 +86,12 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             emptyViewImg.image = UIImage(named: emptyViewData.imgName)
         }
     }
+    
+    fileprivate func initExplanationManager() {
+        let contents = ExplanationContents(title: "Did you know?", text: "You can scrub an item left\nor right to change quantities", imageName: "scrub", buttonTitle: "Got it!")
+        explanationManager.explanationContents = contents
+    }
+    
     
     func onPullRefresh(_ sender: UIRefreshControl) {
         sender.endRefreshing()
@@ -123,23 +133,41 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.models.count
+        return self.models.count + (explanationManager.showExplanation ? 1 : 0)
+
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "inventoryCell", for: indexPath) as! ProductWithQuantityTableViewCell
         
-        let model = self.models[(indexPath as NSIndexPath).row]
-        
-        cell.model = model
-        cell.delegate = self
-        
-        return cell
+        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "defaultCell", for: indexPath)
+            let explanationView = explanationManager.generateExplanationView()
+            cell.contentView.addSubview(explanationView)
+            explanationView.frame = cell.contentView.bounds
+            explanationView.fillSuperview()
+            explanationView.delegate = self
+            return cell
+            
+        } else { // Normal cell
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "inventoryCell", for: indexPath) as! ProductWithQuantityTableViewCell
+            
+            let model = self.models[(indexPath as NSIndexPath).row - (explanationManager.showExplanation ? 1 : 0)]
+            
+            cell.model = model
+            cell.delegate = self
+            
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellHeight
+        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
+            return explanationManager.rowHeight
+        } else {
+            return cellHeight
+        }
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -425,5 +453,13 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         picker.delegate = self
         picker.dataSource = self
         return picker
+    }
+    
+    
+    // MARK: - ExplanationViewDelegate
+    
+    func onGotItTap(sender: UIButton) {
+        explanationManager.dontShowAgain()
+        tableView.deleteRows(at: [IndexPath(row: 0, section: 0)], with: .top)
     }
 }

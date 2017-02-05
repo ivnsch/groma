@@ -31,6 +31,8 @@
 		6A7C54BA1E439B2800300F8D /* ItemsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A7C54B81E439B2800300F8D /* ItemsController.xib */; };
 		6A7C54BC1E43EFFB00300F8D /* CartListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7C54BB1E43EFFB00300F8D /* CartListItemsControllerNew.swift */; };
 		6A7C54BE1E43F03A00300F8D /* StashListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7C54BD1E43F03A00300F8D /* StashListItemsControllerNew.swift */; };
+		6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AACDC181E475BE000A9E1EC /* ExplanationView.swift */; };
+		6AACDC1B1E475C0C00A9E1EC /* ExplanationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */; };
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
 		6AE34BE41E2E25B80039A2A8 /* RecipesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */; };
 		6AE34BF01E2EA7880039A2A8 /* IngredientsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */; };
@@ -406,6 +408,8 @@
 		6A7C54B81E439B2800300F8D /* ItemsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemsController.xib; sourceTree = "<group>"; };
 		6A7C54BB1E43EFFB00300F8D /* CartListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A7C54BD1E43F03A00300F8D /* StashListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StashListItemsControllerNew.swift; sourceTree = "<group>"; };
+		6AACDC181E475BE000A9E1EC /* ExplanationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExplanationView.swift; sourceTree = "<group>"; };
+		6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExplanationView.xib; sourceTree = "<group>"; };
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
 		6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipesController.swift; sourceTree = "<group>"; };
 		6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientsController.swift; sourceTree = "<group>"; };
@@ -853,6 +857,15 @@
 				6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */,
 			);
 			name = generic;
+			sourceTree = "<group>";
+		};
+		6AACDC171E475BCA00A9E1EC /* explanationView */ = {
+			isa = PBXGroup;
+			children = (
+				6AACDC181E475BE000A9E1EC /* ExplanationView.swift */,
+				6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */,
+			);
+			name = explanationView;
 			sourceTree = "<group>";
 		};
 		6AE34BE21E2E255C0039A2A8 /* recipes */ = {
@@ -1865,6 +1878,7 @@
 		EBEEDD631A49A7B500FC3B29 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				6AACDC171E475BCA00A9E1EC /* explanationView */,
 				EB1D69711CAC82AC004892A2 /* addButton */,
 				EB37ABAD1CA01AE400FE9D7A /* pullToAdd */,
 				EBAEB23A1BDC25FE00FCDA5C /* floatingViews */,
@@ -2142,6 +2156,7 @@
 				EB9207EE1C4C522700332332 /* ForgotPassword.storyboard in Resources */,
 				EB4B39D91CED428B00B41063 /* Login.storyboard in Resources */,
 				EB4B39CB1CED413B00B41063 /* QuickAddListItem.storyboard in Resources */,
+				6AACDC1B1E475C0C00A9E1EC /* ExplanationView.xib in Resources */,
 				EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
 				EBEA0CD01CA5B24C00E68B81 /* MyAutocompleteCell.xib in Resources */,
 				EBB5267F1BEFE39F0002A286 /* HelpHeaderView.xib in Resources */,
@@ -2384,6 +2399,7 @@
 				EBBC232B1BB600DF0002F6B1 /* ConfirmationPopup.swift in Sources */,
 				EBED0D091C82213600A1EEC4 /* RatingPopup.swift in Sources */,
 				EB7524531BF582FA00A97A10 /* QuickAddItemCell.swift in Sources */,
+				6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */,
 				EB8D1D111C389D6E00ADF884 /* ProductsWithQuantityViewController.swift in Sources */,
 				EB8D1D131C396ED600ADF884 /* GroupItemsController.swift in Sources */,
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
