@@ -105,7 +105,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func onToggleReorderSections(_ isNowInReorderSections: Bool) {
-        self.todoListItemsEditBottomView?.expandCollapseButtonExpanded = isNowInReorderSections
+//        self.todoListItemsEditBottomView?.expandCollapseButtonExpanded = isNowInReorderSections
     }
     
 //    override func onGetListItems(_ listItems: [ListItem]) {

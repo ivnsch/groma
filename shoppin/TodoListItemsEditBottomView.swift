@@ -20,10 +20,6 @@ class TodoListItemsEditBottomView: UIView, ExpandCollapseButtonDelegate {
     @IBOutlet weak var cartPriceLabel: UILabel!
     @IBOutlet weak var totalPriceLabel: UILabel!
 
-    @IBOutlet weak var expandCollapseButton: ExpandCollapseButton!
-    
-    @IBOutlet weak var pricesRightConstraint: NSLayoutConstraint!
-
     weak var delegate: TodoListItemsEditBottomViewDelegate?
     
     func setTotalPrice(_ totalPrice: Float) {
@@ -33,20 +29,9 @@ class TodoListItemsEditBottomView: UIView, ExpandCollapseButtonDelegate {
             QL3("Outlets not set, can't set price")
         }
     }
-    
-    var expandCollapseButtonExpanded: Bool {
-        set {
-            expandCollapseButton.expanded = newValue
-        }
-        get {
-            return expandCollapseButton.expanded
-        }
-    }
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        expandCollapseButton.delegate = self
     }
     
     // MARK: - ExpandCollapseButtonDelegate
