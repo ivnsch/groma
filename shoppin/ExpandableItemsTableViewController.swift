@@ -52,16 +52,16 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 
     fileprivate let listItemsProvider = ProviderFactory().listItemProvider
     
-    var models: [ExpandableTableViewModel] = [] {
-        didSet {
-            emptyView.isHidden = !models.isEmpty
-            tableView.isHidden = !emptyView.isHidden
-            if models != oldValue {
-//                tableView.reloadData()
-            }
-//            printDebugModels()
-        }
-    }
+//    var models: [ExpandableTableViewModel] = [] {
+//        didSet {
+//            emptyView.isHidden = !models.isEmpty
+//            tableView.isHidden = !emptyView.isHidden
+//            if models != oldValue {
+////                tableView.reloadData()
+//            }
+////            printDebugModels()
+//        }
+//    }
     
     
     fileprivate var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
@@ -106,12 +106,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         emptyView.addGestureRecognizer(tapRecognizer)
     }
 
-    fileprivate func printDebugModels() {
-        print("ExpandableItemsTableViewController items:")
-        for model in models {
-            print(model.debugDescription)
-        }
-    }
     
     // MARK: -
     
@@ -260,14 +254,18 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return models.count
+        return itemsCount ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath) as! ExpandableItemsTableViewCell
         
-        let model = models[(indexPath as NSIndexPath).row]
-        cell.model = model
+        if let model = itemForRow(row: indexPath.row) {
+            cell.model = model
+        } else {
+            QL4("Illegal state: no model for row: \(indexPath.row)")
+        }
+        
         
         return cell
     }
@@ -282,18 +280,12 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let model = models[indexPath.row]
+            guard let model = itemForRow(row: indexPath.row) else{QL4("Illegal state: no model for index path: \(indexPath)"); return}
+            
             canRemoveModel(model) {[weak self] can in
                 if can {
-                    
-                    _ = self?.models.remove(model) // TODO!!!!!!!!!!!! use results
+                    self?.deleteItem(index: indexPath.row)
                     tableView.deleteRows(at: [indexPath], with: .top)
-                    
-                    
-                    self?.onRemoveModel(model, index: indexPath.row)
-                    
-                    
-                    
                 }
             }
         }
@@ -303,21 +295,8 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         can(true)
     }
     
-    func onRemoveModel(_ model: ExpandableTableViewModel, index: Int) {
-        fatalError("override")
-    }
-    
     func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
-        
-        let list = models[(fromIndexPath as NSIndexPath).row]
-        models.remove(at: (fromIndexPath as NSIndexPath).row)
-        models.insert(list, at: (toIndexPath as NSIndexPath).row)
-        
-        onReorderedModels(from: fromIndexPath.row, to: toIndexPath.row)
-    }
-
-    func onReorderedModels(from: Int, to: Int) {
-        fatalError("override")
+        moveItem(from: fromIndexPath.row, to: toIndexPath.row)
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
@@ -334,7 +313,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let model = self.models[indexPath.row]
+        guard let model = itemForRow(row: indexPath.row) else {QL4("Illegal state: No item for index path: \(indexPath)"); return}
         
         if self.isEditing {
             onSelectCellInEditMode(model, index: indexPath.row)
@@ -415,20 +394,20 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     func prepareAnimations(_ willExpand: Bool, frontView: UIView) {
     }
     
-    func removeModel(_ model: ExpandableTableViewModel) {
-        
-        func remove() {
-            if let index = models.remove(model) {
-                tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .top)
-            } else {
-                print("Warn: ViewController.onWebsocketList: Removed list item was not found in tableView")
-            }
-        }
-        
-        tableView.wrapUpdates {
-            remove()
-        }
-    }
+//    func removeModel(_ model: ExpandableTableViewModel) {
+//        
+//        func remove() {
+//            if let index = models.remove(model) {
+//                tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .top)
+//            } else {
+//                print("Warn: ViewController.onWebsocketList: Removed list item was not found in tableView")
+//            }
+//        }
+//        
+//        tableView.wrapUpdates {
+//            remove()
+//        }
+//    }
     
     // MARK: - ListTopBarViewDelegate
     
@@ -460,5 +439,30 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     }
     
     func onExpand(_ expanding: Bool) {
+    }
+    
+    
+    
+    // New
+    
+    
+    func loadModels(onSuccess: @escaping () -> Void) {
+        fatalError("Override")
+    }
+    
+    func itemForRow(row: Int) -> ExpandableTableViewModel? {
+        fatalError("Override")
+    }
+    
+    var itemsCount: Int? {
+        fatalError("Override")
+    }
+    
+    func deleteItem(index: Int) {
+        fatalError("Override")
+    }
+    
+    func moveItem(from: Int, to: Int) {
+        fatalError("Override")
     }
 }

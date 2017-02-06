@@ -16,7 +16,7 @@ import Providers
 //change
 protocol AddEditInventoryControllerDelegate: class {
     func onAddInventory(_ inventory: DBInventory)
-    func onUpdateInventory(_ inventory: DBInventory)
+    func onUpdateInventory(_ inventory: DBInventory, inventoryInput: InventoryInput)
 }
 
 // TODO try to refactor with AddEditListController, lot of repeated code
@@ -167,10 +167,11 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
 
             if let listToEdit = weakSelf.listToEdit {
                 
-                let totalUsers = weakSelf.users + weakSelf.invitedUsers
+//                let totalUsers = weakSelf.users + weakSelf.invitedUsers // TODO?
 
-                let updatedInventory = listToEdit.copy(name: listName, users: totalUsers, bgColor: bgColor)
-                weakSelf.delegate?.onUpdateInventory(updatedInventory)
+                let inventoryInput = InventoryInput(name: listName, color: bgColor)
+                
+                weakSelf.delegate?.onUpdateInventory(listToEdit, inventoryInput: inventoryInput)
 
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {

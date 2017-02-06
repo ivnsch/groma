@@ -14,8 +14,10 @@ public typealias InventoryItemWithHistoryItem = (inventoryItem: InventoryItem, h
 
 public protocol InventoryProvider {
     
-    func inventories(_ remote: Bool, _ handler: @escaping (ProviderResult<[DBInventory]>) -> ())
+    func inventories(_ remote: Bool, _ handler: @escaping (ProviderResult<RealmSwift.List<DBInventory>>) -> Void)
     
+    
+    // TODO remove
     func inventoriesRealm(_ remote: Bool, _ handler: @escaping (ProviderResult<Results<DBInventory>>) -> Void)
     
     /**
@@ -39,4 +41,15 @@ public protocol InventoryProvider {
     func rejectInvitation(_ invitation: RemoteInventoryInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func findInvitedUsers(_ listUuid: String, _ handler: @escaping (ProviderResult<[DBSharedUser]>) -> Void)
+    
+    
+    // NEW
+    
+    func add(_ inventory: DBInventory, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    func update(_ inventory: DBInventory, input: InventoryInput, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    func move(from: Int, to: Int, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
+    func delete(index: Int, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
 }

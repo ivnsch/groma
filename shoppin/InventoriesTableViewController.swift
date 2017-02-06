@@ -44,7 +44,11 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     var topAddEditListControllerManager: ExpandableTopViewController<AddEditInventoryController>?
 
-    fileprivate var inventoriesResult: Results<DBInventory>?
+    fileprivate var inventoriesResult: RealmSwift.List<DBInventory>? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     fileprivate var notificationToken: NotificationToken?
     
     override func viewDidLoad() {
@@ -69,7 +73,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         let expandableTopViewController: ExpandableTopViewController<AddEditInventoryController> = ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditInventory()
             controller.delegate = self
-            controller.currentListsCount = self?.models.count ?? {
+            controller.currentListsCount = self?.inventoriesResult?.count ?? {
                 print("Error: ListsTableViewController2.initTopAddEditListControllerManager: no valid self reference")
                 return 0
             }()
@@ -82,7 +86,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     override func initModels() {
-        Prov.inventoryProvider.inventoriesRealm(true, successHandler{[weak self] inventories in guard let weakSelf = self else {return}
+        Prov.inventoryProvider.inventories(true, successHandler{[weak self] inventories in guard let weakSelf = self else {return}
                 
             weakSelf.inventoriesResult = inventories
             
@@ -97,8 +101,6 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                     QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                     
                     weakSelf.tableView.beginUpdates()
-                    
-                    weakSelf.models = weakSelf.inventoriesResult!.map{ExpandableTableViewInventoryModelRealm(inventory: $0)}
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
                     weakSelf.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .top)
                     weakSelf.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
@@ -115,8 +117,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                 }
             }
             
-            let authInventories = inventories.filter{InventoryAuthChecker.checkAccess($0)} // TODO
-            weakSelf.models = authInventories.map{ExpandableTableViewInventoryModelRealm(inventory: $0)}
+//            let authInventories = inventories.filter{InventoryAuthChecker.checkAccess($0)} // TODO ? (no multi user right now so letting open)
         })
     }
     
@@ -136,30 +137,6 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         return topAddEditListControllerManager?.expanded ?? false
     }
     
-    override func onReorderedModels(from: Int, to: Int) {
-        let inventories = (models as! [ExpandableTableViewInventoryModelRealm]).map{$0.inventory}
-        
-        let reorderedInventories = inventories.mapEnumerate{index, inventory in inventory.copy(order: index)}
-        let orderUpdates = reorderedInventories.map{inventory in OrderUpdate(uuid: inventory.uuid, order: inventory.order)}
-        
-        models = reorderedInventories.map{ExpandableTableViewInventoryModelRealm(inventory: $0)}
-        
-        let withoutNotifying = notificationToken.map{[$0]} ?? []
-        
-        Prov.inventoryProvider.updateInventoriesOrder(orderUpdates, withoutNotifying: [], realm: nil, remote: false, successHandler {
-        })
-        
-        // For now in the foreground. When in bg get either wrong thread error or "only notifications for the Realm being modified can be skipped" error (instantiating a new realm in bg)
-        // TODO!!!!!!!!!!!!!!!!!!!!!!!! do this in Providers
-//        if let realm = inventoriesResult?.realm {
-//            try! realm.write(withoutNotifying: withoutNotifying) {_ in
-//                for orderUpdate in orderUpdates {
-//                    realm.create(DBInventory.self, value: DBInventory.createOrderUpdateDict(orderUpdate, dirty: false), update: true)
-//                }
-//            }
-//        }
-    }
-    
     override func canRemoveModel(_ model: ExpandableTableViewModel, can: @escaping (Bool) -> Void) {
 //        _ = (model as! ExpandableTableViewInventoryModelRealm).inventory
         ConfirmationPopup.show(title: trans("popup_title_warning"), message: trans("popup_remove_inventory_warning"), okTitle: trans("popup_button_remove"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {
@@ -167,19 +144,6 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             }, onCancel: {
                 can(false)
             })
-    }
-    
-    
-    
-    override func onRemoveModel(_ model: ExpandableTableViewModel, index: Int) {
-        let inventory = (model as! ExpandableTableViewInventoryModelRealm).inventory
-
-        Prov.inventoryProvider.removeInventory(inventory, remote: true, resultHandler(onSuccess: {_ in
-            }, onError: {[weak self] result in
-                self?.initModels()
-                self?.defaultErrorHandler()(result)
-            }
-        ))
     }
     
     override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
@@ -215,24 +179,16 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     override func onAddTap(_ rotateTopBarButton: Bool = true) {
         super.onAddTap()
-        SizeLimitChecker.checkInventoriesSizeLimit(models.count, controller: self) {[weak self] in
-            if let weakSelf = self {
-                let expand = !(weakSelf.topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
-                weakSelf.topAddEditListControllerManager?.expand(expand)
+//        SizeLimitChecker.checkInventoriesSizeLimit(models.count, controller: self) {[weak self] in
+//            if let weakSelf = self {
+                let expand = !(topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
+                topAddEditListControllerManager?.expand(expand)
                 if rotateTopBarButton { // HACK - don't reset the buttons when we don't want to rotate because this causes the toggle button animation to "jump" (this is used on pull to add - in order to show also the submit button we would have to reset the buttons, but this causes a little jump in the X since when the table view goes a little up because of the pull anim, the X animates back a little and when we reset the buttons, setting it to its final state there's a jump). TODO We need to adjust the general logic for this, we don't need multiple nav bar buttons on each side anyways anymore so maybe we can remove all this?
-                    weakSelf.setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
+                    setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
                 }
-            }
-        }
+//            }
+//        }
     }
-    
-    fileprivate func debugItems() {
-        if QorumLogs.minimumLogLevelShown < 2 {
-            print("Inventories:")
-            (models as! [ExpandableTableViewInventoryModelRealm]).forEach{print("\($0.inventory.debugDescription)")}
-        }
-    }
-
     
     // MARK: - ExpandableTopViewControllerDelegate
     
@@ -247,19 +203,41 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     // MARK: - AddEditInventoryControllerDelegate
     
     func onAddInventory(_ inventory: DBInventory) {
-        Prov.inventoryProvider.addInventory(inventory, remote: true, resultHandler(onSuccess: {
-            // do nothing - is handled in realm notification handler
-            }, onErrorAdditional: {[weak self] result in
-                self?.onInventoryAddOrUpdateError(inventory)
+        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+
+        Prov.inventoryProvider.add(inventory, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
+            
+            self?.tableView.insertRows(at: [IndexPath(row: inventoriesResult.count - 1, section: 0)], with: .top) // Note -1 as at this point the new item is already inserted in results
+            
+        }, onErrorAdditional: {[weak self] result in
+            self?.onInventoryAddOrUpdateError(inventory)
             }
         ))
     }
     
-    func onUpdateInventory(_ inventory: DBInventory) {
-        Prov.inventoryProvider.updateInventory(inventory, remote: true, resultHandler(onSuccess: {
-            // do nothing - is handled in realm notification handler
-            }, onErrorAdditional: {[weak self] result in
-                self?.onInventoryAddOrUpdateError(inventory)
+    func onUpdateInventory(_ inventory: DBInventory, inventoryInput: InventoryInput) {
+        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        
+        Prov.inventoryProvider.update(inventory, input: inventoryInput, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+            
+            var row: Int?
+            for (index, item) in inventoriesResult.enumerated() {
+                if item.uuid == inventory.uuid {
+                    row = index
+                }
+            }
+            
+            if let row = row {
+                self.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+            } else {
+                QL4("Invalid state: can't find list: \(inventory)")
+            }
+            
+            
+        }, onErrorAdditional: {[weak self] result in
+            self?.onInventoryAddOrUpdateError(inventory)
             }
         ))
     }
@@ -275,5 +253,46 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                 }
             }
         }
+    }
+    
+    // New
+    
+    override func loadModels(onSuccess: @escaping () -> Void) {
+        // TODO!!!!!!!!!!!!! on success. Is also this method actually necessary?
+        initModels()
+    }
+    
+    override func itemForRow(row: Int) -> ExpandableTableViewModel? {
+        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return nil}
+        
+        return ExpandableTableViewInventoryModelRealm(inventory: inventoriesResult[row])
+    }
+    
+    override var itemsCount: Int? {
+        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return nil}
+        
+        return inventoriesResult.count
+    }
+    
+    override func deleteItem(index: Int) {
+        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        
+        Prov.inventoryProvider.delete(index: index, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+            self?.initModels()
+            }
+        ))
+    }
+    
+    override func moveItem(from: Int, to: Int) {
+        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+
+        Prov.inventoryProvider.move(from: from, to: to, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+            self?.initModels()
+            }
+        ))
     }
 }

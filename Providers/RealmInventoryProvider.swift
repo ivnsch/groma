@@ -15,11 +15,6 @@ class RealmInventoryProvider: RealmProvider {
     let dbListItemProvider = RealmListItemProvider()
     let remoteInventoryProvider = RemoteInventoryProvider()
     let dbProductProvider = RealmProductProvider()
-    
-    func loadInventories(_ handler: @escaping ([DBInventory]) -> ()) {
-        let mapper = {InventoryMapper.inventoryWithDB($0)}
-        self.load(mapper, sortDescriptor: NSSortDescriptor(key: "order", ascending: true), handler: handler)
-    }
 
     
     //////////////////
@@ -199,4 +194,58 @@ class RealmInventoryProvider: RealmProvider {
     func updateLastSyncTimeStampSync(_ realm: Realm, inventory: RemoteInventory) {
         realm.create(DBInventory.self, value: inventory.timestampUpdateDict, update: true)
     }
+    
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    
+    // NEW
+    
+    func loadInventories(_ handler: @escaping (RealmSwift.List<DBInventory>?) -> Void) {
+        guard let inventoriesContainer: InventoriesContainer = loadSync(predicate: nil)?.first else {
+            handler(nil)
+            QL4("Invalid state: no container")
+            return
+        }
+        handler(inventoriesContainer.inventories)
+    }
+    
+    
+    public func add(_ inventory: DBInventory, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: inventories.realm) {realm -> Bool in
+            realm.add(inventory, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
+            inventories.append(inventory)
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    public func update(_ inventory: DBInventory, input: InventoryInput, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: inventory.realm) {realm -> Bool in
+            inventory.name = input.name
+            inventory.setBgColor(input.color)
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    public func move(from: Int, to: Int, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: inventories.realm) {realm -> Bool in
+            inventories.move(from: from, to: to)
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    public func delete(index: Int, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: inventories.realm) {realm -> Bool in
+            inventories.remove(objectAtIndex: index)
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    
 }
+

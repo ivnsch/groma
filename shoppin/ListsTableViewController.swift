@@ -88,7 +88,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         let expandableTopViewController: ExpandableTopViewController<AddEditListController> = ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight + 40, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditList()
             controller.delegate = self
-            controller.currentListsCount = self?.models.count ?? {
+            controller.currentListsCount = self?.itemsCount ?? {
                 print("Error: ListsTableViewController2.initTopAddEditListControllerManager: no valid self reference")
                 return 0
             }()
@@ -131,8 +131,6 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                     QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(weakSelf.listsResult?.count)")
                     
                     weakSelf.tableView.beginUpdates()
-                    
-                    weakSelf.models = weakSelf.listsResult!.map{ExpandableTableViewListModel(list: $0)}
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
                     weakSelf.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .top)
                     weakSelf.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
@@ -149,8 +147,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 }
             }
             
-            weakSelf.models = lists.map{ExpandableTableViewListModel(list: $0)} // TODO use results!
-            self?.debugItems()
+//            weakSelf.models = lists.map{ExpandableTableViewListModel(list: $0)} // TODO use results!
         })
     }
     
@@ -167,28 +164,6 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     
     override func topControllerIsExpanded() -> Bool {
         return topAddEditListControllerManager?.expanded ?? false
-    }
-
-    override func onReorderedModels(from: Int, to: Int) {
-        guard let listsResult = listsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
-        
-        Prov.listProvider.move(from: from, to: to, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
-        }, onErrorAdditional: {[weak self] result in
-            self?.initModels()
-            }
-        ))
-    }
-    
-    override func onRemoveModel(_ model: ExpandableTableViewModel, index: Int) {
-        guard let listsResult = listsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
-        
-        Prov.listProvider.delete(index: index, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
-        }, onErrorAdditional: {[weak self] result in
-            self?.initModels()
-            }
-        ))
     }
     
     override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
@@ -220,15 +195,15 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
 
     override func onAddTap(_ rotateTopBarButton: Bool = true) {
         super.onAddTap()
-        SizeLimitChecker.checkListItemsSizeLimit(models.count, controller: self) {[weak self] in
-            if let weakSelf = self {
-                let expand = !(weakSelf.topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
-                weakSelf.topAddEditListControllerManager?.expand(expand)
+//        SizeLimitChecker.checkListItemsSizeLimit(models.count, controller: self) {[weak self] in
+//            if let weakSelf = self {
+                let expand = !(topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
+                topAddEditListControllerManager?.expand(expand)
                 if rotateTopBarButton { // HACK - don't reset the buttons when we don't want to rotate because this causes the toggle button animation to "jump" (this is used on pull to add - in order to show also the submit button we would have to reset the buttons, but this causes a little jump in the X since when the table view goes a little up because of the pull anim, the X animates back a little and when we reset the buttons, setting it to its final state there's a jump). TODO We need to adjust the general logic for this, we don't need multiple nav bar buttons on each side anyways anymore so maybe we can remove all this?
-                    weakSelf.setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
+                    setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
                 }
-            }
-        }
+//            }
+//        }
     }
     
     // MARK: - AddEditListControllerDelegate
@@ -237,44 +212,41 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         guard let listsResult = listsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         
-        // TODO!!!!!!!!!!!!!!!!!! use results
-        models.insert(ExpandableTableViewListModel(list: list), at: listsResult.count)
-        tableView.insertRows(at: [IndexPath(row: listsResult.count, section: 0)], with: .top)
-        
-        Prov.listProvider.add(list, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {_ in
+        Prov.listProvider.add(list, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] _ in
+            
+            self?.tableView.insertRows(at: [IndexPath(row: listsResult.count - 1, section: 0)], with: .top) // Note -1 as at this point the new item is already inserted in results
+            
         }, onErrorAdditional: {[weak self] result in
             self?.onListAddOrUpdateError(list)
             }
         ))
     }
     
-    func onUpdateList(_ list: Providers.List) {
+    func onUpdateList(_ list: Providers.List, listInput: ListInput) {
         guard let listsResult = listsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         
-        let input = ListInput(name: list.name, color: list.color, store: list.store ?? "", inventory: list.inventory.copy())
-        
-        Prov.listProvider.update(list, input: input, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        Prov.listProvider.update(list, input: listInput, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+            
+            var row: Int?
+            for (index, item) in listsResult.enumerated() {
+                if item.uuid == list.uuid {
+                    row = index
+                }
+            }
+            
+            if let row = row {
+                self.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+            } else {
+                QL4("Invalid state: can't find list: \(list)")
+            }
+            
+            
         }, onErrorAdditional: {[weak self] result in
             self?.onListAddOrUpdateError(list)
             }
         ))
-        
-        // TODO!!!!!!!!!!!!!!!!!! find index using item also in recipes.
-        var row: Int?
-        for (index, item) in listsResult.enumerated(){
-            if item.uuid == list.uuid {
-                row = index
-            }
-        }
-        
-        if let row = row {
-            // TODO!!!!!!!!!!!!!!!!!! use results
-            _ = models.update(ExpandableTableViewListModel(list: list))
-            tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
-        } else {
-            QL4("Invalid state: can't find list: \(list)")
-        }
+
     }
 
     fileprivate func onListAddOrUpdateError(_ list: Providers.List) {
@@ -304,10 +276,45 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     override func onExpand(_ expanding: Bool) {
     }
     
-    fileprivate func debugItems() {
-        if QorumLogs.minimumLogLevelShown < 2 {
-            print("Lists:")
-            (models as! [ExpandableTableViewListModel]).forEach{print("\($0.list.shortDebugDescription)")}
-        }
+    
+    // New
+    
+    override func loadModels(onSuccess: @escaping () -> Void) {
+        // TODO!!!!!!!!!!!!! on success. Is also this method actually necessary?
+        initModels()
+    }
+    
+    override func itemForRow(row: Int) -> ExpandableTableViewModel? {
+        guard let listsResult = listsResult else {QL4("No result"); return nil}
+        
+        return ExpandableTableViewListModel(list: listsResult[row])
+    }
+    
+    override var itemsCount: Int? {
+        guard let listsResult = listsResult else {QL4("No result"); return nil}
+        
+        return listsResult.count
+    }
+    
+    override func deleteItem(index: Int) {
+        guard let listsResult = listsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+
+        Prov.listProvider.delete(index: index, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+            self?.initModels()
+            }
+        ))
+    }
+    
+    override func moveItem(from: Int, to: Int) {
+        guard let listsResult = listsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        
+        Prov.listProvider.move(from: from, to: to, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+            self?.initModels()
+            }
+        ))
     }
 }

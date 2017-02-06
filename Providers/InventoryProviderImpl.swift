@@ -16,40 +16,71 @@ class InventoryProviderImpl: InventoryProvider {
     fileprivate let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
     fileprivate let dbInventoryProvider = RealmInventoryProvider()
 
-    func inventories(_ remote: Bool = true, _ handler: @escaping (ProviderResult<[DBInventory]>) -> ()) {
-        self.dbInventoryProvider.loadInventories {dbInventories in
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    
+    // NEW
+    
+    func inventories(_ remote: Bool = true, _ handler: @escaping (ProviderResult<RealmSwift.List<DBInventory>>) -> Void) {
+        DBProv.inventoryProvider.loadInventories {dbInventories in
             
-            let sotedDBInventories = dbInventories.sortedByOrder() // include name in sorting to guarantee equal ordering with remote result, in case of duplicate order fields
-            
-            handler(ProviderResult(status: .success, sucessResult: sotedDBInventories))
+            handler(ProviderResult(status: .success, sucessResult: dbInventories))
             
             // Disabled while impl. realm sync
-//            if remote {
-//                self.remoteProvider.inventories {remoteResult in
-//                    
-//                    if let remoteInventories = remoteResult.successResult {
-//                        let inventories: [DBInventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
-//                        let sortedInventories = inventories.sortedByOrder()
-//                        
-//                        if sotedDBInventories != sortedInventories {
-//                            
-//                            self.dbInventoryProvider.overwrite(sortedInventories, clearTombstones: true, dirty: false) {saved in
-//                                if saved {
-//                                    handler(ProviderResult(status: .success, sucessResult: sortedInventories))
-//                                    
-//                                } else {
-//                                    QL4("Error updating inventories - dbListsMaybe is nil")
-//                                }
-//                            }
-//                        }
-//                        
-//                    } else {
-//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-//                    }
-//                }
-//            }
+            //            if remote {
+            //                self.remoteProvider.inventories {remoteResult in
+            //
+            //                    if let remoteInventories = remoteResult.successResult {
+            //                        let inventories: [DBInventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
+            //                        let sortedInventories = inventories.sortedByOrder()
+            //
+            //                        if sotedDBInventories != sortedInventories {
+            //
+            //                            self.dbInventoryProvider.overwrite(sortedInventories, clearTombstones: true, dirty: false) {saved in
+            //                                if saved {
+            //                                    handler(ProviderResult(status: .success, sucessResult: sortedInventories))
+            //
+            //                                } else {
+            //                                    QL4("Error updating inventories - dbListsMaybe is nil")
+            //                                }
+            //                            }
+            //                        }
+            //
+            //                    } else {
+            //                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            //                    }
+            //                }
+            //            }
         }
     }
+   
+    public func add(_ inventory: DBInventory, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.inventoryProvider.add(inventory, inventories: inventories, notificationToken: notificationToken) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+    
+    public func update(_ inventory: DBInventory, input: InventoryInput, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.inventoryProvider.update(inventory, input: input, inventories: inventories, notificationToken: notificationToken) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+    
+    public func move(from: Int, to: Int, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.inventoryProvider.move(from: from, to: to, inventories: inventories, notificationToken: notificationToken) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+    
+    public func delete(index: Int, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.inventoryProvider.delete(index: index, inventories: inventories, notificationToken: notificationToken) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+    
+    //////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+
     
     func inventoriesRealm(_ remote: Bool, _ handler: @escaping (ProviderResult<Results<DBInventory>>) -> Void) {
         dbInventoryProvider.loadInventoriesRealm {dbInventories in

@@ -288,14 +288,22 @@ class RealmGlobalProvider: RealmProvider {
     func initContainers(handler: @escaping (Bool) -> Void) {
         
         doInWriteTransaction({realm in
+            
+            let inventoriesContainer: InventoriesContainer? = self.loadFirstSync()
+            if inventoriesContainer == nil {
+                realm.add(InventoriesContainer())
+            }
+            
             let listsContainer: ListsContainer? = self.loadFirstSync()
             if listsContainer == nil {
                 realm.add(ListsContainer())
             }
+            
             let recipesContainer: RecipesContainer? = self.loadFirstSync()
             if recipesContainer == nil {
                 realm.add(RecipesContainer())
             }
+            
             return true
         }) {successMaybe in
             handler(successMaybe ?? false)

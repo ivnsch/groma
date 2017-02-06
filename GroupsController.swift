@@ -97,8 +97,6 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
                     QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(weakSelf.groupsResult?.count)")
                     
                     weakSelf.tableView.beginUpdates()
-                    
-                    weakSelf.models = weakSelf.groupsResult!.map{ExpandableTableViewGroupModel(group: $0)}
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
                     weakSelf.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .top)
                     weakSelf.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
@@ -114,9 +112,6 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
                     fatalError(String(describing: error))
                 }
             }
-            
-            weakSelf.models = groups.map{ExpandableTableViewGroupModel(group: $0)} // TODO use results!
-            self?.debugItems()
         })
     }
     
@@ -133,29 +128,6 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     override func topControllerIsExpanded() -> Bool {
         return topAddEditListControllerManager?.expanded ?? false
-    }
-    
-    override func onReorderedModels(from: Int, to: Int) {
-        let groups = (models as! [ExpandableTableViewGroupModel]).map{$0.group}
-        
-        let reorderedGroups = groups.mapEnumerate{index, group in group.copy(order: index)}
-        let orderUpdates = reorderedGroups.map{group in OrderUpdate(uuid: group.uuid, order: group.order)}
-        
-        models = reorderedGroups.map{ExpandableTableViewGroupModel(group: $0)}
-        
-        Prov.listItemGroupsProvider.updateGroupsOrder(orderUpdates, remote: true, resultHandler(onSuccess: {
-            }, onErrorAdditional: {[weak self] result in
-                self?.initModels()
-            }
-        ))
-    }
-    
-    override func onRemoveModel(_ model: ExpandableTableViewModel, index: Int) {
-        Prov.listItemGroupsProvider.remove((model as! ExpandableTableViewGroupModel).group, remote: true, resultHandler(onSuccess: {
-            }, onErrorAdditional: {[weak self] result in
-                self?.initModels()
-            }
-        ))
     }
     
     override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
@@ -188,27 +160,20 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     override func onAddTap(_ rotateTopBarButton: Bool = true) {
         super.onAddTap()
-        SizeLimitChecker.checkGroupsSizeLimit(models.count, controller: self) {[weak self] in
-            if let weakSelf = self {
-                let expand = !(weakSelf.topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
-                weakSelf.topAddEditListControllerManager?.expand(expand)
+//        SizeLimitChecker.checkGroupsSizeLimit(models.count, controller: self) {[weak self] in
+//            if let weakSelf = self {
+                let expand = !(topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
+                topAddEditListControllerManager?.expand(expand)
                 if rotateTopBarButton { // HACK - don't reset the buttons when we don't want to rotate because this causes the toggle button animation to "jump" (this is used on pull to add - in order to show also the submit button we would have to reset the buttons, but this causes a little jump in the X since when the table view goes a little up because of the pull anim, the X animates back a little and when we reset the buttons, setting it to its final state there's a jump). TODO We need to adjust the general logic for this, we don't need multiple nav bar buttons on each side anyways anymore so maybe we can remove all this?
-                    weakSelf.setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
+                    setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
                 }
-            }
-        }
+//            }
+//        }
     }
     
     func setThemeColor(_ color: UIColor) {
         topBar.backgroundColor = color
         view.backgroundColor = UIColor.white
-    }
-    
-    fileprivate func debugItems() {
-        if QorumLogs.minimumLogLevelShown < 2 {
-            print("Groups:")
-            (models as! [ExpandableTableViewGroupModel]).forEach{print("\($0.group.shortDebugDescription)")}
-        }
     }
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
@@ -243,7 +208,9 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     // MARK: - EditListViewController
     //change
     func onAddGroup(_ input: AddEditSimpleItemInput) {
-        let group = ProductGroup(uuid: NSUUID().uuidString, name: input.name, color: input.color, order: models.count)
+        guard let groupsResult = groupsResult else {QL4("No result"); return}
+
+        let group = ProductGroup(uuid: NSUUID().uuidString, name: input.name, color: input.color, order: groupsResult.count)
         Prov.listItemGroupsProvider.add(group, remote: true, resultHandler(onSuccess: {
             }, onErrorAdditional: {[weak self] result in
                 self?.onGroupAddOrUpdateError(group)

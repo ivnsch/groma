@@ -97,8 +97,6 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
                     QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(weakSelf.itemsResult?.count)")
                     
                     weakSelf.tableView.beginUpdates()
-                    
-                    weakSelf.models = weakSelf.itemsResult!.map{ExpandableTableViewRecipeModel(recipe: $0)}
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
                     weakSelf.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .top)
                     weakSelf.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
@@ -113,10 +111,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
                     // An error occurred while opening the Realm file on the background worker thread
                     fatalError(String(describing: error))
                 }
-            }
-            
-            weakSelf.models = recipes.map{ExpandableTableViewRecipeModel(recipe: $0)} // TODO use results!
-            self?.debugItems()
+            }            
         })
     }
     
@@ -133,25 +128,6 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     
     override func topControllerIsExpanded() -> Bool {
         return topAddEditListControllerManager?.expanded ?? false
-    }
-    
-    override func onReorderedModels(from: Int, to: Int) {
-        guard let itemsResult = itemsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
-        
-        Prov.recipeProvider.move(from: from, to: to, recipes: itemsResult, notificationToken: notificationToken, successHandler {
-        })
-    }
-    
-    override func onRemoveModel(_ model: ExpandableTableViewModel, index: Int) {
-        guard let itemsResult = itemsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
-        
-        Prov.recipeProvider.delete(index: index, recipes: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
-        }, onErrorAdditional: {[weak self] result in
-            self?.initModels()
-            }
-        ))
     }
     
     override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
@@ -185,29 +161,22 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     
     override func onAddTap(_ rotateTopBarButton: Bool = true) {
         super.onAddTap()
-        SizeLimitChecker.checkGroupsSizeLimit(models.count, controller: self) {[weak self] in
-            if let weakSelf = self {
-                let expand = !(weakSelf.topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
-                weakSelf.topAddEditListControllerManager?.expand(expand)
+//        SizeLimitChecker.checkGroupsSizeLimit(models.count, controller: self) {[weak self] in
+//            if let weakSelf = self {
+                let expand = !(topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
+                topAddEditListControllerManager?.expand(expand)
                 if rotateTopBarButton { // HACK - don't reset the buttons when we don't want to rotate because this causes the toggle button animation to "jump" (this is used on pull to add - in order to show also the submit button we would have to reset the buttons, but this causes a little jump in the X since when the table view goes a little up because of the pull anim, the X animates back a little and when we reset the buttons, setting it to its final state there's a jump). TODO We need to adjust the general logic for this, we don't need multiple nav bar buttons on each side anyways anymore so maybe we can remove all this?
-                    weakSelf.setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
+                    setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
                 }
-            }
-        }
+//            }
+//        }
     }
     
     func setThemeColor(_ color: UIColor) {
         topBar.backgroundColor = color
         view.backgroundColor = UIColor.white
     }
-    
-    fileprivate func debugItems() {
-        if QorumLogs.minimumLogLevelShown < 2 {
-            print("Recipes:")
-            (models as! [ExpandableTableViewRecipeModel]).forEach{print("\($0.recipe.debugDescription)")}
-        }
-    }
-    
+
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
     fileprivate func initNavBar(_ actions: [UIBarButtonSystemItem]) {
         navigationItem.title = trans("title_products")
@@ -245,11 +214,10 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
 
         let recipe = Recipe(uuid: NSUUID().uuidString, name: input.name, color: input.color)
         
-        // TODO!!!!!!!!!!!!!!!!!! use results
-        models.insert(ExpandableTableViewRecipeModel(recipe: recipe), at: results.count)
-        tableView.insertRows(at: [IndexPath(row: results.count, section: 0)], with: .top)
-        
         Prov.recipeProvider.add(recipe, recipes: results, notificationToken: notificationToken, resultHandler(onSuccess: {
+            
+            self.tableView.insertRows(at: [IndexPath(row: results.count - 1, section: 0)], with: .top) // Note -1 as at this point the new item is already inserted in results
+            
         }, onErrorAdditional: {[weak self] result in
             self?.onGroupAddOrUpdateError(recipe)
             }
@@ -267,14 +235,24 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
         let recipeInput = RecipeInput(name: input.name, color: input.color)
         
         Prov.recipeProvider.update(recipe, input: recipeInput, recipes: results, notificationToken: notificationToken, resultHandler(onSuccess: {
+            
+            var row: Int?
+            for (index, item) in results.enumerated() {
+                if item.uuid == recipe.uuid {
+                    row = index
+                }
+            }
+            
+            if let row = row {
+                self.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+            } else {
+                QL4("Invalid state: can't find list: \(recipe)")
+            }
+            
         }, onErrorAdditional: {[weak self] result in
             self?.onGroupAddOrUpdateError(recipe)
             }
         ))
-        
-        // TODO!!!!!!!!!!!!!!!!!! use results
-        _ = models.update(ExpandableTableViewRecipeModel(recipe: recipe))
-        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
         
         topAddEditListControllerManager?.expand(false)
         setTopBarState(.normalFromExpanded)
@@ -300,6 +278,45 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     override func onExpandableClose() {
         super.onExpandableClose()
         setTopBarState(.normalFromExpanded)
+    }
+    
+    
+    // New
+    
+    override func loadModels(onSuccess: @escaping () -> Void) {
+        // TODO!!!!!!!!!!!!! on success. Is also this method actually necessary?
+        initModels()
+    }
+    
+    override func itemForRow(row: Int) -> ExpandableTableViewModel? {
+        guard let itemsResult = itemsResult else {QL4("No result"); return nil}
+        
+        return ExpandableTableViewRecipeModel(recipe: itemsResult[row])
+    }
+    
+    override var itemsCount: Int? {
+        guard let itemsResult = itemsResult else {QL4("No result"); return nil}
+        
+        return itemsResult.count
+    }
+    
+    override func deleteItem(index: Int) {
+        guard let itemsResult = itemsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        
+        Prov.recipeProvider.delete(index: index, recipes: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        }, onErrorAdditional: {[weak self] result in
+            self?.initModels()
+            }
+        ))
+    }
+    
+    override func moveItem(from: Int, to: Int) {
+        guard let itemsResult = itemsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        
+        Prov.recipeProvider.move(from: from, to: to, recipes: itemsResult, notificationToken: notificationToken, successHandler {
+        })
     }
 }
 

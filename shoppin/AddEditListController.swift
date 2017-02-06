@@ -15,7 +15,7 @@ import Providers
 
 protocol AddEditListControllerDelegate: class {
     func onAddList(_ list: List)
-    func onUpdateList(_ list: List)
+    func onUpdateList(_ list: List, listInput: ListInput)
 }
 
 // TODO try to refactor with AddEditInventoryController, lot of repeated code
@@ -234,7 +234,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     fileprivate func loadInventories() {
         Prov.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
-            self?.inventories = inventories
+            self?.inventories = inventories.toArray()
         })
     }
     
@@ -319,11 +319,11 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
 //                    afterStoreUpdateCheck(nil)
 //                }
             
-                let totalUsers = weakSelf.users + weakSelf.invitedUsers
+//                let totalUsers = weakSelf.users + weakSelf.invitedUsers // TODO?
 
                 // Note on shared users: if the shared users controller was not opened this will be nil so listToEdit is not affected (passing nil on copy is a noop)
-                let updatedList = listToEdit.copy(name: listName, users: totalUsers, color: bgColor, inventory: inventory, store: ListCopyStore(store))
-                self?.delegate?.onUpdateList(updatedList)
+                let listInput = ListInput(name: listName, color: bgColor, store: store ?? "", inventory: inventory)
+                self?.delegate?.onUpdateList(listToEdit, listInput: listInput)
             
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {

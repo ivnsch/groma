@@ -158,7 +158,7 @@ class MyWebSocket: WebSocketDelegate {
                         
                         // TODO! new services that fetch only uuids from db
                         let listsUuids = Array(lists.map{$0.uuid})
-                        let inventoriesUuids = inventories.map{$0.uuid}
+                        let inventoriesUuids = inventories.toArray().map{$0.uuid}
 
                         weakSelf.sendMaybeMsg(weakSelf.subscribeMsg(listsUuids, inventoriesUuids: inventoriesUuids, deviceId: deviceId))
                         PreferencesManager.savePreference(PreferencesManagerKey.deviceId, value: NSString(string: deviceId))

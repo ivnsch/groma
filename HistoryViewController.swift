@@ -72,7 +72,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     fileprivate func loadInventories() {
         Prov.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
-            self?.inventoryPicker?.inventories = inventories
+            self?.inventoryPicker?.inventories = inventories.toArray()
         })
     }
     
