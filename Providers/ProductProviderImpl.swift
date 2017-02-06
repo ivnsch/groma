@@ -35,6 +35,8 @@ class ProductProviderImpl: ProductProvider {
         DBProv.productProvider.products(text, range: range, sortBy: sortBy) {(substring: String?, products: [Product]?) in
             if let products = products {
                 handler(ProviderResult(status: .success, sucessResult: (substring, products)))
+            } else {
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
@@ -43,6 +45,18 @@ class ProductProviderImpl: ProductProvider {
         DBProv.productProvider.quantifiableProducts(text, range: range, sortBy: sortBy) {(substring: String?, products: [QuantifiableProduct]?) in
             if let products = products {
                 handler(ProviderResult(status: .success, sucessResult: (substring, products)))
+            } else {
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
+    }
+    
+    func quantifiableProducts(product: Product, _ handler: @escaping (ProviderResult<[QuantifiableProduct]>) -> Void) {
+        DBProv.productProvider.quantifiableProducts(product: product) {quantifiableProducts in
+            if let quantifiableProducts = quantifiableProducts {
+                handler(ProviderResult(status: .success, sucessResult: quantifiableProducts))
+            } else {
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
@@ -51,6 +65,8 @@ class ProductProviderImpl: ProductProvider {
         DBProv.productProvider.products(text, sortBy: sortBy) {(substring: String?, products: Results<Product>?) in
             if let products = products {
                 handler(ProviderResult(status: .success, sucessResult: (substring, products)))
+            } else {
+                handler(ProviderResult(status: .databaseUnknown))
             }
         }
     }
@@ -60,7 +76,19 @@ class ProductProviderImpl: ProductProvider {
     }
 
     
-    func productsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)])>) -> Void) {
+    func quantifiableProductsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)])>) -> Void) {
+        
+        DBProv.productProvider.quantifiableProductsWithPosibleSections(text, list: list, range: range, sortBy: sortBy) {result in
+            if let productsWithMaybeSections = result.1 {
+                handler(ProviderResult(status: .success, sucessResult: (substring: result.0, productsWithMaybeSections: productsWithMaybeSections)))
+            } else {
+                handler(ProviderResult(status: .unknown))
+            }
+        }
+    }
+    
+    
+    func productsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: Product, section: Section?)])>) -> Void) {
         
         DBProv.productProvider.productsWithPosibleSections(text, list: list, range: range, sortBy: sortBy) {result in
             if let productsWithMaybeSections = result.1 {

@@ -199,13 +199,18 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         // One possible solution for this is to store the favs in this class, and do a batch update / fav increment only when the user exists quick add.
         
         if let productItem = item as? QuickAddProduct {
-//            productItem.product.fav += 1
+//            productItem.product.fav += 1 // TODO!!!!!!!!!!!!!!!!!!
 //            Prov.productProvider.incrementFav(quantifiableProductUuid: productItem.product.uuid, remote: true, successHandler{})
             // don't wait for db incrementFav - this operation is not critical
-            delegate?.onAddProduct(productItem.product)
+            
+            // TODO!!!!!!! show popup with units if more than 1 quantifiable product for this product!
+            
+            retrieveQuantifiableProduct(product: productItem.product) {[weak self] quantifiableProduct in
+                self?.delegate?.onAddProduct(quantifiableProduct)
+            }
             
         } else if let recipeItem = item as? QuickAddRecipe {
-//            groupItem.group.fav += 1
+//            groupItem.group.fav += 1 // TODO!!!!!!!!!!!!!!!!!!
 //            don't wait for db incrementFav - this operation is not critical
             Prov.recipeProvider.incrementFav(recipeItem.recipe.uuid, successHandler{})
             
@@ -222,6 +227,15 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         } else {
             print("Error: invalid model type in quickAddItems, select cell. \(item)")
         }
+    }
+    
+    fileprivate func retrieveQuantifiableProduct(product: Product, onRetrieved: @escaping (QuantifiableProduct) -> Void) {
+        Prov.productProvider.quantifiableProducts(product: product, successHandler{quantifiableProducts in
+            onRetrieved(quantifiableProducts.first!)
+            // TODO!!!!!!!!!!!!
+            // if > 1 show popup and return selection
+            // and if for some reason there are no quantifiable products log illegal state, but create a quantifiable product and return it, just in case.
+        })
     }
     
     func scrollToBottom() {
@@ -279,7 +293,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         
         func loadProducts() {
             
-            Prov.productProvider.quantifiableProducts(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
+            Prov.productProvider.products(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 
                 QL1("Loaded products, current search: \(self?.searchText), range: \(self?.paginator.currentPage), sortBy: \(self?.contentData.sortBy), result search: \(tuple.substring), results: \(tuple.products.count)")
 
@@ -287,7 +301,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
                     // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
                     if tuple.substring == weakSelf.searchText {
-                        let quickAddItems = tuple.products.map{QuickAddProduct($0, boldRange: $0.product.name.range(weakSelf.searchText, caseInsensitive: true))}
+                        let quickAddItems = tuple.products.map{QuickAddProduct($0, boldRange: $0.name.range(weakSelf.searchText, caseInsensitive: true))}
                         onItemsLoaded(quickAddItems)
                     } else {
                         setLoading(false)
@@ -314,7 +328,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
                     QL1("Comparing: #\(tuple.substring)# with #\(weakSelf.searchText)#")
                     if tuple.substring == weakSelf.searchText {
-                        let quickAddItems = tuple.productsWithMaybeSections.map{QuickAddProduct($0.product, colorOverride: $0.section.map{$0.color}, boldRange: $0.product.product.name.range(weakSelf.searchText, caseInsensitive: true))}
+                        let quickAddItems = tuple.productsWithMaybeSections.map{QuickAddProduct($0.product, colorOverride: $0.section.map{$0.color}, boldRange: $0.product.name.range(weakSelf.searchText, caseInsensitive: true))}
                         onItemsLoaded(quickAddItems)
                     } else {
                         setLoading(false)

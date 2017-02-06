@@ -15,7 +15,6 @@ class QuickAddItemCell: UICollectionViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var brandLabel: UILabel!
     @IBOutlet weak var storeLabel: UILabel!
-    @IBOutlet weak var unitLabel: UILabel! // TODO visual - show this in a different way
     
     @IBOutlet weak var nameLabelVerticalCenterContraint: NSLayoutConstraint!
     
@@ -47,12 +46,10 @@ class QuickAddItemCell: UICollectionViewCell {
                 nameLabel.textColor = color
                 brandLabel.textColor = color
                 storeLabel.textColor = color
-                unitLabel.textColor = color
                 
                 brandLabel.text = item.label2Text
                 storeLabel.text = item.label3Text
-                unitLabel.text = item.label4Text
-                    
+                
                     
                 nameLabelVerticalCenterContraint.constant = nameCenterConstant
 //                    item.label2Text.isEmpty ? 0 : -6

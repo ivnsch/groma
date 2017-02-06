@@ -39,7 +39,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     dynamic var productOpt: Product? = Product()
     public dynamic var baseQuantity: String = "1"
     public dynamic var unitVal: Int = 0
-    public dynamic var fav: Int = 0
+    public dynamic var fav: Int = 0 // not used anymore as we fav again the product, but letting it here just in case. Maybe remove.
     
     public var product: Product {
         get {

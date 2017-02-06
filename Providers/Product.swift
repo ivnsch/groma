@@ -48,6 +48,7 @@ public class Product: DBSyncable, Identifiable {
     public dynamic var name: String = ""
     dynamic var categoryOpt: ProductCategory? = ProductCategory()
     public dynamic var brand: String = ""
+    public dynamic var fav: Int = 0
     
     public var category: ProductCategory {
         get {
@@ -66,7 +67,7 @@ public class Product: DBSyncable, Identifiable {
         return ["name"]
     }
     
-    public convenience init(uuid: String, name: String, category: ProductCategory, brand: String = "", lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, name: String, category: ProductCategory, brand: String = "", fav: Int = 0, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -90,12 +91,13 @@ public class Product: DBSyncable, Identifiable {
         )
     }
     
-    public func copy(uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, brand: String? = nil, store: String? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {
+    public func copy(uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, brand: String? = nil, store: String? = nil, fav: Int = 0, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             category: category ?? self.category.copy(),
             brand: brand ?? self.brand,
+            fav: fav ?? self.fav,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
         )

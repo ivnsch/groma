@@ -10,7 +10,7 @@ import Foundation
 
 public class QuickAddProduct: QuickAddItem {
 
-    public let product: QuantifiableProduct
+    public let product: Product
     
     // TODO better implementation than passing this additionally to product, which is used only when quick add is used for list items
     public let storeProduct: StoreProduct?
@@ -18,7 +18,7 @@ public class QuickAddProduct: QuickAddItem {
     // used in list items, where we shows section color if available, instead of category color. A better solution for this may be implementing a new QuickAddItem subclass but for now like this.
     public let colorOverride: UIColor?
     
-    public init(_ product: QuantifiableProduct, colorOverride: UIColor? = nil, storeProduct: StoreProduct? = nil, boldRange: NSRange? = nil) {
+    public init(_ product: Product, colorOverride: UIColor? = nil, storeProduct: StoreProduct? = nil, boldRange: NSRange? = nil) {
         self.product = product
         self.storeProduct = storeProduct
         self.colorOverride = colorOverride
@@ -26,11 +26,11 @@ public class QuickAddProduct: QuickAddItem {
     }
     
     public override var labelText: String {
-        return product.product.name
+        return product.name
     }
     
     public override var label2Text: String {
-        return product.product.brand
+        return product.brand
     }
     
     // TODO!!!!!!!!!!!!!!!!! (not related with quantifiable prods refactoring but important) review this - is the store always showing? the store should not show when we are in a store-specific list! (if items have a store assigned iirc we should see the items in other stores, but without displayign the store? (i.e. stripped from store-related information)
@@ -38,12 +38,8 @@ public class QuickAddProduct: QuickAddItem {
         return storeProduct?.store ?? ""
     }
 
-    public override var label4Text: String {
-        return product.unitText
-    }
-    
     public override var color: UIColor {
-        return colorOverride ?? product.product.category.color
+        return colorOverride ?? product.category.color
     }
     
     public override func clearBoldRangeCopy() -> QuickAddProduct {
