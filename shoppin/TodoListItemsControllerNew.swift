@@ -263,24 +263,32 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     override func onAddProduct(_ product: QuantifiableProduct) {
         if pricesView.expandedNew {
             cartController?.onAddProduct(product)
+        } else {
+            super.onAddProduct(product)
         }
     }
     
     override func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
         if pricesView.expandedNew {
             cartController?.onAddGroup(group, onFinish: onFinish)
+        } else {
+            super.onAddGroup(group, onFinish: onFinish)
         }
     }
     
     override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
         if pricesView.expandedNew {
             cartController?.onAddRecipe(ingredientModels: ingredientModels, quickAddController: quickAddController)
+        } else {
+            super.onAddRecipe(ingredientModels: ingredientModels, quickAddController: quickAddController)
         }
     }
     
     override func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
         if pricesView.expandedNew {
             cartController?.getAlreadyHaveText(ingredient: ingredient, handler)
+        } else {
+            super.getAlreadyHaveText(ingredient: ingredient, handler)
         }
     }
 
@@ -288,36 +296,48 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     override func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         if pricesView.expandedNew {
             cartController?.onSubmitAddEditItem(input, editingItem: editingItem)
+        } else {
+            super.onSubmitAddEditItem(input, editingItem: editingItem)
         }
     }
     
     override func onCloseQuickAddTap() {
         if pricesView.expandedNew {
             cartController?.onCloseQuickAddTap()
+        } else {
+            super.onCloseQuickAddTap()
         }
     }
     
     override func onQuickListOpen() {
         if pricesView.expandedNew {
             cartController?.onQuickListOpen()
+        } else {
+            super.onQuickListOpen()
         }
     }
     
     override func onAddProductOpen() {
         if pricesView.expandedNew {
             cartController?.onAddProductOpen()
+        } else {
+            super.onAddProductOpen()
         }
     }
     
     override func onAddGroupOpen() {
         if pricesView.expandedNew {
             cartController?.onAddGroupOpen()
+        } else {
+            super.onAddGroupOpen()
         }
     }
     
     override func onAddGroupItemsOpen() {
         if pricesView.expandedNew {
             cartController?.onAddGroupItemsOpen()
+        } else {
+            super.onAddGroupItemsOpen()
         }
     }
     
@@ -325,6 +345,8 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         var view: UIView?
         if pricesView.expandedNew {
             view = cartController?.parentViewForAddButton()
+        } else {
+            view = super.parentViewForAddButton()
         }
         return view ?? {
             QL4("Invalid state: price view expanded but no cart controller - returning a dummy view")
@@ -335,18 +357,24 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     override func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
         if pricesView.expandedNew {
             cartController?.addEditSectionOrCategoryColor(name, handler: handler)
+        } else {
+            super.addEditSectionOrCategoryColor(name, handler: handler)
         }
     }
     
     override func onRemovedSectionCategoryName(_ name: String) {
         if pricesView.expandedNew {
             cartController?.onRemovedSectionCategoryName(name)
+        } else {
+            super.onRemovedSectionCategoryName(name)
         }
     }
     
     override func onRemovedBrand(_ name: String) {
         if pricesView.expandedNew {
             cartController?.onRemovedBrand(name)
+        } else {
+            super.onRemovedBrand(name)
         }
     }
 }
