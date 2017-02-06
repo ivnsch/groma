@@ -43,6 +43,9 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
 //    @IBOutlet weak var undoLabel1: UILabel!
 //    @IBOutlet weak var undoLabel2: UILabel!
     
+    @IBOutlet weak var bgIconLeft: UIImageView!
+    @IBOutlet weak var bgIconRight: UIImageView!
+    
     @IBOutlet weak var minusTrailingConstraint: NSLayoutConstraint!
     
     fileprivate weak var delegate: ListItemCellDelegateNew?
@@ -227,6 +230,10 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         
         swipeToIncrementHelper = SwipeToIncrementHelper(view: myContentView)
         swipeToIncrementHelper?.delegate = self
+        
+        let scaleStart = CGAffineTransform(scaleX: 0.00001, y: 0.00001)
+        bgIconLeft.transform = scaleStart
+        bgIconRight.transform = scaleStart
     }
     
     func onTapPlusMinusContainer(_ recognizer: UITapGestureRecognizer) {
@@ -279,6 +286,46 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         guard let listItem = tableViewListItem else {QL4("No list item"); return}
         
         delegate?.onItemSwiped(listItem)
+    }
+    
+    override func onSwipe(delta: CGFloat, panningRight: Bool) {
+        let absDelta = abs(delta)
+        
+        let offset = width / 12 // when it starts growing
+        
+        if absDelta > offset {
+            
+            let deltaMinusPart = absDelta - offset
+            
+            let fullScaleDelta = width / 5 // distance to when it achieves full scale
+            let percentage = min(1, deltaMinusPart / fullScaleDelta)
+            
+            let scale = CGAffineTransform(scaleX: percentage, y: percentage)
+            
+            bgIconLeft.transform = scale
+            bgIconRight.transform = scale
+            
+            bgIconLeft.isHidden = delta > 0
+            bgIconRight.isHidden = !bgIconLeft.isHidden
+        }
+    }
+    
+    override func onShowAllButtons(delta: CGFloat) {
+        UIView.animate(withDuration: 0.2) {
+            // one is hidden so we can just scale up both
+            let scale = CGAffineTransform(scaleX: 1, y: 1)
+            self.bgIconLeft.transform = scale
+            self.bgIconRight.transform = scale
+        }
+    }
+    
+    override func onResetConstraints(delta: CGFloat) {
+        UIView.animate(withDuration: 0.2) {
+            // one is hidden so we can just scale up both
+            let scale = CGAffineTransform(scaleX: 0.00001, y: 0.00001)
+            self.bgIconLeft.transform = scale
+            self.bgIconRight.transform = scale
+        }
     }
     
     // MARK: - SwipeToIncrementHelperDelegate

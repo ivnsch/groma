@@ -53,6 +53,9 @@ class SwipeableCell: UITableViewCell {
     var swipeDelegate: SwipeableCellDelegate?
     
 
+    fileprivate var panningRight = false
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -83,6 +86,8 @@ class SwipeableCell: UITableViewCell {
             return
         }
 
+        onResetConstraints(delta: contentViewRightConstraint.constant)
+        
         self.updateConstraintsIfNeeded(animated, onCompletion: {[weak self] finished in
             if let weakSelf = self {
                 weakSelf.contentViewLeftConstraint.constant = 0
@@ -102,8 +107,11 @@ class SwipeableCell: UITableViewCell {
             return
         }
         
+        onShowAllButtons(delta: contentViewRightConstraint.constant)
+
         self.updateConstraintsIfNeeded(animated, onCompletion: { (finished) -> Void in
-            let constant = self.direction == .right ? self.buttonTotalWidth() : -self.buttonTotalWidth()
+//            let constant = self.direction == .right ? self.buttonTotalWidth() : -self.buttonTotalWidth()
+            let constant = self.panningRight ? self.buttonTotalWidth() : -self.buttonTotalWidth()
             self.contentViewLeftConstraint.constant = constant
             self.contentViewRightConstraint.constant = -constant
             
@@ -118,6 +126,7 @@ class SwipeableCell: UITableViewCell {
             })
         })
     }
+    
     
     func updateConstraintsIfNeeded(_ animated:Bool, alpha: CGFloat? = nil, onCompletion:((Bool)->Void)?) {
         var duration:TimeInterval = 0
@@ -169,10 +178,17 @@ class SwipeableCell: UITableViewCell {
         // override
     }
     
+    func onSwipe(delta: CGFloat, panningRight: Bool) {
+        // override
+    }
     
-    
-    
-    
+    func onShowAllButtons(delta: CGFloat) {
+        // override
+    }
+
+    func onResetConstraints(delta: CGFloat) {
+        // override
+    }
     
     func onPanCell(_ recognizer: UIPanGestureRecognizer) {
         
@@ -204,6 +220,7 @@ class SwipeableCell: UITableViewCell {
                 }
                 
                 let panningRight = currentPoint.x > self.panStartPoint.x
+                self.panningRight = panningRight
                 
                 if self.startingLeftLayoutConstraint == 0 { //closed
                     if !panningRight {
@@ -251,7 +268,9 @@ class SwipeableCell: UITableViewCell {
                         self.contentViewRightConstraint.constant = -self.contentViewLeftConstraint.constant
                     }
                 }
-
+                
+                // Since both sides are in sync passing one is ok
+                onSwipe(delta: contentViewRightConstraint.constant, panningRight: panningRight)
             }
             
         case .ended:

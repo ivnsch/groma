@@ -468,6 +468,9 @@
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="added" translatesAutoresizingMaskIntoConstraints="NO" id="a2Q-w2-HKK">
                                             <rect key="frame" x="20" y="34" width="24" height="23"/>
                                         </imageView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="added" translatesAutoresizingMaskIntoConstraints="NO" id="jMV-Fq-LvI">
+                                            <rect key="frame" x="331" y="34" width="24" height="23"/>
+                                        </imageView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mEO-yB-hml">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
                                             <subviews>
@@ -594,12 +597,16 @@
                                         <constraint firstAttribute="trailing" secondItem="mEO-yB-hml" secondAttribute="trailing" id="M0m-8G-fqg"/>
                                         <constraint firstItem="a2Q-w2-HKK" firstAttribute="leading" secondItem="6dg-3t-A2g" secondAttribute="leading" constant="20" id="Tzr-z1-mh1" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstItem="a2Q-w2-HKK" firstAttribute="centerY" secondItem="6dg-3t-A2g" secondAttribute="centerY" id="VpE-eK-SHV"/>
+                                        <constraint firstAttribute="trailing" secondItem="jMV-Fq-LvI" secondAttribute="trailing" constant="20" id="bKq-pT-nCL" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstAttribute="bottom" secondItem="mEO-yB-hml" secondAttribute="bottom" id="jRL-Dr-k8D"/>
                                         <constraint firstItem="mEO-yB-hml" firstAttribute="leading" secondItem="6dg-3t-A2g" secondAttribute="leading" id="orc-lq-4ob"/>
+                                        <constraint firstItem="jMV-Fq-LvI" firstAttribute="centerY" secondItem="6dg-3t-A2g" secondAttribute="centerY" id="uM2-gg-dR3"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
+                                    <outlet property="bgIconLeft" destination="a2Q-w2-HKK" id="VuQ-9y-sTD"/>
+                                    <outlet property="bgIconRight" destination="jMV-Fq-LvI" id="tXE-CJ-62K"/>
                                     <outlet property="brandLabel" destination="9Rc-cx-ee2" id="3AD-fD-V2K"/>
                                     <outlet property="centerVerticallyNameLabelConstraint" destination="aPq-1R-TWY" id="eCQ-dH-UjM"/>
                                     <outlet property="contentViewLeftConstraint" destination="orc-lq-4ob" id="ch4-Vg-ytB"/>
