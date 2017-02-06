@@ -66,7 +66,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         Notification.subscribe(.LoginTokenExpired, selector: #selector(AppDelegate.onLoginTokenExpired(_:)), observer: self)
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onWebsocketConnectionChange(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Connection.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(UserTabItemViewController.onLogoutNotification(_:)), name: NSNotification.Name(rawValue: Notification.Logout.rawValue), object: nil)
+        
+        // Temporarily disabled as this is crashing the app ("unrecognized selector" though the selector definitely exists) and current functionality in UserTabItemViewController.onLogoutNotification (show the login controller) doesn't seem to be needed.
+//        NotificationCenter.default.addObserver(self, selector: #selector(UserTabItemViewController.onLogoutNotification(_:)), name: NSNotification.Name(rawValue: Notification.Logout.rawValue), object: nil)
         
         checkClearHistory()
         

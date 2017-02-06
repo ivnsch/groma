@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		580BDABF1DF3312B00FD2298 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 580BDABE1DF3312B00FD2298 /* CloudKit.framework */; };
 		5819FB5E1DDDF59500FB2CC1 /* Validatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5819FB5D1DDDF59500FB2CC1 /* Validatable.swift */; };
 		58FA07161DE1F2550059F2D0 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FA07151DE1F2550059F2D0 /* Bolts.framework */; };
 		58FBD9B11DDCDA19002242D6 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AD1DDCDA18002242D6 /* FBSDKCoreKit.framework */; };
 		58FBD9B21DDCDA19002242D6 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */; };
 		58FBD9B31DDCDA19002242D6 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */; };
 		58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */; };
+		6A04FDB01E48D70B0011A35C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A04FDAF1E48D70B0011A35C /* CloudKit.framework */; };
 		6A0DE19B1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */; };
 		6A1BBADA1E44AF5E00BC7404 /* UITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */; };
 		6A1BBAE01E44B57300BC7404 /* ListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */; };
@@ -384,13 +384,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		580BDABE1DF3312B00FD2298 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		5819FB5D1DDDF59500FB2CC1 /* Validatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validatable.swift; sourceTree = "<group>"; };
 		58FA07151DE1F2550059F2D0 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		58FBD9AD1DDCDA18002242D6 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
 		58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
+		6A04FDAF1E48D70B0011A35C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderSectionTableViewControllerNew.swift; sourceTree = "<group>"; };
 		6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewController.swift; sourceTree = "<group>"; };
 		6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ListItemCell.xib; path = ../ListItemCell.xib; sourceTree = "<group>"; };
@@ -403,6 +403,7 @@
 		6A407ABC1E33A44400D77405 /* AddRecipeIngredientCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddRecipeIngredientCell.xib; sourceTree = "<group>"; };
 		6A42C3831E437C4900F8E0E6 /* SimpleListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleListItemsController.swift; sourceTree = "<group>"; };
 		6A42C3841E437C4900F8E0E6 /* SimpleListItemsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleListItemsController.xib; sourceTree = "<group>"; };
+		6A58B0D21E48D5D50012F4C9 /* groma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = groma.entitlements; sourceTree = "<group>"; };
 		6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A7C54B71E439B2800300F8D /* ItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsController.swift; sourceTree = "<group>"; };
 		6A7C54B81E439B2800300F8D /* ItemsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemsController.xib; sourceTree = "<group>"; };
@@ -456,7 +457,7 @@
 		EB1D696B1CABEB7B004892A2 /* TodoListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsController.swift; sourceTree = "<group>"; };
 		EB1D696F1CAC32E4004892A2 /* CartListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartListItemsController.swift; sourceTree = "<group>"; };
 		EB1D69721CAC82BF004892A2 /* AddButtonHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddButtonHelper.swift; sourceTree = "<group>"; };
-		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB1DDEA51A3334EC00D778DE /* groma.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = groma.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB1DDEB21A3334EC00D778DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -504,7 +505,6 @@
 		EB4147CC1BE2288E00549CE4 /* ManageGroupsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageGroupsCell.swift; sourceTree = "<group>"; };
 		EB451C4A1B864A19000DE208 /* SingleSelectionPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleSelectionPopup.swift; sourceTree = "<group>"; };
 		EB4612B91BE56D970049DAD1 /* ExpandCellAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandCellAnimator.swift; sourceTree = "<group>"; };
-		EB49F5E91AC6CBEE00BBEDA2 /* shoppin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = shoppin.entitlements; sourceTree = "<group>"; };
 		EB4A38A31C87B96C000714F9 /* GoogleSignInHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleSignInHelper.swift; sourceTree = "<group>"; };
 		EB4B39BE1CEB942900B41063 /* SwipeToIncrementAlertHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeToIncrementAlertHelper.swift; sourceTree = "<group>"; };
 		EB4B39C01CEBDF5E00B41063 /* products_translations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = products_translations.swift; path = ../scripts/products_translations.swift; sourceTree = "<group>"; };
@@ -788,10 +788,10 @@
 				58FBD9B31DDCDA19002242D6 /* FBSDKMessengerShareKit.framework in Frameworks */,
 				6AEA4EA41E0461660040557D /* Providers.framework in Frameworks */,
 				EB0F5F881B98A10100035175 /* SystemConfiguration.framework in Frameworks */,
+				6A04FDB01E48D70B0011A35C /* CloudKit.framework in Frameworks */,
 				58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */,
 				58FA07161DE1F2550059F2D0 /* Bolts.framework in Frameworks */,
 				58FBD9B11DDCDA19002242D6 /* FBSDKCoreKit.framework in Frameworks */,
-				580BDABF1DF3312B00FD2298 /* CloudKit.framework in Frameworks */,
 				58FBD9B21DDCDA19002242D6 /* FBSDKLoginKit.framework in Frameworks */,
 				AEC62C1551F853D52768B5A2 /* Pods_shoppin.framework in Frameworks */,
 			);
@@ -889,7 +889,7 @@
 		E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				580BDABE1DF3312B00FD2298 /* CloudKit.framework */,
+				6A04FDAF1E48D70B0011A35C /* CloudKit.framework */,
 				58FA07151DE1F2550059F2D0 /* Bolts.framework */,
 				58FBD9AD1DDCDA18002242D6 /* FBSDKCoreKit.framework */,
 				58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */,
@@ -1044,6 +1044,7 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
+				6A58B0D21E48D5D50012F4C9 /* groma.entitlements */,
 				6AEA4EA31E0461660040557D /* Providers.framework */,
 				EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
@@ -1061,7 +1062,7 @@
 		EB1DDEA61A3334EC00D778DE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EB1DDEA51A3334EC00D778DE /* shoppin.app */,
+				EB1DDEA51A3334EC00D778DE /* groma.app */,
 				EB9F6CE21A8610550038355B /* shoppin_osx.app */,
 				EB9F6CF31A8610550038355B /* shoppin_osxTests.xctest */,
 				EB33D56A1CE010400097AD58 /* shoppinUITests.xctest */,
@@ -1079,7 +1080,6 @@
 				EB1DDEB11A3334EC00D778DE /* Main.storyboard */,
 				EB1DDEB41A3334EC00D778DE /* Images.xcassets */,
 				EB1DDEB61A3334EC00D778DE /* LaunchScreen.xib */,
-				EB49F5E91AC6CBEE00BBEDA2 /* shoppin.entitlements */,
 				EB1DDEA81A3334EC00D778DE /* Supporting Files */,
 			);
 			path = shoppin;
@@ -1988,9 +1988,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EB1DDEA41A3334EC00D778DE /* shoppin */ = {
+		EB1DDEA41A3334EC00D778DE /* groma */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EB1DDEC71A3334EC00D778DE /* Build configuration list for PBXNativeTarget "shoppin" */;
+			buildConfigurationList = EB1DDEC71A3334EC00D778DE /* Build configuration list for PBXNativeTarget "groma" */;
 			buildPhases = (
 				BC25225AB57DCDC3D58F75A7 /* [CP] Check Pods Manifest.lock */,
 				EB1DDEA11A3334EC00D778DE /* Sources */,
@@ -2005,9 +2005,9 @@
 			);
 			dependencies = (
 			);
-			name = shoppin;
+			name = groma;
 			productName = shoppin;
-			productReference = EB1DDEA51A3334EC00D778DE /* shoppin.app */;
+			productReference = EB1DDEA51A3334EC00D778DE /* groma.app */;
 			productType = "com.apple.product-type.application";
 		};
 		EB33D5691CE010400097AD58 /* shoppinUITests */ = {
@@ -2080,7 +2080,7 @@
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.iCloud = {
 								enabled = 1;
@@ -2125,7 +2125,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EB1DDEA41A3334EC00D778DE /* shoppin */,
+				EB1DDEA41A3334EC00D778DE /* groma */,
 				EB9F6CE11A8610550038355B /* shoppin_osx */,
 				EB9F6CF21A8610550038355B /* shoppin_osxTests */,
 				EB33D5691CE010400097AD58 /* shoppinUITests */,
@@ -2592,7 +2592,7 @@
 /* Begin PBXTargetDependency section */
 		EB33D5701CE010410097AD58 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EB1DDEA41A3334EC00D778DE /* shoppin */;
+			target = EB1DDEA41A3334EC00D778DE /* groma */;
 			targetProxy = EB33D56F1CE010410097AD58 /* PBXContainerItemProxy */;
 		};
 		EB9F6CF51A8610550038355B /* PBXTargetDependency */ = {
@@ -2928,9 +2928,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = shoppin/shoppin.entitlements;
+				CODE_SIGN_ENTITLEMENTS = groma.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 37QAPDY2PR;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2957,9 +2958,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = shoppin/shoppin.entitlements;
+				CODE_SIGN_ENTITLEMENTS = groma.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 37QAPDY2PR;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3127,7 +3129,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EB1DDEC71A3334EC00D778DE /* Build configuration list for PBXNativeTarget "shoppin" */ = {
+		EB1DDEC71A3334EC00D778DE /* Build configuration list for PBXNativeTarget "groma" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EB1DDEC81A3334EC00D778DE /* Debug */,

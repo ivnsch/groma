@@ -41,6 +41,8 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     @IBOutlet weak var fbButton: FBSDKLoginButton!
 
     @IBOutlet weak var registerButton: UIButton!
+
+    @IBOutlet weak var iCloudButton: UIButton!
     
     @IBOutlet weak var eyeView: EyeView!
  
@@ -118,6 +120,8 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         staticLayout()
         
         onUIReady?()
+        
+        iCloudButton.imageView?.contentMode = .scaleAspectFit
     }
 
     // Notification for testers
@@ -368,33 +372,30 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     @IBAction func onICloudTap(_ sender: AnyObject) {
         
         CKContainer.default().accountStatus {[weak self] (accountStat, error) in guard let weakSelf = self else {return}
-            if (accountStat == .available) {
-                QL1("iCloud is available")
-                
-                if let token = FileManager.default.ubiquityIdentityToken?.description {
-                    QL1("iCloud token: \(token)")
+            
+            DispatchQueue.main.async {
+                if (accountStat == .available) {
+                    QL1("iCloud is available")
                     
                     guard let rootController = UIApplication.shared.delegate?.window??.rootViewController else { // copied from credentials login, not sure root controller it's really necessary here
                         QL4("No root view controller")
                         return
                     }
                     
-                    Prov.userProvider.authenticateWithICloud(token, controller: rootController, rootController.resultHandler(onSuccess: {_ in
+                    Prov.userProvider.authenticateWithICloud(controller: rootController, rootController.resultHandler(onSuccess: {_ in
                         weakSelf.onLoginSuccess()
                     }, onError: {result in
                         // Note: status from cred login not handled here, since we now are 99% we will not use custom server for sync. So that handling is not used.
                         weakSelf.defaultErrorHandler()(result)
                         Prov.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
+                        weakSelf.progressVisible(false)
                     }
                     ))
-                } else {
                     
+                } else {
+                    QL4("iCloud is not available")
+                    weakSelf.defaultErrorHandler()(ProviderResult(status: .iCloudLoginError)) // TODO!!!!!!!!!!!!! specific status: show to user "iCloud is not available"
                 }
-                
-            }
-            else {
-                QL4("iCloud is not available")
-                weakSelf.defaultErrorHandler()(ProviderResult(status: .iCloudLoginError)) // TODO specific status: show to user "iCloud is not available"
             }
         }
     }

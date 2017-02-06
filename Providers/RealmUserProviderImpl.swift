@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 import QorumLogs
+import CloudKit
 
 class RealmUserProviderImpl: UserProvider {
 
@@ -35,7 +36,7 @@ class RealmUserProviderImpl: UserProvider {
     // We pass userName separately because it's not safely retrievable from SyncCredentials
     private func loginOrRegister(_ credentials: SyncCredentials, userName: String? = nil, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         
-        let syncHost = "192.168.0.12"
+        let syncHost = "192.168.0.11"
         let syncAuthURL = URL(string: "http://\(syncHost):9080")!
         let syncRealmPath = "groma4"
         let syncServerURL = URL(string: "realm://\(syncHost):9080/~/\(syncRealmPath)")!
@@ -79,6 +80,8 @@ class RealmUserProviderImpl: UserProvider {
 
                 } else {
                     QL4("Error during login/register, no user: \(error)")
+                    // TODO!!!!!!!!!!!!!!!! fix/ask:
+//                     RealmUserProviderImpl.swift:82 loginOrRegister(_:userName:controller:_:): ❤️Error during login/register, no user: Optional(Error Domain=io.realm.sync Code=3 "Your request parameters did not validate." UserInfo={statusCode=400, NSLocalizedDescription=Your request parameters did not validate.})❤️
                     handler(ProviderResult(status: .unknown))
                 }
             }
@@ -189,10 +192,25 @@ class RealmUserProviderImpl: UserProvider {
         loginOrRegister(credentials, controller: controller, handler)
     }
     
-    func authenticateWithICloud(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
-        // TODO doesn't work since upgrade to Realm 2.2
-//        let credentials = SyncCredentials.iCloud(token: token)
-//        loginOrRegister(credentials, controller: controller, handler)
+    func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+        
+        let container = CKContainer.default()
+        container.fetchUserRecordID(completionHandler: {(recordID: CKRecordID?, error: Error?) in
+            if let error = error {
+                QL4("Couldn't fetch iCloud user record, error: \(error)")
+                handler(ProviderResult(status: .iCloudLoginError))
+                
+            } else if let userAccessToken = recordID?.recordName {
+                QL2("Retrieved cloudKit token: \(userAccessToken), logging in...")
+                
+                let credentials = SyncCredentials.cloudKit(token: userAccessToken)
+                self.loginOrRegister(credentials, controller: controller, handler)
+                
+            } else{
+                QL4("Invalid state: No error, but also no user record")
+                handler(ProviderResult(status: .iCloudLoginError))
+            }
+        })
     }
     
     // store email in prefs so we can e.g. prefill login controller, which is opened after registration

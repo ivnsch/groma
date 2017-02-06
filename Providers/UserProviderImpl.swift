@@ -315,7 +315,7 @@ class UserProviderImpl: UserProvider {
     }
 
     
-    func authenticateWithICloud(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         QL4("Not supported")
         handler(ProviderResult(status: .unknown))
     }

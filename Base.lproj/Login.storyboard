@@ -229,6 +229,24 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BYN-Hu-cW2" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="62.5" y="521" width="250" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="579-uM-Wtn"/>
+                                    <constraint firstAttribute="height" constant="45" id="7C1-dn-gYT"/>
+                                </constraints>
+                                <state key="normal" title="iCloud" image="icloud">
+                                    <color key="titleColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onICloudTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="hMa-La-WjW"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -270,6 +288,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
+                            <constraint firstItem="BYN-Hu-cW2" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="Mip-oe-cRe"/>
                             <constraint firstItem="t83-R4-Wil" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="NDQ-dn-mEJ"/>
                             <constraint firstItem="D7c-wL-aYY" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="20" id="NYK-Oa-BEo"/>
                             <constraint firstItem="IE2-Wn-ab8" firstAttribute="trailing" secondItem="TsF-zg-FLy" secondAttribute="trailing" id="UCi-Pg-vM6"/>
@@ -353,6 +372,23 @@
                                 </userDefinedRuntimeAttributes>
                             </constraint>
                             <constraint firstItem="yQG-pO-NNA" firstAttribute="top" secondItem="v0i-2j-jaS" secondAttribute="top" id="ubk-Vt-DK9"/>
+                            <constraint firstItem="BYN-Hu-cW2" firstAttribute="top" secondItem="Crr-TG-4lg" secondAttribute="bottom" constant="20" id="ubz-Fl-Lu5" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                        <integer key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                        <integer key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
                             <constraint firstItem="QVU-Pz-cxq" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="zca-DM-UcM"/>
                         </constraints>
                     </view>
@@ -360,6 +396,7 @@
                         <outlet property="eyeView" destination="IE2-Wn-ab8" id="KJQ-2k-NF0"/>
                         <outlet property="fbButton" destination="t83-R4-Wil" id="0Ui-Vf-SgW"/>
                         <outlet property="firstFieldTopConstraint" destination="pAc-tg-rHQ" id="coW-3R-Cw5"/>
+                        <outlet property="iCloudButton" destination="BYN-Hu-cW2" id="bOk-oy-UhW"/>
                         <outlet property="loginButton" destination="EgA-OH-X0u" id="kMT-Xo-LHu"/>
                         <outlet property="passwordField" destination="TsF-zg-FLy" id="EPF-z5-er4"/>
                         <outlet property="pleaseLoginAgainLabel" destination="D7c-wL-aYY" id="3eM-ml-0uA"/>
@@ -374,4 +411,7 @@
             <point key="canvasLocation" x="309" y="397"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="icloud" width="128" height="86"/>
+    </resources>
 </document>

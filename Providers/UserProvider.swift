@@ -50,7 +50,7 @@ public protocol UserProvider {
     // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
     func authenticateWithGoogle(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
 
-    func authenticateWithICloud(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
+    func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void)
 
     func forgotPassword(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
     

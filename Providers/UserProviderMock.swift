@@ -126,7 +126,7 @@ class UserProviderMock: UserProvider {
         }
     }
     
-    func authenticateWithICloud(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
+    func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         delay(requestDelay) {
             let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
             handler(ProviderResult(status: .success, sucessResult: syncResult))
