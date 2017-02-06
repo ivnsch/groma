@@ -824,7 +824,7 @@ class RealmProductProvider: RealmProvider {
         })
     }
     
-    func save(_ dbCategories: [ProductCategory], dbProducts: [Product], _ handler: @escaping (Bool) -> Void) {
+    func save(_ dbCategories: [ProductCategory], dbProducts: [QuantifiableProduct], _ handler: @escaping (Bool) -> Void) {
         
         doInWriteTransaction({realm in
             for dbCategory in dbCategories {
@@ -990,7 +990,7 @@ class RealmProductProvider: RealmProvider {
             var restoredSomething: Bool = false
             
             for prefillProduct in prefillProducts {
-                if realm.objects(Product.self).filter(Product.createFilterNameBrand(prefillProduct.name, brand: prefillProduct.brand)).isEmpty {
+                if realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(unique: prefillProduct.unique)).isEmpty {
                     QL1("Restoring prefill product: \(prefillProduct)")
                     realm.add(prefillProduct, update: false)
                     restoredSomething = true
