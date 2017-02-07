@@ -33,7 +33,7 @@ enum QuickAddContent {
 }
 
 
-class QuickAddListItemViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class QuickAddListItemViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var emptyView: UIView!
@@ -81,6 +81,12 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         onViewDidLoad?()
+        
+        if let flow = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            flow.sectionInset = UIEdgeInsetsMake(0, 12, 0, 12)
+        } else {
+            QL4("Invalid collection view layout - can't set insets")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -165,7 +171,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let item = filteredQuickAddItems[(indexPath as NSIndexPath).row]
         
         if let textSize = item.textSize {
@@ -191,6 +197,11 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             return textSize
         }
     }
+    
+    // Doesn't work
+//    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UIEdgeInsetsMake(0, 12, 0, 12)
+//    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         

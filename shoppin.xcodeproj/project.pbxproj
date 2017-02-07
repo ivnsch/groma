@@ -27,6 +27,7 @@
 		6A42C3851E437C4900F8E0E6 /* SimpleListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A42C3831E437C4900F8E0E6 /* SimpleListItemsController.swift */; };
 		6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A42C3841E437C4900F8E0E6 /* SimpleListItemsController.xib */; };
 		6A66D3461E413A300028240C /* TodoListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */; };
+		6A76C3C61E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */; };
 		6A7C54B91E439B2800300F8D /* ItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7C54B71E439B2800300F8D /* ItemsController.swift */; };
 		6A7C54BA1E439B2800300F8D /* ItemsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A7C54B81E439B2800300F8D /* ItemsController.xib */; };
 		6A7C54BC1E43EFFB00300F8D /* CartListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7C54BB1E43EFFB00300F8D /* CartListItemsControllerNew.swift */; };
@@ -408,6 +409,7 @@
 		6A42C3841E437C4900F8E0E6 /* SimpleListItemsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleListItemsController.xib; sourceTree = "<group>"; };
 		6A58B0D21E48D5D50012F4C9 /* groma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = groma.entitlements; sourceTree = "<group>"; };
 		6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsControllerNew.swift; sourceTree = "<group>"; };
+		6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		6A7C54B71E439B2800300F8D /* ItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsController.swift; sourceTree = "<group>"; };
 		6A7C54B81E439B2800300F8D /* ItemsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemsController.xib; sourceTree = "<group>"; };
 		6A7C54BB1E43EFFB00300F8D /* CartListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartListItemsControllerNew.swift; sourceTree = "<group>"; };
@@ -1384,6 +1386,7 @@
 				EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */,
 				EB4B39C31CEBF05300B41063 /* TopEmptyViewConstraint.swift */,
 				6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */,
+				6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -2391,6 +2394,7 @@
 				EB75E54D1CA424F9006AAEAF /* ExistingSharedUserCell.swift in Sources */,
 				EBED0D141C824FE200A1EEC4 /* EmailHelper.swift in Sources */,
 				EB7777D01CCFCF4F003FF417 /* AddEditListControllerView.swift in Sources */,
+				6A76C3C61E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				EB9208261C4EC53D00332332 /* ManageBrandsCell.swift in Sources */,
 				EBBC23231BB5D57C0002F6B1 /* ProviderPopupManager.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
