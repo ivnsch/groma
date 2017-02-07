@@ -169,7 +169,8 @@ extension AddRecipeIngredientCell {
     }
     
     fileprivate var baseQuantityInput: String {
-        return baseQuantityTextField.text ?? ""
+        // NOTE: We convert to float and back to get correct format for realm (e.g. "1.0" instead of "1"). Since we store base quantity as strings, this is important. The reason of storing it as strings is that it's more efficient to search for autosuggestions, since we can let Realm search. On the other side the way we are handling it now is bad practice. TODO We should use floats until the object is stored to the Realm, where the float is converted to a string (in Provider) in a single place using a single formatter. This way we ensure consistency and also don't expose implementation details to the UI project.   
+        return baseQuantityTextField.text?.floatValue.map{String($0)} ?? ""
     }
 }
 

@@ -37,7 +37,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     
     public dynamic var uuid: String = ""
     dynamic var productOpt: Product? = Product()
-    public dynamic var baseQuantity: String = "1"
+    public dynamic var baseQuantity: String = "1" // For text matching (autosuggestions) is more convenient to store as string, so we can let realm do it
     public dynamic var unitVal: Int = 0
     public dynamic var fav: Int = 0 // not used anymore as we fav again the product, but letting it here just in case. Maybe remove.
     
@@ -59,7 +59,6 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         }
     }
     
-    // For text matching (autosuggestions) is more convenient to store as string, so we can let realm do it
     public var baseQuantityFloat: Float {
         get {
             return baseQuantity.floatValue ?? {
