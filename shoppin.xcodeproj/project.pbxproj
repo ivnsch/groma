@@ -37,6 +37,9 @@
 		6AE34BE41E2E25B80039A2A8 /* RecipesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */; };
 		6AE34BF01E2EA7880039A2A8 /* IngredientsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */; };
 		6AE34BFC1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BFB1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift */; };
+		6AE41A141E49E15300B8459D /* SelectQuantifiableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE41A121E49E15300B8459D /* SelectQuantifiableController.swift */; };
+		6AE41A171E49E1E800B8459D /* SelectQuantifiable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AE41A161E49E1E800B8459D /* SelectQuantifiable.storyboard */; };
+		6AE41A191E49E61D00B8459D /* SelectQuantifiableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE41A181E49E61D00B8459D /* SelectQuantifiableCell.swift */; };
 		6AEA4EA41E0461660040557D /* Providers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AEA4EA31E0461660040557D /* Providers.framework */; };
 		6AEA4EA51E0461660040557D /* Providers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6AEA4EA31E0461660040557D /* Providers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AEC62C1551F853D52768B5A2 /* Pods_shoppin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B242A1FEAA96009C120C8E2A /* Pods_shoppin.framework */; };
@@ -415,6 +418,9 @@
 		6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipesController.swift; sourceTree = "<group>"; };
 		6AE34BEF1E2EA7880039A2A8 /* IngredientsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientsController.swift; sourceTree = "<group>"; };
 		6AE34BFB1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductsWithQuantityViewControllerNew.swift; sourceTree = "<group>"; };
+		6AE41A121E49E15300B8459D /* SelectQuantifiableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectQuantifiableController.swift; sourceTree = "<group>"; };
+		6AE41A161E49E1E800B8459D /* SelectQuantifiable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectQuantifiable.storyboard; sourceTree = "<group>"; };
+		6AE41A181E49E61D00B8459D /* SelectQuantifiableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectQuantifiableCell.swift; sourceTree = "<group>"; };
 		6AEA4EA31E0461660040557D /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98053CCC7F57AECBD28D4F1D /* Pods_shoppin_osxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E255758FF7D0B9EA448C576 /* Pods_shoppin_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1484,6 +1490,9 @@
 			children = (
 				EB85F4591BD54C4200E19E9B /* cell */,
 				EBA18C1F1BF5638D009291F2 /* QuickAddListItemViewController.swift */,
+				6AE41A121E49E15300B8459D /* SelectQuantifiableController.swift */,
+				6AE41A181E49E61D00B8459D /* SelectQuantifiableCell.swift */,
+				6AE41A161E49E1E800B8459D /* SelectQuantifiable.storyboard */,
 				EB4B39CD1CED413C00B41063 /* QuickAddListItem.storyboard */,
 				EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */,
 				EBEA0CDD1CA6C0F500E68B81 /* QuickAddPageController.swift */,
@@ -2187,6 +2196,7 @@
 				EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */,
 				EB4B39E01CED43B400B41063 /* Register.storyboard in Resources */,
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
+				6AE41A171E49E1E800B8459D /* SelectQuantifiable.storyboard in Resources */,
 				6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */,
 				EBD667FD1CED4CD00055EE0B /* SharedUsersViewController.storyboard in Resources */,
 				EB9207E81C4C4FC200332332 /* Localizable.strings in Resources */,
@@ -2404,6 +2414,7 @@
 				EB8D1D131C396ED600ADF884 /* GroupItemsController.swift in Sources */,
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
 				EBB2CBCA1CF20AD60040C619 /* LeftRightBigPaddingConstraint.swift in Sources */,
+				6AE41A191E49E61D00B8459D /* SelectQuantifiableCell.swift in Sources */,
 				EBED0D101C82229900A1EEC4 /* RatingPopupController.swift in Sources */,
 				EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */,
 				EB20FC071A599AE20058103B /* ProductWithQuantityTableViewCell.swift in Sources */,
@@ -2455,6 +2466,7 @@
 				EBB2CBC61CF0CFAD0040C619 /* TextFieldHeightConstraint.swift in Sources */,
 				EBF1F9E71CD76A1900F8016F /* MyAlert.swift in Sources */,
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
+				6AE41A141E49E15300B8459D /* SelectQuantifiableController.swift in Sources */,
 				EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				6A42C3851E437C4900F8E0E6 /* SimpleListItemsController.swift in Sources */,

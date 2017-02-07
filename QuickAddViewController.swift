@@ -12,7 +12,7 @@ import QorumLogs
 import Providers
 
 protocol QuickAddDelegate: class {
-    func onAddProduct(_ product: QuantifiableProduct)
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Int)
     
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) // TODO!!!!!!!!!!!!!! remove (from origin)
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController)
@@ -248,8 +248,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
     
     // product was selected in product quick list
-    func onAddProduct(_ product: QuantifiableProduct) {
-        delegate?.onAddProduct(product)
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
+        delegate?.onAddProduct(product, quantity: quantity)
     }
     
     func onCloseQuickAddTap() {

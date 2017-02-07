@@ -309,9 +309,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         fatalError("Not supported") // It doesn't make sense to add recipes to the inventory
     }
     
-    func onAddProduct(_ product: QuantifiableProduct) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
         if let inventory = inventory {
-            Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: 1, remote: true, successHandler{addedItemWithDelta in
+            Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: quantity, remote: true, successHandler{addedItemWithDelta in
             })
         }
     }

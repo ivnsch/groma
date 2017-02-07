@@ -541,7 +541,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         })
     }
 
-    func onAddProduct(_ product: QuantifiableProduct) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
         guard let realmData = realmData else {QL4("No realm data"); return}
         
         if let list = currentList {
@@ -549,7 +549,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             // TODO!!!!!!!!!!! review if (in other places, here we do after) it's ok to manipulate table view before doing the realm operation or if we should rather wait for realm, otherwise we may get crash when realm fails
             
             // TODO!!!!!!!!!!! don't pass store, list has the store!
-            Prov.listItemsProvider.addNew(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: 1, status: status, realmData: realmData, successHandler {[weak self] (addResult: AddListItemResult) in
+            Prov.listItemsProvider.addNew(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, status: status, realmData: realmData, successHandler {[weak self] (addResult: AddListItemResult) in
                 
                 if addResult.isNewItem {
                     self?.listItemsTableViewController.addRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex), isNewSection: addResult.isNewSection)

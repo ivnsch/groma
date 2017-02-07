@@ -13,7 +13,7 @@ import Providers
 // TODO rename this controller in only groups controller and remove the old groups controller. Also delegate methods not with "Add" but simply "Tap" - the implementation of this delegate decides what the tap means.
 
 protocol QuickAddListItemDelegate: class {
-    func onAddProduct(_ product: QuantifiableProduct)
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Int)
     
     func onAddGroup(_ group: ProductGroup)
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickListController: QuickAddListItemViewController)
@@ -76,6 +76,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
     
     fileprivate var recipeControllerAnimator: GromFromViewControlerAnimator?
+    fileprivate var selectQuantifiableAnimator: GromFromViewControlerAnimator?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,7 +93,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     fileprivate func initAddRecipeAnimator() {
         guard let parent = parent?.parent?.parent?.parent else {QL4("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
         
-        recipeControllerAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self)
+        recipeControllerAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
+        selectQuantifiableAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
     }
     
     fileprivate func clearAndLoadFirstPage(_ isSearchLoad: Bool) {
@@ -205,8 +207,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             
             // TODO!!!!!!! show popup with units if more than 1 quantifiable product for this product!
             
-            retrieveQuantifiableProduct(product: productItem.product) {[weak self] quantifiableProduct in
-                self?.delegate?.onAddProduct(quantifiableProduct)
+            retrieveQuantifiableProduct(product: productItem.product, indexPath: indexPath) {[weak self] (quantifiableProduct, quantity) in
+                self?.delegate?.onAddProduct(quantifiableProduct, quantity: quantity)
             }
             
         } else if let recipeItem = item as? QuickAddRecipe {
@@ -229,12 +231,40 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
     }
     
-    fileprivate func retrieveQuantifiableProduct(product: Product, onRetrieved: @escaping (QuantifiableProduct) -> Void) {
+    fileprivate func retrieveQuantifiableProduct(product: Product, indexPath: IndexPath, onRetrieved: @escaping (QuantifiableProduct, Int) -> Void) {
         Prov.productProvider.quantifiableProducts(product: product, successHandler{quantifiableProducts in
-            onRetrieved(quantifiableProducts.first!)
-            // TODO!!!!!!!!!!!!
-            // if > 1 show popup and return selection
-            // and if for some reason there are no quantifiable products log illegal state, but create a quantifiable product and return it, just in case.
+            
+            if let first = quantifiableProducts.first, quantifiableProducts.count == 1 {
+                onRetrieved(first, 1)
+                
+            } else if quantifiableProducts.count > 1 {
+
+                guard let cell = self.collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
+                
+                // TODO!!!!!!!!!!!!!!!!!!!!!!!! bottom inset different varies for different screen sizes - bottom border has to be slightly about keyboard
+                self.selectQuantifiableAnimator?.open (button: cell, inset: Insets(left: 50, top: 60, right: 50, bottom: 360), scrollOffset: self.collectionView.contentOffset.y, controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
+                    let selectQuantifiableProductController = UIStoryboard.selectQuantifiableController()
+                    
+                    selectQuantifiableProductController.onSelected = {(quantifiableProduct, quantity) in
+                        onRetrieved((quantifiableProduct, quantity))
+                        weakSelf.selectQuantifiableAnimator?.close()
+                    }
+                    
+                    selectQuantifiableProductController.onViewDidLoad = {[weak selectQuantifiableProductController] in
+                        selectQuantifiableProductController?.quantifiableProducts = quantifiableProducts
+                    }
+
+                    return selectQuantifiableProductController
+                })
+
+            } else {
+                QL3("Invalid state?: No quantifiable product for product: \(product). Creating a new quantifiable product.") // we create a new one as "emergency solution". TODO review this - maybe this is not an invalid state - if a user e.g. deletes all the quantifiable products in product manager (this isn't possible yet but it may be implemented in the future), it's possible that we keep only the product but no quantifiable products for it. So we either have to ensure there's always a quantifiable product for a product or allow to create them "lazily" here.
+                
+                let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: .none, product: product)
+                Prov.productProvider.add(newQuantifiableProduct, self.successHandler {
+                    onRetrieved(newQuantifiableProduct, 1)
+                })
+            }
         })
     }
     
@@ -414,6 +444,10 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     func onTapNavBarCloseTap() -> Bool {
         if recipeControllerAnimator?.isShowing ?? false {
             recipeControllerAnimator?.close()
+            return true
+        }
+        if selectQuantifiableAnimator?.isShowing ?? false {
+            selectQuantifiableAnimator?.close()
             return true
         }
         return false

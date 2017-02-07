@@ -284,10 +284,10 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         fatalError("Not supported") // It doesn't make sense to add recipes to groups
     }
     
-    func onAddProduct(_ product: QuantifiableProduct) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
         if let group = group {
             // TODO don't create group item here we don't know if it exists in the group already, if it does the new uuid is not used. Use a prototype class like in list items.
-            let groupItem = GroupItem(uuid: UUID().uuidString, quantity: 1, product: product, group: group)
+            let groupItem = GroupItem(uuid: UUID().uuidString, quantity: quantity, product: product, group: group)
             
             Prov.listItemGroupsProvider.add(groupItem, remote: true, successHandler{addedItem in
             })

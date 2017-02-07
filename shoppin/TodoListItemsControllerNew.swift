@@ -260,11 +260,11 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     // MARK: - QuickAddDelegate
     // IMPORTANT: Make sure all the QuickAddDelegate methods are overriden here, since the cart has to consume everything while it's open. With more time we can think about a better solution for this.
     
-    override func onAddProduct(_ product: QuantifiableProduct) {
+    override func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
         if pricesView.expandedNew {
-            cartController?.onAddProduct(product)
+            cartController?.onAddProduct(product, quantity: quantity)
         } else {
-            super.onAddProduct(product)
+            super.onAddProduct(product, quantity: quantity)
         }
     }
     

@@ -168,6 +168,12 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
+    func add(_ product: QuantifiableProduct, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.productProvider.saveQuantifiableProducts([product], update: true) {saved in
+            handler(ProviderResult(status: saved ? .success : .databaseUnknown))
+        }
+    }
+    
     func update(_ product: QuantifiableProduct, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProv.productProvider.saveQuantifiableProducts([product], update: true) {saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))

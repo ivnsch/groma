@@ -52,6 +52,8 @@ public protocol ProductProvider {
     // Update product. Note: This invalidates the list item memory cache, in order to make listitems update stale product references.
     func update(_ product: Product, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
+    func add(_ product: QuantifiableProduct, _ handler: @escaping (ProviderResult<Any>) -> Void)
+
     func update(_ product: QuantifiableProduct, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func delete(_ product: Product, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())

@@ -13,7 +13,7 @@
         <!--Products With Quantity View Controller-->
         <scene sceneID="cuL-Ap-8F3">
             <objects>
-                <viewController storyboardIdentifier="ProductsWithQuantityViewController" automaticallyAdjustsScrollViewInsets="NO" id="qbS-9X-m18" customClass="ProductsWithQuantityViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProductsWithQuantityViewController" automaticallyAdjustsScrollViewInsets="NO" id="qbS-9X-m18" customClass="ProductsWithQuantityViewController" customModule="groma" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TE0-fj-rkH"/>
                         <viewControllerLayoutGuide type="bottom" id="ZHM-HP-sIF"/>
@@ -31,7 +31,7 @@
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IB8-aT-NV9">
                                 <rect key="frame" x="0.0" y="20" width="375" height="40"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nBh-aZ-qb2" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nBh-aZ-qb2" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                         <rect key="frame" x="243" y="11" width="54" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -42,7 +42,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GzU-ob-qc5" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GzU-ob-qc5" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                                         <rect key="frame" x="313" y="5" width="42" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="Count">
@@ -95,7 +95,7 @@
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops, there are no inventory items yet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2dJ-JG-9o5" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops, there are no inventory items yet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2dJ-JG-9o5" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                         <rect key="frame" x="40" y="426" width="295" height="43"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -106,7 +106,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy items in the cart to add some!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LUt-lH-RYz" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy items in the cart to add some!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LUt-lH-RYz" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                         <rect key="frame" x="40" y="477" width="295" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -195,7 +195,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="607"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <view key="tableFooterView" tag="125" contentMode="scaleToFill" id="hNH-A1-XZ0" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
+                        <view key="tableFooterView" tag="125" contentMode="scaleToFill" id="hNH-A1-XZ0" customClass="LoadingFooter" customModule="groma" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="180" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -206,7 +206,7 @@
                                         <constraint firstAttribute="height" constant="20" id="r8V-P3-YOX"/>
                                     </constraints>
                                 </activityIndicatorView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AUs-nL-SaQ" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AUs-nL-SaQ" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                     <rect key="frame" x="48" y="13" width="55" height="18"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -231,14 +231,14 @@
                             </connections>
                         </view>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inventoryCell" rowHeight="76" id="rPo-Mk-rql" customClass="ProductWithQuantityTableViewCell" customModule="shoppin" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inventoryCell" rowHeight="76" id="rPo-Mk-rql" customClass="ProductWithQuantityTableViewCell" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="76"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rPo-Mk-rql" id="Adh-8H-A6B">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Eg-VM-sQM" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Eg-VM-sQM" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                             <rect key="frame" x="29" y="17" width="44" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -249,7 +249,7 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BUa-eS-yfp" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BUa-eS-yfp" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                             <rect key="frame" x="29" y="39" width="38" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -260,7 +260,7 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="esW-fo-yUS" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="esW-fo-yUS" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                             <rect key="frame" x="260" y="26" width="49" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -320,13 +320,13 @@
                                     <constraints>
                                         <constraint firstAttribute="centerY" secondItem="0Eg-VM-sQM" secondAttribute="centerY" constant="10" id="1vM-IJ-rPZ"/>
                                         <constraint firstAttribute="bottom" secondItem="Gco-Oy-7Vf" secondAttribute="bottom" constant="4" id="5BW-sr-Bmh"/>
-                                        <constraint firstAttribute="trailing" secondItem="K7p-Hq-ZSp" secondAttribute="trailing" constant="25" id="9u4-3K-bV9" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                        <constraint firstAttribute="trailing" secondItem="K7p-Hq-ZSp" secondAttribute="trailing" constant="25" id="9u4-3K-bV9" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstAttribute="centerY" secondItem="esW-fo-yUS" secondAttribute="centerY" id="C8z-jm-0Yn"/>
                                         <constraint firstItem="sa5-bI-suW" firstAttribute="top" secondItem="PSh-4D-BZZ" secondAttribute="bottom" id="DKn-EC-O0t"/>
                                         <constraint firstAttribute="bottom" secondItem="K7p-Hq-ZSp" secondAttribute="bottom" id="Gla-fF-610"/>
                                         <constraint firstItem="K7p-Hq-ZSp" firstAttribute="top" secondItem="PSh-4D-BZZ" secondAttribute="bottom" id="I51-Zg-Pue"/>
                                         <constraint firstItem="PSh-4D-BZZ" firstAttribute="top" secondItem="Adh-8H-A6B" secondAttribute="top" id="PcZ-wW-Mb4"/>
-                                        <constraint firstItem="0Eg-VM-sQM" firstAttribute="leading" secondItem="Gco-Oy-7Vf" secondAttribute="trailing" constant="25" id="VRR-o2-e1S" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                        <constraint firstItem="0Eg-VM-sQM" firstAttribute="leading" secondItem="Gco-Oy-7Vf" secondAttribute="trailing" constant="25" id="VRR-o2-e1S" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstItem="BUa-eS-yfp" firstAttribute="leading" secondItem="0Eg-VM-sQM" secondAttribute="leading" id="abr-Qu-6NS"/>
                                         <constraint firstItem="BUa-eS-yfp" firstAttribute="centerY" secondItem="Adh-8H-A6B" secondAttribute="centerY" constant="10" id="b6y-6O-J9b"/>
                                         <constraint firstItem="PSh-4D-BZZ" firstAttribute="leading" secondItem="Adh-8H-A6B" secondAttribute="leading" id="cGr-yX-iy4"/>
@@ -376,7 +376,7 @@
         <!--Products With Quantity View Controller New-->
         <scene sceneID="DXw-KO-IX9">
             <objects>
-                <viewController storyboardIdentifier="ProductsWithQuantityViewControllerNew" automaticallyAdjustsScrollViewInsets="NO" id="muc-Di-XFf" customClass="ProductsWithQuantityViewControllerNew" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProductsWithQuantityViewControllerNew" automaticallyAdjustsScrollViewInsets="NO" id="muc-Di-XFf" customClass="ProductsWithQuantityViewControllerNew" customModule="groma" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Pic-ct-mjX"/>
                         <viewControllerLayoutGuide type="bottom" id="53L-js-3UG"/>
@@ -394,7 +394,7 @@
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gUm-d8-Sgg">
                                 <rect key="frame" x="0.0" y="20" width="375" height="40"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fIe-kl-SWp" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fIe-kl-SWp" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                         <rect key="frame" x="243" y="11" width="54" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -405,7 +405,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bTk-zw-meL" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bTk-zw-meL" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                                         <rect key="frame" x="313" y="5" width="42" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="Count">
@@ -458,7 +458,7 @@
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops, there are no inventory items yet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1g3-YH-1oJ" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops, there are no inventory items yet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1g3-YH-1oJ" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                         <rect key="frame" x="40" y="426" width="295" height="43"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -469,7 +469,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy items in the cart to add some!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ebd-TG-X2h" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy items in the cart to add some!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ebd-TG-X2h" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                         <rect key="frame" x="40" y="477" width="295" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -558,7 +558,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="607"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <view key="tableFooterView" tag="125" contentMode="scaleToFill" id="18X-jM-kYj" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
+                        <view key="tableFooterView" tag="125" contentMode="scaleToFill" id="18X-jM-kYj" customClass="LoadingFooter" customModule="groma" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="180" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -569,7 +569,7 @@
                                         <constraint firstAttribute="width" constant="20" id="cEd-53-ham"/>
                                     </constraints>
                                 </activityIndicatorView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vmn-Mg-myU" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vmn-Mg-myU" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                     <rect key="frame" x="48" y="13" width="55" height="18"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -594,14 +594,14 @@
                             </connections>
                         </view>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inventoryCell" rowHeight="76" id="aj4-9f-Si2" customClass="ProductWithQuantityTableViewCell" customModule="shoppin" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inventoryCell" rowHeight="76" id="aj4-9f-Si2" customClass="ProductWithQuantityTableViewCell" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="76"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aj4-9f-Si2" id="DnU-YT-E5L">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j26-uq-DjU" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j26-uq-DjU" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                             <rect key="frame" x="29" y="17" width="44" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -612,7 +612,7 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2R5-6Q-YBr" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2R5-6Q-YBr" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                             <rect key="frame" x="29" y="39" width="38" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -623,7 +623,7 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zX5-4v-Mv1" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zX5-4v-Mv1" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                             <rect key="frame" x="260" y="26" width="49" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -684,7 +684,7 @@
                                         <constraint firstItem="2R5-6Q-YBr" firstAttribute="leading" secondItem="j26-uq-DjU" secondAttribute="leading" id="74c-KC-Okp"/>
                                         <constraint firstItem="RtH-jb-k5N" firstAttribute="top" secondItem="jov-l0-4Qz" secondAttribute="bottom" id="9yO-nl-7VW"/>
                                         <constraint firstAttribute="centerY" secondItem="j26-uq-DjU" secondAttribute="centerY" constant="10" id="C7J-vj-XSm"/>
-                                        <constraint firstAttribute="trailing" secondItem="RtH-jb-k5N" secondAttribute="trailing" constant="25" id="CGy-jY-zAR" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                        <constraint firstAttribute="trailing" secondItem="RtH-jb-k5N" secondAttribute="trailing" constant="25" id="CGy-jY-zAR" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstItem="I6W-x1-2IM" firstAttribute="top" secondItem="DnU-YT-E5L" secondAttribute="top" constant="4" id="CxL-dS-dLa"/>
                                         <constraint firstItem="I6W-x1-2IM" firstAttribute="leading" secondItem="DnU-YT-E5L" secondAttribute="leading" id="JdI-E5-CqQ"/>
                                         <constraint firstAttribute="bottom" secondItem="I6W-x1-2IM" secondAttribute="bottom" constant="4" id="Jvu-l1-BTG"/>
@@ -693,7 +693,7 @@
                                         <constraint firstAttribute="bottom" secondItem="EfN-cF-UNd" secondAttribute="bottom" id="Ve6-Xx-yUr"/>
                                         <constraint firstAttribute="trailing" secondItem="jov-l0-4Qz" secondAttribute="trailing" id="afF-dE-5Ho"/>
                                         <constraint firstAttribute="bottom" secondItem="RtH-jb-k5N" secondAttribute="bottom" id="bMD-IH-5n5"/>
-                                        <constraint firstItem="j26-uq-DjU" firstAttribute="leading" secondItem="I6W-x1-2IM" secondAttribute="trailing" constant="25" id="gCN-pN-Wxf" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                        <constraint firstItem="j26-uq-DjU" firstAttribute="leading" secondItem="I6W-x1-2IM" secondAttribute="trailing" constant="25" id="gCN-pN-Wxf" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstItem="EfN-cF-UNd" firstAttribute="top" secondItem="jov-l0-4Qz" secondAttribute="bottom" id="h6L-ft-vzN"/>
                                         <constraint firstItem="zX5-4v-Mv1" firstAttribute="leading" secondItem="EfN-cF-UNd" secondAttribute="trailing" id="im6-pp-0Iv"/>
                                         <constraint firstItem="RtH-jb-k5N" firstAttribute="leading" secondItem="zX5-4v-Mv1" secondAttribute="trailing" id="j5e-JW-kHM"/>

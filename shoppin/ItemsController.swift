@@ -306,7 +306,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     }
     
     
-    func onAddProduct(_ product: QuantifiableProduct) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
         fatalError("Override")
     }
     

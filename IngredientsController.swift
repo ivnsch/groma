@@ -288,12 +288,12 @@ class IngredientsController: UIViewController, ProductsWithQuantityViewControlle
         // TODO!!!!!!!!!!!!!!!!!
     }
     
-    func onAddProduct(_ product: QuantifiableProduct) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
         guard let itemsResult = itemsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         guard let recipe = recipe else {QL4("No recipe"); return}
         
-        Prov.ingredientProvider.add(product, quantity: 1, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, successHandler{addedItem in
+        Prov.ingredientProvider.add(product, quantity: quantity, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, successHandler{addedItem in
             
 //            self.models.insert(ExpandableTableViewRecipeModel(recipe: recipe), at: results.count)
             if addedItem.isNew {

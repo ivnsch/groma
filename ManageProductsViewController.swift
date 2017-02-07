@@ -231,7 +231,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
     }
     
-    func onAddProduct(_ product: QuantifiableProduct) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
     }
     
     internal func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {

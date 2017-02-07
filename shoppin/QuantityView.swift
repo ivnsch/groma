@@ -17,7 +17,6 @@ class QuantityView: UIView {
     
     weak var delegate: QuantityViewDelegate?
  
-//    @IBOutlet weak var test: UIButton!
     @IBOutlet weak var quantityLabel: UILabel!
     
     var quantity: Int = 0 {
@@ -40,26 +39,21 @@ class QuantityView: UIView {
     fileprivate func xibSetup() {
         let view = Bundle.loadView("QuantityView", owner: self)!
         
-        view.frame = bounds
-        // Make the view stretch with containing view
-        view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
-
-//        view.backgroundColor = UIColor.yellowColor()
-//        test.backgroundColor = UIColor.redColor()
-
+        view.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(view)
         
-        self.addSubview(view)
+        view.fillSuperview()
         
-//        userInteractionEnabled = true
-//        view.userInteractionEnabled = true
-//        test.userInteractionEnabled = true
+        isUserInteractionEnabled = true
+        view.isUserInteractionEnabled = true
     }
-    
+
     @IBAction func onPlusTap(_ sender: UIButton) {
         delegate?.onRequestUpdateQuantity(1)
     }
     
     @IBAction func onMinusTap(_ sender: UIButton) {
         delegate?.onRequestUpdateQuantity(-1)
+        
     }
 }
