@@ -131,7 +131,7 @@ class SwipeableCell: UITableViewCell {
     func updateConstraintsIfNeeded(_ animated:Bool, alpha: CGFloat? = nil, onCompletion:((Bool)->Void)?) {
         var duration:TimeInterval = 0
         if animated {
-            duration = 0.3
+            duration = 0.1
         }
         let delay:TimeInterval = 0
         
