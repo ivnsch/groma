@@ -740,15 +740,17 @@ class SimpleListItemsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ListItemCellNew
         
         if let listItem = listItems?[indexPath.row], let cellDelegate = cellDelegate {
+            cell.startStriked = true // this has to be done before setting the list item
             cell.setup(status, mode: cellMode, tableViewListItem: listItem, delegate: cellDelegate)
             cell.direction = .left
             
             // When returning cell height programatically (which we need now in order to use different cell heights for different screen sizes), here it's still the height from the storyboard so we have to pass the offset for the line to eb draw at the bottom. Apparently there's no method where we get the cell with final height (did move to superview / window also still have the height from the storyboard)
             cell.contentView.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
             
-            let attributeString = NSMutableAttributedString(string: listItem.product.product.product.name)
-            attributeString.addAttribute(NSStrikethroughStyleAttributeName, value: 1, range: NSMakeRange(0, attributeString.length))
-            cell.nameLabel.attributedText = attributeString
+//            let attributeString = NSMutableAttributedString(string: listItem.product.product.product.name)
+//            attributeString.addAttribute(NSStrikethroughStyleAttributeName, value: 1, range: NSMakeRange(0, attributeString.length))
+//            cell.nameLabel.attributedText = attributeString
+            
             cell.myContentView.backgroundColor = Theme.lightBlue
             cell.sectionColorView.backgroundColor = UIColor.clear // in cart/stash no section colors
             

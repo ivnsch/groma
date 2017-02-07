@@ -189,6 +189,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         
         guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {QL4("No listItem"); return cell}
         cell.setup(status, mode: cellMode, tableViewListItem: listItem, delegate: self)
+        cell.startStriked = false
         
         return cell
     }

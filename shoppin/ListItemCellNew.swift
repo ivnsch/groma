@@ -52,6 +52,10 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     
     fileprivate var swipeToIncrementHelper: SwipeToIncrementHelper?
     
+    fileprivate var strikeLine: UIView?
+    
+    var startStriked: Bool = false
+    
     fileprivate var shownQuantity: Int = 0 {
         didSet {
             if let tableViewListItem = tableViewListItem {
@@ -75,6 +79,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
                 let listItem = tableViewListItem
                 
                 nameLabel.text = NSLocalizedString(listItem.product.product.product.name, comment: "")
+                nameLabel.sizeToFit() // important for strike line
+                
                 shownQuantity = listItem.quantity
 //                shownQuantity = listItem.quantity(status)
                 
@@ -93,8 +99,37 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
                 } else {
                     backgroundColor = UIColor.white
                 }
+                
+                updateStrikeLine()
             }
         }
+    }
+    
+    
+    fileprivate func updateStrikeLine() {
+    
+        if let strikeLine = strikeLine {
+            strikeLine.removeFromSuperview()
+        }
+        
+        let strokeWidth: CGFloat = 1
+    
+        // TODO nameLabel position is not updated yet (centerVerticallyNameLabelConstraint.constant doesn't have effect) where should we call this to not use have to use centerVerticallyNameLabelConstraint.constant? NOTE: Still not displayer correctly in some cells.
+//        let line = UIView(frame: CGRect(x: nameLabel.x - 10, y: height / 2 - nameLabel.height / 2 - strokeWidth / 2, width: self.nameLabel.width + 20, height: strokeWidth))
+        let line = UIView(frame: CGRect(x: nameLabel.x - 10, y: height / 2 - centerVerticallyNameLabelConstraint.constant - strokeWidth / 2, width: self.nameLabel.width + 20, height: strokeWidth))
+        line.backgroundColor = UIColor(hexString: "222222")
+        
+        nameLabel.superview?.addSubview(line)
+        nameLabel.superview?.bringSubview(toFront: line)
+        
+        line.layer.anchorPoint = CGPoint(x: 0, y: line.layer.anchorPoint.y)
+        line.frame.origin.x = line.frame.origin.x - line.width / 2 // back to original position
+        
+        let scaleX: CGFloat = startStriked ? 1 : 0
+        line.transform = CGAffineTransform(scaleX: scaleX, y: 1) // Note due to bug in iOS this can't be 0 (it never appears in this case)
+        line.isHidden = startStriked ? false : true // without this (when !startStriked) the line appears briefly when the list items controller animates in
+        
+        self.strikeLine = line
     }
     
     func update() {
@@ -293,12 +328,12 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         
         let offset = width / 12 // when it starts growing
         
+        let deltaMinusPart = absDelta - offset
+        
+        let fullScaleDelta = width / 5 // distance to when it achieves full scale
+        let percentage = min(1, deltaMinusPart / fullScaleDelta)
+        
         if absDelta > offset {
-            
-            let deltaMinusPart = absDelta - offset
-            
-            let fullScaleDelta = width / 5 // distance to when it achieves full scale
-            let percentage = min(1, deltaMinusPart / fullScaleDelta)
             
             let scale = CGAffineTransform(scaleX: percentage, y: percentage)
             
@@ -307,7 +342,15 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
             
             bgIconLeft.isHidden = delta > 0
             bgIconRight.isHidden = !bgIconLeft.isHidden
+            
         }
+        
+        
+        let linePercentage = min(1, absDelta / fullScaleDelta)
+        let finalLinePercentage = startStriked ? 1 - linePercentage : linePercentage // invert if startStriked
+        strikeLine?.isHidden = false
+        strikeLine?.transform = CGAffineTransform(scaleX: finalLinePercentage, y: 1)
+        
     }
     
     override func onShowAllButtons(delta: CGFloat) {
@@ -316,6 +359,14 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
             let scale = CGAffineTransform(scaleX: 1, y: 1)
             self.bgIconLeft.transform = scale
             self.bgIconRight.transform = scale
+            
+
+            if self.startStriked {
+                self.strikeLine?.transform = CGAffineTransform(scaleX: 0.00001, y: 1)
+            } else {
+                self.strikeLine?.transform = CGAffineTransform(scaleX: 1, y: 1)
+            }
+            
         }
     }
     
@@ -325,6 +376,12 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
             let scale = CGAffineTransform(scaleX: 0.00001, y: 0.00001)
             self.bgIconLeft.transform = scale
             self.bgIconRight.transform = scale
+            
+            if self.startStriked {
+                self.strikeLine?.transform = CGAffineTransform(scaleX: 1, y: 1)
+            } else {
+                self.strikeLine?.transform = CGAffineTransform(scaleX: 0.00001, y: 1)
+            }
         }
     }
     
