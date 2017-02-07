@@ -66,9 +66,6 @@ class GromFromViewControlerAnimator {
         backgroundView.addSubview(controller.view)
         parent.addChildViewController(controller)
         parent.view.addSubview(backgroundView)
-        
-        
-        controller.view.layer.cornerRadius = 10
 
         
 //        parent.addChildViewControllerAndView(controller) // add to superview (lists controller) because it has to occupy full space (navbar - tab)

@@ -217,9 +217,6 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             Prov.recipeProvider.incrementFav(recipeItem.recipe.uuid, successHandler{})
             
             guard let cell = collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
-            
-            let tabBarHeight = (tabBarController?.tabBar.height ?? 0)
-            let statusBarHeight = UIApplication.shared.statusBarFrame.height
 
             recipeControllerAnimator?.open (button: cell, inset: (left: 0, top: 0, right: 0, bottom: 0), controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
                 let controller = AddRecipeController()
@@ -256,6 +253,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     selectQuantifiableProductController.onViewDidLoad = {[weak selectQuantifiableProductController] in
                         selectQuantifiableProductController?.quantifiableProducts = quantifiableProducts
                     }
+                    
+                    selectQuantifiableProductController.view.layer.cornerRadius = Theme.popupCornerRadius
 
                     return selectQuantifiableProductController
                 })

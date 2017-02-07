@@ -44,4 +44,6 @@ struct Theme {
     static let lighterGreen = UIColor(hexString: "28c75d")
     
     static let defaultTableViewBGColor = lightGreyBackground
+    
+    static let popupCornerRadius: CGFloat = 10
 }
