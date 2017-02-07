@@ -218,7 +218,10 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             
             guard let cell = collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
             
-            recipeControllerAnimator?.open (button: cell, controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
+            let tabBarHeight = (tabBarController?.tabBar.height ?? 0)
+            let statusBarHeight = UIApplication.shared.statusBarFrame.height
+
+            recipeControllerAnimator?.open (button: cell, inset: (left: 0, top: 0, right: 0, bottom: 0), controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
                 let controller = AddRecipeController()
                 controller.delegate = weakSelf
                 controller.list = weakSelf.list

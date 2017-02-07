@@ -912,25 +912,16 @@ class RealmListItemProvider: RealmProvider {
     
     /// Input form
     func addSync(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, doTransaction: Bool = true) -> AddListItemResult? {
-return nil // TODO reenable commented code, only for test of section notification
-//        //guard let listItemsRealm = listItems.realm else {QL4("List items have no realm"); return nil}
-//        
-//        switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false) {
-//        case .ok(let quantifiableProduct):
-//            
-//            return addSync(quantifiableProduct: quantifiableProduct, store: list.store ?? "", list: list, quantity: listItemInput.quantity, status: status, realmData: realmData)
-//            
-//            //switch DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, status: status, possibleNewOrder: nil, list: list) {
-//            //case .ok(let section, let isNewSection):
-//            //    return addSync(quantifiableProduct: quantifiableProduct, store: list.store ?? "", list: list, quantity: listItemInput.quantity, status: status, notificationToken: notificationToken)
-//            //case .err(let error):
-//            //    QL4("Couldn't add/update section: \(error)")
-//            //    return nil
-//            //}
-//        case .err(let error):
-//            QL4("Couldn't add/update quantifiable product: \(error)")
-//            return nil
-//        }
+
+        switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false) {
+            
+        case .ok(let quantifiableProduct):
+            return addSync(quantifiableProduct: quantifiableProduct, store: list.store ?? "", list: list, quantity: listItemInput.quantity, status: status, realmData: realmData)
+
+        case .err(let error):
+            QL4("Couldn't add/update quantifiable product: \(error)")
+            return nil
+        }
     }
     
     /// Input form / recipes
@@ -944,7 +935,7 @@ return nil // TODO reenable commented code, only for test of section notificatio
             if let result = addSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData, doTransaction: doTransaction) {
                 addedListItems.append((result.listItem, result.isNewItem))
             } else {
-                QL4("Couldn't add list item for input: \(listItemInput), list: \(list), status: \(status). Skipping") // we could also break instead of skip but why not skip
+                QL4("Couldn't add list item for input: \(listItemInput), list: \(list.uuid)::\(list.name), status: \(status). Skipping") // we could also break instead of skip but why not skip
             }
         }
         return addedListItems

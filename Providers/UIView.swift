@@ -248,8 +248,6 @@ extension UIView {
     public func hasAncestor<T: UIView>(type: T.Type) -> Bool {
         guard let superview = superview else {return false}
         
-        print("super: \(type(of: superview)), 2: \(type(of: superview) is T), 3: \(type(of: superview) == T.self)")
-        
         if (type(of: superview) == T.self) {
             return true
         }

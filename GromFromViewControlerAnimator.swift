@@ -61,7 +61,7 @@ class GromFromViewControlerAnimator {
         }
         self.backgroundView = backgroundView
         
-        controller.view.frame = CGRect(x: 0 + inset.left, y: inset.top, width: parent.view.frame.width - inset.left - inset.right, height: parent.view.frame.height - inset.top - inset.bottom)
+        controller.view.frame = CGRect(x: 0 + inset.left, y: inset.top, width: backgroundView.width - inset.left - inset.right, height: backgroundView.height - inset.top - inset.bottom)
         
         backgroundView.addSubview(controller.view)
         parent.addChildViewController(controller)
