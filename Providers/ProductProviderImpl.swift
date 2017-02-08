@@ -362,7 +362,7 @@ class ProductProviderImpl: ProductProvider {
                         
                         func onHasItem(_ item: Item) {
                             // fav: 1 If we create a product we are "using" it so we start with fav: 1. This way, for example, when user creates new products in the quick add, these products will show in the quick add list above of prefilled products that have never been used.
-                            let newProduct = Product(uuid: UUID().uuidString, item: item, category: category, brand: prototype.brand)
+                            let newProduct = Product(uuid: UUID().uuidString, item: item, brand: prototype.brand)
                             handler(ProviderResult(status: .success, sucessResult: newProduct))
                         }
                         
@@ -380,7 +380,7 @@ class ProductProviderImpl: ProductProvider {
                                     }
                                     
                                 } else {
-                                    let newItem = Item(uuid: UUID().uuidString, name: prototype.name, fav: 1)
+                                    let newItem = Item(uuid: UUID().uuidString, name: prototype.name, category: category, fav: 1)
                                     onHasItem(newItem)
                                 }
 

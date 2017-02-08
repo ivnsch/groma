@@ -42,7 +42,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
             
             shownQuantity = model.quantity
             
-            categoryColorView.backgroundColor = model.product.product.category.color
+            categoryColorView.backgroundColor = model.product.product.item.category.color
             
             cancelDeleteProgress() // some recycled cells were showing red bar on top
             

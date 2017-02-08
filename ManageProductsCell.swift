@@ -35,7 +35,7 @@ class ManageProductsCell: UITableViewCell {
         
         productBrandLabel.text = product.product.brand
         
-        categoryColorView.backgroundColor = product.product.category.color
+        categoryColorView.backgroundColor = product.product.item.category.color
         
         productNameCenterConstraint.constant = product.product.brand.isEmpty ? 0 : -10
         

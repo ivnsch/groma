@@ -555,8 +555,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                 name: model.productPrototype.name,
                 quantity: model.quantity,
                 price: -1, // No prices here - use existing store product or default for new store product
-                section: model.ingredient.product.product.category.name,
-                sectionColor: model.ingredient.product.product.category.color,
+                section: model.ingredient.product.product.item.category.name,
+                sectionColor: model.ingredient.product.product.item.category.color,
                 note: nil,
                 baseQuantity: model.productPrototype.baseQuantity,
                 unit: model.productPrototype.unit,

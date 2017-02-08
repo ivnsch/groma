@@ -253,7 +253,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                 
                                 let storeProductInput = StoreProductInput(price: 1, baseQuantity: 1, unit: .none)
                                 let prototypes = productsIngredients.map {
-                                    ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.category.name, targetSectionColor: $0.product.product.category.color, storeProductInput: storeProductInput)
+                                    ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.item.category.name, targetSectionColor: $0.product.product.item.category.color, storeProductInput: storeProductInput)
                                 }
                                 
                                 Prov.listItemsProvider.add(prototypes, status: .todo, list: exampleList, note: nil, order: nil, token: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in

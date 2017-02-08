@@ -39,7 +39,7 @@ public class QuickAddProduct: QuickAddItem {
     }
 
     public override var color: UIColor {
-        return colorOverride ?? product.category.color
+        return colorOverride ?? product.item.category.color
     }
     
     public override func clearBoldRangeCopy() -> QuickAddProduct {

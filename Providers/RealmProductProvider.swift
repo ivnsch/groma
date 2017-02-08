@@ -341,7 +341,7 @@ class RealmProductProvider: RealmProvider {
         withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
             let products: Results<QuantifiableProduct> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending)/*, range: range*/)
             
-            let categoryNames = products.map{$0.product.category.name}.distinct()
+            let categoryNames = products.map{$0.product.item.category.name}.distinct()
         
             let sectionsDict: [String: Section] = realm.objects(Section.self).filter(Section.createFilterWithNames(categoryNames, listUuid: list.uuid)).toDictionary{($0.name, $0)}
             
@@ -351,7 +351,7 @@ class RealmProductProvider: RealmProvider {
 //            }
 
             let productsWithMaybeSectionsUuids: [(product: String, section: String?)] = products.map {product in
-                let sectionMaybe = sectionsDict[product.product.category.name]
+                let sectionMaybe = sectionsDict[product.product.item.category.name]
                 return (product.uuid, sectionMaybe?.uuid)
             }
 
@@ -398,7 +398,7 @@ class RealmProductProvider: RealmProvider {
         withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
             let products: Results<Product> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending)/*, range: range*/)
             
-            let categoryNames = products.map{$0.category.name}.distinct()
+            let categoryNames = products.map{$0.item.category.name}.distinct()
             
             let sectionsDict: [String: Section] = realm.objects(Section.self).filter(Section.createFilterWithNames(categoryNames, listUuid: list.uuid)).toDictionary{($0.name, $0)}
             
@@ -408,7 +408,7 @@ class RealmProductProvider: RealmProvider {
             //            }
             
             let productsWithMaybeSectionsUuids: [(product: String, section: String?)] = products.map {product in
-                let sectionMaybe = sectionsDict[product.category.name]
+                let sectionMaybe = sectionsDict[product.item.category.name]
                 return (product.uuid, sectionMaybe?.uuid)
             }
             
@@ -769,10 +769,10 @@ class RealmProductProvider: RealmProvider {
                                 // nothing (non-unique) to update yet
                                 return item
                             } else { // item doesn't exist
-                                return Item(uuid: UUID().uuidString, name: productInput.name, fav: 0)
+                                return Item(uuid: UUID().uuidString, name: productInput.name, category: category, fav: 0)
                             }
                         }()
-                        onHasNewOrUpdatedItemAndCategory(item: item, category: category)
+                        onHasNewOrUpdatedItem(item: item)
 
                     case .err(let error):
                         QL4("Couldn't retrieve item: \(error)")
@@ -781,14 +781,14 @@ class RealmProductProvider: RealmProvider {
                 }
             }
             
-            // Now that we have item and category create/update product with them
-            func onHasNewOrUpdatedItemAndCategory(item: Item, category: ProductCategory) {
+            // Now that we have item create/update product with it
+            func onHasNewOrUpdatedItem(item: Item) {
                 if let existingProduct = productMaybe {
-                    let updatedProduct = existingProduct.copy(item: item, category: category, brand: productInput.brand)
+                    let updatedProduct = existingProduct.copy(item: item, brand: productInput.brand)
                     onHasNewOrUpdatedProduct(product: updatedProduct)
                     
                 } else {
-                    let newProduct = Product(uuid: UUID().uuidString, name: productInput.name, category: category, brand: productInput.brand)
+                    let newProduct = Product(uuid: UUID().uuidString, item: item, brand: productInput.brand)
                     onHasNewOrUpdatedProduct(product: newProduct)
                 }
             }
@@ -845,7 +845,7 @@ class RealmProductProvider: RealmProvider {
     // TODO: -
     
     func categoriesContaining(_ text: String, handler: @escaping ([String]) -> Void) {
-        let mapper: (Product) -> String = {$0.category.name}
+        let mapper: (Product) -> String = {$0.item.category.name}
         self.load(mapper, filter: Product.createFilterCategoryNameContains(text)) {categories in
             let distinctCategories = NSOrderedSet(array: categories).array as! [String] // TODO re-check: Realm can't distinct yet https://github.com/realm/realm-cocoa/issues/1103
             handler(distinctCategories)
@@ -992,40 +992,46 @@ class RealmProductProvider: RealmProvider {
      */
     func upsertProductSync(_ realm: Realm, prototype: ProductPrototype) -> Product {
         
+        // TODO!!!!!!!!!!!!!!!!!!!!! update the category in "insertNewProduct" case (e.g. color)
+        
         func findOrCreateCategory(_ realm: Realm, prototype: ProductPrototype) -> ProductCategory {
             return realm.objects(ProductCategory.self).filter(ProductCategory.createFilterName(prototype.category)).first ?? ProductCategory(uuid: NSUUID().uuidString, name: prototype.category, color: prototype.categoryColor)
         }
         
-        func findOrCreateItem(_ realm: Realm, prototype: ProductPrototype) -> Item {
-            return realm.objects(Item.self).filter(Item.createFilter(name: prototype.name)).first ?? Item(uuid: NSUUID().uuidString, name: prototype.name, fav: 0)
+        func findOrCreateItem(_ realm: Realm, prototype: ProductPrototype, category: ProductCategory) -> Item {
+            return realm.objects(Item.self).filter(Item.createFilter(name: prototype.name)).first ?? Item(uuid: NSUUID().uuidString, name: prototype.name, category: category, fav: 0)
         }
         
-        func categoryForExistingProduct(_ existingProduct: Product, prototype: ProductPrototype) -> ProductCategory {
+        func categoryForExistingItem(_ existingItem: Item, prototype: ProductPrototype) -> ProductCategory {
             // Make the updated product point to correct category - if category name hasn't changed, no pointer update. If input category name is different, see if a category with this name already exists, and update pointer. Otherwise create a new category and udpate pointer.
-            if existingProduct.category.name != prototype.category {
+            if existingItem.category.name != prototype.category {
                 return findOrCreateCategory(realm, prototype:  prototype)
             } else {
-                return existingProduct.category
+                return existingItem.category
             }
         }
         
         func itemForExistingProduct(_ existingProduct: Product, prototype: ProductPrototype) -> Item {
+            
+            let category = categoryForExistingItem(existingProduct.item, prototype: prototype)
+            
             // Make the updated product point to correct category - if category name hasn't changed, no pointer update. If input category name is different, see if a category with this name already exists, and update pointer. Otherwise create a new category and udpate pointer.
             if existingProduct.item.name != prototype.name {
-                return findOrCreateItem(realm, prototype:  prototype)
+                return findOrCreateItem(realm, prototype:  prototype, category: category)
             } else {
                 return existingProduct.item
             }
         }
         
         func updateExistingProduct(_ realm: Realm, existingProduct: Product, prototype: ProductPrototype) -> Product {
+            let item = itemForExistingProduct(existingProduct, prototype: prototype)
+            let category = item.category
             
-            let category = categoryForExistingProduct(existingProduct, prototype: prototype)
+            // Udpate category. Besides of the category (where we update only the non-part-of-unique field color) there's nothing non-part-of-unique to update.
             let updatedCategory = category.copy(color: prototype.categoryColor)
-            
-            // Udpate product fields. Besides of the category (where we update only the non-part-of-unique field color) there's nothing non-part-of-unique to update.
-            let updatedProduct = existingProduct.copy()
-            updatedProduct.category = updatedCategory
+            item.category = updatedCategory
+
+            let updatedProduct = existingProduct.copy(item: item)
             
             realm.add(updatedProduct, update: true)
             
@@ -1034,8 +1040,8 @@ class RealmProductProvider: RealmProvider {
         
         func insertNewProduct(_ realm: Realm, prototype: ProductPrototype) -> Product {
             let category = findOrCreateCategory(realm, prototype: prototype)
-            let item = findOrCreateItem(realm, prototype: prototype)
-            let newProduct = Product(prototype: prototype, item: item, category: category)
+            let item = findOrCreateItem(realm, prototype: prototype, category: category)
+            let newProduct = Product(prototype: prototype, item: item)
             realm.add(newProduct, update: false)
             return newProduct
         }

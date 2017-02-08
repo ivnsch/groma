@@ -268,8 +268,8 @@ class RealmListItemProvider: RealmProvider {
                     
                     // see if there's already a section for the new list item in the list, if not create a new one
                     let listItemsInList = realm.objects(ListItem.self).filter(ListItem.createFilterList(list.uuid))
-                    let sectionName = sectionNameMaybe ?? product.product.product.category.name
-                    let sectionColor = sectionColorMaybe ?? product.product.product.category.color
+                    let sectionName = sectionNameMaybe ?? product.product.product.item.category.name
+                    let sectionColor = sectionColorMaybe ?? product.product.product.item.category.color
                     let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
                         return item.section
                         } ?? {
@@ -866,7 +866,7 @@ class RealmListItemProvider: RealmProvider {
     /// Quick add
     func addSync(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Int, status: ListItemStatus, realmData: RealmData, doTransaction: Bool = true) -> (AddListItemResult)? {
         
-        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.category.name, sectionColor: quantifiableProduct.product.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData) {
+        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData) {
         
         case .ok(let sectionResult):
             

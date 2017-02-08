@@ -175,7 +175,7 @@ class ListItemProviderImpl: ListItemProvider {
     func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
         let listItemPrototypes: [ListItemPrototype] = groupItems.map{
             let storeProductInput = StoreProductInput(price: 0, baseQuantity: $0.product.baseQuantity, unit: $0.product.unit)
-            return ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.category.name, targetSectionColor: $0.product.product.category.color, storeProductInput: storeProductInput)
+            return ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.item.category.name, targetSectionColor: $0.product.product.item.category.color, storeProductInput: storeProductInput)
         }
         self.add(listItemPrototypes, status: status, list: list, token: nil, handler)
     }

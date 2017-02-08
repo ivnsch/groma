@@ -24,21 +24,22 @@ class ProductMapper {
     }
     
     class func productWithRemote(_ remoteProduct: RemoteProduct, category: ProductCategory) -> Product {
-        return Product(
-            uuid: remoteProduct.uuid,
-            name: remoteProduct.name,
-            category: category,
-//            fav: remoteProduct.fav,
-            brand: remoteProduct.brand,
-            lastServerUpdate: remoteProduct.lastUpdate
-        )
+        fatalError("Outdated")
+//        return Product(
+//            uuid: remoteProduct.uuid,
+//            name: remoteProduct.name,
+////            category: category,
+////            fav: remoteProduct.fav,
+//            brand: remoteProduct.brand,
+//            lastServerUpdate: remoteProduct.lastUpdate
+//        )
     }
     
     class func dbProductWithRemote(_ product: RemoteProduct, category: RemoteProductCategory) -> Product {
         let dbProduct = Product()
         dbProduct.uuid = product.uuid
 //        dbProduct.name = product.name
-        dbProduct.category = ProductCategoryMapper.dbCategoryWithRemote(category)
+//        dbProduct.category = ProductCategoryMapper.dbCategoryWithRemote(category)
 //        dbProduct.fav = product.fav
         dbProduct.brand = product.brand
         dbProduct.dirty = false

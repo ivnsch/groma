@@ -111,8 +111,8 @@ class AddRecipeController: UIViewController {
         models = ingredients.results.map({
             let prototype = ProductPrototype(
                 name: $0.product.product.item.name,
-                category: $0.product.product.category.name,
-                categoryColor: $0.product.product.category.color,
+                category: $0.product.product.item.category.name,
+                categoryColor: $0.product.product.item.category.color,
                 brand: $0.product.product.brand,
                 baseQuantity: $0.product.baseQuantity,
                 unit: $0.product.unit

@@ -77,8 +77,8 @@ struct AddEditItem {
         self.product = item.product
         self.storeProduct = nil
         self.quantity = item.quantity
-        self.sectionName = item.product.product.category.name
-        self.sectionColor = item.product.product.category.color
+        self.sectionName = item.product.product.item.category.name
+        self.sectionColor = item.product.product.item.category.color
         self.note = nil
         self.model = item
     }
@@ -87,8 +87,8 @@ struct AddEditItem {
         self.product = item.product
         self.storeProduct = nil
         self.quantity = item.quantity
-        self.sectionName = item.product.product.category.name
-        self.sectionColor = item.product.product.category.color
+        self.sectionName = item.product.product.item.category.name
+        self.sectionColor = item.product.product.item.category.color
         self.note = nil
         self.model = item
     }
@@ -97,8 +97,8 @@ struct AddEditItem {
         self.product = item.product
         self.storeProduct = nil
         self.quantity = 0
-        self.sectionName = item.product.product.category.name
-        self.sectionColor = item.product.product.category.color
+        self.sectionName = item.product.product.item.category.name
+        self.sectionColor = item.product.product.item.category.color
         self.note = nil
         self.model = item
     }
@@ -107,8 +107,8 @@ struct AddEditItem {
         self.product = item.product
         self.storeProduct = nil
         self.quantity = item.quantity
-        self.sectionName = item.product.product.category.name
-        self.sectionColor = item.product.product.category.color
+        self.sectionName = item.product.product.item.category.name
+        self.sectionColor = item.product.product.item.category.color
         self.note = nil
         self.model = item
     }
@@ -315,8 +315,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
     fileprivate func prefill(_ planItem: PlanItem) {
         brandInput.text = planItem.product.brand
-        sectionInput.text = planItem.product.category.name
-        sectionColorButton.textColor = planItem.product.category.color
+        sectionInput.text = planItem.product.item.category.name
+        sectionColorButton.textColor = planItem.product.item.category.color
         quantityInput.text = String(planItem.quantity)
     }
     

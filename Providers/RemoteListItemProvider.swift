@@ -392,7 +392,7 @@ class RemoteListItemProvider {
             "uuid": product.uuid as AnyObject,
             "name": product.item.name as AnyObject,
             "brand": product.brand as AnyObject,
-            "category": toRequestParams(product.category) as AnyObject,
+//            "category": toRequestParams(product.category) as AnyObject,
 //            "fav": product.fav as AnyObject
         ]
         

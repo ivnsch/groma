@@ -678,8 +678,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 name: model.productPrototype.name,
                 quantity: model.quantity,
                 price: -1, // No prices here - use existing store product or default for new store product
-                section: model.ingredient.product.product.category.name,
-                sectionColor: model.ingredient.product.product.category.color,
+                section: model.ingredient.product.product.item.category.name,
+                sectionColor: model.ingredient.product.product.item.category.color,
                 note: nil,
                 baseQuantity: model.productPrototype.baseQuantity,
                 unit: model.productPrototype.unit,
@@ -714,7 +714,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         let token: RealmToken? = nil // quickfix
 
         if let list = currentList {
-            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.product.category.name, sectionColor: product.product.category.color, quantity: quantity, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.product.item.category.name, sectionColor: product.product.item.category.color, quantity: quantity, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
                 weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
             })
         } else {

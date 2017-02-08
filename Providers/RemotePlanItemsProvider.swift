@@ -52,7 +52,7 @@ class RemotePlanItemsProvider {
             "productInput": [
                 "uuid": planItem.product.uuid,
                 "name": planItem.product.item.name,
-                "category": RemoteListItemProvider().toRequestParams(planItem.product.category)
+                "category": RemoteListItemProvider().toRequestParams(planItem.product.item.category)
             ] as AnyObject
         ]
         if let lastServerUpdate = planItem.lastServerUpdate {

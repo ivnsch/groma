@@ -470,7 +470,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
 
     func removeListItemsReferencingCategory(_ categoryUuid: String) {
-        for (tableViewListItem, _) in findListItemsWithIndexPath({$0.product.product.product.category.uuid == categoryUuid}) {
+        for (tableViewListItem, _) in findListItemsWithIndexPath({$0.product.product.product.item.category.uuid == categoryUuid}) {
             removeListItem(tableViewListItem.listItem)
         }
     }

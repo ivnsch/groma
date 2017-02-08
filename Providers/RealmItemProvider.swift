@@ -62,7 +62,7 @@ class RealmItemProvider: RealmProvider {
             
         } else {
             let writeSuccess: Bool? = self.doInWriteTransactionSync({realm in
-                let item = Item(uuid: UUID().uuidString, name: input.name, fav: 0)
+                let item = Item(uuid: UUID().uuidString, name: input.name, category: input.category, fav: 0)
                 realm.add(item, update: true)
                 return true
             })
