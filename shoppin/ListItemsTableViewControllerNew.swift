@@ -166,7 +166,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections?[section].listItems.count ?? 0
+        return sectionsExpanded ? sections?[section].listItems.count ?? 0 : 0
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -223,18 +223,26 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     // MARK: - Expand sections
     
     func setAllSectionsExpanded(_ expanded: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
+        
+        guard expanded != sectionsExpanded else {QL1("No changes"); onComplete?(); return}
+        
         guard let sections = sections else {QL4("No sections"); return}
 
-        var completed = 0
-        for (index, _) in sections.enumerated() {
-            setSectionExpanded(expanded, sectionIndex: index/*, section: section*/, animated: animated, onComplete: {
-                completed += 1
-                if completed == sections.count {
-                    onComplete?()
-                }
-            })
-        }
         sectionsExpanded = expanded
+        
+        var completed = 0
+        
+        tableView.wrapUpdates {[weak self] in
+            for (index, _) in sections.enumerated() {
+                
+                self?.setSectionExpanded(expanded, sectionIndex: index/*, section: section*/, animated: animated, onComplete: {
+                    completed += 1
+                    if completed == sections.count {
+                        onComplete?()
+                    }
+                })
+            }
+        }
     }
     
     fileprivate func setSectionExpanded(_ expanded: Bool, sectionIndex: Int/*, section: ListItemsViewSection*/, animated: Bool, onComplete: VoidFunction? = nil) {
@@ -249,19 +257,12 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         }
         
         if expanded {
-            tableView.wrapUpdates {[weak self] in
-                self?.tableView.insertRows(at: sectionIndexPaths, with: .top)
-//                section.expanded = true
-            }
+            tableView.insertRows(at: sectionIndexPaths, with: .top)
+
         } else {
-            tableView.wrapUpdates {[weak self] in
-                self?.tableView.deleteRows(at: sectionIndexPaths, with: .top)
-//                section.expanded = false
-            }
+            tableView.deleteRows(at: sectionIndexPaths, with: .top)
         }
     }
-    
-    
     
     
     // MARK: - ListItemCellDelegateNew

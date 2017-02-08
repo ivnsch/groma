@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 import Providers
 
-class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControllerDelegate, TodoListItemsEditBottomViewDelegate {
+class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControllerDelegate, TodoListItemsEditBottomViewDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var pricesView: PricesView!
     @IBOutlet weak var stashView: StashView!
@@ -33,6 +33,14 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         super.viewDidLoad()
         
         todoListItemsEditBottomView?.delegate = self
+        
+        addPinch()
+    }
+    
+    fileprivate func addPinch() {
+        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(onPinch(_:)))
+        pinchRecognizer.delegate = self
+        view.addGestureRecognizer(pinchRecognizer)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -377,4 +385,50 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             super.onRemovedBrand(name)
         }
     }
+    
+    
+    
+    fileprivate var zoomStartYDistance: CGFloat = 0
+    fileprivate var consumedPinch = false
+
+    @objc func onPinch(_ sender: UIPinchGestureRecognizer) {
+        
+        switch sender.state {
+            
+        case .began:
+            zoomStartYDistance = abs(sender.location(in: view).y - sender.location(ofTouch: 1, in: view).y)
+            consumedPinch = false
+            fallthrough
+            
+        case .changed:
+            
+            guard sender.numberOfTouches > 1 else {return}
+            let x = abs(sender.location(in: view).x - sender.location(ofTouch: 1, in: view).x)
+            let y = abs(sender.location(in: view).y - sender.location(ofTouch: 1, in: view).y)
+            
+            let isVertical = y > x
+            
+            if isVertical {
+                let delta = y - zoomStartYDistance
+                if abs(delta) > 30 {
+                    if delta < 0 && !consumedPinch { // negative - contract
+                        consumedPinch = true
+                        setReorderSections(true)
+
+                    } else if !consumedPinch { // positive - expand
+                        consumedPinch = true
+                        setReorderSections(false)
+                    }
+                }
+            }
+            
+        case .ended: fallthrough
+        case .cancelled: fallthrough
+        case .failed: fallthrough
+        case .possible: break
+        }
+        
+        sender.scale = 1.0
+    }
+    
 }

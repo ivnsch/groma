@@ -708,16 +708,23 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         setReorderSections(sectionsTableViewController == nil)
     }
     
-    fileprivate func setReorderSections(_ reorderSections: Bool) {
+    func setReorderSections(_ reorderSections: Bool) {
         
         if !lockToggleSectionsTableView {
             lockToggleSectionsTableView = true
             
-            if reorderSections { // show reorder sections table view
+            let isCurrentlyExpanded = listItemsTableViewController.sectionsExpanded && sectionsTableViewController == nil // Note that the sectionsTableViewController == nil check is redundant (listItemsTableViewController.sectionsExpanded check should be enough) but just in case
+            
+            //  Avoid repetition. Repetition in case of contract would cause to add a new sections controller on top of the current one, which has the effect of looking like the expand gesture doesn't work anymore, as only the section controller on top is removed and after this the removal code isn't executed anymore.
+            guard (reorderSections && isCurrentlyExpanded) || (!reorderSections && !isCurrentlyExpanded) else {
+                QL1("Repeating current state, return")
+                lockToggleSectionsTableView = false
+                return
+            }
+            
+            if reorderSections { // show reorder sections table view.
                 
-                
-                
-                listItemsTableViewController.setAllSectionsExpanded(!listItemsTableViewController.sectionsExpanded, animated: true, onComplete: { // collapse - add sections table view
+                listItemsTableViewController.setAllSectionsExpanded(false, animated: true, onComplete: { // collapse - add sections table view
                     let sectionsTableViewController = UIStoryboard.reorderSectionTableViewControllerNew()
                     
                     sectionsTableViewController.sections = self.listItemsTableViewController.sections
@@ -758,9 +765,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                         sectionsTableViewController.removeFromParentViewController()
                         sectionsTableViewController.view.removeFromSuperview()
                         self.sectionsTableViewController = nil
-                        self.listItemsTableViewController.setAllSectionsExpanded(!self.listItemsTableViewController.sectionsExpanded, animated: true)
+                        self.listItemsTableViewController.setAllSectionsExpanded(true, animated: true)
                         self.lockToggleSectionsTableView = false
-                        
                         self.onToggleReorderSections(false)
                     }
                 } else {
