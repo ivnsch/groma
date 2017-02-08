@@ -249,7 +249,7 @@ class RealmListItemProvider: RealmProvider {
             return syncedRet(self) {
                 
                 // see if there's already a listitem for this product in the list - if yes only increment it
-                if let existingListItem = realm.objects(ListItem.self).filter(ListItem.createFilterWithQuantifiableProduct(name: product.product.product.name, unit: product.product.unit)).first {
+                if let existingListItem = realm.objects(ListItem.self).filter(ListItem.createFilterWithQuantifiableProduct(name: product.product.product.item.name, unit: product.product.unit)).first {
                     existingListItem.increment(ListItemStatusQuantity(status: status, quantity: quantity))
                     
                     // possible updates (when user submits a new list item using add edit product controller)
@@ -331,7 +331,7 @@ class RealmListItemProvider: RealmProvider {
         let ingredient = ingredient.copy()
         
         withRealm({realm -> T? in
-            let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithProductName(ingredient.product.product.name))
+            let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithProductName(ingredient.product.product.item.name))
             return mapper(listItems)
 
         }) {mappingResultMaybe in

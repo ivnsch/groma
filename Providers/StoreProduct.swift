@@ -133,11 +133,11 @@ public class StoreProduct: DBSyncable, Identifiable {
     }
     
     static func createFilterName(_ name: String) -> String {
-        return "productOpt.productOpt.name = '\(name)'"
+        return "productOpt.productOpt.itemOpt.name = '\(name)'"
     }
     
     static func createFilterNameContains(_ text: String) -> String {
-        return "productOpt.productOpt.name CONTAINS[c] '\(text)'"
+        return "productOpt.productOpt.itemOpt.name CONTAINS[c] '\(text)'"
     }
     
     static func createFilterBrandContains(_ text: String) -> String {

@@ -115,7 +115,7 @@ class IngredientProviderImpl: IngredientProvider {
         
         let prototype = ProductPrototype(name: input.name, category: input.category, categoryColor: input.categoryColor, brand: input.brand, baseQuantity: input.baseQuantity, unit: input.unit)
         // This will update the quantifiable product references with same algorithm for all product pointing items in the app
-        Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false) {(result: ProviderResult<QuantifiableProduct>) in
+        Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false) {(result: ProviderResult<QuantifiableProduct>) in
             
             if let product = result.sucessResult {
                 handler(ProviderResult(status: .success, sucessResult: product))

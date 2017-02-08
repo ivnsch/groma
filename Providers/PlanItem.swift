@@ -62,7 +62,7 @@ public class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     public func same(_ rhs: PlanItem) -> Bool {
-        return self.product.name == rhs.product.name
+        return self.product.item.name == rhs.product.item.name
     }
     
     public var debugDescription: String {
@@ -71,7 +71,7 @@ public class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
 }
 
 public func ==(lhs: PlanItem, rhs: PlanItem) -> Bool {
-    return lhs.product.name == rhs.product.name && lhs.inventory.uuid == rhs.inventory.uuid && lhs.quantity == rhs.quantity
+    return lhs.product.item.name == rhs.product.item.name && lhs.inventory.uuid == rhs.inventory.uuid && lhs.quantity == rhs.quantity
 }
 
 

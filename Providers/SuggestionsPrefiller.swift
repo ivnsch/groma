@@ -682,7 +682,7 @@ public class SuggestionsPrefiller {
             print("\(category.name) = \"\";")
         }
         for product in products {
-            print("\(product.name) = \"\";")
+            print("\(product.item.name) = \"\";")
         }
         print("#####################################")
     }

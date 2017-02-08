@@ -51,7 +51,7 @@ class RemotePlanItemsProvider {
             "quantity": planItem.quantity as AnyObject,
             "productInput": [
                 "uuid": planItem.product.uuid,
-                "name": planItem.product.name,
+                "name": planItem.product.item.name,
                 "category": RemoteListItemProvider().toRequestParams(planItem.product.category)
             ] as AnyObject
         ]

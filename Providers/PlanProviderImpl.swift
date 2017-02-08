@@ -116,70 +116,70 @@ class PlanProviderImpl: PlanProvider {
 
     // TODO review this, adding product with existing name shows a new items in list this shouldn't happen. Maybe it's only the tableview
     fileprivate func addOrIncrementPlanItem(_ itemInput: PlanItemInput, inventory: DBInventory, _ handler: @escaping (ProviderResult<PlanItem>) -> Void) {
-        
-        func onHasProduct(_ product: Product, isUpdate: Bool) {
-            let planItem = PlanItem(inventory: inventory, product: product, quantity: itemInput.quantity, usedQuantity: -1)
-            dbProvider.add(planItem) {[weak self] saved in
-                if saved {
-                    if isUpdate {
-                        // update product can change the name or price, and the products can be referenced by list items, so we have to invalidate memory cache.
-                        Prov.listItemsProvider.invalidateMemCache()
-                    }
-                    handler(ProviderResult(status: .success, sucessResult: planItem))
-                    
-                    self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
-                        if !remoteResult.success {
-                            DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<PlanItem>) in
-                                print("Error: addOrIncrementPlanItem: \(planItem), result: \(remoteResult)")
-                            }
-                        }
-                    }
-                    
-                } else {
-                    handler(ProviderResult(status: .databaseSavingError))
-                }
-            }
-        }
-        
-        planItem(itemInput.name) {[weak self] result in
-            if let existingPlanItemMaybe = result.sucessResult, let existingPlanItem = existingPlanItemMaybe {
-         
-                // if item with product and inventory already exists, increment it
-                let updatedCategory = existingPlanItem.product.category.copy(name: itemInput.category, color: itemInput.categoryColor)
-                let updatedProduct = existingPlanItem.product.copy(name: itemInput.name, category: updatedCategory)
-                let updatedPlanItem = existingPlanItem.copy(product: updatedProduct, quantity: existingPlanItem.quantity + itemInput.quantity, quantityDelta: existingPlanItem.quantityDelta + itemInput.quantity)
-                self?.updatePlanItem(updatedPlanItem, inventory: inventory, handler)
-                
-            } else { // if it doesn't exist, add it
-                
-                // check if product exists
-                Prov.productProvider.product(itemInput.name, brand: itemInput.brand) {result in
-                    if let product = result.sucessResult { // products exists - update it and reference it
-                        let mergedCategory = product.category.copy(name: itemInput.category, color: itemInput.categoryColor)
-                        let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, category: mergedCategory, brand: itemInput.brand)
-                        onHasProduct(mergedProduct, isUpdate: true)
-                    } else { // product doesn't exist - add it
-                        
-                        // check if category exists
-                        Prov.productCategoryProvider.categoryWithName(itemInput.category, {result in
-                            
-                            // if category doesn't exist, create a new one
-                            let category: ProductCategory = result.sucessResult ?? ProductCategory(uuid: UUID().uuidString, name: itemInput.category, color: itemInput.categoryColor)
-
-                            // add the product
-                            let product = Product(uuid: UUID().uuidString, name: itemInput.name, category: category, brand: itemInput.brand)
-                            Prov.productProvider.add(product, remote: true) {result in
-                                if result.success {
-                                    onHasProduct(product, isUpdate: false)
-                                } else {
-                                    handler(ProviderResult(status: .databaseSavingError))
-                                }
-                            }
-                        })
-                    }
-                }
-            }
-        }
+        fatalError("Outdated") // not compiling after introducing "Item" class. Since we don't use plan the code in this method was commented.
+//        func onHasProduct(_ product: Product, isUpdate: Bool) {
+//            let planItem = PlanItem(inventory: inventory, product: product, quantity: itemInput.quantity, usedQuantity: -1)
+//            dbProvider.add(planItem) {[weak self] saved in
+//                if saved {
+//                    if isUpdate {
+//                        // update product can change the name or price, and the products can be referenced by list items, so we have to invalidate memory cache.
+//                        Prov.listItemsProvider.invalidateMemCache()
+//                    }
+//                    handler(ProviderResult(status: .success, sucessResult: planItem))
+//                    
+//                    self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
+//                        if !remoteResult.success {
+//                            DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<PlanItem>) in
+//                                print("Error: addOrIncrementPlanItem: \(planItem), result: \(remoteResult)")
+//                            }
+//                        }
+//                    }
+//                    
+//                } else {
+//                    handler(ProviderResult(status: .databaseSavingError))
+//                }
+//            }
+//        }
+//        
+//        planItem(itemInput.name) {[weak self] result in
+//            if let existingPlanItemMaybe = result.sucessResult, let existingPlanItem = existingPlanItemMaybe {
+//         
+//                // if item with product and inventory already exists, increment it
+//                let updatedCategory = existingPlanItem.product.category.copy(name: itemInput.category, color: itemInput.categoryColor)
+//                let updatedProduct = existingPlanItem.product.copy(name: itemInput.name, category: updatedCategory)
+//                let updatedPlanItem = existingPlanItem.copy(product: updatedProduct, quantity: existingPlanItem.quantity + itemInput.quantity, quantityDelta: existingPlanItem.quantityDelta + itemInput.quantity)
+//                self?.updatePlanItem(updatedPlanItem, inventory: inventory, handler)
+//                
+//            } else { // if it doesn't exist, add it
+//                
+//                // check if product exists
+//                Prov.productProvider.product(itemInput.name, brand: itemInput.brand) {result in
+//                    if let product = result.sucessResult { // products exists - update it and reference it
+//                        let mergedCategory = product.category.copy(name: itemInput.category, color: itemInput.categoryColor)
+//                        let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, category: mergedCategory, brand: itemInput.brand)
+//                        onHasProduct(mergedProduct, isUpdate: true)
+//                    } else { // product doesn't exist - add it
+//                        
+//                        // check if category exists
+//                        Prov.productCategoryProvider.categoryWithName(itemInput.category, {result in
+//                            
+//                            // if category doesn't exist, create a new one
+//                            let category: ProductCategory = result.sucessResult ?? ProductCategory(uuid: UUID().uuidString, name: itemInput.category, color: itemInput.categoryColor)
+//
+//                            // add the product
+//                            let product = Product(uuid: UUID().uuidString, name: itemInput.name, category: category, brand: itemInput.brand)
+//                            Prov.productProvider.add(product, remote: true) {result in
+//                                if result.success {
+//                                    onHasProduct(product, isUpdate: false)
+//                                } else {
+//                                    handler(ProviderResult(status: .databaseSavingError))
+//                                }
+//                            }
+//                        })
+//                    }
+//                }
+//            }
+//        }
     }
     
     func addPlanItem(_ item: PlanItem, _ handler: @escaping (ProviderResult<Any>) -> Void) {

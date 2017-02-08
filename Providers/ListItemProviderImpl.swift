@@ -374,7 +374,7 @@ class ListItemProviderImpl: ListItemProvider {
                 // updateCategory: false: we don't touch product's category from list items - our inputs affect only the section. We use them though to create a category in the case a category with the section's name doesn't exists already. A product needs a category and it's logical to simply default this to the section if it doesn't exist, instead of making user enter a second input for the category. From user's perspective, most times category = section.
                 //Prov.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store, updateCategory: false)
                 let prototype = ProductPrototype(name: listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, brand: listItemInput.brand, baseQuantity: listItemInput.storeProductInput.baseQuantity, unit: listItemInput.storeProductInput.unit)
-                Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false) {(result: ProviderResult<QuantifiableProduct>) in
+                Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false) {(result: ProviderResult<QuantifiableProduct>) in
                     if let product = result.sucessResult {
                         handler(ProviderResult(status: .success, sucessResult: (section, product)))
                         
@@ -533,10 +533,10 @@ class ListItemProviderImpl: ListItemProvider {
                     // see if there's already a listitem for this product in the list - if yes only increment it
                     
                     let existingListItems = realm.objects(ListItem.self).filter(ListItem.createFilterList(list.uuid))
-                    let existingListItemsDict: [String: ListItem] = existingListItems.toDictionary{(StoreProduct.uniqueDictKey($0.product.product.product.name, brand: $0.product.product.product.brand, store: $0.product.store, unit: $0.product.product.unit, baseQuantity: $0.product.product.baseQuantity), $0)}
+                    let existingListItemsDict: [String: ListItem] = existingListItems.toDictionary{(StoreProduct.uniqueDictKey($0.product.product.product.item.name, brand: $0.product.product.product.brand, store: $0.product.store, unit: $0.product.product.unit, baseQuantity: $0.product.product.baseQuantity), $0)}
                     
                     // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
-                    let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(StoreProduct.uniqueDictKey($0.product.product.product.name, brand: $0.product.product.product.brand, store: $0.product.store, unit: $0.product.product.unit, baseQuantity: $0.product.product.baseQuantity), $0)}
+                    let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(StoreProduct.uniqueDictKey($0.product.product.product.item.name, brand: $0.product.product.product.brand, store: $0.product.store, unit: $0.product.product.unit, baseQuantity: $0.product.product.baseQuantity), $0)}
                     
                     // Holds count of new items per section, which is incremented while we loop through prototypes
                     // we need this to determine the order of the items in the sections - which is the last index in existing items + new items count so far in section
@@ -545,7 +545,7 @@ class ListItemProviderImpl: ListItemProvider {
                     var savedListItems: [ListItem] = []
 
                     for (prototype, section) in prototypesWithSections {
-                        if var existingListItem = existingListItemsDict[StoreProduct.uniqueDictKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)] {
+                        if var existingListItem = existingListItemsDict[StoreProduct.uniqueDictKey(prototype.product.product.product.item.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)] {
                             
                             existingListItem = existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
                             
@@ -583,7 +583,7 @@ class ListItemProviderImpl: ListItemProvider {
                                     let sectionCount = getOrderForNewSection(existingListItems)
                                     
                                     // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                    return memoryCacheItemsDict?[StoreProduct.uniqueDictKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+                                    return memoryCacheItemsDict?[StoreProduct.uniqueDictKey(prototype.product.product.product.item.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
                                 }()
                             
                             // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
@@ -600,7 +600,7 @@ class ListItemProviderImpl: ListItemProvider {
                                 }
                             }()
                             
-                            let uuid = memoryCacheItemsDict?[StoreProduct.uniqueDictKey(prototype.product.product.product.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)]?.uuid ?? NSUUID().uuidString
+                            let uuid = memoryCacheItemsDict?[StoreProduct.uniqueDictKey(prototype.product.product.product.item.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)]?.uuid ?? NSUUID().uuidString
                             
                             
                             // create the list item and save it

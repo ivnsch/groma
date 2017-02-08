@@ -78,7 +78,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
                 
                 let listItem = tableViewListItem
                 
-                nameLabel.text = NSLocalizedString(listItem.product.product.product.name, comment: "")
+                nameLabel.text = NSLocalizedString(listItem.product.product.product.item.name, comment: "")
                 nameLabel.sizeToFit() // important for strike line
                 
                 shownQuantity = listItem.quantity

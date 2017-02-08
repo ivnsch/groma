@@ -65,6 +65,20 @@ enum ProvResult<T, V> {
         }
     }
     
+    var isOk: Bool {
+        switch self {
+        case .ok(let _): return true
+        default: return false
+        }
+    }
+    
+    var isErr: Bool {
+        switch self {
+        case .err(let _): return true
+        default: return false
+        }
+    }
+    
     func join<Y>(result: ProvResult<Y, V>) -> ProvResult<(T, Y), V> {
         return flatMap {selfSuccessResult in
             let resultResult = result.map({resultSuccessResult in

@@ -26,7 +26,7 @@ public class QuickAddProduct: QuickAddItem {
     }
     
     public override var labelText: String {
-        return product.name
+        return product.item.name
     }
     
     public override var label2Text: String {

@@ -14,7 +14,7 @@ class RealmIngredientProvider: RealmProvider {
     
     func ingredients(recipe: Recipe, sortBy: InventorySortBy, _ handler: @escaping (Results<Ingredient>?) -> Void) {
         
-        let nameSort = SortDescriptor(keyPath: "productOpt.productOpt.name", ascending: true)
+        let nameSort = SortDescriptor(keyPath: "productOpt.productOpt.itemOpt.name", ascending: true)
         let quantitySort = SortDescriptor(keyPath: "quantity", ascending: true)
         let unitSort = SortDescriptor(keyPath: "productOpt.unitVal", ascending: true)
         let baseQuantitySort = SortDescriptor(keyPath: "productOpt.baseQuantity", ascending: true)

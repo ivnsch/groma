@@ -266,15 +266,15 @@ public class ListItem: DBSyncable, Identifiable {
     }
     
     static func createFilter(_ list: List, product: Product) -> String {
-        return createFilterUniqueInList(product.name, productBrand: product.brand, list: list)
+        return createFilterUniqueInList(product.item.name, productBrand: product.brand, list: list)
     }
 
     static func createFilterUniqueInList(_ productName: String, productBrand: String, list: List) -> String {
-        return "\(createFilterList(list.uuid)) AND productOpt.productOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)'"
+        return "\(createFilterList(list.uuid)) AND productOpt.productOpt.itemOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)'"
     }
 
     static func createFilterUniqueInListNotUuid(_ productName: String, productBrand: String, notUuid: String, list: List) -> String {
-        return "\(createFilterList(list.uuid)) AND productOpt.productOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)' AND uuid != '\(notUuid)'"
+        return "\(createFilterList(list.uuid)) AND productOpt.productOpt.itemOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)' AND uuid != '\(notUuid)'"
     }
     
     // TODO!!!!!!!!!!!!!!!! is this store / quantifiable / product?
@@ -289,11 +289,11 @@ public class ListItem: DBSyncable, Identifiable {
     }
     
     static func createFilterWithProductName(_ productName: String) -> String {
-        return "productOpt.productOpt.productOpt.name == '\(productName)'"
+        return "productOpt.productOpt.productOpt.itemOpt.name == '\(productName)'"
     }
     
     static func createFilterWithQuantifiableProduct(name: String, unit: ProductUnit) -> String {
-        return "productOpt.productOpt.productOpt.name == '\(name)' AND productOpt.productOpt.unitVal == \(unit.rawValue)"
+        return "productOpt.productOpt.productOpt.itemOpt.name == '\(name)' AND productOpt.productOpt.unitVal == \(unit.rawValue)"
     }
 
     static func createFilterWithSection(_ sectionUuid: String) -> String {
@@ -307,7 +307,7 @@ public class ListItem: DBSyncable, Identifiable {
     
     
     static func createFilter(quantifiableProductUnique: QuantifiableProductUnique) -> String {
-        return "productOpt.productOpt.productOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitVal == \(quantifiableProductUnique.unit.rawValue) AND productOpt.productOpt.baseQuantity == '\(quantifiableProductUnique.baseQuantity)'"
+        return "productOpt.productOpt.productOpt.itemOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitVal == \(quantifiableProductUnique.unit.rawValue) AND productOpt.productOpt.baseQuantity == '\(quantifiableProductUnique.baseQuantity)'"
     }
    
     
@@ -332,24 +332,24 @@ public class ListItem: DBSyncable, Identifiable {
     }
 
     public var shortOrderDebugDescription: String {
-        return "[\(product.product.product.name)], unit: \(product.product.unit), todo: \(todoOrder), done: \(doneOrder), stash: \(stashOrder)"
+        return "[\(product.product.product.item.name)], unit: \(product.product.unit), todo: \(todoOrder), done: \(doneOrder), stash: \(stashOrder)"
     }
 
     fileprivate var shortDebugDescription: String {
-        return "[\(product.product.product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)"
+        return "[\(product.product.product.item.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)"
     }
 
     public var quantityDebugDescription: String {
-        return "\(uuid), \(product.product.product.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity)"
+        return "\(uuid), \(product.product.product.item.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity)"
     }
 
     public var quantityOrderDebugDescription: String {
-        return "\(uuid), \(product.product.product.name), TODO: (q: \(todoQuantity), o: \(todoOrder)), DONE: (q: \(doneQuantity), o; \(doneOrder)), STASH: (q: \(stashQuantity), o: \(stashOrder))"
+        return "\(uuid), \(product.product.product.item.name), TODO: (q: \(todoQuantity), o: \(todoOrder)), DONE: (q: \(doneQuantity), o; \(doneOrder)), STASH: (q: \(stashQuantity), o: \(stashOrder))"
 //        , section: \(section.shortOrderDebugDescription)
     }
 
     fileprivate var quantityAndOrderDebugDescription: String {
-        return "\(uuid), \(product.product.product.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)"
+        return "\(uuid), \(product.product.product.item.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)"
     }
 
     fileprivate var longDebugDescription: String {
@@ -562,7 +562,7 @@ public class ListItem: DBSyncable, Identifiable {
     
     public func quantityText(status: ListItemStatus) -> String {
         let unitText = product.product.unitText
-        return "\(quantity(status)) x \(product.product.product.name)\(unitText)"
+        return "\(quantity(status)) x \(product.product.product.item.name)\(unitText)"
     }
     
     public func quantityTextWithoutName(status: ListItemStatus) -> String {

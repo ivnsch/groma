@@ -390,7 +390,7 @@ class RemoteListItemProvider {
     func toRequestParams(_ product: Product) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
             "uuid": product.uuid as AnyObject,
-            "name": product.name as AnyObject,
+            "name": product.item.name as AnyObject,
             "brand": product.brand as AnyObject,
             "category": toRequestParams(product.category) as AnyObject,
 //            "fav": product.fav as AnyObject

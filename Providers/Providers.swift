@@ -10,6 +10,8 @@ import Foundation
 
 public struct Prov {
     
+    public static var itemsProvider: ItemProvider = ItemProviderImpl()
+    
     public static var listItemsProvider: ListItemProvider = ListItemProviderImpl()
     
     public static var productProvider: ProductProvider = ProductProviderImpl()

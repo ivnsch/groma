@@ -37,7 +37,7 @@ class ProductMapper {
     class func dbProductWithRemote(_ product: RemoteProduct, category: RemoteProductCategory) -> Product {
         let dbProduct = Product()
         dbProduct.uuid = product.uuid
-        dbProduct.name = product.name
+//        dbProduct.name = product.name
         dbProduct.category = ProductCategoryMapper.dbCategoryWithRemote(category)
 //        dbProduct.fav = product.fav
         dbProduct.brand = product.brand

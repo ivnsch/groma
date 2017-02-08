@@ -10,6 +10,8 @@ import Foundation
 
 class DBProv {
 
+    static var itemProvider = RealmItemProvider()
+    
     static var listItemProvider = RealmListItemProvider()
 
     static var productProvider = RealmProductProvider()

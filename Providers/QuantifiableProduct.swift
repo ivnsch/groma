@@ -107,7 +107,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
     
     static func createFilter(unique: QuantifiableProductUnique) -> String {
-        return "productOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND unitVal == \(unique.unit.rawValue)"
+        return "productOpt.itemOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND unitVal == \(unique.unit.rawValue)"
     }
     
     static func createFilterBrand(_ brand: String) -> String {
@@ -127,11 +127,11 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
     
     static func createFilterName(_ name: String) -> String {
-        return "productOpt.name = '\(name)'"
+        return "productOpt.itemOpt.name = '\(name)'"
     }
     
     static func createFilterNameContains(_ text: String) -> String {
-        return "productOpt.name CONTAINS[c] '\(text)'"
+        return "productOpt.itemOpt.name CONTAINS[c] '\(text)'"
     }
     
     static func createFilterBrandContains(_ text: String) -> String {
@@ -193,11 +193,11 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
 
     public var unique: QuantifiableProductUnique {
-        return (name: product.name, brand: product.brand, unit: unit, baseQuantity: baseQuantity)
+        return (name: product.item.name, brand: product.brand, unit: unit, baseQuantity: baseQuantity)
     }
     
     public func matches(unique: QuantifiableProductUnique) -> Bool {
-        return product.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit == unique.unit
+        return product.item.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit == unique.unit
     }
     
     fileprivate static var baseQuantityNumberFormatter: NumberFormatter = {

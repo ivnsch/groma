@@ -29,7 +29,7 @@ public class ListItemPrototype: Equatable, Identifiable, CustomDebugStringConver
     }
     
     public var debugDescription: String {
-        return "\(product.product.name), \(quantity), \(product.baseQuantity)::\(product.unit), \(targetSectionName)"
+        return "\(product.product.item.name), \(quantity), \(product.baseQuantity)::\(product.unit), \(targetSectionName)"
     }
     
     public func copy(product: QuantifiableProduct? = nil, quantity: Int? = nil, targetSectionName: String? = nil, targetSectionColor: UIColor? = nil, storeProductInput: StoreProductInput? = nil) -> ListItemPrototype {

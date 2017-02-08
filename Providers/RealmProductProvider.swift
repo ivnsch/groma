@@ -192,7 +192,7 @@ class RealmProductProvider: RealmProvider {
         // For now duplicate code with products, to use Results and plain objs api together (for search text for now it's easier to use plain obj api)
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
-            case .alphabetic: return ("name", true)
+            case .alphabetic: return ("itemOpt.name", true)
             case .fav: return ("fav", false)
             }
         }()
@@ -207,7 +207,7 @@ class RealmProductProvider: RealmProvider {
         // TODO? include unit/base quantity in sorting
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
-            case .alphabetic: return ("productOpt.name", true)
+            case .alphabetic: return ("productOpt.itemOpt.name", true)
             case .fav: return ("fav", false)
             }
         }()
@@ -223,7 +223,7 @@ class RealmProductProvider: RealmProvider {
         
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
-            case .alphabetic: return ("name", true)
+            case .alphabetic: return ("itemOpt.name", true)
             case .fav: return ("fav", false)
             }
         }()
@@ -267,7 +267,7 @@ class RealmProductProvider: RealmProvider {
         
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
-            case .alphabetic: return ("productOpt.name", true)
+            case .alphabetic: return ("productOpt.itemOpt.name", true)
             case .fav: return ("fav", false)
             }
         }()
@@ -327,7 +327,7 @@ class RealmProductProvider: RealmProvider {
     func quantifiableProductsWithPosibleSections(_ substring: String? = nil, list: List, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)]?) -> Void) {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
-            case .alphabetic: return ("name", true)
+            case .alphabetic: return ("itemOpt.name", true)
             case .fav: return ("fav", false)
             }
         }()
@@ -384,7 +384,7 @@ class RealmProductProvider: RealmProvider {
     func productsWithPosibleSections(_ substring: String? = nil, list: List, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ productsWithMaybeSections: [(product: Product, section: Section?)]?) -> Void) {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
-            case .alphabetic: return ("name", true)
+            case .alphabetic: return ("itemOpt.name", true)
             case .fav: return ("fav", false)
             }
         }()
@@ -685,6 +685,12 @@ class RealmProductProvider: RealmProvider {
                     
                     // Save product with new/updated category
                     if let category = category {
+                        
+//                        Prov.itemsProvider.i
+                        
+                        
+                        
+                        
                         let product = Product(uuid: uuid, name: productInput.name, category: category, brand: productInput.brand)
                         self?.saveProducts([product]) {saved in
                             if saved {
@@ -740,6 +746,7 @@ class RealmProductProvider: RealmProvider {
         
         loadProductWithName(productInput.name, brand: productInput.brand) {[weak self] productMaybe in
 
+            // Save the created/updated product and return
             func onHasNewOrUpdatedProduct(product: Product) {
                 self?.saveProducts([product], update: true) {saved in
                     if saved {
@@ -752,8 +759,32 @@ class RealmProductProvider: RealmProvider {
             }
             
             func onHasNewOrUpdatedCategory(category: ProductCategory) {
+                // retrieve/create item
+                DBProv.itemProvider.find(name: productInput.name) {result in
+                    switch result {
+                    case .ok(let itemMaybe):
+                        let item: Item = {
+                            if let item = itemMaybe {
+//                                return item.copy()
+                                // nothing (non-unique) to update yet
+                                return item
+                            } else { // item doesn't exist
+                                return Item(uuid: UUID().uuidString, name: productInput.name, fav: 0)
+                            }
+                        }()
+                        onHasNewOrUpdatedItemAndCategory(item: item, category: category)
+
+                    case .err(let error):
+                        QL4("Couldn't retrieve item: \(error)")
+                        handler(nil)
+                    }
+                }
+            }
+            
+            // Now that we have item and category create/update product with them
+            func onHasNewOrUpdatedItemAndCategory(item: Item, category: ProductCategory) {
                 if let existingProduct = productMaybe {
-                    let updatedProduct = existingProduct.copy(name: productInput.name, category: category, brand: productInput.brand)
+                    let updatedProduct = existingProduct.copy(item: item, category: category, brand: productInput.brand)
                     onHasNewOrUpdatedProduct(product: updatedProduct)
                     
                 } else {
@@ -762,6 +793,7 @@ class RealmProductProvider: RealmProvider {
                 }
             }
             
+            // retrieve/create category
             // seach for existing category with unique (name) and use it or create new one. We don't simply update product's category (in the case where product exists) - imagine e.g. user wants to change the category of a list item, say, "meat" to "fish" - the intent is to assign the item a different category, not to update the category (otherwise the previous "meat" category would now be named "fish" and everything in the app classified as meat would now be fish). For category name update intent, we have (or will have at least) a dedicated screen to manage categories.
             DBProv.productCategoryProvider.category(name: productInput.category) {categoryMaybe in
                 let category: ProductCategory = {
@@ -961,7 +993,11 @@ class RealmProductProvider: RealmProvider {
     func upsertProductSync(_ realm: Realm, prototype: ProductPrototype) -> Product {
         
         func findOrCreateCategory(_ realm: Realm, prototype: ProductPrototype) -> ProductCategory {
-            return realm.objects(ProductCategory.self).filter(ProductCategory.createFilterName(prototype.category)).first ?? ProductCategory(uuid: NSUUID().uuidString, name: prototype.name, color: prototype.categoryColor)
+            return realm.objects(ProductCategory.self).filter(ProductCategory.createFilterName(prototype.category)).first ?? ProductCategory(uuid: NSUUID().uuidString, name: prototype.category, color: prototype.categoryColor)
+        }
+        
+        func findOrCreateItem(_ realm: Realm, prototype: ProductPrototype) -> Item {
+            return realm.objects(Item.self).filter(Item.createFilter(name: prototype.name)).first ?? Item(uuid: NSUUID().uuidString, name: prototype.name, fav: 0)
         }
         
         func categoryForExistingProduct(_ existingProduct: Product, prototype: ProductPrototype) -> ProductCategory {
@@ -973,13 +1009,22 @@ class RealmProductProvider: RealmProvider {
             }
         }
         
+        func itemForExistingProduct(_ existingProduct: Product, prototype: ProductPrototype) -> Item {
+            // Make the updated product point to correct category - if category name hasn't changed, no pointer update. If input category name is different, see if a category with this name already exists, and update pointer. Otherwise create a new category and udpate pointer.
+            if existingProduct.item.name != prototype.name {
+                return findOrCreateItem(realm, prototype:  prototype)
+            } else {
+                return existingProduct.item
+            }
+        }
+        
         func updateExistingProduct(_ realm: Realm, existingProduct: Product, prototype: ProductPrototype) -> Product {
             
             let category = categoryForExistingProduct(existingProduct, prototype: prototype)
             let updatedCategory = category.copy(color: prototype.categoryColor)
             
-            // Udpate product fields
-            let updatedProduct = existingProduct.update(prototype)
+            // Udpate product fields. Besides of the category (where we update only the non-part-of-unique field color) there's nothing non-part-of-unique to update.
+            let updatedProduct = existingProduct.copy()
             updatedProduct.category = updatedCategory
             
             realm.add(updatedProduct, update: true)
@@ -989,7 +1034,8 @@ class RealmProductProvider: RealmProvider {
         
         func insertNewProduct(_ realm: Realm, prototype: ProductPrototype) -> Product {
             let category = findOrCreateCategory(realm, prototype: prototype)
-            let newProduct = Product(prototype: prototype, category: category)
+            let item = findOrCreateItem(realm, prototype: prototype)
+            let newProduct = Product(prototype: prototype, item: item, category: category)
             realm.add(newProduct, update: false)
             return newProduct
         }

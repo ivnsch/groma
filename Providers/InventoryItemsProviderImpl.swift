@@ -204,7 +204,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         DBProv.inventoryItemProvider.deletePossibleInventoryItemWithUnique(input.productPrototype.name, productBrand: input.productPrototype.brand, inventory: updatingInventoryItem.inventory, notUuid: updatingInventoryItem.uuid) {foundAndDeletedInventoryItem in
             // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
             
-            Prov.productProvider.mergeOrCreateProduct(prototype: input.productPrototype, updateCategory: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
+            Prov.productProvider.mergeOrCreateProduct(prototype: input.productPrototype, updateCategory: false, updateItem: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
 
 //            Prov.productProvider.mergeOrCreateProduct(input.productPrototype.name, category: input.productPrototype.category, categoryColor: input.productPrototype.categoryColor, brand: input.productPrototype.brand, updateCategory: false) {[weak self] result in
                 
@@ -397,7 +397,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     
                 } else { // no quantifiable product with unique, create it
                     
-                    Prov.productProvider.mergeOrCreateProduct(prototype: itemInput.productPrototype, updateCategory: true) { (result: ProviderResult<QuantifiableProduct>) in
+                    Prov.productProvider.mergeOrCreateProduct(prototype: itemInput.productPrototype, updateCategory: true, updateItem: true) { (result: ProviderResult<QuantifiableProduct>) in
                         if let quantifiableProduct = result.sucessResult {
                             self.addToInventory(inventory, product: quantifiableProduct, quantity: 1, remote: remote, handler)
                         }

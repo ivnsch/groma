@@ -110,7 +110,7 @@ class AddRecipeController: UIViewController {
         
         models = ingredients.results.map({
             let prototype = ProductPrototype(
-                name: $0.product.product.name,
+                name: $0.product.product.item.name,
                 category: $0.product.product.category.name,
                 categoryColor: $0.product.product.category.color,
                 brand: $0.product.product.brand,
@@ -234,7 +234,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     
     func productNamesContaining(text: String, handler: @escaping ([String]) -> Void) {
         Prov.productProvider.products(text, range: NSRange(location: 0, length: 10000), sortBy: .alphabetic, successHandler {tuple in
-            let names = tuple.products.map{$0.name}
+            let names = tuple.products.map{$0.item.name}
             handler(names)
         })
     }

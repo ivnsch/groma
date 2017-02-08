@@ -25,9 +25,9 @@ class ManageProductsCell: UITableViewCell {
     
     func setProduct(product: QuantifiableProduct, bold: String?) {
         
-        let productNameTranslation = NSLocalizedString(product.product.name, comment: "")
+        let productNameTranslation = NSLocalizedString(product.product.item.name, comment: "")
         
-        if let boldRange = bold.flatMap({product.product.name.range($0, caseInsensitive: true)}) {
+        if let boldRange = bold.flatMap({product.product.item.name.range($0, caseInsensitive: true)}) {
             productNameLabel.attributedText = productNameTranslation.makeAttributedBoldRegular(boldRange)
         } else {
             productNameLabel.text = productNameTranslation

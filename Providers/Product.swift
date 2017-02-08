@@ -45,10 +45,19 @@ public enum ProductUnit: Int {
 public class Product: DBSyncable, Identifiable {
     
     public dynamic var uuid: String = ""
-    public dynamic var name: String = ""
+    dynamic var itemOpt: Item? = Item()
     dynamic var categoryOpt: ProductCategory? = ProductCategory()
     public dynamic var brand: String = ""
     public dynamic var fav: Int = 0
+    
+    public var item: Item {
+        get {
+            return itemOpt ?? Item()
+        }
+        set(newItem) {
+            itemOpt = newItem
+        }
+    }
     
     public var category: ProductCategory {
         get {
@@ -67,12 +76,13 @@ public class Product: DBSyncable, Identifiable {
         return ["name"]
     }
     
+    /// Convenience initializer that creates Item, using name. This is only for the items we add in the pre-filler, to not have to edit everything to add Item(...).
     public convenience init(uuid: String, name: String, category: ProductCategory, brand: String = "", fav: Int = 0, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
         self.uuid = uuid
-        self.name = name
+        self.item = Item(uuid: UUID().uuidString, name: name, fav: 0)
         self.category = category
         self.brand = brand
         
@@ -82,19 +92,35 @@ public class Product: DBSyncable, Identifiable {
         self.removed = removed
     }
     
-    public convenience init(prototype: ProductPrototype, category: ProductCategory) {
+    
+    public convenience init(uuid: String, item: Item, category: ProductCategory, brand: String = "", fav: Int = 0, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+        
+        self.init()
+        
+        self.uuid = uuid
+        self.item = item
+        self.category = category
+        self.brand = brand
+        
+        if let lastServerUpdate = lastServerUpdate {
+            self.lastServerUpdate = lastServerUpdate
+        }
+        self.removed = removed
+    }
+    
+    public convenience init(prototype: ProductPrototype, item: Item, category: ProductCategory) {
         self.init(
             uuid: UUID().uuidString,
-            name: prototype.name,
+            item: item,
             category: category,
             brand: prototype.brand
         )
     }
     
-    public func copy(uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, brand: String? = nil, store: String? = nil, fav: Int = 0, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {
+    public func copy(uuid: String? = nil, item: Item? = nil, category: ProductCategory? = nil, brand: String? = nil, store: String? = nil, fav: Int? = 0, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
-            name: name ?? self.name,
+            item: item ?? self.item,
             category: category ?? self.category.copy(),
             brand: brand ?? self.brand,
             fav: fav ?? self.fav,
@@ -102,13 +128,13 @@ public class Product: DBSyncable, Identifiable {
             removed: removed ?? self.removed
         )
     }
-    
-    // Overwrites fields with corresponding fields of prototype.
-    // NOTE: Does not update category fields.
-    public func update(_ prototype: ProductPrototype) -> Product {
-        return copy(name: prototype.name, brand: prototype.brand)
-    }
-    
+
+//    // Overwrites fields with corresponding fields of prototype.
+//    // NOTE: Does not update category fields.
+//    public func update(_ prototype: ProductPrototype) -> Product {
+//        return copy(name: prototype.name, brand: prototype.brand)
+//    }
+
     // MARK: - Filters
     
     static func createFilter(_ uuid: String) -> String {
@@ -128,7 +154,7 @@ public class Product: DBSyncable, Identifiable {
     }
     
     static func createFilterName(_ name: String) -> String {
-        return "name = '\(name)'"
+        return "itemOpt.name = '\(name)'"
     }
     
     static func createFilter(base: String) -> String {
@@ -140,7 +166,7 @@ public class Product: DBSyncable, Identifiable {
     }
     
     static func createFilterNameContains(_ text: String) -> String {
-        return "name CONTAINS[c] '\(text)'"
+        return "itemOpt.name CONTAINS[c] '\(text)'"
     }
     
     static func createFilterBrandContains(_ text: String) -> String {
@@ -175,7 +201,7 @@ public class Product: DBSyncable, Identifiable {
     static func fromDict(_ dict: [String: AnyObject], category: ProductCategory) -> Product {
         let item = Product()
         item.uuid = dict["uuid"]! as! String
-        item.name = dict["name"]! as! String
+//        item.name = dict["name"]! as! String
         item.category = category
 //        item.fav = dict["fav"]! as! Int
         item.brand = dict["brand"]! as! String
@@ -186,7 +212,7 @@ public class Product: DBSyncable, Identifiable {
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid as AnyObject?
-        dict["name"] = name as AnyObject?
+//        dict["name"] = name as AnyObject?
         dict["category"] = category.toDict() as AnyObject?
 //        dict["fav"] = fav as AnyObject?
         dict["brand"] = brand as AnyObject?
@@ -201,7 +227,7 @@ public class Product: DBSyncable, Identifiable {
     }
 
     public override static func ignoredProperties() -> [String] {
-        return ["category"]
+        return ["category", "item"]
     }
 
     override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
@@ -213,7 +239,7 @@ public class Product: DBSyncable, Identifiable {
     // MARK: -
 
     public func update(_ product: Product) -> Product {
-        return update(product, category: product.category)
+        return update(product, item: product.item, category: product.category)
     }
     
     // Updates product properties that don't belong to its unique with prototype
@@ -224,12 +250,13 @@ public class Product: DBSyncable, Identifiable {
 
     // Updates self and its dependencies with product, the references to the dependencies (uuid) are not changed
     public func updateWithoutChangingReferences(_ product: Product) -> Product {
+        let updatedItem = item.updateWithoutChangingReferences(product.item)
         let updatedCategory = category.updateWithoutChangingReferences(product.category)
-        return update(product, category: updatedCategory)
+        return update(product, item: updatedItem, category: updatedCategory)
     }
 
-    fileprivate func update(_ product: Product, category: ProductCategory) -> Product {
-        return copy(name: product.name, category: product.category, brand: product.brand, lastServerUpdate: product.lastServerUpdate, removed: product.removed)
+    fileprivate func update(_ product: Product, item: Item, category: ProductCategory) -> Product {
+        return copy(item: item, category: category, brand: product.brand, lastServerUpdate: product.lastServerUpdate, removed: product.removed)
     }
 
     public func same(_ rhs: Product) -> Bool {
@@ -238,7 +265,7 @@ public class Product: DBSyncable, Identifiable {
 }
 
 public func ==(lhs: Product, rhs: Product) -> Bool {
-    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.category == rhs.category && lhs.brand == rhs.brand && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
+    return lhs.uuid == rhs.uuid && lhs.item == rhs.item && lhs.category == rhs.category && lhs.brand == rhs.brand && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }
 
 // TODO REMOVE?

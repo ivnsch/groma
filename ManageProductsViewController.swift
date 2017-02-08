@@ -251,7 +251,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             // Assumption: When user edits a product in product screen, they want to modify the product itself. So for example, if they enter a new category, all items in the app referencing this product will also change their category. Or if they enter a new unit (say "box" instead of "packet") all items in the app using this quantifiable product, will now use "box". This maybe should be made clear to the user in some form, e.g. by explaining this when entering the product screen or when submitting an edit.
             // This is different to when user edits items (list, inventory, etc) - in this case we assume the intention is to change data *of the item*, and not altering the referenced (store/quantifiable)products. If they e.g. enter a new category for an item, we assume they want only this item to be categorized differently, not manipulate the underlaying product, which would affect other items in the app.
             let updatedCategory = editingItem.product.product.category.copy(name: input.section, color: input.sectionColor)
-            let updatedProduct = editingItem.product.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
+            let updatedItem = editingItem.product.product.item.copy(name: input.name)
+            let updatedProduct = editingItem.product.product.copy(item: updatedItem, category: updatedCategory, brand: input.brand)
             let updatedQuantifiableProduct = editingItem.product.copy(baseQuantity: input.storeProductInput.baseQuantity, unit: input.storeProductInput.unit, product: updatedProduct)
             
             Prov.productProvider.update(updatedQuantifiableProduct, remote: true, successHandler{

@@ -35,7 +35,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         didSet {
             guard let model = model else {QL3("Model is nil"); return}
             
-            nameLabel.text = NSLocalizedString(model.product.product.name, comment: "")
+            nameLabel.text = NSLocalizedString(model.product.product.item.name, comment: "")
             
             centerVerticallyNameLabelConstraint.constant = model.product.product.brand.isEmpty ? 0 : 10
             brandLabel.text = model.product.product.brand

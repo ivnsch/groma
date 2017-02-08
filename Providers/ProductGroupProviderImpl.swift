@@ -361,7 +361,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
             
             // TODO units? for now doesn't matter since we are not going to continue using groups
             let prototype = ProductPrototype(name: input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand, baseQuantity: "1", unit: .none)
-            Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
+            Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
                 
                 if let product = result.sucessResult {
                     let updatedGroupItem = updatingGroupItem.copy(quantity: input.quantity, product: product)

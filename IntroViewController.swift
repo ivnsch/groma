@@ -175,7 +175,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                             Prov.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
                                 
                                 let productsIngredients: [(product: QuantifiableProduct, quantity: Int)] = ingredients.flatMap {ingredient in
-                                    if let product = products.findFirst({$0.name == ingredient.name}) {
+                                    if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill group
                                         let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: .none, product: product)
                                         return (quanatifiableProduct, ingredient.quantity)
@@ -242,7 +242,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                             Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
                         
                                 let productsIngredients: [(product: QuantifiableProduct, quantity: Int)] = productsWithQuantity.flatMap {ingredient in
-                                    if let product = products.findFirst({$0.name == ingredient.name}) {
+                                    if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill list
                                         let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: .none, product: product)
                                         return (quanatifiableProduct, ingredient.quantity)
@@ -300,8 +300,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                 QL2("Finished copying prefill database")
                 initDefaultInventory {inventoryMaybe in
                     QL2("Finished adding default inventory")
-                    initExampleGroup {
-                        QL2("Finished adding example group")
+                    
+//                    initExampleGroup { // Disabled, getting exception "Can not add objects from a different Realm" after adding "Item" Realm object (no idea why). We don't use groups anymore anyway.
+//                        QL2("Finished adding example group")
                         if let inventory = inventoryMaybe {
                             initExampleList(inventory) {
                                 QL2("Finished adding example list")

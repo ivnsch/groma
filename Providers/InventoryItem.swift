@@ -76,11 +76,11 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
     }
     
     static func createFilter(_ productUnique: ProductUnique, inventoryUuid: String) -> String {
-        return "\(createFilterInventory(inventoryUuid)) AND productOpt.productOpt.name = '\(productUnique.name)' AND productOpt.productOpt.brand = '\(productUnique.brand)'"
+        return "\(createFilterInventory(inventoryUuid)) AND productOpt.productOpt.itemOpt.name = '\(productUnique.name)' AND productOpt.productOpt.brand = '\(productUnique.brand)'"
     }
 
     static func createFilter(_ productUnique: ProductUnique, inventoryUuid: String, notUuid: String) -> String {
-        return "\(createFilterInventory(inventoryUuid)) AND productOpt.productOpt.name = '\(productUnique.name)' AND productOpt.productOpt.brand = '\(productUnique.brand)' AND uuid != '\(notUuid)'"
+        return "\(createFilterInventory(inventoryUuid)) AND productOpt.productOpt.itemOpt.name = '\(productUnique.name)' AND productOpt.productOpt.brand = '\(productUnique.brand)' AND uuid != '\(notUuid)'"
     }
     
     static func createFilter(productUuid: String, inventoryUuid: String) -> String {

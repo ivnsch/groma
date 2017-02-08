@@ -76,7 +76,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
                 
                 let listItem = tableViewListItem.listItem
                 
-                nameLabel.text = NSLocalizedString(listItem.product.product.product.name, comment: "")
+                nameLabel.text = NSLocalizedString(listItem.product.product.product.item.name, comment: "")
                 shownQuantity = listItem.quantity(status)
                 
                 centerVerticallyNameLabelConstraint.constant = listItem.product.product.product.brand.isEmpty ? 0 : 10
@@ -86,7 +86,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
                 
                 updateModeItemsVisibility(false)
                 
-                undoLabel1.text = listItem.product.product.product.name
+                undoLabel1.text = listItem.product.product.product.item.name
                 
                 setOpen(tableViewListItem.swiped)
                 if tableViewListItem.swiped {

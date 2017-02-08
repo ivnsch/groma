@@ -344,7 +344,7 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void) {
+    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void) {
         
         // load product and update or create one
         // if we find a product with the name/brand we update it - this is for the case the user changes the price etc for an existing product while adding an item
@@ -359,11 +359,39 @@ class ProductProviderImpl: ProductProvider {
                 Prov.productCategoryProvider.categoryWithName(prototype.category) {result in
                     
                     func onHasCategory(_ category: ProductCategory) {
-                        // fav: 1 If we create a product we are "using" it so we start with fav: 1. This way, for example, when user creates new products in the quick add, these products will show in the quick add list above of prefilled products that have never been used.
-                        let newProduct = Product(uuid: UUID().uuidString, name: prototype.name, category: category, brand: prototype.brand)
-                        handler(ProviderResult(status: .success, sucessResult: newProduct))
+                        
+                        func onHasItem(_ item: Item) {
+                            // fav: 1 If we create a product we are "using" it so we start with fav: 1. This way, for example, when user creates new products in the quick add, these products will show in the quick add list above of prefilled products that have never been used.
+                            let newProduct = Product(uuid: UUID().uuidString, item: item, category: category, brand: prototype.brand)
+                            handler(ProviderResult(status: .success, sucessResult: newProduct))
+                        }
+                        
+                        // 2nd dependency - item
+                        Prov.itemsProvider.item(name: prototype.name) {itemResult in
+                            if let successResult = itemResult.sucessResult {
+                                
+                                if let existingItem = successResult {
+                                    if updateItem {
+                                        // Nothing to update yet (name is the unique)
+                                        //                                    let updatedItem = existingItem.copy()
+                                        onHasItem(existingItem)
+                                    } else {
+                                        onHasItem(existingItem)
+                                    }
+                                    
+                                } else {
+                                    let newItem = Item(uuid: UUID().uuidString, name: prototype.name, fav: 1)
+                                    onHasItem(newItem)
+                                }
+
+                            } else {
+                                QL4("Couldn't fetch item: \(itemResult)")
+                                handler(ProviderResult(status: .databaseUnknown))
+                            }
+                        }
                     }
                     
+                    // 1st dependency - category
                     if let existingCategory = result.sucessResult {
                         if updateCategory {
                             let udpatedCategory = existingCategory.copy(color: prototype.categoryColor)
@@ -386,7 +414,7 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void) {
+    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void) {
         loadQuantifiableProduct(unique: (name: prototype.name, brand: prototype.brand, unit: prototype.unit, baseQuantity: prototype.baseQuantity)) {quantifiableProductResult in
             
             if let existingQuantifiableProduct = quantifiableProductResult.sucessResult {
@@ -397,7 +425,7 @@ class ProductProviderImpl: ProductProvider {
             } else { //quantifiable product doesn't exist
                 
                 
-                self.mergeOrCreateProduct(prototype: prototype, updateCategory: updateCategory) {(result: ProviderResult<Product>) in
+                self.mergeOrCreateProduct(prototype: prototype, updateCategory: updateCategory, updateItem: updateItem) {(result: ProviderResult<Product>) in
                     if let updatedProduct = result.sucessResult {
                         let quantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: updatedProduct)
                         handler(ProviderResult(status: .success, sucessResult: quantifiableProduct))

@@ -28,7 +28,7 @@ public extension Array where Element: InventoryItem {
         switch sortBy {
         case .alphabetic:
             return sorted{
-                if $0.0.product.product.name == $0.1.product.product.name {
+                if $0.0.product.product.item.name == $0.1.product.product.item.name {
                     if $0.0.quantity == $0.1.quantity {
                         return $0.0.product.unit.text < $0.1.product.unit.text
                     } else {
@@ -36,16 +36,16 @@ public extension Array where Element: InventoryItem {
                     }
                     
                 } else {
-                    return $0.0.product.product.name < $0.1.product.product.name
+                    return $0.0.product.product.item.name < $0.1.product.product.item.name
                 }
             }
         case .count:
             return sorted{
                 if $0.0.quantity == $0.1.quantity {
-                    if $0.0.product.product.name == $0.1.product.product.name {
+                    if $0.0.product.product.item.name == $0.1.product.product.item.name {
                         return $0.0.product.unit.text < $0.1.product.unit.text
                     } else {
-                        return $0.0.product.product.name < $0.1.product.product.name
+                        return $0.0.product.product.item.name < $0.1.product.product.item.name
                     }
                 } else {
                     return $0.0.quantity < $0.1.quantity

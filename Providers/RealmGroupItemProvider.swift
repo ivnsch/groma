@@ -22,7 +22,7 @@ class RealmGroupItemProvider: RealmProvider {
             
             let sortData: (key: String, ascending: Bool) = {
                 switch sortBy {
-                case .alphabetic: return ("name", true)
+                case .alphabetic: return ("productOpt.itemOpt.name", true)
                 case .count: return ("quantity", false)
                 }
             }()
@@ -109,6 +109,7 @@ class RealmGroupItemProvider: RealmProvider {
                 //save
                 try realm.write {
                     for obj in newOrIncrementedGroupItems {
+                        // TODO Exception during intro here: 'Can not add objects from a different Realm' (why different realm??)
                         realm.add(obj, update: true)
                     }
                 }

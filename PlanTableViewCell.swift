@@ -26,7 +26,7 @@ class PlanTableViewCell: UITableViewCell {
     var planItem: PlanItem? {
         didSet {
             if let planItem = planItem {
-                nameLabel.text = planItem.product.name
+                nameLabel.text = planItem.product.item.name
                 quantityLabel.text = "\(planItem.quantity)"
                 quantityLeftLabel.text = "\(planItem.quantity - planItem.usedQuantity)"
             } else {

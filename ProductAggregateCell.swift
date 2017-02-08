@@ -18,7 +18,7 @@ class ProductAggregateCell: UITableViewCell {
     var productAggregate: ProductAggregate? {
         didSet {
             if let productAggregate = productAggregate {
-                nameLabel.text = productAggregate.product.name
+                nameLabel.text = productAggregate.product.item.name
                 priceLabel.text = productAggregate.totalPrice.toLocalCurrencyString()
                 percentLabel.text = "\(productAggregate.percentage.toString(1)) %"
             }
