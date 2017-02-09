@@ -12,7 +12,7 @@ import QorumLogs
 
 public final class Ingredient: Object {
     public dynamic var uuid: String = ""
-    public dynamic var quantity: Int = 0
+    public dynamic var quantity: Float = 0
     dynamic var itemOpt: Item? = Item()
     dynamic var recipeOpt: Recipe? = Recipe()
     
@@ -44,7 +44,7 @@ public final class Ingredient: Object {
         }
     }
 
-    public convenience init(uuid: String, quantity: Int, item: Item, recipe: Recipe) {
+    public convenience init(uuid: String, quantity: Float, item: Item, recipe: Recipe) {
         self.init()
         
         self.uuid = uuid
@@ -91,7 +91,7 @@ public final class Ingredient: Object {
     // MARK: - ProductWithQuantity2 (REMOVED) TODO clean up
     
     
-    public func copy(uuid: String? = nil, quantity: Int? = nil, item: Item? = nil, recipe: Recipe? = nil) -> Ingredient {
+    public func copy(uuid: String? = nil, quantity: Float? = nil, item: Item? = nil, recipe: Recipe? = nil) -> Ingredient {
         return Ingredient(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
@@ -100,7 +100,7 @@ public final class Ingredient: Object {
         )
     }
     
-    public func incrementQuantity(_ delta: Int) {
+    public func incrementQuantity(_ delta: Float) {
         let updatedQuantity = quantity + delta
         if updatedQuantity >= 0 {
             quantity = quantity + delta
@@ -110,11 +110,11 @@ public final class Ingredient: Object {
         }
     }
     
-    public func incrementQuantityCopy(_ delta: Int) -> Ingredient {
+    public func incrementQuantityCopy(_ delta: Float) -> Ingredient {
         return copy(quantity: quantity + delta)
     }
     
-    public func updateQuantityCopy(_ quantity: Int) -> Ingredient {
+    public func updateQuantityCopy(_ quantity: Float) -> Ingredient {
         return copy(quantity: quantity)
     }
     
@@ -131,7 +131,7 @@ public final class Ingredient: Object {
         return uuid == rhs.uuid
     }
     
-    public static func unitText(quantity: Int, baseQuantity: Float, unit: ProductUnit, showNoneText: Bool = false) -> String {
+    public static func unitText(quantity: Float, baseQuantity: Float, unit: ProductUnit, showNoneText: Bool = false) -> String {
         let quantifiableProductUnitText = QuantifiableProduct.unitText(baseQuantity: baseQuantity, unit: unit, showNoneText: showNoneText, pluralUnit: quantity > 1)
         return "\(quantity)\(quantifiableProductUnitText)"
     }

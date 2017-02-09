@@ -11,13 +11,13 @@ import Foundation
 struct RemotePlanItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let inventoryUuid: String
     let productUuid: String
-    let quantity: Int
+    let quantity: Float
     
     init?(representation: AnyObject) {
         guard
             let inventoryUuid = representation.value(forKeyPath: "inventoryUuid") as? String,
             let productUuid = representation.value(forKeyPath: "productUuid") as? String,
-            let quantity = representation.value(forKeyPath: "quantity") as? Int
+            let quantity = representation.value(forKeyPath: "quantity") as? Float
             else {
                 print("Invalid json: \(representation)")
                 return nil}

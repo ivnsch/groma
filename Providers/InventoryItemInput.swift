@@ -10,9 +10,9 @@ import Foundation
 
 public struct InventoryItemInput {
     public let productPrototype: ProductPrototype
-    public let quantity: Int
+    public let quantity: Float
     
-    public init(name: String, quantity: Int, category: String, categoryColor: UIColor, brand: String) {
+    public init(name: String, quantity: Float, category: String, categoryColor: UIColor, brand: String) {
         self.productPrototype = ProductPrototype(name: name, category: category, categoryColor: categoryColor, brand: brand)
         self.quantity = quantity
     }

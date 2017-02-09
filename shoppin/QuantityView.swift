@@ -9,7 +9,7 @@
 import UIKit
 
 protocol QuantityViewDelegate: class {
-    func onRequestUpdateQuantity(_ delta: Int)
+    func onRequestUpdateQuantity(_ delta: Float)
 }
 
 // TODO for some reason the buttons are not interactive! outlets are connected, all views up in the hierarchy have userInteractionEnables = yes (until the custom view -in storyboard- in which this was contained). But nothing happens on tap also no press effect on the button. It should not be anything related with the cell, only the custom view, because when the buttons are added directly to the cell (like now) there are no problems.
@@ -19,7 +19,7 @@ class QuantityView: UIView {
  
     @IBOutlet weak var quantityLabel: UILabel!
     
-    var quantity: Int = 0 {
+    var quantity: Float = 0 {
         didSet {
             quantityLabel.text = String(quantity)
         }

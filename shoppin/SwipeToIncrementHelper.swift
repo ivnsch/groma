@@ -10,8 +10,8 @@ import UIKit
 import QorumLogs
 
 protocol SwipeToIncrementHelperDelegate: class {
-    func currentQuantity() -> Int
-    func onQuantityUpdated(_ quantity: Int)
+    func currentQuantity() -> Float
+    func onQuantityUpdated(_ quantity: Float)
     func onFinishSwipe()
 }
 
@@ -23,7 +23,7 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
     fileprivate var panRecognizer: UIPanGestureRecognizer!
     fileprivate var panStartPoint: CGPoint!
     
-    fileprivate var initQuantitySlider: Int = 0 // capture quantity when we start sliding
+    fileprivate var initQuantitySlider: Float = 0 // capture quantity when we start sliding
     
     weak var delegate: SwipeToIncrementHelperDelegate?
     
@@ -63,7 +63,7 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
                 let currentPoint = recognizer.translation(in: view)
                 let deltaX = currentPoint.x - panStartPoint.x
                 let deltaForQuantity = Int(deltaX / 20)
-                let updatedQuantity = max(0, initQuantitySlider + deltaForQuantity)
+                let updatedQuantity = max(0, initQuantitySlider + Float(deltaForQuantity))
                 delegate.onQuantityUpdated(updatedQuantity)
             }
     

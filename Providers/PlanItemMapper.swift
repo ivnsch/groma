@@ -21,7 +21,7 @@ class PlanItemMapper {
         return dbPlanItem
     }
     
-    class func planItemWith(_ dbPlanItem: DBPlanItem, usedQuantity: Int) -> PlanItem {
+    class func planItemWith(_ dbPlanItem: DBPlanItem, usedQuantity: Float) -> PlanItem {
         return PlanItem(
             inventory: InventoryMapper.inventoryWithDB(dbPlanItem.inventory),
             product: dbPlanItem.product,

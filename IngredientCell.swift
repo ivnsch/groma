@@ -14,7 +14,7 @@ import Providers
 protocol IngredientCellDelegate: class {
     func onIncrementItemTap(_ cell: IngredientCell)
     func onDecrementItemTap(_ cell: IngredientCell)
-    func onPanQuantityUpdate(_ cell: IngredientCell, newQuantity: Int)
+    func onPanQuantityUpdate(_ cell: IngredientCell, newQuantity: Float)
 }
 
 
@@ -42,11 +42,11 @@ class IngredientCell: UITableViewCell, SwipeToIncrementHelperDelegate {
     
     weak var delegate: IngredientCellDelegate?
     
-    var shownQuantity: Int = 0 {
+    var shownQuantity: Float = 0 {
         didSet {
 //            let unitText = model.map{$0.product.unitText} ?? ""
 //            quantityLabel.text = String("\(shownQuantity)\(unitText)")
-            quantityLabel.text = String("\(shownQuantity)")
+            quantityLabel.text = String("\(shownQuantity.quantityString)")
         }
     }
     
@@ -88,11 +88,11 @@ class IngredientCell: UITableViewCell, SwipeToIncrementHelperDelegate {
     
     // MARK: - SwipeToIncrementHelperDelegate
     
-    func currentQuantity() -> Int {
+    func currentQuantity() -> Float {
         return shownQuantity
     }
     
-    func onQuantityUpdated(_ quantity: Int) {
+    func onQuantityUpdated(_ quantity: Float) {
         shownQuantity = quantity
     }
     

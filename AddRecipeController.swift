@@ -14,7 +14,7 @@ import QorumLogs
 
 struct AddRecipeIngredientModel {
     var productPrototype: ProductPrototype
-    var quantity: Int
+    var quantity: Float
     let ingredient: Ingredient // The unmodified ingredient (to pass around)
 }
 
@@ -219,7 +219,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         models[indexPath.row].productPrototype.brand = brand
     }
 
-    func onUpdate(quantity: Int, indexPath: IndexPath) {
+    func onUpdate(quantity: Float, indexPath: IndexPath) {
         models[indexPath.row].quantity = quantity
     }
     

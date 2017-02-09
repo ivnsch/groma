@@ -339,7 +339,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     }
 
     
-    func onIncrementItem(_ tableViewListItem: ListItem, delta: Int) {
+    func onIncrementItem(_ tableViewListItem: ListItem, delta: Float) {
         Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
@@ -541,7 +541,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         })
     }
 
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
         guard let realmData = realmData else {QL4("No realm data"); return}
         
         if let list = currentList {
@@ -702,7 +702,7 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
         })
     }
     
-    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Int) {
+    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Float) {
         Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: newQuantity - tableViewListItem.quantity, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)

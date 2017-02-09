@@ -201,7 +201,7 @@ class PlanProviderImpl: PlanProvider {
         }
     }
     
-    func incrementPlanItem(_ item: PlanItem, delta: Int, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+    func incrementPlanItem(_ item: PlanItem, delta: Float, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         dbProvider.increment(item, delta: delta) {saved in
             if saved {
                 handler(ProviderResult(status: .success))

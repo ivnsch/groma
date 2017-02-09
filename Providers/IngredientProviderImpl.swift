@@ -33,7 +33,7 @@ class IngredientProviderImpl: IngredientProvider {
         }
     }
     
-    func increment(_ ingredient: Ingredient, quantity: Int, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (ProviderResult<Int>) -> Void) {
+    func increment(_ ingredient: Ingredient, quantity: Float, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (ProviderResult<Float>) -> Void) {
         DBProv.ingredientProvider.increment(ingredient, quantity: quantity, notificationToken: notificationToken, realm: realm) {quantityMaybe in
             if let quantity = quantityMaybe {
                 handler(ProviderResult(status: .success, sucessResult: quantity))

@@ -12,14 +12,14 @@ import Foundation
 public struct ListItemInput {
     
     public let name: String
-    public let quantity: Int
+    public let quantity: Float
     public let section: String
     public let sectionColor: UIColor
     public let note: String?
     public let brand: String
     public let storeProductInput: StoreProductInput
     
-    public init(name: String, quantity: Int, price: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: ProductUnit, brand: String) {
+    public init(name: String, quantity: Float, price: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: ProductUnit, brand: String) {
         self.name = name
         self.quantity = quantity
         self.section = section

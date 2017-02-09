@@ -186,7 +186,7 @@ class IngredientsControllerNew: ItemsController, IngredientCellDelegate, UIPicke
         fatalError("TODO!!!!!!!!!!!!!!!!!!!!")
     }
     
-    override func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
+    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
         // Not used
     }
     
@@ -369,7 +369,7 @@ class IngredientsControllerNew: ItemsController, IngredientCellDelegate, UIPicke
         SwipeToIncrementAlertHelper.check(self)
     }
     
-    func onPanQuantityUpdate(_ cell: IngredientCell, newQuantity: Int) {
+    func onPanQuantityUpdate(_ cell: IngredientCell, newQuantity: Float) {
         if let model = cell.model {
             changeQuantity(cell, delta: newQuantity - model.quantity)
         } else {
@@ -377,7 +377,7 @@ class IngredientsControllerNew: ItemsController, IngredientCellDelegate, UIPicke
         }
     }
     
-    fileprivate func changeQuantity(_ cell: IngredientCell, delta: Int) {
+    fileprivate func changeQuantity(_ cell: IngredientCell, delta: Float) {
         guard let model = cell.model else {QL4("Invalid state: Cell must have model"); return}
         
         increment(model, delta: delta, onSuccess: {updatedQuantity in
@@ -386,7 +386,7 @@ class IngredientsControllerNew: ItemsController, IngredientCellDelegate, UIPicke
     }
     
     
-    fileprivate func increment(_ model: Ingredient, delta: Int, onSuccess: @escaping (Int) -> Void) {
+    fileprivate func increment(_ model: Ingredient, delta: Float, onSuccess: @escaping (Float) -> Void) {
         guard let itemsResult = itemsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         guard let ingredientsRealm = itemsResult.realm else {QL4("No realm"); return}

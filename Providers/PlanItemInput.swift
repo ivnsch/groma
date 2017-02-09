@@ -11,7 +11,7 @@ import Foundation
 public class PlanItemInput {
     
     public let name: String
-    public let quantity: Int
+    public let quantity: Float
     public let price: Float
     public let category: String
     public let categoryColor: UIColor
@@ -20,7 +20,7 @@ public class PlanItemInput {
     public let brand: String
     public let store: String
     
-    public init(name: String, quantity: Int, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+    public init(name: String, quantity: Float, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
         self.name = name
         self.quantity = quantity
         self.price = price

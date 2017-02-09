@@ -15,7 +15,7 @@ protocol AddRecipeIngredientCellDelegate {
     
     func onUpdate(productName: String, indexPath: IndexPath)
     func onUpdate(brand: String, indexPath: IndexPath)
-    func onUpdate(quantity: Int, indexPath: IndexPath)
+    func onUpdate(quantity: Float, indexPath: IndexPath)
     func onUpdate(baseQuantity: String, indexPath: IndexPath)
     func onUpdate(unit: ProductUnit, indexPath: IndexPath)
     
@@ -160,8 +160,8 @@ extension AddRecipeIngredientCell {
         return brandTextField.text ?? ""
     }
     
-    fileprivate var quantityInput: Int {
-        return quantityTextField.text.flatMap({Int($0)}) ?? 0
+    fileprivate var quantityInput: Float {
+        return quantityTextField.text.flatMap({Float($0)}) ?? 0
     }
     
     fileprivate var unitInput: ProductUnit {

@@ -310,7 +310,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         fatalError("Not supported") // It doesn't make sense to add recipes to the inventory
     }
     
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
         if let inventory = inventory {
             Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: quantity, remote: true, successHandler{addedItemWithDelta in
             })
@@ -476,7 +476,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void) {
+    func increment(_ model: ProductWithQuantity2, delta: Float, onSuccess: @escaping (Float) -> Void) {
         Prov.inventoryItemsProvider.incrementInventoryItem(model as! InventoryItem, delta: delta, remote: true, successHandler({updatedQuantity in
             onSuccess(updatedQuantity)
         }))

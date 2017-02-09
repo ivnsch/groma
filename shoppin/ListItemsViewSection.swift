@@ -22,7 +22,7 @@ protocol ItemActionsDelegate: class {
     func onHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection)
     func onMinusTap(_ tableViewListItem: TableViewListItem)
     func onPlusTap(_ tableViewListItem: TableViewListItem)
-    func onPanQuantityUpdate(_ tableViewListItem: TableViewListItem, newQuantity: Int)
+    func onPanQuantityUpdate(_ tableViewListItem: TableViewListItem, newQuantity: Float)
 }
 
 class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListItemCellDelegate {
@@ -66,7 +66,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     /**
      Returns total quantity of shown items exluding those marked for undo
      */
-    var totalQuantity: Int {
+    var totalQuantity: Float {
         return tableViewListItems.reduce(0) {sum, item in
             return sum + (item.swiped ? 0 : item.listItem.quantity(status))
         }
@@ -197,7 +197,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
         delegate?.onPlusTap(listItem)
     }
     
-    func onPanQuantityUpdate(_ tableViewListItem: TableViewListItem, newQuantity: Int) {
+    func onPanQuantityUpdate(_ tableViewListItem: TableViewListItem, newQuantity: Float) {
         delegate?.onPanQuantityUpdate(tableViewListItem, newQuantity: newQuantity)
     }
 }

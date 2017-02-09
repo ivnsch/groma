@@ -51,7 +51,7 @@ class MemInventoryItemProvider {
         return true
     }
     
-    func incrementInventoryItem(_ inventoryItem: InventoryItem, delta: Int) -> Bool {
+    func incrementInventoryItem(_ inventoryItem: InventoryItem, delta: Float) -> Bool {
         guard enabled else {return false}
 
         // increment only quantity - in mem cache we don't care about quantityDelta, this cache is only used by the UI, not to write objs to database or server

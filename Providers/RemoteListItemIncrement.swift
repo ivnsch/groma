@@ -12,8 +12,8 @@ import QorumLogs
 public struct RemoteListItemIncrement: ResponseObjectSerializable, CustomDebugStringConvertible {
     public let uuid: String
     public let status: ListItemStatus
-    public let delta: Int
-    public let updatedQuantity: Int
+    public let delta: Float
+    public let updatedQuantity: Float
     public let lastUpdate: Int64
     
     public init?(representation: AnyObject) {
@@ -21,8 +21,8 @@ public struct RemoteListItemIncrement: ResponseObjectSerializable, CustomDebugSt
             let uuid = representation.value(forKeyPath: "uuid") as? String,
             let statusInt = representation.value(forKeyPath: "status") as? Int,
             let status = ListItemStatus(rawValue: statusInt),
-            let delta = representation.value(forKeyPath: "delta") as? Int,
-            let updatedQuantity = representation.value(forKeyPath: "updatedQuantity") as? Int,
+            let delta = representation.value(forKeyPath: "delta") as? Float,
+            let updatedQuantity = representation.value(forKeyPath: "updatedQuantity") as? Float,
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")

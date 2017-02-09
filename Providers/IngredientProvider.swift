@@ -21,7 +21,7 @@ public protocol IngredientProvider {
     func add(_ input: IngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     // NOTE: the realm has to be from Results where notificationToken comes from, otherwise sup pressing of notifications doesn't work.
-    func increment(_ ingredient: Ingredient, quantity: Int, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (ProviderResult<Int>) -> Void)
+    func increment(_ ingredient: Ingredient, quantity: Float, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (ProviderResult<Float>) -> Void)
     
     // Input form (update)
     func update(_ ingredient: Ingredient, input: IngredientInput, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<(ingredient: Ingredient, replaced: Bool)>) -> Void)

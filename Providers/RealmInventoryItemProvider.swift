@@ -57,7 +57,7 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     // TODO remove onlyDelta, with realm sync we don't need to store deltas anymore and this is not necessary
-    func incrementInventoryItem(_ itemUuid: String, delta: Int, onlyDelta: Bool = false, dirty: Bool, handler: @escaping (DBResult<Int>) -> Void) {
+    func incrementInventoryItem(_ itemUuid: String, delta: Float, onlyDelta: Bool = false, dirty: Bool, handler: @escaping (DBResult<Float>) -> Void) {
         
         doInWriteTransaction({realm in
             
@@ -79,7 +79,7 @@ class RealmInventoryItemProvider: RealmProvider {
                 }
             }
             
-        }) {(result: DBResult<Int>?) in
+        }) {(result: DBResult<Float>?) in
             QL2("Calling handler")
             handler(result ?? DBResult(status: .unknown))
         }
@@ -87,12 +87,12 @@ class RealmInventoryItemProvider: RealmProvider {
     
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     // param onlyDelta: if we want to update only quantityDelta field (opposed to updating both quantity and quantityDelta)
-    func incrementInventoryItem(_ item: InventoryItem, delta: Int, onlyDelta: Bool = false, dirty: Bool, handler: @escaping (DBResult<Int>) -> Void) {
+    func incrementInventoryItem(_ item: InventoryItem, delta: Float, onlyDelta: Bool = false, dirty: Bool, handler: @escaping (DBResult<Float>) -> Void) {
         incrementInventoryItem(item.uuid, delta: delta, onlyDelta: onlyDelta, dirty: dirty, handler: handler)
     }
     
     // TODO remove? seems not to be needed anymore
-//    fileprivate func incrementInventoryItemSync(_ realm: Realm, dbInventoryItem: InventoryItem, delta: Int, onlyDelta: Bool = false, dirty: Bool) {
+//    fileprivate func incrementInventoryItemSync(_ realm: Realm, dbInventoryItem: InventoryItem, delta: Float, onlyDelta: Bool = false, dirty: Bool) {
 //        
 //        // convert to model obj because the increment functions are in the model obj (we could also add them to the db obj)
 //        let inventoryItem = InventoryItemMapper.inventoryItemWithDB(dbInventoryItem)
@@ -126,7 +126,7 @@ class RealmInventoryItemProvider: RealmProvider {
     
     // Helper function for common code
     // This is only called when using quick add, not +/-.
-    fileprivate func addOrIncrementInventoryItemWithProductSync(_ realm: Realm, product: StoreProduct, inventory: DBInventory, quantity: Int, dirty: Bool) -> InventoryItemWithHistoryItem? {
+    fileprivate func addOrIncrementInventoryItemWithProductSync(_ realm: Realm, product: StoreProduct, inventory: DBInventory, quantity: Float, dirty: Bool) -> InventoryItemWithHistoryItem? {
 
         // add/increment item and add history entry
         let items = addSync(realm, items: [ProductWithQuantityInput(product: product, quantity: quantity)], inventory: inventory, dirty: dirty)
@@ -139,7 +139,7 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     // TODO needed? remove?
-//    func incrementInventoryItemOnlyDelta(_ item: InventoryItem, delta: Int, dirty: Bool, handler: @escaping (Bool) -> ()) {
+//    func incrementInventoryItemOnlyDelta(_ item: InventoryItem, delta: Float, dirty: Bool, handler: @escaping (Bool) -> ()) {
 //        let incrementedInventoryItem = item.copy(quantityDelta: item.quantityDelta + delta)
 //        
 //        print("\n\nafter delta: \(delta), saving incrementedInventoryItem: \(incrementedInventoryItem)\n\n")
@@ -248,15 +248,15 @@ class RealmInventoryItemProvider: RealmProvider {
     // MARK: - Direct (no history)
     
     // Add product
-    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Int, dirty: Bool, _ handler: @escaping ((inventoryItem: InventoryItem, delta: Int)?) -> Void) {
+    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Float, dirty: Bool, _ handler: @escaping ((inventoryItem: InventoryItem, delta: Float)?) -> Void) {
         doInWriteTransaction({[weak self] realm in
             return self?.addOrIncrementInventoryItem(realm, inventory: inventory, product: product, quantity: quantity, dirty: dirty)
-        }, finishHandler: {(inventoryItemWithDeltaMaybe: (inventoryItem: InventoryItem, delta: Int)?) in
+        }, finishHandler: {(inventoryItemWithDeltaMaybe: (inventoryItem: InventoryItem, delta: Float)?) in
             handler(inventoryItemWithDeltaMaybe)
         })
     }
 
-    func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)], dirty: Bool, _ handler: @escaping ([(inventoryItem: InventoryItem, delta: Int)]?) -> Void) {
+    func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)], dirty: Bool, _ handler: @escaping ([(inventoryItem: InventoryItem, delta: Float)]?) -> Void) {
         
         // Fixes Realm acces in incorrect thread exceptions
         let inventoryCopy = inventory.copy()
@@ -264,14 +264,14 @@ class RealmInventoryItemProvider: RealmProvider {
         
         doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return nil}
             
-            var addedOrIncrementedInventoryItems: [(inventoryItem: InventoryItem, delta: Int)] = []
+            var addedOrIncrementedInventoryItems: [(inventoryItem: InventoryItem, delta: Float)] = []
             for productsWithQuantity in productsWithQuantitiesCopy {
                 let inventoryItem = weakSelf.addOrIncrementInventoryItem(realm, inventory: inventoryCopy, product: productsWithQuantity.product, quantity: productsWithQuantity.quantity, dirty: dirty)
                 addedOrIncrementedInventoryItems.append(inventoryItem)
             }
             return addedOrIncrementedInventoryItems
             
-            }, finishHandler: {(addedOrIncrementedInventoryItems: [(inventoryItem: InventoryItem, delta: Int)]?) in
+            }, finishHandler: {(addedOrIncrementedInventoryItems: [(inventoryItem: InventoryItem, delta: Float)]?) in
                 handler(addedOrIncrementedInventoryItems)
         })
     }  
@@ -299,7 +299,7 @@ class RealmInventoryItemProvider: RealmProvider {
         return adddedOrUpdatedItems
     }
     
-    fileprivate func addOrIncrementInventoryItem(_ realm: Realm, inventory: DBInventory, product: QuantifiableProduct, quantity: Int, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Int) {
+    fileprivate func addOrIncrementInventoryItem(_ realm: Realm, inventory: DBInventory, product: QuantifiableProduct, quantity: Float, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Float) {
     
         // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
         let existingInventoryItems: [InventoryItem] = loadSync(realm, filter: InventoryItem.createFilter(product, inventory))

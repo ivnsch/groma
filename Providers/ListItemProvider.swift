@@ -49,7 +49,7 @@ public protocol ListItemProvider {
     // product/section same logic as add(listItemInput) (see doc above). TODO review other update methods maybe these should be removed or at least made private, since they don't have this product/section logic and there's no reason from outside of the provider to use a different logic (which would be to update the linked product/section directly).
     func update(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: @escaping (ProviderResult<(listItem: ListItem, replaced: Bool)>) -> Void)
     
-    func addListItem(_ product: QuantifiableProduct, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String?, order orderMaybe: Int?, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
+    func addListItem(_ product: QuantifiableProduct, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Float, list: List, note: String?, order orderMaybe: Int?, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void)
     
     // TODO what are note and order parameters here if we are adding an array?
     func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String?, order orderMaybe: Int?, token: RealmToken?, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void)
@@ -71,7 +71,7 @@ public protocol ListItemProvider {
     // This is currently used only to retrieve possible product's list item on receiving a websocket notification with a product update
     func listItem(_ product: Product, list: List, _ handler: @escaping (ProviderResult<ListItem?>) -> ())
     
-    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ())
+    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Float, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ())
 
     func increment(_ increment: RemoteListItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ())
     
@@ -121,7 +121,7 @@ public protocol ListItemProvider {
     
     
     
-    func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Int, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
+    func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
     
     func addNew(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
 

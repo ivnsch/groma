@@ -49,13 +49,13 @@ public struct RemoteSwitchAllListItemsResult: ResponseObjectSerializable, Respon
 
 public struct RemoteSwitchAllListItemResult: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     public let uuid: String
-    public let dstQuantity: Int
+    public let dstQuantity: Float
     public let dstOrder: Int
     
     public init?(representation: AnyObject) {
         guard
             let uuid = representation.value(forKeyPath: "uuid") as? String,
-            let dstQuantity = representation.value(forKeyPath: "dstQuantity") as? Int,
+            let dstQuantity = representation.value(forKeyPath: "dstQuantity") as? Float,
             let dstOrder = representation.value(forKeyPath: "dstOrder") as? Int
             else {
                 QL4("Invalid json: \(representation)")

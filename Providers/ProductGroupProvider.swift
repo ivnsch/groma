@@ -48,7 +48,7 @@ public protocol ProductGroupProvider {
     // For websocket - simply upserts the inventory item, does not any checks or re-referencing of dependencies.
     func addOrUpdateLocal(_ groupItems: [GroupItem], _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func addGroupItems(_ srcGroup: ProductGroup, targetGroup: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Int)]>) -> Void)
+    func addGroupItems(_ srcGroup: ProductGroup, targetGroup: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Float)]>) -> Void)
 
     func add(_ itemInput: GroupItemInput, group: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<GroupItem>) -> Void)
 
@@ -61,7 +61,7 @@ public protocol ProductGroupProvider {
     
     func removeGroupItem(_ uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func increment(_ groupItem: GroupItem, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<Int>) -> Void)
+    func increment(_ groupItem: GroupItem, delta: Float, remote: Bool, _ handler: @escaping (ProviderResult<Float>) -> Void)
 
-    func increment(_ increment: ItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<Int>) -> Void)
+    func increment(_ increment: ItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<Float>) -> Void)
 }

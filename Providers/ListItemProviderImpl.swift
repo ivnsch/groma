@@ -392,7 +392,7 @@ class ListItemProviderImpl: ListItemProvider {
     
 
     // Adds list item with todo status
-    func addListItem(_ product: QuantifiableProduct, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
+    func addListItem(_ product: QuantifiableProduct, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Float, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         let listItemPrototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionName, targetSectionColor: sectionColor, storeProductInput: storeProductInput)
         self.add(listItemPrototype, status: status, list: list, token: token, handler)
     }
@@ -682,7 +682,7 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
-    func addListItem(_ product: QuantifiableProduct, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
+    func addListItem(_ product: QuantifiableProduct, status: ListItemStatus, section: Section, quantity: Float, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         // for now call the other func, which will fetch the section again... review if this is bad for performance otherwise let like this
         addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, storeProductInput: storeProductInput, token: token, handler)
     }
@@ -1137,7 +1137,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // TODO!!!! remote? why did this service not have remote before, forgot or we don't need it there?
-    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ()) {
+    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Float, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ()) {
         
         // Get item from database with updated quantityDelta
         // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
@@ -1287,7 +1287,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     // TODO rename add or increment
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
-    func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Int, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void) {
+    func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void) {
        
         if let tuple = DBProv.listItemProvider.addSync(quantifiableProduct: quantifiableProduct, store: store, list: list, quantity: quantity, status: status, realmData: realmData) {
             handler(ProviderResult(status: .success, sucessResult: tuple))

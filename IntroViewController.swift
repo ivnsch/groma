@@ -156,11 +156,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     
                     let exampleGroup = ProductGroup(uuid: UUID().uuidString, name: trans("example_group_fruits_salad"), color: UIColor.flatYellow, order: 0)
                     
-                    let ingredients: [(name: String, quantity: Int)] = [
+                    let ingredients: [(name: String, quantity: Float)] = [
                         (trans("pr_pineapple"), 1),
                         (trans("pr_plums"), 3),
                         (trans("pr_bananas"), 2),
-                        (trans("pr_strawberries"), 1)
+                        (trans("pr_strawberries"), 1),
+                        (trans("pr_water_1"), 3)
                     ]
                     
                     let ingredientsNameBrands: [(name: String, brand: String)] = ingredients.map{(name: $0.name, brand: "")}
@@ -174,7 +175,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         } else {
                             Prov.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
                                 
-                                let productsIngredients: [(product: QuantifiableProduct, quantity: Int)] = ingredients.flatMap {ingredient in
+                                let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = ingredients.flatMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill group
                                         let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: .none, product: product)
@@ -223,7 +224,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     
                     let exampleList = List(uuid: UUID().uuidString, name: trans("example_list_first_list"), color: UIColor.flatOrange, order: 0, inventory: inventory, store: nil)
                     
-                    let productsWithQuantity: [(name: String, quantity: Int)] = [
+                    let productsWithQuantity: [(name: String, quantity: Float)] = [
                         (trans("pr_peaches"), 6),
                         (trans("pr_oranges"), 12),
                         (trans("pr_kiwis"), 4),
@@ -241,7 +242,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         } else {
                             Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
                         
-                                let productsIngredients: [(product: QuantifiableProduct, quantity: Int)] = productsWithQuantity.flatMap {ingredient in
+                                let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill list
                                         let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: .none, product: product)
@@ -312,7 +313,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                             QL2("Didn't add default inventory so can't add example list")
                             onComplete()
                         }
-                    }
+//                    }
                 }
             }
         }

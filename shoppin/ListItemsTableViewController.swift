@@ -16,7 +16,7 @@ protocol ListItemsTableViewDelegate: class {
     func onListItemSelected(_ tableViewListItem: TableViewListItem, indexPath: IndexPath) // mark as undo
     func onListItemReset(_ tableViewListItem: TableViewListItem) // revert undo
     func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection)
-    func onIncrementItem(_ model: TableViewListItem, delta: Int)
+    func onIncrementItem(_ model: TableViewListItem, delta: Float)
     func onTableViewScroll(_ scrollView: UIScrollView)
     func onPullToAdd()
 }
@@ -100,7 +100,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     /**
      Returns total quantity of shown items exluding those marked for undo
      */
-    var totalQuantity: Int {
+    var totalQuantity: Float {
         return tableViewSections.sum{$0.totalQuantity}
     }
     
@@ -207,7 +207,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
 
-    func updateQuantity(_ uuid: String, quantity: Int, notifyRemote: Bool) {
+    func updateQuantity(_ uuid: String, quantity: Float, notifyRemote: Bool) {
         if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.uuid == uuid}) {
             let updatedItem = tableViewListItem.listItem.updateQuantity(ListItemStatusQuantity(status: status, quantity: quantity))
             updateListItem(updatedItem, status: status, notifyRemote: notifyRemote)
@@ -663,7 +663,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         listItemsTableViewDelegate?.onSectionHeaderTap(header, section: section)
     }
     
-    func onPanQuantityUpdate(_ tableViewListItem: TableViewListItem, newQuantity: Int) {
+    func onPanQuantityUpdate(_ tableViewListItem: TableViewListItem, newQuantity: Float) {
         listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: newQuantity - tableViewListItem.listItem.quantity(status))
     }
     

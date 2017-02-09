@@ -10,10 +10,10 @@ import Foundation
 
 public class ItemIncrement: CustomDebugStringConvertible {
     
-    public let delta: Int
+    public let delta: Float
     public let itemUuid: String
     
-    public init(delta: Int, itemUuid: String) {
+    public init(delta: Float, itemUuid: String) {
         self.delta = delta
         self.itemUuid = itemUuid
     }

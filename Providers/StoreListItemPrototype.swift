@@ -11,11 +11,11 @@ import Foundation
 // Represents an item that will be added to a list - it can come from e.g. quick add product or quick add group
 public class StoreListItemPrototype: Equatable, Identifiable, CustomDebugStringConvertible {
     public let product: StoreProduct
-    public let quantity: Int
+    public let quantity: Float
     public let targetSectionName: String
     public let targetSectionColor: UIColor
     
-    public init(product: StoreProduct, quantity: Int, targetSectionName: String, targetSectionColor: UIColor) {
+    public init(product: StoreProduct, quantity: Float, targetSectionName: String, targetSectionColor: UIColor) {
         self.product = product
         self.quantity = quantity
         self.targetSectionName = targetSectionName

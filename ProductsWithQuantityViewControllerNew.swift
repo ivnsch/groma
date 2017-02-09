@@ -23,7 +23,7 @@ protocol ProductsWithQuantityViewControllerDelegateNew: class {
     
     func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void)
     
-    func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void)
+    func increment(_ model: ProductWithQuantity2, delta: Float, onSuccess: @escaping (Float) -> Void)
     
     func onModelSelected(_ index: Int)
     func emptyViewData() -> (text: String, text2: String, imgName: String)
@@ -242,7 +242,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         SwipeToIncrementAlertHelper.check(self)
     }
     
-    func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Int) {
+    func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Float) {
         if let model = cell.model {
             changeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)
         } else {
@@ -350,7 +350,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         }
     }
     
-    fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Int) {
+    fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float) {
         
         guard let model = cell.model else {QL4("Invalid state: Cell must have model"); return}
 

@@ -22,7 +22,7 @@ class StashView: UIView {
     
     fileprivate var expanded: Bool = true // if vertically minimized or expanded (expanded is normal size)
 
-    var quantity: Int = 0 {
+    var quantity: Float = 0 {
         didSet {
 //            quantityLabel.text = String(quantity)
             button.tintColor = quantity > 0 ? UIColor.white : UIColor(hexString: "3FCF9C")
@@ -59,7 +59,7 @@ class StashView: UIView {
     }
     
     // this is a hack to update the transform of the stash view together with the cart view because otherwise when we scale down the cart view, the stash view remains behind. TODO proper solution - we should put the cart and the stash view inside a new superview with controls this logic, such that we don't have to update them separately.
-    func updateOpenStateForQuantities(_ cartQuantity: Int, stashQuantity: Int) {
+    func updateOpenStateForQuantities(_ cartQuantity: Float, stashQuantity: Float) {
         let expanded = cartQuantity > 0 || stashQuantity > 0
         setExpandedVertical(expanded, animated: true)
     }

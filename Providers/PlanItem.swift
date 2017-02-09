@@ -11,8 +11,8 @@ import Foundation
 public class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
     
     public let product: Product
-    public let quantity: Int
-    public let usedQuantity: Int
+    public let quantity: Float
+    public let usedQuantity: Float
     public let inventory: DBInventory
     
     /** -- copied from InventoryItem --
@@ -20,7 +20,7 @@ public class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
     This is always updated in paralel with quantity. E.g. if add 2 items to inventory, quantity as well as quantityDelta are incremented by 2.
     After a successful synchronization with the server (this may be at item level, or a full sync) quantityDelta is reset to 0
     */
-    public let quantityDelta: Int
+    public let quantityDelta: Float
     
     //////////////////////////////////////////////
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
@@ -35,7 +35,7 @@ public class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
 //        return Float(quantity) * product.price / product.baseQuantity
 //    }
     
-    public init(inventory: DBInventory, product: Product, quantity: Int, quantityDelta: Int = 0, usedQuantity: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public init(inventory: DBInventory, product: Product, quantity: Float, quantityDelta: Float = 0, usedQuantity: Float, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.inventory = inventory
         self.product = product
         self.quantity = quantity
@@ -45,7 +45,7 @@ public class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
         self.quantityDelta = quantityDelta
     }
     
-    public func copy(inventory: DBInventory? = nil, product: Product? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, usedQuantity: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> PlanItem {
+    public func copy(inventory: DBInventory? = nil, product: Product? = nil, quantity: Float? = nil, quantityDelta: Float? = nil, usedQuantity: Float? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> PlanItem {
         return PlanItem(
             inventory: inventory ?? self.inventory,
             product: product ?? self.product,
@@ -57,7 +57,7 @@ public class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
-    public func incrementQuantityCopy(_ delta: Int) -> PlanItem {
+    public func incrementQuantityCopy(_ delta: Float) -> PlanItem {
         return copy(quantity: quantity + delta, quantityDelta: quantityDelta + delta)
     }
     

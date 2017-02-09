@@ -42,9 +42,9 @@ public struct RemoteSwitchListItemResult: ResponseObjectSerializable, CustomDebu
 
 public struct RemoteSwitchListItemItemResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     public let uuid: String
-    public let todoQuantity: Int
-    public let doneQuantity: Int
-    public let stashQuantity: Int
+    public let todoQuantity: Float
+    public let doneQuantity: Float
+    public let stashQuantity: Float
     public let todoOrder: Int
     public let doneOrder: Int
     public let stashOrder: Int
@@ -52,9 +52,9 @@ public struct RemoteSwitchListItemItemResult: ResponseObjectSerializable, Custom
     public init?(representation: AnyObject) {
         guard
             let uuid = representation.value(forKeyPath: "uuid") as? String,
-            let todoQuantity = representation.value(forKeyPath: "todoQuantity") as? Int,
-            let doneQuantity = representation.value(forKeyPath: "doneQuantity") as? Int,
-            let stashQuantity = representation.value(forKeyPath: "stashQuantity") as? Int,
+            let todoQuantity = representation.value(forKeyPath: "todoQuantity") as? Float,
+            let doneQuantity = representation.value(forKeyPath: "doneQuantity") as? Float,
+            let stashQuantity = representation.value(forKeyPath: "stashQuantity") as? Float,
             let todoOrder = representation.value(forKeyPath: "todoOrder") as? Int,
             let doneOrder = representation.value(forKeyPath: "doneOrder") as? Int,
             let stashOrder = representation.value(forKeyPath: "stashOrder") as? Int

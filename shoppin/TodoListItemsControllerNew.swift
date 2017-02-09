@@ -172,16 +172,17 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         if let list = currentList {
             Prov.listItemsProvider.listItemCount(.stash, list: list, fetchMode: .memOnly, successHandler {[weak self] count in guard let weakSelf = self else {return}
                 //                    if count != self?.stashView.quantity { // don't animate if there's no change
-                weakSelf.stashView.quantity = count
+                // TODO maybe we should show total quantity instead of items (rows) quantity
+                weakSelf.stashView.quantity = Float(count)
                 weakSelf.pricesView.allowOpen = count > 0
                 if count == 0 {
                     weakSelf.pricesView.setOpen(false, animated: true)
                 }
-                weakSelf.pricesView.quantities = (cart: weakSelf.pricesView.quantities.cart, stash: count)
+                weakSelf.pricesView.quantities = (cart: weakSelf.pricesView.quantities.cart, stash: Float(count))
                 
                 //                    QL2("Set stash quantity: \(count), cart quantity: \(weakSelf.pricesView.quantities.cart)")
                 
-                weakSelf.stashView.updateOpenStateForQuantities(weakSelf.pricesView.quantities.cart, stashQuantity: count)
+                weakSelf.stashView.updateOpenStateForQuantities(weakSelf.pricesView.quantities.cart, stashQuantity: Float(count))
             })
         }
     }
@@ -273,7 +274,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     // MARK: - QuickAddDelegate
     // IMPORTANT: Make sure all the QuickAddDelegate methods are overriden here, since the cart has to consume everything while it's open. With more time we can think about a better solution for this.
     
-    override func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
+    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
         if pricesView.expandedNew {
             cartController?.onAddProduct(product, quantity: quantity)
         } else {

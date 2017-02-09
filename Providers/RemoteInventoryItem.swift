@@ -11,7 +11,7 @@ import QorumLogs
 
 public struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     public let uuid: String
-    public let quantity: Int
+    public let quantity: Float
     public let productUuid: String // TODO remove this? or store product and inventory here not in RemoteInventoryItemWithProduct --- is this todo still valid?
     public let inventoryUuid: String
     public let lastUpdate: Int64
@@ -19,7 +19,7 @@ public struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectio
     public init?(representation: AnyObject) {
         guard
             let uuid = representation.value(forKeyPath: "uuid") as? String,
-            let quantity = representation.value(forKeyPath: "quantity") as? Int,
+            let quantity = representation.value(forKeyPath: "quantity") as? Float,
             let productUuid = representation.value(forKeyPath: "productUuid") as? String,
             let inventoryUuid = representation.value(forKeyPath: "inventoryUuid") as? String,
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double

@@ -17,6 +17,13 @@ public extension Float {
         f.locale = Locale.current
         return f
     }()
+
+    public static let quantityFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.minimumFractionDigits = 0
+        f.maximumFractionDigits = 2
+        return f
+    }()
     
     public func toString(_ maxFractionDigits: Int) -> String {
         Float.formatter.numberStyle = .none
@@ -25,7 +32,12 @@ public extension Float {
         return Float.formatter.string(from: NSNumber(value: self as Float))!
     }
     
+    // TODO var
     public func toLocalCurrencyString() -> String {
         return Float.currencyFormatter.string(from: NSNumber(value: self))!
+    }
+    
+    public var quantityString: String {
+        return Float.quantityFormatter.string(from: NSNumber(value: self))!
     }
 }

@@ -161,7 +161,7 @@ class RemoteListItemProvider {
         }
     }
     
-    func incrementListItem(_ listItem: ListItem, delta: Int, status: ListItemStatus, handler: @escaping (RemoteResult<RemoteListItemIncrementResult>) -> ()) {
+    func incrementListItem(_ listItem: ListItem, delta: Float, status: ListItemStatus, handler: @escaping (RemoteResult<RemoteListItemIncrementResult>) -> ()) {
         let params: [String: AnyObject] = [
             "uuid": listItem.uuid as AnyObject,
             "status": status.rawValue as AnyObject,

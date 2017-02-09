@@ -17,7 +17,7 @@ protocol ListItemCellDelegateNew: class {
     func onNoteTap(_ cell: ListItemCellNew, listItem: ListItem)
     func onMinusTap(_ listItem: ListItem)
     func onPlusTap(_ listItem: ListItem)
-    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Int)
+    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Float)
 }
 
 class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
@@ -56,10 +56,10 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     
     var startStriked: Bool = false
     
-    fileprivate var shownQuantity: Int = 0 {
+    fileprivate var shownQuantity: Float = 0 {
         didSet {
             if let tableViewListItem = tableViewListItem {
-                quantityLabel.text = String("\(shownQuantity) \(tableViewListItem.product.product.unitText)")
+                quantityLabel.text = String("\(shownQuantity.quantityString) \(tableViewListItem.product.product.unitText)")
             }
         }
     }
@@ -387,11 +387,11 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     
     // MARK: - SwipeToIncrementHelperDelegate
     
-    func currentQuantity() -> Int {
+    func currentQuantity() -> Float {
         return shownQuantity
     }
     
-    func onQuantityUpdated(_ quantity: Int) {
+    func onQuantityUpdated(_ quantity: Float) {
         shownQuantity = quantity
     }
     

@@ -12,7 +12,7 @@ import RealmSwift
 // TODO order?
 public final class GroupItem: DBSyncable, ProductWithQuantity2 {
     public dynamic var uuid: String = ""
-    public dynamic var quantity: Int = 0
+    public dynamic var quantity: Float = 0
     dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
     dynamic var groupOpt: ProductGroup? = ProductGroup()
 
@@ -42,7 +42,7 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
         }
     }
     
-    public convenience init(uuid: String, quantity: Int, product: QuantifiableProduct, group: ProductGroup) {
+    public convenience init(uuid: String, quantity: Float, product: QuantifiableProduct, group: ProductGroup) {
         self.init()
         
         self.uuid = uuid
@@ -114,7 +114,7 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
     
     // MARK: - ProductWithQuantity2
     
-    public func copy(uuid: String? = nil, quantity: Int? = nil, product: QuantifiableProduct? = nil, group: ProductGroup? = nil) -> GroupItem {
+    public func copy(uuid: String? = nil, quantity: Float? = nil, product: QuantifiableProduct? = nil, group: ProductGroup? = nil) -> GroupItem {
         return GroupItem(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
@@ -123,11 +123,11 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
         )
     }
     
-    public func incrementQuantityCopy(_ delta: Int) -> GroupItem {
+    public func incrementQuantityCopy(_ delta: Float) -> GroupItem {
         return copy(quantity: quantity + delta)
     }
     
-    public func updateQuantityCopy(_ quantity: Int) -> GroupItem {
+    public func updateQuantityCopy(_ quantity: Float) -> GroupItem {
         return copy(quantity: quantity)
     }
     

@@ -141,7 +141,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
 
-    func incrementInventoryItem(_ item: InventoryItem, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<Int>) -> Void) {
+    func incrementInventoryItem(_ item: InventoryItem, delta: Float, remote: Bool, _ handler: @escaping (ProviderResult<Float>) -> Void) {
         
         // Get item from database with updated quantityDelta
         // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
@@ -324,7 +324,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     
     // MARK: - Direct (no history)
     
-    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Int, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
+    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Float, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float)>) -> Void) {
         addToInventory(inventory, productsWithQuantities: [(product: product, quantity: quantity)], remote: remote) {result in
             if let addedOrIncrementedInventoryItem = result.sucessResult?.first {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItem))
@@ -334,7 +334,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    fileprivate func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)], remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
+    fileprivate func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)], remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Float)]>) -> Void) {
         DBProv.inventoryItemProvider.addToInventory(inventory, productsWithQuantities: productsWithQuantities, dirty: remote) {addedOrIncrementedInventoryItemsMaybe in
             if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItems))
@@ -366,13 +366,13 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
 
     
-    func addToInventory(_ inventory: DBInventory, group: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) -> Void) {
+    func addToInventory(_ inventory: DBInventory, group: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Float)]>) -> Void) {
         Prov.listItemGroupsProvider.groupItems(group, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
                 if groupItems.isEmpty {
                     handler(ProviderResult(status: .isEmpty))
                 } else {
-                    let productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
+                    let productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)] = groupItems.map{($0.product, $0.quantity)}
                     self?.addToInventory(inventory, productsWithQuantities: productsWithQuantities, remote: remote, handler)
                 }
             } else {
@@ -383,7 +383,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     // Add inventory item input
-    func addToInventory(_ inventory: DBInventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Int)>) -> Void) {
+    func addToInventory(_ inventory: DBInventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float)>) -> Void) {
         
         func onHasProduct(_ product: QuantifiableProduct) {
             addToInventory(inventory, product: product, quantity: 1, remote: remote, handler)

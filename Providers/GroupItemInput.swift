@@ -10,12 +10,12 @@ import Foundation
 
 public struct GroupItemInput: Equatable, Hashable {
     public let name: String
-    public let quantity: Int
+    public let quantity: Float
     public let category: String
     public let categoryColor: UIColor
     public let brand: String
     
-    public init(name: String, quantity: Int, category: String, categoryColor: UIColor, brand: String) {
+    public init(name: String, quantity: Float, category: String, categoryColor: UIColor, brand: String) {
         self.name = name
         self.quantity = quantity
         self.category = category
@@ -27,7 +27,7 @@ public struct GroupItemInput: Equatable, Hashable {
         return name.hashValue
     }
     
-    public func copy(name: String? = nil, quantity: Int? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil) -> GroupItemInput {
+    public func copy(name: String? = nil, quantity: Float? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil) -> GroupItemInput {
         return GroupItemInput(
             name: name ?? self.name,
             quantity: quantity ?? self.quantity,

@@ -15,7 +15,7 @@ public enum ListItemStatus: Int {
     case todo = 0, done = 1, stash = 2
 }
 
-public typealias ListItemStatusQuantity = (status: ListItemStatus, quantity: Int)
+public typealias ListItemStatusQuantity = (status: ListItemStatus, quantity: Float)
 public typealias ListItemStatusOrder = (status: ListItemStatus, order: Int) // TODO rename as this is used now for sections too
 
 
@@ -31,15 +31,15 @@ public class ListItem: DBSyncable, Identifiable {
     
     
     // TODO!!!!!!!!!!!!!!!!! remove this
-    public dynamic var todoQuantity: Int = 0
+    public dynamic var todoQuantity: Float = 0
     public dynamic var todoOrder: Int = 0
-    public dynamic var doneQuantity: Int = 0
+    public dynamic var doneQuantity: Float = 0
     public dynamic var doneOrder: Int = 0
-    public dynamic var stashQuantity: Int = 0
+    public dynamic var stashQuantity: Float = 0
     public dynamic var stashOrder: Int = 0
     
     
-    public dynamic var quantity: Int = 0
+    public dynamic var quantity: Float = 0
     
     public var list: List {
         get {
@@ -80,7 +80,7 @@ public class ListItem: DBSyncable, Identifiable {
     
 
     // TODO use only this initializer?
-    public convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String?, quantity: Int) {
+    public convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String?, quantity: Float) {
         
         self.init()
         
@@ -94,7 +94,7 @@ public class ListItem: DBSyncable, Identifiable {
     }
     
     
-    public convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String?, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String?, todoQuantity: Float, todoOrder: Int, doneQuantity: Float, doneOrder: Int, stashQuantity: Float, stashOrder: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -119,7 +119,7 @@ public class ListItem: DBSyncable, Identifiable {
     
     public convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, statusOrder: ListItemStatusOrder, statusQuantity: ListItemStatusQuantity, lastServerUpdate: Int64? = nil, removed: Bool = false) {
 
-        func quantity(_ selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) -> Int {
+        func quantity(_ selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) ->Float {
             return statusQuantity.status == selfStatus ? statusQuantity.quantity : 0
         }
 
@@ -144,7 +144,7 @@ public class ListItem: DBSyncable, Identifiable {
         )
     }
 
-    public convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, todoQuantity: Int, todoOrder: Int) {
+    public convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, todoQuantity: Float, todoOrder: Int) {
         self.init(
             uuid: uuid,
             product: product,
@@ -161,7 +161,7 @@ public class ListItem: DBSyncable, Identifiable {
     }
 
     // Quantity of listitem in a specific status
-    public func quantityForStatus(_ status: ListItemStatus) -> Int {
+    public func quantityForStatus(_ status: ListItemStatus) -> Float {
         switch status {
         case .todo: return todoQuantity
         case .done: return doneQuantity
@@ -178,7 +178,7 @@ public class ListItem: DBSyncable, Identifiable {
         return increment(listItem.todoQuantity, doneQuantity: listItem.doneQuantity, stashQuantity: listItem.stashQuantity)
     }
 
-    public func increment(_ todoQuantity: Int, doneQuantity: Int, stashQuantity: Int) -> ListItem {
+    public func increment(_ todoQuantity: Float, doneQuantity: Float, stashQuantity: Float) -> ListItem {
 
         let newTodo = self.todoQuantity + todoQuantity
         let newDone = self.doneQuantity + doneQuantity
@@ -207,7 +207,7 @@ public class ListItem: DBSyncable, Identifiable {
     }
 
     public func increment(_ quantity: ListItemStatusQuantity) -> ListItem {
-        let increments: (todo: Int, done: Int, stash: Int) = {
+        let increments: (todo: Float, done: Float, stash: Float) = {
             switch quantity.status {
                 case .todo: return (quantity.quantity, 0, 0)
                 case .done: return (0, quantity.quantity, 0)
@@ -218,7 +218,7 @@ public class ListItem: DBSyncable, Identifiable {
     }
 
     
-    public func copy(uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String? = nil, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> ListItem {
+    public func copy(uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String? = nil, todoQuantity: Float? = nil, todoOrder: Int? = nil, doneQuantity: Float? = nil, doneOrder: Int? = nil, stashQuantity: Float? = nil, stashOrder: Int? = nil) -> ListItem {
         return ListItem(
             uuid: uuid ?? self.uuid,
             product: product ?? self.product.copy(),
@@ -363,11 +363,11 @@ public class ListItem: DBSyncable, Identifiable {
         item.product = product
         item.list = list
         item.note = dict["note"]! as! String
-        item.todoQuantity = dict["todoQuantity"]! as! Int
+        item.todoQuantity = dict["todoQuantity"]! as! Float
         item.todoOrder = dict["todoOrder"]! as! Int
-        item.doneQuantity = dict["doneQuantity"]! as! Int
+        item.doneQuantity = dict["doneQuantity"]! as! Float
         item.doneOrder = dict["doneOrder"]! as! Int
-        item.stashQuantity = dict["stashQuantity"]! as! Int
+        item.stashQuantity = dict["stashQuantity"]! as! Float
         item.stashOrder = dict["stashOrder"]! as! Int
         item.setSyncableFieldswithRemoteDict(dict)
         return item
@@ -420,7 +420,7 @@ public class ListItem: DBSyncable, Identifiable {
         }
     }
     
-    public func quantity(_ status: ListItemStatus) -> Int {
+    public func quantity(_ status: ListItemStatus) -> Float {
         switch status {
         case .todo: return todoQuantity
         case .done: return doneQuantity
@@ -479,7 +479,7 @@ public class ListItem: DBSyncable, Identifiable {
     public func copyIncrement(uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String?, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, statusQuantity: ListItemStatusQuantity) -> ListItem {
 
         // returns self quantity incremented if self status is the same as statusQuantity status, or returns self quantity unchanged
-        func incr(_ selfQuantity: Int, _ selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) -> Int {
+        func incr(_ selfQuantity: Float, _ selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) -> Float {
             return statusQuantity.status == selfStatus ? (selfQuantity + statusQuantity.quantity) : selfQuantity
         }
 
@@ -502,7 +502,7 @@ public class ListItem: DBSyncable, Identifiable {
     public func switchStatusQuantityMutable(_ status: ListItemStatus, targetStatus: ListItemStatus) {
 
         // Capture variables. We have to do this because when setting the fields they reference each other, and they all need to access the previous, not new state
-        let capturedQuantity: (ListItemStatus) -> Int = {[todoQuantity, doneQuantity, stashQuantity] status  in
+        let capturedQuantity: (ListItemStatus) -> Float = {[todoQuantity, doneQuantity, stashQuantity] status  in
             switch status {
             case .todo: return todoQuantity
             case .done: return doneQuantity
@@ -510,7 +510,7 @@ public class ListItem: DBSyncable, Identifiable {
             }
         }
 
-        func fieldQuantity(_ fieldStatus: ListItemStatus, status: ListItemStatus, targetStatus: ListItemStatus) -> Int {
+        func fieldQuantity(_ fieldStatus: ListItemStatus, status: ListItemStatus, targetStatus: ListItemStatus) -> Float {
 
             // had to be rewriten to add bounds check, see TODO below
 //            return status == fieldStatus ? 0 : (targetStatus == fieldStatus ? capturedQuantity(status) + quantity(targetStatus) : quantity(fieldStatus))
@@ -546,7 +546,7 @@ public class ListItem: DBSyncable, Identifiable {
         return copy(product: updatedStoreProduct, note: nil)
     }
     
-    public func incrementQuantity(_ delta: Int) {
+    public func incrementQuantity(_ delta: Float) {
         let updatedQuantity = quantity + delta
         if updatedQuantity >= 0 {
             quantity = quantity + delta

@@ -43,22 +43,22 @@ class RealmGroupItemProvider: RealmProvider {
     ///////////////////////////////////////////////////////////////
     // New - add/increment using only product + quantity, like in inventory, no fake/input group items
     
-    func addOrIncrement(_ group: ProductGroup, productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)], dirty: Bool, _ handler: @escaping ([(groupItem: GroupItem, delta: Int)]?) -> Void) {
+    func addOrIncrement(_ group: ProductGroup, productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)], dirty: Bool, _ handler: @escaping ([(groupItem: GroupItem, delta: Float)]?) -> Void) {
         doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return nil}
             
-            var addedOrIncrementedItems: [(groupItem: GroupItem, delta: Int)] = []
+            var addedOrIncrementedItems: [(groupItem: GroupItem, delta: Float)] = []
             for productsWithQuantity in productsWithQuantities {
                 let groupItem = weakSelf.addOrIncrementGroupItem(realm, group: group, product: productsWithQuantity.product, quantity: productsWithQuantity.quantity, dirty: dirty)
                 addedOrIncrementedItems.append(groupItem)
             }
             return addedOrIncrementedItems
             
-            }, finishHandler: {(addedOrIncrementedItems: [(groupItem: GroupItem, delta: Int)]?) in
+            }, finishHandler: {(addedOrIncrementedItems: [(groupItem: GroupItem, delta: Float)]?) in
                 handler(addedOrIncrementedItems)
         })
     }
     
-    fileprivate func addOrIncrementGroupItem(_ realm: Realm, group: ProductGroup, product: QuantifiableProduct, quantity: Int, dirty: Bool) -> (groupItem: GroupItem, delta: Int) {
+    fileprivate func addOrIncrementGroupItem(_ realm: Realm, group: ProductGroup, product: QuantifiableProduct, quantity: Float, dirty: Bool) -> (groupItem: GroupItem, delta: Float) {
         
         // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
         let existingGroupItems: [GroupItem] = loadSync(realm, filter: GroupItem.createFilter(product, group: group))
@@ -267,11 +267,11 @@ class RealmGroupItemProvider: RealmProvider {
     
     // Copied from realm list item provider (which is copied from inventory item provider) refactor?
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
-    func incrementGroupItem(_ item: GroupItem, delta: Int, dirty: Bool, handler: @escaping (Int?) -> Void) {
+    func incrementGroupItem(_ item: GroupItem, delta: Float, dirty: Bool, handler: @escaping (Float?) -> Void) {
         incrementGroupItem(ItemIncrement(delta: delta, itemUuid: item.uuid), dirty: dirty, handler: handler)
     }
     
-    func incrementGroupItem(_ increment: ItemIncrement, dirty: Bool, handler: @escaping (Int?) -> Void) {
+    func incrementGroupItem(_ increment: ItemIncrement, dirty: Bool, handler: @escaping (Float?) -> Void) {
         
         doInWriteTransaction({realm in
             
@@ -292,7 +292,7 @@ class RealmGroupItemProvider: RealmProvider {
                 }
             }
             
-            }) {(updatedQuantityMaybe: Int?) in
+            }) {(updatedQuantityMaybe: Float?) in
                 QL2("Calling handler")
                 handler(updatedQuantityMaybe)
         }

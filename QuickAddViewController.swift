@@ -12,7 +12,7 @@ import QorumLogs
 import Providers
 
 protocol QuickAddDelegate: class {
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Int)
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float)
     
     func onAddItem(_ item: Item)
     
@@ -252,7 +252,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
     
     // product was selected in product quick list
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
         delegate?.onAddProduct(product, quantity: quantity)
     }
     
@@ -321,7 +321,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(_ price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: ProductUnit, brand: String, editingItem: Any?) {
+    func onOkTap(_ price: Float, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: ProductUnit, brand: String, editingItem: Any?) {
         
         if let name = searchBar.text?.trim() {
             

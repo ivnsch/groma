@@ -12,10 +12,10 @@ public protocol ProductWithQuantity2 {
     
     var product: QuantifiableProduct {get}
     
-    var quantity: Int {get}
+    var quantity: Float {get}
     
     
     // TODO maybe remove these (also from implementations) now that we use Realm everywhere the immutable approach isn't useful
-    func incrementQuantityCopy(_ delta: Int) -> Self
-    func updateQuantityCopy(_ quantity: Int) -> Self
+    func incrementQuantityCopy(_ delta: Float) -> Self
+    func updateQuantityCopy(_ quantity: Float) -> Self
 }

@@ -14,7 +14,7 @@ public class HistoryItem: DBSyncable, Identifiable {
     dynamic var inventoryOpt: DBInventory? = DBInventory()
     dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
     public dynamic var addedDate: Int64 = 0
-    public dynamic var quantity: Int = 0
+    public dynamic var quantity: Float = 0
     dynamic var userOpt: DBSharedUser? = DBSharedUser()
     public dynamic var paidPrice: Float = 0 // product price at the moment of buying the item (per unit)
     
@@ -55,7 +55,7 @@ public class HistoryItem: DBSyncable, Identifiable {
         return paidPrice * Float(quantity)
     }
     
-    public convenience init(uuid: String, inventory: DBInventory, product: QuantifiableProduct, addedDate: Int64, quantity: Int, user: DBSharedUser, paidPrice: Float, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, inventory: DBInventory, product: QuantifiableProduct, addedDate: Int64, quantity: Float, user: DBSharedUser, paidPrice: Float, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.init()
         
         self.uuid = uuid
@@ -139,7 +139,7 @@ public class HistoryItem: DBSyncable, Identifiable {
         return dict
     }
     
-    public func copy(uuid: String? = nil, inventory: DBInventory? = nil, product: QuantifiableProduct? = nil, addedDate: Int64? = nil, quantity: Int? = nil, user: DBSharedUser? = nil, paidPrice: Float? = nil, lastServerUpdate: Int64? = nil, removed: Bool = false) -> HistoryItem {
+    public func copy(uuid: String? = nil, inventory: DBInventory? = nil, product: QuantifiableProduct? = nil, addedDate: Int64? = nil, quantity: Float? = nil, user: DBSharedUser? = nil, paidPrice: Float? = nil, lastServerUpdate: Int64? = nil, removed: Bool = false) -> HistoryItem {
         return HistoryItem(
             uuid: uuid ?? self.uuid,
             inventory: inventory ?? self.inventory.copy(),

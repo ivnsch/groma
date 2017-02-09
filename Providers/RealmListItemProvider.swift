@@ -37,9 +37,9 @@ public struct SwitchListItemResult {
 }
 
 public struct ListItemsCartStashAggregate {
-    public let cartQuantity: Int
+    public let cartQuantity: Float
     public let cartPrice: Float
-    public let stashQuantity: Int
+    public let stashQuantity: Float
 }
 
 class RealmListItemProvider: RealmProvider {
@@ -238,7 +238,7 @@ class RealmListItemProvider: RealmProvider {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     
     
-    func addListItem(_ status: ListItemStatus, product: StoreProduct, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: @escaping (ListItem?) -> Void) {
+    func addListItem(_ status: ListItemStatus, product: StoreProduct, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Float, list: List, note noteMaybe: String? = nil, _ handler: @escaping (ListItem?) -> Void) {
         
         // Fixes Realm acces in incorrect thread exceptions
         let product = product.copy()
@@ -483,7 +483,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
-    func incrementListItem(_ item: ListItem, delta: Int, status: ListItemStatus, handler: @escaping (ListItem?) -> Void) {
+    func incrementListItem(_ item: ListItem, delta: Float, status: ListItemStatus, handler: @escaping (ListItem?) -> Void) {
         incrementListItem(ItemIncrement(delta: delta, itemUuid: item.uuid), status: status, handler: handler)
     }
 
@@ -799,7 +799,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // TODO!!!!!!!!!!!!!!! either remove this or remove listItems paremeter (are in section now)
-    func add(quantifiableProduct: QuantifiableProduct, store: String, section: Section, list: List, quantity: Int, status: ListItemStatus, listItems: RealmSwift.List<ListItem>, notificationToken: NotificationToken, _ handler: @escaping ((listItem: ListItem, isNew: Bool)?) -> Void) {
+    func add(quantifiableProduct: QuantifiableProduct, store: String, section: Section, list: List, quantity: Float, status: ListItemStatus, listItems: RealmSwift.List<ListItem>, notificationToken: NotificationToken, _ handler: @escaping ((listItem: ListItem, isNew: Bool)?) -> Void) {
         // TODO!!!!!!!!!!!!!!! realm data or remove this method (there's a delete in new part)
 //        if let result = addSync(quantifiableProduct: quantifiableProduct, store: store, list: list, quantity: quantity, status: status, notificationToken: realmData.notificationToken) {
 //            handler((result.listItem, result.isNewItem))
@@ -808,21 +808,21 @@ class RealmListItemProvider: RealmProvider {
 //        }
     }
     
-    func increment(_ listItem: ListItem, quantity: Int, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (Int?) -> Void) {
+    func increment(_ listItem: ListItem, quantity: Float, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (Float?) -> Void) {
         handler(incrementSync(listItem, quantity: quantity, realmData: RealmData(realm: realm, token: notificationToken)))
     }
     
     // MARK: - Sync
     
-    func incrementSync(_ listItem: ListItem, quantity: Int, realmData: RealmData, doTransaction: Bool = true) -> Int? {
+    func incrementSync(_ listItem: ListItem, quantity: Float, realmData: RealmData, doTransaction: Bool = true) -> Float? {
         
-        func transactionContent() -> Int {
+        func transactionContent() -> Float {
             listItem.incrementQuantity(quantity)
             return listItem.quantity
         }
         
         if doTransaction {
-            return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Int in
+            return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Float in
                 return transactionContent()
             }
         } else {
@@ -831,13 +831,13 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
-    fileprivate func createSync(_ quantifiableProduct: QuantifiableProduct, store: String, section: Section, list: List, quantity: Int, realmData: RealmData, doTransaction: Bool = true) -> ListItem? {
+    fileprivate func createSync(_ quantifiableProduct: QuantifiableProduct, store: String, section: Section, list: List, quantity: Float, realmData: RealmData, doTransaction: Bool = true) -> ListItem? {
         let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store)
         return createSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
     }
     
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
-    fileprivate func createSync(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Int, realmData: RealmData, doTransaction: Bool = true) -> ListItem? {
+    fileprivate func createSync(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Float, realmData: RealmData, doTransaction: Bool = true) -> ListItem? {
         // TODO note? we use separate methods for quick add/form
         let listItem = ListItem(uuid: UUID().uuidString, product: storeProduct, section: section, list: list, note: nil, quantity: quantity)
         return createSync(listItem, section: section, realmData: realmData, doTransaction: doTransaction)
@@ -864,7 +864,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     /// Quick add
-    func addSync(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Int, status: ListItemStatus, realmData: RealmData, doTransaction: Bool = true) -> (AddListItemResult)? {
+    func addSync(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, status: ListItemStatus, realmData: RealmData, doTransaction: Bool = true) -> (AddListItemResult)? {
         
         switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData) {
         
@@ -946,7 +946,7 @@ class RealmListItemProvider: RealmProvider {
     // TODO!!!!!!!!! do we need to pass Realm around everywhere so notificationToken works?
     /// used in switch status, where we already have a list item and just want to move it to a different status (todo/done/stash). Parameter listItems -> dst list items TODO rename
     // NOTE: section --> target section
-    func addSync(listItem: ListItem, section: Section, list: List, quantity: Int, realmData: RealmData, doTransaction: Bool = true) -> (listItem: ListItem, isNew: Bool)? {
+    func addSync(listItem: ListItem, section: Section, list: List, quantity: Float, realmData: RealmData, doTransaction: Bool = true) -> (listItem: ListItem, isNew: Bool)? {
         
 //        guard let listItemsRealm = section.listItems.realm else {QL4("List items have no realm"); return nil}
         
@@ -968,7 +968,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
-    fileprivate func create(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Int, realmData: RealmData, _ handler: @escaping (ListItem?) -> Void) {
+    fileprivate func create(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Float, realmData: RealmData, _ handler: @escaping (ListItem?) -> Void) {
         handler(createSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData))
     }
     

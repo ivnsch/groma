@@ -154,7 +154,7 @@ extension Array where Element: ListItem {
         }
     }
 
-    public func totalQuanityAndPrice(_ status: ListItemStatus) -> (quantity: Int, price: Float) {
+    public func totalQuanityAndPrice(_ status: ListItemStatus) -> (quantity: Float, price: Float) {
         return reduce((0, 0)) {priceAndQuantity, listItem in
             (
                 quantity: priceAndQuantity.0 + listItem.quantity(status),
@@ -327,7 +327,7 @@ extension Results where T: ListItem {
         }
     }
     
-    public func totalQuanityAndPrice(_ status: ListItemStatus) -> (quantity: Int, price: Float) {
+    public func totalQuanityAndPrice(_ status: ListItemStatus) -> (quantity: Float, price: Float) {
         return reduce((0, 0)) {priceAndQuantity, listItem in
             (
                 quantity: priceAndQuantity.0 + listItem.quantity(status),

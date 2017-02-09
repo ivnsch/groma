@@ -57,8 +57,8 @@ class RealmPlanProvider: RealmProvider {
     * Calculates total amount of product in history items
     * Returns dictionary product uuid -> total amount
     */
-    fileprivate func productsTotalQuantities(_ historyItems: [HistoryItem]) -> [String: Int] {
-        var dict: [String: Int] = [:]
+    fileprivate func productsTotalQuantities(_ historyItems: [HistoryItem]) -> [String: Float] {
+        var dict: [String: Float] = [:]
         for historyItem in historyItems {
             if dict[historyItem.product.uuid] == nil {
                 dict[historyItem.product.uuid] = historyItem.quantity
@@ -318,7 +318,7 @@ class RealmPlanProvider: RealmProvider {
         self.remove("product.name = '\(item.product.item.name)'", handler: handler, objType: DBPlanItem.self)
     }
     
-    func increment(_ item: PlanItem, delta: Int, onlyDelta: Bool = false, handler: @escaping (Bool) -> ()) {
+    func increment(_ item: PlanItem, delta: Float, onlyDelta: Bool = false, handler: @escaping (Bool) -> ()) {
 
         doInWriteTransaction ({[weak self] realm in
             if let weakSelf = self {

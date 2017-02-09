@@ -18,7 +18,7 @@ protocol AddEditListItemViewControllerDelegate: class {
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>)
     
-    func onOkTap(_ price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: ProductUnit, brand: String, editingItem: Any?)
+    func onOkTap(_ price: Float, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: ProductUnit, brand: String, editingItem: Any?)
     
     func parentViewForAddButton() -> UIView?
     
@@ -48,13 +48,13 @@ struct AddEditItem {
     let product: QuantifiableProduct?
     let storeProduct: StoreProduct? // TODO? no redundancy with product
     let item: Item
-    let quantity: Int
+    let quantity: Float
     let sectionName: String
     let sectionColor: UIColor
     let note: String?
     let model: Any
     
-    init(product: QuantifiableProduct, storeProduct: StoreProduct? = nil, quantity: Int, sectionName: String, sectionColor: UIColor, note: String?, model: Any) {
+    init(product: QuantifiableProduct, storeProduct: StoreProduct? = nil, quantity: Float, sectionName: String, sectionColor: UIColor, note: String?, model: Any) {
         self.product = product
         self.storeProduct = storeProduct
         self.item = product.product.item
@@ -382,7 +382,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }()
             
-            if let price = priceMaybe, let quantityText = quantityInput.text, let quantity = Int(quantityText), let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
+            if let price = priceMaybe, let quantityText = quantityInput.text, let quantity = quantityText.floatValue, let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
                 
                 // for now disabled due to new designs
 //                let baseQuantity = scaleInputs?.baseQuantity ?? 1

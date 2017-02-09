@@ -41,22 +41,22 @@ class SelectQuantifiableCell: UITableViewCell, QuantityViewDelegate, SwipeToIncr
         swipeToIncrementHelper?.delegate = self
     }
     
-    var quantity: Int {
+    var quantity: Float {
         return quantityView.quantity
     }
     
-    func onRequestUpdateQuantity(_ delta: Int) {
+    func onRequestUpdateQuantity(_ delta: Float) {
         quantityView.quantity += delta
     }
     
     
     // MARK: - SwipeToIncrementHelperDelegate
     
-    func currentQuantity() -> Int {
+    func currentQuantity() -> Float {
         return quantity
     }
     
-    func onQuantityUpdated(_ quantity: Int) {
+    func onQuantityUpdated(_ quantity: Float) {
         quantityView.quantity = quantity
     }
     

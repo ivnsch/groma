@@ -14,7 +14,7 @@ import Providers
 protocol ProductsWithQuantityViewControllerDelegate: class {
     func loadModels(_ page: NSRange?, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity2]) -> Void)
     func remove(_ model: ProductWithQuantity2, index: Int, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void)
-    func increment(_ model: ProductWithQuantity2, delta: Int, onSuccess: @escaping (Int) -> Void)
+    func increment(_ model: ProductWithQuantity2, delta: Float, onSuccess: @escaping (Float) -> Void)
     func onModelSelected(_ model: ProductWithQuantity2, indexPath: IndexPath)
     func emptyViewData() -> (text: String, text2: String, imgName: String)
     func onEmptyViewTap()
@@ -236,7 +236,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         SwipeToIncrementAlertHelper.check(self)
     }
     
-    func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Int) {
+    func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Float) {
         cell.cancelDeleteProgress()
         if let model = cell.model {
             checkChangeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)
@@ -249,7 +249,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     Unwrap optionals safely
     Note that despite implicitly unwrapped may look suitable here, we prefer working with ? as general approach
     */
-    fileprivate func checkChangeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Int) {
+    fileprivate func checkChangeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float) {
         if let inventoryItem = cell.model, let indexPath = getIndexPath(inventoryItem) {
             changeInventoryItemQuantity(cell, row: (indexPath as NSIndexPath).row, inventoryItem: inventoryItem, delta: delta)
         } else {
@@ -266,7 +266,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         return nil
     }
     
-    fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, row: Int, inventoryItem: ProductWithQuantity2, delta: Int) {
+    fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, row: Int, inventoryItem: ProductWithQuantity2, delta: Float) {
 
         func remove() {
             cell.startDeleteProgress {[weak self] in

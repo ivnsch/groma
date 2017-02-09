@@ -12,7 +12,7 @@ import RealmSwift
 public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2 {
 
     public dynamic var uuid: String = ""
-    public dynamic var quantity: Int = 0
+    public dynamic var quantity: Float = 0
     dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
     dynamic var inventoryOpt: DBInventory? = DBInventory()
 
@@ -42,7 +42,7 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
         }
     }
     
-    public convenience init(uuid: String, quantity: Int = 0, product: QuantifiableProduct, inventory: DBInventory, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, quantity: Float = 0, product: QuantifiableProduct, inventory: DBInventory, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.init()
         
         self.uuid = uuid
@@ -105,7 +105,7 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
     static func fromDict(_ dict: [String: AnyObject], product: QuantifiableProduct, inventory: DBInventory) -> InventoryItem {
         let item = InventoryItem()
         item.uuid = dict["uuid"]! as! String
-        item.quantity = dict["quantity"]! as! Int
+        item.quantity = dict["quantity"]! as! Float
         // Note: we don't set quantity delta here because when we gets objs from server it means they are synced, which means there's no quantity delta.
         item.product = product
         item.inventory = inventory
@@ -130,7 +130,7 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
         return ["product", "inventory"]
     }
     
-    public func copy(uuid: String? = nil, quantity: Int? = nil, product: QuantifiableProduct? = nil, inventory: DBInventory? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> InventoryItem {
+    public func copy(uuid: String? = nil, quantity: Float? = nil, product: QuantifiableProduct? = nil, inventory: DBInventory? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> InventoryItem {
         return InventoryItem(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
@@ -144,7 +144,7 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
     
     
     
-    public func incrementQuantityCopy(_ delta: Int) -> InventoryItem {
+    public func incrementQuantityCopy(_ delta: Float) -> InventoryItem {
         return copy(quantity: quantity + delta)
     }
     
@@ -154,7 +154,7 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
     
     // MARK: - ProductWithQuantity2
     
-    public func updateQuantityCopy(_ quantity: Int) -> InventoryItem {
+    public func updateQuantityCopy(_ quantity: Float) -> InventoryItem {
         return copy(quantity: quantity)
     }
 }

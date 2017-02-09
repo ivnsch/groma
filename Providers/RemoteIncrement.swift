@@ -11,13 +11,13 @@ import QorumLogs
 
 struct RemoteIncrement: ResponseObjectSerializable, CustomDebugStringConvertible {
     let uuid: String
-    let delta: Int
+    let delta: Float
     let lastUpdate: Int64
     
     init?(representation: AnyObject) {
         guard
             let uuid = representation.value(forKeyPath: "uuid") as? String,
-            let delta = representation.value(forKeyPath: "delta") as? Int,
+            let delta = representation.value(forKeyPath: "delta") as? Float,
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")

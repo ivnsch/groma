@@ -11,9 +11,9 @@ import Foundation
 // TODO rename StoreProductWithQuantityInput
 public struct ProductWithQuantityInput {
     public let product: StoreProduct
-    public let quantity: Int
+    public let quantity: Float
     
-    public init(product: StoreProduct, quantity: Int) {
+    public init(product: StoreProduct, quantity: Float) {
         self.product = product
         self.quantity = quantity
     }
@@ -23,9 +23,9 @@ public struct ProductWithQuantityInput {
 // TODO put in own file
 public struct QuantifiableProductWithQuantityInput {
     public let product: QuantifiableProduct
-    public let quantity: Int
+    public let quantity: Float
     
-    public init(product: QuantifiableProduct, quantity: Int) {
+    public init(product: QuantifiableProduct, quantity: Float) {
         self.product = product
         self.quantity = quantity
     }

@@ -10,18 +10,18 @@ import Foundation
 
 struct RemoteListItemIncrementResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     let uuid: String
-    let delta: Int
+    let delta: Float
     let status: ListItemStatus
-    let updatedQuantity: Int
+    let updatedQuantity: Float
     let lastUpdate: Int64
     
     init?(representation: AnyObject) {
         guard
             let uuid = representation.value(forKeyPath: "uuid") as? String,
-            let delta = representation.value(forKeyPath: "delta") as? Int,
+            let delta = representation.value(forKeyPath: "delta") as? Float,
             let statusInt = representation.value(forKeyPath: "status") as? Int,
             let status = ListItemStatus(rawValue: statusInt),
-            let updatedQuantity = representation.value(forKeyPath: "updatedQuantity") as? Int,
+            let updatedQuantity = representation.value(forKeyPath: "updatedQuantity") as? Float,
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
                 print("Invalid json: \(representation)")

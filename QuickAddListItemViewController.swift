@@ -13,7 +13,7 @@ import Providers
 // TODO rename this controller in only groups controller and remove the old groups controller. Also delegate methods not with "Add" but simply "Tap" - the implementation of this delegate decides what the tap means.
 
 protocol QuickAddListItemDelegate: class {
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Int)
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float)
     
     func onAddItem(_ item: Item)
 
@@ -253,7 +253,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
     }
     
-    fileprivate func retrieveQuantifiableProduct(product: Product, indexPath: IndexPath, onRetrieved: @escaping (QuantifiableProduct, Int) -> Void) {
+    fileprivate func retrieveQuantifiableProduct(product: Product, indexPath: IndexPath, onRetrieved: @escaping (QuantifiableProduct, Float) -> Void) {
         Prov.productProvider.quantifiableProducts(product: product, successHandler{quantifiableProducts in
             
             if let first = quantifiableProducts.first, quantifiableProducts.count == 1 {

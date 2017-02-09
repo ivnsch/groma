@@ -10,7 +10,7 @@ import Foundation
 
 public extension Array where Element: HistoryItem {
 
-    public var totalQuantity: Int {
+    public var totalQuantity: Float {
         return reduce(0) {sum, element in sum + element.quantity}
     }
 

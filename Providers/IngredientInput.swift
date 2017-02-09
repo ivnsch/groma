@@ -10,14 +10,14 @@ import Foundation
 
 public struct IngredientInput: Equatable, Hashable {
     public let name: String
-    public let quantity: Int
+    public let quantity: Float
     public let category: String
     public let categoryColor: UIColor
     public let brand: String
     public let unit: ProductUnit
     public let baseQuantity: String // TODO!!!!!!!!! remove
     
-    public init(name: String, quantity: Int, category: String, categoryColor: UIColor, brand: String, unit: ProductUnit, baseQuantity: String) {
+    public init(name: String, quantity: Float, category: String, categoryColor: UIColor, brand: String, unit: ProductUnit, baseQuantity: String) {
         self.name = name
         self.quantity = quantity
         self.category = category
@@ -31,7 +31,7 @@ public struct IngredientInput: Equatable, Hashable {
         return name.hashValue
     }
     
-    public func copy(name: String? = nil, quantity: Int? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil, unit: ProductUnit? = nil, baseQuantity: String? = nil) -> IngredientInput {
+    public func copy(name: String? = nil, quantity: Float? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil, unit: ProductUnit? = nil, baseQuantity: String? = nil) -> IngredientInput {
         return IngredientInput(
             name: name ?? self.name,
             quantity: quantity ?? self.quantity,
@@ -52,10 +52,10 @@ public func ==(lhs: IngredientInput, rhs: IngredientInput) -> Bool {
 // TODO better name, this is also used by input form after the item was retrieved from db
 public struct QuickAddIngredientInput: Equatable, Hashable {
     public let item: Item
-    public let quantity: Int
+    public let quantity: Float
     public let unit: ProductUnit
     
-    public init(item: Item, quantity: Int, unit: ProductUnit) {
+    public init(item: Item, quantity: Float, unit: ProductUnit) {
         self.item = item
         self.quantity = quantity
         self.unit = unit
@@ -65,7 +65,7 @@ public struct QuickAddIngredientInput: Equatable, Hashable {
         return item.uuid.hashValue
     }
     
-    public func copy(item: Item? = nil, quantity: Int? = nil, unit: ProductUnit? = nil) -> QuickAddIngredientInput {
+    public func copy(item: Item? = nil, quantity: Float? = nil, unit: ProductUnit? = nil) -> QuickAddIngredientInput {
         return QuickAddIngredientInput(
             item: item ?? self.item,
             quantity: quantity ?? self.quantity,

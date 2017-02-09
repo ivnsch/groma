@@ -15,7 +15,7 @@ class SelectQuantifiableController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    var onSelected: (((quantifiableProduct: QuantifiableProduct, quantity: Int)) -> Void)?
+    var onSelected: (((quantifiableProduct: QuantifiableProduct, quantity: Float)) -> Void)?
  
     var onViewDidLoad: (() -> Void)?
 

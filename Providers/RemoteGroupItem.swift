@@ -12,7 +12,7 @@ import QorumLogs
 struct RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let uuid: String
-    let quantity: Int
+    let quantity: Float
     let productUuid: String
     let groupUuid: String
     let lastUpdate: Int64
@@ -20,7 +20,7 @@ struct RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializab
     init?(representation: AnyObject) {
         guard
             let uuid = representation.value(forKeyPath: "uuid") as? String,
-            let quantity = representation.value(forKeyPath: "quantity") as? Int,
+            let quantity = representation.value(forKeyPath: "quantity") as? Float,
             let productUuid = representation.value(forKeyPath: "productUuid") as? String,
             let groupUuid = representation.value(forKeyPath: "groupUuid") as? String,
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double

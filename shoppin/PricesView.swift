@@ -58,7 +58,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
 
     var expandedNew: Bool = false /// if at the top or bottom - other expanded is deprecated
     
-    fileprivate var cartQuantity: Int = 0 {
+    fileprivate var cartQuantity: Float = 0 {
         didSet {
             if let cartQuantityLabel = quantityLabel {
                 if cartQuantity == 1 {
@@ -73,7 +73,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         }
     }
 
-    var quantities: (cart: Int, stash: Int) = (0, 0) {
+    var quantities: (cart: Float, stash: Float) = (0, 0) {
         didSet {
             if let _ = quantityLabel {
                 cartQuantity = quantities.cart
@@ -88,7 +88,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         }
     }
     
-    fileprivate var stashQuantity: Int = 0 {
+    fileprivate var stashQuantity: Float = 0 {
         didSet {
             if let stashQuantityLabel = stashQuantityLabel {
                 stashQuantityLabel.text = trans("list_items_items_in_backstore", "\(stashQuantity)")

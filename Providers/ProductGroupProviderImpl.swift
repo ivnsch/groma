@@ -91,13 +91,13 @@ class ProductGroupProviderImpl: ProductGroupProvider {
         }
     }
     
-    func addGroupItems(_ srcGroup: ProductGroup, targetGroup: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Int)]>) -> Void) {
+    func addGroupItems(_ srcGroup: ProductGroup, targetGroup: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Float)]>) -> Void) {
         groupItems(srcGroup, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
             if let groupItems = result.sucessResult {
                 if groupItems.isEmpty {
                     handler(ProviderResult(status: .isEmpty))
                 } else {
-                    let productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
+                    let productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)] = groupItems.map{($0.product, $0.quantity)}
                     self?.add(targetGroup, productsWithQuantities: productsWithQuantities, remote: remote) {result in
                         // return fetched group items to the caller
                         if let groupItems = result.sucessResult {
@@ -253,7 +253,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
     ////////////////////////////////////////////////////////////////////////////////
     // new - decouple input from actual source by passing only product+quantity. TODO make other methods where this is usable also use it
     
-    func add(_ group: ProductGroup, productsWithQuantities: [(product: QuantifiableProduct, quantity: Int)], remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Int)]>) -> Void) {
+    func add(_ group: ProductGroup, productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)], remote: Bool, _ handler: @escaping (ProviderResult<[(groupItem: GroupItem, delta: Float)]>) -> Void) {
         DBProv.groupItemProvider.addOrIncrement(group, productsWithQuantities: productsWithQuantities, dirty: remote) {addedOrIncrementedGroupItemsMaybe in
             if let addedOrIncrementedGroupItems = addedOrIncrementedGroupItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedGroupItems))
@@ -482,11 +482,11 @@ class ProductGroupProviderImpl: ProductGroupProvider {
     }
     
     // Copied from ListItemProviderImpl (which is copied from inventory provider) refactor?
-    func increment(_ groupItem: GroupItem, delta: Int, remote: Bool, _ handler: @escaping (ProviderResult<Int>) -> Void) {
+    func increment(_ groupItem: GroupItem, delta: Float, remote: Bool, _ handler: @escaping (ProviderResult<Float>) -> Void) {
         increment(ItemIncrement(delta: delta, itemUuid: groupItem.uuid), remote: remote, handler)
     }
     
-    func increment(_ increment: ItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<Int>) -> Void) {
+    func increment(_ increment: ItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<Float>) -> Void) {
         DBProv.groupItemProvider.incrementGroupItem(increment, dirty: remote) {updatedQuantityMaybe in
 
             if let updatedQuantity = updatedQuantityMaybe {

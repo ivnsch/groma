@@ -11,12 +11,12 @@ import Foundation
 // Represents an item that will be added to a list - it can come from e.g. quick add product, quick add group or add new list item. In the latest case, storeProductInput is set.
 public class ListItemPrototype: Equatable, Identifiable, CustomDebugStringConvertible {
     public let product: QuantifiableProduct
-    public let quantity: Int
+    public let quantity: Float
     public let targetSectionName: String
     public let targetSectionColor: UIColor
     public let storeProductInput: StoreProductInput?
     
-    public init(product: QuantifiableProduct, quantity: Int, targetSectionName: String, targetSectionColor: UIColor, storeProductInput: StoreProductInput?) {
+    public init(product: QuantifiableProduct, quantity: Float, targetSectionName: String, targetSectionColor: UIColor, storeProductInput: StoreProductInput?) {
         self.product = product
         self.quantity = quantity
         self.targetSectionName = targetSectionName
@@ -32,7 +32,7 @@ public class ListItemPrototype: Equatable, Identifiable, CustomDebugStringConver
         return "\(product.product.item.name), \(quantity), \(product.baseQuantity)::\(product.unit), \(targetSectionName)"
     }
     
-    public func copy(product: QuantifiableProduct? = nil, quantity: Int? = nil, targetSectionName: String? = nil, targetSectionColor: UIColor? = nil, storeProductInput: StoreProductInput? = nil) -> ListItemPrototype {
+    public func copy(product: QuantifiableProduct? = nil, quantity: Float? = nil, targetSectionName: String? = nil, targetSectionColor: UIColor? = nil, storeProductInput: StoreProductInput? = nil) -> ListItemPrototype {
         return ListItemPrototype(
             product: product ?? self.product.copy(),
             quantity: quantity ?? self.quantity,

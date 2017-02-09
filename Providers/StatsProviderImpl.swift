@@ -12,11 +12,11 @@ import RealmSwift
 
 public struct ProductAggregate {
     public let product: Product
-    public let totalCount: Int
+    public let totalCount: Float
     public let totalPrice: Float
     public let percentage: Float
     
-    public init(product: Product, totalCount: Int, totalPrice: Float, percentage: Float) {
+    public init(product: Product, totalCount: Float, totalPrice: Float, percentage: Float) {
         self.product = product
         self.totalCount = totalCount
         self.totalPrice = totalPrice
@@ -56,10 +56,10 @@ public func ==(lhs: GroupMonthYearAggregate, rhs: GroupMonthYearAggregate) -> Bo
 
 public struct MonthYearAggregate: Equatable {
     public let monthYear: MonthYear
-    public let totalCount: Int
+    public let totalCount: Float
     public let totalPrice: Float
     
-    public init(monthYear: MonthYear, totalCount: Int, totalPrice: Float) {
+    public init(monthYear: MonthYear, totalCount: Float, totalPrice: Float) {
         self.monthYear = monthYear
         self.totalCount = totalCount
         self.totalPrice = totalPrice
@@ -114,7 +114,7 @@ class StatsProviderImpl: StatsProvider {
                 
                 if let historyItems = historyItems {
 
-                    var dict: OrderedDictionary<MonthYear, (price: Float, quantity: Int)> = OrderedDictionary()
+                    var dict: OrderedDictionary<MonthYear, (price: Float, quantity: Float)> = OrderedDictionary()
                     
                     let (_, referenceDateMonth, referenceDateYear) = referenceDate.dayMonthYear
                     if timePeriod.timeUnit != .month {
@@ -170,7 +170,7 @@ class StatsProviderImpl: StatsProvider {
     fileprivate func toProductAggregates(_ historyItems: Results<HistoryItem>) -> [ProductAggregate] {
         
         // extract from history items total quantity and price for each product (a product can appear in multiple history items)
-        var dict: OrderedDictionary<String, (product: Product, price: Float, quantity: Int)> = OrderedDictionary()
+        var dict: OrderedDictionary<String, (product: Product, price: Float, quantity: Float)> = OrderedDictionary()
         var totalPrice: Float = 0
         for historyItem in historyItems {
             let product = historyItem.product.product // the product units are irrelevant for this - we just want to know how much we spended e.g. for "apples" - whether we bought sometimes in "boxes" or others in "kg" doesn't make a difference

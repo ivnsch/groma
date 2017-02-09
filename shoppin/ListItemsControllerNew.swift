@@ -357,7 +357,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         onSectionSelected(section.section)
     }
     
-    func onIncrementItem(_ tableViewListItem: ListItem, delta: Int) {
+    func onIncrementItem(_ tableViewListItem: ListItem, delta: Float) {
         Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
 //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
@@ -590,7 +590,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     
-    override func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
+    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
         guard let realmData = realmData else {QL4("No realm data"); return}
      
         if let list = currentList {

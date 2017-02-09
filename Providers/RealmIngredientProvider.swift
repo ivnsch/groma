@@ -35,7 +35,7 @@ class RealmIngredientProvider: RealmProvider {
     }
 //
 //    // TODO remove
-//    func add(_ quantifiableProduct: QuantifiableProduct, quantity: Int, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping ((ingredient: Ingredient, isNew: Bool)?) -> Void) {
+//    func add(_ quantifiableProduct: QuantifiableProduct, quantity: Float, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping ((ingredient: Ingredient, isNew: Bool)?) -> Void) {
 //        
 //        guard let ingredientsRealm = ingredients.realm else {QL4("Ingredients have no realm"); handler(nil); return}
 //        
@@ -80,8 +80,8 @@ class RealmIngredientProvider: RealmProvider {
         }
     }
     
-    func increment(_ ingredient: Ingredient, quantity: Int, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (Int?) -> Void) {
-        let quantityMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: realm) {realm -> Int in
+    func increment(_ ingredient: Ingredient, quantity: Float, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (Float?) -> Void) {
+        let quantityMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: realm) {realm -> Float in
             ingredient.incrementQuantity(quantity)
             return ingredient.quantity
         }
@@ -137,7 +137,7 @@ class RealmIngredientProvider: RealmProvider {
     
     // MARK: - private
     
-    fileprivate func create(_ item: Item, quantity: Int, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Ingredient?) -> Void) {
+    fileprivate func create(_ item: Item, quantity: Float, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Ingredient?) -> Void) {
         let ingredient = Ingredient(uuid: UUID().uuidString, quantity: quantity, item: item, recipe: recipe)
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
             realm.add(ingredient, update: true) // update: true "just in case", not really necessary

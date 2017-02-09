@@ -17,11 +17,11 @@ struct RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializabl
     var listUuid: String
     let note: String?
     
-    let todoQuantity: Int
+    let todoQuantity: Float
     let todoOrder: Int
-    let doneQuantity: Int
+    let doneQuantity: Float
     let doneOrder: Int
-    let stashQuantity: Int
+    let stashQuantity: Float
     let stashOrder: Int
 
     let lastUpdate: Int64
@@ -33,11 +33,11 @@ struct RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializabl
             let sectionUuid = representation.value(forKeyPath: "sectionUuid") as? String,
             let listUuid = representation.value(forKeyPath: "listUuid") as? String,
             let note = representation.value(forKeyPath: "note") as? String?, // TODO is this correct way for optional here?
-            let todoQuantity = representation.value(forKeyPath: "todoQuantity") as? Int,
+            let todoQuantity = representation.value(forKeyPath: "todoQuantity") as? Float,
             let todoOrder = representation.value(forKeyPath: "todoOrder") as? Int,
-            let doneQuantity = representation.value(forKeyPath: "doneQuantity") as? Int,
+            let doneQuantity = representation.value(forKeyPath: "doneQuantity") as? Float,
             let doneOrder = representation.value(forKeyPath: "doneOrder") as? Int,
-            let stashQuantity = representation.value(forKeyPath: "stashQuantity") as? Int,
+            let stashQuantity = representation.value(forKeyPath: "stashQuantity") as? Float,
             let stashOrder = representation.value(forKeyPath: "stashOrder") as? Int,
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {

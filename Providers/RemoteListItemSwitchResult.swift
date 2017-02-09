@@ -13,7 +13,7 @@ public struct RemoteSwitchListItemFullResult: ResponseObjectSerializable, Custom
     public let switchResult: RemoteSwitchListItemResult
     public let srcStatus: ListItemStatus
     public let dstStatus: ListItemStatus
-    public let switchedQuantity: Int
+    public let switchedQuantity: Float
     
     public init?(representation: AnyObject) {
         guard
@@ -23,7 +23,7 @@ public struct RemoteSwitchListItemFullResult: ResponseObjectSerializable, Custom
             let srcStatus = ListItemStatus(rawValue: srcStatusInt),
             let dstStatusInt = representation.value(forKeyPath: "dstStatus") as? Int,
             let dstStatus = ListItemStatus(rawValue: dstStatusInt),
-            let switchedQuantity = representation.value(forKeyPath: "switchedQuantity") as? Int
+            let switchedQuantity = representation.value(forKeyPath: "switchedQuantity") as? Float
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}

@@ -18,9 +18,9 @@ class RemoteInventoryItemsProvider: Any {
     }
 
     // Adds inventoryItems to remote, IMPORTANT: All items are assumed to have the same inventory TODO maybe implement server service such that we don't have to put inventory uuid in url, and just use the inventory for each inventory item for the insert
-    func addToInventory(_ inventoryItemsWithDelta: [(inventoryItem: InventoryItem, delta: Int)], handler: @escaping (RemoteResult<RemoteInventoryItemsWithDependencies>) -> ()) {
+    func addToInventory(_ inventoryItemsWithDelta: [(inventoryItem: InventoryItem, delta: Float)], handler: @escaping (RemoteResult<RemoteInventoryItemsWithDependencies>) -> ()) {
         
-        func toParams(_ inventoryItemWithDelta: (inventoryItem: InventoryItem, delta: Int)) -> [String: AnyObject] {
+        func toParams(_ inventoryItemWithDelta: (inventoryItem: InventoryItem, delta: Float)) -> [String: AnyObject] {
             return [:]
             // Commented because structural changes
 //            let productDict = RemoteListItemProvider().toRequestParams(inventoryItemWithDelta.inventoryItem.product)

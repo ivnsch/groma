@@ -188,7 +188,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                             let monthHistoryItems: [HistoryItem] = (2..<monthItemsCount).map {_ in
                                 let randomIndex = Int.random(products.count)
                                 let product = products[randomIndex]
-                                return HistoryItem(uuid: UUID().uuidString, inventory: inventory, product: product, addedDate: date.toMillis(), quantity: Int.random(10), user: user, paidPrice: Float(Double.random()) * 2)
+                                return HistoryItem(uuid: UUID().uuidString, inventory: inventory, product: product, addedDate: date.toMillis(), quantity: Float(Int.random(10)), user: user, paidPrice: Float(Double.random()) * 2)
                             }
                             return monthHistoryItems
                         }

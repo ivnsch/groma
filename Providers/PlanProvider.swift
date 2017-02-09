@@ -28,5 +28,5 @@ public protocol PlanProvider {
     
     func removePlanItem(_ item: PlanItem, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func incrementPlanItem(_ item: PlanItem, delta: Int, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func incrementPlanItem(_ item: PlanItem, delta: Float, _ handler: @escaping (ProviderResult<Any>) -> Void)
 }

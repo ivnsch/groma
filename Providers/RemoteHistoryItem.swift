@@ -13,7 +13,7 @@ public struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionS
     public let uuid: String
     public let inventoryUuid: String
     public let productUuid: String
-    public let quantity: Int
+    public let quantity: Float
     public let userUuid: String
     public let addedDate: Int64
     public let lastUpdate: Int64
@@ -25,7 +25,7 @@ public struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionS
             let uuid = representation.value(forKeyPath: "uuid") as? String,
             let inventoryUuid = representation.value(forKeyPath: "inventoryUuid") as? String,
             let productUuid = representation.value(forKeyPath: "productUuid") as? String,
-            let quantity = representation.value(forKeyPath: "quantity") as? Int,
+            let quantity = representation.value(forKeyPath: "quantity") as? Float,
             let userUuid = representation.value(forKeyPath: "userUuid") as? String,
             let addedDate = representation.value(forKeyPath: "addedDate") as? Double,
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double,

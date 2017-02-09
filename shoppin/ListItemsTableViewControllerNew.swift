@@ -16,7 +16,7 @@ protocol ListItemsTableViewDelegateNew: class {
     func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath) // mark as undo
     func onListItemReset(_ tableViewListItem: ListItem) // revert undo
     func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection)
-    func onIncrementItem(_ model: ListItem, delta: Int)
+    func onIncrementItem(_ model: ListItem, delta: Float)
     func onTableViewScroll(_ scrollView: UIScrollView)
     func onPullToAdd()
     func showPopup(text: String, cell: UITableViewCell, button: UIView)
@@ -328,7 +328,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         SwipeToIncrementAlertHelper.check(self)
     }
     
-    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Int) {
+    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Float) {
         listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: newQuantity - tableViewListItem.quantity(status))
     }
     
