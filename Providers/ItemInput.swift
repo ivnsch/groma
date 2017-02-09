@@ -11,14 +11,17 @@ import Foundation
 public final class ItemInput: CustomDebugStringConvertible {
     
     public let name: String
-    public let category: ProductCategory // for now as full object, depending on requirements we may change this to category-input
+//    public let category: ProductCategory // for now as full object, depending on requirements we may change this to category-input
+    public let categoryName: String
+    public let categoryColor: UIColor
     
-    public init(name: String, category: ProductCategory) {
+    public init(name: String, categoryName: String, categoryColor: UIColor) {
         self.name = name
-        self.category = category
+        self.categoryName = categoryName
+        self.categoryColor = categoryColor
     }
     
     public var debugDescription: String {
-        return "{\(type(of: self)), name: \(name), category: \(category)}"
+        return "{\(type(of: self)), name: \(name), categoryName: \(categoryName), categoryColor: \(categoryColor)}"
     }
 }

@@ -331,7 +331,7 @@ class RealmListItemProvider: RealmProvider {
         let ingredient = ingredient.copy()
         
         withRealm({realm -> T? in
-            let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithProductName(ingredient.product.product.item.name))
+            let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithProductName(ingredient.item.name))
             return mapper(listItems)
 
         }) {mappingResultMaybe in

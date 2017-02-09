@@ -234,6 +234,10 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func onAddProduct(_ product: QuantifiableProduct, quantity: Int) {
     }
     
+    func onAddItem(_ item: Item) {
+        // Do nothing - No Item quick add in this controller
+    }
+    
     internal func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
         // TODO!!!!!!!!!!!!!!!!! disable recipes from quick add
         fatalError("Not supported") // It doesn't make sense to add recipes to products

@@ -23,8 +23,8 @@ class IngredientProviderImpl: IngredientProvider {
         }
     }
     
-    func add(_ quantifiableProduct: QuantifiableProduct, quantity: Int, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<(ingredient: Ingredient, isNew: Bool)>) -> Void) {
-        DBProv.ingredientProvider.add(quantifiableProduct, quantity: quantity, recipe: recipe, ingredients: ingredients, notificationToken: notificationToken) {ingredientMaybe in
+    func add(_ quickAddInput: QuickAddIngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<(ingredient: Ingredient, isNew: Bool)>) -> Void) {
+        DBProv.ingredientProvider.add(quickAddInput, recipe: recipe, ingredients: ingredients, notificationToken: notificationToken) {ingredientMaybe in
             if let ingredient = ingredientMaybe {
                 handler(ProviderResult(status: .success, sucessResult: ingredient))
             } else {
@@ -46,16 +46,19 @@ class IngredientProviderImpl: IngredientProvider {
     
     // Used by input form (retrives quantifiable product, creates ingredient)
     func add(_ input: IngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        
-        addOrUpdateProduct(input: input, notificationToken: notificationToken) {productResult in
+        addOrUpdateItem(input: input, notificationToken: notificationToken) {itemResult in
             
-            if let product = productResult.sucessResult {
-                self.add(product, quantity: input.quantity, recipe: recipe, ingredients: ingredients, notificationToken: notificationToken) {result in
+            if let item = itemResult.sucessResult {
+                
+                // TODO better name for quickadd item - PseudoIngredient, IngredientInputWithDependencies or something
+                let quickAddItem = QuickAddIngredientInput(item: item, quantity: input.quantity, unit: input.unit)
+                
+                self.add(quickAddItem, recipe: recipe, ingredients: ingredients, notificationToken: notificationToken) {result in
                     handler(ProviderResult(status: result.status))
                 }
                 
             } else {
-                QL4("Error fetching product: \(productResult.status)")
+                QL4("Error fetching item: \(itemResult.status)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -64,21 +67,20 @@ class IngredientProviderImpl: IngredientProvider {
     func update(_ ingredient: Ingredient, input: IngredientInput, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<(ingredient: Ingredient, replaced: Bool)>) -> Void) {
         
         // Remove a (different) possible already existing item with same unique (name+brand) in the same list (imagine I'm editing an item A and my new inputs correspond to unique from another item B which is in the list how do we handle this? we could alert the user but this may be a bit of an overkill, at least for now, so we simply replace (i.e. delete) the other item. We return the deleted item to be able to delete it from the table view. Note that we exclude the editing item from the delete - since this is not being executed in a transaction it's not safe to just delete it to re-add it in subsequent steps.
-        let quantifiableProductUnique = QuantifiableProductUnique(name: input.name, brand: input.brand, unit: input.unit, baseQuantity: input.baseQuantity)
-        DBProv.ingredientProvider.deletePossibleIngredient(quantifiableProductUnique: quantifiableProductUnique, recipe: ingredient.recipe, notUuid: ingredient.uuid) {foundAndDeletedIngredient in
+        DBProv.ingredientProvider.deletePossibleIngredient(itemName: ingredient.item.name, recipe: ingredient.recipe, notUuid: ingredient.uuid) {foundAndDeletedIngredient in
             
-            self.addOrUpdateProduct(input: input, notificationToken: notificationToken) {productResult in
+            self.addOrUpdateItem(input: input, notificationToken: notificationToken) {itemResult in
                 
-                if let product = productResult.sucessResult {
-                    let updatedIngredient = ingredient.copy(quantity: input.quantity, product: product)
+                if let item = itemResult.sucessResult {
+                    let updatedIngredient = ingredient.copy(quantity: input.quantity, item: item)
                     
                     // Now do plain update of the item
                     DBProv.ingredientProvider.update(ingredient, input: input, ingredients: ingredients, notificationToken: notificationToken) {success in
                         if success {
                             handler(ProviderResult(status: .success, sucessResult: (ingredient: updatedIngredient, replaced: foundAndDeletedIngredient)))
                         } else {
-                            QL4("Error updating ingredient: \(productResult)")
-                            handler(ProviderResult(status: productResult.status))
+                            QL4("Error updating ingredient: \(itemResult)")
+                            handler(ProviderResult(status: itemResult.status))
                         }
                     }
                     
@@ -93,7 +95,7 @@ class IngredientProviderImpl: IngredientProvider {
                     
                     
                 } else {
-                    QL4("Error fetching product: \(productResult.status)")
+                    QL4("Error fetching product: \(itemResult.status)")
                     handler(ProviderResult(status: .databaseUnknown))
                 }
                 
@@ -107,24 +109,19 @@ class IngredientProviderImpl: IngredientProvider {
         }
     }
     
-    // MARK: - Private
     
     /// Helper to add/retrieve/update quantifiable product to be used for add/update ingredient
     /// NOTE: notificationToken not used here - should it? TODO!!!!!!!!!!!!!!!!!!!
-    fileprivate func addOrUpdateProduct(input: IngredientInput, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void) {
+    fileprivate func addOrUpdateItem(input: IngredientInput, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Item>) -> Void) {
         
-        let prototype = ProductPrototype(name: input.name, category: input.category, categoryColor: input.categoryColor, brand: input.brand, baseQuantity: input.baseQuantity, unit: input.unit)
-        // This will update the quantifiable product references with same algorithm for all product pointing items in the app
-        Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false) {(result: ProviderResult<QuantifiableProduct>) in
-            
-            if let product = result.sucessResult {
-                handler(ProviderResult(status: .success, sucessResult: product))
-                
-            } else {
-                QL4("Error fetching product: \(result.status)")
-                handler(ProviderResult(status: .databaseUnknown))
-            }
+        let itemInput = ItemInput(name: input.name, categoryName: input.category, categoryColor: input.categoryColor)
+        
+        // TODO!!!!!!!!!!!!!!!! review updateCategory parameter (updates color) here and for product - for product it's false, why?
+        switch DBProv.itemProvider.mergeOrCreateItemSync(itemInput: itemInput, updateCategory: true) {
+        case .ok(let item): handler(ProviderResult(status: .success, sucessResult: item))
+        case .err(let error):
+            QL4("Error fetching item: \(error)")
+            handler(ProviderResult(status: .databaseUnknown))
         }
     }
-    
 }

@@ -606,14 +606,6 @@ class RealmProductProvider: RealmProvider {
         _ = DBProv.storeProductProvider.deleteStoreProductsAndDependenciesForProductSync(realm, productUuid: quantifiableProductUuid, markForSync: markForSync)
         
         _ = DBProv.groupItemProvider.removeGroupItemsForProductSync(realm, productUuid: quantifiableProductUuid, markForSync: markForSync)
-
-        let ingredientsResult = realm.objects(Ingredient.self).filter(Ingredient.createFilterProduct(quantifiableProductUuid))
-        // Commented because structural changes - there are no thombstones for quantifiable products as this class is new and it seems we will not use the custom backend anymore
-//        if markForSync {
-//            let toRemoteInventoryItems = Array(inventoryResult.map{DBRemoveInventoryItem($0)})
-//            saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
-//        }
-        realm.delete(ingredientsResult)
         
         let inventoryResult = realm.objects(InventoryItem.self).filter(InventoryItem.createFilter(quantifiableProductUuid: quantifiableProductUuid))
         if markForSync {

@@ -14,6 +14,8 @@ import Providers
 protocol QuickAddDelegate: class {
     func onAddProduct(_ product: QuantifiableProduct, quantity: Int)
     
+    func onAddItem(_ item: Item)
+    
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) // TODO!!!!!!!!!!!!!! remove (from origin)
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController)
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
@@ -66,7 +68,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     fileprivate var editingItem: AddEditItem? {
         didSet {
             if let editingItem = editingItem {
-                searchBar.text = editingItem.product.product.item.name
+                searchBar.text = editingItem.product?.product.item.name ?? ""
             } else {
                 QL3("Setting a nil editingItem")
             }
@@ -143,6 +145,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             if itemType == .productForList {
                 controller.itemTypeForFirstPage = itemType
                 controller.list = list
+            } else if itemType == .ingredients {
+                controller.itemTypeForFirstPage = itemType
             }
             
             navController?.pushViewController(controller, animated: false)
@@ -252,6 +256,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         delegate?.onAddProduct(product, quantity: quantity)
     }
     
+    func onAddItem(_ item: Item) {
+        delegate?.onAddItem(item)
+    }
+    
     func onCloseQuickAddTap() {
         delegate?.onCloseQuickAddTap()
     }
@@ -263,13 +271,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             searchBar.text = searchBar.text?.uncapitalizeFirst() // revert posible capitalization done in hasItems == true. A possible manual capitalization of the user would also be reverted but it's very improbable user will capitalize the search input.
         } else {
             switch itemType {
-            case .product:
-                fallthrough
+            case .product: fallthrough
+            case .ingredients: fallthrough
             case .productForList:
                 searchBar.text = searchBar.text?.capitalizeFirst() // on has not items the search text becomes item name input, so we capitalize the first letter.
                 _ = showAddProductController()
             case .group: fallthrough
             case .recipe: quickAddListItemViewController?.setEmptyViewVisible(true)
+            
             }
         }
     }

@@ -54,3 +54,47 @@ public class QuickAddProduct: QuickAddItem {
         }
     }
 }
+
+// TODO put in own file
+public class QuickAddDBItem: QuickAddItem {
+    
+    public let item: Item
+    
+    // used in list items, where we shows section color if available, instead of category color. A better solution for this may be implementing a new QuickAddItem subclass but for now like this.
+    public let colorOverride: UIColor?
+    
+    public init(_ item: Item, colorOverride: UIColor? = nil, boldRange: NSRange? = nil) {
+        self.item = item
+        self.colorOverride = colorOverride
+        super.init(boldRange: boldRange)
+    }
+    
+    public override var labelText: String {
+        return item.name
+    }
+    
+    public override var label2Text: String {
+        return ""
+    }
+    
+    // TODO!!!!!!!!!!!!!!!!! (not related with quantifiable prods refactoring but important) review this - is the store always showing? the store should not show when we are in a store-specific list! (if items have a store assigned iirc we should see the items in other stores, but without displayign the store? (i.e. stripped from store-related information)
+    public override var label3Text: String {
+        return ""
+    }
+    
+    public override var color: UIColor {
+        return colorOverride ?? item.category.color
+    }
+    
+    public override func clearBoldRangeCopy() -> QuickAddDBItem {
+        return QuickAddDBItem(item)
+    }
+    
+    public override func same(_ item: QuickAddItem) -> Bool {
+        if let dbItemItem = item as? QuickAddDBItem {
+            return self.item.same(dbItemItem.item)
+        } else {
+            return false
+        }
+    }
+}

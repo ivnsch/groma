@@ -14,8 +14,9 @@ public protocol IngredientProvider {
     func ingredients(recipe: Recipe, sortBy: InventorySortBy, _ handler: @escaping (ProviderResult<Results<Ingredient>>) -> Void)
 
     // NOTE: we pass recipe despite there's a reference to recipe in ingredient. That this is the case, and that the recipe in ingredient is also set correctly can be seen as an assumption. In fact, we don't really need the recipe reference in ingredient as now we model more in accordance to Realm's design, where the parent has the references to the children. Letting it there just in case. Maybe it should be removed.
-    func add(_ quantifiableProduct: QuantifiableProduct, quantity: Int, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<(ingredient: Ingredient, isNew: Bool)>) -> Void)
+    func add(_ quickAddInput: QuickAddIngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<(ingredient: Ingredient, isNew: Bool)>) -> Void)
 
+    
     // Input form (create)
     func add(_ input: IngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
     

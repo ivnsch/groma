@@ -15,6 +15,8 @@ import Providers
 protocol QuickAddListItemDelegate: class {
     func onAddProduct(_ product: QuantifiableProduct, quantity: Int)
     
+    func onAddItem(_ item: Item)
+
     func onAddGroup(_ group: ProductGroup)
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickListController: QuickAddListItemViewController)
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
@@ -25,7 +27,7 @@ protocol QuickAddListItemDelegate: class {
 }
 
 enum QuickAddItemType {
-    case product, group, recipe, productForList
+    case product, group, recipe, productForList, ingredients
 }
 
 enum QuickAddContent {
@@ -153,6 +155,11 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             groupCell.item = recipe
             cell = groupCell
             
+        } else if let dbItemItem = item as? QuickAddDBItem {
+            let dbItemCell = collectionView.dequeueReusableCell(withReuseIdentifier: "itemCell", for: indexPath) as! QuickAddItemCell
+            dbItemCell.item = dbItemItem
+            cell = dbItemCell
+            
         } else {
             QL4("Error: invalid model type in quickAddItems: \(item)")
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "itemCell", for: indexPath) // assign something so it compiles
@@ -236,6 +243,10 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 controller.recipe = recipeItem.recipe
                 return controller
             })
+            
+        } else if let dbItemItem = item as? QuickAddDBItem {
+            // TODO popup with unit, quantity
+            delegate?.onAddItem(dbItemItem.item)
             
         } else {
             print("Error: invalid model type in quickAddItems, select cell. \(item)")
@@ -334,12 +345,38 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             }
         }
         
+        func loadItems() {
+            
+            Prov.itemsProvider.items(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
+                
+                QL1("Loaded items, current search: \(self?.searchText), range: \(self?.paginator.currentPage), sortBy: \(self?.contentData.sortBy), result search: \(tuple.substring), results: \(tuple.items.count)")
+                
+                // TODO!!!!!!!!!!!!!!!!!!!!!!!!! review if pagination is working (in loadProductsForList and loadItems as well) - either way we should be using Realm's Results instead
+                if let weakSelf = self {
+                    // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
+                    // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
+                    if tuple.substring == weakSelf.searchText {
+                        let quickAddItems = tuple.items.toArray().map{QuickAddDBItem($0, boldRange: $0.name.range(weakSelf.searchText, caseInsensitive: true))} // TODO don't map to array...
+                        onItemsLoaded(quickAddItems)
+                    } else {
+                        setLoading(false)
+                    }
+                }
+                }, onError: {[weak self] result in
+                    setLoading(false)
+                    self?.defaultErrorHandler()(result)
+            })
+            )
+        }
+        
+        
         func loadProducts() {
             
             Prov.productProvider.products(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 
                 QL1("Loaded products, current search: \(self?.searchText), range: \(self?.paginator.currentPage), sortBy: \(self?.contentData.sortBy), result search: \(tuple.substring), results: \(tuple.products.count)")
 
+                // TODO!!!!!!!!!!!!!!!!!!!!!!!!! review if pagination is working (in loadProductsForList and loadItems as well) - either way we should be using Realm's Results instead
                 if let weakSelf = self {
                     // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
                     // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
@@ -443,6 +480,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                         loadRecipes()
                     case .productForList:
                         loadProductsForList()
+                    case .ingredients:
+                        loadItems()
                     }
                 }
             }

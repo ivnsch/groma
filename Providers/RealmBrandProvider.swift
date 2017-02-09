@@ -89,7 +89,7 @@ class RealmBrandProvider: RealmProvider {
     
     /// Returns ingredient uuid : associated brands
     func brands(ingredients: Results<Ingredient>, handler: @escaping ([String: [String]]?) -> Void) {
-        let tuples: [(String, String)] = ingredients.map{($0.uuid, $0.product.product.item.name)} // fixes realm thread exception
+        let tuples: [(String, String)] = ingredients.map{($0.uuid, $0.item.name)} // fixes realm thread exception
         
         withRealm({realm in
             var ingredientsDict = Dictionary<String, [String]>()

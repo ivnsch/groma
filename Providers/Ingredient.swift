@@ -10,10 +10,10 @@ import Foundation
 import RealmSwift
 import QorumLogs
 
-public final class Ingredient: Object, ProductWithQuantity2 {
+public final class Ingredient: Object {
     public dynamic var uuid: String = ""
     public dynamic var quantity: Int = 0
-    dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
+    dynamic var itemOpt: Item? = Item()
     dynamic var recipeOpt: Recipe? = Recipe()
     
     public static var quantityFieldName: String {
@@ -23,15 +23,17 @@ public final class Ingredient: Object, ProductWithQuantity2 {
     public override static func primaryKey() -> String? {
         return "uuid"
     }
-    
-    public var product: QuantifiableProduct {
+
+    public var item: Item {
         get {
-            return productOpt ?? QuantifiableProduct()
+            return itemOpt ?? Item()
         }
-        set(newProduct) {
-            productOpt = newProduct
+        set(newItem) {
+            itemOpt = newItem
         }
     }
+    
+
     
     public var recipe: Recipe {
         get {
@@ -41,13 +43,13 @@ public final class Ingredient: Object, ProductWithQuantity2 {
             recipeOpt = newRecipe
         }
     }
-    
-    public convenience init(uuid: String, quantity: Int, product: QuantifiableProduct, recipe: Recipe) {
+
+    public convenience init(uuid: String, quantity: Int, item: Item, recipe: Recipe) {
         self.init()
         
         self.uuid = uuid
         self.quantity = quantity
-        self.product = product
+        self.item = item
         self.recipe = recipe
     }
     
@@ -56,25 +58,25 @@ public final class Ingredient: Object, ProductWithQuantity2 {
     static func createFilter(uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
+
+    static func createFilter(name: String, recipeUuid: String) -> String {
+        return "item.name == '\(name)' AND recipe.uuid == '\(recipeUuid)'"
+    }
     
     static func createFilter(recipeUuid: String) -> String {
         return "recipeOpt.uuid = '\(recipeUuid)'"
     }
     
-    static func createFilterProduct(_ productUuid: String) -> String {
-        return "productOpt.uuid = '\(productUuid)'"
+    static func createFilter(item: Item, recipe: Recipe) -> String {
+        return "\(createFilter(recipeUuid: recipe.uuid)) AND itemOpt.uuid == '\(item.uuid)'"
     }
     
-    static func createFilter(product: QuantifiableProduct, recipe: Recipe) -> String {
-        return createFilter(recipeUuid: recipe.uuid, quantifiableProductUnique: product.unique)
-    }
+//    static func createFilter(recipeUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique) -> String {
+//        return "\(createFilter(recipeUuid: recipeUuid)) AND itemOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unitVal = \(unique.unit.rawValue) AND productOpt.baseQuantity = '\(unique.baseQuantity)'"
+//    }
     
-    static func createFilter(recipeUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique) -> String {
-        return "\(createFilter(recipeUuid: recipeUuid)) AND productOpt.productOpt.itemOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unitVal = \(unique.unit.rawValue) AND productOpt.baseQuantity = '\(unique.baseQuantity)'"
-    }
-    
-    static func createFilter(recipeUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique, notUuid: String) -> String {
-        return "\(createFilter(recipeUuid: recipeUuid, quantifiableProductUnique: unique)) AND uuid != '\(notUuid)'"
+    static func createFilter(recipeUuid: String, name: String, notUuid: String) -> String {
+        return "\(createFilter(name: name, recipeUuid: recipeUuid)) AND uuid != '\(notUuid)'"
     }
     
     static func createFilterGroupItemsUuids(ingredients: [Ingredient]) -> String {
@@ -83,16 +85,17 @@ public final class Ingredient: Object, ProductWithQuantity2 {
     }
     
     public override static func ignoredProperties() -> [String] {
-        return ["product", "recipe"]
+        return ["recipe", "item"]
     }
     
-    // MARK: - ProductWithQuantity2
+    // MARK: - ProductWithQuantity2 (REMOVED) TODO clean up
     
-    public func copy(uuid: String? = nil, quantity: Int? = nil, product: QuantifiableProduct? = nil, recipe: Recipe? = nil) -> Ingredient {
+    
+    public func copy(uuid: String? = nil, quantity: Int? = nil, item: Item? = nil, recipe: Recipe? = nil) -> Ingredient {
         return Ingredient(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
-            product: product ?? self.product.copy(),
+            item: item ?? self.item,
             recipe: recipe ?? self.recipe.copy()
         )
     }
@@ -116,7 +119,7 @@ public final class Ingredient: Object, ProductWithQuantity2 {
     }
     
     public override var description: String {
-        return "{\(type(of: self)) uuid: \(uuid), name: \(product.product.item.name), quantity: \(quantity), unit: \(product.unit)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(item.name), quantity: \(quantity)}"
     }
     
     // MARK: - Identifiable

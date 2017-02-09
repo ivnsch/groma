@@ -42,12 +42,10 @@ extension UIStoryboard {
     fileprivate class func sharedUsersStoryboard() -> UIStoryboard { return UIStoryboard(name: "SharedUsers", bundle: Bundle.main) }
     fileprivate class func listItemsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ListItemsControllers", bundle: Bundle.main) }
     fileprivate class func selectQuantifiableStoryboard() -> UIStoryboard { return UIStoryboard(name: "SelectQuantifiable", bundle: Bundle.main) }
+    fileprivate class func ingredientsStoryboard() -> UIStoryboard { return UIStoryboard(name: "IngredientsController", bundle: Bundle.main) }
 
     // MARK: - List items
-    
-    class func todoItemsViewController() -> TodoListItemsController {
-        return listItemsStoryboard().instantiateViewController(withIdentifier: "TodoListItemsController") as! TodoListItemsController
-    }
+
     class func todoItemsViewControllerNew() -> TodoListItemsControllerNew {
         return listItemsStoryboard().instantiateViewController(withIdentifier: "TodoListItemsController") as! TodoListItemsControllerNew
     }
@@ -278,8 +276,8 @@ extension UIStoryboard {
     
     // MARK: Ingredients
     
-    class func ingredientsController() -> IngredientsController {
-        return mainStoryboard().instantiateViewController(withIdentifier: "IngredientsController") as! IngredientsController
+    class func ingredientsController() -> IngredientsControllerNew {
+        return ingredientsStoryboard().instantiateViewController(withIdentifier: "IngredientsController") as! IngredientsControllerNew
     }
     
     // MARK: SelectQuantifiableController

@@ -294,6 +294,10 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }
     }
     
+    func onAddItem(_ item: Item) {
+        // Do nothing - No Item quick add in this controller
+    }
+    
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditItem(_ input: ListItemInput, editingItem: GroupItem) {

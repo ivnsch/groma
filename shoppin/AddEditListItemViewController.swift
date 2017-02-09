@@ -45,8 +45,9 @@ enum AddEditListItemControllerModus {
 typealias AddEditItemInput2 = (name: String, price: Float, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
 
 struct AddEditItem {
-    let product: QuantifiableProduct
+    let product: QuantifiableProduct?
     let storeProduct: StoreProduct? // TODO? no redundancy with product
+    let item: Item
     let quantity: Int
     let sectionName: String
     let sectionColor: UIColor
@@ -56,6 +57,7 @@ struct AddEditItem {
     init(product: QuantifiableProduct, storeProduct: StoreProduct? = nil, quantity: Int, sectionName: String, sectionColor: UIColor, note: String?, model: Any) {
         self.product = product
         self.storeProduct = storeProduct
+        self.item = product.product.item
         self.quantity = quantity
         self.sectionName = sectionName
         self.sectionColor = sectionColor
@@ -66,6 +68,7 @@ struct AddEditItem {
     init(item: ListItem, currentStatus: ListItemStatus) {
         self.product = item.product.product
         self.storeProduct = item.product
+        self.item = item.product.product.product.item
         self.quantity = item.quantity(currentStatus)
         self.sectionName = item.section.name
         self.sectionColor = item.section.color
@@ -76,6 +79,7 @@ struct AddEditItem {
     init(item: GroupItem) {
         self.product = item.product
         self.storeProduct = nil
+        self.item = item.product.product.item
         self.quantity = item.quantity
         self.sectionName = item.product.product.item.category.name
         self.sectionColor = item.product.product.item.category.color
@@ -86,6 +90,7 @@ struct AddEditItem {
     init(item: InventoryItem) {
         self.product = item.product
         self.storeProduct = nil
+        self.item = item.product.product.item
         self.quantity = item.quantity
         self.sectionName = item.product.product.item.category.name
         self.sectionColor = item.product.product.item.category.color
@@ -96,6 +101,7 @@ struct AddEditItem {
     init(item: AddEditProductControllerEditingData) {
         self.product = item.product
         self.storeProduct = nil
+        self.item = item.product.product.item
         self.quantity = 0
         self.sectionName = item.product.product.item.category.name
         self.sectionColor = item.product.product.item.category.color
@@ -104,11 +110,12 @@ struct AddEditItem {
     }
     
     init(item: Ingredient) {
-        self.product = item.product
+        self.product = nil
         self.storeProduct = nil
+        self.item = item.item
         self.quantity = item.quantity
-        self.sectionName = item.product.product.item.category.name
-        self.sectionColor = item.product.product.item.category.color
+        self.sectionName = item.item.category.name
+        self.sectionColor = item.item.category.color
         self.note = nil
         self.model = item
     }
@@ -289,7 +296,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     fileprivate func prefill(_ item: AddEditItem) {
-        brandInput.text = item.product.product.brand
+        brandInput.text = item.product?.product.brand ?? ""
         sectionInput.text = item.sectionName
         sectionColorButton.textColor = item.sectionColor
         quantityInput.text = String(item.quantity)

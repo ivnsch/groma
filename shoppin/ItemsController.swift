@@ -51,6 +51,11 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         return nil
     }
     
+    
+    var quickAddItemType: QuickAddItemType {
+        return .productForList
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,12 +81,14 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         NotificationCenter.default.removeObserver(self)
     }
     
-    fileprivate func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
+    func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
         let top = topBar.frame.height
         let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, openInset: top, closeInset: top, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
-            controller.itemType = .productForList
+            if let weakSelf = self {
+                controller.itemType = weakSelf.quickAddItemType
+            }
             controller.list = self?.list
             return controller
         }
@@ -297,6 +304,10 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         fatalError("Override")
     }
     
+    func onAddItem(_ item: Item) {
+        fatalError("Override")
+    }
+    
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
        fatalError("Override")
     }
@@ -386,7 +397,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
     }
     
-    fileprivate func closeTopController() {
+    func closeTopController() {
         topQuickAddControllerManager?.expand(false)
         toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()

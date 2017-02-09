@@ -21,6 +21,16 @@ class ItemProviderImpl: ItemProvider {
         }
     }
     
+    func items(_ text: String, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, items: Results<Item>)>) -> Void) {
+        DBProv.itemProvider.items(text, range: range, sortBy: sortBy) {(substring: String?, items: Results<Item>?) in
+            if let items = items {
+                handler(ProviderResult(status: .success, sucessResult: (substring, items)))
+            } else {
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
+    }
+    
     func item(name: String, _ handler: @escaping (ProviderResult<Item?>) -> Void) {
         DBProv.itemProvider.find(name: name) {result in
             switch result {

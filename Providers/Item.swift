@@ -67,8 +67,17 @@ public class Item: Object, Identifiable {
         return "name = '\(name)'"
     }
     
+    static func createFilterNameContains(_ text: String) -> String {
+        return "name CONTAINS[c] '\(text)'"
+    }
+    
     public func same(_ rhs: Item) -> Bool {
         return uuid == rhs.uuid
+    }
+    
+    static func createFilterUuids(_ uuids: [String]) -> String {
+        let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
+        return "uuid IN {\(uuidsStr)}"
     }
     
     // MARK: -

@@ -15,7 +15,7 @@ public struct IngredientInput: Equatable, Hashable {
     public let categoryColor: UIColor
     public let brand: String
     public let unit: ProductUnit
-    public let baseQuantity: String
+    public let baseQuantity: String // TODO!!!!!!!!! remove
     
     public init(name: String, quantity: Int, category: String, categoryColor: UIColor, brand: String, unit: ProductUnit, baseQuantity: String) {
         self.name = name
@@ -46,4 +46,34 @@ public struct IngredientInput: Equatable, Hashable {
 
 public func ==(lhs: IngredientInput, rhs: IngredientInput) -> Bool {
     return lhs.name == rhs.name && lhs.quantity == rhs.quantity && lhs.category == rhs.category && lhs.categoryColor == rhs.categoryColor && lhs.brand == rhs.brand && lhs.unit == rhs.unit && lhs.baseQuantity == rhs.baseQuantity
+}
+
+
+// TODO better name, this is also used by input form after the item was retrieved from db
+public struct QuickAddIngredientInput: Equatable, Hashable {
+    public let item: Item
+    public let quantity: Int
+    public let unit: ProductUnit
+    
+    public init(item: Item, quantity: Int, unit: ProductUnit) {
+        self.item = item
+        self.quantity = quantity
+        self.unit = unit
+    }
+    
+    public var hashValue: Int {
+        return item.uuid.hashValue
+    }
+    
+    public func copy(item: Item? = nil, quantity: Int? = nil, unit: ProductUnit? = nil) -> QuickAddIngredientInput {
+        return QuickAddIngredientInput(
+            item: item ?? self.item,
+            quantity: quantity ?? self.quantity,
+            unit: unit ?? self.unit
+        )
+    }
+}
+
+public func ==(lhs: QuickAddIngredientInput, rhs: QuickAddIngredientInput) -> Bool {
+    return lhs.item == rhs.item && lhs.quantity == rhs.quantity && lhs.unit == rhs.unit
 }

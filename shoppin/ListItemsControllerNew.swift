@@ -77,7 +77,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         initEmptyView(line1: trans("empty_list_line1"), line2: trans("empty_list_line2"))
         
-        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsController.onListRemovedNotification(_:)), name: NSNotification.Name(rawValue: Notification.ListRemoved.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsControllerNew.onListRemovedNotification(_:)), name: NSNotification.Name(rawValue: Notification.ListRemoved.rawValue), object: nil)
     }
  
     override func initProgrammaticViews() {
@@ -555,8 +555,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                 name: model.productPrototype.name,
                 quantity: model.quantity,
                 price: -1, // No prices here - use existing store product or default for new store product
-                section: model.ingredient.product.product.item.category.name,
-                sectionColor: model.ingredient.product.product.item.category.color,
+                section: model.ingredient.item.category.name,
+                sectionColor: model.ingredient.item.category.color,
                 note: nil,
                 baseQuantity: model.productPrototype.baseQuantity,
                 unit: model.productPrototype.unit,

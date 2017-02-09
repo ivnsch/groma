@@ -253,7 +253,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         initModels()
         // If the user quickly after adding the list opened its list items controller, close it.
         for childViewController in childViewControllers {
-            if let todoListItemController = childViewController as? TodoListItemsController {
+            if let todoListItemController = childViewController as? TodoListItemsControllerNew {
                 if (todoListItemController.currentList.map{$0.same(list)}) ?? false {
                     todoListItemController.back()
                 }

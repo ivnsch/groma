@@ -512,8 +512,8 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
                 name: model.productPrototype.name,
                 quantity: model.quantity,
                 price: -1, // No prices here - use existing store product or default for new store product
-                section: model.ingredient.product.product.item.category.name,
-                sectionColor: model.ingredient.product.product.item.category.color,
+                section: model.ingredient.item.category.name,
+                sectionColor: model.ingredient.item.category.color,
                 note: nil,
                 baseQuantity: model.productPrototype.baseQuantity,
                 unit: model.productPrototype.unit,
@@ -565,6 +565,10 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         } else {
             QL4("Add product from quick list but there's no current list in ViewController'")
         }
+    }
+    
+    func onAddItem(_ item: Item) {
+        // Do nothing - No Item quick add in this controller
     }
     
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {

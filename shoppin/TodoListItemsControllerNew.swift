@@ -10,6 +10,11 @@ import UIKit
 import QorumLogs
 import Providers
 
+protocol CartListItemsControllerDelegate: class {
+    func onCartSendItemsToStash(_ listItems: [ListItem])
+}
+
+
 class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControllerDelegate, TodoListItemsEditBottomViewDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var pricesView: PricesView!
@@ -195,30 +200,30 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         pricesView.toggleExpanded(todoController: self)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "stashSegue" {
-            if let stashViewController = segue.destination as? StashListItemsController {
-                //                stashViewController.navigationItemTextColor = titleLabel?.textColor
-                stashViewController.onUIReady = {[weak stashViewController] in
-                    stashViewController?.currentList = self.currentList
-                }
-                stashViewController.onViewWillAppear = {[weak self, weak stashViewController] in guard let weakSelf = self else {return}
-                    if let dotColor = weakSelf.topBar.dotColor {
-                        stashViewController?.topBar.showDot()
-                        stashViewController?.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
-                    } else {
-                        QL4("Invalid state: top bar has no dot color")
-                    }
-                }
-                // TODO!!!!!!!!!!!!!!!!
-                //self.listItemsTableViewController.clearPendingSwipeItemIfAny(true) {}
-                
-            }
-            
-        } else {
-            print("Invalid segue: \(segue.identifier)")
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "stashSegue" {
+//            if let stashViewController = segue.destination as? StashListItemsController {
+//                //                stashViewController.navigationItemTextColor = titleLabel?.textColor
+//                stashViewController.onUIReady = {[weak stashViewController] in
+//                    stashViewController?.currentList = self.currentList
+//                }
+//                stashViewController.onViewWillAppear = {[weak self, weak stashViewController] in guard let weakSelf = self else {return}
+//                    if let dotColor = weakSelf.topBar.dotColor {
+//                        stashViewController?.topBar.showDot()
+//                        stashViewController?.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
+//                    } else {
+//                        QL4("Invalid state: top bar has no dot color")
+//                    }
+//                }
+//                // TODO!!!!!!!!!!!!!!!!
+//                //self.listItemsTableViewController.clearPendingSwipeItemIfAny(true) {}
+//                
+//            }
+//            
+//        } else {
+//            print("Invalid segue: \(segue.identifier)")
+//        }
+//    }
     
     // MARK: - CartListItemsControllerDelegate
     

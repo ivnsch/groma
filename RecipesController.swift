@@ -262,7 +262,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
         initModels()
         // If the user quickly after adding the group opened its group items controller, close it.
         for childViewController in childViewControllers {
-            if let ingredientsController = childViewController as? IngredientsController {
+            if let ingredientsController = childViewController as? IngredientsControllerNew {
                 if (ingredientsController.recipe.map{$0.same(recipe)}) ?? false {
                     ingredientsController.back()
                 }

@@ -14,6 +14,7 @@ import RealmSwift
 import Providers
 
 class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
+
     fileprivate var inventoryItemsResult: Results<InventoryItem>?
     fileprivate var notificationToken: NotificationToken?
     
@@ -315,7 +316,11 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             })
         }
     }
-
+    
+    func onAddItem(_ item: Item) {
+        // Do nothing - No Item quick add in this controller
+    }
+    
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditListItem(_ input: ListItemInput, editingItem: InventoryItem) {
