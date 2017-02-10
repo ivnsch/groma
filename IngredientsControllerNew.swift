@@ -156,18 +156,24 @@ class IngredientsControllerNew: ItemsController, IngredientCellDelegate, UIPicke
     }
     
     override func onAddItem(_ item: Item) {
+    }
+    
+    override func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) {
         
         guard let itemsResult = itemsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         guard let recipe = recipe else {QL4("No recipe"); return}
+
+        // ingredientInput.unitName // TODO custom units
+        let unit: ProductUnit = .none
         
-        let quickAddIngredientInput = QuickAddIngredientInput(item: item, quantity: 1, unit: .none) // for now 1 / .none
-        
+        let quickAddIngredientInput = QuickAddIngredientInput(item: item, quantity: ingredientInput.quantity, unit: unit, fraction: ingredientInput.fraction) // for now 1 / .none
+
         Prov.ingredientProvider.add(quickAddIngredientInput, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, successHandler{addedItem in
-            
+
             if addedItem.isNew {
                 self.insert(item: addedItem.ingredient, scrollToRow: true)
-                
+
             } else {
                 if let index = itemsResult.index(of: addedItem.ingredient) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
                     self.update(item: addedItem.ingredient, scrollToRow: index)

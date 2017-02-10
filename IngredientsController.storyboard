@@ -46,8 +46,8 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="tHc-xl-mtb"/>
                                                 <exclude reference="qLr-v9-3eP"/>
+                                                <exclude reference="tHc-xl-mtb"/>
                                             </mask>
                                         </variation>
                                     </imageView>

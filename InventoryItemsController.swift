@@ -321,6 +321,11 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         // Do nothing - No Item quick add in this controller
     }
     
+    
+    func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) {
+        // Do nothing - No ingredients in this controller
+    }
+    
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
         
         func onEditListItem(_ input: ListItemInput, editingItem: InventoryItem) {

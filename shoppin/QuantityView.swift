@@ -18,10 +18,13 @@ class QuantityView: UIView {
     weak var delegate: QuantityViewDelegate?
  
     @IBOutlet weak var quantityLabel: UILabel!
+    @IBOutlet weak var minusButton: UIButton!
+    @IBOutlet weak var plusButton: UIButton!
     
     var quantity: Float = 0 {
         didSet {
             quantityLabel.text = String(quantity)
+            invalidateIntrinsicContentSize()
         }
     }
     
@@ -46,6 +49,9 @@ class QuantityView: UIView {
         
         isUserInteractionEnabled = true
         view.isUserInteractionEnabled = true
+        
+        view.backgroundColor = UIColor.clear
+        backgroundColor = UIColor.clear
     }
 
     @IBAction func onPlusTap(_ sender: UIButton) {
@@ -54,6 +60,9 @@ class QuantityView: UIView {
     
     @IBAction func onMinusTap(_ sender: UIButton) {
         delegate?.onRequestUpdateQuantity(-1)
-        
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: minusButton.width + quantityLabel.intrinsicContentSize.width + plusButton.width, height: minusButton.height + quantityLabel.intrinsicContentSize.height + plusButton.height)
     }
 }

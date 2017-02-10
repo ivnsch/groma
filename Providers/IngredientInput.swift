@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import QorumLogs
 
 public struct IngredientInput: Equatable, Hashable {
     public let name: String
     public let quantity: Float
     public let category: String
     public let categoryColor: UIColor
-    public let brand: String
+    public let brand: String // TODO!!!!!!!!! remove
     public let unit: ProductUnit
     public let baseQuantity: String // TODO!!!!!!!!! remove
     
@@ -54,26 +55,83 @@ public struct QuickAddIngredientInput: Equatable, Hashable {
     public let item: Item
     public let quantity: Float
     public let unit: ProductUnit
+    public let fraction: Fraction
     
-    public init(item: Item, quantity: Float, unit: ProductUnit) {
+    public init(item: Item, quantity: Float, unit: ProductUnit, fraction: Fraction) {
         self.item = item
         self.quantity = quantity
         self.unit = unit
+        self.fraction = fraction
     }
     
     public var hashValue: Int {
         return item.uuid.hashValue
     }
     
-    public func copy(item: Item? = nil, quantity: Float? = nil, unit: ProductUnit? = nil) -> QuickAddIngredientInput {
+    public func copy(item: Item? = nil, quantity: Float? = nil, unit: ProductUnit? = nil, fraction: Fraction? = nil) -> QuickAddIngredientInput {
         return QuickAddIngredientInput(
             item: item ?? self.item,
             quantity: quantity ?? self.quantity,
-            unit: unit ?? self.unit
+            unit: unit ?? self.unit,
+            fraction: fraction ?? self.fraction
         )
     }
 }
 
 public func ==(lhs: QuickAddIngredientInput, rhs: QuickAddIngredientInput) -> Bool {
-    return lhs.item == rhs.item && lhs.quantity == rhs.quantity && lhs.unit == rhs.unit
+    return lhs.item == rhs.item && lhs.quantity == rhs.quantity && lhs.unit == rhs.unit && lhs.fraction == rhs.fraction
+}
+
+
+public struct Fraction: Equatable {
+    
+    public var wholeNumber: Int // TODO remove - not used anymore. Whole number is the quantity
+    public var numerator: Int
+    public var denominator: Int
+    
+    public init(wholeNumber: Int, numerator: Int, denominator: Int) {
+        self.wholeNumber = wholeNumber
+        self.numerator = numerator
+        self.denominator = denominator
+    }
+    
+    public var decimalValue: Float {
+        guard denominator != 0 else {QL4("Invalid state: denominator is 0. Returning 0"); return 0}
+        return Float(wholeNumber) + (Float(numerator) / Float(denominator))
+    }
+    
+    public var isZero: Bool {
+        return decimalValue == 0
+    }
+    
+    public var isOne: Bool {
+        return decimalValue == 1
+    }
+    
+    public var isValid: Bool {
+        return denominator != 0
+    }
+    
+    public var isValidAndNotZeroOrOne: Bool {
+        return isValid && !isZero && !isOne
+    }
+    
+    public var description: String {
+        let wholeNumberStr = wholeNumber == 0 ? "" : "\(wholeNumber)"
+        return "\(wholeNumberStr)\(numerator)/\(denominator)"
+    }
+    
+    public static var zero: Fraction {
+        return Fraction(wholeNumber: 0, numerator: 0, denominator: 1)
+    }
+    
+    // We could also use 1, 0, 1, but since will likely remove wholeNumber we do like if it wasn't there already. 
+    public static var one: Fraction {
+        return Fraction(wholeNumber: 0, numerator: 1, denominator: 1)
+    }
+}
+
+// We define equality as having identical components not the result/internal value (decimalValue)
+public func ==(lhs: Fraction, rhs: Fraction) -> Bool {
+    return lhs.wholeNumber == rhs.wholeNumber && lhs.numerator == rhs.numerator && lhs.denominator == rhs.denominator
 }

@@ -160,4 +160,11 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     deinit {
         QL1("Deinit quick add page controller")
     }
+    
+    // MARK: - 
+    
+    func closeChildControllers() {
+        addProductController?.closeChildControllers()
+        addGroupController?.closeChildControllers()
+    }
 }

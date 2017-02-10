@@ -119,7 +119,10 @@ class AddButtonHelper: NSObject {
     fileprivate func addAddButton(_ visible: Bool = true) {
         if let parentView = parentView, let window = parentView.window, let centerY = centerY(visible) {
             let frameY = centerY - buttonHeight / 2
-            let addButton = AddItemViewNew(frame: CGRect(x: 0, y: frameY, width: parentView.frame.width, height: buttonHeight))
+            let addButton = AddItemViewNew(frame: CGRect(x: 0, y: frameY, width: parentView.frame.width, height: buttonHeight)) {[weak self] in
+                self?.tapHandler?()
+            }
+            
             self.addButton = addButton
             parentView.addSubview(addButton)
             
@@ -129,9 +132,7 @@ class AddButtonHelper: NSObject {
             
 //            animateVisible(true)
             parentView.bringSubview(toFront: addButton)
-            addButton.tapHandler = {[weak self] in
-                self?.tapHandler?()
-            }
+
         } else {
             QL3("No parent view: \(parentView) or window: \(parentView?.window) for add button")
         }

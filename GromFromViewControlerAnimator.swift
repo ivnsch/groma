@@ -36,7 +36,8 @@ class GromFromViewControlerAnimator {
     }
     
     /// Scroll offset: If button is in a scrollable view (table view, collection view) current content view offset
-    func open(button: UIView? = nil, inset: Insets = (left: 0, top: 0, right: 0, bottom: 0), scrollOffset: CGFloat = 0, controllerCreator: (() -> UIViewController?)? = nil, onFinish: (() -> Void)? = nil) {
+    /// frame has priority over inserts. If frame is passed, inset is ignored.
+    func open(button: UIView? = nil, frame: CGRect? = nil, inset: Insets = (left: 0, top: 0, right: 0, bottom: 0), scrollOffset: CGFloat = 0, addOverlay: Bool = true, controllerCreator: (() -> UIViewController?)? = nil, onFinish: (() -> Void)? = nil) {
         
         if button != nil {
             self.button = button
@@ -54,14 +55,26 @@ class GromFromViewControlerAnimator {
         let topBarHeight: CGFloat = 64
         
         let backgroundView = HandlingButton(frame: CGRect(x: 0, y: topBarHeight, width: parent.view.frame.width, height: parent.view.frame.height - topBarHeight))
-        backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         backgroundView.alpha = 0
-        backgroundView.tapHandler = {[weak self] in
-            self?.close()
-        }
+
         self.backgroundView = backgroundView
         
-        controller.view.frame = CGRect(x: 0 + inset.left, y: inset.top, width: backgroundView.width - inset.left - inset.right, height: backgroundView.height - inset.top - inset.bottom)
+        let controllerViewHeight = frame?.height ?? backgroundView.height - inset.top - inset.bottom
+        
+        // Quick & dirty: addOverlay == false means that we make the overlay transparent and not interactive. Not adding the overlay would require more time to implement.
+        if addOverlay {
+            backgroundView.tapHandler = {[weak self] in
+                self?.close()
+            }
+            backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        } else {
+            backgroundView.backgroundColor = UIColor.clear
+//            backgroundView.isUserInteractionEnabled = false
+            backgroundView.height = controllerViewHeight // hack - transparent overlay blocks touch and user interaction doesn't seem to be useful to avoid this
+        }
+//        controller.view.isUserInteractionEnabled = true // ensure this is enabled if we had to disable it in background view
+        
+        controller.view.frame = frame ?? CGRect(x: 0 + inset.left, y: inset.top, width: backgroundView.width - inset.left - inset.right, height: controllerViewHeight)
         
         backgroundView.addSubview(controller.view)
         parent.addChildViewController(controller)
@@ -79,7 +92,10 @@ class GromFromViewControlerAnimator {
         
 //        controller.view.frame = CGRect(x: 0 + inset.x, y: topBarHeight + inset.y, width: parent.view.frame.width - inset.x * 2, height: parent.view.frame.height - topBarHeight - inset.y * 2)
         backgroundView.frame = CGRect(x: 0, y: topBarHeight, width: parent.view.frame.width, height: parent.view.frame.height - topBarHeight)
-
+        backgroundView.height = controllerViewHeight // hack - transparent overlay blocks touch and user interaction doesn't seem to be useful to avoid this
+        
+        
+        
 //        controller.view.transform = CGAffineTransform(scaleX: 0, y: 0)
         backgroundView.transform = CGAffineTransform(scaleX: 0, y: 0)
         

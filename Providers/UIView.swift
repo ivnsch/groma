@@ -190,7 +190,7 @@ extension UIView {
     }
     
     public func rotate(_ degrees: Double) {
-        transform = CGAffineTransform(rotationAngle: CGFloat(degrees * M_PI / Double(180)))
+        transform = transform.rotated(by: CGFloat(degrees.degreesToRadians))
     }
     
     // MARK: - Borders

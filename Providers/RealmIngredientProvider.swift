@@ -33,30 +33,6 @@ class RealmIngredientProvider: RealmProvider {
         
         handler(result)
     }
-//
-//    // TODO remove
-//    func add(_ quantifiableProduct: QuantifiableProduct, quantity: Float, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping ((ingredient: Ingredient, isNew: Bool)?) -> Void) {
-//        
-//        guard let ingredientsRealm = ingredients.realm else {QL4("Ingredients have no realm"); handler(nil); return}
-//        
-//        let existingIngredientMaybe = ingredients.filter(Ingredient.createFilter(product: quantifiableProduct, recipe: recipe)).first
-//        
-//        if let existingIngredient = existingIngredientMaybe {
-//            increment(existingIngredient, quantity: quantity, notificationToken: notificationToken, realm: ingredientsRealm) {quantityMaybe in
-//                if quantityMaybe != nil {
-//                    handler((ingredient: existingIngredient, isNew: false))
-//                } else {
-//                    QL4("Couldn't increment existing ingredient")
-//                    handler(nil)
-//                }
-//            }
-//        } else {
-//            create(quantifiableProduct, quantity: quantity, recipe: recipe, ingredients: ingredients, notificationToken: notificationToken) {addedIngredient in
-//                handler(addedIngredient.map{(ingredient: $0, isNew: true)})
-//            }
-//        }
-//    }
-    
     
     func add(_ quickAddInput: QuickAddIngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping ((ingredient: Ingredient, isNew: Bool)?) -> Void) {
         
@@ -65,11 +41,11 @@ class RealmIngredientProvider: RealmProvider {
         let existingIngredientMaybe = ingredients.filter(Ingredient.createFilter(item: quickAddInput.item, recipe: recipe)).first
         
         if let existingIngredient = existingIngredientMaybe {
-            increment(existingIngredient, quantity: quickAddInput.quantity, notificationToken: notificationToken, realm: ingredientsRealm) {quantityMaybe in
-                if quantityMaybe != nil {
+            update(existingIngredient, input: quickAddInput, ingredients: ingredients, notificationToken: notificationToken) {updateSuccess in
+                if updateSuccess {
                     handler((ingredient: existingIngredient, isNew: false))
                 } else {
-                    QL4("Couldn't increment existing ingredient")
+                    QL4("Couldn't update existing ingredient")
                     handler(nil)
                 }
             }
@@ -92,6 +68,18 @@ class RealmIngredientProvider: RealmProvider {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
             ingredient.quantity = input.quantity
             // TODO!!!!!!!!!!!!!!!!!!!!!
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    
+    /// When ingredients added via quick add already exist in recipe - since we don't increment ingredients, we just replace, which in this case means updating the existing item with the properties that can be entered using the quick add form.
+    public func update(_ ingredient: Ingredient, input: QuickAddIngredientInput, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
+            ingredient.quantity = input.quantity
+            ingredient.fraction = input.fraction
+            ingredient.unit = input.unit
             return true
         }
         handler(successMaybe ?? false)

@@ -17,4 +17,11 @@ extension UIFont {
     public var isItalic: Bool {
         return fontDescriptor.symbolicTraits.contains(.traitItalic)
     }
+    
+    
+    public var bold: UIFont? {
+        return fontDescriptor.withSymbolicTraits(UIFontDescriptorSymbolicTraits.traitBold).map {descriptor in
+            UIFont(descriptor: descriptor, size: pointSize)
+        }
+    }
 }

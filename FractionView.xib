@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FractionView" customModule="groma" customModuleProvider="target">
+            <connections>
+                <outlet property="denominatorLabel" destination="4MM-PJ-jcW" id="1AM-hq-NBX"/>
+                <outlet property="lineView" destination="DmR-cu-Gkn" id="aZ6-e7-DiZ"/>
+                <outlet property="numeratorLabel" destination="Ykz-WH-7MC" id="MwR-Df-1uI"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="158"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ykz-WH-7MC" customClass="LabelMore" customModule="Providers">
+                    <rect key="frame" x="145" y="68" width="37.5" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="30"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4MM-PJ-jcW" customClass="LabelMore" customModule="Providers">
+                    <rect key="frame" x="193" y="72" width="37.5" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="30"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DmR-cu-Gkn">
+                    <rect key="frame" x="187.5" y="71.5" width="0.5" height="15"/>
+                    <color key="backgroundColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="cx8-jD-11s"/>
+                        <constraint firstAttribute="width" constant="1" id="tsZ-1z-6ZY"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstItem="4MM-PJ-jcW" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="2" id="1gI-4B-Y66"/>
+                <constraint firstItem="DmR-cu-Gkn" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="3Wk-CU-T3b"/>
+                <constraint firstItem="4MM-PJ-jcW" firstAttribute="leading" secondItem="DmR-cu-Gkn" secondAttribute="trailing" constant="5" id="KZL-pW-XiX"/>
+                <constraint firstItem="DmR-cu-Gkn" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="jq5-Dm-jLQ"/>
+                <constraint firstItem="Ykz-WH-7MC" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-2" id="pRV-hF-2w8"/>
+                <constraint firstItem="DmR-cu-Gkn" firstAttribute="leading" secondItem="Ykz-WH-7MC" secondAttribute="trailing" constant="5" id="yEf-Sc-9Kg"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="26.5" y="-202"/>
+        </view>
+    </objects>
+</document>

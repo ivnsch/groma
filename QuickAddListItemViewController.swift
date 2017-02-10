@@ -17,6 +17,8 @@ protocol QuickAddListItemDelegate: class {
     
     func onAddItem(_ item: Item)
 
+    func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs)
+    
     func onAddGroup(_ group: ProductGroup)
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickListController: QuickAddListItemViewController)
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
@@ -24,6 +26,8 @@ protocol QuickAddListItemDelegate: class {
     func onCloseQuickAddTap()
     func onHasItems(_ hasItems: Bool)
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
+    
+    func parentViewForAddButton() -> UIView?
 }
 
 enum QuickAddItemType {
@@ -79,7 +83,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     fileprivate var recipeControllerAnimator: GromFromViewControlerAnimator?
     fileprivate var selectQuantifiableAnimator: GromFromViewControlerAnimator?
-
+    fileprivate var selectIngredientAnimator: GromFromViewControlerAnimator?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         onViewDidLoad?()
@@ -103,6 +108,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         
         recipeControllerAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
         selectQuantifiableAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
+        selectIngredientAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
     }
     
     fileprivate func clearAndLoadFirstPage(_ isSearchLoad: Bool) {
@@ -245,8 +251,9 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             })
             
         } else if let dbItemItem = item as? QuickAddDBItem {
-            // TODO popup with unit, quantity
-            delegate?.onAddItem(dbItemItem.item)
+            retrieveQuickAddIngredient(item: dbItemItem.item, indexPath: indexPath) {[weak self] (quantifiableProduct, quantity) in
+                self?.delegate?.onAddItem(dbItemItem.item)
+            }
             
         } else {
             print("Error: invalid model type in quickAddItems, select cell. \(item)")
@@ -289,6 +296,24 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     onRetrieved(newQuantifiableProduct, 1)
                 })
             }
+        })
+    }
+    
+    fileprivate func retrieveQuickAddIngredient(item: Item, indexPath: IndexPath, onRetrieved: @escaping (QuickAddIngredientInput, Float) -> Void) {
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
+
+        // Note: the height of the quick add is somewhere up in hierarchy, we pass the hardcoded DimensionsManager value because it's quicker to implement
+        selectIngredientAnimator?.open (button: cell, frame: CGRect(x: 0, y: 0, width: view.width, height: DimensionsManager.quickAddHeight), scrollOffset: self.collectionView.contentOffset.y, addOverlay: false, controllerCreator: {[weak self] in
+            let selectQuantifiableProductController = UIStoryboard.selectIngredientDataController()
+            
+            selectQuantifiableProductController.onViewDidLoad = {[weak selectQuantifiableProductController] in
+                selectQuantifiableProductController?.item = item
+            }
+        
+            selectQuantifiableProductController.delegate = self
+            
+            return selectQuantifiableProductController
         })
     }
     
@@ -494,15 +519,20 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
  
     /// Return true to consume the event (i.e. prevent closing of this controller)
     func onTapNavBarCloseTap() -> Bool {
+        closeChildControllers()
+        return false
+    }
+    
+    func closeChildControllers() {
         if recipeControllerAnimator?.isShowing ?? false {
             recipeControllerAnimator?.close()
-            return true
         }
         if selectQuantifiableAnimator?.isShowing ?? false {
             selectQuantifiableAnimator?.close()
-            return true
         }
-        return false
+        if selectIngredientAnimator?.isShowing ?? false {
+            selectIngredientAnimator?.close()
+        }
     }
     
     func closeRecipeController() {
@@ -524,5 +554,20 @@ extension QuickAddListItemViewController: AddRecipeControllerDelegate {
     
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
         delegate?.getAlreadyHaveText(ingredient: ingredient, handler)
+    }
+}
+
+
+// MARK: - SelectIngredientDataControllerDelegate
+
+extension QuickAddListItemViewController: SelectIngredientDataControllerDelegate {
+    
+    func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs) {
+        delegate?.onAddIngredient(item: item, ingredientInput: inputs)
+        selectIngredientAnimator?.close()
+    }
+    
+    func parentViewForAddButton() -> UIView? {
+        return delegate?.parentViewForAddButton()
     }
 }

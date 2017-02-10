@@ -44,6 +44,7 @@ class IngredientProviderImpl: IngredientProvider {
         }
     }
     
+    // TODO Fraction etc.
     // Used by input form (retrives quantifiable product, creates ingredient)
     func add(_ input: IngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         addOrUpdateItem(input: input, notificationToken: notificationToken) {itemResult in
@@ -51,7 +52,7 @@ class IngredientProviderImpl: IngredientProvider {
             if let item = itemResult.sucessResult {
                 
                 // TODO better name for quickadd item - PseudoIngredient, IngredientInputWithDependencies or something
-                let quickAddItem = QuickAddIngredientInput(item: item, quantity: input.quantity, unit: input.unit)
+                let quickAddItem = QuickAddIngredientInput(item: item, quantity: input.quantity, unit: input.unit, fraction: Fraction.zero)
                 
                 self.add(quickAddItem, recipe: recipe, ingredients: ingredients, notificationToken: notificationToken) {result in
                     handler(ProviderResult(status: result.status))

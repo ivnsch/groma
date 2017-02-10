@@ -13,8 +13,13 @@ import QorumLogs
 public final class Ingredient: Object {
     public dynamic var uuid: String = ""
     public dynamic var quantity: Float = 0
+    public dynamic var fractionNumerator: Int = 0
+    public dynamic var fractionDenominator: Int = 1 // To avoid potential division by 0 - as long as numerator is 0 fraction is non-op
+    public dynamic var unitVal: Int = 0
+    
     dynamic var itemOpt: Item? = Item()
     dynamic var recipeOpt: Recipe? = Recipe()
+    
     
     public static var quantityFieldName: String {
         return "quantity"
@@ -33,14 +38,31 @@ public final class Ingredient: Object {
         }
     }
     
-
-    
     public var recipe: Recipe {
         get {
             return recipeOpt ?? Recipe()
         }
         set(newRecipe) {
             recipeOpt = newRecipe
+        }
+    }
+    
+    public var unit: ProductUnit {
+        get {
+            return ProductUnit(rawValue: unitVal)!
+        }
+        set(newUnit) {
+            unitVal = newUnit.rawValue
+        }
+    }
+    
+    public var fraction: Fraction {
+        get {
+            return Fraction(wholeNumber: 0, numerator: fractionNumerator, denominator: fractionDenominator)
+        }
+        set {
+            fractionNumerator = newValue.numerator
+            fractionDenominator = newValue.denominator
         }
     }
 
@@ -85,7 +107,7 @@ public final class Ingredient: Object {
     }
     
     public override static func ignoredProperties() -> [String] {
-        return ["recipe", "item"]
+        return ["recipe", "item", "unit", "fraction"]
     }
     
     // MARK: - ProductWithQuantity2 (REMOVED) TODO clean up

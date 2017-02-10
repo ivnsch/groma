@@ -14,8 +14,9 @@ import Providers
 protocol QuickAddDelegate: class {
     func onAddProduct(_ product: QuantifiableProduct, quantity: Float)
     
-    func onAddItem(_ item: Item)
-    
+    func onAddItem(_ item: Item) // Maybe remove this - now that we have onAddIngredient it's not necessarily. We currently don't add only items anywhere.
+    func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) // only used with item type .ingredient
+
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) // TODO!!!!!!!!!!!!!! remove (from origin)
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController)
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
@@ -48,6 +49,7 @@ private enum AddProductOrGroupContent {
 class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, QuickAddPageControllerDelegate, UITextFieldDelegate {
     
     weak var delegate: QuickAddDelegate?
+    weak var addIngredientDelegate: QuickAddDelegate? // Used only when items type == .ingredient
     
     var itemType: QuickAddItemType = .product // for now product/group mutually exclusive (no mixed tableview)
     
@@ -112,6 +114,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     // MARK: -
     
     func onClose() {
+        quickAddListItemViewController?.closeChildControllers()
     }
     
     func textFieldDidChange(_ textField: UITextField) {
@@ -258,6 +261,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func onAddItem(_ item: Item) {
         delegate?.onAddItem(item)
+    }
+    
+    func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) {
+        delegate?.onAddIngredient(item: item, ingredientInput: ingredientInput)
     }
     
     func onCloseQuickAddTap() {

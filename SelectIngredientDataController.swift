@@ -1,0 +1,397 @@
+//
+//  SelectIngredientDataController.swift
+//  shoppin
+//
+//  Created by Ivan Schuetz on 09/02/2017.
+//  Copyright © 2017 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+import Providers
+import QorumLogs
+
+
+
+struct SelectIngredientDataControllerInputs {
+    var unitName: String = ""
+    var quantity: Float = 1
+    var fraction: Fraction = Fraction(wholeNumber: 0, numerator: 1, denominator: 1)
+}
+
+protocol SelectIngredientDataControllerDelegate: class {
+
+    func parentViewForAddButton() -> UIView?
+    func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs)
+}
+
+class SelectIngredientDataController: UIViewController, QuantityViewDelegate, SwipeToIncrementHelperDelegate, UIGestureRecognizerDelegate {
+
+    @IBOutlet weak var wholeNumberLabel: UILabel!
+    @IBOutlet weak var fractionLabel: UILabel!
+    @IBOutlet weak var unitLabel: UILabel!
+    @IBOutlet weak var itemNameLabel: UILabel!
+    @IBOutlet weak var wholeNumberTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var fractionTrailingConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var quantityView: QuantityView!
+    @IBOutlet weak var quantityBackgroundView: UIView!
+    
+    @IBOutlet weak var unitTextField: MyAutoCompleteTextField!
+    @IBOutlet weak var fractionNumeratorTextField: UITextField!
+    @IBOutlet weak var lineView: UIView!
+    @IBOutlet weak var fractionDenominatorTextField: UITextField!
+    @IBOutlet weak var clearFractionButton: UIButton!
+    
+    @IBOutlet weak var fractionsCollectionView: UICollectionView!
+    
+    @IBOutlet weak var fractionsInputsView: UIView!
+    
+    @IBOutlet weak var collectionViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var collectionViewTrailingConstraint: NSLayoutConstraint!
+    fileprivate var initCollectionViewLeadingConstraint: CGFloat!
+    fileprivate var isAcceptingCollectionViewLeadingConstraintAnimation: Bool = true
+    fileprivate let offsetToAnimateManualFractions: CGFloat = 70
+    fileprivate var dragStartContentOffset: CGFloat = 0
+    
+    fileprivate var inputs: SelectIngredientDataControllerInputs = SelectIngredientDataControllerInputs()
+    
+    fileprivate var panRecognizer: UIPanGestureRecognizer!
+    fileprivate var panStartPoint: CGPoint!
+    
+    fileprivate var titleLabelsFont: UIFont?
+
+    
+    fileprivate var addButtonHelper: AddButtonHelper?
+    
+    weak var delegate: SelectIngredientDataControllerDelegate?
+
+    
+    var item: Item? {
+        didSet {
+            if let item = item {
+                itemNameLabel.text = item.name // TODO string should be "2/1/2 units Onions" etc
+            }
+        }
+    }
+    
+    var quantity: Float {
+        return quantityView.quantity
+    }
+    
+    
+    var onViewDidLoad: (() -> Void)?
+    
+    fileprivate var swipeToIncrementHelper: SwipeToIncrementHelper?
+    
+    fileprivate var predefinedFractions = [
+        Fraction(wholeNumber: 0, numerator: 1, denominator: 2),
+        Fraction(wholeNumber: 0, numerator: 1, denominator: 3),
+        Fraction(wholeNumber: 0, numerator: 1, denominator: 4),
+        Fraction(wholeNumber: 0, numerator: 1, denominator: 5),
+        Fraction(wholeNumber: 0, numerator: 1, denominator: 6),
+        Fraction(wholeNumber: 0, numerator: 1, denominator: 7),
+        Fraction(wholeNumber: 0, numerator: 1, denominator: 8),
+        Fraction(wholeNumber: 0, numerator: 2, denominator: 3),
+        Fraction(wholeNumber: 0, numerator: 3, denominator: 4),
+        // The quantity is the whole number and it's very easy to update so it's not necessary to have it in the predefined fractions
+//        Fraction(wholeNumber: 1, numerator: 1, denominator: 2),
+//        Fraction(wholeNumber: 1, numerator: 1, denominator: 4),
+//        Fraction(wholeNumber: 2, numerator: 1, denominator: 2),
+//        Fraction(wholeNumber: 2, numerator: 1, denominator: 4),
+    ]
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        onViewDidLoad?()
+        
+        quantityView.delegate = self
+        quantityView.quantity = 1
+        
+        swipeToIncrementHelper = SwipeToIncrementHelper(view: quantityBackgroundView)
+        swipeToIncrementHelper?.delegate = self
+        
+        initTextFieldPlaceholders()
+        initAutocompletionTextFields()
+        initTextListeners()
+        
+        lineView.rotate(45)
+        
+        initCollectionViewLeadingConstraint = collectionViewLeadingConstraint.constant
+        
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPanFractionInputsView(_:)))
+        panRecognizer.delegate = self
+        panRecognizer.cancelsTouchesInView = true
+        fractionsInputsView.addGestureRecognizer(panRecognizer)
+        
+        titleLabelsFont = itemNameLabel.font // NOTE: Assumes that all labels in title have same font
+        
+        addButtonHelper = initAddButtonHelper()
+    }
+    
+    fileprivate func initAddButtonHelper() -> AddButtonHelper? {
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
+        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton) {[weak self] in guard let weakSelf = self else {return}
+            weakSelf.submit()
+        }
+        return addButtonHelper
+    }
+
+    fileprivate func initTextListeners() {
+        for textField in [unitTextField, fractionNumeratorTextField, fractionDenominatorTextField] {
+            textField?.addTarget(self, action: #selector(onTextChange(_:)), for: .editingChanged)
+        }
+    }
+    
+    fileprivate func initAutocompletionTextFields() {
+        for textField in [unitTextField] {
+            textField?.defaultAutocompleteStyle()
+            textField?.myDelegate = self
+        }
+    }
+    
+    fileprivate func initTextFieldPlaceholders() {
+        unitTextField.attributedPlaceholder = NSAttributedString(string: unitTextField.placeholder ?? "", attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        fractionNumeratorTextField.attributedPlaceholder = NSAttributedString(string: fractionNumeratorTextField.placeholder ?? "", attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        fractionDenominatorTextField.attributedPlaceholder = NSAttributedString(string: fractionDenominatorTextField.placeholder ?? "", attributes: [NSForegroundColorAttributeName: UIColor.gray])
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addButtonHelper?.addObserver()
+        addButtonHelper?.animateVisible(true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        addButtonHelper?.removeObserver()
+        addButtonHelper?.animateVisible(false)
+    }
+    
+    
+    func onTextChange(_ sender: UITextField) {
+        updateInputsAndTitle()
+    }
+
+    func onRequestUpdateQuantity(_ delta: Float) {
+        quantityView.quantity += delta
+        updateTitle(inputs: inputs)
+    }
+    
+    @IBAction func clearFractionInputs(_ sender: UIButton) {
+        fractionNumeratorTextField.clear()
+        fractionDenominatorTextField.clear()
+        
+        updateInputsAndTitle()
+    }
+    
+    // MARK: - SwipeToIncrementHelperDelegate
+    
+    func currentQuantity() -> Float {
+        return quantity
+    }
+    
+    func onQuantityUpdated(_ quantity: Float) {
+        quantityView.quantity = quantity
+        updateTitle(inputs: inputs)
+    }
+    
+    func onFinishSwipe() {
+        // do nothing
+    }
+    
+    
+    // MARK: - Private
+    
+    fileprivate func updateInputsAndTitle() {
+        inputs.unitName = unitTextField.text ?? ""
+        inputs.quantity = quantity
+        inputs.fraction.numerator = fractionNumeratorTextField.text.flatMap{Int($0)} ?? 1
+        inputs.fraction.denominator = fractionDenominatorTextField.text.flatMap{Int($0)} ?? 1
+        
+        updateTitle(inputs: inputs)
+    }
+    
+    fileprivate func updateTitle(inputs: SelectIngredientDataControllerInputs) {
+        guard let titleLabelsFont = titleLabelsFont else {QL4("No title labels font. Can't update title."); return}
+        
+        let fractionStr = inputs.fraction.isValidAndNotZeroOrOne ? inputs.fraction.description : ""
+        // Don't show quantity if it's 0 and there's a fraction. If there's no fraction we show quantity 0, because otherwise there wouldn't be any number and this doesn't make sense.
+        let wholeNumberStr = quantity == 0 ? (fractionStr.isEmpty ? quantity.quantityString : "") : quantity.quantityString
+        let unitStr = inputs.unitName.isEmpty ? "unit" : inputs.unitName
+        
+        
+        let boldTime: Double = 1
+        
+        print("comparing fractionLabel.text: \(fractionLabel.text) with fractioNStr: \(fractionStr), different: \(fractionLabel.text != fractionStr)")
+        
+        if fractionLabel.text != fractionStr {
+            print("fraction bold!")
+            fractionLabel.animateBold(boldTime, regularFont: titleLabelsFont)
+        }
+        if wholeNumberLabel.text != wholeNumberStr {
+            wholeNumberLabel.animateBold(boldTime, regularFont: titleLabelsFont)
+        }
+        if unitLabel.text != unitStr {
+            unitLabel.animateBold(boldTime, regularFont: titleLabelsFont)
+        }
+        
+        fractionLabel.text = fractionStr
+        wholeNumberLabel.text = wholeNumberStr
+        unitLabel.text = unitStr
+        
+        wholeNumberTrailingConstraint.constant = wholeNumberStr.isEmpty || fractionStr.isEmpty ? 0 : 10
+        fractionTrailingConstraint.constant = wholeNumberStr.isEmpty && fractionStr.isEmpty ? 0 : 10
+    }
+    
+    // TODO validation - don't allow e.g. to add item with 0 quantity
+    
+    fileprivate func onSelect(fraction: Fraction) {
+        if fraction.wholeNumber > 0 {
+            quantityView.quantity = Float(fraction.wholeNumber)
+        }
+        fractionNumeratorTextField.text = "\(fraction.numerator)"
+        fractionDenominatorTextField.text = "\(fraction.denominator)"
+        
+        updateInputsAndTitle()
+    }
+    
+    fileprivate func submit() {
+        guard let item = item else {QL4("Illegal state: no item. Can't submit"); return}
+        
+        delegate?.onSubmitIngredientInputs(item: item, inputs: inputs)
+    }
+}
+
+
+extension SelectIngredientDataController: MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, MyAutoCompleteTextFieldDelegate {
+    
+    // MARK: - MLPAutoCompleteTextFieldDataSource
+    
+    func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, possibleCompletionsFor string: String!, completionHandler handler: @escaping (([Any]?) -> Void)) {
+        switch textField {
+        case unitTextField:
+            guard let text = unitTextField.text else {handler([]); return}
+            
+            Prov.productProvider.unitsContainingText(text, successHandler{units in
+                handler(units)
+            })
+        case _:
+            QL4("Not handled text field in autoCompleteTextField")
+            break
+        }
+    }
+    
+    
+    // MARK: - MyAutoCompleteTextFieldDelegate
+    
+    func onDeleteSuggestion(_ string: String, sender: MyAutoCompleteTextField) {
+        switch sender {
+
+        case unitTextField:
+            guard let text = unitTextField.text else {return}
+            guard let unitEnum = ProductUnit.fromString(text) else {QL4("Invalid unit input: \(text)"); return} // TODO!!!!!!!!!!!!!!! remove this after non enum units
+            
+            ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_unit_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+                Prov.productProvider.deleteProductsWith(unit: unitEnum, weakSelf.successHandler {
+                    AlertPopup.show(message: trans("popup_was_removed", text), controller: weakSelf)
+                })
+            })
+
+        default: QL4("Not handled input")
+        }
+    }
+    
+    
+    fileprivate func showManualFractionInputs(_ show: Bool, animated: Bool = true) {
+        if show {
+            // Move left & right constraints view.width to the right (TODO showing constraint error in console)
+            collectionViewLeadingConstraint.constant = initCollectionViewLeadingConstraint - view.width
+            collectionViewTrailingConstraint.constant = initCollectionViewLeadingConstraint + view.width
+            
+        } else {
+            // Reset left & right constraints to initial constant
+            collectionViewLeadingConstraint.constant = initCollectionViewLeadingConstraint
+            collectionViewTrailingConstraint.constant = initCollectionViewLeadingConstraint
+        }
+ 
+        view.setNeedsLayout()
+        if animated {
+            
+            UIView.animate(withDuration: Theme.defaultAnimDuration) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+}
+
+extension SelectIngredientDataController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    // TODO!!!!!!!!!!!!!!!!!!!!! on select suggestion the top label should also be updated. doesn't seem to be the case currently
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return predefinedFractions.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FractionCell
+        cell.fractionView.fraction = predefinedFractions[indexPath.row]
+        cell.fractionView.backgroundColor = UIColor.white
+        cell.fractionView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        onSelect(fraction: predefinedFractions[indexPath.row])
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        // Only process event when showing the collection view, i.e. the collection views' left constraint has its initial state where the collection view is fully visible
+        // To close the inputs view we use pan recognizer on the inputs view.
+        guard collectionViewLeadingConstraint.constant == initCollectionViewLeadingConstraint else {return}
+        
+        let delta = scrollView.contentOffset.x - dragStartContentOffset
+        
+        if isAcceptingCollectionViewLeadingConstraintAnimation && delta > 50 { // if can start and scroll 50 pt to the left
+            isAcceptingCollectionViewLeadingConstraintAnimation = false
+            showManualFractionInputs(true)
+        }
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        // Only show the manual fractions views when the drag starts with a small or no left offset
+        dragStartContentOffset = scrollView.contentOffset.x
+        
+        if scrollView.contentOffset.x > scrollView.contentSize.width - fractionsCollectionView.frame.width - 30 { // if the drag starts when the collection view is near to the end (30 is "near")
+            isAcceptingCollectionViewLeadingConstraintAnimation = true
+        } else {
+            isAcceptingCollectionViewLeadingConstraintAnimation = false
+        }
+    }
+   
+    func onPanFractionInputsView(_ recognizer: UIPanGestureRecognizer) {
+        
+        var movingHorizontally = false
+        if let panStartPoint = panStartPoint {
+            movingHorizontally = fabsf(Float(panStartPoint.y)) <= fabsf(Float(panStartPoint.x))
+        }
+        
+        switch recognizer.state {
+        case .began:
+            panStartPoint = recognizer.translation(in: view)
+            
+        case .changed:
+            if movingHorizontally {
+                let currentPoint = recognizer.translation(in: view)
+                let deltaX = currentPoint.x - panStartPoint.x
+                let panningToRight = deltaX > 0
+                if panningToRight && abs(deltaX) > offsetToAnimateManualFractions {
+                    showManualFractionInputs(false)
+                }
+            }
+            
+        default: break
+        }
+    }
+}

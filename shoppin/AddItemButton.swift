@@ -11,9 +11,7 @@ import Providers
 
 class AddItemViewNew: UIView {
     
-    var tapHandler: VoidFunction?
-    
-    override init(frame: CGRect) {
+    init(frame: CGRect, tapHandler: VoidFunction?) {
         super.init(frame: frame)
         
         backgroundColor = Theme.lightGreyBackground

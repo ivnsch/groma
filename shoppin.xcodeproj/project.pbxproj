@@ -35,6 +35,10 @@
 		6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AACDC181E475BE000A9E1EC /* ExplanationView.swift */; };
 		6AACDC1B1E475C0C00A9E1EC /* ExplanationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */; };
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
+		6ADC6F3A1E4D2C88005BE5EB /* FractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC6F391E4D2C88005BE5EB /* FractionView.swift */; };
+		6ADC6F3E1E4D2EB1005BE5EB /* FractionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ADC6F3D1E4D2EB1005BE5EB /* FractionView.xib */; };
+		6ADC6F401E4D32CD005BE5EB /* FractionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC6F3F1E4D32CD005BE5EB /* FractionCell.swift */; };
+		6ADC6F421E4E11C9005BE5EB /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC6F411E4E11C9005BE5EB /* UILabel.swift */; };
 		6AE34BE41E2E25B80039A2A8 /* RecipesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */; };
 		6AE34BFC1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BFB1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift */; };
 		6AE41A141E49E15300B8459D /* SelectQuantifiableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE41A121E49E15300B8459D /* SelectQuantifiableController.swift */; };
@@ -45,6 +49,8 @@
 		6AEB65E81E4C8BE90094B9DE /* IngredientsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB65E71E4C8BE90094B9DE /* IngredientsControllerNew.swift */; };
 		6AEB65EA1E4C92B50094B9DE /* IngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB65E91E4C92B50094B9DE /* IngredientCell.swift */; };
 		6AEB65EC1E4C93620094B9DE /* IngredientsController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AEB65EB1E4C93620094B9DE /* IngredientsController.storyboard */; };
+		6AEB65EF1E4D056C0094B9DE /* SelectIngredientDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB65EE1E4D056C0094B9DE /* SelectIngredientDataController.swift */; };
+		6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */; };
 		AEC62C1551F853D52768B5A2 /* Pods_shoppin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B242A1FEAA96009C120C8E2A /* Pods_shoppin.framework */; };
 		EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0587DB1BBED86B00080626 /* IntroPageView.xib */; };
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
@@ -416,6 +422,10 @@
 		6AACDC181E475BE000A9E1EC /* ExplanationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExplanationView.swift; sourceTree = "<group>"; };
 		6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExplanationView.xib; sourceTree = "<group>"; };
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
+		6ADC6F391E4D2C88005BE5EB /* FractionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FractionView.swift; sourceTree = "<group>"; };
+		6ADC6F3D1E4D2EB1005BE5EB /* FractionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FractionView.xib; sourceTree = "<group>"; };
+		6ADC6F3F1E4D32CD005BE5EB /* FractionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FractionCell.swift; sourceTree = "<group>"; };
+		6ADC6F411E4E11C9005BE5EB /* UILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		6AE34BE31E2E25B80039A2A8 /* RecipesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipesController.swift; sourceTree = "<group>"; };
 		6AE34BFB1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductsWithQuantityViewControllerNew.swift; sourceTree = "<group>"; };
 		6AE41A121E49E15300B8459D /* SelectQuantifiableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectQuantifiableController.swift; sourceTree = "<group>"; };
@@ -425,6 +435,8 @@
 		6AEB65E71E4C8BE90094B9DE /* IngredientsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientsControllerNew.swift; sourceTree = "<group>"; };
 		6AEB65E91E4C92B50094B9DE /* IngredientCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientCell.swift; sourceTree = "<group>"; };
 		6AEB65EB1E4C93620094B9DE /* IngredientsController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IngredientsController.storyboard; sourceTree = "<group>"; };
+		6AEB65EE1E4D056C0094B9DE /* SelectIngredientDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectIngredientDataController.swift; sourceTree = "<group>"; };
+		6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectIngredientData.storyboard; sourceTree = "<group>"; };
 		98053CCC7F57AECBD28D4F1D /* Pods_shoppin_osxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E255758FF7D0B9EA448C576 /* Pods_shoppin_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0402B4CFFCE62A7F089CFBD /* Pods-shoppin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.release.xcconfig"; sourceTree = "<group>"; };
@@ -883,6 +895,18 @@
 				6AEB65EB1E4C93620094B9DE /* IngredientsController.storyboard */,
 			);
 			name = recipes;
+			sourceTree = "<group>";
+		};
+		6AEB65ED1E4D053B0094B9DE /* selectIngredientDataController */ = {
+			isa = PBXGroup;
+			children = (
+				6AEB65EE1E4D056C0094B9DE /* SelectIngredientDataController.swift */,
+				6ADC6F391E4D2C88005BE5EB /* FractionView.swift */,
+				6ADC6F3D1E4D2EB1005BE5EB /* FractionView.xib */,
+				6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */,
+				6ADC6F3F1E4D32CD005BE5EB /* FractionCell.swift */,
+			);
+			name = selectIngredientDataController;
 			sourceTree = "<group>";
 		};
 		B27D810CB73D3BD1DB8296A9 /* Pods */ = {
@@ -1399,6 +1423,7 @@
 				EBD828041BEA441B0072F9FA /* UINavigationController.swift */,
 				EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */,
 				5819FB5D1DDDF59500FB2CC1 /* Validatable.swift */,
+				6ADC6F411E4E11C9005BE5EB /* UILabel.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -1488,6 +1513,7 @@
 		EB85F44F1BD538FC00E19E9B /* quickAdd */ = {
 			isa = PBXGroup;
 			children = (
+				6AEB65ED1E4D053B0094B9DE /* selectIngredientDataController */,
 				EB85F4591BD54C4200E19E9B /* cell */,
 				EBA18C1F1BF5638D009291F2 /* QuickAddListItemViewController.swift */,
 				6AE41A121E49E15300B8459D /* SelectQuantifiableController.swift */,
@@ -2168,6 +2194,7 @@
 				6AACDC1B1E475C0C00A9E1EC /* ExplanationView.xib in Resources */,
 				EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
 				EBEA0CD01CA5B24C00E68B81 /* MyAutocompleteCell.xib in Resources */,
+				6ADC6F3E1E4D2EB1005BE5EB /* FractionView.xib in Resources */,
 				EBB5267F1BEFE39F0002A286 /* HelpHeaderView.xib in Resources */,
 				EB75E5491CA36174006AAEAF /* SharedUsers.storyboard in Resources */,
 				EB1FC51A1BC694AF004E1114 /* OkNextButtonsView.xib in Resources */,
@@ -2198,6 +2225,7 @@
 				EB4B39E01CED43B400B41063 /* Register.storyboard in Resources */,
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
 				6AE41A171E49E1E800B8459D /* SelectQuantifiable.storyboard in Resources */,
+				6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */,
 				6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */,
 				EBD667FD1CED4CD00055EE0B /* SharedUsersViewController.storyboard in Resources */,
 				EB9207E81C4C4FC200332332 /* Localizable.strings in Resources */,
@@ -2322,6 +2350,7 @@
 				EB0C1B881B3DA37100F24C85 /* LoginViewController.swift in Sources */,
 				EBDA75531BCD960900E34AC3 /* OkCancelButtonsView.swift in Sources */,
 				EBA2C8C61C4F18AC00A970B8 /* ManageProductCategoriesController.swift in Sources */,
+				6ADC6F3A1E4D2C88005BE5EB /* FractionView.swift in Sources */,
 				EBDF8D0F1BFB7E2A00F6830A /* ListTopBarView.swift in Sources */,
 				EBEA0CC81CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift in Sources */,
 				EBBC23211BB580FD0002F6B1 /* FacebookLogin.swift in Sources */,
@@ -2341,6 +2370,7 @@
 				EB8D1D091C37318500ADF884 /* GroupsController.swift in Sources */,
 				EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
+				6ADC6F421E4E11C9005BE5EB /* UILabel.swift in Sources */,
 				EBA9E5EA1C6380ED00A85610 /* SettingsViewController.swift in Sources */,
 				EB75E54B1CA424E1006AAEAF /* NewSharedUserCell.swift in Sources */,
 				6A407AB31E32ACDF00D77405 /* AddRecipeController.swift in Sources */,
@@ -2380,6 +2410,7 @@
 				EB1D69731CAC82BF004892A2 /* AddButtonHelper.swift in Sources */,
 				EBB526851BEFE6DD0002A286 /* SectionModel.swift in Sources */,
 				EBF1F9EB1CD7F75E00F8016F /* SimpleSettingCell.swift in Sources */,
+				6AEB65EF1E4D056C0094B9DE /* SelectIngredientDataController.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
 				EB451C4B1B864A19000DE208 /* SingleSelectionPopup.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
@@ -2506,6 +2537,7 @@
 				EBA2C8CD1C4F207800A970B8 /* EditProductCategoryController.swift in Sources */,
 				EB1B36571BC44D9A003519F2 /* PlanViewController.swift in Sources */,
 				EB6E3D151C56D3D600D65DD5 /* ExpandCollapseButton.swift in Sources */,
+				6ADC6F401E4D32CD005BE5EB /* FractionCell.swift in Sources */,
 				EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */,
 				EB37ABBB1CA2021C00FE9D7A /* RoundTextField.swift in Sources */,
 			);

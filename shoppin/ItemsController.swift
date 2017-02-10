@@ -308,6 +308,10 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         fatalError("Override")
     }
     
+    func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) {
+        fatalError("Override")
+    }
+    
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
        fatalError("Override")
     }

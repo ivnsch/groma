@@ -11,6 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="QuantityView" customModule="groma" customModuleProvider="target">
             <connections>
+                <outlet property="minusButton" destination="3bg-dS-GSw" id="ARz-lT-gRP"/>
+                <outlet property="plusButton" destination="HNQ-zH-qvO" id="l7v-sI-wMt"/>
                 <outlet property="quantityLabel" destination="Cxh-rI-YN0" id="HzN-EX-XnL"/>
             </connections>
         </placeholder>
@@ -20,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cxh-rI-YN0" customClass="LabelMore" customModule="Providers">
-                    <rect key="frame" x="49" y="49" width="49" height="24"/>
+                    <rect key="frame" x="74" y="49" width="49" height="24"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
@@ -31,7 +33,7 @@
                     </userDefinedRuntimeAttributes>
                 </label>
                 <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3bg-dS-GSw">
-                    <rect key="frame" x="98" y="0.0" width="41" height="122"/>
+                    <rect key="frame" x="123" y="0.0" width="41" height="122"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="41" id="wwx-ae-Pii"/>
                     </constraints>
@@ -41,7 +43,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HNQ-zH-qvO">
-                    <rect key="frame" x="8" y="0.0" width="41" height="122"/>
+                    <rect key="frame" x="33" y="0.0" width="41" height="122"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="41" id="DP8-Ob-s7B"/>
                     </constraints>
@@ -59,7 +61,7 @@
                 <constraint firstItem="3bg-dS-GSw" firstAttribute="leading" secondItem="Cxh-rI-YN0" secondAttribute="trailing" id="X0c-OZ-rdI"/>
                 <constraint firstAttribute="bottom" secondItem="3bg-dS-GSw" secondAttribute="bottom" id="Znh-Nb-H6x"/>
                 <constraint firstItem="Cxh-rI-YN0" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="htV-zd-UnO"/>
-                <constraint firstAttribute="trailing" secondItem="3bg-dS-GSw" secondAttribute="trailing" constant="25" id="jif-XZ-UcZ"/>
+                <constraint firstAttribute="trailing" secondItem="3bg-dS-GSw" secondAttribute="trailing" id="jif-XZ-UcZ"/>
                 <constraint firstItem="Cxh-rI-YN0" firstAttribute="leading" secondItem="HNQ-zH-qvO" secondAttribute="trailing" id="lg1-6F-RMf"/>
                 <constraint firstItem="3bg-dS-GSw" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="vbE-l3-tWo"/>
             </constraints>
