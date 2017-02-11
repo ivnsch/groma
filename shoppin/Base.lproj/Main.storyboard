@@ -62,7 +62,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O8d-6A-xsA" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="8" width="335" height="28"/>
+                                                    <rect key="frame" x="20" y="8" width="335" height="27.5"/>
                                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -446,7 +446,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dSI-bX-GUc" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="275" y="0.0" width="100" height="91"/>
+                                                    <rect key="frame" x="275" y="0.0" width="100" height="90.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="85" id="Lk5-f1-0Lf"/>
                                                         <constraint firstAttribute="width" constant="100" id="ST7-0G-QNA"/>

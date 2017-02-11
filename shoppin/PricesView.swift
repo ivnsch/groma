@@ -252,16 +252,22 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     }
     
     func toggleExpanded(todoController: TodoListItemsControllerNew) {
-        
+        guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
+
+        let isExpanded = bottomConstraint.constant > todoController.view.height / 2
+        setExpanded(expanded: !isExpanded, todoController: todoController)
+    }
+    
+    func setExpanded(expanded: Bool, todoController: TodoListItemsControllerNew) {
         guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
         
-        if bottomConstraint.constant < todoController.view.height / 2 { // it's currently in bottom part of view
+        expandedNew = expanded
+        
+        if expanded {
             bottomConstraint.constant = y - todoController.topBar.height
-            expandedNew = true
             
-        } else { // it's currently in upper part
+        } else {
             bottomConstraint.constant = 0
-            expandedNew = false
         }
         
         UIView.animate(withDuration: 0.2) {

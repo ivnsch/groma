@@ -10,9 +10,6 @@ import UIKit
 import QorumLogs
 import Providers
 
-protocol CartListItemsControllerDelegate: class {
-    func onCartSendItemsToStash(_ listItems: [ListItem])
-}
 
 
 class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControllerDelegate, TodoListItemsEditBottomViewDelegate, UIGestureRecognizerDelegate {
@@ -201,6 +198,10 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         pricesView.toggleExpanded(todoController: self)
     }
     
+    func setCartExpanded(expanded: Bool) {
+        pricesView.setExpanded(expanded: expanded, todoController: self)
+    }
+    
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        if segue.identifier == "stashSegue" {
 //            if let stashViewController = segue.destination as? StashListItemsController {
@@ -228,22 +229,27 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     // MARK: - CartListItemsControllerDelegate
     
-    func onCartSendItemsToStash(_ listItems: [ListItem]) {
-        // Open quickly the stash view to show/remind users they can open it by swiping.
-        // Note: Assumes the cart controller is closing when this is called otherwise the user will not see anything.
-        if listItems.count > 0 {
-            let alreadyShowedAnim: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.shownCanSwipeToOpenStash) ?? false
-            if !alreadyShowedAnim {
-                PreferencesManager.savePreference(PreferencesManagerKey.shownCanSwipeToOpenStash, value: true)
-                delay(0.4) {[weak self] in
-                    self?.pricesView.setOpen(true)
-                    delay(0.8) {
-                        self?.pricesView.setOpen(false)
-                    }
-                }
-            }
-        }
+    func onCloseCart() {
+        setCartExpanded(expanded: false)
     }
+    
+//    // for now not used. This functionality needs to be reviewed anyway
+//    func onCartSendItemsToStash(_ listItems: [ListItem]) {
+//        // Open quickly the stash view to show/remind users they can open it by swiping.
+//        // Note: Assumes the cart controller is closing when this is called otherwise the user will not see anything.
+//        if listItems.count > 0 {
+//            let alreadyShowedAnim: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.shownCanSwipeToOpenStash) ?? false
+//            if !alreadyShowedAnim {
+//                PreferencesManager.savePreference(PreferencesManagerKey.shownCanSwipeToOpenStash, value: true)
+//                delay(0.4) {[weak self] in
+//                    self?.pricesView.setOpen(true)
+//                    delay(0.8) {
+//                        self?.pricesView.setOpen(false)
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     // MARK: - TodoListItemsEditBottomViewDelegate
     
@@ -260,7 +266,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         cartController.view.translatesAutoresizingMaskIntoConstraints = false
         addChildViewControllerAndView(cartController)
         
-        print("frame: \(pricesView.frame)")
+        cartController.delegate = self
         
         _ = cartController.view.positionBelowView(pricesView)
         _ = cartController.view.heightConstraint(view.height - topBar.height - pricesView.height - 70) // 70 is the height of the buy button - not quite sure yet why we have to substract this

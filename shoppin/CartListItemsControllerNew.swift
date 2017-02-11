@@ -10,10 +10,20 @@ import UIKit
 import Providers
 import QorumLogs
 
+//protocol CartListItemsControllerDelegate: class {
+//    func onCartSendItemsToStash(_ listItems: [ListItem])
+//}
+
+protocol CartListItemsControllerDelegate: class {
+    func onCloseCart()
+}
+
 class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var totalDonePriceLabel: UILabel!
     @IBOutlet weak var buyViewHeightConstraint: NSLayoutConstraint!
+    
+    var delegate: CartListItemsControllerDelegate?
     
     override var status: ListItemStatus {
         return .done
@@ -88,7 +98,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     }
     
     fileprivate func close() {
-        _ = navigationController?.popViewController(animated: true)
+        delegate?.onCloseCart()
     }
     
     @IBAction func onAddToInventoryTap(_ sender: UIBarButtonItem) {
