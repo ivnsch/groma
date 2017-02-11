@@ -50,7 +50,7 @@ class RealmIngredientProvider: RealmProvider {
                 }
             }
         } else {
-            create(quickAddInput.item, quantity: quickAddInput.quantity, recipe: recipe, ingredients: ingredients, notificationToken: notificationToken) {addedIngredient in
+            create(quickAddInput, recipe: recipe, ingredients: ingredients, notificationToken: notificationToken) {addedIngredient in
                 handler(addedIngredient.map{(ingredient: $0, isNew: true)})
             }
         }
@@ -125,8 +125,8 @@ class RealmIngredientProvider: RealmProvider {
     
     // MARK: - private
     
-    fileprivate func create(_ item: Item, quantity: Float, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Ingredient?) -> Void) {
-        let ingredient = Ingredient(uuid: UUID().uuidString, quantity: quantity, item: item, recipe: recipe)
+    fileprivate func create(_ quickAddInput: QuickAddIngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Ingredient?) -> Void) {
+        let ingredient = Ingredient(uuid: UUID().uuidString, quantity: quickAddInput.quantity, fraction: quickAddInput.fraction, unit: quickAddInput.unit, item: quickAddInput.item, recipe: recipe)
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
             realm.add(ingredient, update: true) // update: true "just in case", not really necessary
             return true

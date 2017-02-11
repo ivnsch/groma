@@ -12,61 +12,64 @@ import Providers
 
 
 protocol IngredientCellDelegate: class {
-    func onIncrementItemTap(_ cell: IngredientCell)
-    func onDecrementItemTap(_ cell: IngredientCell)
-    func onPanQuantityUpdate(_ cell: IngredientCell, newQuantity: Float)
 }
 
 
-class IngredientCell: UITableViewCell, SwipeToIncrementHelperDelegate {
-    
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var quantityLabel: UILabel!
+class IngredientCell: UITableViewCell {
     
     @IBOutlet weak var categoryColorView: UIView!
+    @IBOutlet weak var quantityLabel: UILabel!
+    @IBOutlet weak var fractionView: FractionView!
+    @IBOutlet weak var unitLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
     
-    var model: Ingredient? {
+    @IBOutlet weak var nameLeadingConstraint: NSLayoutConstraint!
+    
+    var ingredient: Ingredient? {
         didSet {
-            guard let model = model else {QL3("Model is nil"); return}
+            guard let ingredient = ingredient else {QL3("Model is nil"); return}
             
-            nameLabel.text = model.item.name
+            nameLabel.text = ingredient.item.name
             
-            shownQuantity = model.quantity
+            quantityLabel.text = String("\(ingredient.quantity.quantityString)")
+            unitLabel.text = ingredient.unit.shortText
+            fractionView.fraction = ingredient.fraction
             
-            categoryColorView.backgroundColor = model.item.category.color
+            categoryColorView.backgroundColor = ingredient.item.category.color
 
             // height now calculated yet so we pass the position of border
-            addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
+            addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.ingredientsCellHeight)
+            
+            
+            QL3("fraction width: \(fractionView.width)")
         }
     }
     
     weak var delegate: IngredientCellDelegate?
-    
-    var shownQuantity: Float = 0 {
-        didSet {
-//            let unitText = model.map{$0.product.unitText} ?? ""
-//            quantityLabel.text = String("\(shownQuantity)\(unitText)")
-            quantityLabel.text = String("\(shownQuantity.quantityString)")
-        }
-    }
-    
+
     fileprivate var swipeToIncrementHelper: SwipeToIncrementHelper?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        swipeToIncrementHelper = SwipeToIncrementHelper(view: contentView)
-        swipeToIncrementHelper?.delegate = self
-        
         selectionStyle = .none
     }
     
-    @IBAction func onIncrementTap(_ sender: UIButton) {
-        delegate?.onIncrementItemTap(self)
-    }
-    
-    @IBAction func onDecrementTap(_ sender: UIButton) {
-        delegate?.onDecrementItemTap(self)
+    func setRightSideOffset(offset: CGFloat, animated: Bool) {
+     
+        func f() {
+            nameLeadingConstraint.constant = offset
+        }
+        
+        if animated {
+            UIView.animate(withDuration: Theme.defaultAnimDuration) {
+                f()
+            }
+            
+            
+        } else {
+            f()
+        }
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -83,20 +86,5 @@ class IngredientCell: UITableViewCell, SwipeToIncrementHelperDelegate {
         } else {
             animate(1)
         }
-    }
-    
-    
-    // MARK: - SwipeToIncrementHelperDelegate
-    
-    func currentQuantity() -> Float {
-        return shownQuantity
-    }
-    
-    func onQuantityUpdated(_ quantity: Float) {
-        shownQuantity = quantity
-    }
-    
-    func onFinishSwipe() {
-        delegate?.onPanQuantityUpdate(self, newQuantity: shownQuantity)
     }
 }

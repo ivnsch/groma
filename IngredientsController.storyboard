@@ -197,7 +197,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kBK-Tm-FlM" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                            <rect key="frame" x="29" y="27" width="44" height="22"/>
+                                            <rect key="frame" x="240" y="27" width="44" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -207,27 +207,17 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G5G-bR-cvc" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                            <rect key="frame" x="260" y="26" width="49" height="24"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G5G-bR-cvc" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                            <rect key="frame" x="138.5" y="27.5" width="9" height="22"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                             <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                    <integer key="value" value="60"/>
+                                                    <integer key="value" value="50"/>
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Ei-RS-ZfS">
-                                            <rect key="frame" x="309" y="4" width="41" height="72"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="41" id="D80-ta-ISH"/>
-                                            </constraints>
-                                            <state key="normal" image="minus"/>
-                                            <connections>
-                                                <action selector="onDecrementTap:" destination="gmc-7r-34q" eventType="touchUpInside" id="DPB-8q-3XI"/>
-                                            </connections>
-                                        </button>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8gZ-RJ-4PM">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="4"/>
                                             <subviews>
@@ -253,40 +243,49 @@
                                                 <constraint firstAttribute="width" constant="4" id="yrS-Bm-v9w"/>
                                             </constraints>
                                         </view>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="feA-yt-0oe">
-                                            <rect key="frame" x="219" y="4" width="41" height="72"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="41" id="fRl-yH-2br"/>
-                                            </constraints>
-                                            <state key="normal" image="plus"/>
-                                            <connections>
-                                                <action selector="onIncrementTap:" destination="gmc-7r-34q" eventType="touchUpInside" id="TNa-uK-r4Q"/>
-                                            </connections>
-                                        </button>
+                                        <view contentMode="scaleToFill" placeholderIntrinsicWidth="30" placeholderIntrinsicHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mwK-SJ-DPa" customClass="FractionView" customModule="groma" customModuleProvider="target">
+                                            <rect key="frame" x="147.5" y="24" width="30" height="28"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="isBold" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </view>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="unit" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAa-db-Q7O" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                            <rect key="frame" x="186.5" y="28" width="33.5" height="22"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                            <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="50"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="iu9-Mq-1aV" secondAttribute="bottom" constant="4" id="0Kb-Sj-GR0"/>
                                         <constraint firstItem="8gZ-RJ-4PM" firstAttribute="top" secondItem="MYG-wi-HRh" secondAttribute="top" id="0WU-pK-CmL"/>
-                                        <constraint firstItem="kBK-Tm-FlM" firstAttribute="leading" secondItem="iu9-Mq-1aV" secondAttribute="trailing" constant="25" id="5Nm-5j-wSU" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                                        <constraint firstItem="mwK-SJ-DPa" firstAttribute="centerY" secondItem="G5G-bR-cvc" secondAttribute="centerY" id="1KQ-71-jKf"/>
                                         <constraint firstItem="iu9-Mq-1aV" firstAttribute="leading" secondItem="MYG-wi-HRh" secondAttribute="leading" id="5te-CM-NWn"/>
+                                        <constraint firstItem="TAa-db-Q7O" firstAttribute="centerY" secondItem="G5G-bR-cvc" secondAttribute="centerY" id="8uZ-Uj-Llv"/>
                                         <constraint firstItem="iu9-Mq-1aV" firstAttribute="top" secondItem="MYG-wi-HRh" secondAttribute="top" constant="4" id="90H-za-WAL"/>
+                                        <constraint firstItem="TAa-db-Q7O" firstAttribute="leading" secondItem="mwK-SJ-DPa" secondAttribute="trailing" constant="9" id="Fr4-qQ-XJO"/>
                                         <constraint firstAttribute="centerY" secondItem="kBK-Tm-FlM" secondAttribute="centerY" id="H1f-GA-I1g"/>
-                                        <constraint firstItem="6Ei-RS-ZfS" firstAttribute="top" secondItem="8gZ-RJ-4PM" secondAttribute="bottom" id="IJO-xo-ix8"/>
                                         <constraint firstItem="8gZ-RJ-4PM" firstAttribute="leading" secondItem="MYG-wi-HRh" secondAttribute="leading" id="IlF-my-Fvb"/>
-                                        <constraint firstAttribute="bottom" secondItem="6Ei-RS-ZfS" secondAttribute="bottom" id="Mla-hH-9tP"/>
-                                        <constraint firstAttribute="bottom" secondItem="feA-yt-0oe" secondAttribute="bottom" id="STr-Px-f9B"/>
-                                        <constraint firstItem="G5G-bR-cvc" firstAttribute="leading" secondItem="feA-yt-0oe" secondAttribute="trailing" id="a1t-fa-rff"/>
-                                        <constraint firstItem="feA-yt-0oe" firstAttribute="top" secondItem="8gZ-RJ-4PM" secondAttribute="bottom" id="cHd-yr-rCh"/>
+                                        <constraint firstItem="kBK-Tm-FlM" firstAttribute="leading" secondItem="TAa-db-Q7O" secondAttribute="trailing" constant="20" id="bof-y6-Gw8"/>
                                         <constraint firstAttribute="centerY" secondItem="G5G-bR-cvc" secondAttribute="centerY" id="jYN-sj-hD6"/>
-                                        <constraint firstAttribute="trailing" secondItem="6Ei-RS-ZfS" secondAttribute="trailing" constant="25" id="jvR-vQ-83Y" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
-                                        <constraint firstItem="6Ei-RS-ZfS" firstAttribute="leading" secondItem="G5G-bR-cvc" secondAttribute="trailing" id="mic-fz-e5X"/>
+                                        <constraint firstItem="mwK-SJ-DPa" firstAttribute="leading" secondItem="G5G-bR-cvc" secondAttribute="trailing" id="ngC-0S-YXq"/>
+                                        <constraint firstItem="kBK-Tm-FlM" firstAttribute="leading" secondItem="MYG-wi-HRh" secondAttribute="leading" constant="240" id="ptN-CE-sbA"/>
                                         <constraint firstAttribute="trailing" secondItem="8gZ-RJ-4PM" secondAttribute="trailing" id="s0g-HU-U9G"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="categoryColorView" destination="iu9-Mq-1aV" id="pab-Mg-1S5"/>
+                                    <outlet property="fractionView" destination="mwK-SJ-DPa" id="uEg-YH-hHs"/>
                                     <outlet property="nameLabel" destination="kBK-Tm-FlM" id="I1j-gH-9nk"/>
+                                    <outlet property="nameLeadingConstraint" destination="ptN-CE-sbA" id="0xh-wY-dOR"/>
                                     <outlet property="quantityLabel" destination="G5G-bR-cvc" id="Sjo-HZ-awN"/>
+                                    <outlet property="unitLabel" destination="TAa-db-Q7O" id="t27-ua-h93"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="defaultCell" rowHeight="76" id="CIA-3e-nYC">
@@ -306,12 +305,10 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MZS-cx-XPS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1457" y="492"/>
+            <point key="canvasLocation" x="1456.8" y="491.60419790104953"/>
         </scene>
     </scenes>
     <resources>
         <image name="empty_page" width="240" height="206"/>
-        <image name="minus" width="9" height="3"/>
-        <image name="plus" width="15" height="14"/>
     </resources>
 </document>

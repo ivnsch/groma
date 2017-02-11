@@ -66,6 +66,13 @@ public final class Ingredient: Object {
         }
     }
 
+    public convenience init(uuid: String, quantity: Float, fraction: Fraction, unit: ProductUnit, item: Item, recipe: Recipe) {
+        self.init(uuid: uuid, quantity: quantity, item: item, recipe: recipe)
+        self.fraction = fraction
+        self.unit = unit
+    }
+    
+    // TODO deprecated remove
     public convenience init(uuid: String, quantity: Float, item: Item, recipe: Recipe) {
         self.init()
         

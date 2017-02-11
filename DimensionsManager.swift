@@ -184,6 +184,15 @@ class DimensionsManager {
         }
     }
     
+    static var ingredientsCellHeight: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 50
+        case .small: return 50
+        case .middle: return 60
+        case .large: return 60
+        }
+    }
+    
     static var cartStashCellHeight: CGFloat {
         switch heightDimension {
         case .verySmall: return 45

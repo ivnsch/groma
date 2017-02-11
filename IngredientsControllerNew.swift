@@ -11,7 +11,7 @@ import RealmSwift
 import QorumLogs
 import Providers
 
-class IngredientsControllerNew: ItemsController, IngredientCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ExplanationViewDelegate {
+class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPickerViewDelegate, ExplanationViewDelegate {
 
     var recipe: Recipe? {
         didSet {
@@ -37,9 +37,15 @@ class IngredientsControllerNew: ItemsController, IngredientCellDelegate, UIPicke
     fileprivate var explanationManager: ExplanationManager = ExplanationManager()
 
     
-    fileprivate var itemsResult: Results<Ingredient>?
+    fileprivate var itemsResult: Results<Ingredient>? {
+        didSet {
+            updateLargestLeftSideWidth()
+            tableView.reloadData()
+        }
+    }
     fileprivate var notificationToken: NotificationToken?
     
+    fileprivate var maxLeftSideWidth: CGFloat = 0
     
     override var tableView: UITableView {
         return tableViewController.tableView
@@ -160,19 +166,31 @@ class IngredientsControllerNew: ItemsController, IngredientCellDelegate, UIPicke
     
     override func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) {
         
+        
+        
         guard let itemsResult = itemsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         guard let recipe = recipe else {QL4("No recipe"); return}
 
-        // ingredientInput.unitName // TODO custom units
-        let unit: ProductUnit = .none
+        let unit: ProductUnit = ProductUnit.fromString(ingredientInput.unitName) ?? .none // TODO custom units
         
-        let quickAddIngredientInput = QuickAddIngredientInput(item: item, quantity: ingredientInput.quantity, unit: unit, fraction: ingredientInput.fraction) // for now 1 / .none
+        let quickAddIngredientInput = QuickAddIngredientInput(item: item, quantity: ingredientInput.quantity, unit: unit, fraction: ingredientInput.fraction)
 
         Prov.ingredientProvider.add(quickAddIngredientInput, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, successHandler{addedItem in
 
             if addedItem.isNew {
                 self.insert(item: addedItem.ingredient, scrollToRow: true)
+                
+                self.updateLargestLeftSideWidth()
+                
+                if let cells = self.tableView.visibleCells as? [IngredientCell] {
+                    for cell in cells {
+                        cell.setRightSideOffset(offset: self.maxLeftSideWidth, animated: true)
+                    }
+                    
+                } else {
+                    QL4("Illegal state: Wrong cell type: \(self.tableView.visibleCells)")
+                }
 
             } else {
                 if let index = itemsResult.index(of: addedItem.ingredient) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
@@ -315,6 +333,37 @@ class IngredientsControllerNew: ItemsController, IngredientCellDelegate, UIPicke
         }
     }
     
+    fileprivate func updateLargestLeftSideWidth() {
+        maxLeftSideWidth = findLargestLeftSideWidth()
+    }
+    
+    fileprivate func findLargestLeftSideWidth() -> CGFloat {
+        
+        guard let itemsResult = itemsResult else {QL4("No result"); return 0}
+
+        // hardcoded numbers (fix)
+        
+        let quantityLabelFont = Fonts.regular
+        let unitLabelFont = quantityLabelFont
+        let spacingBetweenLabels: CGFloat = 9
+        
+        let maxInternalWidth = itemsResult.reduce(CGFloat(0)) {(maxLength, ingredient) in
+            
+            var length = ingredient.quantity.quantityString.size(quantityLabelFont).width + ingredient.unit.shortText.size(unitLabelFont).width
+            length += (spacingBetweenLabels * 2)
+//            length += (ingredient.fraction.isValidAndNotZeroOrOne ? 40 : 0) // TODO fraction also must be calculated using string lengths (numbers could have more than 1 digit). Width for current font and 1 digit is ~30 so hardcoding to 40 for now
+            length += 40
+            
+            return max(maxLength, length)
+        }
+        
+        let leftConstraint: CGFloat = 20
+        let trailingConstraint: CGFloat = 20
+        let categoryColorWidth: CGFloat = 5
+        
+        return maxInternalWidth + leftConstraint + trailingConstraint + categoryColorWidth
+    }
+    
     fileprivate func findFirstItem(_ f: (Ingredient) -> Bool) -> (index: Int, model: Ingredient)? {
         for itemIndex in 0..<itemsCount {
             guard let item = itemForRow(row: itemIndex) else {QL4("Illegal state: no item for index: \(itemIndex)"); return nil}
@@ -361,45 +410,6 @@ class IngredientsControllerNew: ItemsController, IngredientCellDelegate, UIPicke
 
             tableViewController?.tableView.reloadData()
         }
-    }
-    
-    // MARK: - IngredientCellDelegate
-    
-    func onIncrementItemTap(_ cell: IngredientCell) {
-        changeQuantity(cell, delta: 1)
-        SwipeToIncrementAlertHelper.check(self)
-    }
-    
-    func onDecrementItemTap(_ cell: IngredientCell) {
-        changeQuantity(cell, delta: -1)
-        SwipeToIncrementAlertHelper.check(self)
-    }
-    
-    func onPanQuantityUpdate(_ cell: IngredientCell, newQuantity: Float) {
-        if let model = cell.model {
-            changeQuantity(cell, delta: newQuantity - model.quantity)
-        } else {
-            QL4("No model, can't update quantity")
-        }
-    }
-    
-    fileprivate func changeQuantity(_ cell: IngredientCell, delta: Float) {
-        guard let model = cell.model else {QL4("Invalid state: Cell must have model"); return}
-        
-        increment(model, delta: delta, onSuccess: {updatedQuantity in
-            cell.shownQuantity = updatedQuantity
-        })
-    }
-    
-    
-    fileprivate func increment(_ model: Ingredient, delta: Float, onSuccess: @escaping (Float) -> Void) {
-        guard let itemsResult = itemsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
-        guard let ingredientsRealm = itemsResult.realm else {QL4("No realm"); return}
-        
-        Prov.ingredientProvider.increment(model, quantity: delta, notificationToken: notificationToken, realm: ingredientsRealm, successHandler({updatedQuantity in
-            onSuccess(updatedQuantity)
-        }))
     }
     
     func remove(_ model: Ingredient, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
@@ -489,12 +499,11 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
             let row = explanationManager.showExplanation ? indexPath.row - 1 : indexPath.row
             
             if let itemsResult = itemsResult {
-                cell.model = itemsResult[indexPath.row]
+                cell.ingredient = itemsResult[indexPath.row]
+                cell.setRightSideOffset(offset: maxLeftSideWidth, animated: false)
             } else {
                 QL4("Illegal state: No item for row: \(row)")
             }
-            
-            cell.delegate = self
             
             return cell
         }
@@ -505,7 +514,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
         if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
             return explanationManager.rowHeight
         } else {
-            return DimensionsManager.defaultCellHeight
+            return DimensionsManager.ingredientsCellHeight
         }
     }
     
