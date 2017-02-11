@@ -79,6 +79,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
                         Prov.listItemsProvider.buyCart(list: list, realmData: realmData, controller.successHandler{[weak self] in
                             // TODO!!!!!!!!!!!!!!!! is this still necessary?
 //                            self?.delegate?.onCartSendItemsToStash(weakSelf.listItemsTableViewController.items)
+                            self?.butCartAnimation()
                             self?.close()
                         })
                     } else {
@@ -95,6 +96,14 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
 //                    }
 //                }
 //        })
+    }
+    
+    fileprivate func butCartAnimation() {
+        if let tabBarController = UIApplication.shared.delegate?.window??.rootViewController as? MyTabBarController {
+            tabBarController.buyAnimation()
+        } else {
+            QL4("Couldn't get tab bar controller, can't perform tab bar cart animation!")
+        }
     }
     
     fileprivate func close() {
