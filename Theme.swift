@@ -40,8 +40,10 @@ struct Theme {
     
     static let lightBlue = UIColor(hexString: "e8f0f9")
     static let lightGreyBackground = UIColor(hexString: "F0F0F0")
+    static let lightPink = UIColor(hexString: "f9eaf1")
     static let green = UIColor(hexString: "1FAC6A")
     static let lighterGreen = UIColor(hexString: "28c75d")
+    
     
     static let defaultTableViewBGColor = lightGreyBackground
     

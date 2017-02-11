@@ -285,12 +285,12 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             delegate?.increment(inventoryItem, delta: delta, onSuccess: {updatedQuantity in
                 cell.shownQuantity = updatedQuantity
                 if updatedQuantity == 0 {
-                    remove()
+//                    remove()
                 }
             })
             
         } else { // user tries to decrement when the quantity is already 0 (quantity + delta is a negative number) -> start remove animation
-            remove()
+//            remove()
         }
     }
 

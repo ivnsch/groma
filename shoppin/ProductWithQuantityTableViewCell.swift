@@ -72,6 +72,14 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         didSet {
             let unitText = model.map{$0.product.unitText} ?? ""
             quantityLabel.text = String("\(shownQuantity.quantityString)\(unitText)")
+            
+            if shownQuantity == 0 && oldValue != 0 {
+                UIView.animate(withDuration: Theme.defaultAnimDuration) {[weak self] in
+                    self?.contentView.backgroundColor = Theme.lightPink
+                }
+            } else {
+                contentView.backgroundColor = UIColor.white
+            }
         }
     }
     
