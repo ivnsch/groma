@@ -21,6 +21,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var brandLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
+    @IBOutlet weak var baseQuantityLabel: UILabel!
     @IBOutlet weak var deleteProgressContainer: UIView!
     @IBOutlet weak var deleteProgressViewWidth: NSLayoutConstraint!
 
@@ -40,6 +41,8 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
             centerVerticallyNameLabelConstraint.constant = model.product.product.brand.isEmpty ? 0 : 10
             brandLabel.text = model.product.product.brand
             
+            baseQuantityLabel.text = model.product.unitText
+                
             shownQuantity = model.quantity
             
             categoryColorView.backgroundColor = model.product.product.item.category.color
@@ -70,8 +73,13 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
 
     var shownQuantity: Float = 0 {
         didSet {
-            let unitText = model.map{$0.product.unitText} ?? ""
-            quantityLabel.text = String("\(shownQuantity.quantityString)\(unitText)")
+            if let product = model?.product {
+                quantityLabel.text = String("\(product.quantityWithMaybeUnitText(quantity: shownQuantity))")
+            } else {
+                QL3("Warn? using quantity before model is set")
+                //            let unitText = model.map{$0.product.unitText} ?? ""
+                quantityLabel.text = String("\(shownQuantity.quantityString)") // show something meaningful anyway. Maybe we can remove this.
+            }
             
             if shownQuantity == 0 && oldValue != 0 {
                 UIView.animate(withDuration: Theme.defaultAnimDuration) {[weak self] in

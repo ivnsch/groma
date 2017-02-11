@@ -206,6 +206,18 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         return formatter
     }()
     
+    public func quantityWithMaybeUnitText(quantity: Float) -> String {
+        let quantityStr = "\(quantity.quantityString)"
+        // If there's no base quantity (it's 0 or 1 - normally we expect no-op base quantity to be 1 but just in case) we show the unit next to the quantity
+        // The reason is that when there's a base quantity the unit belongs to the base quantity, and when there's none, it belongs to the quantity
+        // E.g. 2x500g meat - the g refers to the base quantity, 2 is only units. But products that don't have a fixed base quantity (and a unit) - e.g. meat from the fridge, which can be 234.5g, has a base quantity of 1 and to not confuse the user we just don't show a base quantity at all but only the quantity with the unit next to it.
+        // Clarification: Base quantity is the quantity of a product that can be bought in a store as a unit. We can buy a 500g of meat in a store (as a pack - but "pack" seems redundant information, as if we enter 500g as base quantity we know that it means 500 are sold as unit, and it's difficult to think about a product with a specified name, brand and base quantity, that will be sold in something different as "pack". Yes there could also be 500g sold as e.g. "Can" but this product will likely have a different name - canned meat or something). We also can buy 1g of meat in a store. The quantity (of list, inventory, group items) is just a multiplier of this base quantity)
+        let unitStr = ((baseQuantityFloat == 0 || baseQuantityFloat == 1) && unit != .none) ? unit.shortText : ""
+        return "\(quantityStr)\(unitStr)"
+    }
+    
+    
+    
     public var unitText: String {
         return QuantifiableProduct.unitText(baseQuantity: baseQuantityFloat, unit: unit)
     }
@@ -215,7 +227,8 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
     
     public static func unitText(baseQuantity: Float, unit: ProductUnit, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
-        let baseQuantityText = baseQuantity > 1 ? "x\(QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!)" : ""
+//        let baseQuantityText = baseQuantity > 1 ? "x\(QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!)" : ""
+        let baseQuantityText = baseQuantity > 1 ? "\(QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!)" : ""
         
         let unitText: String = {
             if showNoneText && unit == .none {
