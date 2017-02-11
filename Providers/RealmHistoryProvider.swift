@@ -51,10 +51,26 @@ class RealmHistoryProvider: RealmProvider {
     // TODO change data model! one table with groups and the other with history items, 1:n (also in server)
     // this is very important as right now we fetch and iterate through ALL the history items, this is very inefficient
     func loadHistoryItemsGroups(_ range: NSRange, inventory: DBInventory, _ handler: @escaping ([HistoryItemGroup]) -> ()) {
-
-        let finished: ([HistoryItemGroup]) -> () = {result in
+        
+        let inventory = inventory.copy()
+        
+        func retrieved(historyItemsUuidGroupedByDate: OrderedDictionary<Date, [String]>) {
+            
             DispatchQueue.main.async(execute: {
-                handler(result)
+                // Map date -> history item dict to HistoryItemDateGroup
+                // NOTE as user we select first user in the group. Theoretically there could be more than one user. This is a simplification based in that we think it's highly unlikely that multiple users will mark items as "bought" at the exact same point of time (milliseconds). And even if they do, having one history group with (partly) wrong user is not critical.
+                let historyItemsDateGroups: [HistoryItemGroup] = historyItemsUuidGroupedByDate.flatMap{k, uuids in
+                    
+                    if let historyItems = self.loadHistoryItemsSync(uuids: uuids) {
+                        let firstUser = historyItems.first!.user // force unwrap -> if there's an array as value it must contain at least one element. If there was no history item for this date the date would not be in the dictionary
+                        return HistoryItemGroup(date: k, user: firstUser, historyItems: historyItems.toArray())
+                    } else {
+                        QL4("Error ocurred retrieving history items for uuids: \(uuids). Skipping history items group.")
+                        return nil
+                    }
+                }
+                
+                handler(historyItemsDateGroups)
             })
         }
         
@@ -63,20 +79,18 @@ class RealmHistoryProvider: RealmProvider {
                 let realm = try Realm()
                 let results = realm.objects(HistoryItem.self).filter(HistoryItem.createFilterWithInventory(inventory.uuid)).sorted(byProperty: "addedDate", ascending: false) // not using constant because weak self etc.
                 
-                let dateDict = weakSelf.groupByDate(results)[range]
-                
-                // Map date -> history item dict to HistoryItemDateGroup
-                // NOTE as user we select first user in the group. Theoretically there could be more than one user. This is a simplification based in that we think it's highly unlikely that multiple users will mark items as "bought" at the exact same point of time (milliseconds). And even if they do, having one history group with (partly) wrong user is not critical.
-                let historyItemsDateGroup: [HistoryItemGroup] = dateDict.map{k, v in
-                    let firstUser = v.first!.user // force unwrap -> if there's an array as value it must contain at least one element. If there was no history item for this date the date would not be in the dictionary
-                    return HistoryItemGroup(date: k, user: firstUser, historyItems: v)
+                let dateDict = weakSelf.groupByDate(results)[range].mapDictionary{(date, historyItems) in
+                    // Map to uuids because of realm thread issues. We re-fetch the items in the main thread.
+                    return (date, historyItems.map{return $0.uuid})
                 }
-                
-                finished(historyItemsDateGroup)
-                
+
+                retrieved(historyItemsUuidGroupedByDate: dateDict)
+
             } catch _ {
                 print("Error: creating Realm() in loadHistoryItemsUserDateGroups, returning empty results")
-                finished([])
+                DispatchQueue.main.async(execute: {
+                    handler([])
+                })
             }
         }
     }
@@ -389,5 +403,15 @@ class RealmHistoryProvider: RealmProvider {
             }, finishHandler: {success in
                 handler(success ?? false)
         })
+    }
+    
+    // MARK: - Sync
+    
+    func loadHistoryItemSync(uuid: String) -> HistoryItem? {
+        return loadFirstSync(filter: HistoryItem.createFilter(uuid))
+    }
+    
+    func loadHistoryItemsSync(uuids: [String]) -> Results<HistoryItem>? {
+        return loadSync(filter: HistoryItem.createFilter(uuids: uuids))
     }
 }

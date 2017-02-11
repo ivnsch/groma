@@ -85,9 +85,14 @@ public class HistoryItem: DBSyncable, Identifiable {
     }
 
     static func createFilter(_ historyItemGroup: HistoryItemGroup) -> String {
-        let historyItemsUuidsStr: String = historyItemGroup.historyItems.map{"'\($0.uuid)'"}.joined(separator: ",")
+        return createFilter(uuids: historyItemGroup.historyItems.map{$0.uuid})
+    }
+    
+    static func createFilter(uuids: [String]) -> String {
+        let historyItemsUuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
         return "uuid IN {\(historyItemsUuidsStr)}"
     }
+    
     
     static func createPredicate(_ addedDate: Int64, inventoryUuid: String) -> NSPredicate {
         return NSPredicate(format: "addedDate >= %@ AND inventoryOpt.uuid == %@", NSNumber(value: Int64(addedDate) as Int64), inventoryUuid)
