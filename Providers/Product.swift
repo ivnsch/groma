@@ -108,7 +108,7 @@ public class Product: DBSyncable, Identifiable {
     public func copy(uuid: String? = nil, item: Item? = nil, brand: String? = nil, store: String? = nil, fav: Int? = 0, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
-            item: item ?? self.item,
+            item: item ?? self.item.copy(),
             brand: brand ?? self.brand,
             fav: fav ?? self.fav,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,

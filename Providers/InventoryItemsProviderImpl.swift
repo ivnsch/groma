@@ -325,6 +325,8 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     // MARK: - Direct (no history)
     
     func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Float, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float)>) -> Void) {
+        let inventory = inventory.copy()
+        let product = product.copy()
         addToInventory(inventory, productsWithQuantities: [(product: product, quantity: quantity)], remote: remote) {result in
             if let addedOrIncrementedInventoryItem = result.sucessResult?.first {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItem))
@@ -335,6 +337,9 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     fileprivate func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)], remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Float)]>) -> Void) {
+        let inventory = inventory.copy()
+        let productsWithQuantities = productsWithQuantities.map{($0.product.copy(), $0.quantity)}
+        
         DBProv.inventoryItemProvider.addToInventory(inventory, productsWithQuantities: productsWithQuantities, dirty: remote) {addedOrIncrementedInventoryItemsMaybe in
             if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItems))

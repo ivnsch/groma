@@ -52,7 +52,7 @@ public class Item: Object, Identifiable {
         return Item(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
-            category: category ?? self.category,
+            category: category ?? self.category.copy(),
             fav: fav ?? self.fav
         )
     }

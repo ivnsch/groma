@@ -264,15 +264,30 @@ class RealmInventoryItemProvider: RealmProvider {
         
         doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return nil}
             
-            var addedOrIncrementedInventoryItems: [(inventoryItem: InventoryItem, delta: Float)] = []
+            var addedOrIncrementedInventoryItems: [(inventoryItemUuid: String, delta: Float)] = []
             for productsWithQuantity in productsWithQuantitiesCopy {
                 let inventoryItem = weakSelf.addOrIncrementInventoryItem(realm, inventory: inventoryCopy, product: productsWithQuantity.product, quantity: productsWithQuantity.quantity, dirty: dirty)
-                addedOrIncrementedInventoryItems.append(inventoryItem)
+                addedOrIncrementedInventoryItems.append((inventoryItem.inventoryItem.uuid, inventoryItem.delta))
             }
             return addedOrIncrementedInventoryItems
             
-            }, finishHandler: {(addedOrIncrementedInventoryItems: [(inventoryItem: InventoryItem, delta: Float)]?) in
-                handler(addedOrIncrementedInventoryItems)
+            }, finishHandler: {(addedOrIncrementedInventoryItems: [(inventoryItemUuid: String, delta: Float)]?) in
+                
+                // we have to map to uuids and back to inventory items because of realm thread issues
+                if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItems {
+                    var inventoryItemsWithDeltas: [(inventoryItem: InventoryItem, delta: Float)] = []
+                    for (inventoryItemUuid, delta) in addedOrIncrementedInventoryItems {
+                        if let inventoryItem: InventoryItem = self.findInventoryItemSync(uuid: inventoryItemUuid) {
+                            inventoryItemsWithDeltas.append((inventoryItem, delta))
+                        } else {
+                            QL4("No inventory item for uuid: \(inventoryItemUuid)")
+                        }
+                    }
+                    handler(inventoryItemsWithDeltas)
+
+                } else {
+                    handler(nil)
+                }
         })
     }  
     
@@ -398,4 +413,11 @@ class RealmInventoryItemProvider: RealmProvider {
                 handler(success ?? false)
         })
     }
+    
+    // MARK: - Sync
+    
+    func findInventoryItemSync(uuid: String) -> InventoryItem? {
+        return loadFirstSync()
+    }
+
 }
