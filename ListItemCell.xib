@@ -35,7 +35,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="G1L-C6-XHI" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="29" y="23" width="237" height="22"/>
+                                <rect key="frame" x="29" y="23" width="44" height="22"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -73,7 +73,7 @@
                                 <state key="normal" image="speechbubble"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="249" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="ETO-cG-1dT" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="29" y="45" width="237" height="18"/>
+                                <rect key="frame" x="29" y="45" width="37.5" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -101,23 +101,35 @@
                                 </constraints>
                                 <state key="normal" image="minus"/>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="8jf-0h-TXY" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="78" y="23" width="167" height="22"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="omP-yo-uwI" firstAttribute="top" secondItem="qsx-FZ-N7Z" secondAttribute="top" id="0wW-bw-Yb8"/>
+                            <constraint firstItem="KBs-ef-XHn" firstAttribute="leading" secondItem="8jf-0h-TXY" secondAttribute="trailing" constant="10" id="1QO-BN-ZHy"/>
                             <constraint firstItem="G1L-C6-XHI" firstAttribute="leading" secondItem="omP-yo-uwI" secondAttribute="trailing" constant="25" id="2T2-Yr-LHZ" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                             <constraint firstItem="KBs-ef-XHn" firstAttribute="centerY" secondItem="qsx-FZ-N7Z" secondAttribute="centerY" id="3Am-bA-0Cb"/>
+                            <constraint firstItem="8jf-0h-TXY" firstAttribute="baseline" secondItem="G1L-C6-XHI" secondAttribute="baseline" id="53i-5P-YLm"/>
                             <constraint firstItem="Hlg-oE-uD3" firstAttribute="top" secondItem="qsx-FZ-N7Z" secondAttribute="top" id="5Kc-gW-NtV"/>
                             <constraint firstAttribute="bottom" secondItem="q2i-tR-Ja4" secondAttribute="bottom" id="60k-4y-b8T"/>
                             <constraint firstAttribute="centerY" secondItem="tWT-lo-PEo" secondAttribute="centerY" id="6Tn-lh-b0c"/>
                             <constraint firstAttribute="bottom" secondItem="Hlg-oE-uD3" secondAttribute="bottom" id="8U4-X1-abO"/>
-                            <constraint firstItem="ETO-cG-1dT" firstAttribute="trailing" secondItem="G1L-C6-XHI" secondAttribute="trailing" id="E9E-eQ-sqV"/>
-                            <constraint firstItem="tWT-lo-PEo" firstAttribute="leading" secondItem="G1L-C6-XHI" secondAttribute="trailing" priority="999" constant="50" id="EdA-JD-DSt"/>
                             <constraint firstItem="tWT-lo-PEo" firstAttribute="leading" secondItem="q2i-tR-Ja4" secondAttribute="trailing" id="N4R-lq-Df5"/>
                             <constraint firstItem="ETO-cG-1dT" firstAttribute="centerY" secondItem="qsx-FZ-N7Z" secondAttribute="centerY" constant="10" id="OxT-A4-Yad"/>
                             <constraint firstItem="Hlg-oE-uD3" firstAttribute="leading" secondItem="tWT-lo-PEo" secondAttribute="trailing" id="QfM-gb-KkM"/>
                             <constraint firstItem="hGa-Px-tk0" firstAttribute="top" secondItem="tWT-lo-PEo" secondAttribute="bottom" id="VO7-QH-RZL"/>
                             <constraint firstAttribute="bottom" secondItem="KBs-ef-XHn" secondAttribute="bottom" id="W83-4s-2Zb"/>
+                            <constraint firstItem="8jf-0h-TXY" firstAttribute="leading" secondItem="G1L-C6-XHI" secondAttribute="trailing" constant="5" id="ZJW-pG-7Cc"/>
                             <constraint firstItem="omP-yo-uwI" firstAttribute="leading" secondItem="qsx-FZ-N7Z" secondAttribute="leading" id="Zra-53-7hZ"/>
                             <constraint firstItem="tWT-lo-PEo" firstAttribute="leading" secondItem="KBs-ef-XHn" secondAttribute="trailing" id="dOc-12-UlJ"/>
                             <constraint firstAttribute="centerY" secondItem="G1L-C6-XHI" secondAttribute="centerY" constant="10" id="esy-ni-fkJ"/>
@@ -148,6 +160,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="baseQuantityLabel" destination="8jf-0h-TXY" id="Qgt-nl-AeS"/>
                 <outlet property="bgIconLeft" destination="MjB-ho-rEw" id="4zH-8U-2VT"/>
                 <outlet property="bgIconRight" destination="U2m-oG-dVp" id="l77-Ox-ySs"/>
                 <outlet property="brandLabel" destination="ETO-cG-1dT" id="5NB-C9-Zg1"/>
