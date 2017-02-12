@@ -124,6 +124,7 @@ public class SuggestionsPrefiller {
         /// TODO!!!!!!!!! think about restore prefill products (from settings) - at this point (after we allow user to delete units) it may be possible that there are no .g or .kg. We can either don't allow to delete the default units (at least some of them) or don't allow to delete only noneUnit - or when we are here, if the units don't exist, re-create them (the later sounds to be the most reasonable)
         guard let g = unitDict[.g] else {QL4("No g unit! can't prefill."); return ([], [])}
         guard let kg = unitDict[.kg] else {QL4("No kg unit! can't prefill."); return ([], [])}
+        guard let l = unitDict[.liter] else {QL4("No l unit! can't prefill."); return ([], [])}
         guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't prefill."); return ([], [])}
         
         func noResult() -> (categories: [ProductCategory], products: [QuantifiableProduct]) {
@@ -261,20 +262,20 @@ public class SuggestionsPrefiller {
             
             // drinks
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_water", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_water_1", lang), category: drinksCat)),// TODO!!!!!!! liter unit
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_water_1", lang), category: drinksCat)),// TODO!!!!!!! liter unit
             //            Product(uuid: uuid, name: tr("pr_club_mate", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1.5, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 2, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1.5, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 2, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1.5, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 2, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat)),
             
             // alcohol
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 0.5, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_beer", lang), category: alcoholCat)), // TODO!!!!!!! liter unit
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 0.5, unit: l, product: Product(uuid: uuid, name: tr("pr_beer", lang), category: alcoholCat)), // TODO!!!!!!! liter unit
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_whisky", lang), category: alcoholCat)),
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_vodka", lang), category: alcoholCat)),
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_tequilla", lang), category: alcoholCat)),

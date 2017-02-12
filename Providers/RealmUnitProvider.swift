@@ -20,24 +20,30 @@ class RealmUnitProvider: RealmProvider {
     
         // TODO!!!!!!!!!!!!!!!!!!!!!!!!!! translations
         
+        // TODO different ordering for device's country - countries that don't/rarely use OZ and LB should have them at the end
+        
         let defaultUnits = [
             Unit(uuid: UUID().uuidString, name: trans("unit_none"), id: .none),
             
             Unit(uuid: UUID().uuidString, name: trans("unit_g"), id: .g),
             Unit(uuid: UUID().uuidString, name: trans("unit_kg"), id: .kg),
+            Unit(uuid: UUID().uuidString, name: trans("unit_liter"), id: .liter),
+            Unit(uuid: UUID().uuidString, name: trans("unit_milliliter"), id: .milliliter),
+            
             Unit(uuid: UUID().uuidString, name: trans("unit_ounce"), id: .ounce),
             Unit(uuid: UUID().uuidString, name: trans("unit_pound"), id: .pound),
             
             Unit(uuid: UUID().uuidString, name: trans("unit_pack"), id: .pack),
-            Unit(uuid: UUID().uuidString, name: trans("unit_bottle"), id: .bottle),
             
             Unit(uuid: UUID().uuidString, name: trans("unit_cup"), id: .cup),
             Unit(uuid: UUID().uuidString, name: trans("unit_spoon"), id: .spoon),
             Unit(uuid: UUID().uuidString, name: trans("unit_teaspoon"), id: .teaspoon),
-            Unit(uuid: UUID().uuidString, name: trans("unit_clove"), id: .clove),
+            
+            Unit(uuid: UUID().uuidString, name: trans("unit_drop"), id: .drop),
+            Unit(uuid: UUID().uuidString, name: trans("unit_shot"), id: .shot),
             Unit(uuid: UUID().uuidString, name: trans("unit_pinch"), id: .pinch),
 
-//            Unit(uuid: UUID().uuidString, name: trans("unit_bunch")), // TODO translate this?
+//            Unit(uuid: UUID().uuidString, name: trans("unit_bunch")), // TODO?
         ]
 
         if saveObjsSync(defaultUnits) { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits

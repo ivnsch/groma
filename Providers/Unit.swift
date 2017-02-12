@@ -18,13 +18,16 @@ public enum UnitId: Int {
     case kg = 2
     case ounce = 3
     case pack = 4
-    case bottle = 5
-    case cup = 6
-    case teaspoon = 7
-    case clove = 8
-    case pinch = 9
-    case pound = 10
-    case spoon = 11
+    case cup = 5
+    case teaspoon = 6
+    case spoon = 7
+    case pinch = 8
+    case pound = 9
+    case liter = 10
+    case milliliter = 11
+    case drop = 12
+    case shot = 13
+
     
     case custom = 99
 }

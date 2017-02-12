@@ -455,3 +455,19 @@ recipe_already_has = "Derzeit in der Liste: %@";
 recipe_unit_singular = "Einheit";
 recipe_unit_plural = "Einheiten";
 recipe_you_will_add = "Es wird hinzugefügt: %@";
+
+
+unit_none = "";
+unit_g = "g";
+unit_kg = "kg";
+unit_ounce = "oz";
+unit_pound = "lb";
+unit_pack = "pk";
+unit_cup = "Ta";
+unit_spoon = "EL";
+unit_teaspoon = "TL";
+unit_liter = "l";
+unit_milliliter = "ml";
+unit_drop = "Tr";
+unit_shot = "Schuss";
+unit_pinch = "Pr";

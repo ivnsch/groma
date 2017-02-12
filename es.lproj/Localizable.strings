@@ -456,3 +456,19 @@ recipe_already_has = "Ya en la lista: %@";
 recipe_unit_singular = "Artículo";
 recipe_unit_plural = "Artículos";
 recipe_you_will_add = "Se agregará: %@";
+
+
+unit_none = "";
+unit_g = "g";
+unit_kg = "kg";
+unit_ounce = "oz";
+unit_pound = "lb";
+unit_pack = "pkt";
+unit_cup = "tza";
+unit_spoon = "cda";
+unit_teaspoon = "cdta";
+unit_liter = "l";
+unit_milliliter = "ml";
+unit_drop = "gt";
+unit_shot = "shot";
+unit_pinch = "pzc";
