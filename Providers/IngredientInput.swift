@@ -15,10 +15,10 @@ public struct IngredientInput: Equatable, Hashable {
     public let category: String
     public let categoryColor: UIColor
     public let brand: String // TODO!!!!!!!!! remove
-    public let unit: ProductUnit
+    public let unit: Unit
     public let baseQuantity: String // TODO!!!!!!!!! remove
     
-    public init(name: String, quantity: Float, category: String, categoryColor: UIColor, brand: String, unit: ProductUnit, baseQuantity: String) {
+    public init(name: String, quantity: Float, category: String, categoryColor: UIColor, brand: String, unit: Unit, baseQuantity: String) {
         self.name = name
         self.quantity = quantity
         self.category = category
@@ -32,7 +32,7 @@ public struct IngredientInput: Equatable, Hashable {
         return name.hashValue
     }
     
-    public func copy(name: String? = nil, quantity: Float? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil, unit: ProductUnit? = nil, baseQuantity: String? = nil) -> IngredientInput {
+    public func copy(name: String? = nil, quantity: Float? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil, unit: Unit? = nil, baseQuantity: String? = nil) -> IngredientInput {
         return IngredientInput(
             name: name ?? self.name,
             quantity: quantity ?? self.quantity,
@@ -54,10 +54,10 @@ public func ==(lhs: IngredientInput, rhs: IngredientInput) -> Bool {
 public struct QuickAddIngredientInput: Equatable, Hashable {
     public let item: Item
     public let quantity: Float
-    public let unit: ProductUnit
+    public let unit: Unit
     public let fraction: Fraction
     
-    public init(item: Item, quantity: Float, unit: ProductUnit, fraction: Fraction) {
+    public init(item: Item, quantity: Float, unit: Unit, fraction: Fraction) {
         self.item = item
         self.quantity = quantity
         self.unit = unit
@@ -68,7 +68,7 @@ public struct QuickAddIngredientInput: Equatable, Hashable {
         return item.uuid.hashValue
     }
     
-    public func copy(item: Item? = nil, quantity: Float? = nil, unit: ProductUnit? = nil, fraction: Fraction? = nil) -> QuickAddIngredientInput {
+    public func copy(item: Item? = nil, quantity: Float? = nil, unit: Unit? = nil, fraction: Fraction? = nil) -> QuickAddIngredientInput {
         return QuickAddIngredientInput(
             item: item ?? self.item,
             quantity: quantity ?? self.quantity,

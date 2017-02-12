@@ -17,7 +17,7 @@ protocol AddRecipeIngredientCellDelegate {
     func onUpdate(brand: String, indexPath: IndexPath)
     func onUpdate(quantity: Float, indexPath: IndexPath)
     func onUpdate(baseQuantity: String, indexPath: IndexPath)
-    func onUpdate(unit: ProductUnit, indexPath: IndexPath)
+    func onUpdate(unit: String, indexPath: IndexPath)
     
     func productNamesContaining(text: String, handler: @escaping ([String]) -> Void)
     func brandsContaining(text: String, handler: @escaping ([String]) -> Void)
@@ -30,7 +30,7 @@ protocol AddRecipeIngredientCellDelegate {
     func delete(baseQuantity: String, handler: @escaping () -> Void)
 }
 
-typealias AddRecipeIngredientCellOptions = (brands: [String], units: [ProductUnit], baseQuantities: [String]) // TODO!!!!!!!!!!!!!!!!!! remove this
+typealias AddRecipeIngredientCellOptions = (brands: [String], units: [Providers.Unit], baseQuantities: [String]) // TODO!!!!!!!!!!!!!!!!!! remove this
 
 class AddRecipeIngredientCell: UITableViewCell {
 
@@ -55,7 +55,7 @@ class AddRecipeIngredientCell: UITableViewCell {
             ingredientNameLabel.text = model.map{"\($0.ingredient.quantity) x \($0.productPrototype.name)"}
             productNameTextField.text = model?.productPrototype.name
             brandTextField.text = model?.productPrototype.brand
-            unitTextField.text = model?.productPrototype.unit.shortText
+            unitTextField.text = model?.productPrototype.unit
             baseQuantityTextField.text = model?.productPrototype.baseQuantity.floatValue?.toString(2)
             quantityTextField.text = model.map{"\($0.quantity)"} ?? "" // this doesn't make a lot of sense, but for now
             
@@ -96,7 +96,7 @@ class AddRecipeIngredientCell: UITableViewCell {
 
         // TODO!!!!!!!!!!!!!!!!! user can enters any unit - don't use enum anymore
         
-        let unitText = Ingredient.unitText(quantity: quantityInput, baseQuantity: baseQuantityInput.floatValue ?? 1, unit: unitInput, showNoneText: true)
+        let unitText = Ingredient.unitText(quantity: quantityInput, baseQuantity: baseQuantityInput.floatValue ?? 1, unitName: unitInput, showNoneText: true)
         let allUnitText = trans("recipe_you_will_add", unitText)
         quantitySummaryLabel.text = allUnitText
     }
@@ -164,8 +164,8 @@ extension AddRecipeIngredientCell {
         return quantityTextField.text.flatMap({Float($0)}) ?? 0
     }
     
-    fileprivate var unitInput: ProductUnit {
-        return (unitTextField.text.flatMap{unitText in ProductUnit.fromString(unitText)}) ?? .none
+    fileprivate var unitInput: String {
+        return unitTextField.text ?? ""
     }
     
     fileprivate var baseQuantityInput: String {

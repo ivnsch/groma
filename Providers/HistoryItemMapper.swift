@@ -11,19 +11,21 @@ import Foundation
 class HistoryItemMapper {
     
     class func historyItemWithRemote(_ remoteHistoryItem: RemoteHistoryItem, inventory: DBInventory, product: Product, user: DBSharedUser) -> HistoryItem {
-        // Structural changes. Quick fix to compile.
-        let dummy = QuantifiableProduct(uuid: "123", baseQuantity: "1", unit: .none, product: product)
+        fatalError("Outdated")
         
-        return HistoryItem(
-            uuid: remoteHistoryItem.uuid,
-            inventory: inventory,
-            product: dummy,
-            addedDate: remoteHistoryItem.addedDate,
-            quantity: remoteHistoryItem.quantity,
-            user: user,
-            paidPrice: remoteHistoryItem.paidPrice,
-            lastServerUpdate: remoteHistoryItem.lastUpdate
-        )
+        // Structural changes. Quick fix to compile.
+//        let dummy = QuantifiableProduct(uuid: "123", baseQuantity: "1", unit: .none, product: product)
+//        
+//        return HistoryItem(
+//            uuid: remoteHistoryItem.uuid,
+//            inventory: inventory,
+//            product: dummy,
+//            addedDate: remoteHistoryItem.addedDate,
+//            quantity: remoteHistoryItem.quantity,
+//            user: user,
+//            paidPrice: remoteHistoryItem.paidPrice,
+//            lastServerUpdate: remoteHistoryItem.lastUpdate
+//        )
     }
     
     class func historyItemsWithRemote(_ remoteListItems: RemoteHistoryItems) -> HistoryItemsWithRelations {

@@ -17,23 +17,25 @@ class InventoryItemMapper {
     }
     
     class func inventoryItemWithRemote(_ remoteItem: RemoteInventoryItemWithProduct, inventory: DBInventory) -> InventoryItem {
-        let product = ProductMapper.productWithRemote(remoteItem.product, category: remoteItem.productCategory)
-        let dummy = QuantifiableProduct(uuid: "123", baseQuantity: "1", unit: .none, product: product) // quick fix for structural changes (to get it to compile)
-        return InventoryItem(uuid: remoteItem.inventoryItem.uuid, quantity: remoteItem.inventoryItem.quantity, product: dummy, inventory: inventory, lastServerUpdate: remoteItem.inventoryItem.lastUpdate)
+        fatalError("Outdated")
+//        let product = ProductMapper.productWithRemote(remoteItem.product, category: remoteItem.productCategory)
+//        let dummy = QuantifiableProduct(uuid: "123", baseQuantity: "1", unit: .none, product: product) // quick fix for structural changes (to get it to compile)
+//        return InventoryItem(uuid: remoteItem.inventoryItem.uuid, quantity: remoteItem.inventoryItem.quantity, product: dummy, inventory: inventory, lastServerUpdate: remoteItem.inventoryItem.lastUpdate)
     }
     
     class func dbInventoryItemWithRemote(_ item: RemoteInventoryItemWithProduct, inventory: DBInventory) -> InventoryItem {
-        let product = ProductMapper.dbProductWithRemote(item.product, category: item.productCategory)
-        let dummy = QuantifiableProduct(uuid: "123", baseQuantity: "1", unit: .none, product: product) // quick fix for structural changes (to get it to compile)
-        
-        let db = InventoryItem()
-        db.uuid = item.inventoryItem.uuid
-        db.quantity = item.inventoryItem.quantity
-        db.product = dummy
-        db.inventory = inventory
-        db.lastServerUpdate = item.inventoryItem.lastUpdate
-        db.dirty = false
-        return db
+        fatalError("Outdated")
+//        let product = ProductMapper.dbProductWithRemote(item.product, category: item.productCategory)
+//        let dummy = QuantifiableProduct(uuid: "123", baseQuantity: "1", unit: .none, product: product) // quick fix for structural changes (to get it to compile)
+//        
+//        let db = InventoryItem()
+//        db.uuid = item.inventoryItem.uuid
+//        db.quantity = item.inventoryItem.quantity
+//        db.product = dummy
+//        db.inventory = inventory
+//        db.lastServerUpdate = item.inventoryItem.lastUpdate
+//        db.dirty = false
+//        return db
     }
 
     

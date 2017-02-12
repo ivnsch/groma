@@ -219,9 +219,9 @@ extension UIStoryboard {
     
     // MARK: ScaleViewController
     
-    class func scaleViewController() -> ScaleViewController {
-        return scaleStoryboard().instantiateViewController(withIdentifier: "ScaleViewController") as! ScaleViewController
-    }
+//    class func scaleViewController() -> ScaleViewController {
+//        return scaleStoryboard().instantiateViewController(withIdentifier: "ScaleViewController") as! ScaleViewController
+//    }
     
     // MARK: ProductsWithQuantityViewController
     

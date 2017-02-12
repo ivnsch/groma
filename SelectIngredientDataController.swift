@@ -9,8 +9,7 @@
 import UIKit
 import Providers
 import QorumLogs
-
-
+import RealmSwift
 
 struct SelectIngredientDataControllerInputs {
     var unitName: String = ""
@@ -74,6 +73,8 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         }
     }
     
+    fileprivate var units: Results<Providers.Unit>?
+    
     var quantity: Float {
         return quantityView.quantity
     }
@@ -127,6 +128,14 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         titleLabelsFont = itemNameLabel.font // NOTE: Assumes that all labels in title have same font
         
         addButtonHelper = initAddButtonHelper()
+        
+        loadUnits()
+    }
+    
+    fileprivate func loadUnits() {
+        Prov.unitProvider.units(successHandler{[weak self] units in
+            self?.units = units
+        })
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
@@ -204,7 +213,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     // MARK: - Private
     
     fileprivate func updateInputsAndTitle() {
-        inputs.unitName = unitTextField.text ?? ""
+//        inputs.unitName = unitTextField.text ?? ""
         inputs.quantity = quantity
         inputs.fraction.numerator = fractionNumeratorTextField.text.flatMap{Int($0)} ?? 1
         inputs.fraction.denominator = fractionDenominatorTextField.text.flatMap{Int($0)} ?? 1
@@ -219,7 +228,6 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         // Don't show quantity if it's 0 and there's a fraction. If there's no fraction we show quantity 0, because otherwise there wouldn't be any number and this doesn't make sense.
         let wholeNumberStr = quantity == 0 ? (fractionStr.isEmpty ? quantity.quantityString : "") : quantity.quantityString
         let unitStr = inputs.unitName.isEmpty ? "unit" : inputs.unitName
-        
         
         let boldTime: Double = 1
         
@@ -272,10 +280,10 @@ extension SelectIngredientDataController: MLPAutoCompleteTextFieldDataSource, ML
         switch textField {
         case unitTextField:
             guard let text = unitTextField.text else {handler([]); return}
+            guard let units = units else {handler([]); return}
             
-            Prov.productProvider.unitsContainingText(text, successHandler{units in
-                handler(units)
-            })
+            handler(units.filter{$0.name.contains(text)})
+
         case _:
             QL4("Not handled text field in autoCompleteTextField")
             break
@@ -289,12 +297,11 @@ extension SelectIngredientDataController: MLPAutoCompleteTextFieldDataSource, ML
         switch sender {
 
         case unitTextField:
-            guard let text = unitTextField.text else {return}
-            guard let unitEnum = ProductUnit.fromString(text) else {QL4("Invalid unit input: \(text)"); return} // TODO!!!!!!!!!!!!!!! remove this after non enum units
+            guard let unitText = unitTextField.text else {return}
             
             ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_unit_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-                Prov.productProvider.deleteProductsWith(unit: unitEnum, weakSelf.successHandler {
-                    AlertPopup.show(message: trans("popup_was_removed", text), controller: weakSelf)
+                Prov.unitProvider.delete(name: unitText, weakSelf.successHandler {
+                    AlertPopup.show(message: trans("popup_was_removed", unitText), controller: weakSelf)
                 })
             })
 

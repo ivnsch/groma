@@ -34,6 +34,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     var onCreateExampleList: VoidFunction?
     
+    fileprivate let suggestionsPrefiller = SuggestionsPrefiller()
+    
     fileprivate var finishedSlider = false {
         didSet {
             if mode == .launch {
@@ -113,12 +115,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }))
         }
         
-        func prefillDatabase(_ onFinish: VoidFunction? = nil) {
+        func prefillDatabase(_ onFinish: @escaping (_ success: Bool, _ units: [Providers.Unit]) -> Void) {
             let lang = LangManager().appLang // note that the prefill items are left permanently in whatever lang the device was when the user installed the app
             
-            SuggestionsPrefiller().prefill(lang) {success in
-                QL1("Finish initialising database for lang: \(lang), success: \(success)")
-                onFinish?()
+            suggestionsPrefiller.prefill(lang) {(success: Bool, defaultUnits: [Providers.Unit]) in
+                QL1("Finish initialising database for lang: \(lang), success: \(success). Default units count: \(defaultUnits.count)")
+                onFinish((success, defaultUnits))
             }
         }
         
@@ -149,7 +151,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }))
         }
         
-        func initExampleGroup(_ onFinish: VoidFunction? = nil) {
+        func initExampleGroup(unitDict: [UnitId: Providers.Unit], _ onFinish: VoidFunction? = nil) {
             Prov.listItemGroupsProvider.groups(sortBy: .order, resultHandler(onSuccess: {[weak self] groups in guard let weakSelf = self else {onFinish?(); return}
                 
                 if groups.isEmpty {
@@ -175,10 +177,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         } else {
                             Prov.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
                                 
+                                guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't add group items."); onFinish?(); return}
+                                
                                 let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = ingredients.flatMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill group
-                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: .none, product: product)
+                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantityFloat: 1, unit: noneUnit, product: product)
                                         return (quanatifiableProduct, ingredient.quantity)
                                     } else {
                                         return nil
@@ -217,7 +221,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }))
         }
 
-        func initExampleList(_ inventory: DBInventory, onFinish: VoidFunction? = nil) {
+        func initExampleList(_ inventory: DBInventory, unitDict: [UnitId: Providers.Unit], onFinish: VoidFunction? = nil) {
             Prov.listProvider.lists(false, resultHandler(onSuccess: {[weak self] lists in guard let weakSelf = self else {onFinish?(); return}
                 
                 if lists.isEmpty {
@@ -242,32 +246,42 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         } else {
                             Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
                         
+                                guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't add list items."); onFinish?(); return}
+
                                 let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill list
-                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: .none, product: product)
+                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantityFloat: 1, unit: noneUnit, product: product)
                                         return (quanatifiableProduct, ingredient.quantity)
                                     } else {
                                         return nil
                                     }
                                 }
                                 
-                                let storeProductInput = StoreProductInput(price: 1, baseQuantity: 1, unit: .none)
+                                let storeProductInput = StoreProductInput(price: 1, baseQuantity: 1, unit: "") // TODO!!!!!!!!!!!!!!!!! empty string unit is converted to "none" when saving TODO more reliable way to implement this
                                 let prototypes = productsIngredients.map {
                                     ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.item.category.name, targetSectionColor: $0.product.product.item.category.color, storeProductInput: storeProductInput)
                                 }
+
                                 
-                                Prov.listItemsProvider.add(prototypes, status: .todo, list: exampleList, note: nil, order: nil, token: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
-                                    QL2("Finish adding example list")
-                                    
-                                    self?.onCreateExampleList?()
-                                    
-                                    onFinish?()
-                                    
-                                    }, onError: {result in
-                                        QL4("Error adding example list items, result: \(result), items: \(prototypes)")
-                                        onFinish?()
-                                }))
+                                
+                                // TODO add list items correctly (ues correct provider method - appending to list's sections)
+                                onFinish?()
+//                                Prov.listItemsProvider.add(prototypes, status: .todo, list: exampleList, note: nil, order: nil, token: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
+//                                    QL2("Finish adding example list")
+//                                    
+//                                    self?.onCreateExampleList?()
+//                                    
+//                                    onFinish?()
+//                                    
+//                                    }, onError: {result in
+//                                        QL4("Error adding example list items, result: \(result), items: \(prototypes)")
+//                                        onFinish?()
+//                                }))
+                                
+                                
+                                
+                                
                                 
                                 }, onError: {result in
                                     QL4("Error adding example list, result: \(result), group: \(exampleList)")
@@ -289,7 +303,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
 
             
-            
+        // TODO!!!!!!!!!!!!!!!!!!!! move init containers to app delegate - since intro is shown on top of lists controller, the first time user loads the app will trigger error messages because lists (for controller behind) can't be loaded (since containers don't exist yet).
         initRealmContainers {success in
             guard success else {
                 onComplete()
@@ -297,15 +311,20 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }
             
             QL2("Finished init realm containers")
-            prefillDatabase {
+            prefillDatabase {success, defaultUnits in
+                
+                let unitDict = defaultUnits.toDictionary {defaultUnit in
+                    (defaultUnit.id, defaultUnit)
+                }
+                
                 QL2("Finished copying prefill database")
                 initDefaultInventory {inventoryMaybe in
                     QL2("Finished adding default inventory")
                     
-//                    initExampleGroup { // Disabled, getting exception "Can not add objects from a different Realm" after adding "Item" Realm object (no idea why). We don't use groups anymore anyway.
+//                    initExampleGroup(unitDict: unitDict) { // Disabled, getting exception "Can not add objects from a different Realm" after adding "Item" Realm object (no idea why). We don't use groups anymore anyway.
 //                        QL2("Finished adding example group")
                         if let inventory = inventoryMaybe {
-                            initExampleList(inventory) {
+                            initExampleList(inventory, unitDict: unitDict) {
                                 QL2("Finished adding example list")
                                 onComplete()
                             }

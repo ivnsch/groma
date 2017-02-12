@@ -16,7 +16,7 @@ class RealmIngredientProvider: RealmProvider {
         
         let nameSort = SortDescriptor(keyPath: "itemOpt.name", ascending: true)
         let quantitySort = SortDescriptor(keyPath: "quantity", ascending: true)
-        let unitSort = SortDescriptor(keyPath: "productOpt.unitVal", ascending: true) // TODO
+        let unitSort = SortDescriptor(keyPath: "productOpt.unitOpt.name", ascending: true) // TODO
         
         let rest = [unitSort]
         

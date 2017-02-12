@@ -343,7 +343,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
                 return findRow({
                     if $0.quantity == inventoryItem.quantity {
                         if $0.product.product.item.name == inventoryItem.product.product.item.name {
-                            return $0.product.unit.text > inventoryItem.product.unit.text
+                            return $0.product.unit.name > inventoryItem.product.unit.name
                         } else {
                             return $0.product.product.item.name > inventoryItem.product.product.item.name
                         }
@@ -356,7 +356,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
                 return findRow({
                     if $0.product.product.item.name == inventoryItem.product.product.item.name {
                         if $0.quantity == inventoryItem.quantity {
-                            return $0.product.unit.text > inventoryItem.product.unit.text
+                            return $0.product.unit.name > inventoryItem.product.unit.name
                         } else {
                             return $0.quantity > inventoryItem.quantity
                         }

@@ -292,8 +292,8 @@ public class ListItem: DBSyncable, Identifiable {
         return "productOpt.productOpt.productOpt.itemOpt.name == '\(productName)'"
     }
     
-    static func createFilterWithQuantifiableProduct(name: String, unit: ProductUnit) -> String {
-        return "productOpt.productOpt.productOpt.itemOpt.name == '\(name)' AND productOpt.productOpt.unitVal == \(unit.rawValue)"
+    static func createFilterWithQuantifiableProduct(name: String, unit: Unit) -> String {
+        return "productOpt.productOpt.productOpt.itemOpt.name == '\(name)' AND productOpt.productOpt.unitOpt.name == '\(unit.name)'"
     }
 
     static func createFilterWithSection(_ sectionUuid: String) -> String {
@@ -307,7 +307,7 @@ public class ListItem: DBSyncable, Identifiable {
     
     
     static func createFilter(quantifiableProductUnique: QuantifiableProductUnique) -> String {
-        return "productOpt.productOpt.productOpt.itemOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitVal == \(quantifiableProductUnique.unit.rawValue) AND productOpt.productOpt.baseQuantity == '\(quantifiableProductUnique.baseQuantity)'"
+        return "productOpt.productOpt.productOpt.itemOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitOpt.name == '\(quantifiableProductUnique.unit)' AND productOpt.productOpt.baseQuantity == '\(quantifiableProductUnique.baseQuantity)'"
     }
    
     

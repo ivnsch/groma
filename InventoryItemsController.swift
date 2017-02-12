@@ -330,7 +330,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         
         func onEditListItem(_ input: ListItemInput, editingItem: InventoryItem) {
 
-            let inventoryItemInput = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
+            let inventoryItemInput = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: input.storeProductInput.unit)
             
             Prov.inventoryItemsProvider.updateInventoryItem(inventoryItemInput, updatingInventoryItem: editingItem, remote: true, resultHandler (onSuccess: {  (inventoryItem, replaced) in
 
@@ -341,7 +341,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         
         func onAddInventoryItem(_ input: ListItemInput) {
             if let inventory = inventory {
-                let input = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
+                let input = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: input.storeProductInput.unit)
                 
                 Prov.inventoryItemsProvider.addToInventory(inventory, itemInput: input, remote: true, resultHandler (onSuccess: {groupItem in
                 }, onError: {[weak self] result in

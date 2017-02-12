@@ -42,7 +42,7 @@ class AddRecipeController: UIViewController {
     // These variables aren't updated in real time - they are loaded only once when the view controller is loaded
     // If they were to change in the background it's not critical, as the user submitting the ingredients will re-create products with any brands/units/base quantities that could have been deleted/changed(which is equivalent to a delete, being the brand/unit/base its own "unique")
     fileprivate var ingredientsToBrands = Dictionary<String, [String]>()
-    fileprivate var units: [ProductUnit] = []
+    fileprivate var units: [Providers.Unit] = []
     fileprivate var baseQuantities: [String] = []
     
     weak var delegate: AddRecipeControllerDelegate?
@@ -115,7 +115,7 @@ class AddRecipeController: UIViewController {
                 categoryColor: $0.item.category.color,
                 brand: "",
                 baseQuantity: "",
-                unit: .none
+                unit: ""
             )
             return AddRecipeIngredientModel(productPrototype: prototype, quantity: $0.quantity, ingredient: $0)
         })
@@ -227,7 +227,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         models[indexPath.row].productPrototype.baseQuantity = baseQuantity
     }
     
-    func onUpdate(unit: ProductUnit, indexPath: IndexPath) {
+    func onUpdate(unit: String, indexPath: IndexPath) {
         models[indexPath.row].productPrototype.unit = unit
     }
     
@@ -273,10 +273,8 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
     
     func delete(unit: String, handler: @escaping () -> Void) {
-        guard let unitEnum = ProductUnit.fromString(unit) else {QL4("Invalid unit input: \(unit)"); handler(); return} // TODO!!!!!!!!!!!!!!! remove this after non enum units
-        
         ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_unit_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-            Prov.productProvider.deleteProductsWith(unit: unitEnum, weakSelf.successHandler {
+            Prov.unitProvider.delete(name: unit, weakSelf.successHandler {
                 AlertPopup.show(message: trans("popup_was_removed", unit), controller: weakSelf)
                 handler()
             })

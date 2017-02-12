@@ -240,62 +240,64 @@ class RealmListItemProvider: RealmProvider {
     
     func addListItem(_ status: ListItemStatus, product: StoreProduct, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Float, list: List, note noteMaybe: String? = nil, _ handler: @escaping (ListItem?) -> Void) {
         
-        // Fixes Realm acces in incorrect thread exceptions
-        let product = product.copy()
-        let list = list.copy()
-        
-        doInWriteTransaction({realm in
-            
-            return syncedRet(self) {
-                
-                // see if there's already a listitem for this product in the list - if yes only increment it
-                if let existingListItem = realm.objects(ListItem.self).filter(ListItem.createFilterWithQuantifiableProduct(name: product.product.product.item.name, unit: product.product.unit)).first {
-                    existingListItem.increment(ListItemStatusQuantity(status: status, quantity: quantity))
-                    
-                    // possible updates (when user submits a new list item using add edit product controller)
-                    if let sectionName = sectionNameMaybe {
-                        existingListItem.section.name = sectionName
-                    }
-                    if let note = noteMaybe {
-                        existingListItem.note = note
-                    }
-                    
-                    // TODO!! update sectionnaeme, note (for case where this is from add product with inputs)
-                    realm.add(existingListItem, update: true)
-                    return existingListItem
-                    
-                } else { // no list item for product in the list, create a new one
-                    
-                    // see if there's already a section for the new list item in the list, if not create a new one
-                    let listItemsInList = realm.objects(ListItem.self).filter(ListItem.createFilterList(list.uuid))
-                    let sectionName = sectionNameMaybe ?? product.product.product.item.category.name
-                    let sectionColor = sectionColorMaybe ?? product.product.product.item.category.color
-                    let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
-                        return item.section
-                        } ?? {
-                            let sectionCount = Set(listItemsInList.map{$0.section}).count
-                            return Section(uuid: NSUUID().uuidString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
-                        }()
-                    
-                    
-                    // calculate list item order, which is at the end of it's section (==count of listitems in section). Note that currently we are doing this iteration even if we just created the section, where order is always 0. This if for clarity - can be optimised later (TODO)
-                    var listItemOrder = 0
-                    for existingListItem in listItemsInList {
-                        if existingListItem.section.uuid == section.uuid {
-                            listItemOrder += 1
-                        }
-                    }
-                    
-                    // create the list item and save it
-                    let listItem = ListItem(uuid: NSUUID().uuidString, product: product, section: section, list: list, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
-                    
-                    realm.add(listItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
-                    return listItem
-                }
-            }
-        }, finishHandler: {(savedListItemMaybe: ListItem?) in
-                handler(savedListItemMaybe)
-        })
+        fatalError("Outdated (Unit refactoring)")
+//        
+//        // Fixes Realm acces in incorrect thread exceptions
+//        let product = product.copy()
+//        let list = list.copy()
+//        
+//        doInWriteTransaction({realm in
+//            
+//            return syncedRet(self) {
+//                
+//                // see if there's already a listitem for this product in the list - if yes only increment it
+//                if let existingListItem = realm.objects(ListItem.self).filter(ListItem.createFilterWithQuantifiableProduct(name: product.product.product.item.name, unit: product.product.unit)).first {
+//                    existingListItem.increment(ListItemStatusQuantity(status: status, quantity: quantity))
+//                    
+//                    // possible updates (when user submits a new list item using add edit product controller)
+//                    if let sectionName = sectionNameMaybe {
+//                        existingListItem.section.name = sectionName
+//                    }
+//                    if let note = noteMaybe {
+//                        existingListItem.note = note
+//                    }
+//                    
+//                    // TODO!! update sectionnaeme, note (for case where this is from add product with inputs)
+//                    realm.add(existingListItem, update: true)
+//                    return existingListItem
+//                    
+//                } else { // no list item for product in the list, create a new one
+//                    
+//                    // see if there's already a section for the new list item in the list, if not create a new one
+//                    let listItemsInList = realm.objects(ListItem.self).filter(ListItem.createFilterList(list.uuid))
+//                    let sectionName = sectionNameMaybe ?? product.product.product.item.category.name
+//                    let sectionColor = sectionColorMaybe ?? product.product.product.item.category.color
+//                    let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
+//                        return item.section
+//                        } ?? {
+//                            let sectionCount = Set(listItemsInList.map{$0.section}).count
+//                            return Section(uuid: NSUUID().uuidString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+//                        }()
+//                    
+//                    
+//                    // calculate list item order, which is at the end of it's section (==count of listitems in section). Note that currently we are doing this iteration even if we just created the section, where order is always 0. This if for clarity - can be optimised later (TODO)
+//                    var listItemOrder = 0
+//                    for existingListItem in listItemsInList {
+//                        if existingListItem.section.uuid == section.uuid {
+//                            listItemOrder += 1
+//                        }
+//                    }
+//                    
+//                    // create the list item and save it
+//                    let listItem = ListItem(uuid: NSUUID().uuidString, product: product, section: section, list: list, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
+//                    
+//                    realm.add(listItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
+//                    return listItem
+//                }
+//            }
+//        }, finishHandler: {(savedListItemMaybe: ListItem?) in
+//                handler(savedListItemMaybe)
+//        })
     }
 
     // TODO do we really need status

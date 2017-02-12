@@ -166,39 +166,41 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     override func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) {
         
-        
-        
         guard let itemsResult = itemsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         guard let recipe = recipe else {QL4("No recipe"); return}
-
-        let unit: ProductUnit = ProductUnit.fromString(ingredientInput.unitName) ?? .none // TODO custom units
         
-        let quickAddIngredientInput = QuickAddIngredientInput(item: item, quantity: ingredientInput.quantity, unit: unit, fraction: ingredientInput.fraction)
-
-        Prov.ingredientProvider.add(quickAddIngredientInput, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, successHandler{addedItem in
-
-            if addedItem.isNew {
-                self.insert(item: addedItem.ingredient, scrollToRow: true)
+        func onHasUnit(_ unit: Providers.Unit) {
+            let quickAddIngredientInput = QuickAddIngredientInput(item: item, quantity: ingredientInput.quantity, unit: unit, fraction: ingredientInput.fraction)
+            
+            Prov.ingredientProvider.add(quickAddIngredientInput, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, successHandler{addedItem in
                 
-                self.updateLargestLeftSideWidth()
-                
-                if let cells = self.tableView.visibleCells as? [IngredientCell] {
-                    for cell in cells {
-                        cell.setRightSideOffset(offset: self.maxLeftSideWidth, animated: true)
+                if addedItem.isNew {
+                    self.insert(item: addedItem.ingredient, scrollToRow: true)
+                    
+                    self.updateLargestLeftSideWidth()
+                    
+                    if let cells = self.tableView.visibleCells as? [IngredientCell] {
+                        for cell in cells {
+                            cell.setRightSideOffset(offset: self.maxLeftSideWidth, animated: true)
+                        }
+                        
+                    } else {
+                        QL4("Illegal state: Wrong cell type: \(self.tableView.visibleCells)")
                     }
                     
                 } else {
-                    QL4("Illegal state: Wrong cell type: \(self.tableView.visibleCells)")
+                    if let index = itemsResult.index(of: addedItem.ingredient) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
+                        self.update(item: addedItem.ingredient, scrollToRow: index)
+                    } else {
+                        QL4("Illegal state: Item is not new (it's an update) but was not found in results")
+                    }
                 }
-
-            } else {
-                if let index = itemsResult.index(of: addedItem.ingredient) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
-                    self.update(item: addedItem.ingredient, scrollToRow: index)
-                } else {
-                    QL4("Illegal state: Item is not new (it's an update) but was not found in results")
-                }
-            }
+            })
+        }
+        
+        Prov.unitProvider.getOrCreate(name: ingredientInput.unitName, successHandler{unit in
+            onHasUnit(unit)
         })
     }
     
@@ -237,17 +239,23 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
             }))
         }
         
-        let input = IngredientInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: input.storeProductInput.unit, baseQuantity: input.storeProductInput.baseQuantity)
-        
-        if let editingItem = editingItem as? Ingredient {
-            onEditItem(input, editingItem: editingItem)
-        } else {
-            if editingItem == nil {
-                onAddItem(input)
+        func onHasUnit(_ unit: Providers.Unit) {
+            let input = IngredientInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: unit, baseQuantity: input.storeProductInput.baseQuantity)
+            
+            if let editingItem = editingItem as? Ingredient {
+                onEditItem(input, editingItem: editingItem)
             } else {
-                QL4("Cast didn't work: \(editingItem)")
+                if editingItem == nil {
+                    onAddItem(input)
+                } else {
+                    QL4("Cast didn't work: \(editingItem)")
+                }
             }
         }
+        
+        Prov.unitProvider.getOrCreate(name: input.storeProductInput.unit, successHandler{unit in
+            onHasUnit(unit)
+        })
     }
 
     override func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
@@ -349,7 +357,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         
         let maxInternalWidth = itemsResult.reduce(CGFloat(0)) {(maxLength, ingredient) in
             
-            var length = ingredient.quantity.quantityString.size(quantityLabelFont).width + ingredient.unit.shortText.size(unitLabelFont).width
+            var length = ingredient.quantity.quantityString.size(quantityLabelFont).width + ingredient.unit.name.size(unitLabelFont).width
             length += (spacingBetweenLabels * 2)
 //            length += (ingredient.fraction.isValidAndNotZeroOrOne ? 40 : 0) // TODO fraction also must be calculated using string lengths (numbers could have more than 1 digit). Width for current font and 1 digit is ~30 so hardcoding to 40 for now
             length += 40

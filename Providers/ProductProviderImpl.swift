@@ -245,8 +245,14 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func deleteProductsWith(unit: ProductUnit, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.productProvider.deleteProductsAndDependencies(unit: unit, markForSync: true) {saved in
+    func deleteProductsWith(unit: Unit, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.productProvider.deleteQuantifiableProductsAndDependencies(unit: unit, markForSync: true) {saved in
+            handler(ProviderResult(status: saved ? .success : .databaseUnknown))
+        }
+    }
+    
+    func deleteProductsWith(unitName: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.productProvider.deleteQuantifiableProductsAndDependencies(unitName: unitName, markForSync: true) {saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
         }
     }
@@ -273,6 +279,7 @@ class ProductProviderImpl: ProductProvider {
 //            }
         }
     }
+
     
     func incrementFav(quantifiableProductUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         DBProv.productProvider.incrementFav(quantifiableProductUuid: quantifiableProductUuid, {saved in
@@ -419,17 +426,23 @@ class ProductProviderImpl: ProductProvider {
             
             if let existingQuantifiableProduct = quantifiableProductResult.sucessResult {
                 let updatedProduct = existingQuantifiableProduct.product.updateNonUniqueProperties(prototype: prototype)
-                let updatedQuantifiableProduct = existingQuantifiableProduct.copy(baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: updatedProduct)
+                // Note: unit not updated - for now all we can udpate is the name and this belongs to the quantifiable unique, so there's nothing to udpate
+                let updatedQuantifiableProduct = existingQuantifiableProduct.copy(baseQuantity: prototype.baseQuantity, product: updatedProduct)
                 handler(ProviderResult(status: .success, sucessResult: updatedQuantifiableProduct))
                 
             } else { //quantifiable product doesn't exist
                 
-                
                 self.mergeOrCreateProduct(prototype: prototype, updateCategory: updateCategory, updateItem: updateItem) {(result: ProviderResult<Product>) in
                     if let updatedProduct = result.sucessResult {
-                        let quantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: updatedProduct)
-                        handler(ProviderResult(status: .success, sucessResult: quantifiableProduct))
                         
+                        if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
+                            let quantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit, product: updatedProduct)
+                            handler(ProviderResult(status: .success, sucessResult: quantifiableProduct))
+                        } else {
+                            QL4("Couldn't get unit. Protoype: \(prototype)")
+                            handler(ProviderResult(status: .databaseUnknown))
+                        }
+
                     } else {
                         handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
                     }
@@ -482,17 +495,6 @@ class ProductProviderImpl: ProductProvider {
                 handler(ProviderResult(status: .success, sucessResult: restoredSomething))
             } else {
                 QL4("Local error restoring products")
-                handler(ProviderResult(status: .databaseUnknown))
-            }
-        }
-    }
-    
-    func allUnits(_ handler: @escaping (ProviderResult<[ProductUnit]>) -> Void) {
-        DBProv.productProvider.allUnits {unitsMaybe in
-            if let units = unitsMaybe {
-                handler(ProviderResult(status: .success, sucessResult: units))
-            } else {
-                QL4("Couldn't retrieve units")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }

@@ -372,19 +372,20 @@ class RemoteListItemProvider {
     }
 
     func toRequestParams(_ product: StoreProduct) -> [String: AnyObject] {
-        var dict: [String: AnyObject] = [
-            "uuid": product.uuid as AnyObject,
-            "price": product.price as AnyObject,
-            "baseQuantity": product.baseQuantity as AnyObject,
-            "unit": product.unit.rawValue as AnyObject,
-            "store": product.store as AnyObject,
-            // Disabled because of structural changes
-//            "product": toRequestParams(product.product) as AnyObject
-        ]
-        
-        dict["lastUpdate"] = NSNumber(value: Int64(product.lastServerUpdate) as Int64)
-        
-        return dict
+        fatalError("Outdated")
+//        var dict: [String: AnyObject] = [
+//            "uuid": product.uuid as AnyObject,
+//            "price": product.price as AnyObject,
+//            "baseQuantity": product.baseQuantity as AnyObject,
+//            "unit": product.unit.rawValue as AnyObject,
+//            "store": product.store as AnyObject,
+//            // Disabled because of structural changes
+////            "product": toRequestParams(product.product) as AnyObject
+//        ]
+//        
+//        dict["lastUpdate"] = NSNumber(value: Int64(product.lastServerUpdate) as Int64)
+//        
+//        return dict
     }
     
     func toRequestParams(_ product: Product) -> [String: AnyObject] {

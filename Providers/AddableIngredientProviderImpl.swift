@@ -13,7 +13,7 @@ import QorumLogs
 public struct AddableIngredients {
     public let results: Results<Ingredient>
     public let brands: [String: [String]] // ingredient uuid - brands (which are associated with products with the same name as the ingredient product)
-    public let units: [ProductUnit] // for now this is all the units that exist in all products
+    public let units: [Unit] // for now this is all the units that exist in all products
     public let baseQuantities: [String] // for now this is all base quantities that exist in all products
 }
 
@@ -36,7 +36,7 @@ class AddableIngredientProviderImpl: AddableIngredientProvider {
                     return
                 }
                 
-                Prov.productProvider.allUnits({ allUnitsResult in
+                Prov.unitProvider.units({allUnitsResult in
                     guard let allUnits = allUnitsResult.sucessResult else {
                         QL4("No units")
                         handler(ProviderResult(status: allUnitsResult.status))
@@ -50,7 +50,7 @@ class AddableIngredientProviderImpl: AddableIngredientProvider {
                             return
                         }
                         
-                        let addableIngredients = AddableIngredients(results: ingredients, brands: ingredientsWithBrands, units: allUnits, baseQuantities: allBaseQuantities)
+                        let addableIngredients = AddableIngredients(results: ingredients, brands: ingredientsWithBrands, units: allUnits.toArray(), baseQuantities: allBaseQuantities)
                         handler(ProviderResult(status: .success, sucessResult: addableIngredients))
                     })
                 })

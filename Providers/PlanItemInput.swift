@@ -16,11 +16,11 @@ public class PlanItemInput {
     public let category: String
     public let categoryColor: UIColor
     public let baseQuantity: Float
-    public let unit: ProductUnit
+    public let unit: String
     public let brand: String
     public let store: String
     
-    public init(name: String, quantity: Float, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+    public init(name: String, quantity: Float, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: String, brand: String, store: String) {
         self.name = name
         self.quantity = quantity
         self.price = price

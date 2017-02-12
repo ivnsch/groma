@@ -15,8 +15,8 @@ public final class Ingredient: Object {
     public dynamic var quantity: Float = 0
     public dynamic var fractionNumerator: Int = 0
     public dynamic var fractionDenominator: Int = 1 // To avoid potential division by 0 - as long as numerator is 0 fraction is non-op
-    public dynamic var unitVal: Int = 0
     
+    dynamic var unitOpt: Unit? = Unit()
     dynamic var itemOpt: Item? = Item()
     dynamic var recipeOpt: Recipe? = Recipe()
     
@@ -47,12 +47,12 @@ public final class Ingredient: Object {
         }
     }
     
-    public var unit: ProductUnit {
+    public var unit: Unit {
         get {
-            return ProductUnit(rawValue: unitVal)!
+            return unitOpt ?? Unit()
         }
-        set(newUnit) {
-            unitVal = newUnit.rawValue
+        set {
+            unitOpt = newValue
         }
     }
     
@@ -66,7 +66,7 @@ public final class Ingredient: Object {
         }
     }
 
-    public convenience init(uuid: String, quantity: Float, fraction: Fraction, unit: ProductUnit, item: Item, recipe: Recipe) {
+    public convenience init(uuid: String, quantity: Float, fraction: Fraction, unit: Unit, item: Item, recipe: Recipe) {
         self.init(uuid: uuid, quantity: quantity, item: item, recipe: recipe)
         self.fraction = fraction
         self.unit = unit
@@ -113,6 +113,10 @@ public final class Ingredient: Object {
         return "uuid IN {\(ingredientsUuidsStr)}"
     }
     
+    static func createFilter(unitName: String) -> String {
+        return "unitOpt.name = '\(unitName)'"
+    }
+    
     public override static func ignoredProperties() -> [String] {
         return ["recipe", "item", "unit", "fraction"]
     }
@@ -120,10 +124,12 @@ public final class Ingredient: Object {
     // MARK: - ProductWithQuantity2 (REMOVED) TODO clean up
     
     
-    public func copy(uuid: String? = nil, quantity: Float? = nil, item: Item? = nil, recipe: Recipe? = nil) -> Ingredient {
+    public func copy(uuid: String? = nil, quantity: Float? = nil, fraction: Fraction? = nil, unit: Unit? = nil, item: Item? = nil, recipe: Recipe? = nil) -> Ingredient {
         return Ingredient(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
+            fraction: fraction ?? self.fraction,
+            unit: unit ?? self.unit,
             item: item ?? self.item,
             recipe: recipe ?? self.recipe.copy()
         )
@@ -160,8 +166,8 @@ public final class Ingredient: Object {
         return uuid == rhs.uuid
     }
     
-    public static func unitText(quantity: Float, baseQuantity: Float, unit: ProductUnit, showNoneText: Bool = false) -> String {
-        let quantifiableProductUnitText = QuantifiableProduct.unitText(baseQuantity: baseQuantity, unit: unit, showNoneText: showNoneText, pluralUnit: quantity > 1)
+    public static func unitText(quantity: Float, baseQuantity: Float, unitName: String, showNoneText: Bool = false) -> String {
+        let quantifiableProductUnitText = QuantifiableProduct.unitText(baseQuantity: baseQuantity, unitName: unitName, showNoneText: showNoneText, pluralUnit: quantity > 1)
         return "\(quantity)\(quantifiableProductUnitText)"
     }
 }

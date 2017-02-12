@@ -174,7 +174,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
         let listItemPrototypes: [ListItemPrototype] = groupItems.map{
-            let storeProductInput = StoreProductInput(price: 0, baseQuantity: $0.product.baseQuantity, unit: $0.product.unit)
+            let storeProductInput = StoreProductInput(price: 0, baseQuantity: $0.product.baseQuantity, unit: $0.product.unit.name)
             return ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.item.category.name, targetSectionColor: $0.product.product.item.category.color, storeProductInput: storeProductInput)
         }
         self.add(listItemPrototypes, status: status, list: list, token: nil, handler)
@@ -431,255 +431,257 @@ class ListItemProviderImpl: ListItemProvider {
     // TODO!!!! review parameters note and order, we are passing a list of prototypes so this doesn't make sense?   
     func add(_ prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, token: RealmToken?, _ handler: @escaping (ProviderResult<[ListItem]>) -> Void) {
         
-        // Fixes Realm acces in incorrect thread exceptions
-        let prototypes = prototypes.map{$0.copy()}
-        let list = list.copy()
+        fatalError("Outdated") // Unit refactoring
         
-        func getOrderForNewSection(_ existingListItems: Results<ListItem>) -> Int {
-            let sectionsOfItemsWithStatus: [Section] = existingListItems.collect({
-                if $0.hasStatus(status) {
-                    return $0.section
-                } else {
-                    return nil
-                }
-            })
-            return sectionsOfItemsWithStatus.distinctUsingEquatable().count
-        }
-        
-        func getItemCountInSection(listItems: Results<ListItem>, section: Section, status: ListItemStatus) -> Int {
-            var count = 0
-            for listItem in listItems {
-                if listItem.section.uuid == section.uuid && listItem.hasStatus(status) {
-                    count += 1
-                }
-            }
-            return count
-        }
-        
-        typealias BGResult = (success: Bool, listItemUuids: [String]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything). Returns uuids instead of list items because of Realm thread access limitations
-        
-        dbProvider.withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
-            
-            return syncedRet(weakSelf) {
-        
-                guard let existingStoreProducts: Results<StoreProduct> = DBProv.storeProductProvider.storeProductsSync(prototypes.map{$0.product}, store: list.store ?? "") else {
-                    QL4("Couldn't load store products")
-                    return (success: false, listItemUuids: [])
-                }
-                
-                let storePrototypes: [StoreListItemPrototype] = {
-                    let existingStoreProductsDict = existingStoreProducts.toDictionary{($0.product.uuid, $0)}
-                    return prototypes.map {prototype in
-                        let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
-                            let storeProduct = StoreProduct(uuid: NSUUID().uuidString, price: prototype.storeProductInput?.price ?? 0, store: list.store ?? "", product: prototype.product)
-                            QL1("Store product doesn't exist, created: \(storeProduct)")
-                            return storeProduct
-                        }()
-                        
-                        // Set possible passed store product properties in the store product we will save. These are passed only when we create list items, using the form
-                        // We don't update e.g. quantifiable properties (unit, base quantity) because we assume in this method that we have up to date quantity product. On one side we can be here with quick-add - then there can't be changes, or with the form, in which case we fetch/create first the quantifiable product for the entered unique. And we just fetched/created the store product using the uuid of quantifiable product with said unique.
-                        let updatedStoreProduct = prototype.storeProductInput.map{
-                            if $0.price == -1 {
-                                return storeProduct // don't update store product (the only attribute that can currently be updated is price)
-                            } else {
-                                return storeProduct.copy(price: $0.price) // update store product with price
-                            }
-                        } ?? storeProduct
-                        return StoreListItemPrototype(product: updatedStoreProduct, quantity: prototype.quantity, targetSectionName: prototype.targetSectionName, targetSectionColor: prototype.targetSectionColor)
-                    }
-                }()
-                
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // TODO interaction with mem provider is a bit finicky and messy here, if performance is ok and everything works correctly maybe we should do all the logic here and pass only the final list item to the mem provider. The initial idea I think was to put the logic to "upsert" listitem/section in mem provider in order to call handler with the result as soon as possible. This may have had another reasons besides only performance. Review this.
-                
-                // Fetch the section or create a new one if it doesn't exist. Note that this could be/was previously done in the memory provider, which helps a bit with performance as we don't have to read from the database. But we can have sections that are not referenced by any list item (in all status), so they are not in mem provider which has only list items. When sections are left empty after deleting list items or moving items to other sections, we don't delete the sections. So we now retrieve/create section here and pass it to mem provider together with the prototype.
-                var prototypesWithSections: [(StoreListItemPrototype, Section)] = []
-                for prototype in storePrototypes {
-
-                    // Use possible equal section from previous items - this is needed because otherwise if we pass e.g. 3 different fruits and there's no fruits section in the database yet, we would create 3 new fruits sections. Also for performance. Note that later we fetch the section again doing the db transaction, so the error of having 3x the same section would be only in memory, i.e. visible the first time we load the controller and fixed after. TODO Simplify this? Do we really need to determine the section here and again in db transaction. This weird functionality may be a leftover of when we used only the memory cache in this part (see previous comment of why this was changed).
-                    let previousItemSectionMaybeWithSameName: (Section)? = (prototypesWithSections.findFirst{$0.1.name == prototype.targetSectionName})?.1
-                    
-                    let section = previousItemSectionMaybeWithSameName ?? {
-                    
-                        let existingSectionMaybe = realm.objects(Section.self).filter(Section.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first
-                        return existingSectionMaybe ?? {
-                            
-                            let newSection: Section = Section(uuid: NSUUID().uuidString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
-                            QL1("Section for prototype: \(prototype) didn't exist, created a new one: \(newSection)")
-                            return newSection
-                        }()
-                        
-                    }()
-                    prototypesWithSections.append((prototype, section))
-                }
-                
-                let memAddedListItemsMaybe = weakSelf.memProvider.addOrUpdateListItems(prototypesWithSections, status: status, list: list, note: note)
-                if let addedListItems = memAddedListItemsMaybe {
-                    DispatchQueue.main.async {
-                        // return in advance so our client is quick - the database update continues in the background
-                        handler(ProviderResult(status: .success, sucessResult: addedListItems))
-                    }
-                }
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                
-                
-                let tokens = token.map{[$0.token]} ?? []
-                
-                return weakSelf.dbProvider.doInWriteTransactionSync(withoutNotifying: tokens, realm: token?.realm, {realm in
-                    
-                    // even if we have the possibly updated item from mem cache, do always a fetch to db and use this item - to guarantee max. consistency.s
-                    // theoretically the state in mem should match the state in db so this fetch should not be necessary, but for now let's be secure.
-                    
-                    // see if there's already a listitem for this product in the list - if yes only increment it
-                    
-                    let existingListItems = realm.objects(ListItem.self).filter(ListItem.createFilterList(list.uuid))
-                    let existingListItemsDict: [String: ListItem] = existingListItems.toDictionary{(StoreProduct.uniqueDictKey($0.product.product.product.item.name, brand: $0.product.product.product.brand, store: $0.product.store, unit: $0.product.product.unit, baseQuantity: $0.product.product.baseQuantity), $0)}
-                    
-                    // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
-                    let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(StoreProduct.uniqueDictKey($0.product.product.product.item.name, brand: $0.product.product.product.brand, store: $0.product.store, unit: $0.product.product.unit, baseQuantity: $0.product.product.baseQuantity), $0)}
-                    
-                    // Holds count of new items per section, which is incremented while we loop through prototypes
-                    // we need this to determine the order of the items in the sections - which is the last index in existing items + new items count so far in section
-                    var sectionCountNewItemsDict: [String: Int] = [  :]
-                    
-                    var savedListItems: [ListItem] = []
-
-                    for (prototype, section) in prototypesWithSections {
-                        if var existingListItem = existingListItemsDict[StoreProduct.uniqueDictKey(prototype.product.product.product.item.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)] {
-                            
-                            existingListItem = existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
-                            
-                            // for some reason it crashes in this line (yes here not when saving) with reason: 'Can't set primary key property 'uuid' to existing value '03F949BB-AE2A-427A-B49B-D53FA290977D'.' (this is the uuid of the list), no idea why, so doing a copy.
-                            //                                    existingListItem.section = section
-                            existingListItem = existingListItem.copy(section: section)
-                            
-                            if let note = note {
-                                existingListItem.note = note
-                            }
-                            
-                            // Item exists, but is not in status - append it to the end of section in status
-                            if !existingListItem.hasStatus(status) {
-                                let existingCountInSection = getItemCountInSection(listItems: existingListItems, section: existingListItem.section, status: status)
-                                existingListItem.updateOrder(ListItemStatusOrder(status: status, order: existingCountInSection))
-                            }
-                            
-                            // let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
-                            realm.add(existingListItem, update: true)
-                            
-                            QL1("item exists, affter incrementent: \(existingListItem)")
-                            
-                            savedListItems.append(existingListItem)
-                            
-                            
-                        } else { // item doesn't exist
-                            
-                            // see if there's already a section for the new list item in the list, if not create a new one
-                            //                        let listItemsInList = realm.objects(ListItem).filter(ListItem.createFilter(list))
-                            let sectionName = prototype.targetSectionName
-                            let section = existingListItems.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
-                                return item.section
-                                } ?? { // section not existent create a new one
-                                    
-                                    let sectionCount = getOrderForNewSection(existingListItems)
-                                    
-                                    // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                    return memoryCacheItemsDict?[StoreProduct.uniqueDictKey(prototype.product.product.product.item.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
-                                }()
-                            
-                            // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
-                            let listItemOrder: Int = {
-                                if let sectionCount = sectionCountNewItemsDict[section.uuid] { // if already initialised (existing items count) increment 1 (for new item we are adding)
-                                    let order = sectionCount + 1
-                                    sectionCountNewItemsDict[section.uuid] = order
-                                    return order
-                                    
-                                } else { // init to existing count
-                                    let existingCountInSection = getItemCountInSection(listItems: existingListItems, section: section, status: status)
-                                    sectionCountNewItemsDict[section.uuid] = existingCountInSection
-                                    return existingCountInSection
-                                }
-                            }()
-                            
-                            let uuid = memoryCacheItemsDict?[StoreProduct.uniqueDictKey(prototype.product.product.product.item.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)]?.uuid ?? NSUUID().uuidString
-                            
-                            
-                            // create the list item and save it
-                            // memcache uuid: if we created a new listitem in memcache use this uuid so our data is consistent mem/db
-                            let listItem = ListItem(
-                                uuid: uuid,
-                                product: prototype.product,
-                                section: section,
-                                list: list,
-                                note: note,
-                                statusOrder: ListItemStatusOrder(status: status, order: listItemOrder),
-                                statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.quantity)
-                            )
-                            
-                            QL1("item doesn't exist, created: \(listItem)")
-                            
-                            realm.add(listItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
-                            
-                            savedListItems.append(listItem)
-                        }
-                    }
-                    
-                    return (success: true, listItemUuids: savedListItems.map{$0.uuid}) // map to uuid fixes Realm acces in incorrect thread exceptions
-                })
-            }
-            
-        }) {[weak self] (bgResultMaybe: BGResult?) -> Void in
-                
-            if let bgResult = bgResultMaybe { // bg ran successfully
-                
-                if self?.memProvider.valid ?? false {
-                    // bgResult & mem valid -> do nothing: added item was returned to handler already (after add to mem provider), no need to return it again
-                    
-                } else {
-                    // mem provider is not enabled - controller is waiting for result - return it
-                    do {
-                        let realm = try Realm()
-                        realm.refresh() // for the data we just wrote in background thread to become available
-
-                        let filter: String = ListItem.createFilterForUuids(bgResult.listItemUuids)
-                        let listItems: [ListItem] = realm.objects(ListItem.self).filter(filter).toArray()
-
-                        handler(ProviderResult(status: .success, sucessResult: listItems))
-
-                    } catch let e {
-                        QL4("Error retrieving saved list items with uuids: \(bgResultMaybe?.listItemUuids), error: \(e)")
-                        handler(ProviderResult(status: .databaseUnknown))
-                    }
-                }
-                
-                //                        if let addedListItem = bgResult.listItem { // bg returned a list item
-                //                            handler(ProviderResult(status: .Success, sucessResult: bgResult.addedListItem))
-                //
-                //
-                //                        } else {
-                //                            // bg was successful but didn't return a list item, this happens when the item was returned from the memory cache
-                //                            // in this case we do nothing - the client already has the added object
-                //                        }
-                
-                
-                // add to server
-                // Disabled while impl. realm sync
-//                self?.remoteProvider.add(bgResult.listItems) {remoteResult in
-//                    if let remoteListItems = remoteResult.successResult {
-//                        self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
-//                        }
-//                    } else {
-//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
-//                            QL4("Remote call no success: \(remoteResult)")
-//                            self?.memProvider.invalidate()
-//                            handler(result)
-//                        })
+//        // Fixes Realm acces in incorrect thread exceptions
+//        let prototypes = prototypes.map{$0.copy()}
+//        let list = list.copy()
+//        
+//        func getOrderForNewSection(_ existingListItems: Results<ListItem>) -> Int {
+//            let sectionsOfItemsWithStatus: [Section] = existingListItems.collect({
+//                if $0.hasStatus(status) {
+//                    return $0.section
+//                } else {
+//                    return nil
+//                }
+//            })
+//            return sectionsOfItemsWithStatus.distinctUsingEquatable().count
+//        }
+//        
+//        func getItemCountInSection(listItems: Results<ListItem>, section: Section, status: ListItemStatus) -> Int {
+//            var count = 0
+//            for listItem in listItems {
+//                if listItem.section.uuid == section.uuid && listItem.hasStatus(status) {
+//                    count += 1
+//                }
+//            }
+//            return count
+//        }
+//        
+//        typealias BGResult = (success: Bool, listItemUuids: [String]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything). Returns uuids instead of list items because of Realm thread access limitations
+//        
+//        dbProvider.withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
+//            
+//            return syncedRet(weakSelf) {
+//        
+//                guard let existingStoreProducts: Results<StoreProduct> = DBProv.storeProductProvider.storeProductsSync(prototypes.map{$0.product}, store: list.store ?? "") else {
+//                    QL4("Couldn't load store products")
+//                    return (success: false, listItemUuids: [])
+//                }
+//                
+//                let storePrototypes: [StoreListItemPrototype] = {
+//                    let existingStoreProductsDict = existingStoreProducts.toDictionary{($0.product.uuid, $0)}
+//                    return prototypes.map {prototype in
+//                        let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
+//                            let storeProduct = StoreProduct(uuid: NSUUID().uuidString, price: prototype.storeProductInput?.price ?? 0, store: list.store ?? "", product: prototype.product)
+//                            QL1("Store product doesn't exist, created: \(storeProduct)")
+//                            return storeProduct
+//                        }()
+//                        
+//                        // Set possible passed store product properties in the store product we will save. These are passed only when we create list items, using the form
+//                        // We don't update e.g. quantifiable properties (unit, base quantity) because we assume in this method that we have up to date quantity product. On one side we can be here with quick-add - then there can't be changes, or with the form, in which case we fetch/create first the quantifiable product for the entered unique. And we just fetched/created the store product using the uuid of quantifiable product with said unique.
+//                        let updatedStoreProduct = prototype.storeProductInput.map{
+//                            if $0.price == -1 {
+//                                return storeProduct // don't update store product (the only attribute that can currently be updated is price)
+//                            } else {
+//                                return storeProduct.copy(price: $0.price) // update store product with price
+//                            }
+//                        } ?? storeProduct
+//                        return StoreListItemPrototype(product: updatedStoreProduct, quantity: prototype.quantity, targetSectionName: prototype.targetSectionName, targetSectionColor: prototype.targetSectionColor)
+//                    }
+//                }()
+//                
+//                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                // TODO interaction with mem provider is a bit finicky and messy here, if performance is ok and everything works correctly maybe we should do all the logic here and pass only the final list item to the mem provider. The initial idea I think was to put the logic to "upsert" listitem/section in mem provider in order to call handler with the result as soon as possible. This may have had another reasons besides only performance. Review this.
+//                
+//                // Fetch the section or create a new one if it doesn't exist. Note that this could be/was previously done in the memory provider, which helps a bit with performance as we don't have to read from the database. But we can have sections that are not referenced by any list item (in all status), so they are not in mem provider which has only list items. When sections are left empty after deleting list items or moving items to other sections, we don't delete the sections. So we now retrieve/create section here and pass it to mem provider together with the prototype.
+//                var prototypesWithSections: [(StoreListItemPrototype, Section)] = []
+//                for prototype in storePrototypes {
+//
+//                    // Use possible equal section from previous items - this is needed because otherwise if we pass e.g. 3 different fruits and there's no fruits section in the database yet, we would create 3 new fruits sections. Also for performance. Note that later we fetch the section again doing the db transaction, so the error of having 3x the same section would be only in memory, i.e. visible the first time we load the controller and fixed after. TODO Simplify this? Do we really need to determine the section here and again in db transaction. This weird functionality may be a leftover of when we used only the memory cache in this part (see previous comment of why this was changed).
+//                    let previousItemSectionMaybeWithSameName: (Section)? = (prototypesWithSections.findFirst{$0.1.name == prototype.targetSectionName})?.1
+//                    
+//                    let section = previousItemSectionMaybeWithSameName ?? {
+//                    
+//                        let existingSectionMaybe = realm.objects(Section.self).filter(Section.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first
+//                        return existingSectionMaybe ?? {
+//                            
+//                            let newSection: Section = Section(uuid: NSUUID().uuidString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
+//                            QL1("Section for prototype: \(prototype) didn't exist, created a new one: \(newSection)")
+//                            return newSection
+//                        }()
+//                        
+//                    }()
+//                    prototypesWithSections.append((prototype, section))
+//                }
+//                
+//                let memAddedListItemsMaybe = weakSelf.memProvider.addOrUpdateListItems(prototypesWithSections, status: status, list: list, note: note)
+//                if let addedListItems = memAddedListItemsMaybe {
+//                    DispatchQueue.main.async {
+//                        // return in advance so our client is quick - the database update continues in the background
+//                        handler(ProviderResult(status: .success, sucessResult: addedListItems))
 //                    }
 //                }
-                
-            } else { // there was a database error
-                handler(ProviderResult(status: .databaseUnknown))
-            }
-        }
+//                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                
+//                
+//                let tokens = token.map{[$0.token]} ?? []
+//                
+//                return weakSelf.dbProvider.doInWriteTransactionSync(withoutNotifying: tokens, realm: token?.realm, {realm in
+//                    
+//                    // even if we have the possibly updated item from mem cache, do always a fetch to db and use this item - to guarantee max. consistency.s
+//                    // theoretically the state in mem should match the state in db so this fetch should not be necessary, but for now let's be secure.
+//                    
+//                    // see if there's already a listitem for this product in the list - if yes only increment it
+//                    
+//                    let existingListItems = realm.objects(ListItem.self).filter(ListItem.createFilterList(list.uuid))
+//                    let existingListItemsDict: [String: ListItem] = existingListItems.toDictionary{(StoreProduct.uniqueDictKey($0.product.product.product.item.name, brand: $0.product.product.product.brand, store: $0.product.store, unit: $0.product.product.unit, baseQuantity: $0.product.product.baseQuantity), $0)}
+//                    
+//                    // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
+//                    let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(StoreProduct.uniqueDictKey($0.product.product.product.item.name, brand: $0.product.product.product.brand, store: $0.product.store, unit: $0.product.product.unit, baseQuantity: $0.product.product.baseQuantity), $0)}
+//                    
+//                    // Holds count of new items per section, which is incremented while we loop through prototypes
+//                    // we need this to determine the order of the items in the sections - which is the last index in existing items + new items count so far in section
+//                    var sectionCountNewItemsDict: [String: Int] = [  :]
+//                    
+//                    var savedListItems: [ListItem] = []
+//
+//                    for (prototype, section) in prototypesWithSections {
+//                        if var existingListItem = existingListItemsDict[StoreProduct.uniqueDictKey(prototype.product.product.product.item.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)] {
+//                            
+//                            existingListItem = existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
+//                            
+//                            // for some reason it crashes in this line (yes here not when saving) with reason: 'Can't set primary key property 'uuid' to existing value '03F949BB-AE2A-427A-B49B-D53FA290977D'.' (this is the uuid of the list), no idea why, so doing a copy.
+//                            //                                    existingListItem.section = section
+//                            existingListItem = existingListItem.copy(section: section)
+//                            
+//                            if let note = note {
+//                                existingListItem.note = note
+//                            }
+//                            
+//                            // Item exists, but is not in status - append it to the end of section in status
+//                            if !existingListItem.hasStatus(status) {
+//                                let existingCountInSection = getItemCountInSection(listItems: existingListItems, section: existingListItem.section, status: status)
+//                                existingListItem.updateOrder(ListItemStatusOrder(status: status, order: existingCountInSection))
+//                            }
+//                            
+//                            // let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
+//                            realm.add(existingListItem, update: true)
+//                            
+//                            QL1("item exists, affter incrementent: \(existingListItem)")
+//                            
+//                            savedListItems.append(existingListItem)
+//                            
+//                            
+//                        } else { // item doesn't exist
+//                            
+//                            // see if there's already a section for the new list item in the list, if not create a new one
+//                            //                        let listItemsInList = realm.objects(ListItem).filter(ListItem.createFilter(list))
+//                            let sectionName = prototype.targetSectionName
+//                            let section = existingListItems.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
+//                                return item.section
+//                                } ?? { // section not existent create a new one
+//                                    
+//                                    let sectionCount = getOrderForNewSection(existingListItems)
+//                                    
+//                                    // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
+//                                    return memoryCacheItemsDict?[StoreProduct.uniqueDictKey(prototype.product.product.product.item.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)]?.section ?? Section(uuid: NSUUID().uuidString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+//                                }()
+//                            
+//                            // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
+//                            let listItemOrder: Int = {
+//                                if let sectionCount = sectionCountNewItemsDict[section.uuid] { // if already initialised (existing items count) increment 1 (for new item we are adding)
+//                                    let order = sectionCount + 1
+//                                    sectionCountNewItemsDict[section.uuid] = order
+//                                    return order
+//                                    
+//                                } else { // init to existing count
+//                                    let existingCountInSection = getItemCountInSection(listItems: existingListItems, section: section, status: status)
+//                                    sectionCountNewItemsDict[section.uuid] = existingCountInSection
+//                                    return existingCountInSection
+//                                }
+//                            }()
+//                            
+//                            let uuid = memoryCacheItemsDict?[StoreProduct.uniqueDictKey(prototype.product.product.product.item.name, brand: prototype.product.product.product.brand, store: prototype.product.store, unit: prototype.product.product.unit, baseQuantity: prototype.product.product.baseQuantity)]?.uuid ?? NSUUID().uuidString
+//                            
+//                            
+//                            // create the list item and save it
+//                            // memcache uuid: if we created a new listitem in memcache use this uuid so our data is consistent mem/db
+//                            let listItem = ListItem(
+//                                uuid: uuid,
+//                                product: prototype.product,
+//                                section: section,
+//                                list: list,
+//                                note: note,
+//                                statusOrder: ListItemStatusOrder(status: status, order: listItemOrder),
+//                                statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.quantity)
+//                            )
+//                            
+//                            QL1("item doesn't exist, created: \(listItem)")
+//                            
+//                            realm.add(listItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
+//                            
+//                            savedListItems.append(listItem)
+//                        }
+//                    }
+//                    
+//                    return (success: true, listItemUuids: savedListItems.map{$0.uuid}) // map to uuid fixes Realm acces in incorrect thread exceptions
+//                })
+//            }
+//            
+//        }) {[weak self] (bgResultMaybe: BGResult?) -> Void in
+//                
+//            if let bgResult = bgResultMaybe { // bg ran successfully
+//                
+//                if self?.memProvider.valid ?? false {
+//                    // bgResult & mem valid -> do nothing: added item was returned to handler already (after add to mem provider), no need to return it again
+//                    
+//                } else {
+//                    // mem provider is not enabled - controller is waiting for result - return it
+//                    do {
+//                        let realm = try Realm()
+//                        realm.refresh() // for the data we just wrote in background thread to become available
+//
+//                        let filter: String = ListItem.createFilterForUuids(bgResult.listItemUuids)
+//                        let listItems: [ListItem] = realm.objects(ListItem.self).filter(filter).toArray()
+//
+//                        handler(ProviderResult(status: .success, sucessResult: listItems))
+//
+//                    } catch let e {
+//                        QL4("Error retrieving saved list items with uuids: \(bgResultMaybe?.listItemUuids), error: \(e)")
+//                        handler(ProviderResult(status: .databaseUnknown))
+//                    }
+//                }
+//                
+//                //                        if let addedListItem = bgResult.listItem { // bg returned a list item
+//                //                            handler(ProviderResult(status: .Success, sucessResult: bgResult.addedListItem))
+//                //
+//                //
+//                //                        } else {
+//                //                            // bg was successful but didn't return a list item, this happens when the item was returned from the memory cache
+//                //                            // in this case we do nothing - the client already has the added object
+//                //                        }
+//                
+//                
+//                // add to server
+//                // Disabled while impl. realm sync
+////                self?.remoteProvider.add(bgResult.listItems) {remoteResult in
+////                    if let remoteListItems = remoteResult.successResult {
+////                        self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+////                        }
+////                    } else {
+////                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
+////                            QL4("Remote call no success: \(remoteResult)")
+////                            self?.memProvider.invalidate()
+////                            handler(result)
+////                        })
+////                    }
+////                }
+//                
+//            } else { // there was a database error
+//                handler(ProviderResult(status: .databaseUnknown))
+//            }
+//        }
     }
 
     func addListItem(_ product: QuantifiableProduct, status: ListItemStatus, section: Section, quantity: Float, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, token: RealmToken?, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {

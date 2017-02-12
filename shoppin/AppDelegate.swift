@@ -247,27 +247,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     // Actions executed if app is in debug mode
     fileprivate func ifDebugLaunchActions() {
         #if DEBUG
-            if debugGeneratePrefillDatabases {
-                generatePrefillDatabase()
-            }
-//            if debugAddDummyData || !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
-////                addDummyData()
+//            if debugGeneratePrefillDatabases {
+//                generatePrefillDatabase()
 //            }
+////            if debugAddDummyData || !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
+//////                addDummyData()
+////            }
             #else
         #endif
     }
     
-    /**
-    * Create database which we embed in the app in order to prefill the app's database
-    * TODO try to use test for this (PrefillDatabase - not working because sth with Realm). This should not be in of the app.
-    */
-    fileprivate func generatePrefillDatabase() {
-        print("Creating prefilled databases")
-        self.suggestionsPrefiller = SuggestionsPrefiller()
-        self.suggestionsPrefiller?.prefill {
-            print("Finished creating prefilled databases")
-        }
-    }
+//    /**
+//    * Create database which we embed in the app in order to prefill the app's database
+//    * TODO try to use test for this (PrefillDatabase - not working because sth with Realm). This should not be in of the app.
+//    */
+//    fileprivate func generatePrefillDatabase() {
+//        print("Creating prefilled databases")
+//        self.suggestionsPrefiller = SuggestionsPrefiller()
+//        self.suggestionsPrefiller?.prefill {
+//            print("Finished creating prefilled databases")
+//        }
+//    }
 
 //    // A minimal dummy data setup with 1 inventory, 1 list and 1 list item (with corresponding product and category)
 //    fileprivate func addDummyData() {

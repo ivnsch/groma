@@ -45,6 +45,8 @@ public struct Prov {
     
     public static var brandProvider: BrandProvider = BrandProviderImpl()
     
+    public static var unitProvider: UnitProvider = UnitProviderImpl()
+
     public static var globalProvider: GlobalProvider = GlobalProviderImpl()
     
     public static var errorProvider: ErrorProvider = ErrorProviderImpl()

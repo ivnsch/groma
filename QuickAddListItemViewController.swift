@@ -290,10 +290,19 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
 
             } else {
                 QL3("Invalid state?: No quantifiable product for product: \(product). Creating a new quantifiable product.") // we create a new one as "emergency solution". TODO review this - maybe this is not an invalid state - if a user e.g. deletes all the quantifiable products in product manager (this isn't possible yet but it may be implemented in the future), it's possible that we keep only the product but no quantifiable products for it. So we either have to ensure there's always a quantifiable product for a product or allow to create them "lazily" here.
-                
-                let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: .none, product: product)
-                Prov.productProvider.add(newQuantifiableProduct, self.successHandler {
-                    onRetrieved(newQuantifiableProduct, 1)
+
+                Prov.unitProvider.units(self.successHandler {units in
+                    
+                    guard let noneUnit = units.findFirst({$0.id == .none}) else {
+                        let errorMsg = "2 Invalid states: (1) Didn't find a quantifiable product for a product, (2) couldn't retrieve .none unit -crash!"
+                        QL4(errorMsg)
+                        fatalError(errorMsg)
+                    }
+                    
+                    let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantityFloat: 1, unit: noneUnit, product: product)
+                    Prov.productProvider.add(newQuantifiableProduct, self.successHandler {
+                        onRetrieved(newQuantifiableProduct, 1)
+                    })
                 })
             }
         })

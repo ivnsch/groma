@@ -22,7 +22,7 @@ public struct ProductUnique {
     }
 }
 
-public typealias QuantifiableProductUnique = (name: String, brand: String, unit: ProductUnit, baseQuantity: String)
+public typealias QuantifiableProductUnique = (name: String, brand: String, unit: String, baseQuantity: String)
 //public struct QuantifiableProductUnique {
 //    let name: String
 //    let brand: String
@@ -41,7 +41,7 @@ public struct ProductPrototype {
     public var brand: String
     
     public var baseQuantity: String
-    public var unit: ProductUnit
+    public var unit: String
 
     var productUnique: ProductUnique {
         return ProductUnique(name: name, brand: brand)
@@ -52,7 +52,7 @@ public struct ProductPrototype {
     }
     
     // TODO!!!!!!!!!!!!! remove defaults
-    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: String = "1", unit: ProductUnit = .none) {
+    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: String = "1", unit: String) {
         self.name = name
         self.category = category
         self.categoryColor = categoryColor
@@ -485,10 +485,22 @@ class RealmProductProvider: RealmProvider {
         })
     }
     
-    func deleteProductsAndDependencies(unit: ProductUnit, markForSync: Bool, handler: @escaping (Bool) -> Void) {
+    func deleteQuantifiableProductsAndDependencies(unit: Unit, markForSync: Bool, handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({[weak self] realm in
             if let weakSelf = self {
-                return weakSelf.deleteProductsAndDependenciesSync(realm, unit: unit, markForSync: markForSync)
+                return weakSelf.deleteQuantifiableProductsAndDependenciesSync(realm, unit: unit, markForSync: markForSync)
+            } else {
+                return false
+            }
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func deleteQuantifiableProductsAndDependencies(unitName: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            if let weakSelf = self {
+                return weakSelf.deleteQuantifiableProductsAndDependenciesSync(realm, unitName: unitName, markForSync: markForSync)
             } else {
                 return false
             }
@@ -514,7 +526,7 @@ class RealmProductProvider: RealmProvider {
     func deleteProductsAndDependenciesSync(_ realm: Realm, productName: String, markForSync: Bool) -> Bool {
         let productsResult = realm.objects(Product.self).filter(Product.createFilterName(productName))
         for product in productsResult {
-            deleteProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
+            _ = deleteProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
         }
         return true
     }
@@ -523,16 +535,25 @@ class RealmProductProvider: RealmProvider {
     func deleteProductsAndDependenciesSync(_ realm: Realm, base: String, markForSync: Bool) -> Bool {
         let productsResult = realm.objects(Product.self).filter(Product.createFilter(base: base))
         for product in productsResult {
-            deleteProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
+            _ = deleteProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
         }
         return true
     }
     
     // Note: This is expected to be called from inside a transaction and in a background operation
-    func deleteProductsAndDependenciesSync(_ realm: Realm, unit: ProductUnit, markForSync: Bool) -> Bool {
-        let productsResult = realm.objects(Product.self).filter(Product.createFilter(unit: unit))
+    func deleteQuantifiableProductsAndDependenciesSync(_ realm: Realm, unit: Unit, markForSync: Bool) -> Bool {
+        let productsResult = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(unit: unit))
         for product in productsResult {
-            deleteProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
+            _ = deleteQuantifiableProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
+        }
+        return true
+    }
+    
+    // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteQuantifiableProductsAndDependenciesSync(_ realm: Realm, unitName: String, markForSync: Bool) -> Bool {
+        let productsResult = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(unitName: unitName))
+        for product in productsResult {
+            deleteQuantifiableProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
         }
         return true
     }
@@ -550,13 +571,30 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
+    func deleteQuantifiableProductAndDependenciesSync(_ realm: Realm, dbProduct: QuantifiableProduct, markForSync: Bool) -> Bool {
+        if deleteQuantifiableProductDependenciesSync(realm, quantifiableProductUuid: dbProduct.uuid, markForSync: markForSync) {
+            
+            // Commented because structural changes - there are no thombstones for quantifiable products as this class is new and it seems we will not use the custom backend anymore
+            //            if markForSync {
+            //                let toRemove = ProductToRemove(dbProduct)
+            //                realm.add(toRemove, update: true)
+            //            }
+            realm.delete(dbProduct)
+            return true
+        } else {
+            return false
+        }
+    }
+    
     // Note: This is expected to be called from inside a transaction and in a background operation
     func deleteProductDependenciesSync(_ realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
         
-        let quantifiableProductsResult = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilterProduct(productUuid))
+        // Delete all the quantifiable products that reference product 
+        
+        let quantifiableProductsResult = realm.objects(Product.self).filter(QuantifiableProduct.createFilterProduct(productUuid))
 
         for quantifiableProduct in quantifiableProductsResult {
-            deleteQuantifiableProductAndDependenciesSync(realm, quantifiableProductUuid: quantifiableProduct.uuid, markForSync: markForSync)
+            _ = deleteQuantifiableProductAndDependenciesSync(realm, quantifiableProductUuid: quantifiableProduct.uuid, markForSync: markForSync)
         }
         
         return true
@@ -584,20 +622,7 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func deleteQuantifiableProductAndDependenciesSync(_ realm: Realm, dbProduct: QuantifiableProduct, markForSync: Bool) -> Bool {
-        if deleteQuantifiableProductDependenciesSync(realm, quantifiableProductUuid: dbProduct.uuid, markForSync: markForSync) {
-            
-            // Commented because structural changes - there are no thombstones for quantifiable products as this class is new and it seems we will not use the custom backend anymore
-//            if markForSync {
-//                let toRemove = ProductToRemove(dbProduct)
-//                realm.add(toRemove, update: true)
-//            }
-            realm.delete(dbProduct)
-            return true
-        } else {
-            return false
-        }
-    }
+
     
     
     // Note: This is expected to be called from inside a transaction and in a background operation
@@ -724,10 +749,15 @@ class RealmProductProvider: RealmProvider {
                     handler(existingQuantifiableProduct)
 
                 } else {
-                    let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: product)
-                    self.doInWriteTransactionSync({realm in
-                        realm.add(newQuantifiableProduct)
-                    })
+                    if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
+                        let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit, product: product)
+                        self.doInWriteTransactionSync({realm in
+                            realm.add(newQuantifiableProduct)
+                        })
+                    } else {
+                        QL4("Couldn't get/create unit for prototype: \(prototype)")
+                        handler(nil)
+                    }
                 }
             }
         }
@@ -911,6 +941,10 @@ class RealmProductProvider: RealmProvider {
     
     func save(_ dbCategories: [ProductCategory], dbProducts: [QuantifiableProduct], _ handler: @escaping (Bool) -> Void) {
         
+        // fix realm thread access exceptions (the units referenced were accessed in main thread/other thread, and here we save in a background thread, so we have to copy)
+        let dbCategories = dbCategories.map{$0.copy()}
+        let dbProducts = dbProducts.map{$0.copy()}
+        
         doInWriteTransaction({realm in
             for dbCategory in dbCategories {
 //                print("saving cat: \(dbCategory.uuid)")
@@ -1090,7 +1124,9 @@ class RealmProductProvider: RealmProvider {
         
         doInWriteTransaction({realm in
             
-            let prefillProducts = SuggestionsPrefiller().prefillProducts(LangManager().appLang).products
+            guard let units = DBProv.unitProvider.unitsSync() else {QL4("Couldn't load units. Can't restore prefill product"); return false}
+            
+            let prefillProducts = SuggestionsPrefiller().prefillProducts(LangManager().appLang, defaultUnits: units.toArray()).products
             
             var restoredSomething: Bool = false
             
@@ -1106,24 +1142,6 @@ class RealmProductProvider: RealmProvider {
             }, finishHandler: {successMaybe in
                 handler(successMaybe)
         })
-    }
-    
-    func allUnits(_ handler: @escaping ([ProductUnit]?) -> Void) {
-        withRealm({(realm) -> [ProductUnit] in
-            let units = realm.objects(QuantifiableProduct.self).flatMap{quantifiableProduct in
-                return ProductUnit(rawValue: quantifiableProduct.unitVal) ?? {
-                    QL4("No product unit for raw value: \(quantifiableProduct.unitVal). Skipping.")
-                    return nil
-                }()
-            }
-            return Array(units).distinct()
-            
-        }) { unitsMaybe in
-            if unitsMaybe == nil {
-                QL4("Couldn't retrieve units")
-            }
-            handler(unitsMaybe ?? [])
-        }
     }
     
     func allBaseQuantities(_ handler: @escaping ([String]?) -> Void) {
@@ -1160,16 +1178,7 @@ class RealmProductProvider: RealmProvider {
     
     func unitsContainingText(_ text: String, _ handler: @escaping ([String]) -> Void) {
         background({
-            do {
-                let realm = try Realm()
-                // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
-                // .sorted("unitVal", ascending: true)
-                let baseQuantities = Array(Set(realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilterBaseQuantityContains(text)).flatMap{ProductUnit(rawValue: $0.unitVal)})).map{$0.shortText}.sorted()
-                return baseQuantities
-            } catch let e {
-                QL4("Couldn't load stores, returning empty array. Error: \(e)")
-                return []
-            }
+            return DBProv.unitProvider.unitsContainingTextSync(text)?.map{$0.name} ?? []
         }) {(result: [String]) in
             handler(result)
         }
@@ -1214,12 +1223,18 @@ class RealmProductProvider: RealmProvider {
         
         if let existingProduct = loadQuantifiableProductWithUniqueSync(prototype.quantifiableProductUnique) {
             let updatedProduct = existingProduct.product.updateNonUniqueProperties(prototype: prototype)
-            let updatedQuantifiableProduct = existingProduct.copy(baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: updatedProduct) // NOTE this does update unique properties TODO!!!!!!!!!!!!!!!! review
+            // Note: unit not updated - for now all we can udpate is the name and this belongs to the quantifiable unique, so there's nothing to udpate
+            let updatedQuantifiableProduct = existingProduct.copy(baseQuantity: prototype.baseQuantity, product: updatedProduct) // NOTE this does update unique properties TODO!!!!!!!!!!!!!!!! review
             return .ok(updatedQuantifiableProduct)
 
         } else {
-            let result: ProvResult<QuantifiableProduct, DatabaseError> = mergeOrCreateeProductSync(prototype: prototype, updateCategory: true, save: false).map {product in
-                return QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: prototype.unit, product: product)
+            let result: ProvResult<QuantifiableProduct, DatabaseError> = mergeOrCreateeProductSync(prototype: prototype, updateCategory: true, save: false).flatMap {product in
+                if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
+                    return .ok(QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit, product: product))
+                } else {
+                    QL4("Couldn't get or create unit")
+                    return .err(.unknown)
+                }
             }
 
             return !save ? result : result.flatMap {product in

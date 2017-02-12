@@ -30,7 +30,7 @@ public extension Array where Element: InventoryItem {
             return sorted{
                 if $0.0.product.product.item.name == $0.1.product.product.item.name {
                     if $0.0.quantity == $0.1.quantity {
-                        return $0.0.product.unit.text < $0.1.product.unit.text
+                        return $0.0.product.unit.name < $0.1.product.unit.name
                     } else {
                         return $0.0.quantity < $0.1.quantity
                     }
@@ -43,7 +43,7 @@ public extension Array where Element: InventoryItem {
             return sorted{
                 if $0.0.quantity == $0.1.quantity {
                     if $0.0.product.product.item.name == $0.1.product.product.item.name {
-                        return $0.0.product.unit.text < $0.1.product.unit.text
+                        return $0.0.product.unit.name < $0.1.product.unit.name
                     } else {
                         return $0.0.product.product.item.name < $0.1.product.product.item.name
                     }

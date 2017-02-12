@@ -9,39 +9,6 @@
 import Foundation
 import RealmSwift
 
-
-public enum ProductUnit: Int {
-    case none = 0
-    case gram = 1
-    case kilogram = 2
-
-    public var text: String {
-        switch self {
-        case .none: return ""
-        case .gram: return "Gram"
-        case .kilogram: return "Kilogram"
-        }
-    }
-
-    public var shortText: String {
-        switch self {
-        case .none: return ""
-        case .gram: return "g"
-        case .kilogram: return "kg"
-        }
-    }
-    
-    public static func fromString(_ string: String) -> ProductUnit? {
-        switch string {
-        case "": return ProductUnit.none // note prefix otherwise it's processed as Option.none
-        case "g": return .gram
-        case "kg": return .kilogram
-        default: return nil
-        }
-    }
-}
-
-
 public class Product: DBSyncable, Identifiable {
     
     public dynamic var uuid: String = ""
@@ -146,10 +113,6 @@ public class Product: DBSyncable, Identifiable {
     
     static func createFilter(base: String) -> String {
         return "baseQuantity = '\(base)'"
-    }
-
-    static func createFilter(unit: ProductUnit) -> String {
-        return "unitVal = '\(unit.rawValue)'"
     }
     
     static func createFilterNameContains(_ text: String) -> String {

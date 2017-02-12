@@ -66,7 +66,9 @@ public protocol ProductProvider {
 
     func deleteProductsWith(base: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
-    func deleteProductsWith(unit: ProductUnit, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func deleteProductsWith(unit: Unit, _ handler: @escaping (ProviderResult<Any>) -> Void)
+
+    func deleteProductsWith(unitName: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
     
     func incrementFav(quantifiableProductUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
@@ -98,9 +100,7 @@ public protocol ProductProvider {
    
     // Returns if restored at least one product
     func restorePrefillProductsLocal(_ handler: @escaping (ProviderResult<Bool>) -> Void)
-    
-    
-    func allUnits(_ handler: @escaping (ProviderResult<[ProductUnit]>) -> Void)
+
     
     func allBaseQuantities(_ handler: @escaping (ProviderResult<[String]>) -> Void)
     

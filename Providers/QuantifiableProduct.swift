@@ -38,7 +38,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     public dynamic var uuid: String = ""
     dynamic var productOpt: Product? = Product()
     public dynamic var baseQuantity: String = "1" // For text matching (autosuggestions) is more convenient to store as string, so we can let realm do it
-    public dynamic var unitVal: Int = 0
+    dynamic var unitOpt: Unit? = Unit()
     public dynamic var fav: Int = 0 // not used anymore as we fav again the product, but letting it here just in case. Maybe remove.
     
     public var product: Product {
@@ -49,16 +49,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
             productOpt = newProduct
         }
     }
-    
-    public var unit: ProductUnit {
-        get {
-            return ProductUnit(rawValue: unitVal)!
-        }
-        set(newUnit) {
-            unitVal = newUnit.rawValue
-        }
-    }
-    
+
     public var baseQuantityFloat: Float {
         get {
             return baseQuantity.floatValue ?? {
@@ -71,15 +62,24 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         }
     }
     
+    public var unit: Unit {
+        get {
+            return unitOpt ?? Unit()
+        }
+        set {
+            unitOpt = newValue
+        }
+    }
+    
     public override static func primaryKey() -> String? {
         return "uuid"
     }
     
-    public convenience init(uuid: String, baseQuantity: Float, unit: ProductUnit, product: Product, fav: Int = 0) {
-        self.init(uuid: uuid, baseQuantity: String(baseQuantity), unit: unit, product: product, fav: fav)
+    public convenience init(uuid: String, baseQuantityFloat: Float, unit: Unit, product: Product, fav: Int = 0) {
+        self.init(uuid: uuid, baseQuantity: String(baseQuantityFloat), unit: unit, product: product, fav: fav)
     }
     
-    public convenience init(uuid: String, baseQuantity: String, unit: ProductUnit, product: Product, fav: Int = 0) {
+    public convenience init(uuid: String, baseQuantity: String, unit: Unit, product: Product, fav: Int = 0) {
         
         self.init()
         
@@ -90,11 +90,11 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         self.fav = fav
     }
     
-    public func copy(uuid: String? = nil, baseQuantity: String? = nil, unit: ProductUnit? = nil, product: Product? = nil, fav: Int? = nil) -> QuantifiableProduct {
+    public func copy(uuid: String? = nil, baseQuantity: String? = nil, unit: Unit? = nil, product: Product? = nil, fav: Int? = nil) -> QuantifiableProduct {
         return QuantifiableProduct(
             uuid: uuid ?? self.uuid,
             baseQuantity: baseQuantity ?? self.baseQuantity,
-            unit: unit ?? self.unit,
+            unit: unit ?? self.unit.copy(),
             product: product ?? self.product.copy(),
             fav: fav ?? self.fav
         )
@@ -107,7 +107,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
     
     static func createFilter(unique: QuantifiableProductUnique) -> String {
-        return "productOpt.itemOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND unitVal == \(unique.unit.rawValue)"
+        return "productOpt.itemOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND unitOpt.name == '\(unique.unit)'"
     }
     
     static func createFilterBrand(_ brand: String) -> String {
@@ -158,6 +158,15 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         return "baseQuantity CONTAINS[c] '\(text)'"
     }
     
+    // Deletes by unit name
+    static func createFilter(unit: Unit) -> String {
+        return createFilter(unitName: unit.name)
+    }
+    
+    static func createFilter(unitName: String) -> String {
+        return "unitOpt.name = '\(unitName)'"
+    }
+    
     override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
         _ = RealmStoreProductProvider().deleteStoreProductDependenciesSync(realm, storeProductUuid: uuid, markForSync: markForSync)
         realm.delete(self)
@@ -193,11 +202,11 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
 
     public var unique: QuantifiableProductUnique {
-        return (name: product.item.name, brand: product.brand, unit: unit, baseQuantity: baseQuantity)
+        return (name: product.item.name, brand: product.brand, unit: unit.name, baseQuantity: baseQuantity)
     }
     
     public func matches(unique: QuantifiableProductUnique) -> Bool {
-        return product.item.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit == unique.unit
+        return product.item.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit.name == unique.unit
     }
     
     fileprivate static var baseQuantityNumberFormatter: NumberFormatter = {
@@ -212,37 +221,37 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         // The reason is that when there's a base quantity the unit belongs to the base quantity, and when there's none, it belongs to the quantity
         // E.g. 2x500g meat - the g refers to the base quantity, 2 is only units. But products that don't have a fixed base quantity (and a unit) - e.g. meat from the fridge, which can be 234.5g, has a base quantity of 1 and to not confuse the user we just don't show a base quantity at all but only the quantity with the unit next to it.
         // Clarification: Base quantity is the quantity of a product that can be bought in a store as a unit. We can buy a 500g of meat in a store (as a pack - but "pack" seems redundant information, as if we enter 500g as base quantity we know that it means 500 are sold as unit, and it's difficult to think about a product with a specified name, brand and base quantity, that will be sold in something different as "pack". Yes there could also be 500g sold as e.g. "Can" but this product will likely have a different name - canned meat or something). We also can buy 1g of meat in a store. The quantity (of list, inventory, group items) is just a multiplier of this base quantity)
-        let unitStr = ((baseQuantityFloat == 0 || baseQuantityFloat == 1) && unit != .none) ? unit.shortText : ""
+        let unitStr = ((baseQuantityFloat == 0 || baseQuantityFloat == 1) && unit != .none) ? unit.name : ""
         return "\(quantityStr)\(unitStr)"
     }
     
     
     
     public var unitText: String {
-        return QuantifiableProduct.unitText(baseQuantity: baseQuantityFloat, unit: unit)
+        return QuantifiableProduct.unitText(baseQuantity: baseQuantityFloat, unitName: unit.name)
     }
     
     public func unitText(showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
-        return QuantifiableProduct.unitText(baseQuantity: baseQuantityFloat, unit: unit, showNoneText: showNoneText, pluralUnit: pluralUnit)
+        return QuantifiableProduct.unitText(baseQuantity: baseQuantityFloat, unitName: unit.name, showNoneText: showNoneText, pluralUnit: pluralUnit)
     }
     
-    public static func unitText(baseQuantity: Float, unit: ProductUnit, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+    public static func unitText(baseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
 //        let baseQuantityText = baseQuantity > 1 ? "x\(QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!)" : ""
         let baseQuantityText = baseQuantity > 1 ? "\(QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!)" : ""
         
         let unitText: String = {
-            if showNoneText && unit == .none {
+            if showNoneText && unitName.isEmpty {
                 if pluralUnit {
                     return trans("recipe_unit_plural")
                 } else {
                     return trans("recipe_unit_singular")
                 }
             } else {
-                return unit.shortText
+                return unitName
             }
         }()
 
-        let unitSeparator = unit == .none ? " " : ""
+        let unitSeparator = unitName.isEmpty ? " " : ""
         return "\(baseQuantityText)\(unitSeparator)\(unitText)"
     }
 }

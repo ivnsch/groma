@@ -353,32 +353,32 @@ class ProductGroupProviderImpl: ProductGroupProvider {
     
     
     func update(_ input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<(groupItem: GroupItem, replaced: Bool)>) -> Void) {
-        
-        // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
-        let quantifiableProductUnique = QuantifiableProductUnique(name: input.name, brand: input.brand, unit: input.storeProductInput.unit, baseQuantity: input.storeProductInput.baseQuantity)
-        DBProv.groupItemProvider.deletePossibleGroupItem(quantifiableProductUnique: quantifiableProductUnique, group: updatingGroupItem.group, notUuid: updatingGroupItem.uuid) {foundAndDeletedGroupItem in
-            // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
-            
-            // TODO units? for now doesn't matter since we are not going to continue using groups
-            let prototype = ProductPrototype(name: input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand, baseQuantity: "1", unit: .none)
-            Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
-                
-                if let product = result.sucessResult {
-                    let updatedGroupItem = updatingGroupItem.copy(quantity: input.quantity, product: product)
-                    self?.update(updatedGroupItem, remote: remote) {result in
-                        if result.success {
-                            handler(ProviderResult(status: .success, sucessResult: (groupItem: updatedGroupItem, replaced: foundAndDeletedGroupItem)))
-                        } else {
-                            QL4("Error updating group item: \(result)")
-                            handler(ProviderResult(status: result.status))
-                        }
-                    }
-                } else {
-                    QL4("Error fetching product: \(result.status)")
-                    handler(ProviderResult(status: .databaseUnknown))
-                }
-            }
-        }
+        fatalError("Outdated")
+//        // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
+//        let quantifiableProductUnique = QuantifiableProductUnique(name: input.name, brand: input.brand, unit: input.storeProductInput.unit, baseQuantity: input.storeProductInput.baseQuantity)
+//        DBProv.groupItemProvider.deletePossibleGroupItem(quantifiableProductUnique: quantifiableProductUnique, group: updatingGroupItem.group, notUuid: updatingGroupItem.uuid) {foundAndDeletedGroupItem in
+//            // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
+//            
+//            // TODO units? for now doesn't matter since we are not going to continue using groups
+//            let prototype = ProductPrototype(name: input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand, baseQuantity: "1", unit: .none)
+//            Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
+//                
+//                if let product = result.sucessResult {
+//                    let updatedGroupItem = updatingGroupItem.copy(quantity: input.quantity, product: product)
+//                    self?.update(updatedGroupItem, remote: remote) {result in
+//                        if result.success {
+//                            handler(ProviderResult(status: .success, sucessResult: (groupItem: updatedGroupItem, replaced: foundAndDeletedGroupItem)))
+//                        } else {
+//                            QL4("Error updating group item: \(result)")
+//                            handler(ProviderResult(status: result.status))
+//                        }
+//                    }
+//                } else {
+//                    QL4("Error fetching product: \(result.status)")
+//                    handler(ProviderResult(status: .databaseUnknown))
+//                }
+//            }
+//        }
     }
     
     func update(_ item: GroupItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
