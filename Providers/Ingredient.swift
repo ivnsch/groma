@@ -129,8 +129,8 @@ public final class Ingredient: Object {
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
             fraction: fraction ?? self.fraction,
-            unit: unit ?? self.unit,
-            item: item ?? self.item,
+            unit: unit ?? self.unit.copy(),
+            item: item ?? self.item.copy(),
             recipe: recipe ?? self.recipe.copy()
         )
     }
