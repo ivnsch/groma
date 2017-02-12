@@ -507,7 +507,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
             let row = explanationManager.showExplanation ? indexPath.row - 1 : indexPath.row
             
             if let itemsResult = itemsResult {
-                cell.ingredient = itemsResult[indexPath.row]
+                cell.ingredient = itemsResult[row]
                 cell.setRightSideOffset(offset: maxLeftSideWidth, animated: false)
             } else {
                 QL4("Illegal state: No item for row: \(row)")
