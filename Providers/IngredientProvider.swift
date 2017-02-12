@@ -26,5 +26,7 @@ public protocol IngredientProvider {
     // Input form (update)
     func update(_ ingredient: Ingredient, input: IngredientInput, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<(ingredient: Ingredient, replaced: Bool)>) -> Void)
     
+    func updateLastProductInputs(ingredientModels: [AddRecipeIngredientModel], _ handler: @escaping (ProviderResult<Any>) -> Void)
+    
     func delete(_ ingredient: Ingredient, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
 }

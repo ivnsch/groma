@@ -12,12 +12,6 @@ import RealmSwift
 import QorumLogs
 
 
-struct AddRecipeIngredientModel {
-    var productPrototype: ProductPrototype
-    var quantity: Float
-    let ingredient: Ingredient // The unmodified ingredient (to pass around)
-}
-
 protocol AddRecipeControllerDelegate: class {
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], addRecipeController: AddRecipeController) // Delegate can decide when/if to close the recipe controller
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
@@ -80,6 +74,12 @@ class AddRecipeController: UIViewController {
     // MARK: - Actions
     
     @IBAction func onAddToListTap(sender: UIButton) {
+        
+        // Remembering the last inputs is not a critical operation nor depends / is it a requisite to submit the items, so we just execute it in parallel
+        // We only care eabout the intention of the user here ("want to submit this")
+        Prov.ingredientProvider.updateLastProductInputs(ingredientModels: models, successHandler {
+        })
+        
         delegate?.onAddRecipe(ingredientModels: models, addRecipeController: self)
     }
     
@@ -110,14 +110,14 @@ class AddRecipeController: UIViewController {
         
         models = ingredients.results.map({
             let prototype = ProductPrototype(
-                name: $0.item.name,
+                name: $0.pName.isEmpty ? $0.item.name : $0.pName,
                 category: $0.item.category.name,
                 categoryColor: $0.item.category.color,
-                brand: "",
-                baseQuantity: "",
-                unit: ""
+                brand: $0.pBrand,
+                baseQuantity: $0.pBase,
+                unit: $0.pUnit
             )
-            return AddRecipeIngredientModel(productPrototype: prototype, quantity: $0.quantity, ingredient: $0)
+            return AddRecipeIngredientModel(productPrototype: prototype, quantity: $0.pQuantity == 0 ? $0.quantity : $0.pQuantity, ingredient: $0)
         })
         
         tableView.reloadData()

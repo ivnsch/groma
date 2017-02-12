@@ -20,6 +20,13 @@ public final class Ingredient: Object {
     dynamic var itemOpt: Item? = Item()
     dynamic var recipeOpt: Recipe? = Recipe()
     
+    /// Remember the last inputs entered by user when adding this ingredient to a shopping list (p stands for "product")
+    /// We use this to prefill the next time user adds this ingredient to a list
+    public dynamic var pName: String = ""
+    public dynamic var pBrand: String = ""
+    public dynamic var pBase: String = ""
+    public dynamic var pQuantity: Float = 0
+    public dynamic var pUnit: String = ""
     
     public static var quantityFieldName: String {
         return "quantity"
@@ -155,6 +162,15 @@ public final class Ingredient: Object {
     
     public override var description: String {
         return "{\(type(of: self)) uuid: \(uuid), name: \(item.name), quantity: \(quantity)}"
+    }
+    
+    /// Updates the last product inputs with prototype and quantity. The reason we use ProductPrototype is only that it's the class we currently use in AddRecipeController to store the inputs
+    public func updateLastProductInputs(prototype: ProductPrototype, quantity: Float) {
+        pName = prototype.name
+        pBrand = prototype.brand
+        pUnit = prototype.unit
+        pBase = prototype.baseQuantity
+        pQuantity = quantity
     }
     
     // MARK: - Identifiable

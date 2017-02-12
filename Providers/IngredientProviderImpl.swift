@@ -104,6 +104,12 @@ class IngredientProviderImpl: IngredientProvider {
         }
     }
     
+    func updateLastProductInputs(ingredientModels: [AddRecipeIngredientModel], _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.ingredientProvider.updateLastProductInputs(ingredientModels: ingredientModels) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+    
     func delete(_ ingredient: Ingredient, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProv.ingredientProvider.delete(ingredient, ingredients: ingredients, notificationToken: notificationToken) {success in
             handler(ProviderResult(status: success ? .success : .databaseUnknown))

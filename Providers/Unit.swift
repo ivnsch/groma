@@ -66,7 +66,7 @@ public class Unit: DBSyncable, Identifiable {
     }
     
     static func createFilter(name: String) -> String {
-        return "item.name == '\(name)'"
+        return "name == '\(name)'"
     }
     
     static func createFilterNameContains(_ text: String) -> String {

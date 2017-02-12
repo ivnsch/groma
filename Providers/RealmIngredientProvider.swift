@@ -10,6 +10,20 @@ import UIKit
 import RealmSwift
 import QorumLogs
 
+
+public struct AddRecipeIngredientModel {
+    public var productPrototype: ProductPrototype
+    public var quantity: Float
+    public let ingredient: Ingredient // The unmodified ingredient (to pass around)
+    
+    public init(productPrototype: ProductPrototype, quantity: Float, ingredient: Ingredient) {
+        self.productPrototype = productPrototype
+        self.quantity = quantity
+        self.ingredient = ingredient
+    }
+}
+
+
 class RealmIngredientProvider: RealmProvider {
     
     func ingredients(recipe: Recipe, sortBy: InventorySortBy, _ handler: @escaping (Results<Ingredient>?) -> Void) {
@@ -80,6 +94,16 @@ class RealmIngredientProvider: RealmProvider {
             ingredient.quantity = input.quantity
             ingredient.fraction = input.fraction
             ingredient.unit = input.unit
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+    
+    func updateLastProductInputs(ingredientModels: [AddRecipeIngredientModel], _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [], realm: nil) {realm -> Bool in
+            for model in ingredientModels {
+                model.ingredient.updateLastProductInputs(prototype: model.productPrototype, quantity: model.quantity)
+            }
             return true
         }
         handler(successMaybe ?? false)
