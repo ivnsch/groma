@@ -74,6 +74,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     }
     
     fileprivate var units: Results<Providers.Unit>?
+    fileprivate var unitNames: [String] = [] // we need this because we can't touch the Realm Units in the autocompletions thread (get diff. thread exception). So we have to map to Strings in advance.
     
     var quantity: Float {
         return quantityView.quantity
@@ -135,6 +136,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     fileprivate func loadUnits() {
         Prov.unitProvider.units(successHandler{[weak self] units in
             self?.units = units
+            self?.unitNames = units.map{$0.name} // see comment on var why this is necessary
         })
     }
     
@@ -231,10 +233,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         
         let boldTime: Double = 1
         
-        print("comparing fractionLabel.text: \(fractionLabel.text) with fractioNStr: \(fractionStr), different: \(fractionLabel.text != fractionStr)")
-        
         if fractionLabel.text != fractionStr {
-            print("fraction bold!")
             fractionLabel.animateBold(boldTime, regularFont: titleLabelsFont)
         }
         if wholeNumberLabel.text != wholeNumberStr {
@@ -280,9 +279,8 @@ extension SelectIngredientDataController: MLPAutoCompleteTextFieldDataSource, ML
         switch textField {
         case unitTextField:
             guard let text = unitTextField.text else {handler([]); return}
-            guard let units = units else {handler([]); return}
             
-            handler(units.filter{$0.name.contains(text)})
+            handler(unitNames.filter{$0.contains(text)})
 
         case _:
             QL4("Not handled text field in autoCompleteTextField")
