@@ -95,7 +95,7 @@ public class Item: Object, Identifiable {
     // Updates self and its dependencies with category, the references to the dependencies (uuid) are not changed
     // In category we don't need this now as it doesn't have dependencies to other models, but it may in the future, in which case we would just have to change the implementation of this method + this way it's consistent with other models that also have this method.
     public func updateWithoutChangingReferences(_ item: Item) -> Item {
-        let updatedCategory = category.updateWithoutChangingReferences(item.category)
+//        let updatedCategory = category.updateWithoutChangingReferences(item.category)
         return copy(category: category)
     }
 }

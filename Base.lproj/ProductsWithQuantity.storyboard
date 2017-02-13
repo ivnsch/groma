@@ -238,7 +238,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Eg-VM-sQM" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Eg-VM-sQM" customClass="LabelMore" customModule="groma">
                                             <rect key="frame" x="29" y="17" width="44" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -272,7 +272,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K7p-Hq-ZSp">
-                                            <rect key="frame" x="309" y="4" width="41" height="71.5"/>
+                                            <rect key="frame" x="309" y="4" width="41" height="71"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="41" id="ipa-2D-pDX"/>
                                             </constraints>
@@ -300,14 +300,14 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gco-Oy-7Vf">
-                                            <rect key="frame" x="0.0" y="4" width="4" height="67.5"/>
+                                            <rect key="frame" x="0.0" y="4" width="4" height="67"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="4" id="6zY-e9-a9R"/>
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sa5-bI-suW">
-                                            <rect key="frame" x="219" y="4" width="41" height="71.5"/>
+                                            <rect key="frame" x="219" y="4" width="41" height="71"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="41" id="Bge-AM-2Ky"/>
                                             </constraints>
@@ -649,7 +649,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RtH-jb-k5N">
-                                            <rect key="frame" x="309" y="4" width="41" height="71.5"/>
+                                            <rect key="frame" x="309" y="4" width="41" height="71"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="41" id="v5K-Qm-i00"/>
                                             </constraints>
@@ -677,14 +677,14 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I6W-x1-2IM">
-                                            <rect key="frame" x="0.0" y="4" width="4" height="67.5"/>
+                                            <rect key="frame" x="0.0" y="4" width="4" height="67"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="4" id="gFs-C8-etq"/>
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EfN-cF-UNd">
-                                            <rect key="frame" x="219" y="4" width="41" height="71.5"/>
+                                            <rect key="frame" x="219" y="4" width="41" height="71"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="41" id="4T2-YU-wvz"/>
                                             </constraints>

@@ -161,7 +161,7 @@ class AddRecipeController: UIViewController {
         // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
         QL1("add button - Keyboard will disappear - hiding")
 //        animateVisible(false) // TODO!!!!!!!!!!!!!!!!!!!!!!!! animate
-        let tabBarHeight = (tabBarController?.tabBar.height ?? 0)
+//        let tabBarHeight = (tabBarController?.tabBar.height ?? 0)
         
         addToListViewBottomConstraint.constant = 0
         

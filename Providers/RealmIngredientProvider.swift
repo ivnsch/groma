@@ -30,9 +30,9 @@ class RealmIngredientProvider: RealmProvider {
         
         let nameSort = SortDescriptor(keyPath: "itemOpt.name", ascending: true)
         let quantitySort = SortDescriptor(keyPath: "quantity", ascending: true)
-        let unitSort = SortDescriptor(keyPath: "productOpt.unitOpt.name", ascending: true) // TODO
+//        let unitSort = SortDescriptor(keyPath: "productOpt.unitOpt.name", ascending: true) // TODO
         
-        let rest = [unitSort]
+//        let rest = [unitSort]
         
         let sortDescriptors: [SortDescriptor] = {
             switch sortBy {
@@ -50,7 +50,7 @@ class RealmIngredientProvider: RealmProvider {
     
     func add(_ quickAddInput: QuickAddIngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping ((ingredient: Ingredient, isNew: Bool)?) -> Void) {
         
-        guard let ingredientsRealm = ingredients.realm else {QL4("Ingredients have no realm"); handler(nil); return}
+        guard ingredients.realm != nil else {QL4("Ingredients have no realm"); handler(nil); return}
         
         let existingIngredientMaybe = ingredients.filter(Ingredient.createFilter(item: quickAddInput.item, recipe: recipe)).first
         

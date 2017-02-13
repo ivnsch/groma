@@ -266,13 +266,13 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             // TODO!!!! when receive switch status via websocket we will *not* show undo (undo should be only for the device doing the switch) but submit immediately this means:
             // 1. call switchstatus like here, 2. switch status in provider updates status/order, maybe deletes section, etc 3. update the table view - swipe the item and maybe delete section(this should be similar to calling onListItemClear except the animation in this case is not swipe, but that should be ok?)
             listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true, onFinish: {[weak self] in guard let weakSelf = self else {return}
-                let targetStatus: ListItemStatus = {
-                    switch weakSelf.status {
-                    case .todo: return .done
-                    case .done: return .todo
-                    case .stash: return .todo
-                    }
-                }()
+//                let targetStatus: ListItemStatus = {
+//                    switch weakSelf.status {
+//                    case .todo: return .done
+//                    case .done: return .todo
+//                    case .stash: return .todo
+//                    }
+//                }()
                 
                 // NOTE: For the provider the whole state is updated here - including possible section removal (if the current undo list item is the last one in the section) and the order field update of possible following sections. This means that the contents of the table view may be in a slightly inconsistent state with the data in the provider during the time cell is in undo (for the table view the section is still there, for the provider it's not). This is fine as the undo state is just a UI thing (local) and it should be cleared as soon as we try to start a new action (add, edit, delete, reorder etc) or go to the cart/stash.
                 
@@ -340,7 +340,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
 
     
     func onIncrementItem(_ tableViewListItem: ListItem, delta: Float) {
-        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
+        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
             //            self?.onTableViewChangedQuantifiables()
@@ -480,12 +480,12 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             Prov.listItemsProvider.addGroupItems(group, status: status, list: list, resultHandler(onSuccess: {[weak self] addedListItems in
                 if let list = self?.currentList {
                     self?.initWithList(list) // refresh list items
-                    if let firstListItem = addedListItems.first {
-                        //    TODO!!!!!!!!!!!!!!!! ?
-                        //                        self?.listItemsTableViewController.scrollToListItem(firstListItem)
-                    } else {
-                        QL3("Shouldn't be here without list items")
-                    }
+//                    if let firstListItem = addedListItems.first {
+//                        //    TODO!!!!!!!!!!!!!!!! ?
+//                        //                        self?.listItemsTableViewController.scrollToListItem(firstListItem)
+//                    } else {
+//                        QL3("Shouldn't be here without list items")
+//                    }
                 } else {
                     QL3("Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
                 }
@@ -691,7 +691,7 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     }
     
     func onMinusTap(_ listItem: ListItem) {
-        Prov.listItemsProvider.increment(listItem, status: status, delta: -1, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
+        Prov.listItemsProvider.increment(listItem, status: status, delta: -1, remote: true, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
             //            self?.onTableViewChangedQuantifiables()
@@ -699,7 +699,7 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     }
     
     func onPlusTap(_ listItem: ListItem) {
-        Prov.listItemsProvider.increment(listItem, status: status, delta: 1, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
+        Prov.listItemsProvider.increment(listItem, status: status, delta: 1, remote: true, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
             //            self?.onTableViewChangedQuantifiables()
@@ -707,7 +707,7 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     }
     
     func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Float) {
-        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: newQuantity - tableViewListItem.quantity, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
+        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: newQuantity - tableViewListItem.quantity, remote: true, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
             //            self?.onTableViewChangedQuantifiables()

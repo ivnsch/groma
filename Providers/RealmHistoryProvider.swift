@@ -77,7 +77,7 @@ class RealmHistoryProvider: RealmProvider {
         DispatchQueue.global(qos: .background).async {[weak self] in guard let weakSelf = self else {return}
             do {
                 let realm = try Realm()
-                let results = realm.objects(HistoryItem.self).filter(HistoryItem.createFilterWithInventory(inventory.uuid)).sorted(byProperty: "addedDate", ascending: false) // not using constant because weak self etc.
+                let results = realm.objects(HistoryItem.self).filter(HistoryItem.createFilterWithInventory(inventory.uuid)).sorted(byKeyPath: "addedDate", ascending: false) // not using constant because weak self etc.
                 
                 let dateDict = weakSelf.groupByDate(results)[range].mapDictionary{(date, historyItems) in
                     // Map to uuids because of realm thread issues. We re-fetch the items in the main thread.
@@ -299,7 +299,7 @@ class RealmHistoryProvider: RealmProvider {
         
         withRealm({realm in
             
-            if let oldestItem = realm.objects(HistoryItem.self).sorted(byProperty: HistoryItem.addedDateKey, ascending: true).first {
+            if let oldestItem = realm.objects(HistoryItem.self).sorted(byKeyPath: HistoryItem.addedDateKey, ascending: true).first {
                 return oldestItem.addedDate.millisToEpochDate()
             } else {
                 QL1("No items / oldest item")

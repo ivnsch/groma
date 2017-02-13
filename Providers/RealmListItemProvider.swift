@@ -311,7 +311,7 @@ class RealmListItemProvider: RealmProvider {
         let sortDescriptors: [SortDescriptor] = status.map {status in
             let sectionOrderFieldName = Section.orderFieldName(status)
             let listItemOrderFieldName = ListItem.orderFieldName(status)
-            return [SortDescriptor(property: sectionOrderFieldName, ascending: true), SortDescriptor(property: listItemOrderFieldName, ascending: true)]
+            return [SortDescriptor(keyPath: sectionOrderFieldName, ascending: true), SortDescriptor(keyPath: listItemOrderFieldName, ascending: true)]
         } ?? []
         
         let filter = status.map {status in
@@ -329,7 +329,7 @@ class RealmListItemProvider: RealmProvider {
     func listItems<T>(list: List, ingredient: Ingredient, mapper: @escaping (Results<ListItem>) -> T, _ handler: @escaping (T?) -> Void) {
         
         // Realm threads
-        let list = list.copy()
+//        let list = list.copy()
         let ingredient = ingredient.copy()
         
         withRealm({realm -> T? in
@@ -1012,7 +1012,7 @@ class RealmListItemProvider: RealmProvider {
         
         let listItem = srcSection.listItems[from.row]
         
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {[weak self] (realm) -> MoveListItemResult? in
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> MoveListItemResult? in
 
             // delete from src section
             srcSection.listItems.remove(objectAtIndex: from.row)
@@ -1160,7 +1160,7 @@ class RealmListItemProvider: RealmProvider {
         
         func transactionContent() -> Bool {
             
-            for (index, listItem) in cartOrStashListItems.enumerated() {
+            for listItem in cartOrStashListItems {
                 
                 guard let dstSection = DBProv.sectionProvider.getOrCreate(name: listItem.section.name, color: listItem.section.color, list: list, status: .todo, notificationToken: realmData.token, realm: realmData.realm, doTransaction: false) else {QL4("Invalid state - couldn't get or create section"); return false}
                 

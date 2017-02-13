@@ -30,7 +30,7 @@ class RealmProductGroupProvider: RealmProvider {
         
         
         withRealm({realm -> [String]? in
-            let groups: Results<ProductGroup> = self.loadSync(realm, filter: substring.map{ProductGroup.createFilterNameContains($0)}, sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending))
+            let groups: Results<ProductGroup> = self.loadSync(realm, filter: substring.map{ProductGroup.createFilterNameContains($0)}, sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
             return groups.toArray(range).map{$0.uuid}
             
         }) {uuidsMaybe in
@@ -38,7 +38,7 @@ class RealmProductGroupProvider: RealmProvider {
                 if let uuids = uuidsMaybe {
                     let realm = try Realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let groups: Results<ProductGroup> = self.loadSync(realm, filter: ProductGroup.createFilterUuids(uuids), sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending))
+                    let groups: Results<ProductGroup> = self.loadSync(realm, filter: ProductGroup.createFilterUuids(uuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
                     handler(substring, groups.toArray())
                     
                 } else {

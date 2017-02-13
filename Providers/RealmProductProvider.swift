@@ -156,14 +156,9 @@ class RealmProductProvider: RealmProvider {
     func loadQuantifiableProductWithUnique(_ unique: QuantifiableProductUnique, handler: @escaping (QuantifiableProduct?) -> Void) {
         
         background({() -> String? in
-            do {
-                let product: QuantifiableProduct? = self.loadQuantifiableProductWithUniqueSync(unique)
-                return product?.uuid
-            } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
-                return nil
-            }
-            
+            let product: QuantifiableProduct? = self.loadQuantifiableProductWithUniqueSync(unique)
+            return product?.uuid
+
         }, onFinish: {productUuidMaybe in
             do {
                 if let productUuid = productUuidMaybe {
@@ -245,7 +240,7 @@ class RealmProductProvider: RealmProvider {
                 if let productUuids = productUuidsMaybe {
                     let realm = try Realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let products: Results<Product> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending))
+                    let products: Results<Product> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
                     handler(substring, products)
                     
                 } else {
@@ -289,7 +284,7 @@ class RealmProductProvider: RealmProvider {
                 if let productUuids = productUuidsMaybe {
                     let realm = try Realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
-                    let products: Results<QuantifiableProduct> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending))
+                    let products: Results<QuantifiableProduct> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
                     handler(substring, products)
                     
                 } else {
@@ -553,7 +548,7 @@ class RealmProductProvider: RealmProvider {
     func deleteQuantifiableProductsAndDependenciesSync(_ realm: Realm, unitName: String, markForSync: Bool) -> Bool {
         let productsResult = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(unitName: unitName))
         for product in productsResult {
-            deleteQuantifiableProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
+            _ = deleteQuantifiableProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
         }
         return true
     }

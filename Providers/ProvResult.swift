@@ -67,14 +67,14 @@ enum ProvResult<T, V> {
     
     var isOk: Bool {
         switch self {
-        case .ok(let _): return true
+        case .ok(_): return true
         default: return false
         }
     }
     
     var isErr: Bool {
         switch self {
-        case .err(let _): return true
+        case .err(_): return true
         default: return false
         }
     }

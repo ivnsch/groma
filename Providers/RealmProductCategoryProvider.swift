@@ -221,8 +221,7 @@ class RealmProductCategoryProvider: RealmProvider {
         
         let result: ProvResult<ProductCategory, DatabaseError> = loadCategoryWithUniqueSync(name).map ({
             if let existingCategory = $0 {
-                existingCategory.copy(name: name, color: color)
-                return existingCategory
+                return existingCategory.copy(name: name, color: color)
             } else {
                 return ProductCategory(uuid: UUID().uuidString, name: name, color: color)
             }

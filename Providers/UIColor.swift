@@ -48,7 +48,7 @@ public extension UIColor {
         return NSString(format:"%06x", rgb) as String
     }
     
-    open override var description: String {
+    override open var description: String {
         return hexStr
     }
 }

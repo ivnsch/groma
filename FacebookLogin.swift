@@ -20,7 +20,8 @@ class FacebookLogin {
     
     static func authenticate(_ controller: UIViewController, handler: @escaping (ProviderResult<String>) -> ()) {
         let login = FBSDKLoginManager()
-        login.logIn(withReadPermissions: ["public_profile"]) {result, error in
+        
+        login.logIn(withReadPermissions: ["public_profile"], from: controller) {result, error in
             if let error = error {
                 QL4("Error: Facebook login: error: \(error)")
                 handler(ProviderResult(status: .socialLoginError))

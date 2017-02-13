@@ -164,7 +164,7 @@ class RealmProvider {
     }
     
     func loadSync<T: Object>(filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T>? {
-        return loadSync(filter: filterMaybe, sortDescriptors: sortDescriptorMaybe.flatMap{sc in sc.key.map{[SortDescriptor(property: $0, ascending: sc.ascending)]}} ?? [])
+        return loadSync(filter: filterMaybe, sortDescriptors: sortDescriptorMaybe.flatMap{sc in sc.key.map{[SortDescriptor(keyPath: $0, ascending: sc.ascending)]}} ?? [])
     }
     
     func loadSync<T: Object>(filter filterMaybe: String?, sortDescriptors: [SortDescriptor]) -> Results<T>? {
@@ -189,7 +189,7 @@ class RealmProvider {
 //        
 //        return results
         
-        return loadSync(realm, predicate: predicateMaybe, sortDescriptors: sortDescriptorMaybe.flatMap{sc in sc.key.map{[SortDescriptor(property: $0, ascending: sc.ascending)]}} ?? [])
+        return loadSync(realm, predicate: predicateMaybe, sortDescriptors: sortDescriptorMaybe.flatMap{sc in sc.key.map{[SortDescriptor(keyPath: $0, ascending: sc.ascending)]}} ?? [])
     }
     
     func loadSync<T: Object>(_ realm: Realm, predicate predicateMaybe: NSPredicate?, sortDescriptors: [SortDescriptor]) -> Results<T> {
@@ -249,7 +249,7 @@ class RealmProvider {
             results = results.filter(predicate)
         }
         if let sortDescriptor = sortDescriptorMaybe, let key = sortDescriptor.key {
-            results = results.sorted(byProperty: key, ascending: sortDescriptor.ascending)
+            results = results.sorted(byKeyPath: key, ascending: sortDescriptor.ascending)
         }
         
         return results.toArray(rangeMaybe)
@@ -304,7 +304,7 @@ class RealmProvider {
             results = results.filter(predicate)
         }
         if let sortDescriptor = sortDescriptorMaybe, let key = sortDescriptor.key {
-            results = results.sorted(byProperty: key, ascending: sortDescriptor.ascending)
+            results = results.sorted(byKeyPath: key, ascending: sortDescriptor.ascending)
         }
         
         let objs: [T] = results.toArray(rangeMaybe)

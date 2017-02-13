@@ -194,7 +194,7 @@ public class Product: DBSyncable, Identifiable {
     
     // Updates product properties that don't belong to its unique with prototype
     public func updateNonUniqueProperties(prototype: ProductPrototype) -> Product {
-        let updatedItem = item.updateNonUniqueProperties(prototype: prototype)
+//        let updatedItem = item.updateNonUniqueProperties(prototype: prototype)
         return copy(item: item)
     }
 

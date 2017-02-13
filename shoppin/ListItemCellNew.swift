@@ -76,7 +76,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
 
     fileprivate(set) var tableViewListItem: ListItem? {
         didSet {
-            if let tableViewListItem = tableViewListItem, let status = status {
+            if let tableViewListItem = tableViewListItem {
                 
                 let listItem = tableViewListItem
                 

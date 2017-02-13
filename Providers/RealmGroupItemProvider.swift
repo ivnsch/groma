@@ -27,7 +27,7 @@ class RealmGroupItemProvider: RealmProvider {
                 }
             }()
             
-            let items: Results<GroupItem> = self.loadSync(realm, filter: GroupItem.createFilterGroup(groupCopy.uuid), sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending))
+            let items: Results<GroupItem> = self.loadSync(realm, filter: GroupItem.createFilterGroup(groupCopy.uuid), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
             handler(items)
             
         } catch let e {

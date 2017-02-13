@@ -246,22 +246,22 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         } else {
                             Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
                         
-                                guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't add list items."); onFinish?(); return}
-
-                                let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
-                                    if let product = products.findFirst({$0.item.name == ingredient.name}) {
-                                        // for now use products without unit to prefill list
-                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantityFloat: 1, unit: noneUnit, product: product)
-                                        return (quanatifiableProduct, ingredient.quantity)
-                                    } else {
-                                        return nil
-                                    }
-                                }
-                                
-                                let storeProductInput = StoreProductInput(price: 1, baseQuantity: 1, unit: "") // TODO!!!!!!!!!!!!!!!!! empty string unit is converted to "none" when saving TODO more reliable way to implement this
-                                let prototypes = productsIngredients.map {
-                                    ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.item.category.name, targetSectionColor: $0.product.product.item.category.color, storeProductInput: storeProductInput)
-                                }
+//                                guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't add list items."); onFinish?(); return}
+//
+//                                let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
+//                                    if let product = products.findFirst({$0.item.name == ingredient.name}) {
+//                                        // for now use products without unit to prefill list
+//                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantityFloat: 1, unit: noneUnit, product: product)
+//                                        return (quanatifiableProduct, ingredient.quantity)
+//                                    } else {
+//                                        return nil
+//                                    }
+//                                }
+//                                
+//                                let storeProductInput = StoreProductInput(price: 1, baseQuantity: 1, unit: "") // TODO!!!!!!!!!!!!!!!!! empty string unit is converted to "none" when saving TODO more reliable way to implement this
+//                                let prototypes = productsIngredients.map {
+//                                    ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.item.category.name, targetSectionColor: $0.product.product.item.category.color, storeProductInput: storeProductInput)
+//                                }
 
                                 
                                 

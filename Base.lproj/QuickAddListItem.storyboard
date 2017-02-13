@@ -91,14 +91,6 @@
             </objects>
             <point key="canvasLocation" x="738" y="531"/>
         </scene>
-        <!--Quick Add Page Controller-->
-        <scene sceneID="uzh-Kz-AMf">
-            <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="S6x-Hu-rmv" customClass="QuickAddPageController" customModule="groma" customModuleProvider="target" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nbm-oQ-W8x" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1443" y="573.5"/>
-        </scene>
         <!--Quick Add List Item View Controller-->
         <scene sceneID="scd-Js-Uye">
             <objects>

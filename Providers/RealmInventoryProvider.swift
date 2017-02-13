@@ -39,7 +39,7 @@ class RealmInventoryProvider: RealmProvider {
                 }
             }()
             
-            let items: Results<InventoryItem> = self.loadSync(realm, filter: InventoryItem.createFilterInventory(inventoryCopy.uuid), sortDescriptor: SortDescriptor(property: sortData.key, ascending: sortData.ascending))
+            let items: Results<InventoryItem> = self.loadSync(realm, filter: InventoryItem.createFilterInventory(inventoryCopy.uuid), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
             handler(items)
 
         } catch let e {
