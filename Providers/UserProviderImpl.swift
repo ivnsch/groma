@@ -181,95 +181,101 @@ class UserProviderImpl: UserProvider {
     
     // If we have login success with a different user than the one that is currently stored in the device, clear local db before doing sync. Otherwise we will upload the data from the old user to the account of the new one (which even if we wanted doesn't work because the uuids have to be unique).
     fileprivate func wrapCheckDifferentUser(_ loggedInUserEmail: String, controller: UIViewController, handler: @escaping (ProviderResult<Any>) -> Void) {
-        
-        let loggingInWithADifferentUser = isDifferentUser(loggedInUserEmail)
-        
-        if loggingInWithADifferentUser {
-            
-            let previousEmail = Prov.userProvider.mySharedUser?.email ?? ""
-
-            QL2("Logging in with different user, new email: \(loggedInUserEmail), previous email: \(previousEmail)")
-            
-            ConfirmationPopup.show(title: "Warning", message: "You're logging in with a new account on this device. If you continue, all the not synced data on this device will be lost permanently. Do you want to continue?\nYour previous account id: \(previousEmail)", okTitle: "Yes", cancelTitle: "Cancel", controller: controller, onOk: {
-                
-                    Prov.globalProvider.clearAllData(false) {result in
-                        if !result.success {
-                            QL4("Error clearing data of different user: \(loggedInUserEmail), result: \(result)")
-                        }
-                        handler(result)
-                    }
-                
-                }, onCancel: {[weak self] in
-                    QL2("Different user and cancelled clear local data, logging out")
-                    self?.logout {logoutResult in
-                        if !logoutResult.success {
-                            QL4("Logout failed: \(logoutResult)")
-                        }
-                        handler(ProviderResult(status: .cancelledLoginWithDifferentAccount))
-                    }
-            })
-            
-        } else {
-            handler(ProviderResult(status: .success))
-        }
+        // we now put this code in a different project and there are no popups here. Since this is not used, commented.
+        QL4("Outdated")
+        handler(ProviderResult(status: .unknown))
+//        
+//        let loggingInWithADifferentUser = isDifferentUser(loggedInUserEmail)
+//        
+//        if loggingInWithADifferentUser {
+//            
+//            let previousEmail = Prov.userProvider.mySharedUser?.email ?? ""
+//
+//            QL2("Logging in with different user, new email: \(loggedInUserEmail), previous email: \(previousEmail)")
+//            
+//            ConfirmationPopup.show(title: "Warning", message: "You're logging in with a new account on this device. If you continue, all the not synced data on this device will be lost permanently. Do you want to continue?\nYour previous account id: \(previousEmail)", okTitle: "Yes", cancelTitle: "Cancel", controller: controller, onOk: {
+//                
+//                    Prov.globalProvider.clearAllData(false) {result in
+//                        if !result.success {
+//                            QL4("Error clearing data of different user: \(loggedInUserEmail), result: \(result)")
+//                        }
+//                        handler(result)
+//                    }
+//                
+//                }, onCancel: {[weak self] in
+//                    QL2("Different user and cancelled clear local data, logging out")
+//                    self?.logout {logoutResult in
+//                        if !logoutResult.success {
+//                            QL4("Logout failed: \(logoutResult)")
+//                        }
+//                        handler(ProviderResult(status: .cancelledLoginWithDifferentAccount))
+//                    }
+//            })
+//            
+//        } else {
+//            handler(ProviderResult(status: .success))
+//        }
     }
     
     
     fileprivate func handleLoginSuccess(_ userEmail: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
-        
-        // If a user logs in the first time on a device but account exists already, we don't want to do a full sync because this would upload all the prefilled products (which have different uuids) and user would end with a duplicate (name suffix (n)) for each product.
-        // So we remember if the user registered using this device, if not it means they are loggin in with a new device. If the user logs in with a new device we only overwrite the local database, meaning we send a sync with no payload.
-        // We also remember if we overwrote already - this is only for the first login! After this the user of course has to sync normally.
-        let registeredWithThisDevice = PreferencesManager.loadPreference(PreferencesManagerKey.registeredWithThisDevice) ?? false
-        let overwroteLocalDataAfterNewDeviceLogin = PreferencesManager.loadPreference(PreferencesManagerKey.overwroteLocalDataAfterNewDeviceLogin) ?? false
-        
-        if !registeredWithThisDevice && !overwroteLocalDataAfterNewDeviceLogin {
-            ConfirmationPopup.show(title: "New installation", message: "Your local data will be overwritten with the data stored in your account", okTitle: "Continue", cancelTitle: "Cancel", controller: controller, onOk: {[weak self] in
-                
-                
-                self?.wrapCheckDifferentUser(userEmail, controller: controller) {result in
-                    if result.success {
-                        self?.storeEmail(userEmail)
-                        
-                        self?.sync(isMatchSync: false, onlyOverwriteLocal: true, additionalActionsOnSyncSuccess: {
-                            PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
-                            }, handler: handler)
-                    } else {
-                        handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
-                    }
-                }
-                
-            }, onCancel: {[weak self] in
-                // If user declines to overwrite local data we do nothing and log the user out.
-                QL1("Declined overwrite sync, logging out")
-                self?.logout {logoutResult in
-                    if !logoutResult.success {
-                        QL4("Logout failed: \(logoutResult)")
-                    }
-                    handler(ProviderResult(status: .isNewDeviceLoginAndDeclinedOverwrite))
-                }
-                
-            }, onCannotPresent: {[weak self] in // this can happen if we are showing another popup already on same controller - an example in this case is when we show the optional app update dialog, which also uses root controller. It's always presented before of this, so when we are here, it will not show anything. For now we do the same as if user cancelled - log out, this isn't perfect but is the only meaningful thing we can do here. Note it is important to return something! Otherwise we get e.g. not dismissed progress indicator. This situation (with the update dialog, the only where it has happened so far) can happen but is rare, it means that: 1. User has an outdated installation on a device, 2. User opened an account with other device, 3. User logs in with the outdated device - here we get 'new device' and 'should update app' popup at the same time. At least for this case logging out is ok, user just has to login again after cancelling the update (if they update the app everything is gone anyway) and then the new installation popup appears.
-                QL3("Couldn't present confirm new device popup, logging out")
-                self?.logout {logoutResult in
-                    if !logoutResult.success {
-                        QL4("Logout failed: \(logoutResult)")
-                    }
-                    handler(ProviderResult(status: .isNewDeviceLoginAndDeclinedOverwrite))
-                }
-            })
-            
-        } else { // normal login/sync
-            wrapCheckDifferentUser(userEmail, controller: controller) {[weak self] result in
-                if result.success {
-                    self?.storeEmail(userEmail)
-                    
-                    self?.sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
-                } else {
-                    handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
-                }
-            }
-        }
+        // we now put this code in a different project and there are no popups here. Since this is not used, commented.
+        QL4("Outdated")
+        handler(ProviderResult(status: .unknown))
+//        
+//        // If a user logs in the first time on a device but account exists already, we don't want to do a full sync because this would upload all the prefilled products (which have different uuids) and user would end with a duplicate (name suffix (n)) for each product.
+//        // So we remember if the user registered using this device, if not it means they are loggin in with a new device. If the user logs in with a new device we only overwrite the local database, meaning we send a sync with no payload.
+//        // We also remember if we overwrote already - this is only for the first login! After this the user of course has to sync normally.
+//        let registeredWithThisDevice = PreferencesManager.loadPreference(PreferencesManagerKey.registeredWithThisDevice) ?? false
+//        let overwroteLocalDataAfterNewDeviceLogin = PreferencesManager.loadPreference(PreferencesManagerKey.overwroteLocalDataAfterNewDeviceLogin) ?? false
+//        
+//        if !registeredWithThisDevice && !overwroteLocalDataAfterNewDeviceLogin {
+//            ConfirmationPopup.show(title: "New installation", message: "Your local data will be overwritten with the data stored in your account", okTitle: "Continue", cancelTitle: "Cancel", controller: controller, onOk: {[weak self] in
+//                
+//                
+//                self?.wrapCheckDifferentUser(userEmail, controller: controller) {result in
+//                    if result.success {
+//                        self?.storeEmail(userEmail)
+//                        
+//                        self?.sync(isMatchSync: false, onlyOverwriteLocal: true, additionalActionsOnSyncSuccess: {
+//                            PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
+//                            }, handler: handler)
+//                    } else {
+//                        handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+//                    }
+//                }
+//                
+//            }, onCancel: {[weak self] in
+//                // If user declines to overwrite local data we do nothing and log the user out.
+//                QL1("Declined overwrite sync, logging out")
+//                self?.logout {logoutResult in
+//                    if !logoutResult.success {
+//                        QL4("Logout failed: \(logoutResult)")
+//                    }
+//                    handler(ProviderResult(status: .isNewDeviceLoginAndDeclinedOverwrite))
+//                }
+//                
+//            }, onCannotPresent: {[weak self] in // this can happen if we are showing another popup already on same controller - an example in this case is when we show the optional app update dialog, which also uses root controller. It's always presented before of this, so when we are here, it will not show anything. For now we do the same as if user cancelled - log out, this isn't perfect but is the only meaningful thing we can do here. Note it is important to return something! Otherwise we get e.g. not dismissed progress indicator. This situation (with the update dialog, the only where it has happened so far) can happen but is rare, it means that: 1. User has an outdated installation on a device, 2. User opened an account with other device, 3. User logs in with the outdated device - here we get 'new device' and 'should update app' popup at the same time. At least for this case logging out is ok, user just has to login again after cancelling the update (if they update the app everything is gone anyway) and then the new installation popup appears.
+//                QL3("Couldn't present confirm new device popup, logging out")
+//                self?.logout {logoutResult in
+//                    if !logoutResult.success {
+//                        QL4("Logout failed: \(logoutResult)")
+//                    }
+//                    handler(ProviderResult(status: .isNewDeviceLoginAndDeclinedOverwrite))
+//                }
+//            })
+//            
+//        } else { // normal login/sync
+//            wrapCheckDifferentUser(userEmail, controller: controller) {[weak self] result in
+//                if result.success {
+//                    self?.storeEmail(userEmail)
+//                    
+//                    self?.sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
+//                } else {
+//                    handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+//                }
+//            }
+//        }
     }
     
     func isDifferentUser(_ email: String) -> Bool {

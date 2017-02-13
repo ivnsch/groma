@@ -36,6 +36,13 @@
 		6AACDC1B1E475C0C00A9E1EC /* ExplanationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */; };
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
 		6AD51A8F1E4F5E350053934E /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */; };
+		6AD51AAF1E512D7F0053934E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AAE1E512D7F0053934E /* String.swift */; };
+		6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51ABE1E512FAA0053934E /* UIColor.swift */; };
+		6AD51AE11E5134880053934E /* LabelMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AE01E5134880053934E /* LabelMore.swift */; };
+		6AD51AE31E5134D00053934E /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AE21E5134D00053934E /* NSLayoutConstraint.swift */; };
+		6AD51AE51E5134F80053934E /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AE41E5134F80053934E /* UIFont.swift */; };
+		6AD51AE91E51360C0053934E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AE81E51360C0053934E /* UIView.swift */; };
+		6AD51AEB1E5136880053934E /* ViewTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AEA1E5136880053934E /* ViewTags.swift */; };
 		6ADC6F3A1E4D2C88005BE5EB /* FractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC6F391E4D2C88005BE5EB /* FractionView.swift */; };
 		6ADC6F3E1E4D2EB1005BE5EB /* FractionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ADC6F3D1E4D2EB1005BE5EB /* FractionView.xib */; };
 		6ADC6F401E4D32CD005BE5EB /* FractionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC6F3F1E4D32CD005BE5EB /* FractionCell.swift */; };
@@ -424,6 +431,13 @@
 		6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExplanationView.xib; sourceTree = "<group>"; };
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
 		6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
+		6AD51AAE1E512D7F0053934E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		6AD51ABE1E512FAA0053934E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		6AD51AE01E5134880053934E /* LabelMore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LabelMore.swift; path = ../LabelMore.swift; sourceTree = "<group>"; };
+		6AD51AE21E5134D00053934E /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
+		6AD51AE41E5134F80053934E /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
+		6AD51AE81E51360C0053934E /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		6AD51AEA1E5136880053934E /* ViewTags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewTags.swift; sourceTree = "<group>"; };
 		6ADC6F391E4D2C88005BE5EB /* FractionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FractionView.swift; sourceTree = "<group>"; };
 		6ADC6F3D1E4D2EB1005BE5EB /* FractionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FractionView.xib; sourceTree = "<group>"; };
 		6ADC6F3F1E4D32CD005BE5EB /* FractionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FractionCell.swift; sourceTree = "<group>"; };
@@ -1418,6 +1432,9 @@
 		EB55675C1A86233700CD3EC6 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
+				6AD51AE81E51360C0053934E /* UIView.swift */,
+				6AD51AE41E5134F80053934E /* UIFont.swift */,
+				6AD51AE21E5134D00053934E /* NSLayoutConstraint.swift */,
 				EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */,
 				EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */,
 				EB0587DF1BBEDAA600080626 /* NSBundle.swift */,
@@ -1427,6 +1444,8 @@
 				EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */,
 				5819FB5D1DDDF59500FB2CC1 /* Validatable.swift */,
 				6ADC6F411E4E11C9005BE5EB /* UILabel.swift */,
+				6AD51AAE1E512D7F0053934E /* String.swift */,
+				6AD51ABE1E512FAA0053934E /* UIColor.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -1937,6 +1956,8 @@
 				EB7D241E1CB959440017EFE6 /* CellUncoverer.swift */,
 				EBB6D7571CD6D67C00F9C711 /* SwipeToIncrementHelper.swift */,
 				EB3E92EE1CD9347E0048DA0D /* EyeView.swift */,
+				6AD51AE01E5134880053934E /* LabelMore.swift */,
+				6AD51AEA1E5136880053934E /* ViewTags.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -2350,6 +2371,7 @@
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
 				EB9208041C4DBE4400332332 /* SimpleInputPopupController.swift in Sources */,
+				6AD51AE91E51360C0053934E /* UIView.swift in Sources */,
 				EB0C1B881B3DA37100F24C85 /* LoginViewController.swift in Sources */,
 				EBDA75531BCD960900E34AC3 /* OkCancelButtonsView.swift in Sources */,
 				EBA2C8C61C4F18AC00A970B8 /* ManageProductCategoriesController.swift in Sources */,
@@ -2413,6 +2435,7 @@
 				EB37ABA61C9F2DA400FE9D7A /* LineAutocompleteTextField.swift in Sources */,
 				EB1D69731CAC82BF004892A2 /* AddButtonHelper.swift in Sources */,
 				EBB526851BEFE6DD0002A286 /* SectionModel.swift in Sources */,
+				6AD51AE51E5134F80053934E /* UIFont.swift in Sources */,
 				EBF1F9EB1CD7F75E00F8016F /* SimpleSettingCell.swift in Sources */,
 				6AEB65EF1E4D056C0094B9DE /* SelectIngredientDataController.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
@@ -2439,6 +2462,8 @@
 				EB51ED831CADA30B008AAAE1 /* DimensionsManager.swift in Sources */,
 				EBD828051BEA441B0072F9FA /* UINavigationController.swift in Sources */,
 				EB5737B91BF27B0700D52FB8 /* SharedUsersViewController.swift in Sources */,
+				6AD51AAF1E512D7F0053934E /* String.swift in Sources */,
+				6AD51AEB1E5136880053934E /* ViewTags.swift in Sources */,
 				EB620DC61C7F85CF0095BFB9 /* InvitationsHandler.swift in Sources */,
 				6A2D506D1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift in Sources */,
 				EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */,
@@ -2447,6 +2472,7 @@
 				EB7524531BF582FA00A97A10 /* QuickAddItemCell.swift in Sources */,
 				6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */,
 				EB8D1D111C389D6E00ADF884 /* ProductsWithQuantityViewController.swift in Sources */,
+				6AD51AE11E5134880053934E /* LabelMore.swift in Sources */,
 				EB8D1D131C396ED600ADF884 /* GroupItemsController.swift in Sources */,
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
 				EBB2CBCA1CF20AD60040C619 /* LeftRightBigPaddingConstraint.swift in Sources */,
@@ -2504,6 +2530,7 @@
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
 				6AE41A141E49E15300B8459D /* SelectQuantifiableController.swift in Sources */,
 				EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */,
+				6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				6A42C3851E437C4900F8E0E6 /* SimpleListItemsController.swift in Sources */,
 				5819FB5E1DDDF59500FB2CC1 /* Validatable.swift in Sources */,
@@ -2513,6 +2540,7 @@
 				EB97032F1CCBFABB00A5B284 /* StashListItemsController.swift in Sources */,
 				EBD7A7E01CC0323200B56C41 /* RatingAlert.swift in Sources */,
 				EB4147B81BDFE9FB00549CE4 /* ManageProductsCell.swift in Sources */,
+				6AD51AE31E5134D00053934E /* NSLayoutConstraint.swift in Sources */,
 				EBB6D7581CD6D67C00F9C711 /* SwipeToIncrementHelper.swift in Sources */,
 				6A7C54BC1E43EFFB00300F8D /* CartListItemsControllerNew.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,

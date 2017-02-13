@@ -8,7 +8,6 @@
 
 import UIKit
 import QorumLogs
-import Providers
 
 enum FontType {
     case light, regular, bold

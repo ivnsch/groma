@@ -156,10 +156,10 @@ class DimensionsManager {
     
     static var listItemsHeaderHeight: CGFloat {
         switch heightDimension {
-        case .verySmall: return 26
-        case .small: return 26
-        case .middle: return 28
-        case .large: return 28
+        case .verySmall: return 28
+        case .small: return 30
+        case .middle: return 43
+        case .large: return 43
         }
     }
 
@@ -193,15 +193,6 @@ class DimensionsManager {
         }
     }
     
-    static var cartStashCellHeight: CGFloat {
-        switch heightDimension {
-        case .verySmall: return 45
-        case .small: return 45
-        case .middle: return 52
-        case .large: return 66
-        }
-    }
-    
     static var searchBarHeight: CGFloat {
         switch heightDimension {
         case .verySmall: return 30
@@ -213,9 +204,9 @@ class DimensionsManager {
     
     static var leftRightPaddingConstraint: CGFloat {
         switch widthDimension {
-        case .small: return 15
-        case .middle: return 20
-        case .large: return 25
+        case .small: return 20
+        case .middle: return 25
+        case .large: return 30
         }
     }
 

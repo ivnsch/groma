@@ -355,7 +355,7 @@
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops, there are no items yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxW-16-sQo" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops, there are no items yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxW-16-sQo" customClass="LabelMore" customModule="Providers">
                                         <rect key="frame" x="73" y="376" width="229" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -472,10 +472,10 @@
                                             <rect key="frame" x="331" y="34" width="24" height="23"/>
                                         </imageView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mEO-yB-hml">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="90"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W7z-OP-2eO">
-                                                    <rect key="frame" x="0.0" y="4" width="4" height="83"/>
+                                                    <rect key="frame" x="0.0" y="4" width="4" height="82"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="4" id="4a4-fc-VIG"/>
@@ -504,7 +504,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OUR-OA-3PQ">
-                                                    <rect key="frame" x="301" y="0.0" width="0.0" height="91"/>
+                                                    <rect key="frame" x="301" y="0.0" width="0.0" height="90"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" id="xtY-uN-SR5"/>
                                                     </constraints>
@@ -514,7 +514,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" alpha="0.0" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LP-6w-Aa7">
-                                                    <rect key="frame" x="240" y="0.0" width="61" height="91"/>
+                                                    <rect key="frame" x="240" y="0.0" width="61" height="90"/>
                                                     <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="61" id="dKo-Iq-2Sh"/>
@@ -548,7 +548,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Pn-i3-NXi">
-                                                    <rect key="frame" x="350" y="0.0" width="0.0" height="91"/>
+                                                    <rect key="frame" x="350" y="0.0" width="0.0" height="90"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" id="9EV-Z6-ykG"/>
                                                     </constraints>

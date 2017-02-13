@@ -59,11 +59,7 @@ public extension String {
         let attributedString = NSMutableAttributedString(string: self)
         return attributedString
     }
-    
-    public func makeAttributedBoldRegular(_ range: NSRange) -> NSAttributedString {
-        return makeAttributed(range, normalFont: Fonts.regularLight, font: Fonts.regularBold)
-    }
-    
+
     public func underline(_ range: NSRange) -> NSMutableAttributedString {
         let attributedText = NSMutableAttributedString(string: self)
         attributedText.addAttribute(NSUnderlineStyleAttributeName, value:NSUnderlineStyle.styleSingle.rawValue, range: range)
