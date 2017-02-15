@@ -11,6 +11,50 @@ import RealmSwift
 import Providers
 import QorumLogs
 
+
+fileprivate class ItemSectionRows {
+    
+    var rows: [Any] = []
+    
+    func insert(productUuid: String, quantifiableProducts: [QuantifiableProduct]) {
+        for (index, row) in rows.enumerated() {
+            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
+                rows.insertAll(index: index + 1, arr: quantifiableProducts)
+            }
+        }
+    }
+    
+    func isExpanded(productUuid: String) -> Bool {
+        for (index, row) in rows.enumerated() {
+            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
+                if let next = rows[safe: index + 1] {
+                    if next is QuantifiableProduct {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    func close(productUuid: String) {
+        for (index, row) in rows.enumerated() {
+            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
+                // Remove all quantifiable products directly after product
+                for i in (index + 1)..<rows.count {
+                    guard i < rows.count else {return}
+                    if rows[i] is QuantifiableProduct {
+                        rows.remove(at: i)
+                    } else {
+                        return
+                    }
+                }
+                return
+            }
+        }
+    }
+}
+
 class ManageItemsController: UIViewController {
 
     fileprivate var tableViewController: UITableViewController!
@@ -23,7 +67,7 @@ class ManageItemsController: UIViewController {
 
     fileprivate var topEditSectionControllerManager: ExpandableTopViewController<AddEditNameNameColorController>?
 
-    fileprivate var productsForExpandedItems = [String: [Product]]()
+    fileprivate var itemsRows = [String: ItemSectionRows]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -165,18 +209,68 @@ class ManageItemsController: UIViewController {
 //            }
 //        }
         
-        if productsForExpandedItems[item.uuid] == nil { // it's closed - open it
+        if itemsRows[item.uuid] == nil { // it's closed - open it
             
             Prov.productProvider.products(itemUuid: item.uuid, successHandler{[weak self] products in
-                self?.productsForExpandedItems[item.uuid] = products.toArray()
+                let sectionRows = ItemSectionRows()
+                sectionRows.rows = products.toArray()
+                self?.itemsRows[item.uuid] = sectionRows
                 self?.tableView.reloadSections(IndexSet([section]), with: .none)
             })
             
         } else { // it's already open - close it
             
-            productsForExpandedItems[item.uuid] = nil
+            itemsRows[item.uuid] = nil
             tableView.reloadSections(IndexSet([section]), with: .none)
         }
+    }
+    
+    fileprivate func onRowTap(indexPath: IndexPath) {
+        
+        guard let items = items else {QL4("No items"); return}
+        
+        let item = items[indexPath.section]
+        if let itemRows = itemsRows[item.uuid] {
+            let row = itemRows.rows[indexPath.row]
+            if let product = row as? Product {
+                onProductTap(indexPath: indexPath, product: product, item: item)
+                
+            } else if let quantifiableProduct = row as? QuantifiableProduct {
+                onQuantifiableProductTap(indexPath: indexPath, quantifiableProduct: quantifiableProduct, item: item)
+            }
+
+        } else {
+            QL4("Invalid state: No item rows for item uuid: \(item.uuid)")
+        }
+    }
+    
+    fileprivate func onProductTap(indexPath: IndexPath, product: Product, item: Item) {
+        
+        func reloadSection() {
+            tableView.reloadSections(IndexSet([indexPath.section]), with: .none)
+        }
+        
+        if let itemRows = itemsRows[item.uuid] {
+            
+            if itemRows.isExpanded(productUuid: product.uuid) {
+                itemRows.close(productUuid: product.uuid)
+                reloadSection()
+
+            } else {
+                Prov.productProvider.quantifiableProducts(product: product, successHandler {[weak self] quantifiableProducts in
+                    self?.itemsRows[item.uuid]?.insert(productUuid: product.uuid, quantifiableProducts: quantifiableProducts)
+                    //                self?.quantifiableProducts[product.uuid] = quantifiableProducts
+                    reloadSection()
+                })
+            }
+ 
+        } else {
+            QL4("Invalid state: No item rows for item uuid: \(item.uuid)")
+        }
+    }
+
+    fileprivate func onQuantifiableProductTap(indexPath: IndexPath, quantifiableProduct: QuantifiableProduct, item: Item) {
+        print("quantifiable tap!")
     }
 }
 
@@ -205,23 +299,36 @@ extension ManageItemsController: UITableViewDataSource, UITableViewDelegate, Man
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let items = items else {QL4("No items"); return 0}
         let item = items[section]
-        return productsForExpandedItems[item.uuid]?.count ?? 0
+        return itemsRows[item.uuid]?.rows.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "productCell", for: indexPath) as! ManageItemsProductCell
         
-        guard let items = items else {QL4("No items"); return cell}
+        
+        guard let items = items else {QL4("No items"); return UITableViewCell()}
 
         let item = items[indexPath.section]
-        if let products = productsForExpandedItems[item.uuid] {
-            let product = products[indexPath.row]
-            cell.config(product: product)
+        if let itemRows = itemsRows[item.uuid] {
+            let row = itemRows.rows[indexPath.row]
+            
+            if let product = row as? Product {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "productCell", for: indexPath) as! ManageItemsProductCell
+                cell.config(product: product)
+                return cell
+                
+            } else if let quantifiableProduct = row as? QuantifiableProduct {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "qProductCell", for: indexPath) as! ManageItemsQuantifiableProductCell
+                cell.config(quantifiableProduct: quantifiableProduct)
+                return cell
+            }
+            
+            
         } else {
             QL4("Invalid state: No products for item uuid: \(item.uuid)")
         }
             
-        return cell
+        QL4("Illegal state - should have returned cell")
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -246,6 +353,8 @@ extension ManageItemsController: UITableViewDataSource, UITableViewDelegate, Man
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        onRowTap(indexPath: indexPath)
     }
     
     

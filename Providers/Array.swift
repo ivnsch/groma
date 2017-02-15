@@ -145,6 +145,12 @@ public extension Array {
         }
         return array
     }
+    
+    public mutating func insertAll(index: Int, arr: [Element]) {
+        for (i, e) in arr.enumerated() {
+            insert(e, at: index + i)
+        }
+    }
 }
 
 public extension Array where Element: Hashable {
