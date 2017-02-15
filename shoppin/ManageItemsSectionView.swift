@@ -12,6 +12,7 @@ import QorumLogs
 
 protocol ManageItemsSectionViewDelegate: class {
     func onHeaderTap(section: Int, view: ManageItemsSectionView)
+    func onHeaderLongTap(section: Int, view: ManageItemsSectionView)
     func onDeleteSectionTap(section: Int, view: ManageItemsSectionView)
 }
 
@@ -44,6 +45,9 @@ class ManageItemsSectionView: UITableViewHeaderFooterView, CellUncovererDelegate
         
         // height now calculated yet so we pass the position of border
         addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.ingredientsCellHeight)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
+        myContentView.addGestureRecognizer(longPress)
     }
 
     fileprivate func updateCategoryColorVisibility(editing: Bool, animated: Bool) {
@@ -89,13 +93,21 @@ class ManageItemsSectionView: UITableViewHeaderFooterView, CellUncovererDelegate
         }
     }
     
-    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let sectionIndex = sectionIndex {
             delegate?.onHeaderTap(section: sectionIndex, view: self)
         } else {
             QL4("No headerIndex or group")
         }
+    }
+    
+    func longPress(_ sender: Any) {
+        if let sectionIndex = sectionIndex {
+            delegate?.onHeaderLongTap(section: sectionIndex, view: self)
+        } else {
+            QL4("No headerIndex or group")
+        }
+        
     }
     
     // MARK: - CellUncovererDelegate

@@ -76,8 +76,7 @@ class ManageItemsController: UIViewController {
         
         topEditSectionControllerManager = initEditSectionControllerManager()
 
-        addEditButton()
-        
+//        addEditButton()
         
         tableView.register(UINib(nibName: "ManageItemsSectionView", bundle: nil), forHeaderFooterViewReuseIdentifier: "header")
     }
@@ -357,13 +356,18 @@ extension ManageItemsController: UITableViewDataSource, UITableViewDelegate, Man
     // MARK: - ManageItemsSectionViewDelegate
     
     func onHeaderTap(section: Int, view: ManageItemsSectionView) {
-        if isEditing {
-            onItemTapInEditMode(section: section)
-        } else {
+        // There's currently no way to know that we are in edit mode (the sections don't get delete or reorder overlay), so we will just not use it and use long tap/single tap instead.
+//        if isEditing {
+//            onItemTapInEditMode(section: section)
+//        } else {
             onItemTapInNormalMode(section: section)
-        }
+//        }
     }
 
+    func onHeaderLongTap(section: Int, view: ManageItemsSectionView) {
+        onItemTapInEditMode(section: section)
+    }
+    
     func onDeleteSectionTap(section: Int, view: ManageItemsSectionView) {
         guard let items = items else {QL4("No items"); return}
         guard let realmData = realmData else {QL4("No realm data"); return}
