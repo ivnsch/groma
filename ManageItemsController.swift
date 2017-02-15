@@ -149,10 +149,6 @@ class ManageItemsController: UIViewController {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         tableViewController.setEditing(editing, animated: animated)
-    
-        for section in tableViewController.tableView.visibleSections {
-            (tableView.headerView(forSection: section)?.contentView as! ManageItemsSectionView).setEditing(editing, animated: true)
-        }
     }
     
     func onEditTap(_ sender: UIBarButtonItem) {
