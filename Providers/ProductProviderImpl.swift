@@ -41,6 +41,16 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
+    func products(itemUuid: String, _ handler: @escaping (ProviderResult<Results<Product>>) -> Void) {
+        DBProv.productProvider.products(itemUuid: itemUuid) {productsMaybe in
+            if let products = productsMaybe {
+                handler(ProviderResult(status: .success, sucessResult: products))
+            } else {
+                handler(ProviderResult(status: .databaseUnknown))
+            }
+        }
+    }
+    
     func quantifiableProducts(_ text: String, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: [QuantifiableProduct])>) -> Void) {
         DBProv.productProvider.quantifiableProducts(text, range: range, sortBy: sortBy) {(substring: String?, products: [QuantifiableProduct]?) in
             if let products = products {

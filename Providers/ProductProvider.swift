@@ -40,6 +40,8 @@ public protocol ProductProvider {
 
     func productsRes(_ text: String, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: Results<QuantifiableProduct>)>) -> Void)
 
+    func products(itemUuid: String, _ handler: @escaping (ProviderResult<Results<Product>>) -> Void)
+
     func countProducts(_ handler: @escaping (ProviderResult<Int>) -> Void)
 
     // Note: this does not check name uniqueness! If need to add a new product use add(productInput), this checks name uniqueness

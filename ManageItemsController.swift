@@ -23,6 +23,8 @@ class ManageItemsController: UIViewController {
 
     fileprivate var topEditSectionControllerManager: ExpandableTopViewController<AddEditNameNameColorController>?
 
+    fileprivate var productsForExpandedItems = [String: [Product]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -112,6 +114,70 @@ class ManageItemsController: UIViewController {
     func onEditTap(_ sender: UIBarButtonItem) {
         setEditing(!isEditing, animated: true)
     }
+    
+    // MARK: - 
+    
+    fileprivate func onItemTapInEditMode(section: Int) {
+        guard let items = items else {QL4("No items"); return}
+        let item = items[section]
+        
+        topEditSectionControllerManager?.expand(true)
+        
+        topEditSectionControllerManager?.controller?.config(prefillData: AddEditNameNameColorControllerInputs(
+            name: item.name,
+            nameColorName: item.category.name,
+            nameColorColor: item.category.color
+            
+            // TODO!!!!!!!!!!!!!!!!!!! translations
+            ), settings: AddEditNameNameColorControllerSettings(
+                namePlaceholder: "placeholder_name",
+                nameEmptyValidationMessage: "validation_name_not_empty",
+                nameNameColorPlaceholder: "placeholder_category_name",
+                nameNameColorEmptyValidationMessage: "validation_category_name_not_empty"
+                
+            ), editingObj: item
+        )
+        //        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+    }
+    
+    /// For now we prefer to avoid having to store
+    
+    
+    fileprivate func getSectionIndex(itemUuid: String) -> Int? {
+        guard let items = items else {QL4("No items"); return nil}
+        for (index, item) in items.enumerated() {
+            if item.uuid == itemUuid {
+                return index
+            }
+        }
+        return nil
+    }
+    
+    fileprivate func onItemTapInNormalMode(section: Int) {
+        guard let items = items else {QL4("No items"); return}
+        let item = items[section]
+        
+//        for (itemUuid, productForExpandedItem) in productsForExpandedItems {
+//            /// close currently expanded
+//            if let sectionIndex = getSectionIndex(itemUuid: itemUuid) {
+//                productsForExpandedItems[itemUuid] = nil
+//                tableView.reloadSections(IndexSet([sectionIndex]), with: Theme.defaultRowAnimation)
+//            }
+//        }
+        
+        if productsForExpandedItems[item.uuid] == nil { // it's closed - open it
+            
+            Prov.productProvider.products(itemUuid: item.uuid, successHandler{[weak self] products in
+                self?.productsForExpandedItems[item.uuid] = products.toArray()
+                self?.tableView.reloadSections(IndexSet([section]), with: .none)
+            })
+            
+        } else { // it's already open - close it
+            
+            productsForExpandedItems[item.uuid] = nil
+            tableView.reloadSections(IndexSet([section]), with: .none)
+        }
+    }
 }
 
 
@@ -137,18 +203,24 @@ extension ManageItemsController: UITableViewDataSource, UITableViewDelegate, Man
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        guard let items = items else {QL4("No items"); return 0}
+        let item = items[section]
+        return productsForExpandedItems[item.uuid]?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath) as! ManageItemsItemCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "productCell", for: indexPath) as! ManageItemsProductCell
         
-        if let items = items {
-            cell.config(item: items[indexPath.row])
+        guard let items = items else {QL4("No items"); return cell}
+
+        let item = items[indexPath.section]
+        if let products = productsForExpandedItems[item.uuid] {
+            let product = products[indexPath.row]
+            cell.config(product: product)
         } else {
-            QL4("Illegal state: No item for row: \(indexPath.row)")
+            QL4("Invalid state: No products for item uuid: \(item.uuid)")
         }
-        
+            
         return cell
     }
     
@@ -180,30 +252,13 @@ extension ManageItemsController: UITableViewDataSource, UITableViewDelegate, Man
     // MARK: - ManageItemsSectionViewDelegate
     
     func onHeaderTap(section: Int, view: ManageItemsSectionView) {
-        //        guard isEditing else {return} TODO expand top only during editing
-        guard let items = items else {QL4("No items"); return}
-        
-        let item = items[section]
-        
-        topEditSectionControllerManager?.expand(true)
-        
-        topEditSectionControllerManager?.controller?.config(prefillData: AddEditNameNameColorControllerInputs(
-            name: item.name,
-            nameColorName: item.category.name,
-            nameColorColor: item.category.color
-            
-            // TODO!!!!!!!!!!!!!!!!!!! translations
-            ), settings: AddEditNameNameColorControllerSettings(
-                namePlaceholder: "placeholder_name",
-                nameEmptyValidationMessage: "validation_name_not_empty",
-                nameNameColorPlaceholder: "placeholder_category_name",
-                nameNameColorEmptyValidationMessage: "validation_category_name_not_empty"
-                
-            ), editingObj: item
-        )
-        //        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+        if isEditing {
+            onItemTapInEditMode(section: section)
+        } else {
+            onItemTapInNormalMode(section: section)
+        }
     }
-    
+
     func onDeleteSectionTap(section: Int, view: ManageItemsSectionView) {
         guard let items = items else {QL4("No items"); return}
         guard let realmData = realmData else {QL4("No realm data"); return}

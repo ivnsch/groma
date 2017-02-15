@@ -212,7 +212,6 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    
     // IMPORTANT: This cannot be used for real time updates (add) since the final results are fetched using uuids, so these results don't notice products with new uuids
     func products(_ substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ products: Results<Product>?) -> Void) {
         
@@ -300,7 +299,9 @@ class RealmProductProvider: RealmProvider {
         
     }
     
-    
+    func products(itemUuid: String, _ handler: @escaping (Results<Product>?) -> Void) {
+        handler(productsSync(itemUuid: itemUuid))
+    }
 
     func quantifiableProducts(_ substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ products: [QuantifiableProduct]?) -> Void) {
         products(substring, range: range, sortBy: sortBy) {(substring, result: Results<QuantifiableProduct>?) in
@@ -1248,6 +1249,12 @@ class RealmProductProvider: RealmProvider {
                 })
                 return (writeSuccess ?? false) ? .ok(product) : .err(.unknown)
             }
+        }
+    }
+    
+    func productsSync(itemUuid: String) -> Results<Product>? {
+        return withRealmSync {realm in
+            return realm.objects(Product.self).filter(Product.createFilter(itemUuid: itemUuid)).sorted(byKeyPath: "itemOpt.name")
         }
     }
 }
