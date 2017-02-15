@@ -157,4 +157,15 @@ class RealmIngredientProvider: RealmProvider {
         }
         handler((successMaybe ?? false) ? ingredient : nil)
     }
+    
+    // MARK: - Sync
+    
+    // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteIngredientsAndDependenciesSync(realm: Realm, itemUuid: String) -> Bool {
+        let ingredients = realm.objects(Ingredient.self).filter(Ingredient.createFilter(itemUuid: itemUuid))
+        for ingredient in ingredients {
+            realm.delete(ingredient)
+        }
+        return true
+    }
 }

@@ -51,8 +51,8 @@ class ItemProviderImpl: ItemProvider {
         }
     }
     
-    func delete(itemUuid: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.itemProvider.delete(uuid: itemUuid) {success in
+    func delete(itemUuid: String, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.itemProvider.delete(uuid: itemUuid, realmData: realmData) {success in
             if success {
                 handler(ProviderResult(status: .success))
                 

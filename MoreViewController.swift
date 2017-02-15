@@ -70,7 +70,7 @@ class MoreViewController: UITableViewController {
             navigationController?.pushViewController(controller, animated: true)
             
         case .manageProduct:
-            let controller = UIStoryboard.manageProductsViewController()
+            let controller = UIStoryboard.manageItemsController()
             navigationController?.pushViewController(controller, animated: true)
             
         case .user:

@@ -39,9 +39,6 @@ class IngredientCell: UITableViewCell {
 
             // height now calculated yet so we pass the position of border
             addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.ingredientsCellHeight)
-            
-            
-            QL3("fraction width: \(fractionView.width)")
         }
     }
     

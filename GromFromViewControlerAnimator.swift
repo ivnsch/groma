@@ -37,7 +37,7 @@ class GromFromViewControlerAnimator {
     
     /// Scroll offset: If button is in a scrollable view (table view, collection view) current content view offset
     /// frame has priority over inserts. If frame is passed, inset is ignored.
-    func open(button: UIView? = nil, frame: CGRect? = nil, inset: Insets = (left: 0, top: 0, right: 0, bottom: 0), scrollOffset: CGFloat = 0, addOverlay: Bool = true, controllerCreator: (() -> UIViewController?)? = nil, onFinish: (() -> Void)? = nil) {
+    func open(button: UIView? = nil, frame: CGRect? = nil, inset: Insets = (left: 0, top: 0, right: 0, bottom: 0), addTopBarHeightToY: Bool = true, scrollOffset: CGFloat = 0, addOverlay: Bool = true, controllerCreator: (() -> UIViewController?)? = nil, onFinish: (() -> Void)? = nil) {
         
         if button != nil {
             self.button = button
@@ -52,7 +52,7 @@ class GromFromViewControlerAnimator {
         
         self.controller = controller
         
-        let topBarHeight: CGFloat = 64
+        let topBarHeight: CGFloat = addTopBarHeightToY ? 64 : 0
         
         let backgroundView = HandlingButton(frame: CGRect(x: 0, y: topBarHeight, width: parent.view.frame.width, height: parent.view.frame.height - topBarHeight))
         backgroundView.alpha = 0

@@ -95,6 +95,10 @@ public class Product: DBSyncable, Identifiable {
         return "uuid == '\(uuid)'"
     }
     
+    static func createFilter(itemUuid: String) -> String {
+        return "itemOpt.uuid == '\(itemUuid)'"
+    }
+    
     static func createFilterBrand(_ brand: String) -> String {
         return "brand == '\(brand)'"
     }

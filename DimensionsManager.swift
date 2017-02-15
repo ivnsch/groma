@@ -80,6 +80,15 @@ class DimensionsManager {
         case .large: return 310
         }
     }
+    
+    static var quickEditItemHeight: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 100
+        case .small: return 100
+        case .middle: return 150
+        case .large: return 150
+        }
+    }
 
     static var quickAddManageProductsHeight: CGFloat {
         switch heightDimension {

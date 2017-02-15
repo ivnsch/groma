@@ -17,6 +17,14 @@
 		6A0DE19B1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */; };
 		6A1BBADA1E44AF5E00BC7404 /* UITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */; };
 		6A1BBAE01E44B57300BC7404 /* ListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */; };
+		6A287E821E51F4F000868244 /* ManageItemsItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */; };
+		6A287E841E5210D000868244 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E831E5210D000868244 /* Globals.swift */; };
+		6A287E871E52671700868244 /* EditNameColorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E861E52671700868244 /* EditNameColorController.swift */; };
+		6A287E891E52672600868244 /* EditNameColorController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A287E881E52672600868244 /* EditNameColorController.xib */; };
+		6A287E8C1E53A7D500868244 /* EditSingleInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E8A1E53A7D500868244 /* EditSingleInputController.swift */; };
+		6A287E8D1E53A7D500868244 /* EditSingleInputController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A287E8B1E53A7D500868244 /* EditSingleInputController.xib */; };
+		6A287E921E53AB7800868244 /* AddEditNameNameColorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E901E53AB7800868244 /* AddEditNameNameColorController.swift */; };
+		6A287E951E53ABB600868244 /* AddEditNameNameColor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A287E941E53ABB600868244 /* AddEditNameNameColor.storyboard */; };
 		6A2D506B1E3F5D0300B0F7EA /* ListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */; };
 		6A2D506D1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */; };
 		6A2D506F1E3F611F00B0F7EA /* ListItemCellNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */; };
@@ -35,6 +43,8 @@
 		6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AACDC181E475BE000A9E1EC /* ExplanationView.swift */; };
 		6AACDC1B1E475C0C00A9E1EC /* ExplanationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */; };
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
+		6ACF4D381E51EFBE00DE9D43 /* ManageItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACF4D371E51EFBE00DE9D43 /* ManageItemsController.swift */; };
+		6ACF4D3B1E51F00600DE9D43 /* ManageItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ACF4D3A1E51F00600DE9D43 /* ManageItems.storyboard */; };
 		6AD51A8F1E4F5E350053934E /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */; };
 		6AD51AAF1E512D7F0053934E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AAE1E512D7F0053934E /* String.swift */; };
 		6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51ABE1E512FAA0053934E /* UIColor.swift */; };
@@ -411,6 +421,14 @@
 		6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderSectionTableViewControllerNew.swift; sourceTree = "<group>"; };
 		6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewController.swift; sourceTree = "<group>"; };
 		6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ListItemCell.xib; path = ../ListItemCell.xib; sourceTree = "<group>"; };
+		6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsItemCell.swift; sourceTree = "<group>"; };
+		6A287E831E5210D000868244 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		6A287E861E52671700868244 /* EditNameColorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNameColorController.swift; sourceTree = "<group>"; };
+		6A287E881E52672600868244 /* EditNameColorController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditNameColorController.xib; sourceTree = "<group>"; };
+		6A287E8A1E53A7D500868244 /* EditSingleInputController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditSingleInputController.swift; sourceTree = "<group>"; };
+		6A287E8B1E53A7D500868244 /* EditSingleInputController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditSingleInputController.xib; sourceTree = "<group>"; };
+		6A287E901E53AB7800868244 /* AddEditNameNameColorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditNameNameColorController.swift; sourceTree = "<group>"; };
+		6A287E941E53ABB600868244 /* AddEditNameNameColor.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddEditNameNameColor.storyboard; sourceTree = "<group>"; };
 		6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsTableViewControllerNew.swift; sourceTree = "<group>"; };
 		6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellNew.swift; sourceTree = "<group>"; };
@@ -430,6 +448,8 @@
 		6AACDC181E475BE000A9E1EC /* ExplanationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExplanationView.swift; sourceTree = "<group>"; };
 		6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExplanationView.xib; sourceTree = "<group>"; };
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
+		6ACF4D371E51EFBE00DE9D43 /* ManageItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageItemsController.swift; path = ../ManageItemsController.swift; sourceTree = "<group>"; };
+		6ACF4D3A1E51F00600DE9D43 /* ManageItems.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItems.storyboard; sourceTree = "<group>"; };
 		6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		6AD51AAE1E512D7F0053934E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		6AD51ABE1E512FAA0053934E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -855,6 +875,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A287E851E5266F900868244 /* addEditItem */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = addEditItem;
+			sourceTree = "<group>";
+		};
+		6A287E8E1E53A94500868244 /* addEditFirstLevelSubcontrollers */ = {
+			isa = PBXGroup;
+			children = (
+				6A287E861E52671700868244 /* EditNameColorController.swift */,
+				6A287E881E52672600868244 /* EditNameColorController.xib */,
+				6A287E8A1E53A7D500868244 /* EditSingleInputController.swift */,
+				6A287E8B1E53A7D500868244 /* EditSingleInputController.xib */,
+			);
+			name = addEditFirstLevelSubcontrollers;
+			sourceTree = "<group>";
+		};
+		6A287E8F1E53AA1500868244 /* addEditSecondLevelSubcontrollers */ = {
+			isa = PBXGroup;
+			children = (
+				6A287E901E53AB7800868244 /* AddEditNameNameColorController.swift */,
+				6A287E941E53ABB600868244 /* AddEditNameNameColor.storyboard */,
+			);
+			name = addEditSecondLevelSubcontrollers;
+			sourceTree = "<group>";
+		};
 		6A2D50691E3F5CF100B0F7EA /* listItems */ = {
 			isa = PBXGroup;
 			children = (
@@ -900,6 +947,20 @@
 				6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */,
 			);
 			name = explanationView;
+			sourceTree = "<group>";
+		};
+		6ACF4D391E51EFC400DE9D43 /* manageItems */ = {
+			isa = PBXGroup;
+			children = (
+				6A287E8F1E53AA1500868244 /* addEditSecondLevelSubcontrollers */,
+				6A287E8E1E53A94500868244 /* addEditFirstLevelSubcontrollers */,
+				6A287E851E5266F900868244 /* addEditItem */,
+				6ACF4D371E51EFBE00DE9D43 /* ManageItemsController.swift */,
+				6ACF4D3A1E51F00600DE9D43 /* ManageItems.storyboard */,
+				6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */,
+			);
+			name = manageItems;
+			path = shoppin;
 			sourceTree = "<group>";
 		};
 		6AE34BE21E2E255C0039A2A8 /* recipes */ = {
@@ -1375,6 +1436,7 @@
 				EBF1A1521B82211600F34105 /* history */,
 				EBF1A1571B8239E600F34105 /* stats */,
 				EB1B36551BC44D73003519F2 /* plan */,
+				6ACF4D391E51EFC400DE9D43 /* manageItems */,
 				EBF162E31A3C853E0048E37C /* listItemsTableView */,
 				EB0A058E1BDFCE5C00D1E29D /* manageProducts */,
 				EB4147BF1BE11D2600549CE4 /* manageGroups */,
@@ -1392,6 +1454,7 @@
 				EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */,
 				EB9207EA1C4C4FC200332332 /* Localizable.strings */,
 				6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */,
+				6A287E831E5210D000868244 /* Globals.swift */,
 			);
 			name = shoppin_ios;
 			sourceTree = "<group>";
@@ -2203,6 +2266,7 @@
 				EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */,
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
 				EBB0A8071CD39821003CB7BA /* TodoListItemsEditBottomView.xib in Resources */,
+				6A287E8D1E53A7D500868244 /* EditSingleInputController.xib in Resources */,
 				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
 				EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */,
 				EBD668201CED4EB00055EE0B /* EditableChoiceModal.storyboard in Resources */,
@@ -2234,10 +2298,12 @@
 				6A7C54BA1E439B2800300F8D /* ItemsController.xib in Resources */,
 				EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */,
 				EBD668041CED4D440055EE0B /* Stats.storyboard in Resources */,
+				6A287E951E53ABB600868244 /* AddEditNameNameColor.storyboard in Resources */,
 				6A407AB41E32ACE000D77405 /* AddRecipeController.xib in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
 				EBD667F61CED4C920055EE0B /* AddEditInventory.storyboard in Resources */,
 				EBD668121CED4DE00055EE0B /* ManageProducts.storyboard in Resources */,
+				6A287E891E52672600868244 /* EditNameColorController.xib in Resources */,
 				EBB655A81CF3D13D00B49A55 /* ProductsWithQuantity.storyboard in Resources */,
 				EB4B39D21CED425000B41063 /* UserDetails.storyboard in Resources */,
 				EB5AD1961BEE2ED400BC6A2F /* EditSectionViewController.xib in Resources */,
@@ -2249,6 +2315,7 @@
 				EB4B39E01CED43B400B41063 /* Register.storyboard in Resources */,
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
 				6AE41A171E49E1E800B8459D /* SelectQuantifiable.storyboard in Resources */,
+				6ACF4D3B1E51F00600DE9D43 /* ManageItems.storyboard in Resources */,
 				6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */,
 				6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */,
 				EBD667FD1CED4CD00055EE0B /* SharedUsersViewController.storyboard in Resources */,
@@ -2370,6 +2437,7 @@
 				EB969FE11BE4371200F5BC35 /* ProductAggregateCell.swift in Sources */,
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
+				6A287E821E51F4F000868244 /* ManageItemsItemCell.swift in Sources */,
 				EB9208041C4DBE4400332332 /* SimpleInputPopupController.swift in Sources */,
 				6AD51AE91E51360C0053934E /* UIView.swift in Sources */,
 				EB0C1B881B3DA37100F24C85 /* LoginViewController.swift in Sources */,
@@ -2403,6 +2471,7 @@
 				EB80CE4D1C3F5F10001DF159 /* InventoryAuthChecker.swift in Sources */,
 				EB3E92EF1CD9347F0048DA0D /* EyeView.swift in Sources */,
 				EBB5267D1BEFE21F0002A286 /* HelpCell.swift in Sources */,
+				6A287E871E52671700868244 /* EditNameColorController.swift in Sources */,
 				EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */,
 				EB33D5561CDFA2000097AD58 /* CountryHelper.swift in Sources */,
 				EB76A7A41BEE8CD700486F30 /* AddEditPlanItemController.swift in Sources */,
@@ -2427,6 +2496,7 @@
 				EB7032851BEBBD5D00779EBB /* ReorderSectionCell.swift in Sources */,
 				EBA18C201BF5638D009291F2 /* QuickAddListItemViewController.swift in Sources */,
 				6A66D3461E413A300028240C /* TodoListItemsControllerNew.swift in Sources */,
+				6A287E841E5210D000868244 /* Globals.swift in Sources */,
 				EB33D5581CDFAB640097AD58 /* LocalizedFloatRule.swift in Sources */,
 				EBD558CB1BF3C1090048F287 /* ScaleViewController.swift in Sources */,
 				EB37ABA21C9F249300FE9D7A /* LineTextField.swift in Sources */,
@@ -2451,6 +2521,7 @@
 				EB7777D01CCFCF4F003FF417 /* AddEditListControllerView.swift in Sources */,
 				6A76C3C61E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				EB9208261C4EC53D00332332 /* ManageBrandsCell.swift in Sources */,
+				6ACF4D381E51EFBE00DE9D43 /* ManageItemsController.swift in Sources */,
 				EBBC23231BB5D57C0002F6B1 /* ProviderPopupManager.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
 				EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */,
@@ -2482,6 +2553,7 @@
 				EB20FC071A599AE20058103B /* ProductWithQuantityTableViewCell.swift in Sources */,
 				EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */,
 				EB37ABB71CA099BB00FE9D7A /* ToggleButtonRotator.swift in Sources */,
+				6A287E8C1E53A7D500868244 /* EditSingleInputController.swift in Sources */,
 				EB7DA2E11C6FCD9F007F1E43 /* SizeLimits.swift in Sources */,
 				EBFD15C11BA7F59600E37342 /* AlertPopup.swift in Sources */,
 				EB5737B71BF2612300D52FB8 /* InventorySharedUserCell.swift in Sources */,
@@ -2524,6 +2596,7 @@
 				EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */,
 				EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */,
 				EB4147CD1BE2288E00549CE4 /* ManageGroupsCell.swift in Sources */,
+				6A287E921E53AB7800868244 /* AddEditNameNameColorController.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
 				EBB2CBC61CF0CFAD0040C619 /* TextFieldHeightConstraint.swift in Sources */,
 				EBF1F9E71CD76A1900F8016F /* MyAlert.swift in Sources */,

@@ -22,7 +22,7 @@ class AddButtonHelper: NSObject {
     
     fileprivate var tapHandler: VoidFunction?
     
-    fileprivate var centerYOverride: CGFloat? // quick fix - if it's necessary to override the default centerY which is calculated in this helper. Doesn't include -keyboardHeight and buttonHeight! keyboardHeight and buttonHeight/2  are subtracted from this value TODO better solution to position the button correctly in all cases. The default is just the result of trial and error.
+    fileprivate var centerYOverride: CGFloat? // quick fix - if it's necessary to override the default centerY which is calculated in this helper. Doesn't include -keyboardHeight and buttonHeight! keyboardHeight and buttonHeight/2  are subtracted from this value TODO better solution to position the button correctly in all cases. The default is just the result of trial and error. EDIT: better explanation: this is the reference view frame used to calculate the center!
     
     init(parentView: UIView, overrideCenterY: CGFloat? = nil, tapHandler: VoidFunction?) {
         

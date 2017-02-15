@@ -44,6 +44,8 @@ extension UIStoryboard {
     fileprivate class func selectQuantifiableStoryboard() -> UIStoryboard { return UIStoryboard(name: "SelectQuantifiable", bundle: Bundle.main) }
     fileprivate class func ingredientsStoryboard() -> UIStoryboard { return UIStoryboard(name: "IngredientsController", bundle: Bundle.main) }
     fileprivate class func selectIngredientDataStoryboard() -> UIStoryboard { return UIStoryboard(name: "SelectIngredientData", bundle: Bundle.main) }
+    fileprivate class func manageItemsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItems", bundle: Bundle.main) }
+    fileprivate class func addEditNameNameColorStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditNameNameColor", bundle: Bundle.main) }
 
     // MARK: - List items
 
@@ -291,5 +293,17 @@ extension UIStoryboard {
     
     class func selectIngredientDataController() -> SelectIngredientDataController {
         return selectIngredientDataStoryboard().instantiateViewController(withIdentifier: "SelectIngredientDataController") as! SelectIngredientDataController
+    }
+    
+    // MARK: Manage items
+    
+    class func manageItemsController() -> ManageItemsController {
+        return manageItemsStoryboard().instantiateViewController(withIdentifier: "ManageItemsController") as! ManageItemsController
+    }
+    
+    // MARK: - AddEditNameNameColorController
+    
+    class func addEditNameNameColorController() -> AddEditNameNameColorController {
+        return addEditNameNameColorStoryboard().instantiateViewController(withIdentifier: "AddEditNameNameColorController") as! AddEditNameNameColorController
     }
 }

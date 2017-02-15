@@ -50,4 +50,6 @@ struct Theme {
     static let popupCornerRadius: CGFloat = 10
     
     static let defaultAnimDuration: Double = 0.2
+    
+    static let defaultRowAnimation = UITableViewRowAnimation.top
 }

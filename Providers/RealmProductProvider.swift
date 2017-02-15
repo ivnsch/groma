@@ -527,6 +527,15 @@ class RealmProductProvider: RealmProvider {
     }
     
     // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteProductsAndDependenciesSync(_ realm: Realm, itemUuid: String, markForSync: Bool) -> Bool {
+        let productsResult = realm.objects(Product.self).filter(Product.createFilter(itemUuid: itemUuid))
+        for product in productsResult {
+            _ = deleteProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
+        }
+        return true
+    }
+    
+    // Note: This is expected to be called from inside a transaction and in a background operation
     func deleteProductsAndDependenciesSync(_ realm: Realm, base: String, markForSync: Bool) -> Bool {
         let productsResult = realm.objects(Product.self).filter(Product.createFilter(base: base))
         for product in productsResult {
@@ -586,7 +595,7 @@ class RealmProductProvider: RealmProvider {
         
         // Delete all the quantifiable products that reference product 
         
-        let quantifiableProductsResult = realm.objects(Product.self).filter(QuantifiableProduct.createFilterProduct(productUuid))
+        let quantifiableProductsResult = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilterProduct(productUuid))
 
         for quantifiableProduct in quantifiableProductsResult {
             _ = deleteQuantifiableProductAndDependenciesSync(realm, quantifiableProductUuid: quantifiableProduct.uuid, markForSync: markForSync)

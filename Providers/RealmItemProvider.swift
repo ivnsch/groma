@@ -21,9 +21,7 @@ class RealmItemProvider: RealmProvider {
             }
         }()
         
-        load(filter: nil, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending)) {(items: Results<Item>?) in
-            handler(items)
-        }
+        handler(loadSync(filter: nil, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending)))
     }
     
     // IMPORTANT: This cannot be used for real time updates (add) since the final results are fetched using uuids, so these results don't notice items with new uuids
@@ -77,8 +75,8 @@ class RealmItemProvider: RealmProvider {
 //        handler(addOrUpdateSync(input: input))
     }
     
-    func delete(uuid: String, handler: @escaping (Bool) -> Void) {
-        handler(deleteSync(uuid: uuid))
+    func delete(uuid: String, realmData: RealmData, handler: @escaping (Bool) -> Void) {
+        handler(deleteSync(uuid: uuid, realmData: realmData))
     }
 
     func delete(name: String, handler: @escaping (Bool) -> Void) {
@@ -116,20 +114,27 @@ class RealmItemProvider: RealmProvider {
 //    }
     
     func deleteSync(name: String) -> Bool {
-        return withRealmSync({realm -> Bool in
-            realm.delete(realm.objects(Item.self).filter(Item.createFilter(name: name)))
-            return true
-        }) ?? false
+        return deleteItemsSync(filter: Item.createFilter(name: name), realmData: nil) // TODO? realm data
     }
     
-    func deleteSync(uuid: String) -> Bool {
-        return withRealmSync({realm -> Bool in
-            realm.delete(realm.objects(Item.self).filter(Item.createFilter(uuid: uuid)))
-            return true
-        }) ?? false
+    func deleteSync(uuid: String, realmData: RealmData) -> Bool {
+        return deleteItemsSync(filter: Item.createFilter(uuid: uuid), realmData: realmData)
     }
     
-    
+    fileprivate func deleteItemsSync(filter: String, realmData: RealmData?) -> Bool {
+        return doInWriteTransactionSync(realmData: realmData) {realm -> Bool in
+            if let item = realm.objects(Item.self).filter(filter).first {
+                DBProv.productProvider.deleteProductsAndDependenciesSync(realm, itemUuid: item.uuid, markForSync: true)
+                DBProv.ingredientProvider.deleteIngredientsAndDependenciesSync(realm: realm, itemUuid: item.uuid)
+                realm.delete(item)
+                return true
+                
+            } else {
+                QL3("Didn't find item with filter: \(filter) to be deleted. Do nothing.")
+                return true // Don't see a particular reason to show the user an error here, so we just log a warning and return success.
+            }
+        } ?? false
+    }
     
     // load item and update or create one
     // if we find an item with the unique we update it - this is for the case the user changes category color etc for an existing item while adding it
