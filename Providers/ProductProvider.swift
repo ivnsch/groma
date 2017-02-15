@@ -30,6 +30,8 @@ public protocol ProductProvider {
     
     func quantifiableProducts(product: Product, _ handler: @escaping (ProviderResult<[QuantifiableProduct]>) -> Void)
 
+    func storeProducts(quantifiableProduct: QuantifiableProduct, _ handler: @escaping (ProviderResult<[StoreProduct]>) -> Void)
+
     func products(_ nameBrands: [(name: String, brand: String)], _ handler: @escaping (ProviderResult<[Product]>) -> Void)
     
     func productsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: Product, section: Section?)])>) -> Void)
@@ -62,6 +64,8 @@ public protocol ProductProvider {
 
     func deleteQuantifiableProduct(uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
+    func delete(_ storeProduct: StoreProduct, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
+
     func delete(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func delete(productName: String, _ handler: @escaping (ProviderResult<Any>) -> Void)

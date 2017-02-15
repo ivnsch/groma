@@ -1,5 +1,5 @@
 //
-//  ManageItemsProductCell.swift
+//  ManageItemsStoreProductCell.swift
 //  shoppin
 //
 //  Created by Ivan Schuetz on 15/02/2017.
@@ -9,13 +9,15 @@
 import UIKit
 import Providers
 
-class ManageItemsProductCell: UITableViewCell {
-
-    @IBOutlet weak var brandLabel: UILabel!
-
-    func config(product: Product) {
+class ManageItemsStoreProductCell: UITableViewCell {
+    
+    @IBOutlet weak var storeNameLabel: UILabel!
+    @IBOutlet weak var priceLabel: UILabel!
+    
+    func config(storeProduct: StoreProduct) {
         
-        brandLabel.text = product.brand.isEmpty ? trans("manage_items_empty_brand_name") : product.brand
+        storeNameLabel.text = storeProduct.store.isEmpty ? trans("manage_items_empty_store_name") : storeProduct.store
+        priceLabel.text = storeProduct.price.toLocalCurrencyString()
         
         // height now calculated yet so we pass the position of border
         addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.ingredientsCellHeight)

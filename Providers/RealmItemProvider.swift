@@ -124,8 +124,8 @@ class RealmItemProvider: RealmProvider {
     fileprivate func deleteItemsSync(filter: String, realmData: RealmData?) -> Bool {
         return doInWriteTransactionSync(realmData: realmData) {realm -> Bool in
             if let item = realm.objects(Item.self).filter(filter).first {
-                DBProv.productProvider.deleteProductsAndDependenciesSync(realm, itemUuid: item.uuid, markForSync: true)
-                DBProv.ingredientProvider.deleteIngredientsAndDependenciesSync(realm: realm, itemUuid: item.uuid)
+                _ = DBProv.productProvider.deleteProductsAndDependenciesSync(realm, itemUuid: item.uuid, markForSync: true)
+                _ = DBProv.ingredientProvider.deleteIngredientsAndDependenciesSync(realm: realm, itemUuid: item.uuid)
                 realm.delete(item)
                 return true
                 

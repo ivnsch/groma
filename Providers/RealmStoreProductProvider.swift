@@ -71,4 +71,11 @@ class RealmStoreProductProvider: RealmProvider {
     func storeProductSync(_ product: QuantifiableProduct, store: String) -> StoreProduct? {
         return loadFirstSync(filter: StoreProduct.createFilterProductStore(quantifiableProductUuid: product.uuid, store: store))
     }
+    
+    func deleteStoreProductSync(uuid: String) -> Bool {
+        return doInWriteTransactionSync {[weak self] realm in
+            _ = self?.deleteStoreProductsAndDependenciesForProductSync(realm, productUuid: uuid, markForSync: true)
+            return true
+        } ?? false
+    }
 }

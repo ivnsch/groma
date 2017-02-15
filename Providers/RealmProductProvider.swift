@@ -1257,4 +1257,9 @@ class RealmProductProvider: RealmProvider {
             return realm.objects(Product.self).filter(Product.createFilter(itemUuid: itemUuid)).sorted(byKeyPath: "itemOpt.name")
         }
     }
+    
+    func storeProductsSync(quantifiableProduct: QuantifiableProduct) -> [StoreProduct]? {
+        return loadSync(filter: StoreProduct.createFilterProduct(quantifiableProduct.uuid))?.toArray()
+//        return [StoreProduct(uuid: UUID().uuidString, price: 123.4, product: quantifiableProduct)] // testing
+    }
 }

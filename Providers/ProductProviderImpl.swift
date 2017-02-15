@@ -71,6 +71,14 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
+    func storeProducts(quantifiableProduct: QuantifiableProduct, _ handler: @escaping (ProviderResult<[StoreProduct]>) -> Void) {
+        if let storeProducts = DBProv.productProvider.storeProductsSync(quantifiableProduct: quantifiableProduct) {
+            handler(ProviderResult(status: .success, sucessResult: storeProducts))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
     func productsRes(_ text: String, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, products: Results<Product>)>) -> Void) {
         DBProv.productProvider.products(text, sortBy: sortBy) {(substring: String?, products: Results<Product>?) in
             if let products = products {
@@ -217,7 +225,14 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func delete(_ product: QuantifiableProduct, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        delete(product.uuid, remote: remote, handler)
+        DBProv.productProvider.deleteQuantifiableProductAndDependencies(product.uuid, markForSync: true) {success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+
+    func delete(_ storeProduct: StoreProduct, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        let success = DBProv.storeProductProvider.deleteStoreProductSync(uuid: storeProduct.uuid)
+        handler(ProviderResult(status: success ? .success : .databaseUnknown))
     }
     
     func delete(_ productUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
@@ -268,7 +283,7 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func deleteQuantifiableProduct(uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.productProvider.deleteProductAndDependencies(uuid, markForSync: true) {saved in
+        DBProv.productProvider.deleteQuantifiableProductAndDependencies(uuid, markForSync: true) {saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
             
             // Disabled while impl. realm sync

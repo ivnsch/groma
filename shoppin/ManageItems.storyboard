@@ -29,6 +29,7 @@
                             </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="k8T-tO-Q6c" firstAttribute="leading" secondItem="VqU-8C-9C4" secondAttribute="leading" id="1v9-LP-XxM"/>
                             <constraint firstItem="PZV-jw-nJU" firstAttribute="top" secondItem="k8T-tO-Q6c" secondAttribute="bottom" id="2Zt-fj-HO3"/>
@@ -69,7 +70,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2iG-iq-7mK">
-                                            <rect key="frame" x="0.0" y="4" width="4" height="61.5"/>
+                                            <rect key="frame" x="0.0" y="4" width="4" height="61"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="4" id="R1O-IE-bom"/>
@@ -134,7 +135,7 @@
                                     <outlet property="brandLabel" destination="ghD-MS-rRf" id="SWt-bk-apU"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="qProductCell" id="f4W-3V-fBb" customClass="ManageItemsQuantifiableProductCell" customModule="groma" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="quantProductCell" id="f4W-3V-fBb" customClass="ManageItemsQuantifiableProductCell" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="168" width="375" height="70"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="f4W-3V-fBb" id="BE9-gk-cTd">
@@ -164,7 +165,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="backgroundColor" red="0.94117647059999998" green="0.97647058819999999" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstItem="OE1-fv-XJd" firstAttribute="centerY" secondItem="BE9-gk-cTd" secondAttribute="centerY" id="L67-Io-JuL"/>
                                         <constraint firstItem="OE1-fv-XJd" firstAttribute="leading" secondItem="BE9-gk-cTd" secondAttribute="leading" constant="21" id="cGO-Ml-s1y" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
@@ -172,9 +173,53 @@
                                         <constraint firstItem="aqM-Jw-WYX" firstAttribute="centerY" secondItem="BE9-gk-cTd" secondAttribute="centerY" id="sBR-Di-vK1"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" red="0.94117647058823528" green="0.97647058823529409" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <outlet property="baseQuantityLabel" destination="OE1-fv-XJd" id="7sD-6s-xt6"/>
                                     <outlet property="unitLabel" destination="aqM-Jw-WYX" id="FGl-Fc-TfW"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="storeProductCell" id="YT2-Wj-cZg" customClass="ManageItemsStoreProductCell" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="238" width="375" height="70"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YT2-Wj-cZg" id="Ke7-3F-WNY">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="69"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZDE-C7-gVb" customClass="LabelMore" customModule="groma">
+                                            <rect key="frame" x="21" y="24" width="44" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="40"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9KL-jU-5IY" customClass="LabelMore" customModule="groma">
+                                            <rect key="frame" x="311" y="24" width="44" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="40"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.97647058819999999" green="0.97647058819999999" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="ZDE-C7-gVb" firstAttribute="leading" secondItem="Ke7-3F-WNY" secondAttribute="leading" constant="21" id="Bpg-jw-3Ug" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                                        <constraint firstItem="9KL-jU-5IY" firstAttribute="centerY" secondItem="Ke7-3F-WNY" secondAttribute="centerY" id="IHR-GM-FP2"/>
+                                        <constraint firstAttribute="trailing" secondItem="9KL-jU-5IY" secondAttribute="trailing" constant="20" id="bzx-48-dXF"/>
+                                        <constraint firstItem="ZDE-C7-gVb" firstAttribute="centerY" secondItem="Ke7-3F-WNY" secondAttribute="centerY" id="p17-9s-dfi"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="priceLabel" destination="9KL-jU-5IY" id="Dtq-to-9vp"/>
+                                    <outlet property="storeNameLabel" destination="ZDE-C7-gVb" id="Hxa-gr-qUv"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

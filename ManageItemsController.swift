@@ -11,10 +11,13 @@ import RealmSwift
 import Providers
 import QorumLogs
 
-
 fileprivate class ItemSectionRows {
     
     var rows: [Any] = []
+    
+    // TODO refactor quantifiable/store product methods. Are identical, except of types.
+    
+    // Quantifiable products
     
     func insert(productUuid: String, quantifiableProducts: [QuantifiableProduct]) {
         for (index, row) in rows.enumerated() {
@@ -41,15 +44,85 @@ fileprivate class ItemSectionRows {
         for (index, row) in rows.enumerated() {
             if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
                 // Remove all quantifiable products directly after product
-                for i in (index + 1)..<rows.count {
+                let i = index + 1
+                while true {
                     guard i < rows.count else {return}
-                    if rows[i] is QuantifiableProduct {
-                        rows.remove(at: i)
-                    } else {
+                    if rows[i] is Product {
                         return
+                    } else {
+                        rows.remove(at: i)
                     }
                 }
                 return
+            }
+        }
+    }
+    
+    func delete(productUuid: String) {
+        close(productUuid: productUuid)
+        for (index, row) in rows.enumerated() {
+            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
+                rows.remove(at: index)
+            }
+        }
+    }
+    
+    // Store products
+    
+    func insert(quantifiableProductUuid: String, storeProducts: [StoreProduct]) {
+        for (index, row) in rows.enumerated() {
+            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
+                rows.insertAll(index: index + 1, arr: storeProducts)
+            }
+        }
+    }
+    
+    func isExpanded(quantifiableProductUuid: String) -> Bool {
+        for (index, row) in rows.enumerated() {
+            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
+                if let next = rows[safe: index + 1] {
+                    if next is StoreProduct {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    func close(quantifiableProductUuid: String) {
+        for (index, row) in rows.enumerated() {
+            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
+                // Remove all quantifiable products directly after product
+                let i = index + 1
+                while true {
+                    guard i < rows.count else {return}
+                    if rows[i] is Product || rows[i] is QuantifiableProduct {
+                        return
+                    } else {
+                        rows.remove(at: i)
+                    }
+                }
+                return
+            }
+        }
+    }
+    
+    func delete(quantifiableProductUuid: String) {
+        close(quantifiableProductUuid: quantifiableProductUuid)
+        for (index, row) in rows.enumerated() {
+            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
+                rows.remove(at: index)
+            }
+        }
+    }
+    
+    
+    
+    func delete(storeProductUuid: String) {
+        for (index, row) in rows.enumerated() {
+            if ((row as? StoreProduct).map{$0.uuid == storeProductUuid}) ?? false {
+                rows.remove(at: index)
             }
         }
     }
@@ -266,6 +339,28 @@ class ManageItemsController: UIViewController {
 
     fileprivate func onQuantifiableProductTap(indexPath: IndexPath, quantifiableProduct: QuantifiableProduct, item: Item) {
         print("quantifiable tap!")
+        
+        func reloadSection() {
+            tableView.reloadSections(IndexSet([indexPath.section]), with: .none)
+        }
+        
+        if let itemRows = itemsRows[item.uuid] {
+            
+            if itemRows.isExpanded(quantifiableProductUuid: quantifiableProduct.uuid) {
+                itemRows.close(quantifiableProductUuid: quantifiableProduct.uuid)
+                reloadSection()
+                
+            } else {
+                Prov.productProvider.storeProducts(quantifiableProduct: quantifiableProduct, successHandler {[weak self] storeProducts in
+                    self?.itemsRows[item.uuid]?.insert(quantifiableProductUuid: quantifiableProduct.uuid, storeProducts: storeProducts)
+                    //                self?.quantifiableProducts[product.uuid] = quantifiableProducts
+                    reloadSection()
+                })
+            }
+            
+        } else {
+            QL4("Invalid state: No item rows for item uuid: \(item.uuid)")
+        }
     }
 }
 
@@ -312,8 +407,13 @@ extension ManageItemsController: UITableViewDataSource, UITableViewDelegate, Man
                 return cell
                 
             } else if let quantifiableProduct = row as? QuantifiableProduct {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "qProductCell", for: indexPath) as! ManageItemsQuantifiableProductCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "quantProductCell", for: indexPath) as! ManageItemsQuantifiableProductCell
                 cell.config(quantifiableProduct: quantifiableProduct)
+                return cell
+                
+            } else if let storeProduct = row as? StoreProduct {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "storeProductCell", for: indexPath) as! ManageItemsStoreProductCell
+                cell.config(storeProduct: storeProduct)
                 return cell
             }
             
@@ -344,6 +444,33 @@ extension ManageItemsController: UITableViewDataSource, UITableViewDelegate, Man
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            guard let items = items else {QL4("No items"); return}
+            let item = items[indexPath.section]
+            if let rows = itemsRows[item.uuid] {
+                let row = rows.rows[indexPath.row]
+                
+                if let product = row as? Product {
+                    Prov.productProvider.delete(product, remote: true, successHandler{[weak self] in
+                        self?.itemsRows[item.uuid]?.delete(productUuid: product.uuid)
+                        self?.tableView.reloadSections(IndexSet([indexPath.section]), with: .none)
+                    })
+                    
+                    
+                } else if let quantifiableProduct = row as? QuantifiableProduct {
+                    Prov.productProvider.deleteQuantifiableProduct(uuid: quantifiableProduct.uuid, remote: true, successHandler{[weak self] in
+                        self?.itemsRows[item.uuid]?.delete(quantifiableProductUuid: quantifiableProduct.uuid)
+                        self?.tableView.reloadSections(IndexSet([indexPath.section]), with: .none)
+                    })
+                    
+                    
+                } else if let storeProduct = row as? StoreProduct {
+                    Prov.productProvider.delete(storeProduct, remote: true, successHandler {[weak self] in
+                        self?.itemsRows[item.uuid]?.delete(storeProductUuid: storeProduct.uuid)
+                        self?.tableView.reloadSections(IndexSet([indexPath.section]), with: .none)
+
+                    })
+                }
+            }
         }
     }
     
