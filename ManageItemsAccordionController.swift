@@ -1,5 +1,5 @@
 //
-//  ManageItemsController.swift
+//  ManageItemsAccordionController.swift
 //  shoppin
 //
 //  Created by Ivan Schuetz on 13/02/2017.
@@ -11,7 +11,7 @@ import RealmSwift
 import Providers
 import QorumLogs
 
-class ManageItemsController: UIViewController {
+class ManageItemsAccordionController: UIViewController {
 
     fileprivate var tableViewController: UITableViewController!
     fileprivate var tableView: UITableView! {
@@ -249,7 +249,7 @@ class ManageItemsController: UIViewController {
 
 
 
-extension ManageItemsController: UITableViewDataSource, UITableViewDelegate, ManageItemsSectionViewDelegate {
+extension ManageItemsAccordionController: UITableViewDataSource, UITableViewDelegate, ManageItemsSectionViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return items?.count ?? 0
@@ -399,7 +399,7 @@ extension ManageItemsController: UITableViewDataSource, UITableViewDelegate, Man
 
 // MARK: - EditSectionViewControllerDelegate
 
-extension ManageItemsController: AddEditNameNameColorControllerDelegate {
+extension ManageItemsAccordionController: AddEditNameNameColorControllerDelegate {
     
     func onSubmitAddEditNameNameColor(result: AddEditNameNameColorResult) {
         print("Submitted result: \(result)")
@@ -451,7 +451,6 @@ fileprivate class ItemSectionRows {
                         rows.remove(at: i)
                     }
                 }
-                return
             }
         }
     }
@@ -501,7 +500,6 @@ fileprivate class ItemSectionRows {
                         rows.remove(at: i)
                     }
                 }
-                return
             }
         }
     }

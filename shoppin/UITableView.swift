@@ -100,6 +100,14 @@ extension UITableView {
         }
     }
     
+    func applyToVisibleRows(f: (IndexPath, UIView) -> Void) {
+        for visibleIndexPath in visibleIndexPaths {
+            if let headerView = cellForRow(at: visibleIndexPath) {
+                f(visibleIndexPath, headerView)
+            }
+        }
+    }
+    
     func absoluteRow(_ indexPath: IndexPath) -> Int {
         var absRow = (indexPath as NSIndexPath).row
         for section in 0..<(indexPath as NSIndexPath).section {

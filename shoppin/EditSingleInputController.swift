@@ -56,14 +56,6 @@ class EditSingleInputController: UIViewController {
         initTextFieldPlaceholders()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if mode == .standalone {
-            addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
-            addButtonHelper?.addObserver()
-        }
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         addButtonHelper?.removeObserver()
@@ -94,6 +86,9 @@ class EditSingleInputController: UIViewController {
         nameTextField.becomeFirstResponder()
         
         if mode == .standalone {
+            addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
+            addButtonHelper?.addObserver()
+            
             focus()
         }
     }

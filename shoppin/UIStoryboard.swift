@@ -44,7 +44,9 @@ extension UIStoryboard {
     fileprivate class func selectQuantifiableStoryboard() -> UIStoryboard { return UIStoryboard(name: "SelectQuantifiable", bundle: Bundle.main) }
     fileprivate class func ingredientsStoryboard() -> UIStoryboard { return UIStoryboard(name: "IngredientsController", bundle: Bundle.main) }
     fileprivate class func selectIngredientDataStoryboard() -> UIStoryboard { return UIStoryboard(name: "SelectIngredientData", bundle: Bundle.main) }
+    fileprivate class func manageItemsAccordionStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItemsAccordion", bundle: Bundle.main) }
     fileprivate class func manageItemsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItems", bundle: Bundle.main) }
+    fileprivate class func manageDatabaseStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageDatabase", bundle: Bundle.main) }
     fileprivate class func addEditNameNameColorStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditNameNameColor", bundle: Bundle.main) }
 
     // MARK: - List items
@@ -296,6 +298,14 @@ extension UIStoryboard {
     }
     
     // MARK: Manage items
+    
+    class func manageDatabaseController() -> ManageDatabaseController {
+        return manageDatabaseStoryboard().instantiateViewController(withIdentifier: "ManageDatabaseController") as! ManageDatabaseController
+    }
+    
+    class func manageItemsAccordionController() -> ManageItemsAccordionController {
+        return manageItemsAccordionStoryboard().instantiateViewController(withIdentifier: "ManageItemsAccordionController") as! ManageItemsAccordionController
+    }
     
     class func manageItemsController() -> ManageItemsController {
         return manageItemsStoryboard().instantiateViewController(withIdentifier: "ManageItemsController") as! ManageItemsController

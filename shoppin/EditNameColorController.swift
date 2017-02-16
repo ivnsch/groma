@@ -94,15 +94,6 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
         initTextFieldPlaceholders()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        if mode == .standalone {
-            addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
-            addButtonHelper?.addObserver()
-        }
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         addButtonHelper?.removeObserver()
@@ -138,6 +129,9 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
         initValidator(emptyNameMessage: settings.nameEmptyValidationMessage)
         
         if mode == .standalone {
+            addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
+            addButtonHelper?.addObserver()
+            
             focus()
         }
     }

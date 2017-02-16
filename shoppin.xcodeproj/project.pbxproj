@@ -30,6 +30,10 @@
 		6A287E9B1E54A13500868244 /* ManageItemsProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E9A1E54A13500868244 /* ManageItemsProductCell.swift */; };
 		6A287E9D1E54D6F300868244 /* ManageItemsQuantifiableProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E9C1E54D6F300868244 /* ManageItemsQuantifiableProductCell.swift */; };
 		6A287E9F1E54FFC800868244 /* ManageItemsStoreProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E9E1E54FFC800868244 /* ManageItemsStoreProductCell.swift */; };
+		6A287EA31E55DD3D00868244 /* ManageDatabaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287EA21E55DD3D00868244 /* ManageDatabaseController.swift */; };
+		6A287EA51E55DD4F00868244 /* ManageDatabase.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A287EA41E55DD4F00868244 /* ManageDatabase.storyboard */; };
+		6A287EA71E55E2EF00868244 /* ManageItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287EA61E55E2EF00868244 /* ManageItemsController.swift */; };
+		6A287EAB1E55E3BE00868244 /* ManageItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A287EAA1E55E3BE00868244 /* ManageItems.storyboard */; };
 		6A2D506B1E3F5D0300B0F7EA /* ListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */; };
 		6A2D506D1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */; };
 		6A2D506F1E3F611F00B0F7EA /* ListItemCellNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */; };
@@ -48,8 +52,8 @@
 		6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AACDC181E475BE000A9E1EC /* ExplanationView.swift */; };
 		6AACDC1B1E475C0C00A9E1EC /* ExplanationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */; };
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
-		6ACF4D381E51EFBE00DE9D43 /* ManageItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACF4D371E51EFBE00DE9D43 /* ManageItemsController.swift */; };
-		6ACF4D3B1E51F00600DE9D43 /* ManageItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ACF4D3A1E51F00600DE9D43 /* ManageItems.storyboard */; };
+		6ACF4D381E51EFBE00DE9D43 /* ManageItemsAccordionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */; };
+		6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */; };
 		6AD51A8F1E4F5E350053934E /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */; };
 		6AD51AAF1E512D7F0053934E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AAE1E512D7F0053934E /* String.swift */; };
 		6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51ABE1E512FAA0053934E /* UIColor.swift */; };
@@ -439,6 +443,10 @@
 		6A287E9A1E54A13500868244 /* ManageItemsProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsProductCell.swift; sourceTree = "<group>"; };
 		6A287E9C1E54D6F300868244 /* ManageItemsQuantifiableProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsQuantifiableProductCell.swift; sourceTree = "<group>"; };
 		6A287E9E1E54FFC800868244 /* ManageItemsStoreProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsStoreProductCell.swift; sourceTree = "<group>"; };
+		6A287EA21E55DD3D00868244 /* ManageDatabaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageDatabaseController.swift; sourceTree = "<group>"; };
+		6A287EA41E55DD4F00868244 /* ManageDatabase.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageDatabase.storyboard; sourceTree = "<group>"; };
+		6A287EA61E55E2EF00868244 /* ManageItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsController.swift; sourceTree = "<group>"; };
+		6A287EAA1E55E3BE00868244 /* ManageItems.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItems.storyboard; sourceTree = "<group>"; };
 		6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsTableViewControllerNew.swift; sourceTree = "<group>"; };
 		6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellNew.swift; sourceTree = "<group>"; };
@@ -458,8 +466,8 @@
 		6AACDC181E475BE000A9E1EC /* ExplanationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExplanationView.swift; sourceTree = "<group>"; };
 		6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExplanationView.xib; sourceTree = "<group>"; };
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
-		6ACF4D371E51EFBE00DE9D43 /* ManageItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageItemsController.swift; path = ../ManageItemsController.swift; sourceTree = "<group>"; };
-		6ACF4D3A1E51F00600DE9D43 /* ManageItems.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItems.storyboard; sourceTree = "<group>"; };
+		6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageItemsAccordionController.swift; path = ../ManageItemsAccordionController.swift; sourceTree = "<group>"; };
+		6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItemsAccordion.storyboard; sourceTree = "<group>"; };
 		6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		6AD51AAE1E512D7F0053934E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		6AD51ABE1E512FAA0053934E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -914,6 +922,28 @@
 			name = addEditSecondLevelSubcontrollers;
 			sourceTree = "<group>";
 		};
+		6A287EA81E55E37600868244 /* items */ = {
+			isa = PBXGroup;
+			children = (
+				6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */,
+				6A287EA61E55E2EF00868244 /* ManageItemsController.swift */,
+				6A287EAA1E55E3BE00868244 /* ManageItems.storyboard */,
+			);
+			name = items;
+			sourceTree = "<group>";
+		};
+		6A287EA91E55E38D00868244 /* accordion */ = {
+			isa = PBXGroup;
+			children = (
+				6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */,
+				6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */,
+				6A287E9E1E54FFC800868244 /* ManageItemsStoreProductCell.swift */,
+				6A287E9C1E54D6F300868244 /* ManageItemsQuantifiableProductCell.swift */,
+				6A287E9A1E54A13500868244 /* ManageItemsProductCell.swift */,
+			);
+			name = accordion;
+			sourceTree = "<group>";
+		};
 		6A2D50691E3F5CF100B0F7EA /* listItems */ = {
 			isa = PBXGroup;
 			children = (
@@ -964,15 +994,13 @@
 		6ACF4D391E51EFC400DE9D43 /* manageItems */ = {
 			isa = PBXGroup;
 			children = (
+				6A287EA91E55E38D00868244 /* accordion */,
+				6A287EA81E55E37600868244 /* items */,
 				6A287E8F1E53AA1500868244 /* addEditSecondLevelSubcontrollers */,
 				6A287E8E1E53A94500868244 /* addEditFirstLevelSubcontrollers */,
 				6A287E851E5266F900868244 /* addEditItem */,
-				6ACF4D371E51EFBE00DE9D43 /* ManageItemsController.swift */,
-				6ACF4D3A1E51F00600DE9D43 /* ManageItems.storyboard */,
-				6A287E9E1E54FFC800868244 /* ManageItemsStoreProductCell.swift */,
-				6A287E9C1E54D6F300868244 /* ManageItemsQuantifiableProductCell.swift */,
-				6A287E9A1E54A13500868244 /* ManageItemsProductCell.swift */,
-				6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */,
+				6A287EA21E55DD3D00868244 /* ManageDatabaseController.swift */,
+				6A287EA41E55DD4F00868244 /* ManageDatabase.storyboard */,
 			);
 			name = manageItems;
 			path = shoppin;
@@ -2284,12 +2312,14 @@
 				6A287E971E54792F00868244 /* ManageItemsSectionView.xib in Resources */,
 				6A287E8D1E53A7D500868244 /* EditSingleInputController.xib in Resources */,
 				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
+				6A287EA51E55DD4F00868244 /* ManageDatabase.storyboard in Resources */,
 				EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */,
 				EBD668201CED4EB00055EE0B /* EditableChoiceModal.storyboard in Resources */,
 				EBAEB23E1BDC263800FCDA5C /* FloatingViews.xib in Resources */,
 				EBD667EF1CED4BF30055EE0B /* AddEditList.storyboard in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB1B365B1BC4637A003519F2 /* PlanTableViewCell_.xib in Resources */,
+				6A287EAB1E55E3BE00868244 /* ManageItems.storyboard in Resources */,
 				EBD667E11CED49EB0055EE0B /* AddEditListItem.storyboard in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
 				EB9207EE1C4C522700332332 /* ForgotPassword.storyboard in Resources */,
@@ -2331,7 +2361,7 @@
 				EB4B39E01CED43B400B41063 /* Register.storyboard in Resources */,
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
 				6AE41A171E49E1E800B8459D /* SelectQuantifiable.storyboard in Resources */,
-				6ACF4D3B1E51F00600DE9D43 /* ManageItems.storyboard in Resources */,
+				6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */,
 				6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */,
 				6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */,
 				EBD667FD1CED4CD00055EE0B /* SharedUsersViewController.storyboard in Resources */,
@@ -2537,7 +2567,7 @@
 				EB7777D01CCFCF4F003FF417 /* AddEditListControllerView.swift in Sources */,
 				6A76C3C61E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				EB9208261C4EC53D00332332 /* ManageBrandsCell.swift in Sources */,
-				6ACF4D381E51EFBE00DE9D43 /* ManageItemsController.swift in Sources */,
+				6ACF4D381E51EFBE00DE9D43 /* ManageItemsAccordionController.swift in Sources */,
 				EBBC23231BB5D57C0002F6B1 /* ProviderPopupManager.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
 				EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */,
@@ -2598,7 +2628,9 @@
 				EB4B39C41CEBF05300B41063 /* TopEmptyViewConstraint.swift in Sources */,
 				EBED0D121C824EC300A1EEC4 /* RatingProvideFeedbackController.swift in Sources */,
 				EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */,
+				6A287EA31E55DD3D00868244 /* ManageDatabaseController.swift in Sources */,
 				6AEB65EA1E4C92B50094B9DE /* IngredientCell.swift in Sources */,
+				6A287EA71E55E2EF00868244 /* ManageItemsController.swift in Sources */,
 				EB33D55E1CDFFC8D0097AD58 /* UIDevice.swift in Sources */,
 				EB4612BA1BE56D970049DAD1 /* ExpandCellAnimator.swift in Sources */,
 				6A2D506F1E3F611F00B0F7EA /* ListItemCellNew.swift in Sources */,

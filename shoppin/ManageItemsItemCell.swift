@@ -16,7 +16,7 @@ class ManageItemsItemCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var categoryNameLabel: UILabel!
     
-    @IBOutlet weak var nameLeadingConstraint: NSLayoutConstraint!
+    //@IBOutlet weak var nameLeadingConstraint: NSLayoutConstraint!
 
     fileprivate var categoryColor: UIColor?
     
