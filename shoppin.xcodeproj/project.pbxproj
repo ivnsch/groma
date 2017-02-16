@@ -40,6 +40,9 @@
 		6A3A67B01E55F7CF00B5354F /* ManageItemsBrandsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3A67AF1E55F7CF00B5354F /* ManageItemsBrandsController.swift */; };
 		6A3A67B21E55F7DF00B5354F /* ManageItemsBrands.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A3A67B11E55F7DF00B5354F /* ManageItemsBrands.storyboard */; };
 		6A3A67B41E55F80900B5354F /* ManageItemsBrandCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3A67B31E55F80900B5354F /* ManageItemsBrandCell.swift */; };
+		6A3A67B71E5604E600B5354F /* ManageItemsBaseQuantitiesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3A67B61E5604E600B5354F /* ManageItemsBaseQuantitiesController.swift */; };
+		6A3A67B91E5604F500B5354F /* ManageItemsBaseQuantities.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A3A67B81E5604F500B5354F /* ManageItemsBaseQuantities.storyboard */; };
+		6A3A67BB1E56050D00B5354F /* ManageItemsBaseQuantityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3A67BA1E56050D00B5354F /* ManageItemsBaseQuantityCell.swift */; };
 		6A407AB31E32ACDF00D77405 /* AddRecipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407AB11E32ACDF00D77405 /* AddRecipeController.swift */; };
 		6A407AB41E32ACE000D77405 /* AddRecipeController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A407AB21E32ACDF00D77405 /* AddRecipeController.xib */; };
 		6A407ABD1E33A44400D77405 /* AddRecipeIngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407ABB1E33A44400D77405 /* AddRecipeIngredientCell.swift */; };
@@ -456,6 +459,9 @@
 		6A3A67AF1E55F7CF00B5354F /* ManageItemsBrandsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsBrandsController.swift; sourceTree = "<group>"; };
 		6A3A67B11E55F7DF00B5354F /* ManageItemsBrands.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItemsBrands.storyboard; sourceTree = "<group>"; };
 		6A3A67B31E55F80900B5354F /* ManageItemsBrandCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsBrandCell.swift; sourceTree = "<group>"; };
+		6A3A67B61E5604E600B5354F /* ManageItemsBaseQuantitiesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsBaseQuantitiesController.swift; sourceTree = "<group>"; };
+		6A3A67B81E5604F500B5354F /* ManageItemsBaseQuantities.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItemsBaseQuantities.storyboard; sourceTree = "<group>"; };
+		6A3A67BA1E56050D00B5354F /* ManageItemsBaseQuantityCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsBaseQuantityCell.swift; sourceTree = "<group>"; };
 		6A407AB11E32ACDF00D77405 /* AddRecipeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecipeController.swift; sourceTree = "<group>"; };
 		6A407AB21E32ACDF00D77405 /* AddRecipeController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddRecipeController.xib; sourceTree = "<group>"; };
 		6A407ABB1E33A44400D77405 /* AddRecipeIngredientCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecipeIngredientCell.swift; sourceTree = "<group>"; };
@@ -975,6 +981,16 @@
 			name = brands;
 			sourceTree = "<group>";
 		};
+		6A3A67B51E56040C00B5354F /* base_quantities */ = {
+			isa = PBXGroup;
+			children = (
+				6A3A67B61E5604E600B5354F /* ManageItemsBaseQuantitiesController.swift */,
+				6A3A67B81E5604F500B5354F /* ManageItemsBaseQuantities.storyboard */,
+				6A3A67BA1E56050D00B5354F /* ManageItemsBaseQuantityCell.swift */,
+			);
+			name = base_quantities;
+			sourceTree = "<group>";
+		};
 		6A407AB01E32ACBC00D77405 /* addRecipe */ = {
 			isa = PBXGroup;
 			children = (
@@ -1013,6 +1029,7 @@
 				6A287EA91E55E38D00868244 /* accordion */,
 				6A287EA81E55E37600868244 /* items */,
 				6A3A67AE1E55F7B200B5354F /* brands */,
+				6A3A67B51E56040C00B5354F /* base_quantities */,
 				6A287E8F1E53AA1500868244 /* addEditSecondLevelSubcontrollers */,
 				6A287E8E1E53A94500868244 /* addEditFirstLevelSubcontrollers */,
 				6A287E851E5266F900868244 /* addEditItem */,
@@ -2380,6 +2397,7 @@
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
 				6AE41A171E49E1E800B8459D /* SelectQuantifiable.storyboard in Resources */,
 				6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */,
+				6A3A67B91E5604F500B5354F /* ManageItemsBaseQuantities.storyboard in Resources */,
 				6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */,
 				6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */,
 				EBD667FD1CED4CD00055EE0B /* SharedUsersViewController.storyboard in Resources */,
@@ -2594,6 +2612,7 @@
 				EB0C1BA51B3DF5FB00F24C85 /* UserDetailsViewController.swift in Sources */,
 				EB7DA2E31C6FCF65007F1E43 /* SizeLimitChecker.swift in Sources */,
 				EB80CE491C3DEB8A001DF159 /* InventoryPicker.swift in Sources */,
+				6A3A67BB1E56050D00B5354F /* ManageItemsBaseQuantityCell.swift in Sources */,
 				6A7C54B91E439B2800300F8D /* ItemsController.swift in Sources */,
 				EB51ED831CADA30B008AAAE1 /* DimensionsManager.swift in Sources */,
 				EBD828051BEA441B0072F9FA /* UINavigationController.swift in Sources */,
@@ -2614,6 +2633,7 @@
 				6A287E9B1E54A13500868244 /* ManageItemsProductCell.swift in Sources */,
 				EBB2CBCA1CF20AD60040C619 /* LeftRightBigPaddingConstraint.swift in Sources */,
 				6AE41A191E49E61D00B8459D /* SelectQuantifiableCell.swift in Sources */,
+				6A3A67B71E5604E600B5354F /* ManageItemsBaseQuantitiesController.swift in Sources */,
 				EBED0D101C82229900A1EEC4 /* RatingPopupController.swift in Sources */,
 				6A287E991E54794600868244 /* ManageItemsSectionView.swift in Sources */,
 				EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */,

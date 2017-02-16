@@ -538,9 +538,9 @@ class RealmProductProvider: RealmProvider {
     
     // Note: This is expected to be called from inside a transaction and in a background operation
     func deleteProductsAndDependenciesSync(_ realm: Realm, base: String, markForSync: Bool) -> Bool {
-        let productsResult = realm.objects(Product.self).filter(Product.createFilter(base: base))
+        let productsResult = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(base: base))
         for product in productsResult {
-            _ = deleteProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
+            _ = deleteQuantifiableProductAndDependenciesSync(realm, dbProduct: product, markForSync: markForSync)
         }
         return true
     }
@@ -1261,5 +1261,17 @@ class RealmProductProvider: RealmProvider {
     func storeProductsSync(quantifiableProduct: QuantifiableProduct) -> [StoreProduct]? {
         return loadSync(filter: StoreProduct.createFilterProduct(quantifiableProduct.uuid))?.toArray()
 //        return [StoreProduct(uuid: UUID().uuidString, price: 123.4, product: quantifiableProduct)] // testing
+    }
+    
+    
+    func updateBaseSync(oldBase: String, newBase: String) -> Bool {
+        return doInWriteTransactionSync({[weak self] realm in
+            let dbProducts = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(base: oldBase))
+            for dbProduct in dbProducts {
+                dbProduct.baseQuantity = newBase
+                realm.add(dbProduct, update: true)
+            }
+            return true
+        }) ?? false
     }
 }

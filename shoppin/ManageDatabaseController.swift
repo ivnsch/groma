@@ -11,7 +11,7 @@ import Providers
 import QorumLogs
 
 enum ManageDatabaseTypeSelection {
-    case items, brands, baseQuantities, units
+    case items, brands, bases, units
 }
 
 class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
@@ -21,7 +21,7 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
     fileprivate let selectOptions: [(value: ManageDatabaseTypeSelection, key: String)] = [
         (.items, trans("select_items")),
         (.brands, trans("select_brands")),
-        (.baseQuantities, trans("select_base_quantities")),
+        (.bases, trans("select_base_quantities")),
         (.units, ("select_units"))
     ]
     
@@ -52,6 +52,11 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
                 
             case .brands:
                 let controller = UIStoryboard.manageBrandsController()
+                controller.delegate = self
+                return controller
+                
+            case .bases:
+                let controller = UIStoryboard.manageBasesController()
                 controller.delegate = self
                 return controller
                 

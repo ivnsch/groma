@@ -76,6 +76,7 @@ public protocol ProductProvider {
 
     func deleteProductsWith(unitName: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
+    func updateBaseQuantity(oldBase: String, newBase: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func incrementFav(quantifiableProductUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
 

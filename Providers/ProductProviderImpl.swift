@@ -304,7 +304,11 @@ class ProductProviderImpl: ProductProvider {
 //            }
         }
     }
-
+    
+    func updateBaseQuantity(oldBase: String, newBase: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        let success = DBProv.productProvider.updateBaseSync(oldBase: oldBase, newBase: newBase)
+        handler(ProviderResult(status: success ? .success : .databaseUnknown))
+    }
     
     func incrementFav(quantifiableProductUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         DBProv.productProvider.incrementFav(quantifiableProductUuid: quantifiableProductUuid, {saved in

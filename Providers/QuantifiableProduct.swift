@@ -158,6 +158,10 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         return "baseQuantity CONTAINS[c] '\(text)'"
     }
     
+    static func createFilter(base: String) -> String {
+        return "baseQuantity = '\(base)'"
+    }
+    
     // Deletes by unit name
     static func createFilter(unit: Unit) -> String {
         return createFilter(unitName: unit.name)
