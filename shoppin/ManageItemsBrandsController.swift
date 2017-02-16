@@ -86,6 +86,7 @@ class ManageItemsBrandsController: UITableViewController {
             
             // Removing brand is equivalent to remove products with brand, brand doesn't exist outside of products.
             Prov.brandProvider.removeProductsWithBrand(brands[indexPath.row], remote: true, successHandler{[weak self] in
+                self?.brands?.remove(at: indexPath.row)
                 self?.tableView.deleteRows(at: [indexPath], with: Theme.defaultRowAnimation)
             })
         }

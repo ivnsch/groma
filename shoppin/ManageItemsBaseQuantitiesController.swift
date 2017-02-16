@@ -82,10 +82,11 @@ class ManageItemsBaseQuantitiesController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            guard let bases = bases else {QL4("No brands"); return}
+            guard let bases = bases else {QL4("No bases"); return}
             
             // Removing base is equivalent to remove products with base, base doesn't exist outside of products.
             Prov.productProvider.deleteProductsWith(base: bases[indexPath.row], successHandler{[weak self] in
+                self?.bases?.remove(at: indexPath.row)
                 self?.tableView.deleteRows(at: [indexPath], with: Theme.defaultRowAnimation)
             })
         }
