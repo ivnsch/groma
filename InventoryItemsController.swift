@@ -13,10 +13,10 @@ import QorumLogs
 import RealmSwift
 import Providers
 
-class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
+class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegateNew, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
 
     fileprivate var inventoryItemsResult: Results<InventoryItem>?
-    fileprivate var notificationToken: NotificationToken?
+    fileprivate var realmData: RealmData?
     
     @IBOutlet weak var topBar: ListTopBarView!
     @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
@@ -26,6 +26,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
     
     fileprivate var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
+    
+    var isEmpty: Bool {
+        return inventoryItemsResult?.isEmpty ?? true
+    }
     
     var inventory: DBInventory? {
         didSet {
@@ -40,14 +44,17 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     var onViewWillAppear: VoidFunction?
     var onViewDidAppear: VoidFunction?
 
-    fileprivate var productsWithQuantityController: ProductsWithQuantityViewController!
-
+    fileprivate var productsWithQuantityController: ProductsWithQuantityViewControllerNew!
+    fileprivate var tableView: UITableView {
+        return productsWithQuantityController.tableView
+    }
+    
     fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        productsWithQuantityController = UIStoryboard.productsWithQuantityViewController()
+        productsWithQuantityController = UIStoryboard.productsWithQuantityViewControllerNew()
         addChildViewController(productsWithQuantityController)
         productsWithQuantityController.delegate = self
         
@@ -260,7 +267,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func setDefaultLeftButtons() {
-        if productsWithQuantityController.models.isEmpty {
+        if inventoryItemsResult?.isEmpty ?? true {
             topBar.setLeftButtonIds([])
         } else {
             topBar.setLeftButtonIds([.edit])
@@ -286,18 +293,19 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
-        if let inventory = inventory {
-            Prov.inventoryItemsProvider.addToInventory(inventory, group: group, remote: true, resultHandler(onSuccess: {inventoryItemsWithDelta in
-
-            }, onError: {[weak self] result in guard let weakSelf = self else {return}
-                switch result.status {
-                case .isEmpty:
-                    AlertPopup.show(title: trans("popup_title_group_is_empty"), message: trans("popup_group_is_empty"), controller: weakSelf)
-                default:
-                    self?.defaultErrorHandler()(result)
-                }
-            }))
-        }
+        // Outdated
+//        if let inventory = inventory {
+//            Prov.inventoryItemsProvider.addToInventory(inventory, group: group, remote: true, resultHandler(onSuccess: {inventoryItemsWithDelta in
+//
+//            }, onError: {[weak self] result in guard let weakSelf = self else {return}
+//                switch result.status {
+//                case .isEmpty:
+//                    AlertPopup.show(title: trans("popup_title_group_is_empty"), message: trans("popup_group_is_empty"), controller: weakSelf)
+//                default:
+//                    self?.defaultErrorHandler()(result)
+//                }
+//            }))
+//        }
     }
     
     internal func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
@@ -311,8 +319,23 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
+        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return}
+        guard let realmData = realmData else {QL4("No realm data"); return}
+        
         if let inventory = inventory {
-            Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: quantity, remote: true, successHandler{addedItemWithDelta in
+            Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: quantity, remote: true, realmData: realmData, successHandler{addedItem in
+                
+                if addedItem.isNew {
+                    self.insert(item: addedItem.inventoryItem, scrollToRow: true)
+                    
+                } else {
+                    if let index = inventoryItemsResult.index(of: addedItem.inventoryItem) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
+                        self.update(item: addedItem.inventoryItem, scrollToRow: index)
+                    } else {
+                        QL4("Illegal state: Item is not new (it's an update) but was not found in results")
+                    }
+                }
+                
             })
         }
     }
@@ -327,13 +350,17 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
-        
+        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return}
+        guard let realmData = realmData else {QL4("No realm data"); return}
+
         func onEditListItem(_ input: ListItemInput, editingItem: InventoryItem) {
 
             let inventoryItemInput = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: input.storeProductInput.unit)
             
-            Prov.inventoryItemsProvider.updateInventoryItem(inventoryItemInput, updatingInventoryItem: editingItem, remote: true, resultHandler (onSuccess: {  (inventoryItem, replaced) in
+            Prov.inventoryItemsProvider.updateInventoryItem(inventoryItemInput, updatingInventoryItem: editingItem, remote: true, realmData: realmData, resultHandler (onSuccess: {  (inventoryItem, replaced) in
 
+                print("replaced: \(replaced)") // TODO!!!!!!!!!!!!!!!!! update in tableview?
+                
             }, onError: {[weak self] result in
                 self?.defaultErrorHandler()(result)
             }))
@@ -343,7 +370,19 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if let inventory = inventory {
                 let input = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: input.storeProductInput.unit)
                 
-                Prov.inventoryItemsProvider.addToInventory(inventory, itemInput: input, remote: true, resultHandler (onSuccess: {groupItem in
+                Prov.inventoryItemsProvider.addToInventory(inventory, itemInput: input, remote: true, realmData: realmData, resultHandler (onSuccess: {addedItem in
+                    
+                    if addedItem.isNew {
+                        self.insert(item: addedItem.inventoryItem, scrollToRow: true)
+                        
+                    } else {
+                        if let index = inventoryItemsResult.index(of: addedItem.inventoryItem) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
+                            self.update(item: addedItem.inventoryItem, scrollToRow: index)
+                        } else {
+                            QL4("Illegal state: Item is not new (it's an update) but was not found in results")
+                        }
+                    }
+                    
                 }, onError: {[weak self] result in
                     self?.closeTopController()
                     self?.defaultErrorHandler()(result)
@@ -407,22 +446,25 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "productsWithQuantityControllerSegue" {
-            productsWithQuantityController = segue.destination as? ProductsWithQuantityViewController
+            productsWithQuantityController = segue.destination as? ProductsWithQuantityViewControllerNew
             productsWithQuantityController?.delegate = self
         }
     }
     
     // MARK: - ProductsWithQuantityViewControllerDelegate
     
-    func loadModels(_ page: NSRange?, sortBy: InventorySortBy, onSuccess: @escaping ([ProductWithQuantity2]) -> Void) {
+    func loadModels(sortBy: InventorySortBy, onSuccess: @escaping () -> Void) {
+        
         if let inventory = inventory {
             // .MemOnly fetch mode prevents following - when we add items to the inventory and switch to inventory very quickly, the db has not finished writing the items yet! and the load request reads the items from db before the write finishes so if we pass fetchMode .Both, first the mem cache returns the correct items but then the call - to the db - returns still the old items. So we pass mem cache which has the correct state, ignoring the db result.
             Prov.inventoryItemsProvider.inventoryItems(inventory: inventory, fetchMode: .memOnly, sortBy: sortBy, successHandler{[weak self] inventoryItems in guard let weakSelf = self else {return}
                 
                 weakSelf.inventoryItemsResult = inventoryItems
-                onSuccess(inventoryItems.toArray()) // TODO! productsWithQuantityController should load also lazily
+                guard let realm = inventoryItems.realm else {QL4("No realm. Will not init notification token"); return}
+        
+                weakSelf.realmData?.token.stop()
 
-                weakSelf.notificationToken = weakSelf.inventoryItemsResult?.addNotificationBlock { changes in
+                let notificationToken = inventoryItems.addNotificationBlock { changes in
                     
                     switch changes {
                     case .initial:
@@ -434,9 +476,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                         QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                         
                         weakSelf.productsWithQuantityController.tableView.beginUpdates()
-                    
-                        weakSelf.productsWithQuantityController.models = inventoryItems.toArray() // TODO! productsWithQuantityController should load also lazily
-                        
                         weakSelf.productsWithQuantityController.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
                         weakSelf.productsWithQuantityController.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .top)
                         weakSelf.productsWithQuantityController.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
@@ -444,53 +483,67 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                         
                         weakSelf.productsWithQuantityController.updateEmptyUI()
                         
-                        // TODO close only when receiving own notification, not from someone else (possible?)
-                        if !modifications.isEmpty { // close only if it's an update (for add user may want to add multiple products)
-                            weakSelf.topQuickAddControllerManager?.expand(false)
-                            weakSelf.topQuickAddControllerManager?.controller?.onClose()
-                        }
-                        
-                        if let firstInsertion = insertions.first { // when add, scroll to added item
-                            weakSelf.productsWithQuantityController.tableView.scrollToRow(at: IndexPath(row: firstInsertion, section: 0), at: .top, animated: true)
-                        }
-
                     case .error(let error):
                         // An error occurred while opening the Realm file on the background worker thread
                         fatalError(String(describing: error))
                     }
                 }
+                
+                weakSelf.realmData = RealmData(realm: realm, token: notificationToken)
+                
+                onSuccess()
+
             })
         } else {
             print("Error: InventoryItemsController.loadModels: no inventory")
         }
     }
     
-    func onLoadedModels(_ models: [ProductWithQuantity2]) {
-        // TODO is this necessary?
+    func itemForRow(row: Int) -> ProductWithQuantity2? {
+        return inventoryItemsResult?[row]
     }
     
-    func remove(_ model: ProductWithQuantity2, index: Int, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
-        if let inventory = inventory {
-            Prov.inventoryItemsProvider.removeInventoryItem((model as! InventoryItem).uuid, inventoryUuid: inventory.uuid, remote: true, resultHandler(onSuccess: {
-                onSuccess()
-            }, onError: {result in
-                onError(result)
-            }))
-        } else {
-            print("Error: InventoryItemsController.remove: no inventory")
-        }
+    var itemsCount: Int {
+        return inventoryItemsResult?.count ?? 0
     }
     
-    func increment(_ model: ProductWithQuantity2, delta: Float, onSuccess: @escaping (Float) -> Void) {
-        Prov.inventoryItemsProvider.incrementInventoryItem(model as! InventoryItem, delta: delta, remote: true, successHandler({updatedQuantity in
-            onSuccess(updatedQuantity)
+    func same(lhs: ProductWithQuantity2, rhs: ProductWithQuantity2) -> Bool {
+        return (lhs as! InventoryItem).same(rhs as! InventoryItem)
+    }
+    
+    func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
+        guard let inventory = inventory else {QL4("No inventory"); return}
+        guard let realmData = realmData else {QL4("No realm data"); return}
+
+        Prov.inventoryItemsProvider.removeInventoryItem((model as! InventoryItem).uuid, inventoryUuid: inventory.uuid, remote: true, realmData: realmData, resultHandler(onSuccess: {
+            // TODO!!!!!!!!!!!!!!!!!!!!! shouldn't we remove rows here(also in ingredients controller?)
+            onSuccess()
+        }, onError: {result in
+            onError(result)
         }))
     }
     
-    func onModelSelected(_ model: ProductWithQuantity2, indexPath: IndexPath) {
-        if productsWithQuantityController.isEditing {
-            let inventoryItem = model as! InventoryItem
+    func onLoadedModels(_ models: [ProductWithQuantity2]) {
+        // TODO is this necessary?
+    }
 
+    
+    func increment(_ model: ProductWithQuantity2, delta: Float, onSuccess: @escaping (Float) -> Void) {
+        guard let realmData = realmData else {QL4("No realm data"); return}
+
+        Prov.inventoryItemsProvider.incrementInventoryItem(model as! InventoryItem, delta: delta, remote: true, realmData: realmData, successHandler({updatedQuantity in
+            onSuccess(updatedQuantity)
+            // TODO!!!!!!!!!!!!! review that increments in ProductsWithQuantityViewControllerNew change the quantity in the cell correctly? such that no updates are necessary here
+        }))
+    }
+    
+    func onModelSelected(_ index: Int) {
+        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return}
+        
+        if productsWithQuantityController.isEditing {
+            
+            let inventoryItem = inventoryItemsResult[index]
+            
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: inventoryItem))
             
@@ -499,6 +552,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             ])
         }
     }
+
     
     func emptyViewData() -> (text: String, text2: String, imgName: String) {
         return (text: trans("empty_inventory_line1"), text2: trans("empty_inventory_line2"), imgName: "empty_page")
@@ -507,27 +561,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onEmptyViewTap() {
         toggleTopAddController()
     }
-    
-    func onTableViewScroll(_ scrollView: UIScrollView) {
-        toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
-    }
-    
-    func indexPathOfItem(_ model: ProductWithQuantity2) -> IndexPath? {
-        for i in 0..<productsWithQuantityController.models.count {
-            if productsWithQuantityController.same(productsWithQuantityController.models[i], model) {
-                return IndexPath(row: i, section: 0)
-            }
-        }
-        return nil
-    }
-    
-    func isPullToAddEnabled() -> Bool {
-        return true
-    }
-    
-    func onPullToAdd() {
-        toggleTopAddController(false)
-    }
+
     
     func onEmpty(_ empty: Bool) {
         if empty {
@@ -536,4 +570,77 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             topBar.setLeftButtonIds([.edit])
         }
     }
+    
+    func onTableViewScroll(_ scrollView: UIScrollView) {
+        toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
+    }
+    
+//    func indexPathOfItem(_ model: ProductWithQuantity2) -> IndexPath? {
+//        for i in 0..<productsWithQuantityController.models.count {
+//            if productsWithQuantityController.same(productsWithQuantityController.models[i], model) {
+//                return IndexPath(row: i, section: 0)
+//            }
+//        }
+//        return nil
+//    }
+    
+    func isPullToAddEnabled() -> Bool {
+        return true
+    }
+    
+    func onPullToAdd() {
+        toggleTopAddController(false)
+    }
+
+    
+    
+    // MARK: - private
+
+    // Inserts item in table view, considering the current sortBy
+    func insert(item: InventoryItem, scrollToRow: Bool) {
+        guard let sortBy = productsWithQuantityController.sortBy else {QL4("No sortby, can't insert!"); return}
+        guard let indexPath = findIndexPathForNewItem(item, sortBy: sortBy) else {
+            QL1("No index path for: \(item), appending"); return;
+        }
+        QL1("Found index path: \(indexPath) for: \(item.product.product.item.name)")
+        tableView.insertRows(at: [indexPath], with: .top)
+        
+        productsWithQuantityController.updateEmptyUI()
+        
+        if scrollToRow {
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
+    }
+    
+    // TODO!!!!!!!!!!!!!!!! replace findIndexPathForNewItem in ingredients with this
+    /// NOTE: assumes that the item is already in inventoryItemsResult
+    fileprivate func findIndexPathForNewItem(_ ingredient: InventoryItem, sortBy: InventorySortBy) -> IndexPath? {
+        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return nil}
+        for (index, item) in inventoryItemsResult.enumerated() {
+            if item.same(ingredient) {
+                return IndexPath(row: index, section: 0)
+            }
+        }
+        return nil
+    }
+    
+    fileprivate func findFirstItem(_ f: (InventoryItem) -> Bool) -> (index: Int, model: InventoryItem)? {
+        for itemIndex in 0..<itemsCount {
+            guard let item = itemForRow(row: itemIndex) as? InventoryItem else {QL4("Illegal state: no item for index: \(itemIndex) or wrong type"); return nil}
+            if f(item) {
+                return (itemIndex, item)
+            }
+        }
+        return nil
+    }
+    
+    func update(item: InventoryItem, scrollToRow index: Int?) {
+        tableView.reloadData() // update with quantity change is tricky, since the sorting (by quantity) can cause the item to change positions. So we just reload the tableview
+        
+        if let index = index {
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
+    }
+    
 }

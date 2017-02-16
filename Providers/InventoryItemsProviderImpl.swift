@@ -126,7 +126,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         findInventoryItem(item.itemUuid) {[weak self] result in
             if let inventoryItem = result.sucessResult {
                 
-                self?.incrementInventoryItem(inventoryItem, delta: item.delta, remote: remote) {result in
+                self?.incrementInventoryItem(inventoryItem, delta: item.delta, remote: remote, realmData: nil) {result in
                     if result.success {
                         handler(ProviderResult(status: .success, sucessResult: inventoryItem))
                     } else {
@@ -141,7 +141,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
 
-    func incrementInventoryItem(_ item: InventoryItem, delta: Float, remote: Bool, _ handler: @escaping (ProviderResult<Float>) -> Void) {
+    func incrementInventoryItem(_ item: InventoryItem, delta: Float, remote: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<Float>) -> Void) {
         
         // Get item from database with updated quantityDelta
         // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
@@ -198,10 +198,10 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func updateInventoryItem(_ input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)>) -> Void) {
+    func updateInventoryItem(_ input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)>) -> Void) {
         
         // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
-        DBProv.inventoryItemProvider.deletePossibleInventoryItemWithUnique(input.productPrototype.name, productBrand: input.productPrototype.brand, inventory: updatingInventoryItem.inventory, notUuid: updatingInventoryItem.uuid) {foundAndDeletedInventoryItem in
+        DBProv.inventoryItemProvider.deletePossibleInventoryItemWithUnique(input.productPrototype.name, productBrand: input.productPrototype.brand, inventory: updatingInventoryItem.inventory, notUuid: updatingInventoryItem.uuid, realmData: realmData) {foundAndDeletedInventoryItem in
             // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
             
             Prov.productProvider.mergeOrCreateProduct(prototype: input.productPrototype, updateCategory: false, updateItem: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
@@ -210,7 +210,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 
                 if let product = result.sucessResult {
                     let updatedInventoryItem = updatingInventoryItem.copy(quantity: input.quantity, product: product)
-                    self?.updateInventoryItem(updatedInventoryItem, remote: remote) {result in
+                    self?.updateInventoryItem(updatedInventoryItem, remote: remote, realmData: realmData) {result in
                         if result.success {
                             handler(ProviderResult(status: .success, sucessResult: (inventoryItem: updatedInventoryItem, replaced: foundAndDeletedInventoryItem)))
                         } else {
@@ -226,15 +226,15 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func updateInventoryItem(_ item: InventoryItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+    func updateInventoryItem(_ item: InventoryItem, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         _ = memProvider.updateInventoryItem(item)
         
-        DBProv.inventoryItemProvider.saveInventoryItems([item], dirty: remote) {[weak self] updated in
-            if !updated {
-                self?.memProvider.invalidate()
-            }
-            
-            handler(ProviderResult(status: updated ? .success : .databaseUnknown))
+        let updated = DBProv.inventoryItemProvider.saveSync(inventoryItems: [item], realmData: realmData)
+        if !updated {
+            memProvider.invalidate()
+        }
+        
+        handler(ProviderResult(status: updated ? .success : .databaseUnknown))
             
             // Disabled while impl. realm sync - access of realm objs here causes wrong thread exception
 //            if remote {
@@ -258,7 +258,6 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //                    }
 //                }
 //            }
-        }
     }
     
     func addOrUpdateLocal(_ inventoryItems: [InventoryItem], _ handler: @escaping (ProviderResult<Any>) -> Void) {
@@ -271,25 +270,24 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     func removeInventoryItem(_ item: InventoryItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        removeInventoryItem(item.uuid, inventoryUuid: item.inventory.uuid, remote: remote, handler)
+        removeInventoryItem(item.uuid, inventoryUuid: item.inventory.uuid, remote: remote, realmData: nil, handler)
     }
     
-    func removeInventoryItem(_ uuid: String, inventoryUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
+    func removeInventoryItem(_ uuid: String, inventoryUuid: String, remote: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         
         let memUpdated = memProvider.removeInventoryItem(uuid, inventoryUuid: inventoryUuid)
         if memUpdated {
             handler(ProviderResult(status: .success))
         }
         
-        DBProv.inventoryItemProvider.removeInventoryItem(uuid, inventoryUuid: inventoryUuid, markForSync: true) {[weak self] removed in
-            if removed {
-                if !memUpdated {
-                    handler(ProviderResult(status: .success))
-                }
-            } else {
-                handler(ProviderResult(status: .databaseUnknown))
-                self?.memProvider.invalidate()
+        if DBProv.inventoryItemProvider.removeInventoryItem(uuid, inventoryUuid: inventoryUuid, markForSync: true, realmData: realmData) {
+            if !memUpdated {
+                handler(ProviderResult(status: .success))
             }
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+            memProvider.invalidate()
+        }
             
             // Disabled while impl. realm sync - access of realm objs here causes wrong thread exception
 //            if remote {
@@ -315,7 +313,6 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //                    }
 //                }
 //            }
-        }
     }
 
     func invalidateMemCache() {
@@ -324,10 +321,10 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     
     // MARK: - Direct (no history)
     
-    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Float, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float)>) -> Void) {
+    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Float, remote: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float, isNew: Bool)>) -> Void) {
         let inventory = inventory.copy()
         let product = product.copy()
-        addToInventory(inventory, productsWithQuantities: [(product: product, quantity: quantity)], remote: remote) {result in
+        addToInventory(inventory, productsWithQuantities: [(product: product, quantity: quantity)], remote: remote, realmData: realmData) {result in
             if let addedOrIncrementedInventoryItem = result.sucessResult?.first {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItem))
             } else {
@@ -336,11 +333,11 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    fileprivate func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)], remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Float)]>) -> Void) {
+    fileprivate func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)], remote: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Float, isNew: Bool)]>) -> Void) {
         let inventory = inventory.copy()
         let productsWithQuantities = productsWithQuantities.map{($0.product.copy(), $0.quantity)}
         
-        DBProv.inventoryItemProvider.addToInventory(inventory, productsWithQuantities: productsWithQuantities, dirty: remote) {addedOrIncrementedInventoryItemsMaybe in
+        DBProv.inventoryItemProvider.addToInventory(inventory, productsWithQuantities: productsWithQuantities, dirty: remote, realmData: realmData) {addedOrIncrementedInventoryItemsMaybe in
             if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItemsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItems))
 
@@ -372,26 +369,28 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 
     
     func addToInventory(_ inventory: DBInventory, group: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Float)]>) -> Void) {
-        Prov.listItemGroupsProvider.groupItems(group, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
-            if let groupItems = result.sucessResult {
-                if groupItems.isEmpty {
-                    handler(ProviderResult(status: .isEmpty))
-                } else {
-                    let productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)] = groupItems.map{($0.product, $0.quantity)}
-                    self?.addToInventory(inventory, productsWithQuantities: productsWithQuantities, remote: remote, handler)
-                }
-            } else {
-                QL4("Couldn't get items for group: \(group)")
-                handler(ProviderResult(status: .databaseUnknown))
-            }
-        }
+        QL4("Outdated")
+        handler(ProviderResult(status: .unknown))
+//        Prov.listItemGroupsProvider.groupItems(group, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
+//            if let groupItems = result.sucessResult {
+//                if groupItems.isEmpty {
+//                    handler(ProviderResult(status: .isEmpty))
+//                } else {
+//                    let productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)] = groupItems.map{($0.product, $0.quantity)}
+//                    self?.addToInventory(inventory, productsWithQuantities: productsWithQuantities, remote: remote, realmData: nil, handler)
+//                }
+//            } else {
+//                QL4("Couldn't get items for group: \(group)")
+//                handler(ProviderResult(status: .databaseUnknown))
+//            }
+//        }
     }
     
     // Add inventory item input
-    func addToInventory(_ inventory: DBInventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float)>) -> Void) {
+    func addToInventory(_ inventory: DBInventory, itemInput: InventoryItemInput, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float, isNew: Bool)>) -> Void) {
         
         func onHasProduct(_ product: QuantifiableProduct) {
-            addToInventory(inventory, product: product, quantity: 1, remote: remote, handler)
+            addToInventory(inventory, product: product, quantity: 1, remote: remote, realmData: nil, handler)
         }
         
         Prov.productProvider.quantifiableProduct(QuantifiableProductUnique(name: itemInput.productPrototype.name, brand: itemInput.productPrototype.brand, unit: itemInput.productPrototype.unit, baseQuantity: itemInput.productPrototype.baseQuantity)) {productResult in
@@ -404,7 +403,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     
                     Prov.productProvider.mergeOrCreateProduct(prototype: itemInput.productPrototype, updateCategory: true, updateItem: true) { (result: ProviderResult<QuantifiableProduct>) in
                         if let quantifiableProduct = result.sucessResult {
-                            self.addToInventory(inventory, product: quantifiableProduct, quantity: 1, remote: remote, handler)
+                            self.addToInventory(inventory, product: quantifiableProduct, quantity: 1, remote: remote, realmData: realmData, handler)
                         }
                     }
                 }

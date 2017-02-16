@@ -272,7 +272,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K7p-Hq-ZSp">
-                                            <rect key="frame" x="309" y="4" width="41" height="71.5"/>
+                                            <rect key="frame" x="309" y="4" width="41" height="72"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="41" id="ipa-2D-pDX"/>
                                             </constraints>
@@ -300,14 +300,14 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gco-Oy-7Vf">
-                                            <rect key="frame" x="0.0" y="4" width="4" height="67.5"/>
+                                            <rect key="frame" x="0.0" y="4" width="4" height="68"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="4" id="6zY-e9-a9R"/>
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sa5-bI-suW">
-                                            <rect key="frame" x="219" y="4" width="41" height="71.5"/>
+                                            <rect key="frame" x="219" y="4" width="41" height="72"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="41" id="Bge-AM-2Ky"/>
                                             </constraints>
@@ -693,6 +693,17 @@
                                                 <action selector="onIncrementTap:" destination="aj4-9f-Si2" eventType="touchUpInside" id="UzP-az-jxE"/>
                                             </connections>
                                         </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efF-zQ-80q" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                            <rect key="frame" x="78" y="17" width="44" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="50"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="2R5-6Q-YBr" firstAttribute="leading" secondItem="j26-uq-DjU" secondAttribute="leading" id="74c-KC-Okp"/>
@@ -700,6 +711,7 @@
                                         <constraint firstAttribute="centerY" secondItem="j26-uq-DjU" secondAttribute="centerY" constant="10" id="C7J-vj-XSm"/>
                                         <constraint firstAttribute="trailing" secondItem="RtH-jb-k5N" secondAttribute="trailing" constant="25" id="CGy-jY-zAR" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstItem="I6W-x1-2IM" firstAttribute="top" secondItem="DnU-YT-E5L" secondAttribute="top" constant="4" id="CxL-dS-dLa"/>
+                                        <constraint firstItem="efF-zQ-80q" firstAttribute="leading" secondItem="j26-uq-DjU" secondAttribute="trailing" constant="5" id="Fhk-Z7-Ya1"/>
                                         <constraint firstItem="I6W-x1-2IM" firstAttribute="leading" secondItem="DnU-YT-E5L" secondAttribute="leading" id="JdI-E5-CqQ"/>
                                         <constraint firstAttribute="bottom" secondItem="I6W-x1-2IM" secondAttribute="bottom" constant="4" id="Jvu-l1-BTG"/>
                                         <constraint firstItem="2R5-6Q-YBr" firstAttribute="leading" secondItem="I6W-x1-2IM" secondAttribute="trailing" constant="6" id="KmG-0g-dIJ"/>
@@ -713,6 +725,7 @@
                                         <constraint firstItem="RtH-jb-k5N" firstAttribute="leading" secondItem="zX5-4v-Mv1" secondAttribute="trailing" id="j5e-JW-kHM"/>
                                         <constraint firstItem="jov-l0-4Qz" firstAttribute="leading" secondItem="DnU-YT-E5L" secondAttribute="leading" id="jcb-M8-0wx"/>
                                         <constraint firstAttribute="centerY" secondItem="zX5-4v-Mv1" secondAttribute="centerY" id="oRJ-AY-AGY"/>
+                                        <constraint firstItem="efF-zQ-80q" firstAttribute="baseline" secondItem="j26-uq-DjU" secondAttribute="baseline" id="pOk-8Y-KYj"/>
                                         <constraint firstItem="jov-l0-4Qz" firstAttribute="top" secondItem="DnU-YT-E5L" secondAttribute="top" id="yJx-RF-oVA"/>
                                     </constraints>
                                     <variation key="default">
@@ -722,6 +735,7 @@
                                     </variation>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="baseQuantityLabel" destination="efF-zQ-80q" id="hFe-g7-VU0"/>
                                     <outlet property="brandLabel" destination="2R5-6Q-YBr" id="un0-8h-lbd"/>
                                     <outlet property="categoryColorView" destination="I6W-x1-2IM" id="Ib5-lI-j1X"/>
                                     <outlet property="centerVerticallyNameLabelConstraint" destination="C7J-vj-XSm" id="FdB-pl-d7j"/>

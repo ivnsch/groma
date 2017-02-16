@@ -383,6 +383,11 @@ class RealmProvider {
             handler(countMaybe)
         })
     }
+    func removeReturnCountSync<T: Object>(_ pred: String?, objType: T.Type, realmData: RealmData?, additionalActions: ((Realm) -> Void)? = nil) -> Int? {
+        return doInWriteTransactionSync(realmData: realmData) {[weak self] realm in
+            return self?.removeReturnCountSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
+        }
+    }
     
     // Expects to be executed in a transaction
     func removeReturnCountSync<T: Object>(_ realm: Realm, pred: String?, objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) -> Int? {
@@ -544,5 +549,14 @@ class RealmProvider {
         }, finishHandler: {saved in
             handler(saved ?? false)
         })
+    }
+    
+    func refresh() {
+        do {
+            let realm = try Realm()
+            realm.refresh()
+        } catch let e {
+            QL4("Couldn't refresh realm, error: \(e)")
+        }
     }
 }

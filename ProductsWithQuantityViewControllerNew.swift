@@ -281,7 +281,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         guard let indexPath = findIndexPathForNewItem(item) else {
             QL1("No index path for: \(item), appending"); return;
         }
-        QL1("Found index path: \(indexPath) for: \(item), sortBy: \(sortBy)")
+        QL1("Found index path: \(indexPath) for: \(item.product.product.item.name), sortBy: \(sortBy)")
         tableView.insertRows(at: [indexPath], with: .top)
         
         updateEmptyUI()

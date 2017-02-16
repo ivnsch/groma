@@ -846,53 +846,53 @@ struct MyWebsocketDispatcher {
     
 
     fileprivate static func processInventoryItem(_ verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
-        switch verb {
-            
-        case WSNotificationVerb.Update:
-            if let remoteInventoryItem = RemoteInventoryItemWithProduct(representation: data) {
-                let inventory = InventoryMapper.inventoryWithRemote(remoteInventoryItem.inventory, users: [])
-                let inventoryItem = InventoryItemMapper.inventoryItemWithRemote(remoteInventoryItem, inventory: inventory)
-                Prov.inventoryItemsProvider.updateInventoryItem(inventoryItem, remote: false) {result in
-                    if result.success {
-                        postNotification(.InventoryItem, verb, sender, inventoryItem)
-                    } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Update inventory item \(inventoryItem)", result: result)
-                    }
-                }
-            } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventory item, data: \(data)")
-            }
-            
-        case WSNotificationVerb.Increment:
-            if let remoteIncrement = RemoteIncrement(representation: data) {
-                let increment = ItemIncrement(delta: remoteIncrement.delta, itemUuid: remoteIncrement.uuid) // TODO!!!! pass the last update timestamp also?
-                Prov.inventoryItemsProvider.incrementInventoryItem(increment, remote: false) {result in
-                    if result.success {
-                        postNotification(.InventoryItem, verb, sender, increment)
-                    } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Increment inventory item \(remoteIncrement)", result: result)
-                    }
-                }
-
-            } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Increment inventory item, data: \(data)")
-            }
-            
-        case WSNotificationVerb.Delete:
-            if let containedItemIdentifier = RemoteContainedItemIdentifier(representation: data) {
-                Prov.inventoryItemsProvider.removeInventoryItem(containedItemIdentifier.itemUuid, inventoryUuid: containedItemIdentifier.containerUuid, remote: false) {result in
-                    if result.success {
-                        postNotification(.InventoryItem, verb, sender, containedItemIdentifier.itemUuid)
-                    } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete inventory item \(containedItemIdentifier)", result: result)
-                    }
-                }
-            } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Delete inventory item, data: \(data)")
-            }
-
-        default: QL4("Not handled verb: \(verb)")
-        }
+        QL4("Outdated")
+//        switch verb {
+//        case WSNotificationVerb.Update:
+//            if let remoteInventoryItem = RemoteInventoryItemWithProduct(representation: data) {
+//                let inventory = InventoryMapper.inventoryWithRemote(remoteInventoryItem.inventory, users: [])
+//                let inventoryItem = InventoryItemMapper.inventoryItemWithRemote(remoteInventoryItem, inventory: inventory)
+//                Prov.inventoryItemsProvider.updateInventoryItem(inventoryItem, remote: false) {result in
+//                    if result.success {
+//                        postNotification(.InventoryItem, verb, sender, inventoryItem)
+//                    } else {
+//                        MyWebsocketDispatcher.reportWebsocketStoringError("Update inventory item \(inventoryItem)", result: result)
+//                    }
+//                }
+//            } else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventory item, data: \(data)")
+//            }
+//            
+//        case WSNotificationVerb.Increment:
+//            if let remoteIncrement = RemoteIncrement(representation: data) {
+//                let increment = ItemIncrement(delta: remoteIncrement.delta, itemUuid: remoteIncrement.uuid) // TODO!!!! pass the last update timestamp also?
+//                Prov.inventoryItemsProvider.incrementInventoryItem(increment, remote: false) {result in
+//                    if result.success {
+//                        postNotification(.InventoryItem, verb, sender, increment)
+//                    } else {
+//                        MyWebsocketDispatcher.reportWebsocketStoringError("Increment inventory item \(remoteIncrement)", result: result)
+//                    }
+//                }
+//
+//            } else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Increment inventory item, data: \(data)")
+//            }
+//            
+//        case WSNotificationVerb.Delete:
+//            if let containedItemIdentifier = RemoteContainedItemIdentifier(representation: data) {
+//                Prov.inventoryItemsProvider.removeInventoryItem(containedItemIdentifier.itemUuid, inventoryUuid: containedItemIdentifier.containerUuid, remote: false) {result in
+//                    if result.success {
+//                        postNotification(.InventoryItem, verb, sender, containedItemIdentifier.itemUuid)
+//                    } else {
+//                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete inventory item \(containedItemIdentifier)", result: result)
+//                    }
+//                }
+//            } else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Delete inventory item, data: \(data)")
+//            }
+//
+//        default: QL4("Not handled verb: \(verb)")
+//        }
     }
     
     fileprivate static func processInventoryItems(_ verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {

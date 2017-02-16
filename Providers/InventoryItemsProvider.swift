@@ -24,32 +24,32 @@ public protocol InventoryItemsProvider {
     func addToInventoryLocal(_ inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: @escaping (ProviderResult<Any>) -> Void)
 
     // Update with removal of possible already existing item with same unique in same inventory and unique reference update
-    func updateInventoryItem(_ input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)>) -> Void)
+    func updateInventoryItem(_ input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)>) -> Void)
 
     // Plain update without additional checks
-    func updateInventoryItem(_ item: InventoryItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func updateInventoryItem(_ item: InventoryItem, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
     // For websocket - simply upserts the inventory item, does not any checks or re-referencing of dependencies.
     func addOrUpdateLocal(_ inventoryItems: [InventoryItem], _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func incrementInventoryItem(_ item: InventoryItem, delta: Float, remote: Bool, _ handler: @escaping (ProviderResult<Float>) -> Void)
+    func incrementInventoryItem(_ item: InventoryItem, delta: Float, remote: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<Float>) -> Void)
     
     func incrementInventoryItem(_ item: ItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<InventoryItem>) -> ())
 
     func removeInventoryItem(_ item: InventoryItem, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
-    func removeInventoryItem(_ uuid: String, inventoryUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
+    func removeInventoryItem(_ uuid: String, inventoryUuid: String, remote: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<Any>) -> ())
     
     func invalidateMemCache()
     
     // MARK: - Direct (no history)
     
     // Add product
-    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Float, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float)>) -> Void)
+    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Float, remote: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float, isNew: Bool)>) -> Void)
     
     // Add group
     func addToInventory(_ inventory: DBInventory, group: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Float)]>) -> Void)
     
     // Add inventory item input
-    func addToInventory(_ inventory: DBInventory, itemInput: InventoryItemInput, remote: Bool, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float)>) -> Void)
+    func addToInventory(_ inventory: DBInventory, itemInput: InventoryItemInput, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float, isNew: Bool)>) -> Void)
 }

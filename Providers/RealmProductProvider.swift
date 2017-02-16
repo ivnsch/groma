@@ -1265,7 +1265,7 @@ class RealmProductProvider: RealmProvider {
     
     
     func updateBaseSync(oldBase: String, newBase: String) -> Bool {
-        return doInWriteTransactionSync({[weak self] realm in
+        return doInWriteTransactionSync({realm in
             let dbProducts = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(base: oldBase))
             for dbProduct in dbProducts {
                 dbProduct.baseQuantity = newBase

@@ -57,12 +57,11 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     // TODO remove onlyDelta, with realm sync we don't need to store deltas anymore and this is not necessary
-    func incrementInventoryItem(_ itemUuid: String, delta: Float, onlyDelta: Bool = false, dirty: Bool, handler: @escaping (DBResult<Float>) -> Void) {
-        
-        doInWriteTransaction({realm in
-            
-            syncedRet(self) {
+    func incrementInventoryItem(_ itemUuid: String, delta: Float, onlyDelta: Bool = false, dirty: Bool, realmData: RealmData?, handler: @escaping (DBResult<Float>) -> Void) {
 
+        let result = doInWriteTransactionSync(realmData: realmData) {realm -> DBResult<Float> in
+            return syncedRet(self) {
+                
                 let results = realm.objects(InventoryItem.self).filter(InventoryItem.createFilterUuid(itemUuid)).toArray()
                 let dbInventoryItems = results.map{InventoryItemMapper.inventoryItemWithDB($0)}
                 
@@ -78,17 +77,15 @@ class RealmInventoryItemProvider: RealmProvider {
                     return DBResult(status: .notFound)
                 }
             }
-            
-        }) {(result: DBResult<Float>?) in
-            QL2("Calling handler")
-            handler(result ?? DBResult(status: .unknown))
         }
+        
+        handler(result ?? DBResult(status: .unknown))
     }
     
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     // param onlyDelta: if we want to update only quantityDelta field (opposed to updating both quantity and quantityDelta)
     func incrementInventoryItem(_ item: InventoryItem, delta: Float, onlyDelta: Bool = false, dirty: Bool, handler: @escaping (DBResult<Float>) -> Void) {
-        incrementInventoryItem(item.uuid, delta: delta, onlyDelta: onlyDelta, dirty: dirty, handler: handler)
+        incrementInventoryItem(item.uuid, delta: delta, onlyDelta: onlyDelta, dirty: dirty, realmData: nil, handler: handler)
     }
     
     // TODO remove? seems not to be needed anymore
@@ -148,20 +145,20 @@ class RealmInventoryItemProvider: RealmProvider {
 //    }
     
     func removeInventoryItem(_ inventoryItem: InventoryItem, markForSync: Bool, handler: @escaping (Bool) -> Void) {
-        removeInventoryItem(inventoryItem.uuid, inventoryUuid: inventoryItem.inventory.uuid, markForSync: markForSync, handler: handler)
+        let success = removeInventoryItem(inventoryItem.uuid, inventoryUuid: inventoryItem.inventory.uuid, markForSync: markForSync, realmData: nil)
+        handler(success)
     }
     
-    func removeInventoryItem(_ uuid: String, inventoryUuid: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
+    func removeInventoryItem(_ uuid: String, inventoryUuid: String, markForSync: Bool, realmData: RealmData?) -> Bool {
         // Needs custom handling because DBRemoveInventoryItem needs the lastUpdate server timestamp and for this we have to retrieve the item from db
-        self.doInWriteTransaction({[weak self] realm in
+        let success = doInWriteTransactionSync(realmData: realmData) {[weak self] realm -> Bool in
             if let itemToRemove = realm.objects(InventoryItem.self).filter(InventoryItem.createFilterUuid(uuid)).first {
                 self?.removeInventoryItemSync(realm, dbInventoryItem: itemToRemove, markForSync: markForSync)
             }
             return true
-            
-            }, finishHandler: {success in
-                handler(success ?? false)
-        })
+        }
+        
+        return success ?? false
     }
     
     func removeInventoryItemSync(_ realm: Realm, dbInventoryItem: InventoryItem, markForSync: Bool) {
@@ -231,65 +228,43 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
-    func deletePossibleInventoryItemWithUnique(_ productName: String, productBrand: String, inventory: DBInventory, notUuid: String, handler: @escaping (Bool) -> Void) {
-        removeReturnCount(InventoryItem.createFilter(ProductUnique(name: productName, brand: productBrand), inventoryUuid: inventory.uuid, notUuid: notUuid), handler: {removedCountMaybe in
-            if let removedCount = removedCountMaybe {
-                if removedCount > 0 {
-                    QL2("Found inventory item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), inventory: {\(inventory.uuid), \(inventory.name)}")
-                }
-            } else {
-                QL4("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(inventory.uuid), \(inventory.name)}")
+    func deletePossibleInventoryItemWithUnique(_ productName: String, productBrand: String, inventory: DBInventory, notUuid: String, realmData: RealmData, handler: @escaping (Bool) -> Void) {
+        let removedCountMaybe = removeReturnCountSync(InventoryItem.createFilter(ProductUnique(name: productName, brand: productBrand), inventoryUuid: inventory.uuid, notUuid: notUuid), objType: InventoryItem.self, realmData: realmData)
+        if let removedCount = removedCountMaybe {
+            if removedCount > 0 {
+                QL2("Found inventory item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), inventory: {\(inventory.uuid), \(inventory.name)}")
             }
-            handler(removedCountMaybe.map{$0 > 0} ?? false)
-        }, objType: InventoryItem.self)
+        } else {
+            QL4("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(inventory.uuid), \(inventory.name)}")
+        }
+        handler(removedCountMaybe.map{$0 > 0} ?? false)
     }
     
     
     // MARK: - Direct (no history)
     
     // Add product
-    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Float, dirty: Bool, _ handler: @escaping ((inventoryItem: InventoryItem, delta: Float)?) -> Void) {
+    func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Float, dirty: Bool, realmData: RealmData?, _ handler: @escaping ((inventoryItem: InventoryItem, delta: Float, isNew: Bool)?) -> Void) {
         doInWriteTransaction({[weak self] realm in
             return self?.addOrIncrementInventoryItem(realm, inventory: inventory, product: product, quantity: quantity, dirty: dirty)
-        }, finishHandler: {(inventoryItemWithDeltaMaybe: (inventoryItem: InventoryItem, delta: Float)?) in
+        }, finishHandler: {(inventoryItemWithDeltaMaybe: (inventoryItem: InventoryItem, delta: Float, isNew: Bool)?) in
             handler(inventoryItemWithDeltaMaybe)
         })
     }
 
-    func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)], dirty: Bool, _ handler: @escaping ([(inventoryItem: InventoryItem, delta: Float)]?) -> Void) {
+    func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)], dirty: Bool, realmData: RealmData?, _ handler: @escaping ([(inventoryItem: InventoryItem, delta: Float, isNew: Bool)]?) -> Void) {
         
-        // Fixes Realm acces in incorrect thread exceptions
-        let inventoryCopy = inventory.copy()
-        let productsWithQuantitiesCopy = productsWithQuantities.map{(product: $0.product.copy(), quantity: $0.quantity)}
-        
-        doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return nil}
-            
-            var addedOrIncrementedInventoryItems: [(inventoryItemUuid: String, delta: Float)] = []
-            for productsWithQuantity in productsWithQuantitiesCopy {
-                let inventoryItem = weakSelf.addOrIncrementInventoryItem(realm, inventory: inventoryCopy, product: productsWithQuantity.product, quantity: productsWithQuantity.quantity, dirty: dirty)
-                addedOrIncrementedInventoryItems.append((inventoryItem.inventoryItem.uuid, inventoryItem.delta))
+        let result: [(inventoryItem: InventoryItem, delta: Float, isNew: Bool)]? = doInWriteTransactionSync(realmData: realmData) {[weak self] realm -> [(inventoryItem: InventoryItem, delta: Float, isNew: Bool)]? in guard let weakSelf = self else {return nil}
+            var addedOrIncrementedInventoryItems: [(inventoryItem: InventoryItem, delta: Float, isNew: Bool)] = []
+            for productsWithQuantity in productsWithQuantities {
+                let inventoryItem = weakSelf.addOrIncrementInventoryItem(realm, inventory: inventory, product: productsWithQuantity.product, quantity: productsWithQuantity.quantity, dirty: dirty)
+                addedOrIncrementedInventoryItems.append((inventoryItem.inventoryItem, inventoryItem.delta, inventoryItem.isNew))
             }
             return addedOrIncrementedInventoryItems
-            
-            }, finishHandler: {(addedOrIncrementedInventoryItems: [(inventoryItemUuid: String, delta: Float)]?) in
-                
-                // we have to map to uuids and back to inventory items because of realm thread issues
-                if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItems {
-                    var inventoryItemsWithDeltas: [(inventoryItem: InventoryItem, delta: Float)] = []
-                    for (inventoryItemUuid, delta) in addedOrIncrementedInventoryItems {
-                        if let inventoryItem: InventoryItem = self.findInventoryItemSync(uuid: inventoryItemUuid) {
-                            inventoryItemsWithDeltas.append((inventoryItem, delta))
-                        } else {
-                            QL4("No inventory item for uuid: \(inventoryItemUuid)")
-                        }
-                    }
-                    handler(inventoryItemsWithDeltas)
-
-                } else {
-                    handler(nil)
-                }
-        })
-    }  
+        }
+        
+        handler(result)
+    }
     
     // MARK: - Sync
 
@@ -314,26 +289,26 @@ class RealmInventoryItemProvider: RealmProvider {
         return adddedOrUpdatedItems
     }
     
-    fileprivate func addOrIncrementInventoryItem(_ realm: Realm, inventory: DBInventory, product: QuantifiableProduct, quantity: Float, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Float) {
+    fileprivate func addOrIncrementInventoryItem(_ realm: Realm, inventory: DBInventory, product: QuantifiableProduct, quantity: Float, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Float, isNew: Bool) {
     
         // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
         let existingInventoryItems: [InventoryItem] = loadSync(realm, filter: InventoryItem.createFilter(product, inventory))
         
-        let addedOrIncrementedInventoryItem: InventoryItem = {
+        let addedOrIncrementedInventoryItem: (item: InventoryItem, isNew: Bool) = {
             if let existingInventoryItem = existingInventoryItems.first {
                 let existingQuantity = existingInventoryItem.quantity
                 
-                return existingInventoryItem.copy(quantity: quantity + existingQuantity)
+                return (existingInventoryItem.copy(quantity: quantity + existingQuantity), false)
                 
             } else { // if item doesn't exist there's nothing to increment
-                return InventoryItem(uuid: UUID().uuidString, quantity: quantity, product: product, inventory: inventory)
+                return (InventoryItem(uuid: UUID().uuidString, quantity: quantity, product: product, inventory: inventory), true)
             }
         }()
         
         // save
-        realm.add(addedOrIncrementedInventoryItem, update: true)
+        realm.add(addedOrIncrementedInventoryItem.item, update: true)
         
-        return (inventoryItem: addedOrIncrementedInventoryItem, delta: quantity)
+        return (inventoryItem: addedOrIncrementedInventoryItem.item, delta: quantity, isNew: addedOrIncrementedInventoryItem.isNew)
     }
     
     func clearInventoryItemTombstone(_ uuid: String, handler: @escaping (Bool) -> Void) {
@@ -419,5 +394,8 @@ class RealmInventoryItemProvider: RealmProvider {
     func findInventoryItemSync(uuid: String) -> InventoryItem? {
         return loadFirstSync()
     }
-
+    
+    func saveSync(inventoryItems: [InventoryItem], update: Bool =  true, realmData: RealmData) -> Bool {
+        return saveObjsSync(inventoryItems)
+    }
 }

@@ -312,14 +312,11 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         case .count:
             return findRow({
                 if $0.quantity == ingredient.quantity {
-                    return $0.item.name > ingredient.item.name
-                      // no units enabled for ingredients yet
-//                        if $0.product.product.item.name == ingredient.item.name {
-//                            return $0.product.unit.text > ingredient.product.unit.text
-//                        } else {
-//                            return $0.product.product.item.name > ingredient.product.product.item.name
-//                        }
-                    
+                    if $0.item.name == ingredient.item.name {
+                        return $0.unit.name > ingredient.unit.name
+                    } else {
+                        return $0.item.name > ingredient.item.name
+                    }
                 } else {
                     return $0.quantity > ingredient.quantity
                 }
@@ -327,13 +324,11 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         case .alphabetic:
             return findRow({
                 if $0.item.name == ingredient.item.name {
-                    return $0.quantity > ingredient.quantity
-                    // no units enabled for ingredients yet
-//                        if $0.quantity == ingredient.quantity {
-//                            return $0.product.unit.text > ingredient.product.unit.text
-//                        } else {
-//                            return $0.quantity > ingredient.quantity
-//                        }
+                    if $0.quantity == ingredient.quantity {
+                        return $0.unit.name > ingredient.unit.name
+                    } else {
+                        return $0.quantity > ingredient.quantity
+                    }
                 } else {
                     return $0.item.name > ingredient.item.name
                 }
