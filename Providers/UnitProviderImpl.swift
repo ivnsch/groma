@@ -50,4 +50,13 @@ class UnitProviderImpl: UnitProvider {
             handler(ProviderResult(status: .databaseUnknown))
         }
     }
+    
+    func update(unit: Unit, name: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        if DBProv.unitProvider.updateSync(unit: unit, name: name) {
+            handler(ProviderResult(status: .success))
+        } else {
+            QL4("Couldn't update unit: \(unit) with name: \(name)")
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
 }

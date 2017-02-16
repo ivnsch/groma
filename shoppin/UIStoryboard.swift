@@ -48,6 +48,7 @@ extension UIStoryboard {
     fileprivate class func manageItemsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItems", bundle: Bundle.main) }
     fileprivate class func manageBrandsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItemsBrands", bundle: Bundle.main) }
     fileprivate class func manageBasesStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItemsBaseQuantities", bundle: Bundle.main) }
+    fileprivate class func manageUnitsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItemsUnits", bundle: Bundle.main) }
 
     fileprivate class func manageDatabaseStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageDatabase", bundle: Bundle.main) }
     fileprivate class func addEditNameNameColorStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditNameNameColor", bundle: Bundle.main) }
@@ -320,6 +321,10 @@ extension UIStoryboard {
     
     class func manageBasesController() -> ManageItemsBaseQuantitiesController {
         return manageBasesStoryboard().instantiateViewController(withIdentifier: "ManageItemsBaseQuantitiesController") as! ManageItemsBaseQuantitiesController
+    }
+    
+    class func manageUnitsController() -> ManageItemsUnitsController {
+        return manageUnitsStoryboard().instantiateViewController(withIdentifier: "ManageItemsUnitsController") as! ManageItemsUnitsController
     }
     
     // MARK: - Form sub controllers

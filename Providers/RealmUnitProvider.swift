@@ -113,4 +113,15 @@ class RealmUnitProvider: RealmProvider {
             return true
         } ?? false
     }
+    
+    func updateSync(unit: Unit, name: String) -> Bool {
+        let unit = unit.copy()
+        
+        return doInWriteTransactionSync(realmData: nil) {realm in
+            unit.name = name
+            realm.add(unit, update: true)
+            
+            return true
+        } ?? false
+    }
 }

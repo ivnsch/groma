@@ -60,9 +60,10 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
                 controller.delegate = self
                 return controller
                 
-            default:
-                QL3("TODO")
-                return UIStoryboard.manageBrandsController() // to compile
+            case .units:
+                let controller = UIStoryboard.manageUnitsController()
+                controller.delegate = self
+                return controller
             }
         }()
         
