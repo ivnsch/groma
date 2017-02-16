@@ -53,8 +53,7 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
     func config(prefillData: AddEditNameNameColorControllerInputs, settings: AddEditNameNameColorControllerSettings, editingObj: Any?) {
         guard nameController != nil else {QL4("Controllers not initialized yet"); return}
         
-        nameController.config(mode: .embedded, prefillName: prefillData.name, settings: EditSingleInputControllerSettings(namePlaceholder: settings.namePlaceholder, nameEmptyValidationMessage: settings.nameEmptyValidationMessage))
-        nameController.editingObj = editingObj
+        nameController.config(mode: .embedded, prefillName: prefillData.name, settings: EditSingleInputControllerSettings(namePlaceholder: settings.namePlaceholder, nameEmptyValidationMessage: settings.nameEmptyValidationMessage), editingObj: editingObj)
         
         nameColorController.config(mode: .embedded, prefillData: EditNameColorViewInputs(name: prefillData.nameColorName, color: UIColor.black), settings: EditNameColorViewSettings(namePlaceholder: settings.nameNameColorPlaceholder, nameEmptyValidationMessage: settings.nameNameColorEmptyValidationMessage))
         nameColorController.editingObj = editingObj

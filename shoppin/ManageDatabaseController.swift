@@ -35,7 +35,6 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
         load(option: .items)
     }
 
@@ -44,17 +43,28 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
         
         selectedOptionController?.removeFromParentViewControllerWithView()
         
-        switch option {
-        case .items:
-            let controller = UIStoryboard.manageItemsController()
-            controller.delegate = self
-            addChildViewController(controller)
-            containerView.addSubview(controller.view)
-            controller.view.translatesAutoresizingMaskIntoConstraints = false
-            controller.view.fillSuperview()
-            
-        default: print("TODO")
-        }
+        let controller: UIViewController = {
+            switch option {
+            case .items:
+                let controller = UIStoryboard.manageItemsController()
+                controller.delegate = self
+                return controller
+                
+            case .brands:
+                let controller = UIStoryboard.manageBrandsController()
+                controller.delegate = self
+                return controller
+                
+            default:
+                QL3("TODO")
+                return UIStoryboard.manageBrandsController() // to compile
+            }
+        }()
+        
+        addChildViewController(controller)
+        containerView.addSubview(controller.view)
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        controller.view.fillSuperview()
     }
 
     
@@ -84,7 +94,7 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
         return label
     }
     
-    @IBAction func onSortByTap(_ sender: UIButton) {
+    @IBAction func onSelectTypeTap(_ sender: UIButton) {
         //        if let popup = self.sortByPopup {
         //            popup.dismissAnimated(true)
         //        } else {
@@ -103,7 +113,7 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
 
 // MARK: - ManageItemsControllerDelegate
 
-extension ManageDatabaseController: ManageItemsControllerDelegate {
+extension ManageDatabaseController: ManageItemsControllerDelegate, ManageItemsBrandsControllerDelegate {
     
     var topControllerConfig: ManageDatabaseTopControllerConfig {
         return ManageDatabaseTopControllerConfig(
@@ -133,3 +143,4 @@ extension ManageDatabaseController: ExpandableTopViewControllerDelegate {
 //        topQuickAddControllerManager?.controller?.onClose()
     }
 }
+

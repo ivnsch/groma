@@ -18,7 +18,7 @@ struct EditSingleInputControllerSettings {
 }
 
 protocol EditSingleInputControllerDelegate: class {
-    func onSubmitSingleInput(name: String)
+    func onSubmitSingleInput(name: String, editingObj: Any?)
 }
 
 class EditSingleInputController: UIViewController {
@@ -67,13 +67,17 @@ class EditSingleInputController: UIViewController {
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
         guard let parentView = parent?.view else {if mode == .standalone {QL4("No parentController")}; return nil}
-        let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
+        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
+        
+        let overrideCenterY: CGFloat = parentView.height + tabBarHeight
+        
+        let addButtonHelper = AddButtonHelper(parentView: parentView, overrideCenterY: overrideCenterY) {[weak self] in
             _ = self?.submit()
         }
         return addButtonHelper
     }
 
-    func config(mode: TopControllerMode, prefillName: String, settings: EditSingleInputControllerSettings) {
+    func config(mode: TopControllerMode, prefillName: String, settings: EditSingleInputControllerSettings, editingObj: Any?) {
         guard nameTextField != nil else {QL4("Outlets not initialized"); return}
         
         self.mode = mode
@@ -83,7 +87,7 @@ class EditSingleInputController: UIViewController {
         nameTextField.attributedPlaceholder = NSAttributedString(string: settings.namePlaceholder, attributes: [NSForegroundColorAttributeName: UIColor.gray])
         initValidator(emptyNameMessage: settings.nameEmptyValidationMessage)
         
-        nameTextField.becomeFirstResponder()
+        self.editingObj = editingObj
         
         if mode == .standalone {
             addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
@@ -106,7 +110,7 @@ class EditSingleInputController: UIViewController {
     func submit() -> InputsResult<String>? {
         
         guard let validator = validator else {QL4("No validator"); return nil}
-        
+
         if let errors = validator.validate() {
             for (_, error) in errors {
                 error.field.showValidationError()
@@ -124,7 +128,7 @@ class EditSingleInputController: UIViewController {
             if let name = nameTextField.text {
                 
                 // We return (for embedded mode) as well as pass to delegate (standalone)
-                delegate?.onSubmitSingleInput(name: name)
+                delegate?.onSubmitSingleInput(name: name, editingObj: editingObj)
                 return .ok(name)
                 
             } else {

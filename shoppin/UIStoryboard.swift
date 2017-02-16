@@ -46,6 +46,7 @@ extension UIStoryboard {
     fileprivate class func selectIngredientDataStoryboard() -> UIStoryboard { return UIStoryboard(name: "SelectIngredientData", bundle: Bundle.main) }
     fileprivate class func manageItemsAccordionStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItemsAccordion", bundle: Bundle.main) }
     fileprivate class func manageItemsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItems", bundle: Bundle.main) }
+    fileprivate class func manageBrandsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItemsBrands", bundle: Bundle.main) }
     fileprivate class func manageDatabaseStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageDatabase", bundle: Bundle.main) }
     fileprivate class func addEditNameNameColorStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditNameNameColor", bundle: Bundle.main) }
 
@@ -311,7 +312,11 @@ extension UIStoryboard {
         return manageItemsStoryboard().instantiateViewController(withIdentifier: "ManageItemsController") as! ManageItemsController
     }
     
-    // MARK: - AddEditNameNameColorController
+    class func manageBrandsController() -> ManageItemsBrandsController {
+        return manageBrandsStoryboard().instantiateViewController(withIdentifier: "ManageItemsBrandsController") as! ManageItemsBrandsController
+    }
+    
+    // MARK: - Form sub controllers
     
     class func addEditNameNameColorController() -> AddEditNameNameColorController {
         return addEditNameNameColorStoryboard().instantiateViewController(withIdentifier: "AddEditNameNameColorController") as! AddEditNameNameColorController
