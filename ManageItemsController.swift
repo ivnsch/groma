@@ -11,123 +11,6 @@ import RealmSwift
 import Providers
 import QorumLogs
 
-fileprivate class ItemSectionRows {
-    
-    var rows: [Any] = []
-    
-    // TODO refactor quantifiable/store product methods. Are identical, except of types.
-    
-    // Quantifiable products
-    
-    func insert(productUuid: String, quantifiableProducts: [QuantifiableProduct]) {
-        for (index, row) in rows.enumerated() {
-            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
-                rows.insertAll(index: index + 1, arr: quantifiableProducts)
-            }
-        }
-    }
-    
-    func isExpanded(productUuid: String) -> Bool {
-        for (index, row) in rows.enumerated() {
-            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
-                if let next = rows[safe: index + 1] {
-                    if next is QuantifiableProduct {
-                        return true
-                    }
-                }
-            }
-        }
-        return false
-    }
-    
-    func close(productUuid: String) {
-        for (index, row) in rows.enumerated() {
-            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
-                // Remove all quantifiable products directly after product
-                let i = index + 1
-                while true {
-                    guard i < rows.count else {return}
-                    if rows[i] is Product {
-                        return
-                    } else {
-                        rows.remove(at: i)
-                    }
-                }
-                return
-            }
-        }
-    }
-    
-    func delete(productUuid: String) {
-        close(productUuid: productUuid)
-        for (index, row) in rows.enumerated() {
-            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
-                rows.remove(at: index)
-            }
-        }
-    }
-    
-    // Store products
-    
-    func insert(quantifiableProductUuid: String, storeProducts: [StoreProduct]) {
-        for (index, row) in rows.enumerated() {
-            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
-                rows.insertAll(index: index + 1, arr: storeProducts)
-            }
-        }
-    }
-    
-    func isExpanded(quantifiableProductUuid: String) -> Bool {
-        for (index, row) in rows.enumerated() {
-            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
-                if let next = rows[safe: index + 1] {
-                    if next is StoreProduct {
-                        return true
-                    }
-                }
-            }
-        }
-        return false
-    }
-    
-    func close(quantifiableProductUuid: String) {
-        for (index, row) in rows.enumerated() {
-            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
-                // Remove all quantifiable products directly after product
-                let i = index + 1
-                while true {
-                    guard i < rows.count else {return}
-                    if rows[i] is Product || rows[i] is QuantifiableProduct {
-                        return
-                    } else {
-                        rows.remove(at: i)
-                    }
-                }
-                return
-            }
-        }
-    }
-    
-    func delete(quantifiableProductUuid: String) {
-        close(quantifiableProductUuid: quantifiableProductUuid)
-        for (index, row) in rows.enumerated() {
-            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
-                rows.remove(at: index)
-            }
-        }
-    }
-    
-    
-    
-    func delete(storeProductUuid: String) {
-        for (index, row) in rows.enumerated() {
-            if ((row as? StoreProduct).map{$0.uuid == storeProductUuid}) ?? false {
-                rows.remove(at: index)
-            }
-        }
-    }
-}
-
 class ManageItemsController: UIViewController {
 
     fileprivate var tableViewController: UITableViewController!
@@ -521,5 +404,124 @@ extension ManageItemsController: AddEditNameNameColorControllerDelegate {
     func onSubmitAddEditNameNameColor(result: AddEditNameNameColorResult) {
         print("Submitted result: \(result)")
         // TODO
+    }
+}
+
+
+
+fileprivate class ItemSectionRows {
+    
+    var rows: [Any] = []
+    
+    // TODO refactor quantifiable/store product methods. Are identical, except of types.
+    
+    // Quantifiable products
+    
+    func insert(productUuid: String, quantifiableProducts: [QuantifiableProduct]) {
+        for (index, row) in rows.enumerated() {
+            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
+                rows.insertAll(index: index + 1, arr: quantifiableProducts)
+            }
+        }
+    }
+    
+    func isExpanded(productUuid: String) -> Bool {
+        for (index, row) in rows.enumerated() {
+            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
+                if let next = rows[safe: index + 1] {
+                    if next is QuantifiableProduct {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    func close(productUuid: String) {
+        for (index, row) in rows.enumerated() {
+            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
+                // Remove all quantifiable products directly after product
+                let i = index + 1
+                while true {
+                    guard i < rows.count else {return}
+                    if rows[i] is Product {
+                        return
+                    } else {
+                        rows.remove(at: i)
+                    }
+                }
+                return
+            }
+        }
+    }
+    
+    func delete(productUuid: String) {
+        close(productUuid: productUuid)
+        for (index, row) in rows.enumerated() {
+            if ((row as? Product).map{$0.uuid == productUuid}) ?? false {
+                rows.remove(at: index)
+            }
+        }
+    }
+    
+    // Store products
+    
+    func insert(quantifiableProductUuid: String, storeProducts: [StoreProduct]) {
+        for (index, row) in rows.enumerated() {
+            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
+                rows.insertAll(index: index + 1, arr: storeProducts)
+            }
+        }
+    }
+    
+    func isExpanded(quantifiableProductUuid: String) -> Bool {
+        for (index, row) in rows.enumerated() {
+            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
+                if let next = rows[safe: index + 1] {
+                    if next is StoreProduct {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    func close(quantifiableProductUuid: String) {
+        for (index, row) in rows.enumerated() {
+            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
+                // Remove all quantifiable products directly after product
+                let i = index + 1
+                while true {
+                    guard i < rows.count else {return}
+                    if rows[i] is Product || rows[i] is QuantifiableProduct {
+                        return
+                    } else {
+                        rows.remove(at: i)
+                    }
+                }
+                return
+            }
+        }
+    }
+    
+    func delete(quantifiableProductUuid: String) {
+        close(quantifiableProductUuid: quantifiableProductUuid)
+        for (index, row) in rows.enumerated() {
+            if ((row as? QuantifiableProduct).map{$0.uuid == quantifiableProductUuid}) ?? false {
+                rows.remove(at: index)
+            }
+        }
+    }
+    
+    
+    
+    func delete(storeProductUuid: String) {
+        for (index, row) in rows.enumerated() {
+            if ((row as? StoreProduct).map{$0.uuid == storeProductUuid}) ?? false {
+                rows.remove(at: index)
+            }
+        }
     }
 }
