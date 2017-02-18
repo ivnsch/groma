@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditableFractionView" customModule="groma" customModuleProvider="target">
+            <connections>
+                <outlet property="denominatorTextField" destination="XPW-vf-qiw" id="0Im-Bf-AmG"/>
+                <outlet property="lineView" destination="aCm-BC-shZ" id="2J4-GZ-C9D"/>
+                <outlet property="numeratorTextField" destination="kgw-R4-fvs" id="ILK-Au-Ff1"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="241" height="73"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aCm-BC-shZ">
+                    <rect key="frame" x="120" y="29" width="1" height="15"/>
+                    <color key="backgroundColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="mLx-Up-S2k"/>
+                        <constraint firstAttribute="width" constant="1" id="wYS-Nu-vqY"/>
+                    </constraints>
+                </view>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="XPW-vf-qiw" customClass="LineTextField" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="126" y="27" width="70" height="19"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="QBv-FR-h96"/>
+                    </constraints>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="50"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="kgw-R4-fvs" customClass="LineTextField" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="45" y="27" width="70" height="19"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="tL7-mA-dwG"/>
+                    </constraints>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="50"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </textField>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="XPW-vf-qiw" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="5Bp-Cq-Wy1"/>
+                <constraint firstItem="aCm-BC-shZ" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="BP3-b7-mBb"/>
+                <constraint firstItem="aCm-BC-shZ" firstAttribute="leading" secondItem="kgw-R4-fvs" secondAttribute="trailing" constant="5" id="aUH-2X-5IT"/>
+                <constraint firstItem="kgw-R4-fvs" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="dEQ-41-JQN"/>
+                <constraint firstItem="aCm-BC-shZ" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="gQA-23-mGc"/>
+                <constraint firstItem="XPW-vf-qiw" firstAttribute="leading" secondItem="aCm-BC-shZ" secondAttribute="trailing" constant="5" id="jxU-Xs-r0Q"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="92.5" y="-245.5"/>
+        </view>
+    </objects>
+</document>

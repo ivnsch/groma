@@ -47,6 +47,8 @@ public struct Prov {
     
     public static var unitProvider: UnitProvider = UnitProviderImpl()
 
+    public static var fractionProvider: FractionProvider = FractionProviderImpl()
+    
     public static var globalProvider: GlobalProvider = GlobalProviderImpl()
     
     public static var errorProvider: ErrorProvider = ErrorProviderImpl()

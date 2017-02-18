@@ -36,6 +36,8 @@ class DBProv {
     static var ingredientProvider = RealmIngredientProvider()
     
     static var unitProvider = RealmUnitProvider()
-
+    
+    static var fractionProvider = RealmFractionProvider()
+    
     static var globalProvider = RealmGlobalProvider()
 }

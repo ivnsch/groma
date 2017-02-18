@@ -289,6 +289,12 @@ class RealmGlobalProvider: RealmProvider {
         
         doInWriteTransaction({realm in
             
+            
+            let fractionsContainer: FractionsContainer? = self.loadFirstSync()
+            if fractionsContainer == nil {
+                realm.add(FractionsContainer())
+            }
+            
             let inventoriesContainer: InventoriesContainer? = self.loadFirstSync()
             if inventoriesContainer == nil {
                 realm.add(InventoriesContainer())
@@ -303,7 +309,6 @@ class RealmGlobalProvider: RealmProvider {
             if recipesContainer == nil {
                 realm.add(RecipesContainer())
             }
-            
             return true
         }) {successMaybe in
             handler(successMaybe ?? false)

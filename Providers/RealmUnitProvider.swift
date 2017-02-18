@@ -22,7 +22,7 @@ class RealmUnitProvider: RealmProvider {
         
         // TODO different ordering for device's country - countries that don't/rarely use OZ and LB should have them at the end
         
-        let defaultUnits = [
+        let defaultUnits: [Unit] = [
             Unit(uuid: UUID().uuidString, name: trans("unit_none"), id: .none),
             
             Unit(uuid: UUID().uuidString, name: trans("unit_g"), id: .g),
@@ -45,9 +45,36 @@ class RealmUnitProvider: RealmProvider {
 
 //            Unit(uuid: UUID().uuidString, name: trans("unit_bunch")), // TODO?
         ]
-
+        
+        // let's add the fractions here too because I'm too lazy to write a new method for this (should be moved to fractions provider in the future)
+        let defaultFractions: [DBFraction] = [
+            DBFraction(numerator: 1, denominator: 2),
+            DBFraction(numerator: 1, denominator: 3),
+            DBFraction(numerator: 1, denominator: 4),
+            DBFraction(numerator: 1, denominator: 5),
+            DBFraction(numerator: 1, denominator: 6),
+            DBFraction(numerator: 1, denominator: 7),
+            DBFraction(numerator: 1, denominator: 8),
+            DBFraction(numerator: 2, denominator: 3),
+            DBFraction(numerator: 3, denominator: 4),
+        ]
+        
+//        let objs: [Object] = defaultUnits + defaultFractions
+        
         if saveObjsSync(defaultUnits) { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
+            
+            
+            var fractionsSuccess = true
+            for fraction in defaultFractions {
+                let (success, _) = DBProv.fractionProvider.add(fraction: fraction) // We use here provider method to append to list, not only save object
+                fractionsSuccess = fractionsSuccess && success
+            }
+            if !fractionsSuccess {
+                QL4("Couldn't prefill some or all fractions") // only log, prefilling fractions is not critical for the app to work
+            }
+            
             handler(defaultUnits)
+            
         } else {
             handler(nil)
         }

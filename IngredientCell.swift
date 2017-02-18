@@ -33,7 +33,7 @@ class IngredientCell: UITableViewCell {
             
             quantityLabel.text = String("\(ingredient.quantity.quantityString)")
             unitLabel.text = ingredient.unit.name
-            fractionView.fraction = ingredient.fraction
+            fractionView.fraction = DBFraction(numerator: ingredient.fraction.numerator, denominator: ingredient.fraction.denominator)
             
             categoryColorView.backgroundColor = ingredient.item.category.color
 

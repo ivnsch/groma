@@ -18,7 +18,7 @@ import Providers
     @IBOutlet weak var denominatorLabel: UILabel!
     @IBOutlet weak var lineView: UIView!
     
-    var fraction: Fraction? {
+    var fraction: DBFraction? {
         didSet {
             if let fraction = fraction {
                 //wholeNumberLabel.text = fraction.wholeNumber == 0 ? "" : "\(fraction.wholeNumber)"
@@ -72,6 +72,6 @@ import Providers
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: numeratorLabel.width + lineView.width + denominatorLabel.width + 5 + 5, height: numeratorLabel.height + 10) // width: 5 pt (*2) spacing to line, 10 pt for 2*2 pt center constraint offset in labels + 6pt just to make a little more space.
+        return CGSize(width: numeratorLabel.width + lineView.width + denominatorLabel.width + 5 + 20, height: numeratorLabel.height + 20) // width: 5 pt (*2) spacing to line, 10 pt for 2*2 pt center constraint offset in labels + 20pt just to make a little more space.
     }
 }

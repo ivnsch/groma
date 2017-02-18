@@ -46,6 +46,9 @@
 		6A3A67BE1E56141200B5354F /* ManageItemsUnitsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3A67BD1E56141200B5354F /* ManageItemsUnitsController.swift */; };
 		6A3A67C01E56142200B5354F /* ManageItemsUnits.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A3A67BF1E56142200B5354F /* ManageItemsUnits.storyboard */; };
 		6A3A67C21E56144400B5354F /* ManageItemsUnitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3A67C11E56144400B5354F /* ManageItemsUnitCell.swift */; };
+		6A3A67C81E57BABF00B5354F /* EditableFractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3A67C71E57BABF00B5354F /* EditableFractionView.swift */; };
+		6A3A67CA1E57BE6B00B5354F /* EditableFractionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A3A67C91E57BE6B00B5354F /* EditableFractionView.xib */; };
+		6A3A67CC1E57BF4400B5354F /* EditableFractionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3A67CB1E57BF4400B5354F /* EditableFractionCell.swift */; };
 		6A407AB31E32ACDF00D77405 /* AddRecipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407AB11E32ACDF00D77405 /* AddRecipeController.swift */; };
 		6A407AB41E32ACE000D77405 /* AddRecipeController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A407AB21E32ACDF00D77405 /* AddRecipeController.xib */; };
 		6A407ABD1E33A44400D77405 /* AddRecipeIngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407ABB1E33A44400D77405 /* AddRecipeIngredientCell.swift */; };
@@ -468,6 +471,9 @@
 		6A3A67BD1E56141200B5354F /* ManageItemsUnitsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsUnitsController.swift; sourceTree = "<group>"; };
 		6A3A67BF1E56142200B5354F /* ManageItemsUnits.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItemsUnits.storyboard; sourceTree = "<group>"; };
 		6A3A67C11E56144400B5354F /* ManageItemsUnitCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsUnitCell.swift; sourceTree = "<group>"; };
+		6A3A67C71E57BABF00B5354F /* EditableFractionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableFractionView.swift; sourceTree = "<group>"; };
+		6A3A67C91E57BE6B00B5354F /* EditableFractionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditableFractionView.xib; sourceTree = "<group>"; };
+		6A3A67CB1E57BF4400B5354F /* EditableFractionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableFractionCell.swift; sourceTree = "<group>"; };
 		6A407AB11E32ACDF00D77405 /* AddRecipeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecipeController.swift; sourceTree = "<group>"; };
 		6A407AB21E32ACDF00D77405 /* AddRecipeController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddRecipeController.xib; sourceTree = "<group>"; };
 		6A407ABB1E33A44400D77405 /* AddRecipeIngredientCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecipeIngredientCell.swift; sourceTree = "<group>"; };
@@ -1076,6 +1082,9 @@
 				6ADC6F3D1E4D2EB1005BE5EB /* FractionView.xib */,
 				6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */,
 				6ADC6F3F1E4D32CD005BE5EB /* FractionCell.swift */,
+				6A3A67CB1E57BF4400B5354F /* EditableFractionCell.swift */,
+				6A3A67C71E57BABF00B5354F /* EditableFractionView.swift */,
+				6A3A67C91E57BE6B00B5354F /* EditableFractionView.xib */,
 			);
 			name = selectIngredientDataController;
 			sourceTree = "<group>";
@@ -2384,6 +2393,7 @@
 				EBB5267F1BEFE39F0002A286 /* HelpHeaderView.xib in Resources */,
 				EB75E5491CA36174006AAEAF /* SharedUsers.storyboard in Resources */,
 				EB1FC51A1BC694AF004E1114 /* OkNextButtonsView.xib in Resources */,
+				6A3A67CA1E57BE6B00B5354F /* EditableFractionView.xib in Resources */,
 				EB4B39E71CED443400B41063 /* Intro.storyboard in Resources */,
 				EBED0D0E1C82225B00A1EEC4 /* RatingPopup.storyboard in Resources */,
 				EBD668191CED4E820055EE0B /* AddEditGroupViewController.storyboard in Resources */,
@@ -2584,6 +2594,7 @@
 				EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */,
 				EBEA0CDE1CA6C0F500E68B81 /* QuickAddPageController.swift in Sources */,
 				EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */,
+				6A3A67CC1E57BF4400B5354F /* EditableFractionCell.swift in Sources */,
 				EB7032801BEBBBB100779EBB /* ReorderSectionTableViewController.swift in Sources */,
 				EBB526891BF016910002A286 /* ButtonMore.swift in Sources */,
 				EB3E92F11CDA3A620048DA0D /* LangHelper.swift in Sources */,
@@ -2645,6 +2656,7 @@
 				EBED0D091C82213600A1EEC4 /* RatingPopup.swift in Sources */,
 				EB7524531BF582FA00A97A10 /* QuickAddItemCell.swift in Sources */,
 				6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */,
+				6A3A67C81E57BABF00B5354F /* EditableFractionView.swift in Sources */,
 				EB8D1D111C389D6E00ADF884 /* ProductsWithQuantityViewController.swift in Sources */,
 				6AD51AE11E5134880053934E /* LabelMore.swift in Sources */,
 				EB8D1D131C396ED600ADF884 /* GroupItemsController.swift in Sources */,

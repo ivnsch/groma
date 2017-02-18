@@ -137,72 +137,35 @@
                                             <outlet property="fractionView" destination="QF4-vh-eKq" id="5rD-dP-rIQ"/>
                                         </connections>
                                     </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="editableCell" id="lk1-Za-cbH" customClass="EditableFractionCell" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="60" y="5" width="150" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XJv-3L-S1L" customClass="EditableFractionView" customModule="groma" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="40"/>
+                                                </view>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="XJv-3L-S1L" firstAttribute="leading" secondItem="lk1-Za-cbH" secondAttribute="leading" id="2TV-bP-2Xk"/>
+                                            <constraint firstItem="XJv-3L-S1L" firstAttribute="top" secondItem="lk1-Za-cbH" secondAttribute="top" id="51A-0M-onM"/>
+                                            <constraint firstAttribute="bottom" secondItem="XJv-3L-S1L" secondAttribute="bottom" constant="10" id="N5F-sh-R2S"/>
+                                            <constraint firstAttribute="trailing" secondItem="XJv-3L-S1L" secondAttribute="trailing" id="u9g-D4-aZ5"/>
+                                        </constraints>
+                                        <size key="customSize" width="150" height="50"/>
+                                        <connections>
+                                            <outlet property="editableFractionView" destination="XJv-3L-S1L" id="ev0-vg-Rd5"/>
+                                        </connections>
+                                    </collectionViewCell>
                                 </cells>
                                 <connections>
                                     <outlet property="dataSource" destination="dea-bw-1mg" id="6a2-2S-KbR"/>
                                     <outlet property="delegate" destination="dea-bw-1mg" id="wmI-S0-bV2"/>
                                 </connections>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yOQ-fl-qht">
-                                <rect key="frame" x="375" y="130" width="375" height="60"/>
-                                <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Rrp-Zx-0Vs" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="208" y="20.5" width="70" height="19"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="5I2-3R-3iB"/>
-                                        </constraints>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                <integer key="value" value="50"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </textField>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8wF-8l-Tff">
-                                        <rect key="frame" x="187.5" y="19" width="0.5" height="22"/>
-                                        <color key="backgroundColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="1" id="U36-Gh-I5L"/>
-                                            <constraint firstAttribute="height" constant="22" id="zRi-EO-Ogk"/>
-                                        </constraints>
-                                    </view>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="AFN-LK-Ugm" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="97.5" y="20.5" width="70" height="19"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="3Jk-gI-iKV"/>
-                                        </constraints>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                <integer key="value" value="50"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tdf-WA-rf7">
-                                        <rect key="frame" x="325" y="15" width="30" height="30"/>
-                                        <state key="normal" title="x">
-                                            <color key="titleColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="clearFractionInputs:" destination="dea-bw-1mg" eventType="touchUpInside" id="inD-d8-c53"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="AFN-LK-Ugm" firstAttribute="centerY" secondItem="yOQ-fl-qht" secondAttribute="centerY" id="5eD-hf-cWj"/>
-                                    <constraint firstItem="Rrp-Zx-0Vs" firstAttribute="leading" secondItem="8wF-8l-Tff" secondAttribute="trailing" constant="20" id="DIf-oF-9TT"/>
-                                    <constraint firstItem="8wF-8l-Tff" firstAttribute="centerY" secondItem="yOQ-fl-qht" secondAttribute="centerY" id="RIc-g2-0SP"/>
-                                    <constraint firstItem="tdf-WA-rf7" firstAttribute="centerY" secondItem="yOQ-fl-qht" secondAttribute="centerY" id="Sca-rG-lhM"/>
-                                    <constraint firstAttribute="trailing" secondItem="tdf-WA-rf7" secondAttribute="trailing" constant="20" id="Wtt-16-sgL"/>
-                                    <constraint firstItem="Rrp-Zx-0Vs" firstAttribute="centerY" secondItem="yOQ-fl-qht" secondAttribute="centerY" id="gTF-RQ-alv"/>
-                                    <constraint firstItem="8wF-8l-Tff" firstAttribute="leading" secondItem="AFN-LK-Ugm" secondAttribute="trailing" constant="20" id="r7r-cB-gEe"/>
-                                    <constraint firstItem="8wF-8l-Tff" firstAttribute="centerX" secondItem="yOQ-fl-qht" secondAttribute="centerX" id="yd2-1e-s36"/>
-                                </constraints>
-                            </view>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Spoon" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zah-Qf-kJ7" customClass="LineAutocompleteTextField" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="118" y="220" width="140" height="19"/>
                                 <constraints>
@@ -241,12 +204,9 @@
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="yOQ-fl-qht" firstAttribute="leading" secondItem="NkH-kB-IrM" secondAttribute="trailing" constant="20" id="1FE-o3-BbJ"/>
                             <constraint firstItem="eC4-TL-KG6" firstAttribute="leading" secondItem="3qO-ox-Llh" secondAttribute="leading" id="2fz-Ys-bNW"/>
                             <constraint firstItem="zah-Qf-kJ7" firstAttribute="centerX" secondItem="3qO-ox-Llh" secondAttribute="centerX" id="6BD-wb-YRo"/>
                             <constraint firstItem="eC4-TL-KG6" firstAttribute="top" secondItem="wEP-4i-HbE" secondAttribute="bottom" constant="20" id="8r8-Gm-LdK"/>
-                            <constraint firstItem="yOQ-fl-qht" firstAttribute="centerY" secondItem="NkH-kB-IrM" secondAttribute="centerY" id="P4f-1W-6VT"/>
-                            <constraint firstItem="yOQ-fl-qht" firstAttribute="top" secondItem="NkH-kB-IrM" secondAttribute="top" id="PRk-S9-y3W"/>
                             <constraint firstItem="wEP-4i-HbE" firstAttribute="top" secondItem="3qO-ox-Llh" secondAttribute="top" id="QVe-IZ-w1e"/>
                             <constraint firstAttribute="trailing" secondItem="eC4-TL-KG6" secondAttribute="trailing" id="S0q-ll-LUa"/>
                             <constraint firstItem="NkH-kB-IrM" firstAttribute="top" secondItem="eC4-TL-KG6" secondAttribute="bottom" constant="20" id="Tw3-rz-DaU"/>
@@ -254,23 +214,14 @@
                             <constraint firstItem="NkH-kB-IrM" firstAttribute="leading" secondItem="3qO-ox-Llh" secondAttribute="leading" constant="20" id="cEM-fJ-L1S"/>
                             <constraint firstItem="wEP-4i-HbE" firstAttribute="leading" secondItem="3qO-ox-Llh" secondAttribute="leading" id="eaY-JG-3Mk"/>
                             <constraint firstItem="zah-Qf-kJ7" firstAttribute="top" secondItem="NkH-kB-IrM" secondAttribute="bottom" constant="30" id="fdf-Se-KqD"/>
-                            <constraint firstItem="yOQ-fl-qht" firstAttribute="width" secondItem="3qO-ox-Llh" secondAttribute="width" id="mEN-1P-SIR"/>
-                            <constraint firstItem="yOQ-fl-qht" firstAttribute="bottom" secondItem="NkH-kB-IrM" secondAttribute="bottom" id="rot-XP-4H4"/>
                             <constraint firstAttribute="trailing" secondItem="NkH-kB-IrM" secondAttribute="trailing" constant="20" id="teg-iU-H6I"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="clearFractionButton" destination="tdf-WA-rf7" id="kmJ-Zn-PFs"/>
-                        <outlet property="collectionViewLeadingConstraint" destination="cEM-fJ-L1S" id="8pi-8J-xbz"/>
-                        <outlet property="collectionViewTrailingConstraint" destination="teg-iU-H6I" id="p3e-h0-IwP"/>
-                        <outlet property="fractionDenominatorTextField" destination="Rrp-Zx-0Vs" id="m6U-nC-HIs"/>
                         <outlet property="fractionLabel" destination="Kh9-dK-XnF" id="xBx-ba-6op"/>
-                        <outlet property="fractionNumeratorTextField" destination="AFN-LK-Ugm" id="3Ja-E9-Bm3"/>
                         <outlet property="fractionTrailingConstraint" destination="6sa-dF-pZ1" id="fBo-CW-a81"/>
                         <outlet property="fractionsCollectionView" destination="NkH-kB-IrM" id="5AQ-CQ-6we"/>
-                        <outlet property="fractionsInputsView" destination="yOQ-fl-qht" id="6nM-r2-cES"/>
                         <outlet property="itemNameLabel" destination="tfU-xw-1mu" id="33G-rU-MRM"/>
-                        <outlet property="lineView" destination="8wF-8l-Tff" id="Bnj-fl-7gO"/>
                         <outlet property="quantityBackgroundView" destination="eC4-TL-KG6" id="W1h-xM-eZN"/>
                         <outlet property="quantityView" destination="KIB-BS-L2u" id="tWc-uZ-REu"/>
                         <outlet property="unitLabel" destination="764-ac-WRf" id="jZ7-nC-pBr"/>
