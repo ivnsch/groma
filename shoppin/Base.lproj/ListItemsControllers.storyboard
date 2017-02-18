@@ -374,9 +374,9 @@
                                     <constraint firstItem="bes-vp-e1u" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="8Vl-sw-Gdt"/>
                                     <constraint firstItem="bes-vp-e1u" firstAttribute="width" secondItem="so5-bY-yhM" secondAttribute="width" multiplier="0.6" id="CF4-Ap-WGa"/>
                                     <constraint firstItem="bes-vp-e1u" firstAttribute="top" secondItem="so5-bY-yhM" secondAttribute="top" constant="200" id="SmB-SA-Fmb" customClass="TopEmptyViewConstraint" customModule="groma" customModuleProvider="target"/>
-                                    <constraint firstItem="sxW-16-sQo" firstAttribute="top" secondItem="bes-vp-e1u" secondAttribute="bottom" constant="20" id="YFI-vZ-mRG"/>
                                     <constraint firstItem="sxW-16-sQo" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="Zub-z6-dKm"/>
                                     <constraint firstItem="fPp-Ci-147" firstAttribute="top" secondItem="sxW-16-sQo" secondAttribute="bottom" constant="8" id="cHA-XD-wmq"/>
+                                    <constraint firstItem="sxW-16-sQo" firstAttribute="top" secondItem="bes-vp-e1u" secondAttribute="bottom" constant="20" id="gCp-st-AlA"/>
                                 </constraints>
                             </view>
                         </subviews>
