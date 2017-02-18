@@ -214,17 +214,17 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
 
         let recipe = Recipe(uuid: NSUUID().uuidString, name: input.name, color: input.color)
         
-        Prov.recipeProvider.add(recipe, recipes: results, notificationToken: notificationToken, resultHandler(onSuccess: {
+        Prov.recipeProvider.add(recipe, recipes: results, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
             
-            self.tableView.insertRows(at: [IndexPath(row: results.count - 1, section: 0)], with: .top) // Note -1 as at this point the new item is already inserted in results
+            self?.tableView.insertRows(at: [IndexPath(row: results.count - 1, section: 0)], with: .top) // Note -1 as at this point the new item is already inserted in results
+        
+            self?.topAddEditListControllerManager?.expand(false)
+            self?.setTopBarState(.normalFromExpanded)
             
         }, onErrorAdditional: {[weak self] result in
             self?.onGroupAddOrUpdateError(recipe)
             }
         ))
-        
-        topAddEditListControllerManager?.expand(false)
-        setTopBarState(.normalFromExpanded)
     }
     
     func onUpdateGroup(_ input: AddEditSimpleItemInput, item: SimpleFirstLevelListItem, index: Int) {

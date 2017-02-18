@@ -210,6 +210,9 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             
             self?.tableView.insertRows(at: [IndexPath(row: inventoriesResult.count - 1, section: 0)], with: .top) // Note -1 as at this point the new item is already inserted in results
             
+            self?.topAddEditListControllerManager?.expand(false)
+            self?.setTopBarState(.normalFromExpanded)
+            
         }, onErrorAdditional: {[weak self] result in
             self?.onInventoryAddOrUpdateError(inventory)
             }
