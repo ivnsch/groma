@@ -8,8 +8,26 @@
 
 import UIKit
 
-class FractionCell: UICollectionViewCell {
+protocol FractionCellDelegate {
+    func onLongPress(cell: FractionCell)
+}
+
+class FractionCell: UICollectionViewCell, FractionViewDelegate {
 
     @IBOutlet weak var fractionView: FractionView!
     
+    var delegate: FractionCellDelegate?
+ 
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        fractionView.delegate = self
+    }
+    
+    // MARK: - FractionViewDelegate
+    
+    func onLongPress() {
+        delegate?.onLongPress(cell: self)
+    }
 }

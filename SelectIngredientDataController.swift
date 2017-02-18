@@ -100,6 +100,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         loadFractions()
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
+        tap.delegate = self
         view.addGestureRecognizer(tap)
         
         if let flow = fractionsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -130,6 +131,23 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
                     }
                 }
             })
+            
+        } else {
+            /// Clear possible marked to delete fractions - we use "tap outside" as the way to cancel the delete-status
+            clearToDeleteFractions()
+        }
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard let view = touch.view else {return false}
+        if view.hasAncestor(type: FractionCell.self) || view.hasAncestor(type: EditableFractionCell.self) {
+            return false
+        } else {
+            return true
         }
     }
     
@@ -291,7 +309,7 @@ extension SelectIngredientDataController: MLPAutoCompleteTextFieldDataSource, ML
     }
 }
 
-extension SelectIngredientDataController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EditableFractionViewDelegate {
+extension SelectIngredientDataController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FractionCellDelegate, EditableFractionViewDelegate {
     
     // TODO!!!!!!!!!!!!!!!!!!!!! on select suggestion the top label should also be updated. doesn't seem to be the case currently
     
@@ -307,6 +325,8 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
             cell.fractionView.fraction = fractions[indexPath.row]
             cell.fractionView.backgroundColor = UIColor.white
             cell.fractionView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
+            cell.fractionView.markedToDelete = false
+            cell.delegate = self
             return cell
             
         } else {
@@ -322,10 +342,51 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let fractions = fractions else {QL4("No fractions"); return}
 
-        onSelect(fraction: fractions[indexPath.row])
+        if (fractionsCollectionView.cellForItem(at: indexPath) as? FractionCell)?.fractionView.markedToDelete ?? false {
+        
+            let fraction = fractions[indexPath.row]
+            
+            Prov.fractionProvider.remove(fraction: fraction, successHandler {[weak self] in
+                self?.fractionsCollectionView.deleteItems(at: [indexPath])
+            })
+            
+        } else {
+            clearToDeleteFractions()
+            
+            onSelect(fraction: fractions[indexPath.row])
+        }
+    }
+    
+    fileprivate func clearToDeleteFractions() {
+        for fractionCell in fractionsCollectionView.visibleCells as? [FractionCell] ?? [] {
+            fractionCell.fractionView.markedToDelete = false
+        }
+        fractionsCollectionView.reloadData()
     }
 
+    // MARK: - EditableFractionViewDelegate
+    
     func onFractionInputChange(fractionInput: Fraction?) {
         currentNewFractionInput = fractionInput
+    }
+    
+    // MARK: - FractionCellDelegate
+    
+    func onLongPress(cell: FractionCell) {        
+        cell.fractionView.markedToDelete = true
+        cell.fractionView.mark(toDelete: true, animated: true)
+    }
+    
+    fileprivate func indexPathForFraction(fraction: DBFraction) -> IndexPath? {
+        guard let fractions = fractions else {QL4("No fractions"); return nil}
+        
+        for (index, f) in fractions.enumerated() {
+            if f.numerator == fraction.numerator && f.denominator == fraction.denominator {
+                return IndexPath(row: index, section: 0)
+            }
+        }
+        
+        return nil
+        
     }
 }
