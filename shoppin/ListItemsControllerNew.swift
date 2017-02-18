@@ -582,7 +582,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             if listItems.isEmpty {
                 return ""
             } else {
-                return trans("recipe_already_has", listItems.map{$0.quantityTextWithoutName(status: self.status)}.joined(separator: ", "))
+                return trans("recipe_already_has", listItems.map{$0.quantityTextWithoutName()}.joined(separator: ", "))
             }
         }, successHandler {text in
             handler(text)

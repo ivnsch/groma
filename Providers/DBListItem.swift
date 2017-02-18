@@ -288,8 +288,8 @@ public class ListItem: DBSyncable, Identifiable {
         return "productOpt.uuid == '\(productUuid)'"
     }
     
-    static func createFilterWithProductName(_ productName: String) -> String {
-        return "productOpt.productOpt.productOpt.itemOpt.name == '\(productName)'"
+    static func createFilterWithProductName(_ productName: String, listUuid: String) -> String {
+        return "productOpt.productOpt.productOpt.itemOpt.name == '\(productName)' && listOpt.uuid == '\(listUuid)'"
     }
     
     static func createFilterWithQuantifiableProduct(name: String, unit: Unit) -> String {
@@ -565,10 +565,9 @@ public class ListItem: DBSyncable, Identifiable {
         return "\(quantity(status)) x \(product.product.product.item.name)\(unitText)"
     }
     
-    public func quantityTextWithoutName(status: ListItemStatus) -> String {
-        let statusQuantity = quantity(status)
-        let unitText = product.product.unitText(showNoneText: true, pluralUnit: statusQuantity > 1)
-        return "\(statusQuantity)\(unitText)"
+    public func quantityTextWithoutName() -> String {
+        let unitText = product.product.unitText(showNoneText: true, pluralUnit: quantity > 1)
+        return "\(quantity.quantityString)\(unitText)"
     }
     
     // MARK: - UI additions

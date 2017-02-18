@@ -329,11 +329,11 @@ class RealmListItemProvider: RealmProvider {
     func listItems<T>(list: List, ingredient: Ingredient, mapper: @escaping (Results<ListItem>) -> T, _ handler: @escaping (T?) -> Void) {
         
         // Realm threads
-//        let list = list.copy()
+        let list = list.copy()
         let ingredient = ingredient.copy()
         
         withRealm({realm -> T? in
-            let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithProductName(ingredient.item.name))
+            let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithProductName(ingredient.item.name, listUuid: list.uuid))
             return mapper(listItems)
 
         }) {mappingResultMaybe in
