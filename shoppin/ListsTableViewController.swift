@@ -46,7 +46,11 @@ class ExpandableTableViewListModel: ExpandableTableViewModel {
 
 class ListsTableViewController: ExpandableItemsTableViewController, AddEditListControllerDelegate, ExpandableTopViewControllerDelegate {
 
-    fileprivate var listsResult: RealmSwift.List<Providers.List>?
+    fileprivate var listsResult: RealmSwift.List<Providers.List>? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     fileprivate var notificationToken: NotificationToken?
     
     var topAddEditListControllerManager: ExpandableTopViewController<AddEditListController>?
