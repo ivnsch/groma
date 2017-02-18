@@ -213,12 +213,18 @@ class RealmSectionProvider: RealmProvider {
     // add/update and save (TODO better method name)
     func mergeOrCreateSectionSync(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, realmData: RealmData?, doTransaction: Bool = true) -> ProvResult<AddSectionResult, DatabaseError> {
         
-        let sections = list.sections(status: status)
+        guard let sections = sectionsSync(list: list, status: status) else {
+            QL4("Couldn't retrieve the sections for list: \(list.uuid):\(list.name)")
+            return .err(.unknown)
+        }
 
         func transactionContent(realm: Realm) -> ProvResult<AddSectionResult, DatabaseError>? {
             
             let addResult: AddSectionResult = {
-                if let section = sections.filter(Section.createFilterWithName(sectionName)).first, let index = sections.index(of: section) {
+                if let section = sections.filter(Section.createFilterWithName(sectionName)).first, let index = sections.index(of: section)
+                
+                {
+                    
                     section.color = sectionColor
                     realm.add(section, update: true) // TODO is this necessary?
                     return AddSectionResult(section: section, isNew: false, index: index)
@@ -290,6 +296,16 @@ class RealmSectionProvider: RealmProvider {
         } else { // The section doesn't exist
             let section = Section(uuid: UUID().uuidString, name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0)) // TODO!!!!!!!!! remove order from sections
             return appendSection(section: section)
+        }
+    }
+    
+    // Load the sections directly from Realm - to ensure the resulting RealmSwift.List references a realm (which is not the case when using "copy") as well as it's fetched from the current thread.
+    // RealmSwift.List not referencing a Realm currently results in an exception when calling filter on it - "This method may only be called on RLMArray instances retrieved from an RLMRealm"
+    func sectionsSync(list: List, status: ListItemStatus) -> RealmSwift.List<Section>? {
+        if let l: List? = loadSync(filter: List.createFilter(list.uuid))?.first {
+            return l?.sections(status: status)
+        } else {
+            return nil
         }
     }
 }

@@ -1272,7 +1272,7 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void) {
+    func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData?, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void) {
         if let tuples = DBProv.listItemProvider.addSync(listItemInputs: listItemInputs, list: list, status: status, realmData: realmData) {
             handler(ProviderResult(status: .success, sucessResult: tuples))
         } else {

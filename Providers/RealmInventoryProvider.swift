@@ -209,9 +209,19 @@ class RealmInventoryProvider: RealmProvider {
         handler(inventoriesContainer.inventories)
     }
     
-    
-    public func add(_ inventory: DBInventory, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
-        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: inventories.realm) {realm -> Bool in
+    public func add(_ inventory: DBInventory, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
+        
+        guard let inventoriesContainer: InventoriesContainer = loadSync(predicate: nil)?.first else {
+            handler(false)
+            QL4("Invalid state: no container")
+            return
+        }
+        
+        add(inventory, inventories: inventoriesContainer.inventories, notificationToken: notificationToken, handler)
+    }
+
+    public func add(_ inventory: DBInventory, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: inventories.realm) {realm -> Bool in
             realm.add(inventory, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
             inventories.append(inventory)
             return true

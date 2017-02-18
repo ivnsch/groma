@@ -816,7 +816,7 @@ class RealmListItemProvider: RealmProvider {
     
     // MARK: - Sync
     
-    func incrementSync(_ listItem: ListItem, quantity: Float, realmData: RealmData, doTransaction: Bool = true) -> Float? {
+    func incrementSync(_ listItem: ListItem, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> Float? {
         
         func transactionContent() -> Float {
             listItem.incrementQuantity(quantity)
@@ -824,7 +824,7 @@ class RealmListItemProvider: RealmProvider {
         }
         
         if doTransaction {
-            return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Float in
+            return doInWriteTransactionSync(realmData: realmData) {realm -> Float in
                 return transactionContent()
             }
         } else {
@@ -833,32 +833,38 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
-    fileprivate func createSync(_ quantifiableProduct: QuantifiableProduct, store: String, section: Section, list: List, quantity: Float, realmData: RealmData, doTransaction: Bool = true) -> ListItem? {
+    fileprivate func createSync(_ quantifiableProduct: QuantifiableProduct, store: String, section: Section, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
         let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store)
         return createSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
     }
     
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
-    fileprivate func createSync(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Float, realmData: RealmData, doTransaction: Bool = true) -> ListItem? {
+    fileprivate func createSync(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
         // TODO note? we use separate methods for quick add/form
         let listItem = ListItem(uuid: UUID().uuidString, product: storeProduct, section: section, list: list, note: nil, quantity: quantity)
         return createSync(listItem, section: section, realmData: realmData, doTransaction: doTransaction)
     }
     
-    fileprivate func createSync(_ listItem: ListItem, section: Section, realmData: RealmData, doTransaction: Bool = true) -> ListItem? {
+    fileprivate func createSync(_ listItem: ListItem, section: Section, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
         
-        func transactionContent() -> Bool {
+        func transactionContent(realm: Realm) -> Bool {
+            realm.add(listItem, update: true)
             section.listItems.append(listItem)
             return true
         }
         
         let successMaybe: Bool? = {
             if doTransaction {
-                return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Bool in
-                    return transactionContent()
+                return doInWriteTransactionSync(realmData: realmData) {realm -> Bool in
+                    return transactionContent(realm: realm)
                 }
             } else {
-                return transactionContent()
+                if let realm = realmData?.realm {
+                    return transactionContent(realm: realm)
+                } else {
+                    QL4("Invalid state: should be executed in existing transaction but didn't pass a realm")
+                    return nil
+                }
             }
         }()
 
@@ -866,7 +872,9 @@ class RealmListItemProvider: RealmProvider {
     }
     
     /// Quick add
-    func addSync(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, status: ListItemStatus, realmData: RealmData, doTransaction: Bool = true) -> (AddListItemResult)? {
+    func addSync(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (AddListItemResult)? {
+        
+        refresh()
         
         switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData) {
         
@@ -906,14 +914,14 @@ class RealmListItemProvider: RealmProvider {
             }
          
             case .err(let error):
-                QL4("Error: \(error), quantifiableProduct: \(quantifiableProduct)")
+                QL4("Error: \(error), quantifiableProduct: \(quantifiableProduct.uuid):\(quantifiableProduct.product.item.name)")
                 return nil
         }
     }
     
     
     /// Input form
-    func addSync(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, doTransaction: Bool = true) -> AddListItemResult? {
+    func addSync(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> AddListItemResult? {
 
         switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false) {
             
@@ -927,7 +935,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     /// Input form / recipes
-    func addSync(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData, doTransaction: Bool = true) -> [(listItem: ListItem, isNew: Bool)]? {
+    func addSync(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> [(listItem: ListItem, isNew: Bool)]? {
         
         //guard let listItemsRealm = listItems.realm else {QL4("List items have no realm"); return nil}
         

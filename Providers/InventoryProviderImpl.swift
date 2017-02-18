@@ -134,26 +134,27 @@ class InventoryProviderImpl: InventoryProvider {
 //    }
     
     func addInventory(_ inventory: DBInventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        self.dbInventoryProvider.saveInventory(inventory, update: true, dirty: remote) {saved in
+        
+        DBProv.inventoryProvider.add(inventory, notificationToken: nil) {saved in
             if saved {
                 handler(ProviderResult(status: .success))
                 
                 // Remove all backend code?
-//                if remote {
-//                    self?.remoteProvider.addInventory(inventory) {remoteResult in
-//                        
-//                        if let remoteInventory = remoteResult.successResult {
-//                            self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventory) {success in
-//                                if !success {
-//                                    QL4("Error storing last update timestamp")
-//                                }
-//                            }
-//                        } else {
-//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-//                        }
-//                    }
-//                }
-
+                //                if remote {
+                //                    self?.remoteProvider.addInventory(inventory) {remoteResult in
+                //
+                //                        if let remoteInventory = remoteResult.successResult {
+                //                            self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventory) {success in
+                //                                if !success {
+                //                                    QL4("Error storing last update timestamp")
+                //                                }
+                //                            }
+                //                        } else {
+                //                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                //                        }
+                //                    }
+                //                }
+                
             } else {
                 handler(ProviderResult(status: .databaseSavingError))
             }

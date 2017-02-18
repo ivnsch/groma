@@ -99,35 +99,45 @@ class ListProviderImpl: ListProvider {
         }
     }
 
-    func add(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<List>) -> ()) {
-        // TODO ensure that in add list case the list is persisted / is never deleted
-        // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
-        // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
-        // remote -> dirty: if we want to upload to server, it means item has to be marked as dirty
-        DBProv.listProvider.saveList(list, dirty: remote, handler: {saved in
-            
+    func add(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<List>) -> Void) {
+        
+        DBProv.listProvider.add(list, notificationToken: nil) {saved in
             if saved {
                 handler(ProviderResult(status: .success, sucessResult: list))
             } else {
                 handler(ProviderResult(status: .databaseUnknown))
             }
-
-            // Disabled while impl. realm sync - access of realm objs here causes wrong thread exception
-//            if remote {
-//                self?.remoteListProvider.add(list, handler: {remoteResult in
-//                    if let timestamp = remoteResult.successResult {
-//                        // We update only the timestamp of the lists as the server doesn't update the inventory, only sends it, as dependency. TODO (server/client) use timestamp-only response.
-//                        DBProvrealProvider.updateLastSyncTimeStamp([list], timestamp: timestamp) {success in
-//                            if !success {
-//                                QL4("Error storing last update timestamp")
-//                            }
-//                        }
-//                    } else {
-//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-//                    }
-//                })
+        }
+            
+        
+//        // TODO ensure that in add list case the list is persisted / is never deleted
+//        // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
+//        // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
+//        // remote -> dirty: if we want to upload to server, it means item has to be marked as dirty
+//        DBProv.listProvider.saveList(list, dirty: remote, handler: {saved in
+//            
+//            if saved {
+//                handler(ProviderResult(status: .success, sucessResult: list))
+//            } else {
+//                handler(ProviderResult(status: .databaseUnknown))
 //            }
-        })
+//
+//            // Disabled while impl. realm sync - access of realm objs here causes wrong thread exception
+////            if remote {
+////                self?.remoteListProvider.add(list, handler: {remoteResult in
+////                    if let timestamp = remoteResult.successResult {
+////                        // We update only the timestamp of the lists as the server doesn't update the inventory, only sends it, as dependency. TODO (server/client) use timestamp-only response.
+////                        DBProvrealProvider.updateLastSyncTimeStamp([list], timestamp: timestamp) {success in
+////                            if !success {
+////                                QL4("Error storing last update timestamp")
+////                            }
+////                        }
+////                    } else {
+////                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+////                    }
+////                })
+////            }
+//        })
     }
 
     func update(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {

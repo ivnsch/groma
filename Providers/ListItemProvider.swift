@@ -125,7 +125,7 @@ public protocol ListItemProvider {
     
     func addNew(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
 
-    func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void)
+    func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData?, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void)
     
     func switchStatusNew(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void)
     

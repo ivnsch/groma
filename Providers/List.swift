@@ -126,7 +126,7 @@ public class List: DBSyncable, Identifiable {
     }
     
     public func copy(uuid: String? = nil, name: String? = nil, users: [DBSharedUser]? = nil, color: UIColor? = nil, order: Int? = nil, inventory: DBInventory? = nil, store: ListCopyStore? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> List {
-        return List(
+        let list = List(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             users: users ?? self.users.map{$0.copy()},
@@ -137,7 +137,14 @@ public class List: DBSyncable, Identifiable {
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
         )
+        
+//        list.todoSections = todoSections
+//        list.doneListItems = doneListItems
+//        list.stashListItems = stashListItems
+        
+        return list
     }
+    
     
     public override static func ignoredProperties() -> [String] {
         return ["inventory", "color"]

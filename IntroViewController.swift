@@ -246,43 +246,34 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         } else {
                             Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
                         
-//                                guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't add list items."); onFinish?(); return}
-//
-//                                let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
-//                                    if let product = products.findFirst({$0.item.name == ingredient.name}) {
-//                                        // for now use products without unit to prefill list
-//                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantityFloat: 1, unit: noneUnit, product: product)
-//                                        return (quanatifiableProduct, ingredient.quantity)
-//                                    } else {
-//                                        return nil
-//                                    }
-//                                }
-//                                
-//                                let storeProductInput = StoreProductInput(price: 1, baseQuantity: 1, unit: "") // TODO!!!!!!!!!!!!!!!!! empty string unit is converted to "none" when saving TODO more reliable way to implement this
-//                                let prototypes = productsIngredients.map {
-//                                    ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.item.category.name, targetSectionColor: $0.product.product.item.category.color, storeProductInput: storeProductInput)
-//                                }
+                                guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't add list items."); onFinish?(); return}
 
+                                let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
+                                    if let product = products.findFirst({$0.item.name == ingredient.name}) {
+                                        // for now use products without unit to prefill list
+                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantityFloat: 1, unit: noneUnit, product: product)
+                                        return (quanatifiableProduct, ingredient.quantity)
+                                    } else {
+                                        return nil
+                                    }
+                                }
+
+                                let inputs = productsIngredients.map {
+                                    ListItemInput(name: $0.product.product.item.name, quantity: $0.quantity, price: 0, section: $0.product.product.item.category.name, sectionColor: $0.product.product.item.category.color, note: nil, baseQuantity: "1", unit: $0.product.unit.name, brand: $0.product.product.brand)
+                                }
                                 
-                                
-                                // TODO add list items correctly (ues correct provider method - appending to list's sections)
-                                onFinish?()
-//                                Prov.listItemsProvider.add(prototypes, status: .todo, list: exampleList, note: nil, order: nil, token: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
-//                                    QL2("Finish adding example list")
-//                                    
-//                                    self?.onCreateExampleList?()
-//                                    
-//                                    onFinish?()
-//                                    
-//                                    }, onError: {result in
-//                                        QL4("Error adding example list items, result: \(result), items: \(prototypes)")
-//                                        onFinish?()
-//                                }))
-                                
-                                
-                                
-                                
-                                
+                                Prov.listItemsProvider.addNew(listItemInputs: inputs, list: exampleList, status: .todo, realmData: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
+                                    QL2("Finish adding example list")
+                                    
+                                    self?.onCreateExampleList?()
+                                    
+                                    onFinish?()
+                                    
+                                    }, onError: {result in
+                                        QL4("Error adding example list items, result: \(result), inputs: \(inputs)")
+                                        onFinish?()
+                                }))
+                                                                
                                 }, onError: {result in
                                     QL4("Error adding example list, result: \(result), group: \(exampleList)")
                                     onFinish?()

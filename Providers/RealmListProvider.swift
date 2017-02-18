@@ -60,9 +60,19 @@ class RealmListProvider: RealmProvider {
         handler(listsContainer.lists)
     }
     
+    public func add(_ list: List, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
+        
+        guard let listsContainer: ListsContainer = loadSync(predicate: nil)?.first else {
+            handler(false)
+            QL4("Invalid state: no container")
+            return
+        }
+        
+        add(list, lists: listsContainer.lists, notificationToken: notificationToken, handler)
+    }
     
-    public func add(_ list: List, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
-        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: list.realm) {realm -> Bool in
+    public func add(_ list: List, lists: RealmSwift.List<List>, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: list.realm) {realm -> Bool in
             realm.add(list, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
             lists.append(list)
             return true
