@@ -210,7 +210,7 @@ class ListTopBarView: UIView {
             heightConstraint.constant = center ? 64 : DimensionsManager.defaultCellHeight
         }
         
-        titleLabelLeftConstraint?.constant = center ? self.center.x - titleLabel.frame.width / 2 : CGFloat(titleLabelLeftConstant)
+        titleLabelLeftConstraint?.constant = center ? self.width / 2 - titleLabel.frame.width / 2 : CGFloat(titleLabelLeftConstant)
         titleLabelCenterYContraint?.constant = center ? 10 : 0
         
         titleLabelWidthConstraint = titleLabel.widthLessThanConstraint(bounds.width - (titleMinLeftRightMargin * 2))
