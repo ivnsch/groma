@@ -87,4 +87,12 @@ public class DBFraction: Object {
     public static var one: DBFraction {
         return DBFraction(numerator: 1, denominator: 1)
     }
+    
+    public var isOneByOne: Bool {
+        return numerator == 1 && denominator == 1
+    }
+    
+    public var isValidAndNotZeroOrOneByOne: Bool {
+        return isValid && !isZero && !isOneByOne
+    }
 }

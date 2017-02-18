@@ -17,7 +17,6 @@ protocol FractionViewDelegate {
     
     @IBInspectable var isBold: Bool = false
     
-    //@IBOutlet weak var wholeNumberLabel: UILabel!
     @IBOutlet weak var numeratorLabel: UILabel!
     @IBOutlet weak var denominatorLabel: UILabel!
     @IBOutlet weak var lineView: UIView!
@@ -29,9 +28,16 @@ protocol FractionViewDelegate {
     var fraction: DBFraction? {
         didSet {
             if let fraction = fraction {
-                //wholeNumberLabel.text = fraction.wholeNumber == 0 ? "" : "\(fraction.wholeNumber)"
-                numeratorLabel.text = "\(fraction.numerator)"
-                denominatorLabel.text = "\(fraction.denominator)"
+                if fraction.isValidAndNotZeroOrOneByOne {
+                    numeratorLabel.text = "\(fraction.numerator)"
+                    denominatorLabel.text = "\(fraction.denominator)"
+                    lineView.isHidden = false
+                    
+                } else {
+                    numeratorLabel.text = ""
+                    denominatorLabel.text = ""
+                    lineView.isHidden = true
+                }
                 
                 numeratorLabel.sizeToFit()
                 denominatorLabel.sizeToFit()
@@ -87,7 +93,12 @@ protocol FractionViewDelegate {
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: numeratorLabel.width + lineView.width + denominatorLabel.width + 5 + 20, height: numeratorLabel.height + 20) // width: 5 pt (*2) spacing to line, 10 pt for 2*2 pt center constraint offset in labels + 20pt just to make a little more space.
+        if !(fraction?.isValidAndNotZeroOrOneByOne ?? false) {
+            return CGSize(width: 10, height: 0)
+            
+        } else {
+            return CGSize(width: numeratorLabel.width + lineView.width + denominatorLabel.width + 5 + 20, height: numeratorLabel.height + 20) // width: 5 pt (*2) spacing to line, 10 pt for 2*2 pt center constraint offset in labels + 20pt just to make a little more space.
+        }
     }
     
     func longPress(_ sender: Any) {

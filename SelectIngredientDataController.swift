@@ -94,10 +94,10 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         
         titleLabelsFont = itemNameLabel.font // NOTE: Assumes that all labels in title have same font
         
-        addButtonHelper = initAddButtonHelper()
-        
         loadUnits()
         loadFractions()
+        
+        updateInputsAndTitle()
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
         tap.delegate = self
@@ -160,7 +160,10 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
         guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
-        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton) {[weak self] in guard let weakSelf = self else {return}
+        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
+        
+        let overrideCenterY: CGFloat = parentViewForAddButton.height + tabBarHeight
+        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton, overrideCenterY: overrideCenterY) {[weak self] in guard let weakSelf = self else {return}
             weakSelf.submit()
         }
         return addButtonHelper
@@ -185,14 +188,13 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
         addButtonHelper?.addObserver()
-        addButtonHelper?.animateVisible(true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         addButtonHelper?.removeObserver()
-        addButtonHelper?.animateVisible(false)
     }
     
     
@@ -224,7 +226,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     // MARK: - Private
     
     fileprivate func updateInputsAndTitle() {
-//        inputs.unitName = unitTextField.text ?? ""
+        inputs.unitName = unitTextField.text ?? ""
         inputs.quantity = quantity
 
         updateTitle(inputs: inputs)
@@ -233,9 +235,9 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     fileprivate func updateTitle(inputs: SelectIngredientDataControllerInputs) {
         guard let titleLabelsFont = titleLabelsFont else {QL4("No title labels font. Can't update title."); return}
         
-        let fractionStr = inputs.fraction.isValidAndNotZeroOrOne ? inputs.fraction.description : ""
+        let fractionStr = inputs.fraction.isValidAndNotZeroOrOneByOne ? inputs.fraction.description : ""
         // Don't show quantity if it's 0 and there's a fraction. If there's no fraction we show quantity 0, because otherwise there wouldn't be any number and this doesn't make sense.
-        let wholeNumberStr = quantity == 0 ? (fractionStr.isEmpty ? quantity.quantityString : "") : quantity.quantityString
+        let wholeNumberStr = quantity == 0 ? (fractionStr.isEmpty ? quantity.quantityString : "") : "\(quantity.quantityString)"
         let unitStr = inputs.unitName.isEmpty ? "unit" : inputs.unitName
         
         let boldTime: Double = 1
@@ -261,6 +263,8 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     // TODO validation - don't allow e.g. to add item with 0 quantity
     
     fileprivate func onSelect(fraction: DBFraction) {
+        inputs.fraction = Fraction(wholeNumber: 0, numerator: fraction.numerator, denominator: fraction.denominator)
+        
         updateInputsAndTitle()
     }
     

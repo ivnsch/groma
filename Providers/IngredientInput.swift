@@ -108,12 +108,20 @@ public struct Fraction: Equatable {
         return decimalValue == 1
     }
     
+    public var isOneByOne: Bool {
+        return numerator == 1 && denominator == 1
+    }
+    
     public var isValid: Bool {
         return denominator != 0
     }
     
     public var isValidAndNotZeroOrOne: Bool {
         return isValid && !isZero && !isOne
+    }
+
+    public var isValidAndNotZeroOrOneByOne: Bool {
+        return isValid && !isZero && !isOneByOne
     }
     
     public var description: String {
