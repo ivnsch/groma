@@ -528,20 +528,27 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
  
     /// Return true to consume the event (i.e. prevent closing of this controller)
     func onTapNavBarCloseTap() -> Bool {
-        closeChildControllers()
-        return false
+        return closeChildControllers()
     }
     
-    func closeChildControllers() {
+    func closeChildControllers() -> Bool {
+        
+        var isAnyShowing: Bool = false
+        
         if recipeControllerAnimator?.isShowing ?? false {
             recipeControllerAnimator?.close()
+            isAnyShowing = true
         }
         if selectQuantifiableAnimator?.isShowing ?? false {
             selectQuantifiableAnimator?.close()
+            isAnyShowing = true
         }
         if selectIngredientAnimator?.isShowing ?? false {
             selectIngredientAnimator?.close()
+            isAnyShowing = true
         }
+        
+        return isAnyShowing
     }
     
     func closeRecipeController() {
