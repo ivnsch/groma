@@ -755,7 +755,7 @@ class RealmProductProvider: RealmProvider {
 
                 } else {
                     if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
-                        let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit, product: product)
+                        let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit.unit, product: product)
                         self.doInWriteTransactionSync({realm in
                             realm.add(newQuantifiableProduct)
                         })
@@ -1235,7 +1235,7 @@ class RealmProductProvider: RealmProvider {
         } else {
             let result: ProvResult<QuantifiableProduct, DatabaseError> = mergeOrCreateeProductSync(prototype: prototype, updateCategory: true, save: false).flatMap {product in
                 if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
-                    return .ok(QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit, product: product))
+                    return .ok(QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit.unit, product: product))
                 } else {
                     QL4("Couldn't get or create unit")
                     return .err(.unknown)

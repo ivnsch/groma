@@ -200,7 +200,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         }
         
         Prov.unitProvider.getOrCreate(name: ingredientInput.unitName, successHandler{unit in
-            onHasUnit(unit)
+            onHasUnit(unit.unit)
         })
     }
     
@@ -254,7 +254,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         }
         
         Prov.unitProvider.getOrCreate(name: input.storeProductInput.unit, successHandler{unit in
-            onHasUnit(unit)
+            onHasUnit(unit.unit)
         })
     }
 

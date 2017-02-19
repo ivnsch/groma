@@ -94,7 +94,7 @@ class RealmUnitProvider: RealmProvider {
         return loadSync(filter: Unit.createFilter(id: id))?.first
     }
     
-    func getOrCreateSync(name: String) -> Unit? {
+    func getOrCreateSync(name: String) -> (unit: Unit, isNew: Bool)? {
         if name.isEmpty {
             let noneUnit = unitSync(id: .none)
             if noneUnit == nil {
@@ -102,21 +102,21 @@ class RealmUnitProvider: RealmProvider {
                 // This hasn't happened so far but as general guideline, we avoid assumptions and try to recover (with online logging of course, so we can also fix the issue)
                 let newNoneUnit = Unit(uuid: UUID().uuidString, name: trans("unit_none"), id: .none)
                 if saveObjSync(newNoneUnit) {
-                    return newNoneUnit
+                    return (newNoneUnit, true)
                 } else {
                     QL4("Didn't succeed creating new none unit")
                     return nil
                 }
             }
-            return noneUnit
+            return noneUnit.map{($0, false)} ?? nil
         }
         
         if let existingUnit = unitSync(name: name) {
-            return existingUnit
+            return (existingUnit, false)
         } else {
             let newUnit = Unit(uuid: UUID().uuidString, name: name, id: .custom)
             let success = saveObjSync(newUnit)
-            return success ? newUnit : nil
+            return success ? (newUnit, true) : nil
         }
     }
     

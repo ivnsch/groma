@@ -53,7 +53,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     public var baseQuantityFloat: Float {
         get {
             return baseQuantity.floatValue ?? {
-                QL4("Invalid base quantity string: \(baseQuantity)")
+                QL3("Invalid base quantity string: \(baseQuantity). Returning 1 (no-op base quantity).")
                 return 1
             }()
         }

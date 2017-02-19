@@ -465,7 +465,7 @@ class ProductProviderImpl: ProductProvider {
                     if let updatedProduct = result.sucessResult {
                         
                         if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
-                            let quantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit, product: updatedProduct)
+                            let quantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit.unit, product: updatedProduct)
                             handler(ProviderResult(status: .success, sucessResult: quantifiableProduct))
                         } else {
                             QL4("Couldn't get unit. Protoype: \(prototype)")

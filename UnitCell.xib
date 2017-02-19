@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="unitCell" id="03B-QQ-7uh" customClass="UnitCell" customModule="groma" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="280" height="101"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="280" height="101"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6vI-VU-pU4" customClass="UnitView" customModule="groma" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="280" height="101"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="6vI-VU-pU4" secondAttribute="trailing" id="6cq-cx-xx9"/>
+                <constraint firstItem="6vI-VU-pU4" firstAttribute="top" secondItem="03B-QQ-7uh" secondAttribute="top" id="KnW-75-Pya"/>
+                <constraint firstAttribute="bottom" secondItem="6vI-VU-pU4" secondAttribute="bottom" id="TC5-gx-O0A"/>
+                <constraint firstItem="6vI-VU-pU4" firstAttribute="leading" secondItem="03B-QQ-7uh" secondAttribute="leading" id="oiA-9Q-Ra6"/>
+            </constraints>
+            <size key="customSize" width="280" height="101"/>
+            <connections>
+                <outlet property="unitView" destination="6vI-VU-pU4" id="6UO-2H-83w"/>
+            </connections>
+            <point key="canvasLocation" x="-301" y="-359.5"/>
+        </collectionViewCell>
+    </objects>
+</document>

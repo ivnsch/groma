@@ -45,7 +45,7 @@ class AddButtonHelper: NSObject {
     func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                QL1("keyboardWillChangeFrame, frame: \(frame)")
+//                QL1("keyboardWillChangeFrame, frame: \(frame)")
                 keyboardHeight = frame.height
             } else {
                 QL3("Couldn't retrieve keyboard size from user info")
@@ -58,7 +58,7 @@ class AddButtonHelper: NSObject {
     
     func keyboardWillDisappear(_ notification: Foundation.Notification) {
         // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
-        QL3("add button - Keyboard will disappear - hiding")
+//        QL3("add button - Keyboard will disappear - hiding")
         animateVisible(false)
     }
     
@@ -82,11 +82,11 @@ class AddButtonHelper: NSObject {
         if endY != addButton.center.y { // animate only if there's a change in the position (open, close keyboard / changed between normal and emoji keyboard)
             
             UIView.animate(withDuration: 0.4, animations: {
-                QL1("Animating add button to \(endY)")
+//                QL1("Animating add button to \(endY)")
                 addButton.center = addButton.center.copy(y: endY)
                 }, completion: {[weak self] finished in
                     if removeOnFinish {
-                        QL3("Finish animation, removing add button")
+//                        QL1("Finish animation, removing add button")
                         self?.addButton?.removeFromSuperview()
                         self?.addButton = nil
                     }

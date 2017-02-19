@@ -105,14 +105,14 @@ protocol FractionViewDelegate {
         addGestureRecognizer(longPress)
     }
     
-    override var intrinsicContentSize: CGSize {
-        if !(fraction?.isValidAndNotZeroOrOneByOne ?? false) {
-            return CGSize(width: 10, height: 0)
-            
-        } else {
-            return CGSize(width: numeratorLabel.width + lineView.width + denominatorLabel.width + 5 + 20, height: numeratorLabel.height + 20) // width: 5 pt (*2) spacing to line, 10 pt for 2*2 pt center constraint offset in labels + 20pt just to make a little more space.
-        }
-    }
+//    override var intrinsicContentSize: CGSize {
+//        if !(fraction?.isValidAndNotZeroOrOneByOne ?? false) {
+//            return CGSize(width: 10, height: 0)
+//            
+//        } else {
+//            return CGSize(width: numeratorLabel.width + lineView.width + denominatorLabel.width + 5 + 20, height: numeratorLabel.height + 20) // width: 5 pt (*2) spacing to line, 10 pt for 2*2 pt center constraint offset in labels + 20pt just to make a little more space.
+//        }
+//    }
     
     func longPress(_ sender: Any) {
         delegate?.onLongPress()

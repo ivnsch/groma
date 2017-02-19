@@ -35,12 +35,11 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     @IBOutlet weak var quantityView: QuantityView!
     @IBOutlet weak var quantityBackgroundView: UIView!
     
-    @IBOutlet weak var unitTextField: MyAutoCompleteTextField!
-
     @IBOutlet weak var fractionsCollectionView: UICollectionView!
     
-    fileprivate var inputs: SelectIngredientDataControllerInputs = SelectIngredientDataControllerInputs()
+    @IBOutlet weak var unitsCollectionView: UICollectionView!
     
+    var inputs: SelectIngredientDataControllerInputs = SelectIngredientDataControllerInputs()
     
     fileprivate var titleLabelsFont: UIFont?
 
@@ -50,7 +49,8 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     weak var delegate: SelectIngredientDataControllerDelegate?
 
     fileprivate var currentNewFractionInput: Fraction?
-    
+    fileprivate var currentNewUnitInput: String?
+
     var item: Item? {
         didSet {
             if let item = item {
@@ -59,7 +59,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         }
     }
     
-    fileprivate var units: Results<Providers.Unit>?
+//    fileprivate var units: Results<Providers.Unit>?
     fileprivate var unitNames: [String] = [] // we need this because we can't touch the Realm Units in the autocompletions thread (get diff. thread exception). So we have to map to Strings in advance.
     
     var quantity: Float {
@@ -77,6 +77,9 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         }
     }
     
+    fileprivate var unitsDataSource: UnitsDataSource?
+    fileprivate var unitsDelegate: UnitsDelegate? // arc
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -87,14 +90,10 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         
         swipeToIncrementHelper = SwipeToIncrementHelper(view: quantityBackgroundView)
         swipeToIncrementHelper?.delegate = self
-        
-        initTextFieldPlaceholders()
-        initAutocompletionTextFields()
-        initTextListeners()
-        
+         
         titleLabelsFont = itemNameLabel.font // NOTE: Assumes that all labels in title have same font
         
-        loadUnits()
+        initUnitsCollectionView()
         loadFractions()
         
         updateInputsAndTitle()
@@ -103,11 +102,37 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         tap.delegate = self
         view.addGestureRecognizer(tap)
         
-        if let flow = fractionsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flow.estimatedItemSize = CGSize(width: 100, height: 50)
-        } else {
-            QL4("No flow layout")
-        }
+        // For the most part intrinsic size worked but there were some issues particularly after removing some cells, the input cell (the last one) would shift to the right until being outside of the collection view. After switching to sizeForItemAt this still happened! (though it seemed to be less frequently?). Then I added invalidateLayout() after the cell removals. This apparently has fixed it. It may be that invalidateLayout() makes it work correctly also with the intrinsic size but I don't have more time for this right now.
+//        // Set estimated size, this makes collection view use intrinsic cell size
+//        if let flow = fractionsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+//            flow.estimatedItemSize = CGSize(width: 100, height: 50)
+//        } else {
+//            QL4("No flow layout")
+//        }
+//        if let flow = unitsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+//            flow.estimatedItemSize = CGSize(width: 100, height: 50)
+//        } else {
+//            QL4("No flow layout")
+//        }
+    }
+    
+    fileprivate func initUnitsCollectionView() {
+
+        let delegate = UnitsDelegate(delegate: self)
+        unitsCollectionView.delegate = delegate
+        unitsDelegate = delegate
+        
+        Prov.unitProvider.units(successHandler{[weak self] units in
+            
+            let dataSource = UnitsDataSource(units: units)
+            dataSource.delegate = self
+            self?.unitsDataSource = dataSource
+            self?.unitsCollectionView.dataSource = dataSource
+            
+            self?.unitNames = units.map{$0.name} // see comment on var why this is necessary
+            
+            self?.unitsCollectionView.reloadData()
+        })
     }
     
     func loadFractions() {
@@ -130,11 +155,36 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
                         editCell.editableFractionView.clear()
                     }
                 }
+                
+                weakSelf.currentNewFractionInput = nil
             })
             
         } else {
             /// Clear possible marked to delete fractions - we use "tap outside" as the way to cancel the delete-status
             clearToDeleteFractions()
+        }
+        
+        
+        if let currentNewUnitInput = currentNewUnitInput {
+            
+            guard let dataSource = unitsCollectionView.dataSource else {QL4("No data source"); return}
+            guard let unitsDataSource = dataSource as? UnitsDataSource else {QL4("Data source has wrong type: \(type(of: dataSource))"); return}
+
+            Prov.unitProvider.getOrCreate(name: currentNewUnitInput, successHandler{[weak self] (unit, isNew) in guard let weakSelf = self else {return}
+                if isNew {
+                    
+                    weakSelf.unitsCollectionView.insertItems(at: [IndexPath(row: (unitsDataSource.units?.count ?? 0) - 1, section: 0)])
+                    if let editCell = weakSelf.unitsCollectionView.cellForItem(at: IndexPath(row: (unitsDataSource.units?.count ?? 0), section: 0)) as? UnitEditableCell {
+                        editCell.editableUnitView.clear()
+                    }
+                }
+                
+                weakSelf.currentNewUnitInput = nil
+            })
+            
+        } else {
+            /// Clear possible marked to delete fractions - we use "tap outside" as the way to cancel the delete-status
+            clearToDeleteUnits()
         }
     }
     
@@ -144,20 +194,13 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         guard let view = touch.view else {return false}
-        if view.hasAncestor(type: FractionCell.self) || view.hasAncestor(type: EditableFractionCell.self) {
+        if view.hasAncestor(type: FractionCell.self) || view.hasAncestor(type: EditableFractionCell.self) || view.hasAncestor(type: UnitCell.self) || view.hasAncestor(type: UnitEditableCell.self) {
             return false
         } else {
             return true
         }
     }
-    
-    fileprivate func loadUnits() {
-        Prov.unitProvider.units(successHandler{[weak self] units in
-            self?.units = units
-            self?.unitNames = units.map{$0.name} // see comment on var why this is necessary
-        })
-    }
-    
+
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
         guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
         guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
@@ -167,23 +210,6 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
             weakSelf.submit()
         }
         return addButtonHelper
-    }
-
-    fileprivate func initTextListeners() {
-        for textField in [unitTextField] {
-            textField?.addTarget(self, action: #selector(onTextChange(_:)), for: .editingChanged)
-        }
-    }
-    
-    fileprivate func initAutocompletionTextFields() {
-        for textField in [unitTextField] {
-            textField?.defaultAutocompleteStyle()
-            textField?.myDelegate = self
-        }
-    }
-    
-    fileprivate func initTextFieldPlaceholders() {
-        unitTextField.attributedPlaceholder = NSAttributedString(string: unitTextField.placeholder ?? "", attributes: [NSForegroundColorAttributeName: UIColor.gray])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -226,7 +252,6 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     // MARK: - Private
     
     fileprivate func updateInputsAndTitle() {
-        inputs.unitName = unitTextField.text ?? ""
         inputs.quantity = quantity
 
         updateTitle(inputs: inputs)
@@ -268,48 +293,16 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         updateInputsAndTitle()
     }
     
+    fileprivate func onSelect(unit: Providers.Unit) {
+        inputs.unitName = unit.name
+        
+        updateInputsAndTitle()
+    }
+    
     fileprivate func submit() {
         guard let item = item else {QL4("Illegal state: no item. Can't submit"); return}
         
         delegate?.onSubmitIngredientInputs(item: item, inputs: inputs)
-    }
-}
-
-
-extension SelectIngredientDataController: MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, MyAutoCompleteTextFieldDelegate {
-    
-    // MARK: - MLPAutoCompleteTextFieldDataSource
-    
-    func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, possibleCompletionsFor string: String!, completionHandler handler: @escaping (([Any]?) -> Void)) {
-        switch textField {
-        case unitTextField:
-            guard let text = unitTextField.text else {handler([]); return}
-            
-            handler(unitNames.filter{$0.contains(text)})
-
-        case _:
-            QL4("Not handled text field in autoCompleteTextField")
-            break
-        }
-    }
-    
-    
-    // MARK: - MyAutoCompleteTextFieldDelegate
-    
-    func onDeleteSuggestion(_ string: String, sender: MyAutoCompleteTextField) {
-        switch sender {
-
-        case unitTextField:
-            guard let unitText = unitTextField.text else {return}
-            
-            ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_unit_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-                Prov.unitProvider.delete(name: unitText, weakSelf.successHandler {
-                    AlertPopup.show(message: trans("popup_was_removed", unitText), controller: weakSelf)
-                })
-            })
-
-        default: QL4("Not handled input")
-        }
     }
 }
 
@@ -360,6 +353,7 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
             
             Prov.fractionProvider.remove(fraction: fraction, successHandler {[weak self] in
                 self?.fractionsCollectionView.deleteItems(at: [indexPath])
+                self?.fractionsCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
             })
             
         } else {
@@ -380,6 +374,17 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        if (fractions.map{fractions in
+            indexPath.row < fractions.count
+        }) ?? false {
+            return CGSize(width: 70, height: 50)
+        } else {
+            return CGSize(width: 120, height: 50)
+        }
+    }
+    
     fileprivate func clearToDeleteFractions() {
         for cell in fractionsCollectionView.visibleCells {
             if let fractionCell = cell as? FractionCell { // Note that we cast individual cells, because the collection view is mixed
@@ -396,10 +401,33 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
         }
     }
     
+    
+    fileprivate func clearToDeleteUnits() {
+        for cell in unitsCollectionView.visibleCells {
+            if let fractionCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
+                fractionCell.unitView.mark(toDelete: false, animated: true)
+            }
+        }
+    }
+    
+    fileprivate func clearSelectedUnits() {
+        for cell in unitsCollectionView.visibleCells {
+            if let fractionCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
+                fractionCell.unitView.showSelected(selected: false, animated: true)
+            }
+        }
+    }
+    
     fileprivate func isSelected(cell: FractionCell) -> Bool {
         guard let fractionViewFraction = cell.fractionView.fraction else {return false}
         
         return fractionViewFraction.numerator == inputs.fraction.numerator && fractionViewFraction.denominator == inputs.fraction.denominator
+    }
+    
+    fileprivate func isSelected(cell: UnitCell) -> Bool {
+        guard let unitViewUnit = cell.unitView.unit else {return false}
+        
+        return unitViewUnit.name == inputs.unitName
     }
     
     // MARK: - EditableFractionViewDelegate
@@ -427,4 +455,165 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
         return nil
         
     }
+    
 }
+
+
+extension SelectIngredientDataController: UnitsCollectionViewDataSourceDelegate, UnitsCollectionViewDelegateDelegate {
+    
+    // MARK: - UnitsCollectionViewDataSourceDelegate
+    
+    func onUpdateUnitNameInput(nameInput: String) {
+        currentNewUnitInput = nameInput
+    }
+    
+    // MARK: - UnitsCollectionViewDelegateDelegate
+
+    func didSelectUnit(indexPath: IndexPath) {
+        guard let dataSource = unitsCollectionView.dataSource else {QL4("No data source"); return}
+        guard let unitsDataSource = dataSource as? UnitsDataSource else {QL4("Data source has wrong type: \(type(of: dataSource))"); return}
+        guard let units = unitsDataSource.units else {QL4("Invalid state: Data source has no units"); return}
+        
+        let cellMaybe = unitsCollectionView.cellForItem(at: indexPath) as? UnitCell
+        
+        if cellMaybe?.unitView.markedToDelete ?? false {
+            
+            let unit = units[indexPath.row]
+            Prov.unitProvider.delete(name: unit.name, successHandler {[weak self] in
+                self?.unitsCollectionView.deleteItems(at: [indexPath])
+                self?.unitsCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
+            })
+            
+        } else {
+            clearToDeleteUnits()
+            clearSelectedUnits()
+            
+            if let cell = cellMaybe {
+                if isSelected(cell: cell) {
+                    cellMaybe?.unitView.showSelected(selected: false, animated: true)
+                    inputs.unitName = ""
+                    updateTitle(inputs: inputs)
+                    
+                } else {
+                    cellMaybe?.unitView.showSelected(selected: true, animated: true)
+                    onSelect(unit: units[indexPath.row])
+                }
+            }
+        }
+    }
+    
+    func sizeFotUnitCell(indexPath: IndexPath) -> CGSize {
+        if (unitsDataSource?.units.map{unit in
+            indexPath.row < unit.count
+        }) ?? false {
+            return CGSize(width: 70, height: 50)
+        } else {
+            return CGSize(width: 120, height: 50)
+        }
+    }
+}
+
+
+
+protocol UnitsCollectionViewDataSourceDelegate {
+    var inputs: SelectIngredientDataControllerInputs {get}
+    func onUpdateUnitNameInput(nameInput: String)
+}
+
+class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, UnitEditableViewDelegate, UICollectionViewDelegateFlowLayout {
+
+    var units: Results<Providers.Unit>?
+
+    var delegate: UnitsCollectionViewDataSourceDelegate?
+    
+    init(units: Results<Providers.Unit>?) {
+        self.units = units
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return units.map{$0.count + 1} ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let units = units else {QL4("No units"); return UICollectionViewCell()}
+        
+        if indexPath.row < units.count {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "unitCell", for: indexPath) as! UnitCell
+            let unit = units[indexPath.row]
+            cell.unitView.unit = unit
+            cell.unitView.bgColor = Theme.unitsBGColor
+            cell.unitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
+            cell.unitView.markedToDelete = false
+            cell.delegate = self
+
+            
+            if let delegate = delegate {
+                let selected = delegate.inputs.unitName == unit.name
+                cell.unitView.showSelected(selected: selected, animated: false)
+                
+            } else {
+                QL4("No delegate - can't update selected state")
+            }
+            
+            // HACK: For some reason after scrolled the label doesn't use its center constraint and appears aligned to the left. Debugging view hierarchy shows the label has the correct constraints, parent also has correct size but for some reason it's aligned at the left.
+            cell.unitView.nameLabel.center = cell.unitView.center
+//            cell.setNeedsLayout()
+            
+            return cell
+            
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "unitEditableCell", for: indexPath) as! UnitEditableCell
+            cell.editableUnitView.backgroundColor = Theme.unitsBGColor
+            cell.editableUnitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
+            cell.editableUnitView.delegate = self
+            
+            if let delegate = delegate {
+                cell.editableUnitView.prefill(name: delegate.inputs.unitName)
+            } else {
+                QL4("No delegate - prefill input cell")
+            }
+
+            return cell
+        }
+    }
+    
+    // MARK: - UnitCellDelegate
+    
+    func onLongPress(cell: UnitCell) {
+        cell.unitView.markedToDelete = true
+        cell.unitView.mark(toDelete: true, animated: true)
+    }
+    
+    
+    // MARK: - EditableUnitCellDelegate
+    
+    func onUnitInputChange(nameInput: String) {
+        delegate?.onUpdateUnitNameInput(nameInput: nameInput)
+    }
+}
+
+
+protocol UnitsCollectionViewDelegateDelegate: class {
+    func sizeFotUnitCell(indexPath: IndexPath) -> CGSize
+    func didSelectUnit(indexPath: IndexPath)
+}
+
+class UnitsDelegate: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
+    fileprivate weak var delegate: UnitsCollectionViewDelegateDelegate?
+    
+    init(delegate: UnitsCollectionViewDelegateDelegate) {
+        self.delegate = delegate
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.didSelectUnit(indexPath: indexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return delegate?.sizeFotUnitCell(indexPath: indexPath) ?? CGSize.zero
+    }
+    
+    
+}
+

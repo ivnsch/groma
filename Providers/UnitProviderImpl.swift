@@ -23,7 +23,7 @@ class UnitProviderImpl: UnitProvider {
         }
     }
 
-    func getOrCreate(name: String, _ handler: @escaping (ProviderResult<Unit>) -> Void) {
+    func getOrCreate(name: String, _ handler: @escaping (ProviderResult<(unit: Unit, isNew: Bool)>) -> Void) {
         if let unit = DBProv.unitProvider.getOrCreateSync(name: name) {
             handler(ProviderResult(status: .success, sucessResult: unit))
         } else {
