@@ -326,11 +326,16 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
         
         if indexPath.row < fractions.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FractionCell
-            cell.fractionView.fraction = fractions[indexPath.row]
+            let fraction = fractions[indexPath.row]
+            cell.fractionView.fraction = fraction
             cell.fractionView.backgroundColor = UIColor.white
             cell.fractionView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
             cell.fractionView.markedToDelete = false
             cell.delegate = self
+            
+            let selected = inputs.fraction.numerator == fraction.numerator && inputs.fraction.denominator == fraction.denominator
+            cell.fractionView.showSelected(selected: selected, animated: false)
+            
             return cell
             
         } else {
@@ -346,7 +351,10 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let fractions = fractions else {QL4("No fractions"); return}
 
-        if (fractionsCollectionView.cellForItem(at: indexPath) as? FractionCell)?.fractionView.markedToDelete ?? false {
+        
+        let cellMaybe = fractionsCollectionView.cellForItem(at: indexPath) as? FractionCell
+        
+        if cellMaybe?.fractionView.markedToDelete ?? false {
         
             let fraction = fractions[indexPath.row]
             
@@ -356,18 +364,44 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
             
         } else {
             clearToDeleteFractions()
+            clearSelectedFractions()
             
-            onSelect(fraction: fractions[indexPath.row])
+            if let cell = cellMaybe {
+                if isSelected(cell: cell) {
+                    cellMaybe?.fractionView.showSelected(selected: false, animated: true)
+                    inputs.fraction = Fraction(wholeNumber: 0, numerator: 1, denominator: 1)
+                    updateTitle(inputs: inputs)
+                    
+                } else {
+                    cellMaybe?.fractionView.showSelected(selected: true, animated: true)
+                    onSelect(fraction: fractions[indexPath.row])
+                }
+            }
         }
     }
     
     fileprivate func clearToDeleteFractions() {
-        for fractionCell in fractionsCollectionView.visibleCells as? [FractionCell] ?? [] {
-            fractionCell.fractionView.markedToDelete = false
+        for cell in fractionsCollectionView.visibleCells {
+            if let fractionCell = cell as? FractionCell { // Note that we cast individual cells, because the collection view is mixed
+                fractionCell.fractionView.mark(toDelete: false, animated: true)
+            }
         }
-        fractionsCollectionView.reloadData()
     }
 
+    fileprivate func clearSelectedFractions() {
+        for cell in fractionsCollectionView.visibleCells {
+            if let fractionCell = cell as? FractionCell { // Note that we cast individual cells, because the collection view is mixed
+                fractionCell.fractionView.showSelected(selected: false, animated: true)
+            }
+        }
+    }
+    
+    fileprivate func isSelected(cell: FractionCell) -> Bool {
+        guard let fractionViewFraction = cell.fractionView.fraction else {return false}
+        
+        return fractionViewFraction.numerator == inputs.fraction.numerator && fractionViewFraction.denominator == inputs.fraction.denominator
+    }
+    
     // MARK: - EditableFractionViewDelegate
     
     func onFractionInputChange(fractionInput: Fraction?) {

@@ -74,8 +74,21 @@ protocol FractionViewDelegate {
     }
     
     func mark(toDelete: Bool, animated: Bool) {
+        markedToDelete = toDelete
         animIf(animated) {[weak self] in
             self?.backgroundColor = toDelete ? UIColor.flatRed : UIColor.white
+        }
+    }
+    
+    func showSelected(selected: Bool, animated: Bool) {
+        
+        let (bgColor, fgColor) = selected ? (UIColor.black, UIColor.white) : (UIColor.white, UIColor.black)
+        
+        animIf(animated) {[weak self] in
+            self?.backgroundColor = bgColor
+            self?.numeratorLabel.textColor = fgColor
+            self?.denominatorLabel.textColor = fgColor
+            self?.lineView.backgroundColor = fgColor
         }
     }
     
