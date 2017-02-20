@@ -24,6 +24,14 @@ public struct AddListItemResult {
     public let sectionIndex: Int
 }
 
+public struct AddCartListItemResult {
+    public let listItem: ListItem
+    public let section: Section
+    public let isNewItem: Bool
+    public let isNewSection: Bool
+    public let listItemIndex: Int
+}
+
 public struct MoveListItemResult {
     public let deletedSrcSection: Bool
 }
@@ -951,6 +959,101 @@ class RealmListItemProvider: RealmProvider {
         return addedListItems
     }
 
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Cart
+    
+    /// Quick add
+    func addToCartSync(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> (AddCartListItemResult)? {
+
+        switch DBProv.sectionProvider.mergeOrCreateCartSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, possibleNewOrder: nil, list: list, realmData: realmData) {
+            
+        case .ok(let sectionResult):
+            
+            let section = sectionResult.section
+            
+            let existingListItemMaybe = list.doneListItems.filter(ListItem.createFilter(quantifiableProductUnique: quantifiableProduct.unique)).first
+            
+            if let existingListItem = existingListItemMaybe, let listItemIndex = list.doneListItems.index(of: existingListItem) {
+                let quantityMaybe = incrementSync(existingListItem, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
+                if quantityMaybe != nil {
+                    
+                    return AddCartListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, listItemIndex: listItemIndex)
+                    //return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
+                } else {
+                    QL4("Couldn't increment existing list item")
+                    return nil
+                }
+                
+            } else { // new list item
+                
+                
+                print("list items before create list item: \(section.listItems.count)")
+                
+                // TODO section, list - see note on create
+                if let createdListItem = createCartSync(quantifiableProduct, store: store, section: section, list: list, quantity: quantity, realmData: realmData, doTransaction: doTransaction) {
+                    
+                    print("list items after create list item: \(section.listItems.count)")
+                    
+                    
+                    // WARNING: quick impl: listItemIndex 0 assumes createCartSync inserts item at 0
+                    return AddCartListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, listItemIndex: 0)
+                } else {
+                    QL4("Couldn't create list item, quantifiableProduct: \(quantifiableProduct)")
+                    return nil
+                }
+            }
+            
+        case .err(let error):
+            QL4("Error: \(error), quantifiableProduct: \(quantifiableProduct.uuid):\(quantifiableProduct.product.item.name)")
+            return nil
+        }
+    }
+    
+    
+    // TODO maybe remove references to section, list of list items so we don't have to pass them here
+    fileprivate func createCartSync(_ quantifiableProduct: QuantifiableProduct, store: String, section: Section, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
+        let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store)
+        return createCartSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
+    }
+    
+    fileprivate func createCartSync(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
+        // TODO note? we use separate methods for quick add/form
+        let listItem = ListItem(uuid: UUID().uuidString, product: storeProduct, section: section, list: list, note: nil, quantity: quantity)
+        return createCartSync(listItem, list: list, realmData: realmData, doTransaction: doTransaction)
+    }
+    
+    fileprivate func createCartSync(_ listItem: ListItem, list: List, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
+        
+        func transactionContent(realm: Realm) -> Bool {
+            realm.add(listItem, update: true)
+            list.doneListItems.insert(listItem, at: 0) // in cart we pre-pend
+            return true
+        }
+        
+        let successMaybe: Bool? = {
+            if doTransaction {
+                return doInWriteTransactionSync(realmData: realmData) {realm -> Bool in
+                    return transactionContent(realm: realm)
+                }
+            } else {
+                if let realm = realmData?.realm {
+                    return transactionContent(realm: realm)
+                } else {
+                    QL4("Invalid state: should be executed in existing transaction but didn't pass a realm")
+                    return nil
+                }
+            }
+        }()
+        
+        return (successMaybe ?? false) ? listItem : nil
+    }
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    
+    
     
     /// Internal (switch)
     // TODO!!!!!!!!! do we need to pass Realm around everywhere so notificationToken works?

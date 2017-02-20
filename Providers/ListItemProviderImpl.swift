@@ -1298,6 +1298,21 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
+    
+    /////////////////////////////////////////////////////////////
+    // Cart
+    
+    
+    func addToCart(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, realmData: RealmData, _ handler: @escaping (ProviderResult<AddCartListItemResult>) -> Void) {
+        
+        if let tuple = DBProv.listItemProvider.addToCartSync(quantifiableProduct: quantifiableProduct, store: store, list: list, quantity: quantity, realmData: realmData) {
+            handler(ProviderResult(status: .success, sucessResult: tuple))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
+    
     func deleteNew(indexPath: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<DeleteListItemResult>) -> Void) {
         if let result = DBProv.listItemProvider.deleteSync(indexPath: indexPath, status: status, list: list, realmData: realmData) {
             handler(ProviderResult(status: .success, sucessResult: result))

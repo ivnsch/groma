@@ -289,7 +289,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 })
 
             } else {
-                QL3("Invalid state?: No quantifiable product for product: \(product). Creating a new quantifiable product.") // we create a new one as "emergency solution". TODO review this - maybe this is not an invalid state - if a user e.g. deletes all the quantifiable products in product manager (this isn't possible yet but it may be implemented in the future), it's possible that we keep only the product but no quantifiable products for it. So we either have to ensure there's always a quantifiable product for a product or allow to create them "lazily" here.
+                QL3("Invalid state?: No quantifiable product for product: \(product.uuid)::\(product.item.name). Creating a new quantifiable product.") // we create a new one as "emergency solution". TODO review this - maybe this is not an invalid state - if a user e.g. deletes all the quantifiable products in product manager (this isn't possible yet but it may be implemented in the future), it's possible that we keep only the product but no quantifiable products for it. So we either have to ensure there's always a quantifiable product for a product or allow to create them "lazily" here.
 
                 Prov.unitProvider.units(self.successHandler {units in
                     

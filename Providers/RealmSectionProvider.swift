@@ -17,6 +17,11 @@ public struct AddSectionResult {
     public let index: Int
 }
 
+// Sections added only to realm but not ordered RealmSwift.List
+public struct AddSectionPlainResult {
+    public let section: Section
+    public let isNew: Bool
+}
 
 class RealmSectionProvider: RealmProvider {
     
@@ -221,7 +226,7 @@ class RealmSectionProvider: RealmProvider {
         func transactionContent(realm: Realm) -> ProvResult<AddSectionResult, DatabaseError>? {
             
             let addResult: AddSectionResult = {
-                if let section = sections.filter(Section.createFilterWithName(sectionName)).first, let index = sections.index(of: section)
+                if let section = sections.filter(Section.createFilter(sectionName, listUuid: list.uuid)).first, let index = sections.index(of: section)
                 
                 {
                     
@@ -250,6 +255,44 @@ class RealmSectionProvider: RealmProvider {
             }
         }()
 
+        return resultMaybe ?? .err(.unknown)
+    }
+    
+    // add/update and save (TODO better method name)
+    func mergeOrCreateCartSectionSync(_ sectionName: String, sectionColor: UIColor, possibleNewOrder: ListItemStatusOrder?, list: List, realmData: RealmData?, doTransaction: Bool = true) -> ProvResult<AddSectionPlainResult, DatabaseError> {
+        
+        func transactionContent(realm: Realm) -> ProvResult<AddSectionPlainResult, DatabaseError>? {
+            
+            let addResult: AddSectionPlainResult = {
+                if let section = realm.objects(Section.self).filter(Section.createFilter(sectionName, listUuid: list.uuid)).first
+                    
+                {
+                    section.color = sectionColor
+                    realm.add(section, update: true) // TODO is this necessary?
+                    return AddSectionPlainResult(section: section, isNew: false)
+                } else {
+                    let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: .done, order: 123)) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
+//                    sections.append(section)
+                    realm.add(section, update: true)
+                    return AddSectionPlainResult(section: section, isNew: true)
+                }
+            }()
+            
+            return .ok(addResult)
+        }
+        
+        let resultMaybe: ProvResult<AddSectionPlainResult, DatabaseError>? = {
+            if doTransaction {
+                return self.doInWriteTransactionSync(realmData: realmData) {realm in
+                    return transactionContent(realm: realm)
+                }
+            } else {
+                return self.withRealmSync(realm: realmData?.realm) {realm in
+                    return transactionContent(realm: realm)
+                }
+            }
+        }()
+        
         return resultMaybe ?? .err(.unknown)
     }
     

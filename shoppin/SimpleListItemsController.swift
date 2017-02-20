@@ -411,6 +411,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         guard let realmData = realmData else {QL4("No realm data"); return}
         
         if let currentList = self.currentList {
+            
             Prov.listItemsProvider.addNew(listItemInput: listItemInput, list: currentList, status: status, realmData: realmData, successHandler {[weak self] tuple in guard let weakSelf = self else {return}
                 self?.onListItemAddedToProvider(tuple.listItem, status: weakSelf.status, scrollToSelection: true)
                 handler?() // TODO!!!!!!!!!! whats this for?
@@ -549,12 +550,14 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             // TODO!!!!!!!!!!! review if (in other places, here we do after) it's ok to manipulate table view before doing the realm operation or if we should rather wait for realm, otherwise we may get crash when realm fails
             
             // TODO!!!!!!!!!!! don't pass store, list has the store!
-            Prov.listItemsProvider.addNew(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, status: status, realmData: realmData, successHandler {[weak self] (addResult: AddListItemResult) in
+            Prov.listItemsProvider.addToCart(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, realmData: realmData, successHandler {[weak self] (addResult: AddCartListItemResult) in
                 
                 if addResult.isNewItem {
-                    self?.listItemsTableViewController.addRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex), isNewSection: addResult.isNewSection)
+                    self?.listItemsTableViewController.tableView.insertRows(at: [IndexPath(row: addResult.listItemIndex, section: 0)], with: .top)
+//                    self?.listItemsTableViewController.addRow(indexPath: IndexPath(row: addResult.listItemIndex, section: 0), isNewSection: addResult.isNewSection)
                 } else {
-                    self?.listItemsTableViewController.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex))
+//                    self?.listItemsTableViewController.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: 0))
+                    self?.listItemsTableViewController.tableView.reloadRows(at: [IndexPath(row: addResult.listItemIndex, section: 0)], with: .none)
                 }
                 
 //                self?.updateEmptyUI()
