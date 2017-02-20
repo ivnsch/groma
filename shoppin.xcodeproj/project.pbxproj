@@ -98,6 +98,8 @@
 		6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */; };
 		6AF46EAC1E5A3A3B00BBFF4C /* UnitEditableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF46EAB1E5A3A3B00BBFF4C /* UnitEditableView.xib */; };
 		6AF46EAE1E5A3A4900BBFF4C /* UnitEditableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EAD1E5A3A4900BBFF4C /* UnitEditableView.swift */; };
+		6AF46EB21E5B422600BBFF4C /* SubmitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EB11E5B422600BBFF4C /* SubmitView.swift */; };
+		6AF46EB41E5B423800BBFF4C /* SubmitView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF46EB31E5B423800BBFF4C /* SubmitView.xib */; };
 		AEC62C1551F853D52768B5A2 /* Pods_shoppin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B242A1FEAA96009C120C8E2A /* Pods_shoppin.framework */; };
 		EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0587DB1BBED86B00080626 /* IntroPageView.xib */; };
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
@@ -531,6 +533,8 @@
 		6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectIngredientData.storyboard; sourceTree = "<group>"; };
 		6AF46EAB1E5A3A3B00BBFF4C /* UnitEditableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnitEditableView.xib; sourceTree = "<group>"; };
 		6AF46EAD1E5A3A4900BBFF4C /* UnitEditableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitEditableView.swift; sourceTree = "<group>"; };
+		6AF46EB11E5B422600BBFF4C /* SubmitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitView.swift; sourceTree = "<group>"; };
+		6AF46EB31E5B423800BBFF4C /* SubmitView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SubmitView.xib; sourceTree = "<group>"; };
 		98053CCC7F57AECBD28D4F1D /* Pods_shoppin_osxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E255758FF7D0B9EA448C576 /* Pods_shoppin_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0402B4CFFCE62A7F089CFBD /* Pods-shoppin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.release.xcconfig"; sourceTree = "<group>"; };
@@ -1036,6 +1040,8 @@
 				6A407AB21E32ACDF00D77405 /* AddRecipeController.xib */,
 				6A407ABB1E33A44400D77405 /* AddRecipeIngredientCell.swift */,
 				6A407ABC1E33A44400D77405 /* AddRecipeIngredientCell.xib */,
+				6AF46EB11E5B422600BBFF4C /* SubmitView.swift */,
+				6AF46EB31E5B423800BBFF4C /* SubmitView.xib */,
 			);
 			name = addRecipe;
 			sourceTree = "<group>";
@@ -2452,6 +2458,7 @@
 				EB4B39E01CED43B400B41063 /* Register.storyboard in Resources */,
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
 				6AE41A171E49E1E800B8459D /* SelectQuantifiable.storyboard in Resources */,
+				6AF46EB41E5B423800BBFF4C /* SubmitView.xib in Resources */,
 				6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */,
 				6A3A67B91E5604F500B5354F /* ManageItemsBaseQuantities.storyboard in Resources */,
 				6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */,
@@ -2721,6 +2728,7 @@
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
 				EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */,
 				EB79AC271BF0E3B700685B30 /* AddEditListController.swift in Sources */,
+				6AF46EB21E5B422600BBFF4C /* SubmitView.swift in Sources */,
 				EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */,
 				EBB6D74E1CD628A200F9C711 /* MultiLayoutConstraint.swift in Sources */,
 				EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */,

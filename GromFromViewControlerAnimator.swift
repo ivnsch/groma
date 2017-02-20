@@ -18,7 +18,7 @@ class GromFromViewControlerAnimator {
     weak var currentController: UIViewController?
     
     var controllerCreator: (() -> UIViewController?)?
-    fileprivate weak var controller: UIViewController?
+    fileprivate(set) weak var controller: UIViewController?
     
     fileprivate weak var backgroundView: UIView?
     

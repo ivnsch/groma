@@ -23,7 +23,7 @@ protocol SelectIngredientDataControllerDelegate: class {
     func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs)
 }
 
-class SelectIngredientDataController: UIViewController, QuantityViewDelegate, SwipeToIncrementHelperDelegate, UIGestureRecognizerDelegate {
+class SelectIngredientDataController: UIViewController, QuantityViewDelegate, SwipeToIncrementHelperDelegate, UIGestureRecognizerDelegate, SubmitViewDelegate {
 
     @IBOutlet weak var wholeNumberLabel: UILabel!
     @IBOutlet weak var fractionLabel: UILabel!
@@ -43,14 +43,13 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     
     fileprivate var titleLabelsFont: UIFont?
 
-    
-    fileprivate var addButtonHelper: AddButtonHelper?
-    
     weak var delegate: SelectIngredientDataControllerDelegate?
 
     fileprivate var currentNewFractionInput: Fraction?
     fileprivate var currentNewUnitInput: String?
 
+    fileprivate var submitView: SubmitView?
+    
     var item: Item? {
         didSet {
             if let item = item {
@@ -97,6 +96,8 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         loadFractions()
         
         updateInputsAndTitle()
+        
+        initSubmitButton()
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
         tap.delegate = self
@@ -201,28 +202,42 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         }
     }
 
-    fileprivate func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
-        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
+    
+    fileprivate func initSubmitButton() {
+        guard self.submitView == nil else {QL1("Already showing a submit view"); return}
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return}
+//        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return}
         
-        let overrideCenterY: CGFloat = parentViewForAddButton.height + tabBarHeight
-        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton, overrideCenterY: overrideCenterY) {[weak self] in guard let weakSelf = self else {return}
-            weakSelf.submit()
+        let height = Theme.submitViewHeight
+        let submitView = SubmitView(frame: CGRect(x: 0, y: parentViewForAddButton.frame.maxY, width: parentViewForAddButton.width, height: height))
+        submitView.delegate = self
+        submitView.setButtonTitle(title: "select_ingredient_data_submit")
+        parentViewForAddButton.addSubview(submitView)
+        
+        anim(3) {
+            submitView.y = parentViewForAddButton.frame.maxY - height
+//            submitView.height = height
         }
-        return addButtonHelper
+        
+        self.submitView = submitView
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
-        addButtonHelper?.addObserver()
+    func onClose() {
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); submitView?.removeFromSuperview(); return}
+
+        anim(3, {[weak self] in
+            self?.submitView?.y = parentViewForAddButton.frame.maxY
+//            self?.submitView?.height = 0
+            
+        }, onFinish:{[weak self] in
+            self?.submitView?.removeFromSuperview()
+        })
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        addButtonHelper?.removeObserver()
-    }
     
+    deinit {
+        QL1("\(type(of: self)) deinit")
+    }
     
     func onTextChange(_ sender: UITextField) {
         updateInputsAndTitle()
@@ -248,6 +263,11 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         // do nothing
     }
     
+    // MARK: - SubmitViewDelegate
+    
+    func onSubmitButton() {
+        submit()
+    }
     
     // MARK: - Private
     

@@ -30,6 +30,12 @@ protocol QuickAddListItemDelegate: class {
     func parentViewForAddButton() -> UIView?
 }
 
+/// For internal communication with other top controllers
+protocol QuickAddListItemTopControllersDelegate: class {
+    func hideKeyboard()
+    func restoreKeyboard()
+}
+
 enum QuickAddItemType {
     case product, group, recipe, productForList, ingredients
 }
@@ -45,6 +51,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     @IBOutlet weak var emptyView: UIView!
     
     weak var delegate: QuickAddListItemDelegate?
+    weak var topControllersDelegate: QuickAddListItemTopControllersDelegate?
     
     fileprivate var filteredQuickAddItems: [QuickAddItem] = [] {
         didSet {
@@ -312,6 +319,9 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         
         guard let cell = collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
 
+        view.endEditing(true)
+        topControllersDelegate?.hideKeyboard()
+        
         // Note: the height of the quick add is somewhere up in hierarchy, we pass the hardcoded DimensionsManager value because it's quicker to implement
         selectIngredientAnimator?.open (button: cell, frame: CGRect(x: 0, y: 0, width: view.width, height: DimensionsManager.quickAddHeight), scrollOffset: self.collectionView.contentOffset.y, addOverlay: false, controllerCreator: {[weak self] in
             let selectQuantifiableProductController = UIStoryboard.selectIngredientDataController()
@@ -545,6 +555,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
         if selectIngredientAnimator?.isShowing ?? false {
             selectIngredientAnimator?.close()
+            (selectIngredientAnimator?.controller as? SelectIngredientDataController)?.onClose() // important to remove the submit button, that is added to parent
+            topControllersDelegate?.restoreKeyboard()
             isAnyShowing = true
         }
         
@@ -580,6 +592,8 @@ extension QuickAddListItemViewController: SelectIngredientDataControllerDelegate
     
     func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs) {
         delegate?.onAddIngredient(item: item, ingredientInput: inputs)
+        (selectIngredientAnimator?.controller as? SelectIngredientDataController)?.onClose()
+        topControllersDelegate?.restoreKeyboard()
         selectIngredientAnimator?.close()
     }
     

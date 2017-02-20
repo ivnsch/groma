@@ -18,7 +18,7 @@ class AddButtonHelper: NSObject {
     
     fileprivate weak var parentView: UIView?
     
-    fileprivate let buttonHeight: CGFloat = 60
+    fileprivate let buttonHeight: CGFloat = Theme.submitViewHeight
     
     fileprivate var tapHandler: VoidFunction?
     

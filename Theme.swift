@@ -48,8 +48,8 @@ struct Theme {
 //    static let unitsBGColor = UIColor(hexString: "CAE1FF")
     static let fractionsBGColor = UIColor.white
     static let unitsBGColor = UIColor.white
-    static let unitsSelectedColor = lighterGreen
-    static let fractionsSelectedColor = lighterGreen
+    static let unitsSelectedColor = blue
+    static let fractionsSelectedColor = blue
     
     static let defaultTableViewBGColor = lightGreyBackground
     
@@ -58,4 +58,6 @@ struct Theme {
     static let defaultAnimDuration: Double = 0.2
     
     static let defaultRowAnimation = UITableViewRowAnimation.top
+    
+    static let submitViewHeight: CGFloat = 60
 }

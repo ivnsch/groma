@@ -14,10 +14,12 @@ import Providers
 protocol QuickAddPageControllerDelegate: class {
 //    func onPagerScroll(xOffset: CGFloat)
     func onPageChanged(_ newIndex: Int, pageType: QuickAddItemType)
+    func hideKeyboard()
+    func restoreKeyboard()
 }
 
 
-class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDelegate, SlidingTabsViewDelegate {
+class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDelegate, SlidingTabsViewDelegate, QuickAddListItemTopControllersDelegate {
 
     @IBOutlet weak var slidingTabsView: SlidingTabsView!
     @IBOutlet weak var swipeView: SwipeView!
@@ -75,6 +77,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         if index == 0 {
             let productsController = UIStoryboard.quickAddListItemViewController()
             productsController.delegate = quickAddListItemDelegate
+            productsController.topControllersDelegate = self
             productsController.onViewDidLoad = {
                 productsController.contentData = (self.itemTypeForFirstPage, .fav)
             }
@@ -89,6 +92,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         } else {
             let productsController = UIStoryboard.quickAddListItemViewController()
             productsController.delegate = quickAddListItemDelegate
+            productsController.topControllersDelegate = self
             productsController.onViewDidLoad = {
                 productsController.contentData = (.recipe, .fav)
             }
@@ -157,6 +161,16 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         slidingTabsView.moveLine(xOffset)
     }
     
+    // MARK: - QuickAddListItemTopControllersDelegate
+    
+    func hideKeyboard() {
+        delegate?.hideKeyboard()
+    }
+    
+    func restoreKeyboard() {
+        delegate?.restoreKeyboard()
+    }
+    
     deinit {
         QL1("Deinit quick add page controller")
     }
@@ -164,7 +178,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     // MARK: - 
     
     func closeChildControllers() {
-        addProductController?.closeChildControllers()
-        addGroupController?.closeChildControllers()
+        _ = addProductController?.closeChildControllers()
+        _ = addGroupController?.closeChildControllers()
     }
 }

@@ -110,6 +110,15 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         itemType = pageType
         searchBar.text = ""
     }
+    
+    func hideKeyboard() {
+        view.endEditing(true)
+        searchBar.resignFirstResponder()
+    }
+    
+    func restoreKeyboard() {
+        searchBar.becomeFirstResponder()
+    }
 
     // MARK: -
     
