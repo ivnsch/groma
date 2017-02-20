@@ -82,7 +82,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         
         if delegate?.isPullToAddEnabled() ?? false {
-            let refreshControl = PullToAddHelper.createPullToAdd(self)
+            let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground)
             tableViewController.refreshControl = refreshControl
             refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), for: .valueChanged)
         }

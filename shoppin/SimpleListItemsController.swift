@@ -101,7 +101,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
 
         listItemsTableViewController.enablePullToAdd()
 
-        listItemsTableViewController.view.backgroundColor = Theme.lightBlue
+        listItemsTableViewController.view.backgroundColor = Theme.lightGreyBackground
         
         view.sendSubview(toBack: listItemsTableViewController.view)
         
@@ -808,7 +808,7 @@ class SimpleListItemsTableViewController: UITableViewController {
     // MARK: - Pull to refresh
     
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self)
+        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground)
         refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
         self.refreshControl = refreshControl
     }

@@ -13,14 +13,15 @@ import Providers
 class PullToAddHelper {
 
     // Creates default refresh control
-    static func createPullToAdd(_ parentController: UIViewController) -> UIRefreshControl {
+    // backgroundColor: Overrides parentController's view background color as background color of pull to add
+    static func createPullToAdd(_ parentController: UIViewController, backgroundColor: UIColor? = nil) -> UIRefreshControl {
         let refreshControl = UIRefreshControl()
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: parentController.view.frame.width, height: refreshControl.bounds.height))
         label.font = Fonts.fontForSizeCategory(40)
         label.textColor = Theme.grey
         label.text = trans("pull_to_add")
         label.textAlignment = .center
-        label.backgroundColor = UIColor.white
+        label.backgroundColor = backgroundColor ?? parentController.view.backgroundColor
         refreshControl.addSubview(label)
         return refreshControl
     }
