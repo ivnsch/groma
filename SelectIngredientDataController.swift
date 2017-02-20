@@ -321,7 +321,7 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FractionCell
             let fraction = fractions[indexPath.row]
             cell.fractionView.fraction = fraction
-            cell.fractionView.backgroundColor = UIColor.white
+            cell.fractionView.backgroundColor = Theme.fractionsBGColor
             cell.fractionView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
             cell.fractionView.markedToDelete = false
             cell.delegate = self
@@ -333,7 +333,7 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
             
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "editableCell", for: indexPath) as! EditableFractionCell
-            cell.editableFractionView.backgroundColor = UIColor.white
+            cell.editableFractionView.backgroundColor = Theme.fractionsBGColor
             cell.editableFractionView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
             cell.editableFractionView.delegate = self
             cell.editableFractionView.prefill(fraction: currentNewFractionInput)

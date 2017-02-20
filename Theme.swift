@@ -46,7 +46,10 @@ struct Theme {
     
     
 //    static let unitsBGColor = UIColor(hexString: "CAE1FF")
-    static let unitsBGColor = UIColor.flatPowderBlue
+    static let fractionsBGColor = UIColor.white
+    static let unitsBGColor = UIColor.white
+    static let unitsSelectedColor = lighterGreen
+    static let fractionsSelectedColor = lighterGreen
     
     static let defaultTableViewBGColor = lightGreyBackground
     

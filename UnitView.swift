@@ -79,7 +79,7 @@ protocol UnitViewDelegate {
     
     func showSelected(selected: Bool, animated: Bool) {
         
-        let (bg, fg) = selected ? (UIColor.black, UIColor.white) : (bgColor, UIColor.black)
+        let (bg, fg) = selected ? (Theme.unitsSelectedColor, UIColor.white) : (bgColor, UIColor.black)
         
         animIf(animated) {[weak self] in
             self?.backgroundColor = bg

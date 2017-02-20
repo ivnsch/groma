@@ -82,7 +82,7 @@ protocol FractionViewDelegate {
     
     func showSelected(selected: Bool, animated: Bool) {
         
-        let (bgColor, fgColor) = selected ? (UIColor.black, UIColor.white) : (UIColor.white, UIColor.black)
+        let (bgColor, fgColor) = selected ? (Theme.unitsSelectedColor, UIColor.white) : (UIColor.white, UIColor.black)
         
         animIf(animated) {[weak self] in
             self?.backgroundColor = bgColor
