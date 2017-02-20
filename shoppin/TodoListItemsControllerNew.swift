@@ -21,7 +21,9 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     fileprivate weak var todoListItemsEditBottomView: TodoListItemsEditBottomView?
     
     fileprivate var cartController: CartListItemsControllerNew?
-    
+
+    private var pricesViewBottomConstraintConstantInExpandedState: CGFloat? // FIXME
+
     override var status: ListItemStatus {
         return .todo
     }
@@ -230,8 +232,10 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     // MARK: - CartListItemsControllerDelegate
     
     func onCloseCart() {
+        topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: tableView)
         setCartExpanded(expanded: false)
     }
+
     
 //    // for now not used. This functionality needs to be reviewed anyway
 //    func onCartSendItemsToStash(_ listItems: [ListItem]) {
@@ -266,6 +270,8 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         cartController.view.translatesAutoresizingMaskIntoConstraints = false
         addChildViewControllerAndView(cartController)
         
+        topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: cartController.tableView)
+        
         cartController.delegate = self
         
         _ = cartController.view.positionBelowView(pricesView)
@@ -276,6 +282,45 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         self.cartController = cartController
     }
 
+    // Re-initialized top controller referencing todo / cart table view (TODO re-use initializer of top class instead - this is implemented in a rush)
+    fileprivate func updateTopQuickAddControllerManager(tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {
+        let top = topBar.frame.height
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, openInset: top, closeInset: top, parentViewController: self, tableView: tableView) {[weak self] in
+            let controller = UIStoryboard.quickAddViewController()
+            controller.delegate = self
+            if let weakSelf = self {
+                controller.itemType = weakSelf.quickAddItemType
+            }
+            controller.list = self?.list
+            return controller
+        }
+        manager.delegate = self
+        return manager
+    }
+    
+    // MARK: - ExpandableTopViewControllerDelegate
+    
+    
+    override func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
+        
+        if pricesView.expandedNew {
+            
+            // Implemented in a rush - hold the max constraint value here - if we don't store it, it doesn't work correctly (heights change during the animation) and in viewDidLoad there's a diffent height, don't have time to check why.
+            if pricesViewBottomConstraintConstantInExpandedState == nil {
+                pricesViewBottomConstraintConstantInExpandedState = self.view.height - topBar.height - pricesView.height
+            }
+//            let maxBottomConstraint: CGFloat = 553
+            
+            let pricesViewMinimizedHeight: CGFloat = 30
+            
+            let bottomConstraintHeightDelta = pricesView.originalHeight - pricesViewMinimizedHeight
+            
+            pricesViewBottomConstraint.constant = (pricesViewBottomConstraintConstantInExpandedState ?? 0) - view.frame.height + (expand ? bottomConstraintHeightDelta : 0)
+            pricesView.heightConstraint.constant = expand ? pricesViewMinimizedHeight : pricesView.originalHeight
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     
     // MARK: - QuickAddDelegate
     // IMPORTANT: Make sure all the QuickAddDelegate methods are overriden here, since the cart has to consume everything while it's open. With more time we can think about a better solution for this.

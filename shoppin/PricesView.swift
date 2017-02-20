@@ -27,7 +27,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     fileprivate(set) var totalPrice: Float?
     fileprivate(set) var donePrice: Float?
     
-    var originalHeight: CGFloat = 0
+    fileprivate(set) var originalHeight: CGFloat = 0
     fileprivate var originalPriceFont: UIFont!
     fileprivate var originalCartImgLeftConstraint: CGFloat = 0
     

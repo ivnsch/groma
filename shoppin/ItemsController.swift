@@ -30,7 +30,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         return true
     }
     
-    fileprivate var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
+    var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
