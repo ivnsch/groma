@@ -24,8 +24,11 @@ public extension String {
         return trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
+    // TODO!!!!!!!!!!!!!!!!!!!!!!!! on device (english) float value of e.g. 500.0 or 1.0 returns nil. Probably locale doesn't accept this separator.
     public var floatValue: Float? {
-        return NumberFormatter().number(from: self)?.floatValue
+        let formatter = NumberFormatter()
+        formatter.isLenient = true
+        return formatter.number(from: self)?.floatValue
     }
     
     public var boolValue: Bool? {
