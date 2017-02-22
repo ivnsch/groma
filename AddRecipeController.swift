@@ -37,7 +37,7 @@ class AddRecipeController: UIViewController {
     // If they were to change in the background it's not critical, as the user submitting the ingredients will re-create products with any brands/units/base quantities that could have been deleted/changed(which is equivalent to a delete, being the brand/unit/base its own "unique")
     fileprivate var ingredientsToBrands = Dictionary<String, [String]>()
     fileprivate var units: Results<Providers.Unit>?
-    fileprivate var baseQuantities: [String] = []
+    fileprivate var baseQuantities: RealmSwift.List<BaseQuantity>?
     
     weak var delegate: AddRecipeControllerDelegate?
     
@@ -193,9 +193,15 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
             cell.model = models[indexPath.row]
             
             cell.initUnitPicker()
+            cell.initBasePicker()
             
             if let units = units {
-                cell.options = (brands: brands, baseQuantities: baseQuantities, units: units)
+                if let baseQuantities = baseQuantities {
+                    cell.options = (brands: brands, baseQuantities: baseQuantities, units: units)
+                } else {
+                    QL4("No bases, can't set cell options")
+                }
+                
             } else {
                 QL4("No units, can't set cell options")
             }
@@ -221,7 +227,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
     
     func addUnit(name: String, _ handler: @escaping (Bool) -> Void) {
-        Prov.unitProvider.getOrCreate(name: name, successHandler{[weak self] (unit, isNew) in
+        Prov.unitProvider.getOrCreate(name: name, successHandler{(unit, isNew) in
             handler(isNew)
         })
     }
@@ -314,9 +320,25 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
     
     func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void) {
-        return handler(units)
+        handler(units)
     }
     
+    func baseQuantities(_ handler: @escaping (RealmSwift.List<BaseQuantity>?) -> Void) {
+        handler(baseQuantities)
+    }
+    
+    
+    func addBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.getOrCreate(baseQuantity: stringVal, successHandler{(unit, isNew) in
+            handler(isNew)
+        })
+    }
+    
+    func deleteBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.delete(baseQuantity: stringVal, successHandler {
+            handler(true)
+        })
+    }
 }
 
 // MARK: - Touch

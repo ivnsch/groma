@@ -59,4 +59,29 @@ class UnitProviderImpl: UnitProvider {
             handler(ProviderResult(status: .databaseUnknown))
         }
     }
+    
+    func baseQuantities(_ handler: @escaping (ProviderResult<RealmSwift.List<BaseQuantity>>) -> Void) {
+        if let bases = DBProv.unitProvider.baseQuantities() {
+            handler(ProviderResult(status: .success, sucessResult: bases))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
+    func getOrCreate(baseQuantity: String, _ handler: @escaping (ProviderResult<(base: BaseQuantity, isNew: Bool)>) -> Void) {
+        if let base = DBProv.unitProvider.getOrCreateSync(baseQuantity: baseQuantity) {
+            handler(ProviderResult(status: .success, sucessResult: base))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
+    func delete(baseQuantity: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        if DBProv.unitProvider.deleteSync(baseQuantity: baseQuantity) {
+            handler(ProviderResult(status: .success))
+        } else {
+            QL4("Couldn't delete base quantities with stringVal: \(baseQuantity)")
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
 }

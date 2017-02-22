@@ -22,4 +22,12 @@ public protocol UnitProvider {
     // NOTE that updating the name can lead to semantic inconsistency with the enum-type (e.g. someone could rename "g" in "kg" but the enum type is still g. We don't care about this for now since the enum types are only used to prefill the database, i.e. are ignored after this. For later, TODO: allow user only to update units of type .custom
     func update(unit: Unit, name: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
+    
+    // TODO separate base quantity provider
+    
+    func baseQuantities(_ handler: @escaping (ProviderResult<RealmSwift.List<BaseQuantity>>) -> Void)
+    
+    func getOrCreate(baseQuantity: String, _ handler: @escaping (ProviderResult<(base: BaseQuantity, isNew: Bool)>) -> Void)
+    
+    func delete(baseQuantity: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
 }

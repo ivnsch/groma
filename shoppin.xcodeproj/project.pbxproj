@@ -15,6 +15,11 @@
 		58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */; };
 		6A04FDB01E48D70B0011A35C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A04FDAF1E48D70B0011A35C /* CloudKit.framework */; };
 		6A0DE19B1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */; };
+		6A1027671E5E10F0003D2972 /* BaseQuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1027661E5E10F0003D2972 /* BaseQuantityView.swift */; };
+		6A1027691E5E115F003D2972 /* BaseQuantityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1027681E5E115F003D2972 /* BaseQuantityView.xib */; };
+		6A10276C1E5E11D8003D2972 /* BaseQuantityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A10276A1E5E11D8003D2972 /* BaseQuantityCell.swift */; };
+		6A10276D1E5E11D8003D2972 /* BaseQuantityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A10276B1E5E11D8003D2972 /* BaseQuantityCell.xib */; };
+		6A10276F1E5E12D8003D2972 /* BasesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A10276E1E5E12D8003D2972 /* BasesDataSource.swift */; };
 		6A1BBADA1E44AF5E00BC7404 /* UITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */; };
 		6A1BBAE01E44B57300BC7404 /* ListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */; };
 		6A287E821E51F4F000868244 /* ManageItemsItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */; };
@@ -455,6 +460,11 @@
 		58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		6A04FDAF1E48D70B0011A35C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderSectionTableViewControllerNew.swift; sourceTree = "<group>"; };
+		6A1027661E5E10F0003D2972 /* BaseQuantityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuantityView.swift; sourceTree = "<group>"; };
+		6A1027681E5E115F003D2972 /* BaseQuantityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BaseQuantityView.xib; sourceTree = "<group>"; };
+		6A10276A1E5E11D8003D2972 /* BaseQuantityCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuantityCell.swift; sourceTree = "<group>"; };
+		6A10276B1E5E11D8003D2972 /* BaseQuantityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BaseQuantityCell.xib; sourceTree = "<group>"; };
+		6A10276E1E5E12D8003D2972 /* BasesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasesDataSource.swift; sourceTree = "<group>"; };
 		6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewController.swift; sourceTree = "<group>"; };
 		6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ListItemCell.xib; path = ../ListItemCell.xib; sourceTree = "<group>"; };
 		6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsItemCell.swift; sourceTree = "<group>"; };
@@ -947,6 +957,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A1027651E5E10C9003D2972 /* bases */ = {
+			isa = PBXGroup;
+			children = (
+				6A1027661E5E10F0003D2972 /* BaseQuantityView.swift */,
+				6A1027681E5E115F003D2972 /* BaseQuantityView.xib */,
+				6A10276A1E5E11D8003D2972 /* BaseQuantityCell.swift */,
+				6A10276B1E5E11D8003D2972 /* BaseQuantityCell.xib */,
+				6A10276E1E5E12D8003D2972 /* BasesDataSource.swift */,
+			);
+			name = bases;
+			sourceTree = "<group>";
+		};
 		6A287E851E5266F900868244 /* addEditItem */ = {
 			isa = PBXGroup;
 			children = (
@@ -1745,6 +1767,7 @@
 		EB85F44F1BD538FC00E19E9B /* quickAdd */ = {
 			isa = PBXGroup;
 			children = (
+				6A1027651E5E10C9003D2972 /* bases */,
 				6AEB65ED1E4D053B0094B9DE /* selectIngredientDataController */,
 				EB85F4591BD54C4200E19E9B /* cell */,
 				EBA18C1F1BF5638D009291F2 /* QuickAddListItemViewController.swift */,
@@ -2439,6 +2462,7 @@
 				EBEA0CD01CA5B24C00E68B81 /* MyAutocompleteCell.xib in Resources */,
 				6ADC6F3E1E4D2EB1005BE5EB /* FractionView.xib in Resources */,
 				EBB5267F1BEFE39F0002A286 /* HelpHeaderView.xib in Resources */,
+				6A1027691E5E115F003D2972 /* BaseQuantityView.xib in Resources */,
 				EB75E5491CA36174006AAEAF /* SharedUsers.storyboard in Resources */,
 				EB1FC51A1BC694AF004E1114 /* OkNextButtonsView.xib in Resources */,
 				6A3A67CA1E57BE6B00B5354F /* EditableFractionView.xib in Resources */,
@@ -2476,6 +2500,7 @@
 				6AE41A171E49E1E800B8459D /* SelectQuantifiable.storyboard in Resources */,
 				6AF46EB41E5B423800BBFF4C /* SubmitView.xib in Resources */,
 				6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */,
+				6A10276D1E5E11D8003D2972 /* BaseQuantityCell.xib in Resources */,
 				6A3A67B91E5604F500B5354F /* ManageItemsBaseQuantities.storyboard in Resources */,
 				6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */,
 				6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */,
@@ -2642,6 +2667,7 @@
 				EB0587E01BBEDAA600080626 /* NSBundle.swift in Sources */,
 				6AEB65E81E4C8BE90094B9DE /* IngredientsControllerNew.swift in Sources */,
 				EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */,
+				6A10276C1E5E11D8003D2972 /* BaseQuantityCell.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
 				6AF46EC01E5CE19A00BBFF4C /* PickerCollectionView.swift in Sources */,
 				EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */,
@@ -2712,6 +2738,7 @@
 				EBBC232B1BB600DF0002F6B1 /* ConfirmationPopup.swift in Sources */,
 				EBED0D091C82213600A1EEC4 /* RatingPopup.swift in Sources */,
 				EB7524531BF582FA00A97A10 /* QuickAddItemCell.swift in Sources */,
+				6A10276F1E5E12D8003D2972 /* BasesDataSource.swift in Sources */,
 				6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */,
 				6A3A67C81E57BABF00B5354F /* EditableFractionView.swift in Sources */,
 				EB8D1D111C389D6E00ADF884 /* ProductsWithQuantityViewController.swift in Sources */,
@@ -2782,6 +2809,7 @@
 				EB4147CD1BE2288E00549CE4 /* ManageGroupsCell.swift in Sources */,
 				6A287E921E53AB7800868244 /* AddEditNameNameColorController.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
+				6A1027671E5E10F0003D2972 /* BaseQuantityView.swift in Sources */,
 				EBB2CBC61CF0CFAD0040C619 /* TextFieldHeightConstraint.swift in Sources */,
 				EBF1F9E71CD76A1900F8016F /* MyAlert.swift in Sources */,
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,

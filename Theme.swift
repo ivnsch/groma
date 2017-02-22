@@ -48,6 +48,7 @@ struct Theme {
 //    static let unitsBGColor = UIColor(hexString: "CAE1FF")
     static let fractionsBGColor = UIColor.white
     static let unitsBGColor = UIColor.white
+    static let baseQuantitiesBGColor = UIColor.white
     static let unitsSelectedColor = blue
     static let fractionsSelectedColor = blue
     

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A1027711E5E167F003D2972 /* BaseQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1027701E5E167F003D2972 /* BaseQuantity.swift */; };
+		6A1027731E5E1CA4003D2972 /* BaseQuantitiesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1027721E5E1CA4003D2972 /* BaseQuantitiesContainer.swift */; };
 		6A256B891E0401AE004F5028 /* Providers.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A256B871E0401AE004F5028 /* Providers.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6A256B8D1E0401D4004F5028 /* MemListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B7C1E0400A0004F5028 /* MemListItemProvider.swift */; };
 		6A256B8E1E0401D7004F5028 /* MemInventoryItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B7D1E0400A0004F5028 /* MemInventoryItemProvider.swift */; };
@@ -308,6 +310,8 @@
 
 /* Begin PBXFileReference section */
 		07C2602C5259E7890FCA54D7 /* Pods-Providers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Providers.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Providers/Pods-Providers.release.xcconfig"; sourceTree = "<group>"; };
+		6A1027701E5E167F003D2972 /* BaseQuantity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuantity.swift; sourceTree = "<group>"; };
+		6A1027721E5E1CA4003D2972 /* BaseQuantitiesContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuantitiesContainer.swift; sourceTree = "<group>"; };
 		6A256B7C1E0400A0004F5028 /* MemListItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemListItemProvider.swift; sourceTree = "<group>"; };
 		6A256B7D1E0400A0004F5028 /* MemInventoryItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemInventoryItemProvider.swift; sourceTree = "<group>"; };
 		6A256B841E0401AE004F5028 /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -923,6 +927,7 @@
 				6AE34BE51E2E25F50039A2A8 /* Recipe.swift */,
 				6AE34BF11E2EA9AA0039A2A8 /* Ingredient.swift */,
 				6A3A67CF1E57CDFF00B5354F /* DBFraction.swift */,
+				6A1027701E5E167F003D2972 /* BaseQuantity.swift */,
 				6AD51A901E4F87840053934E /* Unit.swift */,
 			);
 			name = realm;
@@ -1172,6 +1177,7 @@
 			children = (
 				6AD8DDAE1E47CEB9000A4C36 /* ListsContainer.swift */,
 				6A3A67D51E57D84800B5354F /* FractionsContainer.swift */,
+				6A1027721E5E1CA4003D2972 /* BaseQuantitiesContainer.swift */,
 				6AD8DDB21E489255000A4C36 /* InventoriesContainer.swift */,
 			);
 			name = container;
@@ -1408,6 +1414,7 @@
 				6A256C9F1E0405EE004F5028 /* ListItemStatusUpdate.swift in Sources */,
 				6A256D481E040694004F5028 /* ListSync.swift in Sources */,
 				6A256C561E0405B6004F5028 /* ListItemMapper.swift in Sources */,
+				6A1027731E5E1CA4003D2972 /* BaseQuantitiesContainer.swift in Sources */,
 				6A256D211E04066D004F5028 /* RemoteListItemsWithDependenciesNoList.swift in Sources */,
 				6A256BE01E040530004F5028 /* DBProviders.swift in Sources */,
 				6A256C791E0405C6004F5028 /* DBInventory.swift in Sources */,
@@ -1457,6 +1464,7 @@
 				6A256BF61E040540004F5028 /* RemoteInventoryProvider.swift in Sources */,
 				6A256D091E040634004F5028 /* RemoteInventoryItemsWithHistoryAndDependencies.swift in Sources */,
 				6AE34BF41E2EB1530039A2A8 /* IngredientProvider.swift in Sources */,
+				6A1027711E5E167F003D2972 /* BaseQuantity.swift in Sources */,
 				6A256CDD1E040612004F5028 /* RemoteListItemIncrementResult.swift in Sources */,
 				6A256C7D1E0405C6004F5028 /* ProductGroup.swift in Sources */,
 				6A256C751E0405C6004F5028 /* DBSharedUser.swift in Sources */,

@@ -82,28 +82,6 @@
                             <outlet property="autoCompleteDelegate" destination="KGk-i7-Jjw" id="hkH-AA-kvi"/>
                         </connections>
                     </textField>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="500" placeholder="Base" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="j9B-Z2-Wvv" customClass="LineAutocompleteTextField" customModule="groma" customModuleProvider="target">
-                        <rect key="frame" x="203" y="151" width="80" height="40"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="80" id="8ZB-3n-8p5"/>
-                            <constraint firstAttribute="height" constant="40" id="SFr-ch-hbl" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
-                        </constraints>
-                        <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numberPad" returnKeyType="done"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
-                                <integer key="value" value="10"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                <integer key="value" value="40"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                        <connections>
-                            <outlet property="autoCompleteDataSource" destination="KGk-i7-Jjw" id="Ln1-D5-HaB"/>
-                            <outlet property="autoCompleteDelegate" destination="KGk-i7-Jjw" id="mTS-ZM-hLd"/>
-                        </connections>
-                    </textField>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="iiY-8r-gh8" customClass="LineTextField" customModule="groma" customModuleProvider="target">
                         <rect key="frame" x="25" y="151" width="80" height="40"/>
                         <constraints>
@@ -162,14 +140,27 @@
                                 <integer key="value" value="10"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
-                        <connections>
-                            <action selector="onUnitButtonTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yX2-fH-RRz"/>
-                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nUi-6f-sEG" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                        <rect key="frame" x="209" y="156" width="70" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="pmN-I8-5FP"/>
+                        </constraints>
+                        <state key="normal" title="Button">
+                            <color key="titleColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="40"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="10"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </button>
                 </subviews>
                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
-                    <constraint firstItem="j9B-Z2-Wvv" firstAttribute="leading" secondItem="auJ-uj-ieT" secondAttribute="trailing" constant="14" id="1wI-eb-ibs"/>
                     <constraint firstAttribute="trailing" secondItem="Cqc-3R-1h3" secondAttribute="trailing" id="2nx-cm-p4g"/>
                     <constraint firstItem="auJ-uj-ieT" firstAttribute="leading" secondItem="iiY-8r-gh8" secondAttribute="trailing" constant="14" id="56b-9f-e6j"/>
                     <constraint firstAttribute="bottom" secondItem="Cqc-3R-1h3" secondAttribute="bottom" id="5DN-Wp-XH0"/>
@@ -179,23 +170,24 @@
                     <constraint firstItem="KAK-sU-TMz" firstAttribute="leading" secondItem="Qd6-eV-Zpm" secondAttribute="leading" id="8RN-tx-9sS"/>
                     <constraint firstItem="dO9-oa-KP9" firstAttribute="leading" secondItem="KAK-sU-TMz" secondAttribute="leading" id="98Q-n8-Xvt"/>
                     <constraint firstItem="Cqc-3R-1h3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="F9I-Vt-u8x"/>
-                    <constraint firstItem="dO9-oa-KP9" firstAttribute="top" secondItem="j9B-Z2-Wvv" secondAttribute="bottom" constant="14" id="ITL-a5-RmX"/>
                     <constraint firstItem="auJ-uj-ieT" firstAttribute="baseline" secondItem="iiY-8r-gh8" secondAttribute="baseline" id="Miu-jV-20m"/>
                     <constraint firstItem="HoV-Lx-ei4" firstAttribute="top" secondItem="dO9-oa-KP9" secondAttribute="bottom" constant="14" id="UAc-KS-0WO"/>
                     <constraint firstItem="HoV-Lx-ei4" firstAttribute="leading" secondItem="KAK-sU-TMz" secondAttribute="leading" id="db9-sy-2V7"/>
                     <constraint firstItem="wf2-UD-agf" firstAttribute="trailing" secondItem="KAK-sU-TMz" secondAttribute="trailing" id="j3h-z0-HUh"/>
+                    <constraint firstItem="nUi-6f-sEG" firstAttribute="leading" secondItem="auJ-uj-ieT" secondAttribute="trailing" constant="20" id="jk5-Rk-Uuc"/>
                     <constraint firstItem="HoV-Lx-ei4" firstAttribute="trailing" secondItem="KAK-sU-TMz" secondAttribute="trailing" id="lzz-Gm-xHc"/>
-                    <constraint firstItem="j9B-Z2-Wvv" firstAttribute="baseline" secondItem="iiY-8r-gh8" secondAttribute="baseline" id="mnw-si-qDp"/>
                     <constraint firstItem="Qd6-eV-Zpm" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="25" id="pwz-Gr-edS" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                     <constraint firstItem="KAK-sU-TMz" firstAttribute="top" secondItem="Qd6-eV-Zpm" secondAttribute="bottom" constant="20" id="s9J-0u-2C6"/>
                     <constraint firstItem="wf2-UD-agf" firstAttribute="leading" secondItem="KAK-sU-TMz" secondAttribute="leading" id="sW3-Z8-m34"/>
                     <constraint firstItem="wf2-UD-agf" firstAttribute="top" secondItem="KAK-sU-TMz" secondAttribute="bottom" constant="10" id="uz5-ZC-w5h"/>
                     <constraint firstItem="Qd6-eV-Zpm" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="w3k-Xy-prc"/>
+                    <constraint firstItem="nUi-6f-sEG" firstAttribute="baseline" secondItem="auJ-uj-ieT" secondAttribute="baseline" id="xjY-vz-tKm"/>
+                    <constraint firstItem="dO9-oa-KP9" firstAttribute="top" secondItem="iiY-8r-gh8" secondAttribute="bottom" constant="14" id="z6E-Dz-pUt"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="alreadyHaveLabel" destination="HoV-Lx-ei4" id="C09-7Z-Q4v"/>
-                <outlet property="baseQuantityTextField" destination="j9B-Z2-Wvv" id="dBV-Hk-TZt"/>
+                <outlet property="baseButton" destination="nUi-6f-sEG" id="fXU-gT-wjK"/>
                 <outlet property="brandTextField" destination="wf2-UD-agf" id="UNd-uM-sEi"/>
                 <outlet property="ingredientNameLabel" destination="Qd6-eV-Zpm" id="R1Q-Lt-kIg"/>
                 <outlet property="productNameTextField" destination="KAK-sU-TMz" id="EX1-58-WUF"/>

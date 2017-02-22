@@ -309,6 +309,12 @@ class RealmGlobalProvider: RealmProvider {
             if recipesContainer == nil {
                 realm.add(RecipesContainer())
             }
+            
+            let baseQuantitiesContainer: BaseQuantitiesContainer? = self.loadFirstSync()
+            if baseQuantitiesContainer == nil {
+                realm.add(BaseQuantitiesContainer())
+            }
+            
             return true
         }) {successMaybe in
             handler(successMaybe ?? false)
