@@ -16,6 +16,8 @@ class UnitEditableView: UIView {
 
     @IBOutlet weak var nameTextField: UITextField!
     
+    @IBOutlet weak var nameTextFieldWidthConstraint: NSLayoutConstraint!
+    
     weak var delegate: UnitEditableViewDelegate?
     
     
@@ -69,6 +71,10 @@ class UnitEditableView: UIView {
         super.awakeFromNib()
         
         initTextListeners()
+    }
+    
+    func setMinTextFieldWidth(_ width: CGFloat) {
+        nameTextFieldWidthConstraint.constant = width // for now we lose here the >=
     }
     
 //    override var intrinsicContentSize: CGSize {

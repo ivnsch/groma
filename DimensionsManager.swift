@@ -151,7 +151,17 @@ class DimensionsManager {
         case .large: return 6
         }
     }
-
+    
+    // TODO use in all places where needed
+    static var quickAddCollectionViewItemsFixedHeight: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 30
+        case .small: return 35
+        case .middle: return 35
+        case .large: return 40
+        }
+    }
+    
     static var quickAddCollectionViewCellCornerRadius: CGFloat {
         switch heightDimension {
         case .verySmall: return 16

@@ -483,6 +483,10 @@ extension SelectIngredientDataController: UnitsCollectionViewDataSourceDelegate,
     
     // MARK: - UnitsCollectionViewDataSourceDelegate
     
+    var currentUnitName: String {
+        return inputs.unitName
+    }
+    
     func onUpdateUnitNameInput(nameInput: String) {
         currentNewUnitInput = nameInput
     }
@@ -531,109 +535,14 @@ extension SelectIngredientDataController: UnitsCollectionViewDataSourceDelegate,
             return CGSize(width: 120, height: 50)
         }
     }
-}
-
-
-
-protocol UnitsCollectionViewDataSourceDelegate {
-    var inputs: SelectIngredientDataControllerInputs {get}
-    func onUpdateUnitNameInput(nameInput: String)
-}
-
-class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, UnitEditableViewDelegate, UICollectionViewDelegateFlowLayout {
-
-    var units: Results<Providers.Unit>?
-
-    var delegate: UnitsCollectionViewDataSourceDelegate?
     
-    init(units: Results<Providers.Unit>?) {
-        self.units = units
+    internal var minUnitTextFieldWidth: CGFloat {
+        return 70
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return units.map{$0.count + 1} ?? 0
+    var highlightSelected: Bool {
+        return true
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let units = units else {QL4("No units"); return UICollectionViewCell()}
-        
-        if indexPath.row < units.count {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "unitCell", for: indexPath) as! UnitCell
-            let unit = units[indexPath.row]
-            cell.unitView.unit = unit
-            cell.unitView.bgColor = Theme.unitsBGColor
-            cell.unitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
-            cell.unitView.markedToDelete = false
-            cell.delegate = self
-
-            
-            if let delegate = delegate {
-                let selected = delegate.inputs.unitName == unit.name
-                cell.unitView.showSelected(selected: selected, animated: false)
-                
-            } else {
-                QL4("No delegate - can't update selected state")
-            }
-            
-            // HACK: For some reason after scrolled the label doesn't use its center constraint and appears aligned to the left. Debugging view hierarchy shows the label has the correct constraints, parent also has correct size but for some reason it's aligned at the left.
-            cell.unitView.nameLabel.center = cell.unitView.center
-//            cell.setNeedsLayout()
-            
-            return cell
-            
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "unitEditableCell", for: indexPath) as! UnitEditableCell
-            cell.editableUnitView.backgroundColor = Theme.unitsBGColor
-            cell.editableUnitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
-            cell.editableUnitView.delegate = self
-            
-            if let delegate = delegate {
-                cell.editableUnitView.prefill(name: delegate.inputs.unitName)
-            } else {
-                QL4("No delegate - prefill input cell")
-            }
-
-            return cell
-        }
-    }
-    
-    // MARK: - UnitCellDelegate
-    
-    func onLongPress(cell: UnitCell) {
-        cell.unitView.markedToDelete = true
-        cell.unitView.mark(toDelete: true, animated: true)
-    }
-    
-    
-    // MARK: - EditableUnitCellDelegate
-    
-    func onUnitInputChange(nameInput: String) {
-        delegate?.onUpdateUnitNameInput(nameInput: nameInput)
-    }
-}
-
-
-protocol UnitsCollectionViewDelegateDelegate: class {
-    func sizeFotUnitCell(indexPath: IndexPath) -> CGSize
-    func didSelectUnit(indexPath: IndexPath)
-}
-
-class UnitsDelegate: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    fileprivate weak var delegate: UnitsCollectionViewDelegateDelegate?
-    
-    init(delegate: UnitsCollectionViewDelegateDelegate) {
-        self.delegate = delegate
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.didSelectUnit(indexPath: indexPath)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return delegate?.sizeFotUnitCell(indexPath: indexPath) ?? CGSize.zero
-    }
-    
     
 }
 

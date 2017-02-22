@@ -136,3 +136,92 @@ class GromFromViewControlerAnimator {
         })
     }
 }
+
+
+
+
+
+
+
+
+
+
+// Simplified version of above. Only for UIView
+class GromFromViewAnimator2 {
+    
+    weak var button: UIView?
+    weak var parent: UIView?
+    
+    var controllerCreator: (() -> UIView?)?
+    fileprivate(set) weak var view: UIView?
+    
+    var isShowing: Bool {
+        return view != nil
+    }
+    
+    var animateButtonAtEnd = true
+    
+    init(parent: UIView, animateButtonAtEnd: Bool = true, controllerCreator: (() -> UIView)? = nil) {
+        self.parent = parent
+        self.controllerCreator = controllerCreator
+        self.animateButtonAtEnd = animateButtonAtEnd
+    }
+    
+    /// Scroll offset: If button is in a scrollable view (table view, collection view) current content view offset
+    /// frame has priority over inserts. If frame is passed, inset is ignored.
+    func open(button: UIView? = nil, frame: CGRect, onFinish: (() -> Void)? = nil) {
+        
+        if button != nil {
+            self.button = button
+        }
+        
+        guard let button = button, let parent = parent, let controllerCreator = self.controllerCreator else {QL4("No fields"); return}
+        guard let view = controllerCreator() else {QL4("Couldn't create controller"); return}
+        
+        self.view = view
+
+        view.frame = frame
+        
+        view.center = button.center
+        
+        parent.addSubview(view)
+        
+
+        view.transform = CGAffineTransform(scaleX: 0.000001, y: 0.000001)
+        UIView.animate(withDuration: 0.3, animations: {
+            button.backgroundColor = Theme.lightBlue // TODO not here
+            view.transform = CGAffineTransform(scaleX: 1, y: 1)
+            view.alpha = 1
+            view.center = frame.center
+            onFinish?()
+        })
+    }
+    
+    func close(onFinish: (() -> Void)? = nil) {
+        
+        guard let view = view, let button = button else {QL4("Fields missing, view: \(self.view), button: \(self.button)"); return}
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            button.backgroundColor = UIColor.white // TODO not here
+            view.transform = CGAffineTransform(scaleX: 0.000001, y: 0.000001)
+            view.center = button.center
+            view.alpha = 0
+            
+        }, completion: {finished in
+            self.view = nil
+            view.removeFromSuperview()
+            
+            onFinish?() // we call this before the short button animation since it doesn't belong to the main flow
+            
+            if self.animateButtonAtEnd {
+                UIView.animate(withDuration: 0.15, animations: {
+                    button.transform = CGAffineTransform(scaleX: 2, y: 2)
+                    UIView.animate(withDuration: 0.15, animations: {
+                        button.transform = CGAffineTransform(scaleX: 1, y: 1)
+                    })
+                })
+            }
+        })
+    }
+}
+

@@ -9,6 +9,7 @@
 import UIKit
 import Providers
 import QorumLogs
+import RealmSwift
 
 protocol AddRecipeIngredientCellDelegate {
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
@@ -28,9 +29,14 @@ protocol AddRecipeIngredientCellDelegate {
     func delete(brand: String, handler: @escaping () -> Void)
     func delete(unit: String, handler: @escaping () -> Void)
     func delete(baseQuantity: String, handler: @escaping () -> Void)
+    
+    
+    func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void)
+    func addUnit(name: String, _ handler: @escaping (Bool) -> Void)
+    func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void)
 }
 
-typealias AddRecipeIngredientCellOptions = (brands: [String], units: [Providers.Unit], baseQuantities: [String]) // TODO!!!!!!!!!!!!!!!!!! remove this
+typealias AddRecipeIngredientCellOptions = (brands: [String], units: Results<Providers.Unit>, baseQuantities: [String]) // TODO!!!!!!!!!!!!!!!!!! remove this
 
 class AddRecipeIngredientCell: UITableViewCell {
 
@@ -38,8 +44,9 @@ class AddRecipeIngredientCell: UITableViewCell {
     
     @IBOutlet weak var productNameTextField: LineAutocompleteTextField!
     @IBOutlet weak var brandTextField: LineAutocompleteTextField!
+
+    @IBOutlet weak var unitButton: UIButton!
     
-    @IBOutlet weak var unitTextField: LineAutocompleteTextField!
     @IBOutlet weak var baseQuantityTextField: LineAutocompleteTextField!
     @IBOutlet weak var quantityTextField: UITextField!
     
@@ -49,13 +56,51 @@ class AddRecipeIngredientCell: UITableViewCell {
     var delegate: AddRecipeIngredientCellDelegate?
     var didMoveToSuperviewCalledOnce = false
     
+    fileprivate var currentUnitInput: String? {
+        didSet {
+            guard let unitButton = unitButton else {QL3("Outlets not set yet"); return}
+            unitButton.setTitle(currentUnitInput ?? "", for: .normal)
+            if currentUnitInput != nil {
+                unitButton.backgroundColor = UIColor.white
+            } else {
+                unitButton.backgroundColor = UIColor.clear
+            }
+        }
+    }
     
+    
+    var indexPath: IndexPath?
+    
+    
+    // MARK: - Units variables
+    
+    fileprivate var unitsCollectionView: UICollectionView?
+    fileprivate var unitsDataSource: UnitsDataSource?
+    fileprivate var unitsDelegate: UnitsDelegate? // arc
+    fileprivate var unitPicker: PickerCollectionView?
+    fileprivate var shapeLayer: CAShapeLayer?
+    fileprivate var unitPickerWrapper: UIView?
+    fileprivate var unitPickerMask: UIView?
+    
+    fileprivate var unitButtonMaskFrame: CGRect {
+        let unitButtonOrigin = contentView.convert(unitButton.frame.origin, to: unitPicker)
+        unitButton.bounds.origin = unitButtonOrigin
+        return unitButton.bounds.insetBy(dx: -10, dy: -10)
+    }
+    
+    // MARK: -
+
     var model: AddRecipeIngredientModel? {
         didSet {
             ingredientNameLabel.text = model.map{"\($0.ingredient.quantity) x \($0.productPrototype.name)"}
             productNameTextField.text = model?.productPrototype.name
             brandTextField.text = model?.productPrototype.brand
-            unitTextField.text = model?.productPrototype.unit
+            
+            if let unit = model?.productPrototype.unit {
+                unitButton.setTitle(unit, for: .normal)
+                currentUnitInput = unit
+            }
+
             baseQuantityTextField.text = model?.productPrototype.baseQuantity.floatValue?.toString(2)
             quantityTextField.text = model.map{"\($0.quantity)"} ?? "" // this doesn't make a lot of sense, but for now
             
@@ -66,8 +111,6 @@ class AddRecipeIngredientCell: UITableViewCell {
         }
     }
     
-    var indexPath: IndexPath?
-    
     override func awakeFromNib() {
         super.awakeFromNib()
     
@@ -76,6 +119,10 @@ class AddRecipeIngredientCell: UITableViewCell {
         initTextFieldPlaceholders()
         initAutocompletionTextFields()
         initTextListeners()
+        
+        unitButton.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
+        
+        unitButton.isHidden = true
     }
     
     
@@ -89,6 +136,83 @@ class AddRecipeIngredientCell: UITableViewCell {
     func focus() {
         productNameTextField.becomeFirstResponder()
     }
+    
+    func handleGlobalTap() {
+        setUnitPickerOpen(false)
+        
+        func onUnitAdded(isNew: Bool) {
+            guard let picker = unitPicker else {QL4("No units picker"); return}
+            guard let unitsDataSource = unitsDataSource else {QL4("No data source"); return}
+            
+            if isNew {
+                picker.collectionView.insertItems(at: [IndexPath(row: (unitsDataSource.units?.count ?? 0) - 1, section: 0)])
+                if let editCell = picker.collectionView.cellForItem(at: IndexPath(row: (unitsDataSource.units?.count ?? 0), section: 0)) as? UnitEditableCell {
+                    editCell.editableUnitView.clear()
+                }
+            }
+            currentUnitInput = nil
+        }
+        
+        if let currentUnitInput = currentUnitInput {
+            delegate?.addUnit(name: currentUnitInput) {isNew in
+                onUnitAdded(isNew: isNew)
+            }
+        }
+    }
+
+    
+    // TODO cell recycling?
+    func initUnitPicker() {
+        
+        func onHasUnits(units: Results<Providers.Unit>) {
+        
+            let view = contentView
+            
+            let dataSource = UnitsDataSource(units: units)
+            dataSource.delegate = self
+            unitsDataSource = dataSource
+            
+            let flowLayout = UICollectionViewFlowLayout()
+            flowLayout.scrollDirection = .vertical
+            
+            // We need an additional scaling mask for open/close so to now overwrite the gradient mask of PickerCollectionView we need an additional view
+            let unitPickerWrapper = UIView(size: CGSize(width: 100, height: 250), center: unitButton.center)
+            self.unitPickerWrapper = unitPickerWrapper
+            let unitPicker = PickerCollectionView(size: unitPickerWrapper.bounds.size, center: unitPickerWrapper.bounds.center, layout: flowLayout, boxY: unitButton.y, boxCenterY: unitButton.center.y, cellHeight: cellSize.height, cellSpacing: cellSpacing, delegate: self)
+            
+            view.addSubview(unitPickerWrapper)
+            unitPickerWrapper.addSubview(unitPicker)
+
+            self.unitPicker = unitPicker
+            
+            unitPicker.collectionView.register(UINib(nibName: "UnitCell", bundle: nil), forCellWithReuseIdentifier: "unitCell")
+            unitPicker.collectionView.register(UINib(nibName: "UnitEditableCell", bundle: nil), forCellWithReuseIdentifier: "unitEditableCell")
+            unitPicker.collectionView.register(UINib(nibName: "UnitSubmitCell", bundle: nil), forCellWithReuseIdentifier: "submitCell")
+            
+            unitPicker.collectionView.showsVerticalScrollIndicator = false
+            
+            unitPicker.collectionView.dataSource = dataSource
+            unitPicker.collectionView.reloadData()
+            
+            unitPicker.collectionView.backgroundColor = UIColor.clear
+            unitPickerWrapper.backgroundColor = UIColor.clear
+            
+            let unitPickerMask = UIView(frame: unitButtonMaskFrame)
+            unitPickerMask.backgroundColor = UIColor.white
+            unitPickerWrapper.mask = unitPickerMask
+            
+            self.unitPickerMask = unitPickerMask
+        }
+        
+        delegate?.units({unitsMaybe in
+            if let units = unitsMaybe {
+                onHasUnits(units: units)
+            } else {
+                QL4("No units")
+            }
+        })
+    }
+
     
     // MARK: - Private
     
@@ -115,13 +239,13 @@ class AddRecipeIngredientCell: UITableViewCell {
     }
     
     fileprivate func initTextListeners() {
-        for textField in [productNameTextField, brandTextField, quantityTextField, baseQuantityTextField, unitTextField] {
+        for textField in [productNameTextField, brandTextField, quantityTextField, baseQuantityTextField] {
             textField?.addTarget(self, action: #selector(onQuantityTextChange(_:)), for: .editingChanged)
         }
     }
     
     fileprivate func initAutocompletionTextFields() {
-        for textField in [productNameTextField, brandTextField, baseQuantityTextField, unitTextField] {
+        for textField in [productNameTextField, brandTextField, baseQuantityTextField] {
             textField?.defaultAutocompleteStyle()
             textField?.myDelegate = self
         }
@@ -131,7 +255,6 @@ class AddRecipeIngredientCell: UITableViewCell {
         productNameTextField.attributedPlaceholder = NSAttributedString(string: productNameTextField.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
         brandTextField.attributedPlaceholder = NSAttributedString(string: brandTextField.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
         baseQuantityTextField.attributedPlaceholder = NSAttributedString(string: baseQuantityTextField.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
-        unitTextField.attributedPlaceholder = NSAttributedString(string: unitTextField.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
     }
     
     func onQuantityTextChange(_ sender: UITextField) {
@@ -143,8 +266,28 @@ class AddRecipeIngredientCell: UITableViewCell {
         delegate?.onUpdate(productName: nameInput, indexPath: indexPath)
         delegate?.onUpdate(brand: brandInput, indexPath: indexPath)
         delegate?.onUpdate(quantity: quantityInput, indexPath: indexPath)
-        delegate?.onUpdate(unit: unitInput, indexPath: indexPath)
         delegate?.onUpdate(baseQuantity: baseQuantityInput, indexPath: indexPath)
+    }
+}
+
+// MARK: - UnitsCollectionViewDataSourceDelegate
+
+extension AddRecipeIngredientCell: UnitsCollectionViewDataSourceDelegate {
+    
+    var currentUnitName: String {
+        return currentUnitInput ?? ""
+    }
+    
+    func onUpdateUnitNameInput(nameInput: String) {
+        currentUnitInput = nameInput
+    }
+    
+    var minUnitTextFieldWidth: CGFloat {
+        return 40
+    }
+    
+    var highlightSelected: Bool {
+        return false
     }
 }
 
@@ -165,7 +308,7 @@ extension AddRecipeIngredientCell {
     }
     
     fileprivate var unitInput: String {
-        return unitTextField.text ?? ""
+        return currentUnitInput ?? ""
     }
     
     fileprivate var baseQuantityInput: String {
@@ -189,11 +332,6 @@ extension AddRecipeIngredientCell: MLPAutoCompleteTextFieldDataSource, MLPAutoCo
         case brandTextField:
             delegate?.brandsContaining(text: string) {brands in
                 handler(brands)
-            }
-            
-        case unitTextField:
-            delegate?.unitsContaining(text: string) {units in
-                handler(units)
             }
             
         case baseQuantityTextField:
@@ -226,13 +364,160 @@ extension AddRecipeIngredientCell: MLPAutoCompleteTextFieldDataSource, MLPAutoCo
             delegate?.delete(baseQuantity: string) {
                 self.baseQuantityTextField.closeAutoCompleteTableView()
             }
-            
-        case unitTextField:
-            delegate?.delete(unit: string) {
-                self.unitTextField.closeAutoCompleteTableView()
-            }
 
         default: QL4("Not handled input")
         }
+    }
+}
+
+
+extension AddRecipeIngredientCell: PickerCollectionViewDelegate {
+    
+    var cellSize: CGSize {
+        return CGSize(width: 70, height: DimensionsManager.quickAddCollectionViewItemsFixedHeight)
+    }
+    
+    var cellSpacing: CGFloat {
+        return 10
+    }
+    
+    func onStartScrolling() {
+        
+        anim {
+            self.unitPickerMask?.frame = self.unitPicker!.bounds
+            self.contentView.setNeedsLayout()
+            self.contentView.layoutIfNeeded()
+        }
+    }
+    
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // (Almost) same code from SelectIngredientDataController - refactor?
+    
+    func onSelectItem(index: Int) {
+        
+        guard let unitsDataSource = unitsDataSource else {
+            setUnitPickerOpen(false)
+            QL4("No data source")
+            return
+        }
+        
+        guard let units = unitsDataSource.units else {QL4("No units"); return}
+        guard let unitsCollectionView = unitPicker?.collectionView else {QL4("No collection"); return}
+        
+        
+        let indexPath = IndexPath(row: index, section: 0)
+        
+        let cellMaybe = unitsCollectionView.cellForItem(at: indexPath) as? UnitCell
+        
+        if cellMaybe?.unitView.markedToDelete ?? false {
+            
+            let unit = units[indexPath.row]
+            
+            delegate?.deleteUnit(name: unit.name) {success in
+                unitsCollectionView.deleteItems(at: [indexPath])
+                unitsCollectionView.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
+            }
+            
+            
+        } else {
+            clearToDeleteUnits()
+            clearSelectedUnits()
+            
+            if let cell = cellMaybe {
+                if isSelected(cell: cell) {
+                    onSelect(unitName: "")
+                    
+                } else {
+                    let unitName: String = {
+                        if indexPath.row < units.count {
+                            return units[indexPath.row].name
+                        } else if indexPath.row == units.count {
+                            return currentUnitInput ?? ""
+                        } else {
+                            fatalError("Invalid index: \(indexPath.row), unit count: \(units.count)")
+                        }
+                    }()
+                    onSelect(unitName: unitName)
+                }
+            }
+        }
+    }
+    
+    fileprivate func isSelected(cell: UnitCell) -> Bool {
+        guard let unitViewUnit = cell.unitView.unit else {return false}
+        
+        return unitViewUnit.name == currentUnitInput
+    }
+    
+    fileprivate func clearToDeleteUnits() {
+        guard let unitsCollectionView = unitPicker?.collectionView else {QL4("No collection"); return}
+        
+        for cell in unitsCollectionView.visibleCells {
+            if let fractionCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
+                fractionCell.unitView.mark(toDelete: false, animated: true)
+            }
+        }
+    }
+    
+    fileprivate func clearSelectedUnits() {
+        guard let unitsCollectionView = unitPicker?.collectionView else {QL4("No collection"); return}
+        
+        for cell in unitsCollectionView.visibleCells {
+            if let fractionCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
+                fractionCell.unitView.showSelected(selected: false, animated: true)
+            }
+        }
+    }
+    
+    
+    fileprivate func onSelect(unitName: String) {
+        guard let indexPath = indexPath else {QL4("Illegal state: no index path"); return}
+        
+        currentUnitInput = unitName
+        delegate?.onUpdate(unit: unitName, indexPath: indexPath)
+    }
+    
+    
+    ///////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    fileprivate func setUnitPickerOpen(_ open: Bool) {
+        
+        guard let picker = unitPicker else {QL4("No units picker"); return}
+        
+        func animNewFrame(frame: CGRect) {
+            anim {
+                self.unitPickerMask?.frame = frame
+                self.contentView.setNeedsLayout()
+                self.contentView.layoutIfNeeded()
+            }
+        }
+        
+        if open {
+            animNewFrame(frame: picker.bounds)
+        } else {
+            animNewFrame(frame: unitButtonMaskFrame)
+            
+        }
+    }
+
+    func onSnap(cellIndex: Int) { // select model
+        guard let unitsDataSource = unitsDataSource else {QL4("No data source"); return}
+        guard let units = unitsDataSource.units else {QL4("No units"); return}
+        
+        let unitName: String = {
+            if cellIndex < units.count {
+                return units[cellIndex].name
+            } else if cellIndex == units.count {
+                return currentUnitInput ?? ""
+            } else {
+                fatalError("Invalid index: \(cellIndex), unit count: \(units.count)")
+            }
+        }()
+        
+        onSelect(unitName: unitName)
     }
 }

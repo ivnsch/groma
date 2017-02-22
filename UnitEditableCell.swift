@@ -15,4 +15,8 @@ class UnitEditableCell: UICollectionViewCell {
     override var intrinsicContentSize: CGSize {
         return editableUnitView.intrinsicContentSize
     }
+    
+    func setMinTextFieldWidth(_ width: CGFloat) {
+        editableUnitView.setMinTextFieldWidth(width)
+    }
 }

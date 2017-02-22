@@ -18,27 +18,22 @@
                 <rect key="frame" x="0.0" y="0.0" width="100" height="80"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="oAT-xb-v4k" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                        <rect key="frame" x="15" y="30.5" width="70" height="19"/>
-                        <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="heT-O1-nBe"/>
-                        </constraints>
-                        <nil key="textColor"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                <integer key="value" value="50"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                    </textField>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0YP-zl-HrN" customClass="UnitEditableView" customModule="groma" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="100" height="80"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="oAT-xb-v4k" firstAttribute="centerX" secondItem="Kpe-6r-gZo" secondAttribute="centerX" id="2Mz-TZ-yOk"/>
-                <constraint firstItem="oAT-xb-v4k" firstAttribute="centerY" secondItem="Kpe-6r-gZo" secondAttribute="centerY" id="KfY-W2-lN7"/>
+                <constraint firstAttribute="trailing" secondItem="0YP-zl-HrN" secondAttribute="trailing" id="a52-Sx-dCk"/>
+                <constraint firstAttribute="bottom" secondItem="0YP-zl-HrN" secondAttribute="bottom" id="hRO-KJ-n9K"/>
+                <constraint firstItem="0YP-zl-HrN" firstAttribute="leading" secondItem="Kpe-6r-gZo" secondAttribute="leading" id="iq6-U5-lba"/>
+                <constraint firstItem="0YP-zl-HrN" firstAttribute="top" secondItem="Kpe-6r-gZo" secondAttribute="top" id="tuR-dL-CPb"/>
             </constraints>
             <size key="customSize" width="217" height="80"/>
+            <connections>
+                <outlet property="editableUnitView" destination="0YP-zl-HrN" id="eDa-Yi-mEL"/>
+            </connections>
             <point key="canvasLocation" x="-146.5" y="74"/>
         </collectionViewCell>
     </objects>

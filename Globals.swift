@@ -10,7 +10,7 @@ import UIKit
 
 /// UIView animation with default theme duration
 public func anim(_ duration: Double = Theme.defaultAnimDuration, f: @escaping () -> Void) {
-    UIView.animate(withDuration: Theme.defaultAnimDuration) {
+    UIView.animate(withDuration: duration) {
         f()
     }
 }

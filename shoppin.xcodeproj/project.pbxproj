@@ -100,6 +100,11 @@
 		6AF46EAE1E5A3A4900BBFF4C /* UnitEditableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EAD1E5A3A4900BBFF4C /* UnitEditableView.swift */; };
 		6AF46EB21E5B422600BBFF4C /* SubmitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EB11E5B422600BBFF4C /* SubmitView.swift */; };
 		6AF46EB41E5B423800BBFF4C /* SubmitView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF46EB31E5B423800BBFF4C /* SubmitView.xib */; };
+		6AF46EB61E5B6F6000BBFF4C /* UnitsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EB51E5B6F6000BBFF4C /* UnitsDataSource.swift */; };
+		6AF46EB81E5B6F7500BBFF4C /* UnitsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EB71E5B6F7500BBFF4C /* UnitsDelegate.swift */; };
+		6AF46EBB1E5BBBC900BBFF4C /* UnitSubmitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EB91E5BBBC900BBFF4C /* UnitSubmitCell.swift */; };
+		6AF46EBC1E5BBBC900BBFF4C /* UnitSubmitCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF46EBA1E5BBBC900BBFF4C /* UnitSubmitCell.xib */; };
+		6AF46EC01E5CE19A00BBFF4C /* PickerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EBF1E5CE19A00BBFF4C /* PickerCollectionView.swift */; };
 		AEC62C1551F853D52768B5A2 /* Pods_shoppin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B242A1FEAA96009C120C8E2A /* Pods_shoppin.framework */; };
 		EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0587DB1BBED86B00080626 /* IntroPageView.xib */; };
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
@@ -535,6 +540,11 @@
 		6AF46EAD1E5A3A4900BBFF4C /* UnitEditableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitEditableView.swift; sourceTree = "<group>"; };
 		6AF46EB11E5B422600BBFF4C /* SubmitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitView.swift; sourceTree = "<group>"; };
 		6AF46EB31E5B423800BBFF4C /* SubmitView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SubmitView.xib; sourceTree = "<group>"; };
+		6AF46EB51E5B6F6000BBFF4C /* UnitsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitsDataSource.swift; sourceTree = "<group>"; };
+		6AF46EB71E5B6F7500BBFF4C /* UnitsDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitsDelegate.swift; sourceTree = "<group>"; };
+		6AF46EB91E5BBBC900BBFF4C /* UnitSubmitCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitSubmitCell.swift; sourceTree = "<group>"; };
+		6AF46EBA1E5BBBC900BBFF4C /* UnitSubmitCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnitSubmitCell.xib; sourceTree = "<group>"; };
+		6AF46EBF1E5CE19A00BBFF4C /* PickerCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerCollectionView.swift; sourceTree = "<group>"; };
 		98053CCC7F57AECBD28D4F1D /* Pods_shoppin_osxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E255758FF7D0B9EA448C576 /* Pods_shoppin_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0402B4CFFCE62A7F089CFBD /* Pods-shoppin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.release.xcconfig"; sourceTree = "<group>"; };
@@ -1115,6 +1125,10 @@
 				6A3A67DB1E59240000B5354F /* UnitCell.xib */,
 				6A3A67DD1E59D50C00B5354F /* UnitEditableCell.xib */,
 				6A3A67DF1E59D57500B5354F /* UnitEditableCell.swift */,
+				6AF46EB91E5BBBC900BBFF4C /* UnitSubmitCell.swift */,
+				6AF46EBA1E5BBBC900BBFF4C /* UnitSubmitCell.xib */,
+				6AF46EB51E5B6F6000BBFF4C /* UnitsDataSource.swift */,
+				6AF46EB71E5B6F7500BBFF4C /* UnitsDelegate.swift */,
 			);
 			name = selectIngredientDataController;
 			sourceTree = "<group>";
@@ -2154,6 +2168,7 @@
 				EB3E92EE1CD9347E0048DA0D /* EyeView.swift */,
 				6AD51AE01E5134880053934E /* LabelMore.swift */,
 				6AD51AEA1E5136880053934E /* ViewTags.swift */,
+				6AF46EBF1E5CE19A00BBFF4C /* PickerCollectionView.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -2428,6 +2443,7 @@
 				EB1FC51A1BC694AF004E1114 /* OkNextButtonsView.xib in Resources */,
 				6A3A67CA1E57BE6B00B5354F /* EditableFractionView.xib in Resources */,
 				EB4B39E71CED443400B41063 /* Intro.storyboard in Resources */,
+				6AF46EBC1E5BBBC900BBFF4C /* UnitSubmitCell.xib in Resources */,
 				EBED0D0E1C82225B00A1EEC4 /* RatingPopup.storyboard in Resources */,
 				EBD668191CED4E820055EE0B /* AddEditGroupViewController.storyboard in Resources */,
 				EBA2C8CE1C4F207800A970B8 /* EditProductCategoryController.xib in Resources */,
@@ -2627,6 +2643,7 @@
 				6AEB65E81E4C8BE90094B9DE /* IngredientsControllerNew.swift in Sources */,
 				EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
+				6AF46EC01E5CE19A00BBFF4C /* PickerCollectionView.swift in Sources */,
 				EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */,
 				EBEA0CDE1CA6C0F500E68B81 /* QuickAddPageController.swift in Sources */,
 				EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */,
@@ -2663,9 +2680,11 @@
 				6A3A67D81E59219B00B5354F /* UnitCell.swift in Sources */,
 				EBF1F9ED1CD7F77700F8016F /* SwitchSettingCell.swift in Sources */,
 				EB37ABB91CA09B4F00FE9D7A /* PullToAddHelper.swift in Sources */,
+				6AF46EBB1E5BBBC900BBFF4C /* UnitSubmitCell.swift in Sources */,
 				EB4A38A41C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */,
 				6AE34BE41E2E25B80039A2A8 /* RecipesController.swift in Sources */,
 				EBEA0CD21CA5BF3E00E68B81 /* HandlingButton.swift in Sources */,
+				6AF46EB81E5B6F7500BBFF4C /* UnitsDelegate.swift in Sources */,
 				EB75E54D1CA424F9006AAEAF /* ExistingSharedUserCell.swift in Sources */,
 				EBED0D141C824FE200A1EEC4 /* EmailHelper.swift in Sources */,
 				EB7777D01CCFCF4F003FF417 /* AddEditListControllerView.swift in Sources */,
@@ -2756,6 +2775,7 @@
 				EB8D1D151C396F8300ADF884 /* InventoryItemsController.swift in Sources */,
 				EBB6D7561CD69E6100F9C711 /* TextFieldMore.swift in Sources */,
 				6A3A67B01E55F7CF00B5354F /* ManageItemsBrandsController.swift in Sources */,
+				6AF46EB61E5B6F6000BBFF4C /* UnitsDataSource.swift in Sources */,
 				EB7D241F1CB959440017EFE6 /* CellUncoverer.swift in Sources */,
 				EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */,
 				EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */,

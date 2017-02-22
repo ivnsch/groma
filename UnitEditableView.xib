@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UnitEditableView" customModule="groma" customModuleProvider="target">
             <connections>
                 <outlet property="nameTextField" destination="0DB-Dz-aTi" id="1DX-qo-b7x"/>
+                <outlet property="nameTextFieldWidthConstraint" destination="FOj-2l-2oF" id="oer-hC-clf"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

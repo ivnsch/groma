@@ -36,7 +36,7 @@ class AddRecipeController: UIViewController {
     // These variables aren't updated in real time - they are loaded only once when the view controller is loaded
     // If they were to change in the background it's not critical, as the user submitting the ingredients will re-create products with any brands/units/base quantities that could have been deleted/changed(which is equivalent to a delete, being the brand/unit/base its own "unique")
     fileprivate var ingredientsToBrands = Dictionary<String, [String]>()
-    fileprivate var units: [Providers.Unit] = []
+    fileprivate var units: Results<Providers.Unit>?
     fileprivate var baseQuantities: [String] = []
     
     weak var delegate: AddRecipeControllerDelegate?
@@ -85,6 +85,10 @@ class AddRecipeController: UIViewController {
     
     func onTapView(_ tap: UITapGestureRecognizer) {
         UIApplication.shared.delegate!.window??.endEditing(true)
+        
+        for cell in tableView.visibleCells {
+            (cell as? AddRecipeIngredientCell)?.handleGlobalTap()
+        }
     }
     
     // MARK: - Private
@@ -187,7 +191,14 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
             cell.delegate = self
             cell.indexPath = indexPath
             cell.model = models[indexPath.row]
-            cell.options = (brands: brands, baseQuantities: baseQuantities, units: units)
+            
+            cell.initUnitPicker()
+            
+            if let units = units {
+                cell.options = (brands: brands, baseQuantities: baseQuantities, units: units)
+            } else {
+                QL4("No units, can't set cell options")
+            }
             
         } else {
             QL4("Invalid state: no itemsResult")
@@ -207,6 +218,18 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
         delegate?.getAlreadyHaveText(ingredient: ingredient, handler)
+    }
+    
+    func addUnit(name: String, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.getOrCreate(name: name, successHandler{[weak self] (unit, isNew) in
+            handler(isNew)
+        })
+    }
+    
+    func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.delete(name: name, successHandler {
+            handler(true)
+        })
     }
     
     // MARK: - Model update
@@ -288,6 +311,10 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
                 handler()
             })
         })
+    }
+    
+    func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void) {
+        return handler(units)
     }
     
 }
