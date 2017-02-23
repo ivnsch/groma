@@ -86,6 +86,8 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
 
     fileprivate let cellHeight = DimensionsManager.defaultCellHeight
+    
+    fileprivate var pullToAddView: MyRefreshControl?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,6 +97,8 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         let refreshControl = PullToAddHelper.createPullToAdd(self)
         tableViewController.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(ExpandableItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)
+        self.pullToAddView = refreshControl
+
         
         originalNavBarFrame = topBar.frame
         
@@ -342,6 +346,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
+        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
     }
     
     func onAddTap(_ rotateTopBarButton: Bool = true) {

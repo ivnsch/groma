@@ -42,6 +42,12 @@ extension UIView {
         return c
     }
     
+    public func positionAboveView(_ view: UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1, constant: CGFloat(constant))
+        self.superview!.addConstraint(c)
+        return c
+    }
+    
     public func alignTop(_ view:UIView, constant:Float = 0) -> NSLayoutConstraint {
         let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1, constant: CGFloat(constant))
         self.superview!.addConstraint(c)

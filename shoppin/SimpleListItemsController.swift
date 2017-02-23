@@ -738,6 +738,8 @@ class SimpleListItemsTableViewController: UITableViewController {
     weak var scrollViewDelegate: UIScrollViewDelegate?
     weak var listItemsEditTableViewDelegate: ListItemsEditTableViewDelegateNew?
 
+    fileprivate var pullToAddView: MyRefreshControl?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib(nibName: "ListItemCell", bundle: nil), forCellReuseIdentifier: "cell")
@@ -811,6 +813,8 @@ class SimpleListItemsTableViewController: UITableViewController {
         let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground)
         refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
         self.refreshControl = refreshControl
+        self.pullToAddView = refreshControl
+
     }
     
     func onPullRefresh(_ sender: UIRefreshControl) {
@@ -822,6 +826,10 @@ class SimpleListItemsTableViewController: UITableViewController {
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.scrollViewDelegate?.scrollViewWillBeginDragging?(scrollView)
+    }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y)
     }
     
     // MARK: - Etc

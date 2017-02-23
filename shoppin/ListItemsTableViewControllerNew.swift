@@ -73,6 +73,8 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
 
     fileprivate let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
 
+    fileprivate var pullToAddView: MyRefreshControl?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initTableView()
@@ -86,11 +88,12 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
     
-    
     func enablePullToAdd() {
         let refreshControl = PullToAddHelper.createPullToAdd(self)
         refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
         self.refreshControl = refreshControl
+        
+        pullToAddView = refreshControl
     }
     
     func onPullRefresh(_ sender: UIRefreshControl) {
@@ -129,6 +132,10 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         //        let scrollingUp = (velocity.y < 0)
         
 //        clearPendingSwipeItemIfAny(true) TODO!!!!!!!!!!!!!!!! necessary?
+    }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -130)
     }
     
 //    TODO!!!!!!!!!!!!!!!! ?

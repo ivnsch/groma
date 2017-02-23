@@ -62,6 +62,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     fileprivate var explanationManager: ExplanationManager = ExplanationManager()
 
+    fileprivate var pullToAddView: MyRefreshControl?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -74,6 +76,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             let refreshControl = PullToAddHelper.createPullToAdd(self)
             tableViewController.refreshControl = refreshControl
             refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), for: .valueChanged)
+            self.pullToAddView = refreshControl
         }
         
         // TODO custom empty view, put this there
@@ -139,6 +142,9 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
 
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y)
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         

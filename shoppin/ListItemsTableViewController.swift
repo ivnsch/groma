@@ -50,6 +50,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     fileprivate var swipedTableViewListItem: TableViewListItem? // Item marked for "undo".
     
+    fileprivate var pullToAddView: MyRefreshControl?
+
     func touchEnabled(_ enabled:Bool) {
         self.tableView.isUserInteractionEnabled = enabled
     }
@@ -58,6 +60,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         let refreshControl = PullToAddHelper.createPullToAdd(self)
         refreshControl.addTarget(self, action: #selector(ListItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)
         self.refreshControl = refreshControl
+        self.pullToAddView = refreshControl
     }
     
     func onPullRefresh(_ sender: UIRefreshControl) {
@@ -67,6 +70,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         listItemsTableViewDelegate?.onTableViewScroll(scrollView)
+        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y)
     }
     
     var sectionsExpanded: Bool = true

@@ -74,6 +74,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     fileprivate var explanationManager: ExplanationManager = ExplanationManager()
     
+    fileprivate var pullToAddView: MyRefreshControl?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -85,6 +87,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground)
             tableViewController.refreshControl = refreshControl
             refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), for: .valueChanged)
+            self.pullToAddView = refreshControl
         }
         
         // TODO custom empty view, put this there
@@ -440,6 +443,12 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     func onGotItTap(sender: UIButton) {
         explanationManager.dontShowAgain()
         tableView.deleteRows(at: [IndexPath(row: 0, section: 0)], with: .top)
+    }
+    
+    // MARK: - Scrol delegate
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
     }
 }
 
