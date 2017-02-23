@@ -175,10 +175,10 @@ class DimensionsManager {
     
     static var listItemsHeaderHeight: CGFloat {
         switch heightDimension {
-        case .verySmall: return 28
-        case .small: return 30
-        case .middle: return 43
-        case .large: return 43
+        case .verySmall: return 25
+        case .small: return 25
+        case .middle: return 30
+        case .large: return 30
         }
     }
 
