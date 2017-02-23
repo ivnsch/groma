@@ -121,7 +121,7 @@ class DimensionsManager {
         switch widthDimension {
         case .small: return 120
         case .middle: return 140
-        case .large: return 180
+        case .large: return 190
         }
     }
     

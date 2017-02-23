@@ -97,7 +97,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         onViewDidLoad?()
         
         if let flow = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flow.sectionInset = UIEdgeInsetsMake(0, 12, 0, 12)
+            flow.sectionInset = UIEdgeInsetsMake(0, 20, 0, 20)
         } else {
             QL4("Invalid collection view layout - can't set insets")
         }
