@@ -444,13 +444,10 @@ class RealmListItemProvider: RealmProvider {
     
     func updateListItems(_ listItems: [ListItem], handler: @escaping (Bool) -> Void) {
         
-        let listItems = listItems.map{$0.copy(note: nil)} // Fixes Realm acces in incorrect thread exceptions
-        
-        doInWriteTransaction({[weak self] realm in
-            return self?.updateListItemsSync(realm, listItems: listItems)
-            }, finishHandler: {listItemsMaybe in
-                handler(listItemsMaybe ?? false)
-        })
+        handler(doInWriteTransactionSync {realm in
+            return updateListItemsSync(realm, listItems: listItems)
+        } ?? false)
+
     }
     
     func updateListItemsSync(_ realm: Realm, listItems: [ListItem]) -> Bool {
