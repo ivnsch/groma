@@ -1287,11 +1287,12 @@ class ListItemProviderImpl: ListItemProvider {
         //}
     }
     
+    // Quick add
     // TODO rename add or increment
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
     func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void) {
        
-        if let tuple = DBProv.listItemProvider.addSync(quantifiableProduct: quantifiableProduct, store: store, list: list, quantity: quantity, status: status, realmData: realmData) {
+        if let tuple = DBProv.listItemProvider.addSync(quantifiableProduct: quantifiableProduct, store: store, price: nil, list: list, quantity: quantity, status: status, realmData: realmData) {
             handler(ProviderResult(status: .success, sucessResult: tuple))
         } else {
             handler(ProviderResult(status: .databaseUnknown))

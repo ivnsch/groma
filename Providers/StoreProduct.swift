@@ -233,10 +233,10 @@ public class StoreProduct: DBSyncable, Identifiable {
 
 extension StoreProduct {
     
-    static func createDefault(quantifiableProduct: QuantifiableProduct, store: String) -> StoreProduct {
+    static func createDefault(quantifiableProduct: QuantifiableProduct, store: String, price: Float?) -> StoreProduct {
         return StoreProduct(
             uuid: UUID().uuidString,
-            price: 0, // TODO!!!!!!!!!!!!!!!! ensure store products are always initialized with price 0
+            price: price ?? 0,
             store: store,
             product: quantifiableProduct
         )
