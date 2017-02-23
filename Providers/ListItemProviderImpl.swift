@@ -1084,20 +1084,20 @@ class ListItemProviderImpl: ListItemProvider {
     func update(_ listItems: [ListItem], remote: Bool = true, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         
         self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
-            if remote {
-                self?.remoteProvider.update(listItems) {remoteResult in
-                    if let remoteListItems = remoteResult.successResult {
-                        self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
-                        }
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                            QL4("Remote call no success: \(remoteResult) items: \(listItems)")
-                            self?.memProvider.invalidate()
-                            handler(result)
-                        })
-                    }
-                }
-            }
+//            if remote {
+//                self?.remoteProvider.update(listItems) {remoteResult in
+//                    if let remoteListItems = remoteResult.successResult {
+//                        self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+//                        }
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+//                            QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+//                            self?.memProvider.invalidate()
+//                            handler(result)
+//                        })
+//                    }
+//                }
+//            }
         })
     }
     
