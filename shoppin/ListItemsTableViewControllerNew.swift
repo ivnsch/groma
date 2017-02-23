@@ -227,6 +227,11 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         listItemsEditTableViewDelegate?.onListItemMoved(from: sourceIndexPath, to: destinationIndexPath)
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {QL4("No listItem"); return}
+        listItemsTableViewDelegate?.onListItemSelected(listItem, indexPath: indexPath)
+    }
+    
     // MARK: - Expand sections
     
     func setAllSectionsExpanded(_ expanded: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
