@@ -456,9 +456,20 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         guard let realmData = realmData else {QL4("No realm data"); return}
         
+        
+        func onAddSuccess(result: AddListItemResult) {
+            if result.isNewItem {
+                listItemsTableViewController.addRow(indexPath: IndexPath(row: result.listItemIndex, section: result.sectionIndex), isNewSection: result.isNewSection)
+            } else {
+                listItemsTableViewController.updateRow(indexPath: IndexPath(row: result.listItemIndex, section: result.sectionIndex))
+            }
+            
+            updateEmptyUI()
+        }
+        
         if let currentList = self.currentList {
-            Prov.listItemsProvider.addNew(listItemInput: listItemInput, list: currentList, status: status, realmData: realmData, successHandler {[weak self] tuple in guard let weakSelf = self else {return}
-                self?.onListItemAddedToProvider(tuple.listItem, status: weakSelf.status, scrollToSelection: true)
+            Prov.listItemsProvider.addNew(listItemInput: listItemInput, list: currentList, status: status, realmData: realmData, successHandler {[weak self] result in guard let weakSelf = self else {return}
+                onAddSuccess(result: result)
                 handler?() // TODO!!!!!!!!!! whats this for?
             })
             //Prov.listItemsProvider.add(listItemInput, status: status, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), token: RealmToken(token: notificationToken, realm: realm), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
