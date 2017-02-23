@@ -53,6 +53,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     fileprivate func initPriceCart() {
+        pricesView.todoController = self
         pricesView.bottomConstraint = pricesViewBottomConstraint
         // For now 70 hardcoded because pricesView hasn't animated in yet
         // NOTE this calculation works only in viewDidAppear, in viewDidLoad view includes tab bar height (but tab controller isn't set) and willAppear has a very small view height, probably because of the expand animation
@@ -201,7 +202,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     func setCartExpanded(expanded: Bool) {
-        pricesView.setExpanded(expanded: expanded, todoController: self)
+        pricesView.setExpanded(expanded: expanded)
     }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

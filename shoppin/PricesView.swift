@@ -30,6 +30,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     fileprivate(set) var originalHeight: CGFloat = 0
     fileprivate var originalPriceFont: UIFont!
     fileprivate var originalCartImgLeftConstraint: CGFloat = 0
+    fileprivate(set) var originalY: CGFloat = 0
     
     let minimizedHeight: CGFloat = 20
     
@@ -57,6 +58,8 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     var bottomConstraintMax: CGFloat = 0
 
     var expandedNew: Bool = false /// if at the top or bottom - other expanded is deprecated
+    
+    weak var todoController: TodoListItemsControllerNew?
     
     fileprivate var cartQuantity: Float = 0 {
         didSet {
@@ -123,6 +126,11 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         panRecognizer.delegate = self
         addGestureRecognizer(self.panRecognizer)
 //        translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    override func updateConstraints() {
+        super.updateConstraints()
+        self.originalY = self.y
     }
     
     // MARK: - CellUncovererDelegate
@@ -212,11 +220,25 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
                 heightConstraint.constant = expanded ? originalHeight : 0
                 UIView.animate(withDuration: 0.3, animations: {[weak self] in
                     self?.superview?.layoutIfNeeded()
-                }) 
+                }, completion: {[weak self] finished in
+                    self?.updateConstraints() // to set originalY
+                })
             } else {
                 heightConstraint.constant = expanded ? originalHeight : 0
                 superview?.layoutIfNeeded()
             }
+        }
+    }
+    
+    
+    
+    fileprivate func snap() {
+        guard let bottomConstant = bottomConstraint?.constant else {QL4("Illegal state: No bottom constraing"); return}
+        
+        if bottomConstant > bottomConstraintMax / 3 {
+            setExpanded(expanded: true)
+        } else {
+            setExpanded(expanded: false)
         }
     }
     
@@ -255,16 +277,17 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
 
         let isExpanded = bottomConstraint.constant > todoController.view.height / 2
-        setExpanded(expanded: !isExpanded, todoController: todoController)
+        setExpanded(expanded: !isExpanded)
     }
     
-    func setExpanded(expanded: Bool, todoController: TodoListItemsControllerNew) {
+    func setExpanded(expanded: Bool) {
         guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
+        guard let todoController = todoController else {QL4("No todoController"); return}
         
         expandedNew = expanded
         
         if expanded {
-            bottomConstraint.constant = y - todoController.topBar.height
+            bottomConstraint.constant = originalY - todoController.topBar.height
             
         } else {
             bottomConstraint.constant = 0
@@ -300,19 +323,6 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         }
         
     }
-    
-    fileprivate func snap() {
-        guard let bottomConstant = bottomConstraint?.constant else {QL4("Illegal state: No bottom constraing"); return}
-        
-        if bottomConstant > bottomConstraintMax / 3 {
-            bottomConstraint?.constant = bottomConstraintMax
-        } else {
-            bottomConstraint?.constant = 0
-        }
-        UIView.animate(withDuration: 0.1) {
-            self.superview?.layoutIfNeeded()
-        }
-        
-    }
+
 
 }
