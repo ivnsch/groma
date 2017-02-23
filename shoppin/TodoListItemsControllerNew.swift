@@ -173,16 +173,16 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             Prov.listItemsProvider.listItemCount(.stash, list: list, fetchMode: .memOnly, successHandler {[weak self] count in guard let weakSelf = self else {return}
                 //                    if count != self?.stashView.quantity { // don't animate if there's no change
                 // TODO maybe we should show total quantity instead of items (rows) quantity
-                weakSelf.stashView.quantity = Float(count)
-                weakSelf.pricesView.allowOpen = count > 0
-                if count == 0 {
-                    weakSelf.pricesView.setOpen(false, animated: true)
-                }
+//                weakSelf.stashView.quantity = Float(count)
+//                weakSelf.pricesView.allowOpen = count > 0
+//                if count == 0 {
+//                    weakSelf.pricesView.setOpen(false, animated: true)
+//                }
                 weakSelf.pricesView.quantities = (cart: weakSelf.pricesView.quantities.cart, stash: Float(count))
                 
                 //                    QL2("Set stash quantity: \(count), cart quantity: \(weakSelf.pricesView.quantities.cart)")
                 
-                weakSelf.stashView.updateOpenStateForQuantities(weakSelf.pricesView.quantities.cart, stashQuantity: Float(count))
+//                weakSelf.stashView.updateOpenStateForQuantities(weakSelf.pricesView.quantities.cart, stashQuantity: Float(count))
             })
         }
     }
