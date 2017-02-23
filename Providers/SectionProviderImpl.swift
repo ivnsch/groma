@@ -112,27 +112,27 @@ class SectionProviderImpl: SectionProvider {
                 Prov.listItemsProvider.invalidateMemCache()
                 handler(ProviderResult(status: .success))
                 
-                if remote {
-                    
-                    self?.remoteProvider.updateSections(sections) {remoteResult in
-                        if let timestamp = remoteResult.successResult {
-                            let updateDicts: [[String: AnyObject]] = sections.map {
-                                DBSyncable.timestampUpdateDict($0.uuid, lastServerUpdate: timestamp)
-                            }
-                            DBProv.sectionProvider.updateLastSyncTimeStamps(updateDicts) {success in
-                                if !success {
-                                    QL4("Couldn't update last server update timestamps for sections: \(sections)")
-                                }
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                                QL4("Remote call no success: \(remoteResult) items: \(sections)")
-                                Prov.listItemsProvider.invalidateMemCache()
-                                handler(result)
-                            })
-                        }
-                    }
-                }
+//                if remote {
+//                    
+//                    self?.remoteProvider.updateSections(sections) {remoteResult in
+//                        if let timestamp = remoteResult.successResult {
+//                            let updateDicts: [[String: AnyObject]] = sections.map {
+//                                DBSyncable.timestampUpdateDict($0.uuid, lastServerUpdate: timestamp)
+//                            }
+//                            DBProv.sectionProvider.updateLastSyncTimeStamps(updateDicts) {success in
+//                                if !success {
+//                                    QL4("Couldn't update last server update timestamps for sections: \(sections)")
+//                                }
+//                            }
+//                        } else {
+//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+//                                QL4("Remote call no success: \(remoteResult) items: \(sections)")
+//                                Prov.listItemsProvider.invalidateMemCache()
+//                                handler(result)
+//                            })
+//                        }
+//                    }
+//                }
             } else {
                 handler(ProviderResult(status: .databaseUnknown))
             }
