@@ -93,32 +93,14 @@ class RealmProvider {
     * Batch save, refreshing last update date
     */
     func saveObjs<T: DBSyncable>(_ objs: [T], update: Bool = false, onSaved: ((Realm) -> ())? = nil, handler: @escaping (Bool) -> ()) {
-        
-        let finished: (Bool) -> () = {success in
-            DispatchQueue.main.async(execute: {
-                handler(success)
-            })
-        }
-        
-        DispatchQueue.global(qos: .background).async {
-
-            do {
-                let realm = try Realm()
-                try realm.write {
-                    for obj in objs {
-//                        obj.lastUpdate = NSDate()
-                        realm.add(obj, update: update)
-                    }
-                }
-            } catch let error as NSError {
-                QL4("Realm error: \(error)")
-                finished(false)
-            } catch let error {
-                QL4("Realm error: \(error)")
-                finished(false)
+        doInWriteTransaction({realm -> Bool in
+            for obj in objs {
+                realm.add(obj, update: update)
             }
-
-            finished(true)
+            return true
+            
+        }) {successMaybe in
+            handler(successMaybe ?? false)
         }
     }
 
