@@ -140,11 +140,12 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     
     // Updates a section based on identity (uuid). Note that this isn't usable for order update, as updating order requires to update the order field of sections below
     func updateSection(_ section: Section) {
-        for i in 0..<sections.count {
-            if sections[i].same(section) {
-                sections[i] = section
-            }
-        }
+        // realm updates section automatically now, besides this causes also an exception because we can't edit sections outside of transaction
+//        for i in 0..<sections.count {
+//            if sections[i].same(section) {
+//                sections[i] = section
+//            }
+//        }
         tableView.reloadData()
     }
     
