@@ -20,6 +20,8 @@
 		6A10276C1E5E11D8003D2972 /* BaseQuantityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A10276A1E5E11D8003D2972 /* BaseQuantityCell.swift */; };
 		6A10276D1E5E11D8003D2972 /* BaseQuantityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A10276B1E5E11D8003D2972 /* BaseQuantityCell.xib */; };
 		6A10276F1E5E12D8003D2972 /* BasesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A10276E1E5E12D8003D2972 /* BasesDataSource.swift */; };
+		6A1027771E5E5DBF003D2972 /* ProductQuantityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1027751E5E5DBF003D2972 /* ProductQuantityController.swift */; };
+		6A1027781E5E5DBF003D2972 /* ProductQuantityController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1027761E5E5DBF003D2972 /* ProductQuantityController.xib */; };
 		6A1BBADA1E44AF5E00BC7404 /* UITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */; };
 		6A1BBAE01E44B57300BC7404 /* ListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */; };
 		6A287E821E51F4F000868244 /* ManageItemsItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */; };
@@ -465,6 +467,8 @@
 		6A10276A1E5E11D8003D2972 /* BaseQuantityCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuantityCell.swift; sourceTree = "<group>"; };
 		6A10276B1E5E11D8003D2972 /* BaseQuantityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BaseQuantityCell.xib; sourceTree = "<group>"; };
 		6A10276E1E5E12D8003D2972 /* BasesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasesDataSource.swift; sourceTree = "<group>"; };
+		6A1027751E5E5DBF003D2972 /* ProductQuantityController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductQuantityController.swift; sourceTree = "<group>"; };
+		6A1027761E5E5DBF003D2972 /* ProductQuantityController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductQuantityController.xib; sourceTree = "<group>"; };
 		6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewController.swift; sourceTree = "<group>"; };
 		6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ListItemCell.xib; path = ../ListItemCell.xib; sourceTree = "<group>"; };
 		6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsItemCell.swift; sourceTree = "<group>"; };
@@ -967,6 +971,15 @@
 				6A10276E1E5E12D8003D2972 /* BasesDataSource.swift */,
 			);
 			name = bases;
+			sourceTree = "<group>";
+		};
+		6A1027741E5E5D96003D2972 /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				6A1027751E5E5DBF003D2972 /* ProductQuantityController.swift */,
+				6A1027761E5E5DBF003D2972 /* ProductQuantityController.xib */,
+			);
+			name = controller;
 			sourceTree = "<group>";
 		};
 		6A287E851E5266F900868244 /* addEditItem */ = {
@@ -1631,6 +1644,7 @@
 		EB55675B1A86231D00CD3EC6 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				6A1027741E5E5D96003D2972 /* controller */,
 				EB75E5451CA3609C006AAEAF /* sharedUsers */,
 				EB4A38A21C87B937000714F9 /* social */,
 				EB1748D71C7E7AF70067FD16 /* invitation */,
@@ -2478,6 +2492,7 @@
 				EBA575651BCECC0000A0A825 /* QuantityView.xib in Resources */,
 				6A7C54BA1E439B2800300F8D /* ItemsController.xib in Resources */,
 				6A3A67C01E56142200B5354F /* ManageItemsUnits.storyboard in Resources */,
+				6A1027781E5E5DBF003D2972 /* ProductQuantityController.xib in Resources */,
 				EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */,
 				6A3B2B7C1E59E93600798424 /* UnitView.xib in Resources */,
 				EBD668041CED4D440055EE0B /* Stats.storyboard in Resources */,
@@ -2708,6 +2723,7 @@
 				EB37ABB91CA09B4F00FE9D7A /* PullToAddHelper.swift in Sources */,
 				6AF46EBB1E5BBBC900BBFF4C /* UnitSubmitCell.swift in Sources */,
 				EB4A38A41C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */,
+				6A1027771E5E5DBF003D2972 /* ProductQuantityController.swift in Sources */,
 				6AE34BE41E2E25B80039A2A8 /* RecipesController.swift in Sources */,
 				EBEA0CD21CA5BF3E00E68B81 /* HandlingButton.swift in Sources */,
 				6AF46EB81E5B6F7500BBFF4C /* UnitsDelegate.swift in Sources */,

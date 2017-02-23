@@ -174,7 +174,7 @@ class PickerCollectionView: UIView, UICollectionViewDelegate, UICollectionViewDe
         
         let cellIndex = cellStartToUse / totalCellHeight
         
-        delegate?.onSnap(cellIndex: Int(cellIndex) - 1)
+        delegate?.onSnap(cellIndex: max(0, Int(cellIndex) - 1))
     }
     
     

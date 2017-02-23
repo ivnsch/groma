@@ -40,6 +40,7 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
             let base = bases[indexPath.row]
             cell.baseQuantityView.base = base
             cell.baseQuantityView.bgColor = Theme.baseQuantitiesBGColor
+            cell.baseQuantityView.fgColor = Theme.baseQuantitiesFGColor
             cell.baseQuantityView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
             cell.baseQuantityView.markedToDelete = false
             cell.delegate = self
@@ -62,6 +63,7 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
         } else /*if indexPath.row == bases.count*/ {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "unitEditableCell", for: indexPath) as! UnitEditableCell
             cell.editableUnitView.backgroundColor = Theme.baseQuantitiesBGColor
+            cell.editableUnitView.nameTextField.textColor = Theme.baseQuantitiesFGColor
             cell.editableUnitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
             cell.editableUnitView.delegate = self
             

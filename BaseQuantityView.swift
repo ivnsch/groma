@@ -41,6 +41,12 @@ protocol BaseQuantityViewDelegate {
         }
     }
     
+    var fgColor: UIColor = Theme.baseQuantitiesFGColor {
+        didSet {
+            baseQuantityLabel.textColor = fgColor
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         xibSetup()
@@ -79,7 +85,7 @@ protocol BaseQuantityViewDelegate {
     
     func showSelected(selected: Bool, animated: Bool) {
         
-        let (bg, fg) = selected ? (Theme.unitsSelectedColor, UIColor.white) : (bgColor, UIColor.black)
+        let (bg, fg) = selected ? (Theme.unitsSelectedColor, UIColor.white) : (bgColor, fgColor)
         
         animIf(animated) {[weak self] in
             self?.backgroundColor = bg

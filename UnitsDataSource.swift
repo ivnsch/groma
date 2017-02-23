@@ -40,6 +40,7 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
             let unit = units[indexPath.row]
             cell.unitView.unit = unit
             cell.unitView.bgColor = Theme.unitsBGColor
+            cell.unitView.fgColor = Theme.unitsFGColor
             cell.unitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
             cell.unitView.markedToDelete = false
             cell.delegate = self
@@ -63,6 +64,7 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
         } else /*if indexPath.row == units.count*/ {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "unitEditableCell", for: indexPath) as! UnitEditableCell
             cell.editableUnitView.backgroundColor = Theme.unitsBGColor
+            cell.editableUnitView.nameTextField.textColor = Theme.unitsFGColor
             cell.editableUnitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
             cell.editableUnitView.delegate = self
 

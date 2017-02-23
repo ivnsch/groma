@@ -35,9 +35,15 @@ protocol UnitViewDelegate {
         }
     }
     
-    var bgColor: UIColor = UIColor.white {
+    var bgColor: UIColor = Theme.unitsBGColor {
         didSet {
             backgroundColor = bgColor
+        }
+    }
+    
+    var fgColor: UIColor = Theme.unitsFGColor {
+        didSet {
+            nameLabel.textColor = fgColor
         }
     }
     
@@ -79,7 +85,7 @@ protocol UnitViewDelegate {
     
     func showSelected(selected: Bool, animated: Bool) {
         
-        let (bg, fg) = selected ? (Theme.unitsSelectedColor, UIColor.white) : (bgColor, UIColor.black)
+        let (bg, fg) = selected ? (Theme.unitsSelectedColor, UIColor.white) : (bgColor, fgColor)
         
         animIf(animated) {[weak self] in
             self?.backgroundColor = bg

@@ -45,10 +45,12 @@ struct Theme {
     static let lighterGreen = UIColor(hexString: "28c75d")
     
     
-//    static let unitsBGColor = UIColor(hexString: "CAE1FF")
-    static let fractionsBGColor = UIColor.white
+    static let fractionsBGColor = UIColor.gray
     static let unitsBGColor = UIColor.white
+    static let unitsFGColor = UIColor.black
+    static let fractionsFGColor = UIColor.white
     static let baseQuantitiesBGColor = UIColor.white
+    static let baseQuantitiesFGColor = UIColor.black
     static let unitsSelectedColor = blue
     static let fractionsSelectedColor = blue
     
