@@ -89,7 +89,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         self.view.addSubview(view)
         view.fillSuperviewWidth()
         _ = view.alignBottom(self.view)
-        _ = view.heightConstraint(60)
+        _ = view.heightConstraint(70)
         view.setNeedsLayout()
         view.setNeedsUpdateConstraints()
         view.layoutIfNeeded()
@@ -140,7 +140,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             self.pricesView.setDonePrice(aggregate.cartPrice, animated: true)
             self.stashView.updateOpenStateForQuantities(aggregate.cartQuantity, stashQuantity: stashQuantity)
             
-            //            self.todoListItemsEditBottomView?.setTotalPrice(listItems.totalPriceTodoAndCart) // is this needed?
+            self.todoListItemsEditBottomView?.setTotalPrice(aggregate.todoPrice)
         })
         
 //        if let list = currentList {

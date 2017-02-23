@@ -148,24 +148,19 @@ extension Array where Element: ListItem {
         return nil
     }
     
-    public func totalPrice(_ status: ListItemStatus) -> Float {
-        return reduce(0) {price, listItem in
-            price + listItem.totalPrice(status)
-        }
-    }
+//    public func totalPrice() -> Float {
+//        return reduce(0) {price, listItem in
+//            price + listItem.totalPrice()
+//        }
+//    }
 
-    public func totalQuanityAndPrice(_ status: ListItemStatus) -> (quantity: Float, price: Float) {
+    public func totalQuanityAndPrice() -> (quantity: Float, price: Float) {
         return reduce((0, 0)) {priceAndQuantity, listItem in
             (
-                quantity: priceAndQuantity.0 + listItem.quantity(status),
-                price: priceAndQuantity.1 + listItem.totalPrice(status)
+                quantity: priceAndQuantity.0 + listItem.quantity,
+                price: priceAndQuantity.1 + listItem.totalPrice()
             )
         }
-    }
-    
-    // Total price excluding stash
-    public var totalPriceTodoAndCart: Float {
-        return totalPrice(.todo) + totalPrice(.done)
     }
     
     public func filterTodo() -> Array<Element> {
@@ -319,26 +314,6 @@ extension Results where T: ListItem {
             }
         }
         return sections.inOrder(status)
-    }
-    
-    public func totalPrice(_ status: ListItemStatus) -> Float {
-        return reduce(0) {price, listItem in
-            price + listItem.totalPrice(status)
-        }
-    }
-    
-    public func totalQuanityAndPrice(_ status: ListItemStatus) -> (quantity: Float, price: Float) {
-        return reduce((0, 0)) {priceAndQuantity, listItem in
-            (
-                quantity: priceAndQuantity.0 + listItem.quantity(status),
-                price: priceAndQuantity.1 + listItem.totalPrice(status)
-            )
-        }
-    }
-    
-    // Total price excluding stash
-    public var totalPriceTodoAndCart: Float {
-        return totalPrice(.todo) + totalPrice(.done)
     }
     
     public func filterTodo() -> Array<Element> {

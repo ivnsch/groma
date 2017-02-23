@@ -48,6 +48,7 @@ public struct ListItemsCartStashAggregate {
     public let cartQuantity: Float
     public let cartPrice: Float
     public let stashQuantity: Float
+    public let todoPrice: Float
 }
 
 class RealmListItemProvider: RealmProvider {
@@ -1156,14 +1157,21 @@ class RealmListItemProvider: RealmProvider {
             return nil
         }
         let (totalCartQuantity, totalCartPrice) = list.doneListItems.reduce((0, Float(0))) {sum, listItem in
-            (sum.0 + listItem.quantity, sum.1 + listItem.totalPrice(.done))
+            (sum.0 + listItem.quantity, sum.1 + listItem.totalPrice())
         }
         
         let totalStashQuantity = list.stashListItems.reduce(0) {sum, listItem in
             sum + listItem.quantity
         }
-
-        return ListItemsCartStashAggregate(cartQuantity: totalCartQuantity, cartPrice: totalCartPrice, stashQuantity: totalStashQuantity)
+        
+        
+        let totalTodoPrice = list.todoSections.reduce(0) {sum, section in
+            return sum + section.listItems.reduce(0) {sectionSum, listItem in
+                sectionSum + listItem.totalPrice()
+            }
+        }
+        
+        return ListItemsCartStashAggregate(cartQuantity: totalCartQuantity, cartPrice: totalCartPrice, stashQuantity: totalStashQuantity, todoPrice: totalTodoPrice)
     }
     
     // MARK: - Buy

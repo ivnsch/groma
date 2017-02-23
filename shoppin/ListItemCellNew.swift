@@ -223,7 +223,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     }
     
     fileprivate func showPrice(_ tableViewListItem: TableViewListItem, status: ListItemStatus, mode: ListItemCellMode, animated: Bool, animDelay: TimeInterval) {
-        let price = tableViewListItem.listItem.totalPrice(status)
+        let price = tableViewListItem.listItem.totalPrice()
         let hasPrice = price > 0
         let showPrice = hasPrice && mode == .increment
         if showPrice {

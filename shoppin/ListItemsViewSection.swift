@@ -59,7 +59,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
      */
     var totalPrice: Float {
         return tableViewListItems.reduce(Float(0)) {sum, item in
-            return sum + (item.swiped ? 0 : item.listItem.totalPrice(status))
+            return sum + (item.swiped ? 0 : item.listItem.totalPrice())
         }
     }
 
