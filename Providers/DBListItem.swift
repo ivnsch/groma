@@ -270,11 +270,12 @@ public class ListItem: DBSyncable, Identifiable {
     }
 
     static func createFilterUniqueInList(_ productName: String, productBrand: String, list: List) -> String {
-        return "\(createFilterList(list.uuid)) AND productOpt.productOpt.itemOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)'"
+        return "\(createFilterList(list.uuid)) AND productOpt.productOpt.productOpt.itemOpt.name == '\(productName)' AND productOpt.productOpt.productOpt.brand == '\(productBrand)'"
     }
 
+//     AND productOpt.productOpt.unit.name == '\(unit)' AND productOpt.productOpt.baseQuantity == '\(baseQuantity)'
     static func createFilterUniqueInListNotUuid(_ productName: String, productBrand: String, notUuid: String, list: List) -> String {
-        return "\(createFilterList(list.uuid)) AND productOpt.productOpt.itemOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)' AND uuid != '\(notUuid)'"
+        return "\(createFilterList(list.uuid)) AND productOpt.productOpt.productOpt.itemOpt.name == '\(productName)' AND productOpt.productOpt.productOpt.brand == '\(productBrand)' AND uuid != '\(notUuid)'"
     }
     
     // TODO!!!!!!!!!!!!!!!! is this store / quantifiable / product?
