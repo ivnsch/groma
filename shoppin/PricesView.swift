@@ -121,6 +121,8 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
 //        cellUncoverer = CellUncoverer(parentView: self, button: button, leftLayoutConstraint: leftLayoutConstraint)
 //        cellUncoverer?.delegate = self
         
+        cartImg.tintColor = UIColor.white
+        cartImg.backgroundColor = Theme.grey // seems to be necessary for the tint color to work (and only programmatically)
         
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPanCell(_:)))
         panRecognizer.delegate = self
