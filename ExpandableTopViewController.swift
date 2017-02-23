@@ -89,10 +89,13 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
             if expanded {
                 // create and add overlay
 //                let overlayTop = openInset + height
-                let overlayTop = 64 + openInset // 64 -> below nav bar
+//                let overlayTop = 64 + openInset // 64 -> below nav bar
+                let overlayTop = top
                 let overlay = createOverlay()
                 // FIXME!!! no force unwrap for tableview parent - use ?
-                overlay.frame = CGRect(x: tableView.frame.origin.x, y: overlayTop, width: tableView.frame.width, height: tableView.superview!.frame.height)
+                // TODO!!!!!!!!!!!!!!!!! harcoded height 1200 as tableView.superview!.frame.height seems unreliable - returns a short height while at this point it should be higher (it's at least what the view debugger shows).
+//                overlay.frame = CGRect(x: tableView.frame.origin.x, y: overlayTop, width: tableView.frame.width, height: tableView.superview!.frame.height)
+                overlay.frame = CGRect(x: tableView.frame.origin.x, y: overlayTop, width: tableView.frame.width, height: 1200)
                 parentController.view.insertSubview(overlay, aboveSubview: tableView)
                 self.overlay = overlay
                 
