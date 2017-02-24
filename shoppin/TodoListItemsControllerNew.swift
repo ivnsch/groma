@@ -67,7 +67,9 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             initBottomEditView()
         }
         
-        initPriceCart()
+        if cartController == nil {
+            initPriceCart()
+        }
     }
     
     override func onExpand(_ expanding: Bool) {
@@ -264,6 +266,8 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     fileprivate func addCartController() {
         let cartController = UIStoryboard.cartViewControllerNew()
+        self.cartController = cartController
+        
         cartController.onViewWillAppear = {[weak self, weak cartController] in guard let weakSelf = self else {return}
             cartController?.currentList = weakSelf.currentList
         }
@@ -277,8 +281,6 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         _ = cartController.view.heightConstraint(view.height - topBar.height - pricesView.height - 70) // 70 is the height of the buy button - not quite sure yet why we have to substract this
         _ = cartController.view.alignLeft(view)
         _ = cartController.view.alignRight(view)
-        
-        self.cartController = cartController
     }
 
     // Re-initialized top controller referencing todo / cart table view (TODO re-use initializer of top class instead - this is implemented in a rush)
