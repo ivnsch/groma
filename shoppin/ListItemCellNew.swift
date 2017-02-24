@@ -18,6 +18,7 @@ protocol ListItemCellDelegateNew: class {
     func onMinusTap(_ listItem: ListItem)
     func onPlusTap(_ listItem: ListItem)
     func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Float)
+    var isControllerInEditMode: Bool {get}
 }
 
 class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
@@ -71,6 +72,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         didSet {
             updateModeItemsVisibility(true)
             swipeToIncrementHelper?.enabled = mode == .increment
+            swipeEnabled = mode == .note
         }
     }
 
@@ -273,6 +275,12 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         let scaleStart = CGAffineTransform(scaleX: 0.00001, y: 0.00001)
         bgIconLeft.transform = scaleStart
         bgIconRight.transform = scaleStart
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
+        addGestureRecognizer(longPress)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
+        addGestureRecognizer(tap)
     }
     
     func onTapPlusMinusContainer(_ recognizer: UITapGestureRecognizer) {
@@ -404,6 +412,23 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
             delegate?.onPanQuantityUpdate(tableViewListItem, newQuantity: shownQuantity)
         } else {
             QL3("Warn: ListItemCell.onStartItemSwipe: no tableViewListItem")
+        }
+    }
+    
+    // MARK: - Touch
+    
+    func longPress(_ sender: UILongPressGestureRecognizer) {
+        switch sender.state {
+        case .began: mode = mode == .increment ? .note : .increment
+        default: break
+        }
+    }
+    
+    func onTap(_ sender: UITapGestureRecognizer) {
+        // Cancel edit mode for cells that were put in edit mode via long press
+        guard let delegate = delegate else {QL4("No delegate"); return}
+        if mode == .increment && !delegate.isControllerInEditMode {
+            mode = .note
         }
     }
 }

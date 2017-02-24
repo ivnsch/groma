@@ -344,4 +344,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: newQuantity - tableViewListItem.quantity(status))
     }
     
+    var isControllerInEditMode: Bool {
+        return isEditing
+    }
 }

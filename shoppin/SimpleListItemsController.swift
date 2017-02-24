@@ -718,6 +718,10 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
             //            self?.onTableViewChangedQuantifiables()
         })
     }
+    
+    var isControllerInEditMode: Bool {
+        return isEditing
+    }
 }
 
 

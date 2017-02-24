@@ -55,6 +55,7 @@ class SwipeableCell: UITableViewCell {
 
     fileprivate var panningRight = false
     
+    var swipeEnabled: Bool = true
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -191,6 +192,8 @@ class SwipeableCell: UITableViewCell {
     }
     
     func onPanCell(_ recognizer: UIPanGestureRecognizer) {
+        
+        guard swipeEnabled else {return}
         
         var movingHorizontally = false
         if let panStartPoint = self.panStartPoint {
