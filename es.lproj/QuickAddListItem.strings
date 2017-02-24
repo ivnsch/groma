@@ -17,5 +17,5 @@
 /* Class = "UITextField"; placeholder = "Search"; ObjectID = "tof-Zs-Hco"; */
 "tof-Zs-Hco.placeholder" = "Buscar";
 
-/* Class = "UILabel"; text = "No groups found!"; ObjectID = "vuZ-1A-edp"; */
-"vuZ-1A-edp.text" = "Aún no tienes grupos!";
+/* Class = "UILabel"; text = "No recipes found!"; ObjectID = "vuZ-1A-edp"; */
+"vuZ-1A-edp.text" = "Aún no tienes recipes!";

@@ -434,6 +434,7 @@ add_edit_list_item_edit_item = "Editar ítem";
 
 quick_add_slider_tab_products = "Productos";
 quick_add_slider_tab_groups = "Grupos";
+quick_add_slider_tab_recipes = "Recetas";
 
 
 add_button_title = "Guardar";

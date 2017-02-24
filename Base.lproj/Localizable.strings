@@ -433,6 +433,7 @@ add_edit_list_item_edit_item = "Edit Item";
 
 quick_add_slider_tab_products = "Products";
 quick_add_slider_tab_groups = "Groups";
+quick_add_slider_tab_recipes = "Recipes";
 
 
 add_button_title = "Save";
