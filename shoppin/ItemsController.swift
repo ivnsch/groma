@@ -417,6 +417,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
             //                }
         //            }
         case .toggleOpen:
+            beforeToggleTopAddController()
             if !(topQuickAddControllerManager?.controller?.onTapNavBarCloseTap() ?? false) { // if the event is not consumed by quick add
                 _ = toggleTopAddController()
             }
@@ -426,6 +427,11 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
             self.setEditing(editing, animated: true, tryCloseTopViewController: true)
         default: QL4("Not handled: \(buttonId)")
         }
+    }
+    
+    // Do actions when press on topbar +, before everything else
+    func beforeToggleTopAddController() {
+        // override
     }
     
     func onCenterTitleAnimComplete(_ center: Bool) {

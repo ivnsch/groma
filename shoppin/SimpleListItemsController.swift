@@ -552,14 +552,16 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             // TODO!!!!!!!!!!! don't pass store, list has the store!
             Prov.listItemsProvider.addToCart(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, realmData: realmData, successHandler {[weak self] (addResult: AddCartListItemResult) in
                 
+                let indexPath = IndexPath(row: addResult.listItemIndex, section: 0)
                 if addResult.isNewItem {
-                    self?.listItemsTableViewController.tableView.insertRows(at: [IndexPath(row: addResult.listItemIndex, section: 0)], with: .top)
+                    self?.listItemsTableViewController.tableView.insertRows(at: [indexPath], with: .top)
 //                    self?.listItemsTableViewController.addRow(indexPath: IndexPath(row: addResult.listItemIndex, section: 0), isNewSection: addResult.isNewSection)
                 } else {
 //                    self?.listItemsTableViewController.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: 0))
-                    self?.listItemsTableViewController.tableView.reloadRows(at: [IndexPath(row: addResult.listItemIndex, section: 0)], with: .none)
+                    self?.listItemsTableViewController.tableView.reloadRows(at: [indexPath], with: .none)
                 }
-                
+                self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: Theme.defaultRowPosition, animated: true)
+
 //                self?.updateEmptyUI()
             })
             //            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.product.category.name, sectionColor: product.product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}

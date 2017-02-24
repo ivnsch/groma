@@ -458,17 +458,20 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         
         func onAddSuccess(result: AddListItemResult) {
+            
+            let indexPath = IndexPath(row: result.listItemIndex, section: result.sectionIndex)
             if result.isNewItem {
-                listItemsTableViewController.addRow(indexPath: IndexPath(row: result.listItemIndex, section: result.sectionIndex), isNewSection: result.isNewSection)
+                listItemsTableViewController.addRow(indexPath: indexPath, isNewSection: result.isNewSection)
             } else {
-                listItemsTableViewController.updateRow(indexPath: IndexPath(row: result.listItemIndex, section: result.sectionIndex))
+                listItemsTableViewController.updateRow(indexPath: indexPath)
             }
+            listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: Theme.defaultRowPosition, animated: true)
             
             updateEmptyUI()
         }
         
         if let currentList = self.currentList {
-            Prov.listItemsProvider.addNew(listItemInput: listItemInput, list: currentList, status: status, realmData: realmData, successHandler {[weak self] result in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.addNew(listItemInput: listItemInput, list: currentList, status: status, realmData: realmData, successHandler {result in
                 onAddSuccess(result: result)
                 handler?() // TODO!!!!!!!!!! whats this for?
             })
@@ -611,12 +614,14 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             // TODO!!!!!!!!!!! don't pass store, list has the store!
             Prov.listItemsProvider.addNew(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, status: status, realmData: realmData, successHandler {[weak self] (addResult: AddListItemResult) in
                 
+                let indexPath = IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex)
                 if addResult.isNewItem {
                     self?.listItemsTableViewController.addRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex), isNewSection: addResult.isNewSection)
                 } else {
                     self?.listItemsTableViewController.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex))
                 }
-                 
+                self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: Theme.defaultRowPosition, animated: true)
+
                 self?.updateEmptyUI()
             })
 //            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.product.category.name, sectionColor: product.product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}

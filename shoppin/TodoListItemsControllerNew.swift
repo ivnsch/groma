@@ -271,8 +271,6 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         cartController.view.translatesAutoresizingMaskIntoConstraints = false
         addChildViewControllerAndView(cartController)
         
-        topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: cartController.tableView)
-        
         cartController.delegate = self
         
         _ = cartController.view.positionBelowView(pricesView)
@@ -286,7 +284,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     // Re-initialized top controller referencing todo / cart table view (TODO re-use initializer of top class instead - this is implemented in a rush)
     fileprivate func updateTopQuickAddControllerManager(tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {
         let top = topBar.frame.height
-        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, openInset: top, closeInset: top, parentViewController: self, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: !pricesView.expandedNew, openInset: top, closeInset: top, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
             if let weakSelf = self {
@@ -297,6 +295,19 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         }
         manager.delegate = self
         return manager
+    }
+    
+    // TODO optimize this, re-initializing top controller each time may not be best performance
+    override func beforeToggleTopAddController() {
+        if pricesView.expandedNew {
+            if let cartController = cartController {
+                topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: cartController.tableView)
+            } else {
+                QL4("Illegal state: prices view expanded but no cart controller")
+            }
+        } else {
+            topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: tableView)
+        }
     }
     
     // MARK: - ExpandableTopViewControllerDelegate
