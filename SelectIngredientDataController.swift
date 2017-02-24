@@ -214,7 +214,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         submitView.setButtonTitle(title: "select_ingredient_data_submit")
         parentViewForAddButton.addSubview(submitView)
         
-        anim(3) {
+        anim(Theme.defaultAnimDuration) {
             submitView.y = parentViewForAddButton.frame.maxY - height
 //            submitView.height = height
         }
