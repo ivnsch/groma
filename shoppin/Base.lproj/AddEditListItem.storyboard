@@ -21,27 +21,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="NrU-fN-qdF" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="159" y="106" width="120" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="HqM-K2-C7L" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
-                                    <constraint firstAttribute="width" constant="120" id="qrp-kB-pXC"/>
-                                </constraints>
-                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="next"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
-                                        <integer key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                        <integer key="value" value="40"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <outlet property="delegate" destination="CI5-0y-OAL" id="F07-38-4aB"/>
-                                </connections>
-                            </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="List section" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="LineAutocompleteTextField" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="25" y="66" width="255" height="40"/>
                                 <constraints>
@@ -62,27 +41,6 @@
                                     <outlet property="autoCompleteDataSource" destination="CI5-0y-OAL" id="B3X-dn-HRa"/>
                                     <outlet property="autoCompleteDelegate" destination="CI5-0y-OAL" id="qlf-hn-ADn"/>
                                     <outlet property="delegate" destination="CI5-0y-OAL" id="B5C-yx-o97"/>
-                                </connections>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Quantity" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vWS-vL-cob" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="25" y="106" width="120" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="6uo-WM-0CH" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
-                                    <constraint firstAttribute="width" constant="120" id="q9d-EY-Wvb"/>
-                                </constraints>
-                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
-                                        <integer key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                        <integer key="value" value="40"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <outlet property="delegate" destination="CI5-0y-OAL" id="b6s-G1-GNp"/>
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Brand (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5b-Sz-J4o" customClass="LineAutocompleteTextField" customModule="groma" customModuleProvider="target">
@@ -119,7 +77,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="25" y="146" width="325" height="40"/>
+                                <rect key="frame" x="25" y="156" width="235" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
                                 </constraints>
@@ -162,39 +120,68 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eS5-Cx-hK7">
+                                <rect key="frame" x="0.0" y="106" width="375" height="50"/>
+                                <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Hoz-cP-VPS"/>
+                                </constraints>
+                            </view>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="y3W-hW-EO2" customClass="LineTextField" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="280" y="156" width="70" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="A2j-Cc-Oys"/>
+                                    <constraint firstAttribute="height" constant="40" id="lSf-Pq-AHa" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
+                                </constraints>
+                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="decimalPad" returnKeyType="done"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="CI5-0y-OAL" id="DQX-JH-hfI"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" constant="25" id="1GZ-LS-nJw" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="top" secondItem="If7-20-6Xv" secondAttribute="top" constant="8" id="5vc-zY-2WJ"/>
+                            <constraint firstItem="Yfv-oA-AU6" firstAttribute="top" secondItem="eS5-Cx-hK7" secondAttribute="bottom" id="7ph-aU-CSg"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" id="8QS-gR-4dR"/>
-                            <constraint firstItem="vWS-vL-cob" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="DJF-Fi-30J"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="width" secondItem="Xjl-8k-ZTY" secondAttribute="width" id="Ixd-KJ-nvO"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="height" secondItem="Xjl-8k-ZTY" secondAttribute="height" id="KLz-mz-O6h"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="bottom" secondItem="CcK-74-2fx" secondAttribute="bottom" id="LLD-Xt-dbo"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="Xjl-8k-ZTY" secondAttribute="top" id="Lj3-kE-rMA"/>
-                            <constraint firstItem="Yfv-oA-AU6" firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" id="MY4-WA-cwe"/>
+                            <constraint firstItem="y3W-hW-EO2" firstAttribute="baseline" secondItem="Yfv-oA-AU6" secondAttribute="baseline" id="Mrf-Dx-rgd"/>
                             <constraint firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" constant="14" id="PTH-u2-0Wm"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="bottom" secondItem="Xjl-8k-ZTY" secondAttribute="bottom" id="Qj0-os-Vco"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="top" id="Sha-Jh-tLV"/>
                             <constraint firstItem="r5b-Sz-J4o" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="25" id="Sra-Uc-AlA" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
-                            <constraint firstItem="Yfv-oA-AU6" firstAttribute="top" secondItem="vWS-vL-cob" secondAttribute="bottom" id="Tr7-q0-PTa"/>
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="top" secondItem="r5b-Sz-J4o" secondAttribute="bottom" id="Uys-Mm-t4a"/>
                             <constraint firstItem="Yfv-oA-AU6" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="VUC-z5-1Dn"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="leading" secondItem="CcK-74-2fx" secondAttribute="leading" id="XB8-fm-XNW"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="baseline" secondItem="i1w-xi-aFz" secondAttribute="baseline" id="ZXj-Jt-gIn"/>
+                            <constraint firstItem="y3W-hW-EO2" firstAttribute="leading" secondItem="Yfv-oA-AU6" secondAttribute="trailing" constant="20" id="ZaE-Dl-ZCp"/>
+                            <constraint firstItem="eS5-Cx-hK7" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" id="bq9-ZF-eLg"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" id="chq-t4-DD0"/>
-                            <constraint firstItem="vWS-vL-cob" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="dYT-Ag-kT7"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" id="eXm-PX-v89"/>
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="centerX" secondItem="If7-20-6Xv" secondAttribute="centerX" id="ei9-BK-Nvk"/>
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="fUq-lg-gn6"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" id="g2U-te-7jt"/>
+                            <constraint firstAttribute="trailing" secondItem="eS5-Cx-hK7" secondAttribute="trailing" id="g9S-77-apx"/>
+                            <constraint firstItem="y3W-hW-EO2" firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" id="iDd-Nq-czh"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="Xjl-8k-ZTY" secondAttribute="trailing" id="lg7-IJ-coN"/>
                             <constraint firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" constant="14" id="m3p-bh-n5t"/>
-                            <constraint firstItem="NrU-fN-qdF" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="pJC-Cd-QdD"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="top" secondItem="CcK-74-2fx" secondAttribute="top" id="qie-lk-cf9"/>
-                            <constraint firstItem="NrU-fN-qdF" firstAttribute="leading" secondItem="vWS-vL-cob" secondAttribute="trailing" constant="14" id="t15-nq-DuK"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" id="tXT-pg-CSu"/>
+                            <constraint firstItem="eS5-Cx-hK7" firstAttribute="top" secondItem="CcK-74-2fx" secondAttribute="bottom" id="ufH-rt-mUp"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="Xjl-8k-ZTY" secondAttribute="leading" id="wmD-8b-t71"/>
                             <constraint firstItem="r5b-Sz-J4o" firstAttribute="top" secondItem="dwL-LH-4dI" secondAttribute="bottom" id="wtZ-u8-wCv"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="top" id="xIx-72-dxy"/>
@@ -222,15 +209,15 @@
                         <outlet property="addNewItemLabel" destination="dwL-LH-4dI" id="Wbj-R8-UgF"/>
                         <outlet property="brandInput" destination="r5b-Sz-J4o" id="Nwq-Vw-9MC"/>
                         <outlet property="noteInput" destination="Yfv-oA-AU6" id="5Hv-hJ-1gn"/>
-                        <outlet property="priceInput" destination="NrU-fN-qdF" id="VSS-IP-I2d"/>
-                        <outlet property="quantityInput" destination="vWS-vL-cob" id="Jgc-GC-VfN"/>
+                        <outlet property="priceInput" destination="y3W-hW-EO2" id="TPH-RX-eBF"/>
+                        <outlet property="quantitiesContainer" destination="eS5-Cx-hK7" id="oua-Y4-fsi"/>
                         <outlet property="sectionColorButton" destination="CcK-74-2fx" id="ZsK-bj-Mmn"/>
                         <outlet property="sectionInput" destination="i1w-xi-aFz" id="8ba-aL-isS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tgx-6o-HeU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="538" y="228"/>
+            <point key="canvasLocation" x="536.79999999999995" y="227.13643178410797"/>
         </scene>
     </scenes>
 </document>

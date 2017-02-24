@@ -134,7 +134,7 @@ class AddRecipeIngredientCell: UITableViewCell {
         productQuantityController.setUnitPickerOpen(false)
         productQuantityController.setBasesPickerOpen(false)
         
-        if let currentUnitInput = productQuantityController.currentUnitInput {
+        if let currentUnitInput = productQuantityController.currentUnitInput, !currentUnitInput.isEmpty {
             delegate?.addUnit(name: currentUnitInput) {isNew in
                 if isNew {
                     productQuantityController.appendNewUnitCell()
@@ -143,7 +143,7 @@ class AddRecipeIngredientCell: UITableViewCell {
             }
         }
         
-        if let currentBaseInput = productQuantityController.currentBaseInput {
+        if let currentBaseInput = productQuantityController.currentBaseInput, !currentBaseInput.isEmpty {
             delegate?.addBaseQuantity(stringVal: currentBaseInput) {isNew in
                 if isNew {
                     productQuantityController.appendNewBaseCell()

@@ -10,6 +10,7 @@ import UIKit
 import SwiftValidator
 import QorumLogs
 import Providers
+import RealmSwift
 
 protocol AddEditListItemViewControllerDelegate: class {
     
@@ -69,7 +70,7 @@ struct AddEditItem {
         self.product = item.product.product
         self.storeProduct = item.product
         self.item = item.product.product.product.item
-        self.quantity = item.quantity(currentStatus)
+        self.quantity = item.quantity
         self.sectionName = item.section.name
         self.sectionColor = item.section.color
         self.note = item.note
@@ -134,8 +135,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     @IBOutlet weak var sectionColorButton: LineTextField!
 
     @IBOutlet weak var priceInput: LineTextField!
-
-    @IBOutlet weak var quantityInput: LineTextField!
     
     @IBOutlet weak var titleLabel: UILabel!
 
@@ -165,9 +164,16 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     @IBOutlet weak var noteInput: LineTextField!
 
-    
+    @IBOutlet weak var quantitiesContainer: UIView!
+
+    fileprivate var productQuantityController: ProductQuantityController?
+
     weak var delegate: AddEditListItemViewControllerDelegate?
     
+    fileprivate var currentQuantity: Float = 0
+    fileprivate var currentUnit: String = ""
+    fileprivate var currentBase: String = ""
+
     fileprivate var showingColorPicker: FlatColorPickerController?
 //    private var showingNoteInputPopup: SimpleInputPopupController?
 
@@ -220,7 +226,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //                    sectionLabel.text = categoryText
                     sectionInput.placeholder = categoryPlaceHolderText
 //                    quantityLabel.hidden = true
-                    quantityInput.isHidden = true
+//                    quantityInput.isHidden = true
 //                    quantityPlusButton.hidden = true
 //                    quantityMinusButton.hidden = true
                 }
@@ -252,6 +258,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         sectionColorButton.textColor = UIColor.gray
         sectionColorButton.text = trans("generic_color") // string from storyboard localization doesn't work, seems to be xcode bug
         
+        configQuantifiablesView()
+        
         onViewDidLoad?()
         
         initValidator()
@@ -264,6 +272,30 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
         onDidLoad?()
 //        updatePlanLeftQuantity(0) // no quantity yet -> 0
+        
+        initGlobalTap()
+    }
+    
+    fileprivate func initGlobalTap() {
+        let tap = UITapGestureRecognizer()
+        tap.cancelsTouchesInView = false
+        tap.delegate = self
+        tap.addTarget(self, action: #selector(onTapView(_:)))
+        view.addGestureRecognizer(tap)
+    }
+    
+    func configQuantifiablesView() {
+        let productQuantityController = ProductQuantityController()
+        
+        productQuantityController.delegate = self
+        
+        productQuantityController.view.translatesAutoresizingMaskIntoConstraints = false
+        productQuantityController.view.backgroundColor = UIColor.clear
+        addChildViewController(productQuantityController)
+        quantitiesContainer.addSubview(productQuantityController.view)
+        productQuantityController.view.fillSuperview()
+        
+        self.productQuantityController = productQuantityController
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
@@ -276,6 +308,37 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     func focusFirstTextField() {
         brandInput.becomeFirstResponder()
+    }
+    
+    func onTapView(_ tap: UITapGestureRecognizer) {
+        submitUnitOrBasePickers()
+    }
+    
+    
+    fileprivate func submitUnitOrBasePickers() {
+        
+        guard let productQuantityController = productQuantityController else {QL4("No product quantity controller"); return}
+        
+        productQuantityController.setUnitPickerOpen(false)
+        productQuantityController.setBasesPickerOpen(false)
+        
+        if let currentUnitInput = productQuantityController.currentUnitInput, !currentUnitInput.isEmpty {
+            addUnit(name: currentUnitInput) {isNew in
+                if isNew {
+                    productQuantityController.appendNewUnitCell()
+                }
+                productQuantityController.currentUnitInput = nil
+            }
+        }
+        
+        if let currentBaseInput = productQuantityController.currentBaseInput, !currentBaseInput.isEmpty {
+            addBaseQuantity(stringVal: currentBaseInput) {isNew in
+                if isNew {
+                    productQuantityController.appendNewBaseCell()
+                }
+                productQuantityController.currentBaseInput = nil
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -299,7 +362,11 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         brandInput.text = item.product?.product.brand ?? ""
         sectionInput.text = item.sectionName
         sectionColorButton.textColor = item.sectionColor
-        quantityInput.text = String(item.quantity)
+        
+        // TODO!!!!!!!!!!!!!!!!! redundancy - review if we really need to return quantity in delegate as well as pass here
+        currentQuantity = item.quantity
+        productQuantityController?.quantity = item.quantity
+        
         priceInput.text = item.storeProduct?.price.toString(2)
         noteInput.text = item.note
         // TODO!!!!!!!!!!!!!!! quantifiable product - unit?
@@ -308,7 +375,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     fileprivate func initTextFieldPlaceholders() {
         brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
         sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
-        quantityInput.attributedPlaceholder = NSAttributedString(string: quantityInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
         priceInput.attributedPlaceholder = NSAttributedString(string: priceInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
         noteInput.attributedPlaceholder = NSAttributedString(string: noteInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
     }
@@ -324,17 +390,17 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         brandInput.text = planItem.product.brand
         sectionInput.text = planItem.product.item.category.name
         sectionColorButton.textColor = planItem.product.item.category.color
-        quantityInput.text = String(planItem.quantity)
+//        quantityInput.text = String(planItem.quantity)
     }
     
     fileprivate func setInputsDefaultValues() {
-        quantityInput.text = "1"
+//        quantityInput.text = "1"
     }
     
     fileprivate func initValidator() {
         let validator = Validator()
         validator.registerField(sectionInput, rules: [NotEmptyTrimmedRule(message: trans("validation_section_name_not_empty"))])
-        validator.registerField(quantityInput, rules: [NotEmptyTrimmedRule(message: trans("validation_quantity_not_empty"))])
+//        validator.registerField(quantityInput, rules: [NotEmptyTrimmedRule(message: trans("validation_quantity_not_empty"))])
 
         if modus == .listItem {
             validator.registerField(priceInput, rules: [NotEmptyTrimmedRule(message: trans("validation_price_not_empty"))])
@@ -382,7 +448,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }()
             
-            if let price = priceMaybe, let quantityText = quantityInput.text, let quantity = quantityText.floatValue, let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
+            if let price = priceMaybe, let quantity = productQuantityController?.quantity/*, let quantityText = quantityInput.text, let quantity = quantityText.floatValue*/, let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
+                
+                
                 
                 // for now disabled due to new designs
 //                let baseQuantity = scaleInputs?.baseQuantity ?? 1
@@ -397,7 +465,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 delegate?.onOkTap(price, quantity: quantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, editingItem: editingItem?.model)
                 
             } else {
-                QL4("Validation was not implemented correctly, price: \(priceInput.text), quantity: \(quantityInput.text), section: \(sectionInput.text), brand: \(brandInput.text), sectionColor: \(sectionColorButton.textColor)")
+                QL4("Validation was not implemented correctly, price: \(priceInput.text), quantity: \(productQuantityController?.quantity), brand: \(brandInput.text), sectionColor: \(sectionColorButton.textColor)")
             }
         }
     }
@@ -407,7 +475,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             submit()
             sender.resignFirstResponder()
         } else {
-            let textFields = [brandInput, sectionInput, quantityInput, priceInput, noteInput] as [UITextField]
+            let textFields = [brandInput, sectionInput, priceInput, noteInput] as [UITextField]
             if let index = textFields.index(of: sender) {
                 if let next = textFields[safe: index + 1] {
                     next.becomeFirstResponder()
@@ -418,13 +486,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     func clearInputs() {
-        for field in [sectionInput, quantityInput, priceInput] as [UITextField] {
+        for field in [sectionInput, priceInput] as [UITextField] {
             field.text = ""
         }
     }
     
     func dismissKeyboard(_ sender: AnyObject?) {
-        for field in [sectionInput, quantityInput, priceInput] as [UITextField] {
+        for field in [sectionInput, priceInput] as [UITextField] {
             _ = field.resignFirstResponder()
         }
     }
@@ -797,4 +865,90 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //        }
 //    }
 ///////////////////////////////////////////////////////////////////////////
+}
+
+
+
+// MARK: - ProductQuantityControlleDelegate
+
+extension AddEditListItemViewController: ProductQuantityControlleDelegate {
+    
+    func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void) {
+        Prov.unitProvider.units(successHandler {units in
+            handler(units)
+        })
+    }
+    
+    func addUnit(name: String, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.getOrCreate(name: name, successHandler {tuple in
+            handler(tuple.isNew)
+        })
+    }
+    
+    func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.delete(name: name, successHandler {
+            handler(true)
+        })
+    }
+    
+    
+    func baseQuantities(_ handler: @escaping (RealmSwift.List<BaseQuantity>?) -> Void) {
+        Prov.unitProvider.baseQuantities(successHandler {bases in
+            handler(bases)
+        })
+    }
+    
+    func addBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.getOrCreate(baseQuantity: stringVal, successHandler {tuple in
+            handler(tuple.isNew)
+        })
+    }
+    
+    func deleteBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.delete(baseQuantity: stringVal, successHandler {
+            handler(true)
+        })
+    }
+    
+    
+    var quantity: Float {
+        return currentQuantity
+    }
+    
+    
+    func onChangeUnit(unit: String?) {
+        currentUnit = unit ?? ""
+    }
+    
+    func onChangeBaseQuantity(baseQuantity: String?) {
+        currentBase = baseQuantity ?? ""
+    }
+    
+    func onChangeQuantity(quantity: Float) {
+        currentQuantity = quantity
+    }
+    
+    
+    var parentForPickers: UIView {
+        return self.view
+    }
+}
+
+
+
+// MARK: - Touch
+
+extension AddEditListItemViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    /// Tap to dismiss shouldn't block the autocompletion cells to receive touch
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if (touch.view.map{$0.hasAncestor(type: MyAutocompleteCell.self)} ?? false) {
+            return false
+        }
+        return true
+    }
 }
