@@ -188,7 +188,7 @@ class DimensionsManager {
         case .verySmall: return 54
         case .small: return 54
         case .middle: return 60
-        case .large: return 70
+        case .large: return 60
         }
     }
     

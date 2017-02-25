@@ -278,7 +278,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         cartController.delegate = self
         
         _ = cartController.view.positionBelowView(pricesView)
-        _ = cartController.view.heightConstraint(view.height - topBar.height - pricesView.height - 70) // 70 is the height of the buy button - not quite sure yet why we have to substract this
+        _ = cartController.view.heightConstraint(view.height - topBar.height - pricesView.height - 60) // 70 is the height of the buy button - not quite sure yet why we have to substract this
         _ = cartController.view.alignLeft(view)
         _ = cartController.view.alignRight(view)
     }
