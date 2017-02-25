@@ -280,6 +280,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         addGestureRecognizer(longPress)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
+        tap.cancelsTouchesInView = false
         addGestureRecognizer(tap)
     }
     
