@@ -12,6 +12,6 @@ class LeftRightBigPaddingConstraint: NSLayoutConstraint {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.constant = DimensionsManager.leftRightPaddingConstraint
+        self.constant = DimensionsManager.leftRightBigPaddingConstraint
     }
 }

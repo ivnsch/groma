@@ -104,6 +104,15 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xxj-JB-Bmd">
                                 <rect key="frame" x="0.0" y="607" width="375" height="60"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FPw-VW-9Ib">
+                                        <rect key="frame" x="20" y="10" width="335" height="40"/>
+                                        <color key="backgroundColor" red="0.15686274510000001" green="0.78039215689999997" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="25"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lzh-3J-7ty" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                         <rect key="frame" x="355" y="30" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -115,38 +124,57 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oYb-WW-vJz" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="19" width="31" height="22"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Juy-Wa-8fi" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="30" y="0.0" width="345" height="60"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Buy">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="fontType">
                                                 <integer key="value" value="50"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Juy-Wa-8fi">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xOD-7w-8YI" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="345" height="60"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <connections>
-                                            <action selector="onAddToInventoryTap:" destination="Jkv-5K-pqw" eventType="touchUpInside" id="ToD-ff-Iaz"/>
-                                        </connections>
+                                        <state key="normal" title="Price">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="50"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k9L-OO-HB6">
+                                        <rect key="frame" x="164" y="15" width="46" height="30"/>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.1215686275" green="0.67450980390000004" blue="0.41568627450000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="oYb-WW-vJz" firstAttribute="leading" secondItem="Xxj-JB-Bmd" secondAttribute="leading" constant="20" id="2Lv-Cn-xXj"/>
+                                    <constraint firstItem="FPw-VW-9Ib" firstAttribute="top" secondItem="Xxj-JB-Bmd" secondAttribute="top" constant="10" id="46F-66-WXs"/>
                                     <constraint firstAttribute="trailing" secondItem="Lzh-3J-7ty" secondAttribute="trailing" constant="20" id="4fq-nq-Usg"/>
+                                    <constraint firstItem="k9L-OO-HB6" firstAttribute="leading" secondItem="Xxj-JB-Bmd" secondAttribute="leading" id="8rg-NR-0rc"/>
                                     <constraint firstAttribute="bottom" secondItem="Juy-Wa-8fi" secondAttribute="bottom" id="Dxl-Bj-QdB"/>
+                                    <constraint firstItem="xOD-7w-8YI" firstAttribute="top" secondItem="Xxj-JB-Bmd" secondAttribute="top" id="Gge-3b-QC4"/>
+                                    <constraint firstAttribute="trailing" secondItem="k9L-OO-HB6" secondAttribute="trailing" id="H59-XU-Cyh"/>
                                     <constraint firstAttribute="height" constant="60" id="LsL-Ma-0NL"/>
                                     <constraint firstItem="Juy-Wa-8fi" firstAttribute="width" secondItem="Xxj-JB-Bmd" secondAttribute="width" id="MbA-v8-f5D"/>
                                     <constraint firstItem="Lzh-3J-7ty" firstAttribute="centerY" secondItem="Xxj-JB-Bmd" secondAttribute="centerY" id="Mbg-xF-269"/>
-                                    <constraint firstItem="Juy-Wa-8fi" firstAttribute="leading" secondItem="Xxj-JB-Bmd" secondAttribute="leading" id="beh-Lt-Ibo"/>
+                                    <constraint firstAttribute="trailing" secondItem="xOD-7w-8YI" secondAttribute="trailing" constant="30" id="NEd-vi-KPP" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                                    <constraint firstItem="xOD-7w-8YI" firstAttribute="leading" secondItem="Xxj-JB-Bmd" secondAttribute="leading" id="T7P-KQ-2xx"/>
+                                    <constraint firstItem="k9L-OO-HB6" firstAttribute="top" secondItem="Xxj-JB-Bmd" secondAttribute="top" id="VVo-nI-mdj"/>
+                                    <constraint firstAttribute="bottom" secondItem="k9L-OO-HB6" secondAttribute="bottom" id="bZq-gl-XVd"/>
+                                    <constraint firstItem="Juy-Wa-8fi" firstAttribute="leading" secondItem="Xxj-JB-Bmd" secondAttribute="leading" constant="30" id="beh-Lt-Ibo" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                                    <constraint firstAttribute="trailing" secondItem="FPw-VW-9Ib" secondAttribute="trailing" constant="20" id="cnn-hB-wbf" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                     <constraint firstItem="Juy-Wa-8fi" firstAttribute="top" secondItem="Xxj-JB-Bmd" secondAttribute="top" id="fJK-o3-27r"/>
+                                    <constraint firstAttribute="bottom" secondItem="xOD-7w-8YI" secondAttribute="bottom" id="gM2-yP-ptB"/>
                                     <constraint firstItem="Lzh-3J-7ty" firstAttribute="centerY" secondItem="Xxj-JB-Bmd" secondAttribute="centerY" id="iJ2-RM-bje"/>
-                                    <constraint firstItem="oYb-WW-vJz" firstAttribute="centerY" secondItem="Xxj-JB-Bmd" secondAttribute="centerY" id="iby-0I-HnO"/>
+                                    <constraint firstItem="FPw-VW-9Ib" firstAttribute="leading" secondItem="Xxj-JB-Bmd" secondAttribute="leading" constant="20" id="jqF-lJ-cyD" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                     <constraint firstAttribute="trailing" secondItem="Juy-Wa-8fi" secondAttribute="trailing" id="siu-Ep-eP3"/>
+                                    <constraint firstAttribute="bottom" secondItem="FPw-VW-9Ib" secondAttribute="bottom" constant="10" id="v9O-b6-Jzo"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -167,12 +195,12 @@
                     </navigationItem>
                     <connections>
                         <outlet property="buyViewHeightConstraint" destination="LsL-Ma-0NL" id="JKN-cL-vSY"/>
-                        <outlet property="totalDonePriceLabel" destination="Lzh-3J-7ty" id="pad-Ca-PAm"/>
+                        <outlet property="totalDonePriceButton" destination="xOD-7w-8YI" id="U9G-iV-hph"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DAF-jG-58V" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1336" y="379"/>
+            <point key="canvasLocation" x="1335.2" y="378.26086956521743"/>
         </scene>
         <!--Todo List Items Controller New-->
         <scene sceneID="u1H-x0-K3I">

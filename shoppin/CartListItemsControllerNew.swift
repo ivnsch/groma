@@ -20,7 +20,7 @@ protocol CartListItemsControllerDelegate: class {
 
 class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizerDelegate {
 
-    @IBOutlet weak var totalDonePriceLabel: UILabel!
+    @IBOutlet weak var totalDonePriceButton: UIButton!
     @IBOutlet weak var buyViewHeightConstraint: NSLayoutConstraint!
     
     var delegate: CartListItemsControllerDelegate?
@@ -41,7 +41,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
         guard let list = currentList else {QL4("No list"); return}
 
         Prov.listItemsProvider.calculateCartStashAggregate(list: list, successHandler {aggregate in
-            self.totalDonePriceLabel.text = aggregate.cartPrice.toLocalCurrencyString()
+            self.totalDonePriceButton.setTitle(aggregate.cartPrice.toLocalCurrencyString(), for: .normal)
         })
     }
     
