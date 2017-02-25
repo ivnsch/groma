@@ -1299,6 +1299,15 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
+    func updateNew(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<(UpdateListItemResult)>) -> Void) {
+        
+        switch DBProv.listItemProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: list, realmData: realmData) {
+        case .ok(let updateResult): handler(ProviderResult(status: .success, sucessResult: updateResult))
+        case .err(let e):
+            QL4("Error in update list items: \(e)")
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
     
     /////////////////////////////////////////////////////////////
     // Cart

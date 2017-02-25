@@ -259,7 +259,7 @@ class RealmSectionProvider: RealmProvider {
     }
     
     // add/update and save (TODO better method name)
-    func mergeOrCreateCartSectionSync(_ sectionName: String, sectionColor: UIColor, possibleNewOrder: ListItemStatusOrder?, list: List, realmData: RealmData?, doTransaction: Bool = true) -> ProvResult<AddSectionPlainResult, DatabaseError> {
+    func mergeOrCreateSectionSync(_ sectionName: String, sectionColor: UIColor, possibleNewOrder: ListItemStatusOrder?, list: List, realmData: RealmData?, doTransaction: Bool = true) -> ProvResult<AddSectionPlainResult, DatabaseError> {
         
         func transactionContent(realm: Realm) -> ProvResult<AddSectionPlainResult, DatabaseError>? {
             

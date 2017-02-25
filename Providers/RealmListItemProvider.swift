@@ -24,6 +24,11 @@ public struct AddListItemResult {
     public let sectionIndex: Int
 }
 
+public struct UpdateListItemResult {
+    public let listItem: ListItem
+    public let replaced: Bool
+}
+
 public struct AddCartListItemResult {
     public let listItem: ListItem
     public let section: Section
@@ -375,6 +380,36 @@ class RealmListItemProvider: RealmProvider {
 
             handler(removedCountMaybe.map{$0 > 0} ?? false)
         }, objType: ListItem.self)
+    }
+    
+    // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
+    // TODO!!!!!!!!!!!!  messy implementation - if doOwnTransaction is false it shouldn't be possible to pass nil realm. Maybe it's actually not necessary to pass realm around when everything has to be in the same transaction(check this)
+    func deletePossibleListItemWithUniqueSync(_ productName: String, productBrand: String, notUuid: String, list: List, realmData: RealmData?, doTransaction: Bool = true) -> Bool {
+        
+        func transactionContent(realm: Realm) -> Bool {
+            return removeReturnCountSync(realm, pred: ListItem.createFilterUniqueInListNotUuid(productName, productBrand: productBrand, notUuid: notUuid, list: list), objType: ListItem.self).map {removedCount in
+                if removedCount > 0 {
+                    QL2("Found list item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
+                }
+                return removedCount > 0
+                } ?? {
+                    QL4("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
+                    return false
+            }()
+        }
+        
+        if doTransaction {
+            return doInWriteTransactionSync(realmData: realmData) {realm in
+                return transactionContent(realm: realm)
+            } ?? false
+        } else {
+            if let realm = realmData?.realm {
+                return transactionContent(realm: realm)
+            } else {
+                QL4("Invalid state: when do own transaction == false a realm should be passed")
+                return false
+            }
+        }
     }
     
     // hm...
@@ -966,7 +1001,7 @@ class RealmListItemProvider: RealmProvider {
     /// Quick add
     func addToCartSync(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> (AddCartListItemResult)? {
 
-        switch DBProv.sectionProvider.mergeOrCreateCartSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, possibleNewOrder: nil, list: list, realmData: realmData) {
+        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, possibleNewOrder: nil, list: list, realmData: realmData) {
             
         case .ok(let sectionResult):
             
@@ -1086,6 +1121,41 @@ class RealmListItemProvider: RealmProvider {
         handler(createSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData))
     }
     
+    func update(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, realmData: RealmData) -> ProvResult<UpdateListItemResult, DatabaseError> {
+        
+        func doInTransaction() ->  ProvResult<UpdateListItemResult, DatabaseError> {
+            
+            let foundAndDeletedListItem = DBProv.listItemProvider.deletePossibleListItemWithUniqueSync(listItemInput.name, productBrand: listItemInput.brand, notUuid: updatingListItem.uuid, list: list, realmData: realmData, doTransaction: false)
+            
+            // update or create section
+            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: false)
+            
+            // update or create quantifiable product and dependencies
+            let productResult = DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false, realmData: realmData, doTransaction: false)
+            
+            func onHasSectionAndProduct(sectionResult: AddSectionPlainResult, product: QuantifiableProduct) -> UpdateListItemResult {
+                
+                // update list item
+                updatingListItem.product.price = listItemInput.storeProductInput.price
+                updatingListItem.product.product = product
+                updatingListItem.section = sectionResult.section
+                updatingListItem.note = listItemInput.note ?? ""
+                
+                return UpdateListItemResult(listItem: updatingListItem, replaced: foundAndDeletedListItem)
+            }
+            
+            let joinResult = sectionResult.join(result: productResult).map{sectionResult, product in
+                onHasSectionAndProduct(sectionResult: sectionResult, product: product)
+            }
+            
+            return joinResult
+        }
+        
+        return doInWriteTransactionSync(realmData: realmData) {realm in
+            return doInTransaction()
+        } ?? .err(.unknown)
+    }
+
     public func deleteSync(indexPath: IndexPath, status: ListItemStatus, list: List, realmData: RealmData) -> DeleteListItemResult? {
         let sections = list.sections(status: status)
         return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> DeleteListItemResult? in

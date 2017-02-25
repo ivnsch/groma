@@ -129,6 +129,8 @@ public protocol ListItemProvider {
     
     func addToCart(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, realmData: RealmData, _ handler: @escaping (ProviderResult<AddCartListItemResult>) -> Void)
     
+    func updateNew(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<(UpdateListItemResult)>) -> Void)
+    
     func switchStatusNew(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void)
     
     func deleteNew(indexPath: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<DeleteListItemResult>) -> Void)

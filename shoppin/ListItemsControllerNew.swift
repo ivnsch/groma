@@ -497,15 +497,19 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     // Note: don't use this to reorder sections, this doesn't update section order
     // Note: concerning status - this only updates the current status related data (quantity, order). This means quantity and order of possible items in the other status is not affected
     fileprivate func updateItem(_ updatingListItem: ListItem, listItemInput: ListItemInput) {
+        guard let realmData = realmData else {QL4("No realm data"); return}
+        
         if let currentList = self.currentList {
             
-            Prov.listItemsProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, true, successHandler {[weak self] (listItem, replaced) in guard let weakSelf = self else {return}
-                if replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.
+            Prov.listItemsProvider.updateNew(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, realmData: realmData, successHandler {[weak self] (updateResult) in guard let weakSelf = self else {return}
+                if updateResult.replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.
                     weakSelf.updatePossibleList()
                 } else {
                     // TODO!!!!!!!!!!!!!!!!!
 //                    weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
                     //                    self?.updatePrices(.MemOnly)
+                    
+                    weakSelf.listItemsTableViewController.updateListItemCell(listItem: updatingListItem)
                     weakSelf.onTableViewChangedQuantifiables()
                 }
                 weakSelf.closeTopControllers()

@@ -147,6 +147,28 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
 //        }
 //    }
     
+    func findListItemIndexPath(listItem: ListItem) -> IndexPath? {
+        guard let sections = sections else {QL4("No sections"); return nil}
+        
+        for (sectionIndex, s) in sections.enumerated() {
+            for (listItemIndex, l) in s.listItems.enumerated() {
+                if l.same(listItem) {
+                    return IndexPath(row: listItemIndex, section: sectionIndex)
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    func updateListItemCell(listItem: ListItem) {
+        if let indexPath = findListItemIndexPath(listItem: listItem) {
+            tableView.reloadRows(at: [indexPath], with: .none)
+        } else {
+            QL3("Didn't find cell to update for: \(listItem)")
+        }
+    }
+    
     
     // MARK: - Table view data source / delegate
     

@@ -1203,51 +1203,84 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func mergeOrCreateeProductSync(prototype: ProductPrototype, updateCategory: Bool, save: Bool) -> ProvResult<Product, DatabaseError> {
-    
-        if let existingProduct = loadProductWithUniqueSync(prototype.productUnique) {
-            return .ok(existingProduct.updateNonUniqueProperties(prototype: prototype))
+    func mergeOrCreateeProductSync(prototype: ProductPrototype, updateCategory: Bool, save: Bool, realmData: RealmData? = nil, doTransaction: Bool = true) -> ProvResult<Product, DatabaseError> {
+
+        // Always fetch/create item (whether product already exists or not), since we need to ensure we have the item identified by unique from prototype, which is not necessarily the same as the one referenced by existing product (we want to update only non-unique properties).
+        let itemRes = DBProv.itemProvider.mergeOrCreateItemSync(itemInput: ItemInput(name: prototype.name, categoryName: prototype.category, categoryColor: prototype.categoryColor), updateCategory: updateCategory)
+
+        func transactionContent(realm: Realm) -> ProvResult<Product, DatabaseError> {
+            return itemRes.map {item -> Product in
+                if let existingProduct = loadProductWithUniqueSync(prototype.productUnique) {
+                    existingProduct.item = item
+                    existingProduct.brand = prototype.brand
+                    return existingProduct
+                    
+                } else {
+                    let product = Product(uuid: UUID().uuidString, item: item, brand: prototype.brand)
+                    if save {
+                        realm.add(product, update: true)
+                    }
+                    return product
+                }
+            }
+        }
+        
+        if doTransaction {
+            return doInWriteTransactionSync({realm in
+                return transactionContent(realm: realm)
+            }) ?? .err(.unknown)
             
         } else {
-            let result: ProvResult<Product, DatabaseError> = DBProv.productCategoryProvider.mergeOrCreateCategorySync(name: prototype.category, color: prototype.categoryColor, save: false).map {category in
-                return Product(uuid: UUID().uuidString, name: prototype.name, category: category, brand: prototype.brand)
-            }
-            
-            return !save ? result : result.flatMap {product in
-                let writeSuccess: Bool? = self.doInWriteTransactionSync({realm in
-                    realm.add(product, update: true)
-                    return true
-                })
-                return (writeSuccess ?? false) ? .ok(product) : .err(.unknown)
+            if let realm = realmData?.realm {
+                return transactionContent(realm: realm)
+            } else {
+                QL4("Invalid state: on realm")
+                return .err(.unknown)
             }
         }
     }
     
     // Similar to mergeOrCreateProductSync in product provider except: 1. This method does actually save the created/merged product, 2. Synchronous, so it can be executed as part of a write transaction.
-    func mergeOrCreateQuantifiableProductSync(prototype: ProductPrototype, updateCategory: Bool, save: Bool) -> ProvResult<QuantifiableProduct, DatabaseError> {
+    func mergeOrCreateQuantifiableProductSync(prototype: ProductPrototype, updateCategory: Bool, save: Bool, realmData: RealmData? = nil, doTransaction: Bool = true) -> ProvResult<QuantifiableProduct, DatabaseError> {
         
-        if let existingProduct = loadQuantifiableProductWithUniqueSync(prototype.quantifiableProductUnique) {
-            let updatedProduct = existingProduct.product.updateNonUniqueProperties(prototype: prototype)
-            // Note: unit not updated - for now all we can udpate is the name and this belongs to the quantifiable unique, so there's nothing to udpate
-            let updatedQuantifiableProduct = existingProduct.copy(baseQuantity: prototype.baseQuantity, product: updatedProduct) // NOTE this does update unique properties TODO!!!!!!!!!!!!!!!! review
-            return .ok(updatedQuantifiableProduct)
-
-        } else {
-            let result: ProvResult<QuantifiableProduct, DatabaseError> = mergeOrCreateeProductSync(prototype: prototype, updateCategory: true, save: false).flatMap {product in
-                if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
-                    return .ok(QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit.unit, product: product))
+        // Always fetch/create product (whether quantifiable product already exists or not), since we need to ensure we have the product identified by unique from prototype, which is not necessarily the same as the one referenced by existing quantifiable product (we want to update only non-unique properties).
+        let productResult = mergeOrCreateeProductSync(prototype: prototype, updateCategory: updateCategory, save: false, realmData: realmData, doTransaction: doTransaction)
+        
+        func transactionContent(realm: Realm) -> ProvResult<QuantifiableProduct, DatabaseError> {
+            return productResult.flatMap {product in
+                if let existingProduct = loadQuantifiableProductWithUniqueSync(prototype.quantifiableProductUnique) {
+                    existingProduct.product = product
+                    // Nothing else to update - (we just fetched by unique, and there are no more properties)
+                    return .ok(existingProduct)
+                    
                 } else {
-                    QL4("Couldn't get or create unit")
-                    return .err(.unknown)
+                    if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
+                        
+                        let product = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit.unit, product: product)
+                        if save {
+                            realm.add(product, update: true)
+                        }
+                        return .ok(product)
+
+                    } else {
+                        QL4("Couldn't get or create unit")
+                        return .err(.unknown)
+                    }
                 }
             }
-
-            return !save ? result : result.flatMap {product in
-                let writeSuccess: Bool? = self.doInWriteTransactionSync({realm in
-                    realm.add(product, update: true)
-                    return true
-                })
-                return (writeSuccess ?? false) ? .ok(product) : .err(.unknown)
+        }
+        
+        if doTransaction {
+            return doInWriteTransactionSync({realm in
+                return transactionContent(realm: realm)
+            }) ?? .err(.unknown)
+            
+        } else {
+            if let realm = realmData?.realm {
+                return transactionContent(realm: realm)
+            } else {
+                QL4("Invalid state: on realm")
+                return .err(.unknown)
             }
         }
     }

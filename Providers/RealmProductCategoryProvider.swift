@@ -217,6 +217,7 @@ class RealmProductCategoryProvider: RealmProvider {
         }!
     }
     
+    // TODO rename update or create
     func mergeOrCreateCategorySync(name: String, color: UIColor, save: Bool) -> ProvResult<ProductCategory, DatabaseError> {
         
         let result: ProvResult<ProductCategory, DatabaseError> = loadCategoryWithUniqueSync(name).map ({
