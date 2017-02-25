@@ -323,16 +323,17 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         topControllersDelegate?.hideKeyboard()
         
         // Note: the height of the quick add is somewhere up in hierarchy, we pass the hardcoded DimensionsManager value because it's quicker to implement
-        selectIngredientAnimator?.open (button: cell, frame: CGRect(x: 0, y: 0, width: view.width, height: DimensionsManager.quickAddHeight), scrollOffset: self.collectionView.contentOffset.y, addOverlay: false, controllerCreator: {[weak self] in
-            let selectQuantifiableProductController = UIStoryboard.selectIngredientDataController()
-            
-            selectQuantifiableProductController.onViewDidLoad = {[weak selectQuantifiableProductController] in
-                selectQuantifiableProductController?.item = item
+        selectIngredientAnimator?.open (button: cell, frame: CGRect(x: 0, y: 0, width: view.width, height: DimensionsManager.quickAddHeight), scrollOffset: self.collectionView.contentOffset.y, addOverlay: false, controllerCreator: {[weak self] in            
+            let container = SelectIngredientDataContainerController()
+            container.onSelectDataControllerReadyBeforeDidLoad = {selectDataController in
+                selectDataController.onViewDidLoad = {[weak selectDataController] in
+                    selectDataController?.item = item
+                }
+                
+                selectDataController.delegate = self
             }
-        
-            selectQuantifiableProductController.delegate = self
-            
-            return selectQuantifiableProductController
+
+            return container
         })
     }
     

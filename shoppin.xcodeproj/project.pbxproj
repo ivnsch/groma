@@ -103,6 +103,7 @@
 		6AEB65EC1E4C93620094B9DE /* IngredientsController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AEB65EB1E4C93620094B9DE /* IngredientsController.storyboard */; };
 		6AEB65EF1E4D056C0094B9DE /* SelectIngredientDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB65EE1E4D056C0094B9DE /* SelectIngredientDataController.swift */; };
 		6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */; };
+		6AF0C26B1E62197300FE14FD /* SelectIngredientDataContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF0C26A1E62197300FE14FD /* SelectIngredientDataContainerController.swift */; };
 		6AF46EAC1E5A3A3B00BBFF4C /* UnitEditableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF46EAB1E5A3A3B00BBFF4C /* UnitEditableView.xib */; };
 		6AF46EAE1E5A3A4900BBFF4C /* UnitEditableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EAD1E5A3A4900BBFF4C /* UnitEditableView.swift */; };
 		6AF46EB21E5B422600BBFF4C /* SubmitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EB11E5B422600BBFF4C /* SubmitView.swift */; };
@@ -550,6 +551,7 @@
 		6AEB65EB1E4C93620094B9DE /* IngredientsController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IngredientsController.storyboard; sourceTree = "<group>"; };
 		6AEB65EE1E4D056C0094B9DE /* SelectIngredientDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectIngredientDataController.swift; sourceTree = "<group>"; };
 		6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectIngredientData.storyboard; sourceTree = "<group>"; };
+		6AF0C26A1E62197300FE14FD /* SelectIngredientDataContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectIngredientDataContainerController.swift; sourceTree = "<group>"; };
 		6AF46EAB1E5A3A3B00BBFF4C /* UnitEditableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnitEditableView.xib; sourceTree = "<group>"; };
 		6AF46EAD1E5A3A4900BBFF4C /* UnitEditableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitEditableView.swift; sourceTree = "<group>"; };
 		6AF46EB11E5B422600BBFF4C /* SubmitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitView.swift; sourceTree = "<group>"; };
@@ -1145,6 +1147,7 @@
 			isa = PBXGroup;
 			children = (
 				6AEB65EE1E4D056C0094B9DE /* SelectIngredientDataController.swift */,
+				6AF0C26A1E62197300FE14FD /* SelectIngredientDataContainerController.swift */,
 				6ADC6F391E4D2C88005BE5EB /* FractionView.swift */,
 				6ADC6F3D1E4D2EB1005BE5EB /* FractionView.xib */,
 				6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */,
@@ -2686,6 +2689,7 @@
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
 				6AF46EC01E5CE19A00BBFF4C /* PickerCollectionView.swift in Sources */,
 				EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */,
+				6AF0C26B1E62197300FE14FD /* SelectIngredientDataContainerController.swift in Sources */,
 				EBEA0CDE1CA6C0F500E68B81 /* QuickAddPageController.swift in Sources */,
 				EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */,
 				6A3A67CC1E57BF4400B5354F /* EditableFractionCell.swift in Sources */,
