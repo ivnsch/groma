@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ExplanationView" customModule="shoppin" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ExplanationView" customModule="groma" customModuleProvider="target">
             <connections>
                 <outlet property="gotItButton" destination="HUi-cI-v1s" id="N7l-Z2-G40"/>
                 <outlet property="imageView" destination="9ST-0v-X4Y" id="WV8-XG-SyJ"/>
@@ -22,12 +22,12 @@
             <rect key="frame" x="0.0" y="0.0" width="342" height="185"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HUi-cI-v1s" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HUi-cI-v1s" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                     <rect key="frame" x="61" y="97" width="220" height="40"/>
                     <color key="backgroundColor" red="0.054901960784313725" green="0.54117647058823526" blue="0.86274509803921573" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="220" id="2M6-Mn-lv8"/>
-                        <constraint firstAttribute="height" constant="40" id="vKf-Mp-vBD" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                        <constraint firstAttribute="height" constant="40" id="vKf-Mp-vBD" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                     <integer key="value" value="40"/>
@@ -65,7 +65,7 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="longpress0" translatesAutoresizingMaskIntoConstraints="NO" id="9ST-0v-X4Y">
                     <rect key="frame" x="163" y="43" width="16" height="16"/>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="st5-Mi-LsF" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="st5-Mi-LsF" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                     <rect key="frame" x="119" y="12" width="105" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -76,7 +76,7 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tF8-kh-Vuf" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tF8-kh-Vuf" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                     <rect key="frame" x="124" y="59" width="94" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

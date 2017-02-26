@@ -43,6 +43,7 @@ extension UIStoryboard {
     fileprivate class func listItemsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ListItemsControllers", bundle: Bundle.main) }
     fileprivate class func selectQuantifiableStoryboard() -> UIStoryboard { return UIStoryboard(name: "SelectQuantifiable", bundle: Bundle.main) }
     fileprivate class func ingredientsStoryboard() -> UIStoryboard { return UIStoryboard(name: "IngredientsController", bundle: Bundle.main) }
+    fileprivate class func addIngredientContainerStoryboard() -> UIStoryboard { return UIStoryboard(name: "SelectIngredientDataContainerController", bundle: Bundle.main) }
     fileprivate class func selectIngredientDataStoryboard() -> UIStoryboard { return UIStoryboard(name: "SelectIngredientData", bundle: Bundle.main) }
     fileprivate class func manageItemsAccordionStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItemsAccordion", bundle: Bundle.main) }
     fileprivate class func manageItemsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageItems", bundle: Bundle.main) }
@@ -299,6 +300,14 @@ extension UIStoryboard {
     
     class func selectIngredientDataController() -> SelectIngredientDataController {
         return selectIngredientDataStoryboard().instantiateViewController(withIdentifier: "SelectIngredientDataController") as! SelectIngredientDataController
+    }
+    
+    class func selectIngredientUnitController() -> SelectIngredientUnitController {
+        return selectIngredientDataStoryboard().instantiateViewController(withIdentifier: "SelectIngredientUnitController") as! SelectIngredientUnitController
+    }
+    
+    class func selectIngredientDataContainerController() -> SelectIngredientDataContainerController {
+        return addIngredientContainerStoryboard().instantiateViewController(withIdentifier: "SelectIngredientDataContainerController") as! SelectIngredientDataContainerController
     }
     
     // MARK: Manage items

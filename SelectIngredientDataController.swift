@@ -23,6 +23,11 @@ protocol SelectIngredientDataControllerDelegate: class {
     func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs)
 }
 
+protocol SelectUnitControllerDelegate: class {
+    
+    func onSelectUnit(unit: Providers.Unit)
+}
+
 class SelectIngredientDataController: UIViewController, QuantityViewDelegate, SwipeToIncrementHelperDelegate, UIGestureRecognizerDelegate, SubmitViewDelegate {
 
     @IBOutlet weak var wholeNumberLabel: UILabel!
@@ -45,6 +50,8 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
 
     weak var delegate: SelectIngredientDataControllerDelegate?
 
+    weak var unitDelegate: SelectUnitControllerDelegate?
+    
     fileprivate var currentNewFractionInput: Fraction?
     fileprivate var currentNewUnitInput: String?
 
@@ -317,6 +324,8 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         inputs.unitName = unit.name
         
         updateInputsAndTitle()
+        
+        unitDelegate?.onSelectUnit(unit: unit)
     }
     
     fileprivate func submit() {

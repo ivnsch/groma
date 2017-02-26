@@ -1,0 +1,147 @@
+//
+//  SelectIngredientUnitController.swift
+//  shoppin
+//
+//  Created by Ivan Schuetz on 26/02/2017.
+//  Copyright © 2017 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+import RealmSwift
+import Providers
+import QorumLogs
+
+class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataSourceDelegate, UnitsCollectionViewDelegateDelegate {
+
+    @IBOutlet weak var unitsCollectionView: UICollectionView!
+    @IBOutlet weak var collectionViewHeight: NSLayoutConstraint!
+    
+    weak var delegate: SelectUnitControllerDelegate?
+
+    fileprivate var units: Results<Providers.Unit>?
+    
+    fileprivate var unitsDataSource: UnitsDataSource?
+    fileprivate var unitsDelegate: UnitsDelegate? // arc
+    
+    
+    fileprivate var selectedUnit: Providers.Unit?
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        initUnitsCollectionView()
+    }
+
+    fileprivate func initUnitsCollectionView() {
+        
+        let delegate = UnitsDelegate(delegate: self)
+        unitsCollectionView.delegate = delegate
+        unitsDelegate = delegate
+        
+        Prov.unitProvider.units(successHandler{[weak self] units in guard let weakSelf = self else {return}
+            
+            let dataSource = UnitsDataSource(units: units)
+            dataSource.delegate = self
+            weakSelf.unitsDataSource = dataSource
+            weakSelf.unitsCollectionView.dataSource = dataSource
+            
+            weakSelf.units = units
+            
+            weakSelf.unitsCollectionView.reloadData()
+     
+            weakSelf.collectionViewHeight.constant = weakSelf.unitsCollectionView.collectionViewLayout.collectionViewContentSize.height
+        })
+    }
+    
+    fileprivate func onSelect(unit: Providers.Unit) {
+        selectedUnit = unit
+        
+        delegate?.onSelectUnit(unit: unit)
+    }
+    
+    fileprivate func isSelected(cell: UnitCell) -> Bool {
+        guard let unitViewUnit = cell.unitView.unit else {return false}
+        
+        return selectedUnit.map{$0.name == unitViewUnit.name} ?? false
+    }
+    
+    fileprivate func clearSelectedUnits() {
+        for cell in unitsCollectionView.visibleCells {
+            if let fractionCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
+                fractionCell.unitView.showSelected(selected: false, animated: true)
+            }
+        }
+    }
+    
+    fileprivate func clearToDeleteUnits() {
+        for cell in unitsCollectionView.visibleCells {
+            if let fractionCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
+                fractionCell.unitView.mark(toDelete: false, animated: true)
+            }
+        }
+    }
+    // MARK: - UnitsCollectionViewDataSourceDelegate
+    
+    var currentUnitName: String {
+        return selectedUnit?.name ?? ""
+    }
+    
+    func onUpdateUnitNameInput(nameInput: String) {
+//        currentNewUnitInput = nameInput
+        // TODO!!!!!!!!!!!
+    }
+    
+    // MARK: - UnitsCollectionViewDelegateDelegate
+    
+    func didSelectUnit(indexPath: IndexPath) {
+        guard let dataSource = unitsCollectionView.dataSource else {QL4("No data source"); return}
+        guard let unitsDataSource = dataSource as? UnitsDataSource else {QL4("Data source has wrong type: \(type(of: dataSource))"); return}
+        guard let units = unitsDataSource.units else {QL4("Invalid state: Data source has no units"); return}
+        
+        let cellMaybe = unitsCollectionView.cellForItem(at: indexPath) as? UnitCell
+        
+        if cellMaybe?.unitView.markedToDelete ?? false {
+            
+            let unit = units[indexPath.row]
+            Prov.unitProvider.delete(name: unit.name, successHandler {[weak self] in
+                self?.unitsCollectionView.deleteItems(at: [indexPath])
+                self?.unitsCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
+            })
+            
+        } else {
+            clearToDeleteUnits()
+            clearSelectedUnits()
+            
+            if let cell = cellMaybe {
+                if isSelected(cell: cell) { // clear selection
+                    cellMaybe?.unitView.showSelected(selected: false, animated: true)
+                    selectedUnit = nil
+//                    updateTitle(inputs: inputs) // TODO!!!!!!!!!!!!!
+                    
+                } else { // select
+                    cellMaybe?.unitView.showSelected(selected: true, animated: true)
+                    onSelect(unit: units[indexPath.row])
+                }
+            }
+        }
+    }
+    
+    func sizeFotUnitCell(indexPath: IndexPath) -> CGSize {
+        if (unitsDataSource?.units.map{unit in
+            indexPath.row < unit.count
+            }) ?? false {
+            return CGSize(width: 70, height: 50)
+        } else {
+            return CGSize(width: 120, height: 50)
+        }
+    }
+    
+    internal var minUnitTextFieldWidth: CGFloat {
+        return 70
+    }
+    
+    var highlightSelected: Bool {
+        return true
+    }
+}

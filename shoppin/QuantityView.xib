@@ -21,8 +21,8 @@
             <rect key="frame" x="0.0" y="0.0" width="164" height="122"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cxh-rI-YN0" customClass="LabelMore" customModule="Providers">
-                    <rect key="frame" x="74" y="49" width="49" height="24"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cxh-rI-YN0" customClass="LabelMore" customModule="Providers">
+                    <rect key="frame" x="110.5" y="49" width="12.5" height="24"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
@@ -43,7 +43,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HNQ-zH-qvO">
-                    <rect key="frame" x="33" y="0.0" width="41" height="122"/>
+                    <rect key="frame" x="69.5" y="0.0" width="41" height="122"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="41" id="DP8-Ob-s7B"/>
                     </constraints>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectIngredientFractionController" customModule="groma" customModuleProvider="target">
+            <connections>
+                <outlet property="fractionImageView" destination="aRx-YA-td0" id="ggQ-sp-FSM"/>
+                <outlet property="fractionTextInputView" destination="LyZ-lA-iAk" id="DL6-TO-rD6"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="280"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="40" translatesAutoresizingMaskIntoConstraints="NO" id="b8u-iC-Eep">
+                    <rect key="frame" x="67" y="0.0" width="240" height="40"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zju-G9-ouJ" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="5" width="30" height="30"/>
+                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="30" id="4T6-OF-WJ5"/>
+                                <constraint firstAttribute="height" constant="30" id="U6c-ps-UV6"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                    <integer key="value" value="40"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="15"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Select fraction (optional)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IZd-O1-DV1" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                            <rect key="frame" x="40" y="9.5" width="200" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                    <integer key="value" value="40"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="5Bb-wD-w0b"/>
+                        <constraint firstItem="IZd-O1-DV1" firstAttribute="leading" secondItem="Zju-G9-ouJ" secondAttribute="trailing" constant="10" id="H8f-Iu-vhh"/>
+                        <constraint firstAttribute="trailing" secondItem="IZd-O1-DV1" secondAttribute="trailing" id="MI7-L9-M19"/>
+                        <constraint firstItem="Zju-G9-ouJ" firstAttribute="leading" secondItem="b8u-iC-Eep" secondAttribute="leading" id="cn5-ct-mYC"/>
+                        <constraint firstItem="IZd-O1-DV1" firstAttribute="centerY" secondItem="b8u-iC-Eep" secondAttribute="centerY" id="dGd-ww-H1r"/>
+                        <constraint firstItem="Zju-G9-ouJ" firstAttribute="centerY" secondItem="b8u-iC-Eep" secondAttribute="centerY" id="peg-Xo-yBr"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aRx-YA-td0">
+                    <rect key="frame" x="235" y="60" width="120" height="200"/>
+                    <color key="backgroundColor" red="0.96470588239999999" green="0.40784313729999999" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="120" id="8xR-of-rNu"/>
+                        <constraint firstAttribute="height" constant="200" id="zfO-16-4aH"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" placeholderIntrinsicWidth="99" placeholderIntrinsicHeight="89" translatesAutoresizingMaskIntoConstraints="NO" id="LyZ-lA-iAk" customClass="EditableFractionView" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="20" y="110" width="195" height="100"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="100" id="Yzt-eA-UVl"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="aRx-YA-td0" firstAttribute="centerY" secondItem="LyZ-lA-iAk" secondAttribute="centerY" id="7u8-ba-lkN"/>
+                <constraint firstAttribute="bottom" secondItem="aRx-YA-td0" secondAttribute="bottom" constant="20" id="9ag-ei-dDL"/>
+                <constraint firstAttribute="trailing" secondItem="aRx-YA-td0" secondAttribute="trailing" constant="20" id="El3-gZ-G2R"/>
+                <constraint firstItem="LyZ-lA-iAk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="Nn8-tU-fxM"/>
+                <constraint firstItem="aRx-YA-td0" firstAttribute="leading" secondItem="LyZ-lA-iAk" secondAttribute="trailing" constant="20" id="cW2-XS-tio"/>
+                <constraint firstItem="b8u-iC-Eep" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="epj-G8-xAa"/>
+                <constraint firstItem="aRx-YA-td0" firstAttribute="top" secondItem="b8u-iC-Eep" secondAttribute="bottom" constant="20" id="hoh-ax-Nj4"/>
+                <constraint firstItem="b8u-iC-Eep" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="kfv-bo-yAe"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="24.5" y="-141"/>
+        </view>
+    </objects>
+</document>

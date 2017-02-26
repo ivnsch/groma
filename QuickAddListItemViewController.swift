@@ -322,17 +322,22 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         view.endEditing(true)
         topControllersDelegate?.hideKeyboard()
         
+        
+        let windowHeight: CGFloat = UIApplication.shared.delegate.flatMap{$0.window??.height} ?? 0
+        let controllerHeight = windowHeight - 64 - 49 - Theme.submitViewHeight // 64 topbar, 49 tabbar
+        
         // Note: the height of the quick add is somewhere up in hierarchy, we pass the hardcoded DimensionsManager value because it's quicker to implement
-        selectIngredientAnimator?.open (button: cell, frame: CGRect(x: 0, y: 0, width: view.width, height: DimensionsManager.quickAddHeight), scrollOffset: self.collectionView.contentOffset.y, addOverlay: false, controllerCreator: {[weak self] in            
-            let container = SelectIngredientDataContainerController()
-            container.onSelectDataControllerReadyBeforeDidLoad = {selectDataController in
-                selectDataController.onViewDidLoad = {[weak selectDataController] in
-                    selectDataController?.item = item
-                }
-                
-                selectDataController.delegate = self
-            }
-
+        
+        selectIngredientAnimator?.openNoOverlay (button: cell, frame: CGRect(x: 0, y: 0, width: view.width, height: controllerHeight), scrollOffset: self.collectionView.contentOffset.y, controllerCreator: {[weak self] in
+            let container = UIStoryboard.selectIngredientDataContainerController()
+            container.delegate = self
+            
+            container.item = item
+            
+//            container.onSelectDataControllerReadyBeforeDidLoad = {selectDataController in
+//                selectDataController.delegate = self
+//            }
+            
             return container
         })
     }
@@ -555,13 +560,17 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             isAnyShowing = true
         }
         if selectIngredientAnimator?.isShowing ?? false {
-            selectIngredientAnimator?.close()
-            (selectIngredientAnimator?.controller as? SelectIngredientDataController)?.onClose() // important to remove the submit button, that is added to parent
-            topControllersDelegate?.restoreKeyboard()
+            closeSelectIngredientDataController()
             isAnyShowing = true
         }
         
         return isAnyShowing
+    }
+    
+    fileprivate func closeSelectIngredientDataController() {
+        selectIngredientAnimator?.close()
+        (selectIngredientAnimator?.controller as? SelectIngredientDataController)?.onClose() // important to remove the submit button, that is added to parent
+        topControllersDelegate?.restoreKeyboard()
     }
     
     func closeRecipeController() {
@@ -586,10 +595,13 @@ extension QuickAddListItemViewController: AddRecipeControllerDelegate {
     }
 }
 
+// MARK: - SelectIngredientDataContainerControllerDelegate
 
-// MARK: - SelectIngredientDataControllerDelegate
-
-extension QuickAddListItemViewController: SelectIngredientDataControllerDelegate {
+extension QuickAddListItemViewController: SelectIngredientDataContainerControllerDelegate {
+    
+    func onSelectIngrentTapOutsideOfContent() {
+        closeSelectIngredientDataController()
+    }
     
     func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs) {
         delegate?.onAddIngredient(item: item, ingredientInput: inputs)
