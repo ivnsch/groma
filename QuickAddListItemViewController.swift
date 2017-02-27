@@ -324,7 +324,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         
         
         let windowHeight: CGFloat = UIApplication.shared.delegate.flatMap{$0.window??.height} ?? 0
-        let controllerHeight = windowHeight - 64 - 49 - Theme.submitViewHeight // 64 topbar, 49 tabbar
+        let controllerHeight = windowHeight - 49 - 64 // 64 topbar, 49 tabbar
         
         // Note: the height of the quick add is somewhere up in hierarchy, we pass the hardcoded DimensionsManager value because it's quicker to implement
         

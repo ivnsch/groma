@@ -33,7 +33,23 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     var item: Item?
     
     var inputs: SelectIngredientDataControllerInputs = SelectIngredientDataControllerInputs()
-
+    fileprivate var currentUnit: Providers.Unit? // TODO merge this with inputs?
+    
+    fileprivate func updateRowsForUnit(_ unit: Providers.Unit) {
+        let unitsWithFraction: [UnitId] = [.liter, .teaspoon, .spoon, .cup, .ounce]
+        
+        if unitsWithFraction.contains(unit.id) {
+            if expandedSteps == 2 {
+                expandedSteps = 3
+                tableView.insertRows(at: [IndexPath(row: 2, section: 0)], with: Theme.defaultRowAnimation)
+            }
+        } else {
+            if expandedSteps == 3 {
+                expandedSteps = 2
+                tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: Theme.defaultRowAnimation)
+            }
+        }
+    }
     
     var selectUnitController: SelectIngredientUnitController?
     var selectQuantityController: SelectIngredientQuantityController?
@@ -79,18 +95,21 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     
     fileprivate func initSubmitButton() {
         guard self.submitView == nil else {QL1("Already showing a submit view"); return}
-        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return}
-        //        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return}
+//        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return}
+        guard let parentViewForAddButton = view else {QL4("No delegate: \(delegate)"); return}
         
         let height = Theme.submitViewHeight
-        let submitView = SubmitView(frame: CGRect(x: 0, y: parentViewForAddButton.frame.maxY, width: parentViewForAddButton.width, height: height))
+        let submitView = SubmitView(frame: CGRect(x: 0, y: parentViewForAddButton.frame.maxY - height, width: parentViewForAddButton.width, height: height))
         submitView.delegate = self
         submitView.setButtonTitle(title: "select_ingredient_data_submit")
         parentViewForAddButton.addSubview(submitView)
+
+        submitView.translatesAutoresizingMaskIntoConstraints = false
         
-        anim(Theme.defaultAnimDuration) {
-            submitView.y = parentViewForAddButton.frame.maxY - height
-        }
+        _ = submitView.alignLeft(parentViewForAddButton)
+        _ = submitView.alignRight(parentViewForAddButton)
+        let bottomConstraint = submitView.alignBottom(parentViewForAddButton)
+        _ = submitView.heightConstraint(height)
         
         self.submitView = submitView
     }
@@ -139,6 +158,9 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         selectFractionController.delegate = self
         
         self.selectFractionController = selectFractionController
+        selectFractionController.onUIReady = {[weak selectFractionController, weak self] in
+            selectFractionController?.unit = self?.currentUnit
+        }
         
         return selectFractionController
     }
@@ -147,6 +169,12 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     // MARK: - SelectUnitControllerDelegate
     
     func onSelectUnit(unit: Providers.Unit) {
+        
+        self.currentUnit = unit
+        inputs.unitName = unit.name
+        updateTitle(inputs: inputs)
+        selectFractionController?.unit = unit
+        
         if !selectedUnitFirstTime {
             selectedUnitFirstTime = true
             
@@ -154,13 +182,12 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
             tableView.insertRows(at: [IndexPath(row: 1, section: 0)], with: .top)
             
             delay(0.3) {
-                self.expandedSteps = 3
-                self.tableView.insertRows(at: [IndexPath(row: 2, section: 0)], with: .top)
+                self.updateRowsForUnit(unit)
             }
+            
+        } else {
+            updateRowsForUnit(unit)
         }
-        
-        inputs.unitName = unit.name
-        updateTitle(inputs: inputs)
     }
     
     
@@ -240,8 +267,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
 
                 let offset = frame.height - (tabBarController?.tabBar.height ?? 0)
                 tableView.bottomInset = offset
-                tableView.contentOffset = CGPoint(x: 0, y: offset)
-                submitView?.y = frame.origin.y - (submitView?.height ?? 0)
+                tableView.contentOffset = CGPoint(x: 0, y: tableView.contentOffset.y + offset)
                 
             } else {
                 QL3("Couldn't retrieve keyboard size from user info")
@@ -253,8 +279,6 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     
     func keyboardWillDisappear(_ notification: Foundation.Notification) {
         tableView.bottomInset = 0
-        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return}
-        submitView?.y = parentViewForAddButton.frame.maxY - (submitView?.height ?? 0)
     }
 }
 
@@ -303,8 +327,8 @@ extension SelectIngredientDataContainerController: UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0: return DimensionsManager.quickAddHeight + 20
-        case 1: return 60
-        default: return 280
+        case 1: return 100
+        default: return 390
         }
     }
 }
