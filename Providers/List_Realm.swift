@@ -34,4 +34,12 @@ extension RealmSwift.List {
         }
         return l
     }
+
+    public func remove(_ obj: T) -> Bool {
+        if let index = index(of: obj) {
+            remove(objectAtIndex: index)
+            return true
+        }
+        return false
+    }
 }

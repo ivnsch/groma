@@ -501,7 +501,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         if let currentList = self.currentList {
             
-            Prov.listItemsProvider.updateNew(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, realmData: realmData, successHandler {[weak self] (updateResult) in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.updateNew(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, realmData: realmData, successHandler {[weak self] updateResult in guard let weakSelf = self else {return}
                 if updateResult.replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.
                     weakSelf.updatePossibleList()
                 } else {
@@ -509,7 +509,16 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 //                    weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
                     //                    self?.updatePrices(.MemOnly)
                     
-                    weakSelf.listItemsTableViewController.updateListItemCell(listItem: updatingListItem)
+                    // If as part of the update user entered a different section, we have to update both the src and dst sections
+                    // This takes into account that dst section is a new one - since Realm's results are already updated, we will find the returned section in the table view controller's sections result and be able to reload it in the table view.
+                    if updateResult.changedSection {
+                        weakSelf.listItemsTableViewController.updateTableViewSection(section: updatingListItem.section)
+                        weakSelf.listItemsTableViewController.updateTableViewSection(section: updateResult.listItem.section)
+                        
+                    } else {
+                        weakSelf.listItemsTableViewController.updateListItemCell(listItem: updateResult.listItem)
+                    }
+                    
                     weakSelf.onTableViewChangedQuantifiables()
                 }
                 weakSelf.closeTopControllers()

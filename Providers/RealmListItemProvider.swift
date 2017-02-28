@@ -27,6 +27,7 @@ public struct AddListItemResult {
 public struct UpdateListItemResult {
     public let listItem: ListItem
     public let replaced: Bool
+    public let changedSection: Bool
 }
 
 public struct AddCartListItemResult {
@@ -1130,6 +1131,32 @@ class RealmListItemProvider: RealmProvider {
             // update or create section
             let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: false)
             
+            var changedSection = false
+            
+            sectionResult.onOk {res in
+                // If the item was assigned a new section
+                if !res.section.same(updatingListItem.section) {
+                    
+                    // 1. Move list item to new section
+                    updatingListItem.section.listItems.remove(updatingListItem)
+                    res.section.listItems.append(updatingListItem)
+                    
+                    if status == .todo { // There's no List<Section> for status other than .todo
+                        // 2. If section is new, add it to list. We check also if the list contains it (it may be that section is old but not in list, at least in current status -- TODO review this, theoretically when the section is not anymore in list+status it should be removed. This is "just in case".
+                        if res.isNew || !list.sections(status: status).contains(res.section) {
+                            list.sections(status: status).append(res.section)
+                        }
+                    }
+                    
+                    // 3. Delete old section if empty
+                    if updatingListItem.section.listItems.isEmpty {
+                        realmData.realm.delete(updatingListItem.section)
+                    }
+                    
+                    changedSection = true
+                }
+            }
+            
             // update or create quantifiable product and dependencies
             let productResult = DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false, realmData: realmData, doTransaction: false)
             
@@ -1141,7 +1168,7 @@ class RealmListItemProvider: RealmProvider {
                 updatingListItem.section = sectionResult.section
                 updatingListItem.note = listItemInput.note ?? ""
                 
-                return UpdateListItemResult(listItem: updatingListItem, replaced: foundAndDeletedListItem)
+                return UpdateListItemResult(listItem: updatingListItem, replaced: foundAndDeletedListItem, changedSection: changedSection)
             }
             
             let joinResult = sectionResult.join(result: productResult).map{sectionResult, product in

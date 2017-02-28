@@ -161,6 +161,25 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         return nil
     }
     
+    func findSectionIndex(section: Section) -> Int? {
+        guard let sections = sections else {QL4("No sections"); return nil}
+        for (sectionIndex, s) in sections.enumerated() {
+            if s.same(section) {
+                return sectionIndex
+            }
+        }
+        return nil
+    }
+    
+    
+    func updateTableViewSection(section: Section) {
+        if let sectionIndex = findSectionIndex(section: section) {
+            tableView.reloadSections(IndexSet([sectionIndex]), with: .none)
+        } else {
+            QL3("Didn't find index for: \(section)")
+        }
+    }
+    
     func updateListItemCell(listItem: ListItem) {
         if let indexPath = findListItemIndexPath(listItem: listItem) {
             tableView.reloadRows(at: [indexPath], with: .none)
