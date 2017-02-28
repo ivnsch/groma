@@ -54,6 +54,8 @@ extension UIStoryboard {
     fileprivate class func manageDatabaseStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageDatabase", bundle: Bundle.main) }
     fileprivate class func addEditNameNameColorStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditNameNameColor", bundle: Bundle.main) }
 
+    fileprivate class func emptyViewStoryboard() -> UIStoryboard { return UIStoryboard(name: "EmptyView", bundle: Bundle.main) }
+
     // MARK: - List items
 
     class func todoItemsViewControllerNew() -> TodoListItemsControllerNew {
@@ -341,4 +343,12 @@ extension UIStoryboard {
     class func addEditNameNameColorController() -> AddEditNameNameColorController {
         return addEditNameNameColorStoryboard().instantiateViewController(withIdentifier: "AddEditNameNameColorController") as! AddEditNameNameColorController
     }
+    
+    // MARK: - Empty view
+    
+    
+    class func emptyViewStoryboard() -> EmptyViewController {
+        return emptyViewStoryboard().instantiateViewController(withIdentifier: "EmptyViewController") as! EmptyViewController
+    }
+    
 }

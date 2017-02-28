@@ -16,9 +16,9 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     @IBOutlet weak var topBar: ListTopBarView!
     @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var emptyView: UIView!
-    @IBOutlet weak var emptyViewLabel1: UILabel!
-    @IBOutlet weak var emptyViewLabel2: UILabel!
+    @IBOutlet weak var emptyViewControllerContainer: UIView!
+    
+    fileprivate var emptyViewController: EmptyViewController!
 
     weak var expandDelegate: Foo?
 
@@ -51,7 +51,6 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         return nil
     }
     
-    
     var quickAddItemType: QuickAddItemType {
         return .productForList
     }
@@ -65,11 +64,21 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         
         topQuickAddControllerManager = initTopQuickAddControllerManager()
         
+        
         topBar.delegate = self
     }
     
     func initProgrammaticViews() {
-        
+        initEmptyView()
+    }
+    
+    fileprivate func initEmptyView() {
+        let emptyViewController = UIStoryboard.emptyViewStoryboard()
+        emptyViewController.addTo(container: emptyViewControllerContainer)
+        emptyViewController.onTapOrPull = {[weak self] in
+            _ = self?.toggleTopAddController()
+        }
+        self.emptyViewController = emptyViewController
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -104,8 +113,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     }
     
     func initEmptyView(line1: String, line2: String) {
-        emptyViewLabel1.text = line1
-        emptyViewLabel2.text = line2
+        emptyViewController.labels = (line1, line2)
     }
     
     func onExpand(_ expanding: Bool) {
@@ -132,9 +140,9 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         
         let hidden = !empty
         if animated {
-            emptyView.setHiddenAnimated(hidden)
+            emptyViewControllerContainer.setHiddenAnimated(hidden)
         } else {
-            emptyView.isHidden = hidden
+            emptyViewControllerContainer.isHidden = hidden
         }
     }
     
@@ -152,8 +160,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         //        updatePrices(.First)
         
         // TODO custom empty view, put this there
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onEmptyViewTap(_:)))
-        emptyView.addGestureRecognizer(tapRecognizer)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -163,10 +170,6 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         
         onViewDidAppear?()
         onViewDidAppear = nil
-    }
-    
-    func onEmptyViewTap(_ sender: UITapGestureRecognizer) {
-        _ = toggleTopAddController() // this is meant to only open the menu, but toggle is ok since if we can tap on empty view it means it's closed
     }
 
     func setDefaultLeftButtons() {

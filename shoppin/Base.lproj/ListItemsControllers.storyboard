@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="QHZ-uV-ZSM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -355,86 +355,28 @@
                                     <constraint firstAttribute="height" constant="64" id="1ni-VY-RBO"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="so5-bY-yhM">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
-                                        <rect key="frame" x="75" y="200" width="225" height="206"/>
-                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="9iR-Gu-SA7"/>
-                                            <constraint firstAttribute="height" constant="60" id="iEc-mz-stV"/>
-                                        </constraints>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="9iR-Gu-SA7"/>
-                                                <exclude reference="iEc-mz-stV"/>
-                                            </mask>
-                                        </variation>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops, there are no items yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxW-16-sQo" customClass="LabelMore" customModule="groma">
-                                        <rect key="frame" x="73" y="426" width="229" height="22"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                <integer key="value" value="50"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Just add some, will ya?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPp-Ci-147" customClass="LabelMore" customModule="groma">
-                                        <rect key="frame" x="109" y="456" width="158" height="18"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                <integer key="value" value="40"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="fPp-Ci-147" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="4Vf-Te-7ZZ"/>
-                                    <constraint firstItem="bes-vp-e1u" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="8Vl-sw-Gdt"/>
-                                    <constraint firstItem="bes-vp-e1u" firstAttribute="width" secondItem="so5-bY-yhM" secondAttribute="width" multiplier="0.6" id="CF4-Ap-WGa"/>
-                                    <constraint firstItem="bes-vp-e1u" firstAttribute="top" secondItem="so5-bY-yhM" secondAttribute="top" constant="200" id="SmB-SA-Fmb" customClass="TopEmptyViewConstraint" customModule="groma" customModuleProvider="target"/>
-                                    <constraint firstItem="sxW-16-sQo" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="Zub-z6-dKm"/>
-                                    <constraint firstItem="fPp-Ci-147" firstAttribute="top" secondItem="sxW-16-sQo" secondAttribute="bottom" constant="8" id="cHA-XD-wmq"/>
-                                    <constraint firstItem="sxW-16-sQo" firstAttribute="top" secondItem="bes-vp-e1u" secondAttribute="bottom" constant="20" id="gCp-st-AlA"/>
-                                </constraints>
-                            </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tfl-kh-PsZ">
+                                <rect key="frame" x="0.0" y="64" width="375" height="602"/>
+                            </containerView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="CzC-OK-nPG" firstAttribute="top" secondItem="Ytc-Mq-xYS" secondAttribute="top" id="BIM-hI-uax"/>
                             <constraint firstItem="iVM-Kg-U2m" firstAttribute="width" secondItem="Ytc-Mq-xYS" secondAttribute="width" id="CQQ-wq-7AI"/>
-                            <constraint firstItem="iVM-Kg-U2m" firstAttribute="top" secondItem="so5-bY-yhM" secondAttribute="bottom" id="EZn-Vn-Bwd"/>
                             <constraint firstAttribute="trailing" secondItem="5T4-jf-M2R" secondAttribute="trailing" id="Gsx-FO-ul6"/>
                             <constraint firstItem="peQ-Fh-dVX" firstAttribute="top" secondItem="iVM-Kg-U2m" secondAttribute="bottom" priority="999" id="IrT-Je-DDy"/>
+                            <constraint firstAttribute="trailing" secondItem="Tfl-kh-PsZ" secondAttribute="trailing" id="LJh-gs-stU"/>
                             <constraint firstItem="peQ-Fh-dVX" firstAttribute="top" secondItem="5T4-jf-M2R" secondAttribute="bottom" priority="999" id="NDB-NB-vei"/>
+                            <constraint firstItem="Tfl-kh-PsZ" firstAttribute="top" secondItem="CzC-OK-nPG" secondAttribute="bottom" id="PQC-kU-Q2d"/>
                             <constraint firstItem="iVM-Kg-U2m" firstAttribute="leading" secondItem="Ytc-Mq-xYS" secondAttribute="leading" id="R3l-IW-TzB"/>
-                            <constraint firstItem="so5-bY-yhM" firstAttribute="top" secondItem="CzC-OK-nPG" secondAttribute="bottom" priority="999" id="SJe-8i-7tB"/>
-                            <constraint firstAttribute="bottom" secondItem="so5-bY-yhM" secondAttribute="bottom" id="TK9-pE-OAd"/>
                             <constraint firstItem="CzC-OK-nPG" firstAttribute="leading" secondItem="Ytc-Mq-xYS" secondAttribute="leading" id="cRB-8R-1FH"/>
-                            <constraint firstItem="so5-bY-yhM" firstAttribute="leading" secondItem="Ytc-Mq-xYS" secondAttribute="leading" id="cia-OM-TGe"/>
                             <constraint firstAttribute="trailing" secondItem="CzC-OK-nPG" secondAttribute="trailing" id="muZ-sP-qoQ"/>
-                            <constraint firstItem="peQ-Fh-dVX" firstAttribute="top" secondItem="so5-bY-yhM" secondAttribute="bottom" id="nuy-Gu-BZe"/>
-                            <constraint firstAttribute="trailing" secondItem="so5-bY-yhM" secondAttribute="trailing" id="oSI-6A-S4k"/>
+                            <constraint firstItem="Tfl-kh-PsZ" firstAttribute="leading" secondItem="Ytc-Mq-xYS" secondAttribute="leading" id="rH0-KW-9Wh"/>
+                            <constraint firstItem="iVM-Kg-U2m" firstAttribute="top" secondItem="Tfl-kh-PsZ" secondAttribute="bottom" id="s4M-en-jsZ"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="EZn-Vn-Bwd"/>
-                                <exclude reference="nuy-Gu-BZe"/>
-                            </mask>
-                        </variation>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="emptyView" destination="so5-bY-yhM" id="V5P-d2-nyG"/>
-                        <outlet property="emptyViewLabel1" destination="sxW-16-sQo" id="NbD-gE-baq"/>
-                        <outlet property="emptyViewLabel2" destination="fPp-Ci-147" id="p1B-dD-AjT"/>
+                        <outlet property="emptyViewControllerContainer" destination="Tfl-kh-PsZ" id="DdR-df-UKZ"/>
                         <outlet property="pricesView" destination="iVM-Kg-U2m" id="ggY-N4-cSC"/>
                         <outlet property="pricesViewBottomConstraint" destination="IrT-Je-DDy" id="rke-Ap-85C"/>
                         <outlet property="stashView" destination="5T4-jf-M2R" id="8VN-fu-N77"/>

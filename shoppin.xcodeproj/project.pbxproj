@@ -114,6 +114,9 @@
 		6AF0C27E1E646FC300FE14FD /* FillShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF0C27D1E646FC300FE14FD /* FillShapeView.swift */; };
 		6AF0C2811E64F72C00FE14FD /* CommunityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF0C27F1E64F72C00FE14FD /* CommunityController.swift */; };
 		6AF0C2821E64F72C00FE14FD /* CommunityController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF0C2801E64F72C00FE14FD /* CommunityController.xib */; };
+		6AF0C2851E65796100FE14FD /* EmptyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF0C2831E65796100FE14FD /* EmptyViewController.swift */; };
+		6AF0C28B1E657A9200FE14FD /* EmptyView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AF0C28A1E657A9200FE14FD /* EmptyView.storyboard */; };
+		6AF0C28D1E657B8300FE14FD /* EmptyViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF0C28C1E657B8300FE14FD /* EmptyViewCell.swift */; };
 		6AF46EAC1E5A3A3B00BBFF4C /* UnitEditableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF46EAB1E5A3A3B00BBFF4C /* UnitEditableView.xib */; };
 		6AF46EAE1E5A3A4900BBFF4C /* UnitEditableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EAD1E5A3A4900BBFF4C /* UnitEditableView.swift */; };
 		6AF46EB21E5B422600BBFF4C /* SubmitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EB11E5B422600BBFF4C /* SubmitView.swift */; };
@@ -572,6 +575,9 @@
 		6AF0C27D1E646FC300FE14FD /* FillShapeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FillShapeView.swift; sourceTree = "<group>"; };
 		6AF0C27F1E64F72C00FE14FD /* CommunityController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunityController.swift; sourceTree = "<group>"; };
 		6AF0C2801E64F72C00FE14FD /* CommunityController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommunityController.xib; sourceTree = "<group>"; };
+		6AF0C2831E65796100FE14FD /* EmptyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyViewController.swift; sourceTree = "<group>"; };
+		6AF0C28A1E657A9200FE14FD /* EmptyView.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EmptyView.storyboard; sourceTree = "<group>"; };
+		6AF0C28C1E657B8300FE14FD /* EmptyViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyViewCell.swift; sourceTree = "<group>"; };
 		6AF46EAB1E5A3A3B00BBFF4C /* UnitEditableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnitEditableView.xib; sourceTree = "<group>"; };
 		6AF46EAD1E5A3A4900BBFF4C /* UnitEditableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitEditableView.swift; sourceTree = "<group>"; };
 		6AF46EB11E5B422600BBFF4C /* SubmitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitView.swift; sourceTree = "<group>"; };
@@ -1203,6 +1209,16 @@
 				6AF0C2791E6336B800FE14FD /* SelectIngredientUnitController.swift */,
 			);
 			name = selectIngredientCells;
+			sourceTree = "<group>";
+		};
+		6AF0C2871E65796700FE14FD /* emptyView */ = {
+			isa = PBXGroup;
+			children = (
+				6AF0C2831E65796100FE14FD /* EmptyViewController.swift */,
+				6AF0C28A1E657A9200FE14FD /* EmptyView.storyboard */,
+				6AF0C28C1E657B8300FE14FD /* EmptyViewCell.swift */,
+			);
+			name = emptyView;
 			sourceTree = "<group>";
 		};
 		B27D810CB73D3BD1DB8296A9 /* Pods */ = {
@@ -2221,6 +2237,7 @@
 		EBEEDD631A49A7B500FC3B29 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				6AF0C2871E65796700FE14FD /* emptyView */,
 				6AACDC171E475BCA00A9E1EC /* explanationView */,
 				EB1D69711CAC82AC004892A2 /* addButton */,
 				EB37ABAD1CA01AE400FE9D7A /* pullToAdd */,
@@ -2507,6 +2524,7 @@
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB1B365B1BC4637A003519F2 /* PlanTableViewCell_.xib in Resources */,
 				6A287EAB1E55E3BE00868244 /* ManageItems.storyboard in Resources */,
+				6AF0C28B1E657A9200FE14FD /* EmptyView.storyboard in Resources */,
 				6A3A67DC1E59240000B5354F /* UnitCell.xib in Resources */,
 				EBD667E11CED49EB0055EE0B /* AddEditListItem.storyboard in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
@@ -2681,6 +2699,7 @@
 				EB9208241C4EBD4900332332 /* ManageBrandsController.swift in Sources */,
 				EB70327B1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift in Sources */,
 				EB969FE11BE4371200F5BC35 /* ProductAggregateCell.swift in Sources */,
+				6AF0C28D1E657B8300FE14FD /* EmptyViewCell.swift in Sources */,
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				6A3A67E01E59D57500B5354F /* UnitEditableCell.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
@@ -2905,6 +2924,7 @@
 				EB33D5551CDFA2000097AD58 /* MoreCell.swift in Sources */,
 				EBB2CBC81CF1D16D0040C619 /* NotEmptyTrimmedRule.swift in Sources */,
 				EB7524551BF5830600A97A10 /* QuickAddGroupCell.swift in Sources */,
+				6AF0C2851E65796100FE14FD /* EmptyViewController.swift in Sources */,
 				EB75E5471CA360C1006AAEAF /* SharedUsersController.swift in Sources */,
 				EB1748D41C7E7AE20067FD16 /* ListInvitationsHandler.swift in Sources */,
 				6AF0C26E1E621E0900FE14FD /* SelectIngredientQuantityController.swift in Sources */,

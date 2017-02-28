@@ -81,6 +81,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
  
     override func initProgrammaticViews() {
+        super.initProgrammaticViews()
+        
         initTableViewController()
     }
     
