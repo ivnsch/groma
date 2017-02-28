@@ -76,6 +76,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     override func viewDidLayoutSubviews() {
         // add the embedded controller's view
         if productsWithQuantityController.view.superview == nil {
+            productsWithQuantityController.view.translatesAutoresizingMaskIntoConstraints = false
             containerView.addSubview(productsWithQuantityController.view)
             productsWithQuantityController.view.fillSuperview()
             

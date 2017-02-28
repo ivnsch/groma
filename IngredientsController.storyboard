@@ -79,7 +79,7 @@
                                     <constraint firstAttribute="bottom" secondItem="yDK-jV-jwc" secondAttribute="bottom" id="gIQ-pr-T20"/>
                                     <constraint firstItem="rGb-yf-AQC" firstAttribute="baseline" secondItem="u4q-Pc-uS9" secondAttribute="baseline" id="ghl-Zq-4vH"/>
                                     <constraint firstAttribute="trailing" secondItem="yDK-jV-jwc" secondAttribute="trailing" id="hDd-W0-KHL"/>
-                                    <constraint firstAttribute="height" constant="40" id="s6x-um-Nv6"/>
+                                    <constraint firstAttribute="height" priority="999" constant="40" id="s6x-um-Nv6"/>
                                     <constraint firstItem="u4q-Pc-uS9" firstAttribute="centerY" secondItem="OuK-JM-Rua" secondAttribute="centerY" id="u6K-tC-i0l"/>
                                     <constraint firstItem="yDK-jV-jwc" firstAttribute="leading" secondItem="OuK-JM-Rua" secondAttribute="leading" id="yVs-gb-6f0"/>
                                 </constraints>
@@ -254,6 +254,10 @@
         <scene sceneID="F7p-5k-IsP">
             <objects>
                 <viewController id="s0T-bv-GnE" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="sl5-h7-GD9"/>
+                        <viewControllerLayoutGuide type="bottom" id="9av-m3-YZh"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Z5N-b6-QwO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -262,6 +266,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xV5-8p-CEv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="774" y="-220"/>
         </scene>
     </scenes>
 </document>

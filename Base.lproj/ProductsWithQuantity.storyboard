@@ -74,7 +74,7 @@
                                     <constraint firstItem="GzU-ob-qc5" firstAttribute="baseline" secondItem="nBh-aZ-qb2" secondAttribute="baseline" id="Fkw-vC-UbW"/>
                                     <constraint firstAttribute="trailing" secondItem="iMY-Wf-Xm3" secondAttribute="trailing" id="G6F-jN-vH8"/>
                                     <constraint firstItem="iMY-Wf-Xm3" firstAttribute="leading" secondItem="IB8-aT-NV9" secondAttribute="leading" id="JOV-3t-ued"/>
-                                    <constraint firstAttribute="height" constant="40" id="Yuo-cI-lzF"/>
+                                    <constraint firstAttribute="height" priority="999" constant="40" id="Yuo-cI-lzF"/>
                                     <constraint firstItem="GzU-ob-qc5" firstAttribute="leading" secondItem="nBh-aZ-qb2" secondAttribute="trailing" constant="16" id="aES-k6-zQO"/>
                                     <constraint firstAttribute="bottom" secondItem="iMY-Wf-Xm3" secondAttribute="bottom" id="mZ8-dQ-9pp"/>
                                 </constraints>
@@ -445,7 +445,7 @@
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="1C1-ey-U6m"/>
+                                    <constraint firstAttribute="height" priority="999" constant="40" id="1C1-ey-U6m"/>
                                     <constraint firstAttribute="bottom" secondItem="66d-BZ-Qby" secondAttribute="bottom" id="7dC-0m-U7O"/>
                                     <constraint firstItem="bTk-zw-meL" firstAttribute="baseline" secondItem="fIe-kl-SWp" secondAttribute="baseline" id="CVJ-un-gSM"/>
                                     <constraint firstItem="66d-BZ-Qby" firstAttribute="leading" secondItem="gUm-d8-Sgg" secondAttribute="leading" id="JKn-9A-qU1"/>
