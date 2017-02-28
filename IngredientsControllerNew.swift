@@ -41,6 +41,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         didSet {
             updateLargestLeftSideWidth()
             tableView.reloadData()
+            updateEmptyUI()
         }
     }
     fileprivate var notificationToken: NotificationToken?

@@ -47,6 +47,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     fileprivate var inventoriesResult: RealmSwift.List<DBInventory>? {
         didSet {
             tableView.reloadData()
+            updateEmptyUI()
         }
     }
     fileprivate var notificationToken: NotificationToken?

@@ -52,7 +52,12 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     
     fileprivate var topAddEditListControllerManager: ExpandableTopViewController<AddEditGroupViewController>?
     
-    fileprivate var itemsResult: RealmSwift.List<Recipe>?
+    fileprivate var itemsResult: RealmSwift.List<Recipe>? {
+        didSet {
+            tableView.reloadData()
+            updateEmptyUI()
+        }
+    }
     fileprivate var notificationToken: NotificationToken?
     
     override var emptyViewLabels: (label1: String, label2: String) {
