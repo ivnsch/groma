@@ -2,5 +2,5 @@
 /* Class = "UIButton"; normalTitle = "Colours"; ObjectID = "jje-xM-Vp4"; */
 "jje-xM-Vp4.normalTitle" = "Colores";
 
-/* Class = "UITextField"; placeholder = "Group name"; ObjectID = "zZx-UT-Fld"; */
-"zZx-UT-Fld.placeholder" = "Nombre del grupo";
+/* Class = "UITextField"; placeholder = "Recipe name"; ObjectID = "zZx-UT-Fld"; */
+"zZx-UT-Fld.placeholder" = "Nombre de la receta";

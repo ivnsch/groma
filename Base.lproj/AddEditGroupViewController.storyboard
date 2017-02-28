@@ -1,14 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Add Edit Group View Controller-->
         <scene sceneID="coN-hr-b9y">
             <objects>
-                <viewController storyboardIdentifier="AddEditGroupController" id="Krn-O3-8LF" customClass="AddEditGroupViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddEditGroupController" id="Krn-O3-8LF" customClass="AddEditGroupViewController" customModule="groma" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9W3-iS-Zr9"/>
                         <viewControllerLayoutGuide type="bottom" id="7Ub-YK-gdN"/>
@@ -17,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Group name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zZx-UT-Fld" customClass="TextFieldMore" customModule="shoppin" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Recipe name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zZx-UT-Fld" customClass="TextFieldMore" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="25" y="34" width="325" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="oGC-xN-853"/>
@@ -36,11 +40,11 @@
                                     <outlet property="delegate" destination="Krn-O3-8LF" id="9rg-hc-FCL"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jje-xM-Vp4" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jje-xM-Vp4" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="297" y="78" width="53" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Colours">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="fontType">
@@ -52,16 +56,15 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.59215686270000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.59215686270000001" blue="0.85098039219999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="zZx-UT-Fld" firstAttribute="leading" secondItem="Vtl-Cm-eDA" secondAttribute="leading" constant="25" id="IFg-vB-JEq" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                            <constraint firstItem="zZx-UT-Fld" firstAttribute="leading" secondItem="Vtl-Cm-eDA" secondAttribute="leading" constant="25" id="IFg-vB-JEq" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                             <constraint firstItem="zZx-UT-Fld" firstAttribute="top" secondItem="9W3-iS-Zr9" secondAttribute="bottom" constant="14" id="PRE-v7-cq8"/>
-                            <constraint firstAttribute="trailing" secondItem="zZx-UT-Fld" secondAttribute="trailing" constant="25" id="Qhq-ZC-Qgj" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                            <constraint firstAttribute="trailing" secondItem="zZx-UT-Fld" secondAttribute="trailing" constant="25" id="Qhq-ZC-Qgj" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                             <constraint firstItem="jje-xM-Vp4" firstAttribute="trailing" secondItem="zZx-UT-Fld" secondAttribute="trailing" id="Sbi-uk-93p"/>
                             <constraint firstItem="jje-xM-Vp4" firstAttribute="top" secondItem="zZx-UT-Fld" secondAttribute="bottom" constant="14" id="zPy-mv-Xo2"/>
                         </constraints>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="colorButton" destination="jje-xM-Vp4" id="u2F-ra-jEY"/>
                         <outlet property="groupNameInputField" destination="zZx-UT-Fld" id="2ov-3w-u8U"/>

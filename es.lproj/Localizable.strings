@@ -370,7 +370,7 @@ placeholder_list_name = "Nombre de la lista";
 placeholder_store = "Tienda (opcional)";
 placeholder_inventory_name = "Nombre del inventario";
 placeholder_group_name = "Nombre del grupo";
-
+placeholder_recipe_name = "Nombre de la receta";
 
 validation_email_format = "Formato incorrecto de e-mail";
 validation_missing_password = "Por favor ingresa tu clave";
@@ -381,6 +381,7 @@ validation_list_name_not_empty = "Por favor ingresa un nombre para la lista";
 validation_inventory_name_not_empty = "Por favor ingresa un nombre de inventario";
 validation_user_input_not_empty = "Por favor ingresa un e-mail";
 validation_group_name_not_empty = "Por favor ingresa un nombre para el grupo";
+validation_recipe_name_not_empty = "Por favor ingresa un nombre para la receta";
 validation_password_characters = "La contraseña debe tener al menos 8 caracteres, entre los cuales debe haber por lo menos una mayúscula y un número.";
 
 

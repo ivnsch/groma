@@ -369,6 +369,7 @@ placeholder_list_name = "List name";
 placeholder_store = "Store (optional)";
 placeholder_inventory_name = "Inventory name";
 placeholder_group_name = "Group name";
+placeholder_recipe_name = "Recipe name";
 
 
 validation_email_format = "Wrong email format";
@@ -380,6 +381,7 @@ validation_list_name_not_empty = "Please enter a list name";
 validation_inventory_name_not_empty = "Please enter an inventory name";
 validation_user_input_not_empty = "Please enter an email address";
 validation_group_name_not_empty = "Please enter a group name";
+validation_recipe_name_not_empty = "Please enter a recipe name";
 validation_password_characters = "The password must have at least 8 characters, including least 1 uppercase letter and 1 number.";
 
 

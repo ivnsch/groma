@@ -369,6 +369,7 @@ placeholder_list_name = "Name";
 placeholder_store = "Laden (freiwillig)";
 placeholder_inventory_name = "Name";
 placeholder_group_name = "Name";
+placeholder_recipe_name = "Rezeptname";
 
 
 validation_missing_password = "Bitte gib dein Passwort ein";
@@ -379,7 +380,8 @@ validation_price_not_empty = "Bitte gib einen Preis ein";
 validation_list_name_not_empty = "Bitte gib einen Namen für die Liste ein";
 validation_inventory_name_not_empty = "Bitte gib einen Namen für das Inventar ein";
 validation_user_input_not_empty = "Bitte gib eine e-Mail Adresse ein";
-validation_group_name_not_empty = "Bitte gib ein Gruppennamen ein";
+validation_group_name_not_empty = "Bitte gib einen Gruppennamen ein";
+validation_recipe_name_not_empty = "Bitte gib einen Rezeptnamen ein";
 validation_password_characters = "Das Passwort musst mindestens 8 Zeichen enthalten, davon mindestens 1 Großbuchstabe und 1 Zahl.";
 
 
