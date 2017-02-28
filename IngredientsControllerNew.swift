@@ -452,12 +452,18 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         }
     }
     
-    func remove(_ model: Ingredient, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
+    func remove(_ indexPath: IndexPath, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         guard let itemsResult = itemsResult else {QL4("No result"); return}
 
-        Prov.ingredientProvider.delete(model, ingredients: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        let row = explanationManager.showExplanation ? indexPath.row + 1 : indexPath.row
+        let updatedIndexPath = IndexPath(row: row, section: 0)
+        
+        Prov.ingredientProvider.delete(itemsResult[updatedIndexPath.row], ingredients: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
+            self?.tableView.deleteRows(at: [updatedIndexPath], with: Theme.defaultRowAnimation)
+            self?.updateEmptyUI()
             onSuccess()
+            
         }, onError: {result in
             onError(result)
         }))
@@ -563,18 +569,12 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        if isEditing {
-            return .delete
-        } else {
-            return .none
-        }
+        return .delete
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            guard let itemsResult = itemsResult else {QL4("Illegal state: no result in delete"); return}
-            let row = explanationManager.showExplanation ? indexPath.row + 1 : indexPath.row
-            remove(itemsResult[row], onSuccess: {}, onError: {_ in })
+            remove(indexPath, onSuccess: {}, onError: {_ in })
         }
     }
 }

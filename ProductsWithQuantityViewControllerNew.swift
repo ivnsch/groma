@@ -494,7 +494,7 @@ class ExplanationManager {
     }
     
     var showExplanation: Bool {
-        guard let checker = checker else {QL4("Invalid state: No checker"); return false}
+        guard let checker = checker else {QL1("No checker"); return false}
         
         return checker.showPopup()
     }
@@ -528,7 +528,7 @@ class ExplanationManager {
     }
     
     func dontShowAgain() {
-        guard let checker = checker else {QL4("Invalid state: No checker"); return}
+        guard let checker = checker else {QL1("No checker"); return}
         
         checker.dontShowAgain()
     }

@@ -111,7 +111,8 @@ class RealmIngredientProvider: RealmProvider {
     
     public func delete(_ ingredient: Ingredient, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
-            ingredients.realm?.delete(ingredients.filter(Ingredient.createFilter(uuid: ingredient.uuid)))
+            let toDelete = ingredients.filter(Ingredient.createFilter(uuid: ingredient.uuid))
+            ingredients.realm?.delete(toDelete)
             return true
         }
         handler(successMaybe ?? false)
