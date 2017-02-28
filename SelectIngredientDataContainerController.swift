@@ -179,10 +179,12 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
             selectedUnitFirstTime = true
             
             expandedSteps = 2
-            tableView.insertRows(at: [IndexPath(row: 1, section: 0)], with: .top)
+            let quantityRowIndexPath = IndexPath(row: 1, section: 0)
+            tableView.insertRows(at: [quantityRowIndexPath], with: .top)
             
-            delay(0.3) {
-                self.updateRowsForUnit(unit)
+            delay(0.3) {[weak self] in
+                self?.updateRowsForUnit(unit)
+                self?.tableView.scrollToRow(at: quantityRowIndexPath, at: .top, animated: true)
             }
             
         } else {
