@@ -306,7 +306,10 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                     return itemsCount - 1 // no biggest item - our item is the biggest - return end of page (about page see warning in addOrUpdateIncrementUI)
                 }
             }()
-            return row.map{IndexPath(row: $0, section: 0)}
+            
+            let finalRow = row.map{explanationManager.showExplanation ? $0 + 1 : $0}
+            
+            return finalRow.map{IndexPath(row: $0, section: 0)}
         }
         
         
