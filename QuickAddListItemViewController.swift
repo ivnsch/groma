@@ -610,7 +610,11 @@ extension QuickAddListItemViewController: SelectIngredientDataContainerControlle
         selectIngredientAnimator?.close()
     }
     
-    func parentViewForAddButton() -> UIView? {
+    func parentViewForSelectIngredientControllerAddButton() -> UIView? {
         return delegate?.parentViewForAddButton()
+    }
+    
+    func submitButtonBottomOffset(parent: UIView, buttonHeight: CGFloat) -> CGFloat {
+         return 0
     }
 }

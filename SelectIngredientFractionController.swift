@@ -48,6 +48,12 @@ class SelectIngredientFractionController: UIViewController, EditableFractionView
         onUIReady?()
     }
     
+    func config(fraction: Fraction) {
+        fractionImageView.fillTo(percentage: CGFloat(fraction.decimalValue))
+        fractionTextInputView.prefill(fraction: fraction)
+    }
+    
+    
     // MARK: - EditableFractionViewDelegate
     
     func onFractionInputChange(fractionInput: Fraction?) {

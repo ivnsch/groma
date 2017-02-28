@@ -11,7 +11,7 @@ import RealmSwift
 import QorumLogs
 import Providers
 
-class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPickerViewDelegate, ExplanationViewDelegate {
+class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPickerViewDelegate, ExplanationViewDelegate, SelectIngredientDataContainerControllerDelegate {
 
     var recipe: Recipe? {
         didSet {
@@ -36,6 +36,11 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     fileprivate var explanationManager: ExplanationManager = ExplanationManager()
 
+    fileprivate var topSelectIngredientControllerManager: ExpandableTopViewController<SelectIngredientDataContainerController>?
+    
+    override var isAnyTopControllerExpanded: Bool {
+        return super.isAnyTopControllerExpanded || (topSelectIngredientControllerManager?.expanded ?? false)
+    }
     
     fileprivate var itemsResult: Results<Ingredient>? {
         didSet {
@@ -52,6 +57,10 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
 
     fileprivate var pullToAddView: MyRefreshControl?
 
+    // To differenciate from add, etc. We need to disable the animation of top menu to bottom in this case
+    fileprivate var triggeredExpandEditIngredient = false
+    
+    
     override var tableView: UITableView {
         return tableViewController.tableView
     }
@@ -76,6 +85,10 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         enablePullToAdd()
         
         initExplanationManager()
+        
+        topSelectIngredientControllerManager = initEditIngredientControllerManager()
+        
+        tableView.allowsSelectionDuringEditing = true
     }
     
     override func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
@@ -87,6 +100,17 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                 controller.itemType = weakSelf.quickAddItemType
             }
             controller.list = self?.list
+            return controller
+        }
+        manager.delegate = self
+        return manager
+    }
+    
+    func initEditIngredientControllerManager() -> ExpandableTopViewController<SelectIngredientDataContainerController> {
+        let top = topBar.frame.height
+        let manager: ExpandableTopViewController<SelectIngredientDataContainerController> = ExpandableTopViewController(top: top, height: view.height - topBar.height, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
+            let controller = UIStoryboard.selectIngredientDataContainerController()
+            controller.delegate = self
             return controller
         }
         manager.delegate = self
@@ -183,6 +207,14 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         //                weakSelf.productsWithQuantityController.models = weakSelf.results?.toArray() ?? [] // TODO!! use generic Results in productsWithQuantityController to not have to map to array
         
 
+    }
+    
+    
+    override func closeTopControllers(rotateTopBarButton: Bool) {
+        super.closeTopControllers(rotateTopBarButton: rotateTopBarButton)
+        if topSelectIngredientControllerManager?.expanded ?? false {
+            topSelectIngredientControllerManager?.expand(false)
+        }
     }
     
     // MARK: - QuickAddDelegate
@@ -433,9 +465,16 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     override func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
         // Fix top line looks slightly thicker after animation. Problem: We have to animate to min scale of 0.0001 because 0 doesn't work correctly (iOS bug) so the frame height passed here is not exactly 0, which leaves a little gap when we set it in the constraint
-        topControlTopConstraint.constant = view.frame.height
-        topMenusHeightConstraint.constant = expand ? 0 : DimensionsManager.topMenuBarHeight
-        view.layoutIfNeeded()
+        
+        // When top controller is edit, it's larger than the available controller's space which breaks the constraints if we animate the top, so we don't do it in this case. It doesn't make sense anyway as we will see either too litle (when edit controller doesn't have fraction section) or nothing (when it has fraction section) of it.
+        if !triggeredExpandEditIngredient {
+            topControlTopConstraint.constant = view.frame.height
+            topMenusHeightConstraint.constant = expand ? 0 : DimensionsManager.topMenuBarHeight
+            //        view.layoutIfNeeded()
+            
+        } else {
+            triggeredExpandEditIngredient = false // clear it
+        }
     }
     
     // MARK: - Navigation
@@ -467,6 +506,11 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         }, onError: {result in
             onError(result)
         }))
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool, tryCloseTopViewController: Bool = true) {
+        super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
+        tableViewController.setEditing(editing, animated: animated)
     }
 
     
@@ -516,6 +560,25 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     func onGotItTap(sender: UIButton) {
         explanationManager.dontShowAgain()
         tableView.deleteRows(at: [IndexPath(row: 0, section: 0)], with: .top)
+    }
+    
+    
+    // MARK: - SelectIngredientDataContainerControllerDelegate
+        
+    func onSelectIngrentTapOutsideOfContent() {
+        // do nothing - for now there's no outside here (controller covers complete view)
+    }
+    
+    func parentViewForSelectIngredientControllerAddButton() -> UIView? {
+        return view
+    }
+    
+    func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs) {
+        onAddIngredient(item: item, ingredientInput: inputs)
+    }
+    
+    func submitButtonBottomOffset(parent: UIView, buttonHeight: CGFloat) -> CGFloat {
+        return -(tabBarController?.tabBar.height ?? 0)
     }
 }
 
@@ -575,6 +638,20 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             remove(indexPath, onSuccess: {}, onError: {_ in })
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if isEditing {
+            guard let itemsResult = itemsResult else {QL4("No result"); return}
+            
+            let ingredient = itemsResult[indexPath.row]
+            
+            triggeredExpandEditIngredient = true
+            topSelectIngredientControllerManager?.expand(true)
+            topSelectIngredientControllerManager?.controller?.item = itemsResult[indexPath.row].item
+            topSelectIngredientControllerManager?.controller?.configForEditMode(ingredient: ingredient)
+            topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
         }
     }
 }

@@ -68,7 +68,7 @@
                     <rect key="frame" x="235" y="60" width="120" height="250"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="120" id="8xR-of-rNu"/>
-                        <constraint firstAttribute="height" constant="250" id="zfO-16-4aH"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="250" id="zfO-16-4aH"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="99" placeholderIntrinsicHeight="89" translatesAutoresizingMaskIntoConstraints="NO" id="LyZ-lA-iAk" customClass="EditableFractionView" customModule="groma" customModuleProvider="target">
@@ -91,7 +91,7 @@
                 <constraint firstItem="b8u-iC-Eep" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="kfv-bo-yAe"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="24.5" y="-116"/>
+            <point key="canvasLocation" x="-321" y="-51"/>
         </view>
     </objects>
 </document>

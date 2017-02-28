@@ -12,8 +12,9 @@ import QorumLogs
 
 protocol SelectIngredientDataContainerControllerDelegate {
     func onSelectIngrentTapOutsideOfContent()
-    func parentViewForAddButton() -> UIView?
+    func parentViewForSelectIngredientControllerAddButton() -> UIView?
     func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs)
+    func submitButtonBottomOffset(parent: UIView, buttonHeight: CGFloat) -> CGFloat // TODO improve this
 }
 
 class SelectIngredientDataContainerController: UIViewController, SelectUnitControllerDelegate, QuantityViewDelegate, SelectIngredientFractionControllerDelegate, SubmitViewDelegate {
@@ -93,8 +94,24 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         UIApplication.shared.delegate!.window??.endEditing(true)
     }
     
+    func configForEditMode(ingredient: Ingredient) {
+        fill(ingredient: ingredient)
+        updateStepsAfterSelectingUnitIfConditions(unit: ingredient.unit, scrollToQuantityRow: false)
+    }
+    
+    // for edit case
+    func fill(ingredient: Ingredient) {
+        self.currentUnit = ingredient.unit
+        selectUnitController?.selectUnit(unit: ingredient.unit)
+        
+        selectQuantityController?.quantityView.quantity = ingredient.quantity
+        
+        selectFractionController?.config(fraction: ingredient.fraction)
+    }
+    
     fileprivate func initSubmitButton() {
         guard self.submitView == nil else {QL1("Already showing a submit view"); return}
+        guard let delegate = delegate else {QL1("No delegate"); return}
 //        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return}
         guard let parentViewForAddButton = view else {QL4("No delegate: \(delegate)"); return}
         
@@ -108,7 +125,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         
         _ = submitView.alignLeft(parentViewForAddButton)
         _ = submitView.alignRight(parentViewForAddButton)
-        let bottomConstraint = submitView.alignBottom(parentViewForAddButton)
+        _ = submitView.alignBottom(parentViewForAddButton, constant: Float(delegate.submitButtonBottomOffset(parent: parentViewForAddButton, buttonHeight: height)))
         _ = submitView.heightConstraint(height)
         
         self.submitView = submitView
@@ -175,23 +192,30 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         updateTitle(inputs: inputs)
         selectFractionController?.unit = unit
         
+        updateStepsAfterSelectingUnitIfConditions(unit: unit, scrollToQuantityRow: true)
+    }
+    
+    fileprivate func updateStepsAfterSelectingUnitIfConditions(unit: Providers.Unit, scrollToQuantityRow: Bool) {
+        
         if !selectedUnitFirstTime {
             selectedUnitFirstTime = true
-            
+        
             expandedSteps = 2
             let quantityRowIndexPath = IndexPath(row: 1, section: 0)
             tableView.insertRows(at: [quantityRowIndexPath], with: .top)
             
             delay(0.3) {[weak self] in
                 self?.updateRowsForUnit(unit)
-                self?.tableView.scrollToRow(at: quantityRowIndexPath, at: .top, animated: true)
+                
+                if scrollToQuantityRow {
+                    self?.tableView.scrollToRow(at: quantityRowIndexPath, at: .top, animated: true)
+                }
             }
             
         } else {
             updateRowsForUnit(unit)
         }
     }
-    
     
     // MARK: - QuantityViewDelegate
     
@@ -330,7 +354,7 @@ extension SelectIngredientDataContainerController: UITableViewDataSource, UITabl
         switch indexPath.row {
         case 0: return DimensionsManager.quickAddHeight + 20
         case 1: return 100
-        default: return 390
+        default: return 500
         }
     }
 }

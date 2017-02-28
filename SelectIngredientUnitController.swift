@@ -54,6 +54,36 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
         })
     }
     
+    func selectUnit(unit: Providers.Unit) {
+        
+        clearSelectedUnits()
+        
+        selectedUnit = unit
+        
+        if let indexPath = findIndexPath(unit: unit) {
+            if let cell = unitsCollectionView.cellForItem(at: indexPath) as? UnitCell {
+                cell.unitView.showSelected(selected: true, animated: true)
+            } else {
+                QL2("No cell for index path: \(indexPath) or wrong type")
+            }
+        } else {
+            QL4("Didn't find index path to select unit: \(unit)")
+        }
+    }
+    
+    fileprivate func findIndexPath(unit: Providers.Unit) -> IndexPath? {
+        guard let dataSource = unitsCollectionView.dataSource else {QL4("No data source"); return nil}
+        guard let unitsDataSource = dataSource as? UnitsDataSource else {QL4("Data source has wrong type: \(type(of: dataSource))"); return nil}
+        guard let units = unitsDataSource.units else {QL4("Invalid state: Data source has no units"); return nil}
+        
+        for (index, u) in units.enumerated() {
+            if u.same(unit) {
+                return IndexPath(row: index, section: 0)
+            }
+        }
+        return nil
+    }
+    
     fileprivate func onSelect(unit: Providers.Unit) {
         selectedUnit = unit
         
