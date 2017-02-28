@@ -66,8 +66,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initEmptyView(line1: trans("empty_recipe_line1"), line2: trans("empty_recipe_line2"))
+        
         initExplanationManager()
-
     }
     
     override func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
