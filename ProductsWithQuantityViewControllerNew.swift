@@ -54,14 +54,20 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         (.count, trans("sort_by_count")), (.alphabetic, trans("sort_by_alphabetic"))
     ]
     
-    @IBOutlet weak var emptyView: UIView!
-    @IBOutlet weak var emptyViewImg: UIImageView!
-    @IBOutlet weak var emptyViewLabel1: UILabel!
-    @IBOutlet weak var emptyViewLabel2: UILabel!
+    @IBOutlet weak var emptyViewControllerContainer: UIView!
+    fileprivate var emptyViewController: EmptyViewController!
+
+    var isEmpty: Bool {
+        return itemsCount == 0
+    }
     
     @IBOutlet weak var topMenusHeightConstraint: NSLayoutConstraint!
     
-    weak var delegate: ProductsWithQuantityViewControllerDelegateNew?
+    weak var delegate: ProductsWithQuantityViewControllerDelegateNew? {
+        didSet {
+            initEmptyViewLabelsIfConditions()
+        }
+    }
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready
     
@@ -79,7 +85,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initExplanationManager()
+        initExplanationManager()        
+        initEmptyView()
         
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         
@@ -89,15 +96,39 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), for: .valueChanged)
             self.pullToAddView = refreshControl
         }
+    }
+    
+    fileprivate func initEmptyView() {
+        let emptyViewController = UIStoryboard.emptyViewStoryboard()
+        emptyViewController.addTo(container: emptyViewControllerContainer)
+        emptyViewController.onTapOrPull = {[weak self] in
+            self?.delegate?.onEmptyViewTap()
+        }
+        self.emptyViewController = emptyViewController
         
-        // TODO custom empty view, put this there
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProductsWithQuantityViewController.onEmptyInventoryViewTap(_:)))
-        emptyView.addGestureRecognizer(tapRecognizer)
-        
-        if let emptyViewData = delegate?.emptyViewData()  {
-            emptyViewLabel1.text = emptyViewData.text
-            emptyViewLabel2.text = emptyViewData.text2
-            emptyViewImg.image = UIImage(named: emptyViewData.imgName)
+        initEmptyViewLabelsIfConditions()
+    }
+    
+    fileprivate func initEmptyViewLabelsIfConditions() {
+        if let emptyViewController = emptyViewController, let delegate = delegate {
+            let emptyViewData = delegate.emptyViewData()
+            emptyViewController.labels = (emptyViewData.text, emptyViewData.text2)
+        }
+    }
+    
+    func updateEmptyUI() {
+        setEmptyUI(isEmpty, animated: true)
+        // necessary?
+//        delegate?.onEmpty(isEmpty)
+//        topMenuView.setHiddenAnimated(isEmpty)
+    }
+    
+    func setEmptyUI(_ empty: Bool, animated: Bool) {
+        let hidden = !empty
+        if animated {
+            emptyViewControllerContainer.setHiddenAnimated(hidden)
+        } else {
+            emptyViewControllerContainer.isHidden = hidden
         }
     }
     
@@ -120,10 +151,6 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             tableViewController.tableView.dataSource = self
             tableViewController.tableView.delegate = self
         }
-    }
-    
-    func onEmptyInventoryViewTap(_ sender: UITapGestureRecognizer) {
-        delegate?.onEmptyViewTap()
     }
     
     override func viewWillAppear(_ animated:Bool) {
@@ -217,13 +244,6 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         }
     }
 
-    func updateEmptyUI() {
-        let isEmpty = itemsCount == 0
-        emptyView.setHiddenAnimated(!isEmpty)
-        delegate?.onEmpty(isEmpty)
-        topMenuView.setHiddenAnimated(isEmpty)
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.onModelSelected(indexPath.row)
     }

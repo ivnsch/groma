@@ -15,7 +15,12 @@ import Providers
 
 class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegateNew, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
 
-    fileprivate var inventoryItemsResult: Results<InventoryItem>?
+    fileprivate var inventoryItemsResult: Results<InventoryItem>? {
+        didSet {
+            productsWithQuantityController.reload()
+            productsWithQuantityController.updateEmptyUI()
+        }
+    }
     fileprivate var realmData: RealmData?
     
     @IBOutlet weak var topBar: ListTopBarView!
@@ -110,7 +115,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onExpand(_ expanding: Bool) {
         if !expanding {
-            productsWithQuantityController?.emptyView.isHidden = true
+            productsWithQuantityController?.setEmptyUI(true, animated: false)
             topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()            
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])
@@ -327,7 +332,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 
                 if addedItem.isNew {
                     self.insert(item: addedItem.inventoryItem, scrollToRow: true)
-                    
+                    self.productsWithQuantityController.updateEmptyUI()
                 } else {
                     if let index = inventoryItemsResult.index(of: addedItem.inventoryItem) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
                         self.update(item: addedItem.inventoryItem, scrollToRow: index)
@@ -374,6 +379,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                     
                     if addedItem.isNew {
                         self.insert(item: addedItem.inventoryItem, scrollToRow: true)
+                        self.productsWithQuantityController.updateEmptyUI()
                         
                     } else {
                         if let index = inventoryItemsResult.index(of: addedItem.inventoryItem) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
@@ -516,6 +522,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         guard let realmData = realmData else {QL4("No realm data"); return}
 
         Prov.inventoryItemsProvider.removeInventoryItem((model as! InventoryItem).uuid, inventoryUuid: inventory.uuid, remote: true, realmData: realmData, resultHandler(onSuccess: {
+            self.productsWithQuantityController.updateEmptyUI()
             // TODO!!!!!!!!!!!!!!!!!!!!! shouldn't we remove rows here(also in ingredients controller?)
             onSuccess()
         }, onError: {result in
