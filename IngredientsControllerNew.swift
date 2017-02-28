@@ -48,6 +48,10 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     fileprivate var maxLeftSideWidth: CGFloat = 0
     
+    fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
+
+    fileprivate var pullToAddView: MyRefreshControl?
+
     override var tableView: UITableView {
         return tableViewController.tableView
     }
@@ -68,6 +72,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         super.viewDidLoad()
         
         initEmptyView(line1: trans("empty_recipe_line1"), line2: trans("empty_recipe_line2"))
+        
+        enablePullToAdd()
         
         initExplanationManager()
     }
@@ -95,6 +101,32 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         explanationManager.checker = checker
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        toggleButtonRotator.reset(tableView, topBar: topBar)
+    }
+    
+    // MARK: - Pull to add
+    
+    func enablePullToAdd() {
+        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground)
+        refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
+        tableViewController.refreshControl = refreshControl
+        
+        pullToAddView = refreshControl
+    }
+    
+    func onPullRefresh(_ sender: UIRefreshControl) {
+        sender.endRefreshing()
+        _ = toggleTopAddController(false)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
+        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -40)
+    }
+    
+    // MARK: -
     
     func load() {
         guard let recipe = recipe else {QL4("No recipe"); return}
