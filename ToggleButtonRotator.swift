@@ -22,23 +22,20 @@ class ToggleButtonRotator {
     }
     
     func rotateForOffset(_ start: CGFloat, topBar: ListTopBarView, scrollView: UIScrollView) {
-        
         guard enabled else {return}
+        guard let toggleButton = topBar.rightButton(.toggleOpen) else {return}
+
+        let startOffset: CGFloat = 0
+        let offset: CGFloat = scrollView.contentOffset.y
         
-        let offset = scrollView.contentOffset.y
-//        QL1("Call rotate for offset, offset: \(offset)")
-        if offset < start
-//            && offset < lastScrollViewOffset
-        {
-//            lastScrollViewOffset = offset
-            let max: CGFloat = start - 60 // the smaller the value the quicker the button will reach its final rotation
-            let current = scrollView.contentOffset.y - start
-            let rotationPercent: CGFloat = current / (max - start) // value between 0 and 1 indicating how much of the total rotation we want to rotate
-            let truncatedRotationPercent = min(abs(rotationPercent), 1)
-            if let toggleButton = topBar.rightButton(.toggleOpen) {
-                let degrees = 45 * truncatedRotationPercent
-                toggleButton.rotate(Double(degrees))
-            }
-        }
+        let totalAngle: CGFloat = 45
+        let distanceForTotalAngle: CGFloat = 75
+        
+        let ratio = totalAngle / distanceForTotalAngle
+        
+        let currentDistance = offset - startOffset
+        let currentAngle = min(0, currentDistance * ratio) // TODO when scrolling back (lifting finger) we get here 0 and arrow jumps back. Should revert gradually. When scrolling manually back this doesn't happen.
+        
+        toggleButton.transform = CGAffineTransform(rotationAngle: min(totalAngle.degreesToRadians, abs(currentAngle.degreesToRadians)))
     }
 }
