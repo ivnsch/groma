@@ -191,8 +191,10 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     }
     
     func closeTopControllers(rotateTopBarButton: Bool = true) {
-        topQuickAddControllerManager?.expand(false)
-        onCloseTopControllers(rotateTopBarButton: rotateTopBarButton)
+        if topQuickAddControllerManager?.expanded ?? false {
+            topQuickAddControllerManager?.expand(false)
+            onCloseTopControllers(rotateTopBarButton: rotateTopBarButton)
+        }
     }
     
     /// Private to avoid incorrect flow when overriding both closeTopControllers and onCloseTopControllers (and calling super)
