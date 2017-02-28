@@ -11,7 +11,7 @@ import QorumLogs
 import Providers
 
 enum MoreItemType {
-    case history, manageProduct, user, settings, help, share, feedback, watchIntro, about
+    case history, manageProduct, user, settings, help, share, feedback, community, watchIntro, about
 }
 
 typealias MoreItem = (type: MoreItemType, text: String)
@@ -35,11 +35,12 @@ class MoreViewController: UITableViewController {
         
         items = [
             MoreItem(type: .history, text: trans("more_history")),
-            MoreItem(type: .manageProduct, text: trans("more_products")),
+            MoreItem(type: .manageProduct, text: trans("more_items_management")),
             MoreItem(type: .settings, text: trans("more_settings")),
             MoreItem(type: .help, text: trans("more_help")),
             MoreItem(type: .share, text: trans("more_share")),
             MoreItem(type: .feedback, text: trans("more_feedback")),
+            MoreItem(type: .community, text: trans("more_community")),
             MoreItem(type: .watchIntro, text: trans("more_intro")),
             MoreItem(type: .about, text: trans("more_about"))
         ]
@@ -88,6 +89,10 @@ class MoreViewController: UITableViewController {
         case .feedback:
             emailHelper = EmailHelper(controller: self)
             emailHelper?.showEmail()
+
+        case .community:
+            let controller = CommunityController()
+            navigationController?.pushViewController(controller, animated: true)
             
         case .share:
             share(trans("sharing_message"), sharingImage: nil, sharingURL: URL(string: "https://itunes.apple.com/app/groma/id1121689899?&mt=8"))
