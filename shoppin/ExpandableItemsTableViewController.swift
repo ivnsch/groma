@@ -48,8 +48,9 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     @IBOutlet weak var topBar: ListTopBarView!
 //    @IBOutlet weak var topBarConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var emptyView: UIView!
-
+    @IBOutlet weak var emptyViewControllerContainer: UIView!
+    
+    fileprivate var emptyViewController: EmptyViewController!
     fileprivate let listItemsProvider = ProviderFactory().listItemProvider
     
 //    var models: [ExpandableTableViewModel] = [] {
@@ -106,10 +107,30 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         
         initTopBar()
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ExpandableItemsTableViewController.onEmptyViewTap(_:)))
-        emptyView.addGestureRecognizer(tapRecognizer)
+        initEmptyView()
     }
-
+    
+    fileprivate func initEmptyView() {
+        let emptyViewController = UIStoryboard.emptyViewStoryboard()
+        emptyViewController.addTo(container: emptyViewControllerContainer)
+        emptyViewController.labels = emptyViewLabels
+        emptyViewController.onTapOrPull = {[weak self] in
+            _ = self?.onAddTap()
+        }
+        self.emptyViewController = emptyViewController
+    }
+    
+    var emptyViewLabels: (label1: String, label2: String) {
+        fatalError("Override")
+    }
+    
+    func updateEmptyUI() {
+        setEmptyUI(itemsCount.map{$0 == 0} ?? true, animated: true)
+    }
+    
+    func setEmptyUI(_ empty: Bool, animated: Bool) {
+        emptyViewControllerContainer.setHiddenAnimated(!empty)
+    }
     
     // MARK: -
     
@@ -245,10 +266,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    func onEmptyViewTap(_ sender: UITapGestureRecognizer) {
-        onAddTap()
-    }
-
     func onSubmitTap() {
         fatalError("override")
     }

@@ -51,6 +51,10 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     fileprivate var notificationToken: NotificationToken?
     
+    override var emptyViewLabels: (label1: String, label2: String) {
+        return (label1: trans("empty_inventories_line1"), label2: trans("empty_inventories_line2"))
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -212,6 +216,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             
             self?.topAddEditListControllerManager?.expand(false)
             self?.setTopBarState(.normalFromExpanded)
+            self?.updateEmptyUI()
             
         }, onErrorAdditional: {[weak self] result in
             self?.onInventoryAddOrUpdateError(inventory)
@@ -281,7 +286,8 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         guard let inventoriesResult = inventoriesResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         
-        Prov.inventoryProvider.delete(index: index, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        Prov.inventoryProvider.delete(index: index, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
+            self?.updateEmptyUI()
         }, onErrorAdditional: {[weak self] result in
             self?.initModels()
             }

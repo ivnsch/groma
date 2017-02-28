@@ -55,6 +55,10 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     fileprivate var itemsResult: RealmSwift.List<Recipe>?
     fileprivate var notificationToken: NotificationToken?
     
+    override var emptyViewLabels: (label1: String, label2: String) {
+        return (label1: trans("empty_recipes_line1"), label2: trans("empty_recipes_line2"))
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -220,6 +224,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
         
             self?.topAddEditListControllerManager?.expand(false)
             self?.setTopBarState(.normalFromExpanded)
+            self?.updateEmptyUI()
             
         }, onErrorAdditional: {[weak self] result in
             self?.onGroupAddOrUpdateError(recipe)
@@ -304,7 +309,8 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
         guard let itemsResult = itemsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         
-        Prov.recipeProvider.delete(index: index, recipes: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        Prov.recipeProvider.delete(index: index, recipes: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
+            self?.updateEmptyUI()
         }, onErrorAdditional: {[weak self] result in
             self?.initModels()
             }

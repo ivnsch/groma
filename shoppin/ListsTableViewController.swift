@@ -49,11 +49,16 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     fileprivate var listsResult: RealmSwift.List<Providers.List>? {
         didSet {
             tableView.reloadData()
+            updateEmptyUI()
         }
     }
     fileprivate var notificationToken: NotificationToken?
     
     var topAddEditListControllerManager: ExpandableTopViewController<AddEditListController>?
+    
+    override var emptyViewLabels: (label1: String, label2: String) {
+        return (label1: trans("empty_lists_line1"), label2: trans("empty_lists_line2"))
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -222,6 +227,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             
             self?.topAddEditListControllerManager?.expand(false)
             self?.setTopBarState(.normalFromExpanded)
+            self?.updateEmptyUI()
             
         }, onErrorAdditional: {[weak self] result in
             self?.onListAddOrUpdateError(list)
@@ -307,7 +313,8 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         guard let listsResult = listsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
 
-        Prov.listProvider.delete(index: index, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        Prov.listProvider.delete(index: index, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
+            self?.updateEmptyUI()
         }, onErrorAdditional: {[weak self] result in
             self?.initModels()
             }
