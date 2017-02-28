@@ -12,9 +12,6 @@
         <array key="HelveticaNeue.ttc">
             <string>HelveticaNeue</string>
         </array>
-        <array key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
-        </array>
     </customFonts>
     <scenes>
         <!--Quick Add View Controller-->
@@ -210,17 +207,27 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S5X-IT-S9N">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No recipes found!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vuZ-1A-edp">
-                                        <rect key="frame" x="130.5" y="295" width="114.5" height="18"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No recipes found!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vuZ-1A-edp" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="127" y="344.5" width="122" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="40"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to go to recipes tab" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PxW-2D-RII">
-                                        <rect key="frame" x="111" y="335" width="153" height="18"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to go to recipes tab" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PxW-2D-RII" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="106" y="370.5" width="163" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="30"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cvI-SV-8uz">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
@@ -228,17 +235,26 @@
                                             <action selector="onEmptyViewTap:" destination="vbO-Z7-ODC" eventType="touchUpInside" id="0g9-bM-Xli"/>
                                         </connections>
                                     </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="Ztp-ZS-0OP">
+                                        <rect key="frame" x="138" y="234.5" width="100" height="100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="7DI-i0-n3x"/>
+                                            <constraint firstAttribute="height" constant="100" id="kgg-fM-c3N"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="cvI-SV-8uz" firstAttribute="leading" secondItem="S5X-IT-S9N" secondAttribute="leading" id="3bT-If-NrT"/>
+                                    <constraint firstItem="Ztp-ZS-0OP" firstAttribute="centerX" secondItem="S5X-IT-S9N" secondAttribute="centerX" id="6Ly-9B-0Y0"/>
                                     <constraint firstItem="vuZ-1A-edp" firstAttribute="centerX" secondItem="S5X-IT-S9N" secondAttribute="centerX" id="8N2-in-ums"/>
-                                    <constraint firstItem="PxW-2D-RII" firstAttribute="centerY" secondItem="S5X-IT-S9N" secondAttribute="centerY" constant="20" id="AUg-wM-xUF"/>
-                                    <constraint firstItem="vuZ-1A-edp" firstAttribute="centerY" secondItem="S5X-IT-S9N" secondAttribute="centerY" constant="-20" id="EhI-he-cR5"/>
+                                    <constraint firstItem="vuZ-1A-edp" firstAttribute="centerY" secondItem="S5X-IT-S9N" secondAttribute="centerY" constant="30" id="EhI-he-cR5"/>
                                     <constraint firstItem="PxW-2D-RII" firstAttribute="centerX" secondItem="S5X-IT-S9N" secondAttribute="centerX" id="MOQ-V9-daK"/>
                                     <constraint firstAttribute="bottom" secondItem="cvI-SV-8uz" secondAttribute="bottom" id="P2I-9c-E6z"/>
                                     <constraint firstItem="cvI-SV-8uz" firstAttribute="top" secondItem="S5X-IT-S9N" secondAttribute="top" id="QEl-jS-SRa"/>
                                     <constraint firstAttribute="trailing" secondItem="cvI-SV-8uz" secondAttribute="trailing" id="SzE-j7-c5x"/>
+                                    <constraint firstItem="vuZ-1A-edp" firstAttribute="top" secondItem="Ztp-ZS-0OP" secondAttribute="bottom" constant="10" id="WDZ-Qn-1Fh"/>
+                                    <constraint firstItem="PxW-2D-RII" firstAttribute="top" secondItem="vuZ-1A-edp" secondAttribute="bottom" constant="8" id="dKu-3F-1Da"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -321,7 +337,7 @@
             <objects>
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="1wx-Be-Utw" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="3Sg-A1-eFS">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3Sg-A1-eFS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -332,4 +348,7 @@
             <point key="canvasLocation" x="738" y="1287"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="empty_page" width="240" height="206"/>
+    </resources>
 </document>
