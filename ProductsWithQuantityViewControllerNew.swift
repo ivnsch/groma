@@ -257,12 +257,10 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
         changeInventoryItemQuantity(cell, delta: 1)
-        SwipeToIncrementAlertHelper.check(self)
     }
     
     func onDecrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
         changeInventoryItemQuantity(cell, delta: -1)
-        SwipeToIncrementAlertHelper.check(self)
     }
     
     func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Float) {

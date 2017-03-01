@@ -655,12 +655,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     func onMinusTap(_ tableViewListItem: TableViewListItem) {
         listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: -1)
-        SwipeToIncrementAlertHelper.check(self)
     }
     
     func onPlusTap(_ tableViewListItem: TableViewListItem) {
         listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: 1)
-        SwipeToIncrementAlertHelper.check(self)
     }
     
     func onHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection) {

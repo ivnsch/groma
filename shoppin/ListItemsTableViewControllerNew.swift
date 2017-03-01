@@ -373,12 +373,10 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     
     func onMinusTap(_ listItem: ListItem) {
         listItemsTableViewDelegate?.onIncrementItem(listItem, delta: -1)
-        SwipeToIncrementAlertHelper.check(self)
     }
     
     func onPlusTap(_ listItem: ListItem) {
         listItemsTableViewDelegate?.onIncrementItem(listItem, delta: 1)
-        SwipeToIncrementAlertHelper.check(self)
     }
     
     func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Float) {

@@ -233,13 +233,11 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
         cell.cancelDeleteProgress()
         checkChangeInventoryItemQuantity(cell, delta: 1)
-        SwipeToIncrementAlertHelper.check(self)
     }
     
     func onDecrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
         cell.cancelDeleteProgress()
         checkChangeInventoryItemQuantity(cell, delta: -1)
-        SwipeToIncrementAlertHelper.check(self)
     }
     
     func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Float) {
