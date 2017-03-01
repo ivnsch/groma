@@ -876,15 +876,15 @@ class RealmListItemProvider: RealmProvider {
     
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
     // price: only used when product doesn't exist. price == nil means use default value to initialize price.
-    fileprivate func createSync(_ quantifiableProduct: QuantifiableProduct, store: String, price: Float?, section: Section, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
+    fileprivate func createSync(_ quantifiableProduct: QuantifiableProduct, store: String, price: Float?, section: Section, list: List, quantity: Float, note: String?, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
         let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store, price: price)
-        return createSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
+        return createSync(storeProduct, section: section, list: list, quantity: quantity, note: note, realmData: realmData, doTransaction: doTransaction)
     }
     
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
-    fileprivate func createSync(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
+    fileprivate func createSync(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Float, note: String?, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
         // TODO note? we use separate methods for quick add/form
-        let listItem = ListItem(uuid: UUID().uuidString, product: storeProduct, section: section, list: list, note: nil, quantity: quantity)
+        let listItem = ListItem(uuid: UUID().uuidString, product: storeProduct, section: section, list: list, note: note, quantity: quantity)
         return createSync(listItem, section: section, realmData: realmData, doTransaction: doTransaction)
     }
     
@@ -916,7 +916,7 @@ class RealmListItemProvider: RealmProvider {
     
     /// Quick add / form
     /// price set when used in form
-    func addSync(quantifiableProduct: QuantifiableProduct, store: String, price: Float?, list: List, quantity: Float, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (AddListItemResult)? {
+    func addSync(quantifiableProduct: QuantifiableProduct, store: String, price: Float?, list: List, quantity: Float, note: String?, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (AddListItemResult)? {
         
         refresh()
         
@@ -945,7 +945,7 @@ class RealmListItemProvider: RealmProvider {
                 print("list items before create list item: \(section.listItems.count)")
                 
                 // TODO section, list - see note on create
-                if let createdListItem = createSync(quantifiableProduct, store: store, price: price, section: section, list: list, quantity: quantity, realmData: realmData, doTransaction: doTransaction) {
+                if let createdListItem = createSync(quantifiableProduct, store: store, price: price, section: section, list: list, quantity: quantity, note: note, realmData: realmData, doTransaction: doTransaction) {
                     
                     print("list items after create list item: \(section.listItems.count)")
                     
@@ -970,7 +970,7 @@ class RealmListItemProvider: RealmProvider {
         switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false) {
             
         case .ok(let quantifiableProduct):
-            return addSync(quantifiableProduct: quantifiableProduct, store: list.store ?? "", price: listItemInput.storeProductInput.price, list: list, quantity: listItemInput.quantity, status: status, realmData: realmData)
+            return addSync(quantifiableProduct: quantifiableProduct, store: list.store ?? "", price: listItemInput.storeProductInput.price, list: list, quantity: listItemInput.quantity, note: listItemInput.note, status: status, realmData: realmData)
 
         case .err(let error):
             QL4("Couldn't add/update quantifiable product: \(error)")
@@ -1118,8 +1118,8 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
-    fileprivate func create(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Float, realmData: RealmData, _ handler: @escaping (ListItem?) -> Void) {
-        handler(createSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData))
+    fileprivate func create(_ storeProduct: StoreProduct, section: Section, list: List, quantity: Float, note: String?, realmData: RealmData, _ handler: @escaping (ListItem?) -> Void) {
+        handler(createSync(storeProduct, section: section, list: list, quantity: quantity, note: note, realmData: realmData))
     }
     
     func update(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, realmData: RealmData) -> ProvResult<UpdateListItemResult, DatabaseError> {
