@@ -34,7 +34,7 @@ class RealmInventoryProvider: RealmProvider {
             
             let sortData: (key: String, ascending: Bool) = {
                 switch sortBy {
-                case .alphabetic: return ("productOpt.itemOpt.name", true)
+                case .alphabetic: return ("productOpt.productOpt.itemOpt.name", true)
                 case .count: return ("quantity", false)
                 }
             }()
