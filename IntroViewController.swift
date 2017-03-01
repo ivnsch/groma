@@ -180,7 +180,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         // It would be better to delete the recipe on failure instead of skip but this is quicker to implement
                         guard let unit = unitDict[ingredientModel.unitId] else {QL4("Didn't find unit for id: \(ingredientModel.unitId). Can't add ingredient"); return nil}
                         guard let item = itemsDict[ingredientModel.name] else {QL4("Didn't find item with name: \(ingredientModel.name). Can't add ingredient"); return nil}
-                        return Ingredient(uuid: UUID().uuidString, quantity: 1, fraction: Fraction.one, unit: unit, item: item, recipe: recipe)
+                        return Ingredient(uuid: UUID().uuidString, quantity: ingredientModel.quantity, fraction: ingredientModel.fraction, unit: unit, item: item, recipe: recipe)
                     }
                     
                     Prov.recipeProvider.add(recipe, notificationToken: nil, weakSelf.resultHandler(onSuccess: {
