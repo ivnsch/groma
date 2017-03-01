@@ -55,13 +55,23 @@ class RealmRecipeProvider: RealmProvider {
         }
     }
 
-    public func add(_ recipe: Recipe, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
-        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: recipes.realm) {realm -> Bool in
+    public func add(_ recipe: Recipe, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: recipes.realm) {realm -> Bool in
             realm.add(recipe, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
             recipes.append(recipe)
             return true
         }
         handler(successMaybe ?? false)
+    }
+    
+    public func add(_ recipe: Recipe, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
+        recipes(sortBy: .order) {[weak self] recipesMaybe in
+            if let recipes = recipesMaybe {
+                self?.add(recipe, recipes: recipes, notificationToken: notificationToken, handler)
+            } else {
+                handler(false)
+            }
+        }
     }
     
     public func update(_ recipe: Recipe, input: RecipeInput, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {

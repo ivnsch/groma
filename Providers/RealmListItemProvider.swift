@@ -1138,7 +1138,7 @@ class RealmListItemProvider: RealmProvider {
                 if !res.section.same(updatingListItem.section) {
                     
                     // 1. Move list item to new section
-                    updatingListItem.section.listItems.remove(updatingListItem)
+                    _ = updatingListItem.section.listItems.remove(updatingListItem)
                     res.section.listItems.append(updatingListItem)
                     
                     if status == .todo { // There's no List<Section> for status other than .todo

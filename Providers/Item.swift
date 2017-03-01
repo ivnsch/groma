@@ -80,6 +80,11 @@ public class Item: Object, Identifiable {
         return "uuid IN {\(uuidsStr)}"
     }
     
+    static func createFilter(names: [String]) -> String {
+        let namesStr: String = names.map{"'\($0)'"}.joined(separator: ",")
+        return "name IN {\(namesStr)}"
+    }
+    
     // MARK: -
     
     fileprivate func update(_ item: Item, category: ProductCategory) -> Item {

@@ -40,6 +40,13 @@ class ItemProviderImpl: ItemProvider {
         }
     }
     
+    func items(names: [String], _ handler: @escaping (ProviderResult<Results<Item>>) -> Void) {
+        switch DBProv.itemProvider.items(names: names) {
+        case .ok(let items): handler(ProviderResult(status: .success, sucessResult: items))
+        case .err(_): handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+
     func addOrUpdate(input: ItemInput, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProv.itemProvider.addOrUpdate(input: input) {success in
             if success {

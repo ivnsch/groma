@@ -151,6 +151,64 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }))
         }
         
+        func initExampleRecipe(unitDict: [UnitId: Providers.Unit], _ onFinish: VoidFunction? = nil) {
+            Prov.recipeProvider.recipes(sortBy: .order, resultHandler(onSuccess: {[weak self] recipes in guard let weakSelf = self else {onFinish?(); return}
+                
+                guard recipes.isEmpty else {QL2("User already has groups, skipping"); onFinish?(); return}
+                
+                let ingredientModels: [(name: String, quantity: Float, fraction: Fraction, unitId: UnitId)] = [
+                    (trans("pr_tomatoes_peeled"), 1, Fraction.one, .can),
+                    (trans("pr_oil_olives"), 1, Fraction.one, .spoon),
+                    (trans("pr_onions"), 1, Fraction.one, .none),
+                    (trans("pr_salt"), 0, Fraction.zero, .none),
+                    (trans("pr_garlic"), 2, Fraction.one, .clove),
+                    (trans("pr_pepper_red"), 1, Fraction.one, .pinch),
+                    (trans("pr_chicken_broth"), 1, Fraction(numerator: 1, denominator: 2), .cup),
+                    (trans("pr_cream"), 0, Fraction(numerator: 1, denominator: 3), .cup),
+                    (trans("pr_pepper"), 0, Fraction.zero, .none)
+                ]
+                
+                
+                let recipe = Recipe(uuid: UUID().uuidString, name: trans("tomato_soup"), color: UIColor.flatRed)
+                
+                let itemNames = ingredientModels.map {$0.name}
+                Prov.itemsProvider.items(names: itemNames, weakSelf.resultHandler(onSuccess: {[weak self] itemsResults in guard let weakSelf = self else {onFinish?(); return}
+                    
+                    let itemsDict = itemsResults.toDictionary {($0.name, $0)}
+
+                    let ingredients: [Ingredient] = ingredientModels.flatMap {ingredientModel in
+                        // It would be better to delete the recipe on failure instead of skip but this is quicker to implement
+                        guard let unit = unitDict[ingredientModel.unitId] else {QL4("Didn't find unit for id: \(ingredientModel.unitId). Can't add ingredient"); return nil}
+                        guard let item = itemsDict[ingredientModel.name] else {QL4("Didn't find item with name: \(ingredientModel.name). Can't add ingredient"); return nil}
+                        return Ingredient(uuid: UUID().uuidString, quantity: 1, fraction: Fraction.one, unit: unit, item: item, recipe: recipe)
+                    }
+                    
+                    Prov.recipeProvider.add(recipe, notificationToken: nil, weakSelf.resultHandler(onSuccess: {
+                        Prov.ingredientProvider.add(ingredients, weakSelf.resultHandler(onSuccess: {
+                            onFinish?()
+                            
+                        }, onError: {result in
+                            QL4("Error adding ingredients, result: \(result)")
+                            onFinish?()
+                        }))
+                        
+                    }, onError: {result in
+                        QL4("Error adding recipe, result: \(result), recipe: \(recipe)")
+                        onFinish?()
+                    }))
+                    
+                }, onError: {result in
+                    QL4("Error querying items, result: \(result)")
+                    onFinish?()
+                }))
+            
+            }, onError: {result in
+                QL4("Error querying recipes, result: \(result)")
+                onFinish?()
+            }))
+        }
+
+        
         func initExampleGroup(unitDict: [UnitId: Providers.Unit], _ onFinish: VoidFunction? = nil) {
             Prov.listItemGroupsProvider.groups(sortBy: .order, resultHandler(onSuccess: {[weak self] groups in guard let weakSelf = self else {onFinish?(); return}
                 
@@ -312,6 +370,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                 initDefaultInventory {inventoryMaybe in
                     QL2("Finished adding default inventory")
                     
+                    initExampleRecipe(unitDict: unitDict) {
+                    
 //                    initExampleGroup(unitDict: unitDict) { // Disabled, getting exception "Can not add objects from a different Realm" after adding "Item" Realm object (no idea why). We don't use groups anymore anyway.
 //                        QL2("Finished adding example group")
                         if let inventory = inventoryMaybe {
@@ -324,6 +384,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                             onComplete()
                         }
 //                    }
+                    }
                 }
             }
         }

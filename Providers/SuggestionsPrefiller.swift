@@ -125,6 +125,7 @@ public class SuggestionsPrefiller {
         guard let g = unitDict[.g] else {QL4("No g unit! can't prefill."); return ([], [])}
         guard let kg = unitDict[.kg] else {QL4("No kg unit! can't prefill."); return ([], [])}
         guard let l = unitDict[.liter] else {QL4("No l unit! can't prefill."); return ([], [])}
+        guard let ml = unitDict[.milliliter] else {QL4("No ml unit! can't prefill."); return ([], [])}
         guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't prefill."); return ([], [])}
         
         func noResult() -> (categories: [ProductCategory], products: [QuantifiableProduct]) {
@@ -203,6 +204,7 @@ public class SuggestionsPrefiller {
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_plums", lang), category: fruitsCat)),
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_tomatoes", lang), category: fruitsCat)),
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 250, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_olives", lang), category: fruitsCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 400, unit: g, product: Product(uuid: uuid, name: tr("pr_tomatoes_peeled", lang), category: fruitsCat)),
             
             // frozen fruits
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_strawberries_frozen", lang), category: frozenFruitsCat)),
@@ -243,11 +245,13 @@ public class SuggestionsPrefiller {
             
             // spices
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pepper", lang), category: spicesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pepper_red", lang), category: spicesCat)),
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_salt", lang), category: spicesCat)),
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_sugar", lang), category: spicesCat)),
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 250, unit: g, product: Product(uuid: uuid, name: tr("pr_cinnamon", lang), category: spicesCat)),
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 100, unit: g, product: Product(uuid: uuid, name: tr("pr_chili", lang), category: spicesCat)),
-            
+            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 200, unit: ml, product: Product(uuid: uuid, name: tr("pr_chicken_broth", lang), category: spicesCat)),
+
             // bakery
             QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_flour", lang), category: bakeryCat)),
             

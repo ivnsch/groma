@@ -47,7 +47,7 @@ class IngredientProviderImpl: IngredientProvider {
     // TODO Fraction etc.
     // Used by input form (retrives quantifiable product, creates ingredient)
     func add(_ input: IngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        addOrUpdateItem(input: input, notificationToken: notificationToken) {itemResult in
+        addOrUpdateItem(input: input, notificationToken: notificationToken, doTransaction: true) {itemResult in
             
             if let item = itemResult.sucessResult {
                 
@@ -65,12 +65,20 @@ class IngredientProviderImpl: IngredientProvider {
         }
     }
     
+    func add(_ ingredients: [Ingredient], _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        if DBProv.ingredientProvider.add(ingredients: ingredients) {
+            handler(ProviderResult(status: .success))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
     func update(_ ingredient: Ingredient, input: IngredientInput, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<(ingredient: Ingredient, replaced: Bool)>) -> Void) {
         
         // Remove a (different) possible already existing item with same unique (name+brand) in the same list (imagine I'm editing an item A and my new inputs correspond to unique from another item B which is in the list how do we handle this? we could alert the user but this may be a bit of an overkill, at least for now, so we simply replace (i.e. delete) the other item. We return the deleted item to be able to delete it from the table view. Note that we exclude the editing item from the delete - since this is not being executed in a transaction it's not safe to just delete it to re-add it in subsequent steps.
         DBProv.ingredientProvider.deletePossibleIngredient(itemName: ingredient.item.name, recipe: ingredient.recipe, notUuid: ingredient.uuid) {foundAndDeletedIngredient in
             
-            self.addOrUpdateItem(input: input, notificationToken: notificationToken) {itemResult in
+            self.addOrUpdateItem(input: input, notificationToken: notificationToken, doTransaction: true) {itemResult in
                 
                 if let item = itemResult.sucessResult {
                     let updatedIngredient = ingredient.copy(quantity: input.quantity, item: item)
@@ -119,12 +127,12 @@ class IngredientProviderImpl: IngredientProvider {
     
     /// Helper to add/retrieve/update quantifiable product to be used for add/update ingredient
     /// NOTE: notificationToken not used here - should it? TODO!!!!!!!!!!!!!!!!!!!
-    fileprivate func addOrUpdateItem(input: IngredientInput, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Item>) -> Void) {
+    fileprivate func addOrUpdateItem(input: IngredientInput, notificationToken: NotificationToken, doTransaction: Bool, _ handler: @escaping (ProviderResult<Item>) -> Void) {
         
         let itemInput = ItemInput(name: input.name, categoryName: input.category, categoryColor: input.categoryColor)
         
         // TODO!!!!!!!!!!!!!!!! review updateCategory parameter (updates color) here and for product - for product it's false, why?
-        switch DBProv.itemProvider.mergeOrCreateItemSync(itemInput: itemInput, updateCategory: true) {
+        switch DBProv.itemProvider.mergeOrCreateItemSync(itemInput: itemInput, updateCategory: true, doTransaction: doTransaction) {
         case .ok(let item): handler(ProviderResult(status: .success, sucessResult: item))
         case .err(let error):
             QL4("Error fetching item: \(error)")

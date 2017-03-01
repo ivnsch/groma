@@ -107,7 +107,7 @@ class SectionProviderImpl: SectionProvider {
     
     func update(_ sections: [Section], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
 
-        DBProv.sectionProvider.update(sections) {[weak self] updated in
+        DBProv.sectionProvider.update(sections) {updated in
             if updated {
                 Prov.listItemsProvider.invalidateMemCache()
                 handler(ProviderResult(status: .success))

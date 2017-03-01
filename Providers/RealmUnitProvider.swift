@@ -42,7 +42,10 @@ class RealmUnitProvider: RealmProvider {
             Unit(uuid: UUID().uuidString, name: trans("unit_drop"), id: .drop),
             Unit(uuid: UUID().uuidString, name: trans("unit_shot"), id: .shot),
             Unit(uuid: UUID().uuidString, name: trans("unit_pinch"), id: .pinch),
+            
+            Unit(uuid: UUID().uuidString, name: trans("unit_clove"), id: .clove),
 
+            Unit(uuid: UUID().uuidString, name: trans("unit_can"), id: .can),
 //            Unit(uuid: UUID().uuidString, name: trans("unit_bunch")), // TODO?
         ]
         

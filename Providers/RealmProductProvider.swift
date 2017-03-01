@@ -1205,10 +1205,13 @@ class RealmProductProvider: RealmProvider {
     
     func mergeOrCreateeProductSync(prototype: ProductPrototype, updateCategory: Bool, save: Bool, realmData: RealmData? = nil, doTransaction: Bool = true) -> ProvResult<Product, DatabaseError> {
 
-        // Always fetch/create item (whether product already exists or not), since we need to ensure we have the item identified by unique from prototype, which is not necessarily the same as the one referenced by existing product (we want to update only non-unique properties).
-        let itemRes = DBProv.itemProvider.mergeOrCreateItemSync(itemInput: ItemInput(name: prototype.name, categoryName: prototype.category, categoryColor: prototype.categoryColor), updateCategory: updateCategory)
 
         func transactionContent(realm: Realm) -> ProvResult<Product, DatabaseError> {
+            
+            // Always fetch/create item (whether product already exists or not), since we need to ensure we have the item identified by unique from prototype, which is not necessarily the same as the one referenced by existing product (we want to update only non-unique properties).
+            // doTransaction: false: we either are already either in an external transaction (mergeOrCreateeProductSync doTransaction: false) or in the transaction started in this method (true) so in both cases it's not necessary to make item provider start an own transaction
+            let itemRes = DBProv.itemProvider.mergeOrCreateItemSync(itemInput: ItemInput(name: prototype.name, categoryName: prototype.category, categoryColor: prototype.categoryColor), updateCategory: updateCategory, doTransaction: false)
+            
             return itemRes.map {item -> Product in
                 if let existingProduct = loadProductWithUniqueSync(prototype.productUnique) {
                     existingProduct.item = item

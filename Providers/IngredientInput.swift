@@ -89,6 +89,10 @@ public struct Fraction: Equatable {
     public var numerator: Int
     public var denominator: Int
     
+    public init(numerator: Int, denominator: Int) {
+        self.init(wholeNumber: 0, numerator: numerator, denominator: denominator)
+    }
+    
     public init(wholeNumber: Int, numerator: Int, denominator: Int) {
         self.wholeNumber = wholeNumber
         self.numerator = numerator

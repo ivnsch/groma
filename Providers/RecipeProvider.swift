@@ -20,6 +20,8 @@ public protocol RecipeProvider {
 
     func recipes(substring: String, range: NSRange, sortBy: RecipeSortBy, _ handler: @escaping (ProviderResult<(substring: String?, recipes: [Recipe])>) -> Void)
 
+    func add(_ recipe: Recipe, notificationToken: NotificationToken?, _ handler: @escaping (ProviderResult<Any>) -> Void)
+
     func add(_ recipe: Recipe, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func update(_ recipe: Recipe, input: RecipeInput, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)

@@ -27,7 +27,8 @@ public enum UnitId: Int {
     case milliliter = 11
     case drop = 12
     case shot = 13
-
+    case clove = 14
+    case can = 15
     
     case custom = 99
 }

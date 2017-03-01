@@ -70,6 +70,10 @@ class RealmIngredientProvider: RealmProvider {
         }
     }
     
+    func add(ingredients: [Ingredient]) -> Bool {
+        return saveObjsSync(ingredients)
+    }
+    
     func increment(_ ingredient: Ingredient, quantity: Float, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (Float?) -> Void) {
         let quantityMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: realm) {realm -> Float in
             ingredient.incrementQuantity(quantity)

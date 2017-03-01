@@ -1083,7 +1083,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     func update(_ listItems: [ListItem], remote: Bool = true, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         
-        self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
+        self.updateLocal(listItems, handler: handler, onFinishLocal: {
 //            if remote {
 //                self?.remoteProvider.update(listItems) {remoteResult in
 //                    if let remoteListItems = remoteResult.successResult {
