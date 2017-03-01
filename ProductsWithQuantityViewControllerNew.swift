@@ -119,8 +119,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     func updateEmptyUI() {
         setEmptyUI(isEmpty, animated: true)
         // necessary?
-//        delegate?.onEmpty(isEmpty)
-//        topMenuView.setHiddenAnimated(isEmpty)
+        delegate?.onEmpty(isEmpty)
+        topMenuView.setHiddenAnimated(isEmpty)
     }
     
     func setEmptyUI(_ empty: Bool, animated: Bool) {
