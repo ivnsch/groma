@@ -229,6 +229,7 @@
                                     <outlet property="nameLeadingConstraint" destination="ptN-CE-sbA" id="0xh-wY-dOR"/>
                                     <outlet property="quantityLabel" destination="G5G-bR-cvc" id="Sjo-HZ-awN"/>
                                     <outlet property="unitLabel" destination="TAa-db-Q7O" id="t27-ua-h93"/>
+                                    <outlet property="unitLeadingConstraint" destination="Fr4-qQ-XJO" id="9b6-39-f16"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="defaultCell" rowHeight="76" id="CIA-3e-nYC">

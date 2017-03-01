@@ -23,6 +23,7 @@ class IngredientCell: UITableViewCell {
     @IBOutlet weak var unitLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     
+    @IBOutlet weak var unitLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var nameLeadingConstraint: NSLayoutConstraint!
     
     var ingredient: Ingredient? {
@@ -31,8 +32,15 @@ class IngredientCell: UITableViewCell {
             
             nameLabel.text = ingredient.item.name
             
-            quantityLabel.text = String("\(ingredient.quantity.quantityString)")
+            quantityLabel.text = ingredient.quantity.quantityStringHideZero
+            
             unitLabel.text = ingredient.unit.name
+            if ingredient.unit.name.isEmpty {
+                unitLeadingConstraint.constant = 0
+            } else {
+                unitLeadingConstraint.constant = 8
+            }
+            
             fractionView.fraction = DBFraction(numerator: ingredient.fraction.numerator, denominator: ingredient.fraction.denominator)
             
             categoryColorView.backgroundColor = ingredient.item.category.color

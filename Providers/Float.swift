@@ -36,6 +36,10 @@ public extension Float {
     public func toLocalCurrencyString() -> String {
         return Float.currencyFormatter.string(from: NSNumber(value: self))!
     }
+
+    public var quantityStringHideZero: String {
+        return self == 0 ? "" : Float.quantityFormatter.string(from: NSNumber(value: self))!
+    }
     
     public var quantityString: String {
         return Float.quantityFormatter.string(from: NSNumber(value: self))!
