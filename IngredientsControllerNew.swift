@@ -580,6 +580,12 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     func submitButtonBottomOffset(parent: UIView, buttonHeight: CGFloat) -> CGFloat {
         return -(tabBarController?.tabBar.height ?? 0)
     }
+    
+    // MARK: -
+    
+    deinit {
+        QL1("Deinit ingredients")
+    }
 }
 
 
