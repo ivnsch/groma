@@ -235,19 +235,22 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     
     // returns: is now open?
     func toggleTopAddController(_ rotateTopBarButton: Bool = true) -> Bool {
-        
+        return setTopControllerOpen(open: !isAnyTopControllerExpanded, rotateTopBarButton: rotateTopBarButton)
+    }
+    
+    // returns: is now open?
+    func setTopControllerOpen(open: Bool, rotateTopBarButton: Bool = true) -> Bool {
         clearPossibleUndo()
         
         clearPossibleNotePopup()
         
-        // if any top controller is open, close it
-        if isAnyTopControllerExpanded {
-            closeTopControllers(rotateTopBarButton: rotateTopBarButton)
-            return false
-            
-        } else { // if there's no top controller open, open the quick add controller
+        if open {
             openQuickAdd(rotateTopBarButton: rotateTopBarButton)
             return true
+
+        } else {
+            closeTopControllers(rotateTopBarButton: rotateTopBarButton)
+            return false
         }
     }
     
@@ -422,10 +425,11 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
             //                }
         //            }
         case .toggleOpen:
-            beforeToggleTopAddController()
-            if !(topQuickAddControllerManager?.controller?.onTapNavBarCloseTap() ?? false) { // if the event is not consumed by quick add
-                _ = toggleTopAddController()
-            }
+            
+            let willExpand = !isAnyTopControllerExpanded
+            beforeToggleTopAddController(willExpand: willExpand)
+            _ = setTopControllerOpen(open: willExpand)
+            
         case .edit:
             clearPossibleUndo()
             let editing = !isEditing
@@ -435,7 +439,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     }
     
     // Do actions when press on topbar +, before everything else
-    func beforeToggleTopAddController() {
+    func beforeToggleTopAddController(willExpand: Bool) {
         // override
     }
     

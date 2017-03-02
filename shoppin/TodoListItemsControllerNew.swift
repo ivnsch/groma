@@ -253,7 +253,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     func onCartPullToAdd() {
-        beforeToggleTopAddController()
+        beforeToggleTopAddController(willExpand: true)
         super.onPullToAdd()
     }
     
@@ -317,15 +317,17 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     // TODO optimize this, re-initializing top controller each time may not be best performance
-    override func beforeToggleTopAddController() {
-        if pricesView.expandedNew {
-            if let cartController = cartController {
-                topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: cartController.tableView)
+    override func beforeToggleTopAddController(willExpand: Bool) {
+        if willExpand {
+            if pricesView.expandedNew {
+                if let cartController = cartController {
+                    topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: cartController.tableView)
+                } else {
+                    QL4("Illegal state: prices view expanded but no cart controller")
+                }
             } else {
-                QL4("Illegal state: prices view expanded but no cart controller")
+                topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: tableView)
             }
-        } else {
-            topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: tableView)
         }
     }
     
