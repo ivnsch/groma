@@ -17,6 +17,7 @@ import QorumLogs
 protocol CartListItemsControllerDelegate: class {
     func onCloseCart()
     func onCartUpdatedQuantifiables()
+    func onCartPullToAdd()
 }
 
 class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizerDelegate {
@@ -65,6 +66,10 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     
     override func topBarTitle(_ list: List) -> String {
         return trans("title_cart")
+    }
+    
+    override func onPullToAdd() {
+        delegate?.onCartPullToAdd()
     }
     
     fileprivate func addAllItemsToInventory() {

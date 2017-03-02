@@ -835,7 +835,7 @@ class SimpleListItemsTableViewController: UITableViewController {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y)
+        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -40)
     }
     
     // MARK: - Etc

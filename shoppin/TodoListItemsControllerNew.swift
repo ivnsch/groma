@@ -252,6 +252,10 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         updateQuantifiables()
     }
     
+    func onCartPullToAdd() {
+        super.onPullToAdd()
+    }
+    
 //    // for now not used. This functionality needs to be reviewed anyway
 //    func onCartSendItemsToStash(_ listItems: [ListItem]) {
 //        // Open quickly the stash view to show/remind users they can open it by swiping.
