@@ -268,8 +268,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         initStaticLabels()
 
-        addButtonHelper = initAddButtonHelper()
-
         onDidLoad?()
 //        updatePlanLeftQuantity(0) // no quantity yet -> 0
         
@@ -300,7 +298,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
         guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
-        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton) {[weak self] in guard let weakSelf = self else {return}
+        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
+        
+        let overrideCenterY: CGFloat = parentViewForAddButton.height + tabBarHeight
+        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton, overrideCenterY: overrideCenterY) {[weak self] in guard let weakSelf = self else {return}
             weakSelf.submit()
         }
         return addButtonHelper
@@ -343,6 +344,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        if addButtonHelper == nil {
+            addButtonHelper = initAddButtonHelper()
+        }
         addButtonHelper?.addObserver()
         addButtonHelper?.animateVisible(true)
     }
