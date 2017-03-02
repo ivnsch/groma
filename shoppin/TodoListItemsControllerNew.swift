@@ -133,16 +133,16 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     override func updateQuantifiables() {
         guard let list = currentList else {QL4("No list"); return}
         
-        Prov.listItemsProvider.calculateCartStashAggregate(list: list, successHandler {aggregate in
+        Prov.listItemsProvider.calculateCartStashAggregate(list: list, successHandler {[weak self] aggregate in guard let weakSelf = self else {return}
             
             let stashQuantity = aggregate.stashQuantity
             
-            self.pricesView.quantities = (cart: aggregate.cartQuantity, stash: stashQuantity)
+            weakSelf.pricesView.setQuantities(cart: aggregate.cartQuantity, stash: stashQuantity, closeIfZero: !weakSelf.pricesView.expandedNew) // when the cart is expanded and the quantity becomes zero we don't want to hide the prices view (since it's on the upper part of the controller).
             
-            self.pricesView.setDonePrice(aggregate.cartPrice, animated: true)
-            self.stashView.updateOpenStateForQuantities(aggregate.cartQuantity, stashQuantity: stashQuantity)
+            weakSelf.pricesView.setDonePrice(aggregate.cartPrice, animated: true)
+            weakSelf.stashView.updateOpenStateForQuantities(aggregate.cartQuantity, stashQuantity: stashQuantity)
             
-            self.todoListItemsEditBottomView?.setTotalPrice(aggregate.todoPrice)
+            weakSelf.todoListItemsEditBottomView?.setTotalPrice(aggregate.todoPrice)
         })
         
 //        if let list = currentList {
@@ -180,7 +180,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 //                if count == 0 {
 //                    weakSelf.pricesView.setOpen(false, animated: true)
 //                }
-                weakSelf.pricesView.quantities = (cart: weakSelf.pricesView.quantities.cart, stash: Float(count))
+                weakSelf.pricesView.setQuantities(cart: weakSelf.pricesView.cartQuantity, stash: Float(count))
                 
                 //                    QL2("Set stash quantity: \(count), cart quantity: \(weakSelf.pricesView.quantities.cart)")
                 
@@ -239,6 +239,9 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         setCartExpanded(expanded: false)
     }
 
+    func onCartUpdatedQuantifiables() {
+        updateQuantifiables()
+    }
     
 //    // for now not used. This functionality needs to be reviewed anyway
 //    func onCartSendItemsToStash(_ listItems: [ListItem]) {

@@ -16,6 +16,7 @@ import QorumLogs
 
 protocol CartListItemsControllerDelegate: class {
     func onCloseCart()
+    func onCartUpdatedQuantifiables()
 }
 
 class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizerDelegate {
@@ -40,8 +41,9 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     override func updateQuantifiables() {
         guard let list = currentList else {QL4("No list"); return}
 
-        Prov.listItemsProvider.calculateCartStashAggregate(list: list, successHandler {aggregate in
-            self.totalDonePriceButton.setTitle(aggregate.cartPrice.toLocalCurrencyString(), for: .normal)
+        Prov.listItemsProvider.calculateCartStashAggregate(list: list, successHandler {[weak self] aggregate in
+            self?.totalDonePriceButton.setTitle(aggregate.cartPrice.toLocalCurrencyString(), for: .normal)
+            self?.delegate?.onCartUpdatedQuantifiables()
         })
     }
     

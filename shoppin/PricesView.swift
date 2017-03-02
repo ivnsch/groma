@@ -61,7 +61,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     
     weak var todoController: TodoListItemsControllerNew?
     
-    fileprivate var cartQuantity: Float = 0 {
+    fileprivate(set) var cartQuantity: Float = 0 {
         didSet {
             if let cartQuantityLabel = quantityLabel {
                 if cartQuantity == 1 {
@@ -76,18 +76,18 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         }
     }
 
-    var quantities: (cart: Float, stash: Float) = (0, 0) {
-        didSet {
-            if let _ = quantityLabel {
-                cartQuantity = quantities.cart
-                stashQuantity = quantities.stash
-
+    func setQuantities(cart: Float, stash: Float, closeIfZero: Bool = true) {
+        if let _ = quantityLabel {
+            cartQuantity = cart
+            stashQuantity = stash
+            
+            if closeIfZero {
                 checkExpandedVertical()
                 updateQuantityCenterConstraint()
-                
-            } else {
-                QL3("Setting quantities but labels not initialised yet")
             }
+            
+        } else {
+            QL3("Setting quantities but labels not initialised yet")
         }
     }
     
