@@ -208,9 +208,12 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             let controller = UIStoryboard.addEditListItemViewController()
             controller.delegate = self
             
+            controller.keyboardHeight = self.keyboardHeight
+            
             // Something clips the section autocompletion list - after some tests with a dummy view it seems to be the navigation controller - QuickAddViewController does not clip, neither AddEditListItemViewController (for the test added it directly as top menu instead of QuickAddViewController). See also http://stackoverflow.com/questions/18735154/uinavigationcontroller-clips-subviews Couldn't fix (TODO) so for now reducing the number of rows in autocompletion.
             view.clipsToBounds = false
             navController?.view.clipsToBounds = false
+            
 //            navController?.view.layer.masksToBounds = false
 //            if let vcs = navController?.viewControllers {
 //                for vc in vcs {
@@ -395,5 +398,39 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func closeRecipeController() {
         quickAddListItemViewController?.addGroupController?.closeRecipeController()
+    }
+    
+    // MARK: - Keyboard
+    // We need to remember the keyboard height here, in order to pass it to AddEditListItemViewController such that the submit view can be animated to the correct position
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeObserver()
+    }
+    
+    func addObserver() {
+        NotificationCenter.default.addObserver(self, selector:#selector(AddButtonHelper.keyboardWillChangeFrame(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
+    
+    func removeObserver() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
+        if let userInfo = (notification as NSNotification).userInfo {
+            if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                //                QL1("keyboardWillChangeFrame, frame: \(frame)")
+                keyboardHeight = frame.height
+            } else {
+                QL3("Couldn't retrieve keyboard size from user info")
+            }
+        } else {
+            QL3("Notification has no user info")
+        }
     }
 }

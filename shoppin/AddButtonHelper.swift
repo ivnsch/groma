@@ -62,8 +62,10 @@ class AddButtonHelper: NSObject {
         animateVisible(false)
     }
     
-    func animateVisible(_ visible: Bool) {
-        if let centerY = centerY(visible) {
+    
+    // overrideKeyboardHeight: sometimes when calling show add button animation, AddButtonHelper hasn't had the opportunity to store the keyboard height yet. This happens when e.g. the keyboard was already open before switching to the controller where we add the button helper - in this case keyboardWillChangeFrame is never called and when we call animateVisible it will use the default hardcoded height which can be wrong. So in these cases we allow to pass the keyboard height manually. This we can "catch" keyboard height wherever the keyboard is opened and pass it here. Not a good solution of course, this complete class needs re-thinking.
+    func animateVisible(_ visible: Bool, overrideKeyboardHeight: CGFloat? = nil) {
+        if let centerY = centerY(visible, overrideKeyboardHeight: overrideKeyboardHeight) {
             animate(centerY, removeOnFinish: !visible)
         } else {
             QL3("No center y")
@@ -95,8 +97,11 @@ class AddButtonHelper: NSObject {
         }
     }
     
-    fileprivate func centerY(_ visible: Bool) -> CGFloat? {
+    fileprivate func centerY(_ visible: Bool, overrideKeyboardHeight: CGFloat? = nil) -> CGFloat? {
         guard let window = parentView?.window else {QL3("No parentView: \(parentView) or window, can't calculate button's center"); return nil}
+        
+        let keyboardHeight = overrideKeyboardHeight ?? self.keyboardHeight
+        
         if let centerYOverride = centerYOverride {
             switch visible {
             case true: return centerYOverride - keyboardHeight - buttonHeight / 2

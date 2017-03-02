@@ -177,6 +177,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     fileprivate var showingColorPicker: FlatColorPickerController?
 //    private var showingNoteInputPopup: SimpleInputPopupController?
 
+    var keyboardHeight: CGFloat?
+    
     var editingItem: AddEditItem? {
         didSet {
             if let editingItem = editingItem {
@@ -300,8 +302,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
         guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
         
-        let overrideCenterY: CGFloat = parentViewForAddButton.height + tabBarHeight
-        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton, overrideCenterY: overrideCenterY) {[weak self] in guard let weakSelf = self else {return}
+        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton) {[weak self] in guard let weakSelf = self else {return}
             weakSelf.submit()
         }
         return addButtonHelper
@@ -349,7 +350,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             addButtonHelper = initAddButtonHelper()
         }
         addButtonHelper?.addObserver()
-        addButtonHelper?.animateVisible(true)
+        addButtonHelper?.animateVisible(true, overrideKeyboardHeight: keyboardHeight)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
