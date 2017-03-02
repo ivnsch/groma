@@ -22,7 +22,11 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     
     @IBOutlet weak var tableView: UITableView!
     
-    var sections: RealmSwift.List<Section>!
+    var sections: RealmSwift.List<Section>? {
+        didSet {
+            initNotifications()
+        }
+    }
     fileprivate var notificationToken: NotificationToken?
     
     var onViewDidLoad: VoidFunction?
@@ -71,14 +75,54 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
         tableView.endUpdates()
     }
     
+    fileprivate func initNotifications() {
+        
+        guard let sections = sections else {QL4("No sections"); return}
+        
+        self.notificationToken?.stop()
+        
+        let notificationToken = sections.addNotificationBlock {[weak self] changes in guard let weakSelf = self else {return}
+            
+            switch changes {
+            case .initial:
+                QL1("initial")
+                
+            case .update(_, let deletions, let insertions, let modifications):
+                QL2("notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                
+                
+                weakSelf.tableView.beginUpdates()
+                weakSelf.tableView.insertSections(IndexSet(insertions), with: .top)
+                weakSelf.tableView.deleteSections(IndexSet(deletions), with: .top)
+//                weakSelf.tableView.reloadSections(IndexSet(modifications), with: .none)
+                weakSelf.tableView.endUpdates()
+                
+                
+            case .error(let error):
+                // An error occurred while opening the Realm file on the background worker thread
+                fatalError(String(describing: error))
+            }
+        }
+        
+        self.notificationToken = notificationToken
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections.count
+        return sections?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "sectionCell", for: indexPath) as! ReorderSectionCell
-        cell.section = sections[(indexPath as NSIndexPath).row]
+        if let sections = sections {
+            cell.section = sections[indexPath.row]
+        } else {
+            QL4("No sections")
+        }
         return cell
+    }
+    
+    deinit {
+        print("de init")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -90,9 +134,12 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        guard let sections = sections else {QL4("No sections"); return}
+        
         if editingStyle == .delete {
             
-            let section = sections[(indexPath as NSIndexPath).row]
+            let section = sections[indexPath.row]
             
             delegate?.canRemoveSection(section) {can in
                 if can {
@@ -111,7 +158,7 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
         
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
-//        guard let status = status else {QL4("No status"); return} // TODO!!!!!!!!!!!!!!!! status?
+        guard let sections = sections else {QL4("No sections"); return}
         
         Prov.sectionProvider.move(from: fromIndexPath.row, to: toIndexPath.row, sections: sections, notificationToken: notificationToken, successHandler {
         })
@@ -134,7 +181,9 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let section = sections[(indexPath as NSIndexPath).row]
+        guard let sections = sections else {QL4("No sections"); return}
+
+        let section = sections[indexPath.row]
         delegate?.onSectionSelected(section)
     }
     
@@ -158,6 +207,8 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     }
     
     func getSectionIndex(_ uuid: String) -> Int? {
+        guard let sections = sections else {QL4("No sections"); return nil}
+
         for (i, s) in sections.enumerated() {
             if s.uuid == uuid {
                 return i
@@ -167,9 +218,11 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     }
     
     fileprivate func removeSection(_ uuid: String, index: Int) {
+        guard let sections = sections else {QL4("No sections"); return}
+
         tableView.wrapUpdates{[weak self] in
             self?.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .bottom)
-            self?.sections.remove(at: index)
+            sections.remove(objectAtIndex: index)
         }
     }
 }
