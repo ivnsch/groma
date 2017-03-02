@@ -253,6 +253,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     func onCartPullToAdd() {
+        beforeToggleTopAddController()
         super.onPullToAdd()
     }
     
