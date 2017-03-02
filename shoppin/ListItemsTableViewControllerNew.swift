@@ -136,6 +136,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -130)
+        listItemsTableViewDelegate?.onTableViewScroll(scrollView)
     }
     
 //    TODO!!!!!!!!!!!!!!!! ?

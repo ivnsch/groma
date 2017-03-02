@@ -25,7 +25,7 @@ class ToggleButtonRotator {
         guard enabled else {return}
         guard let toggleButton = topBar.rightButton(.toggleOpen) else {return}
 
-        let startOffset: CGFloat = 0
+        let startOffset: CGFloat = start
         let offset: CGFloat = scrollView.contentOffset.y
         
         let totalAngle: CGFloat = 45
