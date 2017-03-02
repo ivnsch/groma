@@ -398,4 +398,13 @@ class RealmInventoryItemProvider: RealmProvider {
     func saveSync(inventoryItems: [InventoryItem], update: Bool =  true, realmData: RealmData) -> Bool {
         return saveObjsSync(inventoryItems)
     }
+    
+    
+    func updateSync(inventoryItem: InventoryItem, input: InventoryItemInput, product: QuantifiableProduct, realmData: RealmData) -> Bool {
+        return doInWriteTransactionSync{realm in
+            inventoryItem.quantity = input.quantity
+            inventoryItem.product = product
+            return true
+        } ?? false
+    }
 }

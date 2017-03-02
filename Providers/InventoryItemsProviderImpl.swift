@@ -209,14 +209,11 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //            Prov.productProvider.mergeOrCreateProduct(input.productPrototype.name, category: input.productPrototype.category, categoryColor: input.productPrototype.categoryColor, brand: input.productPrototype.brand, updateCategory: false) {[weak self] result in
                 
                 if let product = result.sucessResult {
-                    let updatedInventoryItem = updatingInventoryItem.copy(quantity: input.quantity, product: product)
-                    self?.updateInventoryItem(updatedInventoryItem, remote: remote, realmData: realmData) {result in
-                        if result.success {
-                            handler(ProviderResult(status: .success, sucessResult: (inventoryItem: updatedInventoryItem, replaced: foundAndDeletedInventoryItem)))
-                        } else {
-                            QL4("Error updating inventory item: \(result)")
-                            handler(ProviderResult(status: result.status))
-                        }
+                    if DBProv.inventoryItemProvider.updateSync(inventoryItem: updatingInventoryItem, input: input, product: product, realmData: realmData) {
+                        handler(ProviderResult(status: .success, sucessResult: (inventoryItem: updatingInventoryItem, replaced: foundAndDeletedInventoryItem)))
+                    } else {
+                        QL4("Error updating inventory item")
+                        handler(ProviderResult(status: .databaseUnknown))
                     }
                 } else {
                     QL4("Error fetching product: \(result.status)")
