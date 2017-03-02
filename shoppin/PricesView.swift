@@ -282,7 +282,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         setExpanded(expanded: !isExpanded)
     }
     
-    func setExpanded(expanded: Bool) {
+    func setExpanded(expanded: Bool, onFinishAnim: (() -> Void)? = nil) {
         guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
         guard let todoController = todoController else {QL4("No todoController"); return}
         
@@ -295,8 +295,10 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
             bottomConstraint.constant = 0
         }
         
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: Theme.defaultAnimDuration, animations: {
             todoController.view.layoutIfNeeded()
+        }) {finished in
+            onFinishAnim?()
         }
     }
     

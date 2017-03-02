@@ -139,6 +139,15 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             
             weakSelf.pricesView.setQuantities(cart: aggregate.cartQuantity, stash: stashQuantity, closeIfZero: !weakSelf.pricesView.expandedNew) // when the cart is expanded and the quantity becomes zero we don't want to hide the prices view (since it's on the upper part of the controller).
             
+            // If we are currently showing the cart and it's empty (i.e. was just emptied), close the cart
+            if aggregate.cartQuantity == 0 && weakSelf.pricesView.expandedNew {
+                delay(0.2) {
+                    weakSelf.pricesView.setExpanded(expanded: false) {
+                        weakSelf.pricesView.setQuantities(cart: aggregate.cartQuantity, stash: stashQuantity, closeIfZero: true) // now that we are back in todo, close the cart bottom view
+                    }
+                }
+            }
+            
             weakSelf.pricesView.setDonePrice(aggregate.cartPrice, animated: true)
             weakSelf.stashView.updateOpenStateForQuantities(aggregate.cartQuantity, stashQuantity: stashQuantity)
             
