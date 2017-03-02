@@ -168,4 +168,8 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
             self?.sections.remove(at: index)
         }
     }
+    
+    deinit {
+        QL1("Deinit")
+    }
 }

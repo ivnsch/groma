@@ -129,9 +129,12 @@ class ExpandCellAnimator {
                 topSlidingView.removeFromSuperview()
                 bottomSlidingView.removeFromSuperview()
                 if !isExpand {
+                    
                     toView.removeFromSuperview()
+                    weakSelf.reset()
                 }
                 weakSelf.delegate?.animationsComplete(isExpand, frontView: toView)
+                
             }
         )
     }

@@ -24,7 +24,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     @IBOutlet weak var totalDonePriceButton: UIButton!
     @IBOutlet weak var buyViewHeightConstraint: NSLayoutConstraint!
     
-    var delegate: CartListItemsControllerDelegate?
+    weak var delegate: CartListItemsControllerDelegate?
     
     override var status: ListItemStatus {
         return .done

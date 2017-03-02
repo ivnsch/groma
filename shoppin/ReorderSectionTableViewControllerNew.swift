@@ -122,7 +122,7 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     }
     
     deinit {
-        print("de init")
+        QL1("deinit")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

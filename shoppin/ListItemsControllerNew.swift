@@ -755,35 +755,35 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             
             if reorderSections { // show reorder sections table view.
                 
-                listItemsTableViewController.setAllSectionsExpanded(false, animated: true, onComplete: { // collapse - add sections table view
+                listItemsTableViewController.setAllSectionsExpanded(false, animated: true, onComplete: {[weak self] in guard let weakSelf = self else {return} // collapse - add sections table view
                     let sectionsTableViewController = UIStoryboard.reorderSectionTableViewControllerNew()
                     
-                    sectionsTableViewController.sections = self.listItemsTableViewController.sections
-                    sectionsTableViewController.status = self.status
-                    sectionsTableViewController.delegate = self
+                    sectionsTableViewController.sections = weakSelf.listItemsTableViewController.sections
+                    sectionsTableViewController.status = weakSelf.status
+                    sectionsTableViewController.delegate = weakSelf
                     
-                    sectionsTableViewController.onViewDidLoad = {
-                        let navbarHeight = self.topBar.frame.height
+                    sectionsTableViewController.onViewDidLoad = {[weak self, weak sectionsTableViewController] in guard let weakSelf = self else {return}
+                        let navbarHeight = weakSelf.topBar.frame.height
                         let topInset = navbarHeight
                         
                         // TODO this makes a very big bottom inset why?
                         //            let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + addButtonContainer.frame.height
                         //        let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + 20
                         let bottomInset: CGFloat = 0
-                        sectionsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+                        sectionsTableViewController?.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
                         //                sectionsTableViewController.tableView.topOffset = -self.listItemsTableViewController.tableView.inset.top
                         
-                        sectionsTableViewController.view.backgroundColor = self.listItemsTableViewController.view.backgroundColor
-                        sectionsTableViewController.tableView.backgroundColor = self.listItemsTableViewController.view.backgroundColor
+                        sectionsTableViewController?.view.backgroundColor = weakSelf.listItemsTableViewController.view.backgroundColor
+                        sectionsTableViewController?.tableView.backgroundColor = weakSelf.listItemsTableViewController.view.backgroundColor
                         
-                        self.lockToggleSectionsTableView = false
+                        weakSelf.lockToggleSectionsTableView = false
                     }
                     
-                    sectionsTableViewController.view.frame = self.listItemsTableViewController.view.frame
-                    self.addChildViewControllerAndView(sectionsTableViewController, viewIndex: 1)
-                    self.sectionsTableViewController = sectionsTableViewController
+                    sectionsTableViewController.view.frame = weakSelf.listItemsTableViewController.view.frame
+                    weakSelf.addChildViewControllerAndView(sectionsTableViewController, viewIndex: 1)
+                    weakSelf.sectionsTableViewController = sectionsTableViewController
                     
-                    self.onToggleReorderSections(true)
+                    weakSelf.onToggleReorderSections(true)
                     
                 })
                 
@@ -792,13 +792,13 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                 if let sectionsTableViewController = sectionsTableViewController { // expand while in collapsed state (sections tableview is set) - remove sections table view
                     
                     sectionsTableViewController.setCellHeight(DimensionsManager.listItemsHeaderHeight, animated: true)
-                    sectionsTableViewController.setEdit(false, animated: true) {
+                    sectionsTableViewController.setEdit(false, animated: true) {[weak self] in guard let weakSelf = self else {return}
                         sectionsTableViewController.removeFromParentViewController()
                         sectionsTableViewController.view.removeFromSuperview()
-                        self.sectionsTableViewController = nil
-                        self.listItemsTableViewController.setAllSectionsExpanded(true, animated: true)
-                        self.lockToggleSectionsTableView = false
-                        self.onToggleReorderSections(false)
+                        weakSelf.sectionsTableViewController = nil
+                        weakSelf.listItemsTableViewController.setAllSectionsExpanded(true, animated: true)
+                        weakSelf.lockToggleSectionsTableView = false
+                        weakSelf.onToggleReorderSections(false)
                     }
                 } else {
                     // we are already in normal state (sections tableview is not set) - do nothing
