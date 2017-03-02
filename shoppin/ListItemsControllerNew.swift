@@ -355,8 +355,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     //     //})
     }
 
-    func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
-        onSectionSelected(section.section)
+    func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: Section) {
+        onSectionSelected(section)
     }
     
     func onIncrementItem(_ tableViewListItem: ListItem, delta: Float) {

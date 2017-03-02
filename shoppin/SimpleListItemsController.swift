@@ -348,7 +348,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     }
     
     // For now we re-use the delegate from ListItemsTableViewControllerNew which largely meets our requirements here, except of this method
-    func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
+    func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: Section) {
         fatalError("Not supported")
     }
 

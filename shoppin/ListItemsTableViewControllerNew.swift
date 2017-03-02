@@ -15,7 +15,7 @@ protocol ListItemsTableViewDelegateNew: class {
     func onListItemClear(_ tableViewListItem: ListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo
     func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath) // mark as undo
     func onListItemReset(_ tableViewListItem: ListItem) // revert undo
-    func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: ListItemsViewSection)
+    func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: Section)
     func onIncrementItem(_ model: ListItem, delta: Float)
     func onTableViewScroll(_ scrollView: UIScrollView)
     func onPullToAdd()
@@ -39,7 +39,7 @@ protocol ListItemsEditTableViewDelegateNew: class {
 //    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Int)
 //}
 
-class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelegateNew {
+class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelegateNew, ListItemsSectionHeaderViewDelegate {
 
     var sections: RealmSwift.List<Section>? {
         didSet {
@@ -205,7 +205,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         view.nameLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: sectionObj.color, isFlat: true)
         //            view.nameLabel.textColor = headerFontColor
         //            view.nameLabel.font = headerFont
-//        view.delegate = self // TODO!!!!!!!!!!!!!!!!!!! re enable
+        view.delegate = self
         return view
     }
     
@@ -385,5 +385,12 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     
     var isControllerInEditMode: Bool {
         return isEditing
+    }
+    
+    // MARK: - ListItemsSectionHeaderViewDelegate
+    
+    func onHeaderTap(_ header: ListItemsSectionHeaderView) {
+        guard let section = header.section else {QL4("Illegal state: header should have a section"); return}
+        listItemsTableViewDelegate?.onSectionHeaderTap(header, section: section)
     }
 }
