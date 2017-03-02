@@ -451,32 +451,11 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void) {
-        loadQuantifiableProduct(unique: (name: prototype.name, brand: prototype.brand, unit: prototype.unit, baseQuantity: prototype.baseQuantity)) {quantifiableProductResult in
-            
-            if let existingQuantifiableProduct = quantifiableProductResult.sucessResult {
-                let updatedProduct = existingQuantifiableProduct.product.updateNonUniqueProperties(prototype: prototype)
-                // Note: unit not updated - for now all we can udpate is the name and this belongs to the quantifiable unique, so there's nothing to udpate
-                let updatedQuantifiableProduct = existingQuantifiableProduct.copy(baseQuantity: prototype.baseQuantity, product: updatedProduct)
-                handler(ProviderResult(status: .success, sucessResult: updatedQuantifiableProduct))
-                
-            } else { //quantifiable product doesn't exist
-                
-                self.mergeOrCreateProduct(prototype: prototype, updateCategory: updateCategory, updateItem: updateItem) {(result: ProviderResult<Product>) in
-                    if let updatedProduct = result.sucessResult {
-                        
-                        if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
-                            let quantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit.unit, product: updatedProduct)
-                            handler(ProviderResult(status: .success, sucessResult: quantifiableProduct))
-                        } else {
-                            QL4("Couldn't get unit. Protoype: \(prototype)")
-                            handler(ProviderResult(status: .databaseUnknown))
-                        }
-
-                    } else {
-                        handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
-                    }
-                }
-            }
+        switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: prototype, updateCategory: updateCategory, save: true) {
+        case .ok(let updatedQuantifiableProduct):
+            handler(ProviderResult(status: .success, sucessResult: updatedQuantifiableProduct))
+        case .err(let error):
+            QL4("Couldn't merge/crate product: \(error)")
         }
     }
 
