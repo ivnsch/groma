@@ -267,42 +267,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath) {
-        // TODO!!!!!!!!!!!!!!!!!!!!! update for new UI - we probably will not use "select" anymore but swipe and without undo
-        
-        guard let realmData = realmData else {QL4("No realm data"); return}
-        
-       if self.isEditing { // open quick add in edit mode
-            // TODO!!!!!!!!!!!!!! is this correct?
+       if isEditing {
             openQuickAdd(itemToEdit: AddEditItem(item: tableViewListItem, currentStatus: status))
-//            topQuickAddControllerManager?.expand(true)
-//            topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
-//            topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: tableViewListItem, currentStatus: status))
-        
-       } else { // switch list item
-           
-           // TODO!!!! when receive switch status via websocket we will *not* show undo (undo should be only for the device doing the switch) but submit immediately this means:
-           // 1. call switchstatus like here, 2. switch status in provider updates status/order, maybe deletes section, etc 3. update the table view - swipe the item and maybe delete section(this should be similar to calling onListItemClear except the animation in this case is not swipe, but that should be ok?)
-           listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true, onFinish: {[weak self] in guard let weakSelf = self else {return}
-//               let targetStatus: ListItemStatus = {
-//                   switch weakSelf.status {
-//                   case .todo: return .done
-//                   case .done: return .todo
-//                   case .stash: return .todo
-//                   }
-//               }()
-            
-               // NOTE: For the provider the whole state is updated here - including possible section removal (if the current undo list item is the last one in the section) and the order field update of possible following sections. This means that the contents of the table view may be in a slightly inconsistent state with the data in the provider during the time cell is in undo (for the table view the section is still there, for the provider it's not). This is fine as the undo state is just a UI thing (local) and it should be cleared as soon as we try to start a new action (add, edit, delete, reorder etc) or go to the cart/stash.
-            
-            Prov.listItemsProvider.switchTodoToCartSync(listItem: tableViewListItem, from: indexPath, realmData: realmData, weakSelf.successHandler{[weak self] switchedListItem in
-                self?.onTableViewChangedQuantifiables()
-            })
-               // Prov.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, orderInDstStatus: nil, remote: true, weakSelf.resultHandler(onSuccess: {switchedListItem in
-               //     //                        weakSelf.onTableViewChangedQuantifiables()
-               // }, onErrorAdditional: {result in
-               //     weakSelf.updatePossibleList()
-               // }
-               // ))
-           })
        }
     }
 
