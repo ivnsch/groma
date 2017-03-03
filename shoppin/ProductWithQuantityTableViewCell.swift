@@ -81,13 +81,13 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
                 quantityLabel.text = String("\(shownQuantity.quantityString)") // show something meaningful anyway. Maybe we can remove this.
             }
             
-            if shownQuantity == 0 && oldValue != 0 {
-                UIView.animate(withDuration: Theme.defaultAnimDuration) {[weak self] in
-                    self?.contentView.backgroundColor = Theme.lightPink
-                }
-            } else {
-                contentView.backgroundColor = UIColor.white
-            }
+//            if shownQuantity == 0 && oldValue != 0 {
+//                UIView.animate(withDuration: Theme.defaultAnimDuration) {[weak self] in
+//                    self?.contentView.backgroundColor = Theme.lightPink
+//                }
+//            } else {
+//                contentView.backgroundColor = UIColor.white
+//            }
         }
     }
     
