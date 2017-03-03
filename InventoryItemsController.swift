@@ -626,7 +626,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return nil}
         for (index, item) in inventoryItemsResult.enumerated() {
             if item.same(ingredient) {
-                return IndexPath(row: index, section: 0)
+                return IndexPath(row: productsWithQuantityController.explanationManager.showExplanation ? index + 1 : index, section: 0)
             }
         }
         return nil
