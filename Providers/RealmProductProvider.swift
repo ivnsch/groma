@@ -43,6 +43,8 @@ public struct ProductPrototype {
     public var baseQuantity: String
     public var unit: String
 
+    public var edible: Bool
+    
     var productUnique: ProductUnique {
         return ProductUnique(name: name, brand: brand)
     }
@@ -52,13 +54,14 @@ public struct ProductPrototype {
     }
     
     // TODO!!!!!!!!!!!!! remove defaults
-    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: String = "1", unit: String) {
+    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: String = "1", unit: String, edible: Bool) {
         self.name = name
         self.category = category
         self.categoryColor = categoryColor
         self.brand = brand
         self.baseQuantity = baseQuantity
         self.unit = unit
+        self.edible = edible
     }
 }
 
@@ -672,67 +675,67 @@ class RealmProductProvider: RealmProvider {
     
     // TODO deprecate this?
     func saveProduct(_ productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: @escaping (Product?) -> ()) {
-        
-        loadProductWithName(productInput.name, brand: productInput.brand) {[weak self] productMaybe in
-            
-            if productMaybe.isSet && !update {
-                print("Product with name: \(productInput.name), already exists, no update")
-                handler(nil)
-                return
-            }
-            
-            let uuid: String = {
-                if let existingProduct = productMaybe { // since realm doesn't support unique besides primary key yet, we have to fetch first possibly existing product
-                    return existingProduct.uuid
-                } else {
-                    return UUID().uuidString
-                }
-            }()
-            
-            Prov.productCategoryProvider.categoryWithName(productInput.category) {result in
-                
-                if result.status == .success || result.status == .notFound  {
-                    
-                    // Create a new category or update existing one
-                    let category: ProductCategory? = {
-                        if let existingCategory = result.sucessResult {
-                            return existingCategory.copy(name: productInput.category, color: productInput.categoryColor)
-                        } else if result.status == .notFound {
-                            return ProductCategory(uuid: UUID().uuidString, name: productInput.category, color: productInput.categoryColor)
-                        } else {
-                            print("Error: RealmListItemProvider.saveProductError, invalid state: status is .Success but there is not successResult")
-                            return nil
-                        }
-                    }()
-                    
-                    // Save product with new/updated category
-                    if let category = category {
-                        
-//                        Prov.itemsProvider.i
-                        
-                        
-                        
-                        
-                        let product = Product(uuid: uuid, name: productInput.name, category: category, brand: productInput.brand)
-                        self?.saveProducts([product]) {saved in
-                            if saved {
-                                handler(product)
-                            } else {
-                                print("Error: RealmListItemProvider.saveProductError, could not save product: \(product)")
-                                handler(nil)
-                            }
-                        }
-                    } else {
-                        print("Error: RealmListItemProvider.saveProduct, category is nill")
-                        handler(nil)
-                    }
-                    
-                } else {
-                    print("Error: RealmListItemProvider.saveProduct, couldn't fetch category: \(result)")
-                    handler(nil)
-                }
-            }
-        }
+        fatalError("Used? remove?")
+//        loadProductWithName(productInput.name, brand: productInput.brand) {[weak self] productMaybe in
+//            
+//            if productMaybe.isSet && !update {
+//                print("Product with name: \(productInput.name), already exists, no update")
+//                handler(nil)
+//                return
+//            }
+//            
+//            let uuid: String = {
+//                if let existingProduct = productMaybe { // since realm doesn't support unique besides primary key yet, we have to fetch first possibly existing product
+//                    return existingProduct.uuid
+//                } else {
+//                    return UUID().uuidString
+//                }
+//            }()
+//            
+//            Prov.productCategoryProvider.categoryWithName(productInput.category) {result in
+//                
+//                if result.status == .success || result.status == .notFound  {
+//                    
+//                    // Create a new category or update existing one
+//                    let category: ProductCategory? = {
+//                        if let existingCategory = result.sucessResult {
+//                            return existingCategory.copy(name: productInput.category, color: productInput.categoryColor)
+//                        } else if result.status == .notFound {
+//                            return ProductCategory(uuid: UUID().uuidString, name: productInput.category, color: productInput.categoryColor)
+//                        } else {
+//                            print("Error: RealmListItemProvider.saveProductError, invalid state: status is .Success but there is not successResult")
+//                            return nil
+//                        }
+//                    }()
+//                    
+//                    // Save product with new/updated category
+//                    if let category = category {
+//                        
+////                        Prov.itemsProvider.i
+//                        
+//                        
+//                        
+//                        
+//                        let product = Product(uuid: uuid, name: productInput.name, category: category, brand: productInput.brand)
+//                        self?.saveProducts([product]) {saved in
+//                            if saved {
+//                                handler(product)
+//                            } else {
+//                                print("Error: RealmListItemProvider.saveProductError, could not save product: \(product)")
+//                                handler(nil)
+//                            }
+//                        }
+//                    } else {
+//                        print("Error: RealmListItemProvider.saveProduct, category is nill")
+//                        handler(nil)
+//                    }
+//                    
+//                } else {
+//                    print("Error: RealmListItemProvider.saveProduct, couldn't fetch category: \(result)")
+//                    handler(nil)
+//                }
+//            }
+//        }
     }
 
     
@@ -1210,7 +1213,7 @@ class RealmProductProvider: RealmProvider {
             
             // Always fetch/create item (whether product already exists or not), since we need to ensure we have the item identified by unique from prototype, which is not necessarily the same as the one referenced by existing product (we want to update only non-unique properties).
             // doTransaction: false: we either are already either in an external transaction (mergeOrCreateeProductSync doTransaction: false) or in the transaction started in this method (true) so in both cases it's not necessary to make item provider start an own transaction
-            let itemRes = DBProv.itemProvider.mergeOrCreateItemSync(itemInput: ItemInput(name: prototype.name, categoryName: prototype.category, categoryColor: prototype.categoryColor), updateCategory: updateCategory, doTransaction: false)
+            let itemRes = DBProv.itemProvider.mergeOrCreateItemSync(itemInput: ItemInput(name: prototype.name, categoryName: prototype.category, categoryColor: prototype.categoryColor, edible: prototype.edible), updateCategory: updateCategory, doTransaction: false)
             
             return itemRes.map {item -> Product in
                 if let existingProduct = loadProductWithUniqueSync(prototype.productUnique) {

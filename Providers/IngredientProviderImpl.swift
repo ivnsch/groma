@@ -129,7 +129,7 @@ class IngredientProviderImpl: IngredientProvider {
     /// NOTE: notificationToken not used here - should it? TODO!!!!!!!!!!!!!!!!!!!
     fileprivate func addOrUpdateItem(input: IngredientInput, notificationToken: NotificationToken, doTransaction: Bool, _ handler: @escaping (ProviderResult<Item>) -> Void) {
         
-        let itemInput = ItemInput(name: input.name, categoryName: input.category, categoryColor: input.categoryColor)
+        let itemInput = ItemInput(name: input.name, categoryName: input.category, categoryColor: input.categoryColor, edible: true)
         
         // TODO!!!!!!!!!!!!!!!! review updateCategory parameter (updates color) here and for product - for product it's false, why?
         switch DBProv.itemProvider.mergeOrCreateItemSync(itemInput: itemInput, updateCategory: true, doTransaction: doTransaction) {

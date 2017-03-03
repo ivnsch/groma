@@ -15,7 +15,7 @@ public class Item: Object, Identifiable {
     public dynamic var name: String = ""
     public dynamic var categoryOpt: ProductCategory? = ProductCategory()
     public dynamic var fav: Int = 0
-    
+    public dynamic var edible: Bool = true
     
     public var category: ProductCategory {
         get {
@@ -38,7 +38,7 @@ public class Item: Object, Identifiable {
         return ["category"]
     }
     
-    public convenience init(uuid: String, name: String, category: ProductCategory, fav: Int) {
+    public convenience init(uuid: String, name: String, category: ProductCategory, fav: Int, edible: Bool = false) {
         
         self.init()
         
@@ -46,14 +46,16 @@ public class Item: Object, Identifiable {
         self.name = name
         self.category = category
         self.fav = fav
+        self.edible = edible
     }
     
-    public func copy(uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, fav: Int? = nil) -> Item {
+    public func copy(uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, fav: Int? = nil, edible: Bool? = nil) -> Item {
         return Item(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             category: category ?? self.category.copy(),
-            fav: fav ?? self.fav
+            fav: fav ?? self.fav,
+            edible: edible ?? self.edible
         )
     }
     
@@ -71,6 +73,10 @@ public class Item: Object, Identifiable {
         return "name CONTAINS[c] '\(text)'"
     }
     
+    static func createFilterNameContainsAndEdible(_ text: String, edible: Bool) -> String {
+        return "\(createFilterNameContains(text)) AND \(createFilter(edible: edible))"
+    }
+    
     public func same(_ rhs: Item) -> Bool {
         return uuid == rhs.uuid
     }
@@ -83,6 +89,10 @@ public class Item: Object, Identifiable {
     static func createFilter(names: [String]) -> String {
         let namesStr: String = names.map{"'\($0)'"}.joined(separator: ",")
         return "name IN {\(namesStr)}"
+    }
+    
+    static func createFilter(edible: Bool) -> String {
+        return "edible == \(edible)"
     }
     
     // MARK: -

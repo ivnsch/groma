@@ -25,7 +25,7 @@ class RealmItemProvider: RealmProvider {
     }
     
     // IMPORTANT: This cannot be used for real time updates (add) since the final results are fetched using uuids, so these results don't notice items with new uuids
-    func items(_ substring: String, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ items: Results<Item>?) -> Void) {
+    func items(_ substring: String, onlyEdible: Bool, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ items: Results<Item>?) -> Void) {
         
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
@@ -34,7 +34,7 @@ class RealmItemProvider: RealmProvider {
             }
         }()
         
-        let filterMaybe = Item.createFilterNameContains(substring)
+        let filterMaybe = onlyEdible ? Item.createFilterNameContainsAndEdible(substring, edible: onlyEdible) : Item.createFilterNameContains(substring)
         
         background({() -> [String]? in
             do {
@@ -150,25 +150,34 @@ class RealmItemProvider: RealmProvider {
     // if we find an item with the unique we update it - this is for the case the user changes category color etc for an existing item while adding it
     // NOTE: This doesn't save anything to the database (no particular reason, except that the current caller of this method does the saving)
     func mergeOrCreateItemSync(itemInput: ItemInput, updateCategory: Bool, doTransaction: Bool) -> ProvResult<Item, DatabaseError> {
-        
-        // NOTE: We ignore doTransaction for item except to pass it to category - the reason for this is that we don't save item here, and it also doesn't have updateable properties so a transaction isn't necessary
-        
-        // Always fetch/create category (whether item already exists or not), since we need to ensure we have the category identified by unique from prototype, which is not necessarily the same as the one referenced by existing item (we want to update only non-unique properties).
-        return mergeOrCreateCategorySync(categoryInput: itemInput.categoryInput, doTransaction: doTransaction).flatMap {category in
-            
-            switch findSync(name: itemInput.name) {
-            case .ok(let itemMaybe):
-                if let item = itemMaybe {
-                    // No (direct) non-unique properties to update
-                    return .ok(item)
-                    
-                } else { // item doesn't exist
 
-                    let newItem = Item(uuid: UUID().uuidString, name: itemInput.name, category: category, fav: 0)
-                    return .ok(newItem)
+        func transactionContent() -> ProvResult<Item, DatabaseError> {
+            
+            // Always fetch/create category (whether item already exists or not), since we need to ensure we have the category identified by unique from prototype, which is not necessarily the same as the one referenced by existing item (we want to update only non-unique properties).
+            return mergeOrCreateCategorySync(categoryInput: itemInput.categoryInput, doTransaction: false).flatMap {category in
+                
+                switch findSync(name: itemInput.name) {
+                case .ok(let itemMaybe):
+                    if let item = itemMaybe {
+                        item.edible = itemInput.edible
+                        return .ok(item)
+                        
+                    } else { // item doesn't exist
+                        
+                        let newItem = Item(uuid: UUID().uuidString, name: itemInput.name, category: category, fav: 0, edible: itemInput.edible)
+                        return .ok(newItem)
+                    }
+                case .err(let error): return .err(error)
                 }
-            case .err(let error): return .err(error)
             }
+        }
+        
+        if doTransaction {
+            return doInWriteTransactionSync({realm in
+                return transactionContent()
+            }) ?? .err(.unknown)
+        } else {
+            return transactionContent()
         }
     }
     

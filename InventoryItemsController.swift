@@ -361,7 +361,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 
         func onEditListItem(_ input: ListItemInput, editingItem: InventoryItem) {
 
-            let inventoryItemInput = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: input.storeProductInput.unit)
+            let inventoryItemInput = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: input.storeProductInput.unit, edible: input.edible)
             
             Prov.inventoryItemsProvider.updateInventoryItem(inventoryItemInput, updatingInventoryItem: editingItem, remote: true, realmData: realmData, resultHandler (onSuccess: {  (inventoryItem, replaced) in
 
@@ -374,7 +374,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         
         func onAddInventoryItem(_ input: ListItemInput) {
             if let inventory = inventory {
-                let input = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: input.storeProductInput.unit)
+                let input = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: input.storeProductInput.unit, edible: input.edible)
                 
                 Prov.inventoryItemsProvider.addToInventory(inventory, itemInput: input, remote: true, realmData: realmData, resultHandler (onSuccess: {addedItem in
                     

@@ -19,7 +19,7 @@ protocol AddEditListItemViewControllerDelegate: class {
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>)
     
-    func onOkTap(_ price: Float, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: String, brand: String, editingItem: Any?)
+    func onOkTap(_ price: Float, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: String, brand: String, edible: Bool, editingItem: Any?)
     
     func parentViewForAddButton() -> UIView?
     
@@ -138,6 +138,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     @IBOutlet weak var titleLabel: UILabel!
 
+    @IBOutlet weak var edibleButton: UIButton!
+    
 /////////////////////////////////////////////////////////////////////////
 // for now disabled, see comments at the bottom
 //    @IBOutlet weak var sectionLabel: UILabel!
@@ -178,6 +180,16 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //    private var showingNoteInputPopup: SimpleInputPopupController?
 
     var keyboardHeight: CGFloat?
+    
+    var edibleSelected: Bool = false {
+        didSet {
+            if let edibleButton = edibleButton {
+                edibleButton.setTitleColor(edibleSelected ? Theme.black : Theme.lightGray, for: .normal)
+            } else {
+                QL4("Outlets not initialized yet")
+            }
+        }
+    }
     
     var editingItem: AddEditItem? {
         didSet {
@@ -376,13 +388,17 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         priceInput.text = item.storeProduct?.price.toString(2)
         noteInput.text = item.note
         // TODO!!!!!!!!!!!!!!! quantifiable product - unit?
+        
+        edibleSelected = item.item.edible
     }
-    
+
     fileprivate func initTextFieldPlaceholders() {
         brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
         sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
         priceInput.attributedPlaceholder = NSAttributedString(string: priceInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
         noteInput.attributedPlaceholder = NSAttributedString(string: noteInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        
+        edibleButton.setTitle(trans("edible_button_title"), for: .normal)
     }
     
     fileprivate func initAutocompletionTextFields() {
@@ -468,7 +484,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
                 // Explanation category/section name: for list items, the section input refers to the list item's section. For the rest the product category. When we store the list items, if a category with the entered section name doesn't exist yet, one is created with the section's data.
-                delegate?.onOkTap(price, quantity: quantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, editingItem: editingItem?.model)
+                delegate?.onOkTap(price, quantity: quantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
                 
             } else {
                 QL4("Validation was not implemented correctly, price: \(priceInput.text), quantity: \(productQuantityController?.quantity), brand: \(brandInput.text), sectionColor: \(sectionColorButton.textColor)")
@@ -677,6 +693,12 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     deinit {
         // TODO!!! why is this deinit never called?
         QL1("Deinit add edit listitem controller")
+    }
+    
+    // MARK: -
+    
+    @IBAction func onTapEdible() {
+        edibleSelected = !edibleSelected
     }
     
 ///////////////////////////////////////////////////////////////////////////

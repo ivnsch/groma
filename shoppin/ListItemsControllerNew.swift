@@ -555,7 +555,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                 note: nil,
                 baseQuantity: model.productPrototype.baseQuantity,
                 unit: model.productPrototype.unit,
-                brand: model.productPrototype.brand
+                brand: model.productPrototype.brand,
+                edible: model.productPrototype.edible
             )
         }
         

@@ -43,7 +43,7 @@ struct Theme {
     static let lightPink = UIColor(hexString: "f9eaf1")
     static let green = UIColor(hexString: "1FAC6A")
     static let lighterGreen = UIColor(hexString: "28c75d")
-    
+    static let lightGray = UIColor.lightGray
     
     static let fractionsBGColor = UIColor.gray
     static let unitsBGColor = UIColor.white

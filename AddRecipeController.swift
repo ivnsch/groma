@@ -119,7 +119,8 @@ class AddRecipeController: UIViewController {
                 categoryColor: $0.item.category.color,
                 brand: $0.pBrand,
                 baseQuantity: $0.pBase,
-                unit: $0.pUnit
+                unit: $0.pUnit,
+                edible: true
             )
             return AddRecipeIngredientModel(productPrototype: prototype, quantity: $0.pQuantity == 0 ? $0.quantity : $0.pQuantity, ingredient: $0)
         })

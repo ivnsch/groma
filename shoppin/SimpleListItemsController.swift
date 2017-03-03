@@ -518,7 +518,8 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
                 note: nil,
                 baseQuantity: model.productPrototype.baseQuantity,
                 unit: model.productPrototype.unit,
-                brand: model.productPrototype.brand
+                brand: model.productPrototype.brand,
+                edible: model.productPrototype.edible
             )
         }
         

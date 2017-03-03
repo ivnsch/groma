@@ -35,12 +35,12 @@ public class Product: DBSyncable, Identifiable {
     }
     
     /// Convenience initializer that creates Item, using name. This is only for the items we add in the pre-filler, to not have to edit everything to add Item(...).
-    public convenience init(uuid: String, name: String, category: ProductCategory, brand: String = "", fav: Int = 0, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, name: String, category: ProductCategory, brand: String = "", fav: Int = 0, edible: Bool = false, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
         self.uuid = uuid
-        self.item = Item(uuid: UUID().uuidString, name: name, category: category, fav: 0)
+        self.item = Item(uuid: UUID().uuidString, name: name, category: category, fav: 0, edible: edible)
         self.brand = brand
         
         if let lastServerUpdate = lastServerUpdate {

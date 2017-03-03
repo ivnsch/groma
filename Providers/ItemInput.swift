@@ -14,15 +14,17 @@ public final class ItemInput: CustomDebugStringConvertible {
 //    public let category: ProductCategory // for now as full object, depending on requirements we may change this to category-input
     public let categoryName: String
     public let categoryColor: UIColor
+    public let edible: Bool
     
-    public init(name: String, categoryName: String, categoryColor: UIColor) {
+    public init(name: String, categoryName: String, categoryColor: UIColor, edible: Bool) {
         self.name = name
         self.categoryName = categoryName
         self.categoryColor = categoryColor
+        self.edible = edible
     }
     
     public var debugDescription: String {
-        return "{\(type(of: self)), name: \(name), categoryName: \(categoryName), categoryColor: \(categoryColor)}"
+        return "{\(type(of: self)), name: \(name), categoryName: \(categoryName), categoryColor: \(categoryColor), edible: \(edible)}"
     }
     
     var categoryInput: CategoryInput {

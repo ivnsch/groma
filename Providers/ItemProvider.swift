@@ -15,7 +15,7 @@ public protocol ItemProvider {
 
     func items(names: [String], _ handler: @escaping (ProviderResult<Results<Item>>) -> Void)
     
-    func items(_ text: String, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, items: Results<Item>)>) -> Void)
+    func items(_ text: String, onlyEdible: Bool, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, items: Results<Item>)>) -> Void)
 
     func item(name: String, _ handler: @escaping (ProviderResult<Item?>) -> Void)
 

@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="List section" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="LineAutocompleteTextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="25" y="66" width="255" height="40"/>
+                                <rect key="frame" x="25" y="66" width="260" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="jOx-1e-S6w" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
                                 </constraints>
@@ -44,7 +44,7 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Brand (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5b-Sz-J4o" customClass="LineAutocompleteTextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="25" y="26" width="325" height="40"/>
+                                <rect key="frame" x="25" y="26" width="254" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="bLM-k5-r0i" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
                                 </constraints>
@@ -77,7 +77,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="25" y="156" width="235" height="40"/>
+                                <rect key="frame" x="25" y="156" width="240" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
                                 </constraints>
@@ -97,13 +97,13 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xjl-8k-ZTY">
-                                <rect key="frame" x="280" y="66" width="70" height="40"/>
+                                <rect key="frame" x="285" y="66" width="70" height="40"/>
                                 <connections>
                                     <action selector="onSectionColorButtonTap:" destination="CI5-0y-OAL" eventType="touchUpInside" id="Xu7-Uf-KfM"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Colour" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="CcK-74-2fx" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="280" y="66" width="70" height="40"/>
+                            <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Colour" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="CcK-74-2fx" customClass="LineTextField" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="285" y="66" width="70" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="2T8-cF-A8U" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
                                     <constraint firstAttribute="width" constant="70" id="MkS-fK-o65"/>
@@ -127,8 +127,8 @@
                                     <constraint firstAttribute="height" constant="50" id="Hoz-cP-VPS"/>
                                 </constraints>
                             </view>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="y3W-hW-EO2" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="280" y="156" width="70" height="40"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="y3W-hW-EO2" customClass="LineTextField" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="285" y="156" width="70" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="A2j-Cc-Oys"/>
                                     <constraint firstAttribute="height" constant="40" id="lSf-Pq-AHa" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
@@ -148,10 +148,24 @@
                                     <outlet property="delegate" destination="CI5-0y-OAL" id="DQX-JH-hfI"/>
                                 </connections>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yvM-Su-XEx" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="309" y="31" width="46" height="30"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onTapEdible" destination="CI5-0y-OAL" eventType="touchUpInside" id="E93-hj-CAC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" constant="25" id="1GZ-LS-nJw" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                            <constraint firstAttribute="trailing" secondItem="yvM-Su-XEx" secondAttribute="trailing" constant="20" id="4tf-RS-Zcw"/>
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="top" secondItem="If7-20-6Xv" secondAttribute="top" constant="8" id="5vc-zY-2WJ"/>
                             <constraint firstItem="Yfv-oA-AU6" firstAttribute="top" secondItem="eS5-Cx-hK7" secondAttribute="bottom" id="7ph-aU-CSg"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" id="8QS-gR-4dR"/>
@@ -165,20 +179,22 @@
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="top" id="Sha-Jh-tLV"/>
                             <constraint firstItem="r5b-Sz-J4o" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="25" id="Sra-Uc-AlA" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="top" secondItem="r5b-Sz-J4o" secondAttribute="bottom" id="Uys-Mm-t4a"/>
+                            <constraint firstItem="yvM-Su-XEx" firstAttribute="baseline" secondItem="r5b-Sz-J4o" secondAttribute="baseline" id="VFQ-1a-5Dt"/>
                             <constraint firstItem="Yfv-oA-AU6" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="VUC-z5-1Dn"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="leading" secondItem="CcK-74-2fx" secondAttribute="leading" id="XB8-fm-XNW"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="baseline" secondItem="i1w-xi-aFz" secondAttribute="baseline" id="ZXj-Jt-gIn"/>
                             <constraint firstItem="y3W-hW-EO2" firstAttribute="leading" secondItem="Yfv-oA-AU6" secondAttribute="trailing" constant="20" id="ZaE-Dl-ZCp"/>
                             <constraint firstItem="eS5-Cx-hK7" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" id="bq9-ZF-eLg"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" id="chq-t4-DD0"/>
-                            <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" id="eXm-PX-v89"/>
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="centerX" secondItem="If7-20-6Xv" secondAttribute="centerX" id="ei9-BK-Nvk"/>
+                            <constraint firstItem="yvM-Su-XEx" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="trailing" constant="30" id="fUB-Yc-W2v"/>
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="fUq-lg-gn6"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" id="g2U-te-7jt"/>
                             <constraint firstAttribute="trailing" secondItem="eS5-Cx-hK7" secondAttribute="trailing" id="g9S-77-apx"/>
                             <constraint firstItem="y3W-hW-EO2" firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" id="iDd-Nq-czh"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="Xjl-8k-ZTY" secondAttribute="trailing" id="lg7-IJ-coN"/>
                             <constraint firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" constant="14" id="m3p-bh-n5t"/>
+                            <constraint firstItem="yvM-Su-XEx" firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" id="pRZ-LY-RdP"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="top" secondItem="CcK-74-2fx" secondAttribute="top" id="qie-lk-cf9"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" id="tXT-pg-CSu"/>
                             <constraint firstItem="eS5-Cx-hK7" firstAttribute="top" secondItem="CcK-74-2fx" secondAttribute="bottom" id="ufH-rt-mUp"/>
@@ -208,6 +224,7 @@
                     <connections>
                         <outlet property="addNewItemLabel" destination="dwL-LH-4dI" id="Wbj-R8-UgF"/>
                         <outlet property="brandInput" destination="r5b-Sz-J4o" id="Nwq-Vw-9MC"/>
+                        <outlet property="edibleButton" destination="yvM-Su-XEx" id="8gJ-V7-lYH"/>
                         <outlet property="noteInput" destination="Yfv-oA-AU6" id="5Hv-hJ-1gn"/>
                         <outlet property="priceInput" destination="y3W-hW-EO2" id="TPH-RX-eBF"/>
                         <outlet property="quantitiesContainer" destination="eS5-Cx-hK7" id="oua-Y4-fsi"/>

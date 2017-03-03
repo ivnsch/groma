@@ -17,15 +17,17 @@ public struct ListItemInput {
     public let sectionColor: UIColor
     public let note: String?
     public let brand: String
+    public let edible: Bool
     public let storeProductInput: StoreProductInput
     
-    public init(name: String, quantity: Float, price: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: String, brand: String) {
+    public init(name: String, quantity: Float, price: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: String, brand: String, edible: Bool) {
         self.name = name
         self.quantity = quantity
         self.section = section
         self.sectionColor = sectionColor
         self.note = note
         self.brand = brand
+        self.edible = edible
         self.storeProductInput = StoreProductInput(price: price, baseQuantity: baseQuantity, unit: unit)
     }
 }
@@ -34,7 +36,7 @@ public struct ListItemInput {
 extension ListItemInput {
     
     func toProductPrototype() -> ProductPrototype {
-        return ProductPrototype(name: name, category: section, categoryColor: sectionColor, brand: brand, baseQuantity: storeProductInput.baseQuantity, unit: storeProductInput.unit)
+        return ProductPrototype(name: name, category: section, categoryColor: sectionColor, brand: brand, baseQuantity: storeProductInput.baseQuantity, unit: storeProductInput.unit, edible: edible)
     }
     
     var quantifiableProductUnique: QuantifiableProductUnique {

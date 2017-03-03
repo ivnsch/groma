@@ -15,6 +15,7 @@ class ManageItemsItemCell: UITableViewCell {
     @IBOutlet weak var categoryColorView: UIView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var categoryNameLabel: UILabel!
+    @IBOutlet weak var edibleLabel: UILabel!
     
     //@IBOutlet weak var nameLeadingConstraint: NSLayoutConstraint!
 
@@ -31,6 +32,12 @@ class ManageItemsItemCell: UITableViewCell {
         
         // height now calculated yet so we pass the position of border
         addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.ingredientsCellHeight)
+        
+        if item.edible {
+            edibleLabel.text = trans("edible_button_title")
+        } else {
+            edibleLabel.text = ""
+        }
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {

@@ -396,8 +396,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
         
         func loadItems() {
-            
-            Prov.itemsProvider.items(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
+            // onlyEdibles: true - loadItems() is used only for recipes
+            Prov.itemsProvider.items(searchText, onlyEdible: true, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 
                 QL1("Loaded items, current search: \(self?.searchText), range: \(self?.paginator.currentPage), sortBy: \(self?.contentData.sortBy), result search: \(tuple.substring), results: \(tuple.items.count)")
                 
