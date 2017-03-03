@@ -84,8 +84,8 @@ class RealmInventoryItemProvider: RealmProvider {
     
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     // param onlyDelta: if we want to update only quantityDelta field (opposed to updating both quantity and quantityDelta)
-    func incrementInventoryItem(_ item: InventoryItem, delta: Float, onlyDelta: Bool = false, dirty: Bool, handler: @escaping (DBResult<Float>) -> Void) {
-        incrementInventoryItem(item.uuid, delta: delta, onlyDelta: onlyDelta, dirty: dirty, realmData: nil, handler: handler)
+    func incrementInventoryItem(_ item: InventoryItem, delta: Float, realmData: RealmData?, onlyDelta: Bool = false, dirty: Bool, handler: @escaping (DBResult<Float>) -> Void) {
+        incrementInventoryItem(item.uuid, delta: delta, onlyDelta: onlyDelta, dirty: dirty, realmData: realmData, handler: handler)
     }
     
     // TODO remove? seems not to be needed anymore

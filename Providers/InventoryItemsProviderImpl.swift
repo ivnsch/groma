@@ -154,7 +154,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             handler(ProviderResult(status: .success))
         }
         
-        DBProv.inventoryItemProvider.incrementInventoryItem(item, delta: delta, onlyDelta: false, dirty: remote) {dbResult in
+        DBProv.inventoryItemProvider.incrementInventoryItem(item, delta: delta, realmData: realmData, onlyDelta: false, dirty: remote) {dbResult in
 
             if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if let updatedQuantity = dbResult.sucessResult {
