@@ -249,6 +249,10 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
+    func onDeleteTap(_ cell: ProductWithQuantityTableViewCell) {
+        fatalError("Outdated - delete this controller!")
+    }
+    
     /**
     Unwrap optionals safely
     Note that despite implicitly unwrapped may look suitable here, we prefer working with ? as general approach

@@ -266,6 +266,10 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         updateTitle(inputs: inputs)
     }
     
+    var swipeToIncrementEnabled: Bool {
+        return true
+    }
+    
     func onFinishSwipe() {
         // do nothing
     }

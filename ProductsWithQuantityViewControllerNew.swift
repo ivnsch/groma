@@ -271,6 +271,14 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         }
     }
     
+    func onDeleteTap(_ cell: ProductWithQuantityTableViewCell) {
+        if let model = cell.model {
+            delegate?.remove(model, onSuccess: {}, onError: {_ in })
+        } else {
+            QL4("No model, can't update quantity")
+        }
+    }
+    
     fileprivate func findFirstVisibleItem(_ f: (ProductWithQuantity2) -> Bool) -> (index: Int, model: ProductWithQuantity2, cell: ProductWithQuantityTableViewCell)? {
         return (tableView.visibleCells.flatMap {cell in
             let cell =  cell as! ProductWithQuantityTableViewCell

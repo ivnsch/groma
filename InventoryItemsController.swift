@@ -521,10 +521,13 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
         guard let inventory = inventory else {QL4("No inventory"); return}
         guard let realmData = realmData else {QL4("No realm data"); return}
-
-        Prov.inventoryItemsProvider.removeInventoryItem((model as! InventoryItem).uuid, inventoryUuid: inventory.uuid, remote: true, realmData: realmData, resultHandler(onSuccess: {
-            self.productsWithQuantityController.updateEmptyUI()
-            // TODO!!!!!!!!!!!!!!!!!!!!! shouldn't we remove rows here(also in ingredients controller?)
+        guard let indexPath = indexPathOfItem(model) else {QL4("No index path"); return}
+        
+        Prov.inventoryItemsProvider.removeInventoryItem((model as! InventoryItem).uuid, inventoryUuid: inventory.uuid, remote: true, realmData: realmData, resultHandler(onSuccess: {[weak self] in
+            
+            self?.tableView.deleteRows(at: [indexPath], with: Theme.defaultRowAnimation)
+            self?.productsWithQuantityController.updateEmptyUI()
+            
             onSuccess()
         }, onError: {result in
             onError(result)
@@ -583,14 +586,16 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
     }
     
-//    func indexPathOfItem(_ model: ProductWithQuantity2) -> IndexPath? {
-//        for i in 0..<productsWithQuantityController.models.count {
-//            if productsWithQuantityController.same(productsWithQuantityController.models[i], model) {
-//                return IndexPath(row: i, section: 0)
-//            }
-//        }
-//        return nil
-//    }
+    func indexPathOfItem(_ model: ProductWithQuantity2) -> IndexPath? {
+        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return nil}
+
+        for i in 0..<inventoryItemsResult.count {
+            if productsWithQuantityController.same(inventoryItemsResult[i], model) {
+                return IndexPath(row: i, section: 0)
+            }
+        }
+        return nil
+    }
     
     func isPullToAddEnabled() -> Bool {
         return true

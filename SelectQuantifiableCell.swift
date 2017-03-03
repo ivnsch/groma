@@ -60,6 +60,10 @@ class SelectQuantifiableCell: UITableViewCell, QuantityViewDelegate, SwipeToIncr
         quantityView.quantity = quantity
     }
     
+    var swipeToIncrementEnabled: Bool {
+        return true
+    }
+    
     func onFinishSwipe() {
         // do nothing
     }

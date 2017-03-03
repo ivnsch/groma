@@ -71,7 +71,6 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     var mode: ListItemCellMode = .note {
         didSet {
             updateModeItemsVisibility(true)
-            swipeToIncrementHelper?.enabled = mode == .increment
             swipeEnabled = mode == .note
         }
     }
@@ -414,6 +413,10 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         } else {
             QL3("Warn: ListItemCell.onStartItemSwipe: no tableViewListItem")
         }
+    }
+    
+    var swipeToIncrementEnabled: Bool {
+        return mode == .increment
     }
     
     // MARK: - Touch

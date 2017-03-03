@@ -61,7 +61,6 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
     var mode: ListItemCellMode = .note {
         didSet {
             updateModeItemsVisibility(true)
-            swipeToIncrementHelper?.enabled = mode == .increment
         }
     }
     fileprivate(set) var labelColor: UIColor = UIColor.black {
@@ -306,5 +305,9 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         } else {
             QL3("Warn: ListItemCell.onStartItemSwipe: no tableViewListItem")
         }
+    }
+    
+    var swipeToIncrementEnabled: Bool {
+        return mode == .increment
     }
 }

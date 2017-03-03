@@ -13,10 +13,11 @@ import Providers
 protocol ProductWithQuantityTableViewCellDelegate: class {
     func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell)
     func onDecrementItemTap(_ cell: ProductWithQuantityTableViewCell)
+    func onDeleteTap(_ cell: ProductWithQuantityTableViewCell)
     func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Float)
 }
 
-class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperDelegate {
+class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperDelegate, SwipeToDeleteHelperDelegate {
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var brandLabel: UILabel!
@@ -28,6 +29,11 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     @IBOutlet weak var centerVerticallyNameLabelConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var categoryColorView: UIView!
+    
+    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var leftLayoutConstraint: NSLayoutConstraint!
+    @IBOutlet weak var myContentView: UIView!
+    fileprivate var swipeToDeleteHelper: SwipeToDeleteHelper?
     
     fileprivate var isAnimatingProgress: Bool = false
     fileprivate var animationCancelled: Bool = false
@@ -96,7 +102,10 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        swipeToIncrementHelper = SwipeToIncrementHelper(view: contentView)
+        swipeToDeleteHelper = SwipeToDeleteHelper(parentView: self, button: myContentView, leftLayoutConstraint: leftLayoutConstraint, cancelTouches: false)
+        swipeToDeleteHelper?.delegate = self
+        
+        swipeToIncrementHelper = SwipeToIncrementHelper(view: contentView, cancelTouches: false)
         swipeToIncrementHelper?.delegate = self
         
         selectionStyle = .none
@@ -169,5 +178,28 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     
     func onFinishSwipe() {
         delegate?.onPanQuantityUpdate(self, newQuantity: shownQuantity)
+    }
+    
+    var swipeToIncrementEnabled: Bool {
+        let isOpen = swipeToDeleteHelper?.isOpen ?? false
+        return !isOpen
+    }
+    
+    // MARK: -
+    
+    @IBAction func onDeleteTap() {
+//        delegate?.onDeleteTap(self)
+    }
+    
+    // MARK: - SwipeToDeleteHelperDelegate
+    
+    func onOpen(_ open: Bool) {
+        if open {
+            delegate?.onDeleteTap(self)
+        }
+    }
+    
+    var isSwipeToDeleteEnabled: Bool {
+        return shownQuantity == 0
     }
 }

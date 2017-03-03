@@ -24,6 +24,7 @@
 		6A1027781E5E5DBF003D2972 /* ProductQuantityController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1027761E5E5DBF003D2972 /* ProductQuantityController.xib */; };
 		6A1BBADA1E44AF5E00BC7404 /* UITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */; };
 		6A1BBAE01E44B57300BC7404 /* ListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */; };
+		6A278F8C1E69CA1A00126F8E /* SwipeToDeleteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A278F8B1E69CA1A00126F8E /* SwipeToDeleteHelper.swift */; };
 		6A287E821E51F4F000868244 /* ManageItemsItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */; };
 		6A287E841E5210D000868244 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E831E5210D000868244 /* Globals.swift */; };
 		6A287E871E52671700868244 /* EditNameColorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E861E52671700868244 /* EditNameColorController.swift */; };
@@ -485,6 +486,7 @@
 		6A1027761E5E5DBF003D2972 /* ProductQuantityController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductQuantityController.xib; sourceTree = "<group>"; };
 		6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewController.swift; sourceTree = "<group>"; };
 		6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ListItemCell.xib; path = ../ListItemCell.xib; sourceTree = "<group>"; };
+		6A278F8B1E69CA1A00126F8E /* SwipeToDeleteHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteHelper.swift; sourceTree = "<group>"; };
 		6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsItemCell.swift; sourceTree = "<group>"; };
 		6A287E831E5210D000868244 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		6A287E861E52671700868244 /* EditNameColorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNameColorController.swift; sourceTree = "<group>"; };
@@ -1876,6 +1878,7 @@
 				EBB655AA1CF3D13D00B49A55 /* ProductsWithQuantity.storyboard */,
 				EB8D1D101C389D6E00ADF884 /* ProductsWithQuantityViewController.swift */,
 				EB20FC061A599AE20058103B /* ProductWithQuantityTableViewCell.swift */,
+				6A278F8B1E69CA1A00126F8E /* SwipeToDeleteHelper.swift */,
 				6AE34BFB1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift */,
 			);
 			name = productWithQuantity;
@@ -2903,6 +2906,7 @@
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				6A42C3851E437C4900F8E0E6 /* SimpleListItemsController.swift in Sources */,
 				5819FB5E1DDDF59500FB2CC1 /* Validatable.swift in Sources */,
+				6A278F8C1E69CA1A00126F8E /* SwipeToDeleteHelper.swift in Sources */,
 				EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
 				EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */,
 				6A0DE19B1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift in Sources */,
