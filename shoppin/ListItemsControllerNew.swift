@@ -282,14 +282,15 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath) {
-
-        guard let realmData = realmData else {QL4("No realm data"); return}
-
         if isEditing {
             openQuickAdd(itemToEdit: AddEditItem(item: tableViewListItem, currentStatus: status))
-
-        } else { // switch list item
-
+        }
+    }
+    
+    func onListItemSwiped(_ tableViewListItem: ListItem, indexPath: IndexPath) {
+        if !isEditing {
+            guard let realmData = realmData else {QL4("No realm data"); return}
+            
             // TODO!!!! when receive switch status via websocket we will *not* show undo (undo should be only for the device doing the switch) but submit immediately this means:
             // 1. call switchstatus like here, 2. switch status in provider updates status/order, maybe deletes section, etc 3. update the table view - swipe the item and maybe delete section(this should be similar to calling onListItemClear except the animation in this case is not swipe, but that should be ok?)
             listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true, onFinish: {[weak self] in guard let weakSelf = self else {return}
