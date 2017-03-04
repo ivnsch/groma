@@ -12,7 +12,7 @@ import QorumLogs
 import Providers
 
 protocol QuickAddDelegate: class {
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float)
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void)
     
     func onAddItem(_ item: Item) // Maybe remove this - now that we have onAddIngredient it's not necessarily. We currently don't add only items anywhere.
     func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) // only used with item type .ingredient
@@ -39,6 +39,8 @@ protocol QuickAddDelegate: class {
     
     func onRemovedSectionCategoryName(_ name: String)
     func onRemovedBrand(_ name: String)
+    
+    func onFinishAddCellAnimation()
 }
 
 private enum AddProductOrGroupContent {
@@ -267,8 +269,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
     
     // product was selected in product quick list
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
-        delegate?.onAddProduct(product, quantity: quantity)
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
+        delegate?.onAddProduct(product, quantity: quantity, onAddToProvider: onAddToProvider)
     }
     
     func onAddItem(_ item: Item) {
@@ -300,6 +302,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             
             }
         }
+    }
+    
+    func onFinishAddCellAnimation() {
+        delegate?.onFinishAddCellAnimation()
     }
     
     // MARK: - Actions dispatch

@@ -64,4 +64,7 @@ struct Theme {
     static let defaultRowPosition = UITableViewScrollPosition.top
 
     static let submitViewHeight: CGFloat = 60
+    
+    static let topControllerOverlayAlpha: CGFloat = 0.2
+
 }

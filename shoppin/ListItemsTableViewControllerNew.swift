@@ -72,8 +72,11 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     var cellSwipeDirection: SwipeableCellDirection = .right
 
     fileprivate let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
-
+    fileprivate let placeholderIdentifier = "placeholder"
+    
     fileprivate var pullToAddView: MyRefreshControl?
+    
+    var placeHolderItem: (indexPath: IndexPath, item: ListItem)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,6 +87,9 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         // TODO!!!!!!!!!!!! still necessary?
 //        self.tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         self.tableView.allowsSelectionDuringEditing = true
+        
+        
+        tableView.register(UINib(nibName: "PlaceHolderItemCell", bundle: nil), forCellReuseIdentifier: "placeholder")
         
         tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
@@ -197,29 +203,48 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         guard let sectionObj = sections?[section] else {QL4("Invalid state: no section"); return nil}
         
         let view = Bundle.loadView("ListItemsSectionHeaderView", owner: self) as! ListItemsSectionHeaderView
-        view.section = sectionObj
-        view.backgroundColor = sectionObj.color
-        view.nameLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: sectionObj.color, isFlat: true)
-        //            view.nameLabel.textColor = headerFontColor
-        //            view.nameLabel.font = headerFont
+        view.config(section: sectionObj, contracted: contract)
+        
         view.delegate = self
         return view
     }
     
+    
+    var contract: Bool = false
+    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return DimensionsManager.listItemsHeaderHeight
+        return contract ? DimensionsManager.contractedSectionHeight : DimensionsManager.listItemsHeaderHeight
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sectionsExpanded ? sections?[section].listItems.count ?? 0 : 0
+        
+        if sectionsExpanded {
+            
+            
+            // TODO remove this - let method as it was before
+            let addForPossiblePlaceholder: Int = {
+                if let placeHolderItem = placeHolderItem, placeHolderItem.indexPath.section == section {
+                    return 0
+                } else {
+                    return 0
+                }
+            }()
+            
+            let listItemsInSectionCount = sections?[section].listItems.count ?? 0
+            
+            return listItemsInSectionCount + addForPossiblePlaceholder
+            
+        } else {
+            return 0
+        }
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return sections?.count ?? 0
+        // TODO!!!!!!!!!!!!!!!! if placeholder item has a section that isn't yet in the table we have to add it here
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -229,18 +254,25 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! ListItemCellNew
-        cell.showsReorderControl = true
-        cell.direction = .right
-        
-        // When returning cell height programatically (which we need now in order to use different cell heights for different screen sizes), here it's still the height from the storyboard so we have to pass the offset for the line to eb draw at the bottom. Apparently there's no method where we get the cell with final height (did move to superview / window also still have the height from the storyboard)
-        cell.contentView.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
-        
-        guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {QL4("No listItem"); return cell}
-        cell.setup(status, mode: cellMode, tableViewListItem: listItem, delegate: self)
-        cell.startStriked = false
-        
-        return cell
+        if let placeHolderItem = placeHolderItem, placeHolderItem.indexPath == indexPath {
+            let cell = tableView.dequeueReusableCell(withIdentifier: placeholderIdentifier) as! PlaceHolderItemCell
+            cell.categoryColorView.backgroundColor = placeHolderItem.item.product.product.product.item.category.color
+            return cell
+
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! ListItemCellNew
+            cell.showsReorderControl = true
+            cell.direction = .right
+            
+            // When returning cell height programatically (which we need now in order to use different cell heights for different screen sizes), here it's still the height from the storyboard so we have to pass the offset for the line to eb draw at the bottom. Apparently there's no method where we get the cell with final height (did move to superview / window also still have the height from the storyboard)
+            cell.contentView.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
+            
+            guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {QL4("No listItem"); return cell}
+            cell.setup(status, mode: cellMode, tableViewListItem: listItem, delegate: self)
+            cell.startStriked = false
+            
+            return cell
+        }
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {

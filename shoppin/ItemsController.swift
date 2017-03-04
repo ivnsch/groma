@@ -212,6 +212,13 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         } else {
             topBar.setLeftButtonIds([.edit])
         }
+        
+        onFinishCloseTopControllers()
+    }
+    
+    // This is called after close with topbar's x as well as tapping semi transparent overlay. After everything else (rotate top button, close top controllers etc.) was done. Override for custom logic to be executed after closing top controller.
+    func onFinishCloseTopControllers() {
+        // optional override
     }
     
     /// itemToEdit != nil -> Edit mode
@@ -329,7 +336,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     }
     
     
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
         fatalError("Override")
     }
     
@@ -375,6 +382,8 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         }
     }
     
+    func onFinishAddCellAnimation() {
+    }
     
     // MARK: - ExpandableTopViewControllerDelegate
     

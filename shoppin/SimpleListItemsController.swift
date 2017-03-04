@@ -543,7 +543,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         })
     }
 
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
         guard let realmData = realmData else {QL4("No realm data"); return}
         
         if let list = currentList {
@@ -651,6 +651,9 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     
     func onRemovedBrand(_ name: String) {
         updatePossibleList()
+    }
+    
+    func onFinishAddCellAnimation() {
     }
 }
 

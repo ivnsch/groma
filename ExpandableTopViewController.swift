@@ -116,7 +116,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                 if let weakSelf = self, let view = weakSelf.controller?.view {
                     
                     if expanded {
-                        weakSelf.overlay?.alpha = 0.2
+                        weakSelf.overlay?.alpha = Theme.topControllerOverlayAlpha
                     } else {
                         weakSelf.overlay?.alpha = 0
                     }

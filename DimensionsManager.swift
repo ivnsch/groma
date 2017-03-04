@@ -255,6 +255,10 @@ class DimensionsManager {
         }
     }
     
+    static var contractedSectionHeight: CGFloat {
+        return 4
+    }
+    
     // The full width of the screen. Hack - we should not need to use hardcoded values for this. We need it now for bottom border of cells, bounds not calculated yet. TODO fix that and remove this.
     static var fullWidth: CGFloat {
         switch widthDimension {

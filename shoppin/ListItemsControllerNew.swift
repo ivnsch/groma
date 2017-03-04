@@ -250,6 +250,16 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         super.closeTopControllers(rotateTopBarButton: rotateTopBarButton)
         topEditSectionControllerManager?.expand(false)
         topEditSectionControllerManager?.controller?.onClose()
+
+    }
+    
+    override func onFinishCloseTopControllers() {
+        super.onFinishCloseTopControllers()
+
+        listItemsTableViewController.contract = false
+        //        self?.listItemsTableViewController.placeHolderItem = (indexPath: indexPath, item: addResult.listItem)
+        listItemsTableViewController.tableView.reloadData()
+        //        self?.listItemsTableViewController.tableView.layoutIfNeeded()
     }
     
     override func openQuickAdd(rotateTopBarButton: Bool = true, itemToEdit: AddEditItem? = nil) {
@@ -257,6 +267,11 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         // in case we are in reorder sections mode, come back to normal. This mode doesn't make sense while adding list items as we can't see the list items.
         setReorderSections(false)
+        
+        // hide headers
+        listItemsTableViewController.contract = true
+        listItemsTableViewController.tableView.reloadData()
+        listItemsTableViewController.tableView.layoutIfNeeded()
     }
     
     func onListItemClear(_ tableViewListItem: ListItem, notifyRemote: Bool, onFinish: VoidFunction) {
@@ -615,29 +630,36 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     
-    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
+    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
         guard let realmData = realmData else {QL4("No realm data"); return}
      
         if let list = currentList {
             
-            // TODO!!!!!!!!!!! review if (in other places, here we do after) it's ok to manipulate table view before doing the realm operation or if we should rather wait for realm, otherwise we may get crash when realm fails
-            
             // TODO!!!!!!!!!!! don't pass store, list has the store!
-            Prov.listItemsProvider.addNew(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, status: status, realmData: realmData, successHandler {[weak self] (addResult: AddListItemResult) in
+            Prov.listItemsProvider.addNew(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, status: status, realmData: realmData, successHandler {[weak self] (addResult:
+                AddListItemResult) in
+                
+                onAddToProvider(QuickAddAddProductResult(isNewItem: addResult.isNewItem))
                 
                 let indexPath = IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex)
-                if addResult.isNewItem {
-                    self?.listItemsTableViewController.addRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex), isNewSection: addResult.isNewSection)
+
+                if addResult.isNewSection {
+                    self?.listItemsTableViewController.placeHolderItem = (indexPath: indexPath, item: addResult.listItem)
+                    self?.tableView.insertSections([addResult.sectionIndex], with: Theme.defaultRowAnimation)
+                    
+                } else if addResult.isNewItem {
+                    self?.listItemsTableViewController.placeHolderItem = (indexPath: indexPath, item: addResult.listItem)
+                    self?.tableView.insertRows(at: [indexPath], with: Theme.defaultRowAnimation)
+                    
                 } else {
                     self?.listItemsTableViewController.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex))
                 }
-                self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: Theme.defaultRowPosition, animated: true)
+                
+                self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
 
                 self?.updateEmptyUI()
             })
-//            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.product.category.name, sectionColor: product.product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
-//                weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
-//            })
+            
         } else {
             QL4("Add product from quick list but there's no current list in ViewController'")
         }
@@ -724,6 +746,11 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         //        listItemsTableViewController.sectionsExpanded = sectionsTableViewController == nil
     }
 
+    
+    override func onFinishAddCellAnimation() {
+        listItemsTableViewController.placeHolderItem = nil
+        listItemsTableViewController.tableView.reloadData()
+    }
     
     // MARK: - Reorder sections
     

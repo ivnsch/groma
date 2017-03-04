@@ -9,7 +9,11 @@
 import UIKit
 
 public extension CGRect {
-
+    
+    public var bounds: CGRect {
+        return CGRect(x: 0, y: 0, width: width, height: height)
+    }
+    
     public func copy(_ x: CGFloat? = nil, y: CGFloat? = nil, width: CGFloat? = nil, height: CGFloat? = nil) -> CGRect {
         return CGRect(
             x: x ?? self.origin.x,

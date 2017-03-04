@@ -27,7 +27,7 @@ public func animIf(_ animated: Bool, f: @escaping () -> Void) {
 }
 
 public func anim(_ duration: Double = Theme.defaultAnimDuration, _ f: @escaping () -> Void, onFinish: @escaping () -> Void) {
-    UIView.animate(withDuration: Theme.defaultAnimDuration, animations: { 
+    UIView.animate(withDuration: duration, animations: {
         f()
     }) {finished in
         onFinish()

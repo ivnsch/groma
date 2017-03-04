@@ -278,7 +278,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         fatalError("TODO!!!!!!!!!!!!!!!!!!!!")
     }
     
-    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float) {
+    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
         // Not used
     }
     

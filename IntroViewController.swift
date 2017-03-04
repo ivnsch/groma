@@ -229,7 +229,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     Prov.productProvider.products(ingredientsNameBrands, weakSelf.resultHandler(onSuccess: {products in
                         
                         if products.count != ingredientsNameBrands.count {
-                            QL4("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products)")
+                            QL4("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): (\(products.map{$0.item.name})), searched(\(ingredients.count)): \(ingredients.map{$0.name})")
                             onFinish?()
                             
                         } else {
@@ -290,7 +290,15 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         (trans("pr_peaches"), 6),
                         (trans("pr_oranges"), 12),
                         (trans("pr_kiwis"), 4),
-                        (trans("pr_water_1"), 3)
+                        (trans("pr_water_1"), 3),
+                        (trans("pr_rice"), 6),
+                        (trans("pr_bread"), 12),
+                        (trans("pr_grapes"), 4),
+                        (trans("pr_mangos"), 3),
+                        (trans("pr_garlic"), 6),
+                        (trans("pr_drum_sticks"), 12),
+                        (trans("pr_chicken_wings"), 4),
+                        (trans("pr_pepper_red"), 3)
                     ]
                     
                     let productsWithBrands: [(name: String, brand: String)] = productsWithQuantity.map{(name: $0.name, brand: "")}
@@ -298,7 +306,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     Prov.productProvider.products(productsWithBrands, weakSelf.resultHandler(onSuccess: {products in
                         
                         if products.count != productsWithBrands.count {
-                            QL4("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products)")
+                            QL4("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products.map{$0.item.name}), searched(\(productsWithBrands.count)): \(productsWithBrands.map{$0.name})")
                             onFinish?()
                             
                         } else {

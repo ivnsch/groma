@@ -17,12 +17,18 @@ class ListItemsSectionHeaderView: UIView {
     
     @IBOutlet weak var nameLabel: UILabel!
     
-    var section: Section? {
-        didSet {
-            if let section = section {
-                nameLabel.text = NSLocalizedString(section.name, comment: "").uppercased()
-            }
-        }
+    var section: Section?
+    
+    func config(section: Section, contracted: Bool) {
+        
+        self.section = section
+        
+        nameLabel.text = contracted ? "" : NSLocalizedString(section.name, comment: "").uppercased()
+        
+        backgroundColor = section.color
+        nameLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: section.color, isFlat: true)
+        //            nameLabel.textColor = headerFontColor
+        //            nameLabel.font = headerFont
     }
     
     weak var delegate: ListItemsSectionHeaderViewDelegate!

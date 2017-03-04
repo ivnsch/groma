@@ -10,10 +10,15 @@ import UIKit
 import QorumLogs
 import Providers
 
+struct QuickAddAddProductResult {
+    public let isNewItem: Bool
+}
+
+
 // TODO rename this controller in only groups controller and remove the old groups controller. Also delegate methods not with "Add" but simply "Tap" - the implementation of this delegate decides what the tap means.
 
 protocol QuickAddListItemDelegate: class {
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float)
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void)
     
     func onAddItem(_ item: Item)
 
@@ -28,6 +33,8 @@ protocol QuickAddListItemDelegate: class {
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
     
     func parentViewForAddButton() -> UIView?
+    
+    func onFinishAddCellAnimation()
 }
 
 /// For internal communication with other top controllers
@@ -238,8 +245,38 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             
             // TODO!!!!!!! show popup with units if more than 1 quantifiable product for this product!
             
+            func onRetrievedQuantifiableProduct(quantifiableProduct: QuantifiableProduct, quantity: Float) {
+                
+                guard let cell = collectionView.cellForItem(at: indexPath) as? QuickAddItemCell else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
+                guard let windowMaybe = UIApplication.shared.delegate?.window, let window = windowMaybe else {QL4("No window: can't animate cell"); return}
+                
+                func animateItemToCell() {
+                    let copy = cell.copyCell(quantifiableProduct: quantifiableProduct)
+                    let cellPointInWindow = window.convert(cell.center, from: collectionView)
+                    window.addSubview(copy)
+                    copy.center = cellPointInWindow
+                    
+                    
+                    let quickAddFrameRelativeToWindow = window.convert(view.frame, from: view.superview!)
+                    
+                    let categoryColorViewWidth: CGFloat = 4
+                    
+                    let targetCellFrame = CGRect(x: categoryColorViewWidth, y: quickAddFrameRelativeToWindow.maxY + DimensionsManager.contractedSectionHeight, width: view.width - categoryColorViewWidth, height: DimensionsManager.defaultCellHeight)
+                    
+                    copy.animateAddToList(targetFrame: targetCellFrame) {[weak self] in
+                        self?.delegate?.onFinishAddCellAnimation()
+                    }
+                }
+                
+                delegate?.onAddProduct(quantifiableProduct, quantity: quantity) {result in
+                    if result.isNewItem {
+                        animateItemToCell()
+                    }
+                }
+            }
+            
             retrieveQuantifiableProduct(product: productItem.product, indexPath: indexPath) {[weak self] (quantifiableProduct, quantity) in
-                self?.delegate?.onAddProduct(quantifiableProduct, quantity: quantity)
+                onRetrievedQuantifiableProduct(quantifiableProduct: quantifiableProduct, quantity: quantity)
             }
             
         } else if let recipeItem = item as? QuickAddRecipe {

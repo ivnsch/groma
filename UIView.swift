@@ -304,4 +304,16 @@ extension UIView {
         self.init(frame: CGRect(x: center.x - size.width / 2, y: center.y - size.height / 2, width: size.width, height: size.height))
     }
     
+    func copyView() -> UIView? {
+        return NSKeyedUnarchiver.unarchiveObject(with: NSKeyedArchiver.archivedData(withRootObject: self)) as? UIView
+    }
+    
+    // Changes the anchor of view without changing its position. Returns internal translation in pt
+    func setAnchorWithoutMoving(_ anchor: CGPoint) -> CGPoint {
+        let offsetAnchor = CGPoint(x: anchor.x - layer.anchorPoint.x, y: anchor.y - layer.anchorPoint.y)
+        let offset = CGPoint(x: frame.width * offsetAnchor.x, y: frame.height * offsetAnchor.y)
+        layer.anchorPoint = anchor
+        transform = transform.translatedBy(x: offset.x, y: offset.y)
+        return offset
+    }
 }
