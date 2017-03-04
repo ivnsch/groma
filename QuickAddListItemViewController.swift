@@ -315,12 +315,14 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 guard let cell = self.collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
                 
                 // TODO!!!!!!!!!!!!!!!!!!!!!!!! bottom inset different varies for different screen sizes - bottom border has to be slightly about keyboard
-                self.selectQuantifiableAnimator?.open (button: cell, inset: Insets(left: 50, top: 60, right: 50, bottom: 360), scrollOffset: self.collectionView.contentOffset.y, controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
+                self.selectQuantifiableAnimator?.open (button: cell, inset: Insets(left: 50, top: 100, right: 50, bottom: 50), scrollOffset: self.collectionView.contentOffset.y, controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
                     let selectQuantifiableProductController = UIStoryboard.selectQuantifiableController()
                     
                     selectQuantifiableProductController.onSelected = {(quantifiableProduct, quantity) in
-                        onRetrieved((quantifiableProduct, quantity))
-                        weakSelf.selectQuantifiableAnimator?.close()
+                        weakSelf.selectQuantifiableAnimator?.close {
+                            print("") // compiler bug! we need some command here otherwise next line doesn't compile.
+                            onRetrieved((quantifiableProduct, quantity))
+                        }
                     }
                     
                     selectQuantifiableProductController.onViewDidLoad = {[weak selectQuantifiableProductController] in
