@@ -150,11 +150,17 @@ class ProductQuantityController: UIViewController {
             let pickerParent = delegate.parentForPickers
             
             // We need an additional scaling mask for open/close so to now overwrite the gradient mask of PickerCollectionView we need an additional view
-            let unitPickerWrapper = UIView(size: CGSize(width: 100, height: 250), center: view.convert(unitButton.center, to: pickerParent))
+            let unitPickerWrapper = UIViewHitTest(size: CGSize(width: 100, height: 250), center: view.convert(unitButton.center, to: pickerParent))
 
-            self.unitPickerWrapper = unitPickerWrapper
             let unitPicker = PickerCollectionView(size: unitPickerWrapper.bounds.size, center: unitPickerWrapper.bounds.center, layout: flowLayout, boxY: unitButton.y, boxCenterY: unitButton.center.y, cellHeight: cellSize.height, cellSpacing: cellSpacing, delegate: self)
             
+            unitPickerWrapper.isInArea = {[weak unitPickerWrapper, weak unitPicker, weak baseButton] point in
+                guard let unitPickerWrapper = unitPickerWrapper, let unitPicker = unitPicker, let baseButton = baseButton else {return false}
+                return unitPicker.open ? true : point.y > unitPickerWrapper.bounds.center.y - baseButton.height / 2 && point.y < unitPickerWrapper.bounds.center.y + baseButton.height / 2
+            }
+            
+            self.unitPickerWrapper = unitPickerWrapper
+
             pickerParent.addSubview(unitPickerWrapper)
             unitPickerWrapper.addSubview(unitPicker)
             
@@ -205,12 +211,17 @@ class ProductQuantityController: UIViewController {
             let pickerParent = delegate.parentForPickers
             
             // We need an additional scaling mask for open/close so to now overwrite the gradient mask of PickerCollectionView we need an additional view
-            let basesPickerWrapper = UIView(size: CGSize(width: 100, height: 250), center: view.convert(baseButton.center, to: pickerParent))
-            self.basesPickerWrapper = basesPickerWrapper
+            let basesPickerWrapper = UIViewHitTest(size: CGSize(width: 100, height: 250), center: view.convert(baseButton.center, to: pickerParent))
             
             let basesAddRecipeDelegate = BasesAddRecipeDelegate(productQuantityController: self)
             let basePicker = PickerCollectionView(size: basesPickerWrapper.bounds.size, center: basesPickerWrapper.bounds.center, layout: flowLayout, boxY: baseButton.y, boxCenterY: baseButton.center.y, cellHeight: cellSize.height, cellSpacing: cellSpacing, delegate: basesAddRecipeDelegate)
             
+            basesPickerWrapper.isInArea = {[weak basesPickerWrapper, weak basePicker, weak baseButton] point in
+                guard let basesPickerWrapper = basesPickerWrapper, let basePicker = basePicker, let baseButton = baseButton else {return false}
+                return basePicker.open ? true : point.y > basesPickerWrapper.bounds.center.y - baseButton.height / 2 && point.y < basesPickerWrapper.bounds.center.y + baseButton.height / 2
+            }
+            
+            self.basesPickerWrapper = basesPickerWrapper
             
             self.basesAddRecipeDelegate = basesAddRecipeDelegate
             
@@ -320,14 +331,8 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     }
     
     func onStartScrolling() {
-        
         setBasesPickerOpen(false)
-        
-        anim {
-            self.unitPickerMask?.frame = self.unitPicker!.bounds
-            self.view.setNeedsLayout()
-            self.view.layoutIfNeeded()
-        }
+        setUnitPickerOpen(true)
     }
     
     
@@ -460,7 +465,9 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
         setPickerOpen(open, picker: picker, mask: basesPickerMask, maskFrame: baseButtonMaskFrame)
     }
     
-    fileprivate func setPickerOpen(_ open: Bool, picker: UIView, mask: UIView?, maskFrame: CGRect) {
+    fileprivate func setPickerOpen(_ open: Bool, picker: PickerCollectionView, mask: UIView?, maskFrame: CGRect) {
+        
+        picker.open = open
         
         func animNewFrame(frame: CGRect) {
             anim {
@@ -519,14 +526,8 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
     }
     
     func onStartScrolling() {
-        
         productQuantityController.setUnitPickerOpen(false)
-        
-        anim {
-            self.productQuantityController.basesPickerMask?.frame = self.productQuantityController.basesPicker!.bounds
-            self.view.setNeedsLayout()
-            self.view.layoutIfNeeded()
-        }
+        productQuantityController.setBasesPickerOpen(true)
     }
     
     

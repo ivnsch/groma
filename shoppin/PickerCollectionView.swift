@@ -27,8 +27,14 @@ class PickerCollectionView: UIView, UICollectionViewDelegate, UICollectionViewDe
     
     weak var delegate: PickerCollectionViewDelegate?
     
+    var open: Bool = false
+    
     fileprivate let boxY: CGFloat
     fileprivate let boxCenterY: CGFloat
+    
+    fileprivate var boxHeight: CGFloat {
+        return (boxCenterY - boxY) * 2
+    }
     
     fileprivate let cellHeight: CGFloat
     fileprivate let cellSpacing: CGFloat
