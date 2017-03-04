@@ -95,6 +95,8 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         
         tableView.allowsSelectionDuringEditing = true
         
+        setEmptyUI(false, animated: false) // start with hidden empty view, this way there's no "fade in" animation when starting (non empty) screens the first time
+        
         let refreshControl = PullToAddHelper.createPullToAdd(self)
         tableViewController.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(ExpandableItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)
