@@ -169,6 +169,40 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         searchBar.becomeFirstResponder()
     }
 
+    func showTapToAddMoreHintIfEnabled() {
+        
+        func showHint() {
+            let height: CGFloat = 40
+            let label = UILabel(frame: CGRect(x: 0, y: view.bounds.maxY - height, width: view.width, height: height))
+            label.backgroundColor = Theme.lightGreyBackground
+            label.textColor = Theme.grey
+            label.text = trans("hint_tap_to_add_more")
+            label.textAlignment = .center
+            label.font = UIFont.systemFont(ofSize: LabelMore.mapToFontSize(40) ?? 12)
+            view.addSubview(label)
+            label.alpha = 0
+            
+            anim {
+                label.alpha = 1
+            }
+            delay(2) {
+                anim(Theme.defaultAnimDuration, {
+                    label.alpha = 0
+                }) {
+                    label.removeFromSuperview()
+                }
+            }
+        }
+        
+        let showedTapToEditCounterNumber: NSNumber = PreferencesManager.loadPreference(.showedTapToEditCounter) ?? 0
+        let showedTapToEditCount = showedTapToEditCounterNumber.intValue
+        
+        if showedTapToEditCount < 2 {
+            showHint()
+            PreferencesManager.savePreference(.showedTapToEditCounter, value: NSNumber(value: showedTapToEditCount + 1))
+        }
+    }
+    
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -270,7 +304,12 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     // product was selected in product quick list
     func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
-        delegate?.onAddProduct(product, quantity: quantity, onAddToProvider: onAddToProvider)
+        delegate?.onAddProduct(product, quantity: quantity, onAddToProvider: {[weak self] result in
+            if result.isNewItem {
+                self?.showTapToAddMoreHintIfEnabled()
+            }
+            onAddToProvider(result)
+        })
     }
     
     func onAddItem(_ item: Item) {

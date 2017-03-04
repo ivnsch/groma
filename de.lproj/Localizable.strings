@@ -479,3 +479,6 @@ unit_milliliter = "ml";
 unit_drop = "Tr";
 unit_shot = "Schuss";
 unit_pinch = "Pr";
+
+
+hint_tap_to_add_more = "Tappe erneut um mehr hinzuzufügen";

@@ -250,6 +250,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         PreferencesManager.clearPreference(key: .showedDeleteHistoryItemHelp)
         PreferencesManager.savePreference(.showedCanSwipeToIncrementCounter, value: NSNumber(value: SwipeToIncrementAlertHelperNew.countToShowPopup as Int)) // show first time user tries to increment after this
         PreferencesManager.savePreference(.showedLongTapToEditCounter, value: NSNumber(value: SwipeToIncrementAlertHelperNew.countToShowPopup as Int)) // show first time user tries to increment after this
+        PreferencesManager.savePreference(.showedTapToEditCounter, value: NSNumber(value: 0))
         AlertPopup.show(message: trans("popup_hints_restored"), controller: self)
     }
     

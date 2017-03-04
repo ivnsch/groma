@@ -479,3 +479,6 @@ unit_milliliter = "ml";
 unit_drop = "gt";
 unit_shot = "shot";
 unit_pinch = "pzc";
+
+
+hint_tap_to_add_more = "Pulsa de nuevo para agregar más";

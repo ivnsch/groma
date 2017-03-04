@@ -478,3 +478,6 @@ unit_milliliter = "ml";
 unit_drop = "dr";
 unit_shot = "shot";
 unit_pinch = "pn";
+
+
+hint_tap_to_add_more = "Tap again to add more";
