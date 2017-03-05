@@ -12,6 +12,10 @@ protocol QuantityViewDelegate: class {
     func onRequestUpdateQuantity(_ delta: Float)
 }
 
+enum QuantityViewMode {
+    case readonly, edit
+}
+
 // TODO for some reason the buttons are not interactive! outlets are connected, all views up in the hierarchy have userInteractionEnables = yes (until the custom view -in storyboard- in which this was contained). But nothing happens on tap also no press effect on the button. It should not be anything related with the cell, only the custom view, because when the buttons are added directly to the cell (like now) there are no problems.
 class QuantityView: UIView {
     
@@ -21,9 +25,16 @@ class QuantityView: UIView {
     @IBOutlet weak var minusButton: UIButton!
     @IBOutlet weak var plusButton: UIButton!
     
+    @IBOutlet weak var minusBottomWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var plusBottomWidthConstraint: NSLayoutConstraint!
+    
+    var mode: QuantityViewMode = .edit
+    
     var quantity: Float = 0 {
         didSet {
-            quantityLabel.text = String(quantity)
+            // TODO????????????????
+//            tableViewListItem.product.product.quantityWithMaybeUnitText(quantity: shownQuantity)
+            quantityLabel.text = String(quantity.quantityString)
             invalidateIntrinsicContentSize()
         }
     }
@@ -64,5 +75,26 @@ class QuantityView: UIView {
     
     override var intrinsicContentSize: CGSize {
         return CGSize(width: minusButton.width + quantityLabel.intrinsicContentSize.width + plusButton.width, height: minusButton.height + quantityLabel.intrinsicContentSize.height + plusButton.height)
+    }
+    
+    func setMode(_ mode: QuantityViewMode, animated: Bool) {
+        guard mode != self.mode else {return}
+        
+        self.mode = mode
+        
+        if mode == .edit || mode == .readonly {
+            
+            let widthConstant: CGFloat = mode == .edit ? 41 : 0
+
+            minusBottomWidthConstraint.constant = widthConstant
+            plusBottomWidthConstraint.constant = widthConstant
+            if animated {
+                anim {
+                    self.layoutIfNeeded()
+                }
+            } else {
+                layoutIfNeeded()
+            }
+        }
     }
 }

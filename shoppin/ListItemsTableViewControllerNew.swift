@@ -404,17 +404,9 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
             QL4("Invalid state: There's no note. When there's no note there should be no button so we shouldn't be here.")
         }
     }
-    
-    func onMinusTap(_ listItem: ListItem) {
-        listItemsTableViewDelegate?.onIncrementItem(listItem, delta: -1)
-    }
-    
-    func onPlusTap(_ listItem: ListItem) {
-        listItemsTableViewDelegate?.onIncrementItem(listItem, delta: 1)
-    }
-    
-    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Float) {
-        listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: newQuantity - tableViewListItem.quantity(status))
+
+    func onChangeQuantity(_ listItem: ListItem, delta: Float) {
+        listItemsTableViewDelegate?.onIncrementItem(listItem, delta: delta)
     }
     
     var isControllerInEditMode: Bool {

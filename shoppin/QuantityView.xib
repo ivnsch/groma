@@ -11,7 +11,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="QuantityView" customModule="groma" customModuleProvider="target">
             <connections>
+                <outlet property="minusBottomWidthConstraint" destination="wwx-ae-Pii" id="nUe-3p-Lgw"/>
                 <outlet property="minusButton" destination="3bg-dS-GSw" id="ARz-lT-gRP"/>
+                <outlet property="plusBottomWidthConstraint" destination="DP8-Ob-s7B" id="8Rz-Vn-h8R"/>
                 <outlet property="plusButton" destination="HNQ-zH-qvO" id="l7v-sI-wMt"/>
                 <outlet property="quantityLabel" destination="Cxh-rI-YN0" id="HzN-EX-XnL"/>
             </connections>

@@ -15,32 +15,31 @@ protocol ListItemCellDelegateNew: class {
     func onStartItemSwipe(_ listItem: ListItem)
     func onButtonTwoTap(_ listItem: ListItem)
     func onNoteTap(_ cell: ListItemCellNew, listItem: ListItem)
-    func onMinusTap(_ listItem: ListItem)
-    func onPlusTap(_ listItem: ListItem)
-    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Float)
+    func onChangeQuantity(_ listItem: ListItem, delta: Float)
     var isControllerInEditMode: Bool {get}
 }
 
-class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
+class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityViewDelegate {
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var brandLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var baseQuantityLabel: UILabel!
-    @IBOutlet weak var priceLabel: UILabel! // this was a label below the item's quantity in edit mode howing total price for this item. For now disabled as it overlaps with surrounding +/- and maybe a bit too much information for the user.
+//    @IBOutlet weak var priceLabel: UILabel! // this was a label below the item's quantity in edit mode howing total price for this item. For now disabled as it overlaps with surrounding +/- and maybe a bit too much information for the user.
     
     @IBOutlet weak var centerVerticallyNameLabelConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var quantityLabelCenterVerticallyConstraint: NSLayoutConstraint!
+//    @IBOutlet weak var quantityLabelCenterVerticallyConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var noteButton: UIButton!
     
     @IBOutlet weak var sectionColorView: UIView!
     
-    @IBOutlet weak var plusButton: UIView!
-    @IBOutlet weak var minusButton: UIView!
-    @IBOutlet weak var plusButtonWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var minusButtonWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var quantityView: QuantityView!
+//    @IBOutlet weak var plusButton: UIView!
+//    @IBOutlet weak var minusButton: UIView!
+//    @IBOutlet weak var plusButtonWidthConstraint: NSLayoutConstraint!
+//    @IBOutlet weak var minusButtonWidthConstraint: NSLayoutConstraint!
     
 //    @IBOutlet weak var undoLabel1: UILabel!
 //    @IBOutlet weak var undoLabel2: UILabel!
@@ -48,7 +47,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     @IBOutlet weak var bgIconLeft: UIImageView!
     @IBOutlet weak var bgIconRight: UIImageView!
     
-    @IBOutlet weak var minusTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var quantityViewTrailingConstraint: NSLayoutConstraint!
     
     fileprivate weak var delegate: ListItemCellDelegateNew?
     
@@ -61,7 +60,9 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     fileprivate var shownQuantity: Float = 0 {
         didSet {
             if let tableViewListItem = tableViewListItem {
-                quantityLabel.text = String("\(tableViewListItem.product.product.quantityWithMaybeUnitText(quantity: shownQuantity))")
+                quantityView.quantity = shownQuantity
+                // TODO????????????????
+//                quantityLabel.text = String("\(tableViewListItem.product.product.quantityWithMaybeUnitText(quantity: shownQuantity))")
 //                quantityLabel.text = String("\(shownQuantity.quantityString) \(tableViewListItem.product.product.unitText)")
             }
         }
@@ -162,65 +163,29 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         let hasNote = !tableViewListItem.note.isEmpty
         let showNote = hasNote && mode == .note
         
-        // Hide these labels during edit, for reordering (otherwise they stay visible while cell becomes semitransparent). We don't use undo in edit so it's ok to do this fix here. Otherwise private api like described here http://stackoverflow.com/a/10854018/930450, to get events when cell starts and ends moving works too (tested it on iOS 9). Prefer to do it here to avoid using private api.
-        let isEdit = mode == .increment
-//        undoLabel1.isHidden = isEdit
-//        undoLabel2.isHidden = isEdit
-        
-        let (itemsDelay, priceDelay): (TimeInterval, TimeInterval) = {
-            if animated {
-                return mode == .note ? (0.1, 0) : (0, 0.3) // for price a different delay to make it animate after/before the other elements (looks better imo)
-            } else {
-                return (0, 0)
-            }
-        }()
         
         func update() {
-            layoutIfNeeded()
             switch mode {
+                
             case .note:
                 noteButton.alpha = showNote ? 1 : 0
-                plusButton.alpha = 0
-                minusButton.alpha = 0
+                quantityView.setMode(.readonly, animated: false)
                 sectionColorView.alpha = 1
+                quantityViewTrailingConstraint.constant = DimensionsManager.leftRightPaddingConstraint
+                
             case .increment:
                 noteButton.alpha = 0
-                plusButton.alpha = 1
-                minusButton.alpha = 1
+                quantityView.setMode(.edit, animated: false)
                 sectionColorView.alpha = 0
+                quantityViewTrailingConstraint.constant = 0
             }
+            
+            layoutIfNeeded()
         }
         
-        if animated {
-            
-            let constant: CGFloat = {
-                switch mode {
-                case .note: return 0
-                case .increment: return 41
-                }
-            }()
-            
-            let minusConstant: CGFloat = {
-                switch mode {
-                case .note: return DimensionsManager.leftRightPaddingConstraint
-                case .increment: return 0
-                }
-            }()
-            
-            delay(itemsDelay) {[weak self] in
-                self?.plusButtonWidthConstraint.constant = constant
-                self?.minusButtonWidthConstraint.constant = constant
-                self?.minusTrailingConstraint.constant = minusConstant
-                UIView.animate(withDuration: 0.2, animations: {
-                    update()
-                })
-            }
-            
-        } else {
+        anim {
             update()
         }
-        
-        //        showPrice(tableViewListItem, status: status, mode: mode, animated: animated, animDelay: priceDelay)
     }
     
     fileprivate func showPrice(_ tableViewListItem: TableViewListItem, status: ListItemStatus, mode: ListItemCellMode, animated: Bool, animDelay: TimeInterval) {
@@ -228,15 +193,15 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         let hasPrice = price > 0
         let showPrice = hasPrice && mode == .increment
         if showPrice {
-            priceLabel.text = price.toLocalCurrencyString()
+//            priceLabel.text = price.toLocalCurrencyString()
         }
         
         func updateConstraint() {
-            quantityLabelCenterVerticallyConstraint.constant = showPrice ? 10 : 0
+//            quantityLabelCenterVerticallyConstraint.constant = showPrice ? 10 : 0
         }
         
         func updateAlpha() {
-            priceLabel.alpha = showPrice ? 1 : 0
+//            priceLabel.alpha = showPrice ? 1 : 0
         }
         
         if animated {
@@ -256,8 +221,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        quantityLabelCenterVerticallyConstraint.constant = 0
-        priceLabel.alpha = 0
+//        quantityLabelCenterVerticallyConstraint.constant = 0
+//        priceLabel.alpha = 0
         
 //        undoLabel2.text = trans("generic_undo")
         
@@ -274,6 +239,10 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         let scaleStart = CGAffineTransform(scaleX: 0.00001, y: 0.00001)
         bgIconLeft.transform = scaleStart
         bgIconRight.transform = scaleStart
+        
+        quantityView.delegate = self
+        
+        quantityViewTrailingConstraint.constant = DimensionsManager.leftRightPaddingConstraint
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
         addGestureRecognizer(longPress)
@@ -297,21 +266,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     
     // TODO when we tap on minus while the item is 0, the item is cleared - this was not intentional but turns to be the desired behaviour. Review why it's cleared
     // TODO! related with above - review that due to the way we manage the quantity of the items (item is shown when todo/done/stash quantity > 0) we don't keep listitems in the database which are never shown and thus can't be deleted.
-    @IBAction func onMinusTap(_ sender: UIButton) {
-        if let tableViewListItem = tableViewListItem{
-            delegate?.onMinusTap(tableViewListItem)
-        } else {
-            print("Warn: ListItemCell.onMinusTap: no tableViewListItem")
-        }
-    }
+
     
-    @IBAction func onPlusTap(_ sender: UIButton) {
-        if let tableViewListItem = tableViewListItem{
-            delegate?.onPlusTap(tableViewListItem)
-        } else {
-            print("Warn: ListItemCell.onPlusTap: no tableViewListItem")
-        }
-    }
     
     override func onStartItemSwipe() {
         if let tableViewListItem = tableViewListItem{
@@ -408,8 +364,11 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
     }
     
     func onFinishSwipe() {
+        guard let status = status else {QL4("Illegal state: No status"); return}
+        
         if let tableViewListItem = tableViewListItem {
-            delegate?.onPanQuantityUpdate(tableViewListItem, newQuantity: shownQuantity)
+            let delta = shownQuantity - tableViewListItem.quantity(status)
+            delegate?.onChangeQuantity(tableViewListItem, delta: delta)
         } else {
             QL3("Warn: ListItemCell.onStartItemSwipe: no tableViewListItem")
         }
@@ -434,5 +393,15 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate {
         if mode == .increment && !delegate.isControllerInEditMode {
             mode = .note
         }
+    }
+    
+    // MARK: - QuantityViewDelegate
+    
+    func onRequestUpdateQuantity(_ delta: Float) {
+        
+        guard let tableViewListItem = tableViewListItem else {QL4("Illegal state: No list item"); return}
+        
+        shownQuantity = shownQuantity + delta // increment in advance // TODO!!!!!!!!!!!!!!!! test if this always works as intented
+        delegate?.onChangeQuantity(tableViewListItem, delta: delta)
     }
 }

@@ -415,10 +415,10 @@
                                             <rect key="frame" x="331" y="34" width="24" height="23"/>
                                         </imageView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mEO-yB-hml">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="90.5"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W7z-OP-2eO">
-                                                    <rect key="frame" x="0.0" y="4" width="4" height="83"/>
+                                                    <rect key="frame" x="0.0" y="4" width="4" height="82.5"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="4" id="4a4-fc-VIG"/>
@@ -435,29 +435,8 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SqV-LQ-m9i" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="301" y="33.5" width="49" height="24"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                    <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                            <integer key="value" value="60"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OUR-OA-3PQ">
-                                                    <rect key="frame" x="301" y="0.0" width="0.0" height="91"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" id="xtY-uN-SR5"/>
-                                                    </constraints>
-                                                    <state key="normal" image="plus"/>
-                                                    <connections>
-                                                        <action selector="onPlusTap:" destination="qDe-gS-G77" eventType="touchUpInside" id="its-xk-b2U"/>
-                                                    </connections>
-                                                </button>
                                                 <button opaque="NO" alpha="0.0" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LP-6w-Aa7">
-                                                    <rect key="frame" x="240" y="0.0" width="61" height="91"/>
+                                                    <rect key="frame" x="132" y="0.0" width="61" height="90.5"/>
                                                     <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="61" id="dKo-Iq-2Sh"/>
@@ -479,29 +458,8 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PHE-mh-lAU" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="309" y="57.5" width="33" height="16"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                            <integer key="value" value="30"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Pn-i3-NXi">
-                                                    <rect key="frame" x="350" y="0.0" width="0.0" height="91"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" id="9EV-Z6-ykG"/>
-                                                    </constraints>
-                                                    <state key="normal" image="minus"/>
-                                                    <connections>
-                                                        <action selector="onMinusTap:" destination="qDe-gS-G77" eventType="touchUpInside" id="vr0-jF-Xrn"/>
-                                                    </connections>
-                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="Q23-sC-Zlg" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="78" y="24.5" width="152" height="22"/>
+                                                    <rect key="frame" x="78" y="24.5" width="44" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -511,33 +469,29 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
+                                                <view contentMode="scaleToFill" placeholderIntrinsicWidth="114" placeholderIntrinsicHeight="84" translatesAutoresizingMaskIntoConstraints="NO" id="259-87-721" customClass="QuantityView" customModule="groma" customModuleProvider="target">
+                                                    <rect key="frame" x="261" y="0.0" width="114" height="90.5"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="OUR-OA-3PQ" secondAttribute="bottom" id="46G-e4-s4R"/>
-                                                <constraint firstItem="OUR-OA-3PQ" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="4L6-Sy-CDL"/>
                                                 <constraint firstItem="8LP-6w-Aa7" firstAttribute="leading" secondItem="Q23-sC-Zlg" secondAttribute="trailing" constant="10" id="6In-iC-WU0"/>
-                                                <constraint firstItem="PHE-mh-lAU" firstAttribute="top" secondItem="SqV-LQ-m9i" secondAttribute="bottom" id="7NN-oz-hwT"/>
-                                                <constraint firstItem="PHE-mh-lAU" firstAttribute="centerX" secondItem="SqV-LQ-m9i" secondAttribute="centerX" id="80d-5T-asF"/>
-                                                <constraint firstAttribute="trailing" secondItem="5Pn-i3-NXi" secondAttribute="trailing" constant="25" id="BQZ-CA-jxk" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
-                                                <constraint firstItem="SqV-LQ-m9i" firstAttribute="leading" secondItem="8LP-6w-Aa7" secondAttribute="trailing" id="Bu8-oH-DHZ"/>
+                                                <constraint firstAttribute="bottom" secondItem="259-87-721" secondAttribute="bottom" id="9LC-7x-L3m"/>
                                                 <constraint firstAttribute="bottom" secondItem="W7z-OP-2eO" secondAttribute="bottom" constant="4" id="FR7-gt-I5f"/>
                                                 <constraint firstItem="W7z-OP-2eO" firstAttribute="leading" secondItem="mEO-yB-hml" secondAttribute="leading" id="Fqx-Wo-FuB"/>
-                                                <constraint firstItem="SqV-LQ-m9i" firstAttribute="leading" secondItem="OUR-OA-3PQ" secondAttribute="trailing" id="GHl-ny-xfV"/>
-                                                <constraint firstAttribute="centerY" secondItem="SqV-LQ-m9i" secondAttribute="centerY" id="JJd-X6-AeU"/>
                                                 <constraint firstItem="npq-ts-NkO" firstAttribute="leading" secondItem="W7z-OP-2eO" secondAttribute="trailing" constant="25" id="LUU-o0-wMf" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                                 <constraint firstItem="W7z-OP-2eO" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" constant="4" id="OJx-bm-tMl"/>
+                                                <constraint firstAttribute="trailing" secondItem="259-87-721" secondAttribute="trailing" id="P0w-Kx-G4d"/>
                                                 <constraint firstItem="8LP-6w-Aa7" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="PQI-WY-75Y"/>
                                                 <constraint firstAttribute="bottom" secondItem="8LP-6w-Aa7" secondAttribute="bottom" id="QJM-Rb-ZH3"/>
-                                                <constraint firstAttribute="bottom" secondItem="5Pn-i3-NXi" secondAttribute="bottom" id="TJD-z2-FzQ"/>
                                                 <constraint firstItem="Q23-sC-Zlg" firstAttribute="leading" secondItem="npq-ts-NkO" secondAttribute="trailing" constant="5" id="ZQS-bS-hnO"/>
                                                 <constraint firstAttribute="centerY" secondItem="npq-ts-NkO" secondAttribute="centerY" constant="10" id="aPq-1R-TWY"/>
                                                 <constraint firstItem="9Rc-cx-ee2" firstAttribute="leading" secondItem="npq-ts-NkO" secondAttribute="leading" id="avc-VW-rvi"/>
                                                 <constraint firstItem="8LP-6w-Aa7" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" id="cTT-nZ-E4n"/>
                                                 <constraint firstItem="9Rc-cx-ee2" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" constant="10" id="den-ag-xFz"/>
-                                                <constraint firstItem="5Pn-i3-NXi" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="eKA-tF-PUM"/>
                                                 <constraint firstItem="Q23-sC-Zlg" firstAttribute="baseline" secondItem="npq-ts-NkO" secondAttribute="baseline" id="ly6-ma-gKJ"/>
-                                                <constraint firstItem="5Pn-i3-NXi" firstAttribute="leading" secondItem="SqV-LQ-m9i" secondAttribute="trailing" id="u6l-CA-5CQ"/>
+                                                <constraint firstItem="259-87-721" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="xZU-R0-J9P"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
@@ -567,17 +521,11 @@
                                     <outlet property="centerVerticallyNameLabelConstraint" destination="aPq-1R-TWY" id="eCQ-dH-UjM"/>
                                     <outlet property="contentViewLeftConstraint" destination="orc-lq-4ob" id="ch4-Vg-ytB"/>
                                     <outlet property="contentViewRightConstraint" destination="M0m-8G-fqg" id="d3b-rN-Xpc"/>
-                                    <outlet property="minusButton" destination="5Pn-i3-NXi" id="N99-M6-0Mh"/>
-                                    <outlet property="minusButtonWidthConstraint" destination="9EV-Z6-ykG" id="8cT-2t-OhZ"/>
-                                    <outlet property="minusTrailingConstraint" destination="BQZ-CA-jxk" id="Xj7-vs-st4"/>
                                     <outlet property="myContentView" destination="mEO-yB-hml" id="zsB-5b-YPD"/>
                                     <outlet property="nameLabel" destination="npq-ts-NkO" id="e3j-25-fIv"/>
                                     <outlet property="noteButton" destination="8LP-6w-Aa7" id="6Qg-cK-Ip5"/>
-                                    <outlet property="plusButton" destination="OUR-OA-3PQ" id="q3F-Eq-HeY"/>
-                                    <outlet property="plusButtonWidthConstraint" destination="xtY-uN-SR5" id="uNA-IK-SN8"/>
-                                    <outlet property="priceLabel" destination="PHE-mh-lAU" id="E2t-cv-Ag0"/>
-                                    <outlet property="quantityLabel" destination="SqV-LQ-m9i" id="5No-Si-4uh"/>
-                                    <outlet property="quantityLabelCenterVerticallyConstraint" destination="JJd-X6-AeU" id="uGM-Rt-Fmt"/>
+                                    <outlet property="quantityView" destination="259-87-721" id="DrP-RH-Cet"/>
+                                    <outlet property="quantityViewTrailingConstraint" destination="P0w-Kx-G4d" id="f2k-QM-gSt"/>
                                     <outlet property="sectionColorView" destination="W7z-OP-2eO" id="sfw-1Q-nDR"/>
                                 </connections>
                             </tableViewCell>
@@ -597,8 +545,6 @@
         <image name="added" width="24" height="23"/>
         <image name="cart" width="27" height="23"/>
         <image name="empty_page" width="240" height="206"/>
-        <image name="minus" width="9" height="3"/>
-        <image name="plus" width="15" height="14"/>
         <image name="speechbubble" width="23" height="23"/>
         <image name="stash" width="32" height="31"/>
     </resources>

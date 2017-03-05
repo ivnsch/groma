@@ -704,24 +704,9 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
         }
     }
     
-    func onMinusTap(_ listItem: ListItem) {
-        Prov.listItemsProvider.increment(listItem, status: status, delta: -1, remote: true, successHandler{incrementedListItem in
-            // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
-            //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
-            //            self?.onTableViewChangedQuantifiables()
-        })
-    }
-    
-    func onPlusTap(_ listItem: ListItem) {
-        Prov.listItemsProvider.increment(listItem, status: status, delta: 1, remote: true, successHandler{incrementedListItem in
-            // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
-            //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
-            //            self?.onTableViewChangedQuantifiables()
-        })
-    }
-    
-    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Float) {
-        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: newQuantity - tableViewListItem.quantity, remote: true, successHandler{incrementedListItem in
+    func onChangeQuantity(_ listItem: ListItem, delta: Float) {
+        Prov.listItemsProvider.increment(listItem, status: status, delta: delta, remote: true, successHandler{incrementedListItem in
+            // TODO!!!!!!!!!!!!!!!!! review this todo - the cell is already being incremented in advance. Does this work correctly?
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
             //            self?.onTableViewChangedQuantifiables()
