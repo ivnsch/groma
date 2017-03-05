@@ -39,6 +39,9 @@ class ProductQuantityController: UIViewController {
     
     @IBOutlet weak var quantityView: QuantityView!
 
+    @IBOutlet weak var baseViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var unitViewToBaseViewSpaceConstraint: NSLayoutConstraint!
+    
     var delegate: ProductQuantityControlleDelegate?
     
     // MARK: - Inputs
@@ -66,6 +69,7 @@ class ProductQuantityController: UIViewController {
             delegate?.onChangeUnit(unit: currentUnitInput)
         }
     }
+    fileprivate var currentUnit: Providers.Unit? // corresponds to currentUnitInput except when input was done using text input (unit doesn't exist yet), then this is nil
     
     var currentBaseInput: String? {
         didSet {
@@ -372,19 +376,19 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
             
             if let cell = cellMaybe {
                 if isSelected(cell: cell) {
-                    onSelect(unitName: "")
+                    onSelect(unitName: "", unit: nil)
                     
                 } else {
-                    let unitName: String = {
+                    let unitData: (name: String, unit: Providers.Unit?) = {
                         if indexPath.row < units.count {
-                            return units[indexPath.row].name
+                            return (units[indexPath.row].name, units[indexPath.row])
                         } else if indexPath.row == units.count {
-                            return currentUnitInput ?? ""
+                            return (currentUnitInput ?? "", nil)
                         } else {
                             fatalError("Invalid index: \(indexPath.row), unit count: \(units.count)")
                         }
                     }()
-                    onSelect(unitName: unitName)
+                    onSelect(unitName: unitData.name, unit: unitData.unit)
                 }
             }
         }
@@ -440,11 +444,33 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     }
     
     
-    fileprivate func onSelect(unitName: String) {
+    fileprivate func onSelect(unitName: String, unit: Providers.Unit?) {
         currentUnitInput = unitName
         delegate?.onChangeUnit(unit: unitName)
+
+        updateBasesVisibility(unit: unit)
     }
     
+    fileprivate func updateBasesVisibility(unit: Providers.Unit?) {
+        if let unit = unit {
+            let unitsWithBase: [UnitId] = [.g, .kg, .liter, .milliliter]
+            if unitsWithBase.contains(unit.id) {
+                setBasesVisible(visible: true)
+            } else {
+                setBasesVisible(visible: false)
+            }
+        } else {
+            setBasesVisible(visible: false)
+        }
+    }
+    
+    fileprivate func setBasesVisible(visible: Bool) {
+        baseViewWidthConstraint.constant = visible ? 70 : 0
+        unitViewToBaseViewSpaceConstraint.constant = visible ? 20 : 0
+        anim {
+            self.view.layoutIfNeeded()
+        }
+    }
     
     ///////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -489,17 +515,17 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
         guard let unitsDataSource = unitsDataSource else {QL4("No data source"); return}
         guard let units = unitsDataSource.units else {QL4("No units"); return}
         
-        let unitName: String = {
+        let unitData: (name: String, unit: Providers.Unit?) = {
             if cellIndex < units.count {
-                return units[cellIndex].name
+                return (units[cellIndex].name, units[cellIndex])
             } else if cellIndex == units.count {
-                return currentUnitInput ?? ""
+                return (currentUnitInput ?? "", nil)
             } else {
                 fatalError("Invalid index: \(cellIndex), unit count: \(units.count)")
             }
         }()
         
-        onSelect(unitName: unitName)
+        onSelect(unitName: unitData.name, unit: unitData.unit)
     }
 }
 

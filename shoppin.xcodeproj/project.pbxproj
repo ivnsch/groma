@@ -28,6 +28,7 @@
 		6A278F8F1E6A663100126F8E /* PlaceHolderItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A278F8D1E6A663100126F8E /* PlaceHolderItemCell.swift */; };
 		6A278F901E6A663100126F8E /* PlaceHolderItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A278F8E1E6A663100126F8E /* PlaceHolderItemCell.xib */; };
 		6A278F921E6B7B4200126F8E /* UIViewHitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A278F911E6B7B4200126F8E /* UIViewHitTest.swift */; };
+		6A278F941E6CB32800126F8E /* SearchableTextController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A278F931E6CB32800126F8E /* SearchableTextController.swift */; };
 		6A287E821E51F4F000868244 /* ManageItemsItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */; };
 		6A287E841E5210D000868244 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E831E5210D000868244 /* Globals.swift */; };
 		6A287E871E52671700868244 /* EditNameColorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E861E52671700868244 /* EditNameColorController.swift */; };
@@ -493,6 +494,7 @@
 		6A278F8D1E6A663100126F8E /* PlaceHolderItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceHolderItemCell.swift; sourceTree = "<group>"; };
 		6A278F8E1E6A663100126F8E /* PlaceHolderItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceHolderItemCell.xib; sourceTree = "<group>"; };
 		6A278F911E6B7B4200126F8E /* UIViewHitTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewHitTest.swift; sourceTree = "<group>"; };
+		6A278F931E6CB32800126F8E /* SearchableTextController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchableTextController.swift; sourceTree = "<group>"; };
 		6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsItemCell.swift; sourceTree = "<group>"; };
 		6A287E831E5210D000868244 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		6A287E861E52671700868244 /* EditNameColorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNameColorController.swift; sourceTree = "<group>"; };
@@ -1053,6 +1055,7 @@
 				6A287EA61E55E2EF00868244 /* ManageItemsController.swift */,
 				6A287EAA1E55E3BE00868244 /* ManageItems.storyboard */,
 				6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */,
+				6A278F931E6CB32800126F8E /* SearchableTextController.swift */,
 			);
 			name = items;
 			sourceTree = "<group>";
@@ -2950,6 +2953,7 @@
 				EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */,
 				EB22C7111C4B02EE00285352 /* ShareAppViewController.swift in Sources */,
 				EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */,
+				6A278F941E6CB32800126F8E /* SearchableTextController.swift in Sources */,
 				EBB0A8051CD396F6003CB7BA /* TodoListItemsEditBottomView.swift in Sources */,
 				EB5AD1951BEE2ED400BC6A2F /* EditSectionViewController.swift in Sources */,
 				EB37ABAA1C9F4C0D00FE9D7A /* AddItemButton.swift in Sources */,

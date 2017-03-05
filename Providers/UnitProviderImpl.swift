@@ -23,6 +23,14 @@ class UnitProviderImpl: UnitProvider {
         }
     }
 
+    func unitsContainingText(_ text: String, _ handler: @escaping (ProviderResult<Results<Unit>>) -> Void) {
+        if let units = DBProv.unitProvider.unitsContainingTextSync(text) {
+            handler(ProviderResult(status: .success, sucessResult: units))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+    
     func getOrCreate(name: String, _ handler: @escaping (ProviderResult<(unit: Unit, isNew: Bool)>) -> Void) {
         if let unit = DBProv.unitProvider.getOrCreateSync(name: name) {
             handler(ProviderResult(status: .success, sucessResult: unit))

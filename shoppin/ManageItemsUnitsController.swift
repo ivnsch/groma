@@ -16,7 +16,7 @@ protocol ManageItemsUnitsControllerDelegate: class {
     
 }
 
-class ManageItemsUnitsController: UITableViewController {
+class ManageItemsUnitsController: UITableViewController, SearchableTextController {
     
     fileprivate var units: Results<Providers.Unit>?
     
@@ -62,7 +62,7 @@ class ManageItemsUnitsController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ManageItemsUnitCell
         
-        cell.config(unit: units[indexPath.row])
+        cell.config(unit: units[indexPath.row], filter: delegate?.currentFilter)
         
         return cell
     }
@@ -104,6 +104,15 @@ class ManageItemsUnitsController: UITableViewController {
         ), editingObj: unit)
         
         //        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+    }
+    
+    // MARK: - SearchableTextController
+    
+    func filterItems(str: String) {
+        Prov.unitProvider.unitsContainingText(str, successHandler {[weak self] units in
+            self?.units = units
+            self?.tableView.reloadData()
+        })
     }
 }
 

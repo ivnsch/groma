@@ -18,12 +18,12 @@ struct ManageDatabaseTopControllerConfig {
     var delegate: ExpandableTopViewControllerDelegate
 }
 
-protocol ManageItemsControllerDelegate: class {
+protocol ManageItemsControllerDelegate: SearchableItemsControllersDelegate {
     var topControllerConfig: ManageDatabaseTopControllerConfig {get}
     
 }
 
-class ManageItemsController: UITableViewController {
+class ManageItemsController: UITableViewController, SearchableTextController {
 
     fileprivate var items: Results<Item>?
     fileprivate var realmData: RealmData?
@@ -35,8 +35,8 @@ class ManageItemsController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        load()
-
+        filterItems(str: "")
+        
         if let delegate = delegate {
             topEditSectionControllerManager = initEditSectionControllerManager(config: delegate.topControllerConfig)
         } else {
@@ -94,7 +94,7 @@ class ManageItemsController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ManageItemsItemCell
         
-        cell.config(item: items[indexPath.row])
+        cell.config(item: items[indexPath.row], filter: delegate?.currentFilter)
         
         return cell
     }
@@ -145,6 +145,17 @@ class ManageItemsController: UITableViewController {
             ), editingObj: item
         )
         //        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+    }
+    
+    // MARK: - SearchableTextController
+    
+    func filterItems(str: String) {
+        Prov.itemsProvider.items(str, onlyEdible: false, range: NSRange(location: 0, length: 100000), sortBy: .alphabetic, successHandler({[weak self] tuple in
+//            if tuple.substring == weakSelf.searchText {}
+            self?.items = tuple.items
+            self?.initNotifications()
+            self?.tableView.reloadData()
+        }))
     }
 }
 

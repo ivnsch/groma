@@ -16,7 +16,7 @@ protocol ManageItemsBaseQuantitiesControllerDelegate: class {
     
 }
 
-class ManageItemsBaseQuantitiesController: UITableViewController {
+class ManageItemsBaseQuantitiesController: UITableViewController, SearchableTextController {
     
     fileprivate var bases: [String]?
     
@@ -27,19 +27,13 @@ class ManageItemsBaseQuantitiesController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        load()
+        filterItems(str: "")
         
         if let delegate = delegate {
             topEditSectionControllerManager = initSimpleInputControllerManager(config: delegate.topControllerConfig)
         } else {
             QL4("Can't initialize top controller: No delegate")
         }
-    }
-    
-    fileprivate func load() {
-        Prov.productProvider.allBaseQuantities(successHandler {[weak self] bases in
-            self?.bases = bases
-        })
     }
     
     fileprivate func initSimpleInputControllerManager(config: ManageDatabaseTopControllerConfig) -> ExpandableTopViewController<EditSingleInputController> {
@@ -62,7 +56,7 @@ class ManageItemsBaseQuantitiesController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ManageItemsBaseQuantityCell
         
-        cell.config(base: bases[indexPath.row])
+        cell.config(base: bases[indexPath.row], filter: delegate?.currentFilter)
         
         return cell
     }
@@ -105,6 +99,16 @@ class ManageItemsBaseQuantitiesController: UITableViewController {
         ), editingObj: base)
         
         //        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+    }
+    
+    
+    // MARK: - SearchableTextController
+    
+    func filterItems(str: String) {
+        Prov.productProvider.baseQuantitiesContainingText(str, successHandler {[weak self] bases in
+            self?.bases = bases
+            self?.tableView.reloadData()
+        })
     }
 }
 

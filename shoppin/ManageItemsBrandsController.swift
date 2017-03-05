@@ -11,12 +11,12 @@ import RealmSwift
 import Providers
 import QorumLogs
 
-protocol ManageItemsBrandsControllerDelegate: class {
+protocol ManageItemsBrandsControllerDelegate: SearchableItemsControllersDelegate {
     var topControllerConfig: ManageDatabaseTopControllerConfig {get}
     
 }
 
-class ManageItemsBrandsController: UITableViewController {
+class ManageItemsBrandsController: UITableViewController, SearchableTextController {
     
     fileprivate var brands: [String]?
     
@@ -27,19 +27,13 @@ class ManageItemsBrandsController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        load()
+        filterItems(str: "")
         
         if let delegate = delegate {
             topEditSectionControllerManager = initSimpleInputControllerManager(config: delegate.topControllerConfig)
         } else {
             QL4("Can't initialize top controller: No delegate")
         }
-    }
-    
-    fileprivate func load() {
-        Prov.brandProvider.brands(NSRange(location: 0, length: 100000), successHandler{[weak self] brands in
-            self?.brands = brands
-        })
     }
 
     fileprivate func initSimpleInputControllerManager(config: ManageDatabaseTopControllerConfig) -> ExpandableTopViewController<EditSingleInputController> {
@@ -62,7 +56,7 @@ class ManageItemsBrandsController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ManageItemsBrandCell
         
-        cell.config(brand: brands[indexPath.row])
+        cell.config(brand: brands[indexPath.row], filter: delegate?.currentFilter)
         
         return cell
     }
@@ -105,6 +99,15 @@ class ManageItemsBrandsController: UITableViewController {
         ), editingObj: brand)
         
         //        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+    }
+    
+    // MARK: - SearchableTextController
+    
+    func filterItems(str: String) {
+        Prov.brandProvider.brandsContainingText(str, successHandler {[weak self] brands in
+            self?.brands = brands
+            self?.tableView.reloadData()
+        })
     }
 }
 

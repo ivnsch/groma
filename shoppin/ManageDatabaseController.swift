@@ -30,20 +30,49 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
     
     @IBOutlet weak var containerView: UIView!
     
-    fileprivate var selectedOptionController: UIViewController?
+    @IBOutlet weak var searchBoxHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchBar: UITextField!
+
+    var currentFilter: String = "" {
+        didSet {
+            selectedOptionController?.filterItems(str: currentFilter)
+        }
+    }
+    
+    fileprivate var selectedOptionController: SearchableTextController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        searchBar.addTarget(self, action: #selector(searchFieldDidChange(_:)), for: .editingChanged)
+
+        layout()
+
         load(option: .items)
     }
+    
+    
+    fileprivate func layout() {
+        searchBoxHeightConstraint.constant = DimensionsManager.searchBarHeight
+    }
 
+    // MARK: - Filter
+    
+    func searchFieldDidChange(_ textField: UITextField) {
+        filter(textField.text ?? "")
+    }
+    
+    fileprivate func filter(_ searchText: String) {
+        self.currentFilter = searchText
+    }
+    
+    // MARK: -
     
     fileprivate func load(option: ManageDatabaseTypeSelection) {
         
-        selectedOptionController?.removeFromParentViewControllerWithView()
+        (selectedOptionController as? UIViewController)?.removeFromParentViewControllerWithView()
         
-        let controller: UIViewController = {
+        let searchableTextController: SearchableTextController = {
             switch option {
             case .items:
                 let controller = UIStoryboard.manageItemsController()
@@ -66,6 +95,10 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
                 return controller
             }
         }()
+        
+        self.selectedOptionController = searchableTextController
+        
+        let controller = searchableTextController as! UIViewController // Swift doesn't allow yet to declare as subclass & conforming to protocol so for now this
         
         addChildViewController(controller)
         containerView.addSubview(controller.view)
@@ -117,6 +150,10 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
     }
 }
 
+protocol SearchableItemsControllersDelegate: class {
+    var currentFilter: String {get}
+}
+
 // MARK: - ManageItemsControllerDelegate
 
 extension ManageDatabaseController: ManageItemsControllerDelegate, ManageItemsBrandsControllerDelegate {
@@ -138,7 +175,8 @@ extension ManageDatabaseController: ExpandableTopViewControllerDelegate {
     
     func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
         // Fix top line looks slightly thicker after animation. Problem: We have to animate to min scale of 0.0001 because 0 doesn't work correctly (iOS bug) so the frame height passed here is not exactly 0, which leaves a little gap when we set it in the constraint
-        topControlTopConstraint.constant = view.frame.height
+        topControlTopConstraint.constant = expand ? view.frame.height - 10 : 10 // 10: top constraint constant of search bar
+        searchBoxHeightConstraint.constant = expand ? 0 : DimensionsManager.searchBarHeight
         topMenusHeightConstraint.constant = expand ? 0 : DimensionsManager.topMenuBarHeight
         view.layoutIfNeeded()
     }

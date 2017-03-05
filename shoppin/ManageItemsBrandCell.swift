@@ -12,9 +12,13 @@ class ManageItemsBrandCell: UITableViewCell {
     
     @IBOutlet weak var nameLabel: UILabel!
     
-    func config(brand: String) {
+    func config(brand: String, filter: String?) {
         
-        nameLabel.text = brand
+        if let boldRange = filter.flatMap({brand.range($0, caseInsensitive: true)}) {
+            nameLabel.attributedText = brand.makeAttributedBoldRegular(boldRange)
+        } else {
+            nameLabel.text = brand
+        }
         
         // height now calculated yet so we pass the position of border
         addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.ingredientsCellHeight)

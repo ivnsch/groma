@@ -21,9 +21,14 @@ class ManageItemsItemCell: UITableViewCell {
 
     fileprivate var categoryColor: UIColor?
     
-    func config(item: Item) {
+    func config(item: Item, filter: String?) {
         
-        nameLabel.text = item.name
+        if let boldRange = filter.flatMap({item.name.range($0, caseInsensitive: true)}) {
+            nameLabel.attributedText = item.name.makeAttributedBoldRegular(boldRange)
+        } else {
+            nameLabel.text = item.name
+        }
+        
         categoryNameLabel.text = item.category.name
         
         updateCategoryColorVisibility(animated: false)

@@ -74,7 +74,11 @@ public class Item: Object, Identifiable {
     }
     
     static func createFilterNameContainsAndEdible(_ text: String, edible: Bool) -> String {
-        return "\(createFilterNameContains(text)) AND \(createFilter(edible: edible))"
+        if text.isEmpty {
+            return createFilter(edible: edible)
+        } else {
+            return "\(createFilterNameContains(text)) AND \(createFilter(edible: edible))"
+        }
     }
     
     public func same(_ rhs: Item) -> Bool {
