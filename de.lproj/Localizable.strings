@@ -482,3 +482,5 @@ unit_pinch = "Pr";
 
 
 hint_tap_to_add_more = "Tappe erneut um mehr hinzuzufügen";
+
+title_manage_database = "Item Manager";

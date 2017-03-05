@@ -482,3 +482,5 @@ unit_pinch = "pzc";
 
 
 hint_tap_to_add_more = "Pulsa de nuevo para agregar más";
+
+title_manage_database = "Administración de datos";

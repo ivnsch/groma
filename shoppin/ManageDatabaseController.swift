@@ -44,6 +44,8 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.title = trans("title_manage_database")
+        
         searchBar.addTarget(self, action: #selector(searchFieldDidChange(_:)), for: .editingChanged)
 
         layout()
