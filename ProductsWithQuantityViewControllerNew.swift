@@ -255,20 +255,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     // MARK: - ProductWithQuantityTableViewCellDelegate
     
-    func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
-        changeInventoryItemQuantity(cell, delta: 1)
-    }
-    
-    func onDecrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
-        changeInventoryItemQuantity(cell, delta: -1)
-    }
-    
-    func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Float) {
-        if let model = cell.model {
-            changeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)
-        } else {
-            QL4("No model, can't update quantity")
-        }
+    func onChangeQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float) {
+        changeInventoryItemQuantity(cell, delta: delta)
     }
     
     func onDeleteTap(_ cell: ProductWithQuantityTableViewCell) {

@@ -229,24 +229,28 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     }
     
     // MARK: - ProductWithQuantityTableViewCellDelegate
+//    
+//    func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
+//        cell.cancelDeleteProgress()
+//        checkChangeInventoryItemQuantity(cell, delta: 1)
+//    }
+//    
+//    func onDecrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
+//        cell.cancelDeleteProgress()
+//        checkChangeInventoryItemQuantity(cell, delta: -1)
+//    }
+//    
+//    func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Float) {
+//        cell.cancelDeleteProgress()
+//        if let model = cell.model {
+//            checkChangeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)
+//        } else {
+//            QL4("No model, can't update quantity")
+//        }
+//    }
     
-    func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
-        cell.cancelDeleteProgress()
-        checkChangeInventoryItemQuantity(cell, delta: 1)
-    }
-    
-    func onDecrementItemTap(_ cell: ProductWithQuantityTableViewCell) {
-        cell.cancelDeleteProgress()
-        checkChangeInventoryItemQuantity(cell, delta: -1)
-    }
-    
-    func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Float) {
-        cell.cancelDeleteProgress()
-        if let model = cell.model {
-            checkChangeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)
-        } else {
-            QL4("No model, can't update quantity")
-        }
+    func onChangeQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float) {
+        fatalError("Outdated - delete this controller!")
     }
     
     func onDeleteTap(_ cell: ProductWithQuantityTableViewCell) {

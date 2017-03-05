@@ -11,17 +11,16 @@ import QorumLogs
 import Providers
 
 protocol ProductWithQuantityTableViewCellDelegate: class {
-    func onIncrementItemTap(_ cell: ProductWithQuantityTableViewCell)
-    func onDecrementItemTap(_ cell: ProductWithQuantityTableViewCell)
+    func onChangeQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float)
     func onDeleteTap(_ cell: ProductWithQuantityTableViewCell)
-    func onPanQuantityUpdate(_ cell: ProductWithQuantityTableViewCell, newQuantity: Float)
 }
 
-class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperDelegate, SwipeToDeleteHelperDelegate {
+class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperDelegate, SwipeToDeleteHelperDelegate, QuantityViewDelegate {
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var brandLabel: UILabel!
-    @IBOutlet weak var quantityLabel: UILabel!
+    @IBOutlet weak var quantityView: QuantityView!
+    
     @IBOutlet weak var baseQuantityLabel: UILabel!
     @IBOutlet weak var deleteProgressContainer: UIView!
     @IBOutlet weak var deleteProgressViewWidth: NSLayoutConstraint!
@@ -80,11 +79,13 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     var shownQuantity: Float = 0 {
         didSet {
             if let product = model?.product {
-                quantityLabel.text = String("\(product.quantityWithMaybeUnitText(quantity: shownQuantity))")
+                quantityView.quantity = shownQuantity
+//                quantityLabel.text = String("\(product.quantityWithMaybeUnitText(quantity: shownQuantity))") // TODO???????????? format?
             } else {
                 QL3("Warn? using quantity before model is set")
                 //            let unitText = model.map{$0.product.unitText} ?? ""
-                quantityLabel.text = String("\(shownQuantity.quantityString)") // show something meaningful anyway. Maybe we can remove this.
+//                quantityLabel.text = String("\(shownQuantity.quantityString)") // show something meaningful anyway. Maybe we can remove this.
+                quantityView.quantity = shownQuantity
             }
             
 //            if shownQuantity == 0 && oldValue != 0 {
@@ -109,14 +110,8 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         swipeToIncrementHelper?.delegate = self
         
         selectionStyle = .none
-    }
-    
-    @IBAction func onIncrementTap(_ sender: UIButton) {
-        delegate?.onIncrementItemTap(self)
-    }
-    
-    @IBAction func onDecrementTap(_ sender: UIButton) {
-        delegate?.onDecrementItemTap(self)
+        
+        quantityView.delegate = self
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -177,7 +172,10 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     }
     
     func onFinishSwipe() {
-        delegate?.onPanQuantityUpdate(self, newQuantity: shownQuantity)
+        guard let model = model else {QL4("Illegal state: No model"); return}
+
+        let delta = shownQuantity - model.quantity
+        delegate?.onChangeQuantity(self, delta: delta)
     }
     
     var swipeToIncrementEnabled: Bool {
@@ -202,4 +200,12 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     var isSwipeToDeleteEnabled: Bool {
         return shownQuantity == 0
     }
+    
+    // MARK: - QuantityViewDelegate
+    
+    func onRequestUpdateQuantity(_ delta: Float) {
+        shownQuantity = shownQuantity + delta // increment in advance // TODO!!!!!!!!!!!!!!!! test if this always works as intented
+        delegate?.onChangeQuantity(self, delta: delta)
+    }
+
 }
