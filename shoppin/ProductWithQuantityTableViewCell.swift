@@ -168,7 +168,12 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     }
     
     func onQuantityUpdated(_ quantity: Float) {
+        guard let model = model else {QL4("Illegal state: No model"); return}
+        
+        let delta = shownQuantity - model.quantity
+        
         shownQuantity = quantity
+        quantityView.showDelta(delta)
     }
     
     func onFinishSwipe() {

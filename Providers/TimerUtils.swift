@@ -14,3 +14,10 @@ public func delay(_ seconds: Double, f: @escaping VoidFunction) {
         f()
     }
 }
+
+// Cancellable delay - named differently to avoid having to edit all the places where currently delay is used.
+public func delayNew(_ seconds: Double, f: @escaping VoidFunction) -> DispatchWorkItem {
+    let task = DispatchWorkItem {f()}
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds, execute: task)
+    return task
+}

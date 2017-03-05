@@ -39,6 +39,7 @@
                     <constraints>
                         <constraint firstAttribute="width" constant="41" id="wwx-ae-Pii"/>
                     </constraints>
+                    <color key="tintColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="minus"/>
                     <connections>
                         <action selector="onMinusTap:" destination="-1" eventType="touchUpInside" id="lGz-Hb-Vas"/>
@@ -49,6 +50,7 @@
                     <constraints>
                         <constraint firstAttribute="width" constant="41" id="DP8-Ob-s7B"/>
                     </constraints>
+                    <color key="tintColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="plus"/>
                     <connections>
                         <action selector="onPlusTap:" destination="-1" eventType="touchUpInside" id="qIa-KP-Ajg"/>

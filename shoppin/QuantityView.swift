@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 protocol QuantityViewDelegate: class {
     func onRequestUpdateQuantity(_ delta: Float)
@@ -30,6 +31,9 @@ class QuantityView: UIView {
     
     var mode: QuantityViewMode = .edit
     
+    fileprivate var showPlusDeltaTimerTask: DispatchWorkItem?
+    fileprivate var showMinusDeltaTimerTask: DispatchWorkItem?
+
     var quantity: Float = 0 {
         didSet {
             // TODO????????????????
@@ -67,10 +71,46 @@ class QuantityView: UIView {
 
     @IBAction func onPlusTap(_ sender: UIButton) {
         delegate?.onRequestUpdateQuantity(1)
+        showDelta(1)
     }
     
     @IBAction func onMinusTap(_ sender: UIButton) {
         delegate?.onRequestUpdateQuantity(-1)
+        showDelta(-1)
+    }
+    
+    func showDelta(_ delta: Float) {
+        let resetColorDelay: Double = 0.3
+        
+        func resetPlus() {
+            plusButton.setTitleColor(Theme.black, for: .normal)
+            plusButton.imageView?.tintColor = Theme.grey
+        }
+        
+        func resetMinus() {
+            minusButton.setTitleColor(Theme.black, for: .normal)
+            minusButton.imageView?.tintColor = Theme.grey
+        }
+        
+        if delta > 0 {
+            resetMinus()
+            
+            plusButton.setTitleColor(Theme.lighterGreen, for: .normal)
+            plusButton.imageView?.tintColor = Theme.lighterGreen
+            showPlusDeltaTimerTask?.cancel()
+            showPlusDeltaTimerTask = delayNew(resetColorDelay) {
+                resetPlus()
+            }
+        } else if delta < 0 {
+            resetPlus()
+            
+            minusButton.setTitleColor(UIColor.flatRed, for: .normal)
+            minusButton.imageView?.tintColor = UIColor.flatRed
+            showMinusDeltaTimerTask?.cancel()
+            showMinusDeltaTimerTask = delayNew(resetColorDelay) {
+                resetMinus()
+            }
+        }
     }
     
     override var intrinsicContentSize: CGSize {

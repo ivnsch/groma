@@ -360,14 +360,25 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     }
     
     func onQuantityUpdated(_ quantity: Float) {
-        shownQuantity = quantity
+        
+        if let tableViewListItem = tableViewListItem {
+            let delta = shownQuantity - tableViewListItem.quantity
+            
+            
+            QL3("delta: \(delta), shownQuantity: \(shownQuantity), tableViewListItem.quantity(status): \(tableViewListItem.quantity)")
+            
+            shownQuantity = quantity
+            
+            quantityView.showDelta(delta)
+        } else {
+            QL3("no tableViewListItem")
+        }
     }
     
     func onFinishSwipe() {
-        guard let status = status else {QL4("Illegal state: No status"); return}
         
         if let tableViewListItem = tableViewListItem {
-            let delta = shownQuantity - tableViewListItem.quantity(status)
+            let delta = shownQuantity - tableViewListItem.quantity
             delegate?.onChangeQuantity(tableViewListItem, delta: delta)
         } else {
             QL3("Warn: ListItemCell.onStartItemSwipe: no tableViewListItem")
