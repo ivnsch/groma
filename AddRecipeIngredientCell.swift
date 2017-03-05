@@ -95,6 +95,8 @@ class AddRecipeIngredientCell: UITableViewCell {
         initTextFieldPlaceholders()
         initAutocompletionTextFields()
         initTextListeners()
+        
+        configQuantifiablesView()
     }
     
     
@@ -113,6 +115,7 @@ class AddRecipeIngredientCell: UITableViewCell {
     func configQuantifiablesView() {
         let productQuantityController = ProductQuantityController()
         
+        // TODO!!!!!!!!!!!!!!!!!!! is it correct to do this here (awake from nib) - does this work with recycled cells?
         productQuantityController.delegate = self
         
         productQuantityController.view.translatesAutoresizingMaskIntoConstraints = false

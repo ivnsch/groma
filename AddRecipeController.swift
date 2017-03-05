@@ -193,7 +193,7 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
             cell.indexPath = indexPath
             cell.model = models[indexPath.row]
             
-            cell.configQuantifiablesView()
+//            cell.configQuantifiablesView()
             
             if let units = units {
                 if let baseQuantities = baseQuantities {
