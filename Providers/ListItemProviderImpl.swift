@@ -1164,23 +1164,23 @@ class ListItemProviderImpl: ListItemProvider {
                 }
             }
             
-            if remote {
-                self?.remoteProvider.incrementListItem(listItem, delta: delta, status: status) {remoteResult in
-                    if let incrementResult = remoteResult.successResult {
-                        self?.dbProvider.updateListItemWithIncrementResult(incrementResult) {success in
-                            if !success {
-                                QL4("Couldn't save increment result for item: \(listItem), remoteResult: \(remoteResult)")
-                            }
-                        }
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ListItem>) in
-                            QL4("Remote call no success: \(remoteResult) item: \(listItem)")
-                            self?.memProvider.invalidate()
-                            handler(result)
-                        })
-                    }
-                }
-            }
+//            if remote {
+//                self?.remoteProvider.incrementListItem(listItem, delta: delta, status: status) {remoteResult in
+//                    if let incrementResult = remoteResult.successResult {
+//                        self?.dbProvider.updateListItemWithIncrementResult(incrementResult) {success in
+//                            if !success {
+//                                QL4("Couldn't save increment result for item: \(listItem), remoteResult: \(remoteResult)")
+//                            }
+//                        }
+//                    } else {
+//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ListItem>) in
+//                            QL4("Remote call no success: \(remoteResult) item: \(listItem)")
+//                            self?.memProvider.invalidate()
+//                            handler(result)
+//                        })
+//                    }
+//                }
+//            }
         }
     }
     
