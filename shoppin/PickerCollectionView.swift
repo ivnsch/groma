@@ -72,7 +72,7 @@ class PickerCollectionView: UIView, UICollectionViewDelegate, UICollectionViewDe
         return (collectionView.collectionViewLayout as! UICollectionViewFlowLayout).sectionInset
     }
     
-    func scrollToItem(index: Int) {
+    func scrollToItem(index: Int, animated: Bool = true) {
         guard let delegate = delegate else {QL3("No delegate"); return}
         
         let size = delegate.cellSize
@@ -90,7 +90,7 @@ class PickerCollectionView: UIView, UICollectionViewDelegate, UICollectionViewDe
         let offsetDelta = itemCenterInCollectionView - boxCenterRelativeToCollectionContentView
         let offset = collectionView.contentOffset.y + offsetDelta
         
-        collectionView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
+        collectionView.setContentOffset(CGPoint(x: 0, y: offset), animated: animated)
     }
     
     required init?(coder aDecoder: NSCoder) {

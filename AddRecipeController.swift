@@ -256,10 +256,9 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         models[indexPath.row].productPrototype.baseQuantity = baseQuantity
     }
     
-    func onUpdate(unit: String, indexPath: IndexPath) {
-        models[indexPath.row].productPrototype.unit = unit
+    func onUpdate(unit: Providers.Unit, indexPath: IndexPath) {
+        models[indexPath.row].productPrototype.unit = unit.name
     }
-    
     
     func productNamesContaining(text: String, handler: @escaping ([String]) -> Void) {
         Prov.productProvider.products(text, range: NSRange(location: 0, length: 10000), sortBy: .alphabetic, successHandler {tuple in

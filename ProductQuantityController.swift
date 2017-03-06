@@ -24,8 +24,8 @@ protocol ProductQuantityControlleDelegate {
     
     var quantity: Float {get}
     
-    func onChangeUnit(unit: String?)
-    func onChangeBaseQuantity(baseQuantity: String?)
+    func onSelect(unit: Providers.Unit)
+    func onSelect(base: String)
     func onChangeQuantity(quantity: Float)
     
     var parentForPickers: UIView {get}
@@ -52,37 +52,15 @@ class ProductQuantityController: UIViewController {
         }
     }
     
-    var currentUnitInput: String? {
-        didSet {
-            guard let unitButton = unitButton else {QL3("Outlets not set yet"); return}
-            unitButton.setTitle(currentUnitInput ?? "", for: .normal)
-            if currentUnitInput != nil {
-                unitButton.backgroundColor = UIColor.white
-            } else {
-                unitButton.backgroundColor = UIColor.clear
-            }
-            
-            
-            delegate?.onChangeUnit(unit: currentUnitInput)
-        }
+    var currentUnitInput: String?
+    var selectedUnit: Providers.Unit? // corresponds to currentUnitInput except when input was done using text input (unit doesn't exist yet), then this is nil
+    
+    var currentBaseInput: String?
+    
+    fileprivate func onSelect(unit: Providers.Unit) {
+        delegate?.onSelect(unit: unit)
+        updateBasesVisibility(unit: unit)
     }
-    fileprivate var currentUnit: Providers.Unit? // corresponds to currentUnitInput except when input was done using text input (unit doesn't exist yet), then this is nil
-    
-    var currentBaseInput: String? {
-        didSet {
-            guard let baseButton = baseButton else {QL3("Outlets not set yet"); return}
-            baseButton.setTitle(currentBaseInput ?? "", for: .normal)
-            if currentBaseInput != nil {
-                baseButton.backgroundColor = UIColor.white
-            } else {
-                baseButton.backgroundColor = UIColor.clear
-            }
-            
-            delegate?.onChangeBaseQuantity(baseQuantity: currentBaseInput)
-        }
-    }
-    
-    
     
     // MARK: - Units variables
     
@@ -115,6 +93,8 @@ class ProductQuantityController: UIViewController {
         return baseButton.bounds.insetBy(dx: -10, dy: -10)
     }
 
+    var onPickersInitialized: (() -> Void)?
+    
     func config() {
         
         unitButton.isHidden = true
@@ -137,6 +117,8 @@ class ProductQuantityController: UIViewController {
         super.viewDidAppear(animated)
         
         config()
+        
+        onPickersInitialized?()
     }
     
     // TODO cell recycling?
@@ -199,6 +181,31 @@ class ProductQuantityController: UIViewController {
             }
         })
     }
+
+    func selectUnitWithName(_ name: String) {
+        if let units = unitsDataSource?.units {
+            if let index = (units.enumerated().filter {$0.element.name == name}.first)?.offset {
+                unitPicker?.scrollToItem(index: index, animated: false)
+            } else {
+                QL1("Unit with name: \(name) not found in data source units")
+            }
+        } else {
+            QL1("Data source not set")
+        }
+    }
+    
+    func selectBaseWithName(_ name: String) {
+        if let bases = basesDataSource?.bases {
+            if let index = (bases.enumerated().filter {$0.element.stringVal == name}.first)?.offset {
+                basesPicker?.scrollToItem(index: index, animated: false)
+            } else {
+                QL1("Unit with name: \(name) not found in data source units")
+            }
+        } else {
+            QL1("Data source not set")
+        }
+    }
+    
     
     // TODO cell recycling?
     func initBasePicker() {
@@ -373,27 +380,16 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
                 unitsCollectionView.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
             }
             
-            
         } else {
             clearToDeleteUnits()
             clearSelectedUnits()
             
             if let cell = cellMaybe {
-                if isSelected(cell: cell) {
-                    onSelect(unitName: "", unit: nil)
-                    
-                } else {
-                    let unitData: (name: String, unit: Providers.Unit?) = {
-                        if indexPath.row < units.count {
-                            return (units[indexPath.row].name, units[indexPath.row])
-                        } else if indexPath.row == units.count {
-                            return (currentUnitInput ?? "", nil)
-                        } else {
-                            fatalError("Invalid index: \(indexPath.row), unit count: \(units.count)")
-                        }
-                    }()
-                    onSelect(unitName: unitData.name, unit: unitData.unit)
+
+                if indexPath.row < units.count {
+                    onSelect(unit: units[indexPath.row])
                 }
+                // for input cell there's no action on select
             }
         }
     }
@@ -445,14 +441,6 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
         if let editCell = picker.collectionView.cellForItem(at: IndexPath(row: (basesDataSource.bases?.count ?? 0), section: 0)) as? UnitEditableCell {
             editCell.editableUnitView.clear()
         }
-    }
-    
-    
-    fileprivate func onSelect(unitName: String, unit: Providers.Unit?) {
-        currentUnitInput = unitName
-        delegate?.onChangeUnit(unit: unitName)
-
-        updateBasesVisibility(unit: unit)
     }
     
     fileprivate func updateBasesVisibility(unit: Providers.Unit?) {
@@ -517,17 +505,10 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
         guard let unitsDataSource = unitsDataSource else {QL4("No data source"); return}
         guard let units = unitsDataSource.units else {QL4("No units"); return}
         
-        let unitData: (name: String, unit: Providers.Unit?) = {
-            if cellIndex < units.count {
-                return (units[cellIndex].name, units[cellIndex])
-            } else if cellIndex == units.count {
-                return (currentUnitInput ?? "", nil)
-            } else {
-                fatalError("Invalid index: \(cellIndex), unit count: \(units.count)")
-            }
-        }()
-        
-        onSelect(unitName: unitData.name, unit: unitData.unit)
+        if cellIndex < units.count {
+            onSelect(unit: units[cellIndex])
+        }
+        // for input cell there's no action on snap
     }
 }
 
@@ -642,7 +623,7 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
     
     fileprivate func onSelect(base: String) {
         productQuantityController.currentBaseInput = base
-        productQuantityController.delegate?.onChangeBaseQuantity(baseQuantity: base)
+        productQuantityController.delegate?.onSelect(base: base)
     }
     
     

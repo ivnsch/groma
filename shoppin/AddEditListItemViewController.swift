@@ -943,13 +943,12 @@ extension AddEditListItemViewController: ProductQuantityControlleDelegate {
         return currentQuantity
     }
     
-    
-    func onChangeUnit(unit: String?) {
-        currentUnit = unit ?? ""
+    func onSelect(unit: Providers.Unit) {
+        currentUnit = unit.name
     }
     
-    func onChangeBaseQuantity(baseQuantity: String?) {
-        currentBase = baseQuantity ?? ""
+    func onSelect(base: String) {
+        currentBase = base
     }
     
     func onChangeQuantity(quantity: Float) {

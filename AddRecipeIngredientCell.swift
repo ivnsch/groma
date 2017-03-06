@@ -18,7 +18,7 @@ protocol AddRecipeIngredientCellDelegate {
     func onUpdate(brand: String, indexPath: IndexPath)
     func onUpdate(quantity: Float, indexPath: IndexPath)
     func onUpdate(baseQuantity: String, indexPath: IndexPath)
-    func onUpdate(unit: String, indexPath: IndexPath)
+    func onUpdate(unit: Providers.Unit, indexPath: IndexPath)
     
     func productNamesContaining(text: String, handler: @escaping ([String]) -> Void)
     func brandsContaining(text: String, handler: @escaping ([String]) -> Void)
@@ -71,8 +71,13 @@ class AddRecipeIngredientCell: UITableViewCell {
             productNameTextField.text = model?.productPrototype.name
             brandTextField.text = model?.productPrototype.brand
             
-            if let unit = model?.productPrototype.unit {
-                productQuantityController?.currentUnitInput = unit
+            productQuantityController?.onPickersInitialized = {[weak self, weak productQuantityController] in
+                if let prefillUnitName = self?.model?.productPrototype.unit {
+                    productQuantityController?.selectUnitWithName(prefillUnitName)
+                }
+                if let prefillBase = self?.model?.productPrototype.baseQuantity {
+                    productQuantityController?.selectBaseWithName(prefillBase)
+                }
             }
             
             if let base = model?.productPrototype.baseQuantity {
@@ -309,20 +314,20 @@ extension AddRecipeIngredientCell: ProductQuantityControlleDelegate {
     }
     
     
-    func onChangeUnit(unit: String?) {
+    func onSelect(unit: Providers.Unit) {
         guard let indexPath = indexPath else {QL4("Illegal state: no index path"); return}
-
-        delegate?.onUpdate(unit: unit ?? "", indexPath: indexPath)
+        
+        delegate?.onUpdate(unit: unit, indexPath: indexPath)
         updateQuantitySummary()
     }
     
-    func onChangeBaseQuantity(baseQuantity: String?) {
+    func onSelect(base: String) {
         guard let indexPath = indexPath else {QL4("Illegal state: no index path"); return}
-
-        delegate?.onUpdate(baseQuantity: baseQuantity ?? "", indexPath: indexPath)
+        
+        delegate?.onUpdate(baseQuantity: base, indexPath: indexPath)
         updateQuantitySummary()
     }
-    
+
     func onChangeQuantity(quantity: Float) {
         guard let indexPath = indexPath else {QL4("Illegal state: no index path"); return}
 
