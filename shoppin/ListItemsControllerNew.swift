@@ -605,9 +605,10 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             )
         }
         
-        Prov.listItemsProvider.addNew(listItemInputs: listItemInputs, list: list, status: status, realmData: realmData, successHandler {_ in
-            // The list will update automatically with realm notification
+        Prov.listItemsProvider.addNew(listItemInputs: listItemInputs, list: list, status: status, realmData: realmData, successHandler {[weak self] _ in
             quickAddController.closeRecipeController()
+            self?.tableView.reloadData()
+            self?.onTableViewChangedQuantifiables()
         })
         
         //Prov.listItemsProvider.add(listItemInputs, status: .todo, list: list, order: nil, possibleNewSectionOrder: nil, token: nil, successHandler{(addedListItems: [ListItem]) in

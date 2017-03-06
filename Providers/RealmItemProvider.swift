@@ -149,12 +149,12 @@ class RealmItemProvider: RealmProvider {
     // load item and update or create one
     // if we find an item with the unique we update it - this is for the case the user changes category color etc for an existing item while adding it
     // NOTE: This doesn't save anything to the database (no particular reason, except that the current caller of this method does the saving)
-    func mergeOrCreateItemSync(itemInput: ItemInput, updateCategory: Bool, doTransaction: Bool) -> ProvResult<Item, DatabaseError> {
+    func mergeOrCreateItemSync(itemInput: ItemInput, updateCategory: Bool, doTransaction: Bool, notificationToken: NotificationToken?) -> ProvResult<Item, DatabaseError> {
 
         func transactionContent() -> ProvResult<Item, DatabaseError> {
             
             // Always fetch/create category (whether item already exists or not), since we need to ensure we have the category identified by unique from prototype, which is not necessarily the same as the one referenced by existing item (we want to update only non-unique properties).
-            return mergeOrCreateCategorySync(categoryInput: itemInput.categoryInput, doTransaction: false).flatMap {category in
+            return mergeOrCreateCategorySync(categoryInput: itemInput.categoryInput, doTransaction: false, notificationToken: notificationToken).flatMap {category in
                 
                 switch findSync(name: itemInput.name) {
                 case .ok(let itemMaybe):
@@ -173,16 +173,16 @@ class RealmItemProvider: RealmProvider {
         }
         
         if doTransaction {
-            return doInWriteTransactionSync({realm in
+            return doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: nil) {realm in
                 return transactionContent()
-            }) ?? .err(.unknown)
+            } ?? .err(.unknown)
         } else {
             return transactionContent()
         }
     }
     
     // TODO!!!!!!!!!!!!!!! orient maybe with similar method in product for transaction etc. Product also needs refactoring though
-    func mergeOrCreateCategorySync(categoryInput: CategoryInput, doTransaction: Bool) -> ProvResult<ProductCategory, DatabaseError> {
+    func mergeOrCreateCategorySync(categoryInput: CategoryInput, doTransaction: Bool, notificationToken: NotificationToken?) -> ProvResult<ProductCategory, DatabaseError> {
         
         func transactionContent() -> ProvResult<ProductCategory, DatabaseError> {
             
@@ -202,9 +202,9 @@ class RealmItemProvider: RealmProvider {
         }
 
         if doTransaction {
-            return doInWriteTransactionSync({realm in
+            return doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: nil) {realm in
                 return transactionContent()
-            }) ?? .err(.unknown)
+            } ?? .err(.unknown)
         } else {
             return transactionContent()
         }

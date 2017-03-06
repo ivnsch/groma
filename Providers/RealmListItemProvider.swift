@@ -920,8 +920,8 @@ class RealmListItemProvider: RealmProvider {
         
         refresh()
         
-        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData) {
-        
+        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: doTransaction) {
+            
         case .ok(let sectionResult):
             
             let section = sectionResult.section
@@ -967,10 +967,10 @@ class RealmListItemProvider: RealmProvider {
     /// Input form
     func addSync(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> AddListItemResult? {
 
-        switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false) {
+        switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false, realmData: realmData, doTransaction: doTransaction) {
             
         case .ok(let quantifiableProduct):
-            return addSync(quantifiableProduct: quantifiableProduct, store: list.store ?? "", price: listItemInput.storeProductInput.price, list: list, quantity: listItemInput.quantity, note: listItemInput.note, status: status, realmData: realmData)
+            return addSync(quantifiableProduct: quantifiableProduct, store: list.store ?? "", price: listItemInput.storeProductInput.price, list: list, quantity: listItemInput.quantity, note: listItemInput.note, status: status, realmData: realmData, doTransaction: doTransaction)
 
         case .err(let error):
             QL4("Couldn't add/update quantifiable product: \(error)")
@@ -985,13 +985,17 @@ class RealmListItemProvider: RealmProvider {
         
         var addedListItems = [(listItem: ListItem, isNew: Bool)]()
         
-        for listItemInput in listItemInputs {
-            if let result = addSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData, doTransaction: doTransaction) {
-                addedListItems.append((result.listItem, result.isNewItem))
-            } else {
-                QL4("Couldn't add list item for input: \(listItemInput), list: \(list.uuid)::\(list.name), status: \(status). Skipping") // we could also break instead of skip but why not skip
+        doInWriteTransactionSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm: nil) {realm in
+            
+            for listItemInput in listItemInputs {
+                if let result = addSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData, doTransaction: false) {
+                    addedListItems.append((result.listItem, result.isNewItem))
+                } else {
+                    QL4("Couldn't add list item for input: \(listItemInput), list: \(list.uuid)::\(list.name), status: \(status). Skipping") // we could also break instead of skip but why not skip
+                }
             }
         }
+
         return addedListItems
     }
 

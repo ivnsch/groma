@@ -132,7 +132,7 @@ class IngredientProviderImpl: IngredientProvider {
         let itemInput = ItemInput(name: input.name, categoryName: input.category, categoryColor: input.categoryColor, edible: true)
         
         // TODO!!!!!!!!!!!!!!!! review updateCategory parameter (updates color) here and for product - for product it's false, why?
-        switch DBProv.itemProvider.mergeOrCreateItemSync(itemInput: itemInput, updateCategory: true, doTransaction: doTransaction) {
+        switch DBProv.itemProvider.mergeOrCreateItemSync(itemInput: itemInput, updateCategory: true, doTransaction: doTransaction, notificationToken: notificationToken) {
         case .ok(let item): handler(ProviderResult(status: .success, sucessResult: item))
         case .err(let error):
             QL4("Error fetching item: \(error)")
