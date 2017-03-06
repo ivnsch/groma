@@ -72,7 +72,8 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         
         let sharedButtonVisible: Bool = {
             if ConnectionProvider.connectedAndLoggedIn {
-                return true // if the user is connected and logged in, always shows the participants button
+//                return true // if the user is connected and logged in, always shows the participants button
+                return false // for now always false since sharing it's working yet
             } else {
                 // if user is not connected/logged in, show participants button only if the list has already some participants. This is to avoid confusion, if there's no connection/account and list has no participants we just don't bother the user showing this button. If the list has participants though we show it, and show a dialog about missing connection/login if user taps it, so user knows why the probably expected (as the list has already participants) sharing functionality is not available. This overwrites the visibility set in viewDidLoad, which sets by default hidden when there's no connection/account.
                 return !users.isEmpty
@@ -107,7 +108,8 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         
         listNameInputField.becomeFirstResponder()
         
-        setSharedButtonVisibile(ConnectionProvider.connectedAndLoggedIn)
+//        setSharedButtonVisibile(ConnectionProvider.connectedAndLoggedIn)
+        setSharedButtonVisibile(false) // for now always false since sharing it's working yet
     }
     
     fileprivate func setBackgroundColor(_ color: UIColor) {
