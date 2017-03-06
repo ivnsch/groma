@@ -39,6 +39,8 @@ class PickerCollectionView: UIView, UICollectionViewDelegate, UICollectionViewDe
     fileprivate let cellHeight: CGFloat
     fileprivate let cellSpacing: CGFloat
     
+    // TODO are boxY and boxCenterY still necessary? 
+    
     convenience init(size: CGSize, center: CGPoint, layout: UICollectionViewLayout, boxY: CGFloat, boxCenterY: CGFloat, cellHeight: CGFloat, cellSpacing: CGFloat, delegate: PickerCollectionViewDelegate) {
         self.init(frame: CGRect(x: center.x - size.width / 2, y: center.y - size.height / 2, width: size.width, height: size.height), layout: layout, boxY: boxY, boxCenterY: boxCenterY, cellHeight: cellHeight, cellSpacing: cellSpacing, delegate: delegate)
     }
@@ -147,40 +149,26 @@ class PickerCollectionView: UIView, UICollectionViewDelegate, UICollectionViewDe
         let totalCellHeight = cellHeight + cellSpacing
         
         let offset = scrollView.contentOffset.y
-        
-        let topInset = insets.top
-        
-        let boxYRelativeToCollectionViewTop: CGFloat = boxY - frame.origin.y - topInset
-        let boxCenterRelativeToCollectionViewTop: CGFloat = boxCenterY - frame.origin.y - topInset
-        
-        //        let cellStart = floor((offset + boxY) / totalCellHeight) * totalCellHeight
-        let cellStart = floor((offset + boxYRelativeToCollectionViewTop) / totalCellHeight) * totalCellHeight
+    
+        let cellStart = floor((offset) / totalCellHeight) * totalCellHeight
         
         let nextCellStart = cellStart + totalCellHeight
         
-        
-        let boxCenterRelativeToCollectionContentView: CGFloat = offset + boxCenterRelativeToCollectionViewTop
-        
-        
         var cellStartToUse: CGFloat
-        
-        // Take the cell whose center has a smallest distance to the box center
-        if abs(boxCenterRelativeToCollectionContentView - (cellStart + cellHeight / 2)) < abs(boxCenterRelativeToCollectionContentView - (nextCellStart + cellHeight / 2)) {
+
+        if abs(offset - cellStart) < abs(offset - nextCellStart) {
             cellStartToUse = cellStart
         } else {
             cellStartToUse = nextCellStart
         }
         
-        let cellCenter = cellStartToUse + cellHeight / 2
-        
-        // Calculate the offset we have to scroll the collection view such that this cell center aligns with the box center
-        let newOffset = cellCenter - boxCenterRelativeToCollectionViewTop
+        let newOffset = cellStartToUse
         
         scrollView.setContentOffset(CGPoint(x: 0, y: newOffset), animated: true)
         
         let cellIndex = cellStartToUse / totalCellHeight
         
-        delegate?.onSnap(cellIndex: max(0, Int(cellIndex) - 1))
+        delegate?.onSnap(cellIndex: max(0, Int(cellIndex)))
     }
     
     
