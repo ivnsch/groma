@@ -38,9 +38,6 @@ class ProductQuantityController: UIViewController {
     @IBOutlet weak var baseButton: UIButton!
     
     @IBOutlet weak var quantityView: QuantityView!
-
-    @IBOutlet weak var baseViewWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var unitViewToBaseViewSpaceConstraint: NSLayoutConstraint!
     
     var delegate: ProductQuantityControlleDelegate?
     
@@ -130,6 +127,11 @@ class ProductQuantityController: UIViewController {
         quantityView.delegate = self
     }
  
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setBasesVisible(visible: false, animated: false)
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -251,6 +253,8 @@ class ProductQuantityController: UIViewController {
             basesPickerWrapper.mask = basePickerMask
             
             self.basesPickerMask = basePickerMask
+            
+            setBasesVisible(visible: false, animated: false) // start hidden
         }
         
         delegate.baseQuantities({baseQuantitiesMaybe in
@@ -455,20 +459,18 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
         if let unit = unit {
             let unitsWithBase: [UnitId] = [.g, .kg, .liter, .milliliter]
             if unitsWithBase.contains(unit.id) {
-                setBasesVisible(visible: true)
+                setBasesVisible(visible: true, animated: true)
             } else {
-                setBasesVisible(visible: false)
+                setBasesVisible(visible: false, animated: true)
             }
         } else {
-            setBasesVisible(visible: false)
+            setBasesVisible(visible: false, animated: true)
         }
     }
     
-    fileprivate func setBasesVisible(visible: Bool) {
-        baseViewWidthConstraint.constant = visible ? 70 : 0
-        unitViewToBaseViewSpaceConstraint.constant = visible ? 20 : 0
-        anim {
-            self.view.layoutIfNeeded()
+    fileprivate func setBasesVisible(visible: Bool, animated: Bool) {
+        animIf(animated) {[weak self] in
+            self?.basesPickerWrapper?.alpha = visible ? 1 : 0
         }
     }
     
