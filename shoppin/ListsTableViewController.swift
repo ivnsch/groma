@@ -225,9 +225,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             
             self?.tableView.insertRows(at: [IndexPath(row: listsResult.count - 1, section: 0)], with: .top) // Note -1 as at this point the new item is already inserted in results
             
-            self?.topAddEditListControllerManager?.expand(false)
-            self?.setTopBarState(.normalFromExpanded)
-            self?.updateEmptyUI()
+            self?.afterAddOrUpdateList()
             
         }, onErrorAdditional: {[weak self] result in
             self?.onListAddOrUpdateError(list)
@@ -239,7 +237,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         guard let listsResult = listsResult else {QL4("No result"); return}
         guard let notificationToken = notificationToken else {QL4("No notification token"); return}
         
-        Prov.listProvider.update(list, input: listInput, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
+        Prov.listProvider.update(list, input: listInput, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
             
             var row: Int?
             for (index, item) in listsResult.enumerated() {
@@ -249,17 +247,24 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             }
             
             if let row = row {
-                self.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+                self?.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
             } else {
                 QL4("Invalid state: can't find list: \(list)")
             }
             
+            self?.afterAddOrUpdateList()
             
         }, onErrorAdditional: {[weak self] result in
             self?.onListAddOrUpdateError(list)
             }
         ))
 
+    }
+    
+    fileprivate func afterAddOrUpdateList() {
+        topAddEditListControllerManager?.expand(false)
+        setTopBarState(.normalFromExpanded)
+        updateEmptyUI()
     }
 
     fileprivate func onListAddOrUpdateError(_ list: Providers.List) {
