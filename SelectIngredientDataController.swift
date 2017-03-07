@@ -266,6 +266,11 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         updateTitle(inputs: inputs)
     }
     
+    func onQuantityInput(_ quantity: Float) {
+        quantityView.quantity = quantity
+        updateTitle(inputs: inputs)
+    }
+    
     var swipeToIncrementEnabled: Bool {
         return true
     }

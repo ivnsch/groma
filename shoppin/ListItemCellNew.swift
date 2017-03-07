@@ -16,6 +16,7 @@ protocol ListItemCellDelegateNew: class {
     func onButtonTwoTap(_ listItem: ListItem)
     func onNoteTap(_ cell: ListItemCellNew, listItem: ListItem)
     func onChangeQuantity(_ listItem: ListItem, delta: Float)
+    func onQuantityInput(_ listItem: ListItem, quantity: Float)
     var isControllerInEditMode: Bool {get}
 }
 
@@ -411,5 +412,12 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         
         shownQuantity = shownQuantity + delta // increment in advance // TODO!!!!!!!!!!!!!!!! test if this always works as intented
         delegate?.onChangeQuantity(tableViewListItem, delta: delta)
+    }
+    
+    func onQuantityInput(_ quantity: Float) {
+        
+        guard let tableViewListItem = tableViewListItem else {QL4("Illegal state: No list item"); return}
+        
+        delegate?.onQuantityInput(tableViewListItem, quantity: quantity)
     }
 }

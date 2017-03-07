@@ -15,7 +15,7 @@
                 <outlet property="minusButton" destination="3bg-dS-GSw" id="ARz-lT-gRP"/>
                 <outlet property="plusBottomWidthConstraint" destination="DP8-Ob-s7B" id="8Rz-Vn-h8R"/>
                 <outlet property="plusButton" destination="HNQ-zH-qvO" id="l7v-sI-wMt"/>
-                <outlet property="quantityLabel" destination="Cxh-rI-YN0" id="HzN-EX-XnL"/>
+                <outlet property="quantityLabel" destination="mNy-bI-3Ag" id="wMj-qH-NbH"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -23,17 +23,6 @@
             <rect key="frame" x="0.0" y="0.0" width="164" height="122"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cxh-rI-YN0" customClass="LabelMore" customModule="Providers">
-                    <rect key="frame" x="110.5" y="49" width="12.5" height="24"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                            <integer key="value" value="60"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </label>
                 <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3bg-dS-GSw">
                     <rect key="frame" x="123" y="0.0" width="41" height="122"/>
                     <constraints>
@@ -46,7 +35,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HNQ-zH-qvO">
-                    <rect key="frame" x="69.5" y="0.0" width="41" height="122"/>
+                    <rect key="frame" x="72" y="0.0" width="41" height="122"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="41" id="DP8-Ob-s7B"/>
                     </constraints>
@@ -56,17 +45,31 @@
                         <action selector="onPlusTap:" destination="-1" eventType="touchUpInside" id="qIa-KP-Ajg"/>
                     </connections>
                 </button>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mNy-bI-3Ag" customClass="TextFieldMore" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="113" y="49" width="10" height="24"/>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                            <integer key="value" value="30"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="60"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </textField>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="HNQ-zH-qvO" secondAttribute="bottom" id="4BV-W9-Xze"/>
                 <constraint firstItem="HNQ-zH-qvO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="FMg-hx-h56"/>
                 <constraint firstItem="3bg-dS-GSw" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Grv-ad-CMG"/>
-                <constraint firstItem="3bg-dS-GSw" firstAttribute="leading" secondItem="Cxh-rI-YN0" secondAttribute="trailing" id="X0c-OZ-rdI"/>
                 <constraint firstAttribute="bottom" secondItem="3bg-dS-GSw" secondAttribute="bottom" id="Znh-Nb-H6x"/>
-                <constraint firstItem="Cxh-rI-YN0" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="htV-zd-UnO"/>
+                <constraint firstItem="3bg-dS-GSw" firstAttribute="leading" secondItem="mNy-bI-3Ag" secondAttribute="trailing" id="bys-dB-Dkn"/>
+                <constraint firstItem="mNy-bI-3Ag" firstAttribute="leading" secondItem="HNQ-zH-qvO" secondAttribute="trailing" id="gGL-aI-Iic"/>
                 <constraint firstAttribute="trailing" secondItem="3bg-dS-GSw" secondAttribute="trailing" id="jif-XZ-UcZ"/>
-                <constraint firstItem="Cxh-rI-YN0" firstAttribute="leading" secondItem="HNQ-zH-qvO" secondAttribute="trailing" id="lg1-6F-RMf"/>
+                <constraint firstItem="mNy-bI-3Ag" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="sWC-r3-rBS"/>
                 <constraint firstItem="3bg-dS-GSw" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="vbE-l3-tWo"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

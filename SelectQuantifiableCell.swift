@@ -60,6 +60,10 @@ class SelectQuantifiableCell: UITableViewCell, QuantityViewDelegate, SwipeToIncr
         quantityView.quantity = quantity
     }
     
+    func onQuantityInput(_ quantity: Float) {
+        quantityView.quantity = quantity // not sure this is necessary as this method is called after input view changes it's quantity
+    }
+    
     var swipeToIncrementEnabled: Bool {
         return true
     }

@@ -713,6 +713,13 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
         })
     }
     
+    func onQuantityInput(_ listItem: ListItem, quantity: Float) {
+        
+        // Since we already wrote everything based on deltas, we transform our quantity update to delta
+        let delta = quantity - listItem.quantity
+        onChangeQuantity(listItem, delta: delta)
+    }
+    
     var isControllerInEditMode: Bool {
         return isEditing
     }

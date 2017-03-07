@@ -96,6 +96,15 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), for: .valueChanged)
             self.pullToAddView = refreshControl
         }
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
+        tapRecognizer.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapRecognizer)
+    }
+    
+    func onTap(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
+        view.resignFirstResponder()
     }
     
     fileprivate func initEmptyView() {
@@ -256,7 +265,16 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     // MARK: - ProductWithQuantityTableViewCellDelegate
     
     func onChangeQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float) {
-        changeInventoryItemQuantity(cell, delta: delta)
+        changeInventoryItemQuantity(cell, delta: delta, isInput: false)
+    }
+    
+    func onQuantityInput(_ cell: ProductWithQuantityTableViewCell, quantity: Float) {
+        guard let model = cell.model else {QL4("Invalid state: Cell must have model"); return}
+        
+        // Since we already wrote everything based on deltas, we transform our quantity update to delta
+        let delta = quantity - model.quantity
+        
+        changeInventoryItemQuantity(cell, delta: delta, isInput: true)
     }
     
     func onDeleteTap(_ cell: ProductWithQuantityTableViewCell) {
@@ -370,12 +388,14 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         }
     }
     
-    fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float) {
+    fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float, isInput: Bool) {
         
         guard let model = cell.model else {QL4("Invalid state: Cell must have model"); return}
 
         delegate?.increment(model, delta: delta, onSuccess: {updatedQuantity in
-            cell.shownQuantity = updatedQuantity
+            if !isInput { // for input it's not only not necessary to re-set quantity but it also would delete a possible trailing dot
+                cell.shownQuantity = updatedQuantity
+            }
         })
     }
     

@@ -18,6 +18,7 @@ protocol ListItemsTableViewDelegateNew: class {
     func onListItemReset(_ tableViewListItem: ListItem) // revert undo
     func onSectionHeaderTap(_ header: ListItemsSectionHeaderView, section: Section)
     func onIncrementItem(_ model: ListItem, delta: Float)
+    func onQuantityInput(_ listItem: ListItem, quantity: Float)
     func onTableViewScroll(_ scrollView: UIScrollView)
     func onPullToAdd()
     func showPopup(text: String, cell: UITableViewCell, button: UIView)
@@ -407,6 +408,10 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
 
     func onChangeQuantity(_ listItem: ListItem, delta: Float) {
         listItemsTableViewDelegate?.onIncrementItem(listItem, delta: delta)
+    }
+    
+    func onQuantityInput(_ listItem: ListItem, quantity: Float) {
+        listItemsTableViewDelegate?.onQuantityInput(listItem, quantity: quantity)
     }
     
     var isControllerInEditMode: Bool {

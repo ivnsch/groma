@@ -11,6 +11,7 @@ import Providers
 
 protocol QuantityViewDelegate: class {
     func onRequestUpdateQuantity(_ delta: Float)
+    func onQuantityInput(_ quantity: Float)
 }
 
 enum QuantityViewMode {
@@ -18,11 +19,11 @@ enum QuantityViewMode {
 }
 
 // TODO for some reason the buttons are not interactive! outlets are connected, all views up in the hierarchy have userInteractionEnables = yes (until the custom view -in storyboard- in which this was contained). But nothing happens on tap also no press effect on the button. It should not be anything related with the cell, only the custom view, because when the buttons are added directly to the cell (like now) there are no problems.
-class QuantityView: UIView {
+class QuantityView: UIView, UITextFieldDelegate {
     
     weak var delegate: QuantityViewDelegate?
  
-    @IBOutlet weak var quantityLabel: UILabel!
+    @IBOutlet weak var quantityLabel: TextFieldMore!
     @IBOutlet weak var minusButton: UIButton!
     @IBOutlet weak var plusButton: UIButton!
     
@@ -48,7 +49,7 @@ class QuantityView: UIView {
             
         } set {
             quantityLabel.text = newValue
-            invalidateIntrinsicContentSize()
+            quantityLabel.invalidateIntrinsicContentSize()
         }
     }
     
@@ -76,8 +77,30 @@ class QuantityView: UIView {
         
         view.backgroundColor = UIColor.clear
         backgroundColor = UIColor.clear
+        
+        quantityLabel.calculateIntrinsicSizeManually = true
+        
+        quantityLabel.delegate = self
+        quantityLabel.addTarget(self, action: #selector(onQuantityTextChange(_:)), for: .editingChanged)
     }
-
+    
+    
+    // MARK: - UITextFieldDelegate
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return mode == .edit
+    }
+    
+    
+    // MARK: -
+    
+    func onQuantityTextChange(_ sender: UITextField) {
+        if let quantity = quantityLabel.text?.floatValue {
+            quantityText = quantityLabel.text ?? "" // NOTE we set quantityText not quantity because when we input decimals, since this is called on every keystroke, if we type e.g. "1." setting quantity will set the text back to "1"
+            delegate?.onQuantityInput(quantity)
+        }
+    }
+    
     @IBAction func onPlusTap(_ sender: UIButton) {
         delegate?.onRequestUpdateQuantity(1)
         showDelta(1)
@@ -86,6 +109,10 @@ class QuantityView: UIView {
     @IBAction func onMinusTap(_ sender: UIButton) {
         delegate?.onRequestUpdateQuantity(-1)
         showDelta(-1)
+    }
+    
+    override func resignFirstResponder() -> Bool {
+        return quantityLabel.resignFirstResponder()
     }
     
     func showDelta(_ delta: Float) {
@@ -132,7 +159,6 @@ class QuantityView: UIView {
         self.mode = mode
         
         if mode == .edit || mode == .readonly {
-            
             let widthConstant: CGFloat = mode == .edit ? 41 : 0
 
             minusBottomWidthConstraint.constant = widthConstant

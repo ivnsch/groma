@@ -378,7 +378,10 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         })
     }
     
-    
+    func onQuantityInput(_ listItem: ListItem, quantity: Float) {
+        let delta = quantity - listItem.quantity
+        onIncrementItem(listItem, delta: delta)
+    }
     
     
     // MARK: -

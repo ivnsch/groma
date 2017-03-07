@@ -253,6 +253,10 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         fatalError("Outdated - delete this controller!")
     }
     
+    func onQuantityInput(_ cell: ProductWithQuantityTableViewCell, quantity: Float) {
+        fatalError("Outdated - delete this controller!")
+    }
+    
     func onDeleteTap(_ cell: ProductWithQuantityTableViewCell) {
         fatalError("Outdated - delete this controller!")
     }

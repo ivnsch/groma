@@ -336,6 +336,10 @@ extension ProductQuantityController: QuantityViewDelegate {
         quantityView.quantity = newQuantity
         delegate?.onChangeQuantity(quantity: newQuantity)
     }
+    
+    func onQuantityInput(_ quantity: Float) {
+        delegate?.onChangeQuantity(quantity: quantity)
+    }
 }
 
 

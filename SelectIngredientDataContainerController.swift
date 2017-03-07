@@ -220,7 +220,15 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     // MARK: - QuantityViewDelegate
     
     func onRequestUpdateQuantity(_ delta: Float) {
-        inputs.quantity = inputs.quantity + delta
+        onUpdateQuantity(inputs.quantity + delta)
+    }
+    
+    func onQuantityInput(_ quantity: Float) {
+        onUpdateQuantity(quantity)
+    }
+    
+    fileprivate func onUpdateQuantity(_ quantity: Float) {
+        inputs.quantity = quantity
         selectQuantityController?.quantityView.quantity = inputs.quantity
         updateTitle(inputs: inputs)
     }

@@ -12,6 +12,7 @@ import Providers
 
 protocol ProductWithQuantityTableViewCellDelegate: class {
     func onChangeQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float)
+    func onQuantityInput(_ cell: ProductWithQuantityTableViewCell, quantity: Float)
     func onDeleteTap(_ cell: ProductWithQuantityTableViewCell)
 }
 
@@ -212,5 +213,8 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         shownQuantity = shownQuantity + delta // increment in advance // TODO!!!!!!!!!!!!!!!! test if this always works as intented
         delegate?.onChangeQuantity(self, delta: delta)
     }
-
+    
+    func onQuantityInput(_ quantity: Float) {
+        delegate?.onQuantityInput(self, quantity: quantity)
+    }
 }
