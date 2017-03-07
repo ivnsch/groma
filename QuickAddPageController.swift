@@ -176,9 +176,12 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     }
     
     // MARK: - 
-    
-    func closeChildControllers() {
-        _ = addProductController?.closeChildControllers()
-        _ = addGroupController?.closeChildControllers()
+
+    // Returns if any child controller was showing
+    func closeChildControllers() -> Bool {
+        let anyChildShowingProductController = addProductController?.closeChildControllers() ?? false
+        let anyChildShowingRecipesController = addGroupController?.closeChildControllers() ?? false
+        
+        return anyChildShowingProductController || anyChildShowingRecipesController
     }
 }

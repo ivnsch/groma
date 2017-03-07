@@ -585,7 +585,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     func onTapNavBarCloseTap() -> Bool {
         return closeChildControllers()
     }
-    
+
+    // Returns if any child controller was showing (was closed)
     func closeChildControllers() -> Bool {
         
         var isAnyShowing: Bool = false
