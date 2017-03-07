@@ -15,7 +15,7 @@ import QorumLogs
 //}
 
 protocol CartListItemsControllerDelegate: class {
-    func onCloseCart()
+    func onCloseCartAfterBuy()
     func onCartUpdatedQuantifiables()
     func onCartPullToAdd()
 }
@@ -87,7 +87,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
                             // TODO!!!!!!!!!!!!!!!! is this still necessary?
 //                            self?.delegate?.onCartSendItemsToStash(weakSelf.listItemsTableViewController.items)
                             self?.butCartAnimation()
-                            self?.close()
+                            self?.delegate?.onCloseCartAfterBuy()
                         })
                     } else {
                         QL4("No root view controller, can't handle buy cart success result")
@@ -112,11 +112,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
             QL4("Couldn't get tab bar controller, can't perform tab bar cart animation!")
         }
     }
-    
-    fileprivate func close() {
-        delegate?.onCloseCart()
-    }
-    
+
     @IBAction func onAddToInventoryTap(_ sender: UIBarButtonItem) {
         if let list = currentList {
             if InventoryAuthChecker.checkAccess(list.inventory) {

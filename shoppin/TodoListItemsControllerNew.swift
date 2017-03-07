@@ -212,8 +212,8 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         pricesView.toggleExpanded(todoController: self)
     }
     
-    func setCartExpanded(expanded: Bool) {
-        pricesView.setExpanded(expanded: expanded)
+    func setCartExpanded(expanded: Bool, onFinishAnim: (() -> Void)?) {
+        pricesView.setExpanded(expanded: expanded, onFinishAnim: onFinishAnim)
     }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -243,9 +243,13 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     // MARK: - CartListItemsControllerDelegate
     
-    func onCloseCart() {
+    func onCloseCartAfterBuy() {
         topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: tableView)
-        setCartExpanded(expanded: false)
+        setCartExpanded(expanded: false) {[weak self] in
+            // trigger hiding of prices view by setting quantity to 0
+            // we just bought so we know that cart quantity is 0 - no need to re-fetch anything here. We don't use stash for now, so we just pass stash 0.
+            self?.pricesView.setQuantities(cart: 0, stash: 0)
+        }
     }
 
     func onCartUpdatedQuantifiables() {
