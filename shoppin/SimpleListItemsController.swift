@@ -668,7 +668,7 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     func onItemSwiped(_ listItem: ListItem) {
         guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem)"); return}
         
-        onListItemSelected(listItem, indexPath: indexPath)
+        onListItemSwiped(listItem, indexPath: indexPath)
         tableView.deleteRows(at: [indexPath], with: .top)
     }
     
