@@ -23,7 +23,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var brandLabel: UILabel!
-    @IBOutlet weak var quantityLabel: UILabel!
+//    @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var baseQuantityLabel: UILabel!
 //    @IBOutlet weak var priceLabel: UILabel! // this was a label below the item's quantity in edit mode howing total price for this item. For now disabled as it overlaps with surrounding +/- and maybe a bit too much information for the user.
     
@@ -60,10 +60,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     fileprivate var shownQuantity: Float = 0 {
         didSet {
             if let tableViewListItem = tableViewListItem {
-                quantityView.quantity = shownQuantity
-                // TODO????????????????
-//                quantityLabel.text = String("\(tableViewListItem.product.product.quantityWithMaybeUnitText(quantity: shownQuantity))")
-//                quantityLabel.text = String("\(shownQuantity.quantityString) \(tableViewListItem.product.product.unitText)")
+                quantityView.quantityText = String("\(tableViewListItem.product.product.quantityWithMaybeUnitText(quantity: shownQuantity))")
             }
         }
     }

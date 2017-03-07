@@ -240,8 +240,10 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
     
     public static func unitText(baseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+        guard baseQuantity > 1 else {return ""} // for base quantity 1 or 0 there's no text
+        
 //        let baseQuantityText = baseQuantity > 1 ? "x\(QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!)" : ""
-        let baseQuantityText = baseQuantity > 1 ? "\(QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!)" : ""
+        let baseQuantityText = QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!
         
         let unitText: String = {
             if showNoneText && unitName.isEmpty {

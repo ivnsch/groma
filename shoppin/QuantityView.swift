@@ -38,7 +38,16 @@ class QuantityView: UIView {
         didSet {
             // TODO????????????????
 //            tableViewListItem.product.product.quantityWithMaybeUnitText(quantity: shownQuantity)
-            quantityLabel.text = String(quantity.quantityString)
+            quantityText = quantity.quantityString
+        }
+    }
+    
+    var quantityText: String? {
+        get {
+            return quantityLabel.text
+            
+        } set {
+            quantityLabel.text = newValue
             invalidateIntrinsicContentSize()
         }
     }
