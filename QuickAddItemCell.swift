@@ -102,7 +102,7 @@ class QuickAddItemCellAnimatableCopy: UIView {
         
         
         let baseLabel = UILabel()
-        baseLabel.text = quantifiableProduct.unitText
+        baseLabel.text = quantifiableProduct.baseText
         baseLabel.frame = CGRect(x: nameLabel.frame.maxX + 5, y: nameLabel.y, width: nameLabel.width, height: nameLabel.height)
         baseLabel.font = cell.brandLabel.font
         baseLabel.textColor = Theme.grey

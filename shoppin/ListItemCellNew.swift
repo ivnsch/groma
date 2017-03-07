@@ -88,7 +88,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
                 centerVerticallyNameLabelConstraint.constant = listItem.product.product.product.brand.isEmpty ? 0 : 10
                 brandLabel.text = listItem.product.product.product.brand
                 
-                baseQuantityLabel.text = listItem.product.product.unitText
+                baseQuantityLabel.text = listItem.product.product.baseText
                 
                 sectionColorView.backgroundColor = listItem.section.color
                 

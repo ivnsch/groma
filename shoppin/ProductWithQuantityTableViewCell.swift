@@ -46,7 +46,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
             centerVerticallyNameLabelConstraint.constant = model.product.product.brand.isEmpty ? 0 : 10
             brandLabel.text = model.product.product.brand
             
-            baseQuantityLabel.text = model.product.unitText
+            baseQuantityLabel.text = model.product.baseText
                 
             shownQuantity = model.quantity
             

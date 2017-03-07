@@ -164,10 +164,7 @@ class AddRecipeIngredientCell: UITableViewCell {
     // MARK: - Private
     
     fileprivate func updateQuantitySummary() {
-
-        // TODO!!!!!!!!!!!!!!!!! user can enters any unit - don't use enum anymore
-        
-        let unitText = Ingredient.unitText(quantity: quantityInput, baseQuantity: baseQuantityInput.floatValue ?? 1, unitName: unitInput, showNoneText: true)
+        let unitText = Ingredient.quantityFullText(quantity: quantityInput, baseQuantity: productQuantityController?.selectedBase?.floatValue ?? 1, unit: productQuantityController?.selectedUnit)
         let allUnitText = trans("recipe_you_will_add", unitText)
         quantitySummaryLabel.text = allUnitText
     }

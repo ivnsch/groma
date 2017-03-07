@@ -213,7 +213,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         return product.item.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit.name == unique.unit
     }
     
-    fileprivate static var baseQuantityNumberFormatter: NumberFormatter = {
+    static var baseQuantityNumberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 2
         return formatter
@@ -231,33 +231,46 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     
     
     
-    public var unitText: String {
-        return QuantifiableProduct.unitText(baseQuantity: baseQuantityFloat, unitName: unit.name)
+    public var baseText: String {
+        return QuantifiableProduct.baseText(baseQuantity: baseQuantityFloat, unitName: unit.name)
     }
     
-    public func unitText(showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
-        return QuantifiableProduct.unitText(baseQuantity: baseQuantityFloat, unitName: unit.name, showNoneText: showNoneText, pluralUnit: pluralUnit)
+    public var baseAndUnitText: String {
+        return QuantifiableProduct.baseAndUnitText(baseQuantity: baseQuantityFloat, unitName: unit.name, pluralUnit: true)
     }
     
-    public static func unitText(baseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+    // Shows base and unit. The content of any of these doesn't affect the other.
+    public static func baseAndUnitText(baseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+        return baseAndUnitTextInternal(baseQuantity: baseQuantity, unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
+    }
+    
+    // Shows base text and unit, only if base is a non no-op value. Used for labels that show specifically base - we show something if there's a base, otherwise nothing
+    public static func baseText(baseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
         guard baseQuantity > 1 else {return ""} // for base quantity 1 or 0 there's no text
         
-//        let baseQuantityText = baseQuantity > 1 ? "x\(QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!)" : ""
-        let baseQuantityText = QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))!
-        
-        let unitText: String = {
-            if showNoneText && unitName.isEmpty {
-                if pluralUnit {
-                    return trans("recipe_unit_plural")
-                } else {
-                    return trans("recipe_unit_singular")
-                }
-            } else {
-                return unitName
-            }
-        }()
+        return baseAndUnitTextInternal(baseQuantity: baseQuantity, unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
+    }
+    
+    // NOTE: plural unit only affects .none / empty unit ("unit" / "units").
+    fileprivate static func baseAndUnitTextInternal(baseQuantity: Float, unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
 
-        let unitSeparator = unitName.isEmpty ? " " : ""
+        let baseQuantityText = baseQuantity > 1 ? QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantity))! : ""
+        
+        let unitText = QuantifiableProduct.unitText(unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
+        
+        let unitSeparator = unitName.isEmpty || baseQuantityText.isEmpty ? " " : ""
         return "\(baseQuantityText)\(unitSeparator)\(unitText)"
+    }
+    
+    public static func unitText(unitName: String, showNoneText: Bool = false, pluralUnit: Bool = false) -> String {
+        if showNoneText && unitName.isEmpty {
+            if pluralUnit {
+                return trans("recipe_unit_plural")
+            } else {
+                return trans("recipe_unit_singular")
+            }
+        } else {
+            return unitName
+        }
     }
 }

@@ -561,14 +561,22 @@ public class ListItem: DBSyncable, Identifiable {
         return self.uuid == listItem.uuid
     }
     
-    public func quantityText(status: ListItemStatus) -> String {
-        let unitText = product.product.unitText
-        return "\(quantity(status)) x \(product.product.product.item.name)\(unitText)"
-    }
-    
     public func quantityTextWithoutName() -> String {
-        let unitText = product.product.unitText(showNoneText: true, pluralUnit: quantity > 1)
-        return "\(quantity.quantityString)\(unitText)"
+        
+        let baseQuantityFloat = product.product.baseQuantity.floatValue ?? {
+            QL4("No base quantity. Using no-op value (1) to continue")
+            return 1
+        }()
+        
+        let baseQuantityText = baseQuantityFloat > 1 ? QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantityFloat))! : ""
+        let finalBaseQuantityText = baseQuantityText.isEmpty ? "" : "x \(baseQuantityText)"
+        
+        let unitText = QuantifiableProduct.unitText(unitName: product.product.unit.name, showNoneText: true, pluralUnit: quantity > 1)
+        
+        let unitSeparator = !product.product.unit.name.isEmpty && !baseQuantityText.isEmpty ? " " : ""
+        let baseAndUnitText = "\(finalBaseQuantityText)\(unitSeparator)\(unitText)"
+        
+        return "\(quantity.quantityString) \(baseAndUnitText)"
     }
     
     // MARK: - UI additions

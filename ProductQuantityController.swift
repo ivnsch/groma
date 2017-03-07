@@ -56,8 +56,11 @@ class ProductQuantityController: UIViewController {
     var selectedUnit: Providers.Unit? // corresponds to currentUnitInput except when input was done using text input (unit doesn't exist yet), then this is nil
     
     var currentBaseInput: String?
+    var selectedBase: String? // corresponds to currentBaseInput except when input was done using text input (unit doesn't exist yet), then this is nil
     
     fileprivate func onSelect(unit: Providers.Unit) {
+        selectedUnit = unit // this is redundant but in AddRecipeController (where the models are) we currently store only the unit name and in some cases we have to get the unit object from cell, not only the name so for now we will store it here
+        
         delegate?.onSelect(unit: unit)
         updateBasesVisibility(unit: unit)
     }
@@ -198,6 +201,7 @@ class ProductQuantityController: UIViewController {
         if let bases = basesDataSource?.bases {
             if let index = (bases.enumerated().filter {$0.element.stringVal == name}.first)?.offset {
                 basesPicker?.scrollToItem(index: index, animated: false)
+                setBasesVisible(visible: true, animated: false) // ensure it's visible
             } else {
                 QL1("Unit with name: \(name) not found in data source units")
             }
@@ -622,7 +626,8 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
     
     
     fileprivate func onSelect(base: String) {
-        productQuantityController.currentBaseInput = base
+        productQuantityController.selectedBase = base
+
         productQuantityController.delegate?.onSelect(base: base)
     }
     

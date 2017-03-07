@@ -52,7 +52,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
     fileprivate var shownQuantity: Float = 0 {
         didSet {
             if let tableViewListItem = tableViewListItem {
-                quantityLabel.text = String("\(shownQuantity) \(tableViewListItem.listItem.product.product.unitText)")
+                quantityLabel.text = String("\(shownQuantity) \(tableViewListItem.listItem.product.product.baseText)")
             }
         }
     }

@@ -123,7 +123,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         let historyItem = sectionModels[(indexPath as NSIndexPath).section].obj.historyItems[(indexPath as NSIndexPath).row]
         
         cell.itemNameLabel.text = historyItem.product.product.item.name
-        cell.itemUnitLabel.text = "\(historyItem.quantity)\(historyItem.product.unitText) x \(historyItem.paidPrice.toLocalCurrencyString())"
+        // TODO!!!!!!!!!!!!!!!!!! review base/unit text here
+        cell.itemUnitLabel.text = "\(historyItem.quantity)\(historyItem.product.baseAndUnitText) x \(historyItem.paidPrice.toLocalCurrencyString())"
         cell.itemPriceLabel.text = historyItem.totalPaidPrice.toLocalCurrencyString()
         
         return cell

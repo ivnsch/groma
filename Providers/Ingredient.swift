@@ -186,8 +186,16 @@ public final class Ingredient: Object {
         return uuid == rhs.uuid
     }
     
-    public static func unitText(quantity: Float, baseQuantity: Float, unitName: String, showNoneText: Bool = false) -> String {
-        let quantifiableProductUnitText = QuantifiableProduct.unitText(baseQuantity: baseQuantity, unitName: unitName, showNoneText: showNoneText, pluralUnit: quantity > 1)
-        return "\(quantity)\(quantifiableProductUnitText)"
+    public static func quantityFullText(quantity: Float, baseQuantity: Float, unit: Providers.Unit?) -> String {
+        
+        let noneUnitName = quantity > 1 ? trans("recipe_unit_plural") : trans("recipe_unit_singular")
+
+        let baseText = baseQuantity > 1 ? " x \(baseQuantity.quantityString)" : ""
+        let unitText = unit.map{$0.id == .none ? noneUnitName : $0.name} ?? noneUnitName
+        let baseAndUnitTextSeparator = baseText.isEmpty && unitText.isEmpty ? "" : " "
+        let baseAndUnitText = "\(baseText)\(baseAndUnitTextSeparator)\(unitText)"
+        let afterQuantity = baseAndUnitText.isEmpty ? "" : "\(baseAndUnitText)"
+        
+        return "\(quantity.quantityString)\(afterQuantity)"
     }
 }
