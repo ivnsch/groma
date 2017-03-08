@@ -172,6 +172,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                 weakSelf.listItemsTableViewController.tableView.reloadSections(IndexSet(modifications), with: .none)
                 weakSelf.listItemsTableViewController.tableView.endUpdates()
                 
+                
+                weakSelf.updateEmptyUI()
 
                 // TODO!!!!!!!!!!!!!!!: update
 //                    if replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.

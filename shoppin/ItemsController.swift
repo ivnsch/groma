@@ -136,8 +136,6 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     }
     
     func setEmptyUI(_ empty: Bool, animated: Bool) {
-        setDefaultLeftButtons()
-        
         let hidden = !empty
         if animated {
             emptyViewControllerContainer.setHiddenAnimated(hidden)
