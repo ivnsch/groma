@@ -178,140 +178,140 @@ public class SuggestionsPrefiller {
         let quantifiableProducts: [QuantifiableProduct] = [
             // fruits
             
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_peaches", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_bananas", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_peaches", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_bananas", lang), category: fruitsCat, edible: true)),
             
             
             
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_apples", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_nectarines", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_cherries", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_kiwis", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_melons", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_watermelons", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_lemons", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_grapes", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oranges", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mandarines", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_strawberries", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 250, unit: g, product: Product(uuid: uuid, name: tr("pr_blueberries", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 250, unit: g, product: Product(uuid: uuid, name: tr("pr_cranberries", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_grapefruits", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mangos", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_limes", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pomegranate", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pineapple", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_plums", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_tomatoes", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 250, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_olives", lang), category: fruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 400, unit: g, product: Product(uuid: uuid, name: tr("pr_tomatoes_peeled", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_apples", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_nectarines", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_cherries", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_kiwis", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_melons", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_watermelons", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_lemons", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_grapes", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oranges", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mandarines", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_strawberries", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 250, unit: g, product: Product(uuid: uuid, name: tr("pr_blueberries", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 250, unit: g, product: Product(uuid: uuid, name: tr("pr_cranberries", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_grapefruits", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mangos", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_limes", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pomegranate", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pineapple", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_plums", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_tomatoes", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 250, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_olives", lang), category: fruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 400, unit: g, product: Product(uuid: uuid, name: tr("pr_tomatoes_peeled", lang), category: fruitsCat, edible: true)),
             
             // frozen fruits
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_strawberries_frozen", lang), category: frozenFruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_blueberries_frozen", lang), category: frozenFruitsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cranberries_frozen", lang), category: frozenFruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_strawberries_frozen", lang), category: frozenFruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_blueberries_frozen", lang), category: frozenFruitsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cranberries_frozen", lang), category: frozenFruitsCat, edible: true)),
             
             // vegetables
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_onions", lang), category: vegetablesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_onions_red", lang), category: vegetablesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_potatoes", lang), category: vegetablesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_salad", lang), category: vegetablesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_paprika", lang), category: vegetablesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_garlic", lang), category: vegetablesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_carrots", lang), category: vegetablesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_asparagus", lang), category: vegetablesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_onions", lang), category: vegetablesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_onions_red", lang), category: vegetablesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_potatoes", lang), category: vegetablesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_salad", lang), category: vegetablesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_paprika", lang), category: vegetablesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_garlic", lang), category: vegetablesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_carrots", lang), category: vegetablesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_asparagus", lang), category: vegetablesCat, edible: true)),
             //            Product(uuid: uuid, name: tr("pr_dumplings", lang), category: vegetablesCat)),
             //            Product(uuid: uuid, name: tr("pr_mashed_potatoes", lang), category: vegetablesCat)),
             
             // herbs (fresh/dry)
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_parsley", lang), category: herbsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_basil", lang), category: herbsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mint", lang), category: herbsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_coriander", lang), category: herbsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cardamom", lang), category: herbsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_parsley", lang), category: herbsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_basil", lang), category: herbsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mint", lang), category: herbsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_coriander", lang), category: herbsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cardamom", lang), category: herbsCat, edible: true)),
             
             // meat
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_chicken", lang), category: meatCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_drum_sticks", lang), category: meatCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_chicken_wings", lang), category: meatCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_chops", lang), category: meatCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_beef_steak", lang), category: meatCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_beef", lang), category: meatCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: g, product: Product(uuid: uuid, name: tr("pr_duck", lang), category: meatCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_turkey", lang), category: meatCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_chicken", lang), category: meatCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_drum_sticks", lang), category: meatCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_chicken_wings", lang), category: meatCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_chops", lang), category: meatCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_beef_steak", lang), category: meatCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_beef", lang), category: meatCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: g, product: Product(uuid: uuid, name: tr("pr_duck", lang), category: meatCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_turkey", lang), category: meatCat, edible: true)),
             
             // pets
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 2.5, unit: kg, product: Product(uuid: uuid, name: tr("pr_litter", lang), category: petsCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 2.5, unit: kg, product: Product(uuid: uuid, name: tr("pr_litter", lang), category: petsCat)),
             
             // spices
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pepper", lang), category: spicesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pepper_red", lang), category: spicesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_salt", lang), category: spicesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_sugar", lang), category: spicesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 250, unit: g, product: Product(uuid: uuid, name: tr("pr_cinnamon", lang), category: spicesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 100, unit: g, product: Product(uuid: uuid, name: tr("pr_chili", lang), category: spicesCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 200, unit: ml, product: Product(uuid: uuid, name: tr("pr_chicken_broth", lang), category: spicesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pepper", lang), category: spicesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pepper_red", lang), category: spicesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_salt", lang), category: spicesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_sugar", lang), category: spicesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 250, unit: g, product: Product(uuid: uuid, name: tr("pr_cinnamon", lang), category: spicesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 100, unit: g, product: Product(uuid: uuid, name: tr("pr_chili", lang), category: spicesCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 200, unit: ml, product: Product(uuid: uuid, name: tr("pr_chicken_broth", lang), category: spicesCat, edible: true)),
 
             // bakery
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_flour", lang), category: bakeryCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_flour", lang), category: bakeryCat, edible: true)),
             
             // pasta
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_spaguetti", lang), category: pastaCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_noodles", lang), category: pastaCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_ravioli", lang), category: pastaCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_spaguetti", lang), category: pastaCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_noodles", lang), category: pastaCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_ravioli", lang), category: pastaCat, edible: true)),
             
             // rice
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_rice", lang), category: riceCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_rice_basmati", lang), category: riceCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_rice", lang), category: riceCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_rice_basmati", lang), category: riceCat, edible: true)),
             
             // drinks
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_water", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_water_1", lang), category: drinksCat, edible: true)),// TODO!!!!!!! liter unit
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_water", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_water_1", lang), category: drinksCat, edible: true)),// TODO!!!!!!! liter unit
             //            Product(uuid: uuid, name: tr("pr_club_mate", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat, edible: true)),
             
             // alcohol
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 0.5, unit: l, product: Product(uuid: uuid, name: tr("pr_beer", lang), category: alcoholCat, edible: true)), // TODO!!!!!!! liter unit
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_whisky", lang), category: alcoholCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_vodka", lang), category: alcoholCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_tequilla", lang), category: alcoholCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_rum", lang), category: alcoholCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_wine_red", lang), category: alcoholCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_wine_white", lang), category: alcoholCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sherry", lang), category: alcoholCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 0.5, unit: l, product: Product(uuid: uuid, name: tr("pr_beer", lang), category: alcoholCat, edible: true)), // TODO!!!!!!! liter unit
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_whisky", lang), category: alcoholCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_vodka", lang), category: alcoholCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_tequilla", lang), category: alcoholCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_rum", lang), category: alcoholCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_wine_red", lang), category: alcoholCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_wine_white", lang), category: alcoholCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sherry", lang), category: alcoholCat, edible: true)),
             
             // nuts
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 150, unit: g, product: Product(uuid: uuid, name: tr("pr_nuts", lang), category: nutsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 150, unit: g, product: Product(uuid: uuid, name: tr("pr_pine_nuts", lang), category: nutsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 200, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_hazel_nuts", lang), category: nutsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 150, unit: g, product: Product(uuid: uuid, name: tr("pr_nuts", lang), category: nutsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 150, unit: g, product: Product(uuid: uuid, name: tr("pr_pine_nuts", lang), category: nutsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 200, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_hazel_nuts", lang), category: nutsCat, edible: true)),
             
             // oil
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil", lang), category: oilCat, edible: true)), // TODO!!!!!!! liter unit
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil_olives", lang), category: oilCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil_sunflower", lang), category: oilCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil_rapeseed", lang), category: oilCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil_margarine", lang), category: oilCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil_butter", lang), category: oilCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil", lang), category: oilCat, edible: true)), // TODO!!!!!!! liter unit
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil_olives", lang), category: oilCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil_sunflower", lang), category: oilCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil_rapeseed", lang), category: oilCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil_margarine", lang), category: oilCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_oil_butter", lang), category: oilCat, edible: true)),
             
             // hygienic
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_soap_body", lang), category: hygienicCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_soap_hands", lang), category: hygienicCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_shampoo", lang), category: hygienicCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_toothpaste", lang), category: hygienicCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_deodorant", lang), category: hygienicCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_tooth_brush", lang), category: hygienicCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_listerine", lang), category: hygienicCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_dental_floss", lang), category: hygienicCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cotton", lang), category: hygienicCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cotton_buds", lang), category: hygienicCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_soap_body", lang), category: hygienicCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_soap_hands", lang), category: hygienicCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_shampoo", lang), category: hygienicCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_toothpaste", lang), category: hygienicCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_deodorant", lang), category: hygienicCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_tooth_brush", lang), category: hygienicCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_listerine", lang), category: hygienicCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_dental_floss", lang), category: hygienicCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cotton", lang), category: hygienicCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cotton_buds", lang), category: hygienicCat)),
             //            Product(uuid: uuid, name: tr("pr_diapers", lang), category: hygienicCat)),
             //            Product(uuid: uuid, name: tr("pr_sanitary_towel", lang), category: hygienicCat)),
             //            Product(uuid: uuid, name: tr("pr_tampons", lang), category: hygienicCat)),
@@ -319,112 +319,112 @@ public class SuggestionsPrefiller {
             //            Product(uuid: uuid, name: tr("pr_shaving_cream", lang), category: hygienicCat)),
             
             // clothes
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_socks", lang), category: clothesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_tshirts", lang), category: clothesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_underwear", lang), category: clothesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pants", lang), category: clothesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_shoes", lang), category: clothesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_socks", lang), category: clothesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_tshirts", lang), category: clothesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_underwear", lang), category: clothesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pants", lang), category: clothesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_shoes", lang), category: clothesCat)),
             
             // cleaning
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cleaning_agent", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cleaning_agent_toilet", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cleaning_agent_windows", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sponge", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sponge_wire", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mop", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_brush", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_5", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_10", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_30", lang), category: cleaningCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_60", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cleaning_agent", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cleaning_agent_toilet", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cleaning_agent_windows", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sponge", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sponge_wire", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mop", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_brush", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_5", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_10", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_30", lang), category: cleaningCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_waste_bags_60", lang), category: cleaningCat)),
             
             // dips
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_salad_dressing", lang), category: dipsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_dip", lang), category: dipsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pesto", lang), category: dipsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_salad_dressing", lang), category: dipsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_dip", lang), category: dipsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pesto", lang), category: dipsCat, edible: true)),
             
             // fish
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_salmon", lang), category: fishCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_trout", lang), category: fishCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 185, unit: g, product: Product(uuid: uuid, name: tr("pr_tuna", lang), category: fishCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 200, unit: g, product: Product(uuid: uuid, name: tr("pr_herring", lang), category: fishCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 90, unit: g, product: Product(uuid: uuid, name: tr("pr_anchovies", lang), category: fishCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 450, unit: g, product: Product(uuid: uuid, name: tr("pr_fish_sticks", lang), category: fishCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_salmon", lang), category: fishCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_trout", lang), category: fishCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 185, unit: g, product: Product(uuid: uuid, name: tr("pr_tuna", lang), category: fishCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 200, unit: g, product: Product(uuid: uuid, name: tr("pr_herring", lang), category: fishCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 90, unit: g, product: Product(uuid: uuid, name: tr("pr_anchovies", lang), category: fishCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 450, unit: g, product: Product(uuid: uuid, name: tr("pr_fish_sticks", lang), category: fishCat, edible: true)),
             
             // fried
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 750, unit: g, product: Product(uuid: uuid, name: tr("pr_fries", lang), category: friedCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 750, unit: g, product: Product(uuid: uuid, name: tr("pr_fries_oven", lang), category: friedCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 750, unit: g, product: Product(uuid: uuid, name: tr("pr_fries", lang), category: friedCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 750, unit: g, product: Product(uuid: uuid, name: tr("pr_fries_oven", lang), category: friedCat, edible: true)),
             
             // bakery
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cake", lang), category: bakeryCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pudding", lang), category: bakeryCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_curd", lang), category: bakeryCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cake", lang), category: bakeryCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pudding", lang), category: bakeryCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_curd", lang), category: bakeryCat, edible: true)),
             
             // cheese
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cheese", lang), category: cheeseCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_parmesan", lang), category: cheeseCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cheddar", lang), category: cheeseCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_gouda", lang), category: cheeseCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cheese", lang), category: cheeseCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_parmesan", lang), category: cheeseCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cheddar", lang), category: cheeseCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_gouda", lang), category: cheeseCat, edible: true)),
             
             // beans
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 250, unit: g, product: Product(uuid: uuid, name: tr("pr_beans_kidney", lang), category: beansCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 220, unit: g, product: Product(uuid: uuid, name: tr("pr_beans_string", lang), category: beansCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_corn", lang), category: beansCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 250, unit: g, product: Product(uuid: uuid, name: tr("pr_beans_kidney", lang), category: beansCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 220, unit: g, product: Product(uuid: uuid, name: tr("pr_beans_string", lang), category: beansCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_corn", lang), category: beansCat, edible: true)),
             
             // eggs
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_eggs", lang), category: eggsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_eggs", lang), category: eggsCat, edible: true)),
             
             // spread
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_marmelade", lang), category: spreadCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_marmelade", lang), category: spreadCat, edible: true)),
             
             // cereal
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_corn_flakes", lang), category: cerealCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_muesli", lang), category: cerealCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_corn_flakes", lang), category: cerealCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_muesli", lang), category: cerealCat, edible: true)),
             
             // bread (bakery)
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_toast_bread", lang), category: breadCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_bread", lang), category: breadCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_baguette", lang), category: breadCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_toast_bread", lang), category: breadCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_bread", lang), category: breadCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_baguette", lang), category: breadCat, edible: true)),
             
             // cold cut
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_bacon", lang), category: coldCutCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_ham", lang), category: coldCutCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_salami", lang), category: coldCutCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mortadella", lang), category: coldCutCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_bacon", lang), category: coldCutCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_ham", lang), category: coldCutCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_salami", lang), category: coldCutCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mortadella", lang), category: coldCutCat, edible: true)),
             
             // milk
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_milk", lang), category: milkCat, edible: true)), // TODO!!!!!!! liter unit
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cream", lang), category: milkCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sour_cream", lang), category: milkCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_whipped_cream", lang), category: milkCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_milk", lang), category: milkCat, edible: true)), // TODO!!!!!!! liter unit
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cream", lang), category: milkCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sour_cream", lang), category: milkCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_whipped_cream", lang), category: milkCat, edible: true)),
             
             // oven
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pizza", lang), category: ovenCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pizza", lang), category: ovenCat, edible: true)),
             
             // tea & coffee
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_green_tea", lang), category: teaAndCoffeeCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_black_tea", lang), category: teaAndCoffeeCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mint_tea", lang), category: teaAndCoffeeCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_camellia_tea", lang), category: teaAndCoffeeCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_coffee", lang), category: teaAndCoffeeCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_green_tea", lang), category: teaAndCoffeeCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_black_tea", lang), category: teaAndCoffeeCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mint_tea", lang), category: teaAndCoffeeCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_camellia_tea", lang), category: teaAndCoffeeCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_coffee", lang), category: teaAndCoffeeCat, edible: true)),
             
             // sweets
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_chewing_gum", lang), category: sweetsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_catamels", lang), category: sweetsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_chocolates", lang), category: sweetsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_ice_cream", lang), category: sweetsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mints", lang), category: sweetsCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_marshmallows", lang), category: sweetsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_chewing_gum", lang), category: sweetsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_catamels", lang), category: sweetsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_chocolates", lang), category: sweetsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_ice_cream", lang), category: sweetsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_mints", lang), category: sweetsCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_marshmallows", lang), category: sweetsCat, edible: true)),
             
             // stationeries
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_paper", lang), category: stationeriesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pens", lang), category: stationeriesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pencils", lang), category: stationeriesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_notebooks", lang), category: stationeriesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sharpeners", lang), category: stationeriesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_erasers", lang), category: stationeriesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_stapler", lang), category: stationeriesCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantityFloat: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cartridges", lang), category: stationeriesCat))
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_paper", lang), category: stationeriesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pens", lang), category: stationeriesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_pencils", lang), category: stationeriesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_notebooks", lang), category: stationeriesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_sharpeners", lang), category: stationeriesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_erasers", lang), category: stationeriesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_stapler", lang), category: stationeriesCat)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_cartridges", lang), category: stationeriesCat))
         ]
         
 //        let products: [Product] = [

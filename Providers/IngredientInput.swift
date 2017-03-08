@@ -16,9 +16,9 @@ public struct IngredientInput: Equatable, Hashable {
     public let categoryColor: UIColor
     public let brand: String // TODO!!!!!!!!! remove
     public let unit: Unit
-    public let baseQuantity: String // TODO!!!!!!!!! remove
+    public let baseQuantity: Float // TODO!!!!!!!!! remove
     
-    public init(name: String, quantity: Float, category: String, categoryColor: UIColor, brand: String, unit: Unit, baseQuantity: String) {
+    public init(name: String, quantity: Float, category: String, categoryColor: UIColor, brand: String, unit: Unit, baseQuantity: Float) {
         self.name = name
         self.quantity = quantity
         self.category = category
@@ -32,7 +32,7 @@ public struct IngredientInput: Equatable, Hashable {
         return name.hashValue
     }
     
-    public func copy(name: String? = nil, quantity: Float? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil, unit: Unit? = nil, baseQuantity: String? = nil) -> IngredientInput {
+    public func copy(name: String? = nil, quantity: Float? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil, unit: Unit? = nil, baseQuantity: Float? = nil) -> IngredientInput {
         return IngredientInput(
             name: name ?? self.name,
             quantity: quantity ?? self.quantity,

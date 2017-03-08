@@ -345,7 +345,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                         fatalError(errorMsg)
                     }
                     
-                    let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantityFloat: 1, unit: noneUnit, product: product)
+                    let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: noneUnit, product: product)
                     Prov.productProvider.add(newQuantifiableProduct, self.successHandler {
                         onRetrieved(newQuantifiableProduct, 1)
                     })

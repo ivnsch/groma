@@ -20,7 +20,7 @@ public struct ListItemInput {
     public let edible: Bool
     public let storeProductInput: StoreProductInput
     
-    public init(name: String, quantity: Float, price: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: String, brand: String, edible: Bool) {
+    public init(name: String, quantity: Float, price: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: String, brand: String, edible: Bool) {
         self.name = name
         self.quantity = quantity
         self.section = section

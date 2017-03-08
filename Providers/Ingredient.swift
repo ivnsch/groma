@@ -24,7 +24,7 @@ public final class Ingredient: Object {
     /// We use this to prefill the next time user adds this ingredient to a list
     public dynamic var pName: String = ""
     public dynamic var pBrand: String = ""
-    public dynamic var pBase: String = ""
+    public dynamic var pBase: Float = 1
     public dynamic var pQuantity: Float = 0
     public dynamic var pUnit: String = ""
     
@@ -112,7 +112,7 @@ public final class Ingredient: Object {
     }
     
 //    static func createFilter(recipeUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique) -> String {
-//        return "\(createFilter(recipeUuid: recipeUuid)) AND itemOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unitVal = \(unique.unit.rawValue) AND productOpt.baseQuantity = '\(unique.baseQuantity)'"
+//        return "\(createFilter(recipeUuid: recipeUuid)) AND itemOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unitVal = \(unique.unit.rawValue) AND productOpt.baseQuantity = \(unique.baseQuantity)"
 //    }
     
     static func createFilter(recipeUuid: String, name: String, notUuid: String) -> String {

@@ -12,8 +12,8 @@ import QorumLogs
 import Providers
 
 protocol BaseQuantitiesDataSourceSourceDelegate {
-    var currentBaseQuantity: String {get}
-    func onUpdateBaseQuantityInput(nameInput: String)
+    var currentBaseQuantity: Float {get}
+    func onUpdateBaseQuantityInput(valueInput: Float)
     var minBaseQuantityTextFieldWidth: CGFloat {get}
     var highlightSelectedBaseQuantity: Bool {get}
 }
@@ -47,7 +47,7 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
             
             if let delegate = delegate {
                 if delegate.highlightSelectedBaseQuantity {
-                    let selected = delegate.currentBaseQuantity == base.stringVal
+                    let selected = delegate.currentBaseQuantity == base.val
                     cell.baseQuantityView.showSelected(selected: selected, animated: false)
                 }
             } else {
@@ -69,7 +69,7 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
             
             
             if let delegate = delegate {
-                cell.editableUnitView.prefill(name: delegate.currentBaseQuantity)
+                cell.editableUnitView.prefill(name: delegate.currentBaseQuantity.quantityString)
                 
                 cell.setMinTextFieldWidth(delegate.minBaseQuantityTextFieldWidth)
                 
@@ -92,6 +92,10 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
     // MARK: - EditableUnitCellDelegate
     
     func onUnitInputChange(nameInput: String) {
-        delegate?.onUpdateBaseQuantityInput(nameInput: nameInput)
+        if let val = nameInput.floatValue {
+            delegate?.onUpdateBaseQuantityInput(valueInput: nameInput.floatValue ?? 1)
+        } else {
+            QL4("Invalid base input: \(nameInput)")
+        }
     }
 }

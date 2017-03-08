@@ -63,26 +63,26 @@ class RealmUnitProvider: RealmProvider {
         ]
         // and the base quantities too...
         let defaultBaseQuantities: [BaseQuantity] = [
-            BaseQuantity("0"),
-            BaseQuantity("2"),
-            BaseQuantity("100"),
-            BaseQuantity("150"),
-            BaseQuantity("200"),
-            BaseQuantity("250"),
-            BaseQuantity("300"),
-            BaseQuantity("350"),
-            BaseQuantity("400"),
-            BaseQuantity("450"),
-            BaseQuantity("500"),
-            BaseQuantity("550"),
-            BaseQuantity("600"),
-            BaseQuantity("650"),
-            BaseQuantity("700"),
-            BaseQuantity("750"),
-            BaseQuantity("800"),
-            BaseQuantity("850"),
-            BaseQuantity("900"),
-            BaseQuantity("950"),
+            BaseQuantity(0),
+            BaseQuantity(2),
+            BaseQuantity(100),
+            BaseQuantity(150),
+            BaseQuantity(200),
+            BaseQuantity(250),
+            BaseQuantity(300),
+            BaseQuantity(350),
+            BaseQuantity(400),
+            BaseQuantity(450),
+            BaseQuantity(500),
+            BaseQuantity(550),
+            BaseQuantity(600),
+            BaseQuantity(650),
+            BaseQuantity(700),
+            BaseQuantity(750),
+            BaseQuantity(800),
+            BaseQuantity(850),
+            BaseQuantity(900),
+            BaseQuantity(950),
         ]
         
 //        let objs: [Object] = defaultUnits + defaultFractions
@@ -200,15 +200,15 @@ class RealmUnitProvider: RealmProvider {
         return basesContainer.bases
     }
     
-    func findBaseQuantity(stringVal: String) -> BaseQuantity? {
+    func findBaseQuantity(val: Float) -> BaseQuantity? {
         return withRealmSync {realm in
-            return realm.objects(BaseQuantity.self).filter(BaseQuantity.createFilter(stringVal: stringVal)).first
+            return realm.objects(BaseQuantity.self).filter(BaseQuantity.createFilter(val: val)).first
         }
     }
     
     func add(base: BaseQuantity) -> (success: Bool, isNew: Bool) {
         
-        if findBaseQuantity(stringVal: base.stringVal) != nil {
+        if findBaseQuantity(val: base.val) != nil {
             return (true, false)
             
         } else {
@@ -226,8 +226,8 @@ class RealmUnitProvider: RealmProvider {
         }
     }
 
-    func getOrCreateSync(baseQuantity: String) -> (base: BaseQuantity, isNew: Bool)? {
-        if let existingBase = findBaseQuantity(stringVal: baseQuantity) {
+    func getOrCreateSync(baseQuantity: Float) -> (base: BaseQuantity, isNew: Bool)? {
+        if let existingBase = findBaseQuantity(val: baseQuantity) {
             return (existingBase, false)
             
         } else {
@@ -245,12 +245,12 @@ class RealmUnitProvider: RealmProvider {
         }
     }
     
-    func deleteSync(baseQuantity: String) -> Bool {
+    func deleteSync(baseQuantity: Float) -> Bool {
         
         return doInWriteTransactionSync(realmData: nil) {realm in
             
             let quantifiableProducts = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(base: baseQuantity))
-            let units = realm.objects(BaseQuantity.self).filter(BaseQuantity.createFilter(stringVal: baseQuantity))
+            let units = realm.objects(BaseQuantity.self).filter(BaseQuantity.createFilter(val: baseQuantity))
             
             realm.delete(quantifiableProducts)
             realm.delete(units)

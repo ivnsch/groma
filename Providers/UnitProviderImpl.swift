@@ -76,7 +76,7 @@ class UnitProviderImpl: UnitProvider {
         }
     }
     
-    func getOrCreate(baseQuantity: String, _ handler: @escaping (ProviderResult<(base: BaseQuantity, isNew: Bool)>) -> Void) {
+    func getOrCreate(baseQuantity: Float, _ handler: @escaping (ProviderResult<(base: BaseQuantity, isNew: Bool)>) -> Void) {
         if let base = DBProv.unitProvider.getOrCreateSync(baseQuantity: baseQuantity) {
             handler(ProviderResult(status: .success, sucessResult: base))
         } else {
@@ -84,7 +84,7 @@ class UnitProviderImpl: UnitProvider {
         }
     }
     
-    func delete(baseQuantity: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+    func delete(baseQuantity: Float, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         if DBProv.unitProvider.deleteSync(baseQuantity: baseQuantity) {
             handler(ProviderResult(status: .success))
         } else {

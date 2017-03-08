@@ -252,7 +252,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         models[indexPath.row].quantity = quantity
     }
     
-    func onUpdate(baseQuantity: String, indexPath: IndexPath) {
+    func onUpdate(baseQuantity: Float, indexPath: IndexPath) {
         models[indexPath.row].productPrototype.baseQuantity = baseQuantity
     }
     
@@ -273,7 +273,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         })
     }
     
-    func baseQuantitiesContaining(text: String, handler: @escaping ([String]) -> Void) {
+    func baseQuantitiesContaining(text: String, handler: @escaping ([Float]) -> Void) {
         Prov.productProvider.baseQuantitiesContainingText(text, successHandler{baseQuantities in
             handler(baseQuantities)
         })
@@ -309,7 +309,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         })
     }
     
-    func delete(baseQuantity: String, handler: @escaping () -> Void) {
+    func delete(baseQuantity: Float, handler: @escaping () -> Void) {
         ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_base_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
             Prov.productProvider.deleteProductsWith(base: baseQuantity, weakSelf.successHandler {
                 AlertPopup.show(message: trans("popup_was_removed", baseQuantity), controller: weakSelf)
@@ -327,14 +327,14 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
     
     
-    func addBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void) {
-        Prov.unitProvider.getOrCreate(baseQuantity: stringVal, successHandler{(unit, isNew) in
+    func addBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.getOrCreate(baseQuantity: val, successHandler{(unit, isNew) in
             handler(isNew)
         })
     }
     
-    func deleteBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void) {
-        Prov.unitProvider.delete(baseQuantity: stringVal, successHandler {
+    func deleteBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.delete(baseQuantity: val, successHandler {
             handler(true)
         })
     }

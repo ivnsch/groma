@@ -18,7 +18,7 @@ protocol ManageItemsBaseQuantitiesControllerDelegate: class {
 
 class ManageItemsBaseQuantitiesController: UITableViewController, SearchableTextController {
     
-    fileprivate var bases: [String]?
+    fileprivate var bases: [Float]?
     
     fileprivate var topEditSectionControllerManager: ExpandableTopViewController<EditSingleInputController>?
     
@@ -93,7 +93,7 @@ class ManageItemsBaseQuantitiesController: UITableViewController, SearchableText
         
         topEditSectionControllerManager?.expand(true)
         
-        topEditSectionControllerManager?.controller?.config(mode: .standalone, prefillName: base, settings: EditSingleInputControllerSettings(
+        topEditSectionControllerManager?.controller?.config(mode: .standalone, prefillName: base.quantityString, settings: EditSingleInputControllerSettings(
             namePlaceholder: "placeholder_name",
             nameEmptyValidationMessage: "validation_name_not_empty"
         ), editingObj: base)
@@ -120,9 +120,10 @@ extension ManageItemsBaseQuantitiesController: EditSingleInputControllerDelegate
     
     func onSubmitSingleInput(name: String, editingObj: Any?) {
         
-        guard let editingBase = editingObj as? String else {QL4("Invalid state: no editing obj or wrong type: \(editingObj)"); return}
+        guard let base = name.floatValue else {QL4("Invalid state: input could't be casted to Float - validation should have caught this. Input: \(name)"); return}
+        guard let editingBase = editingObj as? Float else {QL4("Invalid state: no editing obj or wrong type: \(editingObj)"); return}
         
-        Prov.productProvider.updateBaseQuantity(oldBase: editingBase, newBase: name, successHandler{[weak self] in
+        Prov.productProvider.updateBaseQuantity(oldBase: editingBase, newBase: base, successHandler{[weak self] in
             self?.topEditSectionControllerManager?.expand(false)
             self?.tableView.reloadData()
         })

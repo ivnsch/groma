@@ -19,13 +19,13 @@ protocol ProductQuantityControlleDelegate {
     func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void)
     
     func baseQuantities(_ handler: @escaping (RealmSwift.List<BaseQuantity>?) -> Void)
-    func addBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void)
-    func deleteBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void)
+    func addBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void)
+    func deleteBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void)
     
     var quantity: Float {get}
     
     func onSelect(unit: Providers.Unit)
-    func onSelect(base: String)
+    func onSelect(base: Float)
     func onChangeQuantity(quantity: Float)
     
     var parentForPickers: UIView {get}
@@ -53,10 +53,10 @@ class ProductQuantityController: UIViewController {
     }
     
     var currentUnitInput: String?
-    var selectedUnit: Providers.Unit? // corresponds to currentUnitInput except when input was done using text input (unit doesn't exist yet), then this is nil
+    var selectedUnit: Providers.Unit?
     
-    var currentBaseInput: String?
-    var selectedBase: String? // corresponds to currentBaseInput except when input was done using text input (unit doesn't exist yet), then this is nil
+    var currentBaseInput: Float?
+    var selectedBase: Float?
     
     fileprivate func onSelect(unit: Providers.Unit) {
         selectedUnit = unit // this is redundant but in AddRecipeController (where the models are) we currently store only the unit name and in some cases we have to get the unit object from cell, not only the name so for now we will store it here
@@ -197,13 +197,13 @@ class ProductQuantityController: UIViewController {
         }
     }
     
-    func selectBaseWithName(_ name: String) {
+    func selectBaseWithValue(_ val: Float) {
         if let bases = basesDataSource?.bases {
-            if let index = (bases.enumerated().filter {$0.element.stringVal.floatValue == name.floatValue}.first)?.offset {
+            if let index = (bases.enumerated().filter {$0.element.val == val}.first)?.offset {
                 basesPicker?.scrollToItem(index: index, animated: false)
                 setBasesVisible(visible: true, animated: false) // ensure it's visible
             } else {
-                QL1("Unit with name: \(name) not found in data source units")
+                QL1("Base with val: \(val) not found in data source bases")
             }
         } else {
             QL1("Data source not set")
@@ -312,12 +312,12 @@ extension ProductQuantityController: UnitsCollectionViewDataSourceDelegate {
 
 extension ProductQuantityController: BaseQuantitiesDataSourceSourceDelegate {
     
-    var currentBaseQuantity: String {
-        return currentBaseInput ?? ""
+    var currentBaseQuantity: Float {
+        return currentBaseInput ?? 1
     }
     
-    func onUpdateBaseQuantityInput(nameInput: String) {
-        currentBaseInput = nameInput
+    func onUpdateBaseQuantityInput(valueInput: Float) {
+        currentBaseInput = valueInput
     }
     
     var minBaseQuantityTextFieldWidth: CGFloat {
@@ -572,7 +572,7 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
             
             let base = bases[indexPath.row]
             
-            productQuantityController.delegate?.deleteBaseQuantity(stringVal: base.stringVal) {success in
+            productQuantityController.delegate?.deleteBaseQuantity(val: base.val) {success in
                 basesCollectionView.deleteItems(at: [indexPath])
                 basesCollectionView.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
             }
@@ -584,14 +584,14 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
             
             if let cell = cellMaybe {
                 if isSelected(cell: cell) {
-                    onSelect(base: "")
+                    onSelect(base: nil)
                     
                 } else {
-                    let base: String = {
+                    let base: Float = {
                         if indexPath.row < bases.count {
-                            return bases[indexPath.row].stringVal
+                            return bases[indexPath.row].val
                         } else if indexPath.row == bases.count {
-                            return self.productQuantityController.currentBaseInput ?? ""
+                            return self.productQuantityController.currentBaseInput ?? 1
                         } else {
                             fatalError("Invalid index: \(indexPath.row), bases count: \(bases.count)")
                         }
@@ -605,7 +605,7 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
     fileprivate func isSelected(cell: BaseQuantityCell) -> Bool {
         guard let base = cell.baseQuantityView.base else {return false}
         
-        return base.stringVal == self.productQuantityController.currentBaseInput
+        return base.val == self.productQuantityController.currentBaseInput
     }
     
     fileprivate func clearToDeleteBases() {
@@ -629,10 +629,12 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
     }
     
     
-    fileprivate func onSelect(base: String) {
+    fileprivate func onSelect(base: Float?) {
         productQuantityController.selectedBase = base
 
-        productQuantityController.delegate?.onSelect(base: base)
+        if let base = base {
+            productQuantityController.delegate?.onSelect(base: base)
+        }
     }
     
     
@@ -649,11 +651,11 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
         guard let basesDataSource = productQuantityController.basesDataSource else {QL4("No data source"); return}
         guard let bases = basesDataSource.bases else {QL4("No bases"); return}
         
-        let base: String = {
+        let base: Float = {
             if cellIndex < bases.count {
-                return bases[cellIndex].stringVal
+                return bases[cellIndex].val
             } else if cellIndex == bases.count {
-                return productQuantityController.currentBaseInput ?? ""
+                return productQuantityController.currentBaseInput ?? 1
             } else {
                 fatalError("Invalid index: \(cellIndex), unit count: \(bases.count)")
             }

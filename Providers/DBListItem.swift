@@ -71,7 +71,7 @@ public class ListItem: DBSyncable, Identifiable {
     // Returns the total price for listitem in a certain status
     // If e.g. we have 2x "tomatos" with a price of 2€ in "todo", we get a total price of 4€ for the status "todo".
     public func totalPrice() -> Float {
-        return quantity * product.price / product.product.baseQuantityFloat
+        return quantity * product.price / product.product.baseQuantity
     }
     
     public override static func primaryKey() -> String? {
@@ -273,7 +273,7 @@ public class ListItem: DBSyncable, Identifiable {
         return "\(createFilterList(list.uuid)) AND productOpt.productOpt.productOpt.itemOpt.name == '\(productName)' AND productOpt.productOpt.productOpt.brand == '\(productBrand)'"
     }
 
-//     AND productOpt.productOpt.unit.name == '\(unit)' AND productOpt.productOpt.baseQuantity == '\(baseQuantity)'
+//     AND productOpt.productOpt.unit.name == '\(unit)' AND productOpt.productOpt.baseQuantity == \(baseQuantity)
     static func createFilterUniqueInListNotUuid(_ productName: String, productBrand: String, notUuid: String, list: List) -> String {
         return "\(createFilterList(list.uuid)) AND productOpt.productOpt.productOpt.itemOpt.name == '\(productName)' AND productOpt.productOpt.productOpt.brand == '\(productBrand)' AND uuid != '\(notUuid)'"
     }
@@ -308,7 +308,7 @@ public class ListItem: DBSyncable, Identifiable {
     
     
     static func createFilter(quantifiableProductUnique: QuantifiableProductUnique) -> String {
-        return "productOpt.productOpt.productOpt.itemOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitOpt.name == '\(quantifiableProductUnique.unit)' AND productOpt.productOpt.baseQuantity == '\(quantifiableProductUnique.baseQuantity)'"
+        return "productOpt.productOpt.productOpt.itemOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitOpt.name == '\(quantifiableProductUnique.unit)' AND productOpt.productOpt.baseQuantity == \(quantifiableProductUnique.baseQuantity)"
     }
    
     
@@ -562,13 +562,8 @@ public class ListItem: DBSyncable, Identifiable {
     }
     
     public func quantityTextWithoutName() -> String {
-        
-        let baseQuantityFloat = product.product.baseQuantity.floatValue ?? {
-            QL4("No base quantity. Using no-op value (1) to continue")
-            return 1
-        }()
-        
-        let baseQuantityText = baseQuantityFloat > 1 ? QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: baseQuantityFloat))! : ""
+
+        let baseQuantityText = product.product.baseQuantity > 1 ? QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: product.product.baseQuantity))! : ""
         let finalBaseQuantityText = baseQuantityText.isEmpty ? "" : "x \(baseQuantityText)"
         
         let unitText = QuantifiableProduct.unitText(unitName: product.product.unit.name, showNoneText: true, pluralUnit: quantity > 1)

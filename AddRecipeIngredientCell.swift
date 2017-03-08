@@ -17,18 +17,18 @@ protocol AddRecipeIngredientCellDelegate {
     func onUpdate(productName: String, indexPath: IndexPath)
     func onUpdate(brand: String, indexPath: IndexPath)
     func onUpdate(quantity: Float, indexPath: IndexPath)
-    func onUpdate(baseQuantity: String, indexPath: IndexPath)
+    func onUpdate(baseQuantity: Float, indexPath: IndexPath)
     func onUpdate(unit: Providers.Unit, indexPath: IndexPath)
     
     func productNamesContaining(text: String, handler: @escaping ([String]) -> Void)
     func brandsContaining(text: String, handler: @escaping ([String]) -> Void)
-    func baseQuantitiesContaining(text: String, handler: @escaping ([String]) -> Void)
+    func baseQuantitiesContaining(text: String, handler: @escaping ([Float]) -> Void)
     func unitsContaining(text: String, handler: @escaping ([String]) -> Void)
     
     func delete(productName: String, handler: @escaping () -> Void)
     func delete(brand: String, handler: @escaping () -> Void)
     func delete(unit: String, handler: @escaping () -> Void)
-    func delete(baseQuantity: String, handler: @escaping () -> Void)
+    func delete(baseQuantity: Float, handler: @escaping () -> Void)
     
     
     func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void)
@@ -36,8 +36,8 @@ protocol AddRecipeIngredientCellDelegate {
     func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void)
     
     func baseQuantities(_ handler: @escaping (RealmSwift.List<BaseQuantity>?) -> Void)
-    func addBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void)
-    func deleteBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void)
+    func addBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void)
+    func deleteBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void)
 }
 
 typealias AddRecipeIngredientCellOptions = (brands: [String], units: Results<Providers.Unit>, baseQuantities: RealmSwift.List<BaseQuantity>) // TODO!!!!!!!!!!!!!!!!!! remove this
@@ -76,7 +76,7 @@ class AddRecipeIngredientCell: UITableViewCell {
                     productQuantityController?.selectUnitWithName(prefillUnitName)
                 }
                 if let prefillBase = self?.model?.productPrototype.baseQuantity {
-                    productQuantityController?.selectBaseWithName(prefillBase)
+                    productQuantityController?.selectBaseWithValue(prefillBase)
                 }
             }
             
@@ -151,8 +151,8 @@ class AddRecipeIngredientCell: UITableViewCell {
             }
         }
         
-        if let currentBaseInput = productQuantityController.currentBaseInput, !currentBaseInput.isEmpty {
-            delegate?.addBaseQuantity(stringVal: currentBaseInput) {isNew in
+        if let currentBaseInput = productQuantityController.currentBaseInput {
+            delegate?.addBaseQuantity(val: currentBaseInput) {isNew in
                 if isNew {
                     productQuantityController.appendNewBaseCell()
                 }
@@ -164,7 +164,7 @@ class AddRecipeIngredientCell: UITableViewCell {
     // MARK: - Private
     
     fileprivate func updateQuantitySummary() {
-        let unitText = Ingredient.quantityFullText(quantity: quantityInput, baseQuantity: productQuantityController?.selectedBase?.floatValue ?? 1, unit: productQuantityController?.selectedUnit)
+        let unitText = Ingredient.quantityFullText(quantity: quantityInput, baseQuantity: productQuantityController?.selectedBase ?? 1, unit: productQuantityController?.selectedUnit)
         let allUnitText = trans("recipe_you_will_add", unitText)
         quantitySummaryLabel.text = allUnitText
     }
@@ -227,9 +227,8 @@ extension AddRecipeIngredientCell {
         return productQuantityController?.currentUnitInput ?? ""
     }
     
-    fileprivate var baseQuantityInput: String {
-        // NOTE: We convert to float and back to get correct format for realm (e.g. "1.0" instead of "1"). Since we store base quantity as strings, this is important. The reason of storing it as strings is that it's more efficient to search for autosuggestions, since we can let Realm search. On the other side the way we are handling it now is bad practice. TODO We should use floats until the object is stored to the Realm, where the float is converted to a string (in Provider) in a single place using a single formatter. This way we ensure consistency and also don't expose implementation details to the UI project. TODO is this note still valid after adding the base quantity picker?
-        return productQuantityController?.currentBaseInput ?? ""
+    fileprivate var baseQuantityInput: Float {
+        return productQuantityController?.currentBaseInput ?? 1
     }
 }
 
@@ -297,12 +296,12 @@ extension AddRecipeIngredientCell: ProductQuantityControlleDelegate {
         delegate?.baseQuantities(handler)
     }
     
-    func addBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void) {
-        delegate?.addBaseQuantity(stringVal: stringVal, handler)
+    func addBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void) {
+        delegate?.addBaseQuantity(val: val, handler)
     }
     
-    func deleteBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void) {
-        delegate?.deleteBaseQuantity(stringVal: stringVal, handler)
+    func deleteBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void) {
+        delegate?.deleteBaseQuantity(val: val, handler)
     }
     
     
@@ -318,7 +317,7 @@ extension AddRecipeIngredientCell: ProductQuantityControlleDelegate {
         updateQuantitySummary()
     }
     
-    func onSelect(base: String) {
+    func onSelect(base: Float) {
         guard let indexPath = indexPath else {QL4("Illegal state: no index path"); return}
         
         delegate?.onUpdate(baseQuantity: base, indexPath: indexPath)

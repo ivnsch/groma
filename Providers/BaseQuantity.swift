@@ -13,36 +13,42 @@ import QorumLogs
 // For now not referenced directly by other classes. We decided to implement BaseQuantity when implementing base quantity selectors - we now submit the base quantity before submitting the product, so we need base quantity to be separate.
 public class BaseQuantity: DBSyncable {
     
-    public dynamic var stringVal: String = ""
+    fileprivate dynamic var valInternal: Float = 1
     
-    public var floatValue: Float {
-        get {
-            return stringVal.floatValue ?? {
-                QL3("Invalid base quantity string: \(stringVal). Returning 1 (no-op base quantity).")
-                return 1
-            }()
-        }
-        set(newValue) {
-            stringVal = String(stringVal)
-        }
-    }
-    
-    public convenience init(_ stringVal: String) {
+    public convenience init(_ val: Float) {
         self.init()
-        self.stringVal = stringVal
+        setVal(val)
     }
+    
+    // We need custom setter because didSet doesn't work well with Realms
+    public func setVal(_ val: Float) {
+        self.valInternal = val
+        myPrimaryKey = myPrimaryKeyValue()
+    }
+    
+    // For consistency also a custom getter
+    public var val: Float {
+        return valInternal
+    }
+    
+    // Realm doesn't support Float as primary key so we need this
+    public dynamic var myPrimaryKey: String = "0-"
     
     public override static func primaryKey() -> String? {
-        return "stringVal"
+        return "myPrimaryKey"
     }
     
     public override static func ignoredProperties() -> [String] {
-        return ["floatValue"]
+        return ["val"]
+    }
+    
+    private func myPrimaryKeyValue() -> String {
+        return val.quantityString
     }
     
     // MARK: - Filters
     
-    static func createFilter(stringVal: String) -> String {
-        return "stringVal == '\(stringVal)'"
+    static func createFilter(val: Float) -> String {
+        return "valInternal == \(val)"
     }
 }

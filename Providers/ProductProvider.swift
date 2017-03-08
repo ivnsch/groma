@@ -70,13 +70,13 @@ public protocol ProductProvider {
     
     func delete(productName: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
-    func deleteProductsWith(base: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func deleteProductsWith(base: Float, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
     func deleteProductsWith(unit: Unit, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
     func deleteProductsWith(unitName: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
-    func updateBaseQuantity(oldBase: String, newBase: String, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func updateBaseQuantity(oldBase: Float, newBase: Float, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func incrementFav(quantifiableProductUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
@@ -109,9 +109,9 @@ public protocol ProductProvider {
     func restorePrefillProductsLocal(_ handler: @escaping (ProviderResult<Bool>) -> Void)
 
     
-    func allBaseQuantities(_ handler: @escaping (ProviderResult<[String]>) -> Void)
+    func allBaseQuantities(_ handler: @escaping (ProviderResult<[Float]>) -> Void)
     
-    func baseQuantitiesContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> Void)
+    func baseQuantitiesContainingText(_ text: String, _ handler: @escaping (ProviderResult<[Float]>) -> Void)
     
     func unitsContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> Void)
 }

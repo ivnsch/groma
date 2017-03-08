@@ -26,7 +26,7 @@ protocol BaseQuantityViewDelegate {
     var base: BaseQuantity? {
         didSet {
             if let base = base {
-                baseQuantityLabel.text = "\(base.stringVal.isEmpty ? "" : base.stringVal)" // TODO!!!!!!!!!!!!!!!!!! translation for empty unit
+                baseQuantityLabel.text = base.val.quantityString
                 
                 baseQuantityLabel.sizeToFit()
                 

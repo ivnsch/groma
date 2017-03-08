@@ -264,7 +264,7 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func deleteProductsWith(base: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+    func deleteProductsWith(base: Float, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProv.productProvider.deleteProductsAndDependencies(base: base, markForSync: true) {saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
         }
@@ -305,7 +305,7 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func updateBaseQuantity(oldBase: String, newBase: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+    func updateBaseQuantity(oldBase: Float, newBase: Float, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         let success = DBProv.productProvider.updateBaseSync(oldBase: oldBase, newBase: newBase)
         handler(ProviderResult(status: success ? .success : .databaseUnknown))
     }
@@ -508,7 +508,7 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func allBaseQuantities(_ handler: @escaping (ProviderResult<[String]>) -> Void) {
+    func allBaseQuantities(_ handler: @escaping (ProviderResult<[Float]>) -> Void) {
         DBProv.productProvider.allBaseQuantities {baseQuantitiesMaybe in
             if let baseQuantities = baseQuantitiesMaybe {
                 handler(ProviderResult(status: .success, sucessResult: baseQuantities))
@@ -519,7 +519,7 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    func baseQuantitiesContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> Void) {
+    func baseQuantitiesContainingText(_ text: String, _ handler: @escaping (ProviderResult<[Float]>) -> Void) {
         DBProv.productProvider.baseQuantitiesContainingText(text) {stores in
             handler(ProviderResult(status: .success, sucessResult: stores))
         }

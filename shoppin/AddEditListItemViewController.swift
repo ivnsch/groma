@@ -19,7 +19,7 @@ protocol AddEditListItemViewControllerDelegate: class {
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>)
     
-    func onOkTap(_ price: Float, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: String, unit: String, brand: String, edible: Bool, editingItem: Any?)
+    func onOkTap(_ price: Float, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: String, brand: String, edible: Bool, editingItem: Any?)
     
     func parentViewForAddButton() -> UIView?
     
@@ -174,7 +174,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     fileprivate var currentQuantity: Float = 0
     fileprivate var currentUnit: String = ""
-    fileprivate var currentBase: String = ""
+    fileprivate var currentBase: Float = 1
 
     fileprivate var showingColorPicker: FlatColorPickerController?
 //    private var showingNoteInputPopup: SimpleInputPopupController?
@@ -347,8 +347,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             }
         }
         
-        if let currentBaseInput = productQuantityController.currentBaseInput, !currentBaseInput.isEmpty {
-            addBaseQuantity(stringVal: currentBaseInput) {isNew in
+        if let currentBaseInput = productQuantityController.currentBaseInput {
+            addBaseQuantity(val: currentBaseInput) {isNew in
                 if isNew {
                     productQuantityController.appendNewBaseCell()
                 }
@@ -396,7 +396,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         productQuantityController?.onPickersInitialized = {[weak productQuantityController] in
             if let quantifiableproduct = item.product {
                 productQuantityController?.selectUnitWithName(quantifiableproduct.unit.name)
-                productQuantityController?.selectBaseWithName(quantifiableproduct.baseQuantity)
+                productQuantityController?.selectBaseWithValue(quantifiableproduct.baseQuantity)
             }
         }
     }
@@ -487,7 +487,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //                let baseQuantity = scaleInputs?.baseQuantity ?? 1
 //                let unit = scaleInputs?.unit ?? .None
                 // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                let baseQuantity = "1"
+                let baseQuantity: Float = 1
                 let unit = ""
                 
                 // the price from scaleInputs is inserted in price field, so we have it already
@@ -935,14 +935,14 @@ extension AddEditListItemViewController: ProductQuantityControlleDelegate {
         })
     }
     
-    func addBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void) {
-        Prov.unitProvider.getOrCreate(baseQuantity: stringVal, successHandler {tuple in
+    func addBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.getOrCreate(baseQuantity: val, successHandler {tuple in
             handler(tuple.isNew)
         })
     }
     
-    func deleteBaseQuantity(stringVal: String, _ handler: @escaping (Bool) -> Void) {
-        Prov.unitProvider.delete(baseQuantity: stringVal, successHandler {
+    func deleteBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void) {
+        Prov.unitProvider.delete(baseQuantity: val, successHandler {
             handler(true)
         })
     }
@@ -956,7 +956,7 @@ extension AddEditListItemViewController: ProductQuantityControlleDelegate {
         currentUnit = unit.name
     }
     
-    func onSelect(base: String) {
+    func onSelect(base: Float) {
         currentBase = base
     }
     

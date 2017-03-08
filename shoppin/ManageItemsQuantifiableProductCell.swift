@@ -17,7 +17,7 @@ class ManageItemsQuantifiableProductCell: UITableViewCell {
 
     func config(quantifiableProduct: QuantifiableProduct) {
         
-        baseQuantityLabel.text = quantifiableProduct.baseQuantity
+        baseQuantityLabel.text = quantifiableProduct.baseQuantity.quantityString
         unitLabel.text = quantifiableProduct.unit.name
         
         // height now calculated yet so we pass the position of border

@@ -70,7 +70,7 @@ public final class GroupItem: DBSyncable, ProductWithQuantity2 {
     }
 
     static func createFilter(groupUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique) -> String {
-        return "\(createFilterGroup(groupUuid)) AND productOpt.productOpt.itemOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unitOpt.name = '\(unique.unit)' AND productOpt.baseQuantity = '\(unique.baseQuantity)'"
+        return "\(createFilterGroup(groupUuid)) AND productOpt.productOpt.itemOpt.name = '\(unique.name)' AND productOpt.productOpt.brand = '\(unique.brand)' AND productOpt.unitOpt.name = '\(unique.unit)' AND productOpt.baseQuantity = \(unique.baseQuantity)"
     }
 
     static func createFilter(groupUuid: String, quantifiableProductUnique unique: QuantifiableProductUnique, notUuid: String) -> String {

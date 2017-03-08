@@ -12,12 +12,14 @@ class ManageItemsBaseQuantityCell: UITableViewCell {
     
     @IBOutlet weak var baseLabel: UILabel!
     
-    func config(base: String, filter: String?) {
+    func config(base: Float, filter: String?) {
         
-        if let boldRange = filter.flatMap({base.range($0, caseInsensitive: true)}) {
-            baseLabel.attributedText = base.makeAttributedBoldRegular(boldRange)
+        let baseText = base.quantityString
+        
+        if let boldRange = filter.flatMap({baseText.range($0, caseInsensitive: true)}) {
+            baseLabel.attributedText = baseText.makeAttributedBoldRegular(boldRange)
         } else {
-            baseLabel.text = base
+            baseLabel.text = baseText
         }
         
         // height now calculated yet so we pass the position of border
