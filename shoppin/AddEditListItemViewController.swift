@@ -314,7 +314,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
         guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
         
-        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton) {[weak self] in guard let weakSelf = self else {return}
+        let overrideCenterY: CGFloat = parentViewForAddButton.height + tabBarHeight
+
+        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton, overrideCenterY: overrideCenterY) {[weak self] in guard let weakSelf = self else {return}
             weakSelf.submit()
         }
         return addButtonHelper
@@ -390,6 +392,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         // TODO!!!!!!!!!!!!!!! quantifiable product - unit?
         
         edibleSelected = item.item.edible
+
+        productQuantityController?.onPickersInitialized = {[weak productQuantityController] in
+            if let quantifiableproduct = item.product {
+                productQuantityController?.selectUnitWithName(quantifiableproduct.unit.name)
+                productQuantityController?.selectBaseWithName(quantifiableproduct.baseQuantity)
+            }
+        }
     }
 
     fileprivate func initTextFieldPlaceholders() {

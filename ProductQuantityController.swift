@@ -199,7 +199,7 @@ class ProductQuantityController: UIViewController {
     
     func selectBaseWithName(_ name: String) {
         if let bases = basesDataSource?.bases {
-            if let index = (bases.enumerated().filter {$0.element.stringVal == name}.first)?.offset {
+            if let index = (bases.enumerated().filter {$0.element.stringVal.floatValue == name.floatValue}.first)?.offset {
                 basesPicker?.scrollToItem(index: index, animated: false)
                 setBasesVisible(visible: true, animated: false) // ensure it's visible
             } else {
