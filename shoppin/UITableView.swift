@@ -35,19 +35,19 @@ extension UITableView {
     
     var topInset: CGFloat {
         set {
-            self.contentInset = UIEdgeInsetsMake(newValue, contentInset.left, contentInset.bottom, contentInset.right)
+            contentInset = UIEdgeInsets(top: newValue, left: contentInset.left, bottom: contentInset.bottom, right: contentInset.right)
         }
         get {
-            return self.contentInset.top
+            return contentInset.top
         }
     }
 
     var bottomInset: CGFloat {
         set {
-            self.contentInset = UIEdgeInsetsMake(contentInset.top, contentInset.left, newValue, contentInset.right)
+            contentInset = UIEdgeInsets(top: contentInset.top, left: contentInset.left, bottom: newValue, right: contentInset.right)
         }
         get {
-            return self.contentInset.bottom
+            return contentInset.bottom
         }
     }
     

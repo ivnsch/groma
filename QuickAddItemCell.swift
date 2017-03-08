@@ -85,12 +85,14 @@ class QuickAddItemCellAnimatableCopy: UIView {
         let nameLabel = UILabel()
         nameLabel.text = cell.nameLabel.text
         nameLabel.frame = cell.nameLabel.frame
-        nameLabel.font = cell.nameLabel.font
+//        nameLabel.font = cell.nameLabel.font
+        nameLabel.font = UIFont.systemFont(ofSize: LabelMore.mapToFontSize(50) ?? 20)
+        
+        
         nameLabel.textColor = cell.nameLabel.textColor
         addSubview(nameLabel)
         self.nameLabel = nameLabel
         nameLabel.sizeToFit()
-        
         
         let brandLabel = UILabel()
         brandLabel.text = cell.brandLabel.text
@@ -111,6 +113,18 @@ class QuickAddItemCellAnimatableCopy: UIView {
         baseLabel.alpha = 0 // not present in quick add view, so fades in
         
         
+        
+        // anchor at the left so it will scale only to the right
+        _ = nameLabel.setAnchorWithoutMoving(CGPoint(x: 0, y: nameLabel.layer.anchorPoint.y))
+        _ = baseLabel.setAnchorWithoutMoving(CGPoint(x: 0, y: baseLabel.layer.anchorPoint.y))
+        
+        let scale: CGFloat = 0.7
+        
+        self.nameLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
+
+        addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
+        
+        
         let overlay = UIView(frame: bounds)
         addSubview(overlay)
         self.overlay = overlay
@@ -123,11 +137,7 @@ class QuickAddItemCellAnimatableCopy: UIView {
     
     func animateAddToList(targetFrame: CGRect, onFinish: @escaping () -> Void) {
         nameLabel.frame.origin = CGPoint(x: 0, y: 0)
-        
-        // anchor at the left so it will scale only to the right
-        _ = nameLabel.setAnchorWithoutMoving(CGPoint(x: 0, y: nameLabel.layer.anchorPoint.y))
-        _ = baseLabel.setAnchorWithoutMoving(CGPoint(x: 0, y: baseLabel.layer.anchorPoint.y))
-        
+
         anim(0.3, {
             self.frame = targetFrame
             self.overlay.frame = targetFrame.bounds
@@ -137,21 +147,13 @@ class QuickAddItemCellAnimatableCopy: UIView {
             self.overlay.backgroundColor = UIColor.black.withAlphaComponent(Theme.topControllerOverlayAlpha)
             //                    copy.frame.origin = CGPoint(x: 0, y: quickAddFrameRelativeToWindow.maxY)
             
-            let scale: CGFloat = 1.3
+            let scale: CGFloat = 1
             
-            let categoryColorViewWidth: CGFloat = 4
+            let categoryColorViewWidth: CGFloat = 0
             self.nameLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
             self.nameLabel.frame.origin.x = DimensionsManager.leftRightPaddingConstraint + categoryColorViewWidth
             self.nameLabel.center.y = DimensionsManager.defaultCellHeight / 2
             self.nameLabel.textColor = Theme.black
-            
-            
-//            QL3("maxX: \(self.nameLabel.frame.maxX)")
-//            
-//            self.baseLabel.frame.origin.x = self.nameLabel.width * scale + 4
-//            self.baseLabel.center.y = self.nameLabel.center.y
-//            self.baseLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
-//            self.baseLabel.alpha = 1
             
             
         }, onFinish: {
@@ -161,7 +163,6 @@ class QuickAddItemCellAnimatableCopy: UIView {
             }
         })
     }
-    
     
     
     required init?(coder aDecoder: NSCoder) {

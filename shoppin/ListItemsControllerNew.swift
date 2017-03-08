@@ -25,6 +25,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     weak var listItemsTableViewController: ListItemsTableViewControllerNew!
     
+    var tableViewTopConstraint: NSLayoutConstraint?
     
     var currentList: Providers.List? {
         didSet {
@@ -211,16 +212,29 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         addChildViewControllerAndView(listItemsTableViewController, viewIndex: 0)
         
+        listItemsTableViewController.view.translatesAutoresizingMaskIntoConstraints = false
+
+        _ = listItemsTableViewController.view.alignLeft(view)
+        _ = listItemsTableViewController.view.alignRight(view)
+        _ = listItemsTableViewController.view.alignBottom(view)
+        
+        let tableViewTopConstraint = NSLayoutConstraint(item: listItemsTableViewController.view, attribute: .top, relatedBy: .equal, toItem: topBar, attribute: .bottom, multiplier: 1, constant: 0)
+        self.view.addConstraint(tableViewTopConstraint)
+        self.tableViewTopConstraint = tableViewTopConstraint
+        
         listItemsTableViewController.status = status
         listItemsTableViewController.scrollViewDelegate = self
         listItemsTableViewController.listItemsTableViewDelegate = self
         listItemsTableViewController.listItemsEditTableViewDelegate = self
         
-        let navbarHeight = topBar.frame.height
-        let topInset = navbarHeight
-        let bottomInset: CGFloat = tableViewBottomInset + 10 // 10 - show a little empty space between the last item and the prices view
-        listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0)
-        listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
+        listItemsTableViewController.tableView.bottomInset = 100 // TODO!!!!!!!!!!!!!!! calculate this number correctly
+
+//        let navbarHeight = topBar.frame.height
+//        let topInset = navbarHeight
+//        let bottomInset: CGFloat = tableViewBottomInset + 10 // 10 - show a little empty space between the last item and the prices view
+//        listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0)
+//        listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
+        
         if isPullToAddEnabled {
             listItemsTableViewController.enablePullToAdd()
         }
@@ -651,16 +665,18 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                 if addResult.isNewSection {
                     self?.listItemsTableViewController.placeHolderItem = (indexPath: indexPath, item: addResult.listItem)
                     self?.tableView.insertSections([addResult.sectionIndex], with: Theme.defaultRowAnimation)
+                    self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
                     
                 } else if addResult.isNewItem {
                     self?.listItemsTableViewController.placeHolderItem = (indexPath: indexPath, item: addResult.listItem)
                     self?.tableView.insertRows(at: [indexPath], with: Theme.defaultRowAnimation)
+                    self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
                     
-                } else {
+                } else { // update
                     self?.listItemsTableViewController.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex))
+                    self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 }
                 
-                self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
 
                 self?.updateEmptyUI()
             })
@@ -754,7 +770,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     override func onFinishAddCellAnimation() {
         listItemsTableViewController.placeHolderItem = nil
-        listItemsTableViewController.tableView.reloadData()
+        self.listItemsTableViewController.tableView.reloadData()
+        
     }
     
     // MARK: - Reorder sections

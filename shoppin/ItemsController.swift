@@ -92,7 +92,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     
     func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
         let top: CGFloat = topBar.frame.height
-        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, openInset: top, closeInset: top, parentViewController: self, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
             if let weakSelf = self {

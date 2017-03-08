@@ -307,7 +307,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     // Re-initialized top controller referencing todo / cart table view (TODO re-use initializer of top class instead - this is implemented in a rush)
     fileprivate func updateTopQuickAddControllerManager(tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {
         let top = topBar.frame.height
-        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: !pricesView.expandedNew, openInset: top, closeInset: top, parentViewController: self, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
             if let weakSelf = self {
@@ -355,6 +355,9 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             pricesViewBottomConstraint.constant = (pricesViewBottomConstraintConstantInExpandedState ?? 0) - view.frame.height + (expand ? bottomConstraintHeightDelta : 0)
             pricesView.heightConstraint.constant = expand ? pricesViewMinimizedHeight : pricesView.originalHeight
             self.view.layoutIfNeeded()
+            
+        } else {
+            tableViewTopConstraint?.constant = view.frame.height < 0.1 ? 0 : view.frame.height
         }
     }
     
