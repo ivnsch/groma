@@ -25,8 +25,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="500"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Just add some, will ya?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zGk-15-p8M" customClass="LabelMore" customModule="groma">
-                                            <rect key="frame" x="108.5" y="456" width="158" height="18"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Just add some, will ya?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zGk-15-p8M" customClass="LabelMore" customModule="groma">
+                                            <rect key="frame" x="20" y="456" width="335" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -36,8 +36,8 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops, there are no items yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pw-sM-s8g" customClass="LabelMore" customModule="groma">
-                                            <rect key="frame" x="73" y="426" width="229" height="22"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops, there are no items yet" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pw-sM-s8g" customClass="LabelMore" customModule="groma">
+                                            <rect key="frame" x="20" y="426" width="335" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -65,9 +65,13 @@
                                     <constraints>
                                         <constraint firstItem="9pw-sM-s8g" firstAttribute="top" secondItem="v4P-W6-KqR" secondAttribute="bottom" constant="20" id="BK3-0R-7tn"/>
                                         <constraint firstItem="v4P-W6-KqR" firstAttribute="centerX" secondItem="2DS-as-bOM" secondAttribute="centerX" id="BVM-cX-QQ8"/>
+                                        <constraint firstAttribute="trailing" secondItem="zGk-15-p8M" secondAttribute="trailing" constant="20" id="HuP-8o-YRk"/>
+                                        <constraint firstItem="zGk-15-p8M" firstAttribute="leading" secondItem="2DS-as-bOM" secondAttribute="leading" constant="20" id="JQW-aN-cOl"/>
+                                        <constraint firstAttribute="trailing" secondItem="9pw-sM-s8g" secondAttribute="trailing" constant="20" id="MYu-Zj-Ull"/>
                                         <constraint firstItem="9pw-sM-s8g" firstAttribute="centerX" secondItem="2DS-as-bOM" secondAttribute="centerX" id="Uga-o1-Afu"/>
                                         <constraint firstItem="zGk-15-p8M" firstAttribute="top" secondItem="9pw-sM-s8g" secondAttribute="bottom" constant="8" id="Ylg-kb-3Fh"/>
                                         <constraint firstItem="zGk-15-p8M" firstAttribute="centerX" secondItem="2DS-as-bOM" secondAttribute="centerX" id="g9n-3R-mN0"/>
+                                        <constraint firstItem="9pw-sM-s8g" firstAttribute="leading" secondItem="2DS-as-bOM" secondAttribute="leading" constant="20" id="kDk-sr-MES"/>
                                         <constraint firstItem="9pw-sM-s8g" firstAttribute="top" secondItem="v4P-W6-KqR" secondAttribute="bottom" constant="20" id="sLc-Aw-Ia3"/>
                                         <constraint firstItem="v4P-W6-KqR" firstAttribute="top" secondItem="2DS-as-bOM" secondAttribute="top" constant="200" id="sU7-xm-4sa"/>
                                         <constraint firstItem="zGk-15-p8M" firstAttribute="top" secondItem="9pw-sM-s8g" secondAttribute="bottom" constant="8" id="z4l-hN-njG"/>
