@@ -32,6 +32,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var leftLayoutConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightLayoutConstraint: NSLayoutConstraint!
     @IBOutlet weak var myContentView: UIView!
     fileprivate var swipeToDeleteHelper: SwipeToDeleteHelper?
     
@@ -104,7 +105,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        swipeToDeleteHelper = SwipeToDeleteHelper(parentView: self, button: myContentView, leftLayoutConstraint: leftLayoutConstraint, cancelTouches: false)
+        swipeToDeleteHelper = SwipeToDeleteHelper(parentView: self, button: myContentView, leftLayoutConstraint: leftLayoutConstraint, rightLayoutConstraint: rightLayoutConstraint, cancelTouches: false)
         swipeToDeleteHelper?.delegate = self
         
         swipeToIncrementHelper = SwipeToIncrementHelper(view: contentView, cancelTouches: false)

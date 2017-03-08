@@ -671,6 +671,7 @@
                                     </subviews>
                                     <color key="backgroundColor" red="0.96470588239999999" green="0.40784313729999999" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="Enh-q4-RPK" secondAttribute="trailing" id="97H-4V-UwL"/>
                                         <constraint firstAttribute="trailing" secondItem="fEE-ye-IZc" secondAttribute="trailing" id="9Tc-uY-k7O"/>
                                         <constraint firstItem="Enh-q4-RPK" firstAttribute="top" secondItem="DnU-YT-E5L" secondAttribute="top" id="Fek-WC-eOu"/>
                                         <constraint firstAttribute="bottom" secondItem="Enh-q4-RPK" secondAttribute="bottom" id="FhJ-8y-vU1"/>
@@ -679,9 +680,6 @@
                                         <constraint firstItem="Enh-q4-RPK" firstAttribute="leading" secondItem="DnU-YT-E5L" secondAttribute="leading" id="sxZ-J9-gck"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Enh-q4-RPK" secondAttribute="width" id="hQb-AT-hYB"/>
-                                </constraints>
                                 <connections>
                                     <outlet property="baseQuantityLabel" destination="efF-zQ-80q" id="hFe-g7-VU0"/>
                                     <outlet property="brandLabel" destination="2R5-6Q-YBr" id="un0-8h-lbd"/>
@@ -694,6 +692,7 @@
                                     <outlet property="myContentView" destination="Enh-q4-RPK" id="hiE-wG-t4c"/>
                                     <outlet property="nameLabel" destination="j26-uq-DjU" id="r7i-e9-MMZ"/>
                                     <outlet property="quantityView" destination="Hff-Wc-kvx" id="HC4-IM-PWC"/>
+                                    <outlet property="rightLayoutConstraint" destination="97H-4V-UwL" id="Cy0-KR-zbN"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="defaultCell" rowHeight="76" id="86C-fN-3Y7">

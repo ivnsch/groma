@@ -19,6 +19,7 @@ class SwipeToDeleteHelper: NSObject, UIGestureRecognizerDelegate {
     fileprivate weak var parentView: UIView!
     fileprivate weak var button: UIView!
     fileprivate weak var leftLayoutConstraint: NSLayoutConstraint!
+    fileprivate weak var rightLayoutConstraint: NSLayoutConstraint!
     
     fileprivate var panRecognizer: UIPanGestureRecognizer!
     fileprivate var panStartPoint: CGPoint!
@@ -33,12 +34,13 @@ class SwipeToDeleteHelper: NSObject, UIGestureRecognizerDelegate {
         return leftLayoutConstraint.constant != 0
     }
     
-    init(parentView: UIView, button: UIView, leftLayoutConstraint: NSLayoutConstraint, cancelTouches: Bool = true) {
+    init(parentView: UIView, button: UIView, leftLayoutConstraint: NSLayoutConstraint, rightLayoutConstraint: NSLayoutConstraint, cancelTouches: Bool = true) {
         super.init()
         
         self.parentView = parentView
         self.button = button
         self.leftLayoutConstraint = leftLayoutConstraint
+        self.rightLayoutConstraint = rightLayoutConstraint
         
         let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(CellUncoverer.onPanCell(_:)))
         panRecognizer.delegate = self
@@ -77,6 +79,7 @@ class SwipeToDeleteHelper: NSObject, UIGestureRecognizerDelegate {
                 
                 if panningLeft {
                     leftLayoutConstraint.constant = startingLeftLayoutConstraint - deltaX
+                    rightLayoutConstraint.constant = -leftLayoutConstraint.constant
                 }
             }
             
@@ -105,6 +108,8 @@ class SwipeToDeleteHelper: NSObject, UIGestureRecognizerDelegate {
         } else {
             leftLayoutConstraint.constant = 0
         }
+        rightLayoutConstraint.constant = -leftLayoutConstraint.constant
+        
         anim(Theme.defaultAnimDuration, {[weak self] in
             self?.parentView.layoutIfNeeded()
         }) {[weak self] in
