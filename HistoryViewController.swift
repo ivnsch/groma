@@ -124,7 +124,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         cell.itemNameLabel.text = historyItem.product.product.item.name
         // TODO!!!!!!!!!!!!!!!!!! review base/unit text here
-        cell.itemUnitLabel.text = "\(historyItem.quantity)\(historyItem.product.baseAndUnitText) x \(historyItem.paidPrice.toLocalCurrencyString())"
+        cell.itemUnitLabel.text = "\(historyItem.quantity.quantityString)\(historyItem.product.baseAndUnitText) x \(historyItem.paidPrice.toLocalCurrencyString())"
         cell.itemPriceLabel.text = historyItem.totalPaidPrice.toLocalCurrencyString()
         
         return cell
