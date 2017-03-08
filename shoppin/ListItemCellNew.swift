@@ -69,8 +69,10 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     fileprivate(set) var status: ListItemStatus?
     var mode: ListItemCellMode = .note {
         didSet {
-            updateModeItemsVisibility(true)
-            swipeEnabled = mode == .note
+            if mode != oldValue {
+                updateModeItemsVisibility(true)
+                swipeEnabled = mode == .note
+            }
         }
     }
 
@@ -152,7 +154,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
     fileprivate func updateModeItemsVisibility(_ animated: Bool) {
         if let tableViewListItem = tableViewListItem, let status = status {
-            updateModeItemsVisibility(mode, status: status, tableViewListItem: tableViewListItem, animated: true)
+            updateModeItemsVisibility(mode, status: status, tableViewListItem: tableViewListItem, animated: animated)
         }
     }
     
@@ -181,7 +183,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
             layoutIfNeeded()
         }
         
-        anim {
+        animIf(animated) {
             update()
         }
     }
