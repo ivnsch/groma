@@ -29,6 +29,7 @@
 		6A278F901E6A663100126F8E /* PlaceHolderItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A278F8E1E6A663100126F8E /* PlaceHolderItemCell.xib */; };
 		6A278F921E6B7B4200126F8E /* UIViewHitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A278F911E6B7B4200126F8E /* UIViewHitTest.swift */; };
 		6A278F941E6CB32800126F8E /* SearchableTextController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A278F931E6CB32800126F8E /* SearchableTextController.swift */; };
+		6A278F9A1E71943200126F8E /* HandlingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A278F991E71943200126F8E /* HandlingView.swift */; };
 		6A287E821E51F4F000868244 /* ManageItemsItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */; };
 		6A287E841E5210D000868244 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E831E5210D000868244 /* Globals.swift */; };
 		6A287E871E52671700868244 /* EditNameColorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E861E52671700868244 /* EditNameColorController.swift */; };
@@ -496,6 +497,7 @@
 		6A278F8E1E6A663100126F8E /* PlaceHolderItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceHolderItemCell.xib; sourceTree = "<group>"; };
 		6A278F911E6B7B4200126F8E /* UIViewHitTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewHitTest.swift; sourceTree = "<group>"; };
 		6A278F931E6CB32800126F8E /* SearchableTextController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchableTextController.swift; sourceTree = "<group>"; };
+		6A278F991E71943200126F8E /* HandlingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlingView.swift; sourceTree = "<group>"; };
 		6A287E811E51F4F000868244 /* ManageItemsItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsItemCell.swift; sourceTree = "<group>"; };
 		6A287E831E5210D000868244 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		6A287E861E52671700868244 /* EditNameColorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNameColorController.swift; sourceTree = "<group>"; };
@@ -1747,6 +1749,7 @@
 				EB4B39C31CEBF05300B41063 /* TopEmptyViewConstraint.swift */,
 				6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */,
 				6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */,
+				6A278F991E71943200126F8E /* HandlingView.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -2764,6 +2767,7 @@
 				EBB5267D1BEFE21F0002A286 /* HelpCell.swift in Sources */,
 				6A287E871E52671700868244 /* EditNameColorController.swift in Sources */,
 				EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */,
+				6A278F9A1E71943200126F8E /* HandlingView.swift in Sources */,
 				EB33D5561CDFA2000097AD58 /* CountryHelper.swift in Sources */,
 				EB76A7A41BEE8CD700486F30 /* AddEditPlanItemController.swift in Sources */,
 				6A407ABD1E33A44400D77405 /* AddRecipeIngredientCell.swift in Sources */,

@@ -26,21 +26,21 @@ public extension UIColor {
     public var red: CGFloat {
         get {
             let components = self.cgColor.components
-            return components![0]
+            return components?[0] ?? 0
         }
     }
     
     public var green: CGFloat {
         get {
             let components = self.cgColor.components
-            return components![1]
+            return components?[1] ?? 0
         }
     }
     
     public var blue: CGFloat {
         get {
             let components = self.cgColor.components
-            return components![2]
+            return components?[2] ?? 0
         }
     }
     

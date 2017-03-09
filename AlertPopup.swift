@@ -33,8 +33,35 @@ class AlertPopup: NSObject {
         
         let myAlert = Bundle.loadView("MyAlert", owner: self) as! MyAlert
         
+        
+        
         myAlert.translatesAutoresizingMaskIntoConstraints = true
         myAlert.frame = frame ?? controller.view.bounds
+        
+        // It was not possible to get bg working correctly inside MyAlert view, so here. Attempt consisted in having it as sibling of content view & content view being a wrapper around current content view, transparent and with same size as bg / parent, but the autolayout used inside content breaks the (non-autolayout)positioning of the wrapper. With translatesAutoresizingMaskIntoConstraints = false, etc.
+        let bg = UIView(frame: myAlert.frame)
+        bg.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        controller.view.addSubview(bg)
+
+        func setBGVisible(_ visible: Bool, removeIfInvisible: Bool = true) {
+            bg.alpha = visible ? 0 : 1
+            anim {
+                bg.alpha = visible ? 1 : 0
+            }
+            
+            anim(Theme.defaultAnimDuration, { 
+                bg.alpha = visible ? 1 : 0
+            }) {
+                if removeIfInvisible {
+                    if !visible {
+                        bg.removeFromSuperview()
+                    }
+                }
+            }
+        }
+        
+        setBGVisible(true)
+        
         controller.view.addSubview(myAlert)
         controller.view.bringSubview(toFront: myAlert)
         myAlert.tag = ViewTags.NotePopup
@@ -50,7 +77,7 @@ class AlertPopup: NSObject {
         myAlert.text = message
         
         myAlert.onDismiss = onDismiss
-        myAlert.dismissWithSwipe = false
+//        myAlert.enableDismissWithSwipe()
         
         myAlert.onOk = okAction
         
@@ -63,6 +90,7 @@ class AlertPopup: NSObject {
             myAlert.onTapAnywhere = {
                 myAlert.animateScale(false, anchorPoint: point, parentView: controller.view, frame: frame) {
                     myAlert.dismiss()
+                    setBGVisible(false)
                 }
             }
             
@@ -75,6 +103,7 @@ class AlertPopup: NSObject {
             if !isConfirm && !hasOkButton {
                 myAlert.onTapAnywhere = {
                     myAlert.dismiss()
+                    setBGVisible(false)
                 }
             }
         }

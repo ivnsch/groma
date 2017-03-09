@@ -21,7 +21,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     @IBOutlet weak var container: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var label: UILabel!
-    @IBOutlet weak var background: UIView!
+    @IBOutlet weak var background: HandlingView!
     
     @IBOutlet weak var widthConstraint: NSLayoutConstraint!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
@@ -34,8 +34,6 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     @IBOutlet weak var confirmButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     
-    
-    var dismissWithSwipe = false
     var dismissAnimation: MyAlertDismissAnimation = .fade
 
     var minWidth: CGFloat = 250
@@ -130,30 +128,28 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         okButton.setTitle(buttonText, for: UIControlState())
         confirmButton.setTitle(confirmText, for: UIControlState())
         cancelButton.setTitle(cancelText, for: UIControlState())
-        
-        animateFade(true)
+
+        background.touchHandler = {[weak self] in
+            self?.onTapAnywhere?()
+        }
+    }
+    
+    func enableDismissWithSwipe() {
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(MyAlert.onPan(_:)))
+        panRecognizer.delegate = self
+        panRecognizer.cancelsTouchesInView = false
+        addGestureRecognizer(panRecognizer)
     }
     
     fileprivate func animateFade(_ opening: Bool) {
         alpha = opening ? 0 : 1
-        UIView.animate(withDuration: 0.3, animations: {[weak self] in
+        UIView.animate(withDuration: Theme.defaultAnimDuration, animations: {[weak self] in
             self?.alpha = opening ? 1 : 0
         }) 
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        onTapAnywhere?()
-    }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        if dismissWithSwipe {
-            let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(MyAlert.onPan(_:)))
-            panRecognizer.delegate = self
-            panRecognizer.cancelsTouchesInView = false
-            addGestureRecognizer(panRecognizer)
-        }
     }
 
     func animateScale(_ open: Bool, anchorPoint: CGPoint, parentView: UIView, frame: CGRect? = nil, onFinish: VoidFunction? = nil) {
@@ -171,7 +167,8 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         
         transform = open ? CGAffineTransform(scaleX: 0.001, y: 0.001) : CGAffineTransform(scaleX: 1, y: 1)
 
-        UIView.animate(withDuration: 0.3, animations: {[weak self] in
+        let (damping, velocity): (CGFloat, CGFloat) = open ? (0.75, 2) : (0, 0)
+        UIView.animate(withDuration: Theme.defaultAnimDuration, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: velocity, options: [], animations: {[weak self] in
             self?.transform = open ? CGAffineTransform(scaleX: 1, y: 1) : CGAffineTransform(scaleX: 0.001, y: 0.001)
         }, completion: {finished in
             onFinish?()
@@ -219,7 +216,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         
         switch dismissAnimation {
         case .fade:
-            UIView.animate(withDuration: 0.2, animations: {[weak self] in
+            UIView.animate(withDuration: Theme.defaultAnimDuration, animations: {[weak self] in
                 self?.background.alpha = 0
                 }, completion: {finished in
                     dismiss()
@@ -265,7 +262,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
                 
                 center.y = newY
             
-                UIView.animate(withDuration: min(0.3, duration), animations: {
+                UIView.animate(withDuration: min(Theme.defaultAnimDuration, duration), animations: {
                     self.container.center = center
                 }, completion: {finished in
                     self.dismiss()
