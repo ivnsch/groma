@@ -150,7 +150,7 @@ class QuantityView: UIView, UITextFieldDelegate {
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: minusButton.width + quantityLabel.intrinsicContentSize.width + plusButton.width, height: minusButton.height + quantityLabel.intrinsicContentSize.height + plusButton.height)
+        return CGSize(width: minusBottomWidthConstraint.constant + quantityLabel.intrinsicContentSize.width + plusBottomWidthConstraint.constant, height: minusButton.height + quantityLabel.intrinsicContentSize.height + plusButton.height)
     }
     
     func setMode(_ mode: QuantityViewMode, animated: Bool) {
