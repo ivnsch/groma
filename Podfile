@@ -38,7 +38,6 @@ target 'groma' do
     pod 'KLCPopup', '~> 1.0'
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
     pod 'HockeySDK'
-    pod 'PopupDialog', '~> 0.5'
     shared
     
     # fixme - shouldn't be necessary to have these dependencies here see http://stackoverflow.com/q/41191028/930450

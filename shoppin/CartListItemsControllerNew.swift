@@ -9,7 +9,6 @@
 import UIKit
 import Providers
 import QorumLogs
-import PopupDialog
 
 //protocol CartListItemsControllerDelegate: class {
 //    func onCartSendItemsToStash(_ listItems: [ListItem])
@@ -117,24 +116,10 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
 
     @IBAction func onAddToInventoryTap(_ sender: UIBarButtonItem) {
         if let list = currentList {
-            if InventoryAuthChecker.checkAccess(list.inventory) {
-                
-                let popup = PopupDialog(title: trans("popup_title_confirm"), message: trans("popup_buy_will_add_to_history_stats", list.inventory.name), buttonAlignment: .horizontal, transitionStyle: .zoomIn, gestureDismissal: true)
-                
-                let buttonOne = CancelButton(title: trans("popup_button_cancel"), action: nil)
-                
-                let buttonTwo = DefaultButton(title: trans("popup_button_ok")) {
-                    delay(0.2) {[weak self] in // start buy animation after popup finished animating, otherwise too many things happening at once
-                        self?.addAllItemsToInventory()
-                    }
-                }
-                
-                popup.addButtons([buttonOne, buttonTwo])
-                present(popup, animated: true, completion: nil)
-                
-//                ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_buy_will_add_to_history_stats", list.inventory.name), okTitle: trans("popup_button_buy"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in
-//                    self?.addAllItemsToInventory()
-//                }, onCancel: nil)
+            if InventoryAuthChecker.checkAccess(list.inventory) {                
+                ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_buy_will_add_to_history_stats", list.inventory.name), okTitle: trans("popup_button_buy"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in
+                    self?.addAllItemsToInventory()
+                }, onCancel: nil)
                 
             } else {
                 AlertPopup.show(message: trans("popup_you_cant_buy_cart", list.inventory.name), controller: self)
