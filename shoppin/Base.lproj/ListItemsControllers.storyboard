@@ -415,17 +415,17 @@
                                             <rect key="frame" x="331" y="34" width="24" height="23"/>
                                         </imageView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mEO-yB-hml">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="90.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W7z-OP-2eO">
-                                                    <rect key="frame" x="0.0" y="4" width="4" height="82.5"/>
+                                                    <rect key="frame" x="0.0" y="4" width="4" height="83"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="4" id="4a4-fc-VIG"/>
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="npq-ts-NkO" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="29" y="24.5" width="44" height="22"/>
+                                                    <rect key="frame" x="29" y="25" width="44" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -436,7 +436,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <button opaque="NO" alpha="0.0" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LP-6w-Aa7">
-                                                    <rect key="frame" x="132" y="0.0" width="61" height="90.5"/>
+                                                    <rect key="frame" x="200" y="0.0" width="61" height="91"/>
                                                     <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="61" id="dKo-Iq-2Sh"/>
@@ -448,7 +448,7 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="249" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="9Rc-cx-ee2" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="29" y="46.5" width="38" height="18"/>
+                                                    <rect key="frame" x="29" y="47" width="38" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -459,7 +459,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="Q23-sC-Zlg" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="78" y="24.5" width="44" height="22"/>
+                                                    <rect key="frame" x="78" y="25" width="112" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -470,7 +470,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="114" placeholderIntrinsicHeight="84" translatesAutoresizingMaskIntoConstraints="NO" id="259-87-721" customClass="QuantityView" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="261" y="0.0" width="114" height="90.5"/>
+                                                    <rect key="frame" x="261" y="0.0" width="114" height="91"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
                                             </subviews>
@@ -478,6 +478,7 @@
                                             <constraints>
                                                 <constraint firstItem="8LP-6w-Aa7" firstAttribute="leading" secondItem="Q23-sC-Zlg" secondAttribute="trailing" constant="10" id="6In-iC-WU0"/>
                                                 <constraint firstAttribute="bottom" secondItem="259-87-721" secondAttribute="bottom" id="9LC-7x-L3m"/>
+                                                <constraint firstItem="259-87-721" firstAttribute="leading" secondItem="8LP-6w-Aa7" secondAttribute="trailing" id="FB9-89-d3h"/>
                                                 <constraint firstAttribute="bottom" secondItem="W7z-OP-2eO" secondAttribute="bottom" constant="4" id="FR7-gt-I5f"/>
                                                 <constraint firstItem="W7z-OP-2eO" firstAttribute="leading" secondItem="mEO-yB-hml" secondAttribute="leading" id="Fqx-Wo-FuB"/>
                                                 <constraint firstItem="npq-ts-NkO" firstAttribute="leading" secondItem="W7z-OP-2eO" secondAttribute="trailing" constant="25" id="LUU-o0-wMf" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
