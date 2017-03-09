@@ -243,6 +243,10 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     // MARK: - CartListItemsControllerDelegate
     
+    var priceViewHeight: CGFloat {
+        return pricesView.height
+    }
+    
     func onCloseCartAfterBuy() {
         topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: tableView)
         setCartExpanded(expanded: false) {[weak self] in

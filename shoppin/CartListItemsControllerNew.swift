@@ -15,6 +15,8 @@ import QorumLogs
 //}
 
 protocol CartListItemsControllerDelegate: class {
+    var priceViewHeight: CGFloat {get}
+    
     func onCloseCartAfterBuy()
     func onCartUpdatedQuantifiables()
     func onCartPullToAdd()
@@ -70,6 +72,19 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     
     override func onPullToAdd() {
         delegate?.onCartPullToAdd()
+    }
+    
+    override func showPopup(text: String, cell: UITableViewCell, button: UIView) {
+        guard let delegate = delegate else {QL4("No delegate - can't retrive prices view height to show popup"); return}
+        
+        let topOffset: CGFloat = -delegate.priceViewHeight
+        let frame = view.bounds.copy(y: topOffset, height: view.bounds.height - topOffset)
+        
+        let noteButtonPointParentController = view.convert(CGPoint(x: button.center.x, y: button.center.y), from: cell)
+        // adjust the anchor point also for topOffset
+        let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
+        
+        AlertPopup.showCustom(message: text, controller: self, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
     }
     
     fileprivate func addAllItemsToInventory() {
