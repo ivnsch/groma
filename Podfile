@@ -27,7 +27,7 @@ target 'Providers' do
     shared
 end
 
-target 'shoppin' do
+target 'groma' do
     project 'shoppin.xcodeproj'
     platform :ios, '8.0'
     pod 'SwiftValidator', :git => 'https://github.com/i-schuetz/SwiftValidator.git', :branch => 'remove_delegate_callback'
@@ -38,6 +38,7 @@ target 'shoppin' do
     pod 'KLCPopup', '~> 1.0'
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
     pod 'HockeySDK'
+    pod 'PopupDialog', '~> 0.5'
     shared
     
     # fixme - shouldn't be necessary to have these dependencies here see http://stackoverflow.com/q/41191028/930450
