@@ -1180,6 +1180,7 @@ class RealmListItemProvider: RealmProvider {
                 updatingListItem.product.product = product
                 updatingListItem.section = sectionResult.section
                 updatingListItem.note = listItemInput.note ?? ""
+                updatingListItem.quantity = listItemInput.quantity
                 
                 return UpdateListItemResult(listItem: updatingListItem, replaced: foundAndDeletedListItem, changedSection: changedSection)
             }

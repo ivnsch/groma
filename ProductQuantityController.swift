@@ -187,8 +187,9 @@ class ProductQuantityController: UIViewController {
 
     func selectUnitWithName(_ name: String) {
         if let units = unitsDataSource?.units {
-            if let index = (units.enumerated().filter {$0.element.name == name}.first)?.offset {
+            if let (index, unit) = (units.enumerated().filter {$0.element.name == name}.first) {
                 unitPicker?.scrollToItem(index: index, animated: false)
+                selectedUnit = unit
             } else {
                 QL1("Unit with name: \(name) not found in data source units")
             }
@@ -199,8 +200,9 @@ class ProductQuantityController: UIViewController {
     
     func selectBaseWithValue(_ val: Float) {
         if let bases = basesDataSource?.bases {
-            if let index = (bases.enumerated().filter {$0.element.val == val}.first)?.offset {
+            if let (index, base) = (bases.enumerated().filter {$0.element.val == val}.first) {
                 basesPicker?.scrollToItem(index: index, animated: false)
+                selectedBase = base.val
                 setBasesVisible(visible: true, animated: false) // ensure it's visible
             } else {
                 QL1("Base with val: \(val) not found in data source bases")

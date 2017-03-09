@@ -91,7 +91,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
     
     static func createFilter(unique: QuantifiableProductUnique) -> String {
-        return "productOpt.itemOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND unitOpt.name == '\(unique.unit)'"
+        return "productOpt.itemOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND baseQuantity == \(unique.baseQuantity) AND unitOpt.name == '\(unique.unit)'"
     }
     
     static func createFilterBrand(_ brand: String) -> String {

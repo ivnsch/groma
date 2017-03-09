@@ -479,21 +479,15 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }()
             
-            if let price = priceMaybe, let quantity = productQuantityController?.quantity/*, let quantityText = quantityInput.text, let quantity = quantityText.floatValue*/, let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
+            if let price = priceMaybe, let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
                 
-                
-                
-                // for now disabled due to new designs
-//                let baseQuantity = scaleInputs?.baseQuantity ?? 1
-//                let unit = scaleInputs?.unit ?? .None
-                // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                let baseQuantity: Float = 1
-                let unit = ""
+                let baseQuantity: Float = productQuantityController?.selectedBase ?? 1
+                let unit: String = productQuantityController?.selectedUnit?.name ?? ""
                 
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
                 // Explanation category/section name: for list items, the section input refers to the list item's section. For the rest the product category. When we store the list items, if a category with the entered section name doesn't exist yet, one is created with the section's data.
-                delegate?.onOkTap(price, quantity: quantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
+                delegate?.onOkTap(price, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
                 
             } else {
                 QL4("Validation was not implemented correctly, price: \(priceInput.text), quantity: \(productQuantityController?.quantity), brand: \(brandInput.text), sectionColor: \(sectionColorButton.textColor)")
