@@ -26,6 +26,8 @@ protocol SelectIngredientDataControllerDelegate: class {
 protocol SelectUnitControllerDelegate: class {
     
     func onSelectUnit(unit: Providers.Unit)
+    
+    func onCalculatedUnitsCollectionViewSize(_ size: CGSize)
 }
 
 class SelectIngredientDataController: UIViewController, QuantityViewDelegate, SwipeToIncrementHelperDelegate, UIGestureRecognizerDelegate, SubmitViewDelegate {

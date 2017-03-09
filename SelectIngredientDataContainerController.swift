@@ -64,6 +64,8 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     
     fileprivate var submitView: SubmitView?
 
+    fileprivate var unitsCollectionViewHeight: CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -193,6 +195,11 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         selectFractionController?.unit = unit
         
         updateStepsAfterSelectingUnitIfConditions(unit: unit, scrollToQuantityRow: true)
+    }
+    
+    func onCalculatedUnitsCollectionViewSize(_ size: CGSize) {
+        unitsCollectionViewHeight = size.height
+        tableView.reloadData()
     }
     
     fileprivate func updateStepsAfterSelectingUnitIfConditions(unit: Providers.Unit, scrollToQuantityRow: Bool) {
@@ -360,7 +367,14 @@ extension SelectIngredientDataContainerController: UITableViewDataSource, UITabl
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
-        case 0: return DimensionsManager.quickAddHeight + 20
+        case 0:
+            // TODO!!!!!!!!!!!!!!!!!! use constants (or something else but ensure in sync with the values used in IB)
+            let spaceUpperCellBorderToTitle: CGFloat = 20
+            let titleHeight: CGFloat = 40
+            let spaceTitleToCollectionView: CGFloat = 20
+            let height = max(DimensionsManager.quickAddHeight, spaceUpperCellBorderToTitle + titleHeight + spaceTitleToCollectionView + unitsCollectionViewHeight)
+            return height
+            
         case 1: return 100
         default: return 500
         }

@@ -50,7 +50,11 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
             
             weakSelf.unitsCollectionView.reloadData()
      
-            weakSelf.collectionViewHeight.constant = weakSelf.unitsCollectionView.collectionViewLayout.collectionViewContentSize.height
+            let size = weakSelf.unitsCollectionView.collectionViewLayout.collectionViewContentSize
+            
+            weakSelf.collectionViewHeight.constant = size.height
+            
+            weakSelf.delegate?.onCalculatedUnitsCollectionViewSize(size)
         })
     }
     
@@ -161,9 +165,9 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
         if (unitsDataSource?.units.map{unit in
             indexPath.row < unit.count
             }) ?? false {
-            return CGSize(width: 70, height: 50)
+            return CGSize(width: 70, height: DimensionsManager.ingredientsUnitCellHeight)
         } else {
-            return CGSize(width: 120, height: 50)
+            return CGSize(width: 120, height: DimensionsManager.ingredientsUnitCellHeight)
         }
     }
     
