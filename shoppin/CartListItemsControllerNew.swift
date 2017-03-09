@@ -86,6 +86,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
                         Prov.listItemsProvider.buyCart(list: list, realmData: realmData, controller.successHandler{[weak self] in
                             // TODO!!!!!!!!!!!!!!!! is this still necessary?
 //                            self?.delegate?.onCartSendItemsToStash(weakSelf.listItemsTableViewController.items)
+                            self?.tableView.reloadData() // Update table view (the cart controller continues being active after buy and should be in a valid state to process notifications from todo)
                             self?.butCartAnimation()
                             self?.delegate?.onCloseCartAfterBuy()
                         })
