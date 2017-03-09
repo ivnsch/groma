@@ -64,11 +64,10 @@
                         <constraint firstItem="Zju-G9-ouJ" firstAttribute="centerY" secondItem="b8u-iC-Eep" secondAttribute="centerY" id="peg-Xo-yBr"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aRx-YA-td0" customClass="FillShapeView" customModule="groma" customModuleProvider="target">
+                <view contentMode="scaleToFill" placeholderIntrinsicWidth="120" placeholderIntrinsicHeight="250" translatesAutoresizingMaskIntoConstraints="NO" id="aRx-YA-td0" customClass="FillShapeView" customModule="groma" customModuleProvider="target">
                     <rect key="frame" x="235" y="60" width="120" height="250"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="120" id="8xR-of-rNu"/>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="250" id="zfO-16-4aH"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="99" placeholderIntrinsicHeight="89" translatesAutoresizingMaskIntoConstraints="NO" id="LyZ-lA-iAk" customClass="EditableFractionView" customModule="groma" customModuleProvider="target">
@@ -82,7 +81,6 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="aRx-YA-td0" firstAttribute="centerY" secondItem="LyZ-lA-iAk" secondAttribute="centerY" id="7u8-ba-lkN"/>
-                <constraint firstAttribute="bottom" secondItem="aRx-YA-td0" secondAttribute="bottom" constant="20" id="9ag-ei-dDL"/>
                 <constraint firstAttribute="trailing" secondItem="aRx-YA-td0" secondAttribute="trailing" constant="20" id="El3-gZ-G2R"/>
                 <constraint firstItem="LyZ-lA-iAk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="Nn8-tU-fxM"/>
                 <constraint firstItem="aRx-YA-td0" firstAttribute="leading" secondItem="LyZ-lA-iAk" secondAttribute="trailing" constant="20" id="cW2-XS-tio"/>

@@ -44,7 +44,12 @@ class SelectIngredientFractionController: UIViewController, EditableFractionView
         fractionTextInputView.delegate = self
         
         fractionImageView.delegate = self
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    
+        // Before of viewDidAppear dimensions are not correct - we use this callback to init the fill shape view, which needs final dimensions.
         onUIReady?()
     }
     

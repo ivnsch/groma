@@ -376,7 +376,7 @@ extension SelectIngredientDataContainerController: UITableViewDataSource, UITabl
             return height
             
         case 1: return 100
-        default: return 500
+        default: return 420
         }
     }
 }

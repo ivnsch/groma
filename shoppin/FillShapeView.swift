@@ -64,7 +64,8 @@ class FillShapeView: UIView {
         
         imageView = UIImageView(image: shapeImage)
         
-        imageView.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
+        // NOTE: y of imageView has to be 0 (center: imageView.height / 2) for the mask to work correctly, don't have time now to check why
+        imageView.center = CGPoint(x: frame.width / 2, y: imageView.height / 2)
         
         addSubview(imageView)
         
@@ -89,6 +90,8 @@ class FillShapeView: UIView {
         addGestureRecognizer(tapRecognizer)
         
         showLines()
+        
+        invalidateIntrinsicContentSize()
     }
     
     func fillTo(pt: CGFloat) {
@@ -209,6 +212,9 @@ class FillShapeView: UIView {
         return rationalApproximationOf(x0: Double(decimal)) // convert to fraction
     }
     
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: imageView.width, height: imageView.height)
+    }
 }
 
 func rationalApproximationOf(x0 : Double, withPrecision eps : Double = 1.0E-1) -> Fraction {
