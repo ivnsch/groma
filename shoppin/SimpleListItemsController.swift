@@ -235,9 +235,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     
     
     func clearPossibleNotePopup() {
-        if let popup = view.viewWithTag(ViewTags.NotePopup) {
-            popup.removeFromSuperview()
-        }
+        // Override
     }
     
     // MARK: - ListItemsTableViewDelegateNew

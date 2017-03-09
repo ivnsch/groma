@@ -207,6 +207,11 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     override func onTopBarTitleTap() {
         back()
     }
+
+    override func clearPossibleNotePopup() {
+        super.clearPossibleNotePopup()
+        cartController?.clearPossibleNotePopup()
+    }
     
     @IBAction func onCartTap(_ sender: UIButton) {
         pricesView.toggleExpanded(todoController: self)

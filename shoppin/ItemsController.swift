@@ -55,6 +55,8 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         return .productForList
     }
     
+    fileprivate var currentNotePopup: MyAlertWrapper?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -179,9 +181,8 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     }
     
     func clearPossibleNotePopup() {
-        if let popup = view.viewWithTag(ViewTags.NotePopup) {
-            popup.removeFromSuperview()
-        }
+        currentNotePopup?.dismiss()
+        currentNotePopup = nil
     }
     
     var isAnyTopControllerExpanded: Bool {
@@ -488,6 +489,6 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         // adjust the anchor point also for topOffset
         let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
         
-        AlertPopup.showCustom(message: text, controller: self, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
+        currentNotePopup = AlertPopup.showCustom(message: text, controller: self, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
     }
 }

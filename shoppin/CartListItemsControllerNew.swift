@@ -29,6 +29,8 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     
     weak var delegate: CartListItemsControllerDelegate?
     
+    fileprivate var currentNotePopup: MyAlertWrapper?
+    
     override var status: ListItemStatus {
         return .done
     }
@@ -74,6 +76,8 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
         delegate?.onCartPullToAdd()
     }
     
+    
+    
     override func showPopup(text: String, cell: UITableViewCell, button: UIView) {
         guard let delegate = delegate else {QL4("No delegate - can't retrive prices view height to show popup"); return}
         
@@ -84,7 +88,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
         // adjust the anchor point also for topOffset
         let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
         
-        AlertPopup.showCustom(message: text, controller: self, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
+        currentNotePopup = AlertPopup.showCustom(message: text, controller: self, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
     }
     
     fileprivate func addAllItemsToInventory() {
@@ -142,5 +146,12 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
         } else {
             QL3("Warn: DoneViewController.onAddToInventoryTap: list is not set, can't add to inventory")
         }
+    }
+    
+    override func clearPossibleNotePopup() {
+        super.clearPossibleNotePopup()
+        
+        currentNotePopup?.dismiss()
+        currentNotePopup = nil
     }
 }

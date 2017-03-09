@@ -27,9 +27,9 @@ class AlertPopup: NSObject {
 
     // TODO better structure, alert and confirm should be 2 different classes, which share part of the view and code
     // Frame of popup (including semitransparent background) in case this is different than the frame controller's view.
-    static func showCustom(title: String? = nil, message: String, controller: UIViewController, frame: CGRect? = nil, okMsg: String = trans("popup_button_ok"), confirmMsg: String = trans("popup_button_ok"), cancelMsg: String = trans("popup_button_cancel"), hasOkButton: Bool = false, isConfirm: Bool = false, rootControllerStartPoint: CGPoint? = nil, okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) {
+    static func showCustom(title: String? = nil, message: String, controller: UIViewController, frame: CGRect? = nil, okMsg: String = trans("popup_button_ok"), confirmMsg: String = trans("popup_button_ok"), cancelMsg: String = trans("popup_button_cancel"), hasOkButton: Bool = false, isConfirm: Bool = false, rootControllerStartPoint: CGPoint? = nil, okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) -> MyAlertWrapper? {
         
-        guard controller.view.viewWithTag(ViewTags.NotePopup) == nil else {QL2("Already showing popup, return"); return}
+        guard controller.view.viewWithTag(ViewTags.NotePopup) == nil else {QL2("Already showing popup, return"); return nil} // TODO is this really necessary? (maybe when tap very quickly multiple times to open)
         
         let myAlert = Bundle.loadView("MyAlert", owner: self) as! MyAlert
         
@@ -104,6 +104,37 @@ class AlertPopup: NSObject {
                 myAlert.onTapAnywhere = {
                     myAlert.dismiss()
                     setBGVisible(false)
+                }
+            }
+        }
+        
+        return MyAlertWrapper(myAlert: myAlert, bg: bg)
+    }
+}
+
+
+struct MyAlertWrapper {
+    let myAlert: MyAlert
+    let bg: UIView
+    
+    func dismiss() {
+        myAlert.dismiss()
+        setBGVisible(false)
+    }
+    
+    func setBGVisible(_ visible: Bool, removeIfInvisible: Bool = true) {
+        bg.alpha = visible ? 0 : 1
+        let copy = self
+        anim {
+            copy.bg.alpha = visible ? 1 : 0
+        }
+        
+        anim(Theme.defaultAnimDuration, {
+            copy.bg.alpha = visible ? 1 : 0
+        }) {
+            if removeIfInvisible {
+                if !visible {
+                    copy.bg.removeFromSuperview()
                 }
             }
         }
