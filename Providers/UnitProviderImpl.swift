@@ -12,9 +12,9 @@ import QorumLogs
 
 class UnitProviderImpl: UnitProvider {
 
-    func units(_ handler: @escaping (ProviderResult<Results<Unit>>) -> Void) {
+    func units(buyable: Bool?, _ handler: @escaping (ProviderResult<Results<Unit>>) -> Void) {
         
-        DBProv.unitProvider.units{units in
+        DBProv.unitProvider.units(buyable: buyable) {units in
             if let units = units {
                 handler(ProviderResult(status: .success, sucessResult: units))
             } else {
@@ -59,8 +59,8 @@ class UnitProviderImpl: UnitProvider {
         }
     }
     
-    func update(unit: Unit, name: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        if DBProv.unitProvider.updateSync(unit: unit, name: name) {
+    func update(unit: Unit, name: String, buyable: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        if DBProv.unitProvider.updateSync(unit: unit, name: name, buyable: buyable) {
             handler(ProviderResult(status: .success))
         } else {
             QL4("Couldn't update unit: \(unit) with name: \(name)")

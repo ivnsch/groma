@@ -1132,7 +1132,7 @@ class RealmProductProvider: RealmProvider {
         
         doInWriteTransaction({realm in
             
-            guard let units = DBProv.unitProvider.unitsSync() else {QL4("Couldn't load units. Can't restore prefill product"); return false}
+            guard let units = DBProv.unitProvider.unitsSync(buyable: nil) else {QL4("Couldn't load units. Can't restore prefill product"); return false}
             
             let prefillProducts = SuggestionsPrefiller().prefillProducts(LangManager().appLang, defaultUnits: units.toArray()).products
             

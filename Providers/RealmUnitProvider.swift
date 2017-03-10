@@ -12,8 +12,8 @@ import QorumLogs
 
 class RealmUnitProvider: RealmProvider {
     
-    func units(_ handler: @escaping (Results<Unit>?) -> Void) {
-        handler(unitsSync())
+    func units(buyable: Bool?, _ handler: @escaping (Results<Unit>?) -> Void) {
+        handler(unitsSync(buyable: buyable))
     }
     
     func initDefaultUnits(_ handler: @escaping ([Unit]?) -> Void) {
@@ -23,29 +23,29 @@ class RealmUnitProvider: RealmProvider {
         // TODO different ordering for device's country - countries that don't/rarely use OZ and LB should have them at the end
         
         let defaultUnits: [Unit] = [
-            Unit(uuid: UUID().uuidString, name: trans("unit_none"), id: .none),
+            Unit(uuid: UUID().uuidString, name: trans("unit_none"), id: .none, buyable: true),
             
-            Unit(uuid: UUID().uuidString, name: trans("unit_g"), id: .g),
-            Unit(uuid: UUID().uuidString, name: trans("unit_kg"), id: .kg),
-            Unit(uuid: UUID().uuidString, name: trans("unit_liter"), id: .liter),
-            Unit(uuid: UUID().uuidString, name: trans("unit_milliliter"), id: .milliliter),
+            Unit(uuid: UUID().uuidString, name: trans("unit_g"), id: .g, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_kg"), id: .kg, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_liter"), id: .liter, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_milliliter"), id: .milliliter, buyable: true),
             
-            Unit(uuid: UUID().uuidString, name: trans("unit_ounce"), id: .ounce),
-            Unit(uuid: UUID().uuidString, name: trans("unit_pound"), id: .pound),
+            Unit(uuid: UUID().uuidString, name: trans("unit_ounce"), id: .ounce, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_pound"), id: .pound, buyable: true),
             
-            Unit(uuid: UUID().uuidString, name: trans("unit_pack"), id: .pack),
+            Unit(uuid: UUID().uuidString, name: trans("unit_pack"), id: .pack, buyable: true),
             
-            Unit(uuid: UUID().uuidString, name: trans("unit_cup"), id: .cup),
-            Unit(uuid: UUID().uuidString, name: trans("unit_spoon"), id: .spoon),
-            Unit(uuid: UUID().uuidString, name: trans("unit_teaspoon"), id: .teaspoon),
+            Unit(uuid: UUID().uuidString, name: trans("unit_cup"), id: .cup, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_spoon"), id: .spoon, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_teaspoon"), id: .teaspoon, buyable: false),
             
-            Unit(uuid: UUID().uuidString, name: trans("unit_drop"), id: .drop),
-            Unit(uuid: UUID().uuidString, name: trans("unit_shot"), id: .shot),
-            Unit(uuid: UUID().uuidString, name: trans("unit_pinch"), id: .pinch),
+            Unit(uuid: UUID().uuidString, name: trans("unit_drop"), id: .drop, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_shot"), id: .shot, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_pinch"), id: .pinch, buyable: false),
             
-            Unit(uuid: UUID().uuidString, name: trans("unit_clove"), id: .clove),
+            Unit(uuid: UUID().uuidString, name: trans("unit_clove"), id: .clove, buyable: false),
 
-            Unit(uuid: UUID().uuidString, name: trans("unit_can"), id: .can),
+            Unit(uuid: UUID().uuidString, name: trans("unit_can"), id: .can, buyable: true),
 //            Unit(uuid: UUID().uuidString, name: trans("unit_bunch")), // TODO?
         ]
         
@@ -119,8 +119,8 @@ class RealmUnitProvider: RealmProvider {
     
     // MARK: - Sync
     
-    func unitsSync() -> Results<Unit>? {
-        return loadSync(filter: nil)
+    func unitsSync(buyable: Bool?) -> Results<Unit>? {
+        return loadSync(filter: buyable.map{Unit.createBuyable(buyable: $0)})
     }
     
     func unitSync(name: String) -> Unit? {
@@ -137,7 +137,7 @@ class RealmUnitProvider: RealmProvider {
             if noneUnit == nil {
                 QL4("Invalid state: there's no .none unit! This should never happen. Creating it again.")
                 // This hasn't happened so far but as general guideline, we avoid assumptions and try to recover (with online logging of course, so we can also fix the issue)
-                let newNoneUnit = Unit(uuid: UUID().uuidString, name: trans("unit_none"), id: .none)
+                let newNoneUnit = Unit(uuid: UUID().uuidString, name: trans("unit_none"), id: .none, buyable: true)
                 if saveObjSync(newNoneUnit) {
                     return (newNoneUnit, true)
                 } else {
@@ -151,7 +151,7 @@ class RealmUnitProvider: RealmProvider {
         if let existingUnit = unitSync(name: name) {
             return (existingUnit, false)
         } else {
-            let newUnit = Unit(uuid: UUID().uuidString, name: name, id: .custom)
+            let newUnit = Unit(uuid: UUID().uuidString, name: name, id: .custom, buyable: true)
             let success = saveObjSync(newUnit)
             return success ? (newUnit, true) : nil
         }
@@ -178,11 +178,12 @@ class RealmUnitProvider: RealmProvider {
         } ?? false
     }
     
-    func updateSync(unit: Unit, name: String) -> Bool {
+    func updateSync(unit: Unit, name: String, buyable: Bool) -> Bool {
         let unit = unit.copy()
         
         return doInWriteTransactionSync(realmData: nil) {realm in
             unit.name = name
+            unit.buyable = buyable
             realm.add(unit, update: true)
             
             return true

@@ -109,6 +109,8 @@
 		6AEB65EC1E4C93620094B9DE /* IngredientsController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AEB65EB1E4C93620094B9DE /* IngredientsController.storyboard */; };
 		6AEB65EF1E4D056C0094B9DE /* SelectIngredientDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB65EE1E4D056C0094B9DE /* SelectIngredientDataController.swift */; };
 		6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */; };
+		6AEE5ECB1E720D3300C2A2FB /* EditNameButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEE5EC91E720D3300C2A2FB /* EditNameButtonController.swift */; };
+		6AEE5ECC1E720D3300C2A2FB /* EditNameButtonController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AEE5ECA1E720D3300C2A2FB /* EditNameButtonController.xib */; };
 		6AF0C26B1E62197300FE14FD /* SelectIngredientDataContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF0C26A1E62197300FE14FD /* SelectIngredientDataContainerController.swift */; };
 		6AF0C26E1E621E0900FE14FD /* SelectIngredientQuantityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF0C26C1E621E0900FE14FD /* SelectIngredientQuantityController.swift */; };
 		6AF0C26F1E621E0900FE14FD /* SelectIngredientQuantityController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF0C26D1E621E0900FE14FD /* SelectIngredientQuantityController.xib */; };
@@ -577,6 +579,8 @@
 		6AEB65EB1E4C93620094B9DE /* IngredientsController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = IngredientsController.storyboard; sourceTree = "<group>"; };
 		6AEB65EE1E4D056C0094B9DE /* SelectIngredientDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectIngredientDataController.swift; sourceTree = "<group>"; };
 		6AEB65F01E4D06DD0094B9DE /* SelectIngredientData.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectIngredientData.storyboard; sourceTree = "<group>"; };
+		6AEE5EC91E720D3300C2A2FB /* EditNameButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNameButtonController.swift; sourceTree = "<group>"; };
+		6AEE5ECA1E720D3300C2A2FB /* EditNameButtonController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditNameButtonController.xib; sourceTree = "<group>"; };
 		6AF0C26A1E62197300FE14FD /* SelectIngredientDataContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectIngredientDataContainerController.swift; sourceTree = "<group>"; };
 		6AF0C26C1E621E0900FE14FD /* SelectIngredientQuantityController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectIngredientQuantityController.swift; sourceTree = "<group>"; };
 		6AF0C26D1E621E0900FE14FD /* SelectIngredientQuantityController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectIngredientQuantityController.xib; sourceTree = "<group>"; };
@@ -1039,10 +1043,9 @@
 		6A287E8E1E53A94500868244 /* addEditFirstLevelSubcontrollers */ = {
 			isa = PBXGroup;
 			children = (
-				6A287E861E52671700868244 /* EditNameColorController.swift */,
-				6A287E881E52672600868244 /* EditNameColorController.xib */,
-				6A287E8A1E53A7D500868244 /* EditSingleInputController.swift */,
-				6A287E8B1E53A7D500868244 /* EditSingleInputController.xib */,
+				6AEE5EC71E720CED00C2A2FB /* singleInput */,
+				6AEE5EC61E720CE400C2A2FB /* nameColor */,
+				6AEE5EC81E720D0900C2A2FB /* nameButton */,
 			);
 			name = addEditFirstLevelSubcontrollers;
 			sourceTree = "<group>";
@@ -1221,6 +1224,33 @@
 				6AF46EB71E5B6F7500BBFF4C /* UnitsDelegate.swift */,
 			);
 			name = selectIngredientDataController;
+			sourceTree = "<group>";
+		};
+		6AEE5EC61E720CE400C2A2FB /* nameColor */ = {
+			isa = PBXGroup;
+			children = (
+				6A287E861E52671700868244 /* EditNameColorController.swift */,
+				6A287E881E52672600868244 /* EditNameColorController.xib */,
+			);
+			name = nameColor;
+			sourceTree = "<group>";
+		};
+		6AEE5EC71E720CED00C2A2FB /* singleInput */ = {
+			isa = PBXGroup;
+			children = (
+				6A287E8A1E53A7D500868244 /* EditSingleInputController.swift */,
+				6A287E8B1E53A7D500868244 /* EditSingleInputController.xib */,
+			);
+			name = singleInput;
+			sourceTree = "<group>";
+		};
+		6AEE5EC81E720D0900C2A2FB /* nameButton */ = {
+			isa = PBXGroup;
+			children = (
+				6AEE5EC91E720D3300C2A2FB /* EditNameButtonController.swift */,
+				6AEE5ECA1E720D3300C2A2FB /* EditNameButtonController.xib */,
+			);
+			name = nameButton;
 			sourceTree = "<group>";
 		};
 		6AF0C2741E6307E600FE14FD /* selectIngredientCells */ = {
@@ -2581,6 +2611,7 @@
 				6A7C54BA1E439B2800300F8D /* ItemsController.xib in Resources */,
 				6A3A67C01E56142200B5354F /* ManageItemsUnits.storyboard in Resources */,
 				6A1027781E5E5DBF003D2972 /* ProductQuantityController.xib in Resources */,
+				6AEE5ECC1E720D3300C2A2FB /* EditNameButtonController.xib in Resources */,
 				EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */,
 				6A3B2B7C1E59E93600798424 /* UnitView.xib in Resources */,
 				EBD668041CED4D440055EE0B /* Stats.storyboard in Resources */,
@@ -2754,6 +2785,7 @@
 				6A7C54BE1E43F03A00300F8D /* StashListItemsControllerNew.swift in Sources */,
 				EB21A3001D00A638000C594C /* AboutController.swift in Sources */,
 				EB6E3D131C56D0ED00D65DD5 /* PathButton.swift in Sources */,
+				6AEE5ECB1E720D3300C2A2FB /* EditNameButtonController.swift in Sources */,
 				6A3A67BE1E56141200B5354F /* ManageItemsUnitsController.swift in Sources */,
 				EB8D1D091C37318500ADF884 /* GroupsController.swift in Sources */,
 				EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */,

@@ -905,7 +905,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 extension AddEditListItemViewController: ProductQuantityControlleDelegate {
     
     func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void) {
-        Prov.unitProvider.units(successHandler {units in
+        Prov.unitProvider.units(buyable: true, successHandler {units in
             handler(units)
         })
     }

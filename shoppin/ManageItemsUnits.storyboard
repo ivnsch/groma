@@ -36,13 +36,27 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uEw-eq-OXY" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                            <rect key="frame" x="317" y="12" width="38" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="40"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="1mL-XL-ATw" firstAttribute="centerY" secondItem="edW-ex-poZ" secondAttribute="centerY" id="0mV-rF-DKx"/>
+                                        <constraint firstItem="uEw-eq-OXY" firstAttribute="centerY" secondItem="edW-ex-poZ" secondAttribute="centerY" id="3VM-oT-50s"/>
                                         <constraint firstItem="1mL-XL-ATw" firstAttribute="leading" secondItem="edW-ex-poZ" secondAttribute="leading" constant="20" id="7VG-ok-r2b" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                                        <constraint firstAttribute="trailing" secondItem="uEw-eq-OXY" secondAttribute="trailing" constant="20" id="gKs-n1-wJT" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="buyableLabel" destination="uEw-eq-OXY" id="V6u-Zv-07l"/>
                                     <outlet property="unitLabel" destination="1mL-XL-ATw" id="VSB-NX-UAo"/>
                                 </connections>
                             </tableViewCell>

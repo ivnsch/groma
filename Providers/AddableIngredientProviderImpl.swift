@@ -36,7 +36,8 @@ class AddableIngredientProviderImpl: AddableIngredientProvider {
                     return
                 }
                 
-                Prov.unitProvider.units({allUnitsResult in
+                // This is used to add ingredients to a shopping list, so we are only interested in buyable units
+                Prov.unitProvider.units(buyable: true, {allUnitsResult in
                     guard let allUnits = allUnitsResult.sucessResult else {
                         QL4("No units")
                         handler(ProviderResult(status: allUnitsResult.status))

@@ -39,7 +39,7 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
         unitsCollectionView.delegate = delegate
         unitsDelegate = delegate
         
-        Prov.unitProvider.units(successHandler{[weak self] units in guard let weakSelf = self else {return}
+        Prov.unitProvider.units(buyable: nil, successHandler{[weak self] units in guard let weakSelf = self else {return}
             
             let dataSource = UnitsDataSource(units: units)
             dataSource.delegate = self

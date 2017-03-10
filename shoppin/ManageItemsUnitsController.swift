@@ -20,7 +20,7 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
     
     fileprivate var units: Results<Providers.Unit>?
     
-    fileprivate var topEditSectionControllerManager: ExpandableTopViewController<EditSingleInputController>?
+    fileprivate var topEditUnitControllerManager: ExpandableTopViewController<EditNameButtonController>?
     
     weak var delegate: ManageItemsControllerDelegate?
     
@@ -30,21 +30,21 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
         load()
         
         if let delegate = delegate {
-            topEditSectionControllerManager = initSimpleInputControllerManager(config: delegate.topControllerConfig)
+            topEditUnitControllerManager = initSimpleInputControllerManager(config: delegate.topControllerConfig)
         } else {
             QL4("Can't initialize top controller: No delegate")
         }
     }
     
     fileprivate func load() {
-        Prov.unitProvider.units(successHandler {[weak self] units in
+        Prov.unitProvider.units(buyable: nil, successHandler {[weak self] units in
             self?.units = units
         })
     }
     
-    fileprivate func initSimpleInputControllerManager(config: ManageDatabaseTopControllerConfig) -> ExpandableTopViewController<EditSingleInputController> {
-        let manager: ExpandableTopViewController<EditSingleInputController> = ExpandableTopViewController(top: config.top, height: DimensionsManager.quickEditItemHeight, animateTableViewInset: config.animateInset, parentViewController: config.parentController, tableView: tableView) {[weak self] in
-            let controller = EditSingleInputController()
+    fileprivate func initSimpleInputControllerManager(config: ManageDatabaseTopControllerConfig) -> ExpandableTopViewController<EditNameButtonController> {
+        let manager: ExpandableTopViewController<EditNameButtonController> = ExpandableTopViewController(top: config.top, height: DimensionsManager.quickEditItemHeight, animateTableViewInset: config.animateInset, parentViewController: config.parentController, tableView: tableView) {[weak self] in
+            let controller = EditNameButtonController()
             controller.delegate = self
             return controller
         }
@@ -96,11 +96,19 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
         guard let units = units else {QL4("No units"); return}
         let unit = units[indexPath.row]
         
-        topEditSectionControllerManager?.expand(true)
+        topEditUnitControllerManager?.expand(true)
         
-        topEditSectionControllerManager?.controller?.config(mode: .standalone, prefillName: unit.name, settings: EditSingleInputControllerSettings(
-            namePlaceholder: "placeholder_name",
-            nameEmptyValidationMessage: "validation_name_not_empty"
+        topEditUnitControllerManager?.controller?.config(
+            mode: .standalone,
+        
+        prefillData: EditNameButtonViewInputs(
+            name: unit.name,
+            buttonSelected: unit.buyable),
+        
+        settings: EditNameButtonViewSettings(
+            namePlaceholder: trans("placeholder_name"),
+            nameEmptyValidationMessage: trans("validation_name_not_empty"),
+            buttonTitle: trans("button_title_buyable") // TODO!!!!!!!!!!!!!! trans
         ), editingObj: unit)
         
         //        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
@@ -118,16 +126,15 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
 
 
 
-// MARK: - EditSingleInputControllerDelegate
+// MARK: - EditNameButtonDelegate
 
-extension ManageItemsUnitsController: EditSingleInputControllerDelegate {
+extension ManageItemsUnitsController: EditNameButtonDelegate {
     
-    func onSubmitSingleInput(name: String, editingObj: Any?) {
-        
+    func onSubmitNameButtonInput(result: EditNameButtonResult, editingObj: Any?) {
         guard let editingUnit = editingObj as? Providers.Unit else {QL4("Invalid state: no editing obj or wrong type: \(editingObj)"); return}
         
-        Prov.unitProvider.update(unit: editingUnit, name: name, successHandler{[weak self] in
-            self?.topEditSectionControllerManager?.expand(false)
+        Prov.unitProvider.update(unit: editingUnit, name: result.inputs.name, buyable: result.inputs.buttonSelected, successHandler{[weak self] in
+            self?.topEditUnitControllerManager?.expand(false)
             self?.tableView.reloadData()
         })
     }

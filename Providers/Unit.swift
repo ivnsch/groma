@@ -38,6 +38,8 @@ public class Unit: DBSyncable, Identifiable {
     public dynamic var name: String = ""
     public dynamic var idVal: Int = UnitId.none.rawValue
     
+    public dynamic var buyable: Bool = true
+    
     public var id: UnitId {
         get {
             return UnitId(rawValue: idVal)!
@@ -51,12 +53,13 @@ public class Unit: DBSyncable, Identifiable {
         return "uuid"
     }
 
-    public convenience init(uuid: String, name: String, id: UnitId) {
+    public convenience init(uuid: String, name: String, id: UnitId, buyable: Bool) {
         self.init()
         
         self.uuid = uuid
         self.name = name
         self.id = id
+        self.buyable = buyable
     }
 
     // MARK: - Filters
@@ -77,11 +80,16 @@ public class Unit: DBSyncable, Identifiable {
         return "name CONTAINS[c] '\(text)'"
     }
     
-    public func copy(uuid: String? = nil, name: String? = nil, id: UnitId? = nil) -> Unit {
+    static func createBuyable(buyable: Bool) -> String {
+        return "buyable == \(buyable)"
+    }
+    
+    public func copy(uuid: String? = nil, name: String? = nil, id: UnitId? = nil, buyable: Bool = true) -> Unit {
         return Unit(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
-            id: id ?? self.id
+            id: id ?? self.id,
+            buyable: buyable ?? self.buyable
         )
     }
        public override var description: String {

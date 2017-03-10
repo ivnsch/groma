@@ -12,6 +12,7 @@ import Providers
 class ManageItemsUnitCell: UITableViewCell {
     
     @IBOutlet weak var unitLabel: UILabel!
+    @IBOutlet weak var buyableLabel: UILabel!
     
     func config(unit: Providers.Unit, filter: String?) {
         
@@ -21,6 +22,12 @@ class ManageItemsUnitCell: UITableViewCell {
             unitLabel.attributedText = unitNameText.makeAttributedBoldRegular(boldRange)
         } else {
             unitLabel.text = unitNameText
+        }
+        
+        if unit.buyable {
+            buyableLabel.text = trans("button_title_buyable") // TODO!!!!!!!!! trans
+        } else {
+            buyableLabel.text = ""
         }
         
         // height now calculated yet so we pass the position of border
