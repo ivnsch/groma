@@ -84,13 +84,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let showServerThings = ConnectionProvider.connectedAndLoggedIn
         
         if showServerThings {
-            let realTimeConnectionSetting = SwitchSetting(id: .enableRealTime, label: trans("setting_real_time_connection"), on: Prov.userProvider.isWebsocketConnected())
+//            let realTimeConnectionSetting = SwitchSetting(id: .enableRealTime, label: trans("setting_real_time_connection"), on: Prov.userProvider.isWebsocketConnected())
             
             settings = [
 //                clearHistorySetting,
-                realTimeConnectionSetting,
-                overwriteDataSetting,
-                removeAccountSetting,
+//                realTimeConnectionSetting,
+//                overwriteDataSetting,
+//                removeAccountSetting, // TODO!!!!!!!!!!!!!!!!!!!!!!! how to do this with Realm?
 //                addDummyHistoryItemsSetting,
 //                clearAllDataSetting,
                 restorePrefillProductsSetting,
