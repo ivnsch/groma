@@ -242,12 +242,13 @@ extension UIView {
         self.layer.addSublayer(border)
     }
     
-    public func scaleUpAndDown() {
+    public func scaleUpAndDown(scale: CGFloat = 1.2, onFinish: (() -> Void)? = nil) {
         UIView.animate(withDuration: 0.15, animations: {[weak self] in
-            self?.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+            self?.transform = CGAffineTransform(scaleX: scale, y: scale)
         }, completion: {[weak self] finished in
             UIView.animate(withDuration: 0.15, animations: {[weak self] in
                 self?.transform = CGAffineTransform(scaleX: 1, y: 1)
+                onFinish?()
             })
         })
     }

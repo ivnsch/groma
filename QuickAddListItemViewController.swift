@@ -321,7 +321,9 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     selectQuantifiableProductController.onSelected = {(quantifiableProduct, quantity) in
                         weakSelf.selectQuantifiableAnimator?.close {
                             print("") // compiler bug! we need some command here otherwise next line doesn't compile.
-                            onRetrieved((quantifiableProduct, quantity))
+//                            cell.scaleUpAndDown(scale: 1.1) {
+                                onRetrieved((quantifiableProduct, quantity))
+//                            }
                         }
                     }
                     
