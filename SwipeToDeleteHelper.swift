@@ -25,7 +25,7 @@ class SwipeToDeleteHelper: NSObject, UIGestureRecognizerDelegate {
     fileprivate var panStartPoint: CGPoint!
     fileprivate var startingLeftLayoutConstraint: CGFloat!
     
-    var limit: CGFloat = 200
+    var limit: CGFloat = 120
     
     weak var delegate: SwipeToDeleteHelperDelegate?
     
