@@ -302,6 +302,22 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         }
     }
     
+    func closeFull(onFinishAnim: (() -> Void)? = nil) {
+        guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
+        guard let todoController = todoController else {QL4("No todoController"); return}
+        
+        expandedNew = false
+        
+        bottomConstraint.constant = 0
+        heightConstraint.constant = 0
+        
+        UIView.animate(withDuration: Theme.defaultAnimDuration, animations: {
+            todoController.view.layoutIfNeeded()
+        }) {finished in
+            onFinishAnim?()
+        }
+    }
+    
     func onPanCell(_ recognizer: UIPanGestureRecognizer) {
 
         switch recognizer.state {

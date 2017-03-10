@@ -254,7 +254,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     func onCloseCartAfterBuy() {
         topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: tableView)
-        setCartExpanded(expanded: false) {[weak self] in
+        pricesView.closeFull() {[weak self] in
             // trigger hiding of prices view by setting quantity to 0
             // we just bought so we know that cart quantity is 0 - no need to re-fetch anything here. We don't use stash for now, so we just pass stash 0.
             self?.pricesView.setQuantities(cart: 0, stash: 0)
