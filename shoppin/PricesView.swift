@@ -234,14 +234,18 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     
     
     
-    fileprivate func snap() {
+    fileprivate func snap(panningDown: Bool) {
         guard let bottomConstant = bottomConstraint?.constant else {QL4("Illegal state: No bottom constraing"); return}
         
-        if bottomConstant > bottomConstraintMax / 3 {
-            setExpanded(expanded: true)
-        } else {
-            setExpanded(expanded: false)
-        }
+        let expand: Bool = {
+            if panningDown {
+                return bottomConstant > bottomConstraintMax - 60
+            } else {
+                return bottomConstant > bottomConstraintMax / 5
+            }
+        }()
+        
+        setExpanded(expanded: expand)
     }
     
     // TODO this is from old UI, remove
@@ -336,8 +340,10 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
             
             bottomConstraint?.constant = newConstant
             
-        case .ended: snap()
-        case .cancelled: snap()
+        case .ended: fallthrough
+        case .cancelled:
+            let panningDown = recognizer.translation(in: self).y - panStartPoint.y > 0
+            snap(panningDown: panningDown)
             
         default: print("Not handled")
         }
