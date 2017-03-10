@@ -70,6 +70,7 @@ class QuickAddItemCellAnimatableCopy: UIView {
     var nameLabel: UILabel!
     var brandLabel: UILabel!
     var baseLabel: UILabel!
+    var quantityLabel: UILabel!
     
     var overlay: UIView!
     var baseQuantityLabel: UILabel!
@@ -112,6 +113,15 @@ class QuickAddItemCellAnimatableCopy: UIView {
         self.baseLabel = baseLabel
         baseLabel.alpha = 0 // not present in quick add view, so fades in
         
+        let quantityLabel = UILabel()
+        quantityLabel.text = Float(1).quantityString
+        quantityLabel.frame = CGRect(x: cell.bounds.maxX - 5, y: nameLabel.y, width: nameLabel.width, height: nameLabel.height)
+        quantityLabel.font = UIFont.systemFont(ofSize: LabelMore.mapToFontSize(60) ?? 20)
+        quantityLabel.textColor = Theme.black
+        addSubview(quantityLabel)
+        self.quantityLabel = quantityLabel
+        quantityLabel.sizeToFit()
+        quantityLabel.alpha = 0 // not present in quick add view, so fades in
         
         
         // anchor at the left so it will scale only to the right
@@ -121,7 +131,8 @@ class QuickAddItemCellAnimatableCopy: UIView {
         let scale: CGFloat = 0.7
         
         self.nameLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
-
+        self.quantityLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
+        
         addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
         
         
@@ -136,7 +147,7 @@ class QuickAddItemCellAnimatableCopy: UIView {
     }
     
     func animateAddToList(targetFrame: CGRect, onFinish: @escaping () -> Void) {
-        nameLabel.frame.origin = CGPoint(x: 0, y: 0)
+        nameLabel.frame.origin = CGPoint(x: 0, y: 0) // TODO what's this for ?
 
         anim(0.3, {
             self.frame = targetFrame
@@ -155,6 +166,11 @@ class QuickAddItemCellAnimatableCopy: UIView {
             self.nameLabel.center.y = DimensionsManager.defaultCellHeight / 2
             self.nameLabel.textColor = Theme.black
             
+            
+            self.quantityLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
+            self.quantityLabel.frame.origin.x = targetFrame.width - DimensionsManager.leftRightPaddingConstraint - self.quantityLabel.width
+            self.quantityLabel.center.y = DimensionsManager.defaultCellHeight / 2
+            self.quantityLabel.alpha = 1
             
         }, onFinish: {
             delay(0.1) {
