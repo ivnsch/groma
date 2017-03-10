@@ -53,6 +53,7 @@ struct Theme {
     static let baseQuantitiesFGColor = UIColor.black
     static let unitsSelectedColor = blue
     static let fractionsSelectedColor = blue
+    static let deleteRed = UIColor(hexString: "F66823")
     
     static let defaultTableViewBGColor = lightGreyBackground
     

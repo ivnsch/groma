@@ -714,6 +714,11 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     var isControllerInEditMode: Bool {
         return isEditing
     }
+    
+    func onDelete(_ listItem: ListItem) {
+        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem)"); return}
+        listItemsTableViewController.deleteListItem(indexPath: indexPath)
+    }
 }
 
 
@@ -775,17 +780,18 @@ class SimpleListItemsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
-            guard let listItem = listItems?[indexPath.row] else {QL4("No listItem"); return}
-            
-            tableView.beginUpdates()
-            
+            deleteListItem(indexPath: indexPath)
+        }
+    }
+    
+    fileprivate func deleteListItem(indexPath: IndexPath) {
+        guard let listItem = listItems?[indexPath.row] else {QL4("No listItem"); return}
+
+        tableView.wrapUpdates {[weak self] in
             // remove from content provider
-            listItemsEditTableViewDelegate?.onListItemDeleted(indexPath: indexPath, tableViewListItem: listItem)
-            
+            self?.listItemsEditTableViewDelegate?.onListItemDeleted(indexPath: indexPath, tableViewListItem: listItem)
             // remove from tableview and model
-            tableView.deleteRows(at: [indexPath], with: .top)
-            
-            tableView.endUpdates()
+            self?.tableView.deleteRows(at: [indexPath], with: .top)
         }
     }
     

@@ -30,7 +30,6 @@ class SwipeToDeleteHelper: NSObject, UIGestureRecognizerDelegate {
     weak var delegate: SwipeToDeleteHelperDelegate?
     
     var isOpen: Bool {
-        QL2("is open? \(leftLayoutConstraint.constant != 0)")
         return leftLayoutConstraint.constant != 0
     }
     
@@ -110,7 +109,7 @@ class SwipeToDeleteHelper: NSObject, UIGestureRecognizerDelegate {
         }
         rightLayoutConstraint.constant = -leftLayoutConstraint.constant
         
-        anim(Theme.defaultAnimDuration, {[weak self] in
+        animIf(animated, Theme.defaultAnimDuration, {[weak self] in
             self?.parentView.layoutIfNeeded()
         }) {[weak self] in
             self?.delegate?.onOpen(open)

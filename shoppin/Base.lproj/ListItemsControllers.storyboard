@@ -414,6 +414,19 @@
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="added" translatesAutoresizingMaskIntoConstraints="NO" id="jMV-Fq-LvI">
                                             <rect key="frame" x="331" y="34" width="24" height="23"/>
                                         </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="34m-yG-k8j" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                                            <rect key="frame" x="208" y="0.0" width="167" height="91"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <inset key="contentEdgeInsets" minX="100" minY="0.0" maxX="14" maxY="0.0"/>
+                                            <state key="normal" title="Delete">
+                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="50"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </button>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mEO-yB-hml">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
                                             <subviews>
@@ -504,9 +517,12 @@
                                     <color key="backgroundColor" red="0.15686274510000001" green="0.78039215689999997" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstItem="mEO-yB-hml" firstAttribute="top" secondItem="6dg-3t-A2g" secondAttribute="top" id="1fy-Gk-XaV"/>
+                                        <constraint firstItem="34m-yG-k8j" firstAttribute="top" secondItem="6dg-3t-A2g" secondAttribute="top" id="JZI-XU-5z5"/>
+                                        <constraint firstAttribute="trailing" secondItem="34m-yG-k8j" secondAttribute="trailing" id="KC2-EQ-YNB"/>
                                         <constraint firstAttribute="trailing" secondItem="mEO-yB-hml" secondAttribute="trailing" id="M0m-8G-fqg"/>
                                         <constraint firstItem="a2Q-w2-HKK" firstAttribute="leading" secondItem="6dg-3t-A2g" secondAttribute="leading" constant="20" id="Tzr-z1-mh1" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstItem="a2Q-w2-HKK" firstAttribute="centerY" secondItem="6dg-3t-A2g" secondAttribute="centerY" id="VpE-eK-SHV"/>
+                                        <constraint firstAttribute="bottom" secondItem="34m-yG-k8j" secondAttribute="bottom" id="Vwp-f3-bbB"/>
                                         <constraint firstAttribute="trailing" secondItem="jMV-Fq-LvI" secondAttribute="trailing" constant="20" id="bKq-pT-nCL" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstAttribute="bottom" secondItem="mEO-yB-hml" secondAttribute="bottom" id="jRL-Dr-k8D"/>
                                         <constraint firstItem="mEO-yB-hml" firstAttribute="leading" secondItem="6dg-3t-A2g" secondAttribute="leading" id="orc-lq-4ob"/>
@@ -522,6 +538,7 @@
                                     <outlet property="centerVerticallyNameLabelConstraint" destination="aPq-1R-TWY" id="eCQ-dH-UjM"/>
                                     <outlet property="contentViewLeftConstraint" destination="orc-lq-4ob" id="ch4-Vg-ytB"/>
                                     <outlet property="contentViewRightConstraint" destination="M0m-8G-fqg" id="d3b-rN-Xpc"/>
+                                    <outlet property="deleteButton" destination="34m-yG-k8j" id="kqX-Ye-a0Q"/>
                                     <outlet property="myContentView" destination="mEO-yB-hml" id="zsB-5b-YPD"/>
                                     <outlet property="nameLabel" destination="npq-ts-NkO" id="e3j-25-fIv"/>
                                     <outlet property="noteButton" destination="8LP-6w-Aa7" id="6Qg-cK-Ip5"/>

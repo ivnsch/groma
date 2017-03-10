@@ -17,10 +17,11 @@ protocol ListItemCellDelegateNew: class {
     func onNoteTap(_ cell: ListItemCellNew, listItem: ListItem)
     func onChangeQuantity(_ listItem: ListItem, delta: Float)
     func onQuantityInput(_ listItem: ListItem, quantity: Float)
+    func onDelete(_ listItem: ListItem)
     var isControllerInEditMode: Bool {get}
 }
 
-class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityViewDelegate {
+class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityViewDelegate, SwipeToDeleteHelperDelegate {
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var brandLabel: UILabel!
@@ -50,6 +51,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
     @IBOutlet weak var quantityViewTrailingConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var deleteButton: UIButton!
+    
     fileprivate weak var delegate: ListItemCellDelegateNew?
     
     fileprivate var swipeToIncrementHelper: SwipeToIncrementHelper?
@@ -58,6 +61,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
     var startStriked: Bool = false
     
+    fileprivate var swipeToDeleteHelper: SwipeToDeleteHelper?
+
     fileprivate var shownQuantity: Float = 0 {
         didSet {
             if let tableViewListItem = tableViewListItem {
@@ -80,6 +85,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         didSet {
             if let tableViewListItem = tableViewListItem {
                 
+                swipeToDeleteHelper?.setOpen(false, animated: false) // recycling
+
                 let listItem = tableViewListItem
                 
                 nameLabel.text = NSLocalizedString(listItem.product.product.product.item.name, comment: "")
@@ -172,12 +179,20 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
                 quantityView.setMode(.readonly, animated: false)
                 sectionColorView.alpha = 1
                 quantityViewTrailingConstraint.constant = DimensionsManager.leftRightPaddingConstraint
+                deleteButton.isHidden = true
+                bgIconLeft.isHidden = false
+                bgIconRight.isHidden = false
+                contentView.backgroundColor = Theme.lighterGreen
                 
             case .increment:
                 noteButton.alpha = 0
                 quantityView.setMode(.edit, animated: false)
                 sectionColorView.alpha = 0
                 quantityViewTrailingConstraint.constant = 0
+                deleteButton.isHidden = false
+                bgIconLeft.isHidden = true
+                bgIconRight.isHidden = true
+                contentView.backgroundColor = Theme.deleteRed
             }
             
             layoutIfNeeded()
@@ -232,6 +247,9 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         //        // block tapping the cell behind the +/- buttons, otherwise it's easy to open the edit listitem view by mistake
         //        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTapPlusMinusContainer:")
         //        minusButton.addGestureRecognizer(tapRecognizer)
+        
+        swipeToDeleteHelper = SwipeToDeleteHelper(parentView: self, button: myContentView, leftLayoutConstraint: contentViewLeftConstraint, rightLayoutConstraint: contentViewRightConstraint, cancelTouches: false)
+        swipeToDeleteHelper?.delegate = self
         
         swipeToIncrementHelper = SwipeToIncrementHelper(view: myContentView)
         swipeToIncrementHelper?.delegate = self
@@ -386,7 +404,28 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     }
     
     var swipeToIncrementEnabled: Bool {
-        return mode == .increment
+        if mode == .increment {
+            let isOpen = swipeToDeleteHelper?.isOpen ?? false
+            return !isOpen
+        } else {
+            return false
+        }
+    }
+    
+    // MARK: - SwipeToDeleteHelperDelegate
+    
+    func onOpen(_ open: Bool) {
+        if open {
+            if let tableViewListItem = tableViewListItem {
+                delegate?.onDelete(tableViewListItem)
+            } else {
+                QL3("No listItem")
+            }
+        }
+    }
+    
+    var isSwipeToDeleteEnabled: Bool {
+        return shownQuantity == 0
     }
     
     // MARK: - Touch

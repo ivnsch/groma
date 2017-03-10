@@ -24,6 +24,19 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="undo" translatesAutoresizingMaskIntoConstraints="NO" id="MjB-ho-rEw">
                         <rect key="frame" x="20" y="32" width="23" height="24"/>
                     </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QqO-kK-LfZ" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                        <rect key="frame" x="223" y="0.0" width="167" height="88.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <inset key="contentEdgeInsets" minX="100" minY="0.0" maxX="14" maxY="0.0"/>
+                        <state key="normal" title="Delete">
+                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                <integer key="value" value="50"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </button>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qsx-FZ-N7Z">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="88"/>
                         <subviews>
@@ -117,10 +130,13 @@
                     <constraint firstItem="qsx-FZ-N7Z" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="48m-MO-3dm"/>
                     <constraint firstAttribute="trailing" secondItem="U2m-oG-dVp" secondAttribute="trailing" constant="20" id="5Us-PV-yHF" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                     <constraint firstItem="qsx-FZ-N7Z" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Gyi-Al-dLt"/>
+                    <constraint firstItem="QqO-kK-LfZ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="OB1-F8-aMc"/>
                     <constraint firstItem="MjB-ho-rEw" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="QQd-RY-Q9y" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                     <constraint firstItem="U2m-oG-dVp" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="a3U-ax-LkM"/>
+                    <constraint firstAttribute="bottom" secondItem="QqO-kK-LfZ" secondAttribute="bottom" id="sSA-TH-X63"/>
                     <constraint firstItem="MjB-ho-rEw" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="tDL-NK-Mw5"/>
                     <constraint firstAttribute="bottom" secondItem="qsx-FZ-N7Z" secondAttribute="bottom" id="wzQ-D7-c0K"/>
+                    <constraint firstAttribute="trailing" secondItem="QqO-kK-LfZ" secondAttribute="trailing" id="y1T-Ri-jUD"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -131,6 +147,7 @@
                 <outlet property="centerVerticallyNameLabelConstraint" destination="esy-ni-fkJ" id="WzT-AR-ykM"/>
                 <outlet property="contentViewLeftConstraint" destination="48m-MO-3dm" id="h4S-8N-DRq"/>
                 <outlet property="contentViewRightConstraint" destination="12w-c0-6Pn" id="Kkh-cR-etc"/>
+                <outlet property="deleteButton" destination="QqO-kK-LfZ" id="v7o-EC-aMV"/>
                 <outlet property="myContentView" destination="qsx-FZ-N7Z" id="5z0-e2-a9Y"/>
                 <outlet property="nameLabel" destination="G1L-C6-XHI" id="Sjp-6s-go0"/>
                 <outlet property="noteButton" destination="KBs-ef-XHn" id="T8B-Zw-Y8o"/>

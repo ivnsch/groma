@@ -33,3 +33,16 @@ public func anim(_ duration: Double = Theme.defaultAnimDuration, _ f: @escaping 
         onFinish()
     }
 }
+
+public func animIf(_ animated: Bool, _ duration: Double = Theme.defaultAnimDuration, _ f: @escaping () -> Void, onFinish: @escaping () -> Void) {
+    if animated {
+        UIView.animate(withDuration: duration, animations: {
+            f()
+        }) {finished in
+            onFinish()
+        }
+    } else {
+        f()
+        onFinish()
+    }
+}

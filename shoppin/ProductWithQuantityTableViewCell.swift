@@ -43,6 +43,8 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         didSet {
             guard let model = model else {QL3("Model is nil"); return}
             
+            swipeToDeleteHelper?.setOpen(false, animated: false) // recycling
+            
             nameLabel.text = NSLocalizedString(model.product.product.item.name, comment: "")
             
             centerVerticallyNameLabelConstraint.constant = model.product.product.brand.isEmpty ? 0 : 10
