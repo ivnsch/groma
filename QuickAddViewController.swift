@@ -41,7 +41,16 @@ protocol QuickAddDelegate: class {
     func onRemovedBrand(_ name: String)
     
     func onFinishAddCellAnimation()
+    var offsetForAddCellAnimation: CGFloat {get}
 }
+
+extension QuickAddDelegate {
+    
+    var offsetForAddCellAnimation: CGFloat {
+        return 0
+    }
+}
+
 
 private enum AddProductOrGroupContent {
     case product, group, recipe
@@ -351,6 +360,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func onFinishAddCellAnimation() {
         delegate?.onFinishAddCellAnimation()
+    }
+    
+    var offsetForAddCellAnimation: CGFloat {
+        return delegate?.offsetForAddCellAnimation ?? 0
     }
     
     // MARK: - Actions dispatch

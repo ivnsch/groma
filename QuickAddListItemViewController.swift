@@ -35,6 +35,7 @@ protocol QuickAddListItemDelegate: class {
     func parentViewForAddButton() -> UIView?
     
     func onFinishAddCellAnimation()
+    var offsetForAddCellAnimation: CGFloat {get}
 }
 
 /// For internal communication with other top controllers
@@ -261,7 +262,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     
                     let categoryColorViewWidth: CGFloat = 4
                     
-                    let targetCellFrame = CGRect(x: categoryColorViewWidth, y: quickAddFrameRelativeToWindow.maxY + DimensionsManager.contractedSectionHeight, width: view.width - categoryColorViewWidth, height: DimensionsManager.defaultCellHeight)
+                    let targetCellFrame = CGRect(x: categoryColorViewWidth, y: quickAddFrameRelativeToWindow.maxY + (delegate?.offsetForAddCellAnimation ?? 0), width: view.width - categoryColorViewWidth, height: DimensionsManager.defaultCellHeight)
                     
                     copy.animateAddToList(targetFrame: targetCellFrame) {[weak self] in
                         self?.delegate?.onFinishAddCellAnimation()

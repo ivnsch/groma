@@ -91,7 +91,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         self.tableView.allowsSelectionDuringEditing = true
         
         
-        tableView.register(UINib(nibName: "PlaceHolderItemCell", bundle: nil), forCellReuseIdentifier: "placeholder")
+        tableView.register(UINib(nibName: "PlaceHolderItemCell", bundle: nil), forCellReuseIdentifier: placeholderIdentifier)
         
         tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
@@ -222,22 +222,8 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         if sectionsExpanded {
-            
-            
-            // TODO remove this - let method as it was before
-            let addForPossiblePlaceholder: Int = {
-                if let placeHolderItem = placeHolderItem, placeHolderItem.indexPath.section == section {
-                    return 0
-                } else {
-                    return 0
-                }
-            }()
-            
-            let listItemsInSectionCount = sections?[section].listItems.count ?? 0
-            
-            return listItemsInSectionCount + addForPossiblePlaceholder
+            return sections?[section].listItems.count ?? 0
             
         } else {
             return 0

@@ -130,7 +130,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onExpandableClose() {
         topBarOnCloseExpandable()
         toggleButtonRotator.enabled = true
-        topQuickAddControllerManager?.controller?.onClose()        
+        topQuickAddControllerManager?.controller?.onClose()
+        
+        productsWithQuantityController.showQuantityButtons = true
     }
     
     fileprivate func topBarOnCloseExpandable() {
@@ -225,6 +227,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)])
             }
             
+            productsWithQuantityController.showQuantityButtons = true
+            
         } else { // if there's no top controller open, open the quick add controller
             
             func open() {
@@ -237,6 +241,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 if rotateTopBarButton {
                     topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))])
                 }
+                
+                productsWithQuantityController.showQuantityButtons = false
             }
             
             checkShowAddToInventoryExplanationPopup {
@@ -329,19 +335,27 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         guard let realmData = realmData else {QL4("No realm data"); return}
         
         if let inventory = inventory {
-            Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: quantity, remote: true, realmData: realmData, successHandler{addedItem in
+            Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: quantity, remote: true, realmData: realmData, successHandler{[weak self] addedItem in
                 
-                if addedItem.isNew {
-                    self.insert(item: addedItem.inventoryItem, scrollToRow: true)
-                    self.productsWithQuantityController.updateEmptyUI()
-                } else {
-                    if let index = inventoryItemsResult.index(of: addedItem.inventoryItem) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
-                        self.update(item: addedItem.inventoryItem, scrollToRow: index)
-                    } else {
-                        QL4("Illegal state: Item is not new (it's an update) but was not found in results")
-                    }
+                onAddToProvider(QuickAddAddProductResult(isNewItem: addedItem.isNew))
+                
+                guard let itemIndex = inventoryItemsResult.index(of: addedItem.inventoryItem) else {
+                    QL4("Illegal state: Just added/updated item but didn't find it in results")
+                    return
                 }
                 
+                let indexPath = IndexPath(row: itemIndex, section: 0)
+
+                if addedItem.isNew {
+                    self?.productsWithQuantityController.placeHolderItem = (indexPath: indexPath, item: addedItem.inventoryItem)
+                    self?.tableView.insertRows(at: [indexPath], with: Theme.defaultRowAnimation)
+                    self?.productsWithQuantityController.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+                    
+                } else { // update
+                    self?.update(item: addedItem.inventoryItem, scrollToRow: itemIndex)
+                }
+                
+                self?.productsWithQuantityController.updateEmptyUI()
             })
         }
     }
@@ -450,6 +464,12 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onFinishAddCellAnimation() {
+        productsWithQuantityController.placeHolderItem = nil
+        productsWithQuantityController.tableView.reloadData()
+    }
+    
+    var offsetForAddCellAnimation: CGFloat {
+        return 2 // This table view doesn't have headers, so we theoretically shouldn't need offsetForAddCellAnimation here (it should be 0) but for some reason there are little jumps and this fixes it
     }
     
     // MARK: - Navigation

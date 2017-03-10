@@ -387,6 +387,10 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     func onFinishAddCellAnimation() {
     }
     
+    var offsetForAddCellAnimation: CGFloat {
+        return 0
+    }
+    
     // MARK: - ExpandableTopViewControllerDelegate
     
     func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {

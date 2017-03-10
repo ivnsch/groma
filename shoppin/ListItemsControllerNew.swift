@@ -229,7 +229,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         listItemsTableViewController.listItemsTableViewDelegate = self
         listItemsTableViewController.listItemsEditTableViewDelegate = self
         
-        listItemsTableViewController.tableView.bottomInset = 100 // TODO!!!!!!!!!!!!!!! calculate this number correctly
+        listItemsTableViewController.tableView.bottomInset = 300 // TODO!!!!!!!!!!!!!!! calculate this number correctly
 
 //        let navbarHeight = topBar.frame.height
 //        let topInset = navbarHeight
@@ -774,6 +774,10 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         listItemsTableViewController.placeHolderItem = nil
         self.listItemsTableViewController.tableView.reloadData()
         
+    }
+
+    override var offsetForAddCellAnimation: CGFloat {
+        return DimensionsManager.contractedSectionHeight
     }
     
     // MARK: - Reorder sections

@@ -71,6 +71,11 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready
     
+    var showQuantityButtons: Bool = true {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     var itemsCount: Int {
         return delegate?.itemsCount ?? 0
@@ -82,11 +87,16 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     fileprivate var pullToAddView: MyRefreshControl?
 
+    fileprivate let placeholderIdentifier = "placeholder"
+    var placeHolderItem: (indexPath: IndexPath, item: InventoryItem)?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         initExplanationManager()        
         initEmptyView()
+        
+        tableView.register(UINib(nibName: "PlaceHolderItemCell", bundle: nil), forCellReuseIdentifier: placeholderIdentifier)
         
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         
@@ -170,7 +180,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         if let _ = tabBarController?.tabBar.frame.height {
             // TODO this is not enough, why?
             //            tableView.bottomInset = tabBarHeight + Constants.tableViewAdditionalBottomInset
-            tableView.bottomInset = 120
+            tableView.bottomInset = 220
         } else {
             QL3("No tabBarController: \(tabBarController)")
         }
@@ -202,6 +212,11 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             explanationView.imageView.startAnimating()
             return cell
             
+        }else if let placeHolderItem = placeHolderItem, placeHolderItem.indexPath == indexPath {
+            let cell = tableView.dequeueReusableCell(withIdentifier: placeholderIdentifier) as! PlaceHolderItemCell
+            cell.categoryColorView.backgroundColor = placeHolderItem.item.product.product.item.category.color
+            return cell
+            
         } else { // Normal cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "inventoryCell", for: indexPath) as! ProductWithQuantityTableViewCell
             
@@ -216,6 +231,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
                 }
                 
             }
+            
+            cell.setMode(showQuantityButtons ? .edit : .readonly)
             
             cell.indexPath = indexPath
             cell.delegate = self
