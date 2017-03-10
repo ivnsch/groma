@@ -122,7 +122,11 @@ class AddRecipeController: UIViewController {
                 unit: $0.pUnit,
                 edible: true
             )
-            return AddRecipeIngredientModel(productPrototype: prototype, quantity: $0.pQuantity == 0 ? $0.quantity : $0.pQuantity, ingredient: $0)
+            
+            let quantity = $0.pQuantity == 0 ? $0.quantity : $0.pQuantity // Use prefill quantity, if not set quantity (0 in pre-fill means not set)
+            let finalQuantity = max(quantity, 1) // Start with min. 1 - ingredients can have a quantity of 0 (because they have a fraction, which is not included in quantity or because it's really 0 which can be used to indicate "to taste", e.g. with spices.
+            
+            return AddRecipeIngredientModel(productPrototype: prototype, quantity: finalQuantity, ingredient: $0)
         })
         
         tableView.reloadData()

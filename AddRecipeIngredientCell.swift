@@ -84,7 +84,7 @@ class AddRecipeIngredientCell: UITableViewCell {
                 productQuantityController?.currentBaseInput = base
             }
             
-            productQuantityController?.quantity = max(model?.quantity ?? 0, 1)
+            productQuantityController?.quantity = model?.quantity ?? 0
             
             updateQuantitySummary()
             
