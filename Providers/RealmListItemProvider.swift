@@ -1212,15 +1212,22 @@ class RealmListItemProvider: RealmProvider {
     }
 
     public func deleteSync(indexPath: IndexPath, status: ListItemStatus, list: List, realmData: RealmData) -> DeleteListItemResult? {
-        let sections = list.sections(status: status)
+        
         return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> DeleteListItemResult? in
-            
-            let section = sections[indexPath.section]
-            section.listItems.remove(objectAtIndex: indexPath.row)
-            
-            if self.deleteSectionIfEmpty(sections: list.sections(status: status), section: section) {
-                return DeleteListItemResult(deletedSection: true)
+
+            if status == .todo {
+                let section = list.sections(status: status)[indexPath.section]
+                
+                section.listItems.remove(objectAtIndex: indexPath.row)
+                
+                if self.deleteSectionIfEmpty(sections: list.sections(status: status), section: section) {
+                    return DeleteListItemResult(deletedSection: true)
+                } else {
+                    return DeleteListItemResult(deletedSection: false)
+                }
+
             } else {
+                list.listItems(status: status).remove(objectAtIndex: indexPath.row)
                 return DeleteListItemResult(deletedSection: false)
             }
         }
