@@ -933,18 +933,50 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func incrementFav(quantifiableProductUuid: String, _ handler: @escaping (Bool) -> Void) {
-        doInWriteTransaction({realm in
+    func incrementFav(quantifiableProductUuid: String, transactionRealm: Realm? = nil,  _ handler: @escaping (Bool) -> Void) {
+        
+        func transactionContent(realm: Realm) -> Bool {
             if let existingProduct = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(quantifiableProductUuid)).first {
                 existingProduct.fav += 1
-                realm.add(existingProduct, update: true)                
+                realm.add(existingProduct, update: true)
                 return true
             } else { // product not found
                 return false
             }
-        }, finishHandler: {savedMaybe in
-            handler(savedMaybe ?? false)
-        })
+        }
+        
+        if let realm = transactionRealm {
+            transactionContent(realm: realm)
+        } else {
+            doInWriteTransaction({realm in
+                return transactionContent(realm: realm)
+            }, finishHandler: {savedMaybe in
+                handler(savedMaybe ?? false)
+            })
+        }
+    }
+    
+    func incrementFav(productUuid: String, transactionRealm: Realm? = nil,  _ handler: @escaping (Bool) -> Void) {
+        
+        func transactionContent(realm: Realm) -> Bool {
+            if let existingProduct = realm.objects(Product.self).filter(Product.createFilter(productUuid)).first {
+                existingProduct.fav += 1
+                realm.add(existingProduct, update: true)
+                return true
+            } else { // product not found
+                return false
+            }
+        }
+        
+        if let realm = transactionRealm {
+            transactionContent(realm: realm)
+        } else {
+            doInWriteTransaction({realm in
+                return transactionContent(realm: realm)
+            }, finishHandler: {savedMaybe in
+                handler(savedMaybe ?? false)
+            })
+        }
     }
     
     func save(_ dbCategories: [ProductCategory], dbProducts: [QuantifiableProduct], _ handler: @escaping (Bool) -> Void) {

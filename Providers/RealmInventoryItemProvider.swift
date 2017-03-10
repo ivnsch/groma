@@ -289,8 +289,19 @@ class RealmInventoryItemProvider: RealmProvider {
         return adddedOrUpdatedItems
     }
     
+    // NOTE: This is used only add/increment with add user action, not when incrementing inventory item in cell. Because of this we also increment fav here in both cases (add/increment)
     fileprivate func addOrIncrementInventoryItem(_ realm: Realm, inventory: DBInventory, product: QuantifiableProduct, quantity: Float, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Float, isNew: Bool) {
     
+        // We execute this on successful add/increment(where increment here means also "add to list" user action).
+        // We don't wait until execution finishes or handle error if it fails, since this is not critical
+        func incrementFav() {
+            DBProv.productProvider.incrementFav(productUuid: product.product.uuid, transactionRealm: realm, {saved in
+                if !saved {
+                    QL4("Couldn't increment product fav")
+                }
+            })
+        }
+        
         // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
         let existingInventoryItems: [InventoryItem] = loadSync(realm, filter: InventoryItem.createFilter(product, inventory))
         
@@ -304,6 +315,8 @@ class RealmInventoryItemProvider: RealmProvider {
                 return (InventoryItem(uuid: UUID().uuidString, quantity: quantity, product: product, inventory: inventory), true)
             }
         }()
+        
+        incrementFav()
         
         // save
         realm.add(addedOrIncrementedInventoryItem.item, update: true)

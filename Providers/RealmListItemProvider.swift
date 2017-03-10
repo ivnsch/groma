@@ -925,9 +925,20 @@ class RealmListItemProvider: RealmProvider {
     
     /// Quick add / form
     /// price set when used in form
+    // TODO!!!!!!!!!!!!!!!!!! remove RealmData and "doTransaction" everywhere -- to indicate that a transaction already exists, pass a Realm. Notification token separately where needed.
     func addSync(quantifiableProduct: QuantifiableProduct, store: String, price: Float?, list: List, quantity: Float, note: String?, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (AddListItemResult)? {
         
         refresh()
+        
+        // We execute this on successful add/increment(where increment here means also "add to list" user action).
+        // We don't wait until execution finishes or handle error if it fails, since this is not critical
+        func incrementFav() {
+            DBProv.productProvider.incrementFav(productUuid: quantifiableProduct.product.uuid, transactionRealm: doTransaction ? nil : realmData?.realm, {saved in
+                if !saved {
+                    QL4("Couldn't increment product fav")
+                }
+            })
+        }
         
         switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: doTransaction) {
             
@@ -941,6 +952,8 @@ class RealmListItemProvider: RealmProvider {
                 let quantityMaybe = incrementSync(existingListItem, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
                 if quantityMaybe != nil {
                     
+                    incrementFav()
+                        
                     return AddListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, listItemIndex: listItemIndex, sectionIndex: sectionResult.index)
                     //return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
                 } else {
@@ -958,6 +971,7 @@ class RealmListItemProvider: RealmProvider {
                     
                     print("list items after create list item: \(section.listItems.count)")
                     
+                    incrementFav()
                     
                     return AddListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, listItemIndex: section.listItems.count - 1, sectionIndex: sectionResult.index)
                 } else {

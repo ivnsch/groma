@@ -63,7 +63,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         return "uuid"
     }
     
-    public convenience init(uuid: String, baseQuantity: Float, unit: Unit, product: Product, fav: Int = 0) {
+    public convenience init(uuid: String, baseQuantity: Float, unit: Unit, product: Product, fav: Int = 1) {
         
         self.init()
         
