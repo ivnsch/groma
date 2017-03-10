@@ -50,6 +50,15 @@ class RealmIngredientProvider: RealmProvider {
     
     func add(_ quickAddInput: QuickAddIngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping ((ingredient: Ingredient, isNew: Bool)?) -> Void) {
         
+        // We don't wait until execution finishes or handle error if it fails, since this is not critical
+        func incrementFav() {
+            DBProv.itemProvider.incrementFav(itemUuid: quickAddInput.item.uuid, transactionRealm: nil, {saved in
+                if !saved {
+                    QL4("Couldn't increment item fav")
+                }
+            })
+        }
+        
         guard ingredients.realm != nil else {QL4("Ingredients have no realm"); handler(nil); return}
         
         let existingIngredientMaybe = ingredients.filter(Ingredient.createFilter(item: quickAddInput.item, recipe: recipe)).first
@@ -57,6 +66,7 @@ class RealmIngredientProvider: RealmProvider {
         if let existingIngredient = existingIngredientMaybe {
             update(existingIngredient, input: quickAddInput, ingredients: ingredients, notificationToken: notificationToken) {updateSuccess in
                 if updateSuccess {
+                    incrementFav()
                     handler((ingredient: existingIngredient, isNew: false))
                 } else {
                     QL4("Couldn't update existing ingredient")
@@ -65,6 +75,7 @@ class RealmIngredientProvider: RealmProvider {
             }
         } else {
             create(quickAddInput, recipe: recipe, ingredients: ingredients, notificationToken: notificationToken) {addedIngredient in
+                incrementFav()
                 handler(addedIngredient.map{(ingredient: $0, isNew: true)})
             }
         }

@@ -92,6 +92,29 @@ class RealmItemProvider: RealmProvider {
         handler(deleteSync(name: name))
     }
     
+    func incrementFav(itemUuid: String, transactionRealm: Realm? = nil,  _ handler: @escaping (Bool) -> Void) {
+        
+        func transactionContent(realm: Realm) -> Bool {
+            if let existingItem = realm.objects(Item.self).filter(Item.createFilter(uuid: itemUuid)).first {
+                existingItem.fav += 1
+                realm.add(existingItem, update: true)
+                return true
+            } else { // product not found
+                return false
+            }
+        }
+        
+        if let realm = transactionRealm {
+            transactionContent(realm: realm)
+        } else {
+            doInWriteTransaction({realm in
+                return transactionContent(realm: realm)
+            }, finishHandler: {savedMaybe in
+                handler(savedMaybe ?? false)
+            })
+        }
+    }
+    
     // MARK: - Sync
     
     func findSync(name: String) -> ProvResult<Item?, DatabaseError> {
