@@ -65,9 +65,9 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         didSet {
             if let cartQuantityLabel = quantityLabel {
                 if cartQuantity == 1 {
-                    cartQuantityLabel.text = trans("list_items_items_in_cart_singular", "\(cartQuantity)")
+                    cartQuantityLabel.text = trans("list_items_items_in_cart_singular", "\(cartQuantity.quantityString)")
                 } else {
-                    cartQuantityLabel.text = trans("list_items_items_in_cart_plural", "\(cartQuantity)")
+                    cartQuantityLabel.text = trans("list_items_items_in_cart_plural", "\(cartQuantity.quantityString)")
                 }
                 
             } else {
