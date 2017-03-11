@@ -163,6 +163,9 @@ class QuantityView: UIView, UITextFieldDelegate {
 
             minusBottomWidthConstraint.constant = widthConstant
             plusBottomWidthConstraint.constant = widthConstant
+            
+            invalidateIntrinsicContentSize()
+            
             if animated {
                 anim {
                     self.layoutIfNeeded()

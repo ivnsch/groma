@@ -151,6 +151,7 @@
                 <outlet property="myContentView" destination="qsx-FZ-N7Z" id="5z0-e2-a9Y"/>
                 <outlet property="nameLabel" destination="G1L-C6-XHI" id="Sjp-6s-go0"/>
                 <outlet property="noteButton" destination="KBs-ef-XHn" id="T8B-Zw-Y8o"/>
+                <outlet property="noteButtonWidthConstraint" destination="2Om-Al-QIK" id="0EE-m1-B2h"/>
                 <outlet property="quantityView" destination="Nlm-EJ-pVy" id="m3J-j4-GY5"/>
                 <outlet property="quantityViewTrailingConstraint" destination="BFl-bn-YOt" id="jcj-0F-NcH"/>
                 <outlet property="sectionColorView" destination="omP-yo-uwI" id="a0O-XX-YMv"/>

@@ -542,6 +542,7 @@
                                     <outlet property="myContentView" destination="mEO-yB-hml" id="zsB-5b-YPD"/>
                                     <outlet property="nameLabel" destination="npq-ts-NkO" id="e3j-25-fIv"/>
                                     <outlet property="noteButton" destination="8LP-6w-Aa7" id="6Qg-cK-Ip5"/>
+                                    <outlet property="noteButtonWidthConstraint" destination="dKo-Iq-2Sh" id="mR5-fG-Vcn"/>
                                     <outlet property="quantityView" destination="259-87-721" id="DrP-RH-Cet"/>
                                     <outlet property="quantityViewTrailingConstraint" destination="P0w-Kx-G4d" id="f2k-QM-gSt"/>
                                     <outlet property="sectionColorView" destination="W7z-OP-2eO" id="sfw-1Q-nDR"/>

@@ -30,6 +30,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
 //    @IBOutlet weak var priceLabel: UILabel! // this was a label below the item's quantity in edit mode howing total price for this item. For now disabled as it overlaps with surrounding +/- and maybe a bit too much information for the user.
     
     @IBOutlet weak var centerVerticallyNameLabelConstraint: NSLayoutConstraint!
+    @IBOutlet weak var noteButtonWidthConstraint: NSLayoutConstraint!
     
 //    @IBOutlet weak var quantityLabelCenterVerticallyConstraint: NSLayoutConstraint!
     
@@ -198,8 +199,10 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
             layoutIfNeeded()
         }
         
-        animIf(animated) {
+        animIf(animated, Theme.defaultAnimDuration, { 
             update()
+        }) {[weak self] in
+            self?.noteButtonWidthConstraint.constant = showNote ? 61 : 0
         }
     }
     
