@@ -28,6 +28,8 @@ public struct UpdateListItemResult {
     public let listItem: ListItem
     public let replaced: Bool
     public let changedSection: Bool
+    public let addedSectionIndex: Int? // if a section was added, its index. Set if changedSection == true and section is new.
+    public let deletedSectionIndex: Int? // if a section was deleted, its index. Set if changedSection == true and the old section was left empty.
 }
 
 public struct AddCartListItemResult {
@@ -1159,10 +1161,15 @@ class RealmListItemProvider: RealmProvider {
             let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: false)
             
             var changedSection = false
+            var addedNewSectionIndex: Int?
+            var deletedSectionIndex: Int?
             
             sectionResult.onOk {res in
+                
+                let listItemSection = updatingListItem.section // current section ("old", in case the section changes)
+                
                 // If the item was assigned a new section
-                if !res.section.same(updatingListItem.section) {
+                if !res.section.same(listItemSection) {
                     
                     // 1. Move list item to new section
                     _ = updatingListItem.section.listItems.remove(updatingListItem)
@@ -1171,12 +1178,15 @@ class RealmListItemProvider: RealmProvider {
                     if status == .todo { // There's no List<Section> for status other than .todo
                         // 2. If section is new, add it to list. We check also if the list contains it (it may be that section is old but not in list, at least in current status -- TODO review this, theoretically when the section is not anymore in list+status it should be removed. This is "just in case".
                         if res.isNew || !list.sections(status: status).contains(res.section) {
-                            list.sections(status: status).append(res.section)
+                            let sections = list.sections(status: status)
+                            sections.append(res.section)
+                            addedNewSectionIndex = sections.count - 1
                         }
                     }
                     
                     // 3. Delete old section if empty
                     if updatingListItem.section.listItems.isEmpty {
+                        deletedSectionIndex = list.sections(status: status).index(of: listItemSection)
                         realmData.realm.delete(updatingListItem.section)
                     }
                     
@@ -1196,7 +1206,7 @@ class RealmListItemProvider: RealmProvider {
                 updatingListItem.note = listItemInput.note ?? ""
                 updatingListItem.quantity = listItemInput.quantity
                 
-                return UpdateListItemResult(listItem: updatingListItem, replaced: foundAndDeletedListItem, changedSection: changedSection)
+                return UpdateListItemResult(listItem: updatingListItem, replaced: foundAndDeletedListItem, changedSection: changedSection, addedSectionIndex: addedNewSectionIndex, deletedSectionIndex: deletedSectionIndex)
             }
             
             let joinResult = sectionResult.join(result: productResult).map{sectionResult, product in

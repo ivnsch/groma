@@ -544,9 +544,24 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                     // If as part of the update user entered a different section, we have to update both the src and dst sections
                     // This takes into account that dst section is a new one - since Realm's results are already updated, we will find the returned section in the table view controller's sections result and be able to reload it in the table view.
                     if updateResult.changedSection {
-                        weakSelf.listItemsTableViewController.updateTableViewSection(section: updatingListItem.section)
-                        weakSelf.listItemsTableViewController.updateTableViewSection(section: updateResult.listItem.section)
-                        
+                        if let _ = updateResult.deletedSectionIndex {
+                            
+                            // not sure what the problem is here, but at least when section 0 (src) is deleted and section 1 (target) updated there's an error with "can't update and delete the same row". Apparently after deleting section 0, section 1 becomes 0 (in the same transaction). Several different combinations didn't work (calling only update, only delete, changing order, etc). So using reloadData().
+//                            weakSelf.listItemsTableViewController.tableView.wrapUpdates {
+//                                weakSelf.listItemsTableViewController.deleteSection(index: deletedSectionIndex)
+//                                weakSelf.listItemsTableViewController.updateTableViewSection(section: updateResult.listItem.section)
+//                            }
+                            weakSelf.listItemsTableViewController.tableView.reloadData()
+                            
+                        } else if let _ = updateResult.addedSectionIndex {
+                            // Here also reloadData, because I'm lazy. Note that there can also be the case that both src section is deleted (left empty) and a new section added - this is also handled by reloadData()
+                            weakSelf.listItemsTableViewController.tableView.reloadData()
+                            
+                        } else {
+                            weakSelf.listItemsTableViewController.updateTableViewSection(section: updatingListItem.section)
+                            weakSelf.listItemsTableViewController.updateTableViewSection(section: updateResult.listItem.section)
+                        }
+
                     } else {
                         weakSelf.listItemsTableViewController.updateListItemCell(listItem: updateResult.listItem)
                     }
