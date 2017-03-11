@@ -657,7 +657,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
 extension SimpleListItemsController: ListItemCellDelegateNew {
     
     func onItemSwiped(_ listItem: ListItem) {
-        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem)"); return}
+        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
         
         onListItemSwiped(listItem, indexPath: indexPath)
         tableView.deleteRows(at: [indexPath], with: .top)
@@ -716,7 +716,7 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     }
     
     func onDelete(_ listItem: ListItem) {
-        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem)"); return}
+        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
         listItemsTableViewController.deleteListItem(indexPath: indexPath)
     }
 }
@@ -734,7 +734,19 @@ class SimpleListItemsTableViewController: UITableViewController {
         }
     }
     var status: ListItemStatus = .done
-    var cellMode: ListItemCellMode = .increment
+    var cellMode: ListItemCellMode = .note {
+        didSet {
+            
+            if let cells = tableView.visibleCells as? [ListItemCellNew] {
+                for cell in cells {
+                    cell.mode = cellMode
+                }
+            } else {
+                QL4("Invalid state, couldn't cast: \(tableView.visibleCells)")
+            }
+            
+        }
+    }
     
     weak var listItemsTableViewDelegate: ListItemsTableViewDelegateNew?
     weak var cellDelegate: ListItemCellDelegateNew?
@@ -768,6 +780,7 @@ class SimpleListItemsTableViewController: UITableViewController {
 //            cell.nameLabel.attributedText = attributeString
             
             cell.myContentView.backgroundColor = Theme.lightBlue
+            cell.backgroundColor = Theme.lightBlue
             cell.sectionColorView.backgroundColor = UIColor.clear // in cart/stash no section colors
             
         } else {

@@ -349,6 +349,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     func onTableViewChangedQuantifiables() {
         updateQuantifiables()
         updateEmptyUI()
+        setDefaultLeftButtons()
     }
     
     func updateQuantifiables() {

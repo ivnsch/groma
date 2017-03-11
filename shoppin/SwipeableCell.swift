@@ -75,7 +75,7 @@ class SwipeableCell: UITableViewCell {
     
     func setOpen(_ open: Bool, animated: Bool = false) {
         if open {
-            backgroundColor = UIColor.clear
+//            backgroundColor = UIColor.clear
             setConstraintsToShowAllButtons(animated, notifyDelegateDidOpen: false)
         } else {
             resetConstraintContstantsToZero(animated, notifyDelegateDidClose: false)
@@ -97,7 +97,7 @@ class SwipeableCell: UITableViewCell {
                 weakSelf.updateConstraintsIfNeeded(animated, alpha: 1, onCompletion: {finished in
                     weakSelf.startingLeftLayoutConstraint = weakSelf.contentViewLeftConstraint.constant
                     
-                    weakSelf.backgroundColor = UIColor.white // resetConstraintContstantsToZero is used to set back cell when tap on it while "undo" so reset color also here... (TODO colors in 1 place now we are setting white/clear in 3 different places)
+//                    weakSelf.backgroundColor = UIColor.white // resetConstraintContstantsToZero is used to set back cell when tap on it while "undo" so reset color also here... (TODO colors in 1 place now we are setting white/clear in 3 different places)
                 })
             }
         })

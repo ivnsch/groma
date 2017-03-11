@@ -28,6 +28,10 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         return .todo
     }
     
+    override var isEmpty: Bool {
+        return super.isEmpty && !pricesView.expandedNew // Assumption: if prices view is expanded, cart contains items. So if price view is expanded it means we are not in an empty state.
+    }
+    
     override var tableViewBottomInset: CGFloat {
         //        return pricesView.frame.height // can be open or closed, for now just return fixed height of prices view - when it's closed we have a bigger inset
         return DimensionsManager.listItemsPricesViewHeight
@@ -117,6 +121,8 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
         
         todoListItemsEditBottomView?.setHiddenAnimated(!editing)
+        
+        cartController?.setEditing(editing, animated: animated)
     }
     
     override func onToggleReorderSections(_ isNowInReorderSections: Bool) {
@@ -215,6 +221,9 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     @IBAction func onCartTap(_ sender: UIButton) {
         pricesView.toggleExpanded(todoController: self)
+        
+        setDefaultLeftButtons() // update edit button visibility in case there's an empty state difference between todo and cart
+
     }
     
     func setCartExpanded(expanded: Bool, onFinishAnim: (() -> Void)?) {
