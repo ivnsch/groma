@@ -34,11 +34,14 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     @IBOutlet weak var leftLayoutConstraint: NSLayoutConstraint!
     @IBOutlet weak var rightLayoutConstraint: NSLayoutConstraint!
     @IBOutlet weak var myContentView: UIView!
+    
+    @IBOutlet weak var quantityViewTrailingConstraint: NSLayoutConstraint!
+
     fileprivate var swipeToDeleteHelper: SwipeToDeleteHelper?
     
     fileprivate var isAnimatingProgress: Bool = false
     fileprivate var animationCancelled: Bool = false
-    
+
     var model: ProductWithQuantity2? {
         didSet {
             guard let model = model else {QL3("Model is nil"); return}
@@ -164,6 +167,10 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         }
     }
     
+    func setMode(_ mode: QuantityViewMode) {
+        quantityViewTrailingConstraint.constant = mode == .edit ? 0 : DimensionsManager.leftRightPaddingConstraint
+        quantityView.setMode(mode, animated: false)
+    }
     
     // MARK: - SwipeToIncrementHelperDelegate
     

@@ -645,7 +645,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="100" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="Hff-Wc-kvx" customClass="QuantityView" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="255" y="0.0" width="100" height="76"/>
+                                                    <rect key="frame" x="275" y="0.0" width="100" height="76"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
                                             </subviews>
@@ -662,7 +662,7 @@
                                                 <constraint firstItem="efF-zQ-80q" firstAttribute="leading" secondItem="j26-uq-DjU" secondAttribute="trailing" constant="5" id="M0B-S1-Ucg"/>
                                                 <constraint firstItem="2R5-6Q-YBr" firstAttribute="centerY" secondItem="Enh-q4-RPK" secondAttribute="centerY" constant="10" id="NkO-b2-23E"/>
                                                 <constraint firstItem="jov-l0-4Qz" firstAttribute="leading" secondItem="Enh-q4-RPK" secondAttribute="leading" constant="20" id="OlW-Iv-UIE"/>
-                                                <constraint firstAttribute="trailing" secondItem="Hff-Wc-kvx" secondAttribute="trailing" constant="20" id="Sew-e6-g4s"/>
+                                                <constraint firstAttribute="trailing" secondItem="Hff-Wc-kvx" secondAttribute="trailing" id="Sew-e6-g4s"/>
                                                 <constraint firstItem="jov-l0-4Qz" firstAttribute="top" secondItem="Enh-q4-RPK" secondAttribute="top" constant="20" id="d4r-6r-nKs"/>
                                                 <constraint firstAttribute="trailing" secondItem="jov-l0-4Qz" secondAttribute="trailing" constant="20" id="gpy-NT-tMQ"/>
                                                 <constraint firstAttribute="bottom" secondItem="I6W-x1-2IM" secondAttribute="bottom" constant="4" id="ssh-t0-b38"/>
@@ -692,6 +692,7 @@
                                     <outlet property="myContentView" destination="Enh-q4-RPK" id="hiE-wG-t4c"/>
                                     <outlet property="nameLabel" destination="j26-uq-DjU" id="r7i-e9-MMZ"/>
                                     <outlet property="quantityView" destination="Hff-Wc-kvx" id="HC4-IM-PWC"/>
+                                    <outlet property="quantityViewTrailingConstraint" destination="Sew-e6-g4s" id="Ggd-CK-kKO"/>
                                     <outlet property="rightLayoutConstraint" destination="97H-4V-UwL" id="Cy0-KR-zbN"/>
                                 </connections>
                             </tableViewCell>
