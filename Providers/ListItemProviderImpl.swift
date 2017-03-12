@@ -1338,7 +1338,15 @@ class ListItemProviderImpl: ListItemProvider {
             handler(ProviderResult(status: .databaseUnknown))
         }
     }
-
+    
+    func moveCartOrStash(from: IndexPath, to: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        if let result = DBProv.listItemProvider.moveCartOrStash(from: from, to: to, status: status, list: list, realmData: realmData) {
+            handler(ProviderResult(status: .success))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+        
     func calculateCartStashAggregate(list: List, _ handler: @escaping (ProviderResult<ListItemsCartStashAggregate>) -> Void) {
         let listUuid = list.uuid // We retrieve list in background, to not get Realm thread exception
         background({

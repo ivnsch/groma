@@ -389,14 +389,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         guard let list = currentList else {QL4("No list"); return}
         guard let realmData = realmData else {QL4("No realm data"); return}
         
-        Prov.listItemsProvider.move(from: from, to: to, status: status, list: list, realmData: realmData, resultHandler(onSuccess: {result in
-            delay(0.4) {
-                // show possible changes, e.g. new section color, deleted section (when it's left empty)
-                //            tableView.reloadRows(at: [destinationIndexPath], with: .none) // for now we reload complete tableview, when section is left empty it also has to be removed
-                self.listItemsTableViewController.reload()
-            }
-            
-            
+        Prov.listItemsProvider.moveCartOrStash(from: from, to: to, status: status, list: list, realmData: realmData, resultHandler(onSuccess: {result in
         }, onErrorAdditional: {[weak self] result in
             self?.updatePossibleList()
             }

@@ -1294,6 +1294,12 @@ class RealmListItemProvider: RealmProvider {
         }
     }
     
+    public func moveCartOrStash(from: IndexPath, to: IndexPath, status: ListItemStatus, list: List, realmData: RealmData) -> Bool? {
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm in
+           list.listItems(status: status).move(from: from.row, to: to.row)
+            return true
+        }
+    }
     
     public func calculateCartStashAggregate(listUuid: String) -> ListItemsCartStashAggregate? {
         
