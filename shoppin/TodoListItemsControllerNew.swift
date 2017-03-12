@@ -100,6 +100,12 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         view.setNeedsUpdateConstraints()
         view.layoutIfNeeded()
         view.updateConstraintsIfNeeded()
+        
+        updateTodoEditBottomViewVisibility()
+    }
+    
+    fileprivate func updateTodoEditBottomViewVisibility() {
+        todoListItemsEditBottomView?.isHidden = isEmpty || !isEditing
     }
     
     override func toggleTopAddController(_ rotateTopBarButton: Bool = true) -> Bool {
@@ -188,7 +194,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     override func onTableViewChangedQuantifiables() {
         super.onTableViewChangedQuantifiables()
-        todoListItemsEditBottomView?.isHidden = isEmpty
+        updateTodoEditBottomViewVisibility()
     }
     
     func updateStashView() {
@@ -278,7 +284,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 
     func onCartUpdatedQuantifiables() {
         updateQuantifiables()
-        todoListItemsEditBottomView?.isHidden = isEmpty
+        updateTodoEditBottomViewVisibility()
     }
     
     func onCartPullToAdd() {
