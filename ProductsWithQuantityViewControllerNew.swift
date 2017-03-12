@@ -180,7 +180,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         if let _ = tabBarController?.tabBar.frame.height {
             // TODO this is not enough, why?
             //            tableView.bottomInset = tabBarHeight + Constants.tableViewAdditionalBottomInset
-            tableView.bottomInset = 220
+            tableView.bottomInset = 41
         } else {
             QL3("No tabBarController: \(tabBarController)")
         }

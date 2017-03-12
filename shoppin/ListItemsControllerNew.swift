@@ -212,6 +212,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     fileprivate func initTableViewController() {
         listItemsTableViewController = UIStoryboard.listItemsTableViewControllerNew()
         
+        listItemsTableViewController.automaticallyAdjustsScrollViewInsets = false
+        
         addChildViewControllerAndView(listItemsTableViewController, viewIndex: 0)
         
         listItemsTableViewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -228,9 +230,12 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         listItemsTableViewController.scrollViewDelegate = self
         listItemsTableViewController.listItemsTableViewDelegate = self
         listItemsTableViewController.listItemsEditTableViewDelegate = self
-        
-        listItemsTableViewController.tableView.bottomInset = 300 // TODO!!!!!!!!!!!!!!! calculate this number correctly
 
+        
+        // TODO!!!!!!!!!!!!!!! calculate this number correctly
+        // The problem here is that the search box in quick add changes automatically the bottom inset (couldn't find how to avoid this). It adds the inset to the current inset (41 in this case). But this automatic value changes for different screen sizes, so 41 is only correct for the first where we tried (iPhone 7+). Possible solutions: 1. Investigate exactly how the automatic number is calculated so we always have correct number here or 2. Use a normal controller instead of table view controller, which seems not to do this automatic inset but then we also have to implement pull to refresh manually as normal controller doesn't support it out of the box.
+        listItemsTableViewController.tableView.bottomInset = 41
+        
 //        let navbarHeight = topBar.frame.height
 //        let topInset = navbarHeight
 //        let bottomInset: CGFloat = tableViewBottomInset + 10 // 10 - show a little empty space between the last item and the prices view
