@@ -836,7 +836,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                     
                     sectionsTableViewController.onViewDidLoad = {[weak self, weak sectionsTableViewController] in guard let weakSelf = self else {return}
                         let navbarHeight = weakSelf.topBar.frame.height
-                        let topInset = navbarHeight
+                        let topInset: CGFloat = 0
                         
                         // TODO this makes a very big bottom inset why?
                         //            let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + addButtonContainer.frame.height
