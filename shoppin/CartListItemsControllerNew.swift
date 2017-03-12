@@ -21,6 +21,8 @@ protocol CartListItemsControllerDelegate: class {
     func onCartUpdatedQuantifiables()
     func onCartPullToAdd()
     
+    func cartCloseTopControllers()
+    
     var cartParentForAddButton: UIView {get}
     
     func onCartSelectListItem(listItem: ListItem, indexPath: IndexPath)
@@ -130,6 +132,12 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
 //                    }
 //                }
 //        })
+    }
+    
+    override func afterUpdatedItem() {
+        super.afterUpdatedItem()
+        
+        delegate?.cartCloseTopControllers()
     }
     
     fileprivate func butCartAnimation() {

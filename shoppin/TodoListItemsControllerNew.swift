@@ -313,6 +313,11 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         return view
     }
     
+    func cartCloseTopControllers() {
+        closeTopControllers()
+    }
+    
+    
     // MARK: - TodoListItemsEditBottomViewDelegate
     
     func onExpandSections(_ expand: Bool) {

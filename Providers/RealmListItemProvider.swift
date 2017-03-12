@@ -1175,9 +1175,12 @@ class RealmListItemProvider: RealmProvider {
                     _ = updatingListItem.section.listItems.remove(updatingListItem)
                     res.section.listItems.append(updatingListItem)
                     
+                    // For .cart/.stash we don't use sections, in these cases sectionsList is nil.
+                    let sectionsList: RealmSwift.List<Section>? = status == .todo ? list.sections(status: status) : nil
+                    
                     if status == .todo { // There's no List<Section> for status other than .todo
                         // 2. If section is new, add it to list. We check also if the list contains it (it may be that section is old but not in list, at least in current status -- TODO review this, theoretically when the section is not anymore in list+status it should be removed. This is "just in case".
-                        if res.isNew || !list.sections(status: status).contains(res.section) {
+                        if res.isNew || !(sectionsList?.contains(res.section) ?? true) {
                             let sections = list.sections(status: status)
                             sections.append(res.section)
                             addedNewSectionIndex = sections.count - 1
@@ -1186,7 +1189,7 @@ class RealmListItemProvider: RealmProvider {
                     
                     // 3. Delete old section if empty
                     if updatingListItem.section.listItems.isEmpty {
-                        deletedSectionIndex = list.sections(status: status).index(of: listItemSection)
+                        deletedSectionIndex = sectionsList?.index(of: listItemSection)
                         realmData.realm.delete(updatingListItem.section)
                     }
                     
