@@ -26,6 +26,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     weak var listItemsTableViewController: ListItemsTableViewControllerNew!
     
     var tableViewTopConstraint: NSLayoutConstraint?
+    var reorderSectionsTableViewTopConstraint: NSLayoutConstraint?
     
     var currentList: Providers.List? {
         didSet {
@@ -95,7 +96,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 
     fileprivate func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
         let top = topBar.frame.height
-        let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 70, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
+        let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 70, animateTableViewInset: false, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = EditSectionViewController()
             controller.delegate = self
             return controller
@@ -410,7 +411,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     // for tap on normal sections and edit mode sections (2 different tableviews)
     fileprivate func onSectionSelectedShared(_ section: Section) {
-        if isEditing {
+        if sectionsTableViewController != nil {
             topEditSectionControllerManager?.tableView = sectionsTableViewController?.tableView ?? listItemsTableViewController.tableView
             topEditSectionControllerManager?.expand(true)
             topEditSectionControllerManager?.controller?.section = section
@@ -853,6 +854,18 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                     
                     sectionsTableViewController.view.frame = weakSelf.listItemsTableViewController.view.frame
                     weakSelf.addChildViewControllerAndView(sectionsTableViewController, viewIndex: 1)
+                    
+                    
+                    sectionsTableViewController.view.translatesAutoresizingMaskIntoConstraints = false
+                    _ = sectionsTableViewController.view.alignLeft(weakSelf.view)
+                    _ = sectionsTableViewController.view.alignRight(weakSelf.view)
+                    _ = sectionsTableViewController.view.alignBottom(weakSelf.view)
+                    
+                    let reorderSectionsTableViewTopConstraint = NSLayoutConstraint(item: sectionsTableViewController.view, attribute: .top, relatedBy: .equal, toItem: weakSelf.topBar, attribute: .bottom, multiplier: 1, constant: 0)
+                    weakSelf.view.addConstraint(reorderSectionsTableViewTopConstraint)
+                    weakSelf.reorderSectionsTableViewTopConstraint = reorderSectionsTableViewTopConstraint
+                    
+                    
                     weakSelf.sectionsTableViewController = sectionsTableViewController
                     
                     weakSelf.onToggleReorderSections(true)

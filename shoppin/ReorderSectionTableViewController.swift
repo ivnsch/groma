@@ -116,10 +116,11 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
             sections = sections.enumerated().map{index, section in
                 section.updateOrder(ListItemStatusOrder(status: status, order: index))
             }
-            
-            Prov.sectionProvider.update(sections, remote: true, successHandler{[weak self] in
-                self?.delegate?.onSectionsUpdated()
-            })
+
+            fatalError("Outdated - remove this controller") // TODO
+//            Prov.sectionProvider.update(sections, remote: true, successHandler{[weak self] in
+//                self?.delegate?.onSectionsUpdated()
+//            })
             
         } else {
             QL4("Status not set, can't reorder")

@@ -403,6 +403,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             
         } else {
             tableViewTopConstraint?.constant = view.frame.height < 0.1 ? 0 : view.frame.height
+            reorderSectionsTableViewTopConstraint?.constant = view.frame.height < 0.1 ? 0 : view.frame.height
         }
     }
     

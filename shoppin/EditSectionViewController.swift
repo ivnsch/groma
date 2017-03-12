@@ -116,8 +116,8 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
             }
             
             if let name = nameTextField.text, let color = view.backgroundColor {
-                let updatedSection = section.copy(name: name, color: color)
-                Prov.sectionProvider.update([updatedSection], remote: true, successHandler {[weak self] in
+                let sectionInput = SectionInput(name: name, color: color)
+                Prov.sectionProvider.update(section, input: sectionInput, successHandler {[weak self] updatedSection in
                     self?.delegate?.onSectionUpdated(updatedSection)
                 })
                 

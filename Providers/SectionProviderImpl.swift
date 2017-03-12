@@ -105,44 +105,14 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func update(_ sections: [Section], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-
-        DBProv.sectionProvider.update(sections) {updated in
-            if updated {
-                Prov.listItemsProvider.invalidateMemCache()
-                handler(ProviderResult(status: .success))
-                
-//                if remote {
-//                    
-//                    self?.remoteProvider.updateSections(sections) {remoteResult in
-//                        if let timestamp = remoteResult.successResult {
-//                            let updateDicts: [[String: AnyObject]] = sections.map {
-//                                DBSyncable.timestampUpdateDict($0.uuid, lastServerUpdate: timestamp)
-//                            }
-//                            DBProv.sectionProvider.updateLastSyncTimeStamps(updateDicts) {success in
-//                                if !success {
-//                                    QL4("Couldn't update last server update timestamps for sections: \(sections)")
-//                                }
-//                            }
-//                        } else {
-//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-//                                QL4("Remote call no success: \(remoteResult) items: \(sections)")
-//                                Prov.listItemsProvider.invalidateMemCache()
-//                                handler(result)
-//                            })
-//                        }
-//                    }
-//                }
-            } else {
-                handler(ProviderResult(status: .databaseUnknown))
-            }
+    func update(_ section: Section, input: SectionInput, _ handler: @escaping (ProviderResult<Section>) -> Void) {
+        if let updateSection = DBProv.sectionProvider.update(section, input: input) {
+            handler(ProviderResult(status: .success, sucessResult: updateSection))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
         }
     }
 
-    func update(_ section: Section, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        update([section], remote: remote, handler)
-    }
-    
     func sectionSuggestionsContainingText(_ text: String, _ handler: @escaping (ProviderResult<[String]>) -> ()) {
         DBProv.sectionProvider.sectionSuggestionsContainingText(text) {dbSuggestions in
             handler(ProviderResult(status: ProviderStatusCode.success, sucessResult: dbSuggestions))

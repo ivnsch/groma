@@ -23,6 +23,17 @@ public struct AddSectionPlainResult {
     public let isNew: Bool
 }
 
+public struct SectionInput {
+    public let name: String
+    public let color: UIColor
+    
+    public init(name: String, color: UIColor) {
+        self.name = name
+        self.color = color
+    }
+}
+
+
 class RealmSectionProvider: RealmProvider {
     
     func sections(list: List, handler: @escaping (ProvResult<RealmSwift.List<Section>, DatabaseError>) -> Void) {
@@ -148,10 +159,13 @@ class RealmSectionProvider: RealmProvider {
         realm.delete(dbListItems)
         return true
     }
-    
-    func update(_ sections: [Section], handler: @escaping (Bool) -> ()) {
-        let dbSections = sections.map{$0.copy()}
-        self.saveObjs(dbSections, update: true, handler: handler)
+
+    func update(_ section: Section, input: SectionInput) -> Section? {
+        return doInWriteTransactionSync {realm in
+            section.name = input.name
+            section.color = input.color
+            return section
+        }
     }
     
     // Gets suggestions both from section and category names

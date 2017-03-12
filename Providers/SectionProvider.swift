@@ -15,10 +15,8 @@ public protocol SectionProvider {
 
     func loadSection(_ name: String, list: List, handler: @escaping (ProviderResult<Section?>) -> ())
 
-    func update(_ section: Section, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
+    func update(_ section: Section, input: SectionInput, _ handler: @escaping (ProviderResult<Section>) -> Void)
     
-    func update(_ sections: [Section], remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
-
     func remove(_ section: Section, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
     func remove(_ sectionUuid: String, listUuid: String?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())

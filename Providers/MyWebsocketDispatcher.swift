@@ -731,13 +731,14 @@ struct MyWebsocketDispatcher {
                     let list = ListMapper.listWithRemote(remoteSection.list)
                     return SectionMapper.SectionWithRemote(remoteSection.section, list: list)
                 }
-                Prov.sectionProvider.update(sections, remote: false) {result in
-                    if result.success {
-                        postNotification(.Section, verb, sender, sections)
-                    } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Update section \(sections)", result: result)
-                    }
-                }
+                fatalError("Outdated")
+//                Prov.sectionProvider.update(sections, remote: false) {result in
+//                    if result.success {
+//                        postNotification(.Section, verb, sender, sections)
+//                    } else {
+//                        MyWebsocketDispatcher.reportWebsocketStoringError("Update section \(sections)", result: result)
+//                    }
+//                }
             } else {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Update section, data: \(data)")
             }
