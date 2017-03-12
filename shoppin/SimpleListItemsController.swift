@@ -252,6 +252,8 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         
         if isEditing { // open quick add in edit mode
             // TODO!!!!!!!!!!!!!! is this correct?
+
+            
 //            openQuickAdd(itemToEdit: AddEditItem(item: tableViewListItem, currentStatus: status))
             //            topQuickAddControllerManager?.expand(true)
             //            topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
@@ -757,6 +759,9 @@ class SimpleListItemsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.allowsSelectionDuringEditing = true
+        
         tableView.register(UINib(nibName: "ListItemCell", bundle: nil), forCellReuseIdentifier: "cell")
     }
     
@@ -822,6 +827,11 @@ class SimpleListItemsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return DimensionsManager.defaultCellHeight
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let listItem = listItems?[indexPath.row] else {QL4("No listItem"); return}
+        listItemsTableViewDelegate?.onListItemSelected(listItem, indexPath: indexPath)
     }
     
     // MARK: - Pull to refresh

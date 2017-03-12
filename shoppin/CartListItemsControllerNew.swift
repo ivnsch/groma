@@ -20,6 +20,10 @@ protocol CartListItemsControllerDelegate: class {
     func onCloseCartAfterBuy()
     func onCartUpdatedQuantifiables()
     func onCartPullToAdd()
+    
+    var cartParentForAddButton: UIView {get}
+    
+    func onCartSelectListItem(listItem: ListItem, indexPath: IndexPath)
 }
 
 class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizerDelegate {
@@ -76,6 +80,9 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
         delegate?.onCartPullToAdd()
     }
     
+    override func parentViewForAddButton() -> UIView {
+        return delegate?.cartParentForAddButton ?? view
+    }
     
     
     override func showPopup(text: String, cell: UITableViewCell, button: UIView) {
@@ -153,5 +160,10 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
         
         currentNotePopup?.dismiss()
         currentNotePopup = nil
+    }
+    
+    override func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath) {
+        super.onListItemSelected(tableViewListItem, indexPath: indexPath)
+        delegate?.onCartSelectListItem(listItem: tableViewListItem, indexPath: indexPath)
     }
 }

@@ -304,6 +304,15 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 //        }
 //    }
     
+    func onCartSelectListItem(listItem: ListItem, indexPath: IndexPath) {
+        // We just open the top controller - when the data is submitted it will call onSubmitAddEditItem on this controller, which forwards the result to the cart (if it's open, which is assumed to be still the case at that point since the UI doesn't allow to close the cart controller while the add/edit controller is open)
+        onListItemSelected(listItem, indexPath: indexPath)
+    }
+    
+    var cartParentForAddButton: UIView {
+        return view
+    }
+    
     // MARK: - TodoListItemsEditBottomViewDelegate
     
     func onExpandSections(_ expand: Bool) {
