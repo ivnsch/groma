@@ -95,7 +95,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         self.view.addSubview(view)
         view.fillSuperviewWidth()
         _ = view.alignBottom(self.view)
-        _ = view.heightConstraint(70)
+        _ = view.heightConstraint(60) // must be same as price view
         view.setNeedsLayout()
         view.setNeedsUpdateConstraints()
         view.layoutIfNeeded()
@@ -150,6 +150,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
                 delay(0.2) {
                     weakSelf.pricesView.setExpanded(expanded: false) {
                         weakSelf.pricesView.setQuantities(cart: aggregate.cartQuantity, stash: stashQuantity, closeIfZero: true) // now that we are back in todo, close the cart bottom view
+                        weakSelf.todoListItemsEditBottomView?.isHidden = weakSelf.isEmpty
                     }
                 }
             }
@@ -183,6 +184,11 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 //        } else {
 //            QL3("No list")
 //        }
+    }
+    
+    override func onTableViewChangedQuantifiables() {
+        super.onTableViewChangedQuantifiables()
+        todoListItemsEditBottomView?.isHidden = isEmpty
     }
     
     func updateStashView() {
@@ -272,6 +278,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 
     func onCartUpdatedQuantifiables() {
         updateQuantifiables()
+        todoListItemsEditBottomView?.isHidden = isEmpty
     }
     
     func onCartPullToAdd() {

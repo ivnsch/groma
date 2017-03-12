@@ -301,6 +301,8 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         
         UIView.animate(withDuration: Theme.defaultAnimDuration, animations: {
             todoController.view.layoutIfNeeded()
+            todoController.view.bringSubview(toFront: self) // without this would be hidden by todoListItemsEditBottomView in some cases
+            
         }) {finished in
             onFinishAnim?()
         }
