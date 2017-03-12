@@ -88,8 +88,8 @@ class RealmSectionProvider: RealmProvider {
         saveObjs(sections, update: true, handler: handler)
     }
     
-    func remove(_ section: Section, markForSync: Bool, handler: @escaping (Bool) -> ()) {
-        remove(section.uuid, markForSync: markForSync, handler: handler)
+    func remove(_ section: Section, notificationTokens: [NotificationToken], markForSync: Bool, handler: @escaping (Bool) -> Void) {
+        remove(section.uuid, notificationTokens: notificationTokens, markForSync: markForSync, handler: handler)
     }
     
     func removeAllWithName(_ sectionName: String, markForSync: Bool, handler: @escaping ([Section]?) -> Void) {
@@ -112,12 +112,12 @@ class RealmSectionProvider: RealmProvider {
         }
     }
     
-    func remove(_ sectionUuid: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
-        removeSectionAndDependencies(sectionUuid, markForSync: markForSync, handler: handler)
+    func remove(_ sectionUuid: String, notificationTokens: [NotificationToken], markForSync: Bool, handler: @escaping (Bool) -> Void) {
+        handler(removeSectionAndDependenciesSync(sectionUuid, notificationTokens: notificationTokens, markForSync: markForSync))
     }
     
-    func removeSectionAndDependencies(_ sectionUuid: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
-        doInWriteTransaction({[weak self] realm in
+    func removeSectionAndDependenciesSync(_ sectionUuid: String, notificationTokens: [NotificationToken], markForSync: Bool) -> Bool {
+        return doInWriteTransactionSync(withoutNotifying: notificationTokens) {[weak self] realm in
             if let weakSelf = self {
                 _ = weakSelf.removeSectionAndDependenciesSync(realm, sectionUuid: sectionUuid, markForSync: markForSync)
                 return true
@@ -125,9 +125,7 @@ class RealmSectionProvider: RealmProvider {
                 QL4("self is nil")
                 return false
             }
-        }, finishHandler: {success in
-            handler(success ?? false)
-        })
+        } ?? false
     }
     
     // Expected to be executed in a transaction

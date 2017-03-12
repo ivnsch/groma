@@ -34,37 +34,36 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func remove(_ sectionUuid: String, listUuid: String?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        
-        DBProv.sectionProvider.remove(sectionUuid, markForSync: true) {[weak self] removed in
+    func remove(_ sectionUuid: String, notificationTokens: [NotificationToken], listUuid: String?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.sectionProvider.remove(sectionUuid, notificationTokens: notificationTokens, markForSync: true) {removed in
             handler(ProviderResult(status: removed ? .success : .databaseUnknown))
-            if removed {
-                
-                Prov.listItemsProvider.removeSectionFromListItemsMemCacheIfExistent(sectionUuid, listUuid: listUuid) {result in
-                    if !result.success {
-                        QL4("Couldn't remove section from mem cache: \(result)")
-                    }
-                }
-                
-                if remote {
-                    self?.remoteProvider.removeSection(sectionUuid) {remoteResult in
-                        if remoteResult.success {
-                            DBProv.sectionProvider.clearSectionTombstone(sectionUuid) {removeTombstoneSuccess in
-                                if !removeTombstoneSuccess {
-                                    QL4("Couldn't delete tombstone for section: \(sectionUuid)")
-                                }
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                        }
-                    }
-                }
-            }
+//            if removed {
+//                
+//                Prov.listItemsProvider.removeSectionFromListItemsMemCacheIfExistent(sectionUuid, listUuid: listUuid) {result in
+//                    if !result.success {
+//                        QL4("Couldn't remove section from mem cache: \(result)")
+//                    }
+//                }
+//                
+//                if remote {
+//                    self?.remoteProvider.removeSection(sectionUuid) {remoteResult in
+//                        if remoteResult.success {
+//                            DBProv.sectionProvider.clearSectionTombstone(sectionUuid) {removeTombstoneSuccess in
+//                                if !removeTombstoneSuccess {
+//                                    QL4("Couldn't delete tombstone for section: \(sectionUuid)")
+//                                }
+//                            }
+//                        } else {
+//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                        }
+//                    }
+//                }
+//            }
         }
     }
     
-    func remove(_ section: Section, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        remove(section.uuid, listUuid: section.list.uuid, remote: remote) {result in
+    func remove(_ section: Section, notificationTokens: [NotificationToken], _ handler: @escaping (ProviderResult<Any>) -> ()) {
+        remove(section.uuid, notificationTokens: notificationTokens, listUuid: section.list.uuid, remote: true) {result in
             if result.success {
                 handler(result)
             } else {

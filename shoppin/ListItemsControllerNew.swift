@@ -30,7 +30,9 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     var currentList: Providers.List? {
         didSet {
-            updatePossibleList()
+            if let list = currentList {
+                initWithList(list)
+            }
         }
     }
     
@@ -105,38 +107,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         return manager
     }
 
-    
-    fileprivate func updatePossibleList() {
-        if let list = self.currentList {
-            //            self.navigationItem.title = list.name
-            self.initWithList(list)
-        }
-    }
-
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        updatePossibleList() // if there's a list already (e.g. come back from cart or stash - reload. If not (come from lists) onViewWillAppear triggers it.
-        
-        
-        //        updatePrices(.First)
-        
-    }
-    
-    
     fileprivate func initWithList(_ list: Providers.List) {
         topBar.title = topBarTitle(list)
-        udpateListItems(list)
-    }
-    
-    func topBarTitle(_ list: Providers.List) -> String {
-        return list.name
-    }
-    
-    fileprivate func udpateListItems(_ list: Providers.List, onFinish: VoidFunction? = nil) {
-
-        guard let list = currentList else {QL4("No list"); return}
         
         listItemsTableViewController.sections = list.sections(status: status)
         
@@ -147,6 +119,10 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         initNotifications()
     }
     
+    func topBarTitle(_ list: Providers.List) -> String {
+        return list.name
+    }
+
     fileprivate func initNotifications() {
 
         guard let sections = listItemsTableViewController.sections else {QL4("No sections"); return}
@@ -443,24 +419,14 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         guard let list = currentList else {QL4("No list"); return}
         guard let realmData = realmData else {QL4("No realm data"); return}
         
-        Prov.listItemsProvider.deleteNew(indexPath: indexPath, status: status, list: list, realmData: realmData, resultHandler(onSuccess: {[weak self] result in
+        Prov.listItemsProvider.deleteNew(indexPath: indexPath, status: status, list: list, realmData: realmData, successHandler{[weak self] result in
             self?.onTableViewChangedQuantifiables()
             
             // NOTE: Assumes that Provider's deleteNew is synchronous
             if result.deletedSection {
                 self?.listItemsTableViewController.deleteSection(index: indexPath.section)
-            }
-            
-            }, onErrorAdditional: {[weak self] result in
-                self?.updatePossibleList()
-            }
-        ))
-//        Prov.listItemsProvider.remove(tableViewListItem, remote: true, token: RealmToken(token: notificationToken, realm: realm), resultHandler(onSuccess: {[weak self] in
-//            self?.onTableViewChangedQuantifiables()
-//            }, onErrorAdditional: {[weak self] result in
-//                self?.updatePossibleList()
-//            }
-//        ))
+            }}
+        )
     }
     
     func onListItemMoved(from: IndexPath, to: IndexPath) {
@@ -469,18 +435,13 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         guard let list = currentList else {QL4("No list"); return}
         guard let realmData = realmData else {QL4("No realm data"); return}
 
-        Prov.listItemsProvider.move(from: from, to: to, status: status, list: list, realmData: realmData, resultHandler(onSuccess: {result in
+        Prov.listItemsProvider.move(from: from, to: to, status: status, list: list, realmData: realmData, successHandler{result in
             delay(0.4) {
                 // show possible changes, e.g. new section color, deleted section (when it's left empty)
                 //            tableView.reloadRows(at: [destinationIndexPath], with: .none) // for now we reload complete tableview, when section is left empty it also has to be removed
                 self.listItemsTableViewController.reload()
-            }
-            
-            
-            }, onErrorAdditional: {[weak self] result in
-                self?.updatePossibleList()
-            }
-        ))
+            }}
+        )
     }
     
     /**
@@ -542,7 +503,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             
             Prov.listItemsProvider.updateNew(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, realmData: realmData, successHandler {[weak self] updateResult in guard let weakSelf = self else {return}
                 if updateResult.replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.
-                    weakSelf.updatePossibleList()
+                    weakSelf.listItemsTableViewController.tableView.reloadData()
+                    
                 } else {
                     // TODO!!!!!!!!!!!!!!!!!
 //                    weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
@@ -596,34 +558,36 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 //    }
     
     override func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
-        if let list = currentList {
-            
-            // TODO save "group list item" don't desintegrate group immediatly
-            
-            
-            Prov.listItemsProvider.addGroupItems(group, status: status, list: list, resultHandler(onSuccess: {[weak self] addedListItems in
-                if let list = self?.currentList {
-                    self?.initWithList(list) // refresh list items
-//                    if let firstListItem = addedListItems.first {
-//                        //    TODO!!!!!!!!!!!!!!!! ?
-////                        self?.listItemsTableViewController.scrollToListItem(firstListItem)
-//                    } else {
-//                        QL3("Shouldn't be here without list items")
+        QL4("Outdated")
+//        
+//        if let list = currentList {
+//            
+//            // TODO save "group list item" don't desintegrate group immediatly
+//            
+//            
+//            Prov.listItemsProvider.addGroupItems(group, status: status, list: list, resultHandler(onSuccess: {[weak self] addedListItems in
+//                if let list = self?.currentList {
+//                    self?.initWithList(list) // refresh list items
+////                    if let firstListItem = addedListItems.first {
+////                        //    TODO!!!!!!!!!!!!!!!! ?
+//////                        self?.listItemsTableViewController.scrollToListItem(firstListItem)
+////                    } else {
+////                        QL3("Shouldn't be here without list items")
+////                    }
+//                } else {
+//                    QL3("Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
+//                }
+//                }, onError: {[weak self] result in guard let weakSelf = self else {return}
+//                    switch result.status {
+//                    case .isEmpty:
+//                        AlertPopup.show(title: trans("popup_title_group_is_empty"), message: trans("popup_group_is_empty"), controller: weakSelf)
+//                    default:
+//                        self?.defaultErrorHandler()(result)
 //                    }
-                } else {
-                    QL3("Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
-                }
-                }, onError: {[weak self] result in guard let weakSelf = self else {return}
-                    switch result.status {
-                    case .isEmpty:
-                        AlertPopup.show(title: trans("popup_title_group_is_empty"), message: trans("popup_group_is_empty"), controller: weakSelf)
-                    default:
-                        self?.defaultErrorHandler()(result)
-                    }
-            }))
-        } else {
-            QL4("Add product from quick list but there's no current list in ViewController'")
-        }
+//            }))
+//        } else {
+//            QL4("Add product from quick list but there's no current list in ViewController'")
+//        }
     }
     
     override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
@@ -765,11 +729,11 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     override func onRemovedSectionCategoryName(_ name: String) {
-        updatePossibleList()
+        listItemsTableViewController.tableView.reloadData()
     }
     
     override func onRemovedBrand(_ name: String) {
-        updatePossibleList()
+        listItemsTableViewController.tableView.reloadData()
     }
     
     // MARK: - EditSectionViewControllerDelegate
@@ -834,6 +798,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                     sectionsTableViewController.sections = weakSelf.listItemsTableViewController.sections
                     sectionsTableViewController.status = weakSelf.status
                     sectionsTableViewController.delegate = weakSelf
+                    
+                    sectionsTableViewController.listItemsNotificationToken = weakSelf.realmData?.token
                     
                     sectionsTableViewController.onViewDidLoad = {[weak self, weak sectionsTableViewController] in guard let weakSelf = self else {return}
                         let navbarHeight = weakSelf.topBar.frame.height
@@ -900,12 +866,12 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     // MARK: - ReorderSectionTableViewControllerDelegate
     
     func onSectionsUpdated() {
-        if let list = currentList {
-            udpateListItems(list) {
-            }
-        } else {
-            print("Error: ViewController.onSectionOrderUpdated: Invalid state, reordering sections and no list")
-        }
+//        if let list = currentList {
+//            udpateListItems(list) {
+//            }
+//        } else {
+//            print("Error: ViewController.onSectionOrderUpdated: Invalid state, reordering sections and no list")
+//        }
     }
     
     func onSectionSelected(_ section: Section) {
@@ -921,13 +887,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     func onSectionRemoved(_ section: Section) {
-        // TODO!!!!!!!!!!!!!!!!!!!!!
-//        listItemsTableViewController.removeSection(section.uuid)
-        Prov.sectionProvider.remove(section, remote: true, resultHandler(onSuccess: {
-        }, onErrorAdditional: {[weak self] result in
-            self?.updatePossibleList()
-            }
-        ))
+        listItemsTableViewController.tableView.reloadData()
     }
     
     override func back() {

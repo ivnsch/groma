@@ -744,17 +744,18 @@ struct MyWebsocketDispatcher {
             }
             
         case WSNotificationVerb.Delete:
-            if let sectionUuid = data as? String {
-                Prov.sectionProvider.remove(sectionUuid, listUuid: nil, remote: false) {result in
-                    if result.success {
-                        postNotification(.Section, verb, sender, sectionUuid)
-                    } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete section \(sectionUuid)", result: result)
-                    }
-                }
-            } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Delete section, data: \(data)")
-            }
+            fatalError("Outdated")
+//            if let sectionUuid = data as? String {
+//                Prov.sectionProvider.remove(sectionUuid, listUuid: nil, remote: false) {result in
+//                    if result.success {
+//                        postNotification(.Section, verb, sender, sectionUuid)
+//                    } else {
+//                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete section \(sectionUuid)", result: result)
+//                    }
+//                }
+//            } else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Delete section, data: \(data)")
+//            }
 
         case WSNotificationVerb.DeleteWithName:
             if let sectionName = data as? String {

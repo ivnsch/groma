@@ -29,6 +29,11 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     }
     fileprivate var notificationToken: NotificationToken?
     
+    // For delete - Theoretically it should work without this, but when list items controller receives the delete (and update, for the other sections) notifications and reloads sections/cells after it, there's a crash because "Realm object has been deleted or invalidated". Couldn't figure out why this happens - the delete is done in the main thread, the notification should be send by Realm after everything is up to date, and list items controllers references a Realm list, which of course is also in the main thread, which should be up to date when receiving the notification. It's a timing issue, since it doesn't happen when debugging, i.e. advancing step by step to the reload of the sections/cells.
+    // So, instead of updating list items controller with the notification token, we supress the list items controller notification with this token and instead trigger a reload of it via delegate.
+    // For more details about this error see https://github.com/realm/realm-cocoa/issues/3195, Though there doesn't seem to be anything that clarifies this problem there - a conclusion from this thread is that long as we use the notification block everything is ok, but that's exactly what's causing the crash here.
+    var listItemsNotificationToken: NotificationToken?
+    
     var onViewDidLoad: VoidFunction?
     
     var cellHeight: CGFloat = DimensionsManager.listItemsHeaderHeight
@@ -136,21 +141,24 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         guard let sections = sections else {QL4("No sections"); return}
+        guard let notificationToken = notificationToken else {QL4("No notificationToken"); return}
+        guard let listItemsNotificationToken = listItemsNotificationToken else {QL4("No list items notificationToken"); return}
         
         if editingStyle == .delete {
             
             let section = sections[indexPath.row]
             
-            delegate?.canRemoveSection(section) {can in
-                if can {
+//            delegate?.canRemoveSection(section) {can in
+//                if can {
                     tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
                         tableView.deleteRows(at: [indexPath], with: .fade)
-                        Prov.sectionProvider.remove(section, remote: true, weakSelf.successHandler {
-                            weakSelf.delegate?.onSectionRemoved(section)
+                        Prov.sectionProvider.remove(section, notificationTokens: [notificationToken, listItemsNotificationToken], weakSelf.successHandler {[weak self] in
+                            self?.tableView.deleteRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .bottom)
+                            self?.delegate?.onSectionRemoved(section)
                         })
                     }
-                }
-            }
+//                }
+//            }
         }
     }
     
@@ -196,33 +204,5 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
 //            }
 //        }
         tableView.reloadData()
-    }
-    
-    func removeSection(_ uuid: String) {
-        if let index = getSectionIndex(uuid) {
-            removeSection(uuid, index: index)
-        } else {
-            QL2("Section to remove not found: \(uuid)")
-        }
-    }
-    
-    func getSectionIndex(_ uuid: String) -> Int? {
-        guard let sections = sections else {QL4("No sections"); return nil}
-
-        for (i, s) in sections.enumerated() {
-            if s.uuid == uuid {
-                return i
-            }
-        }
-        return nil
-    }
-    
-    fileprivate func removeSection(_ uuid: String, index: Int) {
-        guard let sections = sections else {QL4("No sections"); return}
-
-        tableView.wrapUpdates{[weak self] in
-            self?.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .bottom)
-            sections.remove(objectAtIndex: index)
-        }
     }
 }
