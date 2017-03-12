@@ -344,7 +344,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     
     func onItemSwiped(_ listItem: ListItem) {
         
-        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem)"); return}
+        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
         
         listItemsTableViewDelegate?.onListItemSwiped(listItem, indexPath: indexPath)
         
@@ -405,7 +405,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     }
     
     func onDelete(_ listItem: ListItem) {
-        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem)"); return}
+        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
         deleteListItem(indexPath: indexPath)
     }
     

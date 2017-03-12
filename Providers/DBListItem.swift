@@ -336,8 +336,8 @@ public class ListItem: DBSyncable, Identifiable {
         return "[\(product.product.product.item.name)], unit: \(product.product.unit), todo: \(todoOrder), done: \(doneOrder), stash: \(stashOrder)"
     }
 
-    fileprivate var shortDebugDescription: String {
-        return "[\(product.product.product.item.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)"
+    public var shortDebugDescription: String {
+        return "[\(product.product.product.item.name), quantity: \(quantity), uuid: \(uuid), section: \(section.name)]"
     }
 
     public var quantityDebugDescription: String {
