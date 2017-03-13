@@ -1031,7 +1031,7 @@ class RealmListItemProvider: RealmProvider {
     /// Quick add
     func addToCartSync(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> (AddCartListItemResult)? {
 
-        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, possibleNewOrder: nil, list: list, realmData: realmData) {
+        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, possibleNewOrder: nil, list: list, status: .done, realmData: realmData) {
             
         case .ok(let sectionResult):
             
@@ -1158,7 +1158,7 @@ class RealmListItemProvider: RealmProvider {
             let foundAndDeletedListItem = DBProv.listItemProvider.deletePossibleListItemWithUniqueSync(listItemInput.name, productBrand: listItemInput.brand, notUuid: updatingListItem.uuid, list: list, realmData: realmData, doTransaction: false)
             
             // update or create section
-            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: false)
+            let sectionResult = DBProv.sectionProvider.mergeOrCreateSectionSync(listItemInput.section, sectionColor: listItemInput.sectionColor, possibleNewOrder: nil, list: list, status: status, realmData: realmData, doTransaction: false)
             
             var changedSection = false
             var addedNewSectionIndex: Int?
@@ -1355,13 +1355,22 @@ class RealmListItemProvider: RealmProvider {
         
         let srcSection = listItem.section
 
-        
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {(realm) -> SwitchListItemResult? in
-      
+        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {realm -> SwitchListItemResult? in
+
+            // Update the section referenced by the list item, for consistency. The cart has no section list / visible sections.
+            guard let dstSection = DBProv.sectionProvider.getOrCreateCartStash(name: listItem.section.name, color: listItem.section.color, list: list, status: .done, notificationToken: realmData.token, realm: realm, doTransaction: false) else {
+                QL4("Couldn't get or create dst section, can't switch")
+                return nil
+            }
+            listItem.section = dstSection
+            
+            // delete from src section. This is only for .todo items - the cart and stash sections have like all sections a list of list items too but this is not used since we don't need ordering relative to section there.
+            srcSection.listItems.remove(objectAtIndex: from.row)
+            
+            // Insert the item in the cart listitems list
             list.doneListItems.insert(listItem, at: 0)
             
-            // delete from src section
-            srcSection.listItems.remove(objectAtIndex: from.row)
+            // TODO remove src section if empty
             
             if self.deleteSectionIfEmpty(sections: list.todoSections, section: srcSection) {
                 return SwitchListItemResult(deletedSection: true)
@@ -1394,37 +1403,6 @@ class RealmListItemProvider: RealmProvider {
         
         return switchCartOrStashToTodoSync(listItem: listItem, from: from, cartOrStashListItems: list.doneListItems, realmData: realmData)
     }
-
-    
-    // TODO do we need list item parameter or is "from" enough
-    func switchSync(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData) -> SwitchListItemResult? {
-        
-        guard let realm = listItem.section.realm else {QL4("No realm"); return nil}
-        
-        let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
-        
-        let srcSection = listItem.section
-        
-        guard let dstSection = DBProv.sectionProvider.getOrCreate(name: listItem.section.name, color: listItem.section.color, list: list, status: dstStatus, notificationToken: realmData.token, realm: realm) else {QL4("Invalid state - couldn't get or create section"); return nil}
-        
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {(realm) -> SwitchListItemResult? in
-            
-            // append/increment in dst section
-            if self.addSync(listItem: listItem, section: dstSection, list: list, quantity: listItem.quantity, realmData: realmData, doTransaction: false) == nil {
-                QL4("Add sync returned nil, exit")
-                return nil // interrupt transaction
-            }
-            
-            // delete from src section
-            srcSection.listItems.remove(objectAtIndex: from.row)
-            
-            if self.deleteSectionIfEmpty(sections: list.sections(status: srcStatus), section: srcSection) {
-                return SwitchListItemResult(deletedSection: true)
-            } else {
-                return SwitchListItemResult(deletedSection: false)
-            }
-        }
-    }
     
     fileprivate func switchCartOrStashToTodoSync(cartOrStashListItems: RealmSwift.List<ListItem>, list: List, realmData: RealmData, doTransaction: Bool) -> Bool {
         
@@ -1432,14 +1410,13 @@ class RealmListItemProvider: RealmProvider {
             
             for listItem in cartOrStashListItems {
                 
-                guard let dstSection = DBProv.sectionProvider.getOrCreate(name: listItem.section.name, color: listItem.section.color, list: list, status: .todo, notificationToken: realmData.token, realm: realmData.realm, doTransaction: false) else {QL4("Invalid state - couldn't get or create section"); return false}
+                guard let dstSection = DBProv.sectionProvider.getOrCreateTodo(name: listItem.section.name, color: listItem.section.color, list: list, notificationToken: realmData.token, realm: realmData.realm, doTransaction: false) else {QL4("Invalid state - couldn't get or create section"); return false}
                 
                 // append/increment in dst section
                 if self.addSync(listItem: listItem, section: dstSection, list: list, quantity: listItem.quantity, realmData: realmData, doTransaction: false) == nil {
                     QL4("Add sync returned nil, exit")
                     return false // interrupt transaction
                 }
-                
                 
                 // delete from src list items
                 cartOrStashListItems.remove(objectAtIndex: 0)
@@ -1467,10 +1444,15 @@ class RealmListItemProvider: RealmProvider {
         guard let realm = listItem.section.realm else {QL4("No realm"); return false}
         
         let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
-        
-        guard let dstSection = DBProv.sectionProvider.getOrCreate(name: listItem.section.name, color: listItem.section.color, list: list, status: .todo, notificationToken: realmData.token, realm: realm) else {QL4("Invalid state - couldn't get or create section"); return false}
+
         
         return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {realm -> Bool? in
+
+            guard let dstSection = DBProv.sectionProvider.getOrCreateTodo(name: listItem.section.name, color: listItem.section.color, list: list, notificationToken: realmData.token, realm: realm, doTransaction: false) else {
+                QL4("Couldn't get or create dst section, can't switch")
+                return nil
+            }
+            listItem.section = dstSection
             
             // append/increment in dst section
             if self.addSync(listItem: listItem, section: dstSection, list: list, quantity: listItem.quantity, realmData: realmData, doTransaction: false) == nil {

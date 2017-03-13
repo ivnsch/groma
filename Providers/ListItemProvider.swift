@@ -131,8 +131,6 @@ public protocol ListItemProvider {
     
     func updateNew(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<(UpdateListItemResult)>) -> Void)
     
-    func switchStatusNew(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void)
-    
     func deleteNew(indexPath: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<DeleteListItemResult>) -> Void)
     
     /// Move which takes section into account (currently only used by .todo)

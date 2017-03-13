@@ -9,6 +9,18 @@
 import Foundation
 import RealmSwift
 
+public struct SectionUnique {
+    let name: String
+    let listUuid: String
+    let status: ListItemStatus
+    
+    init(name: String, listUuid: String, status: ListItemStatus) {
+        self.name = name
+        self.listUuid = listUuid
+        self.status = status
+    }
+}
+
 public class Section: DBSyncable, Identifiable {
 
     public dynamic var uuid: String = ""
@@ -23,6 +35,17 @@ public class Section: DBSyncable, Identifiable {
     public dynamic var stashOrder: Int = 0
 
     public let listItems = RealmSwift.List<ListItem>()
+    
+    public dynamic var statusVal: Int = 0
+    
+    public var status: ListItemStatus {
+        get {
+            return ListItemStatus(rawValue: statusVal)!
+        }
+        set {
+            statusVal = status.rawValue
+        }
+    }
     
     public var color: UIColor {
         get {
@@ -47,10 +70,10 @@ public class Section: DBSyncable, Identifiable {
     }
     
     public override class func indexedProperties() -> [String] {
-        return ["name"]
+        return ["name", "status"]
     }
     
-    public convenience init(uuid: String, name: String, color: UIColor, list: List, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastUpdate: Date = Date(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, name: String, color: UIColor, list: List, todoOrder: Int, doneOrder: Int, stashOrder: Int, status: ListItemStatus, lastUpdate: Date = Date(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -62,6 +85,7 @@ public class Section: DBSyncable, Identifiable {
         self.todoOrder = todoOrder
         self.doneOrder = doneOrder
         self.stashOrder = stashOrder
+        self.statusVal = status.rawValue
         
         if let lastServerUpdate = lastServerUpdate {
             self.lastServerUpdate = lastServerUpdate
@@ -70,7 +94,7 @@ public class Section: DBSyncable, Identifiable {
     }
     
     // NOTE: we reuse ListItemStatusOrder from list items, as content is what we need here also, maybe we should rename it
-    public convenience init(uuid: String, name: String, color: UIColor, list: List, order: ListItemStatusOrder, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, name: String, color: UIColor, list: List, order: ListItemStatusOrder, status: ListItemStatus, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         let (todoOrder, doneOrder, stashOrder): (Int, Int, Int) = {
             switch order.status {
@@ -80,7 +104,7 @@ public class Section: DBSyncable, Identifiable {
             }
         }()
         
-        self.init(uuid: uuid, name: name, color: color, list: list, todoOrder: todoOrder, doneOrder: doneOrder, stashOrder: stashOrder, lastServerUpdate: lastServerUpdate, removed: removed)
+        self.init(uuid: uuid, name: name, color: color, list: list, todoOrder: todoOrder, doneOrder: doneOrder, stashOrder: stashOrder, status: status, lastServerUpdate: lastServerUpdate, removed: removed)
     }
     
     // MARK: - Filters
@@ -89,14 +113,16 @@ public class Section: DBSyncable, Identifiable {
         return "uuid == '\(uuid)'"
     }
     
+    // TODO review why this is used
     static func createFilterWithName(_ name: String) -> String {
         return "name == '\(name)'"
     }
-    
-    static func createFilter(_ name: String, listUuid: String) -> String {
-        return "name == '\(name)' AND listOpt.uuid = '\(listUuid)'"
+
+    static func createFilter(unique: SectionUnique) -> String {
+        return "name == '\(unique.name)' AND listOpt.uuid == '\(unique.listUuid)' AND statusVal == \(unique.status.rawValue)"
     }
-    
+
+    // TODO review why this is used
     static func createFilterWithNames(_ names: [String], listUuid: String) -> String {
         let sectionsNamesStr: String = names.map{"'\($0)'"}.joined(separator: ",")
         return "name IN {\(sectionsNamesStr)} AND listOpt.uuid = '\(listUuid)'"
@@ -178,7 +204,7 @@ public class Section: DBSyncable, Identifiable {
         )
     }
     
-    public func copy(uuid: String? = nil, name: String? = nil, color: UIColor? = nil, list: List? = nil, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Section {
+    public func copy(uuid: String? = nil, name: String? = nil, color: UIColor? = nil, list: List? = nil, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, status: ListItemStatus? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Section {
         return Section(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -189,6 +215,8 @@ public class Section: DBSyncable, Identifiable {
             doneOrder: doneOrder ?? self.doneOrder,
             stashOrder: stashOrder ?? self.stashOrder,
 
+            status: status ?? self.status,
+            
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
         )

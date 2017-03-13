@@ -238,7 +238,8 @@ class RealmSectionProvider: RealmProvider {
         func transactionContent(realm: Realm) -> ProvResult<AddSectionResult, DatabaseError>? {
             
             let addResult: AddSectionResult = {
-                if let section = sections.filter(Section.createFilter(sectionName, listUuid: list.uuid)).first, let index = sections.index(of: section)
+                let sectionUnique = SectionUnique(name: sectionName, listUuid: list.uuid, status: status)
+                if let section = sections.filter(Section.createFilter(unique: sectionUnique)).first, let index = sections.index(of: section)
                 
                 {
                     
@@ -246,7 +247,7 @@ class RealmSectionProvider: RealmProvider {
                     realm.add(section, update: true) // TODO is this necessary?
                     return AddSectionResult(section: section, isNew: false, index: index)
                 } else {
-                    let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: status, order: 123)) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
+                    let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: status, order: 123), status: status) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
                     sections.append(section)
                     return AddSectionResult(section: section, isNew: true, index: sections.count - 1)
                 }
@@ -271,19 +272,20 @@ class RealmSectionProvider: RealmProvider {
     }
     
     // add/update and save (TODO better method name)
-    func mergeOrCreateSectionSync(_ sectionName: String, sectionColor: UIColor, possibleNewOrder: ListItemStatusOrder?, list: List, realmData: RealmData?, doTransaction: Bool = true) -> ProvResult<AddSectionPlainResult, DatabaseError> {
+    func mergeOrCreateSectionSync(_ sectionName: String, sectionColor: UIColor, possibleNewOrder: ListItemStatusOrder?, list: List, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> ProvResult<AddSectionPlainResult, DatabaseError> {
         
         func transactionContent(realm: Realm) -> ProvResult<AddSectionPlainResult, DatabaseError>? {
             
             let addResult: AddSectionPlainResult = {
-                if let section = realm.objects(Section.self).filter(Section.createFilter(sectionName, listUuid: list.uuid)).first
+                let sectionUnique = SectionUnique(name: sectionName, listUuid: list.uuid, status: status)
+                if let section = realm.objects(Section.self).filter(Section.createFilter(unique: sectionUnique)).first
                     
                 {
                     section.color = sectionColor
                     realm.add(section, update: true) // TODO is this necessary?
                     return AddSectionPlainResult(section: section, isNew: false)
                 } else {
-                    let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: .done, order: 123)) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
+                    let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: .done, order: 123), status: status) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
 //                    sections.append(section)
                     realm.add(section, update: true)
                     return AddSectionPlainResult(section: section, isNew: true)
@@ -318,7 +320,10 @@ class RealmSectionProvider: RealmProvider {
     
     // MARK: - Sync
     
-    func getOrCreate(name: String, color: UIColor, list: List, status: ListItemStatus, notificationToken: NotificationToken, realm: Realm, doTransaction: Bool = true) -> Section? {
+    /// Get or create for .todo (takes into consideration that section is in a RealmSwift.List)
+    func getOrCreateTodo(name: String, color: UIColor, list: List, notificationToken: NotificationToken, realm: Realm, doTransaction: Bool = true) -> Section? {
+        
+        let status: ListItemStatus = .todo
         
         func appendSection(section: Section) -> Section? {
             
@@ -341,17 +346,46 @@ class RealmSectionProvider: RealmProvider {
             return sectionMaybe
         }
         
+        let sectionUnique = SectionUnique(name: name, listUuid: list.uuid, status: status)
         
-        if let section = list.sections(status: status).filter(Section.createFilterWithName(name)).first { // The target status already contains the section
+        if let section = list.sections(status: status).filter(Section.createFilter(unique: sectionUnique)).first { // The target status already contains the section
             return section
         
         } else if let section = loadSectionSync(name, list: list).getOk().flatMap({$0}) { // The target status doesn't contain the section, but it exists
             return appendSection(section: section)
             
         } else { // The section doesn't exist
-            let section = Section(uuid: UUID().uuidString, name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0)) // TODO!!!!!!!!! remove order from sections
+            let section = Section(uuid: UUID().uuidString, name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0), status: status) // TODO!!!!!!!!! remove order from sections
             return appendSection(section: section)
         }
+    }
+    
+    /// Get or create for .cart and .stash (section is not in a RealmSwift.List)
+    func getOrCreateCartStash(name: String, color: UIColor, list: List, status: ListItemStatus, notificationToken: NotificationToken, realm: Realm, doTransaction: Bool = true) -> Section? {
+        func transactionContent(realm: Realm) -> Section? {
+            let sectionUnique = SectionUnique(name: name, listUuid: list.uuid, status: status)
+            if let section = realm.objects(Section.self).filter(Section.createFilter(unique: sectionUnique)).first { // The target status already contains the section
+                return section
+
+            } else {
+                let section = Section(uuid: UUID().uuidString, name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0), status: status) // TODO!!!!!!!!! remove order from sections
+                realm.add(section, update: true)
+                return section
+            }
+        }
+        
+            
+        let sectionMaybe: Section? = {
+            if doTransaction {
+                return doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: realm, {realm in
+                    return transactionContent(realm: realm)
+                })
+            } else {
+                return transactionContent(realm: realm)
+            }
+        }()
+        
+        return sectionMaybe
     }
     
     // Load the sections directly from Realm - to ensure the resulting RealmSwift.List references a realm (which is not the case when using "copy") as well as it's fetched from the current thread.

@@ -15,7 +15,8 @@ class SectionMapper {
 //    }
     
     class func SectionWithRemote(_ remoteSection: RemoteSection, list: List) -> Section {
-        return Section(uuid: remoteSection.uuid, name: remoteSection.name, color: remoteSection.color, list: list, todoOrder: remoteSection.todoOrder, doneOrder: remoteSection.doneOrder, stashOrder: remoteSection.stashOrder, lastServerUpdate: remoteSection.lastUpdate)
+        fatalError("Outdated")
+//        return Section(uuid: remoteSection.uuid, name: remoteSection.name, color: remoteSection.color, list: list, todoOrder: remoteSection.todoOrder, doneOrder: remoteSection.doneOrder, stashOrder: remoteSection.stashOrder, lastServerUpdate: remoteSection.lastUpdate)
     }
 //    
 //    class func dbWithSection(_ section: Section) -> Section {

@@ -144,7 +144,7 @@ class SectionProviderImpl: SectionProvider {
                     
                 } else {
                     if let order = possibleNewOrder {
-                        let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: order)
+                        let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: order, status: status)
                         handler(ProviderResult(status: .success, sucessResult: section))
                         
                     } else { // no order known in advance - fetch listItems to count how many sections, order at the end
@@ -154,7 +154,7 @@ class SectionProviderImpl: SectionProvider {
                             if let listItems = result.sucessResult {
                                 let order = listItems.sectionCount(status)
                                 
-                                let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order))
+                                let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order), status: status)
                                 
                                 QL1("Section: \(sectionName) doesn't exist, will create a new one. New uuid: \(section.uuid). List uuid: \(list.uuid)")
                                 handler(ProviderResult(status: .success, sucessResult: section))

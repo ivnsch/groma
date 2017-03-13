@@ -1368,15 +1368,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // MARK: - Switch
-    
-    func switchStatusNew(listItem: ListItem, from: IndexPath, srcStatus: ListItemStatus, dstStatus: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void) {
-        if let result = DBProv.listItemProvider.switchSync(listItem: listItem, from: from, srcStatus: srcStatus, dstStatus: dstStatus, realmData: realmData) {
-            handler(ProviderResult(status: .success, sucessResult: result))
-        } else {
-            handler(ProviderResult(status: .databaseUnknown))
-        }
-    }
-    
+        
     func switchTodoToCartSync(listItem: ListItem, from: IndexPath, realmData: RealmData, _ handler: @escaping (ProviderResult<SwitchListItemResult>) -> Void) {
         if let result = DBProv.listItemProvider.switchTodoToCartSync(listItem: listItem, from: from, realmData: realmData) {
             handler(ProviderResult(status: .success, sucessResult: result))
