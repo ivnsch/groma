@@ -78,8 +78,8 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     fileprivate let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
     fileprivate let placeholderIdentifier = "placeholder"
     
-    fileprivate var pullToAddView: MyRefreshControl?
-    
+    fileprivate var pullToAdd: PullToAddHelper?
+
     var placeHolderItem: (indexPath: IndexPath, item: ListItem)?
     
     override func viewDidLoad() {
@@ -99,18 +99,11 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     func enablePullToAdd() {
-//        let refreshControl = PullToAddHelper.createPullToAdd(self)
-//        refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
-//        self.refreshControl = refreshControl
-//        
-//        pullToAddView = refreshControl
+        self.pullToAdd = PullToAddHelper(tableView: tableView) {[weak self] refreshControl in
+            refreshControl.endRefreshing()
+            self?.listItemsTableViewDelegate?.onPullToAdd()
+        }
     }
-    
-    func onPullRefresh(_ sender: UIRefreshControl) {
-        sender.endRefreshing()
-        listItemsTableViewDelegate?.onPullToAdd()
-    }
-    
     
     /**
      Sets pending item (mark as undo" if open and shows cell open state. Submits currently pending item if existent.
@@ -145,7 +138,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -130)
+        pullToAdd?.refreshControl.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -130)
         listItemsTableViewDelegate?.onTableViewScroll(scrollView)
     }
     

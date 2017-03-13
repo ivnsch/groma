@@ -13,6 +13,34 @@ import QorumLogs
 // TODO object oriented
 class PullToAddHelper {
 
+    
+    var onPull: ((MyRefreshControl) -> Void)?
+    
+    let refreshControl: MyRefreshControl
+    
+    init(tableView: UITableView, onPull: @escaping (MyRefreshControl) -> Void) {
+        self.onPull = onPull
+        
+        let refreshControl = MyRefreshControl(frame: CGRect(x: 0, y: tableView.y, width: tableView.width, height: 200), backgroundColor: tableView.backgroundColor)
+        
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.backgroundView = refreshControl
+        }
+        
+        self.refreshControl = refreshControl
+        
+        refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
+        
+    }
+    
+    @objc func onPullRefresh(_ sender: UIRefreshControl) {
+        onPull?(refreshControl)
+    }
+    
+    
+    // backwards compatibility - TODO remove
     // Creates default refresh control
     // backgroundColor: Overrides parentController's view background color as background color of pull to add
     static func createPullToAdd(_ parentController: UIViewController, backgroundColor: UIColor? = nil) -> MyRefreshControl {

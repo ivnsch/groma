@@ -80,14 +80,14 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     fileprivate let cellHeight = DimensionsManager.defaultCellHeight
     
     fileprivate(set) var explanationManager: ExplanationManager = ExplanationManager()
-    
-    fileprivate var pullToAddView: MyRefreshControl?
 
     fileprivate let placeholderIdentifier = "placeholder"
     var placeHolderItem: (indexPath: IndexPath, item: InventoryItem)?
     
     fileprivate var initializedTableViewBottomInset = false
 
+    fileprivate var pullToAdd: PullToAddHelper?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -99,16 +99,13 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         tableView.dataSource = self
         tableView.delegate = self
         
-        tableView.tag = 1234901111
-        emptyViewController.tableView.tag = 123123
-        
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         
         if delegate?.isPullToAddEnabled() ?? false {
-//            let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground)
-//            tableViewController.refreshControl = refreshControl
-//            refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), for: .valueChanged)
-//            self.pullToAddView = refreshControl
+            self.pullToAdd = PullToAddHelper(tableView: tableView) {[weak self] refreshControl in
+                refreshControl.endRefreshing()
+                self?.delegate?.onPullToAdd()
+            }
         }
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
@@ -161,11 +158,6 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         checker.preference = .showedLongTapToEditCounter
         explanationManager.explanationContents = contents
         explanationManager.checker = checker
-    }
-    
-    func onPullRefresh(_ sender: UIRefreshControl) {
-        sender.endRefreshing()
-        delegate?.onPullToAdd()
     }
     
     override func viewWillAppear(_ animated:Bool) {
@@ -501,7 +493,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     // MARK: - Scrol delegate
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
+        pullToAdd?.refreshControl.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
     }
 }
 
