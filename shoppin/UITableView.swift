@@ -8,8 +8,15 @@
 
 import UIKit
 import Providers
+import QorumLogs
 
 extension UITableView {
+    
+    open override var contentInset: UIEdgeInsets {
+        didSet {
+            QL3("set content inset: \(contentInset), tag: \(tag)")
+        }
+    }
     
     var inset: UIEdgeInsets {
         set {
@@ -131,5 +138,23 @@ extension UITableView {
         function()
         self.endUpdates()
         CATransaction.commit()
+    }
+    
+    func addRow(indexPath: IndexPath, isNewSection: Bool) {
+        
+        beginUpdates()
+        if isNewSection {
+            insertSections([indexPath.section], with: .top)
+        }
+        insertRows(at: [IndexPath(row: indexPath.row, section: indexPath.section)], with: .top)
+        endUpdates()
+    }
+    
+    func updateRow(indexPath: IndexPath) {
+        reloadRows(at: [indexPath], with: .none)
+    }
+    
+    func deleteSection(index: Int) {
+        deleteSections(IndexSet([index]), with: .top)
     }
 }

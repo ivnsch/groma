@@ -41,8 +41,10 @@ protocol ListItemsEditTableViewDelegateNew: class {
 //    func onPanQuantityUpdate(_ tableViewListItem: ListItem, newQuantity: Int)
 //}
 
-class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelegateNew, ListItemsSectionHeaderViewDelegate {
+class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew, ListItemsSectionHeaderViewDelegate, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet weak var tableView: UITableView!
+    
     var sections: RealmSwift.List<Section>? {
         didSet {
             tableView.reloadData()
@@ -97,11 +99,11 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     }
     
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self)
-        refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
-        self.refreshControl = refreshControl
-        
-        pullToAddView = refreshControl
+//        let refreshControl = PullToAddHelper.createPullToAdd(self)
+//        refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
+//        self.refreshControl = refreshControl
+//        
+//        pullToAddView = refreshControl
     }
     
     func onPullRefresh(_ sender: UIRefreshControl) {
@@ -133,7 +135,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     
     // MARK: - Scrolling
 
-    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.scrollViewDelegate?.scrollViewWillBeginDragging?(scrollView)
         
         //        let velocity = scrollView.panGestureRecognizer.velocityInView(scrollView.superview)
@@ -142,7 +144,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
 //        clearPendingSwipeItemIfAny(true) TODO!!!!!!!!!!!!!!!! necessary?
     }
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -130)
         listItemsTableViewDelegate?.onTableViewScroll(scrollView)
     }
@@ -200,11 +202,11 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     
     // MARK: - Table view data source / delegate
     
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return isEditing
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let sectionObj = sections?[section] else {QL4("Invalid state: no section"); return nil}
         
         let view = Bundle.loadView("ListItemsSectionHeaderView", owner: self) as! ListItemsSectionHeaderView
@@ -217,11 +219,11 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
     
     var contract: Bool = false
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return contract ? DimensionsManager.contractedSectionHeight : DimensionsManager.listItemsHeaderHeight
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if sectionsExpanded {
             return sections?[section].listItems.count ?? 0
             
@@ -230,17 +232,17 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         }
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return sections?.count ?? 0
         // TODO!!!!!!!!!!!!!!!! if placeholder item has a section that isn't yet in the table we have to add it here
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return DimensionsManager.defaultCellHeight
     }
     
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if let placeHolderItem = placeHolderItem, placeHolderItem.indexPath == indexPath {
             let cell = tableView.dequeueReusableCell(withIdentifier: placeholderIdentifier) as! PlaceHolderItemCell
@@ -263,7 +265,7 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         }
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             deleteListItem(indexPath: indexPath)
         }
@@ -280,16 +282,16 @@ class ListItemsTableViewControllerNew: UITableViewController, ListItemCellDelega
         }
     }
     
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return isEditing
     }
     
     
-    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         listItemsEditTableViewDelegate?.onListItemMoved(from: sourceIndexPath, to: destinationIndexPath)
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {QL4("No listItem"); return}
         listItemsTableViewDelegate?.onListItemSelected(listItem, indexPath: indexPath)
     }

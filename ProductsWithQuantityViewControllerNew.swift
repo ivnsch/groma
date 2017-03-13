@@ -39,12 +39,8 @@ protocol ProductsWithQuantityViewControllerDelegateNew: class {
 /// Generic controller for sorted products with a quantity, which can be incremented and decremented
 class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ExplanationViewDelegate {
     
-    fileprivate weak var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
-    
-    var tableView: UITableView {
-        return tableViewController.tableView
-    }
-    
+    @IBOutlet weak var tableView: UITableView!
+
     @IBOutlet weak var topMenuView: UIView!
     
     var sortBy: InventorySortBy? = .count
@@ -90,6 +86,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     fileprivate let placeholderIdentifier = "placeholder"
     var placeHolderItem: (indexPath: IndexPath, item: InventoryItem)?
     
+    fileprivate var initializedTableViewBottomInset = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -98,13 +96,19 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         
         tableView.register(UINib(nibName: "PlaceHolderItemCell", bundle: nil), forCellReuseIdentifier: placeholderIdentifier)
         
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        tableView.tag = 1234901111
+        emptyViewController.tableView.tag = 123123
+        
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         
         if delegate?.isPullToAddEnabled() ?? false {
-            let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground)
-            tableViewController.refreshControl = refreshControl
-            refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), for: .valueChanged)
-            self.pullToAddView = refreshControl
+//            let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground)
+//            tableViewController.refreshControl = refreshControl
+//            refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), for: .valueChanged)
+//            self.pullToAddView = refreshControl
         }
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
@@ -164,28 +168,23 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         delegate?.onPullToAdd()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "embedTableViewController" {
-            tableViewController = segue.destination as! UITableViewController
-            tableViewController.tableView.dataSource = self
-            tableViewController.tableView.delegate = self
-        }
-    }
-    
     override func viewWillAppear(_ animated:Bool) {
         onViewWillAppear?()
         
         tableView.allowsSelectionDuringEditing = true
         
-        if let _ = tabBarController?.tabBar.frame.height {
-            // TODO this is not enough, why?
-            //            tableView.bottomInset = tabBarHeight + Constants.tableViewAdditionalBottomInset
-            tableView.bottomInset = 41
-        } else {
-            QL3("No tabBarController: \(tabBarController)")
-        }
-        
         load()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Set inset such that newly added cells can be positioned directly below the quick add controller
+        // Before of view did appear final table view height is not set. We also have to execute this only the first time because later it may be that the table view is contracted (quick add is open) which would set an incorrect inset.
+        if !initializedTableViewBottomInset {
+            initializedTableViewBottomInset = true
+            tableView.bottomInset = tableView.height + topMenusHeightConstraint.constant - DimensionsManager.quickAddHeight - DimensionsManager.defaultCellHeight
+        }
     }
     
     // MARK: - Table view data source

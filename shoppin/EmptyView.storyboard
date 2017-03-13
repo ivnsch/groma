@@ -12,7 +12,7 @@
         <!--Empty View Controller-->
         <scene sceneID="Owm-QJ-TsN">
             <objects>
-                <tableViewController storyboardIdentifier="EmptyViewController" id="R6H-H5-Xlf" customClass="EmptyViewController" customModule="groma" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="EmptyViewController" extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" id="R6H-H5-Xlf" customClass="EmptyViewController" customModule="groma" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="500" sectionHeaderHeight="28" sectionFooterHeight="28" id="GNQ-7u-Awn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

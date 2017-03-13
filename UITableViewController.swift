@@ -13,21 +13,15 @@ extension UITableViewController {
     // MARK: - Table view row manipulation
     
     func addRow(indexPath: IndexPath, isNewSection: Bool) {
-        
-        tableView.beginUpdates()
-        if isNewSection {
-            tableView.insertSections([indexPath.section], with: .top)
-        }
-        tableView.insertRows(at: [IndexPath(row: indexPath.row, section: indexPath.section)], with: .top)
-        tableView.endUpdates()
+        tableView.addRow(indexPath: indexPath, isNewSection: isNewSection)
     }
     
     func updateRow(indexPath: IndexPath) {
-        tableView.reloadRows(at: [indexPath], with: .none)
+        tableView.updateRow(indexPath: indexPath)
     }
     
     func deleteSection(index: Int) {
-        tableView.deleteSections(IndexSet([index]), with: .top)
+        tableView.deleteSection(index: index)
     }
     
     func reload() {

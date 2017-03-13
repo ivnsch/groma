@@ -468,8 +468,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         productsWithQuantityController.tableView.reloadData()
     }
     
+    
     var offsetForAddCellAnimation: CGFloat {
-        return 2 // This table view doesn't have headers, so we theoretically shouldn't need offsetForAddCellAnimation here (it should be 0) but for some reason there are little jumps and this fixes it
+//        return 2 // This table view doesn't have headers, so we theoretically shouldn't need offsetForAddCellAnimation here (it should be 0) but for some reason there are little jumps and this fixes it
+        return 0 // It seems this was actually not necessary, review and offsetForAddCellAnimation altogether if it's not
     }
     
     // MARK: - Navigation

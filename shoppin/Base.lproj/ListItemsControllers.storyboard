@@ -554,6 +554,9 @@
                             <outlet property="delegate" destination="MUh-dr-wEg" id="GUM-zB-zHh"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="tableView" destination="h1K-3W-SBz" id="Fba-ZU-Pek"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F9d-rN-gDW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

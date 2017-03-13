@@ -67,6 +67,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     fileprivate var topEditSectionControllerManager: ExpandableTopViewController<EditSectionViewController>?
     
+    fileprivate var initializedTableViewBottomInset = false
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -95,7 +97,17 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         NotificationCenter.default.removeObserver(self)
     }
     
-
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Set inset such that newly added cells can be positioned directly below the quick add controller
+        // Before of view did appear final table view height is not set. We also have to execute this only the first time because later it may be that the table view is contracted (quick add is open) which would set an incorrect inset.
+        if !initializedTableViewBottomInset {
+            initializedTableViewBottomInset = true
+            listItemsTableViewController.tableView.bottomInset = listItemsTableViewController.tableView.height - DimensionsManager.quickAddHeight - DimensionsManager.defaultCellHeight
+        }
+    }
+    
     fileprivate func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
         let top = topBar.frame.height
         let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 70, animateTableViewInset: false, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
@@ -208,10 +220,6 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         listItemsTableViewController.listItemsTableViewDelegate = self
         listItemsTableViewController.listItemsEditTableViewDelegate = self
 
-        
-        // TODO!!!!!!!!!!!!!!! calculate this number correctly
-        // The problem here is that the search box in quick add changes automatically the bottom inset (couldn't find how to avoid this). It adds the inset to the current inset (41 in this case). But this automatic value changes for different screen sizes, so 41 is only correct for the first where we tried (iPhone 7+). Possible solutions: 1. Investigate exactly how the automatic number is calculated so we always have correct number here or 2. Use a normal controller instead of table view controller, which seems not to do this automatic inset but then we also have to implement pull to refresh manually as normal controller doesn't support it out of the box.
-        listItemsTableViewController.tableView.bottomInset = 41
         
 //        let navbarHeight = topBar.frame.height
 //        let topInset = navbarHeight
@@ -424,7 +432,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             
             // NOTE: Assumes that Provider's deleteNew is synchronous
             if result.deletedSection {
-                self?.listItemsTableViewController.deleteSection(index: indexPath.section)
+                self?.listItemsTableViewController.tableView.deleteSection(index: indexPath.section)
             }}
         )
     }
@@ -439,7 +447,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             delay(0.4) {
                 // show possible changes, e.g. new section color, deleted section (when it's left empty)
                 //            tableView.reloadRows(at: [destinationIndexPath], with: .none) // for now we reload complete tableview, when section is left empty it also has to be removed
-                self.listItemsTableViewController.reload()
+                self.listItemsTableViewController.tableView.reloadData()
             }}
         )
     }
@@ -461,9 +469,9 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             
             let indexPath = IndexPath(row: result.listItemIndex, section: result.sectionIndex)
             if result.isNewItem {
-                listItemsTableViewController.addRow(indexPath: indexPath, isNewSection: result.isNewSection)
+                listItemsTableViewController.tableView.addRow(indexPath: indexPath, isNewSection: result.isNewSection)
             } else {
-                listItemsTableViewController.updateRow(indexPath: indexPath)
+                listItemsTableViewController.tableView.updateRow(indexPath: indexPath)
             }
             listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: Theme.defaultRowPosition, animated: true)
             
@@ -661,7 +669,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                     self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
                     
                 } else { // update
-                    self?.listItemsTableViewController.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex))
+                    self?.listItemsTableViewController.tableView.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: addResult.sectionIndex))
                     self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 }
                 
