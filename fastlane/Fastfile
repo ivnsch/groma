@@ -1,0 +1,29 @@
+# More documentation about how to customize your build
+# can be found here:
+# https://docs.fastlane.tools
+fastlane_version "1.109.0"
+
+# This value helps us track success metrics for Fastfiles
+# we automatically generate. Feel free to remove this line
+# once you get things running smoothly!
+generated_fastfile_id "49e6dc86-a8a5-4230-bc53-482c6ad83b87"
+
+default_platform :ios
+
+# Fastfile actions accept additional configuration, but
+# don't worry, fastlane will prompt you for required
+# info which you can add here later
+lane :beta do
+  cocoapods
+
+  # build your iOS app
+  gym(
+    use_legacy_build_api: true,
+    scheme: "groma"
+  )
+
+  # upload to HockeyApp
+  hockey(
+    api_token: "35de641f96e24d4e9dffb4a82d93e9e8"
+  )
+end
