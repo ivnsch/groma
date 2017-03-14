@@ -29,9 +29,15 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     fileprivate var titleLabelsFont: UIFont?
 
     @IBOutlet weak var tableView: TableViewHitTest!
+
+    var onUIReady: VoidFunction?
     
-    
-    var item: Item?
+    var item: Item? {
+        didSet {
+            guard itemNameLabel != nil else {QL4("Outlets not set yet"); return}
+            itemNameLabel.text = item?.name
+        }
+    }
     
     var inputs: SelectIngredientDataControllerInputs = SelectIngredientDataControllerInputs()
     fileprivate var currentUnit: Providers.Unit? // TODO merge this with inputs?
@@ -80,6 +86,8 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTableViewTap(_:)))
         tapRecognizer.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapRecognizer)
+        
+        onUIReady?()
     }
     
     override func viewWillAppear(_ animated: Bool) {

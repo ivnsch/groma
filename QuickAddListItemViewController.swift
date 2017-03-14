@@ -374,7 +374,9 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             let container = UIStoryboard.selectIngredientDataContainerController()
             container.delegate = self
             
-            container.item = item
+            container.onUIReady = {[weak container] in
+                container?.item = item
+            }
             
 //            container.onSelectDataControllerReadyBeforeDidLoad = {selectDataController in
 //                selectDataController.delegate = self
