@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectIngredientQuantityController" customModule="groma" customModuleProvider="target">
             <connections>
                 <outlet property="quantityView" destination="bnO-AN-ERt" id="9u0-nO-bsc"/>
+                <outlet property="quantityViewContainer" destination="SyD-ar-V6c" id="zcz-LY-HfU"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
