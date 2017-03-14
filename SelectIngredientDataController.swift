@@ -13,7 +13,7 @@ import RealmSwift
 
 struct SelectIngredientDataControllerInputs {
     var unitName: String = ""
-    var quantity: Float = 1
+    var quantity: Float = 0
     var fraction: Fraction = Fraction(wholeNumber: 0, numerator: 1, denominator: 1)
 }
 

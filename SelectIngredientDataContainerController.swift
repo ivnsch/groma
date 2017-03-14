@@ -160,8 +160,9 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         guard self.selectQuantityController == nil else {return self.selectQuantityController!}
         
         let selectQuantityController = SelectIngredientQuantityController()
-        selectQuantityController.onUIReady = {[weak selectQuantityController] in
-            selectQuantityController?.quantityView.delegate = self
+        selectQuantityController.onUIReady = {[weak selectQuantityController, weak self] in guard let weakSelf = self else {return}
+            selectQuantityController?.quantityView.quantity = weakSelf.inputs.quantity
+            selectQuantityController?.quantityView.delegate = weakSelf
         }
 
         self.selectQuantityController = selectQuantityController

@@ -63,18 +63,28 @@
                         <constraint firstAttribute="trailing" secondItem="8Pv-Iq-Aue" secondAttribute="trailing" id="q38-17-KAV"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bnO-AN-ERt" customClass="QuantityView" customModule="groma" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SyD-ar-V6c">
                     <rect key="frame" x="0.0" y="40" width="375" height="132"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" placeholderIntrinsicWidth="335" placeholderIntrinsicHeight="112" translatesAutoresizingMaskIntoConstraints="NO" id="bnO-AN-ERt" customClass="QuantityView" customModule="groma" customModuleProvider="target">
+                            <rect key="frame" x="20" y="10" width="335" height="112"/>
+                            <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="bnO-AN-ERt" firstAttribute="centerY" secondItem="SyD-ar-V6c" secondAttribute="centerY" id="MTz-Sp-dBz"/>
+                        <constraint firstItem="bnO-AN-ERt" firstAttribute="centerX" secondItem="SyD-ar-V6c" secondAttribute="centerX" id="Wkh-jI-G5o"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="aT7-vn-i8P" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="473-Y5-Rsm"/>
-                <constraint firstItem="bnO-AN-ERt" firstAttribute="top" secondItem="aT7-vn-i8P" secondAttribute="bottom" id="ERE-6E-Kyu"/>
-                <constraint firstAttribute="bottom" secondItem="bnO-AN-ERt" secondAttribute="bottom" id="Ms7-pG-Q1X"/>
-                <constraint firstAttribute="trailing" secondItem="bnO-AN-ERt" secondAttribute="trailing" id="R2e-q3-ZTm"/>
-                <constraint firstItem="bnO-AN-ERt" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="uB3-ro-mbg"/>
+                <constraint firstAttribute="bottom" secondItem="SyD-ar-V6c" secondAttribute="bottom" id="65M-U9-Q4p"/>
+                <constraint firstItem="SyD-ar-V6c" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="B2H-rj-6se"/>
+                <constraint firstItem="SyD-ar-V6c" firstAttribute="top" secondItem="aT7-vn-i8P" secondAttribute="bottom" id="Vlb-DD-1bn"/>
+                <constraint firstAttribute="trailing" secondItem="SyD-ar-V6c" secondAttribute="trailing" id="hBS-o6-Jcj"/>
                 <constraint firstItem="aT7-vn-i8P" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="vSL-JU-4V9"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
