@@ -105,7 +105,8 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     fileprivate func updateTodoEditBottomViewVisibility() {
-        todoListItemsEditBottomView?.isHidden = isEmpty || !isEditing
+        let show = !isEmpty && isEditing
+        todoListItemsEditBottomView?.isHidden = !show
     }
     
     override func toggleTopAddController(_ rotateTopBarButton: Bool = true) -> Bool {
@@ -156,7 +157,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
                 delay(0.2) {
                     weakSelf.pricesView.setExpanded(expanded: false) {
                         weakSelf.pricesView.setQuantities(cart: aggregate.cartQuantity, stash: stashQuantity, closeIfZero: true) // now that we are back in todo, close the cart bottom view
-                        weakSelf.todoListItemsEditBottomView?.isHidden = weakSelf.isEmpty
+                        weakSelf.updateTodoEditBottomViewVisibility()
                     }
                 }
             }
