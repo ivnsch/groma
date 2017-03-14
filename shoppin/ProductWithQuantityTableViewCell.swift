@@ -113,7 +113,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         swipeToDeleteHelper = SwipeToDeleteHelper(parentView: self, button: myContentView, leftLayoutConstraint: leftLayoutConstraint, rightLayoutConstraint: rightLayoutConstraint, cancelTouches: false)
         swipeToDeleteHelper?.delegate = self
         
-        swipeToIncrementHelper = SwipeToIncrementHelper(view: contentView, cancelTouches: false)
+        swipeToIncrementHelper = SwipeToIncrementHelper(view: contentView)
         swipeToIncrementHelper?.delegate = self
         
         selectionStyle = .none
