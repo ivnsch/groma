@@ -46,7 +46,7 @@ class MoreViewController: UITableViewController {
         ]
         
         if CountryHelper.isInServerSupportedCountry() {
-            items.insert((type: .user, text: trans("more_user")), at: 2)
+//            items.insert((type: .user, text: trans("more_user")), at: 2)
         }
         
         tableView.reloadData()
