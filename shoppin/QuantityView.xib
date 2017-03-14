@@ -45,7 +45,7 @@
                         <action selector="onPlusTap:" destination="-1" eventType="touchUpInside" id="qIa-KP-Ajg"/>
                     </connections>
                 </button>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mNy-bI-3Ag" customClass="TextFieldMore" customModule="groma" customModuleProvider="target">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mNy-bI-3Ag" customClass="TextFieldMore" customModule="groma" customModuleProvider="target">
                     <rect key="frame" x="113" y="49" width="10" height="24"/>
                     <nil key="textColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
