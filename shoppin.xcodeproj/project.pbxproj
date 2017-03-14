@@ -135,7 +135,6 @@
 		6AF46EBC1E5BBBC900BBFF4C /* UnitSubmitCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF46EBA1E5BBBC900BBFF4C /* UnitSubmitCell.xib */; };
 		6AF46EC01E5CE19A00BBFF4C /* PickerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EBF1E5CE19A00BBFF4C /* PickerCollectionView.swift */; };
 		AE4ACBEA0F92FC70EBA5FB3A /* Pods_groma.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */; };
-		AEC62C1551F853D52768B5A2 /* Pods_shoppin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B242A1FEAA96009C120C8E2A /* Pods_shoppin.framework */; };
 		EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0587DB1BBED86B00080626 /* IntroPageView.xib */; };
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
 		EB0587E01BBEDAA600080626 /* NSBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DF1BBEDAA600080626 /* NSBundle.swift */; };
@@ -981,7 +980,6 @@
 				58FA07161DE1F2550059F2D0 /* Bolts.framework in Frameworks */,
 				58FBD9B11DDCDA19002242D6 /* FBSDKCoreKit.framework in Frameworks */,
 				58FBD9B21DDCDA19002242D6 /* FBSDKLoginKit.framework in Frameworks */,
-				AEC62C1551F853D52768B5A2 /* Pods_shoppin.framework in Frameworks */,
 				AE4ACBEA0F92FC70EBA5FB3A /* Pods_groma.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2413,14 +2411,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB1DDEC71A3334EC00D778DE /* Build configuration list for PBXNativeTarget "groma" */;
 			buildPhases = (
-				BC25225AB57DCDC3D58F75A7 /* [CP] Check Pods Manifest.lock */,
+				F37F379991F909931E195C20 /* [CP] Check Pods Manifest.lock */,
 				EB1DDEA11A3334EC00D778DE /* Sources */,
 				EB1DDEA21A3334EC00D778DE /* Frameworks */,
 				EB1DDEA31A3334EC00D778DE /* Resources */,
 				EB6E3D541C60129600D65DD5 /* ShellScript */,
-				48A96D6A66EE238E0D0FDD7A /* [CP] Embed Pods Frameworks */,
-				48885FF3645F8DE87C7D3494 /* [CP] Copy Pods Resources */,
 				6AEA4EA21E045EC40040557D /* Embed Frameworks */,
+				002CB37F85917CB0CA426C8A /* [CP] Embed Pods Frameworks */,
+				D7A0B09196426BECD3C0C00D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2688,22 +2686,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		48885FF3645F8DE87C7D3494 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		48A96D6A66EE238E0D0FDD7A /* [CP] Embed Pods Frameworks */ = {
+		002CB37F85917CB0CA426C8A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2718,19 +2701,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BC25225AB57DCDC3D58F75A7 /* [CP] Check Pods Manifest.lock */ = {
+		D7A0B09196426BECD3C0C00D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EB6E3D541C60129600D65DD5 /* ShellScript */ = {
@@ -2745,6 +2728,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "FILE=\"${SRCROOT}/HockeySDK-iOS/BuildAgent\"\nif [ -f \"$FILE\" ]; then\n\"$FILE\"\nfi";
+		};
+		F37F379991F909931E195C20 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
