@@ -29,6 +29,8 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
     weak var delegate: SwipeToIncrementHelperDelegate?
     
     init(view: UIView, cancelTouches: Bool = true) {
+        self.view = view
+        
         super.init()
         
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SwipeToIncrementHelper.onPanCell(_:)))
@@ -43,12 +45,10 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
     
     func onPanCell(_ recognizer: UIPanGestureRecognizer) {
 
+        guard let view = view else {QL4("No view"); return}
         guard let delegate = delegate else {QL4("No delegate"); return}
 
-        var movingHorizontally = false
-        if let panStartPoint = panStartPoint {
-            movingHorizontally = fabsf(Float(panStartPoint.y)) < fabsf(Float(panStartPoint.x))
-        }
+        let movingHorizontally = abs(recognizer.velocity(in: view).x) > abs(recognizer.velocity(in: view).y)
         
         switch recognizer.state {
         case .began:
@@ -73,6 +73,8 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
             QL3("Cancelled pan")
             
         case .ended:
+            
+            panStartPoint = nil
             
             guard delegate.swipeToIncrementEnabled else {return}
 
