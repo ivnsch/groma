@@ -192,6 +192,10 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
         }
     }
     
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.setEditing(editing, animated: animated)
+    }
     
     // MARK: - Table view data source / delegate
     
@@ -279,6 +283,13 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
         return isEditing
     }
     
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        if isEditing {
+            return .delete
+        } else {
+            return .none
+        }
+    }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         listItemsEditTableViewDelegate?.onListItemMoved(from: sourceIndexPath, to: destinationIndexPath)
