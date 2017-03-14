@@ -35,7 +35,7 @@ class MoreViewController: UITableViewController {
         
         items = [
             MoreItem(type: .history, text: trans("more_history")),
-            MoreItem(type: .manageProduct, text: trans("more_items_management")),
+            MoreItem(type: .manageProduct, text: trans("title_manage_database")),
             MoreItem(type: .settings, text: trans("more_settings")),
             MoreItem(type: .help, text: trans("more_help")),
             MoreItem(type: .share, text: trans("more_share")),
