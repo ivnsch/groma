@@ -87,6 +87,8 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         tapRecognizer.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapRecognizer)
         
+        updateTitle(inputs: inputs)
+        
         onUIReady?()
     }
     
@@ -271,7 +273,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         let fractionStr = inputs.fraction.isValidAndNotZeroOrOneByOne ? inputs.fraction.description : ""
         // Don't show quantity if it's 0 and there's a fraction. If there's no fraction we show quantity 0, because otherwise there wouldn't be any number and this doesn't make sense.
         let wholeNumberStr = inputs.quantity == 0 ? (fractionStr.isEmpty ? inputs.quantity.quantityString : "") : "\(inputs.quantity.quantityString)"
-        let unitStr = inputs.unitName.isEmpty ? "unit" : inputs.unitName
+        let unitStr = inputs.unitName
         
         let boldTime: Double = 1
         
@@ -290,7 +292,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         unitLabel.text = unitStr
         
         wholeNumberTrailingConstraint.constant = wholeNumberStr.isEmpty || fractionStr.isEmpty ? 0 : 10
-        fractionTrailingConstraint.constant = wholeNumberStr.isEmpty && fractionStr.isEmpty ? 0 : 10
+        fractionTrailingConstraint.constant = wholeNumberStr.isEmpty && fractionStr.isEmpty || unitStr.isEmpty ? 0 : 10
     }
     
     fileprivate func submit() {

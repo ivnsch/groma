@@ -301,7 +301,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         let fractionStr = inputs.fraction.isValidAndNotZeroOrOneByOne ? inputs.fraction.description : ""
         // Don't show quantity if it's 0 and there's a fraction. If there's no fraction we show quantity 0, because otherwise there wouldn't be any number and this doesn't make sense.
         let wholeNumberStr = quantity == 0 ? (fractionStr.isEmpty ? quantity.quantityString : "") : "\(quantity.quantityString)"
-        let unitStr = inputs.unitName.isEmpty ? "unit" : inputs.unitName
+        let unitStr = inputs.unitName
         
         let boldTime: Double = 1
         
