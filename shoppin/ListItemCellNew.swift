@@ -270,8 +270,22 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
         tap.cancelsTouchesInView = false
+        tap.delegate = self
         addGestureRecognizer(tap)
+        tap.require(toFail: longPress)
+        
     }
+    
+    // MARK: - UIGestureRecognizerDelegate
+    
+    override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if touch.view?.isDescendant(of: quantityView) ?? false {
+            return false
+        }
+        return true
+    }
+    
+    // MARK: -
     
     func onTapPlusMinusContainer(_ recognizer: UITapGestureRecognizer) {
         // do nothing
