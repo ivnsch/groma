@@ -86,7 +86,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         didSet {
             if let tableViewListItem = tableViewListItem {
                 
-//                swipeToDeleteHelper?.setOpen(false, animated: false) // recycling
+                swipeToDeleteHelper?.setOpen(false, animated: false) // recycling
 
                 let listItem = tableViewListItem
                 
@@ -251,8 +251,8 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         //        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTapPlusMinusContainer:")
         //        minusButton.addGestureRecognizer(tapRecognizer)
         
-//        swipeToDeleteHelper = SwipeToDeleteHelper(parentView: self, button: myContentView, leftLayoutConstraint: contentViewLeftConstraint, rightLayoutConstraint: contentViewRightConstraint, cancelTouches: false)
-//        swipeToDeleteHelper?.delegate = self
+        swipeToDeleteHelper = SwipeToDeleteHelper(parentView: self, button: myContentView, leftLayoutConstraint: contentViewLeftConstraint, rightLayoutConstraint: contentViewRightConstraint, cancelTouches: false)
+        swipeToDeleteHelper?.delegate = self
         
         swipeToIncrementHelper = SwipeToIncrementHelper(view: myContentView)
         swipeToIncrementHelper?.delegate = self
@@ -443,6 +443,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
     var isSwipeToDeleteEnabled: Bool {
         return shownQuantity == 0
+            && (mode == .increment && !isEditing) // show in increment mode but not when the cell is in edit mode (i.e. only on long-tap edit). The reason is that during edit mode we have reorder control and swipe to delete looks weird with it as it appears on the left side of the reorder control.
     }
     
     // MARK: - Touch
