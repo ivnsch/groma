@@ -429,6 +429,7 @@ more_share = "Compartir";
 more_feedback = "Feedback";
 more_intro = "Ver intro de nuevo";
 more_about = "Sobre Groma";
+more_community = "Comunidad";
 
 
 register_accept_terms = "Acepto los %%términos y condiciones%%";
@@ -466,6 +467,8 @@ recipe_you_will_add = "Se agregará: %@";
 
 
 unit_none = "";
+unit_unit = "unidad";
+unit_unit_pl = "unidades";
 unit_g = "g";
 unit_kg = "kg";
 unit_ounce = "oz";
@@ -479,8 +482,15 @@ unit_milliliter = "ml";
 unit_drop = "gt";
 unit_shot = "shot";
 unit_pinch = "pzc";
+unit_clove = "diente";
+unit_can = "lata";
 
 
 hint_tap_to_add_more = "Pulsa de nuevo para agregar más";
 
 title_manage_database = "Administración de datos";
+placeholder_name = "Nombre";
+validation_name_not_empty = "Por favor ingresa un nombre";
+placeholder_category_name = "Categoría";
+validation_category_name_not_empty = "Por favor ingresa una categoría";
+button_title_buyable = "Comprable";

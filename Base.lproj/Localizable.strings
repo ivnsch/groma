@@ -428,6 +428,7 @@ more_share = "Share";
 more_feedback = "Feedback";
 more_intro = "Watch intro again";
 more_about = "About";
+more_community = "Community";
 
 
 register_accept_terms = "I accept the %%terms and conditions%%";
@@ -465,6 +466,8 @@ recipe_you_will_add = "Will be added: %@";
 
 
 unit_none = "";
+unit_unit = "unit";
+unit_unit_pl = "units";
 unit_g = "g";
 unit_kg = "kg";
 unit_ounce = "oz";
@@ -478,8 +481,15 @@ unit_milliliter = "ml";
 unit_drop = "dr";
 unit_shot = "shot";
 unit_pinch = "pn";
+unit_clove = "clove";
+unit_can = "can";
 
 
 hint_tap_to_add_more = "Tap again to add more";
 
 title_manage_database = "Items management";
+placeholder_name = "Name";
+validation_name_not_empty = "Please enter a name";
+placeholder_category_name = "Category";
+validation_category_name_not_empty = "Please enter a category";
+button_title_buyable = "Purchasable";

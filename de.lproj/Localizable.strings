@@ -429,6 +429,7 @@ more_share = "Teilen";
 more_feedback = "Feedback";
 more_intro = "Intro nochmal sehen";
 more_about = "Impressum";
+more_community = "Community";
 
 
 register_accept_terms = "Ich akzeptiere die %%AGB%%";
@@ -466,6 +467,8 @@ recipe_you_will_add = "Es wird hinzugefügt: %@";
 
 
 unit_none = "";
+unit_unit = "Einheit";
+unit_unit_pl = "Einheiten";
 unit_g = "g";
 unit_kg = "kg";
 unit_ounce = "oz";
@@ -479,8 +482,15 @@ unit_milliliter = "ml";
 unit_drop = "Tr";
 unit_shot = "Schuss";
 unit_pinch = "Pr";
+unit_clove = "Zehe";
+unit_can = "Dose";
 
 
 hint_tap_to_add_more = "Tappe erneut um mehr hinzuzufügen";
 
 title_manage_database = "Item Manager";
+placeholder_name = "Name";
+validation_name_not_empty = "Bitte gib einen Namen ein";
+placeholder_category_name = "Kategorie";
+validation_category_name_not_empty = "Bitte gib eine Kategorie an";
+button_title_buyable = "Kaufbar";

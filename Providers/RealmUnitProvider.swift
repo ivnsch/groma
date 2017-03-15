@@ -17,8 +17,6 @@ class RealmUnitProvider: RealmProvider {
     }
     
     func initDefaultUnits(_ handler: @escaping ([Unit]?) -> Void) {
-    
-        // TODO!!!!!!!!!!!!!!!!!!!!!!!!!! translations
         
         // TODO different ordering for device's country - countries that don't/rarely use OZ and LB should have them at the end
         

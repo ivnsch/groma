@@ -26,7 +26,7 @@ protocol UnitViewDelegate {
     var unit: Providers.Unit? {
         didSet {
             if let unit = unit {
-                nameLabel.text = "\(unit.name.isEmpty ? "unit" : unit.name)" // TODO!!!!!!!!!!!!!!!!!! translation for empty unit
+                nameLabel.text = "\(unit.name.isEmpty ? trans("unit_unit") : unit.name)"
 
                 nameLabel.sizeToFit()
                 

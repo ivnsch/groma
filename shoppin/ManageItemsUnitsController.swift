@@ -108,7 +108,7 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
         settings: EditNameButtonViewSettings(
             namePlaceholder: trans("placeholder_name"),
             nameEmptyValidationMessage: trans("validation_name_not_empty"),
-            buttonTitle: trans("button_title_buyable") // TODO!!!!!!!!!!!!!! trans
+            buttonTitle: trans("button_title_buyable")
         ), editingObj: unit)
         
         //        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())

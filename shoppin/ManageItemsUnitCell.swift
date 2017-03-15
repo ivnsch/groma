@@ -25,7 +25,7 @@ class ManageItemsUnitCell: UITableViewCell {
         }
         
         if unit.buyable {
-            buyableLabel.text = trans("button_title_buyable") // TODO!!!!!!!!! trans
+            buyableLabel.text = trans("button_title_buyable")
         } else {
             buyableLabel.text = ""
         }

@@ -135,7 +135,6 @@ class ManageItemsController: UITableViewController, SearchableTextController {
             nameColorName: item.category.name,
             nameColorColor: item.category.color
             
-            // TODO!!!!!!!!!!!!!!!!!!! translations
             ), settings: AddEditNameNameColorControllerSettings(
                 namePlaceholder: "placeholder_name",
                 nameEmptyValidationMessage: "validation_name_not_empty",
