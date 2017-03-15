@@ -531,8 +531,8 @@ class RealmListItemProvider: RealmProvider {
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     // TODO probably remove TODO above, outdated
     // TODO remove status parameter we don't use this anymore (list item itself belongs to a status)
-    func incrementListItem(_ item: ListItem, delta: Float, status: ListItemStatus, handler: @escaping (ListItem?) -> Void) {
-        let listItemMaybe: ListItem? = doInWriteTransactionSync {realm in
+    func incrementListItem(_ item: ListItem, delta: Float, status: ListItemStatus, token: NotificationToken?, handler: @escaping (ListItem?) -> Void) {
+        let listItemMaybe: ListItem? = doInWriteTransactionSync(withoutNotifying: token.map{[$0]} ?? []) {realm in
             item.quantity = item.quantity + delta
             return item
         }

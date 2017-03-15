@@ -71,7 +71,7 @@ public protocol ListItemProvider {
     // This is currently used only to retrieve possible product's list item on receiving a websocket notification with a product update
     func listItem(_ product: Product, list: List, _ handler: @escaping (ProviderResult<ListItem?>) -> ())
     
-    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Float, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ())
+    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Float, remote: Bool, token: NotificationToken?, _ handler: @escaping (ProviderResult<ListItem>) -> ())
 
     func increment(_ increment: RemoteListItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ())
     

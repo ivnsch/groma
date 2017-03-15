@@ -226,6 +226,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
         
         clearPossibleNotePopup()
         
@@ -345,7 +346,9 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
 
     
     func onIncrementItem(_ tableViewListItem: ListItem, delta: Float) {
-        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, successHandler{incrementedListItem in
+        guard let realmData = realmData else {QL4("No realm data"); return}
+
+        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, token: realmData.token, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
             //            self?.onTableViewChangedQuantifiables()
@@ -698,7 +701,9 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     }
     
     func onChangeQuantity(_ listItem: ListItem, delta: Float) {
-        Prov.listItemsProvider.increment(listItem, status: status, delta: delta, remote: true, successHandler{incrementedListItem in
+        guard let realmData = realmData else {QL4("No realm data"); return}
+
+        Prov.listItemsProvider.increment(listItem, status: status, delta: delta, remote: true, token: realmData.token, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! review this todo - the cell is already being incremented in advance. Does this work correctly?
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)

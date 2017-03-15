@@ -1139,7 +1139,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // TODO!!!! remote? why did this service not have remote before, forgot or we don't need it there?
-    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Float, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ()) {
+    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Float, remote: Bool, token: NotificationToken?, _ handler: @escaping (ProviderResult<ListItem>) -> ()) {
         
         // Get item from database with updated quantityDelta
         // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
@@ -1154,7 +1154,7 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: .success, sucessResult: memIncremented))
             })
         }
-        dbProvider.incrementListItem(listItem, delta: delta, status: status) {[weak self] listItemMaybe in
+        dbProvider.incrementListItem(listItem, delta: delta, status: status, token: token) {[weak self] listItemMaybe in
             
             if memIncremented == nil { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if let listItem = listItemMaybe {
@@ -1200,7 +1200,7 @@ class ListItemProviderImpl: ListItemProvider {
         findListItem(increment.uuid) {[weak self] result in
             if let listItem = result.sucessResult {
                 
-                self?.increment(listItem, status: increment.status, delta: increment.delta, remote: remote) {result in
+                self?.increment(listItem, status: increment.status, delta: increment.delta, remote: remote, token: nil) {result in
 
                     if let statusQuantity = result.sucessResult {
                         handler(ProviderResult(status: .success, sucessResult: statusQuantity))

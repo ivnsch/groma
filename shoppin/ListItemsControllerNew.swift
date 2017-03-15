@@ -377,8 +377,9 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         onSectionSelected(section)
     }
     
+    // TODO!!!!!!!!!!!!!!!!! why this doesn't trigger the notification? Nowhere we pass notification token and the transaction executes successfully, with a change. Adding realm.add(obj, update: true) after the increment also didn't help. The increment of the cart, on the other side works as expected - it triggers a notification (in the cart) when no token is passed.
     func onIncrementItem(_ tableViewListItem: ListItem, delta: Float) {
-        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, successHandler{incrementedListItem in
+        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, token: nil, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
 //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
 //            self?.onTableViewChangedQuantifiables()
