@@ -350,6 +350,7 @@ title_stash = "Back store";
 title_inventories = "Inventories";
 title_groups = "Groups";
 title_participants = "Participants";
+title_recipes = "Recipes";
 
 
 empty_list_line1 = "Oops, there are no items yet";
@@ -483,6 +484,10 @@ unit_shot = "shot";
 unit_pinch = "pn";
 unit_clove = "clove";
 unit_can = "can";
+
+
+tomato_soup = "Tomato soup";
+
 
 hint_tap_to_add_more = "Tap again to add more";
 

@@ -351,6 +351,7 @@ title_stash = "Zwischenlager";
 title_inventories = "Inventare";
 title_groups = "Gruppen";
 title_participants = "Teilnehmer";
+title_recipes = "Rezepte";
 
 
 empty_list_line1 = "Hoppla! Es gibt noch keine Items";
@@ -484,6 +485,9 @@ unit_shot = "Schuss";
 unit_pinch = "Pr";
 unit_clove = "Zehe";
 unit_can = "Dose";
+
+
+tomato_soup = "Tomatensuppe";
 
 
 hint_tap_to_add_more = "Tappe erneut um mehr hinzuzufügen";

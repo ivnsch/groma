@@ -352,6 +352,7 @@ title_stash = "Depósito";
 title_inventories = "Inventarios";
 title_groups = "Grupos";
 title_participants = "Participantes";
+title_recipes = "Recetas";
 
 
 empty_list_line1 = "Tu lista está vacía";
@@ -484,6 +485,9 @@ unit_shot = "shot";
 unit_pinch = "pzc";
 unit_clove = "diente";
 unit_can = "lata";
+
+
+tomato_soup = "Sopa de tomate";
 
 
 hint_tap_to_add_more = "Pulsa de nuevo para agregar más";
