@@ -32,14 +32,20 @@ class RealmInventoryProvider: RealmProvider {
         do {
             let realm = try Realm()
             
-            let sortData: (key: String, ascending: Bool) = {
+            let nameSort = SortDescriptor(keyPath: "productOpt.productOpt.itemOpt.name", ascending: true)
+            let quantitySort = SortDescriptor(keyPath: "quantity", ascending: true)
+            //        let unitSort = SortDescriptor(keyPath: "productOpt.unitOpt.name", ascending: true) // TODO
+            
+            //        let rest = [unitSort]
+            
+            let sortDescriptors: [SortDescriptor] = {
                 switch sortBy {
-                case .alphabetic: return ("productOpt.productOpt.itemOpt.name", true)
-                case .count: return ("quantity", false)
+                case .alphabetic: return [nameSort, quantitySort] // + rest
+                case .count: return [quantitySort, nameSort] // + rest
                 }
             }()
             
-            let items: Results<InventoryItem> = self.loadSync(realm, filter: InventoryItem.createFilterInventory(inventoryCopy.uuid), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
+            let items: Results<InventoryItem> = self.loadSync(realm, filter: InventoryItem.createFilterInventory(inventoryCopy.uuid), sortDescriptors: sortDescriptors)
             handler(items)
 
         } catch let e {
