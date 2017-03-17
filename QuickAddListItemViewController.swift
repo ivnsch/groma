@@ -34,7 +34,8 @@ protocol QuickAddListItemDelegate: class {
     
     func parentViewForAddButton() -> UIView?
     
-    func onFinishAddCellAnimation()
+    // addedItem can be QuantifiableProduct or Item, depending on where we use quick add (in e.g. list/inventory items, we add q.products and in ingredients, items).
+    func onFinishAddCellAnimation(addedItem: AnyObject)
     var offsetForAddCellAnimation: CGFloat {get}
 }
 
@@ -265,7 +266,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     let targetCellFrame = CGRect(x: categoryColorViewWidth, y: quickAddFrameRelativeToWindow.maxY + (delegate?.offsetForAddCellAnimation ?? 0), width: view.width - categoryColorViewWidth, height: DimensionsManager.defaultCellHeight)
                     
                     copy.animateAddToList(targetFrame: targetCellFrame) {[weak self] in
-                        self?.delegate?.onFinishAddCellAnimation()
+                        self?.delegate?.onFinishAddCellAnimation(addedItem: quantifiableProduct)
                     }
                 }
                 

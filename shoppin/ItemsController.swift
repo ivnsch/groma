@@ -384,7 +384,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         }
     }
     
-    func onFinishAddCellAnimation() {
+    func onFinishAddCellAnimation(addedItem: AnyObject) {
     }
     
     var offsetForAddCellAnimation: CGFloat {

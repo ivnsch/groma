@@ -463,11 +463,20 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onRemovedBrand(_ name: String) {
     }
     
-    func onFinishAddCellAnimation() {
+    func onFinishAddCellAnimation(addedItem: AnyObject) {
         productsWithQuantityController.placeHolderItem = nil
         productsWithQuantityController.tableView.reloadData()
     }
     
+    fileprivate func findIndexPathForQuantifiableProduct(quantifiableProduct: QuantifiableProduct) -> IndexPath? {
+        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return nil}
+        for (index, item) in inventoryItemsResult.enumerated() {
+            if item.product.same(quantifiableProduct) {
+                return IndexPath(row: productsWithQuantityController.explanationManager.showExplanation ? index + 1 : index, section: 0)
+            }
+        }
+        return nil
+    }
     
     var offsetForAddCellAnimation: CGFloat {
 //        return 2 // This table view doesn't have headers, so we theoretically shouldn't need offsetForAddCellAnimation here (it should be 0) but for some reason there are little jumps and this fixes it

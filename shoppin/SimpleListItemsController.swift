@@ -654,7 +654,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         updatePossibleList()
     }
     
-    func onFinishAddCellAnimation() {
+    func onFinishAddCellAnimation(addedItem: AnyObject) {
     }
 }
 

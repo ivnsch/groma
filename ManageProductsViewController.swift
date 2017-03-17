@@ -325,7 +325,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         loadProducts()
     }
     
-    func onFinishAddCellAnimation() {
+    func onFinishAddCellAnimation(addedItem: AnyObject) {
     }
     
     // MARK: -

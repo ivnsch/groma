@@ -40,7 +40,7 @@ protocol QuickAddDelegate: class {
     func onRemovedSectionCategoryName(_ name: String)
     func onRemovedBrand(_ name: String)
     
-    func onFinishAddCellAnimation()
+    func onFinishAddCellAnimation(addedItem: AnyObject)
     var offsetForAddCellAnimation: CGFloat {get}
 }
 
@@ -358,8 +358,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         }
     }
     
-    func onFinishAddCellAnimation() {
-        delegate?.onFinishAddCellAnimation()
+    func onFinishAddCellAnimation(addedItem: AnyObject) {
+        delegate?.onFinishAddCellAnimation(addedItem: addedItem)
     }
     
     var offsetForAddCellAnimation: CGFloat {

@@ -765,7 +765,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
 
     
-    override func onFinishAddCellAnimation() {
+    override func onFinishAddCellAnimation(addedItem: AnyObject) {
         listItemsTableViewController.placeHolderItem = nil
         self.listItemsTableViewController.tableView.reloadData()
         

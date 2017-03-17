@@ -378,7 +378,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         productsWithQuantityController.load()
     }
     
-    func onFinishAddCellAnimation() {
+    func onFinishAddCellAnimation(addedItem: AnyObject) {
     }
 
     // MARK: - Navigation
