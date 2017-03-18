@@ -591,6 +591,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs) {
         onAddIngredient(item: item, ingredientInput: inputs)
+        
+        topSelectIngredientControllerManager?.expand(false)
+        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
     }
     
     func submitButtonBottomOffset(parent: UIView, buttonHeight: CGFloat) -> CGFloat {
