@@ -113,11 +113,14 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     
     // for edit case
     func fill(ingredient: Ingredient) {
-        self.currentUnit = ingredient.unit
+        currentUnit = ingredient.unit
+        
+        inputs.unitName = ingredient.unit.name
+        inputs.quantity = ingredient.quantity
+        inputs.fraction = ingredient.fraction
+        
         selectUnitController?.selectUnit(unit: ingredient.unit)
-        
         selectQuantityController?.quantityView.quantity = ingredient.quantity
-        
         selectFractionController?.config(fraction: ingredient.fraction)
     }
     
@@ -188,8 +191,9 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         selectFractionController.delegate = self
         
         self.selectFractionController = selectFractionController
-        selectFractionController.onUIReady = {[weak selectFractionController, weak self] in
+        selectFractionController.onUIReady = {[weak selectFractionController, weak self] in guard let weakSelf = self else {return}
             selectFractionController?.unit = self?.currentUnit
+            selectFractionController?.config(fraction: weakSelf.inputs.fraction)
         }
         
         return selectFractionController
