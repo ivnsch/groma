@@ -335,7 +335,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         guard let realmData = realmData else {QL4("No realm data"); return}
         
         if let inventory = inventory {
-            Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: quantity, remote: true, realmData: realmData, successHandler{[weak self] addedItem in
+            Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: quantity, remote: true, realmData: realmData, successHandler{[weak self] addedItem in guard let weakSelf = self else {return}
                 
                 onAddToProvider(QuickAddAddProductResult(isNewItem: addedItem.isNew))
                 
@@ -344,7 +344,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                     return
                 }
                 
-                let indexPath = IndexPath(row: itemIndex, section: 0)
+                let finalItemIndex = weakSelf.productsWithQuantityController.explanationManager.showExplanation ? itemIndex + 1 : itemIndex
+                let indexPath = IndexPath(row: finalItemIndex, section: 0)
 
                 if addedItem.isNew {
                     self?.productsWithQuantityController.placeHolderItem = (indexPath: indexPath, item: addedItem.inventoryItem)
@@ -352,7 +353,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                     self?.productsWithQuantityController.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
                     
                 } else { // update
-                    self?.update(item: addedItem.inventoryItem, scrollToRow: itemIndex)
+                    self?.update(item: addedItem.inventoryItem, scrollToRow: indexPath.row)
                 }
                 
                 self?.productsWithQuantityController.updateEmptyUI()
