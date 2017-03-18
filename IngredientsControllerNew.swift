@@ -77,6 +77,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         return .ingredients
     }
     
+    fileprivate var initializedTableViewBottomInset = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -128,6 +130,13 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         toggleButtonRotator.reset(tableView, topBar: topBar)
+        
+        // Set inset such that newly added cells can be positioned directly below the quick add controller
+        // Before of view did appear final table view height is not set. We also have to execute this only the first time because later it may be that the table view is contracted (quick add is open) which would set an incorrect inset.
+        if !initializedTableViewBottomInset {
+            initializedTableViewBottomInset = true
+            tableView.bottomInset = tableView.height + topMenusHeightConstraint.constant - DimensionsManager.quickAddHeight - DimensionsManager.ingredientsCellHeight
+        }
     }
     
     // MARK: - Pull to add
@@ -239,29 +248,36 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         func onHasUnit(_ unit: Providers.Unit) {
             let quickAddIngredientInput = QuickAddIngredientInput(item: item, quantity: ingredientInput.quantity, unit: unit, fraction: ingredientInput.fraction)
             
-            Prov.ingredientProvider.add(quickAddIngredientInput, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, successHandler{addedItem in
+            Prov.ingredientProvider.add(quickAddIngredientInput, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, successHandler{[weak self] addedItem in guard let weakSelf = self else {return}
+                
+                guard let itemIndex = weakSelf.itemsResult?.index(of: addedItem.ingredient) else {
+                    QL4("Illegal state: Just added/updated ingredient but didn't find it in results. Or results are not set")
+                    return
+                }
+                
+                let finalItemIndex = weakSelf.explanationManager.showExplanation ? itemIndex + 1 : itemIndex
+                let indexPath = IndexPath(row: finalItemIndex, section: 0)
                 
                 if addedItem.isNew {
-                    self.insert(item: addedItem.ingredient, scrollToRow: true)
+                    weakSelf.tableView.insertRows(at: [indexPath], with: Theme.defaultRowAnimation)
+                    weakSelf.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
                     
-                    self.updateLargestLeftSideWidth()
+                    weakSelf.updateLargestLeftSideWidth()
                     
-                    if let cells = self.tableView.visibleCells as? [IngredientCell] {
+                    if let cells = weakSelf.tableView.visibleCells as? [IngredientCell] {
                         for cell in cells {
-                            cell.setRightSideOffset(offset: self.maxLeftSideWidth, animated: true)
+                            cell.setRightSideOffset(offset: weakSelf.maxLeftSideWidth, animated: true)
                         }
                         
                     } else {
-                        QL4("Illegal state: Wrong cell type: \(self.tableView.visibleCells)")
+                        QL4("Illegal state: Wrong cell type: \(weakSelf.tableView.visibleCells)")
                     }
                     
                 } else {
-                    if let index = itemsResult.index(of: addedItem.ingredient) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
-                        self.update(item: addedItem.ingredient, scrollToRow: index)
-                    } else {
-                        QL4("Illegal state: Item is not new (it's an update) but was not found in results")
-                    }
+                    weakSelf.update(item: addedItem.ingredient, scrollToRow: indexPath.row)
                 }
+                
+                weakSelf.updateEmptyUI()
             })
         }
         
