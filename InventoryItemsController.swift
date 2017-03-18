@@ -378,9 +378,11 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 
             let inventoryItemInput = InventoryItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: input.storeProductInput.unit, edible: input.edible)
             
-            Prov.inventoryItemsProvider.updateInventoryItem(inventoryItemInput, updatingInventoryItem: editingItem, remote: true, realmData: realmData, resultHandler (onSuccess: {  (inventoryItem, replaced) in
+            Prov.inventoryItemsProvider.updateInventoryItem(inventoryItemInput, updatingInventoryItem: editingItem, remote: true, realmData: realmData, resultHandler (onSuccess: {[weak self] (inventoryItem, replaced) in
 
                 print("replaced: \(replaced)") // TODO!!!!!!!!!!!!!!!!! update in tableview?
+                
+                self?.closeTopController()
                 
             }, onError: {[weak self] result in
                 self?.defaultErrorHandler()(result)
