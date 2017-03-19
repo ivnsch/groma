@@ -198,28 +198,13 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func updateInventoryItem(_ input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)>) -> Void) {
-        
-        // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
-        DBProv.inventoryItemProvider.deletePossibleInventoryItemWithUnique(input.productPrototype.name, productBrand: input.productPrototype.brand, inventory: updatingInventoryItem.inventory, notUuid: updatingInventoryItem.uuid, realmData: realmData) {foundAndDeletedInventoryItem in
-            // Point to possible existing product with same semantic unique / create a new one instead of updating underlying product, which would lead to surprises in other screens.
-            
-            Prov.productProvider.mergeOrCreateProduct(prototype: input.productPrototype, updateCategory: false, updateItem: false) {[weak self] (result: ProviderResult<QuantifiableProduct>) in
-
-//            Prov.productProvider.mergeOrCreateProduct(input.productPrototype.name, category: input.productPrototype.category, categoryColor: input.productPrototype.categoryColor, brand: input.productPrototype.brand, updateCategory: false) {[weak self] result in
-                
-                if let product = result.sucessResult {
-                    if DBProv.inventoryItemProvider.updateSync(inventoryItem: updatingInventoryItem, input: input, product: product, realmData: realmData) {
-                        handler(ProviderResult(status: .success, sucessResult: (inventoryItem: updatingInventoryItem, replaced: foundAndDeletedInventoryItem)))
-                    } else {
-                        QL4("Error updating inventory item")
-                        handler(ProviderResult(status: .databaseUnknown))
-                    }
-                } else {
-                    QL4("Error fetching product: \(result.status)")
-                    handler(ProviderResult(status: .databaseUnknown))
-                }
-            }
+    func updateInventoryItem(_ input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<UpdateInventoryItemResult>) -> Void) {
+        let result = DBProv.inventoryItemProvider.updateNew(inventoryItem: updatingInventoryItem, input: input, realmData: realmData)
+        result.onOk {result in
+            handler(ProviderResult(status: .success, sucessResult: result))
+        }.onErr {error in
+            QL4("Error updating inventory item: \(error)")
+            handler(ProviderResult(status: .databaseUnknown))
         }
     }
     

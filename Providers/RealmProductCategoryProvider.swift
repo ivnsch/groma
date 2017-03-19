@@ -217,7 +217,7 @@ class RealmProductCategoryProvider: RealmProvider {
         }!
     }
     
-    // TODO rename update or create
+    // TODO remove - use the other mergeOrCreateCategorySync
     func mergeOrCreateCategorySync(name: String, color: UIColor, save: Bool) -> ProvResult<ProductCategory, DatabaseError> {
         
         let result: ProvResult<ProductCategory, DatabaseError> = loadCategoryWithUniqueSync(name).map ({
@@ -234,6 +234,36 @@ class RealmProductCategoryProvider: RealmProvider {
                 return true
             })
             return (writeSuccess ?? false) ? .ok(category) : .err(.unknown)
+        }
+    }
+    
+    
+    // TODO!!!!!!!!!!!!!!! orient maybe with similar method in product for transaction etc. Product also needs refactoring though
+    func mergeOrCreateCategorySync(categoryInput: CategoryInput, doTransaction: Bool, notificationToken: NotificationToken?) -> ProvResult<ProductCategory, DatabaseError> {
+        
+        func transactionContent() -> ProvResult<ProductCategory, DatabaseError> {
+            
+            return DBProv.productCategoryProvider.loadCategoryWithUniqueSync(categoryInput.name).map {existingCategoryMaybe in
+                if let existingCategory = existingCategoryMaybe {
+                    existingCategory.color = categoryInput.color
+                    return existingCategory
+                    
+                } else {
+                    let newCategory = ProductCategory(uuid: UUID().uuidString, name: categoryInput.name, color: categoryInput.color)
+                    //                    if save {
+                    //                        realm.add(newCategory, update: true)
+                    //                    }
+                    return newCategory
+                }
+            }
+        }
+        
+        if doTransaction {
+            return doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: nil) {realm in
+                return transactionContent()
+                } ?? .err(.unknown)
+        } else {
+            return transactionContent()
         }
     }
     

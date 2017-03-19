@@ -177,12 +177,13 @@ class RealmItemProvider: RealmProvider {
         func transactionContent() -> ProvResult<Item, DatabaseError> {
             
             // Always fetch/create category (whether item already exists or not), since we need to ensure we have the category identified by unique from prototype, which is not necessarily the same as the one referenced by existing item (we want to update only non-unique properties).
-            return mergeOrCreateCategorySync(categoryInput: itemInput.categoryInput, doTransaction: false, notificationToken: notificationToken).flatMap {category in
+            return DBProv.productCategoryProvider.mergeOrCreateCategorySync(categoryInput: itemInput.categoryInput, doTransaction: false, notificationToken: notificationToken).flatMap {category in
                 
                 switch findSync(name: itemInput.name) {
                 case .ok(let itemMaybe):
                     if let item = itemMaybe {
                         item.edible = itemInput.edible
+                        item.category = category    
                         return .ok(item)
                         
                     } else { // item doesn't exist
@@ -203,34 +204,6 @@ class RealmItemProvider: RealmProvider {
             return transactionContent()
         }
     }
-    
-    // TODO!!!!!!!!!!!!!!! orient maybe with similar method in product for transaction etc. Product also needs refactoring though
-    func mergeOrCreateCategorySync(categoryInput: CategoryInput, doTransaction: Bool, notificationToken: NotificationToken?) -> ProvResult<ProductCategory, DatabaseError> {
-        
-        func transactionContent() -> ProvResult<ProductCategory, DatabaseError> {
-            
-            return DBProv.productCategoryProvider.loadCategoryWithUniqueSync(categoryInput.name).map {existingCategoryMaybe in
-                if let existingCategory = existingCategoryMaybe {
-                    existingCategory.color = categoryInput.color
-                    return existingCategory
-                    
-                } else {
-                    let newCategory = ProductCategory(uuid: UUID().uuidString, name: categoryInput.name, color: categoryInput.color)
-//                    if save {
-//                        realm.add(newCategory, update: true)
-//                    }
-                    return newCategory
-                }
-            }
-        }
 
-        if doTransaction {
-            return doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: nil) {realm in
-                return transactionContent()
-            } ?? .err(.unknown)
-        } else {
-            return transactionContent()
-        }
-    }
     
 }

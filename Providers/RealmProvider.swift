@@ -365,9 +365,24 @@ class RealmProvider {
             handler(countMaybe)
         })
     }
-    func removeReturnCountSync<T: Object>(_ pred: String?, objType: T.Type, realmData: RealmData?, additionalActions: ((Realm) -> Void)? = nil) -> Int? {
-        return doInWriteTransactionSync(realmData: realmData) {[weak self] realm in
-            return self?.removeReturnCountSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
+    
+    func removeReturnCountSync<T: Object>(_ pred: String?, objType: T.Type, realmData: RealmData?, doTransaction: Bool = true, additionalActions: ((Realm) -> Void)? = nil) -> Int? {
+        
+        func transactionContent(realm: Realm) -> Int? {
+            return removeReturnCountSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
+        }
+        
+        if doTransaction {
+            return doInWriteTransactionSync(realmData: realmData) {realm in
+                return transactionContent(realm: realm)
+            }
+        } else {
+            if let realm = realmData?.realm {
+                return transactionContent(realm: realm)
+            } else {
+                QL4("Invalid state: when do own transaction == false a realm should be passed")
+                return nil
+            }
         }
     }
     

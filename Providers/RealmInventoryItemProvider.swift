@@ -10,6 +10,11 @@ import Foundation
 import RealmSwift
 import QorumLogs
 
+public struct UpdateInventoryItemResult {
+    public let inventoryItem: InventoryItem
+    public let replaced: Bool
+}
+
 class RealmInventoryItemProvider: RealmProvider {
 
     // TODO does this function still makes sense (now InventoryItem is always a realm object)
@@ -229,7 +234,11 @@ class RealmInventoryItemProvider: RealmProvider {
     
     // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
     func deletePossibleInventoryItemWithUnique(_ productName: String, productBrand: String, inventory: DBInventory, notUuid: String, realmData: RealmData, handler: @escaping (Bool) -> Void) {
-        let removedCountMaybe = removeReturnCountSync(InventoryItem.createFilter(ProductUnique(name: productName, brand: productBrand), inventoryUuid: inventory.uuid, notUuid: notUuid), objType: InventoryItem.self, realmData: realmData)
+        handler(deletePossibleInventoryItemWithUniqueSync(productName, productBrand: productBrand, inventory: inventory, notUuid: notUuid, realmData: realmData))
+    }
+
+    func deletePossibleInventoryItemWithUniqueSync(_ productName: String, productBrand: String, inventory: DBInventory, notUuid: String, realmData: RealmData, doTransaction: Bool = true) -> Bool {
+        let removedCountMaybe = removeReturnCountSync(InventoryItem.createFilter(ProductUnique(name: productName, brand: productBrand), inventoryUuid: inventory.uuid, notUuid: notUuid), objType: InventoryItem.self, realmData: realmData, doTransaction: doTransaction)
         if let removedCount = removedCountMaybe {
             if removedCount > 0 {
                 QL2("Found inventory item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), inventory: {\(inventory.uuid), \(inventory.name)}")
@@ -237,7 +246,7 @@ class RealmInventoryItemProvider: RealmProvider {
         } else {
             QL4("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(inventory.uuid), \(inventory.name)}")
         }
-        handler(removedCountMaybe.map{$0 > 0} ?? false)
+        return removedCountMaybe.map{$0 > 0} ?? false
     }
     
     
@@ -420,4 +429,29 @@ class RealmInventoryItemProvider: RealmProvider {
             return true
         } ?? false
     }
+    
+    func updateNew(inventoryItem: InventoryItem, input: InventoryItemInput, realmData: RealmData) -> ProvResult<UpdateInventoryItemResult, DatabaseError> {
+        
+        func doInTransaction() ->  ProvResult<UpdateInventoryItemResult, DatabaseError> {
+            
+            let foundAndDeletedInventoryItem = deletePossibleInventoryItemWithUniqueSync(input.productPrototype.name, productBrand: input.productPrototype.brand, inventory: inventoryItem.inventory, notUuid: inventoryItem.uuid, realmData: realmData, doTransaction: false)
+            
+            // update or create quantifiable product and dependencies
+            let productResult = DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: input.productPrototype, updateCategory: true, save: false, realmData: realmData, doTransaction: false)
+            
+            return productResult.map {quantifiableProduct in
+                
+                // update inventory item
+                inventoryItem.product = quantifiableProduct
+                inventoryItem.quantity = input.quantity
+                
+                return UpdateInventoryItemResult(inventoryItem: inventoryItem, replaced: foundAndDeletedInventoryItem)
+            }
+        }
+        
+        return doInWriteTransactionSync(realmData: realmData) {realm in
+            return doInTransaction()
+        } ?? .err(.unknown)
+    }
+
 }

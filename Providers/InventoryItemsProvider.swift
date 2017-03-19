@@ -24,7 +24,7 @@ public protocol InventoryItemsProvider {
     func addToInventoryLocal(_ inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: @escaping (ProviderResult<Any>) -> Void)
 
     // Update with removal of possible already existing item with same unique in same inventory and unique reference update
-    func updateInventoryItem(_ input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, replaced: Bool)>) -> Void)
+    func updateInventoryItem(_ input: InventoryItemInput, updatingInventoryItem: InventoryItem, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<UpdateInventoryItemResult>) -> Void)
 
     // Plain update without additional checks
     func updateInventoryItem(_ item: InventoryItem, remote: Bool, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void)
