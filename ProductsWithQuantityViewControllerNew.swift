@@ -11,6 +11,8 @@ import CMPopTipView
 import QorumLogs
 import Providers
 
+typealias InventoryItemsSortOption = (value: InventorySortBy, key: String)
+
 protocol ProductsWithQuantityViewControllerDelegateNew: class {
     
     func loadModels(sortBy: InventorySortBy, onSuccess: @escaping () -> Void)
@@ -43,10 +45,19 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
 
     @IBOutlet weak var topMenuView: UIView!
     
-    var sortBy: InventorySortBy? = .count
+    var sortBy: InventoryItemsSortOption? {
+        didSet {
+            if let sortBy = sortBy {
+                sortByButton.setTitle(sortBy.key, for: UIControlState())
+            } else {
+                QL3("sortBy is nil")
+            }
+        }
+    }
+    
     @IBOutlet weak var sortByButton: UIButton!
     //    private var sortByPopup: CMPopTipView?
-    fileprivate let sortByOptions: [(value: InventorySortBy, key: String)] = [
+    fileprivate let sortByOptions: [InventoryItemsSortOption] = [
         (.count, trans("sort_by_count")), (.alphabetic, trans("sort_by_alphabetic"))
     ]
     
@@ -100,6 +111,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         tableView.delegate = self
         
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
+     
+        sortBy = sortByOptions.first
         
         if delegate?.isPullToAddEnabled() ?? false {
             self.pullToAdd = PullToAddHelper(tableView: tableView) {[weak self] refreshControl in
@@ -346,6 +359,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     // TODO!!!!!!!!!!!!!!!! insert at specific place: for realm it's not a problem we just have to append to the list (the results should continue being sorted so we don't need to do anything else). but we have to insert the item in the visible rows of the table - look for its place here using the cells instead of models.
     fileprivate func findIndexPathForNewItem(_ inventoryItem: ProductWithQuantity2) -> IndexPath? {
+        
         func findRow(_ isAfter: (ProductWithQuantity2) -> Bool) -> IndexPath? {
         
             let row: Int? = {
@@ -361,7 +375,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             return finalRow.map{IndexPath(row: $0, section: 0)}
         }
         
-        if let sortBy = sortBy {
+        if let sortBy = sortBy?.value {
             switch sortBy {
             case .count:
                 return findRow({
@@ -436,7 +450,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         tableView.reloadData()
         updateEmptyUI()
         
-        delegate?.loadModels(sortBy: sortBy) {[weak self] models in
+        delegate?.loadModels(sortBy: sortBy.value) {[weak self] models in
             self?.tableView.reloadData()
             self?.updateEmptyUI()
         }
@@ -453,10 +467,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let sortByOption = sortByOptions[row]
-        sortBy = sortByOption.value
-        sortByButton.setTitle(sortByOption.key, for: UIControlState())
-        
+        sortBy = sortByOptions[row]
         load()
     }
     

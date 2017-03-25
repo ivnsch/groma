@@ -11,6 +11,8 @@ import RealmSwift
 import QorumLogs
 import Providers
 
+typealias IngredientsSortOption = (value: InventorySortBy, key: String)
+
 class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPickerViewDelegate, ExplanationViewDelegate, SelectIngredientDataContainerControllerDelegate {
 
     var recipe: Recipe? {
@@ -22,10 +24,19 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         }
     }
     
-    var sortBy: InventorySortBy = .count
+    var sortBy: IngredientsSortOption? {
+        didSet {
+            if let sortBy = sortBy {
+                sortByButton.setTitle(sortBy.key, for: UIControlState())
+            } else {
+                QL3("sortBy is nil")
+            }
+        }
+    }
+    
     @IBOutlet weak var sortByButton: UIButton!
     //    private var sortByPopup: CMPopTipView?
-    fileprivate let sortByOptions: [(value: InventorySortBy, key: String)] = [
+    fileprivate let sortByOptions: [IngredientsSortOption] = [
         (.count, trans("sort_by_count")), (.alphabetic, trans("sort_by_alphabetic"))
     ]
     
@@ -91,6 +102,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         topSelectIngredientControllerManager = initEditIngredientControllerManager()
         
         tableView.allowsSelectionDuringEditing = true
+        
+        sortBy = sortByOptions.first
     }
     
     override func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
@@ -163,8 +176,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     func load() {
         guard let recipe = recipe else {QL4("No recipe"); return}
+        guard let sortBy = sortBy else {QL4("No sort by"); return}
         
-        Prov.ingredientProvider.ingredients(recipe: recipe, sortBy: sortBy, successHandler {[weak self] ingredients in guard let weakSelf = self else {return}
+        Prov.ingredientProvider.ingredients(recipe: recipe, sortBy: sortBy.value, successHandler {[weak self] ingredients in guard let weakSelf = self else {return}
             
             weakSelf.itemsResult = ingredients
             
@@ -377,6 +391,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     // TODO!!!!!!!!!!!!!!!! insert at specific place: for realm it's not a problem we just have to append to the list (the results should continue being sorted so we don't need to do anything else). but we have to insert the item in the visible rows of the table - look for its place here using the cells instead of models.
     fileprivate func findIndexPathForNewItem(_ ingredient: Ingredient) -> IndexPath? {
+        
+        guard let sortBy = sortBy else {QL4("No sort by"); return nil}
+        
         func findRow(_ isAfter: (Ingredient) -> Bool) -> IndexPath? {
             
             let row: Int? = {
@@ -393,7 +410,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         }
         
         
-        switch sortBy {
+        switch sortBy.value {
         case .count:
             return findRow({
                 if $0.quantity == ingredient.quantity {
@@ -541,10 +558,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let sortByOption = sortByOptions[row]
-        sortBy = sortByOption.value
-        sortByButton.setTitle(sortByOption.key, for: UIControlState())
-        
+        sortBy = sortByOptions[row]
         load()
     }
     

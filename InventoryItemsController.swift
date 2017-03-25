@@ -652,7 +652,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     // Inserts item in table view, considering the current sortBy
     func insert(item: InventoryItem, scrollToRow: Bool) {
         guard let sortBy = productsWithQuantityController.sortBy else {QL4("No sortby, can't insert!"); return}
-        guard let indexPath = findIndexPathForNewItem(item, sortBy: sortBy) else {
+        guard let indexPath = findIndexPathForNewItem(item, sortBy: sortBy.value) else {
             QL1("No index path for: \(item), appending"); return;
         }
         QL1("Found index path: \(indexPath) for: \(item.product.product.item.name)")
