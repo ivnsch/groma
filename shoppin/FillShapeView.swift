@@ -144,8 +144,9 @@ class FillShapeView: UIView {
         if sender.state == .changed {
             let delta = sender.translation(in: self).y
             
-            let actualDelta = max(-(contentStart ?? 0), delta) // top limit
-            
+            let deltaTopLimit = max(-(contentStart ?? 0), delta) // top limit
+            let actualDelta = min(frame.height - (contentStart ?? 0), deltaTopLimit) // bottom limit
+   
             newcontentLayer.frame.origin.y = (contentStart ?? 0) + actualDelta
             mynewmask.frame.origin.y = (heightStart ?? 0) - actualDelta
          
