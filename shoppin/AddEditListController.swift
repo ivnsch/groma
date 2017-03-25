@@ -263,7 +263,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             if let view = view as? AddEditListControllerView {
                 view.popupFrame = popup.frame // include popup in tap area
             } else {
-                QL4("Cast failed")
+                QL4("Cast failed, view: \(view)")
             }
         }
     }
