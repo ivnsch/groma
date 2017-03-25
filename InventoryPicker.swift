@@ -76,6 +76,10 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         return label
     }
     
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return DimensionsManager.pickerRowHeight
+    }
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedInventory = inventories[row]
     }

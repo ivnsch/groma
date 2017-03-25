@@ -350,4 +350,10 @@ class DimensionsManager {
         case .large: return 50
         }
     }
+    
+    // MARK: Picker general
+    
+    static var pickerRowHeight: CGFloat {
+        return 25
+    }
 }

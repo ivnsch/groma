@@ -459,6 +459,10 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         return label
     }
     
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return DimensionsManager.pickerRowHeight
+    }
+    
     @IBAction func onSortByTap(_ sender: UIButton) {
 //        if let popup = self.sortByPopup {
 //            popup.dismissAnimated(true)
