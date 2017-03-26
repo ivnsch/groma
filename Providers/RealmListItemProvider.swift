@@ -1367,8 +1367,35 @@ class RealmListItemProvider: RealmProvider {
             // delete from src section. This is only for .todo items - the cart and stash sections have like all sections a list of list items too but this is not used since we don't need ordering relative to section there.
             srcSection.listItems.remove(objectAtIndex: from.row)
             
-            // Insert the item in the cart listitems list
-            list.doneListItems.insert(listItem, at: 0)
+            
+            
+            let existingListItemMaybe = list.doneListItems.filter(ListItem.createFilter(quantifiableProductUnique: listItem.product.product.unique)).first // we should be able to use the uuid of the store product or quantifiable product too, but let's for now stick to the semantic unique for consistency and since it's the easiest to reason about. (TODO review this)
+            
+            if let existingListItem = existingListItemMaybe {
+                let quantityMaybe = incrementSync(existingListItem, quantity: listItem.quantity, realmData: realmData, doTransaction: false)
+                if quantityMaybe != nil {
+
+                    if let index = list.doneListItems.index(of: existingListItem) {
+                        list.doneListItems.move(from: index, to: 0) // move incremented item to top of list
+                        
+                    } else {
+                        QL4("Illegal state in transaction: just retrieved list item but can't get index")
+                        realm.cancelWrite()
+                        return nil
+                    }
+   
+                } else {
+                    QL4("Couldn't increment existing list item")
+                    realm.cancelWrite()
+                    return nil
+                }
+                
+            } else { // list item doesn't exist in cart yet, prepend/create it
+                // Insert the item in the cart listitems list
+                list.doneListItems.insert(listItem, at: 0)
+            }
+            
+            
             
             // TODO remove src section if empty
             
