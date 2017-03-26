@@ -269,6 +269,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         initTextFieldPlaceholders()
         initAutocompletionTextFields()
         
+        priceInput.delegate = self
+        
         sectionColorButton.textColor = UIColor.gray
         sectionColorButton.text = trans("generic_color") // string from storyboard localization doesn't work, seems to be xcode bug
         
@@ -401,6 +403,12 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
 
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == priceInput {
+            textField.selectAll(nil)
+        }
+    }
+    
     fileprivate func initTextFieldPlaceholders() {
         brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
         sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
