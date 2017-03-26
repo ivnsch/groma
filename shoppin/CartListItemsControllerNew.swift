@@ -53,9 +53,13 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
         guard let list = currentList else {QL4("No list"); return}
 
         Prov.listItemsProvider.calculateCartStashAggregate(list: list, successHandler {[weak self] aggregate in
-            self?.totalDonePriceButton.setTitle(aggregate.cartPrice.toLocalCurrencyString(), for: .normal)
-            self?.delegate?.onCartUpdatedQuantifiables()
+            self?.showQuantifiables(aggregate: aggregate)
         })
+    }
+    
+    func showQuantifiables(aggregate: ListItemsCartStashAggregate) {
+        totalDonePriceButton.setTitle(aggregate.cartPrice.toLocalCurrencyString(), for: .normal)
+        delegate?.onCartUpdatedQuantifiables()
     }
     
     // Fixes random, rare freezes when coming back to todo controller. See http://stackoverflow.com/a/28919337/930450

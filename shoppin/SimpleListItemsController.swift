@@ -565,6 +565,9 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
                 self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: Theme.defaultRowPosition, animated: true)
 
 //                self?.updateEmptyUI()
+                
+                self?.onTableViewChangedQuantifiables()
+                
             })
             //            Prov.listItemsProvider.addListItem(product, status: status, sectionName: product.product.category.name, sectionColor: product.product.category.color, quantity: 1, list: list, note: nil, order: nil, storeProductInput: nil, token: token, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
             //                weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)

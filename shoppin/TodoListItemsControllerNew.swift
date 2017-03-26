@@ -166,6 +166,8 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             weakSelf.stashView.updateOpenStateForQuantities(aggregate.cartQuantity, stashQuantity: stashQuantity)
             
             weakSelf.todoListItemsEditBottomView?.setTotalPrice(aggregate.todoPrice)
+            
+            weakSelf.cartController?.showQuantifiables(aggregate: aggregate)
         })
         
 //        if let list = currentList {
