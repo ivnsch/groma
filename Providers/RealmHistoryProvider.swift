@@ -334,6 +334,9 @@ class RealmHistoryProvider: RealmProvider {
     }
     
     func removeHistoryItemsGroup(_ historyItemGroup: HistoryItemGroup, markForSync: Bool, _ handler: @escaping (Bool) -> Void) {
+        
+        let historyItemGroup = historyItemGroup.copy()
+        
         self.doInWriteTransaction({[weak self] realm in
             let dbHistoryItems = realm.objects(HistoryItem.self).filter(HistoryItem.createFilter(historyItemGroup))
             if markForSync {
@@ -342,7 +345,8 @@ class RealmHistoryProvider: RealmProvider {
             }
             realm.delete(dbHistoryItems)
             return true
-            }, finishHandler: {(successMaybe: Bool?) in
+            }, finishHandler: {[weak self] (successMaybe: Bool?) in
+                
                 if let success = successMaybe {
                     handler(success)
                 } else {

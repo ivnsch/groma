@@ -28,7 +28,7 @@ public class HistoryItemGroup: CustomDebugStringConvertible {
         return HistoryItemGroup(
             date: date ?? self.date,
             user: user ?? self.user,
-            historyItems: historyItems ?? self.historyItems
+            historyItems: historyItems ?? self.historyItems.map{$0.copy()}
         )
     }
     

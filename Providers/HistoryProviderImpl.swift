@@ -103,19 +103,19 @@ class HistoryProviderImpl: HistoryProvider {
         dbProvider.removeHistoryItemsGroup(historyItemGroup, markForSync: true) {[weak self] success in
             if success {
                 handler(ProviderResult(status: .success))
-                if remote {
-                    self?.remoteProvider.removeHistoryItems(historyItemGroup) {result in
-                        if result.success {
-                            self?.dbProvider.clearHistoryItemsTombstones(historyItemGroup) {removeTombstoneSuccess in
-                                if !removeTombstoneSuccess {
-                                    QL4("Couldn't delete tombstones for history items: \(historyItemGroup)")
-                                }
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(result, handler: handler)
-                        }
-                    }
-                }
+//                if remote {
+//                    self?.remoteProvider.removeHistoryItems(historyItemGroup) {result in
+//                        if result.success {
+//                            self?.dbProvider.clearHistoryItemsTombstones(historyItemGroup) {removeTombstoneSuccess in
+//                                if !removeTombstoneSuccess {
+//                                    QL4("Couldn't delete tombstones for history items: \(historyItemGroup)")
+//                                }
+//                            }
+//                        } else {
+//                            DefaultRemoteErrorHandler.handle(result, handler: handler)
+//                        }
+//                    }
+//                }
             } else {
                 QL4("Coult not remove historyItem group: \(historyItemGroup)")
             }
