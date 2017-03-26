@@ -242,7 +242,8 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         
         let unitText = QuantifiableProduct.unitText(unitName: unitName, showNoneText: showNoneText, pluralUnit: pluralUnit)
         
-        let unitSeparator = unitName.isEmpty || baseQuantityText.isEmpty ? " " : ""
+//        let unitSeparator = unitName.isEmpty || baseQuantityText.isEmpty ? " " : ""
+        let unitSeparator = ""
         return "\(baseQuantityText)\(unitSeparator)\(unitText)"
     }
     

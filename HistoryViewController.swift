@@ -124,7 +124,21 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         cell.itemNameLabel.text = historyItem.product.product.item.name
         // TODO!!!!!!!!!!!!!!!!!! review base/unit text here
-        cell.itemUnitLabel.text = "\(historyItem.quantity.quantityString)\(historyItem.product.baseAndUnitText) x \(historyItem.paidPrice.toLocalCurrencyString())"
+        
+        let unitText = historyItem.product.unit.name
+        let baseText = historyItem.product.baseQuantity.quantityString
+        
+        func hasBase() -> Bool {
+            return historyItem.product.baseQuantity > 1
+        }
+        
+        let quantityUnitText = hasBase() ? "" : unitText // if there's no base, the unit "belongs" to the quantity
+        let quantityText = "\(historyItem.quantity.quantityString)\(quantityUnitText)"
+        
+        let baseAndUnitText = hasBase() ? "\(baseText)\(unitText)" : "" // if there's base, the unit "belongs" to the base
+        let quantity_baseAndUnitTextSeparator = baseAndUnitText.isEmpty ? "" : " x "
+        
+        cell.itemUnitLabel.text = "\(quantityText)\(quantity_baseAndUnitTextSeparator)\(baseAndUnitText) x \(historyItem.paidPrice.toLocalCurrencyString())"
         cell.itemPriceLabel.text = historyItem.totalPaidPrice.toLocalCurrencyString()
         
         return cell
