@@ -445,6 +445,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
     
     fileprivate func dismissColorPicker(_ selectedColor: UIColor?) {
+        let growColorPickerAnimator = self.growColorPickerAnimator
+        
         growColorPickerAnimator?.close() {[weak self] in
             UIView.animate(withDuration: 0.3, animations: {[weak self] in
                 if let selectedColor = selectedColor {
@@ -481,6 +483,15 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         } else { // adding a list - there can't be invited users yet
             handler([])
         }
+    }
+    
+    // MARK: -
+    
+    // Returns if quick controller can be closed
+    func requestClose() -> Bool {
+        let isColorPickerOpen = growColorPickerAnimator?.isShowing ?? false
+        dismissColorPicker(nil)
+        return !isColorPickerOpen // at this point the variable actually means "wasColorPickerOpen"
     }
     
     deinit {

@@ -139,8 +139,11 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     // Returns if quick add controller can be closed
     func requestClose() -> Bool {
-        let anyChildShowing = quickAddListItemViewController?.closeChildControllers() ?? false
-        return !anyChildShowing
+        
+        let anyQuickAddListItemChildShowing = quickAddListItemViewController?.closeChildControllers() ?? false
+        let addEdtListItemChildShowing = (showingController as? AddEditListItemViewController)?.closeChildControllers() ?? false
+        
+        return !(anyQuickAddListItemChildShowing || addEdtListItemChildShowing)
     }
     
     func textFieldDidChange(_ textField: UITextField) {

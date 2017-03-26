@@ -962,6 +962,13 @@ extension AddEditListItemViewController: ProductQuantityControlleDelegate {
     var parentForPickers: UIView {
         return self.view
     }
+    
+    // Returns if any child controller was showing (was closed)
+    func closeChildControllers() -> Bool {
+        let showingColorPicker = self.showingColorPicker
+        dismissColorPicker(nil)
+        return showingColorPicker != nil
+    }
 }
 
 

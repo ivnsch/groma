@@ -273,6 +273,15 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         }
     }
     
+    // MARK: -
+    
+    // Returns if quick controller can be closed
+    func requestClose() -> Bool {
+        let showingColorPicker = self.showingColorPicker
+        dismissColorPicker(nil)
+        return showingColorPicker == nil
+    }
+    
     deinit {
         QL1("Deinit add edit groups controller")
     }

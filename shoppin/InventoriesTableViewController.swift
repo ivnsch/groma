@@ -43,6 +43,10 @@ class ExpandableTableViewInventoryModelRealm: ExpandableTableViewModel {
 class InventoriesTableViewController: ExpandableItemsTableViewController, AddEditInventoryControllerDelegate, ExpandableTopViewControllerDelegate {
     
     var topAddEditListControllerManager: ExpandableTopViewController<AddEditInventoryController>?
+    
+    override var isAnyTopControllerExpanded: Bool {
+        return topAddEditListControllerManager?.expanded ?? false
+    }
 
     fileprivate var inventoriesResult: RealmSwift.List<DBInventory>? {
         didSet {
@@ -70,7 +74,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     override func onPullToAdd() {
-        onAddTap(false)
+        showAddEditController(rotateTopBarButton: false)
     }
     
     fileprivate func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditInventoryController> {
@@ -181,19 +185,39 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             removeChildViewControllers()
         }
     }
-    
-    override func onAddTap(_ rotateTopBarButton: Bool = true) {
-        super.onAddTap()
-//        SizeLimitChecker.checkInventoriesSizeLimit(models.count, controller: self) {[weak self] in
-//            if let weakSelf = self {
-                let expand = !(topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
-                topAddEditListControllerManager?.expand(expand)
-                if rotateTopBarButton { // HACK - don't reset the buttons when we don't want to rotate because this causes the toggle button animation to "jump" (this is used on pull to add - in order to show also the submit button we would have to reset the buttons, but this causes a little jump in the X since when the table view goes a little up because of the pull anim, the X animates back a little and when we reset the buttons, setting it to its final state there's a jump). TODO We need to adjust the general logic for this, we don't need multiple nav bar buttons on each side anyways anymore so maybe we can remove all this?
-                    setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
-                }
-//            }
-//        }
+
+    override func openTopController(rotateTopBarButton: Bool = true) {
+        super.openTopController(rotateTopBarButton: rotateTopBarButton)
+        showAddEditController(rotateTopBarButton: rotateTopBarButton)
     }
+    
+    override func closeTopControllers(rotateTopBarButton: Bool = true) {
+        if topAddEditListControllerManager?.expanded ?? false {
+            
+            if topAddEditListControllerManager?.controller?.requestClose() ?? true {
+                topAddEditListControllerManager?.expand(false)
+                onCloseTopControllers(rotateTopBarButton: rotateTopBarButton)
+            }
+        }
+    }
+    
+    // This is called after close with topbar's x as well as tapping semi transparent overlay. After everything else (rotate top button, close top controllers etc.) was done. Override for custom logic to be executed after closing top controller.
+    func onFinishCloseTopControllers() {
+        // optional override
+    }
+    
+    fileprivate func showAddEditController(rotateTopBarButton: Bool = true) {
+        //        SizeLimitChecker.checkInventoriesSizeLimit(models.count, controller: self) {[weak self] in
+        //            if let weakSelf = self {
+        let expand = !(topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
+        topAddEditListControllerManager?.expand(expand)
+        if rotateTopBarButton { // HACK - don't reset the buttons when we don't want to rotate because this causes the toggle button animation to "jump" (this is used on pull to add - in order to show also the submit button we would have to reset the buttons, but this causes a little jump in the X since when the table view goes a little up because of the pull anim, the X animates back a little and when we reset the buttons, setting it to its final state there's a jump). TODO We need to adjust the general logic for this, we don't need multiple nav bar buttons on each side anyways anymore so maybe we can remove all this?
+            setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
+        }
+        //            }
+        //        }
+    }
+    
     
     // MARK: - ExpandableTopViewControllerDelegate
     

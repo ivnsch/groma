@@ -82,6 +82,11 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     fileprivate let expandCellAnimator = ExpandCellAnimator()
     
+    var isAnyTopControllerExpanded: Bool {
+        // override
+        return false
+    }
+    
     fileprivate var originalNavBarFrame: CGRect = CGRect.zero
     
     fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
@@ -117,7 +122,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         emptyViewController.addTo(container: emptyViewControllerContainer)
         emptyViewController.labels = emptyViewLabels
         emptyViewController.onTapOrPull = {[weak self] in
-            _ = self?.onAddTap()
+            _ = self?.toggleTopAddController()
         }
         self.emptyViewController = emptyViewController
     }
@@ -368,16 +373,50 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
     }
     
-    func onAddTap(_ rotateTopBarButton: Bool = true) {
+    func openTopController(rotateTopBarButton: Bool = true) {
+        // override
     }
     
     @IBAction func onEditTap(_ sender: UIBarButtonItem) {
         self.setEditing(!self.isEditing, animated: true, tryCloseTopViewController: true)
     }
     
+    
     func topControllerIsExpanded() -> Bool {
         fatalError("Override")
     }
+    
+    
+    // returns: is now open?
+    func toggleTopAddController(_ rotateTopBarButton: Bool = true) -> Bool {
+        return setTopControllerOpen(open: !isAnyTopControllerExpanded, rotateTopBarButton: rotateTopBarButton)
+    }
+    
+    // returns: is now open?
+    func setTopControllerOpen(open: Bool, rotateTopBarButton: Bool = true) -> Bool {
+        
+        if open {
+            openTopController(rotateTopBarButton: rotateTopBarButton)
+            return true
+            
+        } else {
+            closeTopControllers(rotateTopBarButton: rotateTopBarButton)
+            return false
+        }
+    }
+    
+    func closeTopControllers(rotateTopBarButton: Bool = true) {
+        // override
+    }
+    
+    func onCloseTopControllers(rotateTopBarButton: Bool = true) {
+        toggleButtonRotator.enabled = true
+        
+        if rotateTopBarButton {
+            setTopBarState(.normalFromExpanded)
+        }
+    }
+    
     
     // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
     func setEditing(_ editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
@@ -446,7 +485,10 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         case .submit:
             onSubmitTap()
         case .toggleOpen:
-            onAddTap()
+            let willExpand = !isAnyTopControllerExpanded
+            beforeToggleTopAddController(willExpand: willExpand)
+            _ = setTopControllerOpen(open: willExpand)
+            
         case .edit:
             let editing = !self.tableView.isEditing
             self.setEditing(editing, animated: true, tryCloseTopViewController: true)
@@ -455,6 +497,13 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
             break;
         }
     }
+    
+    
+    // Do actions when press on topbar +, before everything else
+    func beforeToggleTopAddController(willExpand: Bool) {
+        // override
+    }
+    
     
     func onCenterTitleAnimComplete(_ center: Bool) {
         if center {
