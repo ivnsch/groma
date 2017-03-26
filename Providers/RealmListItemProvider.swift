@@ -1422,31 +1422,20 @@ class RealmListItemProvider: RealmProvider {
     func switchStashToTodoSync(listItem: ListItem, from: IndexPath, realmData: RealmData) -> Bool {
         let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
         
-        return switchCartOrStashToTodoSync(listItem: listItem, from: from, cartOrStashListItems: list.stashListItems, realmData: realmData)
+        return switchCartOrStashToTodoSync(listItem: listItem, from: from.row, cartOrStashListItems: list.stashListItems, realmData: realmData)
     }
 
     func switchCartToTodoSync(listItem: ListItem, from: IndexPath, realmData: RealmData) -> Bool {
         let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
         
-        return switchCartOrStashToTodoSync(listItem: listItem, from: from, cartOrStashListItems: list.doneListItems, realmData: realmData)
+        return switchCartOrStashToTodoSync(listItem: listItem, from: from.row, cartOrStashListItems: list.doneListItems, realmData: realmData)
     }
     
     fileprivate func switchCartOrStashToTodoSync(cartOrStashListItems: RealmSwift.List<ListItem>, list: List, realmData: RealmData, doTransaction: Bool) -> Bool {
         
         func transactionContent() -> Bool {
-            
             for listItem in cartOrStashListItems {
-                
-                guard let dstSection = DBProv.sectionProvider.getOrCreateTodo(name: listItem.section.name, color: listItem.section.color, list: list, notificationToken: realmData.token, realm: realmData.realm, doTransaction: false) else {QL4("Invalid state - couldn't get or create section"); return false}
-                
-                // append/increment in dst section
-                if self.addSync(listItem: listItem, section: dstSection, list: list, quantity: listItem.quantity, realmData: realmData, doTransaction: false) == nil {
-                    QL4("Add sync returned nil, exit")
-                    return false // interrupt transaction
-                }
-                
-                // delete from src list items
-                cartOrStashListItems.remove(objectAtIndex: 0)
+                switchCartOrStashToTodoSync(listItem: listItem, from: 0, cartOrStashListItems: cartOrStashListItems, realmData: realmData, doTransaction: false)
             }
             return true
         }
@@ -1467,14 +1456,13 @@ class RealmListItemProvider: RealmProvider {
         return success
     }
     
-    fileprivate func switchCartOrStashToTodoSync(listItem: ListItem, from: IndexPath, cartOrStashListItems: RealmSwift.List<ListItem>, realmData: RealmData) -> Bool {
+    fileprivate func switchCartOrStashToTodoSync(listItem: ListItem, from: Int, cartOrStashListItems: RealmSwift.List<ListItem>, realmData: RealmData, doTransaction: Bool = true) -> Bool {
         guard let realm = listItem.section.realm else {QL4("No realm"); return false}
         
         let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
 
-        
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {realm -> Bool? in
-
+        func transactionContent(realm: Realm) -> Bool? {
+            
             guard let dstSection = DBProv.sectionProvider.getOrCreateTodo(name: listItem.section.name, color: listItem.section.color, list: list, notificationToken: realmData.token, realm: realm, doTransaction: false) else {
                 QL4("Couldn't get or create dst section, can't switch")
                 return nil
@@ -1488,10 +1476,19 @@ class RealmListItemProvider: RealmProvider {
             }
             
             // delete from src list items
-            cartOrStashListItems.remove(objectAtIndex: from.row)
+            cartOrStashListItems.remove(objectAtIndex: from)
             
             return true
-            
-        } ?? false
+        }
+        
+        return {
+            if doTransaction {
+                return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {realm -> Bool? in
+                    transactionContent(realm: realm)
+                }
+            } else {
+                return transactionContent(realm: realm)
+            }
+        }() ?? false
     }
 }
