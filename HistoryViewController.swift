@@ -272,11 +272,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func onDeleteGroupTap(_ sectionModel: SectionModel<HistoryItemGroup>, header: HistoryItemGroupHeaderView) {
-        ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("history_delete_items_in_group"), okTitle: trans("popup_button_ok"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-            Prov.historyProvider.removeHistoryItemsGroup(sectionModel.obj, remote: true, weakSelf.successHandler{
-                weakSelf.loadHistory()
+//        ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("history_delete_items_in_group"), okTitle: trans("popup_button_ok"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+            Prov.historyProvider.removeHistoryItemsGroup(sectionModel.obj, remote: true, successHandler{[weak self] in
+                self?.loadHistory()
             })
-        }, onCancel: nil)
+//        }, onCancel: nil)
     }
 
     // MARK: -
