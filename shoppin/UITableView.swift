@@ -12,12 +12,6 @@ import QorumLogs
 
 extension UITableView {
     
-    open override var contentInset: UIEdgeInsets {
-        didSet {
-            QL3("set content inset: \(contentInset), tag: \(tag)")
-        }
-    }
-    
     var inset: UIEdgeInsets {
         set {
             self.contentInset = newValue
