@@ -498,3 +498,4 @@ validation_name_not_empty = "Bitte gib einen Namen ein";
 placeholder_category_name = "Kategorie";
 validation_category_name_not_empty = "Bitte gib eine Kategorie an";
 button_title_buyable = "Kaufbar";
+edible_button_title = "Verzehrbar";
