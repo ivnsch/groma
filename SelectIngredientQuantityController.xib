@@ -24,15 +24,14 @@
                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="40" translatesAutoresizingMaskIntoConstraints="NO" id="aT7-vn-i8P">
                     <rect key="frame" x="67" y="0.0" width="240" height="40"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="75D-H1-5KH" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="75D-H1-5KH" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="5" width="30" height="30"/>
-                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="30" id="kqj-lx-SoO"/>
                                 <constraint firstAttribute="height" constant="30" id="ryk-kR-AlJ"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="textColor" red="0.054901960780000002" green="0.54117647059999996" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="fontType">
@@ -44,7 +43,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Select quantity" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Pv-Iq-Aue" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                            <rect key="frame" x="40" y="9.5" width="200" height="21"/>
+                            <rect key="frame" x="30" y="9.5" width="210" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
@@ -60,7 +59,7 @@
                         <constraint firstItem="8Pv-Iq-Aue" firstAttribute="centerY" secondItem="aT7-vn-i8P" secondAttribute="centerY" id="EmO-bx-kqr"/>
                         <constraint firstAttribute="height" constant="40" id="Mwj-A1-QzC"/>
                         <constraint firstItem="75D-H1-5KH" firstAttribute="leading" secondItem="aT7-vn-i8P" secondAttribute="leading" id="Zpw-aD-kPT"/>
-                        <constraint firstItem="8Pv-Iq-Aue" firstAttribute="leading" secondItem="75D-H1-5KH" secondAttribute="trailing" constant="10" id="iDd-lF-A6Z"/>
+                        <constraint firstItem="8Pv-Iq-Aue" firstAttribute="leading" secondItem="75D-H1-5KH" secondAttribute="trailing" id="iDd-lF-A6Z"/>
                         <constraint firstAttribute="trailing" secondItem="8Pv-Iq-Aue" secondAttribute="trailing" id="q38-17-KAV"/>
                     </constraints>
                 </view>

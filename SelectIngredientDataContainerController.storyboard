@@ -12,7 +12,7 @@
         <!--Select Ingredient Data Container Controller-->
         <scene sceneID="b1T-UQ-41T">
             <objects>
-                <viewController storyboardIdentifier="SelectIngredientDataContainerController" id="S5p-hg-mLZ" customClass="SelectIngredientDataContainerController" customModule="groma" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SelectIngredientDataContainerController" automaticallyAdjustsScrollViewInsets="NO" id="S5p-hg-mLZ" customClass="SelectIngredientDataContainerController" customModule="groma" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="vAy-Rk-51f"/>
                         <viewControllerLayoutGuide type="bottom" id="tBE-2N-ytz"/>
@@ -103,7 +103,7 @@
                                     <constraint firstItem="YMu-Tc-m5k" firstAttribute="centerX" secondItem="gX4-9O-qGF" secondAttribute="centerX" id="yOy-1L-lP0"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ME0-K5-s4R" customClass="TableViewHitTest" customModule="groma" customModuleProvider="target">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ME0-K5-s4R" customClass="TableViewHitTest" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="40" width="375" height="627"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -111,7 +111,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3ge-oX-JsV" id="4Zy-If-Y1w">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="199.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
