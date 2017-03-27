@@ -103,7 +103,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         
         tableView.allowsSelectionDuringEditing = true
         
-        sortBy = sortByOptions.first
+        sortBy = (.alphabetic, trans("sort_by_alphabetic"))
+        topMenusHeightConstraint.constant = 0
     }
     
     override func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
@@ -502,8 +503,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         // When top controller is edit, it's larger than the available controller's space which breaks the constraints if we animate the top, so we don't do it in this case. It doesn't make sense anyway as we will see either too litle (when edit controller doesn't have fraction section) or nothing (when it has fraction section) of it.
         if !triggeredExpandEditIngredient {
             topControlTopConstraint.constant = view.frame.height
-            topMenusHeightConstraint.constant = expand ? 0 : DimensionsManager.topMenuBarHeight
-            //        view.layoutIfNeeded()
+            //topMenusHeightConstraint.constant = expand ? 0 : DimensionsManager.topMenuBarHeight
             
         } else {
             triggeredExpandEditIngredient = false // clear it
