@@ -61,7 +61,7 @@ class RealmUnitProvider: RealmProvider {
         ]
         // and the base quantities too...
         let defaultBaseQuantities: [BaseQuantity] = [
-            BaseQuantity(0),
+            BaseQuantity(1),
             BaseQuantity(2),
             BaseQuantity(100),
             BaseQuantity(150),
