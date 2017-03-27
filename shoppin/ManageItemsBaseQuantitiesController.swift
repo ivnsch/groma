@@ -125,7 +125,11 @@ extension ManageItemsBaseQuantitiesController: EditSingleInputControllerDelegate
         
         Prov.productProvider.updateBaseQuantity(oldBase: editingBase, newBase: base, successHandler{[weak self] in
             self?.topEditSectionControllerManager?.expand(false)
-            self?.tableView.reloadData()
+            
+            //self?.tableView.reloadData()
+            
+            // We aren't using Realm results in this controller but an array so we have to reload the data manually. TODO use Realm Results
+            self?.filterItems(str: self?.delegate?.currentFilter ?? "")
         })
     }
 }

@@ -1205,9 +1205,10 @@ class RealmProductProvider: RealmProvider {
                 let realm = try Realm()
                 // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
                 // .sorted("baseQuantity", ascending: true)
-                let baseQuantities = Array(Set(realm.objects(QuantifiableProduct.self).map{$0.baseQuantity})).sorted()
                 
-                return baseQuantities.filter {baseQuantity in
+                let baseQuantities = Array(Set(realm.objects(BaseQuantity.self).map{$0.val})).sorted()
+                
+                return text.isEmpty ? baseQuantities : baseQuantities.filter {baseQuantity in
                     return "\(baseQuantity)".contains(text)
                 }
             } catch let e {
@@ -1340,6 +1341,16 @@ class RealmProductProvider: RealmProvider {
     
     func updateBaseSync(oldBase: Float, newBase: Float) -> Bool {
         return doInWriteTransactionSync({realm in
+            
+            // We update base and product separately. The reason is only that BaseQuantity was added late in the development and we haven't adjusted quantifiable product to reference these objects instead of only floats. Changing this adds more overhead and complexity and it doesn't seem to be really justified.
+            
+            // We have to remove and add base since val is the primary key and we can't update it.
+            if let base = realm.objects(BaseQuantity.self).filter(BaseQuantity.createFilter(val: oldBase)).first {
+                realm.delete(base)
+            }
+            let newBaseObj = BaseQuantity(newBase)
+            realm.add(newBaseObj, update: true)
+            
             let dbProducts = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(base: oldBase))
             for dbProduct in dbProducts {
                 dbProduct.baseQuantity = newBase
