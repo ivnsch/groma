@@ -498,3 +498,8 @@ placeholder_category_name = "Category name";
 validation_category_name_not_empty = "Please enter a category";
 button_title_buyable = "Purchasable";
 edible_button_title = "Edible";
+
+select_items = "Items";
+select_brands = "Brands";
+select_base_quantities = "Base quantities";
+select_units = "Units";

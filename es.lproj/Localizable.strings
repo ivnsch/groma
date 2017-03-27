@@ -499,3 +499,8 @@ placeholder_category_name = "Categoría";
 validation_category_name_not_empty = "Por favor ingresa una categoría";
 button_title_buyable = "Comprable";
 edible_button_title = "Comestible";
+
+select_items = "Items";
+select_brands = "Marcas";
+select_base_quantities = "Cantidades base";
+select_units = "Unidades";

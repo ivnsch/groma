@@ -1,0 +1,9 @@
+
+/* Class = "UIButton"; normalTitle = "Objects"; ObjectID = "agc-b0-hg3"; */
+"agc-b0-hg3.normalTitle" = "Objects";
+
+/* Class = "UILabel"; text = "Type:"; ObjectID = "ezr-Ic-BhG"; */
+"ezr-Ic-BhG.text" = "Typ:";
+
+/* Class = "UITextField"; placeholder = "Search"; ObjectID = "isN-7n-Fu4"; */
+"isN-7n-Fu4.placeholder" = "Search";

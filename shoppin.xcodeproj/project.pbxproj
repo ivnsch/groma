@@ -44,7 +44,6 @@
 		6A287E9D1E54D6F300868244 /* ManageItemsQuantifiableProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E9C1E54D6F300868244 /* ManageItemsQuantifiableProductCell.swift */; };
 		6A287E9F1E54FFC800868244 /* ManageItemsStoreProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287E9E1E54FFC800868244 /* ManageItemsStoreProductCell.swift */; };
 		6A287EA31E55DD3D00868244 /* ManageDatabaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287EA21E55DD3D00868244 /* ManageDatabaseController.swift */; };
-		6A287EA51E55DD4F00868244 /* ManageDatabase.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A287EA41E55DD4F00868244 /* ManageDatabase.storyboard */; };
 		6A287EA71E55E2EF00868244 /* ManageItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287EA61E55E2EF00868244 /* ManageItemsController.swift */; };
 		6A287EAB1E55E3BE00868244 /* ManageItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A287EAA1E55E3BE00868244 /* ManageItems.storyboard */; };
 		6A2D506B1E3F5D0300B0F7EA /* ListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */; };
@@ -134,6 +133,7 @@
 		6AF46EBB1E5BBBC900BBFF4C /* UnitSubmitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EB91E5BBBC900BBFF4C /* UnitSubmitCell.swift */; };
 		6AF46EBC1E5BBBC900BBFF4C /* UnitSubmitCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF46EBA1E5BBBC900BBFF4C /* UnitSubmitCell.xib */; };
 		6AF46EC01E5CE19A00BBFF4C /* PickerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EBF1E5CE19A00BBFF4C /* PickerCollectionView.swift */; };
+		6AFF38361E89B0D3009AD368 /* ManageDatabase.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF38381E89B0D3009AD368 /* ManageDatabase.storyboard */; };
 		AE4ACBEA0F92FC70EBA5FB3A /* Pods_groma.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */; };
 		EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0587DB1BBED86B00080626 /* IntroPageView.xib */; };
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
@@ -513,7 +513,6 @@
 		6A287E9C1E54D6F300868244 /* ManageItemsQuantifiableProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsQuantifiableProductCell.swift; sourceTree = "<group>"; };
 		6A287E9E1E54FFC800868244 /* ManageItemsStoreProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsStoreProductCell.swift; sourceTree = "<group>"; };
 		6A287EA21E55DD3D00868244 /* ManageDatabaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageDatabaseController.swift; sourceTree = "<group>"; };
-		6A287EA41E55DD4F00868244 /* ManageDatabase.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageDatabase.storyboard; sourceTree = "<group>"; };
 		6A287EA61E55E2EF00868244 /* ManageItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsController.swift; sourceTree = "<group>"; };
 		6A287EAA1E55E3BE00868244 /* ManageItems.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItems.storyboard; sourceTree = "<group>"; };
 		6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsControllerNew.swift; sourceTree = "<group>"; };
@@ -603,6 +602,10 @@
 		6AF46EB91E5BBBC900BBFF4C /* UnitSubmitCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitSubmitCell.swift; sourceTree = "<group>"; };
 		6AF46EBA1E5BBBC900BBFF4C /* UnitSubmitCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnitSubmitCell.xib; sourceTree = "<group>"; };
 		6AF46EBF1E5CE19A00BBFF4C /* PickerCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerCollectionView.swift; sourceTree = "<group>"; };
+		6AFF38371E89B0D3009AD368 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ManageDatabase.storyboard; sourceTree = "<group>"; };
+		6AFF383A1E89B0D6009AD368 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ManageDatabase.strings; sourceTree = "<group>"; };
+		6AFF383C1E89B0DC009AD368 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ManageDatabase.strings; sourceTree = "<group>"; };
+		6AFF383E1E89B0DF009AD368 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ManageDatabase.strings; sourceTree = "<group>"; };
 		8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_groma.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90786A7A2BEDAE7F0308001C /* Pods-groma.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-groma.debug.xcconfig"; path = "Pods/Target Support Files/Pods-groma/Pods-groma.debug.xcconfig"; sourceTree = "<group>"; };
 		98053CCC7F57AECBD28D4F1D /* Pods_shoppin_osxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1173,7 +1176,7 @@
 				6A287E8E1E53A94500868244 /* addEditFirstLevelSubcontrollers */,
 				6A287E851E5266F900868244 /* addEditItem */,
 				6A287EA21E55DD3D00868244 /* ManageDatabaseController.swift */,
-				6A287EA41E55DD4F00868244 /* ManageDatabase.storyboard */,
+				6AFF38381E89B0D3009AD368 /* ManageDatabase.storyboard */,
 			);
 			name = manageItems;
 			path = shoppin;
@@ -2570,7 +2573,7 @@
 				6A287E971E54792F00868244 /* ManageItemsSectionView.xib in Resources */,
 				6A287E8D1E53A7D500868244 /* EditSingleInputController.xib in Resources */,
 				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
-				6A287EA51E55DD4F00868244 /* ManageDatabase.storyboard in Resources */,
+				6AFF38361E89B0D3009AD368 /* ManageDatabase.storyboard in Resources */,
 				EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */,
 				6A278F901E6A663100126F8E /* PlaceHolderItemCell.xib in Resources */,
 				EBD668201CED4EB00055EE0B /* EditableChoiceModal.storyboard in Resources */,
@@ -3114,6 +3117,17 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		6AFF38381E89B0D3009AD368 /* ManageDatabase.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6AFF38371E89B0D3009AD368 /* Base */,
+				6AFF383A1E89B0D6009AD368 /* en */,
+				6AFF383C1E89B0DC009AD368 /* de */,
+				6AFF383E1E89B0DF009AD368 /* es */,
+			);
+			name = ManageDatabase.storyboard;
+			sourceTree = "<group>";
+		};
 		EB1DDEB11A3334EC00D778DE /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
