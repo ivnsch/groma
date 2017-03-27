@@ -16,7 +16,7 @@ class ManageItemsUnitCell: UITableViewCell {
     
     func config(unit: Providers.Unit, filter: String?) {
         
-        let unitNameText = unit.name.isEmpty ? "unit_none_name" : unit.name
+        let unitNameText = unit.name.isEmpty ? trans("unit_none_name") : unit.name
         
         if let boldRange = filter.flatMap({unitNameText.range($0, caseInsensitive: true)}) {
             unitLabel.attributedText = unitNameText.makeAttributedBoldRegular(boldRange)

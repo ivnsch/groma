@@ -14,15 +14,17 @@ enum ManageDatabaseTypeSelection {
     case items, brands, bases, units
 }
 
+typealias ManageDatabaseControllerOption = (value: ManageDatabaseTypeSelection, key: String)
+
 class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
-    var selectedOption: ManageDatabaseTypeSelection = .items
+    var selectedOption: ManageDatabaseControllerOption?
     @IBOutlet weak var selectOptionButton: UIButton!
-    fileprivate let selectOptions: [(value: ManageDatabaseTypeSelection, key: String)] = [
+    fileprivate let selectOptions: [ManageDatabaseControllerOption] = [
         (.items, trans("select_items")),
         (.brands, trans("select_brands")),
         (.bases, trans("select_base_quantities")),
-        (.units, ("select_units"))
+        (.units, trans("select_units"))
     ]
     
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
@@ -50,7 +52,11 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
 
         layout()
 
-        load(option: .items)
+        if let first = selectOptions.first {
+            load(option: first)
+        } else {
+            QL4("No options")
+        }
     }
     
     
@@ -70,12 +76,14 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
     
     // MARK: -
     
-    fileprivate func load(option: ManageDatabaseTypeSelection) {
+    fileprivate func load(option: ManageDatabaseControllerOption) {
+        
+        selectOptionButton.setTitle(option.key, for: UIControlState())
         
         (selectedOptionController as? UIViewController)?.removeFromParentViewControllerWithView()
         
         let searchableTextController: SearchableTextController = {
-            switch option {
+            switch option.value {
             case .items:
                 let controller = UIStoryboard.manageItemsController()
                 controller.delegate = self
@@ -122,10 +130,9 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let selectOption = selectOptions[row]
-        selectedOption = selectOption.value
-        selectOptionButton.setTitle(selectOption.key, for: UIControlState())
+        selectedOption = selectOption
         
-        load(option: selectedOption)
+        load(option: selectOption)
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {

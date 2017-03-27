@@ -504,3 +504,4 @@ select_items = "Items";
 select_brands = "Marken";
 select_base_quantities = "Basismengen";
 select_units = "Einheiten";
+unit_none_name = "Einheit (default)";

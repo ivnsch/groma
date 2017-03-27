@@ -503,3 +503,4 @@ select_items = "Items";
 select_brands = "Brands";
 select_base_quantities = "Base quantities";
 select_units = "Units";
+unit_none_name = "unit (default)";
