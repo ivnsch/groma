@@ -146,9 +146,21 @@ class QuickAddItemCellAnimatableCopy: UIView {
         super.init(frame: frame)
     }
     
+    fileprivate func calculateOriginalQuantityLabelSize() -> CGSize {
+        let quantityView = QuantityView(frame: CGRect(x: 0, y: 0, width: 1000, height: 1000))
+        quantityView.quantity = 1
+        quantityView.setNeedsLayout()
+        quantityView.layoutIfNeeded()
+        return quantityView.quantityLabel.frame.size
+    }
+    
     func animateAddToList(targetFrame: CGRect, onFinish: @escaping () -> Void) {
         nameLabel.frame.origin = CGPoint(x: 0, y: 0) // TODO what's this for ?
 
+        // Fix for: small jump of label position after animation finishes (i.e. there's a delta between the final animated label and the cell's label).
+        // Reason: The label in quantity view has a slightly different size, because we add +2 width in TextFieldMore's intrinsic size as workaround to prevent content truncation. We also can't use the +2 value directly, as the final width for some reason isn't exactly text width +2 (maybe auto layout related rounding) - the time it was debugged it was 1.5. So we just create a dummy quantity view here and get the size of it's label and use this to calculate the animated label's target position.
+        let quantityViewLabelSize = calculateOriginalQuantityLabelSize()
+        
         anim(0.3, {
             self.frame = targetFrame
             self.overlay.frame = targetFrame.bounds
@@ -167,8 +179,9 @@ class QuickAddItemCellAnimatableCopy: UIView {
             self.nameLabel.textColor = Theme.black
             
             
+
             self.quantityLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
-            self.quantityLabel.frame.origin.x = targetFrame.width - DimensionsManager.leftRightPaddingConstraint - self.quantityLabel.width
+            self.quantityLabel.frame.origin.x = targetFrame.width - DimensionsManager.leftRightPaddingConstraint - quantityViewLabelSize.width
             self.quantityLabel.center.y = DimensionsManager.defaultCellHeight / 2
             self.quantityLabel.alpha = 1
             
