@@ -11,7 +11,7 @@ import RealmSwift
 import Providers
 import QorumLogs
 
-class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataSourceDelegate, UnitsCollectionViewDelegateDelegate {
+class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataSourceDelegate, UnitsCollectionViewDelegateDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var unitsCollectionView: UICollectionView!
     @IBOutlet weak var collectionViewHeight: NSLayoutConstraint!
@@ -26,13 +26,64 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
     
     fileprivate var selectedUnit: Providers.Unit?
     
+    fileprivate var currentNewUnitInput: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         initUnitsCollectionView()
+        
+        addBackgroundTap()
     }
-
+    
+    fileprivate func addBackgroundTap() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
+        tap.delegate = self
+        view.addGestureRecognizer(tap)
+    }
+    
+    func onTap(_ sender: UIView) {
+        
+        if let currentNewUnitInput = currentNewUnitInput {
+            
+            guard let dataSource = unitsCollectionView.dataSource else {QL4("No data source"); return}
+            guard let unitsDataSource = dataSource as? UnitsDataSource else {QL4("Data source has wrong type: \(type(of: dataSource))"); return}
+            
+            Prov.unitProvider.getOrCreate(name: currentNewUnitInput, successHandler{[weak self] (unit, isNew) in guard let weakSelf = self else {return}
+                if isNew {
+                    
+                    weakSelf.unitsCollectionView.insertItems(at: [IndexPath(row: (unitsDataSource.units?.count ?? 0) - 1, section: 0)])
+                    if let editCell = weakSelf.unitsCollectionView.cellForItem(at: IndexPath(row: (unitsDataSource.units?.count ?? 0), section: 0)) as? UnitEditableCell {
+                        editCell.editableUnitView.clear()
+                    }
+                }
+                
+                weakSelf.currentNewUnitInput = nil
+            })
+            
+        } else {
+            /// Clear possible marked to delete units - we use "tap outside" as the way to cancel the delete-status
+            clearToDeleteUnits()
+        }
+    }
+    
+    // MARK: - UIGestureRecognizerDelegate
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard let view = touch.view else {return false}
+        if view.hasAncestor(type: UnitCell.self) || view.hasAncestor(type: UnitEditableCell.self) {
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    // MARK: -
+    
     fileprivate func initUnitsCollectionView() {
         
         let delegate = UnitsDelegate(delegate: self)
@@ -47,7 +98,7 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
             weakSelf.unitsCollectionView.dataSource = dataSource
             
             weakSelf.units = units
-            
+     
             weakSelf.unitsCollectionView.reloadData()
      
             let size = weakSelf.unitsCollectionView.collectionViewLayout.collectionViewContentSize
@@ -122,8 +173,7 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
     }
     
     func onUpdateUnitNameInput(nameInput: String) {
-//        currentNewUnitInput = nameInput
-        // TODO!!!!!!!!!!!
+        currentNewUnitInput = nameInput
     }
     
     // MARK: - UnitsCollectionViewDelegateDelegate
