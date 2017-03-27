@@ -21,8 +21,11 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="bhI-Ct-ZAx" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="16" y="0.0" width="281" height="667"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="bhI-Ct-ZAx" customClass="LineTextField" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="20" y="313.5" width="279" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="7yZ-3B-tIP" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
+                    </constraints>
                     <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -36,7 +39,7 @@
                     </userDefinedRuntimeAttributes>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OSL-jp-YHp" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="309" y="318" width="46" height="30"/>
+                    <rect key="frame" x="309" y="318.5" width="46" height="30"/>
                     <state key="normal" title="Button">
                         <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -52,11 +55,11 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="bhI-Ct-ZAx" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="NCW-pM-tzk"/>
                 <constraint firstItem="OSL-jp-YHp" firstAttribute="baseline" secondItem="bhI-Ct-ZAx" secondAttribute="baseline" id="QDp-gm-awN"/>
-                <constraint firstAttribute="bottom" secondItem="bhI-Ct-ZAx" secondAttribute="bottom" id="UGt-xe-UL3"/>
-                <constraint firstItem="bhI-Ct-ZAx" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="aXS-7S-UvP"/>
                 <constraint firstAttribute="trailing" secondItem="OSL-jp-YHp" secondAttribute="trailing" constant="20" id="apx-nW-5a9" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                 <constraint firstItem="bhI-Ct-ZAx" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="rbr-8p-H8S" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                <constraint firstItem="OSL-jp-YHp" firstAttribute="leading" secondItem="bhI-Ct-ZAx" secondAttribute="trailing" constant="10" id="vav-gH-pA1"/>
             </constraints>
         </view>
     </objects>

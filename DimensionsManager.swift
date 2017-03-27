@@ -83,10 +83,10 @@ class DimensionsManager {
     
     static var quickEditItemHeight: CGFloat {
         switch heightDimension {
-        case .verySmall: return 100
-        case .small: return 100
-        case .middle: return 150
-        case .large: return 150
+        case .verySmall: return 60
+        case .small: return 60
+        case .middle: return 60
+        case .large: return 60
         }
     }
 

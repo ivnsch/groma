@@ -21,7 +21,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="WW0-gt-UAU" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="20" y="0.0" width="335" height="667"/>
+                    <rect key="frame" x="20" y="313.5" width="335" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="APm-Gw-JcK" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
+                    </constraints>
                     <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -37,11 +40,10 @@
             </subviews>
             <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="WW0-gt-UAU" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="HXe-ce-abb"/>
                 <constraint firstItem="WW0-gt-UAU" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="IaV-ZC-Xqq"/>
-                <constraint firstAttribute="bottom" secondItem="WW0-gt-UAU" secondAttribute="bottom" id="Zv4-x7-ScX"/>
                 <constraint firstAttribute="trailing" secondItem="WW0-gt-UAU" secondAttribute="trailing" constant="20" id="cH0-lg-aBL" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                 <constraint firstItem="WW0-gt-UAU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="gsQ-TP-0ur" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                <constraint firstItem="WW0-gt-UAU" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="hUT-CB-Rvf"/>
             </constraints>
         </view>
     </objects>
