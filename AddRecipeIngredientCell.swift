@@ -32,7 +32,7 @@ protocol AddRecipeIngredientCellDelegate {
     
     
     func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void)
-    func addUnit(name: String, _ handler: @escaping (Bool) -> Void)
+    func addUnit(name: String, _ handler: @escaping ((unit: Providers.Unit, isNew: Bool)) -> Void)
     func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void)
     
     func baseQuantities(_ handler: @escaping (RealmSwift.List<BaseQuantity>?) -> Void)
@@ -143,9 +143,9 @@ class AddRecipeIngredientCell: UITableViewCell {
         productQuantityController.setBasesPickerOpen(false)
         
         if let currentUnitInput = productQuantityController.currentUnitInput, !currentUnitInput.isEmpty {
-            delegate?.addUnit(name: currentUnitInput) {isNew in
+            delegate?.addUnit(name: currentUnitInput) {(unit, isNew) in
                 if isNew {
-                    productQuantityController.appendNewUnitCell()
+                    productQuantityController.appendNewUnitCell(unit: unit)
                 }
                 productQuantityController.currentUnitInput = nil
             }
@@ -283,7 +283,7 @@ extension AddRecipeIngredientCell: ProductQuantityControlleDelegate {
         delegate?.units(handler)
     }
     
-    func addUnit(name: String, _ handler: @escaping (Bool) -> Void) {
+    func addUnit(name: String, _ handler: @escaping ((unit: Providers.Unit, isNew: Bool)) -> Void) {
         delegate?.addUnit(name: name, handler)
     }
     

@@ -230,9 +230,9 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         delegate?.getAlreadyHaveText(ingredient: ingredient, handler)
     }
     
-    func addUnit(name: String, _ handler: @escaping (Bool) -> Void) {
-        Prov.unitProvider.getOrCreate(name: name, successHandler{(unit, isNew) in
-            handler(isNew)
+    func addUnit(name: String, _ handler: @escaping ((unit: Providers.Unit, isNew: Bool)) -> Void) {
+        Prov.unitProvider.getOrCreate(name: name, successHandler{tuple in
+            handler(tuple)
         })
     }
     

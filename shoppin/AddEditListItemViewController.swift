@@ -341,9 +341,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         productQuantityController.setBasesPickerOpen(false)
         
         if let currentUnitInput = productQuantityController.currentUnitInput, !currentUnitInput.isEmpty {
-            addUnit(name: currentUnitInput) {isNew in
+            addUnit(name: currentUnitInput) {(unit, isNew) in
                 if isNew {
-                    productQuantityController.appendNewUnitCell()
+                    productQuantityController.appendNewUnitCell(unit: unit)
                 }
                 productQuantityController.currentUnitInput = nil
             }
@@ -918,9 +918,9 @@ extension AddEditListItemViewController: ProductQuantityControlleDelegate {
         })
     }
     
-    func addUnit(name: String, _ handler: @escaping (Bool) -> Void) {
+    func addUnit(name: String, _ handler: @escaping ((unit: Providers.Unit, isNew: Bool)) -> Void) {
         Prov.unitProvider.getOrCreate(name: name, successHandler {tuple in
-            handler(tuple.isNew)
+            handler(tuple)
         })
     }
     

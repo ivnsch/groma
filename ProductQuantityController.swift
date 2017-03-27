@@ -15,7 +15,7 @@ import RealmSwift
 protocol ProductQuantityControlleDelegate {
 
     func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void)
-    func addUnit(name: String, _ handler: @escaping (Bool) -> Void)
+    func addUnit(name: String, _ handler: @escaping ((unit: Providers.Unit, isNew: Bool)) -> Void)
     func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void)
     
     func baseQuantities(_ handler: @escaping (RealmSwift.List<BaseQuantity>?) -> Void)
@@ -432,7 +432,7 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     
     
     
-    func appendNewUnitCell() {
+    func appendNewUnitCell(unit: Providers.Unit) {
         guard let picker = unitPicker else {QL4("No units picker"); return}
         guard let unitsDataSource = unitsDataSource else {QL4("No units data source"); return}
         
@@ -441,6 +441,9 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
         if let editCell = picker.collectionView.cellForItem(at: IndexPath(row: (unitsDataSource.units?.count ?? 0), section: 0)) as? UnitEditableCell {
             editCell.editableUnitView.clear()
         }
+        
+        updateBasesVisibility(unit: unit)
+        
     }
     
     func appendNewBaseCell() {
@@ -455,7 +458,7 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     
     fileprivate func updateBasesVisibility(unit: Providers.Unit?) {
         if let unit = unit {
-            let unitsWithBase: [UnitId] = [.g, .kg, .liter, .milliliter]
+            let unitsWithBase: [UnitId] = [.g, .kg, .liter, .milliliter, .custom]
             if unitsWithBase.contains(unit.id) {
                 setBasesVisible(visible: true, animated: true)
             } else {
