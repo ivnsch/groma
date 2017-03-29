@@ -130,4 +130,12 @@ class SelectIngredientFractionController: UIViewController, EditableFractionView
         default: return "\(fraction.numerator)/\(fraction.denominator)"
         }
     }
+    
+    
+    // MARK: -
+    
+    // TODO maybe do "focusFrame" or something instead. We need the actual possition. Currently we make assumptions about it
+    var hasFractionInputFocus: Bool {
+        return fractionTextInputView.hasFractionInputFocus
+    }
 }

@@ -76,6 +76,10 @@ class UnitEditableView: UIView {
     func setMinTextFieldWidth(_ width: CGFloat) {
         nameTextFieldWidthConstraint.constant = width // for now we lose here the >=
     }
+
+    var hasFocus: Bool {
+        return nameTextField.isFirstResponder
+    }
     
 //    override var intrinsicContentSize: CGSize {
 //        return CGSize(width: nameTextField.intrinsicContentSize.width + 20, height: nameTextField.intrinsicContentSize.height + 20) // + 20 padding

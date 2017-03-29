@@ -24,6 +24,8 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
     
     var delegate: UnitsCollectionViewDataSourceDelegate?
     
+    fileprivate var addNewUnitCell: UnitEditableCell? // to ask if it has focus
+    
     init(units: Results<Providers.Unit>?) {
         self.units = units
     }
@@ -68,6 +70,7 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
             cell.editableUnitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
             cell.editableUnitView.delegate = self
 
+            addNewUnitCell = cell
             
             if let delegate = delegate {
                 cell.editableUnitView.prefill(name: delegate.currentUnitName)
@@ -100,6 +103,13 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
     
     func onUnitInputChange(nameInput: String) {
         delegate?.onUpdateUnitNameInput(nameInput: nameInput)
+    }
+    
+    // MARK: -
+    
+    // TODO maybe do "focusFrame" or something instead. We need the actual possition. Currently we make assumptions about it
+    var hasUnitInputFocus: Bool {
+        return addNewUnitCell?.hasFocus ?? false
     }
 }
 

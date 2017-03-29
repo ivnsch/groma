@@ -96,4 +96,8 @@ class EditableFractionView: UIView {
 //    override var intrinsicContentSize: CGSize {
 //        return CGSize(width: numeratorTextField.width + lineView.width + denominatorTextField.width + 5 + 20, height: numeratorTextField.height + 20) // width: 5 pt (*2) spacing to line, 10 pt for 2*2 pt center constraint offset in labels + 6pt just to make a little more space. TODO copied from FractionView - check if these numbers are also valid here
 //    }
+    
+    var hasFractionInputFocus: Bool {
+        return numeratorTextField.isFirstResponder || denominatorTextField.isFirstResponder
+    }
 }

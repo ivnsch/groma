@@ -19,4 +19,8 @@ class UnitEditableCell: UICollectionViewCell {
     func setMinTextFieldWidth(_ width: CGFloat) {
         editableUnitView.setMinTextFieldWidth(width)
     }
+    
+    var hasFocus: Bool {
+        return editableUnitView.hasFocus
+    }
 }

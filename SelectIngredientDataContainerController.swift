@@ -321,20 +321,24 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
 
-//                let offset = frame.height - (tabBarController?.tabBar.height ?? 0)
-//                tableView.bottomInset = offset
-//                tableView.contentOffset = CGPoint(x: 0, y: tableView.contentOffset.y + offset)
+                // yes, this is hacky - harcoded indices, assumptions and so on TODO improve
+                
+                let isUnitFieldFocused = selectUnitController?.isUnitInputFocused ?? false // true: unit input, false: fraction input. NOTE: Assumes that these are the only inputs in the table view!
                 
                 if let window = view.window {
-                    
-                    let tableViewContentMaxYWindow = view.convert(CGPoint(x: 0, y: tableView.frame.origin.y + tableView.contentSize.height), to: window).y
-                    
-                    let delta = frame.origin.y - tableViewContentMaxYWindow
-                    
-                    if delta < 0 {
-                        tableView.bottomInset = -delta
-                        tableView.contentOffset = CGPoint(x: 0, y: tableView.contentOffset.y - delta)
+                
+                    // scrolls up such that the bottom of the cell at row aligns with the top of the keyboard. If bottom of the cell is above keyboard, does nothing.
+                    func adjustTableViewOfset(row: Int) {
+                        let rect: CGRect = tableView.rectForRow(at: IndexPath(row: row, section: 0))
+                        let delta = frame.origin.y - tableView.convert(rect, to: window).maxY
+                        
+                        if delta < 0 {
+                            tableView.bottomInset = -delta
+                            tableView.contentOffset = CGPoint(x: 0, y: tableView.contentOffset.y - delta)
+                        }
                     }
+                    
+                    adjustTableViewOfset(row: isUnitFieldFocused ? 0 : 2)
                 }
 
             } else {

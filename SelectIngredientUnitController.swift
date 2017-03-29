@@ -228,4 +228,8 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
     var highlightSelected: Bool {
         return true
     }
+    
+    var isUnitInputFocused: Bool {
+        return unitsDataSource?.hasUnitInputFocus ?? false
+    }
 }
