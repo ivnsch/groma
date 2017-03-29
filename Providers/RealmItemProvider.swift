@@ -81,7 +81,13 @@ class RealmItemProvider: RealmProvider {
     }
     
     func addOrUpdate(input: ItemInput, _ handler: @escaping (Bool) -> Void) {
-//        handler(addOrUpdateSync(input: input))
+        switch mergeOrCreateItemSync(itemInput: input, updateCategory: true, doTransaction: true, notificationToken: nil) {
+        case .ok(let item):
+            handler(true)
+        case .err(let error):
+            QL4("Error in merge or create item: \(error)")
+            handler(false)
+        }
     }
     
     func delete(uuid: String, realmData: RealmData, handler: @escaping (Bool) -> Void) {
@@ -172,7 +178,7 @@ class RealmItemProvider: RealmProvider {
     // load item and update or create one
     // if we find an item with the unique we update it - this is for the case the user changes category color etc for an existing item while adding it
     // NOTE: This doesn't save anything to the database (no particular reason, except that the current caller of this method does the saving)
-    func mergeOrCreateItemSync(itemInput: ItemInput, updateCategory: Bool, doTransaction: Bool, notificationToken: NotificationToken?) -> ProvResult<Item, DatabaseError> {
+    func mergeOrCreateItemSync(itemInput: ItemInput, updateCategory: Bool, doTransaction: Bool, saveItem: Bool = false, notificationToken: NotificationToken?) -> ProvResult<Item, DatabaseError> {
 
         func transactionContent() -> ProvResult<Item, DatabaseError> {
             
@@ -189,7 +195,12 @@ class RealmItemProvider: RealmProvider {
                     } else { // item doesn't exist
                         
                         let newItem = Item(uuid: UUID().uuidString, name: itemInput.name, category: category, fav: 0, edible: itemInput.edible)
-                        return .ok(newItem)
+                        if saveObjSync(newItem) {
+                            return .ok(newItem)
+                        } else {
+                            QL4("Couldn't save new item")
+                            return .err(.unknown)
+                        }
                     }
                 case .err(let error): return .err(error)
                 }

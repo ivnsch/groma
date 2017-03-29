@@ -132,14 +132,16 @@ class ManageItemsController: UITableViewController, SearchableTextController {
         
         topEditSectionControllerManager?.controller?.config(prefillData: AddEditNameNameColorControllerInputs(
             name: item.name,
+            buttonSelected: item.edible,
             nameColorName: item.category.name,
             nameColorColor: item.category.color
             
             ), settings: AddEditNameNameColorControllerSettings(
-                namePlaceholder: "placeholder_name",
-                nameEmptyValidationMessage: "validation_name_not_empty",
-                nameNameColorPlaceholder: "placeholder_category_name",
-                nameNameColorEmptyValidationMessage: "validation_category_name_not_empty"
+                namePlaceholder: trans("placeholder_name"),
+                nameEmptyValidationMessage: trans("validation_name_not_empty"),
+                buttonTitle: trans("edible_button_title"),
+                nameNameColorPlaceholder: trans("placeholder_category_name"),
+                nameNameColorEmptyValidationMessage: trans("validation_category_name_not_empty")
                 
             ), editingObj: item
         )
@@ -165,7 +167,10 @@ class ManageItemsController: UITableViewController, SearchableTextController {
 extension ManageItemsController: AddEditNameNameColorControllerDelegate {
     
     func onSubmitAddEditNameNameColor(result: AddEditNameNameColorResult) {
-        print("Submitted result: \(result)")
-        // TODO
+        let itemInput = ItemInput(name: result.name, categoryName: result.nameColorInputs.name, categoryColor: result.nameColorInputs.color, edible: result.buttonSelected)
+        Prov.itemsProvider.addOrUpdate(input: itemInput, successHandler {[weak self] in
+            self?.tableView.reloadData()
+            self?.topEditSectionControllerManager?.expand(false)
+        })
     }
 }

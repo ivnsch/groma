@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-public class Item: Object, Identifiable {
+public class Item: DBSyncable, Identifiable {
 
     public dynamic var uuid: String = ""
     public dynamic var name: String = ""
