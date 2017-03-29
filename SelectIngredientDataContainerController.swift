@@ -321,10 +321,22 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
 
-                let offset = frame.height - (tabBarController?.tabBar.height ?? 0)
-                tableView.bottomInset = offset
-                tableView.contentOffset = CGPoint(x: 0, y: tableView.contentOffset.y + offset)
+//                let offset = frame.height - (tabBarController?.tabBar.height ?? 0)
+//                tableView.bottomInset = offset
+//                tableView.contentOffset = CGPoint(x: 0, y: tableView.contentOffset.y + offset)
                 
+                if let window = view.window {
+                    
+                    let tableViewContentMaxYWindow = view.convert(CGPoint(x: 0, y: tableView.frame.origin.y + tableView.contentSize.height), to: window).y
+                    
+                    let delta = frame.origin.y - tableViewContentMaxYWindow
+                    
+                    if delta < 0 {
+                        tableView.bottomInset = -delta
+                        tableView.contentOffset = CGPoint(x: 0, y: tableView.contentOffset.y - delta)
+                    }
+                }
+
             } else {
                 QL3("Couldn't retrieve keyboard size from user info")
             }
@@ -391,7 +403,7 @@ extension SelectIngredientDataContainerController: UITableViewDataSource, UITabl
             return height
             
         case 1: return 100
-        default: return 420
+        default: return 320
         }
     }
 }

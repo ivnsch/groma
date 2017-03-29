@@ -83,7 +83,7 @@
                                 </connections>
                             </collectionView>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="40" translatesAutoresizingMaskIntoConstraints="NO" id="Xpm-7j-7aF">
-                                <rect key="frame" x="67.5" y="40" width="240" height="40"/>
+                                <rect key="frame" x="68" y="40" width="240" height="40"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lw7-eq-Nwy" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="5" width="30" height="30"/>
@@ -104,7 +104,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Select unit" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OCB-zs-jiQ" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="30" y="9.5" width="210" height="21"/>
+                                        <rect key="frame" x="30" y="10" width="210" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.054901960780000002" green="0.54117647059999996" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>

@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (4.3.0)
+  - ASValueTrackingSlider (0.12.1)
   - ChameleonFramework/Default (2.1.0)
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
@@ -66,6 +67,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
+  - ASValueTrackingSlider
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
   - CMPopTipView (~> 2.0)
   - Google/SignIn
@@ -97,6 +99,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
+  ASValueTrackingSlider: 5261de3fcf00adb339efc93885e8f0bc99e703cd
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   CMPopTipView: 774e0230b5c73abb3c39051da6d8a383373c4f7f
   FirebaseAnalytics: 9c67af0ebeb8d2146c9b4ea2616439affa947b58
@@ -122,6 +125,6 @@ SPEC CHECKSUMS:
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009
   Valet: ef076e9bb47353c0d879c8febcd53af4f6e92313
 
-PODFILE CHECKSUM: 2d80af213c29385725dd6f1e9ae9c9a2c6695407
+PODFILE CHECKSUM: a8ed48e580b73a0e14652b33d86d8a091bb6877c
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.1.1

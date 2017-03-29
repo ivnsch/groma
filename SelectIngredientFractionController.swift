@@ -8,34 +8,37 @@
 
 import UIKit
 import Providers
+import ASValueTrackingSlider
 
 protocol SelectIngredientFractionControllerDelegate {
     func onSelectFraction(fraction: Fraction?)
 }
 
-class SelectIngredientFractionController: UIViewController, EditableFractionViewDelegate, FillShapeViewDelegate {
+class SelectIngredientFractionController: UIViewController, EditableFractionViewDelegate/*, FillShapeViewDelegate*/, ASValueTrackingSliderDataSource {
 
-    @IBOutlet weak var fractionImageView: FillShapeView!
+//    @IBOutlet weak var fractionImageView: FillShapeView!
     @IBOutlet weak var fractionTextInputView: EditableFractionView!
     
+    @IBOutlet weak var fractionSlider: ASValueTrackingSlider!
+
     var delegate: SelectIngredientFractionControllerDelegate?
     
     var onUIReady: (() -> Void)?
     
     var unit: Providers.Unit? {
         didSet {
-            guard let unit = unit else {return}
-            let (imageName, maskName): (String, String) = {
-                switch unit.id {
-                case .teaspoon: fallthrough
-                case .spoon: return ("spoon_shape", "spoon_shape_mask")
-                case .liter: return ("bottle_shape", "bottle_shape_mask")
-                default: return ("default_shape", "default_shape_mask")
-                }
-            }()
-            
-            fractionImageView.config(shapeImageName: imageName, maskImageName: maskName)
-            fractionImageView.fillTo(percentage: 0)
+//            guard let unit = unit else {return}
+//            let (imageName, maskName): (String, String) = {
+//                switch unit.id {
+//                case .teaspoon: fallthrough
+//                case .spoon: return ("spoon_shape", "spoon_shape_mask")
+//                case .liter: return ("bottle_shape", "bottle_shape_mask")
+//                default: return ("default_shape", "default_shape_mask")
+//                }
+//            }()
+//            
+//            fractionImageView.config(shapeImageName: imageName, maskImageName: maskName)
+//            fractionImageView.fillTo(percentage: 0)
         }
     }
     
@@ -43,7 +46,16 @@ class SelectIngredientFractionController: UIViewController, EditableFractionView
         super.viewDidLoad()
         fractionTextInputView.delegate = self
         
-        fractionImageView.delegate = self
+//        fractionImageView.delegate = self
+        
+        fractionSlider.maximumValue = 1
+        fractionSlider.setMaxFractionDigitsDisplayed(1)
+        fractionSlider.popUpViewCornerRadius = 12
+        fractionSlider.popUpViewColor = Theme.blue
+        //fractionSlider.font =
+        fractionSlider.textColor = UIColor.white
+        
+        fractionSlider.dataSource = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -54,7 +66,8 @@ class SelectIngredientFractionController: UIViewController, EditableFractionView
     }
     
     func config(fraction: Fraction) {
-        fractionImageView.fillTo(percentage: CGFloat(fraction.decimalValue))
+//        fractionImageView.fillTo(percentage: CGFloat(fraction.decimalValue))
+        fractionSlider.value = fraction.decimalValue
         fractionTextInputView.prefill(fraction: fraction)
     }
     
@@ -69,9 +82,12 @@ class SelectIngredientFractionController: UIViewController, EditableFractionView
         }
         
         if let fraction = finalFractionInput {
-            fractionImageView.fillTo(percentage: CGFloat(fraction.decimalValue))
+//            fractionImageView.fillTo(percentage: CGFloat(fraction.decimalValue))
+            fractionSlider.value = fraction.decimalValue
+            
         } else {
-            fractionImageView.fillTo(percentage: 1)
+//            fractionImageView.fillTo(percentage: 1)
+            fractionSlider.value = 1
         }
         
         delegate?.onSelectFraction(fraction: finalFractionInput)
@@ -82,5 +98,36 @@ class SelectIngredientFractionController: UIViewController, EditableFractionView
     func onFillShapeValueUpdated(fraction: Fraction) {
         fractionTextInputView.prefill(fraction: fraction)
         delegate?.onSelectFraction(fraction: fraction)
+    }
+    
+    // MARK: - Slider
+
+    @IBAction func snapValue(_ sender: UISlider) {
+        let fraction = rationalApproximationOf(x0: Double(fractionSlider.value))
+        fractionSlider.value = fraction.decimalValue
+        
+//        let sliderFractions: [Float] = [0, 1/4, 1/3, 2/4, 2/3, 3/4, 1]
+//        for snapPosition in sliderFractions {
+//            if fractionSlider.value < snapPosition {
+//                fractionSlider.value = snapPosition
+//                break
+//            }
+//        }
+        
+        fractionTextInputView.prefill(fraction: fraction)
+        delegate?.onSelectFraction(fraction: fraction)
+    }
+    
+    // MARK: - ASValueTrackingSliderDataSource
+    
+    func slider(_ slider: ASValueTrackingSlider!, stringForValue value: Float) -> String! {
+        
+        let fraction = rationalApproximationOf(x0: Double(value))
+        
+        switch fraction.decimalValue {
+        case 0: return "0"
+        case 1: return "1"
+        default: return "\(fraction.numerator)/\(fraction.denominator)"
+        }
     }
 }
