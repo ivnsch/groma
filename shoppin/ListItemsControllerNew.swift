@@ -124,7 +124,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         listItemsTableViewController.sections = list.sections(status: status)
         
-        QL1("Initialized sections: \(listItemsTableViewController.sections?.count)")
+        QL1("Initialized sections: \(String(describing: listItemsTableViewController.sections?.count))")
         
         onTableViewChangedQuantifiables()
         
@@ -700,7 +700,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             if editingItem == nil {
                 onAddListItem(input)
             } else {
-                QL4("Cast didn't work: \(editingItem)")
+                QL4("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
@@ -811,7 +811,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                     sectionsTableViewController.listItemsNotificationToken = weakSelf.realmData?.token
                     
                     sectionsTableViewController.onViewDidLoad = {[weak self, weak sectionsTableViewController] in guard let weakSelf = self else {return}
-                        let navbarHeight = weakSelf.topBar.frame.height
+                        _ = weakSelf.topBar.frame.height
                         let topInset: CGFloat = 0
                         
                         // TODO this makes a very big bottom inset why?

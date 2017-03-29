@@ -156,7 +156,7 @@ class GromFromViewControlerAnimator {
     
     func close(onFinish: (() -> Void)? = nil) {
         
-        guard let controller = controller, let button = button else {QL4("Fields missing, controller: \(self.controller), button: \(self.button)"); return}
+        guard let controller = controller, let button = button else {QL4("Fields missing, controller: \(String(describing: self.controller)), button: \(String(describing: self.button))"); return}
 
         UIView.animate(withDuration: 0.3, animations: {
             
@@ -251,7 +251,7 @@ class GromFromViewAnimator2 {
     
     func close(onFinish: (() -> Void)? = nil) {
         
-        guard let view = view, let button = button else {QL4("Fields missing, view: \(self.view), button: \(self.button)"); return}
+        guard let view = view, let button = button else {QL4("Fields missing, view: \(String(describing: self.view)), button: \(String(describing: self.button))"); return}
         
         UIView.animate(withDuration: 0.3, animations: {
             button.backgroundColor = UIColor.white // TODO not here

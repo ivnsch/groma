@@ -98,7 +98,7 @@ class AddButtonHelper: NSObject {
     }
     
     fileprivate func centerY(_ visible: Bool, overrideKeyboardHeight: CGFloat? = nil) -> CGFloat? {
-        guard let window = parentView?.window else {QL3("No parentView: \(parentView) or window, can't calculate button's center"); return nil}
+        guard let window = parentView?.window else {QL3("No parentView: \(String(describing: parentView)) or window, can't calculate button's center"); return nil}
         
         let keyboardHeight = overrideKeyboardHeight ?? self.keyboardHeight
         
@@ -116,7 +116,7 @@ class AddButtonHelper: NSObject {
     }
     
     fileprivate func center(_ keyboardHeight: CGFloat) -> CGFloat? {
-        guard let window = parentView?.window else {QL3("No parentView: \(parentView) or window, can't calculate button's center"); return nil}
+        guard let window = parentView?.window else {QL3("No parentView: \(String(describing: parentView)) or window, can't calculate button's center"); return nil}
 
         return window.frame.height - keyboardHeight - buttonHeight / 2
     }
@@ -139,7 +139,7 @@ class AddButtonHelper: NSObject {
             parentView.bringSubview(toFront: addButton)
 
         } else {
-            QL3("No parent view: \(parentView) or window: \(parentView?.window) for add button")
+            QL3("No parent view: \(String(describing: parentView)) or window: \(String(describing: parentView?.window)) for add button")
         }
     }
 }

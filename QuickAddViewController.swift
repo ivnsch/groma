@@ -148,13 +148,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func textFieldDidChange(_ textField: UITextField) {
         
-        QL1("textFieldDidChange, text: \(textField.text)")
+        QL1("textFieldDidChange, text: \(String(describing: textField.text))")
         
         if !isEdit {
             if let controller = quickAddListItemViewController, let searchText = textField.text {
                 controller.search(searchText)
             } else {
-                QL3("Controller: \(quickAddListItemViewController) or search is nil: \(textField.text)")
+                QL3("Controller: \(String(describing: quickAddListItemViewController)) or search is nil: \(String(describing: textField.text))")
             }
         } else {
             QL3("Trying to search while isEdit (quick add has an edit item) - doing nothing.")
@@ -373,7 +373,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func handleFloatingButtonAction(_ action: FLoatingButtonAction) {
         if let _ = showingController as? QuickAddListItemViewController {
-            print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
+            print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(String(describing: showingController)) instance")
             
             
         } else if let addEditListItemViewController = showingController as? AddEditListItemViewController {
@@ -383,7 +383,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             case .back:
                 _ = navController?.popViewController(animated: false)
                 delegate?.onQuickListOpen() // we are now back in quick list
-            case .add, .toggle, .expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
+            case .add, .toggle, .expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(String(describing: showingController)) instance")
             }
             
         } else {

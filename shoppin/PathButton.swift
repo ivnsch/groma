@@ -31,7 +31,7 @@ class PathButton: UIButton {
                     }
                 }
             } else {
-                print("Warn: PathButton.strokeColor: strokeColor: \(strokeColor) or sublayers: \(layer.sublayers) are nil")
+                print("Warn: PathButton.strokeColor: strokeColor: \(String(describing: strokeColor)) or sublayers: \(String(describing: layer.sublayers)) are nil")
             }
         }
     }

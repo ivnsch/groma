@@ -68,7 +68,7 @@ class RealmListItemProvider: RealmProvider {
     */
     func addOrIncrementListItems(_ listItems: [ListItem], updateSection: Bool = true, handler: @escaping ([ListItem]?) -> ()) {
         
-        let listItems = listItems.map{$0.copy()} // Fixes Realm acces in incorrect thread exceptions
+        let listItems: [ListItem] = listItems.map{$0.copy()} // Fixes Realm acces in incorrect thread exceptions
         
         doInWriteTransaction({[weak self] realm in
             self?.addOrIncrementListItemsSync(realm, listItems: listItems, updateSection: updateSection)
@@ -346,8 +346,8 @@ class RealmListItemProvider: RealmProvider {
     func listItems<T>(list: List, ingredient: Ingredient, mapper: @escaping (Results<ListItem>) -> T, _ handler: @escaping (T?) -> Void) {
         
         // Realm threads
-        let list = list.copy()
-        let ingredient = ingredient.copy()
+        let list: List = list.copy()
+        let ingredient: Ingredient = ingredient.copy()
         
         withRealm({realm -> T? in
             let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithProductName(ingredient.item.name, listUuid: list.uuid))
@@ -508,7 +508,7 @@ class RealmListItemProvider: RealmProvider {
     */
     func listItemCount(_ status: ListItemStatus, list: List, handler: @escaping (Int?) -> Void) {
         
-        let listCopy = list.copy() // Fixes Realm acces in incorrect thread exceptions
+        let listCopy: List = list.copy() // Fixes Realm acces in incorrect thread exceptions
         
         let finished: (Int?) -> Void = {result in
             DispatchQueue.main.async(execute: {
@@ -576,7 +576,7 @@ class RealmListItemProvider: RealmProvider {
                     handler(nil)
                 }
             } catch let e {
-                QL4("Error: \(e), getting item for uuid: \(listItemUuidMaybe)")
+                QL4("Error: \(e), getting item for uuid: \(String(describing: listItemUuidMaybe))")
                 handler(nil)
             }
         }
@@ -1435,7 +1435,7 @@ class RealmListItemProvider: RealmProvider {
         
         func transactionContent() -> Bool {
             for listItem in cartOrStashListItems {
-                switchCartOrStashToTodoSync(listItem: listItem, from: 0, cartOrStashListItems: cartOrStashListItems, realmData: realmData, doTransaction: false)
+                _ = switchCartOrStashToTodoSync(listItem: listItem, from: 0, cartOrStashListItems: cartOrStashListItems, realmData: realmData, doTransaction: false)
             }
             return true
         }

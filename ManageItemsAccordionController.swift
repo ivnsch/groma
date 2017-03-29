@@ -389,7 +389,7 @@ extension ManageItemsAccordionController: UITableViewDataSource, UITableViewDele
                 
                 let sectionView = (view as! ManageItemsSectionView)
                 
-                QL3("apply to section at index: \(sectionIndex), name in cell: \(sectionView.nameLabel.text), item name at index: \(items[sectionIndex].name)")
+                QL3("apply to section at index: \(sectionIndex), name in cell: \(String(describing: sectionView.nameLabel.text)), item name at index: \(items[sectionIndex].name)")
                 (view as! ManageItemsSectionView).sectionIndex = sectionIndex
             })
         })

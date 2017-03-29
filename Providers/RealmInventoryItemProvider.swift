@@ -30,12 +30,12 @@ class RealmInventoryItemProvider: RealmProvider {
     
     
     func saveInventoryItems(_ items: [InventoryItem], update: Bool =  true, dirty: Bool, handler: @escaping (Bool) -> ()) {
-        let dbObjs = items.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
+        let dbObjs: [InventoryItem] = items.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
         self.saveObjs(dbObjs, update: update, handler: handler)
     }
     
     func overwrite(_ items: [InventoryItem], inventoryUuid: String, clearTombstones: Bool, dirty: Bool, handler: @escaping (Bool) -> Void) {
-        let dbObjs = items.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
+        let dbObjs: [InventoryItem] = items.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
         
         let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveInventoryItem.self, DBRemoveInventoryItem.createFilterForInventory(inventoryUuid))} : nil
         
@@ -48,8 +48,8 @@ class RealmInventoryItemProvider: RealmProvider {
     
     
     func saveInventoryAndHistoryItem(_ inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: @escaping (Bool) -> Void) {
-        let dbInventoryItem = inventoryItems.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
-        let dbHistorytem = historyItems.map{$0.copy()}
+        let dbInventoryItem: [InventoryItem] = inventoryItems.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
+        let dbHistorytem: [HistoryItem] = historyItems.map{$0.copy()}
         
         doInWriteTransaction({realm in
             realm.add(dbInventoryItem, update: true) // update true just in case

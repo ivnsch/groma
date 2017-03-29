@@ -137,7 +137,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     fileprivate func topBarOnCloseExpandable() {
         setDefaultLeftButtons()
-        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)])
+        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)), endTransform: CGAffineTransform.identity)])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -224,7 +224,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             topBar.setLeftButtonIds([.edit])
             
             if rotateTopBarButton {
-                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)])
+                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)), endTransform: CGAffineTransform.identity)])
             }
             
             productsWithQuantityController.showQuantityButtons = true
@@ -239,7 +239,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 topBar.setLeftButtonIds([])
                 
                 if rotateTopBarButton {
-                    topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))])
+                    topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))])
                 }
                 
                 productsWithQuantityController.showQuantityButtons = false
@@ -425,7 +425,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if editingItem == nil {
                 onAddInventoryItem(input)
             } else {
-                QL4("Cast didn't work: \(editingItem)")
+                QL4("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
@@ -441,7 +441,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
             TopBarButtonModel(buttonId: .add),
-            TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
+            TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))
         ])
     }
     
@@ -449,7 +449,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topBar.setBackVisible(true)
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
+            TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))
         ])
     }
     
@@ -599,7 +599,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: inventoryItem))
             
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
+                TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))
             ])
         }
     }

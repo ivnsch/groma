@@ -100,7 +100,7 @@ class HistoryProviderImpl: HistoryProvider {
     }
     
     func removeHistoryItemsGroup(_ historyItemGroup: HistoryItemGroup, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        dbProvider.removeHistoryItemsGroup(historyItemGroup, markForSync: true) {[weak self] success in
+        dbProvider.removeHistoryItemsGroup(historyItemGroup, markForSync: true) {success in
             if success {
                 handler(ProviderResult(status: .success))
 //                if remote {

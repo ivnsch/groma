@@ -66,7 +66,7 @@ public class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     public var debugDescription: String {
-        return "{\(type(of: self)) product: \(product), quantity: \(quantity), usedQuantity: \(usedQuantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
+        return "{\(type(of: self)) product: \(product), quantity: \(quantity), usedQuantity: \(usedQuantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastServerUpdate: \(String(describing: lastServerUpdate))::\(String(describing: lastServerUpdate?.millisToEpochDate())), removed: \(removed)}"
     }
 }
 

@@ -83,7 +83,7 @@ class MyWebSocket: WebSocketDelegate {
                 QL1("Websocket: Sending msg: \(msg)")
                 socket?.write(string: msg)
             } else {
-                QL3("Websocket: Trying to send a message: \(msg), but socket is not connected or initialised: \(socket?.isConnected)")
+                QL3("Websocket: Trying to send a message: \(msg), but socket is not connected or initialised: \(String(describing: socket?.isConnected))")
             }
         } else {
             QL4("Websocke: Trying to send nil. Not sending anything.")
@@ -123,7 +123,7 @@ class MyWebSocket: WebSocketDelegate {
     fileprivate func toMsgStr(_ dict: [String: AnyObject]) -> String? {
         do {
             let data = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions())
-            return NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
+            return NSString(data: data, encoding: String.Encoding.utf8.rawValue) as String?
         } catch let e as NSError {
             QL4("Error serializing json: \(e). dict: \(dict)")
             return nil

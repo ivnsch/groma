@@ -77,7 +77,7 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
                 })
                 
             } else {
-                print("Error: EditProductCategoryController.submit: validation was not implemented correctly, or imageView is nil: \(categoryColorButton.imageView)")
+                print("Error: EditProductCategoryController.submit: validation was not implemented correctly, or imageView is nil: \(String(describing: categoryColorButton.imageView))")
             }
         }
     }

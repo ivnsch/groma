@@ -92,7 +92,7 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
     // MARK: - EditableUnitCellDelegate
     
     func onUnitInputChange(nameInput: String) {
-        if let val = nameInput.floatValue {
+        if let _ = nameInput.floatValue {
             delegate?.onUpdateBaseQuantityInput(valueInput: nameInput.floatValue ?? 1)
         } else {
             QL4("Invalid base input: \(nameInput)")

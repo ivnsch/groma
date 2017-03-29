@@ -127,7 +127,7 @@ class MemListItemProvider {
             }
         }
         
-        QL1("List mem cache after update: \(listItems?[list.uuid])")
+        QL1("List mem cache after update: \(String(describing: listItems?[list.uuid]))")
 
         return addedListItems
     }

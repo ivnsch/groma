@@ -83,7 +83,7 @@ public class ProviderResult<T>: CustomDebugStringConvertible {
     }
     
     open var debugDescription: String {
-        return "{\(type(of: self)) status: \(status), model: \(sucessResult), error: \(error), errorObj: \(error)}"
+        return "{\(type(of: self)) status: \(status), model: \(String(describing: sucessResult)), error: \(String(describing: error)), errorObj: \(String(describing: error))}"
     }
 }
 

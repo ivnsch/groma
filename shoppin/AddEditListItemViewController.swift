@@ -313,7 +313,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(String(describing: delegate))"); return nil}
         guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
         
         let overrideCenterY: CGFloat = parentViewForAddButton.height + tabBarHeight
@@ -498,7 +498,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 delegate?.onOkTap(price, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
                 
             } else {
-                QL4("Validation was not implemented correctly, price: \(priceInput.text), quantity: \(productQuantityController?.quantity), brand: \(brandInput.text), sectionColor: \(sectionColorButton.textColor)")
+                QL4("Validation was not implemented correctly, price: \(String(describing: priceInput.text)), quantity: \(String(describing: productQuantityController?.quantity)), brand: \(String(describing: brandInput.text)), sectionColor: \(String(describing: sectionColorButton.textColor))")
             }
         }
     }

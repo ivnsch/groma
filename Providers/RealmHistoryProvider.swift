@@ -52,7 +52,7 @@ class RealmHistoryProvider: RealmProvider {
     // this is very important as right now we fetch and iterate through ALL the history items, this is very inefficient
     func loadHistoryItemsGroups(_ range: NSRange, inventory: DBInventory, _ handler: @escaping ([HistoryItemGroup]) -> ()) {
         
-        let inventory = inventory.copy()
+        let inventory: DBInventory = inventory.copy()
         
         func retrieved(historyItemsUuidGroupedByDate: OrderedDictionary<Date, [String]>) {
             
@@ -345,7 +345,7 @@ class RealmHistoryProvider: RealmProvider {
             }
             realm.delete(dbHistoryItems)
             return true
-            }, finishHandler: {[weak self] (successMaybe: Bool?) in
+            }, finishHandler: {(successMaybe: Bool?) in
                 
                 if let success = successMaybe {
                     handler(success)
@@ -359,7 +359,7 @@ class RealmHistoryProvider: RealmProvider {
     
     func addHistoryItems(_ historyItems: [HistoryItem], handler: @escaping (Bool) -> Void) {
         
-        let historyItems = historyItems.map{$0.copy()} // Fixes Realm acces in incorrect thread exceptions
+        let historyItems: [HistoryItem] = historyItems.map{$0.copy()} // Fixes Realm acces in incorrect thread exceptions
         
         doInWriteTransaction({realm in
             for historyItem in historyItems {

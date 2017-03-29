@@ -27,7 +27,7 @@ class RealmInventoryProvider: RealmProvider {
     
     func loadInventory(_ inventory: DBInventory, sortBy: InventorySortBy, handler: @escaping (Results<InventoryItem>?) -> Void) {
         // Fixes Realm acces in incorrect thread exceptions
-        let inventoryCopy = inventory.copy()
+        let inventoryCopy: DBInventory = inventory.copy()
         
         do {
             let realm = try Realm()

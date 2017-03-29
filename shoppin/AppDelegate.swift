@@ -86,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             ratingAlert?.delegate = self
             ratingAlert?.checkShow(controller)
         } else {
-            QL4("Couldn't show rating popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
+            QL4("Couldn't show rating popup, either window: \(String(describing: window)) or root controller: \(String(describing: window?.rootViewController)) is nil)")
         }
     }
     
@@ -386,7 +386,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                         if let controller = self?.window?.rootViewController {
                             InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: controller)
                         } else {
-                            QL4("Couldn't show popup, either window: \(self?.window) or root controller: \(self?.window?.rootViewController) is nil)")
+                            QL4("Couldn't show popup, either window: \(String(describing: self?.window)) or root controller: \(String(describing: self?.window?.rootViewController)) is nil)")
                         }
                     } else {
                         QL4("Invalid state: result doesn't have sync result")
@@ -454,7 +454,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                                 })
                                 
                             } else {
-                                QL4("Couldn't do sync, root controller: \(window.rootViewController) is nil)")
+                                QL4("Couldn't do sync, root controller: \(String(describing: window.rootViewController)) is nil)")
                             }
                         }
                     } else {
@@ -540,7 +540,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                     if let controller = window?.rootViewController {
                         ListInvitationsHandler.handleInvitation(invitation, controller: controller)
                     } else {
-                        QL4("Couldn't show popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
+                        QL4("Couldn't show popup, either window: \(String(describing: window)) or root controller: \(String(describing: window?.rootViewController)) is nil)")
                     }
                 default: QL4("Not handled case: \(notification.verb))")
                 }
@@ -561,7 +561,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                     if let controller = window?.rootViewController {
                         InventoryInvitationsHandler.handleInvitation(invitation, controller: controller)
                     } else {
-                        QL4("Couldn't show popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
+                        QL4("Couldn't show popup, either window: \(String(describing: window)) or root controller: \(window?.rootViewController) is nil)")
                     }
                 default: QL4("Not handled case: \(notification.verb))")
                 }
@@ -594,7 +594,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                         })
                         
                     } else {
-                        QL4("Couldn't show popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
+                        QL4("Couldn't show popup, either window: \(String(describing: window)) or root controller: \(String(describing: window?.rootViewController)) is nil)")
                     }
                 default: QL4("Not handled case: \(notification.verb))")
                 }

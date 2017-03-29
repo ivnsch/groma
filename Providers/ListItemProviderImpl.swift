@@ -1154,7 +1154,7 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: .success, sucessResult: memIncremented))
             })
         }
-        dbProvider.incrementListItem(listItem, delta: delta, status: status, token: token) {[weak self] listItemMaybe in
+        dbProvider.incrementListItem(listItem, delta: delta, status: status, token: token) {listItemMaybe in
             
             if memIncremented == nil { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if let listItem = listItemMaybe {
@@ -1248,7 +1248,7 @@ class ListItemProviderImpl: ListItemProvider {
         if memProvider.enabled {
             let success = memProvider.removeSection(sectionUuid, listUuid: listUuid)
             if !success {
-                QL4("Mem cache section removal returned false: sectionUuid: \(sectionUuid), listUuid: \(listUuid)")
+                QL4("Mem cache section removal returned false: sectionUuid: \(sectionUuid), listUuid: \(String(describing: listUuid))")
             }
             handler(ProviderResult(status: .success))
         } else {
@@ -1340,7 +1340,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func moveCartOrStash(from: IndexPath, to: IndexPath, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        if let result = DBProv.listItemProvider.moveCartOrStash(from: from, to: to, status: status, list: list, realmData: realmData) {
+        if let _ = DBProv.listItemProvider.moveCartOrStash(from: from, to: to, status: status, list: list, realmData: realmData) {
             handler(ProviderResult(status: .success))
         } else {
             handler(ProviderResult(status: .databaseUnknown))

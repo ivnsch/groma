@@ -141,7 +141,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                     QL1("initial")
                     
                 case .update(_, let deletions, let insertions, let modifications):
-                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(weakSelf.listsResult?.count)")
+                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(String(describing: weakSelf.listsResult?.count))")
                     
                     weakSelf.tableView.beginUpdates()
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)

@@ -345,7 +345,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                 if editingItem == nil {
                     onAddItem(input)
                 } else {
-                    QL4("Cast didn't work: \(editingItem)")
+                    QL4("Cast didn't work: \(String(describing: editingItem))")
                 }
             }
         }
@@ -380,7 +380,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         guard let indexPath = findIndexPathForNewItem(item) else {
             QL1("No index path for: \(item), appending"); return;
         }
-        QL1("Found index path: \(indexPath) for: \(item), sortBy: \(sortBy)")
+        QL1("Found index path: \(indexPath) for: \(item), sortBy: \(String(describing: sortBy))")
         tableView.insertRows(at: [indexPath], with: .top)
         
         updateEmptyUI()
@@ -481,7 +481,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     }
     
     func itemForRow(row: Int) -> Ingredient? {
-        guard row < (itemsResult?.count ?? 0) else {QL4("Out of bounds: row: \(row), result count: \(itemsResult?.count). Returning nil"); return nil}
+        guard row < (itemsResult?.count ?? 0) else {QL4("Out of bounds: row: \(row), result count: \(String(describing: itemsResult?.count)). Returning nil"); return nil}
         return itemsResult?[row]
     }
     

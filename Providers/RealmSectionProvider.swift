@@ -84,7 +84,7 @@ class RealmSectionProvider: RealmProvider {
     }
     
     func saveSections(_ sections: [Section], handler: @escaping (Bool) -> ()) {
-        let sections = sections.map{$0.copy()}
+        let sections: [Section] = sections.map{$0.copy()}
         saveObjs(sections, update: true, handler: handler)
     }
     

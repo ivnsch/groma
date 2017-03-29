@@ -335,7 +335,7 @@ class RealmProductProvider: RealmProvider {
         
         // Note that we are load the sections from db for each range - this could be optimised (load sections only once for all pages) but it shouldn't be an issue since usually there are not a lot of sections and it's performing well.
         
-        let list = list.copy() // Fixes Realm acces in incorrect thread exceptions
+        let list: List = list.copy() // Fixes Realm acces in incorrect thread exceptions
         
         withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
             let products: Results<QuantifiableProduct> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending)/*, range: range*/)
@@ -372,7 +372,7 @@ class RealmProductProvider: RealmProvider {
                 handler(substring, productsWithMaybeSections)
                 
             } catch let e {
-                QL4("Error retrieving objects for uuids: \(productsWithMaybeSectionsUuids), error: \(e)")
+                QL4("Error retrieving objects for uuids: \(String(describing: productsWithMaybeSectionsUuids)), error: \(e)")
                 handler(substring, nil)
             }
         })
@@ -392,7 +392,7 @@ class RealmProductProvider: RealmProvider {
         
         // Note that we are load the sections from db for each range - this could be optimised (load sections only once for all pages) but it shouldn't be an issue since usually there are not a lot of sections and it's performing well.
         
-        let list = list.copy() // Fixes Realm acces in incorrect thread exceptions
+        let list: List = list.copy() // Fixes Realm acces in incorrect thread exceptions
         
         withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
             let products: Results<Product> = weakSelf.loadSync(realm, filter: filterMaybe, sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending)/*, range: range*/)
@@ -429,7 +429,7 @@ class RealmProductProvider: RealmProvider {
                     handler(substring, productsWithMaybeSections)
                     
                 } catch let e {
-                    QL4("Error retrieving objects for uuids: \(productsWithMaybeSectionsUuids), error: \(e)")
+                    QL4("Error retrieving objects for uuids: \(String(describing: productsWithMaybeSectionsUuids)), error: \(e)")
                     handler(substring, nil)
                 }
         })
@@ -841,7 +841,7 @@ class RealmProductProvider: RealmProvider {
     
     func saveQuantifiableProducts(_ products: [QuantifiableProduct], update: Bool = true, handler: @escaping (Bool) -> ()) {
     
-        let productsCopy = products.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
+        let productsCopy: [QuantifiableProduct] = products.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
         
         for product in productsCopy {
             
@@ -858,7 +858,7 @@ class RealmProductProvider: RealmProvider {
     
     func saveProducts(_ products: [Product], update: Bool = true, handler: @escaping (Bool) -> ()) {
         
-        let productsCopy = products.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
+        let productsCopy: [Product] = products.map{$0.copy()} // fixes Realm acces in incorrect thread exceptions
         
         for product in productsCopy {
             
@@ -946,7 +946,7 @@ class RealmProductProvider: RealmProvider {
         }
         
         if let realm = transactionRealm {
-            transactionContent(realm: realm)
+            _ = transactionContent(realm: realm)
         } else {
             doInWriteTransaction({realm in
                 return transactionContent(realm: realm)
@@ -969,7 +969,7 @@ class RealmProductProvider: RealmProvider {
         }
         
         if let realm = transactionRealm {
-            transactionContent(realm: realm)
+            _ = transactionContent(realm: realm)
         } else {
             doInWriteTransaction({realm in
                 return transactionContent(realm: realm)
@@ -982,8 +982,8 @@ class RealmProductProvider: RealmProvider {
     func save(_ dbCategories: [ProductCategory], dbProducts: [QuantifiableProduct], _ handler: @escaping (Bool) -> Void) {
         
         // fix realm thread access exceptions (the units referenced were accessed in main thread/other thread, and here we save in a background thread, so we have to copy)
-        let dbCategories = dbCategories.map{$0.copy()}
-        let dbProducts = dbProducts.map{$0.copy()}
+        let dbCategories: [ProductCategory] = dbCategories.map{$0.copy()}
+        let dbProducts: [QuantifiableProduct] = dbProducts.map{$0.copy()}
         
         doInWriteTransaction({realm in
             for dbCategory in dbCategories {

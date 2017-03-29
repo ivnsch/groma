@@ -107,7 +107,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
                     QL1("initial")
                     
                 case .update(_, let deletions, let insertions, let modifications):
-                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(weakSelf.itemsResult?.count)")
+                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(String(describing: weakSelf.itemsResult?.count))")
                     
                     weakSelf.tableView.beginUpdates()
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)

@@ -62,6 +62,6 @@ public struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionS
     }
     
     public var debugDescription: String {
-        return "{\(type(of: self)) uuid: \(uuid), name: \(name), order: \(order), inventoryUuid: \(inventoryUuid), lastUpdate: \(lastUpdate), color: \(color), store: \(store)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), order: \(order), inventoryUuid: \(inventoryUuid), lastUpdate: \(lastUpdate), color: \(color), store: \(String(describing: store))}"
     }
 }

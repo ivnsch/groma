@@ -29,7 +29,7 @@ class ConfirmationPopup {
         if controller.presentedViewController == nil {
             controller.present(alert, animated: true, completion: nil)
         } else {
-            QL3("Already showing a confirmation popup: \(controller.presentedViewController), skipping new one: title: \(title), message: \(message)")
+            QL3("Already showing a confirmation popup: \(String(describing: controller.presentedViewController)), skipping new one: title: \(String(describing: title)), message: \(message)")
             onCannotPresent?()
         }
     }

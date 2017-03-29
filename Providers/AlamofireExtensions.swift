@@ -187,7 +187,7 @@ open class RemoteResult<T>: CustomDebugStringConvertible {
     
     open var debugDescription: String {
         let errorText = error.map{$0.debugDescription} ?? ""
-        return "{\(type(of: self)) status: \(status), model: \(successResult), error: \(errorText), errorObj: \(errorObj)}"
+        return "{\(type(of: self)) status: \(status), model: \(String(describing: successResult)), error: \(errorText), errorObj: \(String(describing: errorObj))}"
     }
 }
 
@@ -346,7 +346,7 @@ extension DataRequest {
                 let requestStr: String = {
                     if let request = request {
                         let methodStr = request.httpMethod ?? "<Undefined HTTP method>"
-                        return "Called: \(methodStr), url: \(request.url)"
+                        return "Called: \(methodStr), url: \(String(describing: request.url))"
                     } else {
                         return "Undefined request"
                     }
@@ -506,7 +506,7 @@ extension DataRequest {
                         }
                         
                     case .failure(let error):
-                        logRequesstError("Error serializing response: \(response), request: \(request), data: \(data), serializationError: \(error)")
+                        logRequesstError("Error serializing response: \(response), request: \(String(describing: request)), data: \(String(describing: data)), serializationError: \(error)")
                         return Result.success(RemoteResult<T>(status: .parsingError))
                     }
                     
@@ -521,7 +521,7 @@ extension DataRequest {
                     
                 } else if statusCode == 404 {
                     let str = request?.url.map{$0.absoluteString} ?? ""
-                    logRequesstError("Action not found: \(request?.httpMethod) \(str)")
+                    logRequesstError("Action not found: \(String(describing: request?.httpMethod)) \(str)")
                     return Result.success(RemoteResult<T>(status: .actionNotFound))
                     
                 } else if statusCode == 415 {

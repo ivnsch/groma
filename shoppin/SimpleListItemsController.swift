@@ -162,7 +162,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         
         listItemsTableViewController.listItems = list.listItems(status: status)
         
-        QL1("Initialized listItems: \(listItemsTableViewController.listItems?.count)")
+        QL1("Initialized listItems: \(String(describing: listItemsTableViewController.listItems?.count))")
         
         onTableViewChangedQuantifiables()
         
@@ -489,7 +489,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
 //                        QL3("Shouldn't be here without list items")
 //                    }
                 } else {
-                    QL3("Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
+                    QL3("Group was added but couldn't reinit list, self or currentList is not set: self: \(String(describing: self)), currentlist: \(String(describing: self?.currentList))")
                 }
                 }, onError: {[weak self] result in guard let weakSelf = self else {return}
                     switch result.status {
@@ -602,7 +602,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             if editingItem == nil {
                 onAddListItem(input)
             } else {
-                QL4("Cast didn't work: \(editingItem)")
+                QL4("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
@@ -797,7 +797,7 @@ class SimpleListItemsTableViewController: UITableViewController {
             cell.sectionColorView.backgroundColor = UIColor.clear // in cart/stash no section colors
             
         } else {
-            QL4("Invalid state: no listitem for: \(indexPath) or no cell delegate: \(cellDelegate)")
+            QL4("Invalid state: no listitem for: \(indexPath) or no cell delegate: \(String(describing: cellDelegate))")
         }
         
         return cell

@@ -53,6 +53,6 @@ open class DBResult<T>: CustomDebugStringConvertible {
     }
     
     open var debugDescription: String {
-        return "{\(type(of: self)) status: \(self.status), model: \(self.sucessResult), errorMsg: \(self.errorMsg)}"
+        return "{\(type(of: self)) status: \(self.status), model: \(String(describing: self.sucessResult)), errorMsg: \(String(describing: self.errorMsg))}"
     }
 }

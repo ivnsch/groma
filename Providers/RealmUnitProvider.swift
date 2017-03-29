@@ -177,7 +177,7 @@ class RealmUnitProvider: RealmProvider {
     }
     
     func updateSync(unit: Unit, name: String, buyable: Bool) -> Bool {
-        let unit = unit.copy()
+        let unit: Unit = unit.copy()
         
         return doInWriteTransactionSync(realmData: nil) {realm in
             unit.name = name

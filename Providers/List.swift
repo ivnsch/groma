@@ -165,7 +165,7 @@ public class List: DBSyncable, Identifiable {
 
     public override var debugDescription: String {
         //        return shortDebugDescription
-        return "{\(type(of: self)) uuid: \(uuid), name: \(name), color: \(color), order: \(order), inventory: \(inventory), store: \(store), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate.millisToEpochDate()), removed: \(removed)}"
+        return "{\(type(of: self)) uuid: \(uuid), name: \(name), color: \(color), order: \(order), inventory: \(inventory), store: \(String(describing: store)), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate.millisToEpochDate()), removed: \(removed)}"
     }
     
     public func sections(status: ListItemStatus) -> RealmSwift.List<Section> {

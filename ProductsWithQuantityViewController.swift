@@ -125,7 +125,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
 //            tableView.bottomInset = tabBarHeight + Constants.tableViewAdditionalBottomInset
             tableView.bottomInset = 120
         } else {
-            QL3("No tabBarController: \(tabBarController)")
+            QL3("No tabBarController: \(String(describing: tabBarController))")
         }
         
         load()

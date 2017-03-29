@@ -214,7 +214,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     
     fileprivate func initSubmitButton() {
         guard self.submitView == nil else {QL1("Already showing a submit view"); return}
-        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return}
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(String(describing: delegate))"); return}
 //        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return}
         
         let height = Theme.submitViewHeight
@@ -232,7 +232,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     }
     
     func onClose() {
-        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); submitView?.removeFromSuperview(); return}
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(String(describing: delegate))"); submitView?.removeFromSuperview(); return}
 
         anim(3, {[weak self] in
             self?.submitView?.y = parentViewForAddButton.frame.maxY

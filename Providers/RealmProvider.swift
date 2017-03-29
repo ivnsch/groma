@@ -107,7 +107,7 @@ class RealmProvider {
     func loadFirst<T: Object, U>(_ mapper: @escaping (T) -> U, filter filterMaybe: String? = nil, handler: @escaping (U?) -> ()) {
         self.load(mapper, filter: filterMaybe, handler: {results in
             if results.count > 1 {
-                QL2("Multiple items found in load first \(filterMaybe)") // sometimes we expect only 1 item to be in the database, log this just in case
+                QL2("Multiple items found in load first \(String(describing: filterMaybe))") // sometimes we expect only 1 item to be in the database, log this just in case
             }
             handler(results.first)
         })

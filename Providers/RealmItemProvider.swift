@@ -105,7 +105,7 @@ class RealmItemProvider: RealmProvider {
         }
         
         if let realm = transactionRealm {
-            transactionContent(realm: realm)
+            _ = transactionContent(realm: realm)
         } else {
             doInWriteTransaction({realm in
                 return transactionContent(realm: realm)

@@ -131,7 +131,7 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
 extension ManageItemsUnitsController: EditNameButtonDelegate {
     
     func onSubmitNameButtonInput(result: EditNameButtonResult, editingObj: Any?) {
-        guard let editingUnit = editingObj as? Providers.Unit else {QL4("Invalid state: no editing obj or wrong type: \(editingObj)"); return}
+        guard let editingUnit = editingObj as? Providers.Unit else {QL4("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return}
         
         Prov.unitProvider.update(unit: editingUnit, name: result.inputs.name, buyable: result.inputs.buttonSelected, successHandler{[weak self] in
             self?.topEditUnitControllerManager?.expand(false)

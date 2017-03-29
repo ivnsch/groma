@@ -121,7 +121,7 @@ extension ManageItemsBaseQuantitiesController: EditSingleInputControllerDelegate
     func onSubmitSingleInput(name: String, editingObj: Any?) {
         
         guard let base = name.floatValue else {QL4("Invalid state: input could't be casted to Float - validation should have caught this. Input: \(name)"); return}
-        guard let editingBase = editingObj as? Float else {QL4("Invalid state: no editing obj or wrong type: \(editingObj)"); return}
+        guard let editingBase = editingObj as? Float else {QL4("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return}
         
         Prov.productProvider.updateBaseQuantity(oldBase: editingBase, newBase: base, successHandler{[weak self] in
             self?.topEditSectionControllerManager?.expand(false)

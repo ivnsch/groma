@@ -13,12 +13,12 @@ import QorumLogs
 class RealmListProvider: RealmProvider {
 
     func saveList(_ list: List, dirty: Bool = true, handler: @escaping (Bool) -> Void) {
-        let list = list.copy() // Fixes Realm acces in incorrect thread exceptions
+        let list: List = list.copy() // Fixes Realm acces in incorrect thread exceptions
         self.saveObj(list, update: true, handler: handler)
     }
     
     func saveLists(_ lists: [List], update: Bool = false, dirty: Bool = true, handler: @escaping (Bool) -> ()) {
-        let lists = lists.map{$0.copy()} // Fixes Realm acces in incorrect thread exceptions
+        let lists: [List] = lists.map{$0.copy()} // Fixes Realm acces in incorrect thread exceptions
         self.saveObjs(lists, update: update, handler: handler)
     }
     
@@ -34,7 +34,7 @@ class RealmListProvider: RealmProvider {
     }
     
     func overwriteLists(_ lists: [List], clearTombstones: Bool, handler: @escaping (Bool) -> ()) {
-        let lists = lists.map{$0.copy()} // Fixes Realm acces in incorrect thread exceptions
+        let lists: [List] = lists.map{$0.copy()} // Fixes Realm acces in incorrect thread exceptions
         
         // additional actions: delete tombstones. This flag is passed when we overwrite lists using the server's lists. Since we just got the fresh lists from the server, tombstones may refer to: 1. is not in the server anymore - so we don't need the tombstone - can delete tombstone, 2. it is in the server (can happen if for some reason we are downloading without having uploaded the most recent state first, e.g. when we deleted the list the server was being restarted, so the request failed -> added tombstone, now we call get lists on view will appear -> the list is in the server response but there's a tombstone. The ideal solution here would be filter out the tombstoned element from the downloaded list? and trigger the request to delete tombstones again, or something like that (the idea is the user doesn't see this list again as it was deleted), but we don't have time for this now so we will just clear the tombstone, basically undoing the delete. This may not sound obvious - we could also let the tombstone there, in which case the user would see the list and it would be removed in the next sync but this is even worser UX than just reverting the delete, as user doesn't know that login/connect change will remove it again, user may even decide to re-use the list and add items to it and this will get lost in next login/connect.
         let additionalActions: ((Realm) -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveList.self)} : nil
@@ -113,7 +113,7 @@ class RealmListProvider: RealmProvider {
     
 
     func remove(_ list: List, markForSync: Bool, handler: @escaping (Bool) -> ()) {
-        let list = list.copy() // Fixes Realm acces in incorrect thread exceptions
+        let list: List = list.copy() // Fixes Realm acces in incorrect thread exceptions
         remove(list.uuid, markForSync: markForSync, handler: handler)
     }
     

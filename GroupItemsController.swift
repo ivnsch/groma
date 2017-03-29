@@ -125,7 +125,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     fileprivate func topBarOnCloseExpandable() {
         setDefaultLeftButtons()
-        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)])
+        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)), endTransform: CGAffineTransform.identity)])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -206,7 +206,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             setDefaultLeftButtons()
             
             if rotateTopBarButton {
-                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)])
+                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)), endTransform: CGAffineTransform.identity)])
             }
             
         } else { // if there's no top controller open, open the quick add controller
@@ -217,7 +217,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             topBar.setLeftButtonIds([])
             
             if rotateTopBarButton {
-                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))])
+                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))])
             }
         }
     }
@@ -332,7 +332,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             if editingItem == nil {
                 onAddItem(input)
             } else {
-                QL4("Cast didn't work: \(editingItem)")
+                QL4("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
@@ -348,7 +348,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
             TopBarButtonModel(buttonId: .add),
-            TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
+            TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))
         ])
     }
     
@@ -356,7 +356,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         topBar.setBackVisible(true)
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
+            TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))
         ])
     }
     
@@ -465,7 +465,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: groupItem))
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
+                TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))
             ])
         }
     }

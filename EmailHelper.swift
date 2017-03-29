@@ -74,7 +74,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
             print("Mail sent")
             delegate?.onEmailSent() // TODO!!!! test this with device
         case MFMailComposeResult.failed.rawValue:
-            print("Mail sent failure: \(error?.localizedDescription)")
+            print("Mail sent failure: \(String(describing: error?.localizedDescription))")
         default:
             break
         }

@@ -79,7 +79,7 @@ class RealmUserProviderImpl: UserProvider {
                     }
 
                 } else {
-                    QL4("Error during login/register, no user: \(error)")
+                    QL4("Error during login/register, no user: \(String(describing: error))")
                     // TODO!!!!!!!!!!!!!!!! fix/ask:
 //                     RealmUserProviderImpl.swift:82 loginOrRegister(_:userName:controller:_:): ❤️Error during login/register, no user: Optional(Error Domain=io.realm.sync Code=3 "Your request parameters did not validate." UserInfo={statusCode=400, NSLocalizedDescription=Your request parameters did not validate.})❤️
                     handler(ProviderResult(status: .unknown))

@@ -204,13 +204,13 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         func rightSubmitAndClose() { // v x
             topBar.setRightButtonModels([
 //                TopBarButtonModel(buttonId: .Submit),
-                TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
+                TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))
             ])
         }
         
         func rightClose() { // x
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)))
+                TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))
             ])
         }
 
@@ -223,7 +223,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         // animated
         func rightOpenFromClosed() { // x -> +
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4)), endTransform: CGAffineTransform.identity)
+                TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)), endTransform: CGAffineTransform.identity)
             ])
         }
         
@@ -233,7 +233,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 //                TopBarButtonModel(buttonId: .Submit)
             ]
             if animateToggle {
-                models.append(TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform.identity, endTransform: CGAffineTransform(rotationAngle: CGFloat(M_PI_4))))
+                models.append(TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform.identity, endTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4))))
             } else {
 //                models.append(TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4))))
             }

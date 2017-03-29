@@ -91,10 +91,14 @@ public extension UIDevice {
             "iPhone8,2" : .iPhone6Splus
         ]
         
-        let key = NSString(cString: modelCode, encoding: String.Encoding.utf8.rawValue) as! String
-        if let model = modelMap[key] {
-            return model
+        if let key = NSString(cString: modelCode, encoding: String.Encoding.utf8.rawValue).map({$0 as String}) {
+            if let model = modelMap[key] {
+                return model
+            } else {
+                return Model.unrecognized
+            }
+        } else {
+            return Model.unrecognized
         }
-        return Model.unrecognized
     }
 }

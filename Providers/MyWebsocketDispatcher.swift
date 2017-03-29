@@ -727,7 +727,7 @@ struct MyWebsocketDispatcher {
                 return
             }
             if let remoteSections = RemoteSectionWithDependencies.collection(arr) {
-                let sections: [Section] = remoteSections.map {remoteSection in
+                let _: [Section] = remoteSections.map {remoteSection in
                     let list = ListMapper.listWithRemote(remoteSection.list)
                     return SectionMapper.SectionWithRemote(remoteSection.section, list: list)
                 }

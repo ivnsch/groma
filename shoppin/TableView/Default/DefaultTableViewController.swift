@@ -26,9 +26,9 @@ class DefaultTableViewController: UIViewController, UITableViewDataSource, UITab
         self.tableView = self.generateTableView()
         self.view.addSubview(self.tableView)
         
-        let views = ["tableView": self.tableView]
+        let views: [String: UIView] = ["tableView": self.tableView]
         for view in views.values {
-            view?.translatesAutoresizingMaskIntoConstraints = false
+            view.translatesAutoresizingMaskIntoConstraints = false
         }
         
         for constraint in [

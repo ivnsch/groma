@@ -21,7 +21,7 @@ extension Results {
     public func toArray(_ range: NSRange? = nil) -> [T] {
         
         guard (range.map{$0.location < count} ?? true) else {
-            QL3("Warning: Requesting out of bounds range of results. Range: [\(range?.location), \(range?.length)], results count: \(count)")
+            QL3("Warning: Requesting out of bounds range of results. Range: [\(String(describing: range?.location)), \(String(describing: range?.length))], results count: \(count)")
             return []
         }
         

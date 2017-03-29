@@ -322,7 +322,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     fileprivate func findFirstItem(_ f: (ProductWithQuantity2) -> Bool) -> (index: Int, model: ProductWithQuantity2)? {
         for itemIndex in 0..<itemsCount {
-            guard let item = delegate?.itemForRow(row: itemIndex) else {QL4("Illegal state: no item for index: \(itemIndex). Or delegate is nil: \(delegate)"); return nil}
+            guard let item = delegate?.itemForRow(row: itemIndex) else {QL4("Illegal state: no item for index: \(itemIndex). Or delegate is nil: \(String(describing: delegate))"); return nil}
             if f(item) {
                 return (itemIndex, item)
             }
@@ -337,7 +337,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         guard let indexPath = findIndexPathForNewItem(item) else {
             QL1("No index path for: \(item), appending"); return;
         }
-        QL1("Found index path: \(indexPath) for: \(item.product.product.item.name), sortBy: \(sortBy)")
+        QL1("Found index path: \(indexPath) for: \(item.product.product.item.name), sortBy: \(String(describing: sortBy))")
         tableView.insertRows(at: [indexPath], with: .top)
         
         updateEmptyUI()

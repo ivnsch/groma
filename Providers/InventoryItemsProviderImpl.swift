@@ -304,8 +304,8 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     // MARK: - Direct (no history)
     
     func addToInventory(_ inventory: DBInventory, product: QuantifiableProduct, quantity: Float, remote: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<(inventoryItem: InventoryItem, delta: Float, isNew: Bool)>) -> Void) {
-        let inventory = inventory.copy()
-        let product = product.copy()
+        let inventory: DBInventory = inventory.copy()
+        let product: QuantifiableProduct = product.copy()
         addToInventory(inventory, productsWithQuantities: [(product: product, quantity: quantity)], remote: remote, realmData: realmData) {result in
             if let addedOrIncrementedInventoryItem = result.sucessResult?.first {
                 handler(ProviderResult(status: .success, sucessResult: addedOrIncrementedInventoryItem))
@@ -316,8 +316,8 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     fileprivate func addToInventory(_ inventory: DBInventory, productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)], remote: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Float, isNew: Bool)]>) -> Void) {
-        let inventory = inventory.copy()
-        let productsWithQuantities = productsWithQuantities.map{($0.product.copy(), $0.quantity)}
+        let inventory: DBInventory = inventory.copy()
+        let productsWithQuantities: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantities.map{($0.product.copy(), $0.quantity)}
         
         DBProv.inventoryItemProvider.addToInventory(inventory, productsWithQuantities: productsWithQuantities, dirty: remote, realmData: realmData) {addedOrIncrementedInventoryItemsMaybe in
             if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItemsMaybe {

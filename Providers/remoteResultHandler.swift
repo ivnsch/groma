@@ -15,7 +15,7 @@ func remoteResultHandler<T, U>(_ providerResultHandler: @escaping (ProviderResul
         let remoteStatus = remoteResult.status
         
         if !remoteResult.success {
-            print("Response error, status: \(remoteResult.status), message: \(remoteResult.error)")
+            print("Response error, status: \(remoteResult.status), message: \(String(describing: remoteResult.error))")
         }
         
         let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteStatus)

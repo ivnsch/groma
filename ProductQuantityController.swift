@@ -394,7 +394,7 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
             clearToDeleteUnits()
             clearSelectedUnits()
             
-            if let cell = cellMaybe {
+            if cellMaybe != nil {
 
                 if indexPath.row < units.count {
                     onSelect(unit: units[indexPath.row])

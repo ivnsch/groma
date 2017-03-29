@@ -39,7 +39,8 @@ class RealmProductGroupProvider: RealmProvider {
                     let realm = try Realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let groups: Results<ProductGroup> = self.loadSync(realm, filter: ProductGroup.createFilterUuids(uuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
-                    handler(substring, groups.toArray())
+                    let groupsArray: [ProductGroup] = groups.toArray()
+                    handler((substring, groupsArray))
                     
                 } else {
                     QL4("No product uuids")

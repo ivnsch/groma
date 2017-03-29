@@ -85,7 +85,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
 
     var shownQuantity: Float = 0 {
         didSet {
-            if let product = model?.product {
+            if let _ = model?.product {
                 quantityView.quantity = shownQuantity
 //                quantityLabel.text = String("\(product.quantityWithMaybeUnitText(quantity: shownQuantity))") // TODO???????????? format?
             } else {

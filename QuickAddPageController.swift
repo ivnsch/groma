@@ -109,7 +109,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         if let controller = currentSwipeController {
             controller.searchText = text
         } else {
-            QL3("No controller/failed: \(currentSwipeController)")
+            QL3("No controller/failed: \(String(describing: currentSwipeController))")
         }
     }
     

@@ -119,7 +119,7 @@ extension ManageItemsBrandsController: EditSingleInputControllerDelegate {
 
     func onSubmitSingleInput(name: String, editingObj: Any?) {
         
-        guard let editingBrand = editingObj as? String else {QL4("Invalid state: no editing obj or wrong type: \(editingObj)"); return}
+        guard let editingBrand = editingObj as? String else {QL4("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return}
         
         Prov.brandProvider.updateBrand(editingBrand, newName: name, successHandler{[weak self] in
             self?.topEditSectionControllerManager?.expand(false)

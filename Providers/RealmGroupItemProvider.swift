@@ -14,7 +14,7 @@ class RealmGroupItemProvider: RealmProvider {
     
     func groupItems(_ group: ProductGroup, sortBy: InventorySortBy, handler: @escaping (Results<GroupItem>?) -> Void) {
         // Fixes Realm acces in incorrect thread exceptions
-        let groupCopy = group.copy()
+        let groupCopy: ProductGroup = group.copy()
         
         do {
             let realm = try Realm()
@@ -127,7 +127,7 @@ class RealmGroupItemProvider: RealmProvider {
             })
         }
 
-        let groupItemsCopy = groupItems.map{$0.copy()} // copy fixes Realm acces in incorrect thread exceptions
+        let groupItemsCopy: [GroupItem] = groupItems.map{$0.copy()} // copy fixes Realm acces in incorrect thread exceptions
         
         DispatchQueue.global(qos: .background).async {[weak self] in
             if let weakSelf = self {
@@ -169,7 +169,7 @@ class RealmGroupItemProvider: RealmProvider {
             })
         }
         
-        let groupItemsCopy = groupItem.copy() // copy fixes Realm acces in incorrect thread exceptions
+        let groupItemsCopy: GroupItem = groupItem.copy() // copy fixes Realm acces in incorrect thread exceptions
         
         DispatchQueue.global(qos: .background).async {[weak self] in
             if let weakSelf = self {
@@ -189,12 +189,12 @@ class RealmGroupItemProvider: RealmProvider {
     }
     
     func addOrUpdate(_ groupItem: GroupItem, dirty: Bool, handler: @escaping (Bool) -> Void) {
-        let dbObj = groupItem.copy()
+        let dbObj: GroupItem = groupItem.copy()
         saveObj(dbObj, update: true, handler: handler)
     }
     
     func addOrUpdate(_ groupItems: [GroupItem], update: Bool =  true, dirty: Bool, handler: @escaping (Bool) -> Void) {
-        let dbObjs = groupItems.map{$0.copy()}
+        let dbObjs: [GroupItem] = groupItems.map{$0.copy()}
         self.saveObjs(dbObjs, update: update, handler: handler)
     }
     
