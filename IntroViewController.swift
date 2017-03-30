@@ -48,7 +48,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.isNavigationBarHidden = true
+        if mode == .launch {
+            navigationController?.isNavigationBarHidden = true
+        }
         
         pageModels = [(trans("intro_slide_lists"), "intro_lists"),
                       (trans("intro_slide_inventories"), "intro_inventory"),
