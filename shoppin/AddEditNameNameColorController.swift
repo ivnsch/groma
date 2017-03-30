@@ -70,7 +70,7 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
                 buttonTitle: settings.buttonTitle
         ), editingObj: editingObj)
         
-        nameColorController.config(mode: .embedded, prefillData: EditNameColorViewInputs(name: prefillData.nameColorName, color: UIColor.black), settings: EditNameColorViewSettings(namePlaceholder: settings.nameNameColorPlaceholder, nameEmptyValidationMessage: settings.nameNameColorEmptyValidationMessage))
+        nameColorController.config(mode: .embedded, prefillData: EditNameColorViewInputs(name: prefillData.nameColorName, color: prefillData.nameColorColor), settings: EditNameColorViewSettings(namePlaceholder: settings.nameNameColorPlaceholder, nameEmptyValidationMessage: settings.nameNameColorEmptyValidationMessage))
         nameColorController.editingObj = editingObj
         nameColorController.delegate = self
         
