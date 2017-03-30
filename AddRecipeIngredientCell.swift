@@ -67,24 +67,23 @@ class AddRecipeIngredientCell: UITableViewCell {
 
     var model: AddRecipeIngredientModel? {
         didSet {
-            ingredientNameLabel.text = model.map{"\($0.ingredient.quantity.quantityString) x \($0.productPrototype.name)"}
-            productNameTextField.text = model?.productPrototype.name
-            brandTextField.text = model?.productPrototype.brand
             
-            productQuantityController?.onPickersInitialized = {[weak self, weak productQuantityController] in
-                if let prefillUnitName = self?.model?.productPrototype.unit {
-                    productQuantityController?.selectUnitWithName(prefillUnitName)
-                }
-                if let prefillBase = self?.model?.productPrototype.baseQuantity {
-                    productQuantityController?.selectBaseWithValue(prefillBase)
-                }
+            guard let model = model else {QL3("No model"); return}
+            
+            let quantityPart = model.ingredient.quantity < 2 ? "" : "\(model.ingredient.quantity.quantityString) x "
+            
+            ingredientNameLabel.text = "\(quantityPart)\(model.productPrototype.name)"
+            productNameTextField.text = model.productPrototype.name
+            brandTextField.text = model.productPrototype.brand
+            
+            productQuantityController?.onPickersInitialized = {[weak productQuantityController] in
+                productQuantityController?.selectUnitWithName(model.productPrototype.unit)
+                productQuantityController?.selectBaseWithValue(model.productPrototype.baseQuantity)
             }
             
-            if let base = model?.productPrototype.baseQuantity {
-                productQuantityController?.currentBaseInput = base
-            }
+            productQuantityController?.currentBaseInput = model.productPrototype.baseQuantity
             
-            productQuantityController?.quantity = model?.quantity ?? 0
+            productQuantityController?.quantity = model.quantity
             
             updateQuantitySummary()
             
