@@ -195,13 +195,11 @@ class RealmItemProvider: RealmProvider {
                     } else { // item doesn't exist
                         
                         let newItem = Item(uuid: UUID().uuidString, name: itemInput.name, category: category, fav: 0, edible: itemInput.edible)
-                        if saveObjSync(newItem) {
-                            return .ok(newItem)
-                        } else {
-                            QL4("Couldn't save new item")
-                            return .err(.unknown)
-                        }
-                    }
+                        withRealmSync({realm in
+                            realm.add(newItem, update: true)
+                        })
+                        return .ok(newItem)
+                  }
                 case .err(let error): return .err(error)
                 }
             }
