@@ -36,7 +36,7 @@ class MyTabBarController: UITabBarController {
         UIView.animate(withDuration: duration, delay: initDelay, options: [], animations: {
             self.tabBar.subviews[safe: 3]?.transform = CGAffineTransform(scaleX: scale, y: scale)
         }) {finished in
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: duration) {
                 self.tabBar.subviews[safe: 3]?.transform = CGAffineTransform.identity
             }
         }
@@ -45,7 +45,9 @@ class MyTabBarController: UITabBarController {
         UIView.animate(withDuration: duration, delay: initDelay + 0.2, options: [], animations: {
             self.tabBar.subviews[safe: 4]?.transform = CGAffineTransform(scaleX: scale, y: scale)
         }) {finished in
-            self.tabBar.subviews[safe: 4]?.transform = CGAffineTransform.identity
+            UIView.animate(withDuration: duration) {
+                self.tabBar.subviews[safe: 4]?.transform = CGAffineTransform.identity
+            }
         }
     }
 }
