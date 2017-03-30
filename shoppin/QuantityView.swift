@@ -107,8 +107,12 @@ class QuantityView: UIView, UITextFieldDelegate {
     }
     
     @IBAction func onMinusTap(_ sender: UIButton) {
-        delegate?.onRequestUpdateQuantity(-1)
-        showDelta(-1)
+        let delta: Float = -1
+        
+        guard quantity + delta >= 0 else {return}
+        
+        delegate?.onRequestUpdateQuantity(delta)
+        showDelta(delta)
     }
     
     override func resignFirstResponder() -> Bool {
