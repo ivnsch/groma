@@ -67,7 +67,7 @@ class AddRecipeIngredientCell: UITableViewCell {
 
     var model: AddRecipeIngredientModel? {
         didSet {
-            ingredientNameLabel.text = model.map{"\($0.ingredient.quantity) x \($0.productPrototype.name)"}
+            ingredientNameLabel.text = model.map{"\($0.ingredient.quantity.quantityString) x \($0.productPrototype.name)"}
             productNameTextField.text = model?.productPrototype.name
             brandTextField.text = model?.productPrototype.brand
             
