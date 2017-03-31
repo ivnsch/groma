@@ -441,9 +441,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         validator.registerField(sectionInput, rules: [NotEmptyTrimmedRule(message: trans("validation_section_name_not_empty"))])
 //        validator.registerField(quantityInput, rules: [NotEmptyTrimmedRule(message: trans("validation_quantity_not_empty"))])
 
-        if modus == .listItem {
-            validator.registerField(priceInput, rules: [NotEmptyTrimmedRule(message: trans("validation_price_not_empty"))])
-        }
+//        if modus == .listItem {
+//            validator.registerField(priceInput, rules: [NotEmptyTrimmedRule(message: trans("validation_price_not_empty"))])
+//        }
         self.validator = validator
     }
     
@@ -478,16 +478,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }
             
-            // For some items (e.g. group items) we don't have a price but our current implementation expects one so we just pass 0 in these case (it will not be used). // TODO improve
-            let priceMaybe: Float? = {
-                if modus == .listItem {
-                    return priceInput.text?.floatValue
-                } else {
-                    return 0
-                }
-            }()
+            let price: Float = priceInput.text?.floatValue ?? 0
             
-            if let price = priceMaybe, let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
+            if let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
                 
                 let baseQuantity: Float = productQuantityController?.selectedBase ?? 1
                 let unit: String = productQuantityController?.selectedUnit?.name ?? ""
