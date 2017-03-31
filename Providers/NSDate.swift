@@ -43,12 +43,14 @@ public extension Date {
     }
     
     // src http://stackoverflow.com/a/4482938/930450
+    // NOTE: Difference to SO answer: we don't need here only the last *day* of the month but the end (last "instant") which we will define as 1 second before (-1) of the next day (1) of the next month (+1).
     public static func endOfMonth(_ month: Int, year: Int) -> Date? {
-        let gregorian = Calendar(identifier: Calendar.Identifier.gregorian)
+        var gregorian = Calendar(identifier: Calendar.Identifier.gregorian)
         var components = DateComponents()
         components.month = month + 1
         components.year = year
-        components.day = 0
+        components.day = 1
+        components.second = -1
         return gregorian.date(from: components)
     }
     
