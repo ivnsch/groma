@@ -110,7 +110,7 @@ class StatsProviderImpl: StatsProvider {
         let referenceDate = Date() // today
         if let startDate = (Calendar.current as NSCalendar).date(byAdding: dateComponents as DateComponents, to: referenceDate, options: [])?.toMillis() {
             
-            RealmHistoryProvider().loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
+            DBProv.historyProvider.loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
                 
                 if let historyItems = historyItems {
 
