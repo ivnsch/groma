@@ -18,7 +18,7 @@ public protocol IngredientProvider {
 
     
     // Input form (create)
-    func add(_ input: IngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func add(_ input: IngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<(ingredient: Ingredient, isNew: Bool)>) -> Void)
     
     // Batch add (pre-fill recipe)
     func add(_ ingredients: [Ingredient], _ handler: @escaping (ProviderResult<Any>) -> Void)

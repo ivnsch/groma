@@ -329,7 +329,20 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         func onAddItem(_ input: IngredientInput) {
 //            submittedAddOrEdit.add = true
             
-            Prov.ingredientProvider.add(input, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, resultHandler (onSuccess: {groupItem in
+            Prov.ingredientProvider.add(input, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, resultHandler (onSuccess: {addedItem in
+                
+                if addedItem.isNew {
+                    self.insert(item: addedItem.ingredient, scrollToRow: true)
+                    self.updateEmptyUI()
+                    
+                } else {
+                    if let index = itemsResult.index(of: addedItem.ingredient) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
+                        self.update(item: addedItem.ingredient, scrollToRow: index)
+                    } else {
+                        QL4("Illegal state: Item is not new (it's an update) but was not found in results")
+                    }
+                }
+                
             }, onError: {[weak self] result in
                 self?.closeTopController()
                 self?.defaultErrorHandler()(result)
