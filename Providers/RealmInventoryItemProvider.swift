@@ -316,19 +316,19 @@ class RealmInventoryItemProvider: RealmProvider {
         
         let addedOrIncrementedInventoryItem: (item: InventoryItem, isNew: Bool) = {
             if let existingInventoryItem = existingInventoryItems.first {
-                let existingQuantity = existingInventoryItem.quantity
-                
-                return (existingInventoryItem.copy(quantity: quantity + existingQuantity), false)
+                // update
+                existingInventoryItem.quantity += quantity
+                return (existingInventoryItem, false)
                 
             } else { // if item doesn't exist there's nothing to increment
                 return (InventoryItem(uuid: UUID().uuidString, quantity: quantity, product: product, inventory: inventory), true)
             }
         }()
         
-        incrementFav()
-        
         // save
         realm.add(addedOrIncrementedInventoryItem.item, update: true)
+        
+        incrementFav()
         
         return (inventoryItem: addedOrIncrementedInventoryItem.item, delta: quantity, isNew: addedOrIncrementedInventoryItem.isNew)
     }
