@@ -461,7 +461,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         QL3("No override for updatePrices")
     }
     
-    fileprivate func addItem(_ listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
+    fileprivate func addItem(_ listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil, onFinish: ((QuickAddItem, Any) -> Void)? = nil) {
         
         guard let realmData = realmData else {QL4("No realm data"); return}
         
@@ -482,7 +482,12 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         if let currentList = self.currentList {
             Prov.listItemsProvider.addNew(listItemInput: listItemInput, list: currentList, status: status, realmData: realmData, successHandler {result in
                 onAddSuccess(result: result)
-                handler?() // TODO!!!!!!!!!! whats this for?
+                
+                let res = QuickAddProduct(result.listItem.product.product.product, colorOverride: nil, quantifiableProduct: result.listItem.product.product, boldRange: nil)
+                
+                    
+                onFinish?(res, result.listItem)
+                handler?() // TODO!!!!!!!!!! whats this for? -- remove we now have on finish
             })
             //Prov.listItemsProvider.add(listItemInput, status: status, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), token: RealmToken(token: notificationToken, realm: realm), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
             //    self?.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
@@ -495,6 +500,47 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
     }
     
+    
+    
+    fileprivate func addFormItem(_ listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil, onFinish: ((QuickAddItem, Any) -> Void)? = nil) {
+        
+        guard let realmData = realmData else {QL4("No realm data"); return}
+        
+        
+        func onAddSuccess(result: AddListItemResult) {
+            
+            let indexPath = IndexPath(row: result.listItemIndex, section: result.sectionIndex)
+            if result.isNewItem {
+                listItemsTableViewController.tableView.addRow(indexPath: indexPath, isNewSection: result.isNewSection)
+            } else {
+                listItemsTableViewController.tableView.updateRow(indexPath: indexPath)
+            }
+            listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: Theme.defaultRowPosition, animated: true)
+            
+            updateEmptyUI()
+        }
+        
+        if let currentList = self.currentList {
+            
+            Prov.listItemsProvider.addNew(listItemInput: listItemInput, list: currentList, status: status, realmData: realmData, successHandler {result in
+                onAddSuccess(result: result)
+                
+                let res = QuickAddProduct(result.listItem.product.product.product, colorOverride: nil, quantifiableProduct: result.listItem.product.product, boldRange: nil)
+                
+                onFinish?(res, result.listItem)
+                handler?() // TODO!!!!!!!!!! whats this for? -- remove we now have on finish
+            })
+            
+        } else {
+            print("Error: Invalid state: trying to add item without current list")
+        }
+        
+    }
+    
+    
+    
+    
+    
     // TODO!!!!!!!!!!!!!!!!! we probably will add in advance, so remove this?
     fileprivate func onListItemAddedToProvider(_ savedListItem: ListItem, status: ListItemStatus, scrollToSelection: Bool, notifyRemote: Bool = true) {
 //        // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
@@ -505,7 +551,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     // Note: don't use this to reorder sections, this doesn't update section order
     // Note: concerning status - this only updates the current status related data (quantity, order). This means quantity and order of possible items in the other status is not affected
-    fileprivate func updateItem(_ updatingListItem: ListItem, listItemInput: ListItemInput) {
+    fileprivate func updateItem(_ updatingListItem: ListItem, listItemInput: ListItemInput, onFinish: ((QuickAddItem, Bool) -> Void)? = nil) {
         guard let realmData = realmData else {QL4("No realm data"); return}
         
         if let currentList = self.currentList {
@@ -546,6 +592,10 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                     
                     weakSelf.onTableViewChangedQuantifiables()
                 }
+                
+                
+                let res = QuickAddProduct(updateResult.listItem.product.product.product, colorOverride: nil, quantifiableProduct: updateResult.listItem.product.product, boldRange: nil)
+                onFinish?(res, false) // for now we assume that item submitted in update is always not new. This is actually not always the case, as we can enter a new name/unique in the update form. Not critical though, for current usage of this flag (TODO improve this).
                 weakSelf.closeTopControllers()
             })
         } else {
@@ -704,6 +754,40 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             }
         }
     }
+    
+    override func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
+        
+        guard let list = currentList else {QL4("No list"); return}
+        guard let realmData = realmData else {QL4("No realm data"); return}
+        
+        func onEditListItem(_ input: ListItemInput, editingListItem: ListItem) {
+            // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
+            updateItem(editingListItem, listItemInput: input, onFinish: onFinish)
+        }
+        
+        func onAddListItem(_ input: ListItemInput) {
+            
+            Prov.listItemsProvider.addNewStoreProduct(listItemInput: input, list: list, status: status, realmData: realmData, successHandler {addedStoreProduct in
+                let res = QuickAddProduct(addedStoreProduct.0.product.product, colorOverride: nil, quantifiableProduct: addedStoreProduct.0.product, boldRange: nil)
+                onFinish?(res, addedStoreProduct.1)
+            })
+        }
+        
+        if let editingListItem = editingItem as? ListItem {
+            onEditListItem(input, editingListItem: editingListItem)
+        } else {
+            if editingItem == nil {
+                onAddListItem(input)
+            } else {
+                QL4("Cast didn't work: \(String(describing: editingItem))")
+            }
+        }
+    }
+    
+    
+    
+    
+    
     
     override func onQuickListOpen() {
     }

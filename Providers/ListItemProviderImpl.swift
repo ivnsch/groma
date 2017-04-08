@@ -374,9 +374,9 @@ class ListItemProviderImpl: ListItemProvider {
                 // updateCategory: false: we don't touch product's category from list items - our inputs affect only the section. We use them though to create a category in the case a category with the section's name doesn't exists already. A product needs a category and it's logical to simply default this to the section if it doesn't exist, instead of making user enter a second input for the category. From user's perspective, most times category = section.
                 //Prov.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store, updateCategory: false)
                 let prototype = ProductPrototype(name: listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, brand: listItemInput.brand, baseQuantity: listItemInput.storeProductInput.baseQuantity, unit: listItemInput.storeProductInput.unit, edible: listItemInput.edible)
-                Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false) {(result: ProviderResult<QuantifiableProduct>) in
+                Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false) {(result: ProviderResult<(QuantifiableProduct, Bool)>) in
                     if let product = result.sucessResult {
-                        handler(ProviderResult(status: .success, sucessResult: (section, product)))
+                        handler(ProviderResult(status: .success, sucessResult: (section, product.0)))
                         
                     } else {
                         QL4("Error fetching product: \(result.status)")
@@ -1267,6 +1267,15 @@ class ListItemProviderImpl: ListItemProvider {
     func addNew(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void) {
         if let tuple = DBProv.listItemProvider.addSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData) {
             handler(ProviderResult(status: .success, sucessResult: tuple))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+
+    // TODO rename
+    func addNewStoreProduct(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<(StoreProduct, Bool)>) -> Void) {
+        if let storeProduct = DBProv.listItemProvider.addStoreProductSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData) {
+            handler(ProviderResult(status: .success, sucessResult: storeProduct))
         } else {
             handler(ProviderResult(status: .databaseUnknown))
         }

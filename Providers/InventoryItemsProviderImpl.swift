@@ -383,9 +383,9 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     
                 } else { // no quantifiable product with unique, create it
                     
-                    Prov.productProvider.mergeOrCreateProduct(prototype: itemInput.productPrototype, updateCategory: true, updateItem: true) { (result: ProviderResult<QuantifiableProduct>) in
+                    Prov.productProvider.mergeOrCreateProduct(prototype: itemInput.productPrototype, updateCategory: true, updateItem: true) { (result: ProviderResult<(QuantifiableProduct, Bool)>) in
                         if let quantifiableProduct = result.sucessResult {
-                            self.addToInventory(inventory, product: quantifiableProduct, quantity: 1, remote: remote, realmData: realmData, handler)
+                            self.addToInventory(inventory, product: quantifiableProduct.0, quantity: 1, remote: remote, realmData: realmData, handler)
                         }
                     }
                 }

@@ -815,7 +815,7 @@ class RealmListItemProvider: RealmProvider {
             let quantifiableProductResult = DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: input.toProductPrototype(), updateCategory: true, save: false)
             
             return sectionResult.join(result: quantifiableProductResult).map {(tuple, quantifiableProduct) in
-                ListItemPrototype(product: quantifiableProduct, quantity: input.quantity, targetSectionName: tuple.section.name, targetSectionColor: tuple.section.color, storeProductInput: nil)
+                ListItemPrototype(product: quantifiableProduct.0, quantity: input.quantity, targetSectionName: tuple.section.name, targetSectionColor: tuple.section.color, storeProductInput: nil)
             }
         }
         
@@ -995,8 +995,22 @@ class RealmListItemProvider: RealmProvider {
         switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false, realmData: realmData, doTransaction: doTransaction) {
             
         case .ok(let quantifiableProduct):
-            return addSync(quantifiableProduct: quantifiableProduct, store: list.store ?? "", price: listItemInput.storeProductInput.price, list: list, quantity: listItemInput.quantity, note: listItemInput.note, status: status, realmData: realmData, doTransaction: doTransaction)
+            return addSync(quantifiableProduct: quantifiableProduct.0, store: list.store ?? "", price: listItemInput.storeProductInput.price, list: list, quantity: listItemInput.quantity, note: listItemInput.note, status: status, realmData: realmData, doTransaction: doTransaction)
 
+        case .err(let error):
+            QL4("Couldn't add/update quantifiable product: \(error)")
+            return nil
+        }
+    }
+    
+    /// Input form (new) TODO put in product / store product providers. Don't use ListItemInput but store - specific input type
+    func addStoreProductSync(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (StoreProduct, Bool)? {
+        
+        switch DBProv.productProvider.mergeOrCreateStoreProductSync(prototype: listItemInput.toProductPrototype(), price: listItemInput.storeProductInput.price, updateCategory: true, save: true, realmData: realmData, doTransaction: true) {
+            
+        case .ok(let result):
+            return result
+            
         case .err(let error):
             QL4("Couldn't add/update quantifiable product: \(error)")
             return nil
@@ -1213,7 +1227,7 @@ class RealmListItemProvider: RealmProvider {
             }
             
             let joinResult = sectionResult.join(result: productResult).map{sectionResult, product in
-                onHasSectionAndProduct(sectionResult: sectionResult, product: product)
+                onHasSectionAndProduct(sectionResult: sectionResult, product: product.0)
             }
             
             return joinResult

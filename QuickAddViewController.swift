@@ -22,7 +22,10 @@ protocol QuickAddDelegate: class {
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
     
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) // editingItem == nil -> add
-
+    
+    // Adds the "basic part" of the new item corresponding to the objects used in quick add. E.g. in case of list item, this is a quantifiable product. This is used for the first step of add new item process, in which we show first the new item in quick add (at this point we only added the "basic part" before animating it to the table view (where we add the actual item).
+    func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?)
+    
 //    func onValidationErrors(errors: [UITextField: ValidationError])
 //    func planItem(productName: String, handler: PlanItem? -> ())
     
@@ -412,7 +415,19 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         if let name = searchBar.text?.trim() {
             
             let listItemInput = ListItemInput(name: name, quantity: quantity, price: price, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, edible: edible)
-            delegate?.onSubmitAddEditItem(listItemInput, editingItem: editingItem)
+
+            delegate?.onSubmitAddEditItem2(listItemInput, editingItem: editingItem) {[weak self] quickAddItem, isNew in
+                
+                if editingItem == nil { // add - item was not in the db yet
+                    _ = self?.hideAddProductController() // go back to quick add items
+                    self?.quickAddListItemViewController?.addProductController?.showAddedItem(quickAddItem: quickAddItem, quantity: quantity)
+                    
+                } else {
+                    // Update - we don't go back to quick list here but display "old" way to update i.e. simply update item in table view and scroll to row, without any additional animation.
+                    // Note that update can happen in 2 cases: 1. Explicit update (user edits an item) - in this case we probably even close the top controller after it, or let it there, or clear it but it doesn't make sense to go back to quick add. 2. When user is in "add" context - i.e. fills the form for a new item with data of an already existing item. In this case, it could make sense to go back to the quick add and highlight (i.e. shortly scale) the item in the collection view and perform add to cell animation if it's not in the table view yet, but we're going to skip this for now and simply treat it as an explicit update. Besides, 2. can't actually happen at the time of writing this, as the form is opened only if the name of the item doesn't exist yet (as product or item, depending in which controller we are), and if we change the name to something existent, the form will be closed automatically. But this behaviour needs to be reevaluated because of some other issues, so this may change.
+                    self?.delegate?.onSubmitAddEditItem(listItemInput, editingItem: editingItem)
+                }
+            }
             
         } else {
             // There should be always text as we show add/edit only if user enters text and we find no products for it. If user removes the text, the add/edit controller is hidden.

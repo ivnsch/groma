@@ -144,6 +144,10 @@ public class StoreProduct: DBSyncable, Identifiable {
         return "productOpt.productOpt.categoryOpt.name CONTAINS[c] '\(text)'"
     }
     
+    static func createFilter(unique: QuantifiableProductUnique) -> String {
+        return "productOpt.productOpt.itemOpt.name == '\(unique.name)' AND productOpt.productOpt.brand == '\(unique.brand)' AND productOpt.baseQuantity == \(unique.baseQuantity) AND productOpt.unitOpt.name == '\(unique.unit)'"
+    }
+    
     // Sync - workaround for mysterious store products/products/categories that appear sometimes in sync reqeust
     // Note these invalid objects will be removed on sync response when db is overwritten
     public static func createFilterDirtyAndValid() -> String {

@@ -47,10 +47,10 @@ class ItemProviderImpl: ItemProvider {
         }
     }
 
-    func addOrUpdate(input: ItemInput, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.itemProvider.addOrUpdate(input: input) {success in
-            if success {
-                handler(ProviderResult(status: .success))
+    func addOrUpdate(input: ItemInput, _ handler: @escaping (ProviderResult<(Item, Bool)>) -> Void) {
+        DBProv.itemProvider.addOrUpdate(input: input) {result in
+            if let result = result {
+                handler(ProviderResult(status: .success, sucessResult: result))
 
             } else {
                 handler(ProviderResult(status: .databaseUnknown))

@@ -64,7 +64,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     fileprivate var filteredQuickAddItems: [QuickAddItem] = [] {
         didSet {
-            collectionView.reloadData()
+//            collectionView.reloadData()
         }
     }
     
@@ -129,6 +129,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     fileprivate func clearAndLoadFirstPage(_ isSearchLoad: Bool) {
         filteredQuickAddItems = []
+        collectionView.reloadData()
         paginator.reset()
         loadPossibleNextPage(isSearchLoad)
     }
@@ -234,7 +235,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let item = filteredQuickAddItems[(indexPath as NSIndexPath).row]
+        let item = filteredQuickAddItems[indexPath.row]
 
         // Comment for product and group items: Increment items immediately in memory, then do db update with the incremented items. We could do the increment in database (which is a bit more reliable), but this requires us to fetch first the item which makes the operation relatively slow. We also have to add list items at the same time and this operation should not slow others. And for favs reliability is not very important.
         // TODO!!! review when testing server sync that - when adding many items quickly - the list item count in server is the same. In the simulator it's visible how the updateFav operation for some reason "cuts" the adding of items, that is if we tap a product 20 times very quickly normally it will continue adding until 20 after we stop tapping. But with updateFav, it just adds until we stop tapping. This operation touches only the product, which makes this weird, as the increment list items affects the listitem but shouldn't affect the product. But for some reason it seems to "cut" the pending listitem increments (?). So problem is, maybe when we tap 20 times - we send 20 request to the server, which processes it correctly and adds 20 items, but due to the "cut" we add less than 20 in the client. So when we do sync we suddenly see more items than what we thought we added.
@@ -248,31 +249,10 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             // TODO!!!!!!! show popup with units if more than 1 quantifiable product for this product!
             
             func onRetrievedQuantifiableProduct(quantifiableProduct: QuantifiableProduct, quantity: Float) {
-                
-                guard let cell = collectionView.cellForItem(at: indexPath) as? QuickAddItemCell else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
-                guard let windowMaybe = UIApplication.shared.delegate?.window, let window = windowMaybe else {QL4("No window: can't animate cell"); return}
-                
-                func animateItemToCell() {
-                    let copy = cell.copyCell(quantifiableProduct: quantifiableProduct)
-                    let cellPointInWindow = window.convert(cell.center, from: collectionView)
-                    window.addSubview(copy)
-                    copy.center = cellPointInWindow
-                    
-                    
-                    let quickAddFrameRelativeToWindow = window.convert(view.frame, from: view.superview!)
-                    
-                    let categoryColorViewWidth: CGFloat = 4
-                    
-                    let targetCellFrame = CGRect(x: categoryColorViewWidth, y: quickAddFrameRelativeToWindow.maxY + (delegate?.offsetForAddCellAnimation ?? 0), width: view.width - categoryColorViewWidth, height: DimensionsManager.defaultCellHeight)
-                    
-                    copy.animateAddToList(targetFrame: targetCellFrame) {[weak self] in
-                        self?.delegate?.onFinishAddCellAnimation(addedItem: quantifiableProduct)
-                    }
-                }
-                
-                delegate?.onAddProduct(quantifiableProduct, quantity: quantity) {result in
+
+                delegate?.onAddProduct(quantifiableProduct, quantity: quantity) {[weak self] result in
                     if result.isNewItem {
-                        animateItemToCell()
+                        self?.animateItemToCell(indexPath: indexPath, quantifiableProduct: quantifiableProduct, quantity: 1)
                     }
                 }
             }
@@ -305,6 +285,28 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             print("Error: invalid model type in quickAddItems, select cell. \(item)")
         }
     }
+    
+    fileprivate func animateItemToCell(indexPath: IndexPath, quantifiableProduct: QuantifiableProduct, quantity: Float) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? QuickAddItemCell else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
+        guard let windowMaybe = UIApplication.shared.delegate?.window, let window = windowMaybe else {QL4("No window: can't animate cell"); return}
+        
+        let copy = cell.copyCell(quantifiableProduct: quantifiableProduct, quantity: quantity)
+        let cellPointInWindow = window.convert(cell.center, from: collectionView)
+        window.addSubview(copy)
+        copy.center = cellPointInWindow
+        
+        
+        let quickAddFrameRelativeToWindow = window.convert(view.frame, from: view.superview!)
+        
+        let categoryColorViewWidth: CGFloat = 4
+        
+        let targetCellFrame = CGRect(x: categoryColorViewWidth, y: quickAddFrameRelativeToWindow.maxY + (delegate?.offsetForAddCellAnimation ?? 0), width: view.width - categoryColorViewWidth, height: DimensionsManager.defaultCellHeight)
+        
+        copy.animateAddToList(targetFrame: targetCellFrame) {[weak self] in
+            self?.delegate?.onFinishAddCellAnimation(addedItem: quantifiableProduct)
+        }
+    }
+    
     
     fileprivate func retrieveQuantifiableProduct(product: Product, indexPath: IndexPath, onRetrieved: @escaping (QuantifiableProduct, Float) -> Void) {
         Prov.productProvider.quantifiableProducts(product: product, successHandler{quantifiableProducts in
@@ -400,6 +402,52 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
     }
     
+    // TODO refactor this, it was implemented without time and motivation
+    // The whole workflow here has to be rewritten, probably a problem of quick add controller in general
+    // We shouldn't have to cast quickAddItem to know in which (main) controller we are/which delegate method to call, the main controller shouldn't have to instantiate directly quick add items, etc. etc.
+    func showAddedItem(quickAddItem: QuickAddItem, quantity: Float) {
+        
+        let myDelay: Double = 0.3
+        
+        delay(myDelay) {[weak self] in guard let weakSelf = self else {return}
+            
+            // 1. Insert the item in the collection view (at this point the item/product was already added to the database, before calling showAddedOrUpdatedItem). Note that at this point, as we just were in an input form the items count is 0 (if there were items, meaning there were results for the current search, we wouldn't be in the input form, with the current logic). So we don't have to worry about pagination and "scrollToItem" doesn't has an effect - letting it here for correctness only.
+            
+            let newItemIndexPath = IndexPath(row: weakSelf.filteredQuickAddItems.count, section: 0)
+            
+            weakSelf.collectionView.performBatchUpdates({[weak self] in
+                self?.filteredQuickAddItems.append(quickAddItem)
+                self?.collectionView.insertItems(at: [newItemIndexPath])
+            }, completion: nil)
+            
+            weakSelf.collectionView.scrollToItem(at: newItemIndexPath, at: .top, animated: false)
+            
+            
+            // 2. Insert the item from the collection view into the main controller table view. This only triggers the same operation as when we tap on a quick list item. In the case of list or inventory items, this adds the item to the table view (may show a popup to select base quantity), in case of ingredients it opens the controller to select the ingredient data. Etc.
+            
+            if let quickAddProduct = quickAddItem as? QuickAddProduct {
+                
+                if let quantifiableProduct = quickAddProduct.quantifiableProduct { // list or inventory item
+
+                    delay(myDelay) {[weak self] in
+                        self?.delegate?.onAddProduct(quantifiableProduct, quantity: quantity) {[weak self] result in
+                            if result.isNewItem {
+                                self?.animateItemToCell(indexPath: newItemIndexPath, quantifiableProduct: quantifiableProduct, quantity: quantity)
+                            }
+                        }
+                    }
+                }
+                
+            } else if let quickAddDBItem = quickAddItem as? QuickAddDBItem { // ingredient
+                delay(myDelay) {[weak self] in
+                    self?.retrieveQuickAddIngredient(item: quickAddDBItem.item, indexPath: newItemIndexPath) {[weak self] (quantifiableProduct, quantity) in
+                        self?.delegate?.onAddItem(quickAddDBItem.item)
+                    }
+                }
+            }
+        }
+    }
+    
     func setEmptyViewVisible(_ visible: Bool) {
         UIView.animate(withDuration: 0.3, animations: {[weak self] in
             self?.emptyView.isHidden = !visible
@@ -430,7 +478,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
 
             } else {
                 filteredQuickAddItems.appendAll(items)
-                
+                collectionView.reloadData()
                 paginator.update(items.count)
                 
                 collectionView.reloadData()

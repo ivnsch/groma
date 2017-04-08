@@ -115,6 +115,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
             if let weakSelf = self {
                 controller.itemType = weakSelf.quickAddItemType
             }
+            controller.modus = .product
             controller.list = self?.list
             return controller
         }
@@ -365,6 +366,14 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         
         Prov.unitProvider.getOrCreate(name: input.storeProductInput.unit, successHandler{unit in
             onHasUnit(unit.unit)
+        })
+    }
+    
+    override func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
+        let itemInput = ItemInput(name: input.name, categoryName: input.section, categoryColor: input.sectionColor, edible: input.edible)
+        Prov.itemsProvider.addOrUpdate(input: itemInput, successHandler {item in
+            let quickAddItem = QuickAddDBItem(item.0)
+            onFinish?(quickAddItem, item.1)
         })
     }
 

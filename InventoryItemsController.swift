@@ -430,6 +430,13 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
+    func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
+        Prov.productProvider.mergeOrCreateProduct(prototype: input.toProductPrototype(), updateCategory: false, updateItem: false, successHandler {(quantifiableProduct: QuantifiableProduct, isNew: Bool) in
+            let quickAddItem = QuickAddProduct(quantifiableProduct.product, quantifiableProduct: quantifiableProduct)
+            onFinish?(quickAddItem, isNew)
+        })
+    }
+    
     func onQuickListOpen() {
     }
     

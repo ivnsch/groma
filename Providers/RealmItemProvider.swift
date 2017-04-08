@@ -80,13 +80,13 @@ class RealmItemProvider: RealmProvider {
         handler(findSync(name: name))
     }
     
-    func addOrUpdate(input: ItemInput, _ handler: @escaping (Bool) -> Void) {
+    func addOrUpdate(input: ItemInput, _ handler: @escaping ((Item, Bool)?) -> Void) {
         switch mergeOrCreateItemSync(itemInput: input, updateCategory: true, doTransaction: true, notificationToken: nil) {
-        case .ok(let item):
-            handler(true)
+        case .ok(let item, let isNew):
+            handler((item, isNew))
         case .err(let error):
             QL4("Error in merge or create item: \(error)")
-            handler(false)
+            handler(nil)
         }
     }
     
@@ -178,9 +178,9 @@ class RealmItemProvider: RealmProvider {
     // load item and update or create one
     // if we find an item with the unique we update it - this is for the case the user changes category color etc for an existing item while adding it
     // NOTE: This doesn't save anything to the database (no particular reason, except that the current caller of this method does the saving)
-    func mergeOrCreateItemSync(itemInput: ItemInput, updateCategory: Bool, doTransaction: Bool, saveItem: Bool = false, notificationToken: NotificationToken?) -> ProvResult<Item, DatabaseError> {
+    func mergeOrCreateItemSync(itemInput: ItemInput, updateCategory: Bool, doTransaction: Bool, saveItem: Bool = false, notificationToken: NotificationToken?) -> ProvResult<(Item, Bool), DatabaseError> {
 
-        func transactionContent() -> ProvResult<Item, DatabaseError> {
+        func transactionContent() -> ProvResult<(Item, Bool), DatabaseError> {
             
             // Always fetch/create category (whether item already exists or not), since we need to ensure we have the category identified by unique from prototype, which is not necessarily the same as the one referenced by existing item (we want to update only non-unique properties).
             return DBProv.productCategoryProvider.mergeOrCreateCategorySync(categoryInput: itemInput.categoryInput, doTransaction: false, notificationToken: notificationToken).flatMap {category in
@@ -190,7 +190,7 @@ class RealmItemProvider: RealmProvider {
                     if let item = itemMaybe {
                         item.edible = itemInput.edible
                         item.category = category    
-                        return .ok(item)
+                        return .ok((item, false))
                         
                     } else { // item doesn't exist
                         
@@ -198,7 +198,7 @@ class RealmItemProvider: RealmProvider {
                         withRealmSync({realm in
                             realm.add(newItem, update: true)
                         })
-                        return .ok(newItem)
+                        return .ok((newItem, true))
                   }
                 case .err(let error): return .err(error)
                 }

@@ -58,8 +58,8 @@ class QuickAddItemCell: UICollectionViewCell {
         }
     }
     
-    func copyCell(quantifiableProduct: QuantifiableProduct) -> QuickAddItemCellAnimatableCopy {
-        return QuickAddItemCellAnimatableCopy(cell: self, quantifiableProduct: quantifiableProduct)
+    func copyCell(quantifiableProduct: QuantifiableProduct, quantity: Float) -> QuickAddItemCellAnimatableCopy {
+        return QuickAddItemCellAnimatableCopy(cell: self, quantifiableProduct: quantifiableProduct, quantity: quantity)
     }
 }
 
@@ -76,7 +76,7 @@ class QuickAddItemCellAnimatableCopy: UIView {
     var baseQuantityLabel: UILabel!
     
     
-    init(cell: QuickAddItemCell, quantifiableProduct: QuantifiableProduct) {
+    init(cell: QuickAddItemCell, quantifiableProduct: QuantifiableProduct, quantity: Float) {
         
         super.init(frame: cell.frame)
         
@@ -114,7 +114,7 @@ class QuickAddItemCellAnimatableCopy: UIView {
         baseLabel.alpha = 0 // not present in quick add view, so fades in
         
         let quantityLabel = UILabel()
-        quantityLabel.text = Float(1).quantityString
+        quantityLabel.text = quantity.quantityString
         quantityLabel.frame = CGRect(x: cell.bounds.maxX - 5, y: nameLabel.y, width: nameLabel.width, height: nameLabel.height)
         quantityLabel.font = UIFont.systemFont(ofSize: LabelMore.mapToFontSize(60) ?? 20)
         quantityLabel.textColor = Theme.black

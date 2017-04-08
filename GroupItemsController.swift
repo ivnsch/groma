@@ -337,6 +337,10 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }
     }
     
+    func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
+        QL4("Not implemented")
+    }
+    
     func onQuickListOpen() {
     }
     

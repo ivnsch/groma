@@ -168,7 +168,7 @@ extension ManageItemsController: AddEditNameNameColorControllerDelegate {
     
     func onSubmitAddEditNameNameColor(result: AddEditNameNameColorResult) {
         let itemInput = ItemInput(name: result.name, categoryName: result.nameColorInputs.name, categoryColor: result.nameColorInputs.color, edible: result.buttonSelected)
-        Prov.itemsProvider.addOrUpdate(input: itemInput, successHandler {[weak self] in
+        Prov.itemsProvider.addOrUpdate(input: itemInput, successHandler {[weak self] _ in
             self?.tableView.reloadData()
             self?.topEditSectionControllerManager?.expand(false)
         })

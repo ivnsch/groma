@@ -450,10 +450,10 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void) {
+    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool, _ handler: @escaping (ProviderResult<(QuantifiableProduct, Bool)>) -> Void) {
         switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: prototype, updateCategory: updateCategory, save: true) {
-        case .ok(let updatedQuantifiableProduct):
-            handler(ProviderResult(status: .success, sucessResult: updatedQuantifiableProduct))
+        case .ok(let result):
+            handler(ProviderResult(status: .success, sucessResult: result))
         case .err(let error):
             QL4("Couldn't merge/crate product: \(error)")
         }

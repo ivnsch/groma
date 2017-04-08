@@ -19,7 +19,7 @@ public protocol ItemProvider {
 
     func item(name: String, _ handler: @escaping (ProviderResult<Item?>) -> Void)
 
-    func addOrUpdate(input: ItemInput, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func addOrUpdate(input: ItemInput, _ handler: @escaping (ProviderResult<(Item, Bool)>) -> Void)
     
     func delete(itemUuid: String, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void)
     

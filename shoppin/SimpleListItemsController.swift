@@ -434,7 +434,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     
     // Note: don't use this to reorder sections, this doesn't update section order
     // Note: concerning status - this only updates the current status related data (quantity, order). This means quantity and order of possible items in the other status is not affected
-    fileprivate func updateItem(_ updatingListItem: ListItem, listItemInput: ListItemInput) {
+    fileprivate func updateItem(_ updatingListItem: ListItem, listItemInput: ListItemInput, onFinish: ((QuickAddItem, Bool) -> Void)? = nil) {
         guard let realmData = realmData else {QL4("No realm data"); return}
 
         if let currentList = self.currentList {
@@ -594,6 +594,39 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         
         func onAddListItem(_ input: ListItemInput) {
             addItem(input, successHandler: nil)
+        }
+        
+        if let editingListItem = editingItem as? ListItem {
+            onEditListItem(input, editingListItem: editingListItem)
+        } else {
+            if editingItem == nil {
+                onAddListItem(input)
+            } else {
+                QL4("Cast didn't work: \(String(describing: editingItem))")
+            }
+        }
+    }
+    
+    func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
+        
+        guard let list = currentList else {QL4("No list"); return}
+        guard let realmData = realmData else {QL4("No realm data"); return}
+        
+        
+        
+        func onEditListItem(_ input: ListItemInput, editingListItem: ListItem) {
+            // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
+            updateItem(editingListItem, listItemInput: input, onFinish: onFinish)
+        }
+        
+        func onAddListItem(_ input: ListItemInput) {
+            
+            Prov.listItemsProvider.addNewStoreProduct(listItemInput: input, list: list, status: status, realmData: realmData, successHandler {addedStoreProduct in
+                let res = QuickAddProduct(addedStoreProduct.0.product.product, colorOverride: nil, quantifiableProduct: addedStoreProduct.0.product, boldRange: nil)
+                onFinish?(res, addedStoreProduct.1)
+            })
+            
+            //            addItem(input, successHandler: nil, onFinish: onFinish)
         }
         
         if let editingListItem = editingItem as? ListItem {

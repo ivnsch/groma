@@ -103,7 +103,7 @@ public protocol ProductProvider {
     func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void)
     
     // NOTE: doesn't save the new/merged product
-    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool, _ handler: @escaping (ProviderResult<QuantifiableProduct>) -> Void)
+    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool, _ handler: @escaping (ProviderResult<(QuantifiableProduct, Bool)>) -> Void)
    
     // Returns if restored at least one product
     func restorePrefillProductsLocal(_ handler: @escaping (ProviderResult<Bool>) -> Void)

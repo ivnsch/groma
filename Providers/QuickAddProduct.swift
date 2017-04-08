@@ -13,14 +13,14 @@ public class QuickAddProduct: QuickAddItem {
     public let product: Product
     
     // TODO better implementation than passing this additionally to product, which is used only when quick add is used for list items
-    public let storeProduct: StoreProduct?
+    public let quantifiableProduct: QuantifiableProduct?
     
     // used in list items, where we shows section color if available, instead of category color. A better solution for this may be implementing a new QuickAddItem subclass but for now like this.
     public let colorOverride: UIColor?
     
-    public init(_ product: Product, colorOverride: UIColor? = nil, storeProduct: StoreProduct? = nil, boldRange: NSRange? = nil) {
+    public init(_ product: Product, colorOverride: UIColor? = nil, quantifiableProduct: QuantifiableProduct? = nil, boldRange: NSRange? = nil) {
         self.product = product
-        self.storeProduct = storeProduct
+        self.quantifiableProduct = quantifiableProduct
         self.colorOverride = colorOverride
         super.init(boldRange: boldRange)
     }
@@ -35,7 +35,8 @@ public class QuickAddProduct: QuickAddItem {
     
     // TODO!!!!!!!!!!!!!!!!! (not related with quantifiable prods refactoring but important) review this - is the store always showing? the store should not show when we are in a store-specific list! (if items have a store assigned iirc we should see the items in other stores, but without displayign the store? (i.e. stripped from store-related information)
     public override var label3Text: String {
-        return storeProduct?.store ?? ""
+//        return storeProduct?.store ?? ""
+        return "" // no 3d label anymore. Remove?
     }
 
     public override var color: UIColor {

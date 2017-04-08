@@ -346,6 +346,10 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         fatalError("Override")
     }
     
+    func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
+        fatalError("Override")
+    }
+    
     func onQuickListOpen() {
     }
     

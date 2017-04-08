@@ -442,7 +442,7 @@ class RealmInventoryItemProvider: RealmProvider {
             return productResult.map {quantifiableProduct in
                 
                 // update inventory item
-                inventoryItem.product = quantifiableProduct
+                inventoryItem.product = quantifiableProduct.0
                 inventoryItem.quantity = input.quantity
                 
                 return UpdateInventoryItemResult(inventoryItem: inventoryItem, replaced: foundAndDeletedInventoryItem)

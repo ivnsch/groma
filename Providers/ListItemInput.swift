@@ -35,7 +35,7 @@ public struct ListItemInput {
 
 extension ListItemInput {
     
-    func toProductPrototype() -> ProductPrototype {
+    public func toProductPrototype() -> ProductPrototype {
         return ProductPrototype(name: name, category: section, categoryColor: sectionColor, brand: brand, baseQuantity: storeProductInput.baseQuantity, unit: storeProductInput.unit, edible: edible)
     }
     
