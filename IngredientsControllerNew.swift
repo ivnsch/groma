@@ -115,7 +115,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
             if let weakSelf = self {
                 controller.itemType = weakSelf.quickAddItemType
             }
-            controller.modus = .product
+            controller.modus = .ingredient
             controller.list = self?.list
             return controller
         }

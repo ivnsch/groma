@@ -171,6 +171,7 @@
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" id="8QS-gR-4dR"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="width" secondItem="Xjl-8k-ZTY" secondAttribute="width" id="Ixd-KJ-nvO"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="height" secondItem="Xjl-8k-ZTY" secondAttribute="height" id="KLz-mz-O6h"/>
+                            <constraint firstItem="i1w-xi-aFz" firstAttribute="top" secondItem="If7-20-6Xv" secondAttribute="top" constant="66" id="Kao-Gj-zMX"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="bottom" secondItem="CcK-74-2fx" secondAttribute="bottom" id="LLD-Xt-dbo"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="Xjl-8k-ZTY" secondAttribute="top" id="Lj3-kE-rMA"/>
                             <constraint firstItem="y3W-hW-EO2" firstAttribute="baseline" secondItem="Yfv-oA-AU6" secondAttribute="baseline" id="Mrf-Dx-rgd"/>
@@ -224,6 +225,8 @@
                     <connections>
                         <outlet property="addNewItemLabel" destination="dwL-LH-4dI" id="Wbj-R8-UgF"/>
                         <outlet property="brandInput" destination="r5b-Sz-J4o" id="Nwq-Vw-9MC"/>
+                        <outlet property="categoryOrSectionTextFieldTopToBrandEdibleRowConstraint" destination="Uys-Mm-t4a" id="Gqq-FV-aD4"/>
+                        <outlet property="categoryOrSectionTextFieldTopToSuperviewConstraint" destination="Kao-Gj-zMX" id="j41-r7-fxB"/>
                         <outlet property="edibleButton" destination="yvM-Su-XEx" id="8gJ-V7-lYH"/>
                         <outlet property="noteInput" destination="Yfv-oA-AU6" id="5Hv-hJ-1gn"/>
                         <outlet property="priceInput" destination="y3W-hW-EO2" id="TPH-RX-eBF"/>

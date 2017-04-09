@@ -285,6 +285,13 @@ class ProductQuantityController: UIViewController {
 
         quantityView.quantity = delegate.quantity
     }
+    
+    /// Some of the views added by this controller, are not added as subviews of this controller's view but above in the hierarchy so we have to hide them explicitly.
+    func setManagedViewsHidden(hidden: Bool) {
+        view.isHidden = hidden
+        unitPicker?.isHidden = hidden
+        basesPicker?.isHidden = hidden
+    }
 }
 
 

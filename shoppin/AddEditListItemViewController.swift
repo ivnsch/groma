@@ -40,7 +40,7 @@ protocol AddEditListItemViewControllerDelegate: class {
 // FIXME use instead a "fragment" (custom view) with the common inputs and use this in 2 separate view controllers
 // then we can also use different delegates, now the delegate is passed "note" parameter for group item as well where it doesn't exist, not nice
 enum AddEditListItemControllerModus {
-    case listItem, groupItem, planItem, product
+    case listItem, groupItem, planItem, product, ingredient
 }
 
 //typealias AddEditItemInput2 = (name: String, price: Float, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
@@ -140,6 +140,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
     @IBOutlet weak var edibleButton: UIButton!
     
+    @IBOutlet weak var categoryOrSectionTextFieldTopToSuperviewConstraint: NSLayoutConstraint!
+    @IBOutlet weak var categoryOrSectionTextFieldTopToBrandEdibleRowConstraint: NSLayoutConstraint!
+
 /////////////////////////////////////////////////////////////////////////
 // for now disabled, see comments at the bottom
 //    @IBOutlet weak var sectionLabel: UILabel!
@@ -229,10 +232,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 
                 switch modus {
                 case .listItem:
-                    fallthrough
+                    sectionInput.placeholder = sectionPlaceHolderText
                 case .groupItem:
 //                    sectionLabel.text = sectionText
-                    sectionInput.placeholder = sectionPlaceHolderText
+                    sectionInput.placeholder = categoryPlaceHolderText
                 case .planItem:
 //                    sectionLabel.text = categoryText // plan items don't have section, but we need a category for the new product (note for list and group items we save the section as category - user can change the category later using the product manager. This is for simple usability, mostly section == category otherwise interface may be a bit confusing)
                     sectionInput.placeholder = categoryPlaceHolderText
@@ -243,7 +246,25 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //                    quantityInput.isHidden = true
 //                    quantityPlusButton.hidden = true
 //                    quantityMinusButton.hidden = true
+                case .ingredient:
+                    
+                    sectionInput.placeholder = categoryPlaceHolderText
+                    
+                    brandInput.isHidden = true // no brand
+                    edibleButton.isHidden = true // always edible
+                    
+                    // After the new item is added there's a second controller (which is also shown when we add using the quick-add) where the user enters unit, quantity, etc. so no need to show quantity/unit inputs here.
+                    quantitiesContainer.isHidden = true
+                    productQuantityController?.onPickersInitialized = {[weak self] in
+                        self?.productQuantityController?.setManagedViewsHidden(hidden: true)
+                    }
+                    
+                    // Move the category row a bit up, since there's no brand/edible row
+                    categoryOrSectionTextFieldTopToSuperviewConstraint.isActive = true
+                    categoryOrSectionTextFieldTopToBrandEdibleRowConstraint.isActive = false
+                    categoryOrSectionTextFieldTopToSuperviewConstraint.constant = 10
                 }
+                
             } else {
                 print("Error: Trying to set modus before outlet is initialised")
             }
