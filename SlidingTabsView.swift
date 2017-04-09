@@ -21,7 +21,7 @@ class SlidingTabsView: UIView {
     fileprivate let selectedButtonColor: UIColor = UIColor.darkText
     fileprivate let unselectedButtonColor: UIColor = UIColor.gray
     fileprivate let lineBottomOffset: CGFloat = DimensionsManager.quickAddSlidingLineBottomOffset
-    fileprivate let lineWidth: CGFloat = 70
+    fileprivate let lineWidth: CGFloat = 110
     fileprivate let linePadding: CGFloat = DimensionsManager.quickAddSlidingLeftRightPadding
     
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!

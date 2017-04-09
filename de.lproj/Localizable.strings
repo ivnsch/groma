@@ -351,7 +351,7 @@ title_stash = "Zwischenlager";
 title_inventories = "Inventare";
 title_groups = "Gruppen";
 title_participants = "Teilnehmer";
-title_recipes = "Rezepte";
+title_recipes = "Zutatengruppen";
 
 
 empty_list_line1 = "Hoppla! Es gibt noch keine Items";
@@ -442,7 +442,7 @@ add_edit_list_item_edit_item = "Item editieren";
 
 quick_add_slider_tab_products = "Produkte";
 quick_add_slider_tab_groups = "Gruppen";
-quick_add_slider_tab_recipes = "Rezepte";
+quick_add_slider_tab_recipes = "Zutatengruppen";
 
 
 add_button_title = "Speichern";
@@ -505,3 +505,4 @@ select_brands = "Marken";
 select_base_quantities = "Basismengen";
 select_units = "Einheiten";
 unit_none_name = "Einheit (default)";
+select_ingredient_data_submit = "Speichern";

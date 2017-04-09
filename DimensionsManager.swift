@@ -119,9 +119,9 @@ class DimensionsManager {
 
     static var quickAddSlidingLeftRightPadding: CGFloat {
         switch widthDimension {
-        case .small: return 120
-        case .middle: return 140
-        case .large: return 190
+        case .small: return 90
+        case .middle: return 110
+        case .large: return 130
         }
     }
     

@@ -352,7 +352,7 @@ title_stash = "Depósito";
 title_inventories = "Inventarios";
 title_groups = "Grupos";
 title_participants = "Participantes";
-title_recipes = "Recetas";
+title_recipes = "Grupos de ingredientes";
 
 
 empty_list_line1 = "Tu lista está vacía";
@@ -442,7 +442,7 @@ add_edit_list_item_edit_item = "Editar ítem";
 
 quick_add_slider_tab_products = "Productos";
 quick_add_slider_tab_groups = "Grupos";
-quick_add_slider_tab_recipes = "Recetas";
+quick_add_slider_tab_recipes = "Grupos de ingredientes";
 
 
 add_button_title = "Guardar";
@@ -505,3 +505,4 @@ select_brands = "Marcas";
 select_base_quantities = "Cantidades base";
 select_units = "Unidades";
 unit_none_name = "unidad (default)";
+select_ingredient_data_submit = "Guardar";
