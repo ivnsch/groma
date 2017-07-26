@@ -13,7 +13,6 @@
 		58FBD9B21DDCDA19002242D6 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */; };
 		58FBD9B31DDCDA19002242D6 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */; };
 		58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */; };
-		6A04FDB01E48D70B0011A35C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A04FDAF1E48D70B0011A35C /* CloudKit.framework */; };
 		6A05647C1E8C628F00E5C74D /* CenterAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A05647B1E8C628F00E5C74D /* CenterAlignedCollectionViewFlowLayout.swift */; };
 		6A0DE19B1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */; };
 		6A1027671E5E10F0003D2972 /* BaseQuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1027661E5E10F0003D2972 /* BaseQuantityView.swift */; };
@@ -483,7 +482,6 @@
 		58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
 		58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
-		6A04FDAF1E48D70B0011A35C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		6A05647B1E8C628F00E5C74D /* CenterAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenterAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderSectionTableViewControllerNew.swift; sourceTree = "<group>"; };
 		6A1027661E5E10F0003D2972 /* BaseQuantityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuantityView.swift; sourceTree = "<group>"; };
@@ -980,7 +978,6 @@
 				58FBD9B31DDCDA19002242D6 /* FBSDKMessengerShareKit.framework in Frameworks */,
 				6AEA4EA41E0461660040557D /* Providers.framework in Frameworks */,
 				EB0F5F881B98A10100035175 /* SystemConfiguration.framework in Frameworks */,
-				6A04FDB01E48D70B0011A35C /* CloudKit.framework in Frameworks */,
 				58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */,
 				58FA07161DE1F2550059F2D0 /* Bolts.framework in Frameworks */,
 				58FBD9B11DDCDA19002242D6 /* FBSDKCoreKit.framework in Frameworks */,
@@ -1288,7 +1285,6 @@
 		E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6A04FDAF1E48D70B0011A35C /* CloudKit.framework */,
 				58FA07151DE1F2550059F2D0 /* Bolts.framework */,
 				58FBD9AD1DDCDA18002242D6 /* FBSDKCoreKit.framework */,
 				58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */,
@@ -2503,12 +2499,13 @@
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 37QAPDY2PR;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.iCloud = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -3470,9 +3467,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DDEBUG $(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = co.groma;
+				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "8df1da7b-f838-47e5-99b0-7f0eeb370d0b";
+				PROVISIONING_PROFILE_SPECIFIER = development;
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -3500,10 +3498,12 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DRELEASE $(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = co.groma;
+				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "8df1da7b-f838-47e5-99b0-7f0eeb370d0b";
+				PROVISIONING_PROFILE_SPECIFIER = development;
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
