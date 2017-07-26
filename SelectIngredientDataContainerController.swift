@@ -17,7 +17,7 @@ protocol SelectIngredientDataContainerControllerDelegate {
     func submitButtonBottomOffset(parent: UIView, buttonHeight: CGFloat) -> CGFloat // TODO improve this
 }
 
-class SelectIngredientDataContainerController: UIViewController, SelectUnitControllerDelegate, QuantityViewDelegate, SelectIngredientFractionControllerDelegate, SubmitViewDelegate {
+class SelectIngredientDataContainerController: UIViewController, SelectUnitControllerDelegate, QuantityViewDelegate, SelectIngredientFractionControllerDelegate, SubmitViewDelegate, SwipeToIncrementHelperDelegate {
     
     @IBOutlet weak var wholeNumberLabel: UILabel!
     @IBOutlet weak var fractionLabel: UILabel!
@@ -133,7 +133,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         let height = Theme.submitViewHeight
         let submitView = SubmitView(frame: CGRect(x: 0, y: parentViewForAddButton.frame.maxY - height, width: parentViewForAddButton.width, height: height))
         submitView.delegate = self
-        submitView.setButtonTitle(title: "select_ingredient_data_submit")
+        submitView.setButtonTitle(title: trans("select_ingredient_data_submit"))
         parentViewForAddButton.addSubview(submitView)
 
         submitView.translatesAutoresizingMaskIntoConstraints = false
@@ -176,6 +176,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         selectQuantityController.onUIReady = {[weak selectQuantityController, weak self] in guard let weakSelf = self else {return}
             selectQuantityController?.quantityView.quantity = weakSelf.inputs.quantity
             selectQuantityController?.quantityView.delegate = weakSelf
+            selectQuantityController?.swipeToIncrementHelper?.delegate = weakSelf
         }
 
         self.selectQuantityController = selectQuantityController
@@ -255,6 +256,25 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         updateTitle(inputs: inputs)
     }
     
+    // MARK: - SwipeToIncrementHelperDelegate
+    
+    func currentQuantity() -> Float {
+        return inputs.quantity
+    }
+    
+    func onQuantityUpdated(_ quantity: Float) {
+        let delta = quantity - inputs.quantity
+        onUpdateQuantity(quantity)
+        selectQuantityController?.quantityView.showDelta(delta)
+    }
+
+    func onFinishSwipe() {
+    }
+
+    var swipeToIncrementEnabled: Bool {
+        return true
+    }
+
     // MARK: - SelectIngredientFractionControllerDelegate
     
     func onSelectFraction(fraction: Fraction?) {

@@ -217,8 +217,8 @@ class DimensionsManager {
         switch heightDimension {
         case .verySmall: return 40
         case .small: return 40
-        case .middle: return 50
-        case .large: return 50
+        case .middle: return 40
+        case .large: return 40
         }
     }
     

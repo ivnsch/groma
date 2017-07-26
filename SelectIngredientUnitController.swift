@@ -217,7 +217,7 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
             }) ?? false {
             return CGSize(width: 70, height: DimensionsManager.ingredientsUnitCellHeight)
         } else {
-            return CGSize(width: 120, height: DimensionsManager.ingredientsUnitCellHeight)
+            return CGSize(width: 110, height: DimensionsManager.ingredientsUnitCellHeight)
         }
     }
     

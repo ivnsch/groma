@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,7 +24,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3bg-dS-GSw">
-                    <rect key="frame" x="123" y="0.0" width="41" height="122"/>
+                    <rect key="frame" x="72" y="0.0" width="41" height="122"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="41" id="wwx-ae-Pii"/>
                     </constraints>
@@ -32,17 +32,6 @@
                     <state key="normal" image="minus"/>
                     <connections>
                         <action selector="onMinusTap:" destination="-1" eventType="touchUpInside" id="lGz-Hb-Vas"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HNQ-zH-qvO">
-                    <rect key="frame" x="72" y="0.0" width="41" height="122"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="41" id="DP8-Ob-s7B"/>
-                    </constraints>
-                    <color key="tintColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <state key="normal" image="plus"/>
-                    <connections>
-                        <action selector="onPlusTap:" destination="-1" eventType="touchUpInside" id="qIa-KP-Ajg"/>
                     </connections>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mNy-bI-3Ag" customClass="TextFieldMore" customModule="groma" customModuleProvider="target">
@@ -59,16 +48,27 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </textField>
+                <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HNQ-zH-qvO">
+                    <rect key="frame" x="123" y="0.0" width="41" height="122"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="41" id="DP8-Ob-s7B"/>
+                    </constraints>
+                    <color key="tintColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <state key="normal" image="plus"/>
+                    <connections>
+                        <action selector="onPlusTap:" destination="-1" eventType="touchUpInside" id="qIa-KP-Ajg"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="HNQ-zH-qvO" secondAttribute="bottom" id="4BV-W9-Xze"/>
+                <constraint firstAttribute="trailing" secondItem="HNQ-zH-qvO" secondAttribute="trailing" id="5yM-Jz-JJZ"/>
+                <constraint firstItem="HNQ-zH-qvO" firstAttribute="leading" secondItem="mNy-bI-3Ag" secondAttribute="trailing" id="BGM-gu-n9K"/>
                 <constraint firstItem="HNQ-zH-qvO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="FMg-hx-h56"/>
                 <constraint firstItem="3bg-dS-GSw" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Grv-ad-CMG"/>
+                <constraint firstItem="mNy-bI-3Ag" firstAttribute="leading" secondItem="3bg-dS-GSw" secondAttribute="trailing" id="WJt-KP-HEr"/>
                 <constraint firstAttribute="bottom" secondItem="3bg-dS-GSw" secondAttribute="bottom" id="Znh-Nb-H6x"/>
-                <constraint firstItem="3bg-dS-GSw" firstAttribute="leading" secondItem="mNy-bI-3Ag" secondAttribute="trailing" id="bys-dB-Dkn"/>
-                <constraint firstItem="mNy-bI-3Ag" firstAttribute="leading" secondItem="HNQ-zH-qvO" secondAttribute="trailing" id="gGL-aI-Iic"/>
-                <constraint firstAttribute="trailing" secondItem="3bg-dS-GSw" secondAttribute="trailing" id="jif-XZ-UcZ"/>
                 <constraint firstItem="mNy-bI-3Ag" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="sWC-r3-rBS"/>
                 <constraint firstItem="3bg-dS-GSw" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="vbE-l3-tWo"/>
             </constraints>
