@@ -34,6 +34,9 @@ public enum UnitId: Int {
 }
 
 public class Unit: DBSyncable, Identifiable {
+    
+    public static let unitsWithBase: [UnitId] = [.g, .kg, .liter, .milliliter, .custom]
+
     public dynamic var uuid: String = ""
     public dynamic var name: String = ""
     public dynamic var idVal: Int = UnitId.none.rawValue

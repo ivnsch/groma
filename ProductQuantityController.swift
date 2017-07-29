@@ -465,8 +465,7 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     
     fileprivate func updateBasesVisibility(unit: Providers.Unit?) {
         if let unit = unit {
-            let unitsWithBase: [UnitId] = [.g, .kg, .liter, .milliliter, .custom]
-            if unitsWithBase.contains(unit.id) {
+            if Providers.Unit.unitsWithBase.contains(unit.id) {
                 setBasesVisible(visible: true, animated: true)
             } else {
                 setBasesVisible(visible: false, animated: true)
