@@ -135,6 +135,10 @@ class ProductQuantityController: UIViewController {
             dataSource.delegate = self
             unitsDataSource = dataSource
             
+            if let firstUnit = units.first {
+                onSelect(unit: firstUnit)
+            }
+            
             let flowLayout = UICollectionViewFlowLayout()
             flowLayout.scrollDirection = .vertical
             
@@ -203,7 +207,7 @@ class ProductQuantityController: UIViewController {
             if let (index, base) = (bases.enumerated().filter {$0.element.val == val}.first) {
                 basesPicker?.scrollToItem(index: index, animated: false)
                 selectedBase = base.val
-                setBasesVisible(visible: true, animated: false) // ensure it's visible
+                updateBasesVisibility(unit: selectedUnit, animated: false)
             } else {
                 QL1("Base with val: \(val) not found in data source bases")
             }
@@ -463,15 +467,15 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
         }
     }
     
-    fileprivate func updateBasesVisibility(unit: Providers.Unit?) {
+    fileprivate func updateBasesVisibility(unit: Providers.Unit?, animated: Bool = true) {
         if let unit = unit {
             if Providers.Unit.unitsWithBase.contains(unit.id) {
-                setBasesVisible(visible: true, animated: true)
+                setBasesVisible(visible: true, animated: animated)
             } else {
-                setBasesVisible(visible: false, animated: true)
+                setBasesVisible(visible: false, animated: animated)
             }
         } else {
-            setBasesVisible(visible: false, animated: true)
+            setBasesVisible(visible: false, animated: animated)
         }
     }
     
