@@ -138,7 +138,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pullToAdd?.refreshControl.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -130)
+        pullToAdd?.refreshControl.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
         listItemsTableViewDelegate?.onTableViewScroll(scrollView)
     }
     
