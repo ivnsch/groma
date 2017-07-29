@@ -410,7 +410,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         currentQuantity = item.quantity
         productQuantityController?.quantity = item.quantity
         
-        priceInput.text = item.storeProduct?.price.toString(2)
+        let price = item.storeProduct?.price ?? 0
+        priceInput.text = price > 0 ? price.toString(2) : ""
         noteInput.text = item.note
         // TODO!!!!!!!!!!!!!!! quantifiable product - unit?
         
