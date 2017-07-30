@@ -120,11 +120,13 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     }
     
     fileprivate func initAddRecipeAnimator() {
-        guard let parent = parent?.parent?.parent?.parent else {QL4("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
         
-        recipeControllerAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
-        selectQuantifiableAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
-        selectIngredientAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
+        guard let parent = parent?.parent?.parent?.parent else {QL4("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
+        //guard let parent = parent?.parent?.parent else {QL4("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
+        
+        recipeControllerAnimator = recipeControllerAnimator ?? GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
+        selectQuantifiableAnimator = selectQuantifiableAnimator ?? GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
+        selectIngredientAnimator = selectIngredientAnimator ?? GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
     }
     
     fileprivate func clearAndLoadFirstPage(_ isSearchLoad: Bool) {
@@ -319,26 +321,40 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 guard let cell = self.collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
                 
                 // TODO!!!!!!!!!!!!!!!!!!!!!!!! bottom inset different varies for different screen sizes - bottom border has to be slightly about keyboard
-                self.selectQuantifiableAnimator?.open (button: cell, inset: Insets(left: 50, top: 100, right: 50, bottom: 50), scrollOffset: self.collectionView.contentOffset.y, controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
-                    let selectQuantifiableProductController = UIStoryboard.selectQuantifiableController()
+                
+                let leftRightInset: CGFloat = 50
+                let contentFrame = CGRect(
+                    x: leftRightInset,
+                    y: 30,
+                    width: self.view.frame.width - (leftRightInset * 2),
+                    height: 220
+                )
+                
+                self.selectQuantifiableAnimator?.openWithBGImproved(
+                    button: cell,
+                    srcView: self.collectionView,
+                    contentFrame: contentFrame,
+                    controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
+                        let selectQuantifiableProductController = UIStoryboard.selectQuantifiableController()
                     
-                    selectQuantifiableProductController.onSelected = {(quantifiableProduct, quantity) in
-                        weakSelf.selectQuantifiableAnimator?.close {
-                            print("") // compiler bug! we need some command here otherwise next line doesn't compile.
-//                            cell.scaleUpAndDown(scale: 1.1) {
-                                onRetrieved((quantifiableProduct, quantity))
-//                            }
+                        selectQuantifiableProductController.onSelected = {(quantifiableProduct, quantity) in
+                            weakSelf.selectQuantifiableAnimator?.close {
+                                print("") // compiler bug! we need some command here otherwise next line doesn't compile.
+    //                            cell.scaleUpAndDown(scale: 1.1) {
+                                    onRetrieved((quantifiableProduct, quantity))
+    //                            }
+                            }
                         }
-                    }
-                    
-                    selectQuantifiableProductController.onViewDidLoad = {[weak selectQuantifiableProductController] in
-                        selectQuantifiableProductController?.quantifiableProducts = quantifiableProducts
-                    }
-                    
-                    selectQuantifiableProductController.view.layer.cornerRadius = Theme.popupCornerRadius
+                        
+                        selectQuantifiableProductController.onViewDidLoad = {[weak selectQuantifiableProductController] in
+                            selectQuantifiableProductController?.quantifiableProducts = quantifiableProducts
+                        }
+                        
+                        selectQuantifiableProductController.view.layer.cornerRadius = Theme.popupCornerRadius
 
-                    return selectQuantifiableProductController
-                })
+                        return selectQuantifiableProductController
+                    }
+                )
 
             } else {
                 QL3("Invalid state?: No quantifiable product for product: \(product.uuid)::\(product.item.name). Creating a new quantifiable product.") // we create a new one as "emergency solution". TODO review this - maybe this is not an invalid state - if a user e.g. deletes all the quantifiable products in product manager (this isn't possible yet but it may be implemented in the future), it's possible that we keep only the product but no quantifiable products for it. So we either have to ensure there's always a quantifiable product for a product or allow to create them "lazily" here.

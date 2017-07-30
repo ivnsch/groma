@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 import Providers
 
-// TODO use a transition?
+// TODO use a transition? either way refactor all this... 
 class GromFromViewControlerAnimator {
     
     weak var parent: UIViewController?
@@ -35,6 +35,61 @@ class GromFromViewControlerAnimator {
         self.animateButtonAtEnd = animateButtonAtEnd
     }
     
+    func openWithBGImproved(button: UIView? = nil, srcView: UIView, contentFrame: CGRect, controllerCreator: (() -> UIViewController?)? = nil, onFinish: (() -> Void)? = nil) {
+        if button != nil {
+            self.button = button
+        }
+        
+        if controllerCreator != nil {
+            self.controllerCreator = controllerCreator
+        }
+        
+        guard let parent = parent, let button = button, let controllerCreator = self.controllerCreator else {QL4("No fields"); return}
+        guard let controller = controllerCreator() else {QL4("Couldn't create controller"); return}
+        self.controller = controller
+
+        let buttonPointInParent = parent.view.convert(CGPoint(x: button.center.x, y: button.center.y), from: srcView)
+
+        let navBarOffset: CGFloat = 64
+        
+        let parentWidth = parent.view.frame.width
+        let parentHeight = parent.view.frame.height
+        let parentFrame = CGRect(x: 0, y: 0, width: parentWidth, height: parentHeight)
+        
+        let targetFrame = CGRect(x: parentFrame.origin.x, y: parentFrame.origin.y + 64, width: parentFrame.width, height: parentFrame.height - navBarOffset)
+
+        let backgroundView = HandlingButton()
+        backgroundView.tapHandler = {[weak self] in
+            self?.close()
+        }
+        self.backgroundView = backgroundView
+
+        backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        backgroundView.frame = targetFrame
+        parent.addChildViewController(controller)
+        parent.view.addSubview(backgroundView)
+        
+        
+        controller.view.frame = contentFrame
+        backgroundView.addSubview(controller.view)
+
+        let fractionX = (buttonPointInParent.x) / (parentWidth)
+        let fractionY = (buttonPointInParent.y - navBarOffset) / (parentHeight - navBarOffset)
+        
+        backgroundView.layer.anchorPoint = CGPoint(x: fractionX, y: fractionY)
+        backgroundView.frame = targetFrame
+        backgroundView.alpha = 0
+
+        backgroundView.transform = backgroundView.transform.scaledBy(x: 0.1, y: 0.1)
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            backgroundView.transform = CGAffineTransform(scaleX: 1, y: 1)
+            backgroundView.alpha = 1
+            onFinish?()
+        })
+    }
+    
+        
     /// Scroll offset: If button is in a scrollable view (table view, collection view) current content view offset
     /// frame has priority over inserts. If frame is passed, inset is ignored.
     func open(button: UIView? = nil, frame: CGRect? = nil, inset: Insets = (left: 0, top: 0, right: 0, bottom: 0), addTopBarHeightToY: Bool = true, scrollOffset: CGFloat = 0, addOverlay: Bool = true, controllerCreator: (() -> UIViewController?)? = nil, onFinish: (() -> Void)? = nil) {
