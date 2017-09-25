@@ -519,7 +519,8 @@ class RealmListItemProvider: RealmProvider {
             do {
                 let realm = try Realm()
                 let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterList(listCopy.uuid))
-                let count = listItems.filter{$0.hasStatus(status)}.count
+                let filteredListItems = listItems.filter { $0.hasStatus(status) }
+                let count = filteredListItems.count
                 finished(count)
             } catch _ {
                 print("Error: creating Realm() in load, returning empty results")

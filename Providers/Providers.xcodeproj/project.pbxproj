@@ -277,6 +277,7 @@
 		6A3A67D61E57D84800B5354F /* FractionsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3A67D51E57D84800B5354F /* FractionsContainer.swift */; };
 		6A407AB81E32CB4700D77405 /* AddableIngredientProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407AB71E32CB4700D77405 /* AddableIngredientProviderImpl.swift */; };
 		6A407ABA1E33A14B00D77405 /* AddableIngredientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A407AB91E33A14B00D77405 /* AddableIngredientProvider.swift */; };
+		6A7F59ED1F7990E0008242A5 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7F59EC1F7990E0008242A5 /* Logger.swift */; };
 		6A85FF251E4B5A66008E319D /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A85FF241E4B5A66008E319D /* Item.swift */; };
 		6A85FF271E4B5DC4008E319D /* RealmItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A85FF261E4B5DC4008E319D /* RealmItemProvider.swift */; };
 		6A85FF291E4B6267008E319D /* ItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A85FF281E4B6267008E319D /* ItemInput.swift */; };
@@ -582,6 +583,7 @@
 		6A3A67D51E57D84800B5354F /* FractionsContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FractionsContainer.swift; sourceTree = "<group>"; };
 		6A407AB71E32CB4700D77405 /* AddableIngredientProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddableIngredientProviderImpl.swift; sourceTree = "<group>"; };
 		6A407AB91E33A14B00D77405 /* AddableIngredientProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddableIngredientProvider.swift; sourceTree = "<group>"; };
+		6A7F59EC1F7990E0008242A5 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		6A85FF241E4B5A66008E319D /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		6A85FF261E4B5DC4008E319D /* RealmItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmItemProvider.swift; sourceTree = "<group>"; };
 		6A85FF281E4B6267008E319D /* ItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemInput.swift; sourceTree = "<group>"; };
@@ -1159,6 +1161,7 @@
 				6A256D9C1E04085B004F5028 /* LangManager.swift */,
 				6A256DC01E040DDB004F5028 /* RealmConfig.swift */,
 				6A256DC61E04464E004F5028 /* RequestErrorToMsgMapper.swift */,
+				6A7F59EC1F7990E0008242A5 /* Logger.swift */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -1274,13 +1277,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Providers-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B04CC815DBA455439D1D7E1B /* [CP] Copy Pods Resources */ = {
@@ -1564,6 +1570,7 @@
 				6A256D741E0407AC004F5028 /* String.swift in Sources */,
 				6A256BD21E040530004F5028 /* RealmProductCategoryProvider.swift in Sources */,
 				6A256C091E04056C004F5028 /* ProviderFactory.swift in Sources */,
+				6A7F59ED1F7990E0008242A5 /* Logger.swift in Sources */,
 				6A256CE91E040612004F5028 /* RemoteGroupItem.swift in Sources */,
 				6A256D241E04066D004F5028 /* RemoteGroupWithItems.swift in Sources */,
 				6A256D231E04066D004F5028 /* RemoteInventoryItemsWithDependenciesNoInventory.swift in Sources */,

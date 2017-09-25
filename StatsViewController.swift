@@ -305,8 +305,7 @@ class StatsViewController: UIViewController
         let outputDateFormatter = DateFormatter()
         outputDateFormatter.dateFormat = "MMM"
         
-        
-        
+
         class MyAxisValueDate: ChartAxisValueDate {
             let isHighlighted: Bool
             init(date: Date, formatter: DateFormatter, isHighlighted: Bool, labelSettings: ChartLabelSettings = ChartLabelSettings()) {
@@ -316,7 +315,9 @@ class StatsViewController: UIViewController
             override var labels: [ChartAxisLabel] {
                 let settings: ChartLabelSettings = {
                     if isHighlighted {
-                        return labelSettings.copy(fontColor: UIColor.darkText)
+                        var labelSettingsVar = labelSettings
+                        labelSettingsVar.fontColor = UIColor.darkText
+                        return labelSettingsVar
                     } else {
                         return labelSettings
                     }
@@ -381,11 +382,11 @@ class StatsViewController: UIViewController
             }
         }
 
-        let yValues: [ChartAxisValue] = ChartAxisValuesGenerator.generateYAxisValuesWithChartPoints(chartPoints, minSegmentCount: 4, maxSegmentCount: 8, multiple: 2, axisValueGenerator: {EmptyAxisValue($0)}, addPaddingSegmentIfEdge: false)
+        let yValues: [ChartAxisValue] = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(chartPoints, minSegmentCount: 4, maxSegmentCount: 8, multiple: 2, axisValueGenerator: {EmptyAxisValue($0)}, addPaddingSegmentIfEdge: false)
         
         let xModel = ChartAxisModel(axisValues: xValues, axisTitleLabel: ChartAxisLabel(text: "", settings: labelSettings))
         let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: "Spending", settings: labelSettings.defaultVertical()))
-        let chartSettings = ChartSettings()
+        var chartSettings = ChartSettings()
         chartSettings.top = 20
         chartSettings.trailing = 30
         chartSettings.leading = 12
@@ -393,7 +394,7 @@ class StatsViewController: UIViewController
         chartSettings.axisStrokeWidth = 0
         
         let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: chartView.bounds, xModel: xModel, yModel: yModel)
-        let (xAxis, yAxis, innerFrame) = (coordsSpace.xAxis, coordsSpace.yAxis, coordsSpace.chartInnerFrame)
+        let (xAxisLayer, yAxisLayer, innerFrame) = (coordsSpace.xAxisLayer, coordsSpace.yAxisLayer, coordsSpace.chartInnerFrame)
         
         let cp: [ChartPoint] = xValues.map {xValue in
             let (_, month, year) = xValue.date.dayMonthYear
@@ -410,11 +411,11 @@ class StatsViewController: UIViewController
         }
 
 
-        let barWidth = xAxis.minAxisScreenSpace - (xValues.count < 7 ? 25 : 10) // when few values (<7) bars look a bit too wide, make them smaller
+        let barWidth = xAxisLayer.minAxisScreenSpace - (xValues.count < 7 ? 25 : 10) // when few values (<7) bars look a bit too wide, make them smaller
         
         
         let barViewGenerator = {(chartPointModel: ChartPointLayerModel<AggrChartPoint>, layer: ChartPointsViewsLayer<AggrChartPoint, UIView>, chart: Chart) -> UIView? in
-            let bottomLeft = CGPoint(x: layer.innerFrame.origin.x, y: layer.innerFrame.origin.y + layer.innerFrame.height)
+            let bottomLeft = CGPoint(x: chart.innerFrame.origin.x, y: chart.innerFrame.origin.y + chart.innerFrame.height)
             
             let (p1, p2): (CGPoint, CGPoint) =  (CGPoint(x: chartPointModel.screenLoc.x, y: bottomLeft.y), CGPoint(x: chartPointModel.screenLoc.x, y: chartPointModel.screenLoc.y))
 
@@ -429,7 +430,8 @@ class StatsViewController: UIViewController
 //            }()
             
             let bgColor = Theme.orange
-            let barView = MyChartPointViewBar(p1: p1, p2: p2, width: barWidth, bgColor: bgColor)
+            let barSettings = ChartBarViewSettings()
+            let barView = MyChartPointViewBar(p1: p1, p2: p2, width: barWidth, bgColor: bgColor, settings: barSettings)
             
             barView.onViewTap = {[weak self] in
                 
@@ -447,7 +449,7 @@ class StatsViewController: UIViewController
             
             return barView
         }
-        let barsLayer = ChartPointsViewsLayer<AggrChartPoint, UIView>(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: chartPoints, viewGenerator: barViewGenerator)
+        let barsLayer = ChartPointsViewsLayer<AggrChartPoint, UIView>(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: chartPoints, viewGenerator: barViewGenerator)
         
         let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 2
@@ -461,7 +463,7 @@ class StatsViewController: UIViewController
             }
         }()
         
-        let labelsLayer = ChartPointsViewsLayer(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: cp, viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
+        let labelsLayer = ChartPointsViewsLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: cp, viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
             
             if chartPointModel.index == cp.count - 1 && chartPointModel.chartPoint.y.scalar > 0 {
                 let label = HandlingLabel()
@@ -487,7 +489,7 @@ class StatsViewController: UIViewController
 
         }, displayDelay: 0.3) // show after bars animation
         
-        let layers: [ChartLayer] = [xAxis, barsLayer, labelsLayer]
+        let layers: [ChartLayer] = [xAxisLayer, barsLayer, labelsLayer]
 
 //        if (chartPoints.contains{$0.y.scalar > 0}) { // don't show avg line if all the prices are 0, it looks weird
         
@@ -521,6 +523,8 @@ class StatsViewController: UIViewController
 
         let chart = Chart(
             view: chartView,
+            innerFrame: innerFrame,
+            settings: chartSettings,
             layers: layers
         )
         

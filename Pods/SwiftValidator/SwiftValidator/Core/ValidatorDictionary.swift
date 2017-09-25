@@ -9,10 +9,11 @@
 import Foundation
 
 public struct ValidatorDictionary<T> : Sequence {
-    public init() {}
-
-    fileprivate var innerDictionary: [ObjectIdentifier: T] = [:];
     
+    fileprivate var innerDictionary: [ObjectIdentifier: T] = [:];
+
+    public init() { }
+
     public subscript(key: ValidatableField?) -> T? {
         get {
             if let key = key {
@@ -43,7 +44,6 @@ public struct ValidatorDictionary<T> : Sequence {
     public func makeIterator() -> DictionaryIterator<ObjectIdentifier ,T> {
         return innerDictionary.makeIterator()
     }
-
 }
 
 public func +<T>(left: ValidatorDictionary<T>, right: ValidatorDictionary<T>) -> ValidatorDictionary<T> {

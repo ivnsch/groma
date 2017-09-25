@@ -18,38 +18,42 @@ open class BarsChartConfig: ChartConfig {
         self.xAxisLabelSettings = xAxisLabelSettings
         self.yAxisLabelSettings = yAxisLabelSettings
         
-       super.init(chartSettings: chartSettings, guidelinesConfig: guidelinesConfig)
+        super.init(chartSettings: chartSettings, guidelinesConfig: guidelinesConfig)
     }
 }
 
 open class BarsChart: Chart {
     
-    public init(frame: CGRect, chartConfig: BarsChartConfig, xTitle: String, yTitle: String, bars barModels: [(String, Double)], color: UIColor, barWidth: CGFloat, animDuration: Float = 0.5, horizontal: Bool = false) {
+    public init(frame: CGRect, chartConfig: BarsChartConfig, xTitle: String, yTitle: String, bars barModels: [(String, Double)], color: UIColor, barWidth: CGFloat, animDuration: Float = 0.5, animDelay: Float = 0.5, horizontal: Bool = false) {
         
         let zero = ChartAxisValueDouble(0)
-        let bars: [ChartBarModel] = barModels.enumerated().map {index, barModel in
+        let bars: [ChartBarModel] = barModels.enumerated().map {let (index, barModel) = $0;
             return ChartBarModel(constant: ChartAxisValueDouble(index), axisValue1: zero, axisValue2: ChartAxisValueDouble(barModel.1), bgColor: color)
         }
         
-        let valAxisValues = stride(from: chartConfig.valsAxisConfig.from, through: chartConfig.valsAxisConfig.to, by: chartConfig.valsAxisConfig.by).map{ChartAxisValueDouble($0)}
-        let labelAxisValues = [ChartAxisValueString(order: -1)] + barModels.enumerated().map{index, tuple in ChartAxisValueString(tuple.0, order: index)} + [ChartAxisValueString(order: barModels.count)]
+        let valAxisValues = stride(from: chartConfig.valsAxisConfig.from, through: chartConfig.valsAxisConfig.to, by: chartConfig.valsAxisConfig.by).map{ChartAxisValueDouble($0, labelSettings : chartConfig.xAxisLabelSettings)}
+        let labelAxisValues = [ChartAxisValueString(order: -1)] + barModels.enumerated().map{ let (index, tuple) = $0; return ChartAxisValueString(tuple.0, order: index, labelSettings : chartConfig.xAxisLabelSettings)} + [ChartAxisValueString(order: barModels.count)]
 
         let (xValues, yValues): ([ChartAxisValue], [ChartAxisValue]) = horizontal ? (valAxisValues, labelAxisValues) : (labelAxisValues, valAxisValues)
         
         let xModel = ChartAxisModel(axisValues: xValues, axisTitleLabel: ChartAxisLabel(text: xTitle, settings: chartConfig.xAxisLabelSettings))
         let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: yTitle, settings: chartConfig.xAxisLabelSettings.defaultVertical()))
         let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartConfig.chartSettings, chartFrame: frame, xModel: xModel, yModel: yModel)
-        let (xAxis, yAxis, innerFrame) = (coordsSpace.xAxis, coordsSpace.yAxis, coordsSpace.chartInnerFrame)
+        let (xAxisLayer, yAxisLayer, innerFrame) = (coordsSpace.xAxisLayer, coordsSpace.yAxisLayer, coordsSpace.chartInnerFrame)
         
-        let barsLayer: ChartLayer = ChartBarsLayer(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, bars: bars, horizontal: horizontal, barWidth: barWidth, animDuration: animDuration)
+        let barViewSettings = ChartBarViewSettings(animDuration: animDuration, animDelay: animDelay)
         
-        let guidelinesLayer = GuidelinesDefaultLayerGenerator.generateOpt(xAxis: xAxis, yAxis: yAxis, chartInnerFrame: innerFrame, guidelinesConfig: chartConfig.guidelinesConfig)
+        let barsLayer: ChartLayer = ChartBarsLayer(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, bars: bars, horizontal: horizontal, barWidth: barWidth, settings: barViewSettings)
+        
+        let guidelinesLayer = GuidelinesDefaultLayerGenerator.generateOpt(xAxisLayer: xAxisLayer, yAxisLayer: yAxisLayer, guidelinesConfig: chartConfig.guidelinesConfig)
         
         let view = ChartBaseView(frame: frame)
-        let layers: [ChartLayer] = [xAxis, yAxis] + (guidelinesLayer.map{[$0]} ?? []) + [barsLayer]
+        let layers: [ChartLayer] = [xAxisLayer, yAxisLayer] + (guidelinesLayer.map{[$0]} ?? []) + [barsLayer]
       
         super.init(
             view: view,
+            innerFrame: innerFrame,
+            settings: chartConfig.chartSettings,
             layers: layers
         )
     }

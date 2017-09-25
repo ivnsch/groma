@@ -9,7 +9,8 @@ project 'Providers/Providers.xcodeproj'
 def shared
     pod 'QorumLogs'
     pod 'Reachability', '~> 3.2'
-    pod 'RealmSwift', '~> 2.4'
+    pod 'RealmSwift', '~> 2.10'
+    pod 'SwiftyBeaver'
 end
 
 
@@ -20,9 +21,9 @@ end
 
 target 'Providers' do
     project 'Providers/Providers.xcodeproj'
-    pod 'Alamofire', '~> 4.0'
+    pod 'Alamofire', '~> 4.5'
     pod 'Valet'
-    pod 'Starscream'
+    pod 'Starscream', '2.0.3'
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
     shared
 end
@@ -31,7 +32,7 @@ target 'groma' do
     project 'shoppin.xcodeproj'
     platform :ios, '8.0'
     pod 'SwiftValidator', :git => 'https://github.com/i-schuetz/SwiftValidator.git', :branch => 'remove_delegate_callback'
-    pod 'SwiftCharts', '~> 0.5'
+    pod 'SwiftCharts', :git => 'https://github.com/i-schuetz/SwiftCharts.git'
     pod 'Google/SignIn'
     pod 'SwipeView', '~> 1.3.2'
     pod 'CMPopTipView', '~> 2.0'
@@ -42,9 +43,9 @@ target 'groma' do
     shared
     
     # fixme - shouldn't be necessary to have these dependencies here see http://stackoverflow.com/q/41191028/930450
-    pod 'Alamofire', '~> 4.0'
+    pod 'Alamofire', '~> 4.5'
     pod 'Valet'
-    pod 'Starscream'
+    pod 'Starscream', '2.0.3'
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
 end
 
