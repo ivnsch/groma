@@ -20,7 +20,7 @@ class EyeView: UIView {
     fileprivate let dotDiameter: CGFloat = 10
     
     weak var delegate: EyeViewDelegate?
-    
+
     fileprivate var open: Bool = true {
         didSet {
             openLabel?.isHidden = !open
