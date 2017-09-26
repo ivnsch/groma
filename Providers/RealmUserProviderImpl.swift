@@ -35,8 +35,13 @@ class RealmUserProviderImpl: UserProvider {
     
     // We pass userName separately because it's not safely retrievable from SyncCredentials
     private func loginOrRegister(_ credentials: SyncCredentials, userName: String? = nil, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
-        
-        let syncHost = "192.168.0.11"
+
+        #if (arch(i386) || arch(x86_64)) && os(iOS)
+            let syncHost = "127.0.0.1"
+        #else // device
+            let syncHost = "192.168.0.208"
+        #endif
+
         let syncAuthURL = URL(string: "http://\(syncHost):9080")!
         let syncRealmPath = "groma4"
         let syncServerURL = URL(string: "realm://\(syncHost):9080/~/\(syncRealmPath)")!
@@ -44,7 +49,9 @@ class RealmUserProviderImpl: UserProvider {
         QL1("Logging in with credentials: \(credentials), auth url: \(syncAuthURL)")
         
         SyncUser.logIn(with: credentials, server: syncAuthURL) {[weak self] user, error in
-            DispatchQueue.main.async {
+
+            DispatchQueue.main.sync {
+
                 if let user = user {
                     QL1("\nlogged in user: \(user)")
                     
@@ -52,7 +59,7 @@ class RealmUserProviderImpl: UserProvider {
                     
                     config.syncConfiguration = SyncConfiguration(user: user, realmURL: syncServerURL)
                     config.objectTypes = [List.self, DBInventory.self, Section.self, Product.self, DBSharedUser.self, DBRemoveList.self, DBRemoveInventory.self, ListItem.self, InventoryItem.self, DBSyncable.self, HistoryItem.self, DBPlanItem.self, ProductGroup.self, GroupItem.self, ProductCategory.self, StoreProduct.self, Recipe.self, Ingredient.self,
-                        SectionToRemove.self, ProductToRemove.self, StoreProductToRemove.self, DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self, DBRemoveInventoryItem.self, DBRemoveProductGroup.self
+                        SectionToRemove.self, ProductToRemove.self, StoreProductToRemove.self, DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self, DBRemoveInventoryItem.self, DBRemoveProductGroup.self, Item.self, Unit.self, QuantifiableProduct.self, RecipesContainer.self, InventoriesContainer.self, ListsContainer.self, BaseQuantitiesContainer.self, BaseQuantity.self
                     ]
                         
                     Realm.Configuration.defaultConfiguration = config
@@ -82,7 +89,15 @@ class RealmUserProviderImpl: UserProvider {
                     QL4("Error during login/register, no user: \(String(describing: error))")
                     // TODO!!!!!!!!!!!!!!!! fix/ask:
 //                     RealmUserProviderImpl.swift:82 loginOrRegister(_:userName:controller:_:): ❤️Error during login/register, no user: Optional(Error Domain=io.realm.sync Code=3 "Your request parameters did not validate." UserInfo={statusCode=400, NSLocalizedDescription=Your request parameters did not validate.})❤️
-                    handler(ProviderResult(status: .unknown))
+
+                    switch error {
+                    case let nsError as NSError:
+                        switch nsError.code {
+                        case 611: handler(ProviderResult(status: .invalidCredentials))
+                        default: handler(ProviderResult(status: .unknown))
+                        }
+                    default: handler(ProviderResult(status: .unknown))
+                    }
                 }
             }
         }
