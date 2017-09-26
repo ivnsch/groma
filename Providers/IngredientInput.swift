@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct IngredientInput: Equatable, Hashable {
     public let name: String
@@ -100,7 +100,7 @@ public struct Fraction: Equatable {
     }
     
     public var decimalValue: Float {
-        guard denominator != 0 else {QL4("Invalid state: denominator is 0. Returning 0"); return 0}
+        guard denominator != 0 else {logger.e("Invalid state: denominator is 0. Returning 0"); return 0}
         return Float(wholeNumber) + (Float(numerator) / Float(denominator))
     }
     

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 import RealmSwift
 
@@ -141,11 +141,9 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     func setListItems(_ items: [ListItem]) { // as function instead of variable+didSet because didSet is called each time we modify the array
         self.items = items
         self.initTableViewContent()
-        
-        if QorumLogs.minimumLogLevelShown < 2 {
-            print("List for status: \(status)")
-            print(debugTableViewListItems())
-        }
+
+        logger.d("List for status: \(status)")
+        logger.d(debugTableViewListItems())
     }
     
     fileprivate func initTableViewContent() {
@@ -207,7 +205,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             let incrementedListItem = tableViewListItem.listItem.increment(ListItemStatusQuantity(status: status, quantity: increment.delta))
             updateOrAddListItem(incrementedListItem, status: status, increment: false, notifyRemote: notifyRemote) // update means overwrite - don't increment
         } else {
-            QL2("Couldn't increment list item because it's not in the table view")
+            logger.d("Couldn't increment list item because it's not in the table view")
         }
     }
 
@@ -216,7 +214,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             let updatedItem = tableViewListItem.listItem.updateQuantity(ListItemStatusQuantity(status: status, quantity: quantity))
             updateListItem(updatedItem, status: status, notifyRemote: notifyRemote)
         } else {
-            QL2("Couldn't update list item quantity because it's not in the table view")
+            logger.d("Couldn't update list item quantity because it's not in the table view")
         }
     }
     
@@ -277,7 +275,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                     if let finalIndexPath = finalIndexPath {
                         tableView.scrollToRow(at: finalIndexPath, at: .top, animated: true)
                     } else {
-                        QL4("Invalid state: Index path should be set. Initial index path: \(indexPath). ListItem: \(listItem)")
+                        logger.e("Invalid state: Index path should be set. Initial index path: \(indexPath). ListItem: \(listItem)")
                     }
                 }
             }
@@ -417,15 +415,15 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                     count += s.tableViewListItems.count
                 }
             }
-            QL2("No index path for index: \(index)")
+            logger.d("No index path for index: \(index)")
             return nil
         }
         
         if let indexPath = findIndexPath(index: index) {
-            QL1("Found list item for index: \(index), item: \(indexPath)")
+            logger.v("Found list item for index: \(index), item: \(indexPath)")
             removeListItem(index: index, indexPath: indexPath, animation: animation)
         } else {
-            QL4("Didn't find index path for index: \(index)")
+            logger.e("Didn't find index path for index: \(index)")
         }
     }
     
@@ -469,7 +467,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.uuid == quantifiableProductUuid}) {
             removeListItem(tableViewListItem.listItem)
         } else {
-            QL1("removeListItemReferencingProduct list item is not in list items table view. Quantifiable product uuid: \(quantifiableProductUuid)")
+            logger.v("removeListItemReferencingProduct list item is not in list items table view. Quantifiable product uuid: \(quantifiableProductUuid)")
         }
     }
 
@@ -487,7 +485,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 //            let updated = tableViewListItem.listItem.update(product: product)
 //            updateListItem(updated, status: status, notifyRemote: false)
 //        } else {
-//            QL1("updateProduct list item is not in list items table view. Product uuid: \(product.uuid)")
+//            logger.v("updateProduct list item is not in list items table view. Product uuid: \(product.uuid)")
 //        }
     }
     
@@ -643,7 +641,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 
                 _ = AlertPopup.showCustom(message: tableViewListItem.listItem.note, controller: parentController, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
             } else {
-                QL3("No parent controller, can't show note popup")
+                logger.w("No parent controller, can't show note popup")
             }
             
             
@@ -811,7 +809,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             }
             
         } else {
-            QL3("markOpen: \(open), self not set or indexPath not found: \(indexPath)")
+            logger.w("markOpen: \(open), self not set or indexPath not found: \(indexPath)")
         }
     }
     
@@ -821,10 +819,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 if section.tableViewListItems[safe: (indexPath as NSIndexPath).row] != nil {
                     section.tableViewListItems[(indexPath as NSIndexPath).row].swiped = open
                 } else {
-                    QL3("Didn't find item for index path: \(indexPath)")
+                    logger.w("Didn't find item for index path: \(indexPath)")
                 }
             } else {
-                QL4("Didn't find section for index path: \(indexPath)")
+                logger.e("Didn't find section for index path: \(indexPath)")
             }
             swipeableCell.setOpen(open, animated: true)
         } else {
@@ -871,7 +869,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             }
             
         } catch let e {
-            QL4("Realm error: \(e)")
+            logger.e("Realm error: \(e)")
         }
     }
     
@@ -886,7 +884,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         if let indexPath = getIndexPath(litsItem) {
             tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         } else {
-            QL2("Didn't find list item to scroll to")
+            logger.d("Didn't find list item to scroll to")
         }
     }
 }

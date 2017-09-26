@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import SwiftValidator
 import ChameleonFramework
-import QorumLogs
+
 import Providers
 import RealmSwift
 
@@ -93,7 +93,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     deinit {
-        QL1("Deinit list items controller")
+        logger.v("Deinit list items controller")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -124,7 +124,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         listItemsTableViewController.sections = list.sections(status: status)
         
-        QL1("Initialized sections: \(String(describing: listItemsTableViewController.sections?.count))")
+        logger.v("Initialized sections: \(String(describing: listItemsTableViewController.sections?.count))")
         
         onTableViewChangedQuantifiables()
         
@@ -137,8 +137,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 
     fileprivate func initNotifications() {
 
-        guard let sections = listItemsTableViewController.sections else {QL4("No sections"); return}
-        guard let sectionsRealm = sections.realm else {QL4("No realm"); return}
+        guard let sections = listItemsTableViewController.sections else {logger.e("No sections"); return}
+        guard let sectionsRealm = sections.realm else {logger.e("No realm"); return}
 
         realmData?.token.stop()
         
@@ -148,10 +148,10 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             case .initial:
                 //                        // Results are now populated and can be accessed without blocking the UI
                 //                        self.viewController.didUpdateList(reload: true)
-                QL1("initial")
+                logger.v("initial")
 
             case .update(_, let deletions, let insertions, let modifications):
-                QL2("LIST ITEMS notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                logger.d("LIST ITEMS notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
 
 
                 // TODO pass modifications to listItemsTableViewController, don't access table view directly
@@ -177,7 +177,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 
 
 
-//                QL2("self?.onTableViewChangedQuantifiables(")
+//                logger.d("self?.onTableViewChangedQuantifiables(")
 
 //                    self?.onTableViewChangedQuantifiables()
 
@@ -295,7 +295,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     func onListItemSwiped(_ tableViewListItem: ListItem, indexPath: IndexPath) {
         if !isEditing {
-            guard let realmData = realmData else {QL4("No realm data"); return}
+            guard let realmData = realmData else {logger.e("No realm data"); return}
             
             // TODO!!!! when receive switch status via websocket we will *not* show undo (undo should be only for the device doing the switch) but submit immediately this means:
             // 1. call switchstatus like here, 2. switch status in provider updates status/order, maybe deletes section, etc 3. update the table view - swipe the item and maybe delete section(this should be similar to calling onListItemClear except the animation in this case is not swipe, but that should be ok?)
@@ -331,7 +331,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 //                self?.listItemsTableViewController.clearPendingSwipeItemIfAny(true)
 //            })
 //        } else {
-//            QL2("Didn't find list item uuid in table view: \(listItemUuid)")
+//            logger.d("Didn't find list item uuid in table view: \(listItemUuid)")
 //        }
 //    }
     
@@ -364,11 +364,11 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     //     }
         
     //     Prov.listItemsProvider.switchStatusNew(listItem: listItem, srcStatus: srcStatus, dstStatus: status, notificationToken: notificationToken, realm: nil, successHandler{switchedListItem in
-    //         QL1("Undo successful")
+    //         logger.v("Undo successful")
     //         updateUI()
     //     })
     //     //Prov.listItemsProvider.switchStatus(listItem, list: listItem.list, status1: srcStatus, status: status, orderInDstStatus: listItem.order(status), remote: true, successHandler{switchedListItem in
-    //     //    QL1("Undo successful")
+    //     //    logger.v("Undo successful")
     //     //    updateUI()
     //     //})
     }
@@ -424,9 +424,9 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     func onListItemDeleted(indexPath: IndexPath, tableViewListItem: ListItem) {
-//        guard let status = currentList else {QL4("No realm data"); return}
-        guard let list = currentList else {QL4("No list"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+//        guard let status = currentList else {logger.e("No realm data"); return}
+        guard let list = currentList else {logger.e("No list"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         Prov.listItemsProvider.deleteNew(indexPath: indexPath, status: status, list: list, realmData: realmData, successHandler{[weak self] result in
             self?.onTableViewChangedQuantifiables()
@@ -439,10 +439,10 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     func onListItemMoved(from: IndexPath, to: IndexPath) {
-        guard from != to else {QL1("Nothing to move"); return}
+        guard from != to else {logger.v("Nothing to move"); return}
         
-        guard let list = currentList else {QL4("No list"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let list = currentList else {logger.e("No list"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
 
         Prov.listItemsProvider.move(from: from, to: to, status: status, list: list, realmData: realmData, successHandler{result in
             delay(0.4) {
@@ -458,12 +458,12 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
      */
     func updatePrices(_ listItemsFetchMode: ProviderFetchModus = .both) {
         // override
-        QL3("No override for updatePrices")
+        logger.w("No override for updatePrices")
     }
     
     fileprivate func addItem(_ listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil, onFinish: ((QuickAddItem, Any) -> Void)? = nil) {
         
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         
         func onAddSuccess(result: AddListItemResult) {
@@ -504,7 +504,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     fileprivate func addFormItem(_ listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil, onFinish: ((QuickAddItem, Any) -> Void)? = nil) {
         
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         
         func onAddSuccess(result: AddListItemResult) {
@@ -552,7 +552,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     // Note: don't use this to reorder sections, this doesn't update section order
     // Note: concerning status - this only updates the current status related data (quantity, order). This means quantity and order of possible items in the other status is not affected
     fileprivate func updateItem(_ updatingListItem: ListItem, listItemInput: ListItemInput, onFinish: ((QuickAddItem, Bool) -> Void)? = nil) {
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         if let currentList = self.currentList {
             
@@ -617,7 +617,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 //    }
     
     override func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
-        QL4("Outdated")
+        logger.e("Outdated")
 //        
 //        if let list = currentList {
 //            
@@ -631,10 +631,10 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 ////                        //    TODO!!!!!!!!!!!!!!!! ?
 //////                        self?.listItemsTableViewController.scrollToListItem(firstListItem)
 ////                    } else {
-////                        QL3("Shouldn't be here without list items")
+////                        logger.w("Shouldn't be here without list items")
 ////                    }
 //                } else {
-//                    QL3("Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
+//                    logger.w("Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
 //                }
 //                }, onError: {[weak self] result in guard let weakSelf = self else {return}
 //                    switch result.status {
@@ -645,13 +645,13 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 //                    }
 //            }))
 //        } else {
-//            QL4("Add product from quick list but there's no current list in ViewController'")
+//            logger.e("Add product from quick list but there's no current list in ViewController'")
 //        }
     }
     
     override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
-        guard let list = currentList else {QL4("No list"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let list = currentList else {logger.e("No list"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
 
         let listItemInputs = ingredientModels.map {model in
             
@@ -682,7 +682,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     override func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
-        guard let list = currentList else {QL4("No list"); return}
+        guard let list = currentList else {logger.e("No list"); return}
         
         Prov.listItemsProvider.listItems(list: list, ingredient: ingredient, mapper: {listItems -> String in
             if listItems.isEmpty {
@@ -697,7 +697,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     
     override func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
      
         if let list = currentList {
             
@@ -729,7 +729,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             })
             
         } else {
-            QL4("Add product from quick list but there's no current list in ViewController'")
+            logger.e("Add product from quick list but there's no current list in ViewController'")
         }
     }
     
@@ -750,15 +750,15 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             if editingItem == nil {
                 onAddListItem(input)
             } else {
-                QL4("Cast didn't work: \(String(describing: editingItem))")
+                logger.e("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
     
     override func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
         
-        guard let list = currentList else {QL4("No list"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let list = currentList else {logger.e("No list"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         func onEditListItem(_ input: ListItemInput, editingListItem: ListItem) {
             // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
@@ -779,7 +779,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             if editingItem == nil {
                 onAddListItem(input)
             } else {
-                QL4("Cast didn't work: \(String(describing: editingItem))")
+                logger.e("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
@@ -811,13 +811,13 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                         handler(categoryMaybe?.color)
                         
                         if categoryMaybe == nil {
-                            QL4("No section or category found with name: \(name) in list: \(list)") // if it's in the autocompletions it must be either the name of a section or category so we should have found one of these
+                            logger.e("No section or category found with name: \(name) in list: \(list)") // if it's in the autocompletions it must be either the name of a section or category so we should have found one of these
                         }
                     })
                 }
             })
         } else {
-            QL4("Invalid state: retrieving section color for add/edit but list is not set")
+            logger.e("Invalid state: retrieving section color for add/edit but list is not set")
         }
     }
     
@@ -878,7 +878,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             
             //  Avoid repetition. Repetition in case of contract would cause to add a new sections controller on top of the current one, which has the effect of looking like the expand gesture doesn't work anymore, as only the section controller on top is removed and after this the removal code isn't executed anymore.
             guard (reorderSections && isCurrentlyExpanded) || (!reorderSections && !isCurrentlyExpanded) else {
-                QL1("Repeating current state, return")
+                logger.v("Repeating current state, return")
                 lockToggleSectionsTableView = false
                 return
             }
@@ -991,9 +991,9 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     // MARK: - Notification
     
     func onListRemovedNotification(_ note: Foundation.Notification) {
-        guard let info = (note as NSNotification).userInfo as? Dictionary<String, String> else {QL4("Invalid info: \(note)"); return}
-        guard let listUuid = info[NotificationKey.list] else {QL4("No list uuid: \(info)"); return}
-        guard let currentList = currentList else {QL3("No current list, ignoring list removed notification."); return}
+        guard let info = (note as NSNotification).userInfo as? Dictionary<String, String> else {logger.e("Invalid info: \(note)"); return}
+        guard let listUuid = info[NotificationKey.list] else {logger.e("No list uuid: \(info)"); return}
+        guard let currentList = currentList else {logger.w("No current list, ignoring list removed notification."); return}
         
         // If we happen to be showing a list that was just removed (e.g. because user removed an inventory the list was associated to), exit.
         // In this case (opposed to websocket notification) we don't show an alert, as this is triggered by an action of the user in the same device and user should know it was removed.

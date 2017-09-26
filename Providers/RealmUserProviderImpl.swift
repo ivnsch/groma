@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 import CloudKit
 
 class RealmUserProviderImpl: UserProvider {
@@ -46,14 +46,14 @@ class RealmUserProviderImpl: UserProvider {
         let syncRealmPath = "groma4"
         let syncServerURL = URL(string: "realm://\(syncHost):9080/~/\(syncRealmPath)")!
         
-        QL1("Logging in with credentials: \(credentials), auth url: \(syncAuthURL)")
+        logger.v("Logging in with credentials: \(credentials), auth url: \(syncAuthURL)")
         
         SyncUser.logIn(with: credentials, server: syncAuthURL) {[weak self] user, error in
 
             DispatchQueue.main.sync {
 
                 if let user = user {
-                    QL1("\nlogged in user: \(user)")
+                    logger.v("\nlogged in user: \(user)")
                     
                     var config = RealmConfig.config
                     
@@ -66,14 +66,14 @@ class RealmUserProviderImpl: UserProvider {
                     
                     do {
                         self?.notificationToken = try Realm().addNotificationBlock { _ in
-                            QL2("Realm changed")
+                            logger.d("Realm changed")
                         }
                         
                         if let userName = userName { // for credentials login
 //                            self?.storeEmail(user.identity) // not the user name / email
                             self?.storeEmail(userName)
                         } else {
-                            QL3("User: \(user) has no identity")
+                            logger.w("User: \(user) has no identity")
                         }
                         
                         
@@ -81,12 +81,12 @@ class RealmUserProviderImpl: UserProvider {
                         handler(ProviderResult(status: .success, sucessResult: SyncResult(listInvites: [], inventoryInvites: [])))
                         
                     } catch let error {
-                        QL4("Couldn't instantiate Realm during login/register: \(error)")
+                        logger.e("Couldn't instantiate Realm during login/register: \(error)")
                         handler(ProviderResult(status: .unknown))
                     }
 
                 } else {
-                    QL4("Error during login/register, no user: \(String(describing: error))")
+                    logger.e("Error during login/register, no user: \(String(describing: error))")
                     // TODO!!!!!!!!!!!!!!!! fix/ask:
 //                     RealmUserProviderImpl.swift:82 loginOrRegister(_:userName:controller:_:): ❤️Error during login/register, no user: Optional(Error Domain=io.realm.sync Code=3 "Your request parameters did not validate." UserInfo={statusCode=400, NSLocalizedDescription=Your request parameters did not validate.})❤️
 
@@ -104,7 +104,7 @@ class RealmUserProviderImpl: UserProvider {
     }
     
     func isRegistered(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        QL4("Not implemented")
+        logger.e("Not implemented")
         handler(ProviderResult(status: .success))
     }
     
@@ -114,9 +114,9 @@ class RealmUserProviderImpl: UserProvider {
         let allUsers = SyncUser.all.values
         
         if allUsers.isEmpty {
-            QL3("No user to logout")
+            logger.w("No user to logout")
         } else if allUsers.count > 1 {
-            QL4("Warning/error: more than 1 user logged in: \(allUsers)")
+            logger.e("Warning/error: more than 1 user logged in: \(allUsers)")
         }
         
         for user in allUsers {
@@ -130,48 +130,48 @@ class RealmUserProviderImpl: UserProvider {
     }
     
     func sync(isMatchSync: Bool, onlyOverwriteLocal: Bool, additionalActionsOnSyncSuccess: VoidFunction? = nil, handler: @escaping (ProviderResult<SyncResult>) -> Void) {
-        QL4("Not implemented") // this method is not necessary for realm provider
+        logger.e("Not implemented") // this method is not necessary for realm provider
         handler(ProviderResult(status: .success))
     }
     
     func connectWebsocketIfLoggedIn() {
-        QL4("Not implemented") // this method is not necessary for realm provider
+        logger.e("Not implemented") // this method is not necessary for realm provider
     }
     
     func disconnectWebsocket() {
-        QL4("Not implemented") // this method is not necessary for realm provider
+        logger.e("Not implemented") // this method is not necessary for realm provider
     }
     
     func isWebsocketConnected() -> Bool {
-        QL4("Not implemented") // this method is not necessary for realm provider
+        logger.e("Not implemented") // this method is not necessary for realm provider
         return false
     }
     
     func forgotPassword(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        QL4("Not implemented") // TODO
+        logger.e("Not implemented") // TODO
         handler(ProviderResult(status: .success))
     }
     
     func removeAccount(_ handler: @escaping (ProviderResult<Any>) -> ()) {
-        QL4("Not implemented") // TODO
+        logger.e("Not implemented") // TODO
         handler(ProviderResult(status: .success))
     }
     
     func removeLoginToken() {
-        QL4("Not implemented") // this method is not necessary for realm provider?
+        logger.e("Not implemented") // this method is not necessary for realm provider?
     }
     
     func ping() {
-        QL4("Not implemented") // this method is not necessary for realm provider
+        logger.e("Not implemented") // this method is not necessary for realm provider
     }
     
     var hasLoginToken: Bool {
-        QL4("Not implemented") // this method is not necessary for realm provider
+        logger.e("Not implemented") // this method is not necessary for realm provider
         return true
     }
     
     var hasSignedInOnce: Bool {
-        QL4("Not implemented") // this method is not necessary for realm provider
+        logger.e("Not implemented") // this method is not necessary for realm provider
         return true
     }
     
@@ -184,7 +184,7 @@ class RealmUserProviderImpl: UserProvider {
     }
     
     func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[DBSharedUser]>) -> Void) {
-        QL4("Not implemented") // this method is not necessary for realm provider (for now, since we don't share items with real provider)
+        logger.e("Not implemented") // this method is not necessary for realm provider (for now, since we don't share items with real provider)
         handler(ProviderResult(status: .success))
     }
     
@@ -212,17 +212,17 @@ class RealmUserProviderImpl: UserProvider {
         let container = CKContainer.default()
         container.fetchUserRecordID(completionHandler: {(recordID: CKRecordID?, error: Error?) in
             if let error = error {
-                QL4("Couldn't fetch iCloud user record, error: \(error)")
+                logger.e("Couldn't fetch iCloud user record, error: \(error)")
                 handler(ProviderResult(status: .iCloudLoginError))
                 
             } else if let userAccessToken = recordID?.recordName {
-                QL2("Retrieved cloudKit token: \(userAccessToken), logging in...")
+                logger.d("Retrieved cloudKit token: \(userAccessToken), logging in...")
                 
                 let credentials = SyncCredentials.cloudKit(token: userAccessToken)
                 self.loginOrRegister(credentials, controller: controller, handler)
                 
             } else{
-                QL4("Invalid state: No error, but also no user record")
+                logger.e("Invalid state: No error, but also no user record")
                 handler(ProviderResult(status: .iCloudLoginError))
             }
         })

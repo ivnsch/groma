@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import SwiftValidator
 import ChameleonFramework
-import QorumLogs
+
 import Providers
 import RealmSwift
 
@@ -56,7 +56,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
                     cell.mode = cellMode
                 }
             } else {
-                QL4("Invalid state, couldn't cast: \(tableView.visibleCells)")
+                logger.e("Invalid state, couldn't cast: \(tableView.visibleCells)")
             }
             
         }
@@ -119,7 +119,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     
 
     deinit {
-        QL1("Deinit list items controller")
+        logger.v("Deinit list items controller")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -158,11 +158,11 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     
     fileprivate func udpateListItems(_ list: Providers.List, onFinish: VoidFunction? = nil) {
         
-        guard let list = currentList else {QL4("No list"); return}
+        guard let list = currentList else {logger.e("No list"); return}
         
         listItemsTableViewController.listItems = list.listItems(status: status)
         
-        QL1("Initialized listItems: \(String(describing: listItemsTableViewController.listItems?.count))")
+        logger.v("Initialized listItems: \(String(describing: listItemsTableViewController.listItems?.count))")
         
         onTableViewChangedQuantifiables()
         
@@ -171,8 +171,8 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     
     fileprivate func initNotifications() {
         
-        guard let sections = listItemsTableViewController.listItems else {QL4("No listItems"); return}
-        guard let sectionsRealm = sections.realm else {QL4("No realm"); return}
+        guard let sections = listItemsTableViewController.listItems else {logger.e("No listItems"); return}
+        guard let sectionsRealm = sections.realm else {logger.e("No realm"); return}
         
         realmData?.token.stop()
         
@@ -182,10 +182,10 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             case .initial:
                 //                        // Results are now populated and can be accessed without blocking the UI
                 //                        self.viewController.didUpdateList(reload: true)
-                QL1("initial")
+                logger.v("initial")
                 
             case .update(_, let deletions, let insertions, let modifications):
-                QL2("(Simple controller) notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                logger.d("(Simple controller) notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                 
                 
                 // TODO pass modifications to listItemsTableViewController, don't access table view directly
@@ -212,7 +212,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
                 
                 
                 
-                //                QL2("self?.onTableViewChangedQuantifiables(")
+                //                logger.d("self?.onTableViewChangedQuantifiables(")
                 
                 //                    self?.onTableViewChangedQuantifiables()
                 
@@ -267,7 +267,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         // TODO!!!!!!!!!!!!!!!!!!!!! update for new UI - we probably will not use "select" anymore but swipe and without undo
         
         if !isEditing { // open quick add in edit mode
-            guard let realmData = realmData else {QL4("No realm data"); return}
+            guard let realmData = realmData else {logger.e("No realm data"); return}
             
             // TODO!!!! when receive switch status via websocket we will *not* show undo (undo should be only for the device doing the switch) but submit immediately this means:
             // 1. call switchstatus like here, 2. switch status in provider updates status/order, maybe deletes section, etc 3. update the table view - swipe the item and maybe delete section(this should be similar to calling onListItemClear except the animation in this case is not swipe, but that should be ok?)
@@ -304,7 +304,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     //                self?.listItemsTableViewController.clearPendingSwipeItemIfAny(true)
     //            })
     //        } else {
-    //            QL2("Didn't find list item uuid in table view: \(listItemUuid)")
+    //            logger.d("Didn't find list item uuid in table view: \(listItemUuid)")
     //        }
     //    }
     
@@ -335,18 +335,18 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         //     }
         
         //     Prov.listItemsProvider.switchStatusNew(listItem: listItem, srcStatus: srcStatus, dstStatus: status, notificationToken: notificationToken, realm: nil, successHandler{switchedListItem in
-        //         QL1("Undo successful")
+        //         logger.v("Undo successful")
         //         updateUI()
         //     })
         //     //Prov.listItemsProvider.switchStatus(listItem, list: listItem.list, status1: srcStatus, status: status, orderInDstStatus: listItem.order(status), remote: true, successHandler{switchedListItem in
-        //     //    QL1("Undo successful")
+        //     //    logger.v("Undo successful")
         //     //    updateUI()
         //     //})
     }
 
     
     func onIncrementItem(_ tableViewListItem: ListItem, delta: Float) {
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
 
         Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, token: realmData.token, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
@@ -368,9 +368,9 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     }
     
     func onListItemDeleted(indexPath: IndexPath, tableViewListItem: ListItem) {
-        //        guard let status = currentList else {QL4("No realm data"); return}
-        guard let list = currentList else {QL4("No list"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        //        guard let status = currentList else {logger.e("No realm data"); return}
+        guard let list = currentList else {logger.e("No list"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         Prov.listItemsProvider.deleteNew(indexPath: indexPath, status: status, list: list, realmData: realmData, resultHandler(onSuccess: {[weak self] result in
             self?.onTableViewChangedQuantifiables()
@@ -387,10 +387,10 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     }
     
     func onListItemMoved(from: IndexPath, to: IndexPath) {
-        guard from != to else {QL1("Nothing to move"); return}
+        guard from != to else {logger.v("Nothing to move"); return}
         
-        guard let list = currentList else {QL4("No list"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let list = currentList else {logger.e("No list"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         Prov.listItemsProvider.moveCartOrStash(from: from, to: to, status: status, list: list, realmData: realmData, resultHandler(onSuccess: {result in
         }, onErrorAdditional: {[weak self] result in
@@ -404,12 +404,12 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
      */
     func updatePrices(_ listItemsFetchMode: ProviderFetchModus = .both) {
         // override
-        QL3("No override for updatePrices")
+        logger.w("No override for updatePrices")
     }
     
     fileprivate func addItem(_ listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         if let currentList = self.currentList {
             
@@ -435,7 +435,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     // Note: don't use this to reorder sections, this doesn't update section order
     // Note: concerning status - this only updates the current status related data (quantity, order). This means quantity and order of possible items in the other status is not affected
     fileprivate func updateItem(_ updatingListItem: ListItem, listItemInput: ListItemInput, onFinish: ((QuickAddItem, Bool) -> Void)? = nil) {
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
 
         if let currentList = self.currentList {
             
@@ -486,10 +486,10 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
 //                        //    TODO!!!!!!!!!!!!!!!! ?
 //                        //                        self?.listItemsTableViewController.scrollToListItem(firstListItem)
 //                    } else {
-//                        QL3("Shouldn't be here without list items")
+//                        logger.w("Shouldn't be here without list items")
 //                    }
                 } else {
-                    QL3("Group was added but couldn't reinit list, self or currentList is not set: self: \(String(describing: self)), currentlist: \(String(describing: self?.currentList))")
+                    logger.w("Group was added but couldn't reinit list, self or currentList is not set: self: \(String(describing: self)), currentlist: \(String(describing: self?.currentList))")
                 }
                 }, onError: {[weak self] result in guard let weakSelf = self else {return}
                     switch result.status {
@@ -500,13 +500,13 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
                     }
             }))
         } else {
-            QL4("Add product from quick list but there's no current list in ViewController'")
+            logger.e("Add product from quick list but there's no current list in ViewController'")
         }
     }
 
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
-        guard let list = currentList else {QL4("No list"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let list = currentList else {logger.e("No list"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         let listItemInputs = ingredientModels.map {model in
             
@@ -531,7 +531,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     }
     
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
-        guard let list = currentList else {QL4("No list"); return}
+        guard let list = currentList else {logger.e("No list"); return}
         
         Prov.listItemsProvider.listItems(list: list, ingredient: ingredient, mapper: {listItems -> String in
             if listItems.isEmpty {
@@ -545,7 +545,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     }
 
     func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         if let list = currentList {
             
@@ -573,7 +573,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             //                weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
             //            })
         } else {
-            QL4("Add product from quick list but there's no current list in ViewController'")
+            logger.e("Add product from quick list but there's no current list in ViewController'")
         }
     }
     
@@ -602,15 +602,15 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             if editingItem == nil {
                 onAddListItem(input)
             } else {
-                QL4("Cast didn't work: \(String(describing: editingItem))")
+                logger.e("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
     
     func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
         
-        guard let list = currentList else {QL4("No list"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let list = currentList else {logger.e("No list"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         
         
@@ -635,7 +635,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
             if editingItem == nil {
                 onAddListItem(input)
             } else {
-                QL4("Cast didn't work: \(String(describing: editingItem))")
+                logger.e("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
@@ -672,13 +672,13 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
                         handler(categoryMaybe?.color)
                         
                         if categoryMaybe == nil {
-                            QL4("No section or category found with name: \(name) in list: \(list)") // if it's in the autocompletions it must be either the name of a section or category so we should have found one of these
+                            logger.e("No section or category found with name: \(name) in list: \(list)") // if it's in the autocompletions it must be either the name of a section or category so we should have found one of these
                         }
                     })
                 }
             })
         } else {
-            QL4("Invalid state: retrieving section color for add/edit but list is not set")
+            logger.e("Invalid state: retrieving section color for add/edit but list is not set")
         }
     }
     
@@ -698,14 +698,14 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
 extension SimpleListItemsController: ListItemCellDelegateNew {
     
     func onItemSwiped(_ listItem: ListItem) {
-        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
+        guard let indexPath = indexPathFor(listItem: listItem) else {logger.e("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
         
         onListItemSwiped(listItem, indexPath: indexPath)
         tableView.deleteRows(at: [indexPath], with: .top)
     }
     
     func indexPathFor(listItem: ListItem) -> IndexPath? {
-        guard let listItems = listItems else {QL4("No listItems"); return nil}
+        guard let listItems = listItems else {logger.e("No listItems"); return nil}
 
         for (index, item) in listItems.enumerated() {
             if item.same(listItem) {
@@ -729,15 +729,15 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
             if let noteButton = cell.noteButton {
                 showPopup(text: listItem.note, cell: cell, button: noteButton)
             } else {
-                QL3("No note button")
+                logger.w("No note button")
             }
         } else {
-            QL4("Invalid state: There's no note. When there's no note there should be no button so we shouldn't be here.")
+            logger.e("Invalid state: There's no note. When there's no note there should be no button so we shouldn't be here.")
         }
     }
     
     func onChangeQuantity(_ listItem: ListItem, delta: Float) {
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
 
         Prov.listItemsProvider.increment(listItem, status: status, delta: delta, remote: true, token: realmData.token, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! review this todo - the cell is already being incremented in advance. Does this work correctly?
@@ -759,7 +759,7 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     }
     
     func onDelete(_ listItem: ListItem) {
-        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
+        guard let indexPath = indexPathFor(listItem: listItem) else {logger.e("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
         listItemsTableViewController.deleteListItem(indexPath: indexPath)
     }
 }
@@ -785,7 +785,7 @@ class SimpleListItemsTableViewController: UITableViewController {
                     cell.mode = cellMode
                 }
             } else {
-                QL4("Invalid state, couldn't cast: \(tableView.visibleCells)")
+                logger.e("Invalid state, couldn't cast: \(tableView.visibleCells)")
             }
             
         }
@@ -830,7 +830,7 @@ class SimpleListItemsTableViewController: UITableViewController {
             cell.sectionColorView.backgroundColor = UIColor.clear // in cart/stash no section colors
             
         } else {
-            QL4("Invalid state: no listitem for: \(indexPath) or no cell delegate: \(String(describing: cellDelegate))")
+            logger.e("Invalid state: no listitem for: \(indexPath) or no cell delegate: \(String(describing: cellDelegate))")
         }
         
         return cell
@@ -844,7 +844,7 @@ class SimpleListItemsTableViewController: UITableViewController {
     }
     
     fileprivate func deleteListItem(indexPath: IndexPath) {
-        guard let listItem = listItems?[indexPath.row] else {QL4("No listItem"); return}
+        guard let listItem = listItems?[indexPath.row] else {logger.e("No listItem"); return}
 
         tableView.wrapUpdates {[weak self] in
             // remove from content provider
@@ -871,7 +871,7 @@ class SimpleListItemsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let listItem = listItems?[indexPath.row] else {QL4("No listItem"); return}
+        guard let listItem = listItems?[indexPath.row] else {logger.e("No listItem"); return}
         listItemsTableViewDelegate?.onListItemSelected(listItem, indexPath: indexPath)
     }
     
@@ -919,12 +919,12 @@ class SimpleListItemsTableViewController: UITableViewController {
         //     }
         
         // } else {
-        //     QL3("markOpen: \(open), self not set or indexPath not found: \(indexPath)")
+        //     logger.w("markOpen: \(open), self not set or indexPath not found: \(indexPath)")
         // }
     }
     
     func findListItemIndexPath(listItem: ListItem) -> IndexPath? {
-        guard let listItems = listItems else {QL4("No sections"); return nil}
+        guard let listItems = listItems else {logger.e("No sections"); return nil}
         
         for (listItemIndex, l) in listItems.enumerated() {
             if l.same(listItem) {
@@ -939,7 +939,7 @@ class SimpleListItemsTableViewController: UITableViewController {
         if let indexPath = findListItemIndexPath(listItem: listItem) {
             tableView.reloadRows(at: [indexPath], with: .none)
         } else {
-            QL3("Didn't find cell to update for: \(listItem)")
+            logger.w("Didn't find cell to update for: \(listItem)")
         }
     }
 }

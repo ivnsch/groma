@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 @IBDesignable public class LabelMore: UILabel {
     
@@ -35,7 +35,7 @@ import QorumLogs
         case (.large, 60): return 22
         
         default:
-            QL3("Not handled fontType: \(fontType)")
+            logger.w("Not handled fontType: \(fontType)")
             return nil
         }
     }
@@ -45,7 +45,7 @@ import QorumLogs
         
         if let size = fontSize() {
             
-//            QL1("Init label with font size: \(size), text?: \(text). Dimension: \(DimensionsManager.widthDimension)")
+//            logger.v("Init label with font size: \(size), text?: \(text). Dimension: \(DimensionsManager.widthDimension)")
             
             self.font = {
                 if font.isBold {

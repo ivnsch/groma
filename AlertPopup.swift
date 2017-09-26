@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 class AlertPopup: NSObject {
@@ -29,7 +29,7 @@ class AlertPopup: NSObject {
     // Frame of popup (including semitransparent background) in case this is different than the frame controller's view.
     static func showCustom(title: String? = nil, message: String, controller: UIViewController, frame: CGRect? = nil, okMsg: String = trans("popup_button_ok"), confirmMsg: String = trans("popup_button_ok"), cancelMsg: String = trans("popup_button_cancel"), hasOkButton: Bool = false, isConfirm: Bool = false, rootControllerStartPoint: CGPoint? = nil, okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) -> MyAlertWrapper? {
         
-        guard controller.view.viewWithTag(ViewTags.NotePopup) == nil else {QL2("Already showing popup, return"); return nil} // TODO is this really necessary? (maybe when tap very quickly multiple times to open)
+        guard controller.view.viewWithTag(ViewTags.NotePopup) == nil else {logger.d("Already showing popup, return"); return nil} // TODO is this really necessary? (maybe when tap very quickly multiple times to open)
         
         let myAlert = Bundle.loadView("MyAlert", owner: self) as! MyAlert
         

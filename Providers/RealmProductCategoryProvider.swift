@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 class RealmProductCategoryProvider: RealmProvider {
     
@@ -24,7 +24,7 @@ class RealmProductCategoryProvider: RealmProvider {
                 let result: Results<ProductCategory> = self.loadSync(realm, filter: ProductCategory.createFilterNameContains(text))
                 return result.map{$0.uuid}
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 return nil
             }
             
@@ -35,12 +35,12 @@ class RealmProductCategoryProvider: RealmProvider {
                     handler(self.loadSync(realm, filter: ProductCategory.createFilterUuids(uuids)))
                 
                 } else {
-                    QL1("No categories with text: \(text)")
+                    logger.v("No categories with text: \(text)")
                     handler(nil)
                 }
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 handler(nil)
             }
         })
@@ -74,7 +74,7 @@ class RealmProductCategoryProvider: RealmProvider {
                 }
                 return true
             } catch let error {
-                QL4("Realm error: \(error)")
+                logger.e("Realm error: \(error)")
                 return false
             }
             }) {(result: Bool) in
@@ -90,7 +90,7 @@ class RealmProductCategoryProvider: RealmProvider {
                     handler(category)
                     
                 } else {
-                    QL4("Couldn't load categories")
+                    logger.e("Couldn't load categories")
                     handler(nil)
                 }
                 
@@ -114,7 +114,7 @@ class RealmProductCategoryProvider: RealmProvider {
                 onHasNewOrUpdatedCategory(category: category.copy(color: color))
                 
             } else {
-                QL1("Category doesn't exists: \(name)")
+                logger.v("Category doesn't exists: \(name)")
                 let newCategory = ProductCategory(uuid: UUID().uuidString, name: name, color: color.hexStr)
                 onHasNewOrUpdatedCategory(category: newCategory)
             }
@@ -146,7 +146,7 @@ class RealmProductCategoryProvider: RealmProvider {
     
     func removeAllWithName(_ categoryName: String, markForSync: Bool, handler: @escaping (Results<ProductCategory>?) -> Void) {
         categoriesWithName(categoryName) {[weak self] categories in guard let weakSelf = self else {return}
-            guard let categories = categories else {QL4("No results"); handler(nil); return}
+            guard let categories = categories else {logger.e("No results"); handler(nil); return}
             if !categories.isEmpty {
                 weakSelf.doInWriteTransaction({realm in
                     for category in categories {
@@ -158,7 +158,7 @@ class RealmProductCategoryProvider: RealmProvider {
                 })
                 
             } else {
-                QL2("No categories with name: \(categoryName) - nothing to remove") // this is not an error, this can be used e.g. in the autosuggestions where we list also section names.
+                logger.d("No categories with name: \(categoryName) - nothing to remove") // this is not an error, this can be used e.g. in the autosuggestions where we list also section names.
                 handler(nil)
             }
         }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol SlidingTabsViewDelegate: class {
@@ -67,7 +67,7 @@ class SlidingTabsView: UIView {
             line.center = line.center.copy(x: centerX)
             setNeedsDisplay()
         } else {
-            QL3("Trying to move line but is not initialised yet")
+            logger.w("Trying to move line but is not initialised yet")
         }
     }
     
@@ -138,7 +138,7 @@ class SlidingTabsView: UIView {
             }
             button.setTitleColor(selectedButtonColor, for: UIControlState())
         } else {
-            QL3("Button not found: \(buttonIndex)")
+            logger.w("Button not found: \(buttonIndex)")
         }
     }
 }

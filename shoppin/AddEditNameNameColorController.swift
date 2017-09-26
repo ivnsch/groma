@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 import SwiftValidator
 
 
@@ -55,7 +55,7 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
     var delegate: AddEditNameNameColorControllerDelegate?
     
     func config(prefillData: AddEditNameNameColorControllerInputs, settings: AddEditNameNameColorControllerSettings, editingObj: Any?) {
-        guard nameController != nil else {QL4("Controllers not initialized yet"); return}
+        guard nameController != nil else {logger.e("Controllers not initialized yet"); return}
         
         nameController?.config(
             mode: .embedded,
@@ -92,8 +92,8 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
     
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentView = parent?.view else {QL4("No parentController"); return nil}
-        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
+        guard let parentView = parent?.view else {logger.e("No parentController"); return nil}
+        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {logger.e("No tabBarController"); return nil}
         
         let overrideCenterY: CGFloat = parentView.height + tabBarHeight
         let addButtonHelper = AddButtonHelper(parentView: parentView, overrideCenterY: overrideCenterY) {[weak self] in
@@ -104,11 +104,11 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
     
     // Submit doesn't return anything here because we asume this controller to be always in standalone mode.
     func submit() {
-        guard let editingObj = editingObj else {QL4("No editing object"); return}
-        guard nameController != nil else {QL4("Controllers not initialized yet"); return}
+        guard let editingObj = editingObj else {logger.e("No editing object"); return}
+        guard nameController != nil else {logger.e("Controllers not initialized yet"); return}
         
-        guard let nameControllerResult = nameController.submit() else {QL4("Couldn't retrieve results"); return}
-        guard let nameColorControllerResult = nameColorController.submit() else {QL4("Couldn't retrieve results"); return}
+        guard let nameControllerResult = nameController.submit() else {logger.e("Couldn't retrieve results"); return}
+        guard let nameColorControllerResult = nameColorController.submit() else {logger.e("Couldn't retrieve results"); return}
         
         var result: EditNameButtonResult?
         var nameErrors: ValidatorDictionary<ValidationError>?
@@ -128,7 +128,7 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
             delegate?.onSubmitAddEditNameNameColor(result: AddEditNameNameColorResult(name: result.inputs.name, buttonSelected: result.inputs.buttonSelected, nameColorInputs: nameColorRes.inputs, editingObj: editingObj))
             
         } else {
-            guard let allErrors = (nameErrors.fOrAny(nameColorErrors){$0 + $1}) else {QL4("Invalid state: there should be errors here!"); return}
+            guard let allErrors = (nameErrors.fOrAny(nameColorErrors){$0 + $1}) else {logger.e("Invalid state: there should be errors here!"); return}
             present(ValidationAlertCreator.create(allErrors), animated: true, completion: nil)
         }
     }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 enum FontType {
     case light, regular, bold
@@ -23,7 +23,7 @@ class Fonts {
         if let fontSize = LabelMore.mapToFontSize(fontType) { // TODO move this out of LabelMore
             return UIFont.systemFont(ofSize: fontSize)
         } else {
-            QL3("No fond size for size category: \(fontType)")
+            logger.w("No fond size for size category: \(fontType)")
             return UIFont.systemFont(ofSize: 15) // return something
         }
     }

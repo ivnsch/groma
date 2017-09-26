@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct RemoteSwitchAllListItemsResult: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     public let items: [RemoteSwitchAllListItemResult]
@@ -22,7 +22,7 @@ public struct RemoteSwitchAllListItemsResult: ResponseObjectSerializable, Respon
             let sections = RemoteSwitchAllSectionResult.collection(sectionsObj),
             let lastUpdate = representation.value(forKeyPath: "timestamp") as? Double
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.items = items
@@ -58,7 +58,7 @@ public struct RemoteSwitchAllListItemResult: ResponseObjectSerializable, Respons
             let dstQuantity = representation.value(forKeyPath: "dstQuantity") as? Float,
             let dstOrder = representation.value(forKeyPath: "dstOrder") as? Int
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid
@@ -92,7 +92,7 @@ public struct RemoteSwitchAllSectionResult: ResponseObjectSerializable, Response
             let uuid = representation.value(forKeyPath: "uuid") as? String,
             let dstOrder = representation.value(forKeyPath: "dstOrder") as? Int
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid

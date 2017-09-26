@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 struct GoogleSignInHelper {
 
@@ -16,7 +16,7 @@ struct GoogleSignInHelper {
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)
         if let configureError = configureError {
-            QL4("Error configuring Google services: \(configureError)")
+            logger.e("Error configuring Google services: \(configureError)")
         }
         
         GIDSignIn.sharedInstance().delegate = delegate

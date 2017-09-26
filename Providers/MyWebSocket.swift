@@ -7,7 +7,7 @@
 //
 
 import Starscream
-import QorumLogs
+
 
 private class Keys {
     
@@ -52,15 +52,15 @@ class MyWebSocket: WebSocketDelegate {
                 socket?.delegate = self
                 socket?.headers["X-Auth-Token"] = token
                 socket?.headers["Content-Type"] = "application/json"
-                QL2("Websocket: Initialised, connecting...")
+                logger.d("Websocket: Initialised, connecting...")
                 socket?.connect()
                 
             } else {
-                QL1("No login token - can't initialise websocket ")
+                logger.v("No login token - can't initialise websocket ")
             }
 
         } else {
-            QL1("No internet connection - can't initialise websocket ")
+            logger.v("No internet connection - can't initialise websocket ")
         }
     }
     
@@ -69,24 +69,24 @@ class MyWebSocket: WebSocketDelegate {
         
         
         
-        QL2("Websocket: Disconnecting...")
+        logger.d("Websocket: Disconnecting...")
         if let deviceId: String = PreferencesManager.loadPreference(PreferencesManagerKey.deviceId) {
             sendMaybeMsg(unsubscribeMsg(deviceId)) // TODO!!!! we should send the list of the items we are subscribed to, to not make server traverse whole subscriber map looking for our device id
         } else {
-            QL4("Websocket: Can't unsubcribe websocket without device id. Not disconnecting.") // TODO if wen can't unsubscribe maybe we should disconnect anyway? But how does the server remove our not used entries from the subscriber map?
+            logger.e("Websocket: Can't unsubcribe websocket without device id. Not disconnecting.") // TODO if wen can't unsubscribe maybe we should disconnect anyway? But how does the server remove our not used entries from the subscriber map?
         }
     }
     
     fileprivate func sendMaybeMsg(_ msg: String?) {
         if let msg = msg {
             if isConnected {
-                QL1("Websocket: Sending msg: \(msg)")
+                logger.v("Websocket: Sending msg: \(msg)")
                 socket?.write(string: msg)
             } else {
-                QL3("Websocket: Trying to send a message: \(msg), but socket is not connected or initialised: \(String(describing: socket?.isConnected))")
+                logger.w("Websocket: Trying to send a message: \(msg), but socket is not connected or initialised: \(String(describing: socket?.isConnected))")
             }
         } else {
-            QL4("Websocke: Trying to send nil. Not sending anything.")
+            logger.e("Websocke: Trying to send nil. Not sending anything.")
         }
     }
     
@@ -125,7 +125,7 @@ class MyWebSocket: WebSocketDelegate {
             let data = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions())
             return NSString(data: data, encoding: String.Encoding.utf8.rawValue) as String?
         } catch let e as NSError {
-            QL4("Error serializing json: \(e). dict: \(dict)")
+            logger.e("Error serializing json: \(e). dict: \(dict)")
             return nil
         }
     }
@@ -144,7 +144,7 @@ class MyWebSocket: WebSocketDelegate {
         
         let deviceId = websocketDeviceId
         
-        QL2("Websocket: Connected. Device id: \(deviceId). Will send subscribe...")
+        logger.d("Websocket: Connected. Device id: \(deviceId). Will send subscribe...")
         
         Prov.listProvider.lists(false) {listsResult in
             
@@ -164,11 +164,11 @@ class MyWebSocket: WebSocketDelegate {
                         PreferencesManager.savePreference(PreferencesManagerKey.deviceId, value: NSString(string: deviceId))
 
                     } else {
-                        QL4("Couldn't retrieve inventories: \(inventoriesResult)")
+                        logger.e("Couldn't retrieve inventories: \(inventoriesResult)")
                     }
                 }
             } else {
-                QL4("Couldn't retrieve lists: \(listsResult)")
+                logger.e("Couldn't retrieve lists: \(listsResult)")
             }
         }
     }
@@ -177,37 +177,37 @@ class MyWebSocket: WebSocketDelegate {
         if let error = error {
             switch error.code {
             case 401:
-                QL3("Not authorized, removing login token \(error) TODO show login screen")
+                logger.w("Not authorized, removing login token \(error) TODO show login screen")
                 Prov.userProvider.removeLoginToken()
             case 1000:
                 // Called when we close the connection explicitly with disconnect()
-                QL2("Websocket: Closed connection")
+                logger.d("Websocket: Closed connection")
                 // ! sometimes this was called when the server was down also, so we try to reconnect here also, if there's a login token. If the user just logged out this does nothing as logout removes the login token.
                 if !WebsocketHelper.userDisabledWebsocket() {
                     tryReconnectIfLoggedIn()
                 }
             case 61:
                 // "Connection refused" - Called e.g. when trying to connect while the server is down. Here we don't check for login token because we should have checked for login token in the call that originated this reponse. This is only used for retry. If we are here, it means a connection attempt just was done, which means there is a login token stored.
-                QL3("Websocket: Connection refused")
+                logger.w("Websocket: Connection refused")
 
                 tryReconnectAndIncrementDelay()
                 notifyConnected(false)
                 
             case 57:
-                QL3("Trying to reconnect socket after: \(error)")
+                logger.w("Trying to reconnect socket after: \(error)")
                 // Got this sometimes on device, no apparent reason, server wasn't down or anything. Only thing is that it was on the device and the app was in the background 20 mins or so (using twitter while testing with the simulator)
                 // Error Domain=NSPOSIXErrorDomain Code=57 "The operation couldn’t be completed. Socket is not connected"[;
                 // For now we handle as closed connection and try to reconnect
                 tryReconnectIfLoggedIn()
                 
             default:
-                QL4("Unknown websocket connection error: \(error)")
+                logger.e("Unknown websocket connection error: \(error)")
             }
         } else {
             // Called when the server is stopped (e.g. restarted) NOTE we assume for now this is the only reason, there may be other(?) TODO: review. We should only try to reconnect when the server was down or general connection error, not when client intentionally disconnects.
             // EDIT: Apparently called also when the user logs out - first we see "Websocket: Closed connection[;" in log (case 1000 above) and immediately after "Websocket: Server closed the connection[;" which means we are being notified 2x. So now we check here if user has a login token (this is removed when the user logs out), so we don't try to reconnect or sent the notification to show the "websocket disconnected" message in this case. 
             // The responses seem to be a bit inconsistent, so we call now tryReconnectIfLoggedIn both on 1000 and here and check for login token in both cases. >> in server down case anyway only 1 of them is called, not both at the same time, so we will not have the situation of running the retry timier 2x (even if, it will just access the timer 2x)
-            QL2("Websocket: Server closed the connection")
+            logger.d("Websocket: Server closed the connection")
             tryReconnectIfLoggedIn()
         }
     }
@@ -233,12 +233,12 @@ class MyWebSocket: WebSocketDelegate {
         func calculateDelay() -> (Double, Double) {
             let delayUpper = (pow(2, reconnectDelayK) - 1) // the upper limit to calculate the random delay
             let delay = delayUpper.randomFrom0()
-//            QL1("reconnectDelayK: \(reconnectDelayK) delayUpper: \(delayUpper) random: \(delay)")
+//            logger.v("reconnectDelayK: \(reconnectDelayK) delayUpper: \(delayUpper) random: \(delay)")
             return (delayUpper, min(delay, maxReconnectDelay))
         }
         
         let (delayUpper, delay) = calculateDelay()
-        QL2("Will try to connect after delay: \(delay)")
+        logger.d("Will try to connect after delay: \(delay)")
         connectAfterDelay(delay)
         
         
@@ -258,7 +258,7 @@ class MyWebSocket: WebSocketDelegate {
             
             if !weakSelf.isConnected {
                 
-                QL2("Trying to connect websocket again after delay: \(Int(delaySecs))")
+                logger.d("Trying to connect websocket again after delay: \(Int(delaySecs))")
                 self?.socket?.connect()
             }
         }
@@ -270,7 +270,7 @@ class MyWebSocket: WebSocketDelegate {
     }
     
     func websocketDidReceiveMessage(socket: WebSocket, text: String) {
-        QL1("Websocket: Received text: \(text)")
+        logger.v("Websocket: Received text: \(text)")
 
         if let data = (text as NSString).data(using: String.Encoding.utf8.rawValue) {
             do {
@@ -281,42 +281,42 @@ class MyWebSocket: WebSocketDelegate {
                     if let connectionMsg = dict[Keys.cn] as? String {
                         switch connectionMsg {
                             case Keys.subscribed:
-                                QL2("Websocket: Received subscribed ack")
+                                logger.d("Websocket: Received subscribed ack")
                                 onSubscribed()
                             
                             case Keys.unsubscribed:
-                                QL2("Websocket: Received unsubscribed ack")
+                                logger.d("Websocket: Received unsubscribed ack")
                                 socket.disconnect()
                                 PreferencesManager.clearPreference(key: PreferencesManagerKey.deviceId)
                             
                             default:
-                                QL4("Websocket: Received unexpected connection msg: \(connectionMsg)")
+                                logger.e("Websocket: Received unexpected connection msg: \(connectionMsg)")
                         }
                         
                     } else {
                         // If the dictionary has no action key we expected it to be a standard message
                         if let verb = dict[Keys.verb] as? String, let category = dict[Keys.category] as? String, let topic = dict[Keys.topic] as? String, let sender = dict[Keys.sender] as? String, let data = dict[Keys.message] {
-                            QL1("Websocket: Verb: \(verb), category: \(category), topic: \(topic), sender: \(sender), data: \(data)")
+                            logger.v("Websocket: Verb: \(verb), category: \(category), topic: \(topic), sender: \(sender), data: \(data)")
                             MyWebsocketDispatcher.processCategory(category, verb: verb, topic: topic, sender: sender, data: data)
                         } else {
-                            QL4("Websocket: Dictionary has not expected contents: \(dict)")
+                            logger.e("Websocket: Dictionary has not expected contents: \(dict)")
                         }
                     }
 
                 } else {
-                    QL4("Websocket: Couldn't cast json obj to dict: \(json)")
+                    logger.e("Websocket: Couldn't cast json obj to dict: \(json)")
                 }
                 
             } catch let e as NSError {
-                QL4("Websocket: Error deserializing json: \(e)")
+                logger.e("Websocket: Error deserializing json: \(e)")
             }
             
         } else {
-            QL4("Websocket: Couldn't get data from text: \(text)")
+            logger.e("Websocket: Couldn't get data from text: \(text)")
         }
     }
     
     func websocketDidReceiveData(socket: WebSocket, data: Data) {
-        QL1("Websocket: Received data: \(data.count)")
+        logger.v("Websocket: Received data: \(data.count)")
     }
 }

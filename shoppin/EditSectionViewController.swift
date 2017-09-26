@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-import QorumLogs
+
 import Providers
 
 protocol EditSectionViewControllerDelegate: class {
@@ -34,7 +34,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
                 nameTextField.text = section?.name
                 view.backgroundColor = section?.color
             } else {
-                QL3("Outlets not initialised")
+                logger.w("Outlets not initialised")
             }
         }
     }
@@ -64,7 +64,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentView = parent?.view else {QL4("No parentController"); return nil}
+        guard let parentView = parent?.view else {logger.e("No parentController"); return nil}
         let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
             self?.submit()
         }

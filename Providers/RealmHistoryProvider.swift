@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 class RealmHistoryProvider: RealmProvider {
 
@@ -65,7 +65,7 @@ class RealmHistoryProvider: RealmProvider {
                         let firstUser = historyItems.first!.user // force unwrap -> if there's an array as value it must contain at least one element. If there was no history item for this date the date would not be in the dictionary
                         return HistoryItemGroup(date: k, user: firstUser, historyItems: historyItems.toArray())
                     } else {
-                        QL4("Error ocurred retrieving history items for uuids: \(uuids). Skipping history items group.")
+                        logger.e("Error ocurred retrieving history items for uuids: \(uuids). Skipping history items group.")
                         return nil
                     }
                 }
@@ -125,14 +125,14 @@ class RealmHistoryProvider: RealmProvider {
         doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return false}
             let results = realm.objects(HistoryItem.self).filter(HistoryItem.createPredicate(startDate.toMillis(), endAddedDate: endDate.toMillis(), inventoryUuid: inventoryUuid))
             
-            QL1("Found results for date: \(groupDate) in range: \(startDate) to \(endDate): \(results)")
+            logger.v("Found results for date: \(groupDate) in range: \(startDate) to \(endDate): \(results)")
             
             var dateDictDB = weakSelf.groupByDate(results)
             
             if let itemsForDate = dateDictDB[groupDate] {
                 realm.delete(itemsForDate)
             } else {
-                QL2("Didn't find any items to delete for date: \(groupDate) in range: \(startDate) to \(endDate)")
+                logger.d("Didn't find any items to delete for date: \(groupDate) in range: \(startDate) to \(endDate)")
             }
             
             return true
@@ -217,7 +217,7 @@ class RealmHistoryProvider: RealmProvider {
                 if let success = successMaybe {
                     handler(success)
                 } else {
-                    QL4("Error: RealmHistoryProvider.removeHistoryItem: success in nil")
+                    logger.e("Error: RealmHistoryProvider.removeHistoryItem: success in nil")
                     handler(false)
                 }
             }
@@ -256,11 +256,11 @@ class RealmHistoryProvider: RealmProvider {
                     return Array(deletedHistoryItemsUuids)
                     
                 } else {
-                    QL4("Didn't get endOfMonth for month year: \(monthYear)")
+                    logger.e("Didn't get endOfMonth for month year: \(monthYear)")
                     return nil
                 }
             } else {
-                QL4("Counldn't convert month year to date: \(monthYear)")
+                logger.e("Counldn't convert month year to date: \(monthYear)")
                 return nil
             }
             
@@ -268,7 +268,7 @@ class RealmHistoryProvider: RealmProvider {
             if let deletedHistoryItemsUuids = deletedHistoryItemsUuidsMaybe {
                 handler(deletedHistoryItemsUuids)
             } else {
-                QL4("Error: RealmHistoryProvider.removeHistoryItem: success in nil")
+                logger.e("Error: RealmHistoryProvider.removeHistoryItem: success in nil")
                 handler(nil)
             }
         })
@@ -288,7 +288,7 @@ class RealmHistoryProvider: RealmProvider {
                 if let removed = removedMaybe {
                     handler(removed)
                 } else {
-                    QL4("removed is nil")
+                    logger.e("removed is nil")
                     handler(false)
                 }
         })
@@ -302,7 +302,7 @@ class RealmHistoryProvider: RealmProvider {
             if let oldestItem = realm.objects(HistoryItem.self).sorted(byKeyPath: HistoryItem.addedDateKey, ascending: true).first {
                 return oldestItem.addedDate.millisToEpochDate()
             } else {
-                QL1("No items / oldest item")
+                logger.v("No items / oldest item")
                 return nil
             }
             

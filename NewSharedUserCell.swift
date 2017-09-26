@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol NewSharedUserCellDelegate: class {
@@ -35,7 +35,7 @@ class NewSharedUserCell: UITableViewCell {
         if let sharedUser = sharedUser {
             delegate?.onAddSharedUser(sharedUser, cell: self)
         } else {
-            QL4("Shared user is not set")
+            logger.e("Shared user is not set")
         }
     }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 import CMPopTipView
-import QorumLogs
+
 import Providers
 
 typealias InventoryItemsSortOption = (value: InventorySortBy, key: String)
@@ -50,7 +50,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             if let sortBy = sortBy {
                 sortByButton.setTitle(sortBy.key, for: UIControlState())
             } else {
-                QL3("sortBy is nil")
+                logger.w("sortBy is nil")
             }
         }
     }
@@ -229,9 +229,9 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
                 cell.model = model
             } else {
                 if delegate == nil {
-                    QL4("No delegate")
+                    logger.e("No delegate")
                 } else {
-                    QL4("Illegal state: No item for row: \(row)")
+                    logger.e("Illegal state: No item for row: \(row)")
                 }
                 
             }
@@ -268,7 +268,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            guard let model = delegate?.itemForRow(row: indexPath.row) else {QL4("Illegal state: no model"); return}
+            guard let model = delegate?.itemForRow(row: indexPath.row) else {logger.e("Illegal state: no model"); return}
             
             delegate?.remove(model, onSuccess: {}, onError: {_ in })
         }
@@ -290,7 +290,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     }
     
     func onQuantityInput(_ cell: ProductWithQuantityTableViewCell, quantity: Float) {
-        guard let model = cell.model else {QL4("Invalid state: Cell must have model"); return}
+        guard let model = cell.model else {logger.e("Invalid state: Cell must have model"); return}
         
         // Since we already wrote everything based on deltas, we transform our quantity update to delta
         let delta = quantity - model.quantity
@@ -302,15 +302,15 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         if let model = cell.model {
             delegate?.remove(model, onSuccess: {}, onError: {_ in })
         } else {
-            QL4("No model, can't update quantity")
+            logger.e("No model, can't update quantity")
         }
     }
     
     fileprivate func findFirstVisibleItem(_ f: (ProductWithQuantity2) -> Bool) -> (index: Int, model: ProductWithQuantity2, cell: ProductWithQuantityTableViewCell)? {
         return (tableView.visibleCells.flatMap {cell in
             let cell =  cell as! ProductWithQuantityTableViewCell
-            guard let model = cell.model else {QL4("Invalid state: no model"); return nil}
-            guard let indexPath = cell.indexPath else {QL4("Invalid state: no index path"); return nil}
+            guard let model = cell.model else {logger.e("Invalid state: no model"); return nil}
+            guard let indexPath = cell.indexPath else {logger.e("Invalid state: no index path"); return nil}
             
             if f(model) {
                 return (indexPath.row, model, cell)
@@ -322,7 +322,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     fileprivate func findFirstItem(_ f: (ProductWithQuantity2) -> Bool) -> (index: Int, model: ProductWithQuantity2)? {
         for itemIndex in 0..<itemsCount {
-            guard let item = delegate?.itemForRow(row: itemIndex) else {QL4("Illegal state: no item for index: \(itemIndex). Or delegate is nil: \(String(describing: delegate))"); return nil}
+            guard let item = delegate?.itemForRow(row: itemIndex) else {logger.e("Illegal state: no item for index: \(itemIndex). Or delegate is nil: \(String(describing: delegate))"); return nil}
             if f(item) {
                 return (itemIndex, item)
             }
@@ -335,9 +335,9 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     // Inserts item in table view, considering the current sortBy
     func insert(item: ProductWithQuantity2, scrollToRow: Bool) {
         guard let indexPath = findIndexPathForNewItem(item) else {
-            QL1("No index path for: \(item), appending"); return;
+            logger.v("No index path for: \(item), appending"); return;
         }
-        QL1("Found index path: \(indexPath) for: \(item.product.product.item.name), sortBy: \(String(describing: sortBy))")
+        logger.v("Found index path: \(indexPath) for: \(item.product.product.item.name), sortBy: \(String(describing: sortBy))")
         tableView.insertRows(at: [indexPath], with: .top)
         
         updateEmptyUI()
@@ -412,7 +412,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     fileprivate func changeInventoryItemQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float, isInput: Bool) {
         
-        guard let model = cell.model else {QL4("Invalid state: Cell must have model"); return}
+        guard let model = cell.model else {logger.e("Invalid state: Cell must have model"); return}
 
         delegate?.increment(model, delta: delta, onSuccess: {updatedQuantity in
             if !isInput { // for input it's not only not necessary to re-set quantity but it also would delete a possible trailing dot
@@ -445,7 +445,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     //////////////
     
     func load() {
-        guard let sortBy = sortBy else {QL4("Can't load models, sortBy not set"); return}
+        guard let sortBy = sortBy else {logger.e("Can't load models, sortBy not set"); return}
         
         tableView.reloadData()
         updateEmptyUI()
@@ -534,7 +534,7 @@ class ExplanationManager {
     }
     
     var showExplanation: Bool {
-        guard let checker = checker else {QL1("No checker"); return false}
+        guard let checker = checker else {logger.v("No checker"); return false}
         
         return checker.showPopup()
     }
@@ -544,7 +544,7 @@ class ExplanationManager {
     
     func generateExplanationView() -> ExplanationView {
         
-        guard let contents = explanationContents else {QL4("Invalid state: No explanation contents, returning dummy view"); return ExplanationView()}
+        guard let contents = explanationContents else {logger.e("Invalid state: No explanation contents, returning dummy view"); return ExplanationView()}
 
         return view ?? {
             let view = ExplanationView()
@@ -557,7 +557,7 @@ class ExplanationManager {
             
             var arr = [UIImage]()
             for i in 0...contents.frameCount {
-                guard let img = UIImage(named: "\(contents.imageName)\(i)") else {QL4("No image for: \(i), returning dummy view"); return ExplanationView()}
+                guard let img = UIImage(named: "\(contents.imageName)\(i)") else {logger.e("No image for: \(i), returning dummy view"); return ExplanationView()}
                 arr.append(img)
             }
             
@@ -568,7 +568,7 @@ class ExplanationManager {
     }
     
     func dontShowAgain() {
-        guard let checker = checker else {QL1("No checker"); return}
+        guard let checker = checker else {logger.v("No checker"); return}
         
         checker.dontShowAgain()
     }

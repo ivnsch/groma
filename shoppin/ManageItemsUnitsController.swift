@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 import Providers
-import QorumLogs
+
 
 protocol ManageItemsUnitsControllerDelegate: class {
     var topControllerConfig: ManageDatabaseTopControllerConfig {get}
@@ -32,7 +32,7 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
         if let delegate = delegate {
             topEditUnitControllerManager = initSimpleInputControllerManager(config: delegate.topControllerConfig)
         } else {
-            QL4("Can't initialize top controller: No delegate")
+            logger.e("Can't initialize top controller: No delegate")
         }
     }
     
@@ -58,7 +58,7 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let units = units else {QL4("No units"); return UITableViewCell()}
+        guard let units = units else {logger.e("No units"); return UITableViewCell()}
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ManageItemsUnitCell
         
@@ -82,7 +82,7 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            guard let units = units else {QL4("No units"); return}
+            guard let units = units else {logger.e("No units"); return}
             
             // Removing base is equivalent to remove products with base, base doesn't exist outside of products.
             Prov.unitProvider.delete(name: units[indexPath.row].name, successHandler{[weak self] in
@@ -93,7 +93,7 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let units = units else {QL4("No units"); return}
+        guard let units = units else {logger.e("No units"); return}
         let unit = units[indexPath.row]
         
         topEditUnitControllerManager?.expand(true)
@@ -131,7 +131,7 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
 extension ManageItemsUnitsController: EditNameButtonDelegate {
     
     func onSubmitNameButtonInput(result: EditNameButtonResult, editingObj: Any?) {
-        guard let editingUnit = editingObj as? Providers.Unit else {QL4("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return}
+        guard let editingUnit = editingObj as? Providers.Unit else {logger.e("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return}
         
         Prov.unitProvider.update(unit: editingUnit, name: result.inputs.name, buyable: result.inputs.buttonSelected, successHandler{[weak self] in
             self?.topEditUnitControllerManager?.expand(false)

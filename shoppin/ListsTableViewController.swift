@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import RealmSwift
 import Providers
 
@@ -75,7 +75,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     deinit {
-        QL1("Deinit lists controller")
+        logger.v("Deinit lists controller")
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -88,7 +88,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0)
             }
         } else {
-            QL4("Couldn't set tabitems appearance, tabBar is nil")
+            logger.e("Couldn't set tabitems appearance, tabBar is nil")
         }
     }
     
@@ -138,10 +138,10 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI
                     //                        self.viewController.didUpdateList(reload: true)
-                    QL1("initial")
+                    logger.v("initial")
                     
                 case .update(_, let deletions, let insertions, let modifications):
-                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(String(describing: weakSelf.listsResult?.count))")
+                    logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(String(describing: weakSelf.listsResult?.count))")
                     
                     weakSelf.tableView.beginUpdates()
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
@@ -241,8 +241,8 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     // MARK: - AddEditListControllerDelegate
     
     func onAddList(_ list: Providers.List) {
-        guard let listsResult = listsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let listsResult = listsResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         
         Prov.listProvider.add(list, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] _ in
             
@@ -257,8 +257,8 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     func onUpdateList(_ list: Providers.List, listInput: ListInput) {
-        guard let listsResult = listsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let listsResult = listsResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         
         Prov.listProvider.update(list, input: listInput, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
             
@@ -272,7 +272,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             if let row = row {
                 self?.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
             } else {
-                QL4("Invalid state: can't find list: \(list)")
+                logger.e("Invalid state: can't find list: \(list)")
             }
             
             self?.afterAddOrUpdateList()
@@ -326,20 +326,20 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override func itemForRow(row: Int) -> ExpandableTableViewModel? {
-        guard let listsResult = listsResult else {QL4("No result"); return nil}
+        guard let listsResult = listsResult else {logger.e("No result"); return nil}
         
         return ExpandableTableViewListModel(list: listsResult[row])
     }
     
     override var itemsCount: Int? {
-        guard let listsResult = listsResult else {QL4("No result"); return nil}
+        guard let listsResult = listsResult else {logger.e("No result"); return nil}
         
         return listsResult.count
     }
     
     override func deleteItem(index: Int) {
-        guard let listsResult = listsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let listsResult = listsResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
 
         Prov.listProvider.delete(index: index, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
             self?.updateEmptyUI()
@@ -350,8 +350,8 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override func moveItem(from: Int, to: Int) {
-        guard let listsResult = listsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let listsResult = listsResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         
         Prov.listProvider.move(from: from, to: to, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {
         }, onErrorAdditional: {[weak self] result in

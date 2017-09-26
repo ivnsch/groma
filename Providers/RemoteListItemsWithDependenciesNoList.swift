@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteListItemsWithDependenciesNoList: ResponseObjectSerializable, CustomDebugStringConvertible {
     
@@ -35,7 +35,7 @@ struct RemoteListItemsWithDependenciesNoList: ResponseObjectSerializable, Custom
             let listItemsObj = representation.value(forKeyPath: "items") as? [AnyObject],
             let listItems = RemoteListItem.collection(listItemsObj)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.products = products

@@ -9,7 +9,7 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
-import QorumLogs
+
 import Providers
 
 protocol UserDetailsViewControllerDelegate: class {
@@ -28,7 +28,7 @@ class UserDetailsViewController: UIViewController {
         if let me = Prov.userProvider.mySharedUser {
             initContents(me)
         } else {
-            QL4("Invalid state, we are in user details but there's no stored user")
+            logger.e("Invalid state, we are in user details but there's no stored user")
         }
         
         logoutButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
@@ -38,7 +38,7 @@ class UserDetailsViewController: UIViewController {
         if let userIdLabel = userIdLabel {
             userIdLabel.text = user.email
         } else {
-            QL3("Outlets not initialised yet, can't show user data")
+            logger.w("Outlets not initialised yet, can't show user data")
         }
     }
     

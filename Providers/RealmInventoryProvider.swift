@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 class RealmInventoryProvider: RealmProvider {
    
@@ -49,7 +49,7 @@ class RealmInventoryProvider: RealmProvider {
             handler(items)
 
         } catch let e {
-            QL4("Error: creating Realm, returning empty results, error: \(e)")
+            logger.e("Error: creating Realm, returning empty results, error: \(e)")
             handler(nil)
         }
     }
@@ -80,7 +80,7 @@ class RealmInventoryProvider: RealmProvider {
                 }
                 return true
             } catch let e {
-                QL4("Realm error: \(e)")
+                logger.e("Realm error: \(e)")
                 return false
             }
             }) {(result: Bool) in
@@ -209,7 +209,7 @@ class RealmInventoryProvider: RealmProvider {
     func loadInventories(_ handler: @escaping (RealmSwift.List<DBInventory>?) -> Void) {
         guard let inventoriesContainer: InventoriesContainer = loadSync(predicate: nil)?.first else {
             handler(nil)
-            QL4("Invalid state: no container")
+            logger.e("Invalid state: no container")
             return
         }
         handler(inventoriesContainer.inventories)
@@ -219,7 +219,7 @@ class RealmInventoryProvider: RealmProvider {
         
         guard let inventoriesContainer: InventoriesContainer = loadSync(predicate: nil)?.first else {
             handler(false)
-            QL4("Invalid state: no container")
+            logger.e("Invalid state: no container")
             return
         }
         

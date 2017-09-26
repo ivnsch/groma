@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     public let uuid: String
@@ -29,7 +29,7 @@ public struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionS
                 UIColor(hexString: colorStr)
             })
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         self.uuid = uuid
         self.name = name
@@ -42,7 +42,7 @@ public struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionS
             if let store = storeMaybe as? String {
                 self.store = store
             } else {
-                QL4("Invalid store type: \(storeMaybe)")
+                logger.e("Invalid store type: \(storeMaybe)")
                 return nil
             }
         }

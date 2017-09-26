@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import RealmSwift
 import Providers
 
@@ -69,7 +69,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     deinit {
-        QL1("Deinit inventories controller")
+        logger.v("Deinit inventories controller")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -104,10 +104,10 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                 case .initial:
 //                        // Results are now populated and can be accessed without blocking the UI
 //                        self.viewController.didUpdateList(reload: true)
-                    QL1("initial")
+                    logger.v("initial")
                     
                 case .update(_, let deletions, let insertions, let modifications):
-                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                    logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                     
                     weakSelf.tableView.beginUpdates()
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
@@ -232,8 +232,8 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     // MARK: - AddEditInventoryControllerDelegate
     
     func onAddInventory(_ inventory: DBInventory) {
-        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let inventoriesResult = inventoriesResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
 
         Prov.inventoryProvider.add(inventory, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
             
@@ -250,8 +250,8 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     func onUpdateInventory(_ inventory: DBInventory, inventoryInput: InventoryInput) {
-        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let inventoriesResult = inventoriesResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         
         Prov.inventoryProvider.update(inventory, input: inventoryInput, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {
             
@@ -265,7 +265,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             if let row = row {
                 self.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
             } else {
-                QL4("Invalid state: can't find list: \(inventory)")
+                logger.e("Invalid state: can't find list: \(inventory)")
             }
             
             
@@ -296,20 +296,20 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     override func itemForRow(row: Int) -> ExpandableTableViewModel? {
-        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return nil}
+        guard let inventoriesResult = inventoriesResult else {logger.e("No result"); return nil}
         
         return ExpandableTableViewInventoryModelRealm(inventory: inventoriesResult[row])
     }
     
     override var itemsCount: Int? {
-        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return nil}
+        guard let inventoriesResult = inventoriesResult else {logger.e("No result"); return nil}
         
         return inventoriesResult.count
     }
     
     override func deleteItem(index: Int) {
-        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let inventoriesResult = inventoriesResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         
         Prov.inventoryProvider.delete(index: index, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
             self?.updateEmptyUI()
@@ -320,8 +320,8 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     override func moveItem(from: Int, to: Int) {
-        guard let inventoriesResult = inventoriesResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let inventoriesResult = inventoriesResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
 
         Prov.inventoryProvider.move(from: from, to: to, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {
         }, onErrorAdditional: {[weak self] result in

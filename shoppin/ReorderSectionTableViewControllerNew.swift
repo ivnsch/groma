@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 import RealmSwift
 
@@ -82,7 +82,7 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     
     fileprivate func initNotifications() {
         
-        guard let sections = sections else {QL4("No sections"); return}
+        guard let sections = sections else {logger.e("No sections"); return}
         
         self.notificationToken?.stop()
         
@@ -90,10 +90,10 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
             
             switch changes {
             case .initial:
-                QL1("initial")
+                logger.v("initial")
                 
             case .update(_, let deletions, let insertions, let modifications):
-                QL2("notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                logger.d("notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                 
                 
                 weakSelf.tableView.beginUpdates()
@@ -121,13 +121,13 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
         if let sections = sections {
             cell.section = sections[indexPath.row]
         } else {
-            QL4("No sections")
+            logger.e("No sections")
         }
         return cell
     }
     
     deinit {
-        QL1("deinit")
+        logger.v("deinit")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -140,9 +140,9 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
-        guard let sections = sections else {QL4("No sections"); return}
-        guard let notificationToken = notificationToken else {QL4("No notificationToken"); return}
-        guard let listItemsNotificationToken = listItemsNotificationToken else {QL4("No list items notificationToken"); return}
+        guard let sections = sections else {logger.e("No sections"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notificationToken"); return}
+        guard let listItemsNotificationToken = listItemsNotificationToken else {logger.e("No list items notificationToken"); return}
         
         if editingStyle == .delete {
             
@@ -165,8 +165,8 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     // Note: status of itels in this list assumed to be .Todo! It's not possible to reorder sections in the other status
     func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
         
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
-        guard let sections = sections else {QL4("No sections"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
+        guard let sections = sections else {logger.e("No sections"); return}
         
         Prov.sectionProvider.move(from: fromIndexPath.row, to: toIndexPath.row, sections: sections, notificationToken: notificationToken, successHandler {
         })
@@ -189,7 +189,7 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let sections = sections else {QL4("No sections"); return}
+        guard let sections = sections else {logger.e("No sections"); return}
 
         let section = sections[indexPath.row]
         delegate?.onSectionSelected(section)

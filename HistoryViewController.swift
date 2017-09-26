@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, HistoryItemGroupHeaderViewDelegate {
@@ -61,7 +61,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     deinit {
-        QL1("Deinit history controller")
+        logger.v("Deinit history controller")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -193,7 +193,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
             
         } else {
-            QL2("Can't load page because there's no selected inventory")
+            logger.d("Can't load page because there's no selected inventory")
             self.tableViewFooter.isHidden = true
         }
     }
@@ -253,7 +253,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             }
         }
-        QL1("HistoryItem was not in table view: \(historyItemUuid)")
+        logger.v("HistoryItem was not in table view: \(historyItemUuid)")
         return false
     }
     
@@ -312,10 +312,10 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 switch notification.verb {
                 case .Add:
                     loadHistory()
-                default: QL4("Not handled: \(notification.verb)")
+                default: logger.e("Not handled: \(notification.verb)")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
@@ -323,23 +323,23 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 case .Delete:
                     _ = removeHistoryItemUI(notification.obj)
                     
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<[String]>> { // group - see note in MyWebsocketDispatcher for explanation
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
                     loadHistory()
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else {
-            QL4("No userInfo")
+            logger.e("No userInfo")
         }
     }
     
@@ -352,20 +352,20 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 default: break // no error msg here, since we will receive .Add but not handle it in this view controller
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
                     loadHistory()
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else {
-            QL4("No userInfo")
+            logger.e("No userInfo")
         }
     }
     
@@ -375,10 +375,10 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 switch notification.verb {
                 case .Add:
                     loadHistory()
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
@@ -387,10 +387,10 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                     loadHistory()
                 case .DeleteWithBrand:
                     loadHistory()
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else {
             print("Error: ViewController.onWebsocketProduct: no userInfo")
@@ -404,14 +404,14 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 case .BuyCart:
                     loadHistory()
                     
-                default: QL4("Not handled: \(notification.verb)")
+                default: logger.e("Not handled: \(notification.verb)")
                 }
             } else {
-                QL4("Mo value")
+                logger.e("Mo value")
             }
             
         } else {
-            QL4("No userInfo")
+            logger.e("No userInfo")
         }
     }
     
@@ -423,7 +423,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 switch notification.verb {
                 case .Add:
                     loadHistory()
-                default: QL4("Error: InventoryItemsViewController.onWebsocketInventoryWithHistoryAfterSave: History: not implemented: \(notification.verb)")
+                default: logger.e("Error: InventoryItemsViewController.onWebsocketInventoryWithHistoryAfterSave: History: not implemented: \(notification.verb)")
                 }
             }
         }

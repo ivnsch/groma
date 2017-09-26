@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 class StoreProductMapper {
     
@@ -15,7 +15,7 @@ class StoreProductMapper {
 //        if let product = productsDict[remoteProduct.uuid] {
 //            return productWithRemote(remoteProduct, category: ProductMapper.productWithRemote(productsDict))
 //        } else {
-//            QL4("Got product with product uuid: \(remoteProduct.productUuid) which is not in the category dict: \(productsDict)")
+//            logger.e("Got product with product uuid: \(remoteProduct.productUuid) which is not in the category dict: \(productsDict)")
 //            return nil
 //        }
 //    }

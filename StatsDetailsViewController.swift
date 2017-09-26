@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, XYPieChartDataSource, XYPieChartDelegate {
@@ -157,7 +157,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     deinit {
-        QL1("Deinit stats details controller")
+        logger.v("Deinit stats details controller")
     }
     
     fileprivate func initPieChart() {

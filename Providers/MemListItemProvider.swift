@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 class MemListItemProvider {
 
@@ -81,7 +81,7 @@ class MemListItemProvider {
             
             let updatedListItem = existingListItem.copyIncrement(section: updatedSection, note: note, statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.prototype.quantity))
             
-            QL1("Item exists, updated it: \(updatedListItem)")
+            logger.v("Item exists, updated it: \(updatedListItem)")
 
             _ = self.listItems?[list.uuid]?.update(updatedListItem)
             
@@ -104,7 +104,7 @@ class MemListItemProvider {
             // create the list item and save it
             let listItem = ListItem(uuid: UUID().uuidString, product: prototype.prototype.product, section: prototype.section, list: list, note: note, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.prototype.quantity))
             
-            QL1("Item didn't exist, created one: \(listItem)")
+            logger.v("Item didn't exist, created one: \(listItem)")
             
             self.listItems?[listItem.list.uuid]?.append(listItem)
             
@@ -116,7 +116,7 @@ class MemListItemProvider {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
-        QL1("Called with prototypes: \(prototypes)")
+        logger.v("Called with prototypes: \(prototypes)")
 
         var addedListItems: [ListItem] = []
         for prototype in prototypes {
@@ -127,7 +127,7 @@ class MemListItemProvider {
             }
         }
         
-        QL1("List mem cache after update: \(String(describing: listItems?[list.uuid]))")
+        logger.v("List mem cache after update: \(String(describing: listItems?[list.uuid]))")
 
         return addedListItems
     }
@@ -171,7 +171,7 @@ class MemListItemProvider {
                 return false
             }
         } else {
-            QL3("Didn't find list of list item to be removed: listUuid: \(listUuid), list item uuid: \(uuid)")
+            logger.w("Didn't find list of list item to be removed: listUuid: \(listUuid), list item uuid: \(uuid)")
             return false
         }
     }
@@ -219,7 +219,7 @@ class MemListItemProvider {
         if let _ = self.listItems![list.uuid] {
             return self.listItems![list.uuid]!.filterStatus(status).count
         } else {
-            QL1("Info: MemListItemProvider.listItemCount: there are no listitems for list: \(list)")
+            logger.v("Info: MemListItemProvider.listItemCount: there are no listitems for list: \(list)")
             return 0
         }
     }
@@ -240,12 +240,12 @@ class MemListItemProvider {
                 return incremented
                 
             } else {
-                QL3("Item not updated")
+                logger.w("Item not updated")
                 return nil
             }
             
         } else {
-            QL3("Item not found")
+            logger.w("Item not found")
             return nil
         }
     }
@@ -264,12 +264,12 @@ class MemListItemProvider {
                     listItems?[listUuid] = updatedListItems
                     
                 } else {
-                    QL1("No list items for section: \(uuid) in list: \(listUuid)")
+                    logger.v("No list items for section: \(uuid) in list: \(listUuid)")
                     return false
                 }
                 
             } else {
-                QL3("Didn't find list: \(listUuid)")
+                logger.w("Didn't find list: \(listUuid)")
                 return false
             }
             
@@ -289,7 +289,7 @@ class MemListItemProvider {
     func invalidate() {
         guard enabled else {return}
         
-        QL1("Info: MemListItemProvider.invalidate: Invalidated list items memory cache")
+        logger.v("Info: MemListItemProvider.invalidate: Invalidated list items memory cache")
         
         listItems = nil
     }

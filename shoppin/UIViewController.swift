@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 extension UIViewController {
@@ -84,7 +84,7 @@ extension UIViewController {
                 if let successResult = providerResult.sucessResult {
                     onSuccess(successResult)
                 } else {
-                    QL4("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
+                    logger.e("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
                     self?.handleResultHelper(.unknown, error: nil, errorObj: nil)
                 }
                 
@@ -123,7 +123,7 @@ extension UIViewController {
                 if let successResult = providerResult.sucessResult {
                     onSuccess(successResult)
                 } else {
-                    QL4("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
+                    logger.e("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
                     self?.handleResultHelper(.unknown, error: nil, errorObj: nil)
                 }
                 
@@ -158,7 +158,7 @@ extension UIViewController {
                 self?.handleResultHelper(providerResult.status, error: providerResult.error, errorObj: providerResult.errorObj)
                 self?.progressVisible(false)
             } else {
-                QL1("Ignoring status code: \(providerResult.status), result: \(providerResult)")
+                logger.v("Ignoring status code: \(providerResult.status), result: \(providerResult)")
             }
         }
     }
@@ -170,7 +170,7 @@ extension UIViewController {
             if let error = error {
                 showRemoteValidationErrorAlert(status, error: error)
             } else {
-                QL4("Invalid state: Has invalid params status but no error, status: \(status), error: \(String(describing: error)), errorObj: \(String(describing: errorObj))")
+                logger.e("Invalid state: Has invalid params status but no error, status: \(status), error: \(String(describing: error)), errorObj: \(String(describing: errorObj))")
                 ProviderPopupManager.instance.showStatusPopup(status, controller: self)
             }
         case .sizeLimit:
@@ -179,7 +179,7 @@ extension UIViewController {
             AlertPopup.show(title: title, message: trans("size_limit_exceeded", sizeStr), controller: self)
         
         case .mustUpdateApp:
-            QL1("Controller received: \(status), do nothing.") // popup in this case is shown by AppDelegate
+            logger.v("Controller received: \(status), do nothing.") // popup in this case is shown by AppDelegate
             
         default: ProviderPopupManager.instance.showStatusPopup(status, controller: self)
         }

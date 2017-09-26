@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteIncrement: ResponseObjectSerializable, CustomDebugStringConvertible {
     let uuid: String
@@ -20,7 +20,7 @@ struct RemoteIncrement: ResponseObjectSerializable, CustomDebugStringConvertible
             let delta = representation.value(forKeyPath: "delta") as? Float,
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid

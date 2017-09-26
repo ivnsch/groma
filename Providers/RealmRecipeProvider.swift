@@ -8,14 +8,14 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 class RealmRecipeProvider: RealmProvider {
     
     public func recipes(sortBy: RecipeSortBy, _ handler: @escaping (RealmSwift.List<Recipe>?) -> Void) {
         guard let recipesContainer: RecipesContainer = loadSync(predicate: nil)?.first else {
             handler(nil)
-            QL4("Invalid state: no container")
+            logger.e("Invalid state: no container")
             return
         }
         handler(recipesContainer.recipes)
@@ -44,12 +44,12 @@ class RealmRecipeProvider: RealmProvider {
                     handler((substring, recipes.toArray()))
                     
                 } else {
-                    QL4("No product uuids")
+                    logger.e("No product uuids")
                     handler((substring, []))
                 }
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 handler((substring, []))
             }
         }
@@ -106,7 +106,7 @@ class RealmRecipeProvider: RealmProvider {
 //                realm.add(recipe, update: true) // TODO!!!!!!!!!!!!!!!! confirm if this is not necessary and remove
                 return true
             } else { // group not found
-                QL4("Didn't find group to increment fav")
+                logger.e("Didn't find group to increment fav")
                 return true // we return success anyway because this is not critical, no reason to show a popup to the user
             }
         }, finishHandler: {savedMaybe in

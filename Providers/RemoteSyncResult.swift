@@ -8,7 +8,7 @@
 
 import Foundation
 import Alamofire
-import QorumLogs
+
 
 struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     let productCategories: [[String: AnyObject]]
@@ -43,7 +43,7 @@ struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertibl
             let inventoryInvitationsObj = representation.value(forKeyPath: "inventoryInvitations") as? [AnyObject],
             let inventoryInvitations = RemoteInventoryInvitation.collection(inventoryInvitationsObj)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.productCategories = productCategories

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol ReorderSectionTableViewControllerDelegate: class {
@@ -123,7 +123,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
 //            })
             
         } else {
-            QL4("Status not set, can't reorder")
+            logger.e("Status not set, can't reorder")
         }
     }
 
@@ -150,7 +150,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         if let index = getSectionIndex(uuid) {
             removeSection(uuid, index: index)
         } else {
-            QL2("Section to remove not found: \(uuid)")
+            logger.d("Section to remove not found: \(uuid)")
         }
     }
     
@@ -171,6 +171,6 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     }
     
     deinit {
-        QL1("Deinit")
+        logger.v("Deinit")
     }
 }

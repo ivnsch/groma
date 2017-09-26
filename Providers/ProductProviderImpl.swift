@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 import RealmSwift
 
 // TODO move product-only method from list item provider here
@@ -155,7 +155,7 @@ class ProductProviderImpl: ProductProvider {
                             }
                         } else {
                             DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
-                                QL4("Remote call no success: \(remoteResult)")
+                                logger.e("Remote call no success: \(remoteResult)")
                             })
                         }
                     }
@@ -175,7 +175,7 @@ class ProductProviderImpl: ProductProvider {
                         }
                     } else {
                         DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
-                            QL4("Remote call no success: \(remoteResult)")
+                            logger.e("Remote call no success: \(remoteResult)")
                         })
                     }
                 }
@@ -210,7 +210,7 @@ class ProductProviderImpl: ProductProvider {
                             }
                         } else {
                             DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
-                                QL4("Remote call no success: \(remoteResult)")
+                                logger.e("Remote call no success: \(remoteResult)")
                             })
                         }
                     }
@@ -245,7 +245,7 @@ class ProductProviderImpl: ProductProvider {
 //                    if remoteResult.success {
 //                        DBProv.productProvider.clearProductTombstone(productUuid) {removeTombstoneSuccess in
 //                            if !removeTombstoneSuccess {
-//                                QL4("Couldn't delete tombstone for product: \(productUuid)")
+//                                logger.e("Couldn't delete tombstone for product: \(productUuid)")
 //                            }
 //                        }
 //                    } else {
@@ -292,7 +292,7 @@ class ProductProviderImpl: ProductProvider {
 //                    if remoteResult.success {
 //                        DBProv.productProvider.clearProductTombstone(productUuid) {removeTombstoneSuccess in
 //                            if !removeTombstoneSuccess {
-//                                QL4("Couldn't delete tombstone for product: \(productUuid)")
+//                                logger.e("Couldn't delete tombstone for product: \(productUuid)")
 //                            }
 //                        }
 //                    } else {
@@ -321,7 +321,7 @@ class ProductProviderImpl: ProductProvider {
 //                        // no timestamp - for increment fav this looks like an overkill. If there's a conflict some favs may get lost - ok
 //                    } else {
 //                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-//                            QL4("Remote call no success: \(remoteResult)")
+//                            logger.e("Remote call no success: \(remoteResult)")
 //                        })
 //                    }
 //                }
@@ -346,7 +346,7 @@ class ProductProviderImpl: ProductProvider {
             if let quantifiableProduct = quantifiableProductMaybe {
                 handler(ProviderResult(status: .success, sucessResult: quantifiableProduct))
             } else {
-                QL4("Couldn't update/create quantifiable product for prototype: \(prototype)")
+                logger.e("Couldn't update/create quantifiable product for prototype: \(prototype)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -421,7 +421,7 @@ class ProductProviderImpl: ProductProvider {
                                 }
 
                             } else {
-                                QL4("Couldn't fetch item: \(itemResult)")
+                                logger.e("Couldn't fetch item: \(itemResult)")
                                 handler(ProviderResult(status: .databaseUnknown))
                             }
                         }
@@ -455,7 +455,7 @@ class ProductProviderImpl: ProductProvider {
         case .ok(let result):
             handler(ProviderResult(status: .success, sucessResult: result))
         case .err(let error):
-            QL4("Couldn't merge/crate product: \(error)")
+            logger.e("Couldn't merge/crate product: \(error)")
         }
     }
 
@@ -466,7 +466,7 @@ class ProductProviderImpl: ProductProvider {
             if let count = countMaybe {
                 handler(ProviderResult(status: .success, sucessResult: count))
             } else {
-                QL4("No count")
+                logger.e("No count")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -502,7 +502,7 @@ class ProductProviderImpl: ProductProvider {
             if let restoredSomething = restoredSomethingMaybe {
                 handler(ProviderResult(status: .success, sucessResult: restoredSomething))
             } else {
-                QL4("Local error restoring products")
+                logger.e("Local error restoring products")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -513,7 +513,7 @@ class ProductProviderImpl: ProductProvider {
             if let baseQuantities = baseQuantitiesMaybe {
                 handler(ProviderResult(status: .success, sucessResult: baseQuantities))
             } else {
-                QL4("Couldn't retrieve base quantities")
+                logger.e("Couldn't retrieve base quantities")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }

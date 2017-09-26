@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 import RealmSwift
 
 public struct ProductAggregate {
@@ -77,7 +77,7 @@ class StatsProviderImpl: StatsProvider {
                 let productAggregates = self.toProductAggregates(historyItems)
                 handler(ProviderResult(status: .success, sucessResult: productAggregates))
             } else {
-                QL4("Couldn't load items")
+                logger.e("Couldn't load items")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -93,7 +93,7 @@ class StatsProviderImpl: StatsProvider {
                     let productAggregates = self.toProductAggregates(historyItems)
                     handler(ProviderResult(status: .success, sucessResult: productAggregates))
                 } else {
-                    QL4("Couldn't load items")
+                    logger.e("Couldn't load items")
                     handler(ProviderResult(status: .unknown))
                 }
             }
@@ -118,7 +118,7 @@ class StatsProviderImpl: StatsProvider {
                     
                     let (_, referenceDateMonth, referenceDateYear) = referenceDate.dayMonthYear
                     if timePeriod.timeUnit != .month {
-                        QL4("Error: not supported timeunit: \(timePeriod.timeUnit) - the calculations will be incorrect") // for now we only need months (TODO complete or remove the other enum values, maybe even remove the enum)
+                        logger.e("Error: not supported timeunit: \(timePeriod.timeUnit) - the calculations will be incorrect") // for now we only need months (TODO complete or remove the other enum values, maybe even remove the enum)
                     }
                     
                     // Prefill the dictionary with the month years in time period's range. We need all the months in the result independently if they have history items or not ("left join")
@@ -141,7 +141,7 @@ class StatsProviderImpl: StatsProvider {
                                 dict[key] = (price: historyItem.totalPaidPrice, quantity: historyItem.quantity)
                             }
                         } else {
-                            QL4("No month/year in components")
+                            logger.e("No month/year in components")
                             handler(ProviderResult(status: .unknown))
                             break
                         }
@@ -156,7 +156,7 @@ class StatsProviderImpl: StatsProvider {
                     handler(ProviderResult(status: .success, sucessResult: groupMonthYearAggregate))
                     
                 } else {
-                    QL4("Couldn't load items")
+                    logger.e("Couldn't load items")
                     handler(ProviderResult(status: .unknown))
                 }
             }
@@ -211,7 +211,7 @@ class StatsProviderImpl: StatsProvider {
             if let items = result.sucessResult {
                 handler(ProviderResult(status: .success, sucessResult: items.isEmpty))
             } else {
-                QL4("Didn't return result, monthYear: \(monthYear), inventory: \(inventory)")
+                logger.e("Didn't return result, monthYear: \(monthYear), inventory: \(inventory)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }

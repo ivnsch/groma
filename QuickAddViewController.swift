@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-import QorumLogs
+
 import Providers
 
 protocol QuickAddDelegate: class {
@@ -86,7 +86,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             if let editingItem = editingItem {
                 searchBar.text = editingItem.product?.product.item.name ?? ""
             } else {
-                QL3("Setting a nil editingItem")
+                logger.w("Setting a nil editingItem")
             }
         }
     }
@@ -97,7 +97,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
 
     deinit {
-        QL1("Deinit quick add")
+        logger.v("Deinit quick add")
     }
     
     var open: Bool = false
@@ -151,16 +151,16 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func textFieldDidChange(_ textField: UITextField) {
         
-        QL1("textFieldDidChange, text: \(String(describing: textField.text))")
+        logger.v("textFieldDidChange, text: \(String(describing: textField.text))")
         
         if !isEdit {
             if let controller = quickAddListItemViewController, let searchText = textField.text {
                 controller.search(searchText)
             } else {
-                QL3("Controller: \(String(describing: quickAddListItemViewController)) or search is nil: \(String(describing: textField.text))")
+                logger.w("Controller: \(String(describing: quickAddListItemViewController)) or search is nil: \(String(describing: textField.text))")
             }
         } else {
-            QL3("Trying to search while isEdit (quick add has an edit item) - doing nothing.")
+            logger.w("Trying to search while isEdit (quick add has an edit item) - doing nothing.")
         }
     }
     
@@ -230,7 +230,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         if segue.identifier == "navController" {
             navController = segue.destination as? UINavigationController
         } else {
-            QL3("Not handled segue")
+            logger.w("Not handled segue")
         }
     }
     
@@ -390,7 +390,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             }
             
         } else {
-            QL3("Not showing any controller")
+            logger.w("Not showing any controller")
         }
     }
     
@@ -432,7 +432,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         } else {
             // There should be always text as we show add/edit only if user enters text and we find no products for it. If user removes the text, the add/edit controller is hidden.
             // It can be that user taps on submit while we search for products in the databse (which we do before hidding add/edit but this is unlikely as this is a very short time.
-            QL3("Tried to submit item but there's no product name (text in the search bar)")
+            logger.w("Tried to submit item but there's no product name (text in the search bar)")
         }
     }
 
@@ -506,13 +506,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                //                QL1("keyboardWillChangeFrame, frame: \(frame)")
+                //                logger.v("keyboardWillChangeFrame, frame: \(frame)")
                 keyboardHeight = frame.height
             } else {
-                QL3("Couldn't retrieve keyboard size from user info")
+                logger.w("Couldn't retrieve keyboard size from user info")
             }
         } else {
-            QL3("Notification has no user info")
+            logger.w("Notification has no user info")
         }
     }
 }

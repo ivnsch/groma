@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 public enum ItemUnit: Int {
     case none = 0

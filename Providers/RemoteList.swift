@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
@@ -26,7 +26,7 @@ struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, C
             let unserializedUsers = representation.value(forKeyPath: "users") as? [AnyObject],
             let users = RemoteSharedUser.collection(unserializedUsers)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = list.uuid

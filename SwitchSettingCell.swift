@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 protocol SwitchSettingCellDelegate: class {
     func onSwitch(_ setting: SwitchSetting, on: Bool)
@@ -37,7 +37,7 @@ class SwitchSettingCell: UITableViewCell {
         if let setting = setting {
             delegate?.onSwitch(setting, on: sender.isOn)
         } else {
-            QL3("No setting")
+            logger.w("No setting")
         }
     }
 }

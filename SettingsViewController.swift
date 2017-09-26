@@ -9,7 +9,7 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
-import QorumLogs
+
 import Providers
 import RealmSwift
 
@@ -184,7 +184,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                             // max 2.000: Takes long, but works: (month item count were between 790 and 1860): does request (takes about 1 min), 6 mb, response only 500kb (gzip), processed correctly.
                             
                             let monthItemsCount = Int.random(2, max: 300)
-                            QL1("Generating history item count: \(monthItemsCount) for date: \(date)")
+                            logger.v("Generating history item count: \(monthItemsCount) for date: \(date)")
                             let monthHistoryItems: [HistoryItem] = (2..<monthItemsCount).map {_ in
                                 let randomIndex = Int.random(products.count)
                                 let product = products[randomIndex]
@@ -320,7 +320,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .enableRealTime:
             setWebsocketSettingEnabled(on)
         default:
-            QL3("Not supported: \(setting)")
+            logger.w("Not supported: \(setting)")
             break
         }
     }
@@ -338,11 +338,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .restoreHints:
             AlertPopup.show(message: restoreHintsMessage, controller: self)
 
-        default: QL4("No supported setting: \(setting)")
+        default: logger.e("No supported setting: \(setting)")
         }
     }
     
     deinit {
-        QL1("Deinit settings controller")
+        logger.v("Deinit settings controller")
     }
 }

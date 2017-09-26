@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 
 public enum SupportedLang: String {
     case DE = "de", EN = "en", ES = "es"
@@ -23,11 +23,11 @@ public class LangHelper: Any {
             if let supportedLang = SupportedLang(rawValue: langCode) {
                 return supportedLang
             } else {
-                QL3("Not supported lang code: \(langCode), returning english")
+                logger.w("Not supported lang code: \(langCode), returning english")
                 return .EN
             }
         } else {
-            QL3("Not lang code, returning english")
+            logger.w("Not lang code, returning english")
             return .EN
         }
     }

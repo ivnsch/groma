@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-import QorumLogs
+
 import RealmSwift
 import Providers
 
@@ -77,7 +77,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     }
     
     deinit {
-        QL1("Deinit recipes controller")
+        logger.v("Deinit recipes controller")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -104,10 +104,10 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI
                     //                        self.viewController.didUpdateList(reload: true)
-                    QL1("initial")
+                    logger.v("initial")
                     
                 case .update(_, let deletions, let insertions, let modifications):
-                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(String(describing: weakSelf.itemsResult?.count))")
+                    logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(String(describing: weakSelf.itemsResult?.count))")
                     
                     weakSelf.tableView.beginUpdates()
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
@@ -221,8 +221,8 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     // MARK: - EditListViewController
     //change
     func onAddGroup(_ input: AddEditSimpleItemInput) {
-        guard let results = itemsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let results = itemsResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
 
         let recipe = Recipe(uuid: NSUUID().uuidString, name: input.name, color: input.color)
         
@@ -241,8 +241,8 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     }
     
     func onUpdateGroup(_ input: AddEditSimpleItemInput, item: SimpleFirstLevelListItem, index: Int) {
-        guard let results = itemsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let results = itemsResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         
         let recipe = item as! Recipe
         let recipeInput = RecipeInput(name: input.name, color: input.color)
@@ -259,7 +259,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
             if let row = row {
                 self.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
             } else {
-                QL4("Invalid state: can't find list: \(recipe)")
+                logger.e("Invalid state: can't find list: \(recipe)")
             }
             
         }, onErrorAdditional: {[weak self] result in
@@ -302,20 +302,20 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     }
     
     override func itemForRow(row: Int) -> ExpandableTableViewModel? {
-        guard let itemsResult = itemsResult else {QL4("No result"); return nil}
+        guard let itemsResult = itemsResult else {logger.e("No result"); return nil}
         
         return ExpandableTableViewRecipeModel(recipe: itemsResult[row])
     }
     
     override var itemsCount: Int? {
-        guard let itemsResult = itemsResult else {QL4("No result"); return nil}
+        guard let itemsResult = itemsResult else {logger.e("No result"); return nil}
         
         return itemsResult.count
     }
     
     override func deleteItem(index: Int) {
-        guard let itemsResult = itemsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let itemsResult = itemsResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         
         Prov.recipeProvider.delete(index: index, recipes: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
             self?.updateEmptyUI()
@@ -326,8 +326,8 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     }
     
     override func moveItem(from: Int, to: Int) {
-        guard let itemsResult = itemsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
+        guard let itemsResult = itemsResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         
         Prov.recipeProvider.move(from: from, to: to, recipes: itemsResult, notificationToken: notificationToken, successHandler {
         })

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 enum MyAlertDismissAnimation {
@@ -46,7 +46,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
                 titleLabel.text = title
                 updateContainerSize()
             } else {
-                QL3("Outlets not initialised, can't set text")
+                logger.w("Outlets not initialised, can't set text")
             }
         }
     }
@@ -57,7 +57,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
                 label.text = text
                 updateContainerSize()
             } else {
-                QL3("Outlets not initialised, can't set text")
+                logger.w("Outlets not initialised, can't set text")
             }
         }
     }
@@ -67,7 +67,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
             if let okButton = okButton {
                 okButton.setTitle(buttonText, for: UIControlState())
             } else {
-                QL3("Outlets not initialised, can't set text")
+                logger.w("Outlets not initialised, can't set text")
             }
         }
     }
@@ -81,7 +81,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
             if let confirmButton = confirmButton {
                 confirmButton.setTitle(confirmText, for: UIControlState())
             } else {
-                QL3("Outlets not initialised")
+                logger.w("Outlets not initialised")
             }
         }
     }
@@ -91,7 +91,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
             if let cancelButton = cancelButton {
                 cancelButton.setTitle(cancelText, for: UIControlState())
             } else {
-                QL3("Outlets not initialised")
+                logger.w("Outlets not initialised")
             }
         }
     }
@@ -103,7 +103,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
                 cancelButton.isHidden = !isConfirm
                 okButton.isHidden = isConfirm
             } else {
-                QL3("Outlets not initialised")
+                logger.w("Outlets not initialised")
             }
         }
     }
@@ -113,7 +113,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
             if let okButton = okButton {
                 okButton.isHidden = !hasOkButton
             } else {
-                QL3("No button")
+                logger.w("No button")
             }
         }
     }
@@ -274,7 +274,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
             }
 
         default:
-            QL3("Not handled: \(recognizer.state)")
+            logger.w("Not handled: \(recognizer.state)")
         }
     }
     

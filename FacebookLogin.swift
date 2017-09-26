@@ -9,7 +9,7 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
-import QorumLogs
+
 import Providers
 
 /**
@@ -23,26 +23,26 @@ class FacebookLogin {
         
         login.logIn(withReadPermissions: ["public_profile"], from: controller) {result, error in
             if let error = error {
-                QL4("Error: Facebook login: error: \(error)")
+                logger.e("Error: Facebook login: error: \(error)")
                 handler(ProviderResult(status: .socialLoginError))
                 
             } else if let result = result {
                 if result.isCancelled {
-                    QL2("Facebook login cancelled")
+                    logger.d("Facebook login cancelled")
                     handler(ProviderResult(status: .socialLoginCancelled))
                     
                 } else {
-                    QL1("Facebook login success")
+                    logger.v("Facebook login success")
                     if let tokenString = result.token.tokenString {
                         handler(ProviderResult(status: .success, sucessResult: tokenString))
                         
                     } else {
-                        QL4("Facebook no token")
+                        logger.e("Facebook no token")
                         handler(ProviderResult(status: .socialLoginError))
                     }
                 }
             } else {
-                QL4("No result")
+                logger.e("No result")
             }
         }
     }

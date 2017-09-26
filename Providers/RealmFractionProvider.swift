@@ -8,13 +8,13 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 class RealmFractionProvider: RealmProvider {
 
     func fractions() -> RealmSwift.List<DBFraction>? {
         guard let fractionsContainer: FractionsContainer = loadSync(predicate: nil)?.first else {
-            QL4("Invalid state: no container")
+            logger.e("Invalid state: no container")
             return nil
         }
         return fractionsContainer.fractions
@@ -33,7 +33,7 @@ class RealmFractionProvider: RealmProvider {
             
         } else {
             guard let fractionsContainer: FractionsContainer = loadSync(predicate: nil)?.first else {
-                QL4("Invalid state: no container")
+                logger.e("Invalid state: no container")
                 return (false, false)
             }
             

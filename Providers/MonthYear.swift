@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public class MonthYear: Equatable, Hashable, CustomDebugStringConvertible {
     
@@ -41,7 +41,7 @@ public class MonthYear: Equatable, Hashable, CustomDebugStringConvertible {
             let (_, month, year) = dateWithOffset.dayMonthYear
             return MonthYear(month: month, year: year)
         } else {
-            QL4("Date is nil \(self)")
+            logger.e("Date is nil \(self)")
             return nil
         }
     }

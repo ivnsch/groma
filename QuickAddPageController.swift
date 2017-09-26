@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import SwipeView
 import Providers
 
@@ -69,10 +69,10 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
 
         
         if quickAddListItemDelegate == nil {
-            QL3("delegate is nil")
+            logger.w("delegate is nil")
         }
         
-        QL1("viewForItemAtIndex: index: \(index)")
+        logger.v("viewForItemAtIndex: index: \(index)")
         
         if index == 0 {
             let productsController = UIStoryboard.quickAddListItemViewController()
@@ -109,7 +109,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         if let controller = currentSwipeController {
             controller.searchText = text
         } else {
-            QL3("No controller/failed: \(String(describing: currentSwipeController))")
+            logger.w("No controller/failed: \(String(describing: currentSwipeController))")
         }
     }
     
@@ -117,7 +117,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         if let currentSwipeController = currentSwipeController {
             currentSwipeController.setEmptyViewVisible(visible)
         } else {
-            QL3("setEmptyViewVisible: no controller")
+            logger.w("setEmptyViewVisible: no controller")
         }
         
     }
@@ -172,7 +172,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     }
     
     deinit {
-        QL1("Deinit quick add page controller")
+        logger.v("Deinit quick add page controller")
     }
     
     // MARK: - 

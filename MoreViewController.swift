@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 enum MoreItemType {
@@ -152,6 +152,6 @@ class MoreViewController: UITableViewController {
     }
     
     deinit {
-        QL1("Deinit more controller")
+        logger.v("Deinit more controller")
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 import Providers
-import QorumLogs
+
 
 protocol ManageItemsBaseQuantitiesControllerDelegate: class {
     var topControllerConfig: ManageDatabaseTopControllerConfig {get}
@@ -32,7 +32,7 @@ class ManageItemsBaseQuantitiesController: UITableViewController, SearchableText
         if let delegate = delegate {
             topEditSectionControllerManager = initSimpleInputControllerManager(config: delegate.topControllerConfig)
         } else {
-            QL4("Can't initialize top controller: No delegate")
+            logger.e("Can't initialize top controller: No delegate")
         }
     }
     
@@ -52,7 +52,7 @@ class ManageItemsBaseQuantitiesController: UITableViewController, SearchableText
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let bases = bases else {QL4("No brands"); return UITableViewCell()}
+        guard let bases = bases else {logger.e("No brands"); return UITableViewCell()}
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ManageItemsBaseQuantityCell
         
@@ -76,7 +76,7 @@ class ManageItemsBaseQuantitiesController: UITableViewController, SearchableText
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            guard let bases = bases else {QL4("No bases"); return}
+            guard let bases = bases else {logger.e("No bases"); return}
             
             // Removing base is equivalent to remove products with base, base doesn't exist outside of products.
             Prov.productProvider.deleteProductsWith(base: bases[indexPath.row], successHandler{[weak self] in
@@ -88,7 +88,7 @@ class ManageItemsBaseQuantitiesController: UITableViewController, SearchableText
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let bases = bases else {QL4("No items"); return}
+        guard let bases = bases else {logger.e("No items"); return}
         let base = bases[indexPath.row]
         
         topEditSectionControllerManager?.expand(true)
@@ -120,8 +120,8 @@ extension ManageItemsBaseQuantitiesController: EditSingleInputControllerDelegate
     
     func onSubmitSingleInput(name: String, editingObj: Any?) {
         
-        guard let base = name.floatValue else {QL4("Invalid state: input could't be casted to Float - validation should have caught this. Input: \(name)"); return}
-        guard let editingBase = editingObj as? Float else {QL4("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return}
+        guard let base = name.floatValue else {logger.e("Invalid state: input could't be casted to Float - validation should have caught this. Input: \(name)"); return}
+        guard let editingBase = editingObj as? Float else {logger.e("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return}
         
         Prov.productProvider.updateBaseQuantity(oldBase: editingBase, newBase: base, successHandler{[weak self] in
             self?.topEditSectionControllerManager?.expand(false)

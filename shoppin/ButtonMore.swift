@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 // UIButton with utilities
@@ -72,7 +72,7 @@ class ButtonMore: UIButton {
                     }
                 }()
             } else {
-                QL3("No label?")
+                logger.w("No label?")
             }
         }
     }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol MyAutoCompleteTextFieldDelegate {
@@ -64,7 +64,7 @@ class MyAutoCompleteTextField: MLPAutoCompleteTextField {
                 self?.myDelegate?.onDeleteSuggestion(string, sender: weakSelf)
             }
         } else {
-            QL3("Cell is has not expected type: \(cell)")
+            logger.w("Cell is has not expected type: \(cell)")
         }
     }
     

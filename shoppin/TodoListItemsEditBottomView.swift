@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 protocol TodoListItemsEditBottomViewDelegate: class {
     func onExpandSections(_ expand: Bool)
@@ -26,7 +26,7 @@ class TodoListItemsEditBottomView: UIView, ExpandCollapseButtonDelegate {
         if let totalPriceLabel = totalPriceLabel {
             totalPriceLabel.text = totalPrice.toLocalCurrencyString()
         } else {
-            QL3("Outlets not set, can't set price")
+            logger.w("Outlets not set, can't set price")
         }
     }
 

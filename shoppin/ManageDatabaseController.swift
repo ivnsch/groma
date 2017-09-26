@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 
 enum ManageDatabaseTypeSelection {
     case items, brands, bases, units
@@ -55,7 +55,7 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
         if let first = selectOptions.first {
             load(option: first)
         } else {
-            QL4("No options")
+            logger.e("No options")
         }
     }
     

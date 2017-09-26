@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 
@@ -28,7 +28,7 @@ class IngredientCell: UITableViewCell {
     
     var ingredient: Ingredient? {
         didSet {
-            guard let ingredient = ingredient else {QL3("Model is nil"); return}
+            guard let ingredient = ingredient else {logger.w("Model is nil"); return}
             
             nameLabel.text = ingredient.item.name
             

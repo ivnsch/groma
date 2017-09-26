@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 class UnitProviderImpl: UnitProvider {
 
@@ -54,7 +54,7 @@ class UnitProviderImpl: UnitProvider {
         if DBProv.unitProvider.deleteSync(name: name) {
             handler(ProviderResult(status: .success))
         } else {
-            QL4("Couldn't delete units with name: \(name)")
+            logger.e("Couldn't delete units with name: \(name)")
             handler(ProviderResult(status: .databaseUnknown))
         }
     }
@@ -63,7 +63,7 @@ class UnitProviderImpl: UnitProvider {
         if DBProv.unitProvider.updateSync(unit: unit, name: name, buyable: buyable) {
             handler(ProviderResult(status: .success))
         } else {
-            QL4("Couldn't update unit: \(unit) with name: \(name)")
+            logger.e("Couldn't update unit: \(unit) with name: \(name)")
             handler(ProviderResult(status: .databaseUnknown))
         }
     }
@@ -88,7 +88,7 @@ class UnitProviderImpl: UnitProvider {
         if DBProv.unitProvider.deleteSync(baseQuantity: baseQuantity) {
             handler(ProviderResult(status: .success))
         } else {
-            QL4("Couldn't delete base quantities with stringVal: \(baseQuantity)")
+            logger.e("Couldn't delete base quantities with stringVal: \(baseQuantity)")
             handler(ProviderResult(status: .databaseUnknown))
         }
     }

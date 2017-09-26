@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-import QorumLogs
+
 import RealmSwift
 import Providers
 
@@ -68,7 +68,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     }
     
     deinit {
-        QL1("Deinit groups controller")
+        logger.v("Deinit groups controller")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -95,10 +95,10 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI
                     //                        self.viewController.didUpdateList(reload: true)
-                    QL1("initial")
+                    logger.v("initial")
                     
                 case .update(_, let deletions, let insertions, let modifications):
-                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(String(describing: weakSelf.groupsResult?.count))")
+                    logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications), count: \(String(describing: weakSelf.groupsResult?.count))")
                     
                     weakSelf.tableView.beginUpdates()
                     weakSelf.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
@@ -212,7 +212,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     // MARK: - EditListViewController
     //change
     func onAddGroup(_ input: AddEditSimpleItemInput) {
-        guard let groupsResult = groupsResult else {QL4("No result"); return}
+        guard let groupsResult = groupsResult else {logger.e("No result"); return}
 
         let group = ProductGroup(uuid: NSUUID().uuidString, name: input.name, color: input.color, order: groupsResult.count)
         Prov.listItemGroupsProvider.add(group, remote: true, resultHandler(onSuccess: {

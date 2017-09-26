@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 import Providers
-import QorumLogs
+
 
 struct ManageDatabaseTopControllerConfig {
     var top: CGFloat
@@ -40,7 +40,7 @@ class ManageItemsController: UITableViewController, SearchableTextController {
         if let delegate = delegate {
             topEditSectionControllerManager = initEditSectionControllerManager(config: delegate.topControllerConfig)
         } else {
-            QL4("Can't initialize top controller: No delegate")
+            logger.e("Can't initialize top controller: No delegate")
         }
     }
     
@@ -52,8 +52,8 @@ class ManageItemsController: UITableViewController, SearchableTextController {
     }
     
     fileprivate func initNotifications() {
-        guard let items = items else {QL4("No sections"); return}
-        guard let realm = items.realm else {QL4("No realm"); return}
+        guard let items = items else {logger.e("No sections"); return}
+        guard let realm = items.realm else {logger.e("No realm"); return}
         
         realmData?.token.stop()
         
@@ -62,7 +62,7 @@ class ManageItemsController: UITableViewController, SearchableTextController {
             switch changes {
             case .initial: break
             case .update(_, let deletions, let insertions, let modifications):
-                QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                 // TODO
                 
             case .error(let error):
@@ -90,7 +90,7 @@ class ManageItemsController: UITableViewController, SearchableTextController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let items = items else {QL4("No items"); return UITableViewCell()}
+        guard let items = items else {logger.e("No items"); return UITableViewCell()}
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ManageItemsItemCell
         
@@ -114,8 +114,8 @@ class ManageItemsController: UITableViewController, SearchableTextController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
 
-            guard let items = items else {QL4("No items"); return}
-            guard let realmData = realmData else {QL4("No realm data"); return}
+            guard let items = items else {logger.e("No items"); return}
+            guard let realmData = realmData else {logger.e("No realm data"); return}
             
             Prov.itemsProvider.delete(itemUuid: items[indexPath.row].uuid, realmData: realmData, successHandler{[weak self] in
                 self?.tableView.deleteRows(at: [indexPath], with: Theme.defaultRowAnimation)
@@ -125,7 +125,7 @@ class ManageItemsController: UITableViewController, SearchableTextController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let items = items else {QL4("No items"); return}
+        guard let items = items else {logger.e("No items"); return}
         let item = items[indexPath.row]
         
         topEditSectionControllerManager?.expand(true)

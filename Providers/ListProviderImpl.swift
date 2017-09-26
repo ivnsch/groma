@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 import RealmSwift
 
 class ListProviderImpl: ListProvider {
@@ -25,7 +25,7 @@ class ListProviderImpl: ListProvider {
             if let lists = lists {
                 handler(ProviderResult(status: .success, sucessResult: lists))
             } else {
-                QL4("Couldn't load lists")
+                logger.e("Couldn't load lists")
                 handler(ProviderResult(status: .unknown, sucessResult: lists))
             }
             
@@ -45,7 +45,7 @@ class ListProviderImpl: ListProvider {
             //                                        handler(ProviderResult(status: .success, sucessResult: lists))
             //                                    }
             //                                } else {
-            //                                    QL4("Error overwriting lists - couldn't save")
+            //                                    logger.e("Error overwriting lists - couldn't save")
             //                                }
             //                            }
             //                        }
@@ -92,7 +92,7 @@ class ListProviderImpl: ListProvider {
                 handler(ProviderResult(status: .success, sucessResult: dbList))
                 
             } else {
-                QL4("Couldn't loadList: \(listUuid)")
+                logger.e("Couldn't loadList: \(listUuid)")
                 handler(ProviderResult(status: .notFound))
             }
             
@@ -129,7 +129,7 @@ class ListProviderImpl: ListProvider {
 ////                        // We update only the timestamp of the lists as the server doesn't update the inventory, only sends it, as dependency. TODO (server/client) use timestamp-only response.
 ////                        DBProvrealProvider.updateLastSyncTimeStamp([list], timestamp: timestamp) {success in
 ////                            if !success {
-////                                QL4("Error storing last update timestamp")
+////                                logger.e("Error storing last update timestamp")
 ////                            }
 ////                        }
 ////                    } else {
@@ -155,18 +155,18 @@ class ListProviderImpl: ListProvider {
 //                        if let timestamp = remoteResult.successResult {
 //                            DBProv.listProvider.updateLastSyncTimeStamp(lists, timestamp: timestamp) {success in
 //                                if !success {
-//                                    QL4("Error storing last update timestamp")
+//                                    logger.e("Error storing last update timestamp")
 //                                }
 //                            }
 //                        } else {
 //                            DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
-//                                QL4(remoteResult)
+//                                logger.e(remoteResult)
 //                            }
 //                        }
 //                    }
 //                }
             } else {
-                QL4("DB update didn't succeed")
+                logger.e("DB update didn't succeed")
             }
         }
     }
@@ -187,7 +187,7 @@ class ListProviderImpl: ListProvider {
 //                    }
 //                }
             } else {
-                QL4("Error updating lists order in local database, orderUpdates: \(orderUpdates)")
+                logger.e("Error updating lists order in local database, orderUpdates: \(orderUpdates)")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -213,18 +213,18 @@ class ListProviderImpl: ListProvider {
 //                        if remoteResult.success {
 //                            DBProv.listProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
 //                                if !removeTombstoneSuccess {
-//                                    QL4("Couldn't delete tombstone for list: \(listUuid)")
+//                                    logger.e("Couldn't delete tombstone for list: \(listUuid)")
 //                                }
 //                            }
 //                        } else {
 //                            DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
-//                                QL4(remoteResult)
+//                                logger.e(remoteResult)
 //                            }
 //                        }
 //                    }
 //                }
             } else {
-                QL4("DB remove didn't succeed")
+                logger.e("DB remove didn't succeed")
             }
         })
     }
@@ -232,7 +232,7 @@ class ListProviderImpl: ListProvider {
     func acceptInvitation(_ invitation: RemoteListInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         remoteListProvider.acceptInvitation(invitation) {remoteResult in
             if remoteResult.success {
-                QL1("Accept list invitation success")
+                logger.v("Accept list invitation success")
                 handler(ProviderResult(status: .success))
             } else {
                 DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
@@ -243,7 +243,7 @@ class ListProviderImpl: ListProvider {
     func rejectInvitation(_ invitation: RemoteListInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         remoteListProvider.rejectInvitation(invitation) {remoteResult in
             if remoteResult.success {
-                QL1("Reject list invitation success")
+                logger.v("Reject list invitation success")
             } else {
                 DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
             }

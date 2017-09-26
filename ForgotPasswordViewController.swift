@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-import QorumLogs
+
 import Providers
 
 protocol ForgotPasswordDelegate: class {
@@ -108,6 +108,6 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
     }
     
     deinit {
-        QL1("Deinit forgot password controller")
+        logger.v("Deinit forgot password controller")
     }
 }

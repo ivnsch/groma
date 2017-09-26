@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteSocialLoginResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     let token: String
@@ -24,7 +24,7 @@ struct RemoteSocialLoginResult: ResponseObjectSerializable, CustomDebugStringCon
             let lastName = representation.value(forKeyPath: "lastName") as? String,
             let isRegister = representation.value(forKeyPath: "isRegister") as? Bool
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.token = token

@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 
 // TODO object oriented
 class PullToAddHelper {
@@ -91,7 +91,7 @@ class MyRefreshControl: UIRefreshControl {
 
             
         } else {
-            QL4("No arrow image!")
+            logger.e("No arrow image!")
         }
         
     }

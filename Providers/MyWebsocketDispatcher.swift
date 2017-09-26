@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 
 public enum WSNotificationName: String {
@@ -98,7 +98,7 @@ public let WSNotificationValue = "value"
 struct MyWebsocketDispatcher {
     
     static func processCategory(_ category: String, verb verbStr: String, topic: String, sender: String, data: AnyObject) {
-        guard let verb = WSNotificationVerb.init(rawValue: verbStr) else {QL4("Error: MyWebsocketDispatcher: Verb not supported: \(verbStr). Can't process. Category: \(category), topic: \(topic), sender: \(sender)"); return}
+        guard let verb = WSNotificationVerb.init(rawValue: verbStr) else {logger.e("Error: MyWebsocketDispatcher: Verb not supported: \(verbStr). Can't process. Category: \(category), topic: \(topic), sender: \(sender)"); return}
         
         NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: WSNotificationName.Reception.rawValue), object: nil, userInfo: ["verb": verbStr, "category": category, "sender": sender])
         
@@ -136,7 +136,7 @@ struct MyWebsocketDispatcher {
 //                processPlanItem(verb, topic, data)
             }
         } else {
-            QL4("MyWebsocketDispatcher.processCategory not handled: \(category)")
+            logger.e("MyWebsocketDispatcher.processCategory not handled: \(category)")
         }
     }
     
@@ -145,21 +145,21 @@ struct MyWebsocketDispatcher {
         let report = ErrorReport(title: "Websocket storing", body: "msg: \(msg), result: \(result)")
         NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: WSNotificationName.ProcessingError.rawValue), object: nil, userInfo: nil)
         Prov.errorProvider.reportError(report)
-        QL4("Websocket: Couldn't store: \(msg), result: \(result)")
+        logger.e("Websocket: Couldn't store: \(msg), result: \(result)")
     }
 
     fileprivate static func reportWebsocketParsingError(_ msg: String) {
         let report = ErrorReport(title: "Websocket parsing", body: "msg: \(msg)")
         NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: WSNotificationName.ProcessingError.rawValue), object: nil, userInfo: nil)
         Prov.errorProvider.reportError(report)
-        QL4("Websocket: Couldn't parse: \(msg)")
+        logger.e("Websocket: Couldn't parse: \(msg)")
     }
     
     fileprivate static func reportWebsocketGeneralError(_ msg: String) {
         let report = ErrorReport(title: "Websocket", body: "msg: \(msg)")
         NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: WSNotificationName.ProcessingError.rawValue), object: nil, userInfo: nil)
         Prov.errorProvider.reportError(report)
-        QL4("Websocket General error: \(msg)")
+        logger.e("Websocket General error: \(msg)")
     }
     
     static func postNotification<T: Any>(_ notificationName: WSNotificationName, _ verb: WSNotificationVerb, _ sender: String, _ obj: T) {
@@ -250,7 +250,7 @@ struct MyWebsocketDispatcher {
                     MyWebsocketDispatcher.reportWebsocketParsingError("Increment product fav, data: \(data)")
                 }
             
-            default: QL4("Not handled verb: \(verb)")
+            default: logger.e("Not handled verb: \(verb)")
         }
     }
     
@@ -283,7 +283,7 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Delete category, data: \(data)")
             }
 
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
     
@@ -361,7 +361,7 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Update groups order, data: \(data)")
             }
 
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
     
@@ -431,7 +431,7 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Delete Group item, data: \(data)")
             }
             
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
     
@@ -452,7 +452,7 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Add group items, data: \(data)")
             }
             
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
 
@@ -509,7 +509,7 @@ struct MyWebsocketDispatcher {
             if let remoteListInvitation = RemoteListInvitation(representation: data) {
                 postNotification(.List, verb, sender, remoteListInvitation)
             } else {
-                QL4("Couldn't parse data: \(data)")
+                logger.e("Couldn't parse data: \(data)")
             }
             
             
@@ -531,14 +531,14 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Update lists order, data: \(data)")
             }
             
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
     
     fileprivate static func processListItem(_ verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            QL3("Websocket TODO!!!!")
+            logger.w("Websocket TODO!!!!")
             // now that we have to pass status to list item add, we need this info in websocket also? or do we simply have to insert, if yes maybe we need a provider method special for this, and delete the old ones?
             
 //            if let remoteListItems = RemoteListItems(representation: data) {
@@ -632,7 +632,7 @@ struct MyWebsocketDispatcher {
                                 Prov.listItemsProvider.updateListItemsOrderLocal(remoteOrderUpdates.items, sections: sections, status: .done) {updateResult in
                                     onUpdated(updateResult, remoteOrderUpdates: remoteOrderUpdates)
                                 }
-                            default: QL4("Invalid verb: \(verb), should be here only if .TodoOrder or .DoneOrder")
+                            default: logger.e("Invalid verb: \(verb), should be here only if .TodoOrder or .DoneOrder")
                             }
 
                         } else {
@@ -640,7 +640,7 @@ struct MyWebsocketDispatcher {
                         }
                     }
                 } else {
-                    QL4("Websocket warning/error: Received list items order update but the list was not found.") // Can happen if e.g. receiver just deleted the list. This must happen in a very short time, after the server did the order update. If we see this message frequently it's an error, as this is expected to happen rarely.
+                    logger.e("Websocket warning/error: Received list items order update but the list was not found.") // Can happen if e.g. receiver just deleted the list. This must happen in a very short time, after the server did the order update. If we see this message frequently it's an error, as this is expected to happen rarely.
                 }
             } else {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Update list items order, data: \(data)")
@@ -686,7 +686,7 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Switch all, data: \(data)")
             }
             
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
     
@@ -709,7 +709,7 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Update list items, data: \(data)")
             }
             
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
 
@@ -770,7 +770,7 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Delete sections with name, data: \(data)")
             }
             
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
     
@@ -821,7 +821,7 @@ struct MyWebsocketDispatcher {
 //            if let remoteInventoryInvitation = RemoteInventoryInvitation(representation: data) {
 //                postNotification(.Inventory, verb, sender, remoteInventoryInvitation)
 //            } else {
-//                QL4("Couldn't parse data: \(data)")
+//                logger.e("Couldn't parse data: \(data)")
 //            }
 //            
 //        case WSNotificationVerb.Order:
@@ -842,13 +842,13 @@ struct MyWebsocketDispatcher {
 //                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventories order, data: \(data)")
 //            }
 //            
-//        default: QL4("Not handled verb: \(verb)")
+//        default: logger.e("Not handled verb: \(verb)")
 //        }
     }
     
 
     fileprivate static func processInventoryItem(_ verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
-        QL4("Outdated")
+        logger.e("Outdated")
 //        switch verb {
 //        case WSNotificationVerb.Update:
 //            if let remoteInventoryItem = RemoteInventoryItemWithProduct(representation: data) {
@@ -893,7 +893,7 @@ struct MyWebsocketDispatcher {
 //                MyWebsocketDispatcher.reportWebsocketParsingError("Delete inventory item, data: \(data)")
 //            }
 //
-//        default: QL4("Not handled verb: \(verb)")
+//        default: logger.e("Not handled verb: \(verb)")
 //        }
     }
     
@@ -915,7 +915,7 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Add inventory items, data: \(data)")
             }
             
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
     
@@ -949,7 +949,7 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Delete history item, data: \(data)")
             }
             
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
     
@@ -960,10 +960,10 @@ struct MyWebsocketDispatcher {
                 
                 postNotification(.SyncShared, verb, sender, sender)
             } else {
-                QL4("No sender. Data: \(data)")
+                logger.e("No sender. Data: \(data)")
             }
             
-        default: QL4("Not handled verb: \(verb)")
+        default: logger.e("Not handled verb: \(verb)")
         }
     }
     
@@ -979,7 +979,7 @@ struct MyWebsocketDispatcher {
     //        case WSNotificationVerb.Delete:
     //            let items = WSPlanItemParser.parsePlanItem(data)
     //            postNotification(.PlanItem, verb, items)
-    //        default: QL4("Not handled verb: \(verb)")
+    //        default: logger.e("Not handled verb: \(verb)")
     //        }
     //    }
 }

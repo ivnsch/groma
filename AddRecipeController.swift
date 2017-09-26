@@ -9,7 +9,7 @@
 import UIKit
 import Providers
 import RealmSwift
-import QorumLogs
+
 
 
 protocol AddRecipeControllerDelegate: class {
@@ -98,7 +98,7 @@ class AddRecipeController: UIViewController {
     }
     
     fileprivate func loadIngredients() {
-        guard let recipe = recipe else {QL4("No recipe"); return}
+        guard let recipe = recipe else {logger.e("No recipe"); return}
         
         Prov.addableIngredientProvider.addableIngredients(recipe: recipe, handler: successHandler {addableIngredients in
             self.onLoadedIngredients(ingredients: addableIngredients)
@@ -152,15 +152,15 @@ class AddRecipeController: UIViewController {
     func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                QL1("keyboardWillChangeFrame, frame: \(frame)")
+                logger.v("keyboardWillChangeFrame, frame: \(frame)")
                 let keyboardHeightWithoutTabbar = frame.height - (tabBarController?.tabBar.height ?? 0)
                 addToListViewBottomConstraint.constant = keyboardHeightWithoutTabbar
                 tableView.bottomInset = keyboardHeightWithoutTabbar + addToListView.height
             } else {
-                QL3("Couldn't retrieve keyboard size from user info")
+                logger.w("Couldn't retrieve keyboard size from user info")
             }
         } else {
-            QL3("Notification has no user info")
+            logger.w("Notification has no user info")
         }
         // TODO!!!!!!!!!!!!!!!!!!!!!!!! animate
 //        animateVisible(true)
@@ -168,7 +168,7 @@ class AddRecipeController: UIViewController {
     
     func keyboardWillDisappear(_ notification: Foundation.Notification) {
         // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
-        QL1("add button - Keyboard will disappear - hiding")
+        logger.v("add button - Keyboard will disappear - hiding")
 //        animateVisible(false) // TODO!!!!!!!!!!!!!!!!!!!!!!!! animate
 //        let tabBarHeight = (tabBarController?.tabBar.height ?? 0)
         
@@ -203,15 +203,15 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
                 if let baseQuantities = baseQuantities {
                     cell.options = (brands: brands, baseQuantities: baseQuantities, units: units)
                 } else {
-                    QL4("No bases, can't set cell options")
+                    logger.e("No bases, can't set cell options")
                 }
                 
             } else {
-                QL4("No units, can't set cell options")
+                logger.e("No units, can't set cell options")
             }
             
         } else {
-            QL4("Invalid state: no itemsResult")
+            logger.e("Invalid state: no itemsResult")
         }
         
         return cell

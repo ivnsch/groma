@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 
 protocol SwipeToDeleteHelperDelegate: class {
     var isSwipeToDeleteEnabled: Bool {get}

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol RatingPopupControllerDelegate: class {
@@ -27,7 +27,7 @@ class RatingPopupController: UIViewController, RatingProvideFeedbackControllerDe
                 PreferencesManager.savePreference(PreferencesManagerKey.dontShowAppRatingDialogAgain, value: true) // rating has practically the same meaning as selecting don't show again
             }
         } else {
-            QL4("Url is nil, can't go to rating")
+            logger.e("Url is nil, can't go to rating")
         }
     }
     
@@ -35,7 +35,7 @@ class RatingPopupController: UIViewController, RatingProvideFeedbackControllerDe
         if let feedbackController = segue.destination as? RatingProvideFeedbackController {
             feedbackController.delegate = self
         } else {
-            QL4("Unexpected controller: \(segue.destination)")
+            logger.e("Unexpected controller: \(segue.destination)")
         }
     }
     

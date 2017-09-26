@@ -8,7 +8,7 @@
 
 import Foundation
 import Alamofire
-import QorumLogs
+
 
 // Representation of status code related with remote responses
 // Can represent a HTTP status code sent by the server, a status flag in the JSON response, or a client-side error related with the processing of the remote response
@@ -197,23 +197,21 @@ struct AlamofireHelper {
     
     static func authenticatedRequest(_ method: HTTPMethod, _ url: String, _ parameters: [String: AnyObject]? = nil) -> DataRequest {
 
-        if QorumLogs.minimumLogLevelShown == 1 {
-            let unwrapedParams = parameters?.map{$0} ?? [:] // make more readable
-            QL1("\(method) \(url), parameters: \(unwrapedParams)")
-        }
-        
+        let unwrapedParams = parameters?.map{$0} ?? [:] // make more readable
+        logger.v("\(method) \(url), parameters: \(unwrapedParams)")
+
 //        if let pars = parameters {
 //            let dataExample: NSData = NSKeyedArchiver.archivedDataWithRootObject(pars)
 //            let mb = Float(dataExample.length) / Float(1024) / Float(1024)
-//            QL1("size: \(mb)")
-//            QL1("size dict: \(pars.count)")
+//            logger.v("size: \(mb)")
+//            logger.v("size dict: \(pars.count)")
 //        }
         
         var mutableURLRequest = URLRequest(url: URL(string: url)!)
         mutableURLRequest.httpMethod = method.rawValue
         
         if let token = AccessTokenHelper.loadToken() {
-//            QL1("Setting the token header: \(token)")
+//            logger.v("Setting the token header: \(token)")
             mutableURLRequest.setValue(token, forHTTPHeaderField: "X-Auth-Token")
         } // TODO if there's no token return status code to direct to login controller or something
         
@@ -237,7 +235,7 @@ struct AlamofireHelper {
     
     static func authenticatedRequest(_ method: HTTPMethod, _ url: String, _ parameters: [[String: AnyObject]]) -> DataRequest {
         
-        QL1("\(method) \(url), parameters: \(parameters)")
+        logger.v("\(method) \(url), parameters: \(parameters)")
         
         // this is handled differently because the parameters are an array and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
         var request = URLRequest(url: URL(string: url)!)
@@ -245,7 +243,7 @@ struct AlamofireHelper {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 
         if let token = AccessTokenHelper.loadToken() {
-//            QL1("Setting the token header: \(token)")
+//            logger.v("Setting the token header: \(token)")
             request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
         } // TODO if there's no token return status code to direct to login controller or something
         
@@ -354,9 +352,9 @@ extension DataRequest {
                 
                 let fullStr = "\(requestStr): \(msg)"
                 if isWarning {
-                    QL3(fullStr)
+                    logger.w(fullStr)
                 } else {
-                    QL4(fullStr)
+                    logger.e(fullStr)
                 }
                 
                 if reportToServer {
@@ -377,7 +375,7 @@ extension DataRequest {
                 logRequesstWarningOrError(msg, isWarning: false, reportToServer: false)
             }
             
-//            QL1("method: \(request?.HTTPMethod), response: \(responseMaybe)")
+//            logger.v("method: \(request?.HTTPMethod), response: \(responseMaybe)")
             if let response = responseMaybe {
                 
                 let statusCode = response.statusCode
@@ -391,7 +389,7 @@ extension DataRequest {
                         
                         let dataObj = dataObjAny as AnyObject
                         
-//                        QL1("JSON (request \(request?.HTTPMethod), \(request?.URL): \(dataObj)")
+//                        logger.v("JSON (request \(request?.HTTPMethod), \(request?.URL): \(dataObj)")
 
                         let statusInt = dataObj.value(forKeyPath: "status") as! Int
                         if let status = RemoteStatusCode(rawValue: statusInt) {
@@ -399,7 +397,7 @@ extension DataRequest {
                             // App version check. Note that this doesn't affect processing the rest of the response, not even if the fields are missing. In the future we may prefer to trigger an .Unknown if the fields are missing and not continue processing response.
                             if let minRequiredAppVersion = dataObj.value(forKeyPath: "minr") as? Int, let minAdvisedAppVersion = dataObj.value(forKeyPath: "mina") as? Int {
                                 if let appVersion = AppInfo.CFBundleVersion {
-                                    QL1("Response app version, required: \(minRequiredAppVersion), min advised: \(minAdvisedAppVersion), app version: \(appVersion)")
+                                    logger.v("Response app version, required: \(minRequiredAppVersion), min advised: \(minAdvisedAppVersion), app version: \(appVersion)")
                                     
                                     func isInvalidAppVersion() -> Bool {
                                        return appVersion < minRequiredAppVersion
@@ -423,10 +421,10 @@ extension DataRequest {
                                     }
                                     
                                 } else {
-                                    QL4("Can't check min version: App has no bundle version")
+                                    logger.e("Can't check min version: App has no bundle version")
                                 }
                             } else {
-                                QL4("Server didn't send app minr and/or mina app version, data: \(dataObj)")
+                                logger.e("Server didn't send app minr and/or mina app version, data: \(dataObj)")
                             }
 
                             if status == .success || status == .invalidParameters || status == .sizeLimit || status == .blacklisted {
@@ -563,7 +561,7 @@ extension DataRequest {
                 case .success(let remoteResult):
                     return remoteResult
                 case .failure(let error):
-                    QL4("Error calling remote service, error: \(error)")
+                    logger.e("Error calling remote service, error: \(error)")
                     if error._code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
                         return RemoteResult<T>(status: .serverNotReachable)
                     } else {

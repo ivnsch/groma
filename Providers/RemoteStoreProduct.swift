@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteStoreProduct: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
@@ -28,7 +28,7 @@ struct RemoteStoreProduct: ResponseObjectSerializable, ResponseCollectionSeriali
             let productUuid = representation.value(forKeyPath: "productUuid") as? String,
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid

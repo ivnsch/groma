@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 // TODO put these structs somewhere else
 
@@ -87,7 +87,7 @@ class RealmProductProvider: RealmProvider {
             handler(productMaybe)
             
         } catch let e {
-            QL4("Error: creating Realm, returning empty results, error: \(e)")
+            logger.e("Error: creating Realm, returning empty results, error: \(e)")
             handler(nil)
         }
     }
@@ -101,7 +101,7 @@ class RealmProductProvider: RealmProvider {
                 let product: Product? = self.loadSync(realm, filter: Product.createFilterNameBrand(name, brand: brand)).first
                 return product?.uuid
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 return nil
             }
             
@@ -112,17 +112,17 @@ class RealmProductProvider: RealmProvider {
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let productMaybe: Product? = self.loadSync(realm, filter: Product.createFilter(productUuid)).first
                     if productMaybe == nil {
-                        QL4("Unexpected: product with just fetched uuid is not there")
+                        logger.e("Unexpected: product with just fetched uuid is not there")
                     }
                     handler(productMaybe)
                     
                 } else {
-                    QL1("No product found for name: \(name), brand: \(brand)")
+                    logger.v("No product found for name: \(name), brand: \(brand)")
                     handler(nil)
                 }
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 handler(nil)
             }
         })
@@ -145,12 +145,12 @@ class RealmProductProvider: RealmProvider {
                     handler(products.toArray())
                     
                 } else {
-                    QL4("No product uuids")
+                    logger.e("No product uuids")
                     handler([])
                 }
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 handler([])
             }
         }
@@ -169,17 +169,17 @@ class RealmProductProvider: RealmProvider {
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let productMaybe: QuantifiableProduct? = self.loadSync(realm, filter: QuantifiableProduct.createFilter(productUuid)).first
                     if productMaybe == nil {
-                        QL4("Unexpected: product with just fetched uuid is not there")
+                        logger.e("Unexpected: product with just fetched uuid is not there")
                     }
                     handler(productMaybe)
                     
                 } else {
-                    QL1("No product found for unique: \(unique)")
+                    logger.v("No product found for unique: \(unique)")
                     handler(nil)
                 }
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 handler(nil)
             }
         })
@@ -233,7 +233,7 @@ class RealmProductProvider: RealmProvider {
                 let products: [Product] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
                 return products.map{$0.uuid}
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 return nil
             }
             
@@ -246,12 +246,12 @@ class RealmProductProvider: RealmProvider {
                     handler(substring, products)
                     
                 } else {
-                    QL4("No product uuids")
+                    logger.e("No product uuids")
                     handler(substring, nil)
                 }
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 handler(substring, nil)
             }
         })
@@ -277,7 +277,7 @@ class RealmProductProvider: RealmProvider {
                 let products: [QuantifiableProduct] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
                 return products.map{$0.uuid}
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 return nil
             }
             
@@ -290,12 +290,12 @@ class RealmProductProvider: RealmProvider {
                     handler(substring, products)
                     
                 } else {
-                    QL4("No product uuids")
+                    logger.e("No product uuids")
                     handler(substring, nil)
                 }
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 handler(substring, nil)
             }
         })
@@ -365,14 +365,14 @@ class RealmProductProvider: RealmProvider {
                         let section = sectionUuid.flatMap{realm.objects(Section.self).filter(Section.createFilter($0)).first}
                         return (product, section)
                     } else {
-                        QL4("Error/Warning: Product for just retrieved uuid is not there")
+                        logger.e("Error/Warning: Product for just retrieved uuid is not there")
                         return nil
                     }
                 }
                 handler(substring, productsWithMaybeSections)
                 
             } catch let e {
-                QL4("Error retrieving objects for uuids: \(String(describing: productsWithMaybeSectionsUuids)), error: \(e)")
+                logger.e("Error retrieving objects for uuids: \(String(describing: productsWithMaybeSectionsUuids)), error: \(e)")
                 handler(substring, nil)
             }
         })
@@ -422,14 +422,14 @@ class RealmProductProvider: RealmProvider {
                             let section = sectionUuid.flatMap{realm.objects(Section.self).filter(Section.createFilter($0)).first}
                             return (product, section)
                         } else {
-                            QL4("Error/Warning: Product for just retrieved uuid is not there")
+                            logger.e("Error/Warning: Product for just retrieved uuid is not there")
                             return nil
                         }
                     }
                     handler(substring, productsWithMaybeSections)
                     
                 } catch let e {
-                    QL4("Error retrieving objects for uuids: \(String(describing: productsWithMaybeSectionsUuids)), error: \(e)")
+                    logger.e("Error retrieving objects for uuids: \(String(describing: productsWithMaybeSectionsUuids)), error: \(e)")
                     handler(substring, nil)
                 }
         })
@@ -442,7 +442,7 @@ class RealmProductProvider: RealmProvider {
                 if let count = countMaybe {
                     handler(count)
                 } else {
-                    QL4("No count")
+                    logger.e("No count")
                     handler(nil)
                 }
         }
@@ -745,7 +745,7 @@ class RealmProductProvider: RealmProvider {
         updateOrCreateProduct(productInput) {productMaybe in
             
             guard let product = productMaybe else {
-                QL4("Couldn't update/create product for prototype: \(prototype)")
+                logger.e("Couldn't update/create product for prototype: \(prototype)")
                 handler(nil)
                 return
             }
@@ -763,7 +763,7 @@ class RealmProductProvider: RealmProvider {
                             realm.add(newQuantifiableProduct)
                         })
                     } else {
-                        QL4("Couldn't get/create unit for prototype: \(prototype)")
+                        logger.e("Couldn't get/create unit for prototype: \(prototype)")
                         handler(nil)
                     }
                 }
@@ -782,7 +782,7 @@ class RealmProductProvider: RealmProvider {
                     if saved {
                         handler(product)
                     } else {
-                        QL4("Could not save product: \(product)")
+                        logger.e("Could not save product: \(product)")
                         handler(nil)
                     }
                 }
@@ -805,7 +805,7 @@ class RealmProductProvider: RealmProvider {
                         onHasNewOrUpdatedItem(item: item)
 
                     case .err(let error):
-                        QL4("Couldn't retrieve item: \(error)")
+                        logger.e("Couldn't retrieve item: \(error)")
                         handler(nil)
                     }
                 }
@@ -893,7 +893,7 @@ class RealmProductProvider: RealmProvider {
                 let obj: ProductCategory? = self.loadSync(realm, filter: ProductCategory.createFilterName(name)).first
                 return obj?.uuid
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 return nil
             }
             
@@ -904,17 +904,17 @@ class RealmProductProvider: RealmProvider {
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let objMaybe: ProductCategory? = self.loadSync(realm, filter: ProductCategory.createFilter(uuid)).first
                     if objMaybe == nil {
-                        QL4("Unexpected: obj with just fetched uuid is not there")
+                        logger.e("Unexpected: obj with just fetched uuid is not there")
                     }
                     handler(objMaybe)
                     
                 } else {
-                    QL1("No category found for name: \(name)")
+                    logger.v("No category found for name: \(name)")
                     handler(nil)
                 }
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 handler(nil)
             }
         })
@@ -927,7 +927,7 @@ class RealmProductProvider: RealmProvider {
                 let suggestions = Array(categories.map{Suggestion(name: $0.name)})
                 handler(suggestions)
             } else {
-                QL4("No categories")
+                logger.e("No categories")
                 handler([])
             }
         }
@@ -1151,7 +1151,7 @@ class RealmProductProvider: RealmProvider {
                 let stores = Array(Set(realm.objects(StoreProduct.self).filter(StoreProduct.createFilterStoreContains(text)).map{$0.store}))[range].filter{!$0.isEmpty}.sorted()
                 return stores
             } catch let e {
-                QL4("Couldn't load stores, returning empty array. Error: \(e)")
+                logger.e("Couldn't load stores, returning empty array. Error: \(e)")
                 return []
             }
             }) {(result: [String]) in
@@ -1164,7 +1164,7 @@ class RealmProductProvider: RealmProvider {
         
         doInWriteTransaction({realm in
             
-            guard let units = DBProv.unitProvider.unitsSync(buyable: nil) else {QL4("Couldn't load units. Can't restore prefill product"); return false}
+            guard let units = DBProv.unitProvider.unitsSync(buyable: nil) else {logger.e("Couldn't load units. Can't restore prefill product"); return false}
             
             let prefillProducts = SuggestionsPrefiller().prefillProducts(LangManager().appLang, defaultUnits: units.toArray()).products
             
@@ -1172,7 +1172,7 @@ class RealmProductProvider: RealmProvider {
             
             for prefillProduct in prefillProducts {
                 if realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(unique: prefillProduct.unique)).isEmpty {
-                    QL1("Restoring prefill product: \(prefillProduct)")
+                    logger.v("Restoring prefill product: \(prefillProduct)")
                     realm.add(prefillProduct, update: false)
                     restoredSomething = true
                 }
@@ -1193,7 +1193,7 @@ class RealmProductProvider: RealmProvider {
             
         }) { baseQuantiesMaybe in
             if baseQuantiesMaybe == nil {
-                QL4("Couldn't retrieve base quantities")
+                logger.e("Couldn't retrieve base quantities")
             }
             handler(baseQuantiesMaybe ?? [])
         }
@@ -1212,7 +1212,7 @@ class RealmProductProvider: RealmProvider {
                     return "\(baseQuantity)".contains(text)
                 }
             } catch let e {
-                QL4("Couldn't load stores, returning empty array. Error: \(e)")
+                logger.e("Couldn't load stores, returning empty array. Error: \(e)")
                 return []
             }
         }) {(result: [Float]) in
@@ -1283,7 +1283,7 @@ class RealmProductProvider: RealmProvider {
             if let realm = realmData?.realm {
                 return transactionContent(realm: realm)
             } else {
-                QL4("Invalid state: on realm")
+                logger.e("Invalid state: on realm")
                 return .err(.unknown)
             }
         }
@@ -1312,7 +1312,7 @@ class RealmProductProvider: RealmProvider {
                         return .ok(product, true)
 
                     } else {
-                        QL4("Couldn't get or create unit")
+                        logger.e("Couldn't get or create unit")
                         return .err(.unknown)
                     }
                 }
@@ -1328,7 +1328,7 @@ class RealmProductProvider: RealmProvider {
             if let realm = realmData?.realm {
                 return transactionContent(realm: realm)
             } else {
-                QL4("Invalid state: on realm")
+                logger.e("Invalid state: on realm")
                 return .err(.unknown)
             }
         }
@@ -1368,7 +1368,7 @@ class RealmProductProvider: RealmProvider {
             if let realm = realmData?.realm {
                 return transactionContent(realm: realm)
             } else {
-                QL4("Invalid state: on realm")
+                logger.e("Invalid state: on realm")
                 return .err(.unknown)
             }
         }

@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 // TODO maybe remove the mapping toArray later if we want to stick with realm, as this can increase performance
 // this would mean the provider is more coupled with realm but that's ok in this case
@@ -24,7 +24,7 @@ class RealmProvider {
                 if let result = resultMaybe {
                     handler(result)
                 } else {
-                    QL4("self is nil")
+                    logger.e("self is nil")
                     handler(false)
                 }
             })
@@ -39,10 +39,10 @@ class RealmProvider {
                 realm.add(obj, update: update)
             }
         } catch let error as NSError {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return false
         } catch let error {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return false
         }
         return true
@@ -58,7 +58,7 @@ class RealmProvider {
                 if let result = resultMaybe {
                     handler(result)
                 } else {
-                    QL4("self is nil")
+                    logger.e("self is nil")
                     handler(false)
                 }
             })
@@ -72,10 +72,10 @@ class RealmProvider {
                 saveObjsSyncInt(realm, objs: objs, update: update)
             }
         } catch let error as NSError {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return false
         } catch let error {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return false
         }
         return true
@@ -107,7 +107,7 @@ class RealmProvider {
     func loadFirst<T: Object, U>(_ mapper: @escaping (T) -> U, filter filterMaybe: String? = nil, handler: @escaping (U?) -> ()) {
         self.load(mapper, filter: filterMaybe, handler: {results in
             if results.count > 1 {
-                QL2("Multiple items found in load first \(String(describing: filterMaybe))") // sometimes we expect only 1 item to be in the database, log this just in case
+                logger.d("Multiple items found in load first \(String(describing: filterMaybe))") // sometimes we expect only 1 item to be in the database, log this just in case
             }
             handler(results.first)
         })
@@ -140,7 +140,7 @@ class RealmProvider {
             return results
             
         } catch let e {
-            QL4("Error: creating Realm, returning empty results, error: \(e)")
+            logger.e("Error: creating Realm, returning empty results, error: \(e)")
             return nil
         }
     }
@@ -155,7 +155,7 @@ class RealmProvider {
             return loadSync(realm, filter: filterMaybe, sortDescriptors: sortDescriptors)
             
         } catch let e {
-            QL4("Error: creating Realm, returning empty results, error: \(e)")
+            logger.e("Error: creating Realm, returning empty results, error: \(e)")
             return nil
         }
     }
@@ -219,7 +219,7 @@ class RealmProvider {
                 finished(models)
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 finished([]) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
             }
         }
@@ -274,7 +274,7 @@ class RealmProvider {
                 finished(models)
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 finished([]) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
             }
         }
@@ -331,7 +331,7 @@ class RealmProvider {
             let realm = try Realm()
             return removeSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
         } catch let error {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return false
         }
     }
@@ -350,7 +350,7 @@ class RealmProvider {
             return true
             
         } catch let error {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return false
         }
     }
@@ -380,7 +380,7 @@ class RealmProvider {
             if let realm = realmData?.realm {
                 return transactionContent(realm: realm)
             } else {
-                QL4("Invalid state: when do own transaction == false a realm should be passed")
+                logger.e("Invalid state: when do own transaction == false a realm should be passed")
                 return nil
             }
         }
@@ -419,10 +419,10 @@ class RealmProvider {
                 finished(obj)
                 
             } catch let error as NSError {
-                QL4("Realm error: \(error)")
+                logger.e("Realm error: \(error)")
                 finished(nil)
             } catch let error {
-                QL4("Realm error: \(error)")
+                logger.e("Realm error: \(error)")
                 finished(nil)
             }
         }
@@ -433,10 +433,10 @@ class RealmProvider {
             let realm = try realmData?.realm ?? Realm()
             return doInWriteTransactionWithRealmSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm, f: f)
         } catch let error as NSError {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return nil
         } catch let error {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return nil
         }
     }
@@ -447,10 +447,10 @@ class RealmProvider {
             let realm = try realm ?? Realm()
             return doInWriteTransactionWithRealmSync(withoutNotifying: withoutNotifying, realm, f: f)
         } catch let error as NSError {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return nil
         } catch let error {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return nil
         }
     }
@@ -459,13 +459,13 @@ class RealmProvider {
 //    func commitWrite(object: Object, withoutNotifying: [NotificationToken] = []) -> Bool {
 //        do {
 //            guard let realm = object.realm else {
-//                QL4("Object has no realm: \(object), isInvalidated: \(object.isInvalidated)")
+//                logger.e("Object has no realm: \(object), isInvalidated: \(object.isInvalidated)")
 //                return false
 //            }
 //            try realm.commitWrite(withoutNotifying: [])
 //            return true
 //        } catch let error {
-//            QL4("Realm error: \(error)")
+//            logger.e("Realm error: \(error)")
 //            return false
 //        }
 //    }
@@ -479,10 +479,10 @@ class RealmProvider {
             return obj
             
         } catch let error as NSError {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return nil
         } catch let error {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return nil
         }
     }
@@ -499,10 +499,10 @@ class RealmProvider {
         do {
             return try f(realm ?? Realm())
         } catch let error as NSError {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return nil
         } catch let error {
-            QL4("Realm error: \(error)")
+            logger.e("Realm error: \(error)")
             return nil
         }
     }
@@ -553,7 +553,7 @@ class RealmProvider {
             let realm = try Realm()
             realm.refresh()
         } catch let e {
-            QL4("Couldn't refresh realm, error: \(e)")
+            logger.e("Couldn't refresh realm, error: \(e)")
         }
     }
 }

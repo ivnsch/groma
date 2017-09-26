@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 class InventoryItemMapper {
     
@@ -74,7 +74,7 @@ class InventoryItemMapper {
 //                dict[remoteProduct.uuid] = product
 //                arr.append(product)
 //            } else {
-//                QL4("Error: Got product with category uuid: \(remoteProduct.categoryUuid) which is not in the category dict: \(categories)")
+//                logger.e("Error: Got product with category uuid: \(remoteProduct.categoryUuid) which is not in the category dict: \(categories)")
 //            }
 //        }
 //        return (dict, arr)
@@ -128,7 +128,7 @@ class InventoryItemMapper {
 //                    dict[remoteHistoryItem.uuid] = historyItem
 //                    arr.append(historyItem)
 //                } else {
-//                    QL4("Error: Either product or inventory or user are not set for item: \(remoteHistoryItems), product: \(products[remoteHistoryItem.productUuid]), inventory: \(inventories[remoteHistoryItem.inventoryUuid]), user: \(users[remoteHistoryItem.userUuid])")
+//                    logger.e("Error: Either product or inventory or user are not set for item: \(remoteHistoryItems), product: \(products[remoteHistoryItem.productUuid]), inventory: \(inventories[remoteHistoryItem.inventoryUuid]), user: \(users[remoteHistoryItem.userUuid])")
 //                }
 //            }
 //            return (dict, arr)

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 import RealmSwift
 
 class HistoryProviderImpl: HistoryProvider {
@@ -20,7 +20,7 @@ class HistoryProviderImpl: HistoryProvider {
             if let historyItems = historyItems {
                 handler(ProviderResult(status: .success, sucessResult: historyItems))
             } else {
-                QL4("Couldn't load history items")
+                logger.e("Couldn't load history items")
                 handler(ProviderResult(status: .unknown))
             }
             
@@ -34,7 +34,7 @@ class HistoryProviderImpl: HistoryProvider {
             if let historyItems = historyItems {
                 handler(ProviderResult(status: .success, sucessResult: historyItems))
             } else {
-                QL4("Couldn't load history items")
+                logger.e("Couldn't load history items")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -45,7 +45,7 @@ class HistoryProviderImpl: HistoryProvider {
             if let historyItems = historyItems {
                 handler(ProviderResult(status: .success, sucessResult: historyItems))
             } else {
-                QL4("Couldn't load history items")
+                logger.e("Couldn't load history items")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -77,7 +77,7 @@ class HistoryProviderImpl: HistoryProvider {
                         if result.success {
                             self?.dbProvider.clearHistoryItemTombstone(uuid) {removeTombstoneSuccess in
                                 if !removeTombstoneSuccess {
-                                    QL4("Couldn't delete tombstone for history item: \(uuid)")
+                                    logger.e("Couldn't delete tombstone for history item: \(uuid)")
                                 }
                             }
                         } else {
@@ -108,7 +108,7 @@ class HistoryProviderImpl: HistoryProvider {
 //                        if result.success {
 //                            self?.dbProvider.clearHistoryItemsTombstones(historyItemGroup) {removeTombstoneSuccess in
 //                                if !removeTombstoneSuccess {
-//                                    QL4("Couldn't delete tombstones for history items: \(historyItemGroup)")
+//                                    logger.e("Couldn't delete tombstones for history items: \(historyItemGroup)")
 //                                }
 //                            }
 //                        } else {
@@ -117,7 +117,7 @@ class HistoryProviderImpl: HistoryProvider {
 //                    }
 //                }
             } else {
-                QL4("Coult not remove historyItem group: \(historyItemGroup)")
+                logger.e("Coult not remove historyItem group: \(historyItemGroup)")
             }
         }
     }
@@ -130,16 +130,16 @@ class HistoryProviderImpl: HistoryProvider {
                         if removeSuccess {
                             handler(ProviderResult(status: .success))
                         } else {
-                            QL4("Couldn't remove local history group items for iem: \(uuid)")
+                            logger.e("Couldn't remove local history group items for iem: \(uuid)")
                             handler(ProviderResult(status: .unknown))
                         }
                     }
                 } else {
-                    QL2("History item to remove group was not found: \(uuid)")
+                    logger.d("History item to remove group was not found: \(uuid)")
                     handler(ProviderResult(status: .success))
                 }
             } else {
-                QL2("History item to remove group was not found: \(uuid) (second optional?)") // TODO does unwrapping the optional twice make sense?
+                logger.d("History item to remove group was not found: \(uuid) (second optional?)") // TODO does unwrapping the optional twice make sense?
                 handler(ProviderResult(status: .success))
             }
         }
@@ -172,7 +172,7 @@ class HistoryProviderImpl: HistoryProvider {
                         if result.success {
                             self?.dbProvider.clearHistoryItemsTombstones(removedHistoryItemsUuids) {removeTombstoneSuccess in
                                 if !removeTombstoneSuccess {
-                                    QL4("Couldn't delete tombstones for history items: \(removedHistoryItemsUuids)")
+                                    logger.e("Couldn't delete tombstones for history items: \(removedHistoryItemsUuids)")
                                 }
                             }
                         } else {
@@ -181,7 +181,7 @@ class HistoryProviderImpl: HistoryProvider {
                     }
                 }
             } else {
-                QL4("Coult not remove history items for month year: \(monthYear)")
+                logger.e("Coult not remove history items for month year: \(monthYear)")
             }
         }
     }
@@ -190,10 +190,10 @@ class HistoryProviderImpl: HistoryProvider {
     func removeHistoryItemsOlderThan(_ date: Date, handler: @escaping (ProviderResult<Bool>) -> Void) {
         DBProv.historyProvider.removeHistoryItemsOlderThan(date) {removedSomething in
             if let removedSomething = removedSomething {
-                QL2("Removed history items older than: \(date), removed something: \(removedSomething)")
+                logger.d("Removed history items older than: \(date), removed something: \(removedSomething)")
                 handler(ProviderResult(status: .success, sucessResult: removedSomething))
             } else {
-                QL4("Coult not remove history items older than: \(date)")
+                logger.e("Coult not remove history items older than: \(date)")
             }
         }
     }

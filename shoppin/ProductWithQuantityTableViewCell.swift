@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol ProductWithQuantityTableViewCellDelegate: class {
@@ -44,7 +44,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
 
     var model: ProductWithQuantity2? {
         didSet {
-            guard let model = model else {QL3("Model is nil"); return}
+            guard let model = model else {logger.w("Model is nil"); return}
             
             swipeToDeleteHelper?.setOpen(false, animated: false) // recycling
             
@@ -89,7 +89,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
                 quantityView.quantity = shownQuantity
 //                quantityLabel.text = String("\(product.quantityWithMaybeUnitText(quantity: shownQuantity))") // TODO???????????? format?
             } else {
-                QL3("Warn? using quantity before model is set")
+                logger.w("Warn? using quantity before model is set")
                 //            let unitText = model.map{$0.product.unitText} ?? ""
 //                quantityLabel.text = String("\(shownQuantity.quantityString)") // show something meaningful anyway. Maybe we can remove this.
                 quantityView.quantity = shownQuantity
@@ -179,7 +179,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     }
     
     func onQuantityUpdated(_ quantity: Float) {
-        guard let model = model else {QL4("Illegal state: No model"); return}
+        guard let model = model else {logger.e("Illegal state: No model"); return}
         
         let delta = shownQuantity - model.quantity
         
@@ -188,7 +188,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     }
     
     func onFinishSwipe() {
-        guard let model = model else {QL4("Illegal state: No model"); return}
+        guard let model = model else {logger.e("Illegal state: No model"); return}
 
         let delta = shownQuantity - model.quantity
         delegate?.onChangeQuantity(self, delta: delta)

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol SharedUserCellDelegate: class {
@@ -51,7 +51,7 @@ class ListSharedUserCell: UITableViewCell {
         if let sharedUser = cellModel?.user {
             delegate?.onPullProductsTap(sharedUser, cell: self)
         } else {
-            QL4("Illegal state: cell has no shared user")
+            logger.e("Illegal state: cell has no shared user")
         }
     }
 }

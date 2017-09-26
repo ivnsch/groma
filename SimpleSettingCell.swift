@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 protocol SimpleSettingCellDelegate {
     func onSimpleSettingHelpTap(_ cell: SimpleSettingCell, setting: SimpleSetting)
@@ -34,7 +34,7 @@ class SimpleSettingCell: UITableViewCell {
         if let setting = setting {
             delegate?.onSimpleSettingHelpTap(self, setting: setting)
         } else {
-            QL3("No setting set")
+            logger.w("No setting set")
         }
     }
 }

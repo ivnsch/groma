@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct RemoteInventoryInvitation: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     public let sender: String // TODO send shared user obj not simply email
@@ -19,7 +19,7 @@ public struct RemoteInventoryInvitation: ResponseObjectSerializable, ResponseCol
             let itemObj = representation.value(forKeyPath: "item"),
             let inventory = RemoteInventory(representation: itemObj as AnyObject)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.sender = sender

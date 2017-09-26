@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
     
 class RealmGlobalProvider: RealmProvider {
 
@@ -236,7 +236,7 @@ class RealmGlobalProvider: RealmProvider {
                     handler(success)
                     
                 } else {
-                    QL4("No success result")
+                    logger.e("No success result")
                     handler(false)
                 }
         }
@@ -279,7 +279,7 @@ class RealmGlobalProvider: RealmProvider {
                 handler(success)
                 
             } else {
-                QL4("No success result")
+                logger.e("No success result")
                 handler(false)
             }
         }
@@ -290,7 +290,7 @@ class RealmGlobalProvider: RealmProvider {
         doInWriteTransaction({realm in
             
             realm.deleteAll() // This is only for debugging, to avoid multiple instances of prefill objects. During debugging we can force-show intro, which will prefill each time the database. Note that this assumes initContainers is executed before adding the prefill objects. This is a well founded assumption as the containers are a requirements for the pre-fill to work or most other database operations. In production this operation has no effect, as this will be executed only once (intro is shown only first time the user starts the app), and this being the first database write operation, there's nothing to delete.
-            QL1("Cleared realm")
+            logger.v("Cleared realm")
             
             let fractionsContainer: FractionsContainer? = self.loadFirstSync()
             if fractionsContainer == nil {

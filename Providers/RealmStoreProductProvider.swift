@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 class RealmStoreProductProvider: RealmProvider {
       

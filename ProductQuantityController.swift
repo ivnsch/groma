@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 import RealmSwift
 
 
@@ -127,7 +127,7 @@ class ProductQuantityController: UIViewController {
     // TODO cell recycling?
     func initUnitPicker() {
         
-        guard let delegate = delegate else {QL4("No delegate, can't add picker"); return}
+        guard let delegate = delegate else {logger.e("No delegate, can't add picker"); return}
         
         func onHasUnits(units: Results<Providers.Unit>) {
             
@@ -184,7 +184,7 @@ class ProductQuantityController: UIViewController {
             if let units = unitsMaybe {
                 onHasUnits(units: units)
             } else {
-                QL4("No units")
+                logger.e("No units")
             }
         })
     }
@@ -195,10 +195,10 @@ class ProductQuantityController: UIViewController {
                 unitPicker?.scrollToItem(index: index, animated: false)
                 selectedUnit = unit
             } else {
-                QL1("Unit with name: \(name) not found in data source units")
+                logger.v("Unit with name: \(name) not found in data source units")
             }
         } else {
-            QL1("Data source not set")
+            logger.v("Data source not set")
         }
     }
     
@@ -209,10 +209,10 @@ class ProductQuantityController: UIViewController {
                 selectedBase = base.val
                 updateBasesVisibility(unit: selectedUnit, animated: false)
             } else {
-                QL1("Base with val: \(val) not found in data source bases")
+                logger.v("Base with val: \(val) not found in data source bases")
             }
         } else {
-            QL1("Data source not set")
+            logger.v("Data source not set")
         }
     }
     
@@ -220,7 +220,7 @@ class ProductQuantityController: UIViewController {
     // TODO cell recycling?
     func initBasePicker() {
         
-        guard let delegate = delegate else {QL4("No delegate, can't add picker"); return}
+        guard let delegate = delegate else {logger.e("No delegate, can't add picker"); return}
 
         func onHasBases(bases: RealmSwift.List<BaseQuantity>) {
             
@@ -278,14 +278,14 @@ class ProductQuantityController: UIViewController {
             if let bases = baseQuantitiesMaybe {
                 onHasBases(bases: bases)
             } else {
-                QL4("No bases")
+                logger.e("No bases")
             }
         })
     }
 
     
     func initQuantitiesView() {
-        guard let delegate = delegate else {QL4("No delegate, can't add picker"); return}
+        guard let delegate = delegate else {logger.e("No delegate, can't add picker"); return}
 
         quantityView.quantity = delegate.quantity
     }
@@ -380,12 +380,12 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
         
         guard let unitsDataSource = unitsDataSource else {
             setUnitPickerOpen(false)
-            QL4("No data source")
+            logger.e("No data source")
             return
         }
         
-        guard let units = unitsDataSource.units else {QL4("No units"); return}
-        guard let unitsCollectionView = unitPicker?.collectionView else {QL4("No collection"); return}
+        guard let units = unitsDataSource.units else {logger.e("No units"); return}
+        guard let unitsCollectionView = unitPicker?.collectionView else {logger.e("No collection"); return}
         
         
         let indexPath = IndexPath(row: index, section: 0)
@@ -422,7 +422,7 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     }
     
     fileprivate func clearToDeleteUnits() {
-        guard let unitsCollectionView = unitPicker?.collectionView else {QL4("No collection"); return}
+        guard let unitsCollectionView = unitPicker?.collectionView else {logger.e("No collection"); return}
         
         for cell in unitsCollectionView.visibleCells {
             if let fractionCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
@@ -432,7 +432,7 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     }
     
     fileprivate func clearSelectedUnits() {
-        guard let unitsCollectionView = unitPicker?.collectionView else {QL4("No collection"); return}
+        guard let unitsCollectionView = unitPicker?.collectionView else {logger.e("No collection"); return}
         
         for cell in unitsCollectionView.visibleCells {
             if let fractionCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
@@ -444,8 +444,8 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     
     
     func appendNewUnitCell(unit: Providers.Unit) {
-        guard let picker = unitPicker else {QL4("No units picker"); return}
-        guard let unitsDataSource = unitsDataSource else {QL4("No units data source"); return}
+        guard let picker = unitPicker else {logger.e("No units picker"); return}
+        guard let unitsDataSource = unitsDataSource else {logger.e("No units data source"); return}
         
         picker.collectionView.insertItems(at: [IndexPath(row: (unitsDataSource.units?.count ?? 0) - 1, section: 0)])
         
@@ -458,8 +458,8 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     }
     
     func appendNewBaseCell() {
-        guard let picker = basesPicker else {QL4("No base picker"); return}
-        guard let basesDataSource = basesDataSource else {QL4("No bases data source"); return}
+        guard let picker = basesPicker else {logger.e("No base picker"); return}
+        guard let basesDataSource = basesDataSource else {logger.e("No bases data source"); return}
         
         picker.collectionView.insertItems(at: [IndexPath(row: (basesDataSource.bases?.count ?? 0) - 1, section: 0)])
         if let editCell = picker.collectionView.cellForItem(at: IndexPath(row: (basesDataSource.bases?.count ?? 0), section: 0)) as? UnitEditableCell {
@@ -491,7 +491,7 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     
     func setUnitPickerOpen(_ open: Bool) {
         
-        guard let picker = unitPicker else {QL4("No units picker"); return}
+        guard let picker = unitPicker else {logger.e("No units picker"); return}
         
         setPickerOpen(open, picker: picker, mask: unitPickerMask, maskFrame: unitButtonMaskFrame)
         
@@ -499,7 +499,7 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     
     func setBasesPickerOpen(_ open: Bool) {
         
-        guard let picker = basesPicker else {QL4("No bases picker"); return}
+        guard let picker = basesPicker else {logger.e("No bases picker"); return}
         
         setPickerOpen(open, picker: picker, mask: basesPickerMask, maskFrame: baseButtonMaskFrame)
     }
@@ -525,8 +525,8 @@ extension ProductQuantityController: PickerCollectionViewDelegate {
     }
     
     func onSnap(cellIndex: Int) { // select model
-        guard let unitsDataSource = unitsDataSource else {QL4("No data source"); return}
-        guard let units = unitsDataSource.units else {QL4("No units"); return}
+        guard let unitsDataSource = unitsDataSource else {logger.e("No data source"); return}
+        guard let units = unitsDataSource.units else {logger.e("No units"); return}
         
         if cellIndex < units.count {
             onSelect(unit: units[cellIndex])
@@ -571,12 +571,12 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
         
         guard let basesDataSource = productQuantityController.basesDataSource else {
             setBasesPickerOpen(false)
-            QL4("No data source")
+            logger.e("No data source")
             return
         }
         
-        guard let bases = basesDataSource.bases else {QL4("No bases"); return}
-        guard let basesCollectionView = productQuantityController.basesPicker?.collectionView else {QL4("No collection"); return}
+        guard let bases = basesDataSource.bases else {logger.e("No bases"); return}
+        guard let basesCollectionView = productQuantityController.basesPicker?.collectionView else {logger.e("No collection"); return}
         
         
         let indexPath = IndexPath(row: index, section: 0)
@@ -624,7 +624,7 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
     }
     
     fileprivate func clearToDeleteBases() {
-        guard let basesCollectionView = productQuantityController.basesPicker?.collectionView else {QL4("No collection"); return}
+        guard let basesCollectionView = productQuantityController.basesPicker?.collectionView else {logger.e("No collection"); return}
         
         for cell in basesCollectionView.visibleCells {
             if let baseCell = cell as? BaseQuantityCell { // Note that we cast individual cells, because the collection view is mixed
@@ -634,7 +634,7 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
     }
     
     fileprivate func clearSelectedBases() {
-        guard let basesCollectionView = productQuantityController.basesPicker?.collectionView else {QL4("No collection"); return}
+        guard let basesCollectionView = productQuantityController.basesPicker?.collectionView else {logger.e("No collection"); return}
         
         for cell in basesCollectionView.visibleCells {
             if let baseCell = cell as? BaseQuantityCell { // Note that we cast individual cells, because the collection view is mixed
@@ -663,8 +663,8 @@ fileprivate class BasesAddRecipeDelegate: PickerCollectionViewDelegate {
     
     
     func onSnap(cellIndex: Int) { // select model
-        guard let basesDataSource = productQuantityController.basesDataSource else {QL4("No data source"); return}
-        guard let bases = basesDataSource.bases else {QL4("No bases"); return}
+        guard let basesDataSource = productQuantityController.basesDataSource else {logger.e("No data source"); return}
+        guard let bases = basesDataSource.bases else {logger.e("No bases"); return}
         
         let base: Float = {
             if cellIndex < bases.count {

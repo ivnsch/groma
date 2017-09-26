@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 
@@ -144,7 +144,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 //    }
     
     override func updateQuantifiables() {
-        guard let list = currentList else {QL4("No list"); return}
+        guard let list = currentList else {logger.e("No list"); return}
         
         Prov.listItemsProvider.calculateCartStashAggregate(list: list, successHandler {[weak self] aggregate in guard let weakSelf = self else {return}
             
@@ -181,7 +181,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 //                
 //                self.pricesView.quantities = (cart: totalCartQuantity, stash: stashQuantity)
 //                
-//                //                QL2("updating price, items: \(itemsStr), total cart quantity: \(totalCartQuantity), done price: \(totalCartPrice), stash quantity: \(stashQuantity)")
+//                //                logger.d("updating price, items: \(itemsStr), total cart quantity: \(totalCartQuantity), done price: \(totalCartPrice), stash quantity: \(stashQuantity)")
 //                
 //                self.pricesView.setDonePrice(totalCartPrice, animated: true)
 //                self.stashView.updateOpenStateForQuantities(totalCartQuantity, stashQuantity: stashQuantity)
@@ -191,7 +191,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 //            })
 //            
 //        } else {
-//            QL3("No list")
+//            logger.w("No list")
 //        }
     }
     
@@ -212,7 +212,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 //                }
                 weakSelf.pricesView.setQuantities(cart: weakSelf.pricesView.cartQuantity, stash: Float(count))
                 
-                //                    QL2("Set stash quantity: \(count), cart quantity: \(weakSelf.pricesView.quantities.cart)")
+                //                    logger.d("Set stash quantity: \(count), cart quantity: \(weakSelf.pricesView.quantities.cart)")
                 
 //                weakSelf.stashView.updateOpenStateForQuantities(weakSelf.pricesView.quantities.cart, stashQuantity: Float(count))
             })
@@ -257,7 +257,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 //                        stashViewController?.topBar.showDot()
 //                        stashViewController?.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
 //                    } else {
-//                        QL4("Invalid state: top bar has no dot color")
+//                        logger.e("Invalid state: top bar has no dot color")
 //                    }
 //                }
 //                // TODO!!!!!!!!!!!!!!!!
@@ -375,7 +375,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
                 if let cartController = cartController {
                     topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: cartController.tableView)
                 } else {
-                    QL4("Illegal state: prices view expanded but no cart controller")
+                    logger.e("Illegal state: prices view expanded but no cart controller")
                 }
             } else {
                 topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: tableView)
@@ -503,7 +503,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             view = super.parentViewForAddButton()
         }
         return view ?? {
-            QL4("Invalid state: price view expanded but no cart controller - returning a dummy view")
+            logger.e("Invalid state: price view expanded but no cart controller - returning a dummy view")
             return UIView()
         }()
     }

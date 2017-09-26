@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 public enum ListItemStatus: Int {
     // Note: the raw values are used in server communication, don't change.
@@ -186,13 +186,13 @@ public class ListItem: DBSyncable, Identifiable {
 
         // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
         if newTodo < 0 {
-            QL4("New todo quantity: \(newTodo) for item: \(self)")
+            logger.e("New todo quantity: \(newTodo) for item: \(self)")
         }
         if newDone < 0 {
-            QL4("New done quantity: \(newDone) for item: \(self)")
+            logger.e("New done quantity: \(newDone) for item: \(self)")
         }
         if newStash < 0 {
-            QL4("New stash quantity: \(newStash) for item: \(self)")
+            logger.e("New stash quantity: \(newStash) for item: \(self)")
         }
         let checkedTodo = max(0, newTodo)
         let checkedDone = max(0, newDone)
@@ -522,7 +522,7 @@ public class ListItem: DBSyncable, Identifiable {
                     // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
                     let newQuantity = capturedQuantity(status) + quantity(targetStatus)
                     if newQuantity < 0 {
-                        QL4("New done quantity: \(newQuantity), fieldStatus: \(fieldStatus), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
+                        logger.e("New done quantity: \(newQuantity), fieldStatus: \(fieldStatus), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
                     }
                     let checkedQuantity = max(0, newQuantity)
                     return checkedQuantity
@@ -552,7 +552,7 @@ public class ListItem: DBSyncable, Identifiable {
         if updatedQuantity >= 0 {
             quantity = quantity + delta
         } else {
-            QL1("Trying to decrement quantity to less than zero. Current quantity: \(quantity), delta: \(delta). Setting it to 0.")
+            logger.v("Trying to decrement quantity to less than zero. Current quantity: \(quantity), delta: \(delta). Setting it to 0.")
             quantity = 0
         }
     }
@@ -785,13 +785,13 @@ public typealias ListItemsWithRelations = (listItems: [ListItem], storeProducts:
 //
 //        // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
 //        if newTodo < 0 {
-//            QL4("New todo quantity: \(newTodo) for item: \(self)")
+//            logger.e("New todo quantity: \(newTodo) for item: \(self)")
 //        }
 //        if newDone < 0 {
-//            QL4("New done quantity: \(newDone) for item: \(self)")
+//            logger.e("New done quantity: \(newDone) for item: \(self)")
 //        }
 //        if newStash < 0 {
-//            QL4("New stash quantity: \(newStash) for item: \(self)")
+//            logger.e("New stash quantity: \(newStash) for item: \(self)")
 //        }
 //        let checkedTodo = max(0, newTodo)
 //        let checkedDone = max(0, newDone)
@@ -936,7 +936,7 @@ public typealias ListItemsWithRelations = (listItems: [ListItem], storeProducts:
 //                    // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
 //                    let newQuantity = quantity(status) + quantity(targetStatus)
 //                    if newQuantity < 0 {
-//                        QL4("New done quantity: \(newQuantity), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
+//                        logger.e("New done quantity: \(newQuantity), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
 //                    }
 //                    let checkedQuantity = max(0, newQuantity)
 //                    return checkedQuantity
@@ -993,7 +993,7 @@ public typealias ListItemsWithRelations = (listItems: [ListItem], storeProducts:
 //                    // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
 //                    let newQuantity = capturedQuantity(status) + quantity(targetStatus)
 //                    if newQuantity < 0 {
-//                        QL4("New done quantity: \(newQuantity), fieldStatus: \(fieldStatus), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
+//                        logger.e("New done quantity: \(newQuantity), fieldStatus: \(fieldStatus), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
 //                    }
 //                    let checkedQuantity = max(0, newQuantity)
 //                    return checkedQuantity

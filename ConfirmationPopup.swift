@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 class ConfirmationPopup {
@@ -29,7 +29,7 @@ class ConfirmationPopup {
         if controller.presentedViewController == nil {
             controller.present(alert, animated: true, completion: nil)
         } else {
-            QL3("Already showing a confirmation popup: \(String(describing: controller.presentedViewController)), skipping new one: title: \(String(describing: title)), message: \(message)")
+            logger.w("Already showing a confirmation popup: \(String(describing: controller.presentedViewController)), skipping new one: title: \(String(describing: title)), message: \(message)")
             onCannotPresent?()
         }
     }

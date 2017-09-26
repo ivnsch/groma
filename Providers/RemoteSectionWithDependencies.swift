@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteSectionWithDependencies: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
@@ -21,7 +21,7 @@ struct RemoteSectionWithDependencies: ResponseObjectSerializable, ResponseCollec
             let listObj = representation.value(forKeyPath: "list"),
             let list = RemoteListWithDependencies(representation: listObj as AnyObject)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.section = section

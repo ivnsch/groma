@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 
 
 class ToggleButtonRotator {

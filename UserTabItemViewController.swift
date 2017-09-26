@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsViewControllerDelegate {
@@ -100,7 +100,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     }
     
     deinit {
-        QL1("Deinit user tab controller")
+        logger.v("Deinit user tab controller")
         NotificationCenter.default.removeObserver(self)
     }
 }

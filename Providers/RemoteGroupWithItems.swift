@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteGroupWithItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
@@ -21,7 +21,7 @@ struct RemoteGroupWithItems: ResponseObjectSerializable, ResponseCollectionSeria
             let itemsObj = representation.value(forKeyPath: "items") as? [AnyObject],
             let groupItems = RemoteGroupItemsWithDependenciesNoGroup(representation: itemsObj as AnyObject)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.group = group

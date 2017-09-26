@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol RatingPopupDelegate: class {
@@ -27,7 +27,7 @@ class RatingPopup: RatingPopupControllerDelegate {
         
         func appInstallDate() -> Date {
             return PreferencesManager.loadPreference(PreferencesManagerKey.firstLaunchDate) ?? {
-                QL4("Invalid state: There's no app first launch date stored.")
+                logger.e("Invalid state: There's no app first launch date stored.")
                 return Date() // just to return something - note that with this we will never show the popup as the time offset will be ~0
             }()
         }
@@ -40,7 +40,7 @@ class RatingPopup: RatingPopupControllerDelegate {
             } ?? appInstallDate()
             
             let passedDays = referenceDate.daysUntil(Date())
-            QL1("\(passedDays) days passed since last reference date. Showing if >= \(showLaterDays)")
+            logger.v("\(passedDays) days passed since last reference date. Showing if >= \(showLaterDays)")
             if passedDays >= showLaterDays {
                 show(parentController)
             }
@@ -50,10 +50,10 @@ class RatingPopup: RatingPopupControllerDelegate {
             if !selectedNeverShow {
                 onCanShow()
             } else {
-                QL1("User selected to never show rating popup.")
+                logger.v("User selected to never show rating popup.")
             }
         } else {
-            QL1("The rating dialog was never shown yet. Checking time.")
+            logger.v("The rating dialog was never shown yet. Checking time.")
             onCanShow()
         }
     }

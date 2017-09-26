@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 class AddButtonHelper: NSObject {
@@ -45,20 +45,20 @@ class AddButtonHelper: NSObject {
     func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//                QL1("keyboardWillChangeFrame, frame: \(frame)")
+//                logger.v("keyboardWillChangeFrame, frame: \(frame)")
                 keyboardHeight = frame.height
             } else {
-                QL3("Couldn't retrieve keyboard size from user info")
+                logger.w("Couldn't retrieve keyboard size from user info")
             }
         } else {
-            QL3("Notification has no user info")
+            logger.w("Notification has no user info")
         }
         animateVisible(true)
     }
     
     func keyboardWillDisappear(_ notification: Foundation.Notification) {
         // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
-//        QL3("add button - Keyboard will disappear - hiding")
+//        logger.w("add button - Keyboard will disappear - hiding")
         animateVisible(false)
     }
     
@@ -68,7 +68,7 @@ class AddButtonHelper: NSObject {
         if let centerY = centerY(visible, overrideKeyboardHeight: overrideKeyboardHeight) {
             animate(centerY, removeOnFinish: !visible)
         } else {
-            QL3("No center y")
+            logger.w("No center y")
         }
     }
     
@@ -79,16 +79,16 @@ class AddButtonHelper: NSObject {
             parentView?.setNeedsLayout()
             parentView?.layoutIfNeeded()
         }
-        guard let addButton = addButton else {QL3("No add button, can't animate"); return}
+        guard let addButton = addButton else {logger.w("No add button, can't animate"); return}
 
         if endY != addButton.center.y { // animate only if there's a change in the position (open, close keyboard / changed between normal and emoji keyboard)
             
             UIView.animate(withDuration: 0.4, animations: {
-//                QL1("Animating add button to \(endY)")
+//                logger.v("Animating add button to \(endY)")
                 addButton.center = addButton.center.copy(y: endY)
                 }, completion: {[weak self] finished in
                     if removeOnFinish {
-//                        QL1("Finish animation, removing add button")
+//                        logger.v("Finish animation, removing add button")
                         self?.addButton?.removeFromSuperview()
                         self?.addButton = nil
                     }
@@ -98,7 +98,7 @@ class AddButtonHelper: NSObject {
     }
     
     fileprivate func centerY(_ visible: Bool, overrideKeyboardHeight: CGFloat? = nil) -> CGFloat? {
-        guard let window = parentView?.window else {QL3("No parentView: \(String(describing: parentView)) or window, can't calculate button's center"); return nil}
+        guard let window = parentView?.window else {logger.w("No parentView: \(String(describing: parentView)) or window, can't calculate button's center"); return nil}
         
         let keyboardHeight = overrideKeyboardHeight ?? self.keyboardHeight
         
@@ -116,7 +116,7 @@ class AddButtonHelper: NSObject {
     }
     
     fileprivate func center(_ keyboardHeight: CGFloat) -> CGFloat? {
-        guard let window = parentView?.window else {QL3("No parentView: \(String(describing: parentView)) or window, can't calculate button's center"); return nil}
+        guard let window = parentView?.window else {logger.w("No parentView: \(String(describing: parentView)) or window, can't calculate button's center"); return nil}
 
         return window.frame.height - keyboardHeight - buttonHeight / 2
     }
@@ -139,7 +139,7 @@ class AddButtonHelper: NSObject {
             parentView.bringSubview(toFront: addButton)
 
         } else {
-            QL3("No parent view: \(String(describing: parentView)) or window: \(String(describing: parentView?.window)) for add button")
+            logger.w("No parent view: \(String(describing: parentView)) or window: \(String(describing: parentView?.window)) for add button")
         }
     }
 }

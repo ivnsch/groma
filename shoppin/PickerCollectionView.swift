@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import QorumLogs
+
+import Providers
 
 protocol PickerCollectionViewDelegate: class {
     
@@ -73,7 +74,7 @@ class PickerCollectionView: UIView, UICollectionViewDelegate, UICollectionViewDe
     }
     
     func scrollToItem(index: Int, animated: Bool = true) {
-        guard let delegate = delegate else {QL3("No delegate"); return}
+        guard let delegate = delegate else {logger.w("No delegate"); return}
         
         let size = delegate.cellSize
         let cellHeight = size.height

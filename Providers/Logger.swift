@@ -8,12 +8,14 @@
 
 import SwiftyBeaver
 
-enum LoggerTag: String {
-    case db, api, mapping, sync, download, auth, ui, env
+public let logger = Logger()
+
+public enum LoggerTag: String {
+    case db, api, mapping, sync, auth, ui, env
     case wildcard
 }
 
-class Logger {
+public class Logger {
 
     private let log = SwiftyBeaver.self
 
@@ -29,13 +31,15 @@ class Logger {
      */
     private let appendTags = true
 
-    func configure() {
+    public init() { }
+
+    public func configure() {
         let console = ConsoleDestination()
         console.minLevel = .verbose
         log.addDestination(console)
     }
 
-    func v(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
+    public func v(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
            _ function: String = #function, line: Int = #line) {
 
         guard allow(tags: tags) else { return }
@@ -43,7 +47,7 @@ class Logger {
         log.verbose(fullMessage(message, tags), file, function, line: line)
     }
 
-    func d(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
+    public func d(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
            _ function: String = #function, line: Int = #line) {
 
         guard allow(tags: tags) else { return }
@@ -51,7 +55,7 @@ class Logger {
         log.debug(fullMessage(message, tags), file, function, line: line)
     }
 
-    func i(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
+    public func i(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
            _ function: String = #function, line: Int = #line) {
 
         guard allow(tags: tags) else { return }
@@ -59,7 +63,7 @@ class Logger {
         log.info(fullMessage(message, tags), file, function, line: line)
     }
 
-    func w(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
+    public func w(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
            _ function: String = #function, line: Int = #line) {
 
         guard allow(tags: tags) else { return }
@@ -67,7 +71,7 @@ class Logger {
         log.warning(fullMessage(message, tags), file, function, line: line)
     }
 
-    func e(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
+    public func e(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
            _ function: String = #function, line: Int = #line) {
 
         guard allow(tags: tags) else { return }
@@ -86,16 +90,13 @@ class Logger {
 
     private func allow(tags: [LoggerTag]) -> Bool {
 
-        return true
+        // If any of the tags is excluded, don't show message
+        if tagsExclusionsFilter.exists({ tags.contains($0) }) { return false }
 
-        // TODO
-//        // If any of the tags is excluded, don't show message
-//        if tagsExclusionsFilter.exists({ tags.contains($0) }) { return false }
-//
-//        // If there are no filters, show message
-//        if tagsFilter.isEmpty { return true }
-//
-//        // If there are filters, show message only if it contains a tag that's in the filter tags
-//        return tagsFilter.exists { tags.contains($0) }
+        // If there are no filters, show message
+        if tagsFilter.isEmpty { return true }
+
+        // If there are filters, show message only if it contains a tag that's in the filter tags
+        return tagsFilter.exists { tags.contains($0) }
     }
 }

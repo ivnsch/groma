@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct RemoteSwitchListItemFullResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     public let switchResult: RemoteSwitchListItemResult
@@ -25,7 +25,7 @@ public struct RemoteSwitchListItemFullResult: ResponseObjectSerializable, Custom
             let dstStatus = ListItemStatus(rawValue: dstStatusInt),
             let switchedQuantity = representation.value(forKeyPath: "switchedQuantity") as? Float
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.switchResult = switchResult

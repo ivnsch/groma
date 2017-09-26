@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 
 class SelectQuantifiableController: UIViewController {
 
@@ -53,7 +53,7 @@ extension SelectQuantifiableController: UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let quantity = (tableView.cellForRow(at: indexPath) as? SelectQuantifiableCell).map{$0.quantity} ?? {
-            QL4("Invalid state: No cell for selected indexPath: \(indexPath), or cell has invalid class. Returning default quantity.")
+            logger.e("Invalid state: No cell for selected indexPath: \(indexPath), or cell has invalid class. Returning default quantity.")
             return 1
         }()
         

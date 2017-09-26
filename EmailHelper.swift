@@ -8,7 +8,7 @@
 
 import UIKit
 import MessageUI
-import QorumLogs
+
 import Providers
 
 protocol EmailHelperDelegate: class {
@@ -37,7 +37,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
                 let device = UIDevice().type
                 
                 if device == .unrecognized {
-                    QL4("No device name for: \(device)")
+                    logger.e("No device name for: \(device)")
                 }
                 
                 let userStrMaybe = Prov.userProvider.mySharedUser.map{"User id: \($0.email)"}

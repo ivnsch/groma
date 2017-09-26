@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 class RealmListProvider: RealmProvider {
 
@@ -54,7 +54,7 @@ class RealmListProvider: RealmProvider {
     func loadLists(_ handler: @escaping (RealmSwift.List<List>?) -> Void) {
         guard let listsContainer: ListsContainer = loadSync(predicate: nil)?.first else {
             handler(nil)
-            QL4("Invalid state: no container")
+            logger.e("Invalid state: no container")
             return
         }
         handler(listsContainer.lists)
@@ -64,7 +64,7 @@ class RealmListProvider: RealmProvider {
         
         guard let listsContainer: ListsContainer = loadSync(predicate: nil)?.first else {
             handler(false)
-            QL4("Invalid state: no container")
+            logger.e("Invalid state: no container")
             return
         }
         
@@ -118,7 +118,7 @@ class RealmListProvider: RealmProvider {
     }
     
     func remove(_ listUuid: String, markForSync: Bool, handler: @escaping (Bool) -> Void) {
-        QL1("Removing list, uuid: \(listUuid), markForSync: \(markForSync)")
+        logger.v("Removing list, uuid: \(listUuid), markForSync: \(markForSync)")
         
         background({[weak self] in
             do {
@@ -129,7 +129,7 @@ class RealmListProvider: RealmProvider {
                 }
                 return success
             } catch let e {
-                QL4("Realm error: \(e)")
+                logger.e("Realm error: \(e)")
                 return false
             }
             }) {(result: Bool) in

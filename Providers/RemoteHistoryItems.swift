@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
@@ -30,7 +30,7 @@ struct RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSeriali
             let usersObj = representation.value(forKeyPath: "users") as? [AnyObject],
             let users = RemoteSharedUser.collection(usersObj)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.historyItems = historyItems

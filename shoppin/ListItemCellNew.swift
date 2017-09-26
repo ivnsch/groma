@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol ListItemCellDelegateNew: class {
@@ -321,7 +321,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
 //    }
     
     override func onItemSwiped() {
-        guard let listItem = tableViewListItem else {QL4("No list item"); return}
+        guard let listItem = tableViewListItem else {logger.e("No list item"); return}
         
         delegate?.onItemSwiped(listItem)
     }
@@ -400,13 +400,13 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
             let delta = shownQuantity - tableViewListItem.quantity
             
             
-            QL3("delta: \(delta), shownQuantity: \(shownQuantity), tableViewListItem.quantity(status): \(tableViewListItem.quantity)")
+            logger.w("delta: \(delta), shownQuantity: \(shownQuantity), tableViewListItem.quantity(status): \(tableViewListItem.quantity)")
             
             shownQuantity = quantity
             
             quantityView.showDelta(delta)
         } else {
-            QL3("no tableViewListItem")
+            logger.w("no tableViewListItem")
         }
     }
     
@@ -416,7 +416,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
             let delta = shownQuantity - tableViewListItem.quantity
             delegate?.onChangeQuantity(tableViewListItem, delta: delta)
         } else {
-            QL3("Warn: ListItemCell.onStartItemSwipe: no tableViewListItem")
+            logger.w("Warn: ListItemCell.onStartItemSwipe: no tableViewListItem")
         }
     }
     
@@ -436,7 +436,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
             if let tableViewListItem = tableViewListItem {
                 delegate?.onDelete(tableViewListItem)
             } else {
-                QL3("No listItem")
+                logger.w("No listItem")
             }
         }
     }
@@ -457,7 +457,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
     func onTap(_ sender: UITapGestureRecognizer) {
         // Cancel edit mode for cells that were put in edit mode via long press
-        guard let delegate = delegate else {QL4("No delegate"); return}
+        guard let delegate = delegate else {logger.e("No delegate"); return}
         if mode == .increment && !delegate.isControllerInEditMode {
             mode = .note
         }
@@ -467,7 +467,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
     func onRequestUpdateQuantity(_ delta: Float) {
         
-        guard let tableViewListItem = tableViewListItem else {QL4("Illegal state: No list item"); return}
+        guard let tableViewListItem = tableViewListItem else {logger.e("Illegal state: No list item"); return}
         
         shownQuantity = shownQuantity + delta // increment in advance // TODO!!!!!!!!!!!!!!!! test if this always works as intented
         delegate?.onChangeQuantity(tableViewListItem, delta: delta)
@@ -475,7 +475,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
     func onQuantityInput(_ quantity: Float) {
         
-        guard let tableViewListItem = tableViewListItem else {QL4("Illegal state: No list item"); return}
+        guard let tableViewListItem = tableViewListItem else {logger.e("Illegal state: No list item"); return}
         
         delegate?.onQuantityInput(tableViewListItem, quantity: quantity)
     }

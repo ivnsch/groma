@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct RemoteListItemIncrement: ResponseObjectSerializable, CustomDebugStringConvertible {
     public let uuid: String
@@ -25,7 +25,7 @@ public struct RemoteListItemIncrement: ResponseObjectSerializable, CustomDebugSt
             let updatedQuantity = representation.value(forKeyPath: "updatedQuantity") as? Float,
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid

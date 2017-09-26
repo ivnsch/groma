@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-import QorumLogs
+
 import Providers
 
 class ManageProductCategoriesController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, EditProductCategoryControllerDelegate, ListTopBarViewDelegate, ExpandableTopViewControllerDelegate {
@@ -370,20 +370,20 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
                 switch notification.verb {
                 case .Add:
                     clearAndLoadFirstPage(true)
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
                     clearAndLoadFirstPage(true)
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else {
             print("Error: ViewController.onWebsocketProduct: no userInfo")

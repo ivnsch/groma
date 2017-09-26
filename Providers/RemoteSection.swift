@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     public let uuid: String
@@ -33,7 +33,7 @@ public struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSeria
         let doneOrder = representation.value(forKeyPath: "doneOrder") as? Int,
         let stashOrder = representation.value(forKeyPath: "stashOrder") as? Int
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid

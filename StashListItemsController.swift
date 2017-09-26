@@ -7,7 +7,7 @@
 ////
 //
 //import UIKit
-//import QorumLogs
+//
 //import Providers
 //
 //class StashListItemsController: ListItemsController, UIGestureRecognizerDelegate {
@@ -40,14 +40,14 @@
 //    // Note: I also tried implementing a UI test for this but swipe doesn't work well so need to test manually.
 //    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
 //        
-//        guard let navigationController = navigationController else {QL3("No navigation controller"); return false}
+//        guard let navigationController = navigationController else {logger.w("No navigation controller"); return false}
 //        
 //        if navigationController.viewControllers.count > 1 {
 //            return true
 //        }
 //        
 //        // Not really a warning, just curious to see when this actually happens, see method comment.
-//        QL3("Only info: Navigation controller viewControllers.count: \(navigationController.viewControllers.count)")
+//        logger.w("Only info: Navigation controller viewControllers.count: \(navigationController.viewControllers.count)")
 //        return false
 //    }
 //    

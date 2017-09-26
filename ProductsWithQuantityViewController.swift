@@ -8,7 +8,7 @@
 
 import UIKit
 import CMPopTipView
-import QorumLogs
+
 import Providers
 
 protocol ProductsWithQuantityViewControllerDelegate: class {
@@ -125,7 +125,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
 //            tableView.bottomInset = tabBarHeight + Constants.tableViewAdditionalBottomInset
             tableView.bottomInset = 120
         } else {
-            QL3("No tabBarController: \(String(describing: tabBarController))")
+            logger.w("No tabBarController: \(String(describing: tabBarController))")
         }
         
         load()
@@ -245,7 +245,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
 //        if let model = cell.model {
 //            checkChangeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)
 //        } else {
-//            QL4("No model, can't update quantity")
+//            logger.e("No model, can't update quantity")
 //        }
 //    }
     
@@ -290,7 +290,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
                     self?.models.remove(at: row) // TODO!!!!!!!!!!!!!!!!!!!! use results
                     self?.tableView.deleteRows(at: [IndexPath(row: row, section: 0)], with: .top)
                     }, onError: {result in
-                        QL4("Error ocurred removing item: \(result)")
+                        logger.e("Error ocurred removing item: \(result)")
                 })
             }
         }
@@ -333,7 +333,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     // Inserts item in table view, considering the current sortBy
     func insert(item: ProductWithQuantity2, scrollToRow: Bool) {
-        guard let indexPath = findIndexPathForNewItem(item) else {QL4("No index path for: \(item)"); return}
+        guard let indexPath = findIndexPathForNewItem(item) else {logger.e("No index path for: \(item)"); return}
         tableView.insertRows(at: [indexPath], with: .top)
         if scrollToRow {
             tableView.scrollToRow(at: indexPath, at: .top, animated: true)
@@ -392,7 +392,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         if let indexPath = indexPathOfItem(item) {
             tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         } else {
-            QL2("Didn't find item to scroll to")
+            logger.d("Didn't find item to scroll to")
         }
     }
 
@@ -425,7 +425,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     //////////////
     
     func load() {
-        guard let sortBy = sortBy else {QL4("Can't load page, sortBy not set"); return}
+        guard let sortBy = sortBy else {logger.e("Can't load page, sortBy not set"); return}
         
         delegate?.loadModels(nil, sortBy: sortBy) {[weak self] models in
             self?.models = models

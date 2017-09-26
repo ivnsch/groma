@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-import QorumLogs
+
 import Providers
 
 protocol SharedUsersControllerDelegate: class {
@@ -82,7 +82,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
-        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
+        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {logger.e("No tabBarController"); return nil}
         
         let overrideCenterY: CGFloat = view.frame.height + tabBarHeight
         let addButtonHelper = AddButtonHelper(parentView: view, overrideCenterY: overrideCenterY) {[weak self] in

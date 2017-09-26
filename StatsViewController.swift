@@ -9,7 +9,7 @@
 import UIKit
 import CMPopTipView
 import SwiftCharts
-import QorumLogs
+
 import Providers
 
 private enum StatsType {
@@ -83,7 +83,7 @@ class StatsViewController: UIViewController
     }
     
     deinit {
-        QL1("Deinit stats controller")
+        logger.v("Deinit stats controller")
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -95,15 +95,15 @@ class StatsViewController: UIViewController
     // TODO this logic is messy and for now disabled. Is there a reliable way to delete possible first incomplete month? - accross multiple devices, installations, shared users
     fileprivate func clearFirstMonthIfIncomplete() {
         guard !(PreferencesManager.loadPreference(PreferencesManagerKey.clearedFirstIncompleteMonthStats) ?? false) else {
-            QL2("Already cleared first incomplete month, nothing to do")
+            logger.d("Already cleared first incomplete month, nothing to do")
             return
         }
         
         guard !(PreferencesManager.loadPreference(PreferencesManagerKey.cancelledClearFirstIncompleteMonthStats) ?? false) else {
-            QL2("User cancelled to clear the first incomplete stats months, skipping")
+            logger.d("User cancelled to clear the first incomplete stats months, skipping")
             return
         }
-        guard let inventory = selectedInventory else {QL3("No inventory"); return}
+        guard let inventory = selectedInventory else {logger.w("No inventory"); return}
 
         // Get the date of the oldest history item
         Prov.statsProvider.oldestDate(inventory, resultHandler(onSuccess: {[weak self] oldestDate in guard let weakSelf = self else {return}
@@ -119,7 +119,7 @@ class StatsViewController: UIViewController
                 
                 guard oldestDateDayMonthYear.month == firstLaunchDateDayMonthYear.month && oldestDateDayMonthYear.year == firstLaunchDateDayMonthYear.year else {
                     // The only way we can currently know if first month may be incomplete if by checking the app installation date. This is limited though, if user reinstalled app or is using multiple devices it doesn't necessarily match. In this case we just skip our check, user will have to notice average issue themselves and delete items from history manually.
-                    QL2("Oldest date month/year != installation date month/year. Can't make assumptions about first month completeness")
+                    logger.d("Oldest date month/year != installation date month/year. Can't make assumptions about first month completeness")
                     return
                 }
                 
@@ -147,11 +147,11 @@ class StatsViewController: UIViewController
                         })
                         
                     } else {
-                        QL2("Different month than installation month but installed at day 1 - nothing to do")
+                        logger.d("Different month than installation month but installed at day 1 - nothing to do")
                     }
                     
                 } else {
-                    QL2("Same month as installation month")
+                    logger.d("Same month as installation month")
                 }
             }
  
@@ -284,7 +284,7 @@ class StatsViewController: UIViewController
                 if let fontSize = LabelMore.mapToFontSize(20) {
                     return UIFont.systemFont(ofSize: fontSize)
                 } else {
-                    QL4("No font for size")
+                    logger.e("No font for size")
                     return UIFont.systemFont(ofSize: 10)
                 }
 //            } else {
@@ -292,7 +292,7 @@ class StatsViewController: UIViewController
 //                if let fontSize = LabelMore.mapToFontSize(30) {
 //                    return UIFont.systemFontOfSize(fontSize)
 //                } else {
-//                    QL4("No font for size")
+//                    logger.e("No font for size")
 //                    return UIFont.systemFontOfSize(12)
 //                }
 //            }
@@ -458,7 +458,7 @@ class StatsViewController: UIViewController
             if let fontSize = LabelMore.mapToFontSize(20) {
                 return UIFont.systemFont(ofSize: fontSize)
             } else {
-                QL4("No font for size")
+                logger.e("No font for size")
                 return UIFont.systemFont(ofSize: 11)
             }
         }()
@@ -551,14 +551,14 @@ class StatsViewController: UIViewController
                 case .BuyCart:
                     loadChart()
                     
-                default: QL4("Not handled: \(notification.verb)")
+                default: logger.e("Not handled: \(notification.verb)")
                 }
             } else {
-                QL4("Mo value")
+                logger.e("Mo value")
             }
             
         } else {
-            QL4("No userInfo")
+            logger.e("No userInfo")
         }
     }
     
@@ -571,7 +571,7 @@ class StatsViewController: UIViewController
                 default: break // no error msg here, since we will receive .Add but not handle it in this view controller
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
@@ -580,13 +580,13 @@ class StatsViewController: UIViewController
                     loadChart()
                 case .DeleteWithBrand:
                     loadChart()
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else {
-            QL4("No userInfo")
+            logger.e("No userInfo")
         }
     }
     
@@ -596,20 +596,20 @@ class StatsViewController: UIViewController
                 switch notification.verb {
                 case .Add:
                     loadChart()
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Delete:
                     loadChart()
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
         } else {
             print("Error: ViewController.onWebsocketProduct: no userInfo")

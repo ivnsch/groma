@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 
 protocol SelectIngredientDataContainerControllerDelegate {
     func onSelectIngrentTapOutsideOfContent()
@@ -34,7 +34,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     
     var item: Item? {
         didSet {
-            guard itemNameLabel != nil else {QL4("Outlets not set yet"); return}
+            guard itemNameLabel != nil else {logger.e("Outlets not set yet"); return}
             itemNameLabel.text = item?.name
         }
     }
@@ -125,10 +125,10 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     }
     
     fileprivate func initSubmitButton() {
-        guard self.submitView == nil else {QL1("Already showing a submit view"); return}
-        guard let delegate = delegate else {QL1("No delegate"); return}
-//        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return}
-        guard let parentViewForAddButton = view else {QL4("No delegate: \(delegate)"); return}
+        guard self.submitView == nil else {logger.v("Already showing a submit view"); return}
+        guard let delegate = delegate else {logger.v("No delegate"); return}
+//        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {logger.e("No delegate: \(delegate)"); return}
+        guard let parentViewForAddButton = view else {logger.e("No delegate: \(delegate)"); return}
         
         let height = Theme.submitViewHeight
         let submitView = SubmitView(frame: CGRect(x: 0, y: parentViewForAddButton.frame.maxY - height, width: parentViewForAddButton.width, height: height))
@@ -292,7 +292,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     // MARK: -
     
     fileprivate func updateTitle(inputs: SelectIngredientDataControllerInputs) {
-        guard let titleLabelsFont = titleLabelsFont else {QL4("No title labels font. Can't update title."); return}
+        guard let titleLabelsFont = titleLabelsFont else {logger.e("No title labels font. Can't update title."); return}
         
         let fractionStr = inputs.fraction.isValidAndNotZeroOrOneByOne ? inputs.fraction.description : ""
         // Don't show quantity if it's 0 and there's a fraction. If there's no fraction we show quantity 0, because otherwise there wouldn't be any number and this doesn't make sense.
@@ -320,7 +320,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     }
     
     fileprivate func submit() {
-        guard let item = item else {QL4("Illegal state: no item. Can't submit"); return}
+        guard let item = item else {logger.e("Illegal state: no item. Can't submit"); return}
         
         delegate?.onSubmitIngredientInputs(item: item, inputs: inputs)
     }
@@ -362,10 +362,10 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
                 }
 
             } else {
-                QL3("Couldn't retrieve keyboard size from user info")
+                logger.w("Couldn't retrieve keyboard size from user info")
             }
         } else {
-            QL3("Notification has no user info")
+            logger.w("Notification has no user info")
         }
     }
     

@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 // See https://github.com/realm/realm-cocoa/issues/1192 for explanations about compoundKey and setters.
 
@@ -56,7 +56,7 @@ public class DBFraction: Object {
     // MARK: -
     
     public var decimalValue: Float {
-        guard denominator != 0 else {QL4("Invalid state: denominator is 0. Returning 0"); return 0}
+        guard denominator != 0 else {logger.e("Invalid state: denominator is 0. Returning 0"); return 0}
         return (Float(numerator) / Float(denominator))
     }
     

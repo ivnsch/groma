@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 import RealmSwift
 
 class InventoryItemsProviderImpl: InventoryItemsProvider {
@@ -45,7 +45,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             if let dbInventoryItems = dbInventoryItems {
                 handler(ProviderResult(status: .success, sucessResult: dbInventoryItems))
             } else {
-                QL4("Inventory items is nil")
+                logger.e("Inventory items is nil")
                 handler(ProviderResult(status: .unknown))
             }
             
@@ -76,7 +76,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             if let count = countMaybe {
                 handler(ProviderResult(status: .success, sucessResult: count))
             } else {
-                QL4("No count")
+                logger.e("No count")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -87,7 +87,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             if success {
                 handler(ProviderResult(status: .success))
             } else {
-                QL4("Error adding to inventory: inventoryItems: \(inventoryItems), historyItems: \(historyItems)")
+                logger.e("Error adding to inventory: inventoryItems: \(inventoryItems), historyItems: \(historyItems)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -168,13 +168,13 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //                            if let incrementResult = remoteResult.successResult {
 //                                DBProv.inventoryItemProvider.updateInventoryItemWithIncrementResult(incrementResult) {success in
 //                                    if !success {
-//                                        QL4("Couldn't save increment result for item: \(item), remoteResult: \(remoteResult)")
+//                                        logger.e("Couldn't save increment result for item: \(item), remoteResult: \(remoteResult)")
 //                                    }
 //                                }
 //                                
 //                            } else {
 //                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Int>) in
-//                                    QL4("Error incrementing item: \(item) in remote, result: \(result)")
+//                                    logger.e("Error incrementing item: \(item) in remote, result: \(result)")
 //                                    // if there's a not connection related server error, invalidate cache
 //                                    self?.memProvider.invalidate()
 //                                    handler(result)
@@ -187,10 +187,10 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 } else {
                     if dbResult.status == .notFound {
                         // When swiping many times quickly we get requests to increment items that have already been deleted, which triggers error alert - this may require a better fix but for now we ignore not found status
-                        QL3("Item to increment not found: \(item), returning success anyway")
+                        logger.w("Item to increment not found: \(item), returning success anyway")
                         handler(ProviderResult(status: .success))
                     } else {
-                        QL4("Unknown error incrementing inventory item: \(item), delta: \(delta)")
+                        logger.e("Unknown error incrementing inventory item: \(item), delta: \(delta)")
                         handler(ProviderResult(status: .databaseSavingError))
                     }
                 }
@@ -203,7 +203,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         result.onOk {result in
             handler(ProviderResult(status: .success, sucessResult: result))
         }.onErr {error in
-            QL4("Error updating inventory item: \(error)")
+            logger.e("Error updating inventory item: \(error)")
             handler(ProviderResult(status: .databaseUnknown))
         }
     }
@@ -226,13 +226,13 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //
 //                        DBProv.inventoryItemProvider.updateInventoryItemLastUpdate(remoteInventoryItemsWithDependencies) {success in
 //                            if !success {
-//                                QL4("Couldn't save server timestamp for item: \(item), remoteResult: \(remoteResult)")
+//                                logger.e("Couldn't save server timestamp for item: \(item), remoteResult: \(remoteResult)")
 //                            }
 //                        }
 //                        
 //                    } else {
 //                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-//                            QL4("Error updating item: \(item) in remote, result: \(result)")
+//                            logger.e("Error updating item: \(item) in remote, result: \(result)")
 //                            // if there's a not connection related server error, invalidate cache
 //                            self?.memProvider.invalidate()
 //                            handler(result)
@@ -277,19 +277,19 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //                    if remoteResult.success {
 //                        DBProv.inventoryItemProvider.clearInventoryItemTombstone(uuid) {removeTombstoneSuccess in
 //                            if !removeTombstoneSuccess {
-//                                QL4("Couldn't delete tombstone for inventory item: \(uuid)::\(inventoryUuid)")
+//                                logger.e("Couldn't delete tombstone for inventory item: \(uuid)::\(inventoryUuid)")
 //                            }
 //                        }
 //                    } else {
 //                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-//                            QL3("Error removing inventory item in uuid: productUuid: \(uuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
+//                            logger.w("Error removing inventory item in uuid: productUuid: \(uuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
 //                            // When swiping many items quickly it may be that we send multiple requests to delete same item, so we get not found sometimes. Ignore.
 //                            // TODO is this really necessary - what can be do client side to prevent trying to delete same item multiple times?
 //                            if remoteResult.status != .notFound {
 //                                self?.memProvider.invalidate()
 //                                handler(remoteResult)
 //                            } else {
-//                                QL3("Inventory item to delete was not found in the server, ignoring")
+//                                logger.w("Inventory item to delete was not found in the server, ignoring")
 //                            }
 //                        }
 //                    }
@@ -331,7 +331,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //                            }
 //                        } else {
 //                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) in
-//                                QL4("Error addToInventory: \(remoteResult.status)")
+//                                logger.e("Error addToInventory: \(remoteResult.status)")
 //                                // if there's a not connection related server error, invalidate cache
 //                                self?.memProvider.invalidate()
 //                                handler(result)
@@ -341,7 +341,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //                }
                 
             } else {
-                QL4("Unknown error adding to inventory in local db, inventory: \(inventory), productsWithQuantities: \(productsWithQuantities)")
+                logger.e("Unknown error adding to inventory in local db, inventory: \(inventory), productsWithQuantities: \(productsWithQuantities)")
                 handler(ProviderResult(status: .unknown))
 
 //                DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
@@ -351,7 +351,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 
     
     func addToInventory(_ inventory: DBInventory, group: ProductGroup, remote: Bool, _ handler: @escaping (ProviderResult<[(inventoryItem: InventoryItem, delta: Float)]>) -> Void) {
-        QL4("Outdated")
+        logger.e("Outdated")
         handler(ProviderResult(status: .unknown))
 //        Prov.listItemGroupsProvider.groupItems(group, sortBy: .alphabetic, fetchMode: .memOnly) {[weak self] result in
 //            if let groupItems = result.sucessResult {
@@ -362,7 +362,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //                    self?.addToInventory(inventory, productsWithQuantities: productsWithQuantities, remote: remote, realmData: nil, handler)
 //                }
 //            } else {
-//                QL4("Couldn't get items for group: \(group)")
+//                logger.e("Couldn't get items for group: \(group)")
 //                handler(ProviderResult(status: .databaseUnknown))
 //            }
 //        }
@@ -390,7 +390,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     }
                 }
             } else {
-                QL4("Error fetching product, result: \(productResult)")
+                logger.e("Error fetching product, result: \(productResult)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }

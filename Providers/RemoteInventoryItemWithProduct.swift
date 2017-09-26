@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 // TODO review this, seems sync sends us redundant objects? This should not be the case - it should be like in list items response
 struct RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
@@ -29,7 +29,7 @@ struct RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseColle
             let inventoryObj = representation.value(forKeyPath: "inventory"),
             let inventory = RemoteInventory(representation: inventoryObj as AnyObject)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.inventoryItem = inventoryItem

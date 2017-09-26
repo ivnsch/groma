@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct RemoteBuyCartResult: ResponseObjectSerializable, CustomDebugStringConvertible {
 
@@ -21,7 +21,7 @@ public struct RemoteBuyCartResult: ResponseObjectSerializable, CustomDebugString
             let inventoryAndHistoryItemsObj = representation.value(forKeyPath: "inventoryAndHistoryItems"),
             let inventoryAndHistoryItems = RemoteInventoryItemsWithHistoryAndDependencies(representation: inventoryAndHistoryItemsObj as AnyObject)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
 
         self.switchedItems = items

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
@@ -71,7 +71,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
                 }
                 
             } else {
-                QL3("Setting cart quantity but label is not initialised yet")
+                logger.w("Setting cart quantity but label is not initialised yet")
             }
         }
     }
@@ -87,7 +87,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
             }
             
         } else {
-            QL3("Setting quantities but labels not initialised yet")
+            logger.w("Setting quantities but labels not initialised yet")
         }
     }
     
@@ -97,7 +97,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
                 stashQuantityLabel.text = trans("list_items_items_in_backstore", "\(stashQuantity)")
                 stashQuantityLabel.isHidden = stashQuantity == 0
             } else {
-                QL3("Setting stash quantity but label is not initialised yet")
+                logger.w("Setting stash quantity but label is not initialised yet")
             }
         }
     }
@@ -235,7 +235,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     
     
     fileprivate func snap(panningDown: Bool) {
-        guard let bottomConstant = bottomConstraint?.constant else {QL4("Illegal state: No bottom constraing"); return}
+        guard let bottomConstant = bottomConstraint?.constant else {logger.e("Illegal state: No bottom constraing"); return}
         
         let expand: Bool = {
             if panningDown {
@@ -280,15 +280,15 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     }
     
     func toggleExpanded(todoController: TodoListItemsControllerNew) {
-        guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
+        guard let bottomConstraint = bottomConstraint else {logger.e("No bottom constraint"); return}
 
         let isExpanded = bottomConstraint.constant > todoController.view.height / 2
         setExpanded(expanded: !isExpanded)
     }
     
     func setExpanded(expanded: Bool, onFinishAnim: (() -> Void)? = nil) {
-        guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
-        guard let todoController = todoController else {QL4("No todoController"); return}
+        guard let bottomConstraint = bottomConstraint else {logger.e("No bottom constraint"); return}
+        guard let todoController = todoController else {logger.e("No todoController"); return}
         
         expandedNew = expanded
         
@@ -309,8 +309,8 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     }
     
     func closeFull(onFinishAnim: (() -> Void)? = nil) {
-        guard let bottomConstraint = bottomConstraint else {QL4("No bottom constraint"); return}
-        guard let todoController = todoController else {QL4("No todoController"); return}
+        guard let bottomConstraint = bottomConstraint else {logger.e("No bottom constraint"); return}
+        guard let todoController = todoController else {logger.e("No todoController"); return}
         
         expandedNew = false
         
@@ -333,7 +333,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
 
         case .changed:
             
-            guard let startBottomConstraintConstant = startBottomConstraintConstant else {QL4("Illegal state: No constraint constant"); return}
+            guard let startBottomConstraintConstant = startBottomConstraintConstant else {logger.e("Illegal state: No constraint constant"); return}
 
             let currentPoint = recognizer.translation(in: self)
             let deltaY = currentPoint.y - panStartPoint.y

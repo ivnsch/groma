@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 public final class Ingredient: Object {
     public dynamic var uuid: String = ""
@@ -151,7 +151,7 @@ public final class Ingredient: Object {
         if updatedQuantity >= 0 {
             quantity = quantity + delta
         } else {
-            QL1("Trying to decrement quantity to less than zero. Current quantity: \(quantity), delta: \(delta). Setting it to 0.")
+            logger.v("Trying to decrement quantity to less than zero. Current quantity: \(quantity), delta: \(delta). Setting it to 0.")
             quantity = 0
         }
     }

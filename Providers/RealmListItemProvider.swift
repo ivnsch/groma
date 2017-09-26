@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 public enum QuickAddItemSortBy {
     case alphabetic, fav
@@ -113,7 +113,7 @@ class RealmListItemProvider: RealmProvider {
                 if let section = sectionDict[orderUpdate.sectionUuid] {
                     realm.create(ListItem.self, value: orderUpdate.updateDict(status, dbSection: section), update: true)
                 } else {
-                    QL4("Invalid state, section object corresponding to uuid: \(orderUpdate.sectionUuid) was not found")
+                    logger.e("Invalid state, section object corresponding to uuid: \(orderUpdate.sectionUuid) was not found")
                 }
             }
             
@@ -375,10 +375,10 @@ class RealmListItemProvider: RealmProvider {
         removeReturnCount(ListItem.createFilterUniqueInListNotUuid(productName, productBrand: productBrand, notUuid: notUuid, list: list), handler: {removedCountMaybe in
             if let removedCount = removedCountMaybe {
                 if removedCount > 0 {
-                    QL2("Found list item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
+                    logger.d("Found list item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
                 }
             } else {
-                QL4("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
+                logger.e("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
             }
 
             handler(removedCountMaybe.map{$0 > 0} ?? false)
@@ -392,11 +392,11 @@ class RealmListItemProvider: RealmProvider {
         func transactionContent(realm: Realm) -> Bool {
             return removeReturnCountSync(realm, pred: ListItem.createFilterUniqueInListNotUuid(productName, productBrand: productBrand, notUuid: notUuid, list: list), objType: ListItem.self).map {removedCount in
                 if removedCount > 0 {
-                    QL2("Found list item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
+                    logger.d("Found list item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
                 }
                 return removedCount > 0
                 } ?? {
-                    QL4("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
+                    logger.e("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
                     return false
             }()
         }
@@ -409,7 +409,7 @@ class RealmListItemProvider: RealmProvider {
             if let realm = realmData?.realm {
                 return transactionContent(realm: realm)
             } else {
-                QL4("Invalid state: when do own transaction == false a realm should be passed")
+                logger.e("Invalid state: when do own transaction == false a realm should be passed")
                 return false
             }
         }
@@ -437,7 +437,7 @@ class RealmListItemProvider: RealmProvider {
                     let toRemoveListItem = DBRemoveListItem(dbListItem)
                     realm.add(toRemoveListItem, update: true)
                 } else {
-                    QL3("Trying to add tombstone for not existing list item") // if this is because we received a websocket notification and maybe list item was deleted in the meantime, it's ok. Should happen not very frequently though.
+                    logger.w("Trying to add tombstone for not existing list item") // if this is because we received a websocket notification and maybe list item was deleted in the meantime, it's ok. Should happen not very frequently though.
                 }
             }
 
@@ -472,7 +472,7 @@ class RealmListItemProvider: RealmProvider {
 //                DBProv.sectionProvider.removeSectionIfEmptySync(realm, sectionUuid: sectionUuid)
 //                return true
 //            } else {
-//                QL4("Warning/maybe error: Section of list item to be removed was not found in database") // with websockets this can happen, though it should be rare - we receive a message to remove a list item just after user removed the section. If we see this log frequently though, it's likely something else/an actual error.
+//                logger.e("Warning/maybe error: Section of list item to be removed was not found in database") // with websockets this can happen, though it should be rare - we receive a message to remove a list item just after user removed the section. If we see this log frequently though, it's likely something else/an actual error.
 //                return false
 //            }
 //            
@@ -543,7 +543,7 @@ class RealmListItemProvider: RealmProvider {
 
     // TODO!!!!!!!!!!!!!!!!!!!! is this used? if not remove. Implementation doesn't work correctly, it removes sections or list items as "side effect"
     func incrementListItem(_ increment: ItemIncrement, status: ListItemStatus, handler: @escaping (ListItem?) -> Void) {
-        QL4("Outdated")
+        logger.e("Outdated")
         
         doInWriteTransaction({(realm: Realm) -> String? in
 
@@ -559,25 +559,25 @@ class RealmListItemProvider: RealmProvider {
                     return incrementedListitem.uuid
                     
                 } else {
-                    QL3("List item not found: \(increment)")
+                    logger.w("List item not found: \(increment)")
                     return nil
                 }
             }
 
 
         }) { (listItemUuidMaybe) -> Void in
-            guard let listItemUuid = listItemUuidMaybe else {QL4("No uuid"); handler(nil); return}
+            guard let listItemUuid = listItemUuidMaybe else {logger.e("No uuid"); handler(nil); return}
             
             do {
                 if let listItem = try Realm().object(ofType: ListItem.self, forPrimaryKey: listItemUuid) {
                     handler(listItem)
                     
                 } else {
-                    QL4("Unexpected: No item for uuid: \(listItemUuid)")
+                    logger.e("Unexpected: No item for uuid: \(listItemUuid)")
                     handler(nil)
                 }
             } catch let e {
-                QL4("Error: \(e), getting item for uuid: \(String(describing: listItemUuidMaybe))")
+                logger.e("Error: \(e), getting item for uuid: \(String(describing: listItemUuidMaybe))")
                 handler(nil)
             }
         }
@@ -666,17 +666,17 @@ class RealmListItemProvider: RealmProvider {
                         
                         let updateDict: [String: AnyObject] = DBSyncable.timestampUpdateDict(incrementResult.uuid, lastServerUpdate: incrementResult.lastUpdate)
                         realm.create(ListItem.self, value: updateDict, update: true)
-                        QL1("Updateded list item with increment result dict: \(updateDict)")
+                        logger.v("Updateded list item with increment result dict: \(updateDict)")
                         
                     } else {
-                        QL3("Warning: got result with smaller timestamp: \(incrementResult), ignoring")
+                        logger.w("Warning: got result with smaller timestamp: \(incrementResult), ignoring")
                     }
                 
                 } else {
-                    QL1("Received increment result with outdated quantity: \(incrementResult.updatedQuantity)")
+                    logger.v("Received increment result with outdated quantity: \(incrementResult.updatedQuantity)")
                 }
             } else {
-                QL3("Didn't find item for: \(incrementResult)")
+                logger.w("Didn't find item for: \(incrementResult)")
             }
             return true
             }, finishHandler: {success in
@@ -917,7 +917,7 @@ class RealmListItemProvider: RealmProvider {
                 if let realm = realmData?.realm {
                     return transactionContent(realm: realm)
                 } else {
-                    QL4("Invalid state: should be executed in existing transaction but didn't pass a realm")
+                    logger.e("Invalid state: should be executed in existing transaction but didn't pass a realm")
                     return nil
                 }
             }
@@ -938,7 +938,7 @@ class RealmListItemProvider: RealmProvider {
         func incrementFav() {
             DBProv.productProvider.incrementFav(productUuid: quantifiableProduct.product.uuid, transactionRealm: doTransaction ? nil : realmData?.realm, {saved in
                 if !saved {
-                    QL4("Couldn't increment product fav")
+                    logger.e("Couldn't increment product fav")
                 }
             })
         }
@@ -960,7 +960,7 @@ class RealmListItemProvider: RealmProvider {
                     return AddListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, listItemIndex: listItemIndex, sectionIndex: sectionResult.index)
                     //return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
                 } else {
-                    QL4("Couldn't increment existing list item")
+                    logger.e("Couldn't increment existing list item")
                     return nil
                 }
                 
@@ -978,13 +978,13 @@ class RealmListItemProvider: RealmProvider {
                     
                     return AddListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, listItemIndex: section.listItems.count - 1, sectionIndex: sectionResult.index)
                 } else {
-                    QL4("Couldn't create list item, quantifiableProduct: \(quantifiableProduct)")
+                    logger.e("Couldn't create list item, quantifiableProduct: \(quantifiableProduct)")
                     return nil
                 }
             }
          
             case .err(let error):
-                QL4("Error: \(error), quantifiableProduct: \(quantifiableProduct.uuid):\(quantifiableProduct.product.item.name)")
+                logger.e("Error: \(error), quantifiableProduct: \(quantifiableProduct.uuid):\(quantifiableProduct.product.item.name)")
                 return nil
         }
     }
@@ -999,7 +999,7 @@ class RealmListItemProvider: RealmProvider {
             return addSync(quantifiableProduct: quantifiableProduct.0, store: list.store ?? "", price: listItemInput.storeProductInput.price, list: list, quantity: listItemInput.quantity, note: listItemInput.note, status: status, realmData: realmData, doTransaction: doTransaction)
 
         case .err(let error):
-            QL4("Couldn't add/update quantifiable product: \(error)")
+            logger.e("Couldn't add/update quantifiable product: \(error)")
             return nil
         }
     }
@@ -1013,7 +1013,7 @@ class RealmListItemProvider: RealmProvider {
             return result
             
         case .err(let error):
-            QL4("Couldn't add/update quantifiable product: \(error)")
+            logger.e("Couldn't add/update quantifiable product: \(error)")
             return nil
         }
     }
@@ -1021,7 +1021,7 @@ class RealmListItemProvider: RealmProvider {
     /// Input form / recipes
     func addSync(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> [(listItem: ListItem, isNew: Bool)]? {
         
-        //guard let listItemsRealm = listItems.realm else {QL4("List items have no realm"); return nil}
+        //guard let listItemsRealm = listItems.realm else {logger.e("List items have no realm"); return nil}
         
         var addedListItems = [(listItem: ListItem, isNew: Bool)]()
         
@@ -1031,7 +1031,7 @@ class RealmListItemProvider: RealmProvider {
                 if let result = addSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData, doTransaction: false) {
                     addedListItems.append((result.listItem, result.isNewItem))
                 } else {
-                    QL4("Couldn't add list item for input: \(listItemInput), list: \(list.uuid)::\(list.name), status: \(status). Skipping") // we could also break instead of skip but why not skip
+                    logger.e("Couldn't add list item for input: \(listItemInput), list: \(list.uuid)::\(list.name), status: \(status). Skipping") // we could also break instead of skip but why not skip
                 }
             }
         }
@@ -1061,7 +1061,7 @@ class RealmListItemProvider: RealmProvider {
                     return AddCartListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, listItemIndex: listItemIndex)
                     //return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
                 } else {
-                    QL4("Couldn't increment existing list item")
+                    logger.e("Couldn't increment existing list item")
                     return nil
                 }
                 
@@ -1079,13 +1079,13 @@ class RealmListItemProvider: RealmProvider {
                     // WARNING: quick impl: listItemIndex 0 assumes createCartSync inserts item at 0
                     return AddCartListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, listItemIndex: 0)
                 } else {
-                    QL4("Couldn't create list item, quantifiableProduct: \(quantifiableProduct)")
+                    logger.e("Couldn't create list item, quantifiableProduct: \(quantifiableProduct)")
                     return nil
                 }
             }
             
         case .err(let error):
-            QL4("Error: \(error), quantifiableProduct: \(quantifiableProduct.uuid):\(quantifiableProduct.product.item.name)")
+            logger.e("Error: \(error), quantifiableProduct: \(quantifiableProduct.uuid):\(quantifiableProduct.product.item.name)")
             return nil
         }
     }
@@ -1121,7 +1121,7 @@ class RealmListItemProvider: RealmProvider {
                 if let realm = realmData?.realm {
                     return transactionContent(realm: realm)
                 } else {
-                    QL4("Invalid state: should be executed in existing transaction but didn't pass a realm")
+                    logger.e("Invalid state: should be executed in existing transaction but didn't pass a realm")
                     return nil
                 }
             }
@@ -1142,7 +1142,7 @@ class RealmListItemProvider: RealmProvider {
     // NOTE: section --> target section
     func addSync(listItem: ListItem, section: Section, list: List, quantity: Float, realmData: RealmData, doTransaction: Bool = true) -> (listItem: ListItem, isNew: Bool)? {
         
-//        guard let listItemsRealm = section.listItems.realm else {QL4("List items have no realm"); return nil}
+//        guard let listItemsRealm = section.listItems.realm else {logger.e("List items have no realm"); return nil}
         
         let existingListItemMaybe = section.listItems.filter(ListItem.createFilter(quantifiableProductUnique: listItem.product.product.unique)).first // we should be able to use the uuid of the store product or quantifiable product too, but let's for now stick to the semantic unique for consistency and since it's the easiest to reason about. (TODO review this)
         
@@ -1151,7 +1151,7 @@ class RealmListItemProvider: RealmProvider {
             if quantityMaybe != nil {
                 return (listItem: existingListItem, isNew: false)
             } else {
-                QL4("Couldn't increment existing list item")
+                logger.e("Couldn't increment existing list item")
                 return nil
             }
             
@@ -1269,7 +1269,7 @@ class RealmListItemProvider: RealmProvider {
                 sections.remove(objectAtIndex: sectionIndex)
                 return true
             } else {
-                QL4("Invalid state: Src section isn't in the list: srcSection: \(section), sections: \(sections)")
+                logger.e("Invalid state: Src section isn't in the list: srcSection: \(section), sections: \(sections)")
                 return false
             }
         } else {
@@ -1300,7 +1300,7 @@ class RealmListItemProvider: RealmProvider {
                     list.sections(status: status).remove(objectAtIndex: sectionIndex)
                     return MoveListItemResult(deletedSrcSection: true)
                 } else {
-                    QL4("Invalid state: Src section isn't in the list: srcSection: \(srcSection), status: \(status), list: \(list)")
+                    logger.e("Invalid state: Src section isn't in the list: srcSection: \(srcSection), status: \(status), list: \(list)")
                     return nil
                 }
             }
@@ -1319,7 +1319,7 @@ class RealmListItemProvider: RealmProvider {
     public func calculateCartStashAggregate(listUuid: String) -> ListItemsCartStashAggregate? {
         
         guard let list = DBProv.listProvider.loadListSync(listUuid) else {
-            QL4("couldn't load list with uuid: \(listUuid)")
+            logger.e("couldn't load list with uuid: \(listUuid)")
             return nil
         }
         let (totalCartQuantity, totalCartPrice) = list.doneListItems.reduce((0, Float(0))) {sum, listItem in
@@ -1364,7 +1364,7 @@ class RealmListItemProvider: RealmProvider {
     
     func switchTodoToCartSync(listItem: ListItem, from: IndexPath, realmData: RealmData) -> SwitchListItemResult? {
         
-        guard let realm = listItem.section.realm else {QL4("No realm"); return nil}
+        guard let realm = listItem.section.realm else {logger.e("No realm"); return nil}
         
         let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
         
@@ -1374,7 +1374,7 @@ class RealmListItemProvider: RealmProvider {
 
             // Update the section referenced by the list item, for consistency. The cart has no section list / visible sections.
             guard let dstSection = DBProv.sectionProvider.getOrCreateCartStash(name: listItem.section.name, color: listItem.section.color, list: list, status: .done, notificationToken: realmData.token, realm: realm, doTransaction: false) else {
-                QL4("Couldn't get or create dst section, can't switch")
+                logger.e("Couldn't get or create dst section, can't switch")
                 return nil
             }
             listItem.section = dstSection
@@ -1394,13 +1394,13 @@ class RealmListItemProvider: RealmProvider {
                         list.doneListItems.move(from: index, to: 0) // move incremented item to top of list
                         
                     } else {
-                        QL4("Illegal state in transaction: just retrieved list item but can't get index")
+                        logger.e("Illegal state in transaction: just retrieved list item but can't get index")
                         realm.cancelWrite()
                         return nil
                     }
    
                 } else {
-                    QL4("Couldn't increment existing list item")
+                    logger.e("Couldn't increment existing list item")
                     realm.cancelWrite()
                     return nil
                 }
@@ -1472,21 +1472,21 @@ class RealmListItemProvider: RealmProvider {
     }
     
     fileprivate func switchCartOrStashToTodoSync(listItem: ListItem, from: Int, cartOrStashListItems: RealmSwift.List<ListItem>, realmData: RealmData, doTransaction: Bool = true) -> Bool {
-        guard let realm = listItem.section.realm else {QL4("No realm"); return false}
+        guard let realm = listItem.section.realm else {logger.e("No realm"); return false}
         
         let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
 
         func transactionContent(realm: Realm) -> Bool? {
             
             guard let dstSection = DBProv.sectionProvider.getOrCreateTodo(name: listItem.section.name, color: listItem.section.color, list: list, notificationToken: realmData.token, realm: realm, doTransaction: false) else {
-                QL4("Couldn't get or create dst section, can't switch")
+                logger.e("Couldn't get or create dst section, can't switch")
                 return nil
             }
             listItem.section = dstSection
             
             // append/increment in dst section
             if self.addSync(listItem: listItem, section: dstSection, list: list, quantity: listItem.quantity, realmData: realmData, doTransaction: false) == nil {
-                QL4("Add sync returned nil, exit")
+                logger.e("Add sync returned nil, exit")
                 return nil // interrupt transaction
             }
             

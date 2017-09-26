@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 public struct UpdateInventoryItemResult {
     public let inventoryItem: InventoryItem
@@ -78,7 +78,7 @@ class RealmInventoryItemProvider: RealmProvider {
                     return DBResult(status: .notFound, sucessResult: incrementedInventoryitem.quantity)
                     
                 } else {
-                    QL3("Inventory item not found: \(itemUuid)")
+                    logger.w("Inventory item not found: \(itemUuid)")
                     return DBResult(status: .notFound)
                 }
             }
@@ -134,7 +134,7 @@ class RealmInventoryItemProvider: RealmProvider {
         let items = addSync(realm, items: [ProductWithQuantityInput(product: product, quantity: quantity)], inventory: inventory, dirty: dirty)
         
         if items.count != 1 {
-            QL4("Not expected result items count: \(items.count), items: \(items)")
+            logger.e("Not expected result items count: \(items.count), items: \(items)")
         }
         
         return items.first
@@ -196,7 +196,7 @@ class RealmInventoryItemProvider: RealmProvider {
                 if let count = countMaybe {
                     handler(count)
                 } else {
-                    QL4("No count")
+                    logger.e("No count")
                     handler(nil)
                 }
         }
@@ -214,17 +214,17 @@ class RealmInventoryItemProvider: RealmProvider {
                         
                         let updateDict: [String: AnyObject] = DBSyncable.timestampUpdateDict(incrementResult.uuid, lastServerUpdate: incrementResult.lastUpdate)
                         realm.create(InventoryItem.self, value: updateDict, update: true)
-                        QL1("Updateded inventory item with increment result dict: \(updateDict)")
+                        logger.v("Updateded inventory item with increment result dict: \(updateDict)")
                         
                     } else {
-                        QL3("Warning: got result with smaller timestamp: \(incrementResult), ignoring")
+                        logger.w("Warning: got result with smaller timestamp: \(incrementResult), ignoring")
                     }
                 } else {
-                    QL1("Received increment result with outdated quantity: \(incrementResult.updatedQuantity)")
+                    logger.v("Received increment result with outdated quantity: \(incrementResult.updatedQuantity)")
                 }
 
             } else {
-                QL3("Didn't find item for: \(incrementResult)")
+                logger.w("Didn't find item for: \(incrementResult)")
             }
             return true
             }, finishHandler: {success in
@@ -241,10 +241,10 @@ class RealmInventoryItemProvider: RealmProvider {
         let removedCountMaybe = removeReturnCountSync(InventoryItem.createFilter(ProductUnique(name: productName, brand: productBrand), inventoryUuid: inventory.uuid, notUuid: notUuid), objType: InventoryItem.self, realmData: realmData, doTransaction: doTransaction)
         if let removedCount = removedCountMaybe {
             if removedCount > 0 {
-                QL2("Found inventory item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), inventory: {\(inventory.uuid), \(inventory.name)}")
+                logger.d("Found inventory item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), inventory: {\(inventory.uuid), \(inventory.name)}")
             }
         } else {
-            QL4("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(inventory.uuid), \(inventory.name)}")
+            logger.e("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(inventory.uuid), \(inventory.name)}")
         }
         return removedCountMaybe.map{$0 > 0} ?? false
     }
@@ -306,7 +306,7 @@ class RealmInventoryItemProvider: RealmProvider {
         func incrementFav() {
             DBProv.productProvider.incrementFav(productUuid: product.product.uuid, transactionRealm: realm, {saved in
                 if !saved {
-                    QL4("Couldn't increment product fav")
+                    logger.e("Couldn't increment product fav")
                 }
             })
         }

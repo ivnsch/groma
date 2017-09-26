@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 import Providers
 
 typealias IngredientsSortOption = (value: InventorySortBy, key: String)
@@ -29,7 +29,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
             if let sortBy = sortBy {
                 sortByButton.setTitle(sortBy.key, for: UIControlState())
             } else {
-                QL3("sortBy is nil")
+                logger.w("sortBy is nil")
             }
         }
     }
@@ -177,8 +177,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     // MARK: -
     
     func load() {
-        guard let recipe = recipe else {QL4("No recipe"); return}
-        guard let sortBy = sortBy else {QL4("No sort by"); return}
+        guard let recipe = recipe else {logger.e("No recipe"); return}
+        guard let sortBy = sortBy else {logger.e("No sort by"); return}
         
         Prov.ingredientProvider.ingredients(recipe: recipe, sortBy: sortBy.value, successHandler {[weak self] ingredients in guard let weakSelf = self else {return}
             
@@ -189,14 +189,14 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI
                     //                        self.viewController.didUpdateList(reload: true)
-                    QL1("initial")
+                    logger.v("initial")
                     //                    weakSelf.productsWithQuantityController.reload()
                     //
 //                    onSuccess() // TODO! productsWithQuantityController should load also lazily
                     
                     
                 case .update(_, let deletions, let insertions, let modifications):
-                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                    logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                     
 //                    onSuccess() // TODO! productsWithQuantityController should load also lazily
                     
@@ -257,9 +257,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     override func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) {
         
-        guard let itemsResult = itemsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
-        guard let recipe = recipe else {QL4("No recipe"); return}
+        guard let itemsResult = itemsResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
+        guard let recipe = recipe else {logger.e("No recipe"); return}
         
         func onHasUnit(_ unit: Providers.Unit) {
             let quickAddIngredientInput = QuickAddIngredientInput(item: item, quantity: ingredientInput.quantity, unit: unit, fraction: ingredientInput.fraction)
@@ -267,7 +267,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
             Prov.ingredientProvider.add(quickAddIngredientInput, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, successHandler{[weak self] addedItem in guard let weakSelf = self else {return}
                 
                 guard let itemIndex = weakSelf.itemsResult?.index(of: addedItem.ingredient) else {
-                    QL4("Illegal state: Just added/updated ingredient but didn't find it in results. Or results are not set")
+                    logger.e("Illegal state: Just added/updated ingredient but didn't find it in results. Or results are not set")
                     return
                 }
                 
@@ -286,7 +286,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                         }
                         
                     } else {
-                        QL4("Illegal state: Wrong cell type: \(weakSelf.tableView.visibleCells)")
+                        logger.e("Illegal state: Wrong cell type: \(weakSelf.tableView.visibleCells)")
                     }
                     
                 } else {
@@ -315,9 +315,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     }
     
     override func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
-        guard let itemsResult = itemsResult else {QL4("No result"); return}
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
-        guard let recipe = recipe else {QL4("No recipe"); return}
+        guard let itemsResult = itemsResult else {logger.e("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
+        guard let recipe = recipe else {logger.e("No recipe"); return}
         
         
         func onEditItem(_ input: IngredientInput, editingItem: Ingredient) {
@@ -340,7 +340,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                     if let index = itemsResult.index(of: addedItem.ingredient) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
                         self.update(item: addedItem.ingredient, scrollToRow: index)
                     } else {
-                        QL4("Illegal state: Item is not new (it's an update) but was not found in results")
+                        logger.e("Illegal state: Item is not new (it's an update) but was not found in results")
                     }
                 }
                 
@@ -359,7 +359,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                 if editingItem == nil {
                     onAddItem(input)
                 } else {
-                    QL4("Cast didn't work: \(String(describing: editingItem))")
+                    logger.e("Cast didn't work: \(String(describing: editingItem))")
                 }
             }
         }
@@ -400,9 +400,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     // Inserts item in table view, considering the current sortBy
     func insert(item: Ingredient, scrollToRow: Bool) {
         guard let indexPath = findIndexPathForNewItem(item) else {
-            QL1("No index path for: \(item), appending"); return;
+            logger.v("No index path for: \(item), appending"); return;
         }
-        QL1("Found index path: \(indexPath) for: \(item), sortBy: \(String(describing: sortBy))")
+        logger.v("Found index path: \(indexPath) for: \(item), sortBy: \(String(describing: sortBy))")
         tableView.insertRows(at: [indexPath], with: .top)
         
         updateEmptyUI()
@@ -415,7 +415,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     // TODO!!!!!!!!!!!!!!!! insert at specific place: for realm it's not a problem we just have to append to the list (the results should continue being sorted so we don't need to do anything else). but we have to insert the item in the visible rows of the table - look for its place here using the cells instead of models.
     fileprivate func findIndexPathForNewItem(_ ingredient: Ingredient) -> IndexPath? {
         
-        guard let sortBy = sortBy else {QL4("No sort by"); return nil}
+        guard let sortBy = sortBy else {logger.e("No sort by"); return nil}
         
         func findRow(_ isAfter: (Ingredient) -> Bool) -> IndexPath? {
             
@@ -467,7 +467,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     fileprivate func findLargestLeftSideWidth() -> CGFloat {
         
-        guard let itemsResult = itemsResult else {QL4("No result"); return 0}
+        guard let itemsResult = itemsResult else {logger.e("No result"); return 0}
 
         // hardcoded numbers (fix)
         
@@ -494,7 +494,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     fileprivate func findFirstItem(_ f: (Ingredient) -> Bool) -> (index: Int, model: Ingredient)? {
         for itemIndex in 0..<itemsCount {
-            guard let item = itemForRow(row: itemIndex) else {QL4("Illegal state: no item for index: \(itemIndex)"); return nil}
+            guard let item = itemForRow(row: itemIndex) else {logger.e("Illegal state: no item for index: \(itemIndex)"); return nil}
             if f(item) {
                 return (itemIndex, item)
             }
@@ -503,7 +503,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     }
     
     func itemForRow(row: Int) -> Ingredient? {
-        guard row < (itemsResult?.count ?? 0) else {QL4("Out of bounds: row: \(row), result count: \(String(describing: itemsResult?.count)). Returning nil"); return nil}
+        guard row < (itemsResult?.count ?? 0) else {logger.e("Out of bounds: row: \(row), result count: \(String(describing: itemsResult?.count)). Returning nil"); return nil}
         return itemsResult?[row]
     }
     
@@ -547,8 +547,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     }
     
     func remove(_ indexPath: IndexPath, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
-        guard let notificationToken = notificationToken else {QL4("No notification token"); return}
-        guard let itemsResult = itemsResult else {QL4("No result"); return}
+        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
+        guard let itemsResult = itemsResult else {logger.e("No result"); return}
 
         let row = explanationManager.showExplanation ? indexPath.row + 1 : indexPath.row
         let updatedIndexPath = IndexPath(row: row, section: 0)
@@ -643,7 +643,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     // MARK: -
     
     deinit {
-        QL1("Deinit ingredients")
+        logger.v("Deinit ingredients")
     }
 }
 
@@ -676,7 +676,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
                 cell.ingredient = itemsResult[row]
                 cell.setRightSideOffset(offset: maxLeftSideWidth, animated: false)
             } else {
-                QL4("Illegal state: No item for row: \(row)")
+                logger.e("Illegal state: No item for row: \(row)")
             }
             
             return cell
@@ -708,7 +708,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditing {
-            guard let itemsResult = itemsResult else {QL4("No result"); return}
+            guard let itemsResult = itemsResult else {logger.e("No result"); return}
             
             let ingredient = itemsResult[indexPath.row]
             

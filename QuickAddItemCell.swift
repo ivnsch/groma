@@ -9,7 +9,7 @@
 import UIKit
 import ChameleonFramework
 import Providers
-import QorumLogs
+
 
 class QuickAddItemCell: UICollectionViewCell {
     

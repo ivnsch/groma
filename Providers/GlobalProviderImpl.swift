@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 
 class GlobalProviderImpl: GlobalProvider {
 
@@ -23,7 +23,7 @@ class GlobalProviderImpl: GlobalProvider {
                     self?.handleSyncResult(remoteResult, handler: handler)
                 }
             } else {
-                QL4("Couldn't load sync dictionary")
+                logger.e("Couldn't load sync dictionary")
             }
         }
     }
@@ -39,18 +39,18 @@ class GlobalProviderImpl: GlobalProvider {
                         let syncResult = SyncResult(listInvites: remoteSyncResult.listInvitations, inventoryInvites: remoteSyncResult.inventoryInvitations)
                         handler(ProviderResult(status: .success, sucessResult: syncResult))
                     } else {
-                        QL4("Invalid state, remote result should have a successResult")
+                        logger.e("Invalid state, remote result should have a successResult")
                         handler(ProviderResult(status: .unknown))
                     }
                     
                 } else {
-                    QL4("Coudln't save sync result to database")
+                    logger.e("Coudln't save sync result to database")
                     handler(ProviderResult(status: .unknown))
                 }
             }
             
         } else {
-            QL3("Remote error doing sync, result: \(syncResult)")
+            logger.w("Remote error doing sync, result: \(syncResult)")
             // show err msg in any case (also not logged in etc) as in sync we are expected to be connected
             handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(syncResult.status)))
         }
@@ -74,7 +74,7 @@ class GlobalProviderImpl: GlobalProvider {
     func initContainers(handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProv.globalProvider.initContainers {success in
             if !success {
-                QL4("Critical: couldn't initialize realm containers. App will be unusable!")
+                logger.e("Critical: couldn't initialize realm containers. App will be unusable!")
             }
             handler(ProviderResult(status: success ? .success : .databaseCriticalInitError))
         }

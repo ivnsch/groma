@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol HistoryItemGroupHeaderViewDelegate: class {
@@ -90,7 +90,7 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
         if let sectionModel = sectionModel {
             delegate?.onDeleteGroupTap(sectionModel, header: self)
         } else {
-            QL4("No headerIndex or group")
+            logger.e("No headerIndex or group")
         }
     }
     
@@ -98,7 +98,7 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
         if let sectionIndex = sectionIndex, let sectionModel = sectionModel {
             delegate?.onHeaderTap(self, sectionIndex: sectionIndex, sectionModel: sectionModel)
         } else {
-            QL4("No headerIndex or group")
+            logger.e("No headerIndex or group")
         }
     }
     

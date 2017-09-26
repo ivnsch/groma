@@ -8,7 +8,7 @@
 
 import Foundation
 import Alamofire
-import QorumLogs
+
 
 struct RemoteGlobalSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     
@@ -28,7 +28,7 @@ struct RemoteGlobalSyncResult: ResponseObjectSerializable, CustomDebugStringConv
             let groupsObj = representation.value(forKeyPath: "groups") as? [AnyObject],
             let groups = RemoteGroupWithItems.collection(groupsObj)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.lists = lists

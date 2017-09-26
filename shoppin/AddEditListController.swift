@@ -10,7 +10,7 @@ import UIKit
 import SwiftValidator
 import ChameleonFramework
 import CMPopTipView
-import QorumLogs
+
 import Providers
 
 protocol AddEditListControllerDelegate: class {
@@ -143,7 +143,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     fileprivate func setBackgroundColor(_ color: UIColor) {
         
         func setContrastingTextColor(_ color: UIColor) {
-            guard listNameInputField != nil else {QL4("Outlets not initialised yet"); return}
+            guard listNameInputField != nil else {logger.e("Outlets not initialised yet"); return}
             
             let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
             
@@ -184,7 +184,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
     
     fileprivate func initGrowColorAnimator() {
-        guard let parent = parent else {QL4("Parent is not set"); return}
+        guard let parent = parent else {logger.e("Parent is not set"); return}
 
         growColorPickerAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self) {
             let controller = UIStoryboard.listColorPicker()
@@ -194,7 +194,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentView = parent?.view else {QL4("No parentController"); return nil}
+        guard let parentView = parent?.view else {logger.e("No parentController"); return nil}
         let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
             self?.submit()
         }
@@ -263,7 +263,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             if let view = view as? AddEditListControllerView {
                 view.popupFrame = popup.frame // include popup in tap area
             } else {
-                QL4("Cast failed, view: \(view)")
+                logger.e("Cast failed, view: \(view)")
             }
         }
     }
@@ -288,8 +288,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             
             guard let weakSelf = self else {return}
             guard let inventory = weakSelf.selectedInventory else {AlertPopup.show(message: trans("popup_please_select_inventory"), controller: weakSelf); return}
-            guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
-            guard let listName = weakSelf.listNameInputField.text?.trim() else {QL4("Validation was not implemented correctly"); return}
+            guard let bgColor = weakSelf.view.backgroundColor else {logger.e("Invalid state: view has no bg color"); return}
+            guard let listName = weakSelf.listNameInputField.text?.trim() else {logger.e("Validation was not implemented correctly"); return}
             
             let store: String? = weakSelf.storeInputField.optText?.trim()
             
@@ -343,7 +343,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                     self?.delegate?.onAddList(list)
                     
                 } else {
-                    QL4("No currentListsCount")
+                    logger.e("No currentListsCount")
                 }
             }
         }
@@ -495,6 +495,6 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
     
     deinit {
-        QL1("Deinit add edit list controller")
+        logger.v("Deinit add edit list controller")
     }
 }

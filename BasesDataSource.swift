@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 import Providers
 
 protocol BaseQuantitiesDataSourceSourceDelegate {
@@ -33,7 +33,7 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let bases = bases else {QL4("No bases"); return UICollectionViewCell()}
+        guard let bases = bases else {logger.e("No bases"); return UICollectionViewCell()}
         
         if indexPath.row < bases.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "baseCell", for: indexPath) as! BaseQuantityCell
@@ -51,7 +51,7 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
                     cell.baseQuantityView.showSelected(selected: selected, animated: false)
                 }
             } else {
-                QL4("No delegate")
+                logger.e("No delegate")
             }
             
             // HACK: For some reason after scrolled the label doesn't use its center constraint and appears aligned to the left. Debugging view hierarchy shows the label has the correct constraints, parent also has correct size but for some reason it's aligned at the left.
@@ -74,7 +74,7 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
                 cell.setMinTextFieldWidth(delegate.minBaseQuantityTextFieldWidth)
                 
             } else {
-                QL4("No delegate")
+                logger.e("No delegate")
             }
             
             return cell
@@ -95,7 +95,7 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
         if let _ = nameInput.floatValue {
             delegate?.onUpdateBaseQuantityInput(valueInput: nameInput.floatValue ?? 1)
         } else {
-            QL4("Invalid base input: \(nameInput)")
+            logger.e("Invalid base input: \(nameInput)")
         }
     }
 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6A1027711E5E167F003D2972 /* BaseQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1027701E5E167F003D2972 /* BaseQuantity.swift */; };
 		6A1027731E5E1CA4003D2972 /* BaseQuantitiesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1027721E5E1CA4003D2972 /* BaseQuantitiesContainer.swift */; };
+		6A1F48091F7B04D1009D2F18 /* Sequence+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1F48081F7B04D1009D2F18 /* Sequence+Convenience.swift */; };
 		6A256B891E0401AE004F5028 /* Providers.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A256B871E0401AE004F5028 /* Providers.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6A256B8D1E0401D4004F5028 /* MemListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B7C1E0400A0004F5028 /* MemListItemProvider.swift */; };
 		6A256B8E1E0401D7004F5028 /* MemInventoryItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A256B7D1E0400A0004F5028 /* MemInventoryItemProvider.swift */; };
@@ -313,6 +314,7 @@
 		07C2602C5259E7890FCA54D7 /* Pods-Providers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Providers.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Providers/Pods-Providers.release.xcconfig"; sourceTree = "<group>"; };
 		6A1027701E5E167F003D2972 /* BaseQuantity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuantity.swift; sourceTree = "<group>"; };
 		6A1027721E5E1CA4003D2972 /* BaseQuantitiesContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuantitiesContainer.swift; sourceTree = "<group>"; };
+		6A1F48081F7B04D1009D2F18 /* Sequence+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Convenience.swift"; sourceTree = "<group>"; };
 		6A256B7C1E0400A0004F5028 /* MemListItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemListItemProvider.swift; sourceTree = "<group>"; };
 		6A256B7D1E0400A0004F5028 /* MemInventoryItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemInventoryItemProvider.swift; sourceTree = "<group>"; };
 		6A256B841E0401AE004F5028 /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1127,6 +1129,7 @@
 				6A256DBA1E040C52004F5028 /* CGPoint.swift */,
 				6A256D731E0407AC004F5028 /* CGSize.swift */,
 				6ADC6F3B1E4D2E61005BE5EB /* FloatingPoint.swift */,
+				6A1F48081F7B04D1009D2F18 /* Sequence+Convenience.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -1596,6 +1599,7 @@
 				6A3A67D41E57D1A100B5354F /* FractionProviderImpl.swift in Sources */,
 				6A256D751E0407AC004F5028 /* NSMutableAttributedString.swift in Sources */,
 				6A256C8E1E0405D7004F5028 /* DBSectionToRemove.swift in Sources */,
+				6A1F48091F7B04D1009D2F18 /* Sequence+Convenience.swift in Sources */,
 				6A256C991E0405D7004F5028 /* DBRemoveGroupItem.swift in Sources */,
 				6A256D4C1E040694004F5028 /* HistoryItemGroup.swift in Sources */,
 				6A256C721E0405C6004F5028 /* Section.swift in Sources */,

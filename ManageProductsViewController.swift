@@ -9,7 +9,7 @@
 import UIKit
 import SwiftValidator
 import CMPopTipView
-import QorumLogs
+
 import RealmSwift
 import Providers
 
@@ -40,7 +40,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                 if let option = sortByOption(sortBy) {
                     sortByButton.setTitle(option.key, for: UIControlState())
                 } else {
-                    QL3("No option for \(sortBy)")
+                    logger.w("No option for \(sortBy)")
                 }
                 loadProducts()
             }
@@ -97,7 +97,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     deinit {
-        QL1("Deinit manage products controller")
+        logger.v("Deinit manage products controller")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -161,7 +161,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             cell.contentView.addBottomBorderWithColor(Theme.cellBottomBorderColor, width: 1)
             
         } else {
-            QL4("Invalid state: No product")
+            logger.e("Invalid state: No product")
         }
 
         return cell
@@ -174,7 +174,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            guard let product = products?[(indexPath as NSIndexPath).row] else {QL4("No product"); return}
+            guard let product = products?[(indexPath as NSIndexPath).row] else {logger.e("No product"); return}
             Prov.productProvider.deleteQuantifiableProduct(uuid: product.uuid, remote: true, successHandler{
             })
         }
@@ -211,7 +211,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
  
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
-            guard let product = products?[(indexPath as NSIndexPath).row] else {QL4("No product"); return}
+            guard let product = products?[(indexPath as NSIndexPath).row] else {logger.e("No product"); return}
             
             let productEditData = AddEditProductControllerEditingData(product: product, indexPath: indexPath)
             topQuickAddControllerManager?.expand(true)
@@ -289,13 +289,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             if editingItem == nil {
                 onAddItem(input)
             } else {
-                QL4("Cast didn't work: \(String(describing: editingItem))")
+                logger.e("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
     
     func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
-        QL4("Not implemented")
+        logger.e("Not implemented")
     }
     
     func onQuickListOpen() {
@@ -353,10 +353,10 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI
                     //                        self.viewController.didUpdateList(reload: true)
-                    QL1("initial")
+                    logger.v("initial")
                     
                 case .update(_, let deletions, let insertions, let modifications):
-                    QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                    logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                     
                     weakSelf.tableView.beginUpdates()
                     

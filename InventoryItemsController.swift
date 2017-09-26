@@ -9,7 +9,7 @@
 import UIKit
 import ChameleonFramework
 import SwiftValidator
-import QorumLogs
+
 import RealmSwift
 import Providers
 
@@ -69,7 +69,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     deinit {
-        QL1("Deinit inventory items")
+        logger.v("Deinit inventory items")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -193,7 +193,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId) {
         switch buttonId {
         case .add:
-            QL4("Outdated implementation - to add products to inventory we now have to fetch store product (to get the price)")
+            logger.e("Outdated implementation - to add products to inventory we now have to fetch store product (to get the price)")
 //            if let inventory = inventory {
 //                Prov.inventoryItemsProvider.countInventoryItems(inventory, successHandler {[weak self] count in
 //                    if let weakSelf = self {
@@ -209,7 +209,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             toggleTopAddController()
         case .edit:
             toggleEditing()
-        default: QL4("Not handled: \(buttonId)")
+        default: logger.e("Not handled: \(buttonId)")
         }
     }
     
@@ -331,8 +331,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
-        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let inventoryItemsResult = inventoryItemsResult else {logger.e("No result"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         if let inventory = inventory {
             Prov.inventoryItemsProvider.addToInventory(inventory, product: product, quantity: quantity, remote: true, realmData: realmData, successHandler{[weak self] addedItem in guard let weakSelf = self else {return}
@@ -340,7 +340,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 onAddToProvider(QuickAddAddProductResult(isNewItem: addedItem.isNew))
                 
                 guard let itemIndex = inventoryItemsResult.index(of: addedItem.inventoryItem) else {
-                    QL4("Illegal state: Just added/updated item but didn't find it in results")
+                    logger.e("Illegal state: Just added/updated item but didn't find it in results")
                     return
                 }
                 
@@ -371,8 +371,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
-        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let inventoryItemsResult = inventoryItemsResult else {logger.e("No result"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
 
         func onEditListItem(_ input: ListItemInput, editingItem: InventoryItem) {
 
@@ -406,7 +406,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                         if let index = inventoryItemsResult.index(of: addedItem.inventoryItem) { // we could derive "isNew" from this but just to be 100% sure we are consistent with logic of provider
                             self.update(item: addedItem.inventoryItem, scrollToRow: index)
                         } else {
-                            QL4("Illegal state: Item is not new (it's an update) but was not found in results")
+                            logger.e("Illegal state: Item is not new (it's an update) but was not found in results")
                         }
                     }
                     
@@ -415,7 +415,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                     self?.defaultErrorHandler()(result)
                 }))
             } else {
-                QL4("Inventory isn't set, can't add item")
+                logger.e("Inventory isn't set, can't add item")
             }
         }
         
@@ -425,7 +425,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if editingItem == nil {
                 onAddInventoryItem(input)
             } else {
-                QL4("Cast didn't work: \(String(describing: editingItem))")
+                logger.e("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
@@ -482,7 +482,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     fileprivate func findIndexPathForQuantifiableProduct(quantifiableProduct: QuantifiableProduct) -> IndexPath? {
-        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return nil}
+        guard let inventoryItemsResult = inventoryItemsResult else {logger.e("No result"); return nil}
         for (index, item) in inventoryItemsResult.enumerated() {
             if item.product.same(quantifiableProduct) {
                 return IndexPath(row: productsWithQuantityController.explanationManager.showExplanation ? index + 1 : index, section: 0)
@@ -514,7 +514,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             Prov.inventoryItemsProvider.inventoryItems(inventory: inventory, fetchMode: .memOnly, sortBy: sortBy, successHandler{[weak self] inventoryItems in guard let weakSelf = self else {return}
                 
                 weakSelf.inventoryItemsResult = inventoryItems
-                guard let realm = inventoryItems.realm else {QL4("No realm. Will not init notification token"); return}
+                guard let realm = inventoryItems.realm else {logger.e("No realm. Will not init notification token"); return}
         
                 weakSelf.realmData?.token.stop()
 
@@ -524,10 +524,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                     case .initial:
                         //                        // Results are now populated and can be accessed without blocking the UI
                         //                        self.viewController.didUpdateList(reload: true)
-                        QL1("initial")
+                        logger.v("initial")
                         
                     case .update(_, let deletions, let insertions, let modifications):
-                        QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                        logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                         
                         weakSelf.productsWithQuantityController.tableView.beginUpdates()
                         weakSelf.productsWithQuantityController.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .top)
@@ -566,9 +566,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func remove(_ model: ProductWithQuantity2, onSuccess: @escaping VoidFunction, onError: @escaping (ProviderResult<Any>) -> Void) {
-        guard let inventory = inventory else {QL4("No inventory"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
-        guard let indexPath = indexPathOfItem(model) else {QL4("No index path"); return}
+        guard let inventory = inventory else {logger.e("No inventory"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
+        guard let indexPath = indexPathOfItem(model) else {logger.e("No index path"); return}
         
         Prov.inventoryItemsProvider.removeInventoryItem((model as! InventoryItem).uuid, inventoryUuid: inventory.uuid, remote: true, realmData: realmData, resultHandler(onSuccess: {[weak self] in
             
@@ -587,7 +587,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 
     
     func increment(_ model: ProductWithQuantity2, delta: Float, onSuccess: @escaping (Float) -> Void) {
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
 
         Prov.inventoryItemsProvider.incrementInventoryItem(model as! InventoryItem, delta: delta, remote: true, realmData: realmData, successHandler({updatedQuantity in
             onSuccess(updatedQuantity)
@@ -596,7 +596,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onModelSelected(_ index: Int) {
-        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return}
+        guard let inventoryItemsResult = inventoryItemsResult else {logger.e("No result"); return}
         
         if productsWithQuantityController.isEditing {
             
@@ -634,7 +634,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func indexPathOfItem(_ model: ProductWithQuantity2) -> IndexPath? {
-        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return nil}
+        guard let inventoryItemsResult = inventoryItemsResult else {logger.e("No result"); return nil}
 
         for i in 0..<inventoryItemsResult.count {
             if productsWithQuantityController.same(inventoryItemsResult[i], model) {
@@ -658,11 +658,11 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 
     // Inserts item in table view, considering the current sortBy
     func insert(item: InventoryItem, scrollToRow: Bool) {
-        guard let sortBy = productsWithQuantityController.sortBy else {QL4("No sortby, can't insert!"); return}
+        guard let sortBy = productsWithQuantityController.sortBy else {logger.e("No sortby, can't insert!"); return}
         guard let indexPath = findIndexPathForNewItem(item, sortBy: sortBy.value) else {
-            QL1("No index path for: \(item), appending"); return;
+            logger.v("No index path for: \(item), appending"); return;
         }
-        QL1("Found index path: \(indexPath) for: \(item.product.product.item.name)")
+        logger.v("Found index path: \(indexPath) for: \(item.product.product.item.name)")
         tableView.insertRows(at: [indexPath], with: .top)
         
         productsWithQuantityController.updateEmptyUI()
@@ -675,7 +675,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     // TODO!!!!!!!!!!!!!!!! replace findIndexPathForNewItem in ingredients with this
     /// NOTE: assumes that the item is already in inventoryItemsResult
     fileprivate func findIndexPathForNewItem(_ ingredient: InventoryItem, sortBy: InventorySortBy) -> IndexPath? {
-        guard let inventoryItemsResult = inventoryItemsResult else {QL4("No result"); return nil}
+        guard let inventoryItemsResult = inventoryItemsResult else {logger.e("No result"); return nil}
         for (index, item) in inventoryItemsResult.enumerated() {
             if item.same(ingredient) {
                 return IndexPath(row: productsWithQuantityController.explanationManager.showExplanation ? index + 1 : index, section: 0)
@@ -686,7 +686,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     fileprivate func findFirstItem(_ f: (InventoryItem) -> Bool) -> (index: Int, model: InventoryItem)? {
         for itemIndex in 0..<itemsCount {
-            guard let item = itemForRow(row: itemIndex) as? InventoryItem else {QL4("Illegal state: no item for index: \(itemIndex) or wrong type"); return nil}
+            guard let item = itemForRow(row: itemIndex) as? InventoryItem else {logger.e("Illegal state: no item for index: \(itemIndex) or wrong type"); return nil}
             if f(item) {
                 return (itemIndex, item)
             }

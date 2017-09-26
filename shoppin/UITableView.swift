@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 
 extension UITableView {
     

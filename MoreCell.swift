@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 class MoreCell: UITableViewCell {
 
@@ -18,7 +18,7 @@ class MoreCell: UITableViewCell {
             if let label = label {
                 label.text = moreItem?.text
             } else {
-                QL3("Outlets not set")
+                logger.w("Outlets not set")
             }
         }
     }

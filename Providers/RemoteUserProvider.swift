@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 class RemoteUserProvider {
     
@@ -23,7 +23,7 @@ class RemoteUserProvider {
                 self?.storeToken(successResult.token)
             } else {
                 if result.status != .invalidCredentials {
-                    QL4("No token. Result: \(result)")
+                    logger.e("No token. Result: \(result)")
                 }
             }
             handler(result)
@@ -38,7 +38,7 @@ class RemoteUserProvider {
             if result.success {
 
             } else {
-                QL4("Error registering. Result: \(result)")
+                logger.e("Error registering. Result: \(result)")
             }
             handler(result)
         }
@@ -50,7 +50,7 @@ class RemoteUserProvider {
                 if let successResult = result.successResult {
                     AccessTokenHelper.storeToken(successResult.token) // update (replace) the token
                 } else {
-                    QL4("No token. Result: \(result)")
+                    logger.e("No token. Result: \(result)")
                 }
                 handler(result)
             }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 class ExpandableTableViewModel: NSObject, Identifiable {
@@ -291,7 +291,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         if let model = itemForRow(row: indexPath.row) {
             cell.model = model
         } else {
-            QL4("Illegal state: no model for row: \(indexPath.row)")
+            logger.e("Illegal state: no model for row: \(indexPath.row)")
         }
         
         
@@ -308,7 +308,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            guard let model = itemForRow(row: indexPath.row) else{QL4("Illegal state: no model for index path: \(indexPath)"); return}
+            guard let model = itemForRow(row: indexPath.row) else{logger.e("Illegal state: no model for index path: \(indexPath)"); return}
             
             canRemoveModel(model) {[weak self] can in
                 if can {
@@ -341,7 +341,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let model = itemForRow(row: indexPath.row) else {QL4("Illegal state: No item for index path: \(indexPath)"); return}
+        guard let model = itemForRow(row: indexPath.row) else {logger.e("Illegal state: No item for index path: \(indexPath)"); return}
         
         if self.isEditing {
             onSelectCellInEditMode(model, index: indexPath.row)

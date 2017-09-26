@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 public extension UILabel {
@@ -24,7 +24,7 @@ public extension UILabel {
     
     func makeBold() -> Bool {
         
-        guard let boldFont = font.bold else {QL4("Couldn't get bold version. Font: \(font)"); return false}
+        guard let boldFont = font.bold else {logger.e("Couldn't get bold version. Font: \(font)"); return false}
         
         font = boldFont
         

@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 
 public struct AddSectionResult {
@@ -94,7 +94,7 @@ class RealmSectionProvider: RealmProvider {
     
     func removeAllWithName(_ sectionName: String, markForSync: Bool, handler: @escaping ([Section]?) -> Void) {
         loadSections(sectionName) {[weak self] sections in guard let weakSelf = self else {return}
-            guard let sections = sections else {QL1("Sections is nil"); handler(nil); return}
+            guard let sections = sections else {logger.v("Sections is nil"); handler(nil); return}
             if !sections.isEmpty {
                 weakSelf.doInWriteTransaction({(realm: Realm) -> Results<Section> in
                     for section in sections {
@@ -106,7 +106,7 @@ class RealmSectionProvider: RealmProvider {
                 })
                 
             } else {
-                QL2("No sections with name: \(sectionName) - nothing to remove") // this is not an error, this can be used e.g. in the autosuggestions where we list also category names.
+                logger.d("No sections with name: \(sectionName) - nothing to remove") // this is not an error, this can be used e.g. in the autosuggestions where we list also category names.
                 handler([])
             }
         }
@@ -122,7 +122,7 @@ class RealmSectionProvider: RealmProvider {
                 _ = weakSelf.removeSectionAndDependenciesSync(realm, sectionUuid: sectionUuid, markForSync: markForSync)
                 return true
             } else {
-                QL4("self is nil")
+                logger.e("self is nil")
                 return false
             }
         } ?? false
@@ -142,7 +142,7 @@ class RealmSectionProvider: RealmProvider {
             realm.delete(dbSection)
             return true
         } else {
-            QL3("Didn't find section to be deleted: \(sectionUuid)")
+            logger.w("Didn't find section to be deleted: \(sectionUuid)")
             return false
         }
     }
@@ -218,7 +218,7 @@ class RealmSectionProvider: RealmProvider {
     func updateLastSyncTimeStamps(_ sectionsUpdateDicts: [[String: AnyObject]], handler: @escaping (Bool) -> Void) {
         doInWriteTransaction({realm in
             for dict in sectionsUpdateDicts {
-                QL1("Saving dictionaries for section updates: \(sectionsUpdateDicts)")
+                logger.v("Saving dictionaries for section updates: \(sectionsUpdateDicts)")
                 realm.create(Section.self, value: dict, update: true)
             }
             return true
@@ -231,7 +231,7 @@ class RealmSectionProvider: RealmProvider {
     func mergeOrCreateSectionSync(_ sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, realmData: RealmData?, doTransaction: Bool = true) -> ProvResult<AddSectionResult, DatabaseError> {
         
         guard let sections = sectionsSync(list: list, status: status) else {
-            QL4("Couldn't retrieve the sections for list: \(list.uuid):\(list.name)")
+            logger.e("Couldn't retrieve the sections for list: \(list.uuid):\(list.name)")
             return .err(.unknown)
         }
 

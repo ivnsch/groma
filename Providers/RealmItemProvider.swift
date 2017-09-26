@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 class RealmItemProvider: RealmProvider {
 
@@ -42,7 +42,7 @@ class RealmItemProvider: RealmProvider {
                 let items: [Item] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
                 return items.map{$0.uuid}
             } catch let e {
-                QL4("Error creating Realm, returning empty results, error: \(e)")
+                logger.e("Error creating Realm, returning empty results, error: \(e)")
                 return nil
             }
             
@@ -55,12 +55,12 @@ class RealmItemProvider: RealmProvider {
                     handler(substring, items)
                     
                 } else {
-                    QL4("No item uuids")
+                    logger.e("No item uuids")
                     handler(substring, nil)
                 }
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 handler(substring, nil)
             }
         })
@@ -85,7 +85,7 @@ class RealmItemProvider: RealmProvider {
         case .ok(let item, let isNew):
             handler((item, isNew))
         case .err(let error):
-            QL4("Error in merge or create item: \(error)")
+            logger.e("Error in merge or create item: \(error)")
             handler(nil)
         }
     }
@@ -135,7 +135,7 @@ class RealmItemProvider: RealmProvider {
 //        let existingItemMaybe = findSync(name: input.name)
 //        
 //        if existingItemMaybe.isOk {
-//            QL1("Item already exists")
+//            logger.v("Item already exists")
 //            // There's nothing to update now so we just return true
 //            return true
 //            
@@ -168,7 +168,7 @@ class RealmItemProvider: RealmProvider {
                 return true
                 
             } else {
-                QL3("Didn't find item with filter: \(filter) to be deleted. Do nothing.")
+                logger.w("Didn't find item with filter: \(filter) to be deleted. Do nothing.")
                 return true // Don't see a particular reason to show the user an error here, so we just log a warning and return success.
             }
         } ?? false

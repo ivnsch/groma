@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 import RealmSwift
 
 struct SelectIngredientDataControllerInputs {
@@ -117,12 +117,12 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
 //        if let flow = fractionsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
 //            flow.estimatedItemSize = CGSize(width: 100, height: 50)
 //        } else {
-//            QL4("No flow layout")
+//            logger.e("No flow layout")
 //        }
 //        if let flow = unitsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
 //            flow.estimatedItemSize = CGSize(width: 100, height: 50)
 //        } else {
-//            QL4("No flow layout")
+//            logger.e("No flow layout")
 //        }
     }
     
@@ -152,7 +152,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     }
     
     func onTap(_ sender: UIView) {
-        guard let fractions = fractions else {QL4("No fractions"); return}
+        guard let fractions = fractions else {logger.e("No fractions"); return}
         
         if let currentNewFractionInput = currentNewFractionInput {
             
@@ -177,8 +177,8 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         
         if let currentNewUnitInput = currentNewUnitInput {
             
-            guard let dataSource = unitsCollectionView.dataSource else {QL4("No data source"); return}
-            guard let unitsDataSource = dataSource as? UnitsDataSource else {QL4("Data source has wrong type: \(type(of: dataSource))"); return}
+            guard let dataSource = unitsCollectionView.dataSource else {logger.e("No data source"); return}
+            guard let unitsDataSource = dataSource as? UnitsDataSource else {logger.e("Data source has wrong type: \(type(of: dataSource))"); return}
 
             Prov.unitProvider.getOrCreate(name: currentNewUnitInput, successHandler{[weak self] (unit, isNew) in guard let weakSelf = self else {return}
                 if isNew {
@@ -213,9 +213,9 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
 
     
     fileprivate func initSubmitButton() {
-        guard self.submitView == nil else {QL1("Already showing a submit view"); return}
-        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(String(describing: delegate))"); return}
-//        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return}
+        guard self.submitView == nil else {logger.v("Already showing a submit view"); return}
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {logger.e("No delegate: \(String(describing: delegate))"); return}
+//        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {logger.e("No tabBarController"); return}
         
         let height = Theme.submitViewHeight
         let submitView = SubmitView(frame: CGRect(x: 0, y: parentViewForAddButton.frame.maxY, width: parentViewForAddButton.width, height: height))
@@ -232,7 +232,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     }
     
     func onClose() {
-        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(String(describing: delegate))"); submitView?.removeFromSuperview(); return}
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {logger.e("No delegate: \(String(describing: delegate))"); submitView?.removeFromSuperview(); return}
 
         anim(3, {[weak self] in
             self?.submitView?.y = parentViewForAddButton.frame.maxY
@@ -245,7 +245,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     
     
     deinit {
-        QL1("\(type(of: self)) deinit")
+        logger.v("\(type(of: self)) deinit")
     }
     
     func onTextChange(_ sender: UITextField) {
@@ -296,7 +296,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     }
     
     fileprivate func updateTitle(inputs: SelectIngredientDataControllerInputs) {
-        guard let titleLabelsFont = titleLabelsFont else {QL4("No title labels font. Can't update title."); return}
+        guard let titleLabelsFont = titleLabelsFont else {logger.e("No title labels font. Can't update title."); return}
         
         let fractionStr = inputs.fraction.isValidAndNotZeroOrOneByOne ? inputs.fraction.description : ""
         // Don't show quantity if it's 0 and there's a fraction. If there's no fraction we show quantity 0, because otherwise there wouldn't be any number and this doesn't make sense.
@@ -340,7 +340,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
     }
     
     fileprivate func submit() {
-        guard let item = item else {QL4("Illegal state: no item. Can't submit"); return}
+        guard let item = item else {logger.e("Illegal state: no item. Can't submit"); return}
         
         delegate?.onSubmitIngredientInputs(item: item, inputs: inputs)
     }
@@ -355,7 +355,7 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let fractions = fractions else {QL4("No fractions"); return UICollectionViewCell()}
+        guard let fractions = fractions else {logger.e("No fractions"); return UICollectionViewCell()}
         
         if indexPath.row < fractions.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FractionCell
@@ -382,7 +382,7 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let fractions = fractions else {QL4("No fractions"); return}
+        guard let fractions = fractions else {logger.e("No fractions"); return}
 
         
         let cellMaybe = fractionsCollectionView.cellForItem(at: indexPath) as? FractionCell
@@ -484,7 +484,7 @@ extension SelectIngredientDataController: UICollectionViewDataSource, UICollecti
     }
     
     fileprivate func indexPathForFraction(fraction: DBFraction) -> IndexPath? {
-        guard let fractions = fractions else {QL4("No fractions"); return nil}
+        guard let fractions = fractions else {logger.e("No fractions"); return nil}
         
         for (index, f) in fractions.enumerated() {
             if f.numerator == fraction.numerator && f.denominator == fraction.denominator {
@@ -514,9 +514,9 @@ extension SelectIngredientDataController: UnitsCollectionViewDataSourceDelegate,
     // MARK: - UnitsCollectionViewDelegateDelegate
 
     func didSelectUnit(indexPath: IndexPath) {
-        guard let dataSource = unitsCollectionView.dataSource else {QL4("No data source"); return}
-        guard let unitsDataSource = dataSource as? UnitsDataSource else {QL4("Data source has wrong type: \(type(of: dataSource))"); return}
-        guard let units = unitsDataSource.units else {QL4("Invalid state: Data source has no units"); return}
+        guard let dataSource = unitsCollectionView.dataSource else {logger.e("No data source"); return}
+        guard let unitsDataSource = dataSource as? UnitsDataSource else {logger.e("Data source has wrong type: \(type(of: dataSource))"); return}
+        guard let units = unitsDataSource.units else {logger.e("Invalid state: Data source has no units"); return}
         
         let cellMaybe = unitsCollectionView.cellForItem(at: indexPath) as? UnitCell
         

@@ -9,7 +9,7 @@
 import UIKit
 import SwiftValidator
 import ChameleonFramework
-import QorumLogs
+
 import Providers
 
 //change
@@ -72,7 +72,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentView = parent?.view else {QL4("No parentController"); return nil}
+        guard let parentView = parent?.view else {logger.e("No parentController"); return nil}
         let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
             self?.submit()
         }
@@ -113,7 +113,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     fileprivate func setBackgroundColor(_ color: UIColor) {
         
         func setContrastingTextColor(_ color: UIColor) {
-            guard groupNameInputField != nil else {QL4("Outlets not initialised yet"); return}
+            guard groupNameInputField != nil else {logger.e("Outlets not initialised yet"); return}
             
             let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
             
@@ -140,9 +140,9 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         validateInputs(self.listInputsValidator) {[weak self] in
             
             guard let weakSelf = self else {return}
-            guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
-            guard let listName = weakSelf.groupNameInputField.text?.trim() else {QL4("Validation was not implemented correctly"); return}
-            guard let delegate = weakSelf.delegate else {QL4("No delegate"); return}
+            guard let bgColor = weakSelf.view.backgroundColor else {logger.e("Invalid state: view has no bg color"); return}
+            guard let listName = weakSelf.groupNameInputField.text?.trim() else {logger.e("Validation was not implemented correctly"); return}
+            guard let delegate = weakSelf.delegate else {logger.e("No delegate"); return}
             
             let input = AddEditSimpleItemInput(name: listName, color: bgColor)
 
@@ -283,6 +283,6 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     }
     
     deinit {
-        QL1("Deinit add edit groups controller")
+        logger.v("Deinit add edit groups controller")
     }
 }

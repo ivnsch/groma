@@ -8,7 +8,7 @@
 
 import UIKit
 import SwipeView
-import QorumLogs
+
 import Providers
 
 enum IntroMode {
@@ -66,7 +66,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             
             let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
             
-            QL1("Will init database: \(initActions)")
+            logger.v("Will init database: \(initActions)")
 
             func toggleButtons(_ canSkip: Bool) {
                 progressIndicator.isHidden = canSkip
@@ -121,7 +121,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             let lang = LangManager().appLang // note that the prefill items are left permanently in whatever lang the device was when the user installed the app
             
             suggestionsPrefiller.prefill(lang) {(success: Bool, defaultUnits: [Providers.Unit]) in
-                QL1("Finish initialising database for lang: \(lang), success: \(success). Default units count: \(defaultUnits.count)")
+                logger.v("Finish initialising database for lang: \(lang), success: \(success). Default units count: \(defaultUnits.count)")
                 onFinish((success, defaultUnits))
             }
         }
@@ -138,17 +138,17 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                             }, onError: {result in
                                 // let the user start if there's an error (we don't expect any, but just in case!)
                                 // it would be very bad if user can't get past intro for whatever reason. Both adding default inventory and default products (TODO) are not critical for the app to be usable.
-                                QL4("Error adding inventory, result: \(result)")
+                                logger.e("Error adding inventory, result: \(result)")
                                 onFinish?(nil)
                         }))
                     } else {
-                        QL2("User already has inventories, skipping")
+                        logger.d("User already has inventories, skipping")
                         onFinish?(nil)
                     }
                 }
                 
                 }, onError: {result in
-                    QL4("Error fetching inventories, result: \(result)")
+                    logger.e("Error fetching inventories, result: \(result)")
                     onFinish?(nil)
             }))
         }
@@ -156,7 +156,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         func initExampleRecipe(unitDict: [UnitId: Providers.Unit], _ onFinish: VoidFunction? = nil) {
             Prov.recipeProvider.recipes(sortBy: .order, resultHandler(onSuccess: {[weak self] recipes in guard let weakSelf = self else {onFinish?(); return}
                 
-                guard recipes.isEmpty else {QL2("User already has groups, skipping"); onFinish?(); return}
+                guard recipes.isEmpty else {logger.d("User already has groups, skipping"); onFinish?(); return}
                 
                 let ingredientModels: [(name: String, quantity: Float, fraction: Fraction, unitId: UnitId)] = [
                     (trans("pr_tomatoes_peeled"), 1, Fraction.one, .can),
@@ -180,8 +180,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 
                     let ingredients: [Ingredient] = ingredientModels.flatMap {ingredientModel in
                         // It would be better to delete the recipe on failure instead of skip but this is quicker to implement
-                        guard let unit = unitDict[ingredientModel.unitId] else {QL4("Didn't find unit for id: \(ingredientModel.unitId). Can't add ingredient"); return nil}
-                        guard let item = itemsDict[ingredientModel.name] else {QL4("Didn't find item with name: \(ingredientModel.name). Can't add ingredient"); return nil}
+                        guard let unit = unitDict[ingredientModel.unitId] else {logger.e("Didn't find unit for id: \(ingredientModel.unitId). Can't add ingredient"); return nil}
+                        guard let item = itemsDict[ingredientModel.name] else {logger.e("Didn't find item with name: \(ingredientModel.name). Can't add ingredient"); return nil}
                         return Ingredient(uuid: UUID().uuidString, quantity: ingredientModel.quantity, fraction: ingredientModel.fraction, unit: unit, item: item, recipe: recipe)
                     }
                     
@@ -190,22 +190,22 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                             onFinish?()
                             
                         }, onError: {result in
-                            QL4("Error adding ingredients, result: \(result)")
+                            logger.e("Error adding ingredients, result: \(result)")
                             onFinish?()
                         }))
                         
                     }, onError: {result in
-                        QL4("Error adding recipe, result: \(result), recipe: \(recipe)")
+                        logger.e("Error adding recipe, result: \(result), recipe: \(recipe)")
                         onFinish?()
                     }))
                     
                 }, onError: {result in
-                    QL4("Error querying items, result: \(result)")
+                    logger.e("Error querying items, result: \(result)")
                     onFinish?()
                 }))
             
             }, onError: {result in
-                QL4("Error querying recipes, result: \(result)")
+                logger.e("Error querying recipes, result: \(result)")
                 onFinish?()
             }))
         }
@@ -231,13 +231,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     Prov.productProvider.products(ingredientsNameBrands, weakSelf.resultHandler(onSuccess: {products in
                         
                         if products.count != ingredientsNameBrands.count {
-                            QL4("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): (\(products.map{$0.item.name})), searched(\(ingredients.count)): \(ingredients.map{$0.name})")
+                            logger.e("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): (\(products.map{$0.item.name})), searched(\(ingredients.count)): \(ingredients.map{$0.name})")
                             onFinish?()
                             
                         } else {
                             Prov.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
                                 
-                                guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't add group items."); onFinish?(); return}
+                                guard let noneUnit = unitDict[.none] else {logger.e("No none unit! can't add group items."); onFinish?(); return}
                                 
                                 let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = ingredients.flatMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
@@ -254,29 +254,29 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                 }
                                 
                                 Prov.listItemGroupsProvider.add(groupItems, group: exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in 
-                                    QL2("Finish adding example group")
+                                    logger.d("Finish adding example group")
                                     onFinish?()
                                     
                                     }, onError: {result in
-                                        QL4("Error adding example group items, result: \(result), items: \(groupItems)")
+                                        logger.e("Error adding example group items, result: \(result), items: \(groupItems)")
                                         onFinish?()
                                 }))
                                 
                                 }, onError: {result in
-                                    QL4("Error adding example group, result: \(result), group: \(exampleGroup)")
+                                    logger.e("Error adding example group, result: \(result), group: \(exampleGroup)")
                                     onFinish?()
                             }))
                         }
                         }, onError: {result in
-                            QL4("Error querying products, result: \(result)")
+                            logger.e("Error querying products, result: \(result)")
                             onFinish?()
                     }))
                 } else {
-                    QL2("User already has groups, skipping")
+                    logger.d("User already has groups, skipping")
                     onFinish?()
                 }
                 }, onError: {result in
-                    QL4("Error fetching groups, result: \(result)")
+                    logger.e("Error fetching groups, result: \(result)")
                     onFinish?()
             }))
         }
@@ -308,13 +308,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     Prov.productProvider.products(productsWithBrands, weakSelf.resultHandler(onSuccess: {products in
                         
                         if products.count != productsWithBrands.count {
-                            QL4("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products.map{$0.item.name}), searched(\(productsWithBrands.count)): \(productsWithBrands.map{$0.name})")
+                            logger.e("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): \(products.map{$0.item.name}), searched(\(productsWithBrands.count)): \(productsWithBrands.map{$0.name})")
                             onFinish?()
                             
                         } else {
                             Prov.listProvider.add(exampleList, remote: true, weakSelf.resultHandler(onSuccess: {addedList in
                         
-                                guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't add list items."); onFinish?(); return}
+                                guard let noneUnit = unitDict[.none] else {logger.e("No none unit! can't add list items."); onFinish?(); return}
 
                                 let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
@@ -332,32 +332,32 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                 }
                                 
                                 Prov.listItemsProvider.addNew(listItemInputs: inputs, list: exampleList, status: .todo, realmData: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
-                                    QL2("Finish adding example list")
+                                    logger.d("Finish adding example list")
                                     
                                     self?.onCreateExampleList?()
                                     
                                     onFinish?()
                                     
                                     }, onError: {result in
-                                        QL4("Error adding example list items, result: \(result), inputs: \(inputs)")
+                                        logger.e("Error adding example list items, result: \(result), inputs: \(inputs)")
                                         onFinish?()
                                 }))
                                                                 
                                 }, onError: {result in
-                                    QL4("Error adding example list, result: \(result), group: \(exampleList)")
+                                    logger.e("Error adding example list, result: \(result), group: \(exampleList)")
                                     onFinish?()
                             }))
                         }
                         }, onError: {result in
-                            QL4("Error querying products, result: \(result)")
+                            logger.e("Error querying products, result: \(result)")
                             onFinish?()
                     }))
                 } else {
-                    QL2("User already has lists, skipping")
+                    logger.d("User already has lists, skipping")
                     onFinish?()
                 }
                 }, onError: {result in
-                    QL4("Error fetching list, result: \(result)")
+                    logger.e("Error fetching list, result: \(result)")
                     onFinish?()
             }))
         }
@@ -370,28 +370,28 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                 return
             }
             
-            QL2("Finished init realm containers")
+            logger.d("Finished init realm containers")
             prefillDatabase {success, defaultUnits in
                 
                 let unitDict = defaultUnits.toDictionary {defaultUnit in
                     (defaultUnit.id, defaultUnit)
                 }
                 
-                QL2("Finished copying prefill database")
+                logger.d("Finished copying prefill database")
                 initDefaultInventory {inventoryMaybe in
-                    QL2("Finished adding default inventory")
+                    logger.d("Finished adding default inventory")
                     
                     initExampleRecipe(unitDict: unitDict) {
                     
 //                    initExampleGroup(unitDict: unitDict) { // Disabled, getting exception "Can not add objects from a different Realm" after adding "Item" Realm object (no idea why). We don't use groups anymore anyway.
-//                        QL2("Finished adding example group")
+//                        logger.d("Finished adding example group")
                         if let inventory = inventoryMaybe {
                             initExampleList(inventory, unitDict: unitDict) {
-                                QL2("Finished adding example list")
+                                logger.d("Finished adding example list")
                                 onComplete()
                             }
                         } else {
-                            QL2("Didn't add default inventory so can't add example list")
+                            logger.d("Didn't add default inventory so can't add example list")
                             onComplete()
                         }
 //                    }
@@ -484,6 +484,6 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     
     deinit {
-        QL1("Deinit intro controller")
+        logger.v("Deinit intro controller")
     }
 }

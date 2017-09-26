@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 import RealmSwift
 
 protocol AddRecipeIngredientCellDelegate {
@@ -68,7 +68,7 @@ class AddRecipeIngredientCell: UITableViewCell {
     var model: AddRecipeIngredientModel? {
         didSet {
             
-            guard let model = model else {QL3("No model"); return}
+            guard let model = model else {logger.w("No model"); return}
             
             let quantityPart = model.ingredient.quantity < 2 ? "" : "\(model.ingredient.quantity.quantityString) x "
             
@@ -136,7 +136,7 @@ class AddRecipeIngredientCell: UITableViewCell {
 
     fileprivate func submitUnitOrBasePickers() {
         
-        guard let productQuantityController = productQuantityController else {QL4("No product quantity controller"); return}
+        guard let productQuantityController = productQuantityController else {logger.e("No product quantity controller"); return}
         
         productQuantityController.setUnitPickerOpen(false)
         productQuantityController.setBasesPickerOpen(false)
@@ -169,7 +169,7 @@ class AddRecipeIngredientCell: UITableViewCell {
     }
     
     fileprivate func initAlreadyHaveText() {
-        guard let model = model else {QL4("No model"); return}
+        guard let model = model else {logger.e("No model"); return}
         
         delegate?.getAlreadyHaveText(ingredient: model.ingredient) {text in
             self.alreadyHaveLabel.text = text
@@ -197,7 +197,7 @@ class AddRecipeIngredientCell: UITableViewCell {
     func onQuantityTextChange(_ sender: UITextField) {
         updateQuantitySummary()
         
-        guard let indexPath = indexPath else {QL4("Illegal state: no index path"); return}
+        guard let indexPath = indexPath else {logger.e("Illegal state: no index path"); return}
         
         delegate?.onUpdate(productName: nameInput, indexPath: indexPath)
         delegate?.onUpdate(brand: brandInput, indexPath: indexPath)
@@ -269,7 +269,7 @@ extension AddRecipeIngredientCell: MLPAutoCompleteTextFieldDataSource, MLPAutoCo
                 self.brandTextField.closeAutoCompleteTableView()
             }
 
-        default: QL4("Not handled input")
+        default: logger.e("Not handled input")
         }
     }
 }
@@ -310,21 +310,21 @@ extension AddRecipeIngredientCell: ProductQuantityControlleDelegate {
     
     
     func onSelect(unit: Providers.Unit) {
-        guard let indexPath = indexPath else {QL4("Illegal state: no index path"); return}
+        guard let indexPath = indexPath else {logger.e("Illegal state: no index path"); return}
         
         delegate?.onUpdate(unit: unit, indexPath: indexPath)
         updateQuantitySummary()
     }
     
     func onSelect(base: Float) {
-        guard let indexPath = indexPath else {QL4("Illegal state: no index path"); return}
+        guard let indexPath = indexPath else {logger.e("Illegal state: no index path"); return}
         
         delegate?.onUpdate(baseQuantity: base, indexPath: indexPath)
         updateQuantitySummary()
     }
 
     func onChangeQuantity(quantity: Float) {
-        guard let indexPath = indexPath else {QL4("Illegal state: no index path"); return}
+        guard let indexPath = indexPath else {logger.e("Illegal state: no index path"); return}
 
         delegate?.onUpdate(quantity: quantity, indexPath: indexPath)
         updateQuantitySummary()

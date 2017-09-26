@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 import RealmSwift
 
 class InventoryProviderImpl: InventoryProvider {
@@ -41,7 +41,7 @@ class InventoryProviderImpl: InventoryProvider {
             //                                    handler(ProviderResult(status: .success, sucessResult: sortedInventories))
             //
             //                                } else {
-            //                                    QL4("Error updating inventories - dbListsMaybe is nil")
+            //                                    logger.e("Error updating inventories - dbListsMaybe is nil")
             //                                }
             //                            }
             //                        }
@@ -146,7 +146,7 @@ class InventoryProviderImpl: InventoryProvider {
                 //                        if let remoteInventory = remoteResult.successResult {
                 //                            self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventory) {success in
                 //                                if !success {
-                //                                    QL4("Error storing last update timestamp")
+                //                                    logger.e("Error storing last update timestamp")
                 //                                }
                 //                            }
                 //                        } else {
@@ -171,7 +171,7 @@ class InventoryProviderImpl: InventoryProvider {
 //                    if let remoteInventory = remoteResult.successResult {
 //                        self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventory) {success in
 //                            if !success {
-//                                QL4("Error storing last update timestamp")
+//                                logger.e("Error storing last update timestamp")
 //                            }
 //                        }
 //                    } else {
@@ -198,7 +198,7 @@ class InventoryProviderImpl: InventoryProvider {
 //                    }
 //                }
             } else {
-                QL4("Error updating inventories order in local database, orderUpdates: \(orderUpdates)")
+                logger.e("Error updating inventories order in local database, orderUpdates: \(orderUpdates)")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -221,7 +221,7 @@ class InventoryProviderImpl: InventoryProvider {
 //                        if remoteResult.success {
 //                            self?.dbInventoryProvider.clearInventoryTombstone(uuid) {removeTombstoneSuccess in
 //                                if !removeTombstoneSuccess {
-//                                    QL4("Couldn't delete tombstone for inventory: \(uuid)")
+//                                    logger.e("Couldn't delete tombstone for inventory: \(uuid)")
 //                                }
 //                            }
 //                        } else {
@@ -230,7 +230,7 @@ class InventoryProviderImpl: InventoryProvider {
 //                    }
 //                }
             } else {
-                QL4("DB remove didn't succeed")
+                logger.e("DB remove didn't succeed")
             }
         }
     }
@@ -238,7 +238,7 @@ class InventoryProviderImpl: InventoryProvider {
     func acceptInvitation(_ invitation: RemoteInventoryInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         remoteProvider.acceptInvitation(invitation) {remoteResult in
             if remoteResult.success {
-                QL1("Accept inventory invitation success")
+                logger.v("Accept inventory invitation success")
                 handler(ProviderResult(status: .success))
             } else {
                 DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
@@ -249,7 +249,7 @@ class InventoryProviderImpl: InventoryProvider {
     func rejectInvitation(_ invitation: RemoteInventoryInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         remoteProvider.rejectInvitation(invitation) {remoteResult in
             if remoteResult.success {
-                QL1("Reject inventory invitation success")
+                logger.v("Reject inventory invitation success")
             } else {
                 DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
             }

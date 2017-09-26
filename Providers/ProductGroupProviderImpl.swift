@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 import RealmSwift
 
 class ProductGroupProviderImpl: ProductGroupProvider {
@@ -21,7 +21,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
             if let groups = groups {
                 handler(ProviderResult(status: .success, sucessResult: groups))
             } else {
-                QL4("Couldn't load groups")
+                logger.e("Couldn't load groups")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -54,7 +54,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                                handler(ProviderResult(status: .success, sucessResult: sortedGroups))
 //                                
 //                            } else {
-//                                QL4("Error updating groups - coulnd't save remote groups")
+//                                logger.e("Error updating groups - coulnd't save remote groups")
 //                            }
 //                        }
 //                    }
@@ -169,7 +169,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                    if remoteResult.success {
 //                        self?.dbGroupsProvider.clearGroupTombstone(uuid) {removeTombstoneSuccess in
 //                            if !removeTombstoneSuccess {
-//                                QL4("Couldn't delete tombstone for group: \(uuid)")
+//                                logger.e("Couldn't delete tombstone for group: \(uuid)")
 //                            }
 //                        }
 //                    } else {
@@ -189,7 +189,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
             if let dbItems = dbItems {
                 handler(ProviderResult(status: .success, sucessResult: dbItems))
             } else {
-                QL4("Inventory items is nil")
+                logger.e("Inventory items is nil")
                 handler(ProviderResult(status: .unknown))
             }
             
@@ -237,7 +237,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                            }
 //                        } else {
 //                            DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-//                                QL4("Error adding group item in remote: \(addedOrIncrementedGroupItem), result: \(remoteResult)")
+//                                logger.e("Error adding group item in remote: \(addedOrIncrementedGroupItem), result: \(remoteResult)")
 //                            }
 //                        }
 //                    }
@@ -273,7 +273,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                }
                 
             } else {
-                QL4("Unknown error adding to group in local db, group: \(group), productsWithQuantities: \(productsWithQuantities)")
+                logger.e("Unknown error adding to group in local db, group: \(group), productsWithQuantities: \(productsWithQuantities)")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -304,7 +304,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                    }
                 }
             } else {
-                QL4("Error saving items to local db: \(items)")
+                logger.e("Error saving items to local db: \(items)")
                 handler(ProviderResult(status: .databaseSavingError))
             }
         }
@@ -324,7 +324,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
             }
         }
         
-        QL4("Outdated implementation")
+        logger.e("Outdated implementation")
         handler(ProviderResult(status: .unknown))
         // Commented because structural changes
 //        Prov.productProvider.product(itemInput.name, brand: itemInput.brand) {productResult in
@@ -369,12 +369,12 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                        if result.success {
 //                            handler(ProviderResult(status: .success, sucessResult: (groupItem: updatedGroupItem, replaced: foundAndDeletedGroupItem)))
 //                        } else {
-//                            QL4("Error updating group item: \(result)")
+//                            logger.e("Error updating group item: \(result)")
 //                            handler(ProviderResult(status: result.status))
 //                        }
 //                    }
 //                } else {
-//                    QL4("Error fetching product: \(result.status)")
+//                    logger.e("Error fetching product: \(result.status)")
 //                    handler(ProviderResult(status: .databaseUnknown))
 //                }
 //            }
@@ -394,7 +394,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                            }
 //                        } else {
 //                            DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-//                                QL4("Error updating group item in remote: \(item), result: \(remoteResult)")
+//                                logger.e("Error updating group item in remote: \(item), result: \(remoteResult)")
 //                            }
 //                        }
 //                    }
@@ -422,7 +422,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                    }
 //                }
             } else {
-                QL4("Error updating lists order in local database, orderUpdates: \(orderUpdates)")
+                logger.e("Error updating lists order in local database, orderUpdates: \(orderUpdates)")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -439,7 +439,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                        // no timestamp - for increment fav this looks like an overkill. If there's a conflict some favs may get lost - ok
 //                    } else {
 //                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-//                            QL4("Remote call no success: \(remoteResult)")
+//                            logger.e("Remote call no success: \(remoteResult)")
 //                        })
 //                    }
 //                }
@@ -463,7 +463,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                            if remoteResult.success {
 //                                DBProv.groupItemProvider.clearGroupItemTombstone(uuid) {removeTombstoneSuccess in
 //                                    if !removeTombstoneSuccess {
-//                                        QL4("Couldn't delete tombstone for group item: \(uuid)")
+//                                        logger.e("Couldn't delete tombstone for group item: \(uuid)")
 //                                    }
 //                                }
 //                            } else {
@@ -471,7 +471,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                            }
 //                        }
 //                    } else {
-//                        QL4("Couldn't remove group item")
+//                        logger.e("Couldn't remove group item")
 //                    }
 //                }
                 
@@ -502,13 +502,13 @@ class ProductGroupProviderImpl: ProductGroupProvider {
 //                    if let incrementResult = remoteResult.successResult {
 //                        DBProv.groupItemProvider.updateGroupItemWithIncrementResult(incrementResult) {success in
 //                            if !success {
-//                                QL4("Couldn't save increment result for item: \(increment), remoteResult: \(remoteResult)")
+//                                logger.e("Couldn't save increment result for item: \(increment), remoteResult: \(remoteResult)")
 //                            }
 //                        }
 //                        
 //                    } else {
 //                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Int>) in
-//                            QL4("Error incrementing item: \(increment) in remote, result: \(result)")
+//                            logger.e("Error incrementing item: \(increment) in remote, result: \(result)")
 //                            handler(result)
 //                        })
 //                    }

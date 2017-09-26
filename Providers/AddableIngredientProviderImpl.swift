@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 public struct AddableIngredients {
     public let results: Results<Ingredient>
@@ -24,14 +24,14 @@ class AddableIngredientProviderImpl: AddableIngredientProvider {
         
         Prov.ingredientProvider.ingredients(recipe: recipe, sortBy: .alphabetic) {ingredientsResult in
             guard let ingredients = ingredientsResult.sucessResult else {
-                QL4("No ingredients")
+                logger.e("No ingredients")
                 handler(ProviderResult(status: ingredientsResult.status))
                 return
             }
             
             Prov.brandProvider.brands(ingredients: ingredients) {brandsResult in
                 guard let ingredientsWithBrands = brandsResult.sucessResult else {
-                    QL4("No ingredientsWithBrands")
+                    logger.e("No ingredientsWithBrands")
                     handler(ProviderResult(status: brandsResult.status))
                     return
                 }
@@ -39,14 +39,14 @@ class AddableIngredientProviderImpl: AddableIngredientProvider {
                 // This is used to add ingredients to a shopping list, so we are only interested in buyable units
                 Prov.unitProvider.units(buyable: true, {allUnitsResult in
                     guard let allUnits = allUnitsResult.sucessResult else {
-                        QL4("No units")
+                        logger.e("No units")
                         handler(ProviderResult(status: allUnitsResult.status))
                         return
                     }
                     
                     Prov.unitProvider.baseQuantities {baseQuantitiesResult in
                         guard let allBaseQuantities = baseQuantitiesResult.sucessResult else {
-                            QL4("No base quantities")
+                            logger.e("No base quantities")
                             handler(ProviderResult(status: baseQuantitiesResult.status))
                             return
                         }

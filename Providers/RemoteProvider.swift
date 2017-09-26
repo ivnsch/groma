@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 import Reachability
-import QorumLogs
+
 
 class RemoteProvider {
 
@@ -72,7 +72,7 @@ class RemoteProvider {
             } catch _ as NSError {
                 handler(RemoteResult(status: .clientParamsParsingError))
             } catch _ {
-                QL4("Not handled error, returning .Unknown")
+                logger.e("Not handled error, returning .Unknown")
                 handler(RemoteResult(status: .unknown))
             }
         }
@@ -93,7 +93,7 @@ class RemoteProvider {
             } catch _ as NSError {
                 handler(RemoteResult(status: .clientParamsParsingError))
             } catch _ {
-                QL4("Not handled error, returning .Unknown")
+                logger.e("Not handled error, returning .Unknown")
                 handler(RemoteResult(status: .unknown))
             }
         }
@@ -114,7 +114,7 @@ class RemoteProvider {
             } catch _ as NSError {
                 handler(RemoteResult(status: .clientParamsParsingError))
             } catch _ {
-                QL4("Not handled error, returning .Unknown")
+                logger.e("Not handled error, returning .Unknown")
                 handler(RemoteResult(status: .unknown))
             }
         }
@@ -125,11 +125,9 @@ class RemoteProvider {
     * TODO! refactor with the request builders in AlamofireHelper - we should have only 1 method at least setting the headers.
     */
     fileprivate class func buildRequest(_ method: HTTPMethod, url: String) -> URLRequest {
-        
-        if QorumLogs.minimumLogLevelShown == 1 {
-            QL1("\(method) \(url), parameters: TODO refactor this") // see todo in method signature
-        }
-        
+
+        logger.v("\(method) \(url), parameters: TODO refactor this") // see todo in method signature
+
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -149,10 +147,10 @@ class RemoteProvider {
     */
     fileprivate class func onConnected<T: Any>(_ elseHandler: (RemoteResult<T>) -> (), onConnected: VoidFunction) {
         if ConnectionProvider.connected {
-            QL1("Is connected")
+            logger.v("Is connected")
             onConnected()
         } else {
-            QL1("Is not connected")
+            logger.v("Is not connected")
             elseHandler(RemoteResult(status: .noConnection))
         }
     }
@@ -163,10 +161,10 @@ class RemoteProvider {
     fileprivate class func onConnectedAndLoggedIn<T: Any>(_ elseHandler: (RemoteResult<T>) -> (), onConnectedAndLoggedIn: VoidFunction) {
         onConnected(elseHandler) {
             if Prov.userProvider.hasLoginToken {
-                QL1("Has login token")
+                logger.v("Has login token")
                 onConnectedAndLoggedIn()
             } else {
-                QL1("Has no login token")
+                logger.v("Has no login token")
                 elseHandler(RemoteResult(status: .notLoggedIn))
             }
         }

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 //
 //public enum ListItemStatus: Int {
 //    // Note: the raw values are used in server communication, don't change.
@@ -208,13 +208,13 @@ import QorumLogs
 //        
 //        // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
 //        if newTodo < 0 {
-//            QL4("New todo quantity: \(newTodo) for item: \(self)")
+//            logger.e("New todo quantity: \(newTodo) for item: \(self)")
 //        }
 //        if newDone < 0 {
-//            QL4("New done quantity: \(newDone) for item: \(self)")
+//            logger.e("New done quantity: \(newDone) for item: \(self)")
 //        }
 //        if newStash < 0 {
-//            QL4("New stash quantity: \(newStash) for item: \(self)")
+//            logger.e("New stash quantity: \(newStash) for item: \(self)")
 //        }
 //        let checkedTodo = max(0, newTodo)
 //        let checkedDone = max(0, newDone)
@@ -359,7 +359,7 @@ import QorumLogs
 //                    // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
 //                    let newQuantity = quantity(status) + quantity(targetStatus)
 //                    if newQuantity < 0 {
-//                        QL4("New done quantity: \(newQuantity), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
+//                        logger.e("New done quantity: \(newQuantity), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
 //                    }
 //                    let checkedQuantity = max(0, newQuantity)
 //                    return checkedQuantity
@@ -416,7 +416,7 @@ import QorumLogs
 //                    // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
 //                    let newQuantity = capturedQuantity(status) + quantity(targetStatus)
 //                    if newQuantity < 0 {
-//                        QL4("New done quantity: \(newQuantity), fieldStatus: \(fieldStatus), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
+//                        logger.e("New done quantity: \(newQuantity), fieldStatus: \(fieldStatus), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
 //                    }
 //                    let checkedQuantity = max(0, newQuantity)
 //                    return checkedQuantity

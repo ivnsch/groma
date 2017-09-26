@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 public extension UIColor {
     
@@ -95,12 +95,12 @@ public extension UIColor {
                     alpha: 1
                 )
             } else {
-                QL4("Couldn't get image data, returning black")
+                logger.e("Couldn't get image data, returning black")
                 return UIColor.black
             }
             
         } else {
-            QL4("Couldn't get cgImage, returning black")
+            logger.e("Couldn't get cgImage, returning black")
             return UIColor.black
         }
     }

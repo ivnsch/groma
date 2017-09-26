@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 import Providers
-import QorumLogs
+
 
 protocol ManageItemsBrandsControllerDelegate: SearchableItemsControllersDelegate {
     var topControllerConfig: ManageDatabaseTopControllerConfig {get}
@@ -32,7 +32,7 @@ class ManageItemsBrandsController: UITableViewController, SearchableTextControll
         if let delegate = delegate {
             topEditSectionControllerManager = initSimpleInputControllerManager(config: delegate.topControllerConfig)
         } else {
-            QL4("Can't initialize top controller: No delegate")
+            logger.e("Can't initialize top controller: No delegate")
         }
     }
 
@@ -52,7 +52,7 @@ class ManageItemsBrandsController: UITableViewController, SearchableTextControll
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let brands = brands else {QL4("No brands"); return UITableViewCell()}
+        guard let brands = brands else {logger.e("No brands"); return UITableViewCell()}
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ManageItemsBrandCell
         
@@ -76,7 +76,7 @@ class ManageItemsBrandsController: UITableViewController, SearchableTextControll
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            guard let brands = brands else {QL4("No brands"); return}
+            guard let brands = brands else {logger.e("No brands"); return}
             
             // Removing brand is equivalent to remove products with brand, brand doesn't exist outside of products.
             Prov.brandProvider.removeProductsWithBrand(brands[indexPath.row], remote: true, successHandler{[weak self] in
@@ -88,7 +88,7 @@ class ManageItemsBrandsController: UITableViewController, SearchableTextControll
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let brands = brands else {QL4("No items"); return}
+        guard let brands = brands else {logger.e("No items"); return}
         let brand = brands[indexPath.row]
         
         topEditSectionControllerManager?.expand(true)
@@ -119,7 +119,7 @@ extension ManageItemsBrandsController: EditSingleInputControllerDelegate {
 
     func onSubmitSingleInput(name: String, editingObj: Any?) {
         
-        guard let editingBrand = editingObj as? String else {QL4("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return}
+        guard let editingBrand = editingObj as? String else {logger.e("Invalid state: no editing obj or wrong type: \(String(describing: editingObj))"); return}
         
         Prov.brandProvider.updateBrand(editingBrand, newName: name, successHandler{[weak self] in
             self?.topEditSectionControllerManager?.expand(false)

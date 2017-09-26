@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 @IBDesignable class MultiLayoutConstraint: NSLayoutConstraint {
 
@@ -50,21 +50,18 @@ import QorumLogs
         }()
 
         if constant != MultiLayoutConstraint.invalidNumber {
-            if QorumLogs.minimumLogLevelShown < 3 {
-                QL1("Updating constraint from: \(self.constant) to: \(constant), dimension: \(dimensionStr())")
-            }
             self.constant = CGFloat(constant)
         } else {
-            QL3("Value for dimension not provided. horizontal: \(horizontal)")
+            logger.w("Value for dimension not provided. horizontal: \(horizontal)")
         }
 
-//        QL1(horizontal)
-//        QL1(hSmall)
-//        QL1(hMiddle)
-//        QL1(hLarge)
-//        QL1(vVerySmall)
-//        QL1(vSmall)
-//        QL1(vMiddle)
-//        QL1(vLarge)
+//        logger.v(horizontal)
+//        logger.v(hSmall)
+//        logger.v(hMiddle)
+//        logger.v(hLarge)
+//        logger.v(vVerySmall)
+//        logger.v(vSmall)
+//        logger.v(vMiddle)
+//        logger.v(vLarge)
     }
 }

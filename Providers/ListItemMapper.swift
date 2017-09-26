@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 class ListItemMapper {
     
@@ -79,7 +79,7 @@ class ListItemMapper {
                     dict[remoteProduct.uuid] = product
                     arr.append(product)
                 } else {
-                    QL4("Got product with category uuid: \(remoteProduct.categoryUuid) which is not in the category dict: \(categories)")
+                    logger.e("Got product with category uuid: \(remoteProduct.categoryUuid) which is not in the category dict: \(categories)")
                 }
             }
             return (dict, arr)
@@ -96,7 +96,7 @@ class ListItemMapper {
 //                    dict[remoteProduct.uuid] = storeProduct
 //                    arr.append(storeProduct)
 //                } else {
-//                    QL4("Got store product with product uuid: \(remoteProduct.productUuid) which is not in the products dict: \(products)")
+//                    logger.e("Got store product with product uuid: \(remoteProduct.productUuid) which is not in the products dict: \(products)")
 //                }
 //            }
 //            return (dict, arr)
@@ -111,7 +111,7 @@ class ListItemMapper {
                     dict[remoteSection.uuid] = section
                     arr.append(section)
                 } else {
-                    QL4("Got section with list uuid: \(remoteSection.listUuid) which is not in the list dict: \(lists)")
+                    logger.e("Got section with list uuid: \(remoteSection.listUuid) which is not in the list dict: \(lists)")
                 }
             }
             return (dict, arr)

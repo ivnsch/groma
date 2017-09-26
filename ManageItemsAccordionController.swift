@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 import Providers
-import QorumLogs
+
 
 class ManageItemsAccordionController: UIViewController {
 
@@ -56,8 +56,8 @@ class ManageItemsAccordionController: UIViewController {
     }
     
     fileprivate func initNotifications() {
-        guard let items = items else {QL4("No sections"); return}
-        guard let realm = items.realm else {QL4("No realm"); return}
+        guard let items = items else {logger.e("No sections"); return}
+        guard let realm = items.realm else {logger.e("No realm"); return}
 
         realmData?.token.stop()
         
@@ -66,7 +66,7 @@ class ManageItemsAccordionController: UIViewController {
             switch changes {
             case .initial: break
             case .update(_, let deletions, let insertions, let modifications):
-                QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                 
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread
@@ -91,7 +91,7 @@ class ManageItemsAccordionController: UIViewController {
     }
     
     deinit {
-        QL1("Deinit mange items controller")
+        logger.v("Deinit mange items controller")
     }
     
     
@@ -113,7 +113,7 @@ class ManageItemsAccordionController: UIViewController {
     // MARK: - 
     
     fileprivate func onItemTapInEditMode(section: Int) {
-        guard let items = items else {QL4("No items"); return}
+        guard let items = items else {logger.e("No items"); return}
         let item = items[section]
         
         topEditSectionControllerManager?.expand(true)
@@ -140,7 +140,7 @@ class ManageItemsAccordionController: UIViewController {
     
     
     fileprivate func getSectionIndex(itemUuid: String) -> Int? {
-        guard let items = items else {QL4("No items"); return nil}
+        guard let items = items else {logger.e("No items"); return nil}
         for (index, item) in items.enumerated() {
             if item.uuid == itemUuid {
                 return index
@@ -150,7 +150,7 @@ class ManageItemsAccordionController: UIViewController {
     }
     
     fileprivate func onItemTapInNormalMode(section: Int) {
-        guard let items = items else {QL4("No items"); return}
+        guard let items = items else {logger.e("No items"); return}
         let item = items[section]
         
 //        for (itemUuid, productForExpandedItem) in productsForExpandedItems {
@@ -179,7 +179,7 @@ class ManageItemsAccordionController: UIViewController {
     
     fileprivate func onRowTap(indexPath: IndexPath) {
         
-        guard let items = items else {QL4("No items"); return}
+        guard let items = items else {logger.e("No items"); return}
         
         let item = items[indexPath.section]
         if let itemRows = itemsRows[item.uuid] {
@@ -192,7 +192,7 @@ class ManageItemsAccordionController: UIViewController {
             }
 
         } else {
-            QL4("Invalid state: No item rows for item uuid: \(item.uuid)")
+            logger.e("Invalid state: No item rows for item uuid: \(item.uuid)")
         }
     }
     
@@ -217,7 +217,7 @@ class ManageItemsAccordionController: UIViewController {
             }
  
         } else {
-            QL4("Invalid state: No item rows for item uuid: \(item.uuid)")
+            logger.e("Invalid state: No item rows for item uuid: \(item.uuid)")
         }
     }
 
@@ -243,7 +243,7 @@ class ManageItemsAccordionController: UIViewController {
             }
             
         } else {
-            QL4("Invalid state: No item rows for item uuid: \(item.uuid)")
+            logger.e("Invalid state: No item rows for item uuid: \(item.uuid)")
         }
     }
 }
@@ -261,7 +261,7 @@ extension ManageItemsAccordionController: UITableViewDataSource, UITableViewDele
         
         let sectionView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! ManageItemsSectionView
         
-        guard let items = items else {QL4("No item"); return sectionView}
+        guard let items = items else {logger.e("No item"); return sectionView}
         
         sectionView.sectionIndex = section
         sectionView.config(item: items[section], editing: isEditing)
@@ -271,7 +271,7 @@ extension ManageItemsAccordionController: UITableViewDataSource, UITableViewDele
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let items = items else {QL4("No items"); return 0}
+        guard let items = items else {logger.e("No items"); return 0}
         let item = items[section]
         return itemsRows[item.uuid]?.rows.count ?? 0
     }
@@ -279,7 +279,7 @@ extension ManageItemsAccordionController: UITableViewDataSource, UITableViewDele
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         
-        guard let items = items else {QL4("No items"); return UITableViewCell()}
+        guard let items = items else {logger.e("No items"); return UITableViewCell()}
 
         let item = items[indexPath.section]
         if let itemRows = itemsRows[item.uuid] {
@@ -303,10 +303,10 @@ extension ManageItemsAccordionController: UITableViewDataSource, UITableViewDele
             
             
         } else {
-            QL4("Invalid state: No products for item uuid: \(item.uuid)")
+            logger.e("Invalid state: No products for item uuid: \(item.uuid)")
         }
             
-        QL4("Illegal state - should have returned cell")
+        logger.e("Illegal state - should have returned cell")
         return UITableViewCell()
     }
     
@@ -328,7 +328,7 @@ extension ManageItemsAccordionController: UITableViewDataSource, UITableViewDele
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            guard let items = items else {QL4("No items"); return}
+            guard let items = items else {logger.e("No items"); return}
             let item = items[indexPath.section]
             if let rows = itemsRows[item.uuid] {
                 let row = rows.rows[indexPath.row]
@@ -380,8 +380,8 @@ extension ManageItemsAccordionController: UITableViewDataSource, UITableViewDele
     }
     
     func onDeleteSectionTap(section: Int, view: ManageItemsSectionView) {
-        guard let items = items else {QL4("No items"); return}
-        guard let realmData = realmData else {QL4("No realm data"); return}
+        guard let items = items else {logger.e("No items"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
         
         Prov.itemsProvider.delete(itemUuid: items[section].uuid, realmData: realmData, successHandler{[weak self] in
             self?.tableView.deleteSections(IndexSet([section]), with: Theme.defaultRowAnimation)
@@ -391,7 +391,7 @@ extension ManageItemsAccordionController: UITableViewDataSource, UITableViewDele
                 
                 let sectionView = (view as! ManageItemsSectionView)
                 
-                QL3("apply to section at index: \(sectionIndex), name in cell: \(String(describing: sectionView.nameLabel.text)), item name at index: \(items[sectionIndex].name)")
+                logger.w("apply to section at index: \(sectionIndex), name in cell: \(String(describing: sectionView.nameLabel.text)), item name at index: \(items[sectionIndex].name)")
                 (view as! ManageItemsSectionView).sectionIndex = sectionIndex
             })
         })

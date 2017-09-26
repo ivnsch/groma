@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemotePingResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     
@@ -17,7 +17,7 @@ struct RemotePingResult: ResponseObjectSerializable, CustomDebugStringConvertibl
         guard
             let token = representation.value(forKeyPath: "token") as? String
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.token = token

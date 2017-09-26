@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 import RealmSwift
 
 class SectionProviderImpl: SectionProvider {
@@ -41,7 +41,7 @@ class SectionProviderImpl: SectionProvider {
 //                
 //                Prov.listItemsProvider.removeSectionFromListItemsMemCacheIfExistent(sectionUuid, listUuid: listUuid) {result in
 //                    if !result.success {
-//                        QL4("Couldn't remove section from mem cache: \(result)")
+//                        logger.e("Couldn't remove section from mem cache: \(result)")
 //                    }
 //                }
 //                
@@ -50,7 +50,7 @@ class SectionProviderImpl: SectionProvider {
 //                        if remoteResult.success {
 //                            DBProv.sectionProvider.clearSectionTombstone(sectionUuid) {removeTombstoneSuccess in
 //                                if !removeTombstoneSuccess {
-//                                    QL4("Couldn't delete tombstone for section: \(sectionUuid)")
+//                                    logger.e("Couldn't delete tombstone for section: \(sectionUuid)")
 //                                }
 //                            }
 //                        } else {
@@ -67,7 +67,7 @@ class SectionProviderImpl: SectionProvider {
             if result.success {
                 handler(result)
             } else {
-                QL3("Couldn't remove section: \(section), result: \(result)")
+                logger.w("Couldn't remove section: \(section), result: \(result)")
                 handler(result)
             }
         }
@@ -89,7 +89,7 @@ class SectionProviderImpl: SectionProvider {
                             let removedSectionsUuids = removedSections.map{$0.uuid}
                             DBProv.sectionProvider.clearSectionsTombstones(removedSectionsUuids) {removeTombstoneSuccess in
                                 if !removeTombstoneSuccess {
-                                    QL4("Couldn't delete tombstones for sections: \(removedSections)")
+                                    logger.e("Couldn't delete tombstones for sections: \(removedSections)")
                                 }
                             }
                         } else {
@@ -98,7 +98,7 @@ class SectionProviderImpl: SectionProvider {
                     }
                 }
             } else {
-                QL4("Couldn't remove sections from db for name: \(sectionName)")
+                logger.e("Couldn't remove sections from db for name: \(sectionName)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -123,7 +123,7 @@ class SectionProviderImpl: SectionProvider {
             if let sections = sections {
                 handler(ProviderResult(status: .success, sucessResult: sections.toArray()))
             } else {
-                QL4("Couldn't load items")
+                logger.e("Couldn't load items")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -156,7 +156,7 @@ class SectionProviderImpl: SectionProvider {
                                 
                                 let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order), status: status)
                                 
-                                QL1("Section: \(sectionName) doesn't exist, will create a new one. New uuid: \(section.uuid). List uuid: \(list.uuid)")
+                                logger.v("Section: \(sectionName) doesn't exist, will create a new one. New uuid: \(section.uuid). List uuid: \(list.uuid)")
                                 handler(ProviderResult(status: .success, sucessResult: section))
                                 
                             } else {

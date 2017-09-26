@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteInventoryItemsSyncResult: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let inventoryUuid: String
@@ -29,7 +29,7 @@ struct RemoteInventoryItemsSyncResult: ResponseObjectSerializable, ResponseColle
             let inventoryItems = RemoteInventoryItemWithProduct.collection(inventoryItemsObj),
             let couldNotDelete = representation.value(forKeyPath: "couldNotDelete") as? [String]
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.inventoryUuid = inventoryUuid
@@ -79,7 +79,7 @@ struct RemoteInventoriesWithInventoryItemsSyncResult: ResponseObjectSerializable
             let inventoryItemsSyncResultsObj = representation.value(forKeyPath: "inventoryItems") as? [AnyObject],
             let inventoryItemsSyncResults = RemoteInventoryItemsSyncResult.collection(inventoryItemsSyncResultsObj)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.inventories = inventories

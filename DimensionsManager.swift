@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 
 /**
 * Current available iPhone sizes (pt)
@@ -47,7 +47,7 @@ class DimensionsManager {
             default: return .small // iPhone 4,5
             }
         }()
-//        QL2("Screen width: \(screenSize.width), widthDimension: \(dimension)")
+//        logger.d("Screen width: \(screenSize.width), widthDimension: \(dimension)")
         return dimension
     }
     
@@ -60,7 +60,7 @@ class DimensionsManager {
             default: return .verySmall // iPhone 4
             }
         }()
-//        QL2("Screen height: \(screenSize.height), heightDimension: \(dimension)")
+//        logger.d("Screen height: \(screenSize.height), heightDimension: \(dimension)")
         return dimension
     }
 

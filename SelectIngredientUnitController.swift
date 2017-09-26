@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 import Providers
-import QorumLogs
+
 
 class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataSourceDelegate, UnitsCollectionViewDelegateDelegate, UIGestureRecognizerDelegate {
 
@@ -46,8 +46,8 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
         
         if let currentNewUnitInput = currentNewUnitInput {
             
-            guard let dataSource = unitsCollectionView.dataSource else {QL4("No data source"); return}
-            guard let unitsDataSource = dataSource as? UnitsDataSource else {QL4("Data source has wrong type: \(type(of: dataSource))"); return}
+            guard let dataSource = unitsCollectionView.dataSource else {logger.e("No data source"); return}
+            guard let unitsDataSource = dataSource as? UnitsDataSource else {logger.e("Data source has wrong type: \(type(of: dataSource))"); return}
             
             Prov.unitProvider.getOrCreate(name: currentNewUnitInput, successHandler{[weak self] (unit, isNew) in guard let weakSelf = self else {return}
                 if isNew {
@@ -119,17 +119,17 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
             if let cell = unitsCollectionView.cellForItem(at: indexPath) as? UnitCell {
                 cell.unitView.showSelected(selected: true, animated: true)
             } else {
-                QL2("No cell for index path: \(indexPath) or wrong type")
+                logger.d("No cell for index path: \(indexPath) or wrong type")
             }
         } else {
-            QL4("Didn't find index path to select unit: \(unit)")
+            logger.e("Didn't find index path to select unit: \(unit)")
         }
     }
     
     fileprivate func findIndexPath(unit: Providers.Unit) -> IndexPath? {
-        guard let dataSource = unitsCollectionView.dataSource else {QL4("No data source"); return nil}
-        guard let unitsDataSource = dataSource as? UnitsDataSource else {QL4("Data source has wrong type: \(type(of: dataSource))"); return nil}
-        guard let units = unitsDataSource.units else {QL4("Invalid state: Data source has no units"); return nil}
+        guard let dataSource = unitsCollectionView.dataSource else {logger.e("No data source"); return nil}
+        guard let unitsDataSource = dataSource as? UnitsDataSource else {logger.e("Data source has wrong type: \(type(of: dataSource))"); return nil}
+        guard let units = unitsDataSource.units else {logger.e("Invalid state: Data source has no units"); return nil}
         
         for (index, u) in units.enumerated() {
             if u.same(unit) {
@@ -179,9 +179,9 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
     // MARK: - UnitsCollectionViewDelegateDelegate
     
     func didSelectUnit(indexPath: IndexPath) {
-        guard let dataSource = unitsCollectionView.dataSource else {QL4("No data source"); return}
-        guard let unitsDataSource = dataSource as? UnitsDataSource else {QL4("Data source has wrong type: \(type(of: dataSource))"); return}
-        guard let units = unitsDataSource.units else {QL4("Invalid state: Data source has no units"); return}
+        guard let dataSource = unitsCollectionView.dataSource else {logger.e("No data source"); return}
+        guard let unitsDataSource = dataSource as? UnitsDataSource else {logger.e("Data source has wrong type: \(type(of: dataSource))"); return}
+        guard let units = unitsDataSource.units else {logger.e("Invalid state: Data source has no units"); return}
         
         let cellMaybe = unitsCollectionView.cellForItem(at: indexPath) as? UnitCell
         

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 
 protocol EyeViewDelegate: class {
     func onEyeChange(_ open: Bool)

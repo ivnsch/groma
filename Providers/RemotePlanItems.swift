@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemotePlanItems: ResponseObjectSerializable, CustomDebugStringConvertible {
     
@@ -27,7 +27,7 @@ struct RemotePlanItems: ResponseObjectSerializable, CustomDebugStringConvertible
             let productsObj = representation.value(forKeyPath: "products") as? [AnyObject],
             let products = RemoteProduct.collection(productsObj)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.planItems = planItems

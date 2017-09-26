@@ -11,10 +11,11 @@ import CoreData
 import Reachability
 import ChameleonFramework
 import HockeySDK
-import QorumLogs
+
 import RealmSwift
 import Providers
 import FBSDKLoginKit
+
 
 @objc
 @UIApplicationMain
@@ -36,11 +37,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     fileprivate var ratingAlert: RatingAlert? // arc
     
     fileprivate let websocketVisualNotificationDuration: Double = 2
-    
+
+    override init() {
+
+        logger.configure()
+
+        super.init()
+    }
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        configLog()
-        
         initIsFirstLaunch()
         
         ifDebugLaunchActions()
@@ -86,44 +92,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             ratingAlert?.delegate = self
             ratingAlert?.checkShow(controller)
         } else {
-            QL4("Couldn't show rating popup, either window: \(String(describing: window)) or root controller: \(String(describing: window?.rootViewController)) is nil)")
+            logger.e("Couldn't show rating popup, either window: \(String(describing: window)) or root controller: \(String(describing: window?.rootViewController)) is nil)")
         }
-    }
-    
-    fileprivate func configLog() {
-        
-        func debugConfig() {
-            QorumLogs.enabled = true
-            QorumLogs.minimumLogLevelShown = 1
-//            QorumLogs.KZLinkedConsoleSupportEnabled = true
-//            QorumLogs.onlyShowTheseFiles(MyWebSocket.self, MyWebsocketDispatcher.self)
-            QorumLogs.test()
-        }
-        
-        // Sends logs to Google doc
-        func productionConfig() {
-            QorumOnlineLogs.setupOnlineLogs(formLink: "https://docs.google.com/forms/d/1m0bwDy0jtndEaF_X-_ccw1va2vI2Dn13YnQJe3JtOyo/formResponse",
-                                            versionField: "entry.1897545847", userInfoField: "entry.748327727", methodInfoField: "entry.1497134983", textField: "entry.2103211608")
-            
-            var extraInfo = [String: String]()
-            if let email = Prov.userProvider.mySharedUser?.email {
-                extraInfo["user"] = email
-            }
-            if let deviceId: String = PreferencesManager.loadPreference(PreferencesManagerKey.deviceId) {
-                extraInfo["did"] = deviceId
-            }
-            QorumOnlineLogs.extraInformation = extraInfo
-            
-            QorumLogs.enabled = false // This must be disabled for online log to work
-            QorumLogs.minimumLogLevelShown = 4 // This is set because we check in some places for QorumLogs.minimumLogLevelShown to do print statements
-
-            QorumOnlineLogs.minimumLogLevelShown = 4
-            QorumOnlineLogs.enabled = true
-            QorumOnlineLogs.test()
-        }
-
-        debugConfig()
-//        productionConfig()
     }
     
     fileprivate func initWebsocket() {
@@ -178,7 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
         
         if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
-            QL2("Initialising first app launch preferences")
+            logger.d("Initialising first app launch preferences")
             PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
             PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: true)
             PreferencesManager.savePreference(PreferencesManagerKey.firstLaunchDate, value: Date())
@@ -187,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             AccessTokenHelper.removeToken()
 
         } else { // after first launch
-            QL1("Not first launch")
+            logger.v("Not first launch")
             PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: false)
         }
     }
@@ -198,7 +168,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             if let fontSize = LabelMore.mapToFontSize(50) {
                 return UIFont.systemFont(ofSize: fontSize)
             } else {
-                QL4("Not supported font size")
+                logger.e("Not supported font size")
                 return UIFont.systemFont(ofSize: 18)
             }
         }()
@@ -291,31 +261,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 //                ]
 //                
 //                DBProv.listItemProvider.addOrIncrementListItems(listItems) {saved in
-//                    QL1("Done adding dummy data (mini)")
+//                    logger.v("Done adding dummy data (mini)")
 //                }
 //            }
 //        }
 //    }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        QL2("applicationDidBecomeActive")
+        logger.d("applicationDidBecomeActive")
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
-        QL2("applicationWillResignActive")
+        logger.d("applicationWillResignActive")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        QL2("applicationWillEnterForeground")
+        logger.d("applicationWillEnterForeground")
         checkPing() // TODO!!!! applicationWillEnterForeground seems not to be called on launch - is this intended?
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
-        QL2("applicationDidEnterBackground")
+        logger.d("applicationDidEnterBackground")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
@@ -328,18 +298,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             let days = 1
             let passedDays = lastTokeUpdateDate.daysUntil(Date())
             if passedDays >= days {
-                QL2("\(passedDays) days passed since last token refresh. Ping")
+                logger.d("\(passedDays) days passed since last token refresh. Ping")
                 userProvider.ping()
             } else {
-                QL1("There is a token last update date, but \(days) days not passed yet. Passed days: \(passedDays)")
+                logger.v("There is a token last update date, but \(days) days not passed yet. Passed days: \(passedDays)")
             }
         } else {
-            QL1("No token last update date stored yet")
+            logger.v("No token last update date stored yet")
         }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        QL2("applicationWillTerminate")
+        logger.d("applicationWillTerminate")
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         Prov.userProvider.disconnectWebsocket()
@@ -368,28 +338,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         let networkReachability = notification.object as! Reachability
         let remoteHostStatus = networkReachability.currentReachabilityStatus()
 
-        QL1("Changed connectivity status: \(remoteHostStatus.rawValue)")
+        logger.v("Changed connectivity status: \(remoteHostStatus.rawValue)")
 
         if remoteHostStatus != .NotReachable { // wifi / wwan
-            QL2("Connected")
+            logger.d("Connected")
             
             if userProvider.hasLoginToken {
-                QL2("User has login token, start sync")
+                logger.d("User has login token, start sync")
                 window?.defaultProgressVisible(true)
                 Prov.globalProvider.sync(false) {[weak self] result in
-                    QL2("Sync finished")
+                    logger.d("Sync finished")
                     if !result.success {
-                        QL4("Error: AppDelegate.checkForReachability: Sync didn't succeed: \(result)")
+                        logger.e("Error: AppDelegate.checkForReachability: Sync didn't succeed: \(result)")
                     }
 
                     if let syncResult = result.sucessResult {
                         if let controller = self?.window?.rootViewController {
                             InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: controller)
                         } else {
-                            QL4("Couldn't show popup, either window: \(String(describing: self?.window)) or root controller: \(String(describing: self?.window?.rootViewController)) is nil)")
+                            logger.e("Couldn't show popup, either window: \(String(describing: self?.window)) or root controller: \(String(describing: self?.window?.rootViewController)) is nil)")
                         }
                     } else {
-                        QL4("Invalid state: result doesn't have sync result")
+                        logger.e("Invalid state: result doesn't have sync result")
                     }
 
                     self?.window?.defaultProgressVisible(false)
@@ -406,7 +376,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     
     func onLoginTokenExpired(_ note: Foundation.Notification) {
         // Disabled to not have to declare mock as public in Prov.(we also don't need this functionality now)
-//        guard let controller = window?.rootViewController else {QL4("Can't show login modal, either window: \(window) or root controller: \(window?.rootViewController) is nil)"); return}
+//        guard let controller = window?.rootViewController else {logger.e("Can't show login modal, either window: \(window) or root controller: \(window?.rootViewController) is nil)"); return}
 //        if !(Prov.userProvider is UserProviderMock) {
 //            let loginController = ModalLoginController()
 //            controller.present(loginController, animated: true, completion: nil)
@@ -445,20 +415,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                             // If the login token is expired, the websocket connection returns ----> ???? in this case we delete the login token just like when we call a rest service with an expired token.  Here the next sync will happen when the user logs in again. TODO: handle the not auth response of websocket: 1. delete token like in service, 2. show login screen (this is also a TODO!!!! for service)
                             if let controller = window.rootViewController {
                                 controller.progressVisible()
-                                QL2("Websocket reconnected. Starting sync...")
+                                logger.d("Websocket reconnected. Starting sync...")
                                 
                                 Prov.globalProvider.sync(false, handler: controller.successHandler{invitations in
-                                    QL3("Sync complete")
+                                    logger.w("Sync complete")
                                     // Broadcast such that controllers can e.g. reload items.
                                     NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil, userInfo: info)
                                 })
                                 
                             } else {
-                                QL4("Couldn't do sync, root controller: \(String(describing: window.rootViewController)) is nil)")
+                                logger.e("Couldn't do sync, root controller: \(String(describing: window.rootViewController)) is nil)")
                             }
                         }
                     } else {
-                        QL4("Couldn't show popup, is nil)")
+                        logger.e("Couldn't show popup, is nil)")
                     }
                 case false:
                     if window?.viewWithTag(ViewTags.ConnectionLabel) == nil {
@@ -466,7 +436,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                     }
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
             
         }
@@ -499,7 +469,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             return label
             
         } else {
-            QL4("Couldn't show popup, is nil)")
+            logger.e("Couldn't show popup, is nil)")
             return nil
         }
     }
@@ -516,10 +486,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                     notificationView?.removeFromSuperview()
                 }
             } else {
-                QL4("Invalid dictionary format: \(info)")
+                logger.e("Invalid dictionary format: \(info)")
             }
         } else {
-            QL4("No userInfo")
+            logger.e("No userInfo")
         }
     }
     
@@ -540,12 +510,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                     if let controller = window?.rootViewController {
                         ListInvitationsHandler.handleInvitation(invitation, controller: controller)
                     } else {
-                        QL4("Couldn't show popup, either window: \(String(describing: window)) or root controller: \(String(describing: window?.rootViewController)) is nil)")
+                        logger.e("Couldn't show popup, either window: \(String(describing: window)) or root controller: \(String(describing: window?.rootViewController)) is nil)")
                     }
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
             
         }
@@ -561,12 +531,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                     if let controller = window?.rootViewController {
                         InventoryInvitationsHandler.handleInvitation(invitation, controller: controller)
                     } else {
-                        QL4("Couldn't show popup, either window: \(String(describing: window)) or root controller: \(window?.rootViewController) is nil)")
+                        logger.e("Couldn't show popup, either window: \(String(describing: window)) or root controller: \(window?.rootViewController) is nil)")
                     }
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
             
         }
@@ -582,11 +552,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                 case .Sync:
                     if let controller = window?.rootViewController {
                         controller.progressVisible()
-                        QL2("Shared items sync request by \(sender)")
+                        logger.d("Shared items sync request by \(sender)")
                         // text to user "Incoming sync request from x" or "Processing sync request from x" or "Sync request triggered by x" or "Sync request by x" or "x Sync request"
                         
                         Prov.globalProvider.sync(true, handler: controller.successHandler{invitations in
-                            QL3("Are we really expecting invitations here? (not sure if this should be a warning): \(invitations)")
+                            logger.w("Are we really expecting invitations here? (not sure if this should be a warning): \(invitations)")
                             InvitationsHandler.handleInvitations(invitations.listInvites, inventoryInvitations: invitations.inventoryInvites, controller: controller)
                             
                             // Broadcast such that controllers can e.g. reload items.
@@ -594,25 +564,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                         })
                         
                     } else {
-                        QL4("Couldn't show popup, either window: \(String(describing: window)) or root controller: \(String(describing: window?.rootViewController)) is nil)")
+                        logger.e("Couldn't show popup, either window: \(String(describing: window)) or root controller: \(String(describing: window?.rootViewController)) is nil)")
                     }
-                default: QL4("Not handled case: \(notification.verb))")
+                default: logger.e("Not handled case: \(notification.verb))")
                 }
             } else {
-                QL4("No value")
+                logger.e("No value")
             }
             
         }
     }
     
     func onShowShouldUpdateAppDialog(_ note: Foundation.Notification) {
-        guard window?.rootViewController?.presentedViewController == nil else {QL3("Root controller already showing a popup, return"); return}
+        guard window?.rootViewController?.presentedViewController == nil else {logger.w("Root controller already showing a popup, return"); return}
 
         if let controller = window?.rootViewController {
             
             func appInstallDate() -> Date {
                 return PreferencesManager.loadPreference(PreferencesManagerKey.firstLaunchDate) ?? {
-                    QL4("Invalid state: There's no app first launch date stored.")
+                    logger.e("Invalid state: There's no app first launch date stored.")
                     return Date() // just to return something - note that with this we will never show the popup as the time offset will be ~0
                 }()
             }
@@ -626,7 +596,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
             let showAfterDays = Constants.dayCountShouldUpdatAppDialog
             let passedDays = referenceDate.daysUntil(now)
-            QL1("\(passedDays) days passed since last time we showed should update dialog. Showing if >= \(showAfterDays)")
+            logger.v("\(passedDays) days passed since last time we showed should update dialog. Showing if >= \(showAfterDays)")
             if passedDays >= showAfterDays {
                 
                 // Save current date, to be used as reference date next time. Note that this doesn't have to be cleared - 
@@ -637,14 +607,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                     if let url = URL(string: Constants.appStoreLink) {
                         
                         if UIApplication.shared.openURL(url) {
-                            QL1("Update dialog: opened app store")
+                            logger.v("Update dialog: opened app store")
                             
                         } else {
-                            QL1("Rating dialog: Couldn't open app store url")
+                            logger.v("Rating dialog: Couldn't open app store url")
                             AlertPopup.show(message: trans("popup_couldnt_open_app_store_url"), controller: controller)
                         }
                     } else {
-                        QL4("Url is nil, can't go to app store")
+                        logger.e("Url is nil, can't go to app store")
                     }
                     
                 }, onCancel: nil)
@@ -653,12 +623,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     }
     
     func onShowMustUpdateAppDialog(_ note: Foundation.Notification) {
-        guard window?.rootViewController?.presentedViewController == nil else {QL3("Root controller already showing a popup, return"); return}
+        guard window?.rootViewController?.presentedViewController == nil else {logger.w("Root controller already showing a popup, return"); return}
         
         if let controller = window?.rootViewController {
             
             Prov.userProvider.logout(controller.successHandler{
-                QL2("Logout success")
+                logger.d("Logout success")
                 Notification.send(Notification.LogoutUI) // in case we are currently in user screens
             })
             
@@ -667,14 +637,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                 if let url = URL(string: Constants.appStoreLink) {
                     
                     if UIApplication.shared.openURL(url) {
-                        QL1("Update dialog: opened app store")
+                        logger.v("Update dialog: opened app store")
                         
                     } else {
-                        QL1("Rating dialog: Couldn't open app store url")
+                        logger.v("Rating dialog: Couldn't open app store url")
                         AlertPopup.show(message: trans("popup_couldnt_open_app_store_url"), controller: controller)
                     }
                 } else {
-                    QL4("Url is nil, can't go to app store")
+                    logger.e("Url is nil, can't go to app store")
                 }
                 
                 }, onCancel: nil)

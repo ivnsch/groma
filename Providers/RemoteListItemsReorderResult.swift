@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct RemoteListItemsReorderResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     public let sections: [RemoteSection]
@@ -20,7 +20,7 @@ public struct RemoteListItemsReorderResult: ResponseObjectSerializable, CustomDe
             let unserializedItems = representation.value(forKeyPath: "items") as? [AnyObject],
             let items = RemoteListItemReorder.collection(unserializedItems)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.sections = sections

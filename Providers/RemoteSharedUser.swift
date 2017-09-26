@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 // TODO! server should not send uuid
 public struct RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
@@ -24,7 +24,7 @@ public struct RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSe
             let firstName = representation.value(forKeyPath: "firstName") as? String,
             let lastName = representation.value(forKeyPath: "lastName") as? String
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct RemoteInventoryWithItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
@@ -21,7 +21,7 @@ public struct RemoteInventoryWithItems: ResponseObjectSerializable, ResponseColl
             let itemsObj = representation.value(forKeyPath: "items") as? [AnyObject],
             let inventoryItems = RemoteInventoryItemsWithDependenciesNoInventory(representation: itemsObj as AnyObject)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.inventory = inventory

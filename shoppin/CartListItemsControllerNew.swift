@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 
 //protocol CartListItemsControllerDelegate: class {
 //    func onCartSendItemsToStash(_ listItems: [ListItem])
@@ -50,7 +50,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     }
     
     override func updateQuantifiables() {
-        guard let list = currentList else {QL4("No list"); return}
+        guard let list = currentList else {logger.e("No list"); return}
 
         Prov.listItemsProvider.calculateCartStashAggregate(list: list, successHandler {[weak self] aggregate in
             self?.showQuantifiables(aggregate: aggregate)
@@ -67,14 +67,14 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     // Note: I also tried implementing a UI test for this but swipe doesn't work well so need to test manually.
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         
-        guard let navigationController = navigationController else {QL3("No navigation controller"); return false}
+        guard let navigationController = navigationController else {logger.w("No navigation controller"); return false}
         
         if navigationController.viewControllers.count > 1 {
             return true
         }
         
         // Not really a warning, just curious to see when this actually happens, see method comment.
-        QL3("Only info: Navigation controller viewControllers.count: \(navigationController.viewControllers.count)")
+        logger.w("Only info: Navigation controller viewControllers.count: \(navigationController.viewControllers.count)")
         return false
     }
     
@@ -92,7 +92,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     
     
     override func showPopup(text: String, cell: UITableViewCell, button: UIView) {
-        guard let delegate = delegate else {QL4("No delegate - can't retrive prices view height to show popup"); return}
+        guard let delegate = delegate else {logger.e("No delegate - can't retrive prices view height to show popup"); return}
         
         let topOffset: CGFloat = -delegate.priceViewHeight
         let frame = view.bounds.copy(y: topOffset, height: view.bounds.height - topOffset)
@@ -106,8 +106,8 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     
     fileprivate func addAllItemsToInventory() {
         
-        guard let realmData = realmData else {QL4("No realm data"); return}
-        guard let list = currentList else {QL4("No list"); return}
+        guard let realmData = realmData else {logger.e("No realm data"); return}
+        guard let list = currentList else {logger.e("No list"); return}
         
         func onSizeLimitOk(_ list: List) {
 //            listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
@@ -123,7 +123,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
                             self?.delegate?.onCloseCartAfterBuy()
                         })
                     } else {
-                        QL4("No root view controller, can't handle buy cart success result")
+                        logger.e("No root view controller, can't handle buy cart success result")
                     }
 //                }
 //            }
@@ -148,7 +148,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
         if let tabBarController = UIApplication.shared.delegate?.window??.rootViewController as? MyTabBarController {
             tabBarController.buyAnimation()
         } else {
-            QL4("Couldn't get tab bar controller, can't perform tab bar cart animation!")
+            logger.e("Couldn't get tab bar controller, can't perform tab bar cart animation!")
         }
     }
 
@@ -163,7 +163,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
                 AlertPopup.show(message: trans("popup_you_cant_buy_cart", list.inventory.name), controller: self)
             }
         } else {
-            QL3("Warn: DoneViewController.onAddToInventoryTap: list is not set, can't add to inventory")
+            logger.w("Warn: DoneViewController.onAddToInventoryTap: list is not set, can't add to inventory")
         }
     }
     

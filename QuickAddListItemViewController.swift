@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 struct QuickAddAddProductResult {
@@ -85,7 +85,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             if searchText != oldValue {
                 clearAndLoadFirstPage(true)
             } else {
-                QL2("Search text is equal to last value: \(searchText) - doing nothing")
+                logger.d("Search text is equal to last value: \(searchText) - doing nothing")
             }
         }
     }
@@ -108,7 +108,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         if let flow = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             flow.sectionInset = UIEdgeInsetsMake(0, 20, 0, 20)
         } else {
-            QL4("Invalid collection view layout - can't set insets")
+            logger.e("Invalid collection view layout - can't set insets")
         }
     }
     
@@ -121,8 +121,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     fileprivate func initAddRecipeAnimator() {
         
-        guard let parent = parent?.parent?.parent?.parent else {QL4("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
-        //guard let parent = parent?.parent?.parent else {QL4("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
+        guard let parent = parent?.parent?.parent?.parent else {logger.e("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
+        //guard let parent = parent?.parent?.parent else {logger.e("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
         
         recipeControllerAnimator = recipeControllerAnimator ?? GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
         selectQuantifiableAnimator = selectQuantifiableAnimator ?? GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
@@ -186,7 +186,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             cell = dbItemCell
             
         } else {
-            QL4("Error: invalid model type in quickAddItems: \(item)")
+            logger.e("Error: invalid model type in quickAddItems: \(item)")
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "itemCell", for: indexPath) // assign something so it compiles
             cell.contentView.backgroundColor = UIColor.flatGrayDark
         }
@@ -268,7 +268,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
 //            don't wait for db incrementFav - this operation is not critical
             Prov.recipeProvider.incrementFav(recipeItem.recipe.uuid, successHandler{})
             
-            guard let cell = collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
+            guard let cell = collectionView.cellForItem(at: indexPath) else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
 
             recipeControllerAnimator?.open (button: cell, inset: (left: 0, top: 0, right: 0, bottom: 0), controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
                 let controller = AddRecipeController()
@@ -289,8 +289,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     }
     
     fileprivate func animateItemToCell(indexPath: IndexPath, quantifiableProduct: QuantifiableProduct, quantity: Float) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? QuickAddItemCell else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
-        guard let windowMaybe = UIApplication.shared.delegate?.window, let window = windowMaybe else {QL4("No window: can't animate cell"); return}
+        guard let cell = collectionView.cellForItem(at: indexPath) as? QuickAddItemCell else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
+        guard let windowMaybe = UIApplication.shared.delegate?.window, let window = windowMaybe else {logger.e("No window: can't animate cell"); return}
         
         let copy = cell.copyCell(quantifiableProduct: quantifiableProduct, quantity: quantity)
         let cellPointInWindow = window.convert(cell.center, from: collectionView)
@@ -318,7 +318,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 
             } else if quantifiableProducts.count > 1 {
 
-                guard let cell = self.collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
+                guard let cell = self.collectionView.cellForItem(at: indexPath) else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
                 
                 // TODO!!!!!!!!!!!!!!!!!!!!!!!! bottom inset different varies for different screen sizes - bottom border has to be slightly about keyboard
                 
@@ -357,13 +357,13 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 )
 
             } else {
-                QL3("Invalid state?: No quantifiable product for product: \(product.uuid)::\(product.item.name). Creating a new quantifiable product.") // we create a new one as "emergency solution". TODO review this - maybe this is not an invalid state - if a user e.g. deletes all the quantifiable products in product manager (this isn't possible yet but it may be implemented in the future), it's possible that we keep only the product but no quantifiable products for it. So we either have to ensure there's always a quantifiable product for a product or allow to create them "lazily" here.
+                logger.w("Invalid state?: No quantifiable product for product: \(product.uuid)::\(product.item.name). Creating a new quantifiable product.") // we create a new one as "emergency solution". TODO review this - maybe this is not an invalid state - if a user e.g. deletes all the quantifiable products in product manager (this isn't possible yet but it may be implemented in the future), it's possible that we keep only the product but no quantifiable products for it. So we either have to ensure there's always a quantifiable product for a product or allow to create them "lazily" here.
 
                 Prov.unitProvider.units(buyable: nil, self.successHandler {units in
                     
                     guard let noneUnit = units.findFirst({$0.id == .none}) else {
                         let errorMsg = "2 Invalid states: (1) Didn't find a quantifiable product for a product, (2) couldn't retrieve .none unit -crash!"
-                        QL4(errorMsg)
+                        logger.e(errorMsg)
                         fatalError(errorMsg)
                     }
                     
@@ -378,7 +378,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     fileprivate func retrieveQuickAddIngredient(item: Item, indexPath: IndexPath, onRetrieved: @escaping (QuickAddIngredientInput, Float) -> Void) {
         
-        guard let cell = collectionView.cellForItem(at: indexPath) else {QL4("Unexpected: No cell for index path: \(indexPath)"); return}
+        guard let cell = collectionView.cellForItem(at: indexPath) else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
 
         view.endEditing(true)
         topControllersDelegate?.hideKeyboard()
@@ -478,7 +478,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     // isSearchLoad: true if load is triggered from search box, false if pagination/first load
     fileprivate func loadPossibleNextPage(_ isSearchLoad: Bool) {
         
-//        QL1("Called loadPossibleNextPage, isSearchLoad: \(isSearchLoad)")
+//        logger.v("Called loadPossibleNextPage, isSearchLoad: \(isSearchLoad)")
         
         func setLoading(_ loading: Bool) {
             self.loadingPage = loading
@@ -487,7 +487,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         
         func onItemsLoaded(_ items: [QuickAddItem]) {
             
-            QL1("onItemsLoaded: \(items.count)")
+            logger.v("onItemsLoaded: \(items.count)")
             
             if items.isEmpty {
                 delegate?.onHasItems(false)
@@ -508,7 +508,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             // onlyEdibles: true - loadItems() is used only for recipes
             Prov.itemsProvider.items(searchText, onlyEdible: true, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 
-                QL1("Loaded items, current search: \(String(describing: self?.searchText)), range: \(String(describing: self?.paginator.currentPage)), sortBy: \(String(describing: self?.contentData.sortBy)), result search: \(String(describing: tuple.substring)), results: \(tuple.items.count)")
+                logger.v("Loaded items, current search: \(String(describing: self?.searchText)), range: \(String(describing: self?.paginator.currentPage)), sortBy: \(String(describing: self?.contentData.sortBy)), result search: \(String(describing: tuple.substring)), results: \(tuple.items.count)")
                 
                 // TODO!!!!!!!!!!!!!!!!!!!!!!!!! review if pagination is working (in loadProductsForList and loadItems as well) - either way we should be using Realm's Results instead
                 if let weakSelf = self {
@@ -533,7 +533,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             
             Prov.productProvider.products(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 
-                QL1("Loaded products, current search: \(String(describing: self?.searchText)), range: \(String(describing: self?.paginator.currentPage)), sortBy: \(String(describing: self?.contentData.sortBy)), result search: \(String(describing: tuple.substring)), results: \(tuple.products.count)")
+                logger.v("Loaded products, current search: \(String(describing: self?.searchText)), range: \(String(describing: self?.paginator.currentPage)), sortBy: \(String(describing: self?.contentData.sortBy)), result search: \(String(describing: tuple.substring)), results: \(tuple.products.count)")
 
                 // TODO!!!!!!!!!!!!!!!!!!!!!!!!! review if pagination is working (in loadProductsForList and loadItems as well) - either way we should be using Realm's Results instead
                 if let weakSelf = self {
@@ -555,17 +555,17 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         
         func loadProductsForList() {
             
-            guard let list = list else {QL4("Can't load products for list, no list set"); return}
+            guard let list = list else {logger.e("Can't load products for list, no list set"); return}
             
             Prov.productProvider.productsWithPosibleSections(searchText, list: list, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 
                 // TODO bug: some times (rarely) it shows nothing after opening quickly and typing (maybe first time?). Log showed 23 results last time is happened. It shows nothing after this line, meaning that onListItems is not called, meaning tuple.substring == weakSelf.searchText is false?
-                QL1("Loaded products, current search: \(String(describing: self?.searchText)), range: \(String(describing: self?.paginator.currentPage)), sortBy: \(String(describing: self?.contentData.sortBy)), result search: \(String(describing: tuple.substring)), results: \(tuple.productsWithMaybeSections.count)")
+                logger.v("Loaded products, current search: \(String(describing: self?.searchText)), range: \(String(describing: self?.paginator.currentPage)), sortBy: \(String(describing: self?.contentData.sortBy)), result search: \(String(describing: tuple.substring)), results: \(tuple.productsWithMaybeSections.count)")
                 
                 if let weakSelf = self {
                     // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
                     // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
-                    QL1("Comparing: #\(String(describing: tuple.substring))# with #\(weakSelf.searchText)#")
+                    logger.v("Comparing: #\(String(describing: tuple.substring))# with #\(weakSelf.searchText)#")
                     if tuple.substring == weakSelf.searchText {
                         let quickAddItems = tuple.productsWithMaybeSections.map{QuickAddProduct($0.product, colorOverride: $0.section.map{$0.color}, boldRange: $0.product.item.name.range(weakSelf.searchText, caseInsensitive: true))}
                         onItemsLoaded(quickAddItems)
@@ -621,7 +621,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         synced(self) {[weak self] in
             let weakSelf = self!
             
-//            QL1("Trying to load: \(weakSelf.contentData.itemType) current page: \(weakSelf.paginator.currentPage), reachedEnd: \(weakSelf.paginator.reachedEnd), isSearchLoad: \(isSearchLoad)")
+//            logger.v("Trying to load: \(weakSelf.contentData.itemType) current page: \(weakSelf.paginator.currentPage), reachedEnd: \(weakSelf.paginator.reachedEnd), isSearchLoad: \(isSearchLoad)")
 
             if !weakSelf.paginator.reachedEnd || isSearchLoad { // if pagination, load only if we are not at the end, for search load always
                 
@@ -688,7 +688,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     }
     
     deinit {
-        QL1("Deinit quick add item controller")
+        logger.v("Deinit quick add item controller")
     }
 }
 

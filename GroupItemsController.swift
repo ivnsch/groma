@@ -9,7 +9,7 @@
 import UIKit
 import ChameleonFramework
 import SwiftValidator
-import QorumLogs
+
 import RealmSwift
 import Providers
 
@@ -61,7 +61,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     deinit {
-        QL1("Deinit group items controller")
+        logger.v("Deinit group items controller")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -190,7 +190,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             toggleTopAddController()
         case .edit:
             toggleEditing()
-        default: QL4("Not handled: \(buttonId)")
+        default: logger.e("Not handled: \(buttonId)")
             
         }
     }
@@ -322,7 +322,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                     self?.defaultErrorHandler()(result)
                 }))
             } else {
-                QL4("Group isn't set, can't add item")
+                logger.e("Group isn't set, can't add item")
             }
         }
         
@@ -332,13 +332,13 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             if editingItem == nil {
                 onAddItem(input)
             } else {
-                QL4("Cast didn't work: \(String(describing: editingItem))")
+                logger.e("Cast didn't work: \(String(describing: editingItem))")
             }
         }
     }
     
     func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
-        QL4("Not implemented")
+        logger.e("Not implemented")
     }
     
     func onQuickListOpen() {
@@ -410,10 +410,10 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                     case .initial:
                         //                        // Results are now populated and can be accessed without blocking the UI
                         //                        self.viewController.didUpdateList(reload: true)
-                        QL1("initial")
+                        logger.v("initial")
                         
                     case .update(_, let deletions, let insertions, let modifications):
-                        QL2("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+                        logger.d("deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
                         
                         weakSelf.productsWithQuantityController.tableView.beginUpdates()
                         

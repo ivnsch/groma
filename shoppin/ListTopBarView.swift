@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol ListTopBarViewDelegate: class {
@@ -171,14 +171,14 @@ class ListTopBarView: UIView {
     }
     
     func showDot() {
-        guard let circlePath = generateCirclePath() else {QL3("No circle path"); return }
+        guard let circlePath = generateCirclePath() else {logger.w("No circle path"); return }
         bgColorLayer?.path = circlePath.cgPath
     }
     
     // parameter: toDot: true: rect -> dot, false: dot -> rect
     func animateRectDot(_ toDot: Bool, duration: CFTimeInterval) {
         
-        guard let circlePath = generateCirclePath() else {QL3("No circle path"); return }
+        guard let circlePath = generateCirclePath() else {logger.w("No circle path"); return }
 
         let rectPath = UIBezierPath(roundedRect: self.bounds.insetBy(dx: -10, dy: -10), byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: 5, height: 5))
         
@@ -328,7 +328,7 @@ class ListTopBarView: UIView {
                 let tapView = UIButton()
                 tapView.translatesAutoresizingMaskIntoConstraints = false
                 tapView.tag = model.buttonId.rawValue
-//                QL1("model.buttonId: \(model.buttonId), tag: \(tapView.tag)")
+//                logger.v("model.buttonId: \(model.buttonId), tag: \(tapView.tag)")
                 tapView.addSubview(button)
 
                 _ = button.centerYInParent(centerYOffsetInExpandedState)

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteContainedItemIdentifier: CustomDebugStringConvertible {
     let itemUuid: String
@@ -18,7 +18,7 @@ struct RemoteContainedItemIdentifier: CustomDebugStringConvertible {
             let itemUuid = representation.value(forKeyPath: "uuid") as? String,
             let containerUuid = representation.value(forKeyPath: "containerUuid") as? String
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
 
         self.itemUuid = itemUuid

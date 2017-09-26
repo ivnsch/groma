@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 // For now not referenced directly by other classes. We decided to implement BaseQuantity when implementing base quantity selectors - we now submit the base quantity before submitting the product, so we need base quantity to be separate.
 public class BaseQuantity: DBSyncable {

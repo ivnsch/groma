@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 import RealmSwift
 
@@ -88,7 +88,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     }
     
     deinit {
-        QL1("Deinit list items controller")
+        logger.v("Deinit list items controller")
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -453,7 +453,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
             clearPossibleUndo()
             let editing = !isEditing
             self.setEditing(editing, animated: true, tryCloseTopViewController: true)
-        default: QL4("Not handled: \(buttonId)")
+        default: logger.e("Not handled: \(buttonId)")
         }
     }
     

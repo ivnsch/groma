@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 // Status codes relevant to the user
 public enum ProviderStatusCode: Int {
@@ -135,7 +135,7 @@ public struct DefaultRemoteErrorHandler {
             // TODO!!!! check priorities are correct during normal use: this error should appear ONLY when there's a connection AND user is logged in
             ,.serverNotReachable
             :
-            QL1("Remote result status: \(remoteResult.status)")
+            logger.v("Remote result status: \(remoteResult.status)")
             return
         case _:
             handleError(remoteResult, errorMsg: errorMsg, handler: handler)
@@ -163,7 +163,7 @@ public struct DefaultRemoteErrorHandler {
         } else {
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
             let errorText = errorMsg.map{"\($0)::"} ?? ""
-            QL4("\(errorText)\(remoteResult)")
+            logger.e("\(errorText)\(remoteResult)")
             handler(ProviderResult(status: providerStatus, sucessResult: nil, error: remoteResult.error, errorObj: remoteResult.errorObj)) // TODO when remote fails somehow trigger a revert of local updates
         }
     }

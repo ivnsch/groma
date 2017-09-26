@@ -9,7 +9,7 @@
 import UIKit
 import KLCPopup
 import SwiftValidator
-import QorumLogs
+
 
 class PlanViewController: UIViewController
 //    , UITableViewDataSource, UITableViewDelegate, PlanTableViewCellDelegate/*, AddEditPlanItemContentViewDelegate*/
@@ -614,7 +614,7 @@ class PlanViewController: UIViewController
 //                    onPlanItemUpdated(notification.obj)
 //                case .Delete:
 //                    removePlanItemUI(notification.obj)
-//                default: QL4("Not handled verb: \(notification.verb)")                    
+//                default: logger.e("Not handled verb: \(notification.verb)")                    
 //                }
 //            } else {
 //                print("Error: PlanViewController.onWebsocketPlanItem: no value")

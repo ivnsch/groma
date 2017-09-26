@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 class ListItemProviderImpl: ListItemProvider {
 
@@ -40,7 +40,7 @@ class ListItemProviderImpl: ListItemProvider {
                 if let listItems = listItems {
                     handler(ProviderResult(status: .success, sucessResult: listItems))
                 } else {
-                    QL4("Couldn't load groups")
+                    logger.e("Couldn't load groups")
                     handler(ProviderResult(status: .unknown))
                 }
             }
@@ -84,7 +84,7 @@ class ListItemProviderImpl: ListItemProvider {
             if let items = items {
                 handler(ProviderResult(status: .success, sucessResult: items.toArray()))
             } else {
-                QL4("Couldn't load items")
+                logger.e("Couldn't load items")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -95,7 +95,7 @@ class ListItemProviderImpl: ListItemProvider {
             if let items = items {
                 handler(ProviderResult(status: .success, sucessResult: items))
             } else {
-                QL4("Couldn't load items")
+                logger.e("Couldn't load items")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -131,7 +131,7 @@ class ListItemProviderImpl: ListItemProvider {
 //                    if result.success {
 //                        self?.dbProvider.clearListItemTombstone(listItemUuid) {removeTombstoneSuccess in
 //                            if !removeTombstoneSuccess {
-//                                QL4("Couldn't delete tombstone for: \(listItemUuid)")
+//                                logger.e("Couldn't delete tombstone for: \(listItemUuid)")
 //                            }
 //                        }
 //                    } else {
@@ -158,12 +158,12 @@ class ListItemProviderImpl: ListItemProvider {
 //                        if remoteResult.success {
 //                            DBProv.listProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
 //                                if !removeTombstoneSuccess {
-//                                    QL4("Couldn't delete tombstone for list: \(listUuid)")
+//                                    logger.e("Couldn't delete tombstone for list: \(listUuid)")
 //                                }
 //                            }
 //                        } else {
 //                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[Any]>) in
-//                                QL4(remoteResult)
+//                                logger.e(remoteResult)
 //                            })
 //                        }
 //                    }
@@ -292,12 +292,12 @@ class ListItemProviderImpl: ListItemProvider {
                     handler(ProviderResult(status: .success, sucessResult: first))
                     
                 } else {
-                    QL4("Didn't return list item: \(result)")
+                    logger.e("Didn't return list item: \(result)")
                     handler(ProviderResult(status: .databaseUnknown))
                 }
                 
             } else {
-                QL4("Error adding list item: \(result)")
+                logger.e("Error adding list item: \(result)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
             
@@ -312,7 +312,7 @@ class ListItemProviderImpl: ListItemProvider {
             self.add(listItemPrototypes, status: status, list: list, token: token, handler)
             
         }.onErr { error in
-            QL4("Error adding list item inputs: \(error)")
+            logger.e("Error adding list item inputs: \(error)")
             handler(ProviderResult(status: .databaseUnknown))
         }
     }
@@ -353,12 +353,12 @@ class ListItemProviderImpl: ListItemProvider {
                         if result.success {
                             handler(ProviderResult(status: .success, sucessResult: (listItem: listItem, replaced: foundAndDeletedListItem)))
                         } else {
-                            QL4("Error updating list item: \(result)")
+                            logger.e("Error updating list item: \(result)")
                             handler(ProviderResult(status: result.status))
                         }
                     }
                 } else {
-                    QL4("Error fetching section and/or product: \(result.status)")
+                    logger.e("Error fetching section and/or product: \(result.status)")
                     handler(ProviderResult(status: .databaseUnknown))
                 }
             }
@@ -379,12 +379,12 @@ class ListItemProviderImpl: ListItemProvider {
                         handler(ProviderResult(status: .success, sucessResult: (section, product.0)))
                         
                     } else {
-                        QL4("Error fetching product: \(result.status)")
+                        logger.e("Error fetching product: \(result.status)")
                         handler(ProviderResult(status: .databaseUnknown))
                     }
                 }
             } else {
-                QL4("Error fetching section: \(result.status)")
+                logger.e("Error fetching section: \(result.status)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -416,12 +416,12 @@ class ListItemProviderImpl: ListItemProvider {
                 if let addedListItem = addedListItems.first {
                     handler(ProviderResult(status: .success, sucessResult: addedListItem))
                 } else {
-                    QL4("Error: ListItemProviderImpl.add:prototype: Invalid state: add returned success result but it's empty. Status (should be success): \(result.status)")
+                    logger.e("Error: ListItemProviderImpl.add:prototype: Invalid state: add returned success result but it's empty. Status (should be success): \(result.status)")
                     handler(ProviderResult(status: .unknown))
                 }
 
             } else {
-                QL4("Error: ListItemProviderImpl.add:prototype: Add didn't return success result, status: \(result.status)")
+                logger.e("Error: ListItemProviderImpl.add:prototype: Add didn't return success result, status: \(result.status)")
                 handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
             }
         }
@@ -465,7 +465,7 @@ class ListItemProviderImpl: ListItemProvider {
 //            return syncedRet(weakSelf) {
 //        
 //                guard let existingStoreProducts: Results<StoreProduct> = DBProv.storeProductProvider.storeProductsSync(prototypes.map{$0.product}, store: list.store ?? "") else {
-//                    QL4("Couldn't load store products")
+//                    logger.e("Couldn't load store products")
 //                    return (success: false, listItemUuids: [])
 //                }
 //                
@@ -474,7 +474,7 @@ class ListItemProviderImpl: ListItemProvider {
 //                    return prototypes.map {prototype in
 //                        let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
 //                            let storeProduct = StoreProduct(uuid: NSUUID().uuidString, price: prototype.storeProductInput?.price ?? 0, store: list.store ?? "", product: prototype.product)
-//                            QL1("Store product doesn't exist, created: \(storeProduct)")
+//                            logger.v("Store product doesn't exist, created: \(storeProduct)")
 //                            return storeProduct
 //                        }()
 //                        
@@ -507,7 +507,7 @@ class ListItemProviderImpl: ListItemProvider {
 //                        return existingSectionMaybe ?? {
 //                            
 //                            let newSection: Section = Section(uuid: NSUUID().uuidString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
-//                            QL1("Section for prototype: \(prototype) didn't exist, created a new one: \(newSection)")
+//                            logger.v("Section for prototype: \(prototype) didn't exist, created a new one: \(newSection)")
 //                            return newSection
 //                        }()
 //                        
@@ -568,7 +568,7 @@ class ListItemProviderImpl: ListItemProvider {
 //                            // let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
 //                            realm.add(existingListItem, update: true)
 //                            
-//                            QL1("item exists, affter incrementent: \(existingListItem)")
+//                            logger.v("item exists, affter incrementent: \(existingListItem)")
 //                            
 //                            savedListItems.append(existingListItem)
 //                            
@@ -617,7 +617,7 @@ class ListItemProviderImpl: ListItemProvider {
 //                                statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.quantity)
 //                            )
 //                            
-//                            QL1("item doesn't exist, created: \(listItem)")
+//                            logger.v("item doesn't exist, created: \(listItem)")
 //                            
 //                            realm.add(listItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
 //                            
@@ -648,7 +648,7 @@ class ListItemProviderImpl: ListItemProvider {
 //                        handler(ProviderResult(status: .success, sucessResult: listItems))
 //
 //                    } catch let e {
-//                        QL4("Error retrieving saved list items with uuids: \(bgResultMaybe?.listItemUuids), error: \(e)")
+//                        logger.e("Error retrieving saved list items with uuids: \(bgResultMaybe?.listItemUuids), error: \(e)")
 //                        handler(ProviderResult(status: .databaseUnknown))
 //                    }
 //                }
@@ -671,7 +671,7 @@ class ListItemProviderImpl: ListItemProvider {
 ////                        }
 ////                    } else {
 ////                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
-////                            QL4("Remote call no success: \(remoteResult)")
+////                            logger.e("Remote call no success: \(remoteResult)")
 ////                            self?.memProvider.invalidate()
 ////                            handler(result)
 ////                        })
@@ -723,13 +723,13 @@ class ListItemProviderImpl: ListItemProvider {
                     // this is not really necessary, but for consistency - reset order to 0 in the src status.
                     listItem.updateOrderMutable(ListItemStatusOrder(status: status1, order: 0))
                     
-//                    QL2("List item after status update: \(listItem.quantityDebugDescription)")
+//                    logger.d("List item after status update: \(listItem.quantityDebugDescription)")
                 }
                 
                 handler((switchedItems: listItems, storedItems: storedListItems.toArray()))
         
             } else {
-                QL4("Didn't get listItems: \(result.status), can't switch")
+                logger.e("Didn't get listItems: \(result.status), can't switch")
                 handler(nil)
             }
         }
@@ -741,7 +741,7 @@ class ListItemProviderImpl: ListItemProvider {
             if let listItem = result.sucessResult {
                 self?.switchStatus(listItem, list: listItem.list, status1: status1, status: status, remote: false, handler)
             } else {
-                QL2("Didn't find list item to be switched, uuid: \(listItemUuid), status1: \(status1), status: \(status)")
+                logger.d("Didn't find list item to be switched, uuid: \(listItemUuid), status1: \(status1), status: \(status)")
             }
         }
     }
@@ -749,7 +749,7 @@ class ListItemProviderImpl: ListItemProvider {
     // param: orderInDstStatus: To override default dst order with a manual order. This is used for undo cell, where we want to the item to be inserted back at the original position.    
     func switchStatus(_ listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int? = nil, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> Void) {
         
-//        QL2("Switching status from \(listItem.product.product.name) from status \(status1) to \(status)")
+//        logger.d("Switching status from \(listItem.product.product.name) from status \(status1) to \(status)")
         
         switchStatusInsertInDst([listItem], list: list, status1: status1, status: status, orderInDstStatus: orderInDstStatus, remote: remote) {switchResult in
             
@@ -763,12 +763,12 @@ class ListItemProviderImpl: ListItemProvider {
                         items.sortAndUpdateOrderFieldsMutating(status1) // This filters and sorts by src status, iterates through them setting order to index.
                         return switchedItems + items // Add again the switched list item to the array (it's lost when we filter by src status)
                     } else {
-                        QL4("Invalid state: there should be a switched list item")
+                        logger.e("Invalid state: there should be a switched list item")
                         return switchedItems
                     }
                 }()
                 
-//                QL2("After switching: \(listItem.product.product.name), writing updated items to db: \(allItemsToUpdate)")
+//                logger.d("After switching: \(listItem.product.product.name), writing updated items to db: \(allItemsToUpdate)")
                 
                 // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
                 self.updateLocal(allItemsToUpdate, handler: {result in
@@ -777,7 +777,7 @@ class ListItemProviderImpl: ListItemProvider {
                         if let listItem = switchedItems.first {
                             handler(ProviderResult(status: .success, sucessResult: listItem))
                         } else {
-                            QL4("Invalid statue: No list item. We should have the switched list item here.")
+                            logger.e("Invalid statue: No list item. We should have the switched list item here.")
                             handler(ProviderResult(status: .unknown))
                         }
                         
@@ -793,13 +793,13 @@ class ListItemProviderImpl: ListItemProvider {
                             if let remoteUpdateResult = remoteResult.successResult {
                                 DBProv.listItemProvider.storeRemoteListItemSwitchResult(statusUpdate, result: remoteUpdateResult) {success in
                                     if !success {
-                                        QL4("Couldn't store remote switch result in database: \(remoteResult) item: \(listItem)")
+                                        logger.e("Couldn't store remote switch result in database: \(remoteResult) item: \(listItem)")
                                     }
                                 }
                                 
                             } else {
                                 DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                                    QL4("Remote call no success: \(remoteResult) item: \(listItem)")
+                                    logger.e("Remote call no success: \(remoteResult) item: \(listItem)")
                                     self?.memProvider.invalidate()
                                     handler(ProviderResult<ListItem>(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
                                 })
@@ -808,7 +808,7 @@ class ListItemProviderImpl: ListItemProvider {
                     }
                 })
             } else {
-                QL4("Stored list items returned nil")
+                logger.e("Stored list items returned nil")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -830,7 +830,7 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: .success, sucessResult: switchedItems))
 
             } else {
-                QL4("Stored list items returned nil")
+                logger.e("Stored list items returned nil")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -856,23 +856,23 @@ class ListItemProviderImpl: ListItemProvider {
                                 if switchListItemsResult.success {
                                     handler(ProviderResult(status: .success))
                                 } else {
-                                    QL4("Error switching list items: \(switchListItemsResult)")
+                                    logger.e("Error switching list items: \(switchListItemsResult)")
                                     handler(ProviderResult(status: .unknown))
                                 }
                             }
                             
                         } else {
-                            QL4("Error saving inventory and history items: \(saveInventoryAndHistoryItemsResult)")
+                            logger.e("Error saving inventory and history items: \(saveInventoryAndHistoryItemsResult)")
                             handler(ProviderResult(status: .unknown))
                         }
                     }
                     
                 } else {
-                    QL4("None of the items to be switched is in the list") // this is not entirely impossible but extremely unlikely
+                    logger.e("None of the items to be switched is in the list") // this is not entirely impossible but extremely unlikely
                     handler(ProviderResult(status: .success)) // For now just error log, maybe later we should return error status also
                 }
             } else {
-                QL4("Error retrieving list items: \(listItemsResult)")
+                logger.e("Error retrieving list items: \(listItemsResult)")
                 handler(ProviderResult(status: listItemsResult.status, sucessResult: nil, error: listItemsResult.error, errorObj: listItemsResult.errorObj))
             }
         }
@@ -911,7 +911,7 @@ class ListItemProviderImpl: ListItemProvider {
                                                 
                                                 DBProv.listItemProvider.storeBuyCartResult(listItems, inventoryWithHistoryItems: inventoryWithHistoryItems, lastUpdate: timestamp) {success in
                                                     if !success {
-                                                        QL4("Couldn't store remote all switch result in database: \(remoteResult) items: \(listItems)")
+                                                        logger.e("Couldn't store remote all switch result in database: \(remoteResult) items: \(listItems)")
                                                     }
                                                 }
                                                 
@@ -920,7 +920,7 @@ class ListItemProviderImpl: ListItemProvider {
                                                     // TODO!!! -- this should be in the same transaction from buyCart (in client and server) so this additional call is not necessary. Also ensure consistency with the client and server switch.
                                                     Prov.listItemsProvider.switchAllToStatus(resettedStashItems, list: list, status1: .stash, status: .todo, remote: true) {result in
                                                         if !result.success {
-                                                            QL4("Error switching stash items (remote) after buyCart: \(result)")
+                                                            logger.e("Error switching stash items (remote) after buyCart: \(result)")
                                                         }
                                                     }
                                                 }
@@ -928,7 +928,7 @@ class ListItemProviderImpl: ListItemProvider {
                                                 
                                             } else {
                                                 DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                                                    QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+                                                    logger.e("Remote call no success: \(remoteResult) items: \(listItems)")
                                                     self?.memProvider.invalidate()
                                                     handler(result)
                                                 })
@@ -948,7 +948,7 @@ class ListItemProviderImpl: ListItemProvider {
                                                     if result.success {
                                                         afterMaybeResetStash(Array(stashItems))
                                                     } else {
-                                                        QL4("Couldn't reset stash list items")
+                                                        logger.e("Couldn't reset stash list items")
                                                         handler(ProviderResult(status: .databaseUnknown))
                                                     }
                                                 }
@@ -960,20 +960,20 @@ class ListItemProviderImpl: ListItemProvider {
                                     }
                                     
                                 } else {
-                                    QL4("db buy cart didn't return items") // this should not happen as we should not call this method with an empty cart, and if there are cart items there must be inventory/history items.
+                                    logger.e("db buy cart didn't return items") // this should not happen as we should not call this method with an empty cart, and if there are cart items there must be inventory/history items.
                                     handler(ProviderResult(status: .unknown))
                                 }
                             })
                             
                         } else {
-                            QL4("No switched items")
+                            logger.e("No switched items")
                             handler(ProviderResult(status: .unknown))
                         }
                     }
                 }
 
             } else {
-                QL4("Couldn't get items count")
+                logger.e("Couldn't get items count")
                 handler(ProviderResult(status: .databaseUnknown))
             }
             
@@ -1004,13 +1004,13 @@ class ListItemProviderImpl: ListItemProvider {
                             if let remoteUpdateResult = remoteResult.successResult {
                                 DBProv.listItemProvider.storeRemoteAllListItemSwitchResult(statusUpdate, result: remoteUpdateResult) {success in
                                     if !success {
-                                        QL4("Couldn't store remote all switch result in database: \(remoteResult) items: \(listItems)")
+                                        logger.e("Couldn't store remote all switch result in database: \(remoteResult) items: \(listItems)")
                                     }
                                 }
                                 
                             } else {
                                 DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
-                                    QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+                                    logger.e("Remote call no success: \(remoteResult) items: \(listItems)")
                                     self?.memProvider.invalidate()
                                     handler(result)
                                 })
@@ -1020,7 +1020,7 @@ class ListItemProviderImpl: ListItemProvider {
                 })
                 
             } else {
-                QL4("No switched items")
+                logger.e("No switched items")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -1031,7 +1031,7 @@ class ListItemProviderImpl: ListItemProvider {
             if let list = listMaybe {
                 DBProv.listItemProvider.loadListItems(list.uuid) {(listItems: Results<ListItem>?) in
                     
-                    guard let listItems = listItems else {QL4("No items"); handler(ProviderResult(status: .unknown)); return}
+                    guard let listItems = listItems else {logger.e("No items"); handler(ProviderResult(status: .unknown)); return}
                     
                     Prov.listItemsProvider.switchAllToStatus(listItems.toArray(), list: list, status1: result.update.srcStatus, status: result.update.dstStatus, remote: false) {switchResult in
                         if let switchedListItems = switchResult.sucessResult {
@@ -1039,19 +1039,19 @@ class ListItemProviderImpl: ListItemProvider {
                             
                             DBProv.listItemProvider.storeWebsocketAllListItemSwitchResult(switchedListItems, lastUpdate: result.lastUpdate) {success in
                                 if success {
-                                    QL1("Updated timestamps")
+                                    logger.v("Updated timestamps")
                                 } else {
-                                    QL4("Counldn't update timestamps")
+                                    logger.e("Counldn't update timestamps")
                                 }
                             }
                         } else {
-                            QL4("No switched list items, can't store timestamps")
+                            logger.e("No switched list items, can't store timestamps")
                             handler(ProviderResult(status: switchResult.status, sucessResult: nil, error: switchResult.error, errorObj: switchResult.errorObj))
                         }
                     }
                 }
             } else {
-                QL2("List to switch items not found: \(result.update.listUuid)")
+                logger.d("List to switch items not found: \(result.update.listUuid)")
                 handler(ProviderResult(status: .success)) // list can be removed shortly before we get the message so this is not an error
             }
         }
@@ -1091,7 +1091,7 @@ class ListItemProviderImpl: ListItemProvider {
 //                        }
 //                    } else {
 //                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-//                            QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+//                            logger.e("Remote call no success: \(remoteResult) items: \(listItems)")
 //                            self?.memProvider.invalidate()
 //                            handler(result)
 //                        })
@@ -1116,7 +1116,7 @@ class ListItemProviderImpl: ListItemProvider {
 //                        }
                     } else {
                         DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                            QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+                            logger.e("Remote call no success: \(remoteResult) items: \(listItems)")
                             self?.memProvider.invalidate()
                             handler(result)
                         })
@@ -1132,7 +1132,7 @@ class ListItemProviderImpl: ListItemProvider {
                 Prov.listItemsProvider.invalidateMemCache()
                 handler(ProviderResult(status: .success))
             } else {
-                QL4("Couldn't store remote list items order update")
+                logger.e("Couldn't store remote list items order update")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -1169,12 +1169,12 @@ class ListItemProviderImpl: ListItemProvider {
 //                    if let incrementResult = remoteResult.successResult {
 //                        self?.dbProvider.updateListItemWithIncrementResult(incrementResult) {success in
 //                            if !success {
-//                                QL4("Couldn't save increment result for item: \(listItem), remoteResult: \(remoteResult)")
+//                                logger.e("Couldn't save increment result for item: \(listItem), remoteResult: \(remoteResult)")
 //                            }
 //                        }
 //                    } else {
 //                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ListItem>) in
-//                            QL4("Remote call no success: \(remoteResult) item: \(listItem)")
+//                            logger.e("Remote call no success: \(remoteResult) item: \(listItem)")
 //                            self?.memProvider.invalidate()
 //                            handler(result)
 //                        })
@@ -1210,7 +1210,7 @@ class ListItemProviderImpl: ListItemProvider {
                 }
                 
             } else {
-                QL2("Didn't find inventory item to increment, for: \(increment)")
+                logger.d("Didn't find inventory item to increment, for: \(increment)")
                 handler(ProviderResult(status: .notFound))
             }
         }
@@ -1248,7 +1248,7 @@ class ListItemProviderImpl: ListItemProvider {
         if memProvider.enabled {
             let success = memProvider.removeSection(sectionUuid, listUuid: listUuid)
             if !success {
-                QL4("Mem cache section removal returned false: sectionUuid: \(sectionUuid), listUuid: \(String(describing: listUuid))")
+                logger.e("Mem cache section removal returned false: sectionUuid: \(sectionUuid), listUuid: \(String(describing: listUuid))")
             }
             handler(ProviderResult(status: .success))
         } else {
@@ -1313,7 +1313,7 @@ class ListItemProviderImpl: ListItemProvider {
         switch DBProv.listItemProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: list, realmData: realmData) {
         case .ok(let updateResult): handler(ProviderResult(status: .success, sucessResult: updateResult))
         case .err(let e):
-            QL4("Error in update list items: \(e)")
+            logger.e("Error in update list items: \(e)")
             handler(ProviderResult(status: .databaseUnknown))
         }
     }

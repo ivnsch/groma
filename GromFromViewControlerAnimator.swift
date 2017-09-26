@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 // TODO use a transition? either way refactor all this... 
@@ -44,8 +44,8 @@ class GromFromViewControlerAnimator {
             self.controllerCreator = controllerCreator
         }
         
-        guard let parent = parent, let button = button, let controllerCreator = self.controllerCreator else {QL4("No fields"); return}
-        guard let controller = controllerCreator() else {QL4("Couldn't create controller"); return}
+        guard let parent = parent, let button = button, let controllerCreator = self.controllerCreator else {logger.e("No fields"); return}
+        guard let controller = controllerCreator() else {logger.e("Couldn't create controller"); return}
         self.controller = controller
 
         let buttonPointInParent = parent.view.convert(CGPoint(x: button.center.x, y: button.center.y), from: srcView)
@@ -98,8 +98,8 @@ class GromFromViewControlerAnimator {
             self.controllerCreator = controllerCreator
         }
         
-        guard let parent = parent, let button = button, let controllerCreator = self.controllerCreator else {QL4("No fields"); return}
-        guard let controller = controllerCreator() else {QL4("Couldn't create controller"); return}
+        guard let parent = parent, let button = button, let controllerCreator = self.controllerCreator else {logger.e("No fields"); return}
+        guard let controller = controllerCreator() else {logger.e("Couldn't create controller"); return}
         self.controller = controller
         
         let buttonPointInParent = parent.view.convert(CGPoint(x: button.center.x, y: button.center.y), from: srcView)
@@ -156,8 +156,8 @@ class GromFromViewControlerAnimator {
             self.controllerCreator = controllerCreator
         }
         
-        guard let parent = parent, let button = button, let currentController = currentController, let controllerCreator = self.controllerCreator else {QL4("No fields"); return}
-        guard let controller = controllerCreator() else {QL4("Couldn't create controller"); return}
+        guard let parent = parent, let button = button, let currentController = currentController, let controllerCreator = self.controllerCreator else {logger.e("No fields"); return}
+        guard let controller = controllerCreator() else {logger.e("Couldn't create controller"); return}
         
         self.controller = controller
         
@@ -228,8 +228,8 @@ class GromFromViewControlerAnimator {
             self.controllerCreator = controllerCreator
         }
         
-        guard let parent = parent, let button = button, let currentController = currentController, let controllerCreator = self.controllerCreator else {QL4("No fields"); return}
-        guard let controller = controllerCreator() else {QL4("Couldn't create controller"); return}
+        guard let parent = parent, let button = button, let currentController = currentController, let controllerCreator = self.controllerCreator else {logger.e("No fields"); return}
+        guard let controller = controllerCreator() else {logger.e("Couldn't create controller"); return}
         
         self.controller = controller
         
@@ -265,7 +265,7 @@ class GromFromViewControlerAnimator {
     
     func close(onFinish: (() -> Void)? = nil) {
         
-        guard let controller = controller, let button = button else {QL4("Fields missing, controller: \(String(describing: self.controller)), button: \(String(describing: self.button))"); return}
+        guard let controller = controller, let button = button else {logger.e("Fields missing, controller: \(String(describing: self.controller)), button: \(String(describing: self.button))"); return}
 
         UIView.animate(withDuration: 0.3, animations: {
             
@@ -336,8 +336,8 @@ class GromFromViewAnimator2 {
             self.button = button
         }
         
-        guard let button = button, let parent = parent, let controllerCreator = self.controllerCreator else {QL4("No fields"); return}
-        guard let view = controllerCreator() else {QL4("Couldn't create controller"); return}
+        guard let button = button, let parent = parent, let controllerCreator = self.controllerCreator else {logger.e("No fields"); return}
+        guard let view = controllerCreator() else {logger.e("Couldn't create controller"); return}
         
         self.view = view
 
@@ -360,7 +360,7 @@ class GromFromViewAnimator2 {
     
     func close(onFinish: (() -> Void)? = nil) {
         
-        guard let view = view, let button = button else {QL4("Fields missing, view: \(String(describing: self.view)), button: \(String(describing: self.button))"); return}
+        guard let view = view, let button = button else {logger.e("Fields missing, view: \(String(describing: self.view)), button: \(String(describing: self.button))"); return}
         
         UIView.animate(withDuration: 0.3, animations: {
             button.backgroundColor = UIColor.white // TODO not here

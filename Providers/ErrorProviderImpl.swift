@@ -7,17 +7,17 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 class ErrorProviderImpl: ErrorProvider {
 
     fileprivate let remoteProvider = RemoteErrorReporter()
     
     func reportError(_ error: ErrorReport) {
-        QL2("Reporting an error: \(error)")
+        logger.d("Reporting an error: \(error)")
         remoteProvider.report(error) {remoteResult in
             if !remoteResult.success {
-                QL4("Coudn't report error: \(remoteResult)")
+                logger.e("Coudn't report error: \(remoteResult)")
             }
         }
     }

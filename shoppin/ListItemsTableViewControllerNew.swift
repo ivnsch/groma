@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 import RealmSwift
 
 protocol ListItemsTableViewDelegateNew: class {
@@ -67,7 +67,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
                     cell.mode = cellMode
                 }
             } else {
-                QL4("Invalid state, couldn't cast: \(tableView.visibleCells)")
+                logger.e("Invalid state, couldn't cast: \(tableView.visibleCells)")
             }
             
         }
@@ -122,7 +122,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
         //     }
             
         // } else {
-        //     QL3("markOpen: \(open), self not set or indexPath not found: \(indexPath)")
+        //     logger.w("markOpen: \(open), self not set or indexPath not found: \(indexPath)")
         // }
     }
     
@@ -147,12 +147,12 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
 //        if let indexPath = getIndexPath(litsItem) {
 //            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
 //        } else {
-//            QL2("Didn't find list item to scroll to")
+//            logger.d("Didn't find list item to scroll to")
 //        }
 //    }
     
     func findListItemIndexPath(listItem: ListItem) -> IndexPath? {
-        guard let sections = sections else {QL4("No sections"); return nil}
+        guard let sections = sections else {logger.e("No sections"); return nil}
         
         for (sectionIndex, s) in sections.enumerated() {
             for (listItemIndex, l) in s.listItems.enumerated() {
@@ -166,7 +166,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     func findSectionIndex(section: Section) -> Int? {
-        guard let sections = sections else {QL4("No sections"); return nil}
+        guard let sections = sections else {logger.e("No sections"); return nil}
         for (sectionIndex, s) in sections.enumerated() {
             if s.same(section) {
                 return sectionIndex
@@ -180,7 +180,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
         if let sectionIndex = findSectionIndex(section: section) {
             tableView.reloadSections(IndexSet([sectionIndex]), with: .none)
         } else {
-            QL3("Didn't find index for: \(section)")
+            logger.w("Didn't find index for: \(section)")
         }
     }
     
@@ -188,7 +188,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
         if let indexPath = findListItemIndexPath(listItem: listItem) {
             tableView.reloadRows(at: [indexPath], with: .none)
         } else {
-            QL3("Didn't find cell to update for: \(listItem)")
+            logger.w("Didn't find cell to update for: \(listItem)")
         }
     }
     
@@ -204,7 +204,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let sectionObj = sections?[section] else {QL4("Invalid state: no section"); return nil}
+        guard let sectionObj = sections?[section] else {logger.e("Invalid state: no section"); return nil}
         
         let view = Bundle.loadView("ListItemsSectionHeaderView", owner: self) as! ListItemsSectionHeaderView
         view.config(section: sectionObj, contracted: contract)
@@ -254,7 +254,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
             // When returning cell height programatically (which we need now in order to use different cell heights for different screen sizes), here it's still the height from the storyboard so we have to pass the offset for the line to eb draw at the bottom. Apparently there's no method where we get the cell with final height (did move to superview / window also still have the height from the storyboard)
             cell.contentView.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
             
-            guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {QL4("No listItem"); return cell}
+            guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {logger.e("No listItem"); return cell}
             cell.setup(status, mode: cellMode, tableViewListItem: listItem, delegate: self)
             cell.startStriked = false
             
@@ -269,7 +269,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     fileprivate func deleteListItem(indexPath: IndexPath) {
-        guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {QL4("No listItem"); return}
+        guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {logger.e("No listItem"); return}
         
         tableView.wrapUpdates {[weak self] in
             // remove from content provider
@@ -296,7 +296,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {QL4("No listItem"); return}
+        guard let listItem = sections?[indexPath.section].listItems[indexPath.row] else {logger.e("No listItem"); return}
         listItemsTableViewDelegate?.onListItemSelected(listItem, indexPath: indexPath)
     }
     
@@ -304,9 +304,9 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     
     func setAllSectionsExpanded(_ expanded: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
         
-        guard expanded != sectionsExpanded else {QL1("No changes"); onComplete?(); return}
+        guard expanded != sectionsExpanded else {logger.v("No changes"); onComplete?(); return}
         
-        guard let sections = sections else {QL4("No sections"); return}
+        guard let sections = sections else {logger.e("No sections"); return}
 
         sectionsExpanded = expanded
         
@@ -326,7 +326,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     fileprivate func setSectionExpanded(_ expanded: Bool, sectionIndex: Int/*, section: ListItemsViewSection*/, animated: Bool, onComplete: VoidFunction? = nil) {
-        guard let sections = sections else {QL4("No sections"); return}
+        guard let sections = sections else {logger.e("No sections"); return}
         
         let sectionIndexPaths: [IndexPath] = (0..<sections[sectionIndex].listItems.count).map {
             return IndexPath(row: $0, section: sectionIndex)
@@ -350,7 +350,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     
     func onItemSwiped(_ listItem: ListItem) {
         
-        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
+        guard let indexPath = indexPathFor(listItem: listItem) else {logger.e("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
         
         listItemsTableViewDelegate?.onListItemSwiped(listItem, indexPath: indexPath)
         
@@ -362,7 +362,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     func indexPathFor(listItem: ListItem) -> IndexPath? {
-        guard let sections = sections else {QL4("No sections"); return nil}
+        guard let sections = sections else {logger.e("No sections"); return nil}
         
         for (sectionIndex, section) in sections.enumerated() {
             let listItems = section.listItems
@@ -391,10 +391,10 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
             if let noteButton = cell.noteButton {
                 listItemsTableViewDelegate?.showPopup(text: listItem.note, cell: cell, button: noteButton)
             } else {
-                QL3("No note button")
+                logger.w("No note button")
             }
         } else {
-            QL4("Invalid state: There's no note. When there's no note there should be no button so we shouldn't be here.")
+            logger.e("Invalid state: There's no note. When there's no note there should be no button so we shouldn't be here.")
         }
     }
 
@@ -411,14 +411,14 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     func onDelete(_ listItem: ListItem) {
-        guard let indexPath = indexPathFor(listItem: listItem) else {QL4("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
+        guard let indexPath = indexPathFor(listItem: listItem) else {logger.e("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
         deleteListItem(indexPath: indexPath)
     }
     
     // MARK: - ListItemsSectionHeaderViewDelegate
     
     func onHeaderTap(_ header: ListItemsSectionHeaderView) {
-        guard let section = header.section else {QL4("Illegal state: header should have a section"); return}
+        guard let section = header.section else {logger.e("Illegal state: header should have a section"); return}
         listItemsTableViewDelegate?.onSectionHeaderTap(header, section: section)
     }
 }

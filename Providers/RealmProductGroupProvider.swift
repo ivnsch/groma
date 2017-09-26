@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 class RealmProductGroupProvider: RealmProvider {
     
@@ -43,12 +43,12 @@ class RealmProductGroupProvider: RealmProvider {
                     handler((substring, groupsArray))
                     
                 } else {
-                    QL4("No product uuids")
+                    logger.e("No product uuids")
                     handler((substring, []))
                 }
                 
             } catch let e {
-                QL4("Error: creating Realm, returning empty results, error: \(e)")
+                logger.e("Error: creating Realm, returning empty results, error: \(e)")
                 handler((substring, []))
             }
         }
@@ -96,7 +96,7 @@ class RealmProductGroupProvider: RealmProvider {
                 realm.add(existingGroup, update: true)
                 return true
             } else { // group not found
-                QL4("Didn't find group to increment fav")
+                logger.e("Didn't find group to increment fav")
                 return false
             }
             }, finishHandler: {savedMaybe in
@@ -147,7 +147,7 @@ class RealmProductGroupProvider: RealmProvider {
             }
 
         } else {
-            QL1("No group to remove: uuid: \(groupUuid)")
+            logger.v("No group to remove: uuid: \(groupUuid)")
         }
     }
     

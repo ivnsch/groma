@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-import QorumLogs
+
 import Providers
 
 
@@ -104,7 +104,7 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentView = parent?.view else {if mode == .standalone {QL4("No parentController")}; return nil}
+        guard let parentView = parent?.view else {if mode == .standalone {logger.e("No parentController")}; return nil}
         let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
             _ = self?.submit()
         }
@@ -113,12 +113,12 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
     
     fileprivate func initColorControllerAnimator() {
         
-        guard let parent = delegate?.popupsParent else {QL4("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
+        guard let parent = delegate?.popupsParent else {logger.e("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
         colorControllerAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
     }
     
     func config(mode: TopControllerMode, prefillData: EditNameColorViewInputs, settings: EditNameColorViewSettings) {
-        guard nameTextField != nil else {QL4("Outlets not initialized"); return}
+        guard nameTextField != nil else {logger.e("Outlets not initialized"); return}
         
         self.mode = mode
         
@@ -158,8 +158,8 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
     
     func submit() -> InputsResult<EditNameColorResult>? {
         
-        guard let validator = validator else {QL4("No validator"); return nil}
-        guard let editingObj = editingObj else {QL4("No editing object"); return nil}
+        guard let validator = validator else {logger.e("No validator"); return nil}
+        guard let editingObj = editingObj else {logger.e("No editing object"); return nil}
         
         if let errors = validator.validate() {
             for (_, error) in errors {
@@ -185,7 +185,7 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
                 return .ok(result)
                 
             } else {
-                QL4("Validation was not implemented correctly")
+                logger.e("Validation was not implemented correctly")
                 return nil
             }
         }

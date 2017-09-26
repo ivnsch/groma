@@ -11,7 +11,7 @@ import UIKit
 import SwiftValidator
 import FBSDKCoreKit
 import FBSDKLoginKit
-import QorumLogs
+
 import CloudKit
 import Providers
 
@@ -82,7 +82,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                 
 
             } else {
-                QL3("Setting mode before outlets are initialised")
+                logger.w("Setting mode before outlets are initialised")
             }
         }
     }
@@ -185,7 +185,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
             if let email = userNameField.text, let password = passwordField.text {
 
                 guard let rootController = UIApplication.shared.delegate?.window??.rootViewController else {
-                    QL4("No root view controller, can't show invitations popup")
+                    logger.e("No root view controller, can't show invitations popup")
                     return
                 }
                 
@@ -204,9 +204,9 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                             rootController.defaultErrorHandler()(result) // show alert (on root view controller since in login success we switch controller)
                             self?.onLoginSuccess() // handle like success, this way user still can access settings like full download to try to solve sync problems.
                         case .isNewDeviceLoginAndDeclinedOverwrite:
-                            QL1("New device and declined overwrite") // if it's a new device login and user declined overwrite, nothing to do here, user stays in login form, provider logged user out.
+                            logger.v("New device and declined overwrite") // if it's a new device login and user declined overwrite, nothing to do here, user stays in login form, provider logged user out.
                         case .cancelledLoginWithDifferentAccount:
-                            QL1("New email and user cancelled clear local data popup") // nothing to do here, user stays in login form
+                            logger.v("New email and user cancelled clear local data popup") // nothing to do here, user stays in login form
                         default:
                             self?.defaultErrorHandler()(result)
                             Prov.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
@@ -293,21 +293,21 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     // TODO refactor, same code as in LoginController
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         if let error = error {
-            QL4("Facebook login error: \(error)")
+            logger.e("Facebook login error: \(error)")
             defaultErrorHandler()(ProviderResult(status: .socialLoginError))
             progressVisible(false)
             FBSDKLoginManager().logOut() // toggle "logout" label on button
         } else if result.isCancelled {
-            QL1("Facebook login cancelled")
+            logger.v("Facebook login cancelled")
             progressVisible(false)
             FBSDKLoginManager().logOut() // toggle "logout" label on button
         } else {
-            QL1("Facebook login success, calling our server...")
+            logger.v("Facebook login success, calling our server...")
             progressVisible()
             if let tokenString = result.token.tokenString {
                 Prov.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
             } else {
-                QL4("Facebook no token")
+                logger.e("Facebook no token")
             }
         }
     }
@@ -320,11 +320,11 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
-            QL1("Google login success, calling our server...")
+            logger.v("Google login success, calling our server...")
             progressVisible()
             Prov.userProvider.authenticateWithGoogle(user.authentication.idToken, controller: self, socialSignInResultHandler())
         } else {
-            QL4("Google login error: \(error.localizedDescription)")
+            logger.e("Google login error: \(error.localizedDescription)")
         }
     }
     
@@ -348,7 +348,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         return {[weak self] providerResult in
             self?.resultHandler(
                 onSuccess: {[weak self] syncResult in
-                    QL1("Login success")
+                    logger.v("Login success")
                     self?.onLoginSuccess() // TODO!!!! we should probably refactor the login result handler with the credentials login? For example .IsNewDeviceLoginAndDeclinedOverwrite handling seems to be missing here.
                     self?.progressVisible(false)
                     
@@ -356,7 +356,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                         InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
                     }
             }, onError: {[weak self] providerResult in
-                QL1("Login error: \(providerResult)")
+                logger.v("Login error: \(providerResult)")
                 self?.progressVisible(false)
                 self?.defaultErrorHandler()(providerResult)
                 if let weakSelf = self {
@@ -375,10 +375,10 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
             
             DispatchQueue.main.async {
                 if (accountStat == .available) {
-                    QL1("iCloud is available")
+                    logger.v("iCloud is available")
                     
                     guard let rootController = UIApplication.shared.delegate?.window??.rootViewController else { // copied from credentials login, not sure root controller it's really necessary here
-                        QL4("No root view controller")
+                        logger.e("No root view controller")
                         return
                     }
                     
@@ -393,7 +393,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                     ))
                     
                 } else {
-                    QL4("iCloud is not available")
+                    logger.e("iCloud is not available")
                     weakSelf.defaultErrorHandler()(ProviderResult(status: .iCloudLoginError)) // TODO!!!!!!!!!!!!! specific status: show to user "iCloud is not available"
                 }
             }
@@ -407,6 +407,6 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     }
     
     deinit {
-        QL1("Deinit login controller")
+        logger.v("Deinit login controller")
     }
 }

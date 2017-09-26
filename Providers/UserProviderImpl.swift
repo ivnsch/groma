@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 class UserProviderImpl: UserProvider {
    
@@ -55,14 +55,14 @@ class UserProviderImpl: UserProvider {
         // Target specific logout (e.g. iOS has own FB, Google, etc. libraries). Logout can be called from core parts of library like when auth token expires, so a notification is suitable.
         Notification.send(Notification.Logout)
         
-        QL2("User logged out")
+        logger.d("User logged out")
     }
     
     func sync(isMatchSync: Bool, onlyOverwriteLocal: Bool, additionalActionsOnSyncSuccess: VoidFunction? = nil, handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         
         let resultHandler: (ProviderResult<SyncResult>) -> Void = {result in
             if result.success {
-                QL2("Sync/download success, connecting websocket...")
+                logger.d("Sync/download success, connecting websocket...")
                 _ = WebsocketHelper.tryConnectWebsocket()
                 if onlyOverwriteLocal {
                     // overwrote with new device and existing account - store a flag so we don't do this again (after this device is not considered "new" anymore and does normal sync).
@@ -71,7 +71,7 @@ class UserProviderImpl: UserProvider {
                 additionalActionsOnSyncSuccess?()
                 handler(result)
             } else {
-                QL4("Sync/download didn't return success: \(result)")
+                logger.e("Sync/download didn't return success: \(result)")
                 // Return a sync failed status code such that the controller can show error message specific to this. Since we return this as a result of both login and sync, if we let only the server error code client wouldn't know if e.g. "wrong parameters" would be because of login or sync. Differentiation is important because on sync errors we let the user logged in (this way they can e.g. call full download from settings to try to solve the sync problem) while on login errors the user is logged out.
                 if result.status == .unknownServerCommunicationError || result.status == .serverNotReachable {
                     // If e.g. server timeout result needs to be treated differently e.g. don't show sync failed popup, logout
@@ -120,9 +120,9 @@ class UserProviderImpl: UserProvider {
                 // We probably should put this after "first login after register on same device" or similar TODO think about this.
 //                DBProv.globalProvider.markAllDirty {markAllDirtySuccess in
 //                    if markAllDirtySuccess {
-//                        QL1("Reset dirty for all objs")
+//                        logger.v("Reset dirty for all objs")
 //                    } else {
-//                        QL4("Error in mark dirty")
+//                        logger.e("Error in mark dirty")
 //                    }
 //                }
             }
@@ -156,7 +156,7 @@ class UserProviderImpl: UserProvider {
     
     func findAllKnownSharedUsers(_ handler: @escaping (ProviderResult<[DBSharedUser]>) -> Void) {
         // TODO no more custom server
-        QL3("Not supported")
+        logger.w("Not supported")
         handler(ProviderResult(status: .success, sucessResult: []))
 //        remoteProvider.findAllKnownSharedUsers {result in
 //            if let remoteSharedUsers = result.successResult {
@@ -166,7 +166,7 @@ class UserProviderImpl: UserProvider {
 //                    if let me = Prov.userProvider.mySharedUser {
 //                        return sharedUsers.filter{$0.email != me.email}
 //                    } else {
-//                        QL4("Invalid state - requesting shared users (we expect the user to be logged in for this), but own user is not stored")
+//                        logger.e("Invalid state - requesting shared users (we expect the user to be logged in for this), but own user is not stored")
 //                        return sharedUsers // this shouldn't happen, but in case we just return the list unfiltered
 //                    }
 //                }()
@@ -182,7 +182,7 @@ class UserProviderImpl: UserProvider {
     // If we have login success with a different user than the one that is currently stored in the device, clear local db before doing sync. Otherwise we will upload the data from the old user to the account of the new one (which even if we wanted doesn't work because the uuids have to be unique).
     fileprivate func wrapCheckDifferentUser(_ loggedInUserEmail: String, controller: UIViewController, handler: @escaping (ProviderResult<Any>) -> Void) {
         // we now put this code in a different project and there are no popups here. Since this is not used, commented.
-        QL4("Outdated")
+        logger.e("Outdated")
         handler(ProviderResult(status: .unknown))
 //        
 //        let loggingInWithADifferentUser = isDifferentUser(loggedInUserEmail)
@@ -191,22 +191,22 @@ class UserProviderImpl: UserProvider {
 //            
 //            let previousEmail = Prov.userProvider.mySharedUser?.email ?? ""
 //
-//            QL2("Logging in with different user, new email: \(loggedInUserEmail), previous email: \(previousEmail)")
+//            logger.d("Logging in with different user, new email: \(loggedInUserEmail), previous email: \(previousEmail)")
 //            
 //            ConfirmationPopup.show(title: "Warning", message: "You're logging in with a new account on this device. If you continue, all the not synced data on this device will be lost permanently. Do you want to continue?\nYour previous account id: \(previousEmail)", okTitle: "Yes", cancelTitle: "Cancel", controller: controller, onOk: {
 //                
 //                    Prov.globalProvider.clearAllData(false) {result in
 //                        if !result.success {
-//                            QL4("Error clearing data of different user: \(loggedInUserEmail), result: \(result)")
+//                            logger.e("Error clearing data of different user: \(loggedInUserEmail), result: \(result)")
 //                        }
 //                        handler(result)
 //                    }
 //                
 //                }, onCancel: {[weak self] in
-//                    QL2("Different user and cancelled clear local data, logging out")
+//                    logger.d("Different user and cancelled clear local data, logging out")
 //                    self?.logout {logoutResult in
 //                        if !logoutResult.success {
-//                            QL4("Logout failed: \(logoutResult)")
+//                            logger.e("Logout failed: \(logoutResult)")
 //                        }
 //                        handler(ProviderResult(status: .cancelledLoginWithDifferentAccount))
 //                    }
@@ -220,7 +220,7 @@ class UserProviderImpl: UserProvider {
     
     fileprivate func handleLoginSuccess(_ userEmail: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         // we now put this code in a different project and there are no popups here. Since this is not used, commented.
-        QL4("Outdated")
+        logger.e("Outdated")
         handler(ProviderResult(status: .unknown))
 //        
 //        // If a user logs in the first time on a device but account exists already, we don't want to do a full sync because this would upload all the prefilled products (which have different uuids) and user would end with a duplicate (name suffix (n)) for each product.
@@ -247,19 +247,19 @@ class UserProviderImpl: UserProvider {
 //                
 //            }, onCancel: {[weak self] in
 //                // If user declines to overwrite local data we do nothing and log the user out.
-//                QL1("Declined overwrite sync, logging out")
+//                logger.v("Declined overwrite sync, logging out")
 //                self?.logout {logoutResult in
 //                    if !logoutResult.success {
-//                        QL4("Logout failed: \(logoutResult)")
+//                        logger.e("Logout failed: \(logoutResult)")
 //                    }
 //                    handler(ProviderResult(status: .isNewDeviceLoginAndDeclinedOverwrite))
 //                }
 //                
 //            }, onCannotPresent: {[weak self] in // this can happen if we are showing another popup already on same controller - an example in this case is when we show the optional app update dialog, which also uses root controller. It's always presented before of this, so when we are here, it will not show anything. For now we do the same as if user cancelled - log out, this isn't perfect but is the only meaningful thing we can do here. Note it is important to return something! Otherwise we get e.g. not dismissed progress indicator. This situation (with the update dialog, the only where it has happened so far) can happen but is rare, it means that: 1. User has an outdated installation on a device, 2. User opened an account with other device, 3. User logs in with the outdated device - here we get 'new device' and 'should update app' popup at the same time. At least for this case logging out is ok, user just has to login again after cancelling the update (if they update the app everything is gone anyway) and then the new installation popup appears.
-//                QL3("Couldn't present confirm new device popup, logging out")
+//                logger.w("Couldn't present confirm new device popup, logging out")
 //                self?.logout {logoutResult in
 //                    if !logoutResult.success {
-//                        QL4("Logout failed: \(logoutResult)")
+//                        logger.e("Logout failed: \(logoutResult)")
 //                    }
 //                    handler(ProviderResult(status: .isNewDeviceLoginAndDeclinedOverwrite))
 //                }
@@ -322,7 +322,7 @@ class UserProviderImpl: UserProvider {
 
     
     func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
-        QL4("Not supported")
+        logger.e("Not supported")
         handler(ProviderResult(status: .unknown))
     }
     

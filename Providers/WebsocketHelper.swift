@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct WebsocketHelper {
 
@@ -15,15 +15,15 @@ public struct WebsocketHelper {
     public static func tryConnectWebsocket() -> Bool {
         if ConnectionProvider.connectedAndLoggedIn {
             if userDisabledWebsocket() {
-                QL2("User diabled websocket, not connecting")
+                logger.d("User diabled websocket, not connecting")
                 return false
             } else {
-                QL2("Connecting websocket...")
+                logger.d("Connecting websocket...")
                 Prov.userProvider.connectWebsocketIfLoggedIn()
                 return true
             }
         } else {
-            QL2("Not connected or logged in - can't open websocket connection")
+            logger.d("Not connected or logged in - can't open websocket connection")
             return false
         }
     }

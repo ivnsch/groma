@@ -10,7 +10,7 @@ import UIKit
 import SwiftValidator
 import FBSDKCoreKit
 import FBSDKLoginKit
-import QorumLogs
+
 import Providers
 
 protocol RegisterDelegate: class {
@@ -162,7 +162,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     })
                     
                 } else {
-                    QL4("Validation was not implemented correctly")
+                    logger.e("Validation was not implemented correctly")
                 }
             }
         }
@@ -189,21 +189,21 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     // TODO refactor, same code as in LoginController
     public func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         if let error = error {
-            QL4("Facebook login error: \(error)")
+            logger.e("Facebook login error: \(error)")
             defaultErrorHandler()(ProviderResult(status: .socialLoginError))
             progressVisible(false)
             FBSDKLoginManager().logOut() // toggle "logout" label on button
         } else if result.isCancelled {
-            QL1("Facebook login cancelled")
+            logger.v("Facebook login cancelled")
             progressVisible(false)
             FBSDKLoginManager().logOut() // toggle "logout" label on button
         } else {
-            QL1("Facebook login success, calling our server...")
+            logger.v("Facebook login success, calling our server...")
             progressVisible()
             if let tokenString = result.token.tokenString {
                 Prov.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
             } else {
-                QL4("Facebook: No token")
+                logger.e("Facebook: No token")
             }
         }
     }
@@ -216,11 +216,11 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
-            QL1("Google login success, calling our server...")
+            logger.v("Google login success, calling our server...")
             progressVisible()
             Prov.userProvider.authenticateWithGoogle(user.authentication.accessToken, controller: self, socialSignInResultHandler())
         } else {
-            QL4("Google login error: \(error.localizedDescription)")
+            logger.e("Google login error: \(error.localizedDescription)")
         }
     }
     
@@ -244,7 +244,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         return {[weak self] providerResult in
             self?.resultHandler(
                 onSuccess: {[weak self] syncResult in
-                    QL1("Login success")
+                    logger.v("Login success")
                     self?.delegate?.onSocialSignupInRegisterScreenSuccess()
                     self?.progressVisible(false)
                     
@@ -252,7 +252,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                         InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
                     }
                 }, onError: {[weak self] providerResult in
-                    QL1("Login error: \(providerResult)")
+                    logger.v("Login error: \(providerResult)")
                     self?.progressVisible(false)
                     self?.defaultErrorHandler()(providerResult)
                     if let weakSelf = self {
@@ -269,6 +269,6 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     }
     
     deinit {
-        QL1("Deinit register controller")
+        logger.v("Deinit register controller")
     }
 }

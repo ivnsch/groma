@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 
 public func trans(_ key: String) -> String {
     return NSLocalizedString(key, comment: "")
@@ -33,12 +33,12 @@ public class LangManager {
     }
     
     public var appLang: String {
-        QL2("Device lang: \(deviceLang)")
+        logger.d("Device lang: \(deviceLang)")
         if availableLangs.contains(deviceLang) {
-            QL2("Returning device lang: \(deviceLang)")
+            logger.d("Returning device lang: \(deviceLang)")
             return deviceLang
         } else {
-            QL2("Device lang not supported, returning default lang: \(defaultLang)")
+            logger.d("Device lang not supported, returning default lang: \(defaultLang)")
             return defaultLang
         }
     }

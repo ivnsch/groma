@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 import RealmSwift
 
 class ProductCategoryProviderImpl: ProductCategoryProvider {
@@ -80,7 +80,7 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
                         }
                     } else {
                         DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ProductCategory>) in
-                            QL4("Remote call no success: \(remoteResult)")
+                            logger.e("Remote call no success: \(remoteResult)")
                         })
                     }
                 }
@@ -101,7 +101,7 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
                     if remoteResult.success {
                         self?.dbCategoryProvider.clearCategoryTombstone(categoryUuid) {removeTombstoneSuccess in
                             if !removeTombstoneSuccess {
-                                QL4("Couldn't delete tombstone for product category: \(categoryUuid)")
+                                logger.e("Couldn't delete tombstone for product category: \(categoryUuid)")
                             }
                         }
                     } else {
@@ -125,7 +125,7 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
 //                            let removedCategoriesUuids = removedCategories.map{$0.uuid}
 //                            DBProv.productCategoryProvider.clearCategoriesTombstones(removedCategoriesUuids) {removeTombstoneSuccess in
 //                                if !removeTombstoneSuccess {
-//                                    QL4("Couldn't delete tombstones for categories: \(removedCategories)")
+//                                    logger.e("Couldn't delete tombstones for categories: \(removedCategories)")
 //                                }
 //                            }
 //                        } else {
@@ -134,7 +134,7 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
 //                    }
 //                }
             } else {
-                QL4("Couldn't remove sections from db for name: \(categoryName)")
+                logger.e("Couldn't remove sections from db for name: \(categoryName)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }

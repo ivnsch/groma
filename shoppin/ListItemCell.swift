@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 protocol ListItemCellDelegate: class {
@@ -303,7 +303,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
         if let tableViewListItem = tableViewListItem {
             delegate?.onPanQuantityUpdate(tableViewListItem, newQuantity: shownQuantity)
         } else {
-            QL3("Warn: ListItemCell.onStartItemSwipe: no tableViewListItem")
+            logger.w("Warn: ListItemCell.onStartItemSwipe: no tableViewListItem")
         }
     }
     

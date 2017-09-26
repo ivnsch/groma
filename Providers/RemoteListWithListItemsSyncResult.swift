@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 struct RemoteListItemsSyncResult: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let listUuid: String
@@ -24,7 +24,7 @@ struct RemoteListItemsSyncResult: ResponseObjectSerializable, ResponseCollection
             let couldNotUpdate = representation.value(forKeyPath: "couldNotUpdate") as? [String],
             let couldNotDelete = representation.value(forKeyPath: "couldNotDelete") as? [String]
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.listUuid = listUuid
@@ -74,7 +74,7 @@ struct RemoteListWithListItemsSyncResult: ResponseObjectSerializable, CustomDebu
             let listItemsSyncResultsObj = representation.value(forKeyPath: "listItems") as? [AnyObject],
             let listItemsSyncResults = RemoteListItemsSyncResult.collection(listItemsSyncResultsObj)
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.lists = lists

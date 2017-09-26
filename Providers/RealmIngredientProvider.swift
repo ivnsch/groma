@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 
 public struct AddRecipeIngredientModel {
@@ -54,12 +54,12 @@ class RealmIngredientProvider: RealmProvider {
         func incrementFav() {
             DBProv.itemProvider.incrementFav(itemUuid: quickAddInput.item.uuid, transactionRealm: nil, {saved in
                 if !saved {
-                    QL4("Couldn't increment item fav")
+                    logger.e("Couldn't increment item fav")
                 }
             })
         }
         
-        guard ingredients.realm != nil else {QL4("Ingredients have no realm"); handler(nil); return}
+        guard ingredients.realm != nil else {logger.e("Ingredients have no realm"); handler(nil); return}
         
         let existingIngredientMaybe = ingredients.filter(Ingredient.createFilter(item: quickAddInput.item, recipe: recipe)).first
         
@@ -69,7 +69,7 @@ class RealmIngredientProvider: RealmProvider {
                     incrementFav()
                     handler((ingredient: existingIngredient, isNew: false))
                 } else {
-                    QL4("Couldn't update existing ingredient")
+                    logger.e("Couldn't update existing ingredient")
                     handler(nil)
                 }
             }
@@ -139,10 +139,10 @@ class RealmIngredientProvider: RealmProvider {
 //        removeReturnCount(Ingredient.createFilter(recipeUuid: recipe.uuid, quantifiableProductUnique: quantifiableProductUnique, notUuid: notUuid), handler: {removedCountMaybe in
 //            if let removedCount = removedCountMaybe {
 //                if removedCount > 0 {
-//                    QL2("Found ingredient with same unique in list, deleted it. Unique: \(quantifiableProductUnique), recipe: {\(recipe.uuid), \(recipe.name)}")
+//                    logger.d("Found ingredient with same unique in list, deleted it. Unique: \(quantifiableProductUnique), recipe: {\(recipe.uuid), \(recipe.name)}")
 //                }
 //            } else {
-//                QL4("Remove didn't succeed: Unique: \(quantifiableProductUnique), recipe: {\(recipe.uuid), \(recipe.name)}")
+//                logger.e("Remove didn't succeed: Unique: \(quantifiableProductUnique), recipe: {\(recipe.uuid), \(recipe.name)}")
 //            }
 //            handler(removedCountMaybe.map{$0 > 0} ?? false)
 //        }, objType: Ingredient.self)
@@ -154,10 +154,10 @@ class RealmIngredientProvider: RealmProvider {
         removeReturnCount(Ingredient.createFilter(recipeUuid: recipe.uuid, name: itemName, notUuid: notUuid), handler: {removedCountMaybe in
             if let removedCount = removedCountMaybe {
                 if removedCount > 0 {
-                    QL2("Found ingredient with same unique in list, deleted it. Name: \(itemName), recipe: {\(recipe.uuid), \(recipe.name)}")
+                    logger.d("Found ingredient with same unique in list, deleted it. Name: \(itemName), recipe: {\(recipe.uuid), \(recipe.name)}")
                 }
             } else {
-                QL4("Remove didn't succeed: Name: \(itemName), recipe: {\(recipe.uuid), \(recipe.name)}")
+                logger.e("Remove didn't succeed: Name: \(itemName), recipe: {\(recipe.uuid), \(recipe.name)}")
             }
             handler(removedCountMaybe.map{$0 > 0} ?? false)
         }, objType: Ingredient.self)

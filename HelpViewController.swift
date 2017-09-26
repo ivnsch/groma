@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 import Providers
 
 class HelpItemSectionModel: SectionModel<HelpItem> {
@@ -150,6 +150,6 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     deinit {
-        QL1("Deinit help controller")
+        logger.v("Deinit help controller")
     }
 }

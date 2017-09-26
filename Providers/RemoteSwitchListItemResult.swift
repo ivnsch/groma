@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 
 public struct RemoteSwitchListItemResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     
@@ -26,7 +26,7 @@ public struct RemoteSwitchListItemResult: ResponseObjectSerializable, CustomDebu
             let sectionOrderUpdates = RemoteSwitchListItemSectionOrderUpdateResult.collection(sectionOrderUpdatesObj),
             let lastUpdate = ((representation.value(forKeyPath: "timestamp") as? Double).map{d in Date(timeIntervalSince1970: d)})
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.switchedItem = switchedItem
@@ -59,7 +59,7 @@ public struct RemoteSwitchListItemItemResult: ResponseObjectSerializable, Custom
             let doneOrder = representation.value(forKeyPath: "doneOrder") as? Int,
             let stashOrder = representation.value(forKeyPath: "stashOrder") as? Int
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid
@@ -92,7 +92,7 @@ public struct RemoteSwitchListItemOrderUpdateResult: ResponseObjectSerializable,
             let status = representation.value(forKeyPath: "status") as? Int,
             let order = representation.value(forKeyPath: "order") as? Int
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid
@@ -131,7 +131,7 @@ public struct RemoteSwitchListItemSectionOrderUpdateResult: ResponseObjectSerial
             let doneOrder = representation.value(forKeyPath: "doneOrder") as? Int,
             let stashOrder = representation.value(forKeyPath: "stashOrder") as? Int
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid

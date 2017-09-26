@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public extension Optional {
     
@@ -30,7 +30,7 @@ public extension Optional {
         case (let value1, let value2) where value1 != nil && value2 != nil: return f(value1!, value2!)
         case (let value, nil): return value
         case (nil, let value): return value
-        default: QL4("Logic error. Shouldn't be here."); return nil
+        default: logger.e("Logic error. Shouldn't be here."); return nil
         }
     }
 }

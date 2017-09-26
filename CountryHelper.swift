@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 
 class CountryHelper {
     
@@ -25,7 +25,7 @@ class CountryHelper {
 //        let countryCodeMaybe = currentDeviceCountry()?.lowercased()
 //        let isSupported = countryCodeMaybe.map{serverSupportedCountries.contains($0)} ?? false
 //        
-//        QL1("Is server supported country: \(countryCodeMaybe), isSupported: \(isSupported)")
+//        logger.v("Is server supported country: \(countryCodeMaybe), isSupported: \(isSupported)")
 //        
 //        return isSupported
 ////        return true

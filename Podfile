@@ -7,7 +7,6 @@ project 'Providers/Providers.xcodeproj'
 
 
 def shared
-    pod 'QorumLogs'
     pod 'Reachability', '~> 3.2'
     pod 'RealmSwift', '~> 2.10'
     pod 'SwiftyBeaver'

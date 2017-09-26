@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 class TermsAndConditionsController: UIViewController {
 
@@ -26,7 +26,7 @@ class TermsAndConditionsController: UIViewController {
             // maybe we need to do some mappings here later
             return countryCode
         } else {
-            QL4("Couldn't get locale: \(Locale.current)")
+            logger.e("Couldn't get locale: \(Locale.current)")
             return "com"
         }
     }

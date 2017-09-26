@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 class RealmGroupItemProvider: RealmProvider {
     
@@ -31,7 +31,7 @@ class RealmGroupItemProvider: RealmProvider {
             handler(items)
             
         } catch let e {
-            QL4("Error: creating Realm, returning empty results, error: \(e)")
+            logger.e("Error: creating Realm, returning empty results, error: \(e)")
             handler(nil)
         }
     }
@@ -224,10 +224,10 @@ class RealmGroupItemProvider: RealmProvider {
         removeReturnCount(GroupItem.createFilter(groupUuid: group.uuid, quantifiableProductUnique: quantifiableProductUnique, notUuid: notUuid), handler: {removedCountMaybe in
             if let removedCount = removedCountMaybe {
                 if removedCount > 0 {
-                    QL2("Found group item with same name+brand in list, deleted it. Unique: \(quantifiableProductUnique), group: {\(group.uuid), \(group.name)}")
+                    logger.d("Found group item with same name+brand in list, deleted it. Unique: \(quantifiableProductUnique), group: {\(group.uuid), \(group.name)}")
                 }
             } else {
-                QL4("Remove didn't succeed: Unique: \(quantifiableProductUnique), group: {\(group.uuid), \(group.name)}")
+                logger.e("Remove didn't succeed: Unique: \(quantifiableProductUnique), group: {\(group.uuid), \(group.name)}")
             }
             handler(removedCountMaybe.map{$0 > 0} ?? false)
         }, objType: GroupItem.self)
@@ -287,13 +287,13 @@ class RealmGroupItemProvider: RealmProvider {
                     return incrementedGroupItem.quantity
                     
                 } else {
-                    QL3("Inventory item not found: \(increment.itemUuid)")
+                    logger.w("Inventory item not found: \(increment.itemUuid)")
                     return nil
                 }
             }
             
             }) {(updatedQuantityMaybe: Float?) in
-                QL2("Calling handler")
+                logger.d("Calling handler")
                 handler(updatedQuantityMaybe)
         }
     }
@@ -362,17 +362,17 @@ class RealmGroupItemProvider: RealmProvider {
                         
                         let updateDict: [String: AnyObject] = DBSyncable.timestampUpdateDict(incrementResult.uuid, lastServerUpdate: incrementResult.lastUpdate)
                         realm.create(GroupItem.self, value: updateDict, update: true)
-                        QL1("Updateded group item with increment result dict: \(updateDict)")
+                        logger.v("Updateded group item with increment result dict: \(updateDict)")
                         
                     } else {
-                        QL3("Warning: got result with smaller timestamp: \(incrementResult), ignoring")
+                        logger.w("Warning: got result with smaller timestamp: \(incrementResult), ignoring")
                     }
                 } else {
-                    QL1("Received increment result with outdated quantity: \(incrementResult.updatedQuantity)")
+                    logger.v("Received increment result with outdated quantity: \(incrementResult.updatedQuantity)")
                 }
 
             } else {
-                QL3("Didn't find item for: \(incrementResult)")
+                logger.w("Didn't find item for: \(incrementResult)")
             }
             return true
             }, finishHandler: {success in

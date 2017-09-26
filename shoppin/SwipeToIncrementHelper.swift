@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+import Providers
 
 protocol SwipeToIncrementHelperDelegate: class {
     func currentQuantity() -> Float
@@ -45,8 +45,8 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
     
     func onPanCell(_ recognizer: UIPanGestureRecognizer) {
 
-        guard let view = view else {QL4("No view"); return}
-        guard let delegate = delegate else {QL4("No delegate"); return}
+        guard let view = view else {logger.e("No view"); return}
+        guard let delegate = delegate else {logger.e("No delegate"); return}
 
         let movingHorizontally = abs(recognizer.velocity(in: view).x) > abs(recognizer.velocity(in: view).y)
         
@@ -67,10 +67,10 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
             }
     
         case .failed:
-            QL3("Failed pan")
+            logger.w("Failed pan")
 
         case .cancelled:
-            QL3("Cancelled pan")
+            logger.w("Cancelled pan")
             
         case .ended:
             
@@ -83,7 +83,7 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
             }
             
         default:
-            QL3("Not handled: \(recognizer.state)")
+            logger.w("Not handled: \(recognizer.state)")
         }
     }
     

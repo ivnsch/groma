@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 class RealmUnitProvider: RealmProvider {
     
@@ -94,7 +94,7 @@ class RealmUnitProvider: RealmProvider {
                 fractionsSuccess = fractionsSuccess && success
             }
             if !fractionsSuccess {
-                QL4("Couldn't prefill some or all fractions") // only log, prefilling fractions is not critical for the app to work
+                logger.e("Couldn't prefill some or all fractions") // only log, prefilling fractions is not critical for the app to work
             }
             
             var basesSuccess = true
@@ -104,7 +104,7 @@ class RealmUnitProvider: RealmProvider {
                 basesSuccess = basesSuccess && success
             }
             if !basesSuccess {
-                QL4("Couldn't prefill some or all bases") // only log, prefilling bases is not critical for the app to work
+                logger.e("Couldn't prefill some or all bases") // only log, prefilling bases is not critical for the app to work
             }
             
             
@@ -133,13 +133,13 @@ class RealmUnitProvider: RealmProvider {
         if name.isEmpty {
             let noneUnit = unitSync(id: .none)
             if noneUnit == nil {
-                QL4("Invalid state: there's no .none unit! This should never happen. Creating it again.")
+                logger.e("Invalid state: there's no .none unit! This should never happen. Creating it again.")
                 // This hasn't happened so far but as general guideline, we avoid assumptions and try to recover (with online logging of course, so we can also fix the issue)
                 let newNoneUnit = Unit(uuid: UUID().uuidString, name: trans("unit_none"), id: .none, buyable: true)
                 if saveObjSync(newNoneUnit) {
                     return (newNoneUnit, true)
                 } else {
-                    QL4("Didn't succeed creating new none unit")
+                    logger.e("Didn't succeed creating new none unit")
                     return nil
                 }
             }
@@ -193,7 +193,7 @@ class RealmUnitProvider: RealmProvider {
     
     func baseQuantities() -> RealmSwift.List<BaseQuantity>? {
         guard let basesContainer: BaseQuantitiesContainer = loadSync(predicate: nil)?.first else {
-            QL4("Invalid state: no container")
+            logger.e("Invalid state: no container")
             return nil
         }
         return basesContainer.bases
@@ -212,7 +212,7 @@ class RealmUnitProvider: RealmProvider {
             
         } else {
             guard let basesContainer: BaseQuantitiesContainer = loadSync(predicate: nil)?.first else {
-                QL4("Invalid state: no container")
+                logger.e("Invalid state: no container")
                 return (false, false)
             }
             
@@ -231,7 +231,7 @@ class RealmUnitProvider: RealmProvider {
             
         } else {
             guard let basesContainer: BaseQuantitiesContainer = loadSync(predicate: nil)?.first else {
-                QL4("Invalid state: no container")
+                logger.e("Invalid state: no container")
                 return nil
             }
             

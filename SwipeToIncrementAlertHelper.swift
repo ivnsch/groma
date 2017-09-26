@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 
 class SwipeToIncrementAlertHelperNew {
 
@@ -18,7 +18,7 @@ class SwipeToIncrementAlertHelperNew {
     
     func showPopup() -> Bool {
         
-        guard let preference = preference else {QL4("No preference, exit."); return false}
+        guard let preference = preference else {logger.e("No preference, exit."); return false}
         
         let showedCanSwipeToIncrementCountNumber: NSNumber = PreferencesManager.loadPreference(preference) ?? 0
         let showedCanSwipeToIncrementCount = showedCanSwipeToIncrementCountNumber.intValue
@@ -34,7 +34,7 @@ class SwipeToIncrementAlertHelperNew {
     }
     
     func dontShowAgain() {
-        guard let preference = preference else {QL4("No preference, exit."); return}
+        guard let preference = preference else {logger.e("No preference, exit."); return}
 
         PreferencesManager.savePreference(preference, value: NSNumber(value: SwipeToIncrementAlertHelperNew.countToShowPopup + 1))
     }

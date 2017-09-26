@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import QorumLogs
+
 
 public extension UIColor {
     

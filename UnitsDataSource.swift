@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 import Providers
 
 protocol UnitsCollectionViewDataSourceDelegate {
@@ -35,7 +35,7 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let units = units else {QL4("No units"); return UICollectionViewCell()}
+        guard let units = units else {logger.e("No units"); return UICollectionViewCell()}
         
         if indexPath.row < units.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "unitCell", for: indexPath) as! UnitCell
@@ -54,7 +54,7 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
                     cell.unitView.showSelected(selected: selected, animated: false)
                 }
             } else {
-                QL4("No delegate")
+                logger.e("No delegate")
             }
             
             // HACK: For some reason after scrolled the label doesn't use its center constraint and appears aligned to the left. Debugging view hierarchy shows the label has the correct constraints, parent also has correct size but for some reason it's aligned at the left.
@@ -78,7 +78,7 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
                 cell.setMinTextFieldWidth(delegate.minUnitTextFieldWidth)
 
             } else {
-                QL4("No delegate")
+                logger.e("No delegate")
             }
             
             return cell

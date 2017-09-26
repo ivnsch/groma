@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-import QorumLogs
+
 import Providers
 import RealmSwift
 
@@ -189,7 +189,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             if let edibleButton = edibleButton {
                 edibleButton.setTitleColor(edibleSelected ? Theme.black : Theme.lightGray, for: .normal)
             } else {
-                QL4("Outlets not initialized yet")
+                logger.e("Outlets not initialized yet")
             }
         }
     }
@@ -200,7 +200,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 prefill(editingItem)
                 addNewItemLabel.text = trans("add_edit_list_item_edit_item")
             } else {
-                QL3("Setting editingItem before outlets are set")
+                logger.w("Setting editingItem before outlets are set")
             }
         }
     }
@@ -212,7 +212,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 prefill(editingPlanItem)
             } else {
                 
-                QL3("Setting updatingListItem before outlets are set")
+                logger.w("Setting updatingListItem before outlets are set")
             }
         }
     }
@@ -334,8 +334,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(String(describing: delegate))"); return nil}
-        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {logger.e("No delegate: \(String(describing: delegate))"); return nil}
+        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {logger.e("No tabBarController"); return nil}
         
         let overrideCenterY: CGFloat = parentViewForAddButton.height + tabBarHeight
 
@@ -356,7 +356,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     fileprivate func submitUnitOrBasePickers() {
         
-        guard let productQuantityController = productQuantityController else {QL4("No product quantity controller"); return}
+        guard let productQuantityController = productQuantityController else {logger.e("No product quantity controller"); return}
         
         productQuantityController.setUnitPickerOpen(false)
         productQuantityController.setBasesPickerOpen(false)
@@ -513,7 +513,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 delegate?.onOkTap(price, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
                 
             } else {
-                QL4("Validation was not implemented correctly, price: \(String(describing: priceInput.text)), quantity: \(String(describing: productQuantityController?.quantity)), brand: \(String(describing: brandInput.text)), sectionColor: \(String(describing: sectionColorButton.textColor))")
+                logger.e("Validation was not implemented correctly, price: \(String(describing: priceInput.text)), quantity: \(String(describing: productQuantityController?.quantity)), brand: \(String(describing: brandInput.text)), sectionColor: \(String(describing: sectionColorButton.textColor))")
             }
         }
     }
@@ -581,7 +581,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         if textField == sectionInput {
             delegate?.addEditSectionOrCategoryColor(selectedString) {[weak self] colorMaybe in
                 self?.sectionColorButton.textColor = colorMaybe ?? {
-                    QL4("Invalid state: selected a section or category suggestion and there's no color.")
+                    logger.e("Invalid state: selected a section or category suggestion and there's no color.")
                     return UIColor.black
                 }()
             }
@@ -712,13 +712,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                     AlertPopup.show(message: trans("popup_was_removed", string), controller: weakSelf)
                 })
             })
-        default: QL4("Not handled input")
+        default: logger.e("Not handled input")
         }
     }
     
     deinit {
         // TODO!!! why is this deinit never called?
-        QL1("Deinit add edit listitem controller")
+        logger.v("Deinit add edit listitem controller")
     }
     
     // MARK: -

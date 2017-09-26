@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 
 class MemInventoryItemProvider {
     
@@ -155,7 +155,7 @@ class MemInventoryItemProvider {
     }
     
     func inventoriesRealm(_ remote: Bool, _ handler: @escaping (ProviderResult<Results<DBInventory>>) -> Void) {
-        QL4("Not implemented (TODO)")
+        logger.e("Not implemented (TODO)")
     }
 }
 

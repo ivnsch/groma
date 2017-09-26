@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 
 public struct RemoteSwitchAllListItemsLightResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     public let update: RemoteSwitchAllListItemsLightUpdate
@@ -19,7 +19,7 @@ public struct RemoteSwitchAllListItemsLightResult: ResponseObjectSerializable, C
             let update = RemoteSwitchAllListItemsLightUpdate(representation: updateObj as AnyObject),
             let lastUpdate = representation.value(forKeyPath: "lastUpdate") as? Double
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.update = update
@@ -46,7 +46,7 @@ public struct RemoteSwitchAllListItemsLightUpdate: ResponseObjectSerializable, C
             let dstStatus = ListItemStatus(rawValue: dstStatusInt),
             let listUuid = representation.value(forKeyPath: "listUuid") as? String
             else {
-                QL4("Invalid json: \(representation)")
+                logger.e("Invalid json: \(representation)")
                 return nil}
         
         self.srcStatus = srcStatus

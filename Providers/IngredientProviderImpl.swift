@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-import QorumLogs
+
 
 class IngredientProviderImpl: IngredientProvider {
     
@@ -17,7 +17,7 @@ class IngredientProviderImpl: IngredientProvider {
             if let results = resultsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: results))
             } else {
-                QL4("Couldn't retrieve ingredients")
+                logger.e("Couldn't retrieve ingredients")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -38,7 +38,7 @@ class IngredientProviderImpl: IngredientProvider {
             if let quantity = quantityMaybe {
                 handler(ProviderResult(status: .success, sucessResult: quantity))
             } else {
-                QL4("Couldn't increment")
+                logger.e("Couldn't increment")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -59,7 +59,7 @@ class IngredientProviderImpl: IngredientProvider {
                 }
                 
             } else {
-                QL4("Error fetching item: \(itemResult.status)")
+                logger.e("Error fetching item: \(itemResult.status)")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -88,7 +88,7 @@ class IngredientProviderImpl: IngredientProvider {
                         if success {
                             handler(ProviderResult(status: .success, sucessResult: (ingredient: updatedIngredient, replaced: foundAndDeletedIngredient)))
                         } else {
-                            QL4("Error updating ingredient: \(itemResult)")
+                            logger.e("Error updating ingredient: \(itemResult)")
                             handler(ProviderResult(status: itemResult.status))
                         }
                     }
@@ -97,14 +97,14 @@ class IngredientProviderImpl: IngredientProvider {
                     //                        if result.success {
                     //                            handler(ProviderResult(status: .success, sucessResult: (recipe: updatedIngredient, replaced: foundAndDeletedIngredient)))
                     //                        } else {
-                    //                            QL4("Error updating ingredient: \(result)")
+                    //                            logger.e("Error updating ingredient: \(result)")
                     //                            handler(ProviderResult(status: result.status))
                     //                        }
                     //                    }
                     
                     
                 } else {
-                    QL4("Error fetching product: \(itemResult.status)")
+                    logger.e("Error fetching product: \(itemResult.status)")
                     handler(ProviderResult(status: .databaseUnknown))
                 }
                 
@@ -135,7 +135,7 @@ class IngredientProviderImpl: IngredientProvider {
         switch DBProv.itemProvider.mergeOrCreateItemSync(itemInput: itemInput, updateCategory: true, doTransaction: doTransaction, notificationToken: notificationToken) {
         case .ok(let result): handler(ProviderResult(status: .success, sucessResult: result))
         case .err(let error):
-            QL4("Error fetching item: \(error)")
+            logger.e("Error fetching item: \(error)")
             handler(ProviderResult(status: .databaseUnknown))
         }
     }

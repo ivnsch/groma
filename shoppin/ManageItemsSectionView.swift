@@ -8,7 +8,7 @@
 
 import UIKit
 import Providers
-import QorumLogs
+
 
 protocol ManageItemsSectionViewDelegate: class {
     func onHeaderTap(section: Int, view: ManageItemsSectionView)
@@ -89,7 +89,7 @@ class ManageItemsSectionView: UITableViewHeaderFooterView, CellUncovererDelegate
         if let sectionIndex = sectionIndex {
             delegate?.onDeleteSectionTap(section: sectionIndex, view: self)
         } else {
-            QL4("No headerIndex or group")
+            logger.e("No headerIndex or group")
         }
     }
     
@@ -97,7 +97,7 @@ class ManageItemsSectionView: UITableViewHeaderFooterView, CellUncovererDelegate
         if let sectionIndex = sectionIndex {
             delegate?.onHeaderTap(section: sectionIndex, view: self)
         } else {
-            QL4("No headerIndex or group")
+            logger.e("No headerIndex or group")
         }
     }
     
@@ -105,7 +105,7 @@ class ManageItemsSectionView: UITableViewHeaderFooterView, CellUncovererDelegate
         if let sectionIndex = sectionIndex {
             delegate?.onHeaderLongTap(section: sectionIndex, view: self)
         } else {
-            QL4("No headerIndex or group")
+            logger.e("No headerIndex or group")
         }
         
     }

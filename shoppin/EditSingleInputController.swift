@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-import QorumLogs
+
 import Providers
 
 
@@ -66,8 +66,8 @@ class EditSingleInputController: UIViewController {
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentView = parent?.view else {if mode == .standalone {QL4("No parentController")}; return nil}
-        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
+        guard let parentView = parent?.view else {if mode == .standalone {logger.e("No parentController")}; return nil}
+        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {logger.e("No tabBarController"); return nil}
         
         let overrideCenterY: CGFloat = parentView.height + tabBarHeight
         
@@ -78,7 +78,7 @@ class EditSingleInputController: UIViewController {
     }
 
     func config(mode: TopControllerMode, prefillName: String, settings: EditSingleInputControllerSettings, editingObj: Any?) {
-        guard nameTextField != nil else {QL4("Outlets not initialized"); return}
+        guard nameTextField != nil else {logger.e("Outlets not initialized"); return}
         
         self.mode = mode
 
@@ -109,7 +109,7 @@ class EditSingleInputController: UIViewController {
     
     func submit() -> InputsResult<String>? {
         
-        guard let validator = validator else {QL4("No validator"); return nil}
+        guard let validator = validator else {logger.e("No validator"); return nil}
 
         if let errors = validator.validate() {
             for (_, error) in errors {
@@ -132,7 +132,7 @@ class EditSingleInputController: UIViewController {
                 return .ok(name)
                 
             } else {
-                QL4("Validation was not implemented correctly")
+                logger.e("Validation was not implemented correctly")
                 return nil
             }
         }

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import QorumLogs
+
 import RealmSwift
 
 class BrandProviderImpl: BrandProvider {
@@ -32,7 +32,7 @@ class BrandProviderImpl: BrandProvider {
             if let brands = brandsMaybe {
                 handler(ProviderResult(status: .success, sucessResult: brands))
             } else {
-                QL4("Couldn't load brands")
+                logger.e("Couldn't load brands")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }
@@ -69,7 +69,7 @@ class BrandProviderImpl: BrandProvider {
                 }
                 
             } else {
-                QL4("Error removing products with brand from local db: \(name)")
+                logger.e("Error removing products with brand from local db: \(name)")
                 handler(ProviderResult(status: .unknown))
             }
         }
@@ -86,7 +86,7 @@ class BrandProviderImpl: BrandProvider {
             if let dict = dictMaybe {
                 handler(ProviderResult(status: .success, sucessResult: dict))
             } else {
-                QL4("Couldn't load brands")
+                logger.e("Couldn't load brands")
                 handler(ProviderResult(status: .databaseUnknown))
             }
         }

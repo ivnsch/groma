@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-import QorumLogs
+
 import ChameleonFramework
 
 public class SuggestionsPrefiller {
@@ -40,7 +40,7 @@ public class SuggestionsPrefiller {
                 }
                 
             } else {
-                QL4("Error initializing default units, can't prefill database!")
+                logger.e("Error initializing default units, can't prefill database!")
                 onFinished(nil)
             }
             
@@ -122,18 +122,18 @@ public class SuggestionsPrefiller {
         }
         
         /// TODO!!!!!!!!! think about restore prefill products (from settings) - at this point (after we allow user to delete units) it may be possible that there are no .g or .kg. We can either don't allow to delete the default units (at least some of them) or don't allow to delete only noneUnit - or when we are here, if the units don't exist, re-create them (the later sounds to be the most reasonable)
-        guard let g = unitDict[.g] else {QL4("No g unit! can't prefill."); return ([], [])}
-        guard let kg = unitDict[.kg] else {QL4("No kg unit! can't prefill."); return ([], [])}
-        guard let l = unitDict[.liter] else {QL4("No l unit! can't prefill."); return ([], [])}
-        guard let ml = unitDict[.milliliter] else {QL4("No ml unit! can't prefill."); return ([], [])}
-        guard let noneUnit = unitDict[.none] else {QL4("No none unit! can't prefill."); return ([], [])}
+        guard let g = unitDict[.g] else {logger.e("No g unit! can't prefill."); return ([], [])}
+        guard let kg = unitDict[.kg] else {logger.e("No kg unit! can't prefill."); return ([], [])}
+        guard let l = unitDict[.liter] else {logger.e("No l unit! can't prefill."); return ([], [])}
+        guard let ml = unitDict[.milliliter] else {logger.e("No ml unit! can't prefill."); return ([], [])}
+        guard let noneUnit = unitDict[.none] else {logger.e("No none unit! can't prefill."); return ([], [])}
         
         func noResult() -> (categories: [ProductCategory], products: [QuantifiableProduct]) {
             return (categories: [], products: [])
         }
         
-        guard let path = Bundle.main.path(forResource: lang, ofType: "lproj") else {QL4("No path for lang: \(lang)"); return noResult()}
-        guard let bundle = Bundle(path: path) else {QL4("No bundle for path: \(path)"); return noResult()}
+        guard let path = Bundle.main.path(forResource: lang, ofType: "lproj") else {logger.e("No path for lang: \(lang)"); return noResult()}
+        guard let bundle = Bundle(path: path) else {logger.e("No bundle for path: \(path)"); return noResult()}
         
         func tr(_ key: String, _ lang: String) -> String {
             return bundle.localizedString(forKey: key, value: nil, table: nil)
