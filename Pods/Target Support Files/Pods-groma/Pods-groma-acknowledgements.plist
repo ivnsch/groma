@@ -1100,36 +1100,6 @@ THE SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Copyright 2017 Google</string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>FirebaseAnalytics</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>Copyright 2017 Google</string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>FirebaseCore</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>Copyright 2017 Google</string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>FirebaseInstanceID</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
 			<string>
                                  Apache License
                            Version 2.0, January 2004
@@ -1549,16 +1519,6 @@ THE SOFTWARE.
 			<string>Apache</string>
 			<key>Title</key>
 			<string>GTMSessionFetcher</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>Copyright 2016 Google Inc.</string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>Google</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

@@ -10,7 +10,7 @@ import UIKit
 import SwiftValidator
 import FBSDKCoreKit
 import FBSDKLoginKit
-
+import GoogleSignIn
 import Providers
 
 protocol RegisterDelegate: class {

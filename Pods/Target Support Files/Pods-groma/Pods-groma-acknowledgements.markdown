@@ -1027,18 +1027,6 @@ THE SOFTWARE.
 
 
 
-## FirebaseAnalytics
-
-Copyright 2017 Google
-
-## FirebaseCore
-
-Copyright 2017 Google
-
-## FirebaseInstanceID
-
-Copyright 2017 Google
-
 ## GTMOAuth2
 
 
@@ -1450,10 +1438,6 @@ Copyright 2017 Google
    See the License for the specific language governing permissions and
    limitations under the License.
 
-
-## Google
-
-Copyright 2016 Google Inc.
 
 ## GoogleSignIn
 

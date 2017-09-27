@@ -32,7 +32,7 @@ target 'groma' do
     platform :ios, '8.0'
     pod 'SwiftValidator', :git => 'https://github.com/i-schuetz/SwiftValidator.git', :branch => 'remove_delegate_callback'
     pod 'SwiftCharts', :git => 'https://github.com/i-schuetz/SwiftCharts.git'
-    pod 'Google/SignIn'
+    pod 'GoogleSignIn'
     pod 'SwipeView', '~> 1.3.2'
     pod 'CMPopTipView', '~> 2.0'
     pod 'KLCPopup', '~> 1.0'

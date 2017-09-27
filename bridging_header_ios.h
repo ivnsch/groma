@@ -7,5 +7,4 @@
 //
 
 #import "XYPieChart.h"
-#import <Google/SignIn.h>
 #import "MLPAutoCompleteTextField.h"

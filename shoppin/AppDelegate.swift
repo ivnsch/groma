@@ -11,11 +11,10 @@ import CoreData
 import Reachability
 import ChameleonFramework
 import HockeySDK
-
+import GoogleSignIn
 import RealmSwift
 import Providers
 import FBSDKLoginKit
-
 
 @objc
 @UIApplicationMain

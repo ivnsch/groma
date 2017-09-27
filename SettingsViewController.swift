@@ -9,7 +9,7 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
-
+import GoogleSignIn
 import Providers
 import RealmSwift
 

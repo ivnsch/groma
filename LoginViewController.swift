@@ -11,7 +11,7 @@ import UIKit
 import SwiftValidator
 import FBSDKCoreKit
 import FBSDKLoginKit
-
+import GoogleSignIn
 import CloudKit
 import Providers
 

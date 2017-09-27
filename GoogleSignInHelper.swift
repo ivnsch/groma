@@ -8,17 +8,17 @@
 
 import UIKit
 import Providers
+import GoogleSignIn
 
 struct GoogleSignInHelper {
 
     static func configure(uiDelegate: GIDSignInUIDelegate, delegate: GIDSignInDelegate) {
         // Google sign-in
         var configureError: NSError?
-        GGLContext.sharedInstance().configureWithError(&configureError)
-        if let configureError = configureError {
-            logger.e("Error configuring Google services: \(configureError)")
-        }
-        
+
+        // From GoogleService-Info.plist
+        GIDSignIn.sharedInstance().clientID = "648544826350-fjbp79b7n7f4mssd8h6d53t46arf79qg.apps.googleusercontent.com"
+
         GIDSignIn.sharedInstance().delegate = delegate
         
         // So far research these are the current scopes https://developers.google.com/+/web/api/rest/oauth
