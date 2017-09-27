@@ -41,7 +41,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.schuetz.shoppin</string>
+				<string>co.groma.groma</string>
 			</array>
 		</dict>
 	</array>
