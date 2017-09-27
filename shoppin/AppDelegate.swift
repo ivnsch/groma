@@ -64,8 +64,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         checkPing()
         
         checkRatePopup()
-        
-        initWebsocket()
+
+//        initWebsocket()
 
         configRealm()
         
