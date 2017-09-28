@@ -308,7 +308,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
     }
     
     override var itemsCount: Int? {
-        guard let itemsResult = itemsResult else {logger.e("No result"); return nil}
+        guard let itemsResult = itemsResult else { return nil }
         
         return itemsResult.count
     }
