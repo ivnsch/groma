@@ -1280,7 +1280,18 @@ class RealmProductProvider: RealmProvider {
             } ?? .err(.unknown)
             
         } else {
-            if let realm = realmData?.realm {
+
+            let realmOptional: Realm? = realmData?.realm ?? {
+                logger.d("Realm was not passed - creating default realm", .db)
+                do {
+                    return try Realm()
+                } catch (let e) {
+                    logger.e("Error creating default realm: \(e)")
+                    return nil
+                }
+            } ()
+
+            if let realm = realmOptional {
                 return transactionContent(realm: realm)
             } else {
                 logger.e("Invalid state: realmData has no realm")
@@ -1325,7 +1336,18 @@ class RealmProductProvider: RealmProvider {
             } ?? .err(.unknown)
             
         } else {
-            if let realm = realmData?.realm {
+
+            let realmOptional: Realm? = realmData?.realm ?? {
+                logger.d("Realm was not passed - creating default realm", .db)
+                do {
+                    return try Realm()
+                } catch (let e) {
+                    logger.e("Error creating default realm: \(e)")
+                    return nil
+                }
+            } ()
+
+            if let realm = realmOptional {
                 return transactionContent(realm: realm)
             } else {
                 logger.e("Invalid state: realmData has no realm")

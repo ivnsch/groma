@@ -10,10 +10,12 @@ import Foundation
 import RealmSwift
 
 // TODO own file
+// TODO review if it's really necessary to pass the realm with the token (instead of simply doing Realm() where it's needed)
+// if it's not necessary, remove RealmData and pass only the notification token.
 public struct RealmData {
     public var realm: Realm
     public var token: NotificationToken
-    
+
     public init(realm: Realm, token: NotificationToken) {
         self.realm = realm
         self.token = token
