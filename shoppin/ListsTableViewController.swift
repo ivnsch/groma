@@ -55,7 +55,9 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     fileprivate var notificationToken: NotificationToken?
     
     var topAddEditListControllerManager: ExpandableTopViewController<AddEditListController>?
-    
+
+    var canLoadModelsOnWillAppear = false
+
     override var emptyViewLabels: (label1: String, label2: String) {
         return (label1: trans("empty_lists_line1"), label2: trans("empty_lists_line2"))
     }
@@ -126,6 +128,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override func initModels() {
+
         Prov.listProvider.lists(true, successHandler{[weak self] lists in guard let weakSelf = self else {return}
 //            self?.models = lists.map{ExpandableTableViewListModel(list: $0)}
 //            self?.debugItems()
@@ -332,7 +335,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override var itemsCount: Int? {
-        guard let listsResult = listsResult else {logger.e("No result"); return nil}
+        guard let listsResult = listsResult else { return nil }
         
         return listsResult.count
     }

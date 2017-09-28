@@ -123,12 +123,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         if (isDebug() && debugForceShowIntro) || PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
             let introController = UIStoryboard.introViewController()
-            
+
+            let listController = (controller.viewControllers?.first as? UINavigationController)?.viewControllers.first as? ListsTableViewController
+            listController?.allowedToLoadModelsOnWillAppear = false
+
             // On first launch make lists view controller update immediately after create example list, such that when user exits intro there's not a little delay where they see empty image while the example list is loaded. The reason the empty image shows is that the first view controller is loaded immediately - not after intro controller, and it fetches lists which are empty at this point.
-            introController.onCreateExampleList = {[weak controller] in
-                if let listController = (controller?.viewControllers?.first as? UINavigationController)?.viewControllers.first as? ListsTableViewController {
-                    listController.initModels()
-                }
+            introController.onCreateExampleList = {[weak listController] in
+                listController?.initModels()
+                listController?.allowedToLoadModelsOnWillAppear = true
             }
             
             introController.mode = .launch

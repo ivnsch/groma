@@ -86,7 +86,9 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         // override
         return false
     }
-    
+
+    var allowedToLoadModelsOnWillAppear = true
+
     fileprivate var originalNavBarFrame: CGRect = CGRect.zero
     
     fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
@@ -175,7 +177,9 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        initModels()
+        if allowedToLoadModelsOnWillAppear {
+            initModels()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

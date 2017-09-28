@@ -1283,7 +1283,7 @@ class RealmProductProvider: RealmProvider {
             if let realm = realmData?.realm {
                 return transactionContent(realm: realm)
             } else {
-                logger.e("Invalid state: on realm")
+                logger.e("Invalid state: realmData has no realm")
                 return .err(.unknown)
             }
         }
@@ -1328,7 +1328,7 @@ class RealmProductProvider: RealmProvider {
             if let realm = realmData?.realm {
                 return transactionContent(realm: realm)
             } else {
-                logger.e("Invalid state: on realm")
+                logger.e("Invalid state: realmData has no realm")
                 return .err(.unknown)
             }
         }
@@ -1368,7 +1368,7 @@ class RealmProductProvider: RealmProvider {
             if let realm = realmData?.realm {
                 return transactionContent(realm: realm)
             } else {
-                logger.e("Invalid state: on realm")
+                logger.e("Invalid state: realmData has no realm")
                 return .err(.unknown)
             }
         }
