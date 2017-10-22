@@ -29,7 +29,7 @@ end
 
 target 'groma' do
     project 'shoppin.xcodeproj'
-    platform :ios, '8.0'
+    platform :ios, '9.0'
     pod 'SwiftValidator', :git => 'https://github.com/i-schuetz/SwiftValidator.git', :branch => 'remove_delegate_callback'
     pod 'SwiftCharts', :git => 'https://github.com/i-schuetz/SwiftCharts.git'
     pod 'GoogleSignIn'
