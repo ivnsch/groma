@@ -27,6 +27,6 @@ struct ItemWithCellAttributes<T: Equatable>: Equatable {
     }
     
 }
-func ==<T: Equatable>(lhs: ItemWithCellAttributes<T>, rhs: ItemWithCellAttributes<T>) -> Bool {
+func ==<T>(lhs: ItemWithCellAttributes<T>, rhs: ItemWithCellAttributes<T>) -> Bool {
     return lhs.item == rhs.item
 }

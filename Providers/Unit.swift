@@ -92,7 +92,7 @@ public class Unit: DBSyncable, Identifiable {
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             id: id ?? self.id,
-            buyable: buyable ?? self.buyable
+            buyable: buyable
         )
     }
        public override var description: String {

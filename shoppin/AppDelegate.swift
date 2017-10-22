@@ -534,7 +534,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                     if let controller = window?.rootViewController {
                         InventoryInvitationsHandler.handleInvitation(invitation, controller: controller)
                     } else {
-                        logger.e("Couldn't show popup, either window: \(String(describing: window)) or root controller: \(window?.rootViewController) is nil)")
+                        logger.e("Couldn't show popup, either window: \(String(describing: window)) or root " +
+                            "controller: \(String(describing: window?.rootViewController)) is nil)")
                     }
                 default: logger.e("Not handled case: \(notification.verb))")
                 }

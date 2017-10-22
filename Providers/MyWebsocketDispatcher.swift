@@ -77,7 +77,7 @@ public enum WSNotificationCategory: String {
 }
 
 
-public final class WSNotification<T>: AnyObject {
+public final class WSNotification<T> {
     public let verb: WSNotificationVerb
     public let obj: T
     init (_ verb: WSNotificationVerb, _ obj: T) {
@@ -86,7 +86,7 @@ public final class WSNotification<T>: AnyObject {
     }
 }
 
-public final class WSEmptyNotification: AnyObject {
+public final class WSEmptyNotification {
     public let verb: WSNotificationVerb
     init (_ verb: WSNotificationVerb) {
         self.verb = verb

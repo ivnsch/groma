@@ -22,7 +22,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
     fileprivate let closeInset: CGFloat // extra table view inset while closed (additionally to the view's height when expanded)
     fileprivate weak var parentController: UIViewController?
     weak var tableView: UITableView?
-    fileprivate let controllerBuilder: (Void) -> T // initialise lazily the controller
+    fileprivate let controllerBuilder: () -> T // initialise lazily the controller
     
     fileprivate(set) var controller: T?
     fileprivate var overlay: UIView?
@@ -33,7 +33,9 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
     
     weak var delegate: ExpandableTopViewControllerDelegate?
     
-    init(top: CGFloat, height: CGFloat, animateTableViewInset: Bool = true, openInset: CGFloat = 0, closeInset: CGFloat = 0, parentViewController: UIViewController, tableView: UITableView, controllerBuilder: @escaping (Void) -> T) {
+    init(top: CGFloat, height: CGFloat, animateTableViewInset: Bool = true, openInset: CGFloat = 0,
+         closeInset: CGFloat = 0, parentViewController: UIViewController, tableView: UITableView,
+         controllerBuilder: @escaping () -> T) {
         self.top = top
         self.height = height
         self.animateTableViewInset = animateTableViewInset

@@ -14,7 +14,7 @@ protocol SubmitViewDelegate: class {
 
 @IBDesignable class SubmitView: UIView {
 
-    @IBInspectable weak var delegate: SubmitViewDelegate?
+    weak var delegate: SubmitViewDelegate?
     
     @IBOutlet weak var submitButton: UIButton!
     

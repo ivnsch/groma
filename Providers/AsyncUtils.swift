@@ -8,7 +8,7 @@
 
 import Foundation
 
-public func background<T>(_ background: @escaping (Void) -> T, onFinish: @escaping (T) -> Void) {
+public func background<T>(_ background: @escaping () -> T, onFinish: @escaping (T) -> Void) {
     DispatchQueue.global(qos: .background).async {
         let t: T = background()
         mainQueue {
