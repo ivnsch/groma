@@ -35,7 +35,8 @@ private class Keys {
 }
 
 class MyWebSocket: WebSocketDelegate {
-    
+
+
     fileprivate var socket: WebSocket?
     
     fileprivate var reconnectDelayK: Double = 1
@@ -50,8 +51,9 @@ class MyWebSocket: WebSocketDelegate {
             if let token = AccessTokenHelper.loadToken() {
                 socket = WebSocket(url: URL(string: "ws://\(Urls.hostIPPort)/ws")!)
                 socket?.delegate = self
-                socket?.headers["X-Auth-Token"] = token
-                socket?.headers["Content-Type"] = "application/json"
+                // TODO upgrade 2.0.3 -> 3.0.2
+//                socket?.headers["X-Auth-Token"] = token
+//                socket?.headers["Content-Type"] = "application/json"
                 logger.d("Websocket: Initialised, connecting...")
                 socket?.connect()
                 
@@ -139,8 +141,8 @@ class MyWebSocket: WebSocketDelegate {
             return websocketUuid
         }
     }
-    
-    func websocketDidConnect(socket: WebSocket) {
+
+    func websocketDidConnect(socket: WebSocketClient) {
         
         let deviceId = websocketDeviceId
         
@@ -172,10 +174,11 @@ class MyWebSocket: WebSocketDelegate {
             }
         }
     }
-    
-    func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
+
+    func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
+
         if let error = error {
-            switch error.code {
+            switch (error as NSError).code {
             case 401:
                 logger.w("Not authorized, removing login token \(error) TODO show login screen")
                 Prov.userProvider.removeLoginToken()
@@ -204,6 +207,8 @@ class MyWebSocket: WebSocketDelegate {
                 logger.e("Unknown websocket connection error: \(error)")
             }
         } else {
+            // NEW NOTE: (called also if error couldn't be casted to NSError!)
+
             // Called when the server is stopped (e.g. restarted) NOTE we assume for now this is the only reason, there may be other(?) TODO: review. We should only try to reconnect when the server was down or general connection error, not when client intentionally disconnects.
             // EDIT: Apparently called also when the user logs out - first we see "Websocket: Closed connection[;" in log (case 1000 above) and immediately after "Websocket: Server closed the connection[;" which means we are being notified 2x. So now we check here if user has a login token (this is removed when the user logs out), so we don't try to reconnect or sent the notification to show the "websocket disconnected" message in this case. 
             // The responses seem to be a bit inconsistent, so we call now tryReconnectIfLoggedIn both on 1000 and here and check for login token in both cases. >> in server down case anyway only 1 of them is called, not both at the same time, so we will not have the situation of running the retry timier 2x (even if, it will just access the timer 2x)
@@ -268,8 +273,9 @@ class MyWebSocket: WebSocketDelegate {
         notifyConnected(true)
         reconnectDelayK = 1
     }
-    
-    func websocketDidReceiveMessage(socket: WebSocket, text: String) {
+
+
+    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         logger.v("Websocket: Received text: \(text)")
 
         if let data = (text as NSString).data(using: String.Encoding.utf8.rawValue) {
@@ -316,7 +322,7 @@ class MyWebSocket: WebSocketDelegate {
         }
     }
     
-    func websocketDidReceiveData(socket: WebSocket, data: Data) {
+    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         logger.v("Websocket: Received data: \(data.count)")
     }
 }
