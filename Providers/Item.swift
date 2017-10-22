@@ -11,11 +11,11 @@ import RealmSwift
 
 public class Item: DBSyncable, Identifiable {
 
-    public dynamic var uuid: String = ""
-    public dynamic var name: String = ""
-    public dynamic var categoryOpt: ProductCategory? = ProductCategory()
-    public dynamic var fav: Int = 0
-    public dynamic var edible: Bool = true
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var name: String = ""
+    @objc public dynamic var categoryOpt: ProductCategory? = ProductCategory()
+    @objc public dynamic var fav: Int = 0
+    @objc public dynamic var edible: Bool = true
     
     public var category: ProductCategory {
         get {

@@ -96,9 +96,12 @@ class ProductProviderImpl: ProductProvider {
     
     func quantifiableProductsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)])>) -> Void) {
         
-        DBProv.productProvider.quantifiableProductsWithPosibleSections(text, list: list, range: range, sortBy: sortBy) {result in
-            if let productsWithMaybeSections = result.1 {
-                handler(ProviderResult(status: .success, sucessResult: (substring: result.0, productsWithMaybeSections: productsWithMaybeSections)))
+        DBProv.productProvider.quantifiableProductsWithPosibleSections(text, list: list, range: range, sortBy: sortBy)
+        { substring, productsWithMaybeSections in
+            if let productsWithMaybeSections = productsWithMaybeSections {
+                handler(ProviderResult(status: .success, sucessResult: (substring: substring,
+                                                                        productsWithMaybeSections:
+                    productsWithMaybeSections)))
             } else {
                 handler(ProviderResult(status: .unknown))
             }
@@ -108,9 +111,12 @@ class ProductProviderImpl: ProductProvider {
     
     func productsWithPosibleSections(_ text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: @escaping (ProviderResult<(substring: String?, productsWithMaybeSections: [(product: Product, section: Section?)])>) -> Void) {
         
-        DBProv.productProvider.productsWithPosibleSections(text, list: list, range: range, sortBy: sortBy) {result in
-            if let productsWithMaybeSections = result.1 {
-                handler(ProviderResult(status: .success, sucessResult: (substring: result.0, productsWithMaybeSections: productsWithMaybeSections)))
+        DBProv.productProvider.productsWithPosibleSections(text, list: list, range: range, sortBy: sortBy) { substring,
+            productsWithMaybeSections in
+            if let productsWithMaybeSections = productsWithMaybeSections {
+                handler(ProviderResult(status: .success, sucessResult: (substring: substring,
+                                                                        productsWithMaybeSections:
+                    productsWithMaybeSections)))
             } else {
                 handler(ProviderResult(status: .unknown))
             }

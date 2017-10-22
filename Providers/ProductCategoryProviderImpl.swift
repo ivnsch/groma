@@ -42,10 +42,11 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
         }
     }
     
-    func categoriesContainingText(_ text: String, range: NSRange, _ handler: @escaping (ProviderResult<(text: String?, categories: Results<ProductCategory>)>) -> Void) {
-        dbCategoryProvider.categoriesContainingText(text, range: range) {result in
-            if let categories = result.1 {
-                handler(ProviderResult(status: .success, sucessResult: (result.0, categories)))
+    func categoriesContainingText(_ text: String, range: NSRange, _ handler: @escaping (ProviderResult<(text: String?,
+        categories: Results<ProductCategory>)>) -> Void) {
+        dbCategoryProvider.categoriesContainingText(text, range: range) { text, categories in
+            if let categories = categories {
+                handler(ProviderResult(status: .success, sucessResult: (text, categories)))
             } else {
                 handler(ProviderResult(status: .unknown))
             }

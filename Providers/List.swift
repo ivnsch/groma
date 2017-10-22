@@ -18,12 +18,12 @@ public struct ListCopyStore {
 
 public class List: DBSyncable, Identifiable {
     
-    public dynamic var uuid: String = ""
-    public dynamic var name: String = ""
-    dynamic var bgColorHex: String = "000000"
-    public dynamic var order: Int = 0
-    dynamic var inventoryOpt: DBInventory? = DBInventory()
-    public dynamic var store: String?
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var name: String = ""
+    @objc dynamic var bgColorHex: String = "000000"
+    @objc public dynamic var order: Int = 0
+    @objc dynamic var inventoryOpt: DBInventory? = DBInventory()
+    @objc public dynamic var store: String?
     
     public var inventory: DBInventory {
         get {

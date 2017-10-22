@@ -11,11 +11,11 @@ import RealmSwift
 
 public class ProductGroup: DBSyncable, Identifiable {
 
-    public dynamic var uuid: String = ""
-    public dynamic var name: String = ""
-    public dynamic var order: Int = 0
-    public dynamic var bgColorHex: String = "000000"
-    public dynamic var fav: Int = 0
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var name: String = ""
+    @objc public dynamic var order: Int = 0
+    @objc public dynamic var bgColorHex: String = "000000"
+    @objc public dynamic var fav: Int = 0
     
     public var color: UIColor {
         get {

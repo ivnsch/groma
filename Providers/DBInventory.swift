@@ -11,10 +11,10 @@ import RealmSwift
 
 public class DBInventory: DBSyncable {
     
-    public dynamic var uuid: String = ""
-    public dynamic var name: String = ""
-    dynamic var bgColorHex: String = "000000"
-    public dynamic var order: Int = 0
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var name: String = ""
+    @objc dynamic var bgColorHex: String = "000000"
+    @objc public dynamic var order: Int = 0
     
     public var users = RealmSwift.List<DBSharedUser>()
     

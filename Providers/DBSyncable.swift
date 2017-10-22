@@ -19,12 +19,12 @@ public class DBSyncable: Object {
     // TODO!!!! are we using lastUpdate if not remove or write a comment. Ensure we use lastServerUpdate in sync
     // ensure also that when we create the new objs with lastServerUpdate, lastUpdate is set to the same date
 //    dynamic var lastUpdate: NSDate = NSDate()
-    dynamic var lastServerUpdate: Int64 = 0
-    dynamic var removed: Bool = false
+    @objc dynamic var lastServerUpdate: Int64 = 0
+    @objc dynamic var removed: Bool = false
     
     // We make db objs by default dirty. When the db obj comes from the server we have to set it to false.
     // the reason we don't do it the other way is 1. if we miss setting an obj to false (it's just sent again to the server), it's better than when we miss setting one to true (update is never sent to the server) 2. it's easier to miss setting it to true, as this has to be done every single local update and this is more frequent than sync calls.
-    dynamic var dirty: Bool = true
+    @objc dynamic var dirty: Bool = true
     
     // IMPORTANT: Use this only to store sync results
     func setSyncableFieldswithRemoteDict(_ dict: [String: AnyObject]) {

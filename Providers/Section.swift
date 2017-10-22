@@ -23,20 +23,20 @@ public struct SectionUnique {
 
 public class Section: DBSyncable, Identifiable {
 
-    public dynamic var uuid: String = ""
-    public dynamic var name: String = ""
-    dynamic var bgColorHex: String = "000000"
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var name: String = ""
+    @objc dynamic var bgColorHex: String = "000000"
     
 //    let listItems = RealmSwift.List<String>()
     
-    dynamic var listOpt: List? = List()
-    public dynamic var todoOrder: Int = 0
-    public dynamic var doneOrder: Int = 0
-    public dynamic var stashOrder: Int = 0
+    @objc dynamic var listOpt: List? = List()
+    @objc public dynamic var todoOrder: Int = 0
+    @objc public dynamic var doneOrder: Int = 0
+    @objc public dynamic var stashOrder: Int = 0
 
     public let listItems = RealmSwift.List<ListItem>()
     
-    public dynamic var statusVal: Int = 0
+    @objc public dynamic var statusVal: Int = 0
     
     public var status: ListItemStatus {
         get {

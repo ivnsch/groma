@@ -37,11 +37,11 @@ public class Unit: DBSyncable, Identifiable {
     
     public static let unitsWithBase: [UnitId] = [.g, .kg, .liter, .milliliter, .custom]
 
-    public dynamic var uuid: String = ""
-    public dynamic var name: String = ""
-    public dynamic var idVal: Int = UnitId.none.rawValue
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var name: String = ""
+    @objc public dynamic var idVal: Int = UnitId.none.rawValue
     
-    public dynamic var buyable: Bool = true
+    @objc public dynamic var buyable: Bool = true
     
     public var id: UnitId {
         get {

@@ -12,8 +12,8 @@ import RealmSwift
 // TODO!!!! do we need to send this in sync? we don't even have lastServerUpdate here
 class DBRemoveSharedUser: Object {
     
-    dynamic var email: String = ""
-    dynamic var lastServerUpdate: Double = 0
+    @objc dynamic var email: String = ""
+    @objc dynamic var lastServerUpdate: Double = 0
 
     convenience init(_ dbSharedUser: DBSharedUser) {
         self.init()

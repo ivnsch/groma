@@ -323,7 +323,11 @@ class RealmProductProvider: RealmProvider {
     }
     
     // TODO range, maybe remove this as we are now using (again) products for this instead of quantifiable products
-    func quantifiableProductsWithPosibleSections(_ substring: String? = nil, list: List, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)]?) -> Void) {
+    func quantifiableProductsWithPosibleSections(_ substring: String? = nil, list: List, range: NSRange? = nil,
+                                                 sortBy: ProductSortBy,
+                                                 handler: @escaping (_ substring: String?,
+        _ productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)]?) -> Void) {
+
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
             case .alphabetic: return ("itemOpt.name", true)
@@ -380,7 +384,10 @@ class RealmProductProvider: RealmProvider {
     
     
     // TODO range
-    func productsWithPosibleSections(_ substring: String? = nil, list: List, range: NSRange? = nil, sortBy: ProductSortBy, handler: @escaping (_ substring: String?, _ productsWithMaybeSections: [(product: Product, section: Section?)]?) -> Void) {
+    func productsWithPosibleSections(_ substring: String? = nil, list: List, range: NSRange? = nil,
+                                     sortBy: ProductSortBy,
+                                     handler: @escaping (_ substring: String?,
+        _ productsWithMaybeSections: [(product: Product, section: Section?)]?) -> Void) {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
             case .alphabetic: return ("itemOpt.name", true)
@@ -1311,7 +1318,7 @@ class RealmProductProvider: RealmProvider {
                 if let existingProduct = loadQuantifiableProductWithUniqueSync(prototype.quantifiableProductUnique) {
                     existingProduct.product = product
                     // Nothing else to update - (we just fetched by unique, and there are no more properties)
-                    return .ok(existingProduct, false)
+                    return .ok((existingProduct, false))
                     
                 } else {
                     if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
@@ -1320,7 +1327,7 @@ class RealmProductProvider: RealmProvider {
                         if save {
                             realm.add(product, update: true)
                         }
-                        return .ok(product, true)
+                        return .ok((product, true))
 
                     } else {
                         logger.e("Couldn't get or create unit")
@@ -1369,14 +1376,14 @@ class RealmProductProvider: RealmProvider {
                     existingProduct.product = quantifiableProduct.0
                     existingProduct.price = price
                     // store not updatable in app so for now we don't update it (TODO review)
-                    return .ok(existingProduct, false)
+                    return .ok((existingProduct, false))
                     
                 } else {
                     let storeProduct = StoreProduct(uuid: UUID().uuidString, price: price, product: quantifiableProduct.0)
                     if save {
                         realm.add(storeProduct, update: true)
                     }
-                    return .ok(storeProduct, true)
+                    return .ok((storeProduct, true))
                 }
             }
         }

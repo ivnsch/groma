@@ -11,8 +11,8 @@ import RealmSwift
 
 class DBRemoveProductGroup: Object {
     
-    dynamic var uuid: String = ""
-    dynamic var lastServerUpdate: Int64 = 0
+    @objc dynamic var uuid: String = ""
+    @objc dynamic var lastServerUpdate: Int64 = 0
 
     convenience init(_ dbProductGroup: ProductGroup) {
         self.init(uuid: dbProductGroup.uuid, lastServerUpdate: dbProductGroup.lastServerUpdate)

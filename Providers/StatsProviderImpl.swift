@@ -200,7 +200,7 @@ class StatsProviderImpl: StatsProvider {
         }
         
         let sortedByPrice = productAggregates.sorted {
-            $0.0.totalPrice > $0.1.totalPrice
+            $0.totalPrice > $1.totalPrice
         }
         
         return sortedByPrice

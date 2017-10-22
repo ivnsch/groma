@@ -13,7 +13,7 @@ import RealmSwift
 //class DBSharedUser: DBSyncable { // TODO is this syncable or not?
 public class DBSharedUser: Object {
     
-    public dynamic var email: String = ""
+    @objc public dynamic var email: String = ""
     
     public override static func primaryKey() -> String? {
         return "email"

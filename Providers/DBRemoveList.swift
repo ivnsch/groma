@@ -11,8 +11,8 @@ import RealmSwift
 
 class DBRemoveList: Object {
     
-    dynamic var uuid: String = ""
-    dynamic var lastServerUpdate: Int64 = 0
+    @objc dynamic var uuid: String = ""
+    @objc dynamic var lastServerUpdate: Int64 = 0
 
     convenience init(_ dbList: List) {
         self.init(uuid: dbList.uuid, lastServerUpdate: dbList.lastServerUpdate)

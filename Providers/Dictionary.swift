@@ -13,7 +13,7 @@ public extension Dictionary {
     public func map<T, U>(_ f: ((Key, Value)) -> ((T, U))) -> Dictionary<T, U> {
         var dict: Dictionary<T, U> = Dictionary<T, U>()
         for (k, v) in self {
-            let mapped = f(k, v)
+            let mapped = f((k, v))
             dict[mapped.0] = mapped.1
         }
         return dict

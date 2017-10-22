@@ -12,9 +12,9 @@ import RealmSwift
 // TODO rename in ItemCategory
 public class ProductCategory: DBSyncable, Identifiable {
     
-    public dynamic var uuid: String = ""
-    public dynamic var name: String = ""
-    public dynamic var bgColorHex: String = "000000"
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var name: String = ""
+    @objc public dynamic var bgColorHex: String = "000000"
 
     public override static func primaryKey() -> String? {
         return "uuid"

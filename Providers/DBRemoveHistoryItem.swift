@@ -11,8 +11,8 @@ import RealmSwift
 
 class DBRemoveHistoryItem: Object {
     
-    dynamic var uuid: String = ""
-    dynamic var lastServerUpdate: Int64 = 0
+    @objc dynamic var uuid: String = ""
+    @objc dynamic var lastServerUpdate: Int64 = 0
 
     convenience init(_ dbHistoryItem: HistoryItem) {
         self.init(uuid: dbHistoryItem.uuid, lastServerUpdate: dbHistoryItem.lastServerUpdate)

@@ -11,10 +11,10 @@ import RealmSwift
 
 public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2 {
 
-    public dynamic var uuid: String = ""
-    public dynamic var quantity: Float = 0
-    dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
-    dynamic var inventoryOpt: DBInventory? = DBInventory()
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var quantity: Float = 0
+    @objc dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
+    @objc dynamic var inventoryOpt: DBInventory? = DBInventory()
 
     public static var quantityFieldName: String {
         return "quantity"

@@ -35,15 +35,15 @@ public typealias StoreProductUnique = (quantifiableProductUnique: QuantifiablePr
 
 public class StoreProduct: DBSyncable, Identifiable {
     
-    public dynamic var uuid: String = ""
-    public dynamic var price: Float = 0
-    dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var price: Float = 0
+    @objc dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
     
     
     // TODO remove
-    public dynamic var baseQuantity: String = ""
+    @objc public dynamic var baseQuantity: String = ""
     
-    public dynamic var store: String = ""
+    @objc public dynamic var store: String = ""
     
     public var product: QuantifiableProduct {
         get {

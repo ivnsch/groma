@@ -35,11 +35,11 @@ public enum ItemUnit: Int {
 
 public class QuantifiableProduct: DBSyncable, Identifiable {
     
-    public dynamic var uuid: String = ""
-    dynamic var productOpt: Product? = Product()
-    public dynamic var baseQuantity: Float = 1
-    dynamic var unitOpt: Unit? = Unit()
-    public dynamic var fav: Int = 0 // not used anymore as we fav again the product, but letting it here just in case. Maybe remove.
+    @objc public dynamic var uuid: String = ""
+    @objc dynamic var productOpt: Product? = Product()
+    @objc public dynamic var baseQuantity: Float = 1
+    @objc dynamic var unitOpt: Unit? = Unit()
+    @objc public dynamic var fav: Int = 0 // not used anymore as we fav again the product, but letting it here just in case. Maybe remove.
     
     public var product: Product {
         get {

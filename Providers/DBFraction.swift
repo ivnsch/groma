@@ -14,8 +14,8 @@ import RealmSwift
 
 public class DBFraction: Object {
     
-    public dynamic var numerator: Int = 0
-    public dynamic var denominator: Int = 0
+    @objc public dynamic var numerator: Int = 0
+    @objc public dynamic var denominator: Int = 0
     
     public func setNumerator(numerator: Int) {
         self.numerator = numerator
@@ -33,7 +33,7 @@ public class DBFraction: Object {
         setDenominator(denominator: denominator)
     }
     
-    public dynamic var compoundKey: String = "0-"
+    @objc public dynamic var compoundKey: String = "0-"
     
     public override static func primaryKey() -> String? {
         return "compoundKey"

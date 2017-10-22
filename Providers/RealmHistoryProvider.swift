@@ -59,8 +59,10 @@ class RealmHistoryProvider: RealmProvider {
             DispatchQueue.main.async(execute: {
                 // Map date -> history item dict to HistoryItemDateGroup
                 // NOTE as user we select first user in the group. Theoretically there could be more than one user. This is a simplification based in that we think it's highly unlikely that multiple users will mark items as "bought" at the exact same point of time (milliseconds). And even if they do, having one history group with (partly) wrong user is not critical.
-                let historyItemsDateGroups: [HistoryItemGroup] = historyItemsUuidGroupedByDate.flatMap{k, uuids in
+                let historyItemsDateGroups: [HistoryItemGroup] = historyItemsUuidGroupedByDate.flatMap{(arg) in
                     
+                    
+                    let (k, uuids) = arg
                     if let historyItems = self.loadHistoryItemsSync(uuids: uuids) {
                         let firstUser = historyItems.first!.user // force unwrap -> if there's an array as value it must contain at least one element. If there was no history item for this date the date would not be in the dictionary
                         return HistoryItemGroup(date: k, user: firstUser, historyItems: historyItems.toArray())

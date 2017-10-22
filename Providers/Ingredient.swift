@@ -11,22 +11,22 @@ import RealmSwift
 
 
 public final class Ingredient: Object {
-    public dynamic var uuid: String = ""
-    public dynamic var quantity: Float = 0
-    public dynamic var fractionNumerator: Int = 0
-    public dynamic var fractionDenominator: Int = 1 // To avoid potential division by 0 - as long as numerator is 0 fraction is non-op
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var quantity: Float = 0
+    @objc public dynamic var fractionNumerator: Int = 0
+    @objc public dynamic var fractionDenominator: Int = 1 // To avoid potential division by 0 - as long as numerator is 0 fraction is non-op
     
-    dynamic var unitOpt: Unit? = Unit()
-    dynamic var itemOpt: Item? = Item()
-    dynamic var recipeOpt: Recipe? = Recipe()
+    @objc dynamic var unitOpt: Unit? = Unit()
+    @objc dynamic var itemOpt: Item? = Item()
+    @objc dynamic var recipeOpt: Recipe? = Recipe()
     
     /// Remember the last inputs entered by user when adding this ingredient to a shopping list (p stands for "product")
     /// We use this to prefill the next time user adds this ingredient to a list
-    public dynamic var pName: String = ""
-    public dynamic var pBrand: String = ""
-    public dynamic var pBase: Float = 1
-    public dynamic var pQuantity: Float = 0
-    public dynamic var pUnit: String = ""
+    @objc public dynamic var pName: String = ""
+    @objc public dynamic var pBrand: String = ""
+    @objc public dynamic var pBase: Float = 1
+    @objc public dynamic var pQuantity: Float = 0
+    @objc public dynamic var pUnit: String = ""
     
     public static var quantityFieldName: String {
         return "quantity"

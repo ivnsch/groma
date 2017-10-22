@@ -23,23 +23,23 @@ public class ListItem: DBSyncable, Identifiable {
     
     // TODO maybe remove references to Section and List
     
-    public dynamic var uuid: String = ""
-    dynamic var sectionOpt: Section? = Section()
-    dynamic var productOpt: StoreProduct? = StoreProduct()
-    dynamic var listOpt: List? = List()
-    public dynamic var note: String = "" // TODO review if we can use optionals in realm, if not check if in newer version
+    @objc public dynamic var uuid: String = ""
+    @objc dynamic var sectionOpt: Section? = Section()
+    @objc dynamic var productOpt: StoreProduct? = StoreProduct()
+    @objc dynamic var listOpt: List? = List()
+    @objc public dynamic var note: String = "" // TODO review if we can use optionals in realm, if not check if in newer version
     
     
     // TODO!!!!!!!!!!!!!!!!! remove this
-    public dynamic var todoQuantity: Float = 0
-    public dynamic var todoOrder: Int = 0
-    public dynamic var doneQuantity: Float = 0
-    public dynamic var doneOrder: Int = 0
-    public dynamic var stashQuantity: Float = 0
-    public dynamic var stashOrder: Int = 0
+    @objc public dynamic var todoQuantity: Float = 0
+    @objc public dynamic var todoOrder: Int = 0
+    @objc public dynamic var doneQuantity: Float = 0
+    @objc public dynamic var doneOrder: Int = 0
+    @objc public dynamic var stashQuantity: Float = 0
+    @objc public dynamic var stashOrder: Int = 0
     
     
-    public dynamic var quantity: Float = 0
+    @objc public dynamic var quantity: Float = 0
     
     public var list: List {
         get {

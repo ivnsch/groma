@@ -16,10 +16,10 @@ class RecipesContainer: Object { // to be able to hold recipes in realm's list
 
 public class Recipe: Object, Identifiable {
     
-    public dynamic var uuid: String = ""
-    public dynamic var name: String = ""
-    public dynamic var bgColorHex: String = "000000"
-    public dynamic var fav: Int = 0
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var name: String = ""
+    @objc public dynamic var bgColorHex: String = "000000"
+    @objc public dynamic var fav: Int = 0
     
     public var color: UIColor {
         get {

@@ -11,8 +11,8 @@ import RealmSwift
 
 class DBRemoveInventory: Object {
     
-    dynamic var uuid: String = ""
-    dynamic var lastServerUpdate: Int64 = 0
+    @objc dynamic var uuid: String = ""
+    @objc dynamic var lastServerUpdate: Int64 = 0
 
     convenience init(_ dbInventory: DBInventory) {
         self.init(uuid: dbInventory.uuid, lastServerUpdate: dbInventory.lastServerUpdate)

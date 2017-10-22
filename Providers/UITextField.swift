@@ -50,7 +50,7 @@ extension UITextField {
         }
     }
     
-    public func checkMaxLength(_ sender: UITextField) {
+    @objc public func checkMaxLength(_ sender: UITextField) {
         if let newText = sender.text {
             if newText.characters.count > maxLength {
                 let cursorPosition = selectedTextRange
@@ -61,6 +61,6 @@ extension UITextField {
     }
     
     public func setPlaceholderWithColor(_ placeholder: String, color: UIColor) {
-        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName: color])
+        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedStringKey.foregroundColor: color])
     }
 }

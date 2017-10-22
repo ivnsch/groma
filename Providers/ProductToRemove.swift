@@ -11,8 +11,8 @@ import RealmSwift
 
 class ProductToRemove: Object {
     
-    dynamic var uuid: String = ""
-    dynamic var lastServerUpdate: Int64 = 0
+    @objc dynamic var uuid: String = ""
+    @objc dynamic var lastServerUpdate: Int64 = 0
 
     convenience init(_ dbProduct: Product) {
         self.init(uuid: dbProduct.uuid, lastServerUpdate: dbProduct.lastServerUpdate)

@@ -11,10 +11,10 @@ import RealmSwift
 
 // TODO order?
 public final class GroupItem: DBSyncable, ProductWithQuantity2 {
-    public dynamic var uuid: String = ""
-    public dynamic var quantity: Float = 0
-    dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
-    dynamic var groupOpt: ProductGroup? = ProductGroup()
+    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var quantity: Float = 0
+    @objc dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
+    @objc dynamic var groupOpt: ProductGroup? = ProductGroup()
 
     public static var quantityFieldName: String {
         return "quantity"

@@ -10,13 +10,13 @@ import Foundation
 
 public class HistoryItem: DBSyncable, Identifiable {
 
-    public dynamic var uuid: String = ""
-    dynamic var inventoryOpt: DBInventory? = DBInventory()
-    dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
-    public dynamic var addedDate: Int64 = 0
-    public dynamic var quantity: Float = 0
-    dynamic var userOpt: DBSharedUser? = DBSharedUser()
-    public dynamic var paidPrice: Float = 0 // product price at the moment of buying the item (per unit)
+    @objc public dynamic var uuid: String = ""
+    @objc dynamic var inventoryOpt: DBInventory? = DBInventory()
+    @objc dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
+    @objc public dynamic var addedDate: Int64 = 0
+    @objc public dynamic var quantity: Float = 0
+    @objc dynamic var userOpt: DBSharedUser? = DBSharedUser()
+    @objc public dynamic var paidPrice: Float = 0 // product price at the moment of buying the item (per unit)
     
     public static let addedDateKey = "addedDate"
     

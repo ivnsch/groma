@@ -50,9 +50,9 @@ public extension String {
     }
 
     public func makeAttributed(_ range: NSRange?, normalFont: UIFont, font: UIFont, textColor: UIColor = UIColor.darkText) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: self, attributes: [NSFontAttributeName: normalFont, NSForegroundColorAttributeName: textColor])
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedStringKey.font: normalFont, NSAttributedStringKey.foregroundColor: textColor])
         if let range = range {
-            attributedString.setAttributes([NSFontAttributeName: font, NSForegroundColorAttributeName: textColor], range: range)
+            attributedString.setAttributes([NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: textColor], range: range)
         }
         return attributedString
     }
@@ -65,7 +65,7 @@ public extension String {
 
     public func underline(_ range: NSRange) -> NSMutableAttributedString {
         let attributedText = NSMutableAttributedString(string: self)
-        attributedText.addAttribute(NSUnderlineStyleAttributeName, value:NSUnderlineStyle.styleSingle.rawValue, range: range)
+        attributedText.addAttribute(NSAttributedStringKey.underlineStyle, value:NSUnderlineStyle.styleSingle.rawValue, range: range)
         return attributedText
     }
 
@@ -137,12 +137,12 @@ public extension String {
     // NOTE: FIXME: that returned height a bit short at least in HelpViewController (see comment there). Maybe related with missing NSParagraphStyleAttributeName attribute, wrapping etc?
     public func heightWithConstrainedWidth(_ width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let boundingBox = self.boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
+        let boundingBox = self.boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: font], context: nil)
         return boundingBox.height
     }
     
     public func size(_ font: UIFont) -> CGSize {
-        return (self as NSString).size(attributes: [NSFontAttributeName: font])
+        return (self as NSString).size(withAttributes: [NSAttributedStringKey.font: font])
     }
     
 //    func startsWith(str:String) -> Bool {
