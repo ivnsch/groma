@@ -8,9 +8,12 @@
 
 import Foundation
 
+precedencegroup Composition {
+    higherThan: BitwiseShiftPrecedence
+}
 
 // TODO for now duplicate with Provider project, for some reason main project can't use it
-infix operator >>> {associativity right precedence 90}
+infix operator >>> : Composition
 public func >>> <T, R>(x: T, f: (T) -> R) -> R {
     return f(x)
 }

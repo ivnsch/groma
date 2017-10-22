@@ -48,7 +48,7 @@ class MyWebSocket: WebSocketDelegate {
     
     init() {
         if ConnectionProvider.connected {
-            if let token = AccessTokenHelper.loadToken() {
+            if let _ = AccessTokenHelper.loadToken() {
                 socket = WebSocket(url: URL(string: "ws://\(Urls.hostIPPort)/ws")!)
                 socket?.delegate = self
                 // TODO upgrade 2.0.3 -> 3.0.2

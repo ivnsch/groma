@@ -8,8 +8,7 @@
 
 import UIKit
 
-
-public extension UIColor {
+extension UIColor {
     
     // src: https://gist.github.com/yannickl/16f0ed38f0698d9a8ae7
     public convenience init(hexString: String) {
