@@ -21,7 +21,7 @@ end
 target 'Providers' do
     project 'Providers/Providers.xcodeproj'
     pod 'Alamofire', '~> 4.5'
-    pod 'Valet'
+    pod 'Valet', '~> 2.4.2'
     pod 'Starscream', '3.0.2'
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
     shared
@@ -43,7 +43,7 @@ target 'groma' do
     
     # fixme - shouldn't be necessary to have these dependencies here see http://stackoverflow.com/q/41191028/930450
     pod 'Alamofire', '~> 4.5'
-    pod 'Valet'
+    pod 'Valet', '~> 2.4.2'
     pod 'Starscream', '3.0.2'
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
 end
