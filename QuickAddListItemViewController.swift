@@ -310,7 +310,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     }
     
     
-    fileprivate func retrieveQuantifiableProduct(product: Product, indexPath: IndexPath, onRetrieved: @escaping (QuantifiableProduct, Float) -> Void) {
+    fileprivate func retrieveQuantifiableProduct(product: Product, indexPath: IndexPath,
+                                                 onRetrieved: @escaping (QuantifiableProduct, Float) -> Void) {
         Prov.productProvider.quantifiableProducts(product: product, successHandler{quantifiableProducts in
             
             if let first = quantifiableProducts.first, quantifiableProducts.count == 1 {
@@ -337,11 +338,14 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
                         let selectQuantifiableProductController = UIStoryboard.selectQuantifiableController()
                     
-                        selectQuantifiableProductController.onSelected = {(quantifiableProduct, quantity) in
+                        selectQuantifiableProductController.onSelected = { tuple in
+                            let quantifiableProduct = tuple.0
+                            let quantity = tuple.1
+
                             weakSelf.selectQuantifiableAnimator?.close {
                                 print("") // compiler bug! we need some command here otherwise next line doesn't compile.
     //                            cell.scaleUpAndDown(scale: 1.1) {
-                                    onRetrieved((quantifiableProduct, quantity))
+                                    onRetrieved(quantifiableProduct, quantity)
     //                            }
                             }
                         }

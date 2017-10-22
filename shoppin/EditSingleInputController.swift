@@ -62,7 +62,7 @@ class EditSingleInputController: UIViewController {
     }
     
     fileprivate func initTextFieldPlaceholders() {
-        nameTextField.attributedPlaceholder = NSAttributedString(string: nameTextField.placeholder ?? "", attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        nameTextField.attributedPlaceholder = NSAttributedString(string: nameTextField.placeholder ?? "", attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
@@ -84,7 +84,7 @@ class EditSingleInputController: UIViewController {
 
         nameTextField.text = prefillName
         
-        nameTextField.attributedPlaceholder = NSAttributedString(string: settings.namePlaceholder, attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        nameTextField.attributedPlaceholder = NSAttributedString(string: settings.namePlaceholder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
         initValidator(emptyNameMessage: settings.nameEmptyValidationMessage)
         
         self.editingObj = editingObj

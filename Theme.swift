@@ -9,63 +9,63 @@
 import UIKit
 import ChameleonFramework
 
-struct Theme {
+public struct Theme {
 
-//    static let lightGrey = UIColor(red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
-//    static let lightGrey2 = UIColor(hexString: "D4D4D4") // darker than lightGrey
+//    public static let lightGrey = UIColor(red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
+//    public static let lightGrey2 = UIColor(hexString: "D4D4D4") // darker than lightGrey
 
     
-    static let lightGrey = UIColor(hexString: "ACACAC")
-    static let lightGrey2 = UIColor(hexString: "D4D4D4")
+    public static let lightGrey = UIColor(hexString: "ACACAC")
+    public static let lightGrey2 = UIColor(hexString: "D4D4D4")
     
-    static let grey = UIColor(hexString: "7D8B8C")
+    public static let grey = UIColor(hexString: "7D8B8C")
     
-    static let cellBottomBorderColor = UIColor(hexString: "EADFE4")
+    public static let cellBottomBorderColor = UIColor(hexString: "EADFE4")
     
-    static let blue = UIColor(hexString: "0E95E0")
-    static let orange = UIColor(hexString: "FFA83E")
-    static var black = UIColor(hexString: "222222")
+    public static let blue = UIColor(hexString: "0E95E0")
+    public static let orange = UIColor(hexString: "FFA83E")
+    public static var black = UIColor(hexString: "222222")
     
-    static var navigationBarTextColor = UIColor.black
-    static var navigationBarBackgroundColor = UIColor(hexString: "FFFFFF")
-    static var tabBarBackgroundColor = blue
-    static var navBarAddColor = blue
-    static var tabBarSelectedColor = UIColor.white
-    static var tabBarIconsColor = UIColor.black
-    static var tabBarTextColor = UIColor.black
+    public static var navigationBarTextColor = UIColor.black
+    public static var navigationBarBackgroundColor = UIColor(hexString: "FFFFFF")
+    public static var tabBarBackgroundColor = blue
+    public static var navBarAddColor = blue
+    public static var tabBarSelectedColor = UIColor.white
+    public static var tabBarIconsColor = UIColor.black
+    public static var tabBarTextColor = UIColor.black
     
-    static var mainViewsBGColor = lightGrey
-    static var topSettingsBarsBackgroundColor = UIColor.white
-    static var interleavedCellsBackgroundColor = UIColor.white
+    public static var mainViewsBGColor = lightGrey
+    public static var topSettingsBarsBackgroundColor = UIColor.white
+    public static var interleavedCellsBackgroundColor = UIColor.white
     
-    static let lightBlue = UIColor(hexString: "e8f0f9")
-    static let lightGreyBackground = UIColor(hexString: "F0F0F0")
-    static let lightPink = UIColor(hexString: "f9eaf1")
-    static let green = UIColor(hexString: "1FAC6A")
-    static let lighterGreen = UIColor(hexString: "28c75d")
-    static let lightGray = UIColor.lightGray
+    public static let lightBlue = UIColor(hexString: "e8f0f9")
+    public static let lightGreyBackground = UIColor(hexString: "F0F0F0")
+    public static let lightPink = UIColor(hexString: "f9eaf1")
+    public static let green = UIColor(hexString: "1FAC6A")
+    public static let lighterGreen = UIColor(hexString: "28c75d")
+    public static let lightGray = UIColor.lightGray
     
-    static let fractionsBGColor = UIColor.gray
-    static let unitsBGColor = UIColor.white
-    static let unitsFGColor = UIColor.black
-    static let fractionsFGColor = UIColor.white
-    static let baseQuantitiesBGColor = UIColor.white
-    static let baseQuantitiesFGColor = UIColor.black
-    static let unitsSelectedColor = blue
-    static let fractionsSelectedColor = blue
-    static let deleteRed = UIColor(hexString: "F66823")
+    public static let fractionsBGColor = UIColor.gray
+    public static let unitsBGColor = UIColor.white
+    public static let unitsFGColor = UIColor.black
+    public static let fractionsFGColor = UIColor.white
+    public static let baseQuantitiesBGColor = UIColor.white
+    public static let baseQuantitiesFGColor = UIColor.black
+    public static let unitsSelectedColor = blue
+    public static let fractionsSelectedColor = blue
+    public static let deleteRed = UIColor(hexString: "F66823")
     
-    static let defaultTableViewBGColor = lightGreyBackground
+    public static let defaultTableViewBGColor = lightGreyBackground
     
-    static let popupCornerRadius: CGFloat = 10
+    public static let popupCornerRadius: CGFloat = 10
     
-    static let defaultAnimDuration: Double = 0.2
+    public static let defaultAnimDuration: Double = 0.2
     
-    static let defaultRowAnimation = UITableViewRowAnimation.top
-    static let defaultRowPosition = UITableViewScrollPosition.top
+    public static let defaultRowAnimation = UITableViewRowAnimation.top
+    public static let defaultRowPosition = UITableViewScrollPosition.top
 
-    static let submitViewHeight: CGFloat = 60
+    public static let submitViewHeight: CGFloat = 60
     
-    static let topControllerOverlayAlpha: CGFloat = 0.2
+    public static let topControllerOverlayAlpha: CGFloat = 0.2
 
 }

@@ -82,7 +82,7 @@ class SimpleInputPopupController: UIViewController {
     }
     
     // TODO popup should contain logic to animate back... not the parent controller
-    func onTapBG(_ recognizer: UITapGestureRecognizer) {
+    @objc func onTapBG(_ recognizer: UITapGestureRecognizer) {
         delegate?.onDismissSimpleInputPopupController(true)
     }
 }

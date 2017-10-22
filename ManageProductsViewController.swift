@@ -105,11 +105,11 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    func handleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
     
-    func onEditTap(_ sender: UIBarButtonItem) {
+    @objc func onEditTap(_ sender: UIBarButtonItem) {
         toggleEditing()
     }
     
@@ -187,7 +187,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     // MARK: - Filter
     
     
-    func textFieldDidChange(_ textField: UITextField) {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         filter(textField.text ?? "")
     }
     

@@ -190,11 +190,11 @@ class AddRecipeIngredientCell: UITableViewCell {
     }
     
     fileprivate func initTextFieldPlaceholders() {
-        productNameTextField.attributedPlaceholder = NSAttributedString(string: productNameTextField.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
-        brandTextField.attributedPlaceholder = NSAttributedString(string: brandTextField.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        productNameTextField.attributedPlaceholder = NSAttributedString(string: productNameTextField.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        brandTextField.attributedPlaceholder = NSAttributedString(string: brandTextField.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
     }
     
-    func onQuantityTextChange(_ sender: UITextField) {
+    @objc func onQuantityTextChange(_ sender: UITextField) {
         updateQuantitySummary()
         
         guard let indexPath = indexPath else {logger.e("Illegal state: no index path"); return}

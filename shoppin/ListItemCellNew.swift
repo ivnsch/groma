@@ -448,14 +448,14 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
     // MARK: - Touch
     
-    func longPress(_ sender: UILongPressGestureRecognizer) {
+    @objc func longPress(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began: mode = mode == .increment ? .note : .increment
         default: break
         }
     }
     
-    func onTap(_ sender: UITapGestureRecognizer) {
+    @objc func onTap(_ sender: UITapGestureRecognizer) {
         // Cancel edit mode for cells that were put in edit mode via long press
         guard let delegate = delegate else {logger.e("No delegate"); return}
         if mode == .increment && !delegate.isControllerInEditMode {

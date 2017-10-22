@@ -122,7 +122,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             
             suggestionsPrefiller.prefill(lang) {(success: Bool, defaultUnits: [Providers.Unit]) in
                 logger.v("Finish initialising database for lang: \(lang), success: \(success). Default units count: \(defaultUnits.count)")
-                onFinish((success, defaultUnits))
+                onFinish(success, defaultUnits)
             }
         }
         

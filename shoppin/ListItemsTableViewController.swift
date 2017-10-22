@@ -63,7 +63,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         self.pullToAddView = refreshControl
     }
     
-    func onPullRefresh(_ sender: UIRefreshControl) {
+    @objc func onPullRefresh(_ sender: UIRefreshControl) {
         sender.endRefreshing()
         listItemsTableViewDelegate?.onPullToAdd()
     }

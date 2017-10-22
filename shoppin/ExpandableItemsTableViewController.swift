@@ -148,7 +148,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     // MARK: - Pull to add
     
-    func onPullRefresh(_ sender: UIRefreshControl) {
+    @objc func onPullRefresh(_ sender: UIRefreshControl) {
         sender.endRefreshing()
         onPullToAdd()
     }

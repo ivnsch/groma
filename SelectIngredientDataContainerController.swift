@@ -102,7 +102,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         removeKeyboardObserver()
     }
     
-    func onTableViewTap(_ sender: UITapGestureRecognizer) {
+    @objc func onTableViewTap(_ sender: UITapGestureRecognizer) {
         UIApplication.shared.delegate!.window??.endEditing(true)
     }
     
@@ -337,7 +337,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
     }
     
     
-    func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
+    @objc func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
 
@@ -369,7 +369,7 @@ class SelectIngredientDataContainerController: UIViewController, SelectUnitContr
         }
     }
     
-    func keyboardWillDisappear(_ notification: Foundation.Notification) {
+    @objc func keyboardWillDisappear(_ notification: Foundation.Notification) {
         tableView.bottomInset = 0
     }
 }

@@ -57,7 +57,7 @@ class EmptyViewController: UITableViewController {
         pullToAddView = refreshControl
     }
     
-    func onPullRefresh(_ sender: UIRefreshControl) {
+    @objc func onPullRefresh(_ sender: UIRefreshControl) {
         sender.endRefreshing()
         onTapOrPull?()
     }
@@ -82,7 +82,7 @@ class EmptyViewController: UITableViewController {
     }
 
     
-    func onTap(_ sender: UITapGestureRecognizer) {
+    @objc func onTap(_ sender: UITapGestureRecognizer) {
         onTapOrPull?()
     }
 }

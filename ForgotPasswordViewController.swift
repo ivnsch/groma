@@ -53,7 +53,7 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
         emailField.becomeFirstResponder()
     }
     
-    func handleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
     

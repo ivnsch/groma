@@ -98,7 +98,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         explanationManager.checker = checker
     }
     
-    func onPullRefresh(_ sender: UIRefreshControl) {
+    @objc func onPullRefresh(_ sender: UIRefreshControl) {
         sender.endRefreshing()
         delegate?.onPullToAdd()
     }
@@ -111,7 +111,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    func onEmptyInventoryViewTap(_ sender: UITapGestureRecognizer) {
+    @objc func onEmptyInventoryViewTap(_ sender: UITapGestureRecognizer) {
         delegate?.onEmptyViewTap()
     }
     

@@ -52,9 +52,8 @@ class SwipeToDeleteHelper: NSObject, UIGestureRecognizerDelegate {
         return true
     }
     
-    func onPanCell(_ recognizer: UIPanGestureRecognizer) {
-        
-        
+    @objc func onPanCell(_ recognizer: UIPanGestureRecognizer) {
+
         var movingHorizontally = false
         if let panStartPoint = self.panStartPoint {
             movingHorizontally = fabsf(Float(panStartPoint.y)) < fabsf(Float(panStartPoint.x))

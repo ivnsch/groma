@@ -151,7 +151,7 @@ class SelectIngredientDataController: UIViewController, QuantityViewDelegate, Sw
         })
     }
     
-    func onTap(_ sender: UIView) {
+    @objc func onTap(_ sender: UIView) {
         guard let fractions = fractions else {logger.e("No fractions"); return}
         
         if let currentNewFractionInput = currentNewFractionInput {

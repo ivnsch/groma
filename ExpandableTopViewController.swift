@@ -157,7 +157,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
         
     }
     
-    func onOverlayTap(_ sender: UIButton) {
+    @objc func onOverlayTap(_ sender: UIButton) {
         expand(false)
         delegate?.onExpandableClose()
     }

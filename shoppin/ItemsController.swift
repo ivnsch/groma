@@ -283,7 +283,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         }
     }
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    @objc func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         clearPossibleUndo()
     }
     

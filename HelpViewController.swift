@@ -54,7 +54,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
     }
     
-    func handleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
     
@@ -130,7 +130,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - Filter
     
     
-    func textFieldDidChange(_ textField: UITextField) {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         filter(textField.text ?? "")
     }
     

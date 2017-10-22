@@ -234,7 +234,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         return center.y - newY * (1 + abs(angle))
     }
     
-    func onPan(_ recognizer: UIPanGestureRecognizer) {
+    @objc func onPan(_ recognizer: UIPanGestureRecognizer) {
         
         switch recognizer.state {
 

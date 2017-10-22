@@ -126,7 +126,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         view.addGestureRecognizer(tapRecognizer)
     }
     
-    func onTap(_ sender: UITapGestureRecognizer) {
+    @objc func onTap(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
         view.resignFirstResponder()
     }
@@ -450,7 +450,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         tableView.reloadData()
         updateEmptyUI()
         
-        delegate?.loadModels(sortBy: sortBy.value) {[weak self] models in
+        delegate?.loadModels(sortBy: sortBy.value) { [weak self] in
             self?.tableView.reloadData()
             self?.updateEmptyUI()
         }

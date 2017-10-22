@@ -374,7 +374,7 @@ class FloatingViews: UIView {
                 let position = calculateModelPosition(0, modelsCount: newModels.count)
                 let positionedModel = PositionedModel(oldModel.action, position, 0, oldModel.rotation, oldModel.paths, oldModel.backgroundColor, oldModel.pathColor)
                 
-                toRemove.append(button: button, targetModel: positionedModel)
+                toRemove.append((button: button, targetModel: positionedModel))
             }
         }
 
@@ -412,7 +412,7 @@ class FloatingViews: UIView {
         }
     }
     
-    func onButtonTap(_ button: UIButton) {
+    @objc func onButtonTap(_ button: UIButton) {
         models[button.tag].onTap()
     }
 }

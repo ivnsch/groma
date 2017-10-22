@@ -2498,7 +2498,7 @@
 					EB1DDEA41A3334EC00D778DE = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 37QAPDY2PR;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -3530,7 +3530,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = development;
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -3561,7 +3562,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = development;
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};

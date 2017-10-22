@@ -27,7 +27,7 @@ class HandlingButton: UIButton {
         addTarget(self, action: #selector(HandlingButton.onTap(_:)), for: .touchUpInside)
     }
 
-    func onTap(_ sender: UIButton) {
+    @objc func onTap(_ sender: UIButton) {
         tapHandler?()
     }
 }

@@ -101,7 +101,7 @@ class ManageItemsSectionView: UITableViewHeaderFooterView, CellUncovererDelegate
         }
     }
     
-    func longPress(_ sender: Any) {
+    @objc func longPress(_ sender: Any) {
         if let sectionIndex = sectionIndex {
             delegate?.onHeaderLongTap(section: sectionIndex, view: self)
         } else {

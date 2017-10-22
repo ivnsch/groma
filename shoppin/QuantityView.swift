@@ -94,7 +94,7 @@ class QuantityView: UIView, UITextFieldDelegate {
     
     // MARK: -
     
-    func onQuantityTextChange(_ sender: UITextField) {
+    @objc func onQuantityTextChange(_ sender: UITextField) {
         if let quantity = quantityLabel.text?.floatValue {
             quantityText = quantityLabel.text ?? "" // NOTE we set quantityText not quantity because when we input decimals, since this is called on every keystroke, if we type e.g. "1." setting quantity will set the text back to "1"
             delegate?.onQuantityInput(quantity)

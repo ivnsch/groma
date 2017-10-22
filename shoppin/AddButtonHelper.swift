@@ -42,7 +42,7 @@ class AddButtonHelper: NSObject {
         NotificationCenter.default.removeObserver(self)
     }
     
-    func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
+    @objc func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
 //                logger.v("keyboardWillChangeFrame, frame: \(frame)")
@@ -56,7 +56,7 @@ class AddButtonHelper: NSObject {
         animateVisible(true)
     }
     
-    func keyboardWillDisappear(_ notification: Foundation.Notification) {
+    @objc func keyboardWillDisappear(_ notification: Foundation.Notification) {
         // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
 //        logger.w("add button - Keyboard will disappear - hiding")
         animateVisible(false)

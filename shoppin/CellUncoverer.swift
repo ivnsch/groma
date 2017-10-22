@@ -46,7 +46,7 @@ class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
         return true
     }
     
-    func onPanCell(_ recognizer: UIPanGestureRecognizer) {
+    @objc func onPanCell(_ recognizer: UIPanGestureRecognizer) {
         
         guard allowOpen else {return}
         

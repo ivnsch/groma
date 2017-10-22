@@ -990,7 +990,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     // MARK: - Notification
     
-    func onListRemovedNotification(_ note: Foundation.Notification) {
+    @objc func onListRemovedNotification(_ note: Foundation.Notification) {
         guard let info = (note as NSNotification).userInfo as? Dictionary<String, String> else {logger.e("Invalid info: \(note)"); return}
         guard let listUuid = info[NotificationKey.list] else {logger.e("No list uuid: \(info)"); return}
         guard let currentList = currentList else {logger.w("No current list, ignoring list removed notification."); return}

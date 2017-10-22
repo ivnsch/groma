@@ -24,17 +24,18 @@ class RoundTextField: UITextField {
         }
         self.originalTextColor = textColor
     }
-    
-    override func showValidationError() {
-        drawInvalid = true
-        setNeedsDisplay()
-    }
-    
-    override func clearValidationError() {
-        drawInvalid = false
-        setNeedsDisplay()
-    }
-    
+
+    // TODO review - had to be commented while swift 4 migration (extension declaration cannot be overriden)
+//    override func showValidationError() {
+//        drawInvalid = true
+//        setNeedsDisplay()
+//    }
+//
+//    override func clearValidationError() {
+//        drawInvalid = false
+//        setNeedsDisplay()
+//    }
+
     override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         let rect = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)

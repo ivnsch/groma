@@ -66,7 +66,7 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
 
     // MARK: - Filter
     
-    func searchFieldDidChange(_ textField: UITextField) {
+    @objc func searchFieldDidChange(_ textField: UITextField) {
         filter(textField.text ?? "")
     }
     

@@ -14,17 +14,18 @@ class LineAutocompleteTextField: MyAutoCompleteTextField {
     
     fileprivate static let defaultLineColor = UIColor.gray
     fileprivate var lineColor = defaultLineColor
-    
-    override func showValidationError() {
-        lineColor = UIColor.flatRed
-        setNeedsDisplay()
-    }
-    
-    override func clearValidationError() {
-        lineColor = LineAutocompleteTextField.defaultLineColor
-        setNeedsDisplay()
-    }
-    
+
+    // TODO review - had to be commented while swift 4 migration (extension declaration cannot be overriden)
+//    override func showValidationError() {
+//        lineColor = UIColor.flatRed
+//        setNeedsDisplay()
+//    }
+//
+//    override func clearValidationError() {
+//        lineColor = LineAutocompleteTextField.defaultLineColor
+//        setNeedsDisplay()
+//    }
+
     override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         context?.setStrokeColor(lineColor.cgColor)

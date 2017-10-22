@@ -60,7 +60,7 @@ class AddItemButton: UIButton {
 
     }
     
-    func onTap(_ sender: AddItemButton) {
+    @objc func onTap(_ sender: AddItemButton) {
         tapHandler?()
     }
 }

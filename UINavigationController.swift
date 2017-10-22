@@ -15,6 +15,6 @@ extension UINavigationController {
         navigationBar.backgroundColor = backgroundColor
         navigationBar.barTintColor = backgroundColor
         navigationBar.tintColor = textColor
-        navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: textColor]
+        navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: textColor]
     }
 }

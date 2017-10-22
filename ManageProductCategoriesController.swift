@@ -75,13 +75,13 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    func onSubmitTap(_ sender: UIBarButtonItem) {
+    @objc func onSubmitTap(_ sender: UIBarButtonItem) {
         if tableView.isEditing {
             addEditCategoryControllerManager?.controller?.submit()
         }
     }
     
-    func onEditTap(_ sender: UIBarButtonItem) {
+    @objc func onEditTap(_ sender: UIBarButtonItem) {
         toggleEditing()
     }
     
@@ -364,7 +364,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     
     // MARK: - Websocket
     
-    func onWebsocketProductCategory(_ note: Foundation.Notification) {
+    @objc func onWebsocketProductCategory(_ note: Foundation.Notification) {
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
@@ -390,7 +390,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         }
     }
     
-    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
+    @objc func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         clearAndLoadFirstPage(true) // TODO parameter "isSearchLoad" bad naming - describe better what the flag is for, also in other controllers where this is used
     }

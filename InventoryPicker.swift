@@ -52,7 +52,7 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         button.addTarget(self, action: #selector(InventoryPicker.onButtonTap(_:)), for: .touchUpInside)
     }
     
-    func onButtonTap(_ sender: UIButton) {
+    @objc func onButtonTap(_ sender: UIButton) {
         if let popup = inventoriesPopup {
             popup.dismiss(animated: true)
         } else {

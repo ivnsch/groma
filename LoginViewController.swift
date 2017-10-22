@@ -148,7 +148,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         // If there's no email stored, user in most cases wants to register so we don't focus a text field
     }
     
-    func handleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
 

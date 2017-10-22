@@ -149,7 +149,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         return !(anyQuickAddListItemChildShowing || addEdtListItemChildShowing)
     }
     
-    func textFieldDidChange(_ textField: UITextField) {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         
         logger.v("textFieldDidChange, text: \(String(describing: textField.text))")
         
@@ -496,14 +496,15 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
     
     func addObserver() {
-        NotificationCenter.default.addObserver(self, selector:#selector(AddButtonHelper.keyboardWillChangeFrame(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AddButtonHelper.keyboardWillChangeFrame(_:)),
+                                               name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
     
     func removeObserver() {
         NotificationCenter.default.removeObserver(self)
     }
     
-    func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
+    @objc func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
                 //                logger.v("keyboardWillChangeFrame, frame: \(frame)")

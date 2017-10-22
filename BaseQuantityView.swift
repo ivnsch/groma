@@ -109,7 +109,7 @@ protocol BaseQuantityViewDelegate {
     //        return CGSize(width: minLabelWidth, height: baseQuantityLabel.height + 20) // + 20 to add some padding
     //    }
     
-    func longPress(_ sender: Any) {
+    @objc func longPress(_ sender: Any) {
         delegate?.onLongPress()
     }
 }

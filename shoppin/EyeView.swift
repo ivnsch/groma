@@ -57,7 +57,7 @@ class EyeView: UIView {
         addGestureRecognizer(tapRecognizer)
     }
     
-    func onTap(_ sender: UITapGestureRecognizer) {
+    @objc func onTap(_ sender: UITapGestureRecognizer) {
         open = !open
         delegate?.onEyeChange(open)
     }

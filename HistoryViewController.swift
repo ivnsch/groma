@@ -306,7 +306,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: - Websocket
     
-    func onWebsocketHistoryItem(_ note: Foundation.Notification) {
+    @objc func onWebsocketHistoryItem(_ note: Foundation.Notification) {
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<HistoryItem>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
@@ -343,7 +343,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func onWebsocketProduct(_ note: Foundation.Notification) {
+    @objc func onWebsocketProduct(_ note: Foundation.Notification) {
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
@@ -369,7 +369,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func onWebsocketProductCategory(_ note: Foundation.Notification) {
+    @objc func onWebsocketProductCategory(_ note: Foundation.Notification) {
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
@@ -397,7 +397,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
 
-    func onWebsocketListItem(_ note: Foundation.Notification) {
+    @objc func onWebsocketListItem(_ note: Foundation.Notification) {
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
@@ -429,7 +429,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
+    @objc func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         selectedInventory = nil // cause to reload in all cases
         loadInventories()

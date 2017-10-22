@@ -42,7 +42,7 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
         view.addGestureRecognizer(tap)
     }
     
-    func onTap(_ sender: UIView) {
+    @objc func onTap(_ sender: UIView) {
         
         if let currentNewUnitInput = currentNewUnitInput {
             

@@ -57,7 +57,7 @@ class UnitEditableView: UIView {
         }
     }
     
-    func onNameInputChange(_ sender: UITextField) {
+    @objc func onNameInputChange(_ sender: UITextField) {
         // If the input is nil (meaning at least one of the text fields is empty), we pass nil to the delegate
         // Note that we handle invalid characters theh same as if fields are empty. Shouldn't happen anyway as keyboard should be numeric.
         delegate?.onUnitInputChange(nameInput: nameTextField.text ?? "")

@@ -134,7 +134,7 @@ class FillShapeView: UIView {
         super.init(coder: aDecoder)
     }
     
-    func onPan(sender: UIPanGestureRecognizer) {
+    @objc func onPan(sender: UIPanGestureRecognizer) {
         
         if sender.state == .began {
             contentStart = newcontentLayer.frame.origin.y
@@ -159,7 +159,7 @@ class FillShapeView: UIView {
         }
     }
     
-    func onTap(sender: UITapGestureRecognizer) {
+    @objc func onTap(sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             
             let tapY = sender.location(in: self).y

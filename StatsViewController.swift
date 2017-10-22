@@ -544,7 +544,7 @@ class StatsViewController: UIViewController
         }
     }
     
-    func onWebsocketListItem(_ note: Foundation.Notification) {
+    @objc func onWebsocketListItem(_ note: Foundation.Notification) {
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
@@ -562,7 +562,7 @@ class StatsViewController: UIViewController
         }
     }
     
-    func onWebsocketProduct(_ note: Foundation.Notification) {
+    @objc func onWebsocketProduct(_ note: Foundation.Notification) {
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<Product>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
@@ -590,7 +590,7 @@ class StatsViewController: UIViewController
         }
     }
     
-    func onWebsocketProductCategory(_ note: Foundation.Notification) {
+    @objc func onWebsocketProductCategory(_ note: Foundation.Notification) {
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
@@ -616,7 +616,7 @@ class StatsViewController: UIViewController
         }
     }
     
-    func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
+    @objc func onIncomingGlobalSyncFinished(_ note: Foundation.Notification) {
         // TODO notification - note has the sender name
         loadChart()
     }

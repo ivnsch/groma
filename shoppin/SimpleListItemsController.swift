@@ -885,7 +885,7 @@ class SimpleListItemsTableViewController: UITableViewController {
 
     }
     
-    func onPullRefresh(_ sender: UIRefreshControl) {
+    @objc func onPullRefresh(_ sender: UIRefreshControl) {
         sender.endRefreshing()
         listItemsTableViewDelegate?.onPullToAdd()
     }

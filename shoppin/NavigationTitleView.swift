@@ -63,7 +63,7 @@ class NavigationTitleView: UIView {
         }
     }
     
-    func onTap() {
+    @objc func onTap() {
         if !self.editMode {
             self.delegate?.onNavigationLabelTap()
         }

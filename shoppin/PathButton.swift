@@ -85,7 +85,7 @@ class PathButton: UIButton {
         return spring
     }
     
-    func onTapHandler(_ sender: UIButton) {
+    @objc func onTapHandler(_ sender: UIButton) {
         onTap(on)
     }
     

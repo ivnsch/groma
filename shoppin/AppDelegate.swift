@@ -177,8 +177,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }()
         
 //        UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.superSmallLight, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
-        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: regularFont, NSForegroundColorAttributeName: Theme.tabBarTextColor]
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName: regularFont, NSForegroundColorAttributeName: Theme.navigationBarTextColor], for: UIControlState())
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.font: regularFont, NSAttributedStringKey.foregroundColor: Theme.tabBarTextColor]
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.font: regularFont, NSAttributedStringKey.foregroundColor: Theme.navigationBarTextColor], for: UIControlState())
 //        UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.verySmallLight], forState: .Normal)
         
         UITabBar.appearance().tintColor = Theme.tabBarSelectedColor
@@ -336,7 +336,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         self.reachability.startNotifier()
     }
     
-    func checkForReachability(_ notification: Foundation.Notification) {
+    @objc func checkForReachability(_ notification: Foundation.Notification) {
         
         let networkReachability = notification.object as! Reachability
         let remoteHostStatus = networkReachability.currentReachabilityStatus()
@@ -377,7 +377,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         ratingAlert = nil
     }
     
-    func onLoginTokenExpired(_ note: Foundation.Notification) {
+    @objc func onLoginTokenExpired(_ note: Foundation.Notification) {
         // Disabled to not have to declare mock as public in Prov.(we also don't need this functionality now)
 //        guard let controller = window?.rootViewController else {logger.e("Can't show login modal, either window: \(window) or root controller: \(window?.rootViewController) is nil)"); return}
 //        if !(Prov.userProvider is UserProviderMock) {
@@ -398,7 +398,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     
     // MARK: - Websocket
     
-    func onWebsocketConnectionChange(_ note: Foundation.Notification) {
+    @objc func onWebsocketConnectionChange(_ note: Foundation.Notification) {
         
         if let info = (note as NSNotification).userInfo as? Dictionary<String, Bool> {
             if let notification = info[WSNotificationValue] {
@@ -477,7 +477,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func onWebsocketReceptionNotification(_ note: Foundation.Notification) {
+    @objc func onWebsocketReceptionNotification(_ note: Foundation.Notification) {
         if let info = (note as NSNotification).userInfo as? Dictionary<String, String> {
             if let sender = info["sender"], let _ = info["category"], let _ = info["verb"] {
                 
@@ -496,14 +496,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func onWebsocketProcessingError(_ note: Foundation.Notification) {
+    @objc func onWebsocketProcessingError(_ note: Foundation.Notification) {
         let notificationView = showBottomNotification("Error processing incoming update", textColor: UIColor.white, tag: ViewTags.WebsocketErrorNotification)
         delay(websocketVisualNotificationDuration) {
             notificationView?.removeFromSuperview()
         }
     }
     
-    func onWebsocketList(_ note: Foundation.Notification) {
+    @objc func onWebsocketList(_ note: Foundation.Notification) {
         
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteListInvitation>> {
             if let notification = info[WSNotificationValue] {
@@ -524,7 +524,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func onWebsocketInventory(_ note: Foundation.Notification) {
+    @objc func onWebsocketInventory(_ note: Foundation.Notification) {
         
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<RemoteInventoryInvitation>> {
             if let notification = info[WSNotificationValue] {
@@ -547,7 +547,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     }
     
     // Process this here in AppDelegate because it's global and we have a controller, which we need to show possible invitations and maybe a progress indicator
-    func onWebsocketSharedSync(_ note: Foundation.Notification) {
+    @objc func onWebsocketSharedSync(_ note: Foundation.Notification) {
         
         if let info = (note as NSNotification).userInfo as? Dictionary<String, WSNotification<String>> {
             if let notification = info[WSNotificationValue] {
@@ -579,7 +579,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func onShowShouldUpdateAppDialog(_ note: Foundation.Notification) {
+    @objc func onShowShouldUpdateAppDialog(_ note: Foundation.Notification) {
         guard window?.rootViewController?.presentedViewController == nil else {logger.w("Root controller already showing a popup, return"); return}
 
         if let controller = window?.rootViewController {
@@ -626,7 +626,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         }
     }
     
-    func onShowMustUpdateAppDialog(_ note: Foundation.Notification) {
+    @objc func onShowMustUpdateAppDialog(_ note: Foundation.Notification) {
         guard window?.rootViewController?.presentedViewController == nil else {logger.w("Root controller already showing a popup, return"); return}
         
         if let controller = window?.rootViewController {

@@ -324,7 +324,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         }
     }
     
-    func onPanCell(_ recognizer: UIPanGestureRecognizer) {
+    @objc func onPanCell(_ recognizer: UIPanGestureRecognizer) {
 
         switch recognizer.state {
         case .began:

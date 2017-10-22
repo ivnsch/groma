@@ -191,7 +191,7 @@ class SwipeableCell: UITableViewCell {
         // override
     }
     
-    func onPanCell(_ recognizer: UIPanGestureRecognizer) {
+    @objc func onPanCell(_ recognizer: UIPanGestureRecognizer) {
         
         guard swipeEnabled else {return}
         

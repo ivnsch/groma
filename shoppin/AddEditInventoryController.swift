@@ -87,8 +87,8 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     fileprivate func setSharedButtonVisibile(_ visible: Bool) {
         sharedUsersButton.isHidden = !visible
         
-        colorButtonHCenterConstraint.priority = visible ? 999 : 998
-        colorButtonRightPaddingConstraint.priority = visible ? 998 : 999
+        colorButtonHCenterConstraint.priority = UILayoutPriority(rawValue: UILayoutPriority.RawValue(visible ? 999 : 998))
+        colorButtonRightPaddingConstraint.priority = UILayoutPriority(rawValue: UILayoutPriority.RawValue(visible ? 998 : 999))
     }
     
     fileprivate func initValidator() {

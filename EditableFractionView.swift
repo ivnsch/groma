@@ -66,7 +66,7 @@ class EditableFractionView: UIView {
         }
     }
     
-    func onFractionInputChange(_ sender: UITextField) {
+    @objc func onFractionInputChange(_ sender: UITextField) {
         // If the input is nil (meaning at least one of the text fields is empty), we pass nil to the delegate
         // Note that we handle invalid characters theh same as if fields are empty. Shouldn't happen anyway as keyboard should be numeric.
         delegate?.onFractionInputChange(fractionInput: fraction)

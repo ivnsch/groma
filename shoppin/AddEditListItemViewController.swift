@@ -349,7 +349,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         brandInput.becomeFirstResponder()
     }
     
-    func onTapView(_ tap: UITapGestureRecognizer) {
+    @objc func onTapView(_ tap: UITapGestureRecognizer) {
         submitUnitOrBasePickers()
     }
     
@@ -432,10 +432,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     fileprivate func initTextFieldPlaceholders() {
-        brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
-        sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
-        priceInput.attributedPlaceholder = NSAttributedString(string: priceInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
-        noteInput.attributedPlaceholder = NSAttributedString(string: noteInput.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        priceInput.attributedPlaceholder = NSAttributedString(string: priceInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        noteInput.attributedPlaceholder = NSAttributedString(string: noteInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
         
         edibleButton.setTitle(trans("edible_button_title"), for: .normal)
     }

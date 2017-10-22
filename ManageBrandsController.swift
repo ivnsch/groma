@@ -72,13 +72,13 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    func onSubmitTap(_ sender: UIBarButtonItem) {
+    @objc func onSubmitTap(_ sender: UIBarButtonItem) {
         if tableView.isEditing {
             addEditBrandControllerManager?.controller?.submit()
         }
     }
     
-    func onEditTap(_ sender: UIBarButtonItem) {
+    @objc func onEditTap(_ sender: UIBarButtonItem) {
         toggleEditing()
     }
     

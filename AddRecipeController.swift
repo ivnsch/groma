@@ -83,7 +83,7 @@ class AddRecipeController: UIViewController {
         delegate?.onAddRecipe(ingredientModels: models, addRecipeController: self)
     }
     
-    func onTapView(_ tap: UITapGestureRecognizer) {
+    @objc func onTapView(_ tap: UITapGestureRecognizer) {
         UIApplication.shared.delegate!.window??.endEditing(true)
         
         for cell in tableView.visibleCells {
@@ -149,7 +149,7 @@ class AddRecipeController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
+    @objc func keyboardWillChangeFrame(_ notification: Foundation.Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
             if let frame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
                 logger.v("keyboardWillChangeFrame, frame: \(frame)")
@@ -166,7 +166,7 @@ class AddRecipeController: UIViewController {
 //        animateVisible(true)
     }
     
-    func keyboardWillDisappear(_ notification: Foundation.Notification) {
+    @objc func keyboardWillDisappear(_ notification: Foundation.Notification) {
         // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
         logger.v("add button - Keyboard will disappear - hiding")
 //        animateVisible(false) // TODO!!!!!!!!!!!!!!!!!!!!!!!! animate

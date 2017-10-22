@@ -93,7 +93,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     
     // MARK: - Notification
     
-    func onLogoutNotification(_ note: Foundation.Notification) {
+    @objc func onLogoutNotification(_ note: Foundation.Notification) {
         if !(childViewControllers.first is LoginViewController) {
             showLoginController()
         }

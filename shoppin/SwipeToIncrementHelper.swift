@@ -43,7 +43,7 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
         return true
     }
     
-    func onPanCell(_ recognizer: UIPanGestureRecognizer) {
+    @objc func onPanCell(_ recognizer: UIPanGestureRecognizer) {
 
         guard let view = view else {logger.e("No view"); return}
         guard let delegate = delegate else {logger.e("No delegate"); return}

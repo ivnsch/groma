@@ -114,7 +114,7 @@ protocol FractionViewDelegate {
         }
     }
     
-    func longPress(_ sender: Any) {
+    @objc func longPress(_ sender: Any) {
         delegate?.onLongPress()
     }
 }

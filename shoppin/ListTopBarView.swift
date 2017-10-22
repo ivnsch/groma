@@ -428,11 +428,11 @@ class ListTopBarView: UIView {
         setButtonIds(buttonIds, left: false)
     }
     
-    func onTitleTap(_ sender: UIButton) {
+    @objc func onTitleTap(_ sender: UIButton) {
         delegate?.onTopBarTitleTap()
     }
     
-    func onActionButtonTap(_ sender: UIButton) {
+    @objc func onActionButtonTap(_ sender: UIButton) {
         if let buttonId = ListTopBarViewButtonId(rawValue: sender.tag) {
             delegate?.onTopBarButtonTap(buttonId)
         } else {
@@ -440,7 +440,7 @@ class ListTopBarView: UIView {
         }
     }
     
-    func onBackTap(_ sender: UIButton) {
+    @objc func onBackTap(_ sender: UIButton) {
         delegate?.onTopBarBackButtonTap()
     }
 }

@@ -86,7 +86,7 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
         
     }
 
-    func onDeleteButtonTap(_ sender: UIButton) {
+    @objc func onDeleteButtonTap(_ sender: UIButton) {
         if let sectionModel = sectionModel {
             delegate?.onDeleteGroupTap(sectionModel, header: self)
         } else {

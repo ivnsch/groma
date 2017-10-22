@@ -82,7 +82,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         emailField.becomeFirstResponder()
     }
     
-    func handleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
 

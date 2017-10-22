@@ -24,17 +24,18 @@ class LineTextField: UITextField {
             self.font = UIFont.systemFont(ofSize: size)
         }
     }
-    
-    override func showValidationError() {
-        lineColor = UIColor.flatRed
-        setNeedsDisplay()
-    }
-    
-    override func clearValidationError() {
-        lineColor = LineTextField.defaultLineColor
-        setNeedsDisplay()
-    }
-    
+
+    // TODO review - had to be commented while swift 4 migration (extension declaration cannot be overriden)
+//    override func showValidationError() {
+//        lineColor = UIColor.flatRed
+//        setNeedsDisplay()
+//    }
+//
+//    override func clearValidationError() {
+//        lineColor = LineTextField.defaultLineColor
+//        setNeedsDisplay()
+//    }
+
     override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         context?.setStrokeColor(lineColor.cgColor)

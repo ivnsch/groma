@@ -106,7 +106,7 @@ class ManageItemsAccordionController: UIViewController {
         tableViewController.setEditing(editing, animated: animated)
     }
     
-    func onEditTap(_ sender: UIBarButtonItem) {
+    @objc func onEditTap(_ sender: UIBarButtonItem) {
         setEditing(!isEditing, animated: true)
     }
     
