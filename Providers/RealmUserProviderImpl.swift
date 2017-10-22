@@ -40,7 +40,7 @@ class RealmUserProviderImpl: UserProvider {
 
         SyncUser.logIn(with: credentials, server: RealmConfig.syncAuthURL) {[weak self] user, error in
 
-            DispatchQueue.main.sync {
+            DispatchQueue.main.async {
 
                 if let user = user {
                     logger.v("\nlogged in user: \(user)")
