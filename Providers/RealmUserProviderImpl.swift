@@ -36,33 +36,16 @@ class RealmUserProviderImpl: UserProvider {
     // We pass userName separately because it's not safely retrievable from SyncCredentials
     private func loginOrRegister(_ credentials: SyncCredentials, userName: String? = nil, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
 
-        #if (arch(i386) || arch(x86_64)) && os(iOS)
-            let syncHost = "127.0.0.1"
-        #else // device
-            let syncHost = "192.168.0.208"
-        #endif
+        logger.v("Logging in with credentials: \(credentials)")
 
-        let syncAuthURL = URL(string: "http://\(syncHost):9080")!
-        let syncRealmPath = "groma4"
-        let syncServerURL = URL(string: "realm://\(syncHost):9080/~/\(syncRealmPath)")!
-        
-        logger.v("Logging in with credentials: \(credentials), auth url: \(syncAuthURL)")
-        
-        SyncUser.logIn(with: credentials, server: syncAuthURL) {[weak self] user, error in
+        SyncUser.logIn(with: credentials, server: RealmConfig.syncAuthURL) {[weak self] user, error in
 
             DispatchQueue.main.sync {
 
                 if let user = user {
                     logger.v("\nlogged in user: \(user)")
-                    
-                    var config = RealmConfig.config
-                    
-                    config.syncConfiguration = SyncConfiguration(user: user, realmURL: syncServerURL)
-                    config.objectTypes = [List.self, DBInventory.self, Section.self, Product.self, DBSharedUser.self, DBRemoveList.self, DBRemoveInventory.self, ListItem.self, InventoryItem.self, DBSyncable.self, HistoryItem.self, DBPlanItem.self, ProductGroup.self, GroupItem.self, ProductCategory.self, StoreProduct.self, Recipe.self, Ingredient.self,
-                        SectionToRemove.self, ProductToRemove.self, StoreProductToRemove.self, DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self, DBRemoveInventoryItem.self, DBRemoveProductGroup.self, Item.self, Unit.self, QuantifiableProduct.self, RecipesContainer.self, InventoriesContainer.self, ListsContainer.self, BaseQuantitiesContainer.self, BaseQuantity.self
-                    ]
-                        
-                    Realm.Configuration.defaultConfiguration = config
+
+                    Realm.Configuration.defaultConfiguration = RealmConfig.syncedRealmConfigutation(user: user)
                     
                     do {
                         self?.notificationToken = try Realm().addNotificationBlock { _ in
@@ -75,11 +58,12 @@ class RealmUserProviderImpl: UserProvider {
                         } else {
                             logger.w("User: \(user) has no identity")
                         }
-                        
-                        
-                        // Pass a sync result for compatibility with the protocol interface (originally written for own server)
-                        handler(ProviderResult(status: .success, sucessResult: SyncResult(listInvites: [], inventoryInvites: [])))
-                        
+
+                        RealmConfig.copyLocalToSyncRealm(user: user) {
+                            // Pass a sync result for compatibility with the protocol interface (originally written for own server)
+                            handler(ProviderResult(status: .success, sucessResult: SyncResult(listInvites: [], inventoryInvites: [])))
+                        }
+
                     } catch let error {
                         logger.e("Couldn't instantiate Realm during login/register: \(error)")
                         handler(ProviderResult(status: .unknown))

@@ -83,6 +83,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     
     fileprivate func configRealm() {
         Realm.Configuration.defaultConfiguration = RealmConfig.config
+
+        logger.i("Realm path: \(String(describing: Realm.Configuration.defaultConfiguration.fileURL))", .db)
     }
     
     fileprivate func checkRatePopup() {
