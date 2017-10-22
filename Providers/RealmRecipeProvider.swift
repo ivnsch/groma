@@ -93,7 +93,7 @@ class RealmRecipeProvider: RealmProvider {
     
     public func delete(index: Int, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: recipes.realm) {realm -> Bool in
-            recipes.remove(objectAtIndex: index)
+            recipes.remove(at: index)
             return true
         }
         handler(successMaybe ?? false)

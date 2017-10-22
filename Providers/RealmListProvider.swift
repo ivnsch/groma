@@ -101,7 +101,7 @@ class RealmListProvider: RealmProvider {
     
     public func delete(index: Int, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: lists.realm) {realm -> Bool in
-            lists.remove(objectAtIndex: index)
+            lists.remove(at: index)
             return true
         }
         handler(successMaybe ?? false)

@@ -140,9 +140,9 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         guard let sections = listItemsTableViewController.sections else {logger.e("No sections"); return}
         guard let sectionsRealm = sections.realm else {logger.e("No realm"); return}
 
-        realmData?.token.stop()
+        realmData?.token.invalidate()
         
-        let notificationToken = sections.addNotificationBlock {[weak self] changes in guard let weakSelf = self else {return}
+        let notificationToken = sections.observe {[weak self] changes in guard let weakSelf = self else {return}
 
             switch changes {
             case .initial:

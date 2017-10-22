@@ -17,27 +17,27 @@ extension RealmSwift.List {
 //        add(array)
 //    }
     
-    public func add(_ array: [T]) {
+    public func add(_ array: [Element]) {
         for element in array {
             self.append(element)
         }
     }
     
-    public func toArray() -> [T] {
+    public func toArray() -> [Element] {
         return self.map{$0}
     }
     
-    public static func list(_ array: [T]) -> RealmSwift.List<T> {
-        let l = RealmSwift.List<T>()
+    public static func list(_ array: [Element]) -> RealmSwift.List<Element> {
+        let l = RealmSwift.List<Element>()
         for element in array {
             l.append(element)
         }
         return l
     }
 
-    public func remove(_ obj: T) -> Bool {
+    public func remove(_ obj: Element) -> Bool {
         if let index = index(of: obj) {
-            remove(objectAtIndex: index)
+            remove(at: index)
             return true
         }
         return false

@@ -254,7 +254,7 @@ class RealmInventoryProvider: RealmProvider {
     
     public func delete(index: Int, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: inventories.realm) {realm -> Bool in
-            inventories.remove(objectAtIndex: index)
+            inventories.remove(at: index)
             return true
         }
         handler(successMaybe ?? false)

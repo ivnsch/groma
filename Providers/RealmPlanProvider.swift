@@ -80,7 +80,8 @@ class RealmPlanProvider: RealmProvider {
                     let productNamesStr: String = productNames.map{"'\($0)'"}.joined(separator: ",")
 
                     // get all possible already existing plan items in a dictionary
-                    let existingPlanItems = realm.objects(DBPlanItem.self).filter("product.name IN {\(productNamesStr)}").distinctArray()
+                    let existingPlanItems = realm.objects(DBPlanItem.self)
+                        .filter("product.name IN {\(productNamesStr)}").distinctArray()
                     let existingPlanItemsDict: [String: DBPlanItem] = productNames.toDictionary {productName in
                         (productName, existingPlanItems.filter{$0.product.item.name == productName}.first)
                     }

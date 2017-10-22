@@ -136,7 +136,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             
             weakSelf.listsResult = lists
             
-            self?.notificationToken = lists.addNotificationBlock { changes in
+            self?.notificationToken = lists.observe { changes in
                 switch changes {
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI

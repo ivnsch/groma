@@ -84,9 +84,9 @@ class ReorderSectionTableViewControllerNew: UIViewController, UITableViewDataSou
         
         guard let sections = sections else {logger.e("No sections"); return}
         
-        self.notificationToken?.stop()
+        self.notificationToken?.invalidate()
         
-        let notificationToken = sections.addNotificationBlock {[weak self] changes in guard let weakSelf = self else {return}
+        let notificationToken = sections.observe {[weak self] changes in guard let weakSelf = self else {return}
             
             switch changes {
             case .initial:

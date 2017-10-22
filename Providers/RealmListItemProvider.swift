@@ -1257,7 +1257,7 @@ class RealmListItemProvider: RealmProvider {
             if status == .todo {
                 let section = list.sections(status: status)[indexPath.section]
                 
-                section.listItems.remove(objectAtIndex: indexPath.row)
+                section.listItems.remove(at: indexPath.row)
                 
                 if self.deleteSectionIfEmpty(sections: list.sections(status: status), section: section) {
                     return DeleteListItemResult(deletedSection: true)
@@ -1266,7 +1266,7 @@ class RealmListItemProvider: RealmProvider {
                 }
 
             } else {
-                list.listItems(status: status).remove(objectAtIndex: indexPath.row)
+                list.listItems(status: status).remove(at: indexPath.row)
                 return DeleteListItemResult(deletedSection: false)
             }
         }
@@ -1277,7 +1277,7 @@ class RealmListItemProvider: RealmProvider {
     fileprivate func deleteSectionIfEmpty(sections: RealmSwift.List<Section>, section: Section) -> Bool {
         if section.listItems.isEmpty {
             if let sectionIndex = sections.index(of: section) {
-                sections.remove(objectAtIndex: sectionIndex)
+                sections.remove(at: sectionIndex)
                 return true
             } else {
                 logger.e("Invalid state: Src section isn't in the list: srcSection: \(section), sections: \(sections)")
@@ -1298,7 +1298,7 @@ class RealmListItemProvider: RealmProvider {
         return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> MoveListItemResult? in
 
             // delete from src section
-            srcSection.listItems.remove(objectAtIndex: from.row)
+            srcSection.listItems.remove(at: from.row)
             
             dstSection.listItems.insert(listItem, at: to.row)
             
@@ -1308,7 +1308,7 @@ class RealmListItemProvider: RealmProvider {
 
             if srcSection.listItems.isEmpty {
                 if let sectionIndex = list.sections(status: status).index(of: srcSection) {
-                    list.sections(status: status).remove(objectAtIndex: sectionIndex)
+                    list.sections(status: status).remove(at: sectionIndex)
                     return MoveListItemResult(deletedSrcSection: true)
                 } else {
                     logger.e("Invalid state: Src section isn't in the list: srcSection: \(srcSection), status: \(status), list: \(list)")
@@ -1391,7 +1391,7 @@ class RealmListItemProvider: RealmProvider {
             listItem.section = dstSection
             
             // delete from src section. This is only for .todo items - the cart and stash sections have like all sections a list of list items too but this is not used since we don't need ordering relative to section there.
-            srcSection.listItems.remove(objectAtIndex: from.row)
+            srcSection.listItems.remove(at: from.row)
             
             
             
@@ -1502,7 +1502,7 @@ class RealmListItemProvider: RealmProvider {
             }
             
             // delete from src list items
-            cartOrStashListItems.remove(objectAtIndex: from)
+            cartOrStashListItems.remove(at: from)
             
             return true
         }

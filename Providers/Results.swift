@@ -18,7 +18,7 @@ extension Results {
     If range is not fully contained in results count the returned array is determined by the intersection of range and results count
     If range starts beyond results count an empty array is returned
     */
-    public func toArray(_ range: NSRange? = nil) -> [T] {
+    public func toArray(_ range: NSRange? = nil) -> [Element] {
         
         guard (range.map{$0.location < count} ?? true) else {
             logger.w("Warning: Requesting out of bounds range of results. Range: [\(String(describing: range?.location)), \(String(describing: range?.length))], results count: \(count)")
@@ -31,7 +31,7 @@ extension Results {
             return count < endNotTrunkated ? count : endNotTrunkated // note we can't use min bc Results has a min method and math min doesn't have a namespace
         } ?? count
         
-        let arr: [T] = (start..<end).map {
+        let arr: [Element] = (start..<end).map {
             self[$0]
         }
         
@@ -40,7 +40,7 @@ extension Results {
     
     // Copied from Array extension - we need this for results also
     // mapFunc: maps element to a tuple key: value
-    public func toDictionary<K: Hashable, V>(_ mapFunc: (T) -> (K, V)) -> [K: V] {
+    public func toDictionary<K: Hashable, V>(_ mapFunc: (Element) -> (K, V)) -> [K: V] {
         var dict = [K: V]()
         for e in self {
             let (k, v) = mapFunc(e)
@@ -49,7 +49,7 @@ extension Results {
         return dict
     }
     
-    public func findFirst(_ function: (_ element: T) -> Bool) -> T? {
+    public func findFirst(_ function: (_ element: Element) -> Bool) -> Element? {
         for e in self {
             if function(e) {
                 return e
@@ -58,7 +58,7 @@ extension Results {
         return nil
     }
     
-    public func splitMap<U>(_ belongs: (T) -> Bool, mapper: (T) -> U) -> (belongs: [U], notBelongs: [U]) {
+    public func splitMap<U>(_ belongs: (Element) -> Bool, mapper: (Element) -> U) -> (belongs: [U], notBelongs: [U]) {
         var belongsArr: [U] = []
         var notBelongsArr: [U] = []
         for element in self {
@@ -73,7 +73,7 @@ extension Results {
     
     // Filter + map
     // parameter f, mapping and filtering function if returns nil -> filter out
-    public func collect<U>(_ f: (T) -> U?) -> [U] {
+    public func collect<U>(_ f: (Element) -> U?) -> [U] {
         var arr: [U] = []
         for e in self {
             if let e = f(e) {
@@ -91,21 +91,8 @@ extension Results {
 //        return set
 //    }
     
-    public func distinctArray() -> [T] {
-//        var set = Set<T>()
-        var array = [T]()
-        for element in self {
-//            if !set.contains(element) {
-            if !array.contains(element) {
-//                set.insert(element)
-                array.append(element)
-            }
-        }
-        return array
-    }
-    
     // NOTE: calls count - this may be not good for performance depending on implementation
-    public subscript (safe index: Int) -> T? {
+    public subscript (safe index: Int) -> Element? {
         if index < count {
             return self[index]
         } else {
@@ -121,3 +108,15 @@ extension Results {
 //        return self.filter("dirty == \(dirty)")
 //    }
 //}
+
+extension Results where Element: Object {
+    public func distinctArray() -> [Element] {
+        var array = [Element]()
+        for element in self {
+            if !array.contains(element) {
+                array.append(element)
+            }
+        }
+        return array
+    }
+}

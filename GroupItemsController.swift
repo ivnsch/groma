@@ -405,7 +405,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                 
 //                weakSelf.productsWithQuantityController.models = weakSelf.results?.toArray() ?? [] // TODO!! use generic Results in productsWithQuantityController to not have to map to array
                 
-                weakSelf.notificationToken = weakSelf.results?.addNotificationBlock { changes in
+                weakSelf.notificationToken = weakSelf.results?.observe { changes in
                     switch changes {
                     case .initial:
                         //                        // Results are now populated and can be accessed without blocking the UI

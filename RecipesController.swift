@@ -99,7 +99,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
             
             weakSelf.itemsResult = recipes
             
-            self?.notificationToken = recipes.addNotificationBlock { changes in
+            self?.notificationToken = recipes.observe { changes in
                 switch changes {
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI

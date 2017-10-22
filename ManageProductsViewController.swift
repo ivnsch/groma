@@ -348,7 +348,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         Prov.productProvider.productsRes(searchText, sortBy: sortBy, successHandler{[weak self] (substring: String?, products: Results<QuantifiableProduct>) in guard let weakSelf = self else {return}
             weakSelf.products = products
             
-            weakSelf.notificationToken = weakSelf.products?.addNotificationBlock { changes in
+            weakSelf.notificationToken = weakSelf.products?.observe { changes in
                 switch changes {
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI

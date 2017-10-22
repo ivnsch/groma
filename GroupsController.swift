@@ -90,7 +90,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
             
             weakSelf.groupsResult = groups
             
-            self?.notificationToken = groups.addNotificationBlock { changes in
+            self?.notificationToken = groups.observe { changes in
                 switch changes {
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI

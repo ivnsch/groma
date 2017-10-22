@@ -174,9 +174,9 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         guard let sections = listItemsTableViewController.listItems else {logger.e("No listItems"); return}
         guard let sectionsRealm = sections.realm else {logger.e("No realm"); return}
         
-        realmData?.token.stop()
+        realmData?.token.invalidate()
         
-        let notificationToken = sections.addNotificationBlock {[weak self] changes in guard let weakSelf = self else {return}
+        let notificationToken = sections.observe {[weak self] changes in guard let weakSelf = self else {return}
             
             switch changes {
             case .initial:

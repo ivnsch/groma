@@ -59,9 +59,9 @@ class ManageItemsAccordionController: UIViewController {
         guard let items = items else {logger.e("No sections"); return}
         guard let realm = items.realm else {logger.e("No realm"); return}
 
-        realmData?.token.stop()
+        realmData?.token.invalidate()
         
-        let notificationToken = items.addNotificationBlock {changes in
+        let notificationToken = items.observe {changes in
             
             switch changes {
             case .initial: break

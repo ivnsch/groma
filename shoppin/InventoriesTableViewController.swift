@@ -99,7 +99,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                 
             weakSelf.inventoriesResult = inventories
             
-            self?.notificationToken = inventories.addNotificationBlock { changes in
+            self?.notificationToken = inventories.observe { changes in
                 switch changes {
                 case .initial:
 //                        // Results are now populated and can be accessed without blocking the UI

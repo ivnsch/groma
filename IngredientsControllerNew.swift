@@ -184,7 +184,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
             
             weakSelf.itemsResult = ingredients
             
-            weakSelf.notificationToken = weakSelf.itemsResult?.addNotificationBlock {[weak self] changes in guard let weakSelf = self else {return}
+            weakSelf.notificationToken = weakSelf.itemsResult?.observe {[weak self] changes in
+                guard let weakSelf = self else {return}
                 switch changes {
                 case .initial:
                     //                        // Results are now populated and can be accessed without blocking the UI

@@ -197,7 +197,7 @@ extension Array where Element: ListItem {
 
 
 
-extension Results where T: ListItem {
+extension Results where Element: ListItem {
     
     /**
      Sorts increasingly by section and list item order
