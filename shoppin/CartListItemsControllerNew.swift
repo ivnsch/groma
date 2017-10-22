@@ -59,7 +59,7 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     
     func showQuantifiables(aggregate: ListItemsCartStashAggregate) {
         totalDonePriceButton.setTitle(aggregate.cartPrice.toLocalCurrencyString(), for: .normal)
-        delegate?.onCartUpdatedQuantifiables()
+//        delegate?.onCartUpdatedQuantifiables()
     }
     
     // Fixes random, rare freezes when coming back to todo controller. See http://stackoverflow.com/a/28919337/930450
