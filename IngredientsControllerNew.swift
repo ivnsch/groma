@@ -19,7 +19,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         didSet {
             if let recipe = recipe {
                 topBar.title = recipe.name
-                load()
+                delay(0.2) { // smoother animation when showing controller
+                    self.load()
+                }
             }
         }
     }

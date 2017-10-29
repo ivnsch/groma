@@ -216,7 +216,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             explanationView.imageView.startAnimating()
             return cell
             
-        }else if let placeHolderItem = placeHolderItem, placeHolderItem.indexPath == indexPath {
+        } else if let placeHolderItem = placeHolderItem, placeHolderItem.indexPath == indexPath {
             let cell = tableView.dequeueReusableCell(withIdentifier: placeholderIdentifier) as! PlaceHolderItemCell
             cell.categoryColorView.backgroundColor = placeHolderItem.item.product.product.item.category.color
             return cell
@@ -449,10 +449,12 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         
         tableView.reloadData()
         updateEmptyUI()
-        
-        delegate?.loadModels(sortBy: sortBy.value) { [weak self] in
-            self?.tableView.reloadData()
-            self?.updateEmptyUI()
+
+        delay(0.2) { // smoother animation when showing controller
+            self.delegate?.loadModels(sortBy: sortBy.value) { [weak self] in
+                self?.tableView.reloadData()
+                self?.updateEmptyUI()
+            }
         }
     }
     

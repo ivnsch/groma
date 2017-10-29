@@ -121,14 +121,16 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 
     fileprivate func initWithList(_ list: Providers.List) {
         topBar.title = topBarTitle(list)
-        
-        listItemsTableViewController.sections = list.sections(status: status)
-        
-        logger.v("Initialized sections: \(String(describing: listItemsTableViewController.sections?.count))")
-        
-        onTableViewChangedQuantifiables()
-        
-        initNotifications()
+
+        delay(0.2) { // smoother animation when showing controller
+            self.listItemsTableViewController.sections = list.sections(status: self.status)
+
+            logger.v("Initialized sections: \(String(describing: self.listItemsTableViewController.sections?.count))")
+
+            self.onTableViewChangedQuantifiables()
+
+            self.initNotifications()
+        }
     }
     
     func topBarTitle(_ list: Providers.List) -> String {
