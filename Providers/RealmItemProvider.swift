@@ -34,8 +34,9 @@ class RealmItemProvider: RealmProvider {
             }
         }()
         
-        let filterMaybe = onlyEdible ? Item.createFilterNameContainsAndEdible(substring, edible: onlyEdible) : Item.createFilterNameContains(substring)
-        
+        let filterMaybe = onlyEdible ? Item.createFilterNameContainsAndEdible(substring, edible: onlyEdible) :
+            (substring.isEmpty ? nil : Item.createFilterNameContains(substring))
+
         background({() -> [String]? in
             do {
                 let realm = try Realm()

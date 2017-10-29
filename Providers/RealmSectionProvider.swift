@@ -169,8 +169,21 @@ class RealmSectionProvider: RealmProvider {
     // Gets suggestions both from section and category names
     func sectionSuggestionsContainingText(_ text: String, handler: @escaping ([String]) -> Void) {
         withRealm({ realm in
-            let sectionNames: [String] = realm.objects(Section.self).filter(Section.createFilterNameContains(text)).map{$0.name}
-            let categoryNames: [String] = realm.objects(ProductCategory.self).filter(ProductCategory.createFilterNameContains(text)).map{$0.name}
+
+            // Sections
+            let unfilteredSections = realm.objects(Section.self)
+            let sectionFilterMaybe: String? = text.isEmpty ? nil : Section.createFilterNameContains(text)
+            let filteredSections: Results<Section> = sectionFilterMaybe.map { unfilteredSections.filter($0) }
+                ?? unfilteredSections
+            let sectionNames: [String] = filteredSections.map{$0.name}
+
+            // Categories
+            let unfilteredCategories = realm.objects(ProductCategory.self)
+            let categoryFilterMaybe: String? = text.isEmpty ? nil : ProductCategory.createFilterNameContains(text)
+            let filteredCategories: Results<ProductCategory> = categoryFilterMaybe.map {
+                unfilteredCategories.filter($0)} ?? unfilteredCategories
+            let categoryNames: [String] = filteredCategories.map{$0.name}
+
             let allNames: [String] = (sectionNames + categoryNames).distinct()
             return allNames
             

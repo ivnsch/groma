@@ -32,7 +32,10 @@ class RealmRecipeProvider: RealmProvider {
         
         
         withRealm({realm -> [String]? in
-            let recipes: Results<Recipe> = self.loadSync(realm, filter: Recipe.createFilterNameContains(substring), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
+            let filterMaybe: String? = substring.isEmpty ? nil : Recipe.createFilterNameContains(substring)
+            let recipes: Results<Recipe> = self.loadSync(realm, filter: filterMaybe,
+                                                         sortDescriptor: SortDescriptor(keyPath: sortData.key,
+                                                                                        ascending: sortData.ascending))
             return recipes.toArray(range).map{$0.uuid}
             
         }) {uuidsMaybe in

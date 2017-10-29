@@ -30,7 +30,13 @@ class RealmProductGroupProvider: RealmProvider {
         
         
         withRealm({realm -> [String]? in
-            let groups: Results<ProductGroup> = self.loadSync(realm, filter: substring.map{ProductGroup.createFilterNameContains($0)}, sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
+            let filterMaybe: String? = substring.flatMap {
+                $0.isEmpty ? nil : ProductGroup.createFilterNameContains($0)
+            }
+            let groups: Results<ProductGroup> = self.loadSync(realm, filter: filterMaybe,
+                                                              sortDescriptor: SortDescriptor(keyPath: sortData.key,
+                                                                                             ascending:
+                                                                sortData.ascending))
             return groups.toArray(range).map{$0.uuid}
             
         }) {uuidsMaybe in

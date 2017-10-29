@@ -21,7 +21,8 @@ class RealmProductCategoryProvider: RealmProvider {
         background({() -> [String]? in
             do {
                 let realm = try Realm()
-                let result: Results<ProductCategory> = self.loadSync(realm, filter: ProductCategory.createFilterNameContains(text))
+                let filterMaybe: String? = text.isEmpty ? nil : ProductCategory.createFilterNameContains(text)
+                let result: Results<ProductCategory> = self.loadSync(realm, filter: filterMaybe)
                 return result.map{$0.uuid}
             } catch let e {
                 logger.e("Error: creating Realm, returning empty results, error: \(e)")
@@ -47,8 +48,10 @@ class RealmProductCategoryProvider: RealmProvider {
     }
     
     // TODO range
-    func categoriesContainingText(_ text: String, range: NSRange, _ handler: @escaping (_ text: String?, _ categories: Results<ProductCategory>?) -> Void) {
-        load(filter: ProductCategory.createFilterNameContains(text)) {categories in
+    func categoriesContainingText(_ text: String, range: NSRange, _ handler: @escaping (_ text: String?,
+        _ categories: Results<ProductCategory>?) -> Void) {
+        let filterMaybe: String? = text.isEmpty ? nil : ProductCategory.createFilterNameContains(text)
+        load(filter: filterMaybe) {categories in
             handler(text, categories)
         }
     }

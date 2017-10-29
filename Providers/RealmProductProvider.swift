@@ -225,7 +225,9 @@ class RealmProductProvider: RealmProvider {
             }
         }()
         
-        let filterMaybe = substring.map{Product.createFilterNameContains($0)}
+        let filterMaybe: String? = substring.flatMap {
+            $0.isEmpty ? nil : Product.createFilterNameContains($0)
+        }
         
         background({() -> [String]? in
             do {
@@ -269,7 +271,9 @@ class RealmProductProvider: RealmProvider {
             }
         }()
         
-        let filterMaybe = substring.map{QuantifiableProduct.createFilterNameContains($0)}
+        let filterMaybe: String? = substring.flatMap {
+            $0.isEmpty ? nil : QuantifiableProduct.createFilterNameContains($0)
+        }
         
         background({() -> [String]? in
             do {
@@ -335,7 +339,9 @@ class RealmProductProvider: RealmProvider {
             }
         }()
         
-        let filterMaybe = substring.map{QuantifiableProduct.createFilterNameContains($0)}
+        let filterMaybe: String? = substring.flatMap {
+            $0.isEmpty ? nil : QuantifiableProduct.createFilterNameContains($0)
+        }
         
         // Note that we are load the sections from db for each range - this could be optimised (load sections only once for all pages) but it shouldn't be an issue since usually there are not a lot of sections and it's performing well.
         
@@ -395,8 +401,10 @@ class RealmProductProvider: RealmProvider {
             }
         }()
         
-        let filterMaybe = substring.map{Product.createFilterNameContains($0)}
-        
+        let filterMaybe: String? = substring.flatMap {
+            $0.isEmpty ? nil : Product.createFilterNameContains($0)
+        }
+
         // Note that we are load the sections from db for each range - this could be optimised (load sections only once for all pages) but it shouldn't be an issue since usually there are not a lot of sections and it's performing well.
         
         let list: List = list.copy() // Fixes Realm acces in incorrect thread exceptions

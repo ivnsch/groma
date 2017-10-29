@@ -156,7 +156,8 @@ class RealmUnitProvider: RealmProvider {
     }
     
     func unitsContainingTextSync(_ text: String) -> Results<Unit>? {
-        return loadSync(filter: Unit.createFilterNameContains(text))
+        let filterMaybe: String? = text.isEmpty ? nil : Unit.createFilterNameContains(text)
+        return loadSync(filter: filterMaybe)
     }
     
     
