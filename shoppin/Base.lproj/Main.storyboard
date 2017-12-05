@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="c3h-ZV-UrG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="c3h-ZV-UrG">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -227,7 +227,6 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                     <tabBarItem key="tabBarItem" title="" image="list" selectedImage="list_selected" id="uJG-Eo-xiW"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="FPI-Ud-Czg">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -328,7 +327,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="History" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93P-6p-iJK" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                            <rect key="frame" x="20" y="18" width="64" height="24"/>
+                                            <rect key="frame" x="20" y="18" width="62.5" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -649,7 +648,6 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                     <tabBarItem key="tabBarItem" title="" image="inventory" selectedImage="inventory_selected" id="yUm-WR-GoU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QjE-wI-irz">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1187,7 +1185,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XF6-Wi-vHV">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="Lxj-To-pGn" customClass="LoadingFooter" customModule="groma" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="88" width="375" height="44"/>
@@ -1233,7 +1231,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="$5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gpp-Rq-ikf" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="325" y="19" width="22" height="22"/>
+                                                    <rect key="frame" x="318" y="19" width="22" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1244,7 +1242,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Apples" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="sle-Ve-3Yk" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="9" width="285" height="22"/>
+                                                    <rect key="frame" x="20" y="9" width="278" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1255,7 +1253,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="bqW-8q-Oq6" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="31" width="285" height="18"/>
+                                                    <rect key="frame" x="20" y="31" width="278" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.49019607843137253" green="0.54509803921568623" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1435,7 +1433,6 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                     <tabBarItem key="tabBarItem" title="" image="more" selectedImage="more_selected" id="cLJ-PG-GFJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ufI-Hd-Hpl">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1454,7 +1451,6 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                     <tabBarItem key="tabBarItem" title="" image="stats" selectedImage="stats_selected" id="omU-Id-l2V"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="qy3-eD-XlX">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
