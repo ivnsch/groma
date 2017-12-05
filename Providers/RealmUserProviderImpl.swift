@@ -8,7 +8,6 @@
 
 import Foundation
 import RealmSwift
-
 import CloudKit
 
 class RealmUserProviderImpl: UserProvider {
@@ -19,14 +18,12 @@ class RealmUserProviderImpl: UserProvider {
         loginOrRegister(loginData, register: false, controller: controller, handler)
     }
 
-    
     func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         let loginData = LoginData(email: user.email, password: user.password)
         loginOrRegister(loginData, register: true, controller: controller) {result in
             handler(ProviderResult(status: result.status))
         }
     }
-    
     
     private func loginOrRegister(_ loginData: LoginData, register: Bool, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         let credentials = SyncCredentials.usernamePassword(username: loginData.email, password: loginData.password, register: register)
@@ -43,15 +40,15 @@ class RealmUserProviderImpl: UserProvider {
             DispatchQueue.main.async {
 
                 if let user = user {
-                    logger.v("\nlogged in user: \(user)")
+                    logger.v("logged in user: \(user)")
 
                     Realm.Configuration.defaultConfiguration = RealmConfig.syncedRealmConfigutation(user: user)
-                    
+
                     do {
                         self?.notificationToken = try Realm().observe { _,_  in
                             logger.d("Realm changed")
                         }
-                        
+
                         if let userName = userName { // for credentials login
 //                            self?.storeEmail(user.identity) // not the user name / email
                             self?.storeEmail(userName)
