@@ -291,7 +291,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         initAutocompletionTextFields()
         
         priceInput.delegate = self
-        
+
         sectionColorButton.textColor = UIColor.gray
         sectionColorButton.text = trans("generic_color") // string from storyboard localization doesn't work, seems to be xcode bug
         
@@ -573,9 +573,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             break
         }
     }
-    
+
     // MARK: - MLPAutoCompleteTextFieldDelegate
-    
+
     func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, didSelectAutoComplete selectedString: String!, withAutoComplete selectedObject: MLPAutoCompletionObject!, forRowAt indexPath: IndexPath!) {
 
         if textField == sectionInput {
@@ -588,7 +588,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
 
-    
+
     @IBAction func onSectionColorButtonTap(_ sender: UIButton) {
     
         let picker = UIStoryboard.listColorPicker()
@@ -602,7 +602,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             }
         }
     }
-    
+
     fileprivate func showPopup(_ button: UIView, controller: UIViewController, topOffset: CGFloat = 0, width: CGFloat? = nil, height: CGFloat? = nil, onWillShow: VoidFunction) {
         
         if let windowView = parent?.view.superview?.superview?.superview {
@@ -646,18 +646,18 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             print("Warn: AddEditListItemViewController.onSectionColorButtonTap: unexpected: no window")
         }
     }
-    
-    
+
+
     // MARK: - FlatColorPickerControllerDelegate
-    
+
     func onColorPicked(_ color: UIColor) {
         dismissColorPicker(color)
     }
-    
+
     func onDismiss() {
         dismissColorPicker(nil) // not used see FIXME in FlatColorPickerController.viewDidLoad
     }
-    
+
     fileprivate func dismissColorPicker(_ selectedColor: UIColor?) {
         if let showingColorPicker = showingColorPicker {
             
@@ -681,7 +681,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             }
         }
     }
-    
+
     fileprivate func dismissPopup(_ controller: UIViewController, onComplete: VoidFunction? = nil) {
         UIView.animate(withDuration: 0.3, animations: {
             controller.view.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
@@ -691,9 +691,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             }
         )
     }
-    
+
     // MARK: - MyAutoCompleteTextFieldDelegate
-    
+
     func onDeleteSuggestion(_ string: String, sender: MyAutoCompleteTextField) {
         switch sender {
         case sectionInput:
@@ -726,7 +726,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     @IBAction func onTapEdible() {
         edibleSelected = !edibleSelected
     }
-    
+
 ///////////////////////////////////////////////////////////////////////////
 // note popup - for now disabled
 //    @IBAction func onNoteButtonTap(sender: AnyObject) {
