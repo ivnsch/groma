@@ -19,7 +19,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 
     @IBOutlet weak var swipeView: SwipeView!
     @IBOutlet weak var pageControl: UIPageControl!
-    
+
     @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
     @IBOutlet weak var skipButton: UIButton!
     // This works but for now disabled, no signup in intro
@@ -61,7 +61,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         
         
         pageControl.numberOfPages = pageModels.count
-        
+
         if mode == .launch {
             
             let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
@@ -439,7 +439,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         self.modalTransitionStyle = .crossDissolve
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
-    
+
     func onLoginSuccess() {
         PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
         exit()

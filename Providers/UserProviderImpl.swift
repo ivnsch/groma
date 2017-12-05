@@ -25,7 +25,7 @@ class UserProviderImpl: UserProvider {
             }
         }
     }
-    
+
     func register(_ user: UserInput, controller: UIViewController, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         self.remoteProvider.register(user) {result in
             if result.success {
@@ -39,7 +39,7 @@ class UserProviderImpl: UserProvider {
             handler(ProviderResult(status: status))
         }
     }
-    
+
     func isRegistered(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         remoteProvider.isRegistered(email) {result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
@@ -93,21 +93,21 @@ class UserProviderImpl: UserProvider {
     func connectWebsocketIfLoggedIn() {
         webSocket = MyWebSocket()
     }
-    
+
     func disconnectWebsocket() {
         webSocket?.disconnect()
     }
-    
+
     func isWebsocketConnected() -> Bool {
         return webSocket?.isConnected ?? false
     }
-    
+
     func forgotPassword(_ email: String, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         remoteProvider.forgotPassword(email) {result in
             handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
         }
     }
-    
+
     func removeAccount(_ handler: @escaping (ProviderResult<Any>) -> ()) {
         remoteProvider.removeAccount {result in
             handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
@@ -305,7 +305,7 @@ class UserProviderImpl: UserProvider {
             handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
         }
     }
-    
+
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
     func authenticateWithFacebook(_ token: String, controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> ()) {
         remoteProvider.authenticateWithFacebook(token) {[weak self] result in
@@ -320,12 +320,11 @@ class UserProviderImpl: UserProvider {
         }
     }
 
-    
     func authenticateWithICloud(controller: UIViewController, _ handler: @escaping (ProviderResult<SyncResult>) -> Void) {
         logger.e("Not supported")
         handler(ProviderResult(status: .unknown))
     }
-    
+
     // store email in prefs so we can e.g. prefill login controller, which is opened after registration
     // For now store it as simple preference, we need it to be added automatically to list shared users. This may change in the future
     fileprivate func storeEmail(_ email: String) {
