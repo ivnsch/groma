@@ -354,6 +354,12 @@ title_groups = "Grupos";
 title_participants = "Participantes";
 title_recipes = "Grupos de ingredientes";
 
+empty_lists_line1 = "Oops, no hay listas!";
+empty_lists_line2 = "Pulsa para agregar una";
+empty_inventories_line1 = "Oops, no hay inventarios!";
+empty_inventories_line2 = "Pulse para agregar uno";
+empty_recipes_line1 = "Oops, no hay recetas!";
+empty_recipes_line2 = "Pulsa para agregar una";
 
 empty_list_line1 = "Tu lista está vacía";
 empty_list_line2 = "Pulsa para agregar ítems";

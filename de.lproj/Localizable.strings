@@ -353,6 +353,12 @@ title_groups = "Gruppen";
 title_participants = "Teilnehmer";
 title_recipes = "Zutatengruppen";
 
+empty_lists_line1 = "Hoppla! Du hast keine Listen";
+empty_lists_line2 = "Tappe um eine Liste hinzuzufügen";
+empty_inventories_line1 = "Hoppla! Du hast keine Inventare";
+empty_inventories_line2 = "Tappe um ein Inventar hinzuzufügen";
+empty_recipes_line1 = "Hoppla! Du hast keine Gruppen";
+empty_recipes_line2 = "Tappe um eine Grupe hinzuzufügen";
 
 empty_list_line1 = "Hoppla! Es gibt noch keine Items";
 empty_list_line2 = "Tappe um Items hinzuzufügen!";
@@ -360,7 +366,6 @@ empty_inventory_line1 = "Hoppla! Es gibt noch keine Items";
 empty_inventory_line2 = "Tappe um welche hinzuzufügen\noder kaufe sie im Einkaufswagen!";
 empty_group_line1 = "Hoppla! Es gibt noch keine Items";
 empty_group_line2 = "Tappe um Items hinzuzufügen!";
-
 
 generic_login = "Einloggen";
 generic_color = "Farbe";
