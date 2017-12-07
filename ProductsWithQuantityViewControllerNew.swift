@@ -577,6 +577,6 @@ class ExplanationManager {
 
     // Debugging
     func reset() {
-        checker.reset()
+        checker?.reset()
     }
 }
