@@ -300,7 +300,16 @@ extension UIView {
             frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: newValue)
         }
     }
-    
+
+    public var size: CGSize {
+        get {
+            return frame.size
+        }
+        set {
+            frame.size = size
+        }
+    }
+
     convenience init(size: CGSize, center: CGPoint) {
         self.init(frame: CGRect(x: center.x - size.width / 2, y: center.y - size.height / 2, width: size.width, height: size.height))
     }

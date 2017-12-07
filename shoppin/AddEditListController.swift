@@ -94,7 +94,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
     
     
-    fileprivate var growColorPickerAnimator: GromFromViewControlerAnimator?
+    fileprivate var colorPopup: MyPopup?
     
     fileprivate func prefill(_ list: List) {
         listNameInputField.text = list.name
@@ -184,13 +184,6 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
     
     fileprivate func initGrowColorAnimator() {
-        guard let parent = parent else {logger.e("Parent is not set"); return}
-
-        growColorPickerAnimator = GromFromViewControlerAnimator(parent: parent, currentController: self) {
-            let controller = UIStoryboard.listColorPicker()
-            controller.delegate = self
-            return controller
-        }
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
@@ -371,9 +364,25 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
 
     @IBAction func onColorTap() {
-        growColorPickerAnimator?.open(button: colorButton) {[weak self] in
-            self?.view.endEditing(true)
-        }
+        guard let parent = parent else { logger.e("Parent is not set"); return }
+
+        let popup = MyPopup(parent: parent.view)
+        let controller = UIStoryboard.listColorPicker()
+        controller.delegate = self
+        parent.addChildViewController(controller)
+
+        controller.view.size = parent.view.size
+        popup.contentView = controller.view
+
+        self.colorPopup = popup
+
+        popup.show(from: colorButton)
+
+        view.endEditing(true)
+
+        //growColorPickerAnimator?.open(button: colorButton) {[weak self] in
+        //    self?.view.endEditing(true)
+        //}
     }
     
     @IBAction func onSharedUsersTap() {
@@ -445,16 +454,15 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
     
     fileprivate func dismissColorPicker(_ selectedColor: UIColor?) {
-        let growColorPickerAnimator = self.growColorPickerAnimator
-        
-        growColorPickerAnimator?.close() {[weak self] in
+        colorPopup?.hide(onFinish: { [weak self] in
             UIView.animate(withDuration: 0.3, animations: {[weak self] in
                 if let selectedColor = selectedColor {
                     self?.setBackgroundColor(selectedColor)
                 }
             })
             self?.listNameInputField.becomeFirstResponder()
-        }
+            self?.colorPopup = nil
+        })
     }
     
     // MARK: - SharedUsersControllerDelegate
@@ -489,7 +497,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     // Returns if quick controller can be closed
     func requestClose() -> Bool {
-        let isColorPickerOpen = growColorPickerAnimator?.isShowing ?? false
+        let isColorPickerOpen = colorPopup != nil
         dismissColorPicker(nil)
         return !isColorPickerOpen // at this point the variable actually means "wasColorPickerOpen"
     }

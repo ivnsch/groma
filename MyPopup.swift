@@ -1,0 +1,123 @@
+//
+//  MyPopup.swift
+//  groma
+//
+//  Created by Ivan Schuetz on 07.12.17.
+//  Copyright © 2017 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+
+class MyPopup: UIView {
+
+    var contentView: UIView? {
+        didSet {
+            if let contentView = contentView {
+                addSubview(contentView)
+                contentView.layer.cornerRadius = cornerRadius
+            }
+        }
+    }
+
+    var backgroundAlpha: CGFloat = 0
+
+    var cornerRadius: CGFloat = 0
+
+    var backgroundFadeDuration: TimeInterval = 0
+    var scaleDuration: TimeInterval = 0.3
+
+    fileprivate weak var parent: UIView?
+
+    fileprivate lazy var backgroundView: UIView = {
+        let view = UIView(frame: self.bounds)
+        return view
+    } ()
+
+    fileprivate var showFrom: CGPoint?
+
+    convenience init(parent: UIView) {
+        self.init(frame: parent.bounds)
+        self.parent = parent
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        backgroundColor = UIColor.clear
+
+        backgroundView.backgroundColor = UIColor.black
+        backgroundView.alpha = 0
+        addSubview(backgroundView)
+    }
+
+    func show(from: UIView) {
+        guard let parent = parent else { print("No parent!"); return }
+        if let superview = from.superview {
+            let from = superview.convert(from.center, to: parent)
+            show(parent: parent, from: from)
+        }
+    }
+
+    fileprivate func show(parent: UIView, from: CGPoint? = nil) {
+        parent.addSubview(self)
+
+        if let from = from {
+            showFrom = from
+
+            contentView?.center = from
+            contentView?.transform = CGAffineTransform(scaleX: 0.00001, y: 0.00001)
+            UIView.animate(withDuration: scaleDuration) {
+                self.contentView?.center = parent.center
+                self.contentView?.transform = CGAffineTransform(scaleX: 1, y: 1)
+            }
+        }
+
+        if backgroundAlpha > 0 {
+            UIView.animate(withDuration: backgroundFadeDuration, animations: {
+                self.backgroundView.alpha = self.backgroundAlpha
+            })
+        }
+    }
+
+    func hide(onFinish: (() -> Void)? = nil) {
+
+        func onFinishAnimation() {
+            removeFromSuperview()
+            onFinish?()
+        }
+
+        // Remove when the slowest anim finishes
+        let removeOnScaleFinish: Bool = { if scaleDuration > backgroundFadeDuration { return true } else { return false } } ()
+
+        if let from = showFrom {
+            UIView.animate(withDuration: scaleDuration, delay: 0, options: [], animations: {
+                self.contentView?.center = from
+                self.contentView?.transform = CGAffineTransform(scaleX: 0.00001, y: 0.00001)
+            }, completion: { finished in
+                if removeOnScaleFinish {
+                    onFinishAnimation()
+                }
+            })
+        }
+
+        if backgroundAlpha > 0 {
+            UIView.animate(withDuration: backgroundFadeDuration, delay: 0, options: [], animations: {
+                self.backgroundView.alpha = 0
+            }, completion: { finished in
+                if !removeOnScaleFinish {
+                    onFinishAnimation()
+                }
+            })
+        }
+
+        // If there are no animations, remove immediately
+        if showFrom == nil && backgroundAlpha == 0 {
+            onFinishAnimation()
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
