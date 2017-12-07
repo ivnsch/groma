@@ -98,7 +98,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     fileprivate var initializedTableViewBottomInset = false
 
     fileprivate var pullToAdd: PullToAddHelper?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -113,7 +113,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
      
         sortBy = sortByOptions.first
-        
+
         if delegate?.isPullToAddEnabled() ?? false {
             self.pullToAdd = PullToAddHelper(tableView: tableView) {[weak self] refreshControl in
                 refreshControl.endRefreshing()
@@ -125,12 +125,12 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         tapRecognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(tapRecognizer)
     }
-    
+
     @objc func onTap(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
         view.resignFirstResponder()
     }
-    
+
     fileprivate func initEmptyView() {
         let emptyViewController = UIStoryboard.emptyViewStoryboard()
         emptyViewController.addTo(container: emptyViewControllerContainer)
@@ -141,21 +141,21 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         
         initEmptyViewLabelsIfConditions()
     }
-    
+
     fileprivate func initEmptyViewLabelsIfConditions() {
         if let emptyViewController = emptyViewController, let delegate = delegate {
             let emptyViewData = delegate.emptyViewData()
             emptyViewController.labels = (emptyViewData.text, emptyViewData.text2)
         }
     }
-    
+
     func updateEmptyUI() {
         setEmptyUI(isEmpty, animated: true)
         // necessary?
         delegate?.onEmpty(isEmpty)
         topMenuView.setHiddenAnimated(isEmpty)
     }
-    
+
     func setEmptyUI(_ empty: Bool, animated: Bool) {
         let hidden = !empty
         if animated {
@@ -164,7 +164,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             emptyViewControllerContainer.isHidden = hidden
         }
     }
-    
+
     fileprivate func initExplanationManager() {
         let contents = ExplanationContents(title: "Did you know?", text: "You can press and hold\nto set individual items in edit mode", imageName: "longpressedit", buttonTitle: "Got it!", frameCount: 210)
         let checker = SwipeToIncrementAlertHelperNew()
@@ -172,15 +172,15 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         explanationManager.explanationContents = contents
         explanationManager.checker = checker
     }
-    
-    override func viewWillAppear(_ animated:Bool) {
+
+    override func viewWillAppear(_ animated: Bool) {
         onViewWillAppear?()
         
         tableView.allowsSelectionDuringEditing = true
         
         load()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -191,17 +191,17 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             tableView.bottomInset = tableView.height + topMenusHeightConstraint.constant - DimensionsManager.quickAddHeight - DimensionsManager.defaultCellHeight
         }
     }
-    
+
     // MARK: - Table view data source
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemsCount + (explanationManager.showExplanation ? 1 : 0)
     }
-    
+
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -492,7 +492,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         popup.presentPointing(at: sortByButton, in: view, animated: true)
         //        }
     }
-    
+
     fileprivate func createPicker() -> UIPickerView {
         let picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
         picker.delegate = self
@@ -507,7 +507,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         tableView.deleteRows(at: [IndexPath(row: 0, section: 0)], with: .top)
     }
     
-    // MARK: - Scrol delegate
+    // MARK: - Scroll delegate
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pullToAdd?.refreshControl.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
@@ -540,10 +540,10 @@ class ExplanationManager {
         
         return checker.showPopup()
     }
-    
+
     var explanationContents: ExplanationContents?
     var checker: SwipeToIncrementAlertHelperNew? // TODO naming, etc. (quickly recycled old class)
-    
+
     func generateExplanationView() -> ExplanationView {
         
         guard let contents = explanationContents else {logger.e("Invalid state: No explanation contents, returning dummy view"); return ExplanationView()}
@@ -574,5 +574,9 @@ class ExplanationManager {
         
         checker.dontShowAgain()
     }
-    
+
+    // Debugging
+    func reset() {
+        checker.reset()
+    }
 }

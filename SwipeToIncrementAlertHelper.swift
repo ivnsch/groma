@@ -38,6 +38,13 @@ class SwipeToIncrementAlertHelperNew {
 
         PreferencesManager.savePreference(preference, value: NSNumber(value: SwipeToIncrementAlertHelperNew.countToShowPopup + 1))
     }
+
+    // Debug
+    func reset() {
+        guard let preference = preference else {logger.e("No preference, exit."); return}
+
+        PreferencesManager.savePreference(preference, value: NSNumber(value: 0))
+    }
 }
 
 // deprecated
