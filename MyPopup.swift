@@ -34,6 +34,9 @@ class MyPopup: UIView {
 
     var onTapBackground: (() -> Void)?
 
+    // If not set, parent's center is used
+    var contentCenter: CGPoint?
+
     fileprivate lazy var backgroundView: HandlingView = {
         let view = HandlingView(frame: self.bounds)
         return view
@@ -76,7 +79,7 @@ class MyPopup: UIView {
             contentView?.center = from
             contentView?.transform = CGAffineTransform(scaleX: 0.00001, y: 0.00001)
             UIView.animate(withDuration: scaleDuration) {
-                self.contentView?.center = parent.center
+                self.contentView?.center = self.contentCenter ?? parent.center
                 self.contentView?.transform = CGAffineTransform(scaleX: 1, y: 1)
             }
         }

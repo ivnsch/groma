@@ -371,18 +371,16 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         controller.delegate = self
         parent.addChildViewController(controller)
 
-        controller.view.size = parent.view.size
-        popup.contentView = controller.view
+        let topBarHeight: CGFloat = 64
 
+        controller.view.frame = CGRect(x: 0, y: topBarHeight, width: parent.view.width, height: parent.view.height)
+        popup.contentView = controller.view
+        popup.contentCenter = CGPoint(x: parent.view.center.x, y: parent.view.center.y + topBarHeight)
         self.colorPopup = popup
 
         popup.show(from: colorButton)
 
         view.endEditing(true)
-
-        //growColorPickerAnimator?.open(button: colorButton) {[weak self] in
-        //    self?.view.endEditing(true)
-        //}
     }
     
     @IBAction func onSharedUsersTap() {
