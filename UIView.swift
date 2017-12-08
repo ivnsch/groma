@@ -306,7 +306,7 @@ extension UIView {
             return frame.size
         }
         set {
-            frame.size = size
+            frame.size = newValue
         }
     }
 

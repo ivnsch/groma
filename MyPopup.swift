@@ -19,17 +19,23 @@ class MyPopup: UIView {
         }
     }
 
-    var backgroundAlpha: CGFloat = 0
+    var backgroundAlpha: CGFloat = 0 {
+        didSet {
+            backgroundView.alpha = backgroundAlpha
+        }
+    }
 
     var cornerRadius: CGFloat = 0
-
+    
     var backgroundFadeDuration: TimeInterval = 0
     var scaleDuration: TimeInterval = 0.3
 
     fileprivate weak var parent: UIView?
 
-    fileprivate lazy var backgroundView: UIView = {
-        let view = UIView(frame: self.bounds)
+    var onTapBackground: (() -> Void)?
+
+    fileprivate lazy var backgroundView: HandlingView = {
+        let view = HandlingView(frame: self.bounds)
         return view
     } ()
 
@@ -47,6 +53,9 @@ class MyPopup: UIView {
 
         backgroundView.backgroundColor = UIColor.black
         backgroundView.alpha = 0
+        backgroundView.touchHandler = { [weak self] in
+            self?.onTapBackground?()
+        }
         addSubview(backgroundView)
     }
 

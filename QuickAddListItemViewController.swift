@@ -98,7 +98,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
     
     fileprivate var recipeControllerAnimator: GromFromViewControlerAnimator?
-    fileprivate var selectQuantifiableAnimator: GromFromViewControlerAnimator?
+    fileprivate var selectQuantifiablePopup: MyPopup?
     fileprivate var selectIngredientAnimator: GromFromViewControlerAnimator?
     
     override func viewDidLoad() {
@@ -125,7 +125,6 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         //guard let parent = parent?.parent?.parent else {logger.e("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
         
         recipeControllerAnimator = recipeControllerAnimator ?? GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
-        selectQuantifiableAnimator = selectQuantifiableAnimator ?? GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
         selectIngredientAnimator = selectIngredientAnimator ?? GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
     }
     
@@ -308,8 +307,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             self?.delegate?.onFinishAddCellAnimation(addedItem: quantifiableProduct)
         }
     }
-    
-    
+
     fileprivate func retrieveQuantifiableProduct(product: Product, indexPath: IndexPath,
                                                  onRetrieved: @escaping (QuantifiableProduct, Float) -> Void) {
         Prov.productProvider.quantifiableProducts(product: product, successHandler{quantifiableProducts in
@@ -322,7 +320,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 guard let cell = self.collectionView.cellForItem(at: indexPath) else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
                 
                 // TODO!!!!!!!!!!!!!!!!!!!!!!!! bottom inset different varies for different screen sizes - bottom border has to be slightly about keyboard
-                
+
                 let leftRightInset: CGFloat = 50
                 let contentFrame = CGRect(
                     x: leftRightInset,
@@ -330,35 +328,45 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     width: self.view.frame.width - (leftRightInset * 2),
                     height: 220
                 )
-                
-                self.selectQuantifiableAnimator?.openWithBGImproved(
-                    button: cell,
-                    srcView: self.collectionView,
-                    contentFrame: contentFrame,
-                    controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
-                        let selectQuantifiableProductController = UIStoryboard.selectQuantifiableController()
-                    
-                        selectQuantifiableProductController.onSelected = { tuple in
-                            let quantifiableProduct = tuple.0
-                            let quantity = tuple.1
 
-                            weakSelf.selectQuantifiableAnimator?.close {
-                                print("") // compiler bug! we need some command here otherwise next line doesn't compile.
-    //                            cell.scaleUpAndDown(scale: 1.1) {
-                                    onRetrieved(quantifiableProduct, quantity)
-    //                            }
-                            }
-                        }
-                        
-                        selectQuantifiableProductController.onViewDidLoad = {[weak selectQuantifiableProductController] in
-                            selectQuantifiableProductController?.quantifiableProducts = quantifiableProducts
-                        }
-                        
-                        selectQuantifiableProductController.view.layer.cornerRadius = Theme.popupCornerRadius
+                guard let parent = self.parent?.parent?.parent?.parent else { logger.e("Parent is not set"); return } // parent until view shows on top of quick view + list but not navigation/tab bar
 
-                        return selectQuantifiableProductController
-                    }
-                )
+                let popup = MyPopup(parent: parent.view)
+                let selectQuantifiableProductController = UIStoryboard.selectQuantifiableController()
+                parent.addChildViewController(selectQuantifiableProductController)
+
+                selectQuantifiableProductController.onSelected = { [weak self, weak popup] tuple in
+                    let quantifiableProduct = tuple.0
+                    let quantity = tuple.1
+
+                    popup?.hide(onFinish: {
+                        self?.selectQuantifiablePopup = nil
+                        //                            cell.scaleUpAndDown(scale: 1.1) {
+                        onRetrieved(quantifiableProduct, quantity)
+                        //                            }
+                    })
+                }
+
+                selectQuantifiableProductController.onViewDidLoad = {[weak selectQuantifiableProductController] in
+                    selectQuantifiableProductController?.quantifiableProducts = quantifiableProducts
+                }
+
+                selectQuantifiableProductController.view.size = contentFrame.size
+
+                popup.backgroundAlpha = 0.3
+                popup.backgroundFadeDuration = 0.3
+                popup.cornerRadius = Theme.popupCornerRadius
+
+                popup.contentView = selectQuantifiableProductController.view
+
+                popup.onTapBackground = { [weak self, weak popup] in
+                    self?.selectQuantifiablePopup = nil
+                    popup?.hide()
+                }
+
+                self.selectQuantifiablePopup = popup
+
+                popup.show(from: cell)
 
             } else {
                 logger.w("Invalid state?: No quantifiable product for product: \(product.uuid)::\(product.item.name). Creating a new quantifiable product.") // we create a new one as "emergency solution". TODO review this - maybe this is not an invalid state - if a user e.g. deletes all the quantifiable products in product manager (this isn't possible yet but it may be implemented in the future), it's possible that we keep only the product but no quantifiable products for it. So we either have to ensure there's always a quantifiable product for a product or allow to create them "lazily" here.
@@ -669,8 +677,10 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             recipeControllerAnimator?.close()
             isAnyShowing = true
         }
-        if selectQuantifiableAnimator?.isShowing ?? false {
-            selectQuantifiableAnimator?.close()
+
+        if selectQuantifiablePopup != nil {
+            selectQuantifiablePopup?.hide()
+            selectQuantifiablePopup = nil
             isAnyShowing = true
         }
         if selectIngredientAnimator?.isShowing ?? false {
