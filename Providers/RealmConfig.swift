@@ -85,8 +85,8 @@ extension RealmConfig {
 
         let configuration = RLMRealmConfiguration()
         configuration.fileURL = localRealmUrl
-        configuration.dynamic = true
-        configuration.readOnly = true
+        //configuration.dynamic = true
+        //configuration.readOnly = true
         return configuration
     }
 
