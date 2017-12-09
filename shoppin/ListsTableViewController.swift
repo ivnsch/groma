@@ -247,7 +247,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         guard let listsResult = listsResult else {logger.e("No result"); return}
         guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         
-        Prov.listProvider.add(list, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] _ in
+        Prov.listProvider.add(list, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
             
             self?.tableView.insertRows(at: [IndexPath(row: listsResult.count - 1, section: 0)], with: .top) // Note -1 as at this point the new item is already inserted in results
             
