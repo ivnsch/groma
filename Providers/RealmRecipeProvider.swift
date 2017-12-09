@@ -41,7 +41,7 @@ class RealmRecipeProvider: RealmProvider {
         }) {uuidsMaybe in
             do {
                 if let uuids = uuidsMaybe {
-                    let realm = try Realm()
+                    let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let recipes: Results<Recipe> = self.loadSync(realm, filter: Recipe.createFilterUuids(uuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
                     handler((substring, recipes.toArray()))

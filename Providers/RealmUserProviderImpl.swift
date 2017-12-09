@@ -45,7 +45,7 @@ class RealmUserProviderImpl: UserProvider {
                     Realm.Configuration.defaultConfiguration = RealmConfig.syncedRealmConfigutation(user: user)
 
                     do {
-                        self?.notificationToken = try Realm().observe { _,_  in
+                        self?.notificationToken = try RealmConfig.realm().observe { _,_  in
                             logger.d("Realm changed")
                         }
 

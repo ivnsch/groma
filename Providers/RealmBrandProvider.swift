@@ -20,7 +20,7 @@ class RealmBrandProvider: RealmProvider {
     
     func brands(_ range: NSRange, handler: @escaping ([String]) -> Void) {
         do {
-            let realm = try Realm()
+            let realm = try RealmConfig.realm()
             // Note: range is at application level - we are loading all the brands from the database. Currently doesn't seem to be a way to do this at db level
             // we could take range from db results object, problem is that we first have to do "distinct" on product names - which is not supported by realm yet, so we have to load first everything into memory, do distinct and *then* slice to get the correct count.
             let brands = Array(Set(realm.objects(Product.self).map{$0.brand}))[range].filter{!$0.isEmpty}
@@ -73,7 +73,7 @@ class RealmBrandProvider: RealmProvider {
     func brandsContainingText(_ text: String, range: NSRange, _ handler: @escaping ([String]) -> Void) {
         background({
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
                 // .sorted("brand", ascending: true)
                 let brands = Array(Set(realm.objects(Product.self).filter(Product.createFilterBrandContains(text)).map{$0.brand}))[range].filter{!$0.isEmpty}.sorted()

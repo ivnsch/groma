@@ -122,7 +122,7 @@ class RealmListProvider: RealmProvider {
         
         background({[weak self] in
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 var success = false 
                 try realm.write {
                     success = self?.removeListSync(realm, listUuid: listUuid, markForSync: markForSync) ?? false

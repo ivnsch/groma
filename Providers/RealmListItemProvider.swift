@@ -517,7 +517,7 @@ class RealmListItemProvider: RealmProvider {
         }
         DispatchQueue.global(qos: .background).async {
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterList(listCopy.uuid))
                 let filteredListItems = listItems.filter { $0.hasStatus(status) }
                 let count = filteredListItems.count
@@ -569,7 +569,7 @@ class RealmListItemProvider: RealmProvider {
             guard let listItemUuid = listItemUuidMaybe else {logger.e("No uuid"); handler(nil); return}
             
             do {
-                if let listItem = try Realm().object(ofType: ListItem.self, forPrimaryKey: listItemUuid) {
+                if let listItem = try RealmConfig.realm().object(ofType: ListItem.self, forPrimaryKey: listItemUuid) {
                     handler(listItem)
                     
                 } else {
@@ -918,7 +918,7 @@ class RealmListItemProvider: RealmProvider {
                 let realmOptional: Realm? = realmData?.realm ?? {
                     logger.d("Realm was not passed - creating default realm", .db)
                     do {
-                        return try Realm()
+                        return try RealmConfig.realm()
                     } catch (let e) {
                         logger.e("Error creating default realm: \(e)")
                         return nil

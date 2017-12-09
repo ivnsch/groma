@@ -30,7 +30,7 @@ class RealmInventoryProvider: RealmProvider {
         let inventoryCopy: DBInventory = inventory.copy()
         
         do {
-            let realm = try Realm()
+            let realm = try RealmConfig.realm()
             
             let nameSort = SortDescriptor(keyPath: "productOpt.productOpt.itemOpt.name", ascending: true)
             let quantitySort = SortDescriptor(keyPath: "quantity", ascending: true)
@@ -74,7 +74,7 @@ class RealmInventoryProvider: RealmProvider {
     func removeInventory(_ uuid: String, update: Bool =  true, markForSync: Bool, handler: @escaping (Bool) -> ()) {
         background({[weak self] in
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 try realm.write {
                     self?.removeInventorySync(realm, inventoryUuid: uuid, markForSync: markForSync)
                 }

@@ -20,7 +20,7 @@ class RealmProductCategoryProvider: RealmProvider {
     func categoriesContainingText(_ text: String, _ handler: @escaping (Results<ProductCategory>?) -> Void) {
         background({() -> [String]? in
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let filterMaybe: String? = text.isEmpty ? nil : ProductCategory.createFilterNameContains(text)
                 let result: Results<ProductCategory> = self.loadSync(realm, filter: filterMaybe)
                 return result.map{$0.uuid}
@@ -32,7 +32,7 @@ class RealmProductCategoryProvider: RealmProvider {
         }, onFinish: {uuidsMaybe in
             do {
                 if let uuids = uuidsMaybe {
-                    let realm = try Realm()
+                    let realm = try RealmConfig.realm()
                     handler(self.loadSync(realm, filter: ProductCategory.createFilterUuids(uuids)))
                 
                 } else {
@@ -71,7 +71,7 @@ class RealmProductCategoryProvider: RealmProvider {
     func removeCategory(_ categoryUuid: String, markForSync: Bool, _ handler: @escaping (Bool) -> Void) {
         background({[weak self] in
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 try realm.write {
                     self?.removeCategorySync(realm, categoryUuid: categoryUuid, markForSync: markForSync)
                 }

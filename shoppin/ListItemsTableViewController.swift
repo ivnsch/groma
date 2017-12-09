@@ -840,7 +840,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 
                 let dstSection = self.tableViewSections[(destinationIndexPath as NSIndexPath).section]
                 
-                try Realm().write {
+                try RealmConfig.realm().write {
                     tableViewListItem.listItem.section = dstSection.section
                     
                     //        let absoluteRow = tableView.absoluteRow(destinationIndexPath)

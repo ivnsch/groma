@@ -39,7 +39,7 @@ class RealmItemProvider: RealmProvider {
 
         background({() -> [String]? in
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let items: [Item] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
                 return items.map{$0.uuid}
             } catch let e {
@@ -50,7 +50,7 @@ class RealmItemProvider: RealmProvider {
         }, onFinish: {itemUuidsMaybe in
             do {
                 if let itemUuids = itemUuidsMaybe {
-                    let realm = try Realm()
+                    let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let items: Results<Item> = self.loadSync(realm, filter: Item.createFilterUuids(itemUuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
                     handler(substring, items)

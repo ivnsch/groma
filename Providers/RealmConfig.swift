@@ -70,6 +70,10 @@ public struct RealmConfig {
 
         return config
     }
+
+    public static func realm() throws -> Realm {
+        return try Realm(configuration: localRealmConfig)
+    }
 }
 
 // MARK: RLM

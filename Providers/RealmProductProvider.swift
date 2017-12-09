@@ -81,7 +81,7 @@ class RealmProductProvider: RealmProvider {
     
     func loadProductWithUuid(_ uuid: String, handler: @escaping (Product?) -> ()) {
         do {
-            let realm = try Realm()
+            let realm = try RealmConfig.realm()
             // TODO review if it's necessary to pass the sort descriptor here again
             let productMaybe: Product? = self.loadSync(realm, filter: Product.createFilter(uuid)).first
             handler(productMaybe)
@@ -97,7 +97,7 @@ class RealmProductProvider: RealmProvider {
         
         background({() -> String? in
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let product: Product? = self.loadSync(realm, filter: Product.createFilterNameBrand(name, brand: brand)).first
                 return product?.uuid
             } catch let e {
@@ -108,7 +108,7 @@ class RealmProductProvider: RealmProvider {
         }, onFinish: {productUuidMaybe in
             do {
                 if let productUuid = productUuidMaybe {
-                    let realm = try Realm()
+                    let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let productMaybe: Product? = self.loadSync(realm, filter: Product.createFilter(productUuid)).first
                     if productMaybe == nil {
@@ -139,7 +139,7 @@ class RealmProductProvider: RealmProvider {
         }) {productUuidsMaybe in
             do {
                 if let productUuids = productUuidsMaybe {
-                    let realm = try Realm()
+                    let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let products: Results<Product> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids))
                     handler(products.toArray())
@@ -165,7 +165,7 @@ class RealmProductProvider: RealmProvider {
         }, onFinish: {productUuidMaybe in
             do {
                 if let productUuid = productUuidMaybe {
-                    let realm = try Realm()
+                    let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let productMaybe: QuantifiableProduct? = self.loadSync(realm, filter: QuantifiableProduct.createFilter(productUuid)).first
                     if productMaybe == nil {
@@ -231,7 +231,7 @@ class RealmProductProvider: RealmProvider {
         
         background({() -> [String]? in
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let products: [Product] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
                 return products.map{$0.uuid}
             } catch let e {
@@ -242,7 +242,7 @@ class RealmProductProvider: RealmProvider {
         }, onFinish: {productUuidsMaybe in
             do {
                 if let productUuids = productUuidsMaybe {
-                    let realm = try Realm()
+                    let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let products: Results<Product> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
                     handler(substring, products)
@@ -277,7 +277,7 @@ class RealmProductProvider: RealmProvider {
         
         background({() -> [String]? in
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let products: [QuantifiableProduct] = self.loadSync(realm, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
                 return products.map{$0.uuid}
             } catch let e {
@@ -288,7 +288,7 @@ class RealmProductProvider: RealmProvider {
         }, onFinish: {productUuidsMaybe in
             do {
                 if let productUuids = productUuidsMaybe {
-                    let realm = try Realm()
+                    let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let products: Results<QuantifiableProduct> = self.loadSync(realm, filter: Product.createFilterUuids(productUuids), sortDescriptor: SortDescriptor(keyPath: sortData.key, ascending: sortData.ascending))
                     handler(substring, products)
@@ -369,7 +369,7 @@ class RealmProductProvider: RealmProvider {
             
         }, resultHandler: {(productsWithMaybeSectionsUuids: [(product: String, section: String?)]?) in
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)]? = productsWithMaybeSectionsUuids?.flatMap {productUuid, sectionUuid in
                     if let product = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(productUuid)).first {
                         let section = sectionUuid.flatMap{realm.objects(Section.self).filter(Section.createFilter($0)).first}
@@ -431,7 +431,7 @@ class RealmProductProvider: RealmProvider {
             
             }, resultHandler: {(productsWithMaybeSectionsUuids: [(product: String, section: String?)]?) in
                 do {
-                    let realm = try Realm()
+                    let realm = try RealmConfig.realm()
                     let productsWithMaybeSections: [(product: Product, section: Section?)]? = productsWithMaybeSectionsUuids?.flatMap {productUuid, sectionUuid in
                         if let product = realm.objects(Product.self).filter(Product.createFilter(productUuid)).first {
                             let section = sectionUuid.flatMap{realm.objects(Section.self).filter(Section.createFilter($0)).first}
@@ -904,7 +904,7 @@ class RealmProductProvider: RealmProvider {
     func categoryWithName(_ name: String, handler: @escaping (ProductCategory?) -> ()) {
         background({() -> String? in
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let obj: ProductCategory? = self.loadSync(realm, filter: ProductCategory.createFilterName(name)).first
                 return obj?.uuid
             } catch let e {
@@ -915,7 +915,7 @@ class RealmProductProvider: RealmProvider {
         }, onFinish: {uuidMaybe in
             do {
                 if let uuid = uuidMaybe {
-                    let realm = try Realm()
+                    let realm = try RealmConfig.realm()
                     // TODO review if it's necessary to pass the sort descriptor here again
                     let objMaybe: ProductCategory? = self.loadSync(realm, filter: ProductCategory.createFilter(uuid)).first
                     if objMaybe == nil {
@@ -1160,7 +1160,7 @@ class RealmProductProvider: RealmProvider {
     func storesContainingText(_ text: String, range: NSRange, _ handler: @escaping ([String]) -> Void) {
         background({
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
                 // .sorted("store", ascending: true)
                 let stores = Array(Set(realm.objects(StoreProduct.self).filter(StoreProduct.createFilterStoreContains(text)).map{$0.store}))[range].filter{!$0.isEmpty}.sorted()
@@ -1217,7 +1217,7 @@ class RealmProductProvider: RealmProvider {
     func baseQuantitiesContainingText(_ text: String, _ handler: @escaping ([Float]) -> Void) {
         background({
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
                 // .sorted("baseQuantity", ascending: true)
                 
@@ -1299,7 +1299,7 @@ class RealmProductProvider: RealmProvider {
             let realmOptional: Realm? = realmData?.realm ?? {
                 logger.d("Realm was not passed - creating default realm", .db)
                 do {
-                    return try Realm()
+                    return try RealmConfig.realm()
                 } catch (let e) {
                     logger.e("Error creating default realm: \(e)")
                     return nil
@@ -1355,7 +1355,7 @@ class RealmProductProvider: RealmProvider {
             let realmOptional: Realm? = realmData?.realm ?? {
                 logger.d("Realm was not passed - creating default realm", .db)
                 do {
-                    return try Realm()
+                    return try RealmConfig.realm()
                 } catch (let e) {
                     logger.e("Error creating default realm: \(e)")
                     return nil

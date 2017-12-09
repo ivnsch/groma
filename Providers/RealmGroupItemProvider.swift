@@ -17,7 +17,7 @@ class RealmGroupItemProvider: RealmProvider {
         let groupCopy: ProductGroup = group.copy()
         
         do {
-            let realm = try Realm()
+            let realm = try RealmConfig.realm()
             
             
             let sortData: (key: String, ascending: Bool) = {
@@ -89,7 +89,7 @@ class RealmGroupItemProvider: RealmProvider {
         func addOrIncrement(_ groupItems: [GroupItem]) -> Bool {
             do {
                 // load items
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
 
                 let items: [GroupItem] = self.loadSync(realm, filter: GroupItem.createFilterGroupItemsUuids(groupItems))
 //                let items: [GroupItem] = realm.objects(GroupItem.self).filter(GroupItem.createFilterGroupItemsUuids(groupItems))
@@ -146,7 +146,7 @@ class RealmGroupItemProvider: RealmProvider {
         
         func addOrIncrement(_ item: GroupItem) -> GroupItem? {
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 // TODO!! why looking here for unique instead of uuid? when add group item with product we should be able to find the product using only the uuid?
                 if let item: GroupItem = loadSync(realm, filter: GroupItem.createFilter(groupUuid: item.group.uuid, quantifiableProductUnique: groupItem.product.unique)).first {
                     let incremented = item.incrementQuantityCopy(groupItem.quantity)

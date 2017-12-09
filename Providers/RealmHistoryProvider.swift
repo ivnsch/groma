@@ -78,7 +78,7 @@ class RealmHistoryProvider: RealmProvider {
         
         DispatchQueue.global(qos: .background).async {[weak self] in guard let weakSelf = self else {return}
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let results = realm.objects(HistoryItem.self).filter(HistoryItem.createFilterWithInventory(inventory.uuid)).sorted(byKeyPath: "addedDate", ascending: false) // not using constant because weak self etc.
                 
                 let dateDict = weakSelf.groupByDate(results)[range].mapDictionary{(date, historyItems) in

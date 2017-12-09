@@ -34,7 +34,7 @@ class RealmProvider {
     func saveObjSync<T: DBSyncable>(_ obj: T, update: Bool = false) -> Bool {
         do {
 //            obj.lastUpdate = NSDate()
-            let realm = try Realm()
+            let realm = try RealmConfig.realm()
             try realm.write {
                 realm.add(obj, update: update)
             }
@@ -67,7 +67,7 @@ class RealmProvider {
     
     func saveObjsSync<T: Object>(_ objs: [T], update: Bool = false) -> Bool {
         do {
-            let realm = try Realm()
+            let realm = try RealmConfig.realm()
             try realm.write {
                 saveObjsSyncInt(realm, objs: objs, update: update)
             }
@@ -135,7 +135,7 @@ class RealmProvider {
     
     func loadSync<T: Object>(predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil) -> Results<T>? {
         do {
-            let realm = try Realm()
+            let realm = try RealmConfig.realm()
             let results: Results<T> = self.loadSync(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe)
             return results
             
@@ -151,7 +151,7 @@ class RealmProvider {
     
     func loadSync<T: Object>(filter filterMaybe: String?, sortDescriptors: [SortDescriptor]) -> Results<T>? {
         do {
-            let realm = try Realm()
+            let realm = try RealmConfig.realm()
             return loadSync(realm, filter: filterMaybe, sortDescriptors: sortDescriptors)
             
         } catch let e {
@@ -214,7 +214,7 @@ class RealmProvider {
         DispatchQueue.global(qos: .background).async {
             
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let models: [T] = self.loadSync(realm, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe)
                 finished(models)
                 
@@ -269,7 +269,7 @@ class RealmProvider {
         DispatchQueue.global(qos: .background).async {
             
             do {
-                let realm = try Realm()
+                let realm = try RealmConfig.realm()
                 let models = self.loadSync(realm, mapper: mapper, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe)
                 finished(models)
                 
@@ -328,7 +328,7 @@ class RealmProvider {
 
     func removeSync<T: Object>(_ pred: String?, objType: T.Type, additionalActions: ((Realm) -> Void)? = nil) -> Bool {
         do {
-            let realm = try Realm()
+            let realm = try RealmConfig.realm()
             return removeSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
         } catch let error {
             logger.e("Realm error: \(error)")
@@ -411,7 +411,7 @@ class RealmProvider {
         
         DispatchQueue.global(qos: .background).async {
             do {
-                let realm = try realm ?? Realm()
+                let realm = try realm ?? RealmConfig.realm()
                 var obj: T?
                 try realm.write(withoutNotifying: withoutNotifying) {_ in 
                     obj = f(realm)
@@ -430,7 +430,7 @@ class RealmProvider {
 
     func doInWriteTransactionSync<T>(realmData: RealmData?, _ f: (Realm) -> T?) -> T? {
         do {
-            let realm = try realmData?.realm ?? Realm()
+            let realm = try realmData?.realm ?? RealmConfig.realm()
             return doInWriteTransactionWithRealmSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm, f: f)
         } catch let error as NSError {
             logger.e("Realm error: \(error)")
@@ -444,7 +444,7 @@ class RealmProvider {
     // TODO refactor with doInWriteTransactionSync(realmData...)
     func doInWriteTransactionSync<T>(withoutNotifying: [NotificationToken] = [], realm: Realm? = nil, _ f: (Realm) -> T?) -> T? {
         do {
-            let realm = try realm ?? Realm()
+            let realm = try realm ?? RealmConfig.realm()
             return doInWriteTransactionWithRealmSync(withoutNotifying: withoutNotifying, realm, f: f)
         } catch let error as NSError {
             logger.e("Realm error: \(error)")
@@ -497,7 +497,7 @@ class RealmProvider {
     
     func withRealmSync<T>(realm: Realm? = nil, _ f: (Realm) throws -> T?) -> T? {
         do {
-            return try f(realm ?? Realm())
+            return try f(realm ?? RealmConfig.realm())
         } catch let error as NSError {
             logger.e("Realm error: \(error)")
             return nil
@@ -550,7 +550,7 @@ class RealmProvider {
     
     func refresh() {
         do {
-            let realm = try Realm()
+            let realm = try RealmConfig.realm()
             realm.refresh()
         } catch let e {
             logger.e("Couldn't refresh realm, error: \(e)")
