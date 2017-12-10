@@ -40,13 +40,13 @@ class MoreViewController: UITableViewController {
             MoreItem(type: .help, text: trans("more_help")),
             MoreItem(type: .share, text: trans("more_share")),
             MoreItem(type: .feedback, text: trans("more_feedback")),
-            MoreItem(type: .community, text: trans("more_community")),
+//            MoreItem(type: .community, text: trans("more_community")),
             MoreItem(type: .watchIntro, text: trans("more_intro")),
             MoreItem(type: .about, text: trans("more_about"))
         ]
         
         if CountryHelper.isInServerSupportedCountry() {
-            items.insert((type: .user, text: trans("more_user")), at: 2)
+//            items.insert((type: .user, text: trans("more_user")), at: 2)
         }
         
         tableView.reloadData()
