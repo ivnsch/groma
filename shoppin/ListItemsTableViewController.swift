@@ -632,7 +632,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             if let parentController = parent {
                 let noteButton = cell.noteButton
                 
-                let topOffset: CGFloat = 64
+                let topOffset: CGFloat = Theme.navBarHeight
                 let frame = parentController.view.bounds.copy(y: topOffset, height: parentController.view.bounds.height)
                 
                 let noteButtonPointParentController = parentController.view.convert(CGPoint(x: (noteButton?.center.x)!, y: (noteButton?.center.y)!), from: cell)

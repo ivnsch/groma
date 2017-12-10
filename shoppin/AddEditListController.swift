@@ -371,7 +371,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         controller.delegate = self
         parent.addChildViewController(controller)
 
-        let topBarHeight: CGFloat = 64
+        let topBarHeight: CGFloat = Theme.navBarHeight
 
         controller.view.frame = CGRect(x: 0, y: topBarHeight, width: parent.view.width, height: parent.view.height)
         popup.contentView = controller.view

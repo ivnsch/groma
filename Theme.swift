@@ -14,7 +14,11 @@ public struct Theme {
 //    public static let lightGrey = UIColor(red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
 //    public static let lightGrey2 = UIColor(hexString: "D4D4D4") // darker than lightGrey
 
-    
+    public static let defaultNavBarHeight: CGFloat = 64
+    public static var notchNavBarHeight: CGFloat = 88
+    public static var navBarHeight: CGFloat = defaultNavBarHeight
+    public static var notchHeight: CGFloat = 44
+
     public static let lightGrey = UIColor(hexString: "ACACAC")
     public static let lightGrey2 = UIColor(hexString: "D4D4D4")
     

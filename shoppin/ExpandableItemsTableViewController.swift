@@ -46,8 +46,8 @@ enum TopBarState {
 class ExpandableItemsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ExpandCellAnimatorDelegate, Foo, ListTopBarViewDelegate {
     
     @IBOutlet weak var topBar: ListTopBarView!
-//    @IBOutlet weak var topBarConstraint: NSLayoutConstraint!
-    
+    @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
+
     @IBOutlet weak var emptyViewControllerContainer: UIView!
     
     fileprivate var emptyViewController: EmptyViewController!
@@ -172,7 +172,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func setNavTitle(_ title: String) {
         topBar.title = title
-        topBar.positionTitleLabelLeft(true, animated: false, withDot: false)
+        topBar.positionTitleLabelLeft(true, animated: false, withDot: false, heightConstraint: topBarHeightConstraint)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -364,7 +364,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
                 expandCellAnimator.toView = detailController.view
                 expandCellAnimator.inView = view
                 
-                expandCellAnimator.animateTransition(true, topOffsetY: 64)
+                expandCellAnimator.animateTransition(true, topOffsetY: Theme.navBarHeight)
                 
             } else {
                 print("Warn: no cell for indexPath: \(indexPath)")
@@ -452,7 +452,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     }
     
     func setExpanded(_ expanded: Bool) {
-        expandCellAnimator.animateTransition(false, topOffsetY: 64)
+        expandCellAnimator.animateTransition(false, topOffsetY: Theme.navBarHeight)
     }
     
     func animationsComplete(_ wasExpanding: Bool, frontView: UIView) {

@@ -608,7 +608,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         if let windowView = parent?.view.superview?.superview?.superview {
             
             // TODO dynamic
-            let topBarHeight: CGFloat = 64
+            let topBarHeight: CGFloat = Theme.navBarHeight
             let pricesViewHeight: CGFloat = DimensionsManager.listItemsPricesViewHeight
 //            let tabBarHeight: CGFloat = 49
             

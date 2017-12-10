@@ -16,7 +16,7 @@ extension UIView {
         _ = centerYInParent(constantY)
     }
     
-    public func centerYInView(_ view: UIView, constant:Float = 0) -> NSLayoutConstraint {
+    public func centerYInView(_ view: UIView, constant: Float = 0) -> NSLayoutConstraint {
         let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: CGFloat(constant))
         view.addConstraint(c)
         return c
@@ -28,7 +28,7 @@ extension UIView {
         return c
     }
     
-    public func centerYInParent(_ constant:Float = 0) -> NSLayoutConstraint {
+    public func centerYInParent(_ constant: Float = 0) -> NSLayoutConstraint {
         return centerYInView(superview!, constant: constant)
     }
     

@@ -295,7 +295,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     // MARK: - ListItemsTableViewDelegate
     
     func onTableViewScroll(_ scrollView: UIScrollView) {
-        toggleButtonRotator.rotateForOffset(-64, topBar: topBar, scrollView: scrollView)
+        toggleButtonRotator.rotateForOffset(-Theme.navBarHeight, topBar: topBar, scrollView: scrollView)
     }
     
     func onPullToAdd() {
@@ -490,7 +490,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     // MARK: - Popup
     
     func showPopup(text: String, cell: UITableViewCell, button: UIView) {
-        let topOffset: CGFloat = 64
+        let topOffset: CGFloat = Theme.navBarHeight
         let frame = view.bounds.copy(y: topOffset, height: view.bounds.height)
         
         let noteButtonPointParentController = view.convert(CGPoint(x: button.center.x, y: button.center.y), from: cell)

@@ -86,7 +86,8 @@ class ListTopBarView: UIView {
     fileprivate let titleLabelLeftConstant: Float = Float(DimensionsManager.leftRightPaddingConstraint)
     
     fileprivate var titleLabelCenterYContraint: NSLayoutConstraint?
-    
+    fileprivate var titleLabelCenterYContraintOffset: CGFloat = 0
+
     fileprivate var bgColorLayer: CAShapeLayer?
     
     var dotColor: UIColor? {
@@ -107,19 +108,21 @@ class ListTopBarView: UIView {
         backgroundColor = Theme.navigationBarBackgroundColor
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        let statusBarHeight: Float = 20
-        let totalHeight: Float = 64
+
+        let hasNotch = Theme.navBarHeight == Theme.notchNavBarHeight
+        let statusBarHeight: Float = hasNotch ? Float(Theme.notchHeight) : 20
+        let totalHeight: Float = Float(Theme.navBarHeight)
         let availableHeight: Float = totalHeight - statusBarHeight
         centerYInExpandedState = statusBarHeight + (availableHeight / 2)
-        centerYOffsetInExpandedState = centerYInExpandedState - (totalHeight / 2)
-        
+
+        titleLabelCenterYContraintOffset = hasNotch ? 21.5 : 10
+        centerYOffsetInExpandedState = Float(titleLabelCenterYContraintOffset)
         titleLabel.font = titleLabelFont
 //        titleLabel.adjustsFontSizeToFitWidth = true
         addSubview(titleLabel)
         titleLabelLeftConstraint = titleLabel.alignLeft(self, constant: titleLabelLeftConstant)
-        
-        titleLabelCenterYContraint = titleLabel.centerYInParent()
+
+        titleLabelCenterYContraint = titleLabel.centerYInParent(Float(titleLabelCenterYContraintOffset))
         layoutIfNeeded()
         
         addTitleButton()
@@ -205,14 +208,13 @@ class ListTopBarView: UIView {
         
         if let heightConstraint = heightConstraint {
             // The cell and topbar have different heights so we hav to animate this too. Sometimes the topbar is used without animation (e.g. top bar from lists/inventories/groups controller - in this case heightConstraint is nil)
-            heightConstraint.constant = center ? DimensionsManager.defaultCellHeight : 64
+            heightConstraint.constant = Theme.navBarHeight
             layoutIfNeeded()
-            heightConstraint.constant = center ? 64 : DimensionsManager.defaultCellHeight
         }
         
         titleLabelLeftConstraint?.constant = center ? self.width / 2 - titleLabel.frame.width / 2 : CGFloat(titleLabelLeftConstant)
-        titleLabelCenterYContraint?.constant = center ? 10 : 0
-        
+        titleLabelCenterYContraint?.constant = center ? titleLabelCenterYContraintOffset : 0
+
         titleLabelWidthConstraint = titleLabel.widthLessThanConstraint(bounds.width - (titleMinLeftRightMargin * 2))
         
         if animated {

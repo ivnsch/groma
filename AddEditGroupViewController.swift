@@ -199,7 +199,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         
         if let parentViewController = parent {
             
-            let topBarHeight: CGFloat = 64
+            let topBarHeight: CGFloat = Theme.navBarHeight
             
             picker.view.frame = CGRect(x: 0, y: topBarHeight, width: parentViewController.view.frame.width, height: parentViewController.view.frame.height - topBarHeight)
             

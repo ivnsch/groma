@@ -50,13 +50,13 @@ class GromFromViewControlerAnimator {
 
         let buttonPointInParent = parent.view.convert(CGPoint(x: button.center.x, y: button.center.y), from: srcView)
 
-        let navBarOffset: CGFloat = 64
+        let navBarOffset: CGFloat = Theme.navBarHeight
         
         let parentWidth = parent.view.frame.width
         let parentHeight = parent.view.frame.height
         let parentFrame = CGRect(x: 0, y: 0, width: parentWidth, height: parentHeight)
         
-        let targetFrame = CGRect(x: parentFrame.origin.x, y: parentFrame.origin.y + 64, width: parentFrame.width, height: parentFrame.height - navBarOffset)
+        let targetFrame = CGRect(x: parentFrame.origin.x, y: parentFrame.origin.y + Theme.navBarHeight, width: parentFrame.width, height: parentFrame.height - navBarOffset)
 
         let backgroundView = HandlingButton()
         backgroundView.tapHandler = {[weak self] in
@@ -104,13 +104,13 @@ class GromFromViewControlerAnimator {
         
         let buttonPointInParent = parent.view.convert(CGPoint(x: button.center.x, y: button.center.y), from: srcView)
         
-        let navBarOffset: CGFloat = 64
+        let navBarOffset: CGFloat = Theme.navBarHeight
         
         let parentWidth = parent.view.frame.width
         let parentHeight = parent.view.frame.height
         let parentFrame = CGRect(x: 0, y: 0, width: parentWidth, height: parentHeight)
         
-        let targetFrame = CGRect(x: parentFrame.origin.x, y: parentFrame.origin.y + 64, width: parentFrame.width, height: parentFrame.height - navBarOffset)
+        let targetFrame = CGRect(x: parentFrame.origin.x, y: parentFrame.origin.y + Theme.navBarHeight, width: parentFrame.width, height: parentFrame.height - navBarOffset)
         
         let backgroundView = HandlingButton()
         backgroundView.tapHandler = {[weak self] in
@@ -161,7 +161,7 @@ class GromFromViewControlerAnimator {
         
         self.controller = controller
         
-        let topBarHeight: CGFloat = addTopBarHeightToY ? 64 : 0
+        let topBarHeight: CGFloat = addTopBarHeightToY ? Theme.navBarHeight : 0
         
         let backgroundView = HandlingButton(frame: CGRect(x: 0, y: topBarHeight, width: parent.view.frame.width, height: parent.view.frame.height - topBarHeight))
         backgroundView.alpha = 0
@@ -233,7 +233,7 @@ class GromFromViewControlerAnimator {
         
         self.controller = controller
         
-        let topBarHeight: CGFloat = addTopBarHeightToY ? 64 : 0
+        let topBarHeight: CGFloat = addTopBarHeightToY ? Theme.navBarHeight : 0
         
         controller.view.frame = CGRect(x: 0, y: topBarHeight, width: parent.view.frame.width, height: parent.view.frame.height - topBarHeight)
 

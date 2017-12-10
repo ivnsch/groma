@@ -46,6 +46,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
+        initNavBarHeight()
+
         initIsFirstLaunch()
         
         ifDebugLaunchActions()
@@ -79,8 +81,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         
         return initFb
     }
+
+    // In this app we use sometimes a custom view nav bar (to be able to have expand animation with dot) so it's necessary to use a hardcoded height.
+    // Maybe a solution could also be to generate a dummy navbar and measure it
+    fileprivate func initNavBarHeight() {
+        func onIPhoneX() {
+            Theme.navBarHeight = Theme.notchNavBarHeight
+        }
+        if UIDevice.current.type == .iPhoneX {
+            onIPhoneX()
+        } else if UIDevice.current.type == .simulator {
+            if UIDevice.current.userInterfaceIdiom == .phone && UIScreen.main.nativeBounds.height == 2436 {
+                onIPhoneX()
+            }
+        }
+    }
+
     var notificationToken: NotificationToken!
-    
+
     fileprivate func configRealm() {
         Realm.Configuration.defaultConfiguration = RealmConfig.config
 
