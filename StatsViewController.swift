@@ -356,9 +356,6 @@ class StatsViewController: UIViewController
                 } ?? AggrChartPoint(x: xValue, y: ChartAxisValueDouble(0), aggr: nil) // create 0 value chartpoint if there's no aggregate
         }
 
-        
-        
-        
         let (sum, _): (Double, Double) = chartPoints.reduce((Double(0), Double(0))) {tuple, chartPoint in
             
             let newSum = tuple.0 + chartPoint.y.scalar
@@ -385,13 +382,14 @@ class StatsViewController: UIViewController
         let yValues: [ChartAxisValue] = ChartAxisValuesStaticGenerator.generateYAxisValuesWithChartPoints(chartPoints, minSegmentCount: 4, maxSegmentCount: 8, multiple: 2, axisValueGenerator: {EmptyAxisValue($0)}, addPaddingSegmentIfEdge: false)
         
         let xModel = ChartAxisModel(axisValues: xValues, axisTitleLabel: ChartAxisLabel(text: "", settings: labelSettings))
-        let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: "Spending", settings: labelSettings.defaultVertical()))
+        let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: "", settings: labelSettings.defaultVertical()))
         var chartSettings = ChartSettings()
         chartSettings.top = 20
         chartSettings.trailing = 30
         chartSettings.leading = 12
         chartSettings.labelsToAxisSpacingY = 0
         chartSettings.axisStrokeWidth = 0
+        chartSettings.clipInnerFrame = false
         
         let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: chartView.bounds, xModel: xModel, yModel: yModel)
         let (xAxisLayer, yAxisLayer, innerFrame) = (coordsSpace.xAxisLayer, coordsSpace.yAxisLayer, coordsSpace.chartInnerFrame)
@@ -415,11 +413,10 @@ class StatsViewController: UIViewController
         
         
         let barViewGenerator = {(chartPointModel: ChartPointLayerModel<AggrChartPoint>, layer: ChartPointsViewsLayer<AggrChartPoint, UIView>, chart: Chart) -> UIView? in
-            let bottomLeft = CGPoint(x: chart.innerFrame.origin.x, y: chart.innerFrame.origin.y + chart.innerFrame.height)
-            
+            let bottomLeft = layer.modelLocToScreenLoc(x: 0, y: 0)
+
             let (p1, p2): (CGPoint, CGPoint) =  (CGPoint(x: chartPointModel.screenLoc.x, y: bottomLeft.y), CGPoint(x: chartPointModel.screenLoc.x, y: chartPointModel.screenLoc.y))
 
-            
 //            let percentage: CGFloat = {
 //                let y = CGFloat(chartPointModel.chartPoint.y.scalar)
 //                if y <= avg {
@@ -449,7 +446,11 @@ class StatsViewController: UIViewController
             
             return barView
         }
-        let barsLayer = ChartPointsViewsLayer<AggrChartPoint, UIView>(xAxis: xAxisLayer.axis, yAxis: yAxisLayer.axis, chartPoints: chartPoints, viewGenerator: barViewGenerator)
+        let barsLayer = ChartPointsViewsLayer<AggrChartPoint, UIView>(xAxis: xAxisLayer.axis,
+                                                                      yAxis: yAxisLayer.axis,
+                                                                      chartPoints: chartPoints,
+                                                                      viewGenerator: barViewGenerator,
+                                                                      clipViews: false)
         
         let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 2
@@ -489,7 +490,7 @@ class StatsViewController: UIViewController
 
         }, displayDelay: 0.3) // show after bars animation
         
-        let layers: [ChartLayer] = [xAxisLayer, barsLayer, labelsLayer]
+        let layers: [ChartLayer] = [xAxisLayer, yAxisLayer, barsLayer, labelsLayer]
 
 //        if (chartPoints.contains{$0.y.scalar > 0}) { // don't show avg line if all the prices are 0, it looks weird
         

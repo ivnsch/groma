@@ -31,7 +31,7 @@ target 'groma' do
     project 'shoppin.xcodeproj'
     platform :ios, '9.0'
     pod 'SwiftValidator', :git => 'https://github.com/i-schuetz/SwiftValidator.git', :branch => 'remove_delegate_callback'
-    pod 'SwiftCharts', :git => 'https://github.com/i-schuetz/SwiftCharts.git'
+    pod 'SwiftCharts', '~> 0.6.1'
     pod 'GoogleSignIn'
     pod 'SwipeView', '~> 1.3.2'
     pod 'CMPopTipView', '~> 2.0'
