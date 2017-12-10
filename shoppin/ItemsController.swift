@@ -64,8 +64,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         
         initTitleLabel()
         
-        topQuickAddControllerManager = initTopQuickAddControllerManager()
-        
+
         
         topBar.delegate = self
     }

@@ -156,6 +156,8 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
             listItemsController?.recipe = (model as! ExpandableTableViewRecipeModel).recipe //change
             listItemsController?.setThemeColor(weakCell.backgroundColor!)
             listItemsController?.onExpand(true)
+            // This has to be after onExpand so it gets the updated navbar frame height! (which is set in positionTitleLabelLeft...)
+            listItemsController?.topQuickAddControllerManager = listItemsController?.initTopQuickAddControllerManager()
         }
         
         listItemsController.onViewDidAppear = {[weak listItemsController] in
