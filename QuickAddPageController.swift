@@ -62,12 +62,6 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     
     func swipeView(_ swipeView: SwipeView!, viewForItemAt index: Int, reusing view: UIView!) -> UIView! {
         
-        if currentSwipeController?.parent != nil {
-            currentSwipeController?.removeFromParentViewController()
-        }
-        
-
-        
         if quickAddListItemDelegate == nil {
             logger.w("delegate is nil")
         }
@@ -75,6 +69,10 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         logger.v("viewForItemAtIndex: index: \(index)")
         
         if index == 0 {
+
+            // Sometimes swipeView called multiple times for same index - ensure initialize only one controller
+            if let controller = addProductController { return controller.view }
+
             let productsController = UIStoryboard.quickAddListItemViewController()
             productsController.delegate = quickAddListItemDelegate
             productsController.topControllersDelegate = self
@@ -88,8 +86,11 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             addProductController = productsController
             
             return productsController.view
-            
+
         } else {
+            // Sometimes swipeView called multiple times for same index - ensure initialize only one controller
+            if let controller = addGroupController { return controller.view }
+
             let productsController = UIStoryboard.quickAddListItemViewController()
             productsController.delegate = quickAddListItemDelegate
             productsController.topControllersDelegate = self
