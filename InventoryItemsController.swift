@@ -102,7 +102,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topBar.addSubview(label)
     }
     
-    fileprivate func initTopQuickAddControllerManager(_ tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {
+    func initTopQuickAddControllerManager(_ tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {
         let top = topBar.frame.height
         let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
@@ -147,6 +147,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         
         onViewWillAppear?()
         onViewWillAppear = nil
+
+        // This has to be after onViewWillAppear so it gets the updated navbar frame height! (which is set in positionTitleLabelLeft...)
+        topQuickAddControllerManager = initTopQuickAddControllerManager(tableView)
     }
     
     override func viewDidAppear(_ animated: Bool) {
