@@ -170,8 +170,8 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 </variation>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkI-jx-bK6">
-                                <rect key="frame" x="99" y="350" width="177" height="30"/>
-                                <state key="normal" title="Feedback, questions, etc.">
+                                <rect key="frame" x="153.5" y="350" width="68" height="30"/>
+                                <state key="normal" title="Feedback">
                                     <color key="titleColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
