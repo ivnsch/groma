@@ -22,7 +22,7 @@ class HelpItemSectionModel: SectionModel<HelpItem> {
 class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, HelpHeaderViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UITextField!
+    @IBOutlet weak var searchBar: RoundTextField!
     
     @IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
 
