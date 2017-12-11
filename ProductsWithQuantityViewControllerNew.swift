@@ -510,6 +510,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     // MARK: - Scroll delegate
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        delegate?.onTableViewScroll(scrollView)
         pullToAdd?.refreshControl.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
     }
 }

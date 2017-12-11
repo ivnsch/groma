@@ -61,9 +61,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         
         productsWithQuantityController = UIStoryboard.productsWithQuantityViewControllerNew()
         addChildViewController(productsWithQuantityController)
+        productsWithQuantityController.delegate = self // NOTE: set before of triggering view load (call viewDidLoad - since this accesses delegate)
         _ = productsWithQuantityController.view // trigger view/outlets load - otherwise `var tableView` here crahes
-        productsWithQuantityController.delegate = self
-        
+
         initTitleLabel()
         
         topBar.delegate = self
@@ -656,8 +656,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         toggleTopAddController(false)
     }
 
-    
-    
     // MARK: - private
 
     // Inserts item in table view, considering the current sortBy
