@@ -117,7 +117,8 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         swipeToIncrementHelper?.delegate = self
         
         selectionStyle = .none
-        
+
+        setMode(.readonly, animated: false) // default
         quantityView.delegate = self
     }
     
@@ -167,9 +168,11 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         }
     }
     
-    func setMode(_ mode: QuantityViewMode) {
-        quantityViewTrailingConstraint.constant = mode == .edit ? 0 : DimensionsManager.leftRightPaddingConstraint
-        quantityView.setMode(mode, animated: false)
+    func setMode(_ mode: QuantityViewMode, animated: Bool) {
+        isEditing = mode == .edit
+        quantityViewTrailingConstraint.constant = mode == .edit ? DimensionsManager.leftRightPaddingConstraint :
+            DimensionsManager.leftRightPaddingConstraint
+        quantityView.setMode(mode, animated: animated)
     }
     
     // MARK: - SwipeToIncrementHelperDelegate
@@ -195,8 +198,8 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     }
     
     var swipeToIncrementEnabled: Bool {
-        let isOpen = swipeToDeleteHelper?.isOpen ?? false
-        return !isOpen
+        let isSwipeToDeleteOpen = swipeToDeleteHelper?.isOpen ?? false
+        return !isSwipeToDeleteOpen && isEditing
     }
     
     // MARK: -

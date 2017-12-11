@@ -132,8 +132,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topBarOnCloseExpandable()
         toggleButtonRotator.enabled = true
         topQuickAddControllerManager?.controller?.onClose()
-        
-        productsWithQuantityController.showQuantityButtons = true
     }
     
     fileprivate func topBarOnCloseExpandable() {
@@ -230,9 +228,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if rotateTopBarButton {
                 topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, initTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)), endTransform: CGAffineTransform.identity)])
             }
-            
-            productsWithQuantityController.showQuantityButtons = true
-            
+
         } else { // if there's no top controller open, open the quick add controller
             
             func open() {
@@ -245,8 +241,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 if rotateTopBarButton {
                     topBar.setRightButtonModels([TopBarButtonModel(buttonId: .toggleOpen, endTransform: CGAffineTransform(rotationAngle: CGFloat(Double.pi / 4)))])
                 }
-                
-                productsWithQuantityController.showQuantityButtons = false
             }
             
             checkShowAddToInventoryExplanationPopup {

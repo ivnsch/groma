@@ -30,7 +30,7 @@ class QuantityView: UIView, UITextFieldDelegate {
     @IBOutlet weak var minusBottomWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var plusBottomWidthConstraint: NSLayoutConstraint!
     
-    var mode: QuantityViewMode = .edit
+    fileprivate var mode: QuantityViewMode = .edit
     
     fileprivate var showPlusDeltaTimerTask: DispatchWorkItem?
     fileprivate var showMinusDeltaTimerTask: DispatchWorkItem?
@@ -167,9 +167,10 @@ class QuantityView: UIView, UITextFieldDelegate {
 
             minusBottomWidthConstraint.constant = widthConstant
             plusBottomWidthConstraint.constant = widthConstant
-            
-            invalidateIntrinsicContentSize()
-            
+
+            // this causes jumps in inventory items when switching edit/readonly. Don't remember for what it is.
+//            invalidateIntrinsicContentSize()
+
             if animated {
                 anim {
                     self.layoutIfNeeded()

@@ -78,12 +78,6 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready
     
-    var showQuantityButtons: Bool = true {
-        didSet {
-            tableView.reloadData()
-        }
-    }
-    
     var itemsCount: Int {
         return delegate?.itemsCount ?? 0
     }
@@ -281,6 +275,16 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         tableView.setEditing(editing, animated: true)
+
+        // Update cell mode
+        let cellMode: QuantityViewMode = editing ? .edit : .readonly
+        if let cells = tableView.visibleCells as? [ProductWithQuantityTableViewCell] {
+            for cell in cells {
+                cell.setMode(cellMode, animated: true)
+            }
+        } else {
+            logger.e("Invalid state, couldn't cast: \(tableView.visibleCells)")
+        }
     }
     
     // MARK: - ProductWithQuantityTableViewCellDelegate
