@@ -159,7 +159,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     // MARK: - Pull to add
     
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground)
+        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground, tableView: tableView)
         refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
         tableViewController.refreshControl = refreshControl
         

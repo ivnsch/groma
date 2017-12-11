@@ -21,8 +21,11 @@ class PullToAddHelper {
     init(tableView: UITableView, onPull: @escaping (MyRefreshControl) -> Void) {
         self.onPull = onPull
         
-        let refreshControl = MyRefreshControl(frame: CGRect(x: 0, y: tableView.y, width: tableView.width, height: 200), backgroundColor: tableView.backgroundColor)
-        
+        let refreshControl = MyRefreshControl(frame: CGRect(x: 0, y: tableView.y, width: tableView.width, height: 200),
+                                              backgroundColor: tableView.backgroundColor, tableView: tableView)
+
+
+
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refreshControl
         } else {
@@ -32,7 +35,7 @@ class PullToAddHelper {
         self.refreshControl = refreshControl
         
         refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
-        
+
     }
     
     @objc func onPullRefresh(_ sender: UIRefreshControl) {
@@ -43,8 +46,8 @@ class PullToAddHelper {
     // backwards compatibility - TODO remove
     // Creates default refresh control
     // backgroundColor: Overrides parentController's view background color as background color of pull to add
-    static func createPullToAdd(_ parentController: UIViewController, backgroundColor: UIColor? = nil) -> MyRefreshControl {
-        let refreshControl = MyRefreshControl(frame: CGRect.zero, backgroundColor: backgroundColor ?? parentController.view.backgroundColor)
+    static func createPullToAdd(_ parentController: UIViewController, backgroundColor: UIColor? = nil, tableView: UITableView) -> MyRefreshControl {
+        let refreshControl = MyRefreshControl(frame: CGRect.zero, backgroundColor: backgroundColor ?? parentController.view.backgroundColor, tableView: tableView)
         return refreshControl
     }
 }
@@ -53,13 +56,17 @@ class PullToAddHelper {
 class MyRefreshControl: UIRefreshControl {
     
     var arrow: UIImageView?
-    
-    init(frame: CGRect, backgroundColor: UIColor?) {
+
+    weak var tableView: UITableView?
+
+    init(frame: CGRect, backgroundColor: UIColor?, tableView: UITableView) {
         super.init(frame: frame)
-        
+
+        self.tableView = tableView
+
         let bgView = UIView()
         bgView.translatesAutoresizingMaskIntoConstraints = false
-        bgView.backgroundColor = backgroundColor
+        bgView.backgroundColor = backgroundColor // to hide the built in activity indicator
         addSubview(bgView)
         bgView.fillSuperview()
         
@@ -93,7 +100,6 @@ class MyRefreshControl: UIRefreshControl {
         } else {
             logger.e("No arrow image!")
         }
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -102,6 +108,9 @@ class MyRefreshControl: UIRefreshControl {
     
     
     func updateForScrollOffset(offset: CGFloat, startOffset: CGFloat = 0) {
+
+        tableView?.sendSubview(toBack: self) // it's necessary to do this here, otherwise comes to front (sending to back at start doesn't work)
+
         let startOffset: CGFloat = startOffset
         
         let totalAngle: CGFloat = 180

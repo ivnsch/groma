@@ -57,7 +57,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self)
+        let refreshControl = PullToAddHelper.createPullToAdd(self, tableView: tableView)
         refreshControl.addTarget(self, action: #selector(ListItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)
         self.refreshControl = refreshControl
         self.pullToAddView = refreshControl

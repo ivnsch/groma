@@ -50,7 +50,7 @@ class EmptyViewController: UITableViewController {
     }
 
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self)
+        let refreshControl = PullToAddHelper.createPullToAdd(self, tableView: tableView)
         refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
         self.refreshControl = refreshControl
         

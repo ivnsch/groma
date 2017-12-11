@@ -73,7 +73,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         tableView.backgroundColor = Theme.defaultTableViewBGColor
         
         if delegate?.isPullToAddEnabled() ?? false {
-            let refreshControl = PullToAddHelper.createPullToAdd(self)
+            let refreshControl = PullToAddHelper.createPullToAdd(self, tableView: tableView)
             tableViewController.refreshControl = refreshControl
             refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), for: .valueChanged)
             self.pullToAddView = refreshControl

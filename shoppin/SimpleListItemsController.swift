@@ -879,7 +879,7 @@ class SimpleListItemsTableViewController: UITableViewController {
     // MARK: - Pull to refresh
     
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground)
+        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground, tableView: tableView)
         refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
         self.refreshControl = refreshControl
         self.pullToAddView = refreshControl
