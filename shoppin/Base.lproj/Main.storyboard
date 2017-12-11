@@ -92,7 +92,7 @@
                                     <outlet property="delegate" destination="y3s-BI-6fc" id="PlD-Vo-NZE"/>
                                 </connections>
                             </tableView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zUT-nN-8Zc" customClass="RoundTextField" customModule="shoppin">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zUT-nN-8Zc" customClass="RoundTextField" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="20" y="40" width="335" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="BsN-MQ-epw"/>
