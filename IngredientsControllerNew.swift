@@ -274,7 +274,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                     return
                 }
                 
-                let finalItemIndex = weakSelf.explanationManager.showExplanation ? itemIndex + 1 : itemIndex
+//                let finalItemIndex = weakSelf.explanationManager.showExplanation ? itemIndex + 1 : itemIndex
+                let finalItemIndex = false ? itemIndex + 1 : itemIndex
                 let indexPath = IndexPath(row: finalItemIndex, section: 0)
                 
                 if addedItem.isNew {
@@ -430,7 +431,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                 }
             }()
             
-            let finalRow = row.map{explanationManager.showExplanation ? $0 + 1 : $0}
+//            let finalRow = row.map{explanationManager.showExplanation ? $0 + 1 : $0}
+            let finalRow = row.map{false ? $0 + 1 : $0}
             
             return finalRow.map{IndexPath(row: $0, section: 0)}
         }
@@ -553,7 +555,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
         guard let itemsResult = itemsResult else {logger.e("No result"); return}
 
-        let row = explanationManager.showExplanation ? indexPath.row + 1 : indexPath.row
+//        let row = explanationManager.showExplanation ? indexPath.row + 1 : indexPath.row
+        let row = false ? indexPath.row + 1 : indexPath.row
         let updatedIndexPath = IndexPath(row: row, section: 0)
         
         Prov.ingredientProvider.delete(itemsResult[updatedIndexPath.row], ingredients: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
@@ -654,12 +657,14 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
 extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemsCount + (explanationManager.showExplanation ? 1 : 0)
+//        return itemsCount + (explanationManager.showExplanation ? 1 : 0)
+        return itemsCount + (false ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
+//        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
+        if false && indexPath.row == explanationManager.row { // Explanation cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "defaultCell", for: indexPath)
             
             let explanationView = explanationManager.generateExplanationView()
@@ -673,7 +678,8 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
         } else { // Normal cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "ingredientCell", for: indexPath) as! IngredientCell
             
-            let row = explanationManager.showExplanation ? indexPath.row - 1 : indexPath.row
+//            let row = explanationManager.showExplanation ? indexPath.row - 1 : indexPath.row
+            let row = false ? indexPath.row - 1 : indexPath.row
             
             if let itemsResult = itemsResult {
                 cell.ingredient = itemsResult[row]
@@ -688,7 +694,8 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
+//        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
+        if false && indexPath.row == explanationManager.row { // Explanation cell
             return explanationManager.rowHeight
         } else {
             return DimensionsManager.ingredientsCellHeight
