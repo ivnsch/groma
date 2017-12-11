@@ -168,15 +168,18 @@ class QuantityView: UIView, UITextFieldDelegate {
             minusBottomWidthConstraint.constant = widthConstant
             plusBottomWidthConstraint.constant = widthConstant
 
-            // this causes jumps in inventory items when switching edit/readonly. Don't remember for what it is.
-//            invalidateIntrinsicContentSize()
 
             if animated {
-                anim {
+                anim(Theme.defaultAnimDuration, {
                     self.layoutIfNeeded()
-                }
+                }, onFinish: {
+                    // call invalidate intrinsic size after constraint finish (otherwise weird jumps)
+                    // This is necessary so the area adjust to the updated contents - in particular to receive touch events
+                    self.invalidateIntrinsicContentSize()
+                })
             } else {
                 layoutIfNeeded()
+                invalidateIntrinsicContentSize()
             }
         }
     }

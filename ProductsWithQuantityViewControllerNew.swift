@@ -230,8 +230,6 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
                 
             }
             
-            cell.setMode(showQuantityButtons ? .edit : .readonly)
-            
             cell.indexPath = indexPath
             cell.delegate = self
             
