@@ -61,6 +61,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         
         productsWithQuantityController = UIStoryboard.productsWithQuantityViewControllerNew()
         addChildViewController(productsWithQuantityController)
+        _ = productsWithQuantityController.view // trigger view/outlets load - otherwise `var tableView` here crahes
         productsWithQuantityController.delegate = self
         
         initTitleLabel()
