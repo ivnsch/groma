@@ -174,7 +174,6 @@ public class SuggestionsPrefiller {
         let ovenCat = ProductCategory(uuid: uuid, name: tr("pr_oven", lang), color: UIColor.flatWatermelonDark.hexStr)
         let stationeriesCat = ProductCategory(uuid: uuid, name: tr("pr_stationeries", lang), color: UIColor.flatNavyBlueDark.hexStr)
 
-        
         let quantifiableProducts: [QuantifiableProduct] = [
             // fruits
             
@@ -265,8 +264,8 @@ public class SuggestionsPrefiller {
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: kg, product: Product(uuid: uuid, name: tr("pr_rice_basmati", lang), category: riceCat, edible: true)),
             
             // drinks
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_water", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_water_1", lang), category: drinksCat, edible: true)),// TODO!!!!!!! liter unit
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_water", lang), category: drinksCat, edible: true)),
+
             //            Product(uuid: uuid, name: tr("pr_club_mate", lang), category: drinksCat)),
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
             QuantifiableProduct(uuid: uuid, baseQuantity: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
@@ -511,7 +510,6 @@ public class SuggestionsPrefiller {
 //            
 //            // drinks
 //            Product(uuid: uuid, name: tr("pr_water", lang), category: drinksCat),
-//            Product(uuid: uuid, name: tr("pr_water_1", lang), category: drinksCat),
 ////            Product(uuid: uuid, name: tr("pr_club_mate", lang), category: drinksCat),
 //            Product(uuid: uuid, name: tr("pr_cola_1", lang), category: drinksCat),
 //            Product(uuid: uuid, name: tr("pr_cola_1_5", lang), category: drinksCat),

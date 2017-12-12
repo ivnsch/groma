@@ -213,32 +213,32 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         
         func initExampleGroup(unitDict: [UnitId: Providers.Unit], _ onFinish: VoidFunction? = nil) {
             Prov.listItemGroupsProvider.groups(sortBy: .order, resultHandler(onSuccess: {[weak self] groups in guard let weakSelf = self else {onFinish?(); return}
-                
+
                 if groups.isEmpty {
-                    
+
                     let exampleGroup = ProductGroup(uuid: UUID().uuidString, name: trans("example_group_fruits_salad"), color: UIColor.flatYellow, order: 0)
-                    
+
                     let ingredients: [(name: String, quantity: Float)] = [
                         (trans("pr_pineapple"), 1),
                         (trans("pr_plums"), 3),
                         (trans("pr_bananas"), 2),
                         (trans("pr_strawberries"), 1),
-                        (trans("pr_water_1"), 3)
+                        (trans("pr_water"), 3)
                     ]
-                    
+
                     let ingredientsNameBrands: [(name: String, brand: String)] = ingredients.map{(name: $0.name, brand: "")}
-                    
+
                     Prov.productProvider.products(ingredientsNameBrands, weakSelf.resultHandler(onSuccess: {products in
-                        
+
                         if products.count != ingredientsNameBrands.count {
                             logger.e("Unexpected: Some of the products of the example group are not in the database. Found products(\(products.count)): (\(products.map{$0.item.name})), searched(\(ingredients.count)): \(ingredients.map{$0.name})")
                             onFinish?()
-                            
+
                         } else {
                             Prov.listItemGroupsProvider.add(exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
-                                
+
                                 guard let noneUnit = unitDict[.none] else {logger.e("No none unit! can't add group items."); onFinish?(); return}
-                                
+
                                 let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = ingredients.flatMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill group
@@ -248,20 +248,20 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                         return nil
                                     }
                                 }
-                                
+
                                 let groupItems = productsIngredients.map {productIngredient in
                                     GroupItem(uuid: NSUUID().uuidString, quantity: productIngredient.quantity, product: productIngredient.product, group: exampleGroup)
                                 }
-                                
-                                Prov.listItemGroupsProvider.add(groupItems, group: exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in 
+
+                                Prov.listItemGroupsProvider.add(groupItems, group: exampleGroup, remote: true, weakSelf.resultHandler(onSuccess: {_ in
                                     logger.d("Finish adding example group")
                                     onFinish?()
-                                    
+
                                     }, onError: {result in
                                         logger.e("Error adding example group items, result: \(result), items: \(groupItems)")
                                         onFinish?()
                                 }))
-                                
+
                                 }, onError: {result in
                                     logger.e("Error adding example group, result: \(result), group: \(exampleGroup)")
                                     onFinish?()
@@ -288,19 +288,19 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     
                     let exampleList = List(uuid: UUID().uuidString, name: trans("example_list_first_list"), color: UIColor.flatOrange, order: 0, inventory: inventory, store: nil)
                     
-                    let productsWithQuantity: [(name: String, quantity: Float)] = [
-                        (trans("pr_peaches"), 6),
-                        (trans("pr_oranges"), 12),
-                        (trans("pr_kiwis"), 4),
-                        (trans("pr_water_1"), 3),
-                        (trans("pr_rice"), 6),
-                        (trans("pr_bread"), 12),
-                        (trans("pr_grapes"), 4),
-                        (trans("pr_mangos"), 3),
-                        (trans("pr_garlic"), 6),
-                        (trans("pr_drum_sticks"), 12),
-                        (trans("pr_chicken_wings"), 4),
-                        (trans("pr_pepper_red"), 3)
+                    let productsWithQuantity: [(name: String, quantity: Float, base: Float, unit: UnitId)] = [
+                        (trans("pr_peaches"), 6, 1, .none),
+                        (trans("pr_oranges"), 12, 1, .none),
+                        (trans("pr_kiwis"), 4, 1, .none),
+                        (trans("pr_water"), 4, 1, .liter),
+                        (trans("pr_rice"), 6, 500, .g),
+                        (trans("pr_bread"), 12, 1, .none),
+                        (trans("pr_grapes"), 4, 500, .g),
+                        (trans("pr_mangos"), 3, 1, .none),
+                        (trans("pr_garlic"), 6, 1, .none),
+                        (trans("pr_drum_sticks"), 1, 500, .g),
+                        (trans("pr_chicken_wings"), 1, 500, .g),
+                        (trans("pr_pepper_red"), 3, 1, .none)
                     ]
                     
                     let productsWithBrands: [(name: String, brand: String)] = productsWithQuantity.map{(name: $0.name, brand: "")}
@@ -319,7 +319,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                 let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill list
-                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: noneUnit, product: product)
+
+                                        let unitId = ingredient.unit
+                                        let unit = unitDict[unitId] ?? {
+                                            logger.e("Invalid state: no unit found for id: \(unitId). Defaulting to none.")
+                                            return noneUnit
+                                        } ()
+                                        let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: ingredient.base, unit: unit, product: product)
                                         return (quanatifiableProduct, ingredient.quantity)
                                     } else {
                                         return nil
@@ -328,7 +334,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 
                                 let inputs = productsIngredients.map {
                                     // NOTE: Assumes all example list items are edible (edible: true). To change this set this flag in the productsWithQuantity tuples.
-                                    ListItemInput(name: $0.product.product.item.name, quantity: $0.quantity, price: 0, section: $0.product.product.item.category.name, sectionColor: $0.product.product.item.category.color, note: nil, baseQuantity: 1, unit: $0.product.unit.name, brand: $0.product.product.brand, edible: true)
+                                    ListItemInput(name: $0.product.product.item.name, quantity: $0.quantity, price: 0, section: $0.product.product.item.category.name, sectionColor: $0.product.product.item.category.color, note: nil, baseQuantity: $0.product.baseQuantity, unit: $0.product.unit.name, brand: $0.product.product.brand, edible: true)
                                 }
                                 
                                 Prov.listItemsProvider.addNew(listItemInputs: inputs, list: exampleList, status: .todo, realmData: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
@@ -382,7 +388,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     logger.d("Finished adding default inventory")
                     
                     initExampleRecipe(unitDict: unitDict) {
-                    
+
 //                    initExampleGroup(unitDict: unitDict) { // Disabled, getting exception "Can not add objects from a different Realm" after adding "Item" Realm object (no idea why). We don't use groups anymore anyway.
 //                        logger.d("Finished adding example group")
                         if let inventory = inventoryMaybe {
