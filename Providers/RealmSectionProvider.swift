@@ -291,13 +291,11 @@ class RealmSectionProvider: RealmProvider {
             
             let addResult: AddSectionPlainResult = {
                 let sectionUnique = SectionUnique(name: sectionName, listUuid: list.uuid, status: status)
-                if let section = realm.objects(Section.self).filter(Section.createFilter(unique: sectionUnique)).first
-                    
-                {
+                if let section = realm.objects(Section.self).filter(Section.createFilter(unique: sectionUnique)).first { // exists
                     section.color = sectionColor
                     realm.add(section, update: true) // TODO is this necessary?
                     return AddSectionPlainResult(section: section, isNew: false)
-                } else {
+                } else { // doesn't exist
                     let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: .done, order: 123), status: status) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
 //                    sections.append(section)
                     realm.add(section, update: true)

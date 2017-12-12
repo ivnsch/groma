@@ -27,9 +27,17 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     override var status: ListItemStatus {
         return .todo
     }
+
+    override var statusForUpdate: ListItemStatus {
+        return isCartOpen ? .done : .todo
+    }
+
+    fileprivate var isCartOpen: Bool {
+        return pricesView.expandedNew
+    }
     
     override var isEmpty: Bool {
-        return super.isEmpty && !pricesView.expandedNew // Assumption: if prices view is expanded, cart contains items. So if price view is expanded it means we are not in an empty state.
+        return super.isEmpty && isCartOpen // Assumption: if prices view is expanded, cart contains items. So if price view is expanded it means we are not in an empty state.
     }
     
     override var tableViewBottomInset: CGFloat {
@@ -150,10 +158,10 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
             
             let stashQuantity = aggregate.stashQuantity
             
-            weakSelf.pricesView.setQuantities(cart: aggregate.cartQuantity, stash: stashQuantity, closeIfZero: !weakSelf.pricesView.expandedNew) // when the cart is expanded and the quantity becomes zero we don't want to hide the prices view (since it's on the upper part of the controller).
+            weakSelf.pricesView.setQuantities(cart: aggregate.cartQuantity, stash: stashQuantity, closeIfZero: !weakSelf.isCartOpen) // when the cart is expanded and the quantity becomes zero we don't want to hide the prices view (since it's on the upper part of the controller).
             
             // If we are currently showing the cart and it's empty (i.e. was just emptied), close the cart
-            if aggregate.cartQuantity == 0 && weakSelf.pricesView.expandedNew {
+            if aggregate.cartQuantity == 0 && weakSelf.isCartOpen {
                 delay(0.2) {
                     weakSelf.pricesView.setExpanded(expanded: false) {
                         weakSelf.pricesView.setQuantities(cart: aggregate.cartQuantity, stash: stashQuantity, closeIfZero: true) // now that we are back in todo, close the cart bottom view
@@ -371,7 +379,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     // TODO optimize this, re-initializing top controller each time may not be best performance
     override func beforeToggleTopAddController(willExpand: Bool) {
         if willExpand {
-            if pricesView.expandedNew {
+            if isCartOpen {
                 if let cartController = cartController {
                     topQuickAddControllerManager = updateTopQuickAddControllerManager(tableView: cartController.tableView)
                 } else {
@@ -388,7 +396,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     override func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {
         
-        if pricesView.expandedNew {
+        if isCartOpen {
             
             // Implemented in a rush - hold the max constraint value here - if we don't store it, it doesn't work correctly (heights change during the animation) and in viewDidLoad there's a diffent height, don't have time to check why.
             if pricesViewBottomConstraintConstantInExpandedState == nil {
@@ -413,9 +421,17 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     // MARK: - QuickAddDelegate
     // IMPORTANT: Make sure all the QuickAddDelegate methods are overriden here, since the cart has to consume everything while it's open. With more time we can think about a better solution for this.
-    
+
+    override func getRealmDataForAddEditItem() -> RealmData? {
+        if isCartOpen {
+            return cartController?.realmData
+        } else {
+            return super.getRealmDataForAddEditItem()
+        }
+    }
+
     override func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onAddProduct(product, quantity: quantity, onAddToProvider: onAddToProvider)
         } else {
             super.onAddProduct(product, quantity: quantity, onAddToProvider: onAddToProvider)
@@ -423,7 +439,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onAddGroup(group, onFinish: onFinish)
         } else {
             super.onAddGroup(group, onFinish: onFinish)
@@ -431,7 +447,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController) {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onAddRecipe(ingredientModels: ingredientModels, quickAddController: quickAddController)
         } else {
             super.onAddRecipe(ingredientModels: ingredientModels, quickAddController: quickAddController)
@@ -439,7 +455,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.getAlreadyHaveText(ingredient: ingredient, handler)
         } else {
             super.getAlreadyHaveText(ingredient: ingredient, handler)
@@ -448,7 +464,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 
     
     override func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onSubmitAddEditItem(input, editingItem: editingItem)
         } else {
             super.onSubmitAddEditItem(input, editingItem: editingItem)
@@ -456,7 +472,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func onCloseQuickAddTap() {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onCloseQuickAddTap()
         } else {
             super.onCloseQuickAddTap()
@@ -464,7 +480,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func onQuickListOpen() {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onQuickListOpen()
         } else {
             super.onQuickListOpen()
@@ -472,7 +488,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func onAddProductOpen() {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onAddProductOpen()
         } else {
             super.onAddProductOpen()
@@ -480,7 +496,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func onAddGroupOpen() {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onAddGroupOpen()
         } else {
             super.onAddGroupOpen()
@@ -488,7 +504,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func onAddGroupItemsOpen() {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onAddGroupItemsOpen()
         } else {
             super.onAddGroupItemsOpen()
@@ -497,7 +513,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     
     override func parentViewForAddButton() -> UIView {
         var view: UIView?
-        if pricesView.expandedNew {
+        if isCartOpen {
             view = cartController?.parentViewForAddButton()
         } else {
             view = super.parentViewForAddButton()
@@ -509,7 +525,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void) {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.addEditSectionOrCategoryColor(name, handler: handler)
         } else {
             super.addEditSectionOrCategoryColor(name, handler: handler)
@@ -517,7 +533,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func onRemovedSectionCategoryName(_ name: String) {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onRemovedSectionCategoryName(name)
         } else {
             super.onRemovedSectionCategoryName(name)
@@ -525,7 +541,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override func onRemovedBrand(_ name: String) {
-        if pricesView.expandedNew {
+        if isCartOpen {
             cartController?.onRemovedBrand(name)
         } else {
             super.onRemovedBrand(name)

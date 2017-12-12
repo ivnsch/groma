@@ -40,8 +40,16 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     fileprivate var notificationToken: NotificationToken? {
         return realmData?.token
     }
-    
+
+    // Status of current controller - with the current hierarchy this can be only .done (hierachy changed and code was not updated)
+    // This is used for the current items shown in this controller
     var status: ListItemStatus {
+        fatalError("override")
+    }
+
+    // Status to be passed to update (or any other provider methods that require status of item)
+    // This is used for specific items that are changed and have to reflect the status where these items are in
+    var statusForUpdate: ListItemStatus {
         fatalError("override")
     }
 
@@ -560,7 +568,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         if let currentList = self.currentList {
             
-            Prov.listItemsProvider.updateNew(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, realmData: realmData, successHandler {[weak self] updateResult in guard let weakSelf = self else {return}
+            Prov.listItemsProvider.updateNew(listItemInput, updatingListItem: updatingListItem, status: statusForUpdate, list: currentList, realmData: realmData, successHandler {[weak self] updateResult in guard let weakSelf = self else {return}
                 if updateResult.replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.
                     weakSelf.listItemsTableViewController.tableView.reloadData()
                     
@@ -758,11 +766,15 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             }
         }
     }
-    
+
+    func getRealmDataForAddEditItem() -> RealmData? {
+        return realmData
+    }
+
     override func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
         
         guard let list = currentList else {logger.e("No list"); return}
-        guard let realmData = realmData else {logger.e("No realm data"); return}
+        guard let realmData = getRealmDataForAddEditItem() else {logger.e("No realm data"); return}
         
         func onEditListItem(_ input: ListItemInput, editingListItem: ListItem) {
             // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
