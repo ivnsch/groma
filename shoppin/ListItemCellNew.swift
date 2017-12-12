@@ -67,6 +67,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     fileprivate var shownQuantity: Float = 0 {
         didSet {
             if let tableViewListItem = tableViewListItem {
+                quantityView.quantity = shownQuantity
                 quantityView.quantityText = String("\(tableViewListItem.product.product.quantityWithMaybeUnitText(quantity: shownQuantity))")
             }
         }
