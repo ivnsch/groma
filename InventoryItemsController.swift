@@ -429,7 +429,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
-        Prov.productProvider.mergeOrCreateProduct(prototype: input.toProductPrototype(), updateCategory: false, updateItem: false, successHandler {(quantifiableProduct: QuantifiableProduct, isNew: Bool) in
+        guard let realmData = realmData else {logger.e("No realm data"); return}
+
+        Prov.productProvider.mergeOrCreateProduct(prototype: input.toProductPrototype(), updateCategory: false, updateItem: false, realmData: realmData, successHandler {(quantifiableProduct: QuantifiableProduct, isNew: Bool) in
             let quickAddItem = QuickAddProduct(quantifiableProduct.product, quantifiableProduct: quantifiableProduct)
             onFinish?(quickAddItem, isNew)
         })

@@ -386,7 +386,8 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool, _ handler: @escaping (ProviderResult<Product>) -> Void) {
+    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool,
+                              realmData: RealmData?, _ handler: @escaping (ProviderResult<Product>) -> Void) {
         
         // load product and update or create one
         // if we find a product with the name/brand we update it - this is for the case the user changes the price etc for an existing product while adding an item
@@ -456,8 +457,12 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool, _ handler: @escaping (ProviderResult<(QuantifiableProduct, Bool)>) -> Void) {
-        switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: prototype, updateCategory: updateCategory, save: true) {
+    func mergeOrCreateProduct(prototype: ProductPrototype, updateCategory: Bool, updateItem: Bool,
+                              realmData: RealmData?,
+                              _ handler: @escaping (ProviderResult<(QuantifiableProduct, Bool)>) -> Void) {
+        switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: prototype,
+                                                                           updateCategory: updateCategory, save: true,
+                                                                           realmData: realmData) {
         case .ok(let result):
             handler(ProviderResult(status: .success, sucessResult: result))
         case .err(let error):
@@ -465,8 +470,6 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    
-    
     func countProducts(_ handler: @escaping (ProviderResult<Int>) -> Void) {
         DBProv.productProvider.countProducts {countMaybe in
             if let count = countMaybe {

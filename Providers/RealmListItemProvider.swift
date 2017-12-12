@@ -943,7 +943,7 @@ class RealmListItemProvider: RealmProvider {
     func addSync(quantifiableProduct: QuantifiableProduct, store: String, price: Float?, list: List, quantity: Float, note: String?, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (AddListItemResult)? {
         
         refresh()
-        
+
         // We execute this on successful add/increment(where increment here means also "add to list" user action).
         // We don't wait until execution finishes or handle error if it fails, since this is not critical
         func incrementFav() {
@@ -965,16 +965,16 @@ class RealmListItemProvider: RealmProvider {
             if let existingListItem = existingListItemMaybe, let listItemIndex = section.listItems.index(of: existingListItem) {
                 let quantityMaybe = incrementSync(existingListItem, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
                 if quantityMaybe != nil {
-                    
+
                     incrementFav()
                         
                     return AddListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, listItemIndex: listItemIndex, sectionIndex: sectionResult.index)
-                    //return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
+//                    return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
                 } else {
                     logger.e("Couldn't increment existing list item")
                     return nil
                 }
-                
+
             } else { // new list item
                 
                 

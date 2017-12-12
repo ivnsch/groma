@@ -322,12 +322,12 @@ class ListItemProviderImpl: ListItemProvider {
     // We load product and section from db identified by uniques and update and link to them, instead of updating directly the product and section of the item
     // The reason for this, is that if we udpate a part of the unique say the product's brand, we have to look if a product with the new unique exist and link to that one - otherwise we may end with 2 products (or sections) with the same semantic unique (but different uuids) and this is invalid, among others it causes an error in the server. 
     // NOTE: for now assumes that the store is not updated (the app doesn't allow to edit the store of a list item). This means that we don't look if a store product with the name-brand-store exists and link to that one if it does like we do with product or category. We just update the current store product. TODO review this
-    func update(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: @escaping (ProviderResult<(listItem: ListItem, replaced: Bool)>) -> Void) {
+    func update(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, realmData: RealmData?, _ handler: @escaping (ProviderResult<(listItem: ListItem, replaced: Bool)>) -> Void) {
         
         // Remove a possible already existing item with same unique (name+brand) in the same list. Exclude editing item - since this is not being executed in a transaction with the upsert of the item, we should not remove it.
         DBProv.listItemProvider.deletePossibleListItemWithUnique(listItemInput.name, productBrand: listItemInput.brand, notUuid: updatingListItem.uuid, list: list) {[weak self] foundAndDeletedListItem in
         
-            self?.sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: nil) {[weak self] result in
+            self?.sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: nil, realmData: realmData) {[weak self] result in
                 
                 if let (section, product) = result.sucessResult {
 
@@ -366,7 +366,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // Retrieves section and product identified by semantic unique, if they don't exist creates new ones
-    fileprivate func sectionAndProductForAddUpdate(_ listItemInput: ListItemInput, list: List, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: @escaping (ProviderResult<(Section, QuantifiableProduct)>) -> Void) {
+    fileprivate func sectionAndProductForAddUpdate(_ listItemInput: ListItemInput, list: List, possibleNewSectionOrder: ListItemStatusOrder?, realmData: RealmData?, _ handler: @escaping (ProviderResult<(Section, QuantifiableProduct)>) -> Void) {
         Prov.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .todo, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
             
             if let section = result.sucessResult {
@@ -374,7 +374,7 @@ class ListItemProviderImpl: ListItemProvider {
                 // updateCategory: false: we don't touch product's category from list items - our inputs affect only the section. We use them though to create a category in the case a category with the section's name doesn't exists already. A product needs a category and it's logical to simply default this to the section if it doesn't exist, instead of making user enter a second input for the category. From user's perspective, most times category = section.
                 //Prov.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store, updateCategory: false)
                 let prototype = ProductPrototype(name: listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, brand: listItemInput.brand, baseQuantity: listItemInput.storeProductInput.baseQuantity, unit: listItemInput.storeProductInput.unit, edible: listItemInput.edible)
-                Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false) {(result: ProviderResult<(QuantifiableProduct, Bool)>) in
+                Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false, realmData: realmData) {(result: ProviderResult<(QuantifiableProduct, Bool)>) in
                     if let product = result.sucessResult {
                         handler(ProviderResult(status: .success, sucessResult: (section, product.0)))
                         

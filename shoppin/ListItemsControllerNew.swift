@@ -379,9 +379,11 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         onSectionSelected(section)
     }
     
-    // TODO!!!!!!!!!!!!!!!!! why this doesn't trigger the notification? Nowhere we pass notification token and the transaction executes successfully, with a change. Adding realm.add(obj, update: true) after the increment also didn't help. The increment of the cart, on the other side works as expected - it triggers a notification (in the cart) when no token is passed.
+    // TODO why this doesn't trigger the notification? Nowhere we pass notification token and the transaction executes successfully, with a change. Adding realm.add(obj, update: true) after the increment also didn't help. The increment of the cart, on the other side works as expected - it triggers a notification (in the cart) when no token is passed. UPDATE: In last tests this *was* triggering the notification - now passing token to prevent this - all local changes should be done without notifications, notifications are only for other clients! When testing sync with other clients, remove this todo if behavior is corrent.
     func onIncrementItem(_ tableViewListItem: ListItem, delta: Float) {
-        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, token: nil, successHandler{incrementedListItem in
+        guard let realmData = realmData else {logger.e("No realm data"); return}
+
+        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, token: realmData.token, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
 //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
 //            self?.onTableViewChangedQuantifiables()
