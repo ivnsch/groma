@@ -120,8 +120,18 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
 
         setMode(.readonly, animated: false) // default
         quantityView.delegate = self
+
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
+        addGestureRecognizer(longPress)
     }
-    
+
+    @objc func longPress(_ sender: UILongPressGestureRecognizer) {
+        switch sender.state {
+        case .began: setMode(quantityView.mode == .edit ? .readonly : .edit, animated: true)
+        default: break
+        }
+    }
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
