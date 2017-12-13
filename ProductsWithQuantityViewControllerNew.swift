@@ -490,9 +490,22 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         //        if let popup = self.sortByPopup {
         //            popup.dismissAnimated(true)
         //        } else {
-        let popup = MyTipPopup(customView: createPicker())
+        let picker = createPicker()
+
+        let popup = MyTipPopup(customView: picker)
         popup.presentPointing(at: sortByButton, in: view, animated: true)
         //        }
+        if let sortBy = sortBy {
+            let rowIndexMaybe: Int? = sortByOptions.index { tuple -> Bool in
+                tuple.value == sortBy.value
+                } ?? {
+                    logger.e("Invalid state: no matching sortby! sortBy: \(sortBy)", .ui)
+                    return nil
+                } ()
+            if let rowIndex = rowIndexMaybe {
+                picker.selectRow(rowIndex, inComponent: 0, animated: false)
+            }
+        }
     }
 
     fileprivate func createPicker() -> UIPickerView {

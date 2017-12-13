@@ -56,8 +56,21 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         if let popup = inventoriesPopup {
             popup.dismiss(animated: true)
         } else {
-            let popup = MyTipPopup(customView: createPicker())
+            let picker = createPicker()
+            let popup = MyTipPopup(customView: picker)
             popup.presentPointing(at: sender, in: view, animated: true)
+
+            if let selectedInventory = selectedInventory {
+                let rowIndexMaybe: Int? = inventories.index { inventory -> Bool in
+                    inventory.uuid == selectedInventory.uuid
+                    } ?? {
+                        logger.e("Invalid state: no matching inventory! selected inventory: \(selectedInventory)", .ui)
+                        return nil
+                    } ()
+                if let rowIndex = rowIndexMaybe {
+                    picker.selectRow(rowIndex, inComponent: 0, animated: false)
+                }
+            }
         }
     }
     

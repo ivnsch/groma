@@ -249,10 +249,18 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             popup.presentPointing(at: inventoriesButton, in: view, animated: true)
 
             let inventoryUuids = inventories.map{$0.uuid} // index of using uuids just in case - equals includes timestamps etc.
-            if let listToEdit = listToEdit, let row = inventoryUuids.index(of: listToEdit.inventory.uuid) {
+            if let selectedInventory = selectedInventory {
+                if let row = inventoryUuids.index(of: selectedInventory.uuid) {
+                    picker.selectRow(row, inComponent: 0, animated: false)
+                } else {
+                    logger.e("Invalid state = selected inventory can't be selected in picker. \(selectedInventory)", .ui)
+                }
+            } else if
+                let listToEdit = listToEdit,
+                let row = inventoryUuids.index(of: listToEdit.inventory.uuid) { // if user hasn't selected, select list's inventory
                 picker.selectRow(row, inComponent: 0, animated: false)
             }
-            
+
             if let view = view as? AddEditListControllerView {
                 view.popupFrame = popup.frame // include popup in tap area
             } else {
