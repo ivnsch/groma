@@ -35,14 +35,16 @@ class HelpProviderImpl: HelpProvider {
         
         //        // #new
         //        HelpItem(title: "How are the Lists, Cart, Inventory and History related?", text: "Shopping Lists are where you keep Lists of items you want to buy, when you marked them as bought in the Cart they go to the Inventory. The Inventory defaults to ‘Home’, but you can add other locations if you need. The best way to use Lists is to name each for the store where you will use it (this means that when you add prices it will be the right price for that store). When you mark an item as purchased the app also automatically adds it to your History.
-        
+
+        HelpItem(title: "How can I reorder sections?", text: "you can do a zoom out gesture (put 2 fingers on the screen and move them towards each other) over the list items to switch to section-only mode, where you can reorder sections. You leave with the opposite gesture."),
+
         HelpItem(title: "What is the relationship between categories and sections?", text: "Category is how you generally want to classify a product. E.g. for apples you probably would use 'fruit'. A Section is the area of the store where you find the product. The section can be different than the category! For example tuna, could have 'fish' as category but be in the 'canned food' section.\nProducts have always a category, which is used everywhere in the app. Sections only exist in Shopping Lists."),
         
         
-        HelpItem(title: "What are groups? Are they the same as recipes?", text: "Groups are a handy way of adding multiple items to a List at once. For example make a hamburger group with beef, buns, cheese and pickles, and add all the items to the List with only one click of a button – perfect for recipes you use often"),
-        
-        HelpItem(title: "What is the back store?", text: "This is where your List items go after you 'buy' them. You can move the back store items back to the to do List by tapping on 'reset' or tapping on each of them individually. The back store can only be accessed when there are items in it, by swiping the prices view (in the to do List) to the left."),
-        
+//        HelpItem(title: "What are groups? Are they the same as recipes?", text: "Groups are a handy way of adding multiple items to a List at once. For example make a hamburger group with beef, buns, cheese and pickles, and add all the items to the List with only one click of a button – perfect for recipes you use often"),
+
+//        HelpItem(title: "What is the back store?", text: "This is where your List items go after you 'buy' them. You can move the back store items back to the to do List by tapping on 'reset' or tapping on each of them individually. The back store can only be accessed when there are items in it, by swiping the prices view (in the to do List) to the left."),
+
         //        // #new
         //        HelpItem(title: "I set the price of a List item but it's not updated in other Lists.", text: "The prices of products, just like in real life, are store specific. That’s why Lists are linked to specific stores. When you set the price of an item this will affect only items from the same store of the List where you are in. When a List has no store, the update affects only items without a store."),
         
@@ -67,7 +69,7 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "How do I make sense of the report?", text: "The bar chart shows your monthly spend for the last year. 'Monthly average' is the average of what you have spent in the last year, 'Daily average in this month' is the average of what you have spent so far in the current month, 'Projected total this month' is an estimation of what you will spend in total in the current month based on what you have spent so far in this month. Tapping on a bar shows you a detailed view of its month. The pie chart shows the top categories and below you see an aggregate of all the purchased products."),
         
-        HelpItem(title: "Can I sync with other devices or users?", text: "This is currently in development and will be available in upcoming versions."),
+        HelpItem(title: "Can I share with other users in real time?", text: "You can share with other users in real time, by using the same login! If your current login is private (e.g. Facebook account) you have to create a new account which can be shared."),
         
         HelpItem(title: "Can I change the store that a List is linked to?", text: "No, once the List is submitted, the store can't be changed. If you need to do this you have to delete the List and create a new one with the new store."),
         
@@ -103,12 +105,14 @@ class HelpProviderImpl: HelpProvider {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     fileprivate static var helpItemsDE = [
-        
+
+        HelpItem(title: "Kann ich die Abteilungen einer Shopping-Liste umsortieren?", text: "Ja, du kannst eine zoom-out Geste machen über die Listeneinträge um in Abteilungen-Modus zu wechseln, wo du umsortieren kannst."),
+
         HelpItem(title: "Was ist der Unterschied zwischen Abteilungen und Kategorien?", text: "Kategorien ist wie du generell etwas einordnen willst. Die Abteilung ist der Ort im Laden, wo sich das Produkt befindet. Z.B. für Thunfisch könnte die Kategorie 'Fisch' lauten, und die Abteilung 'Dosenprodukte'."),
 
-        HelpItem(title: "Was ist das Zwischenlager?", text: "Das Zwischenlager dient zur Ablage von einzelnen Listeneinträgen, falls du nur ein Teil der Liste kaufst. Sobald alle Einträge gekauft sind, werden sie automatisch zurückgesetzt (in die Todo-Liste verschoben). Du kannst auch jederzeit die Einträge manuell zurücksetzen."),
-        
-        HelpItem(title: "Was sind Gruppen? Etwa Rezepte?", text: "Gruppen erleichtern das Hinzufügen zusammenhängender Einträge. Damit kannst du u.A. die Zutaten speichern, die du für Rezepte kaufen musst."),
+//        HelpItem(title: "Was ist das Zwischenlager?", text: "Das Zwischenlager dient zur Ablage von einzelnen Listeneinträgen, falls du nur ein Teil der Liste kaufst. Sobald alle Einträge gekauft sind, werden sie automatisch zurückgesetzt (in die Todo-Liste verschoben). Du kannst auch jederzeit die Einträge manuell zurücksetzen."),
+//
+//        HelpItem(title: "Was sind Gruppen? Etwa Rezepte?", text: "Gruppen erleichtern das Hinzufügen zusammenhängender Einträge. Damit kannst du u.A. die Zutaten speichern, die du für Rezepte kaufen musst."),
 
         HelpItem(title: "Kann ich Einträge global editieren? Was sind Produkte?", text: "Produkte sind die zugrundeliegende Einheit aller Einträge in dieser App. Um global Eigenschaften zu editieren, also so dass es auch in den Listen, Gruppen, Inventare, Verlauf und Statistiken gemacht wird, musst du es nur einmal in der 'Produktverwaltung' Ansicht machen. Ebenso, wenn du Produkte global löschen willst, musst du es nur einmal in dieser Ansicht machen."),
 
@@ -128,7 +132,7 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Wie ist der Bericht zu verstehen?", text: "Das Säulendiagramm zeigt dir deine monatlichen Ausgaben seitdem du angefangen hast, die App zu benutzen. 'Monatlicher Durchschnitt' ist der Durchschnitt von deinen Ausgaben in den Monaten wo du die App benutzt hast. 'Monatstagesdurchschnitt' ist der täglicher Durchschnitt von dem was du in diesem Monat ausgegeben hast. 'Gesch. Gesamtausgaben akt. Monat' ist die Schätzung von dem, was du in diesem Monat ausgeben wirst, anhand dessen was du bislang in diesem Monat ausgegeben hast. Wenn du eine Säule antippst kommst du zur Detail-Ansicht für den jeweiligen Monat. Da findest du ein Tortendiagramm mit den Kategorien wofür du am meisten ausgegeben hast und darunter ein Aggregat von den gekauften Produkten."),
         
         
-        HelpItem(title: "Kann ich mit anderen Geräten oder Benutzern synchronisieren?", text: "Dies befindet sich derzeit in Entwicklung und wird in kommenden Versionen verfügbar sein."),
+        HelpItem(title: "Kann ich mit anderen Nutzern in Echtzeit teilen?", text: "Ja, dafür müsst ihr euch mit dem gleichen Daten einloggen. Wenn dies nicht möglich ist, z.B. weil du mit deinem persönlichen Facebook Konto eingeloggt bist, muss ein neues Konto angelegt werden, das geteilt werden kann."),
         
         HelpItem(title: "Kann ich den Laden von einer Liste ändern?", text: "Nein, nachdem die Liste gespeichert wurde, kann der Laden nicht mehr geändert werden. Falls du dies brauchst, musst du die alte Liste löschen und eine neue mit dem neuen Laden erstellen."),
         
@@ -163,7 +167,9 @@ class HelpProviderImpl: HelpProvider {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     fileprivate static var helpItemsES = [
-        
+
+        HelpItem(title: "Puedo cambiar el orden de las secciones en una lista?", text: "Sí, para esto tienes que hacer un gesto de \"zoom out\" (ponder los dedos separados en la pantalla y unirlos), con lo que cambias al modo de secciones en donde puedes reordenarlas. Para volver al modo normal haz el gesto opuesto."),
+
         HelpItem(title: "Cuál es la diferencia entre categorías y secciones?", text: "Categoría es como clasificas un producto. Por ejemplo para manzanas probablemente usarías 'frutas'. Una sección es la parte del almacén donde encuentras el producto. La sección no siempre es lo mismo que la categoría! Por ejemplo atún, podría tener 'pez' como categoría pero estar en la sección 'enlatados'.\nProductos siempre tienen una categoría (en listas, grupos, inventarios, etc.) mientras que la sección sólo es utilizada en las listas."),
         
         HelpItem(title: "Qué es el depósito?", text: "Es el sitio a donde van tus ítems cuando no compras la lista completa. Los ítems en el depósito son movidos a la lista \"todo\" automáticamente cuando completas la lista. También los puedes mover manualmente. Para acceder el depósito arrastra la vista en donde aparece la cantidad de ítems en el depósito (en la parte inferior de la lista \"todo\"), hacia la izquierda y selecciona la vista que aparece atrás."),
@@ -186,7 +192,7 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "Cómo interpreto el reporte?", text: "La estadística de barras the muestra los gastos mensuales desde que empezaste a utilizar la app, hasta 1 año en el pasado. 'Promedio mensual' es el promedio de los gastos durante los meses que has usado la app. 'Promedio diario en este mes' es el promedio diario de lo que has gastado durante el mes actual. 'Gastos estimados para este mes'  es una estimación de lo que habrás gastado al final del mes actual (sólo para este mes). Pulsar en las barras te lleva a la vista de gastos para el mes correspondiente. El gráfico de torta muestra las categorías por las que más has gastado y abajo hay una lista de agregados de los productos que compraste durante el mes."),
         
-        HelpItem(title: "Puedo sincronizar con otros dispositivos u usuarios?", text: "Esto se encuentra actualmente en desarrollo y estará disponible en versiones próximas."),
+        HelpItem(title: "Puedo sincronizar con otros usuarios en tiempo real?", text: "Sí, para esto tienen todos que conectarse con el mismo usuario. Si esto no es posible (por ejemplo por que usas tu cuenta personal de Facebook) tienen que crear una nueva cuenta que se puede compartir."),
         
         HelpItem(title: "Puedo cambiar el almacén de una lista?", text: "No, después que guardas la lista, el almacén no se puede cambiar. Si necesitas cambiarlo tienes que borrar la lista y crear una nueva con el nuevo almacén."),
 
