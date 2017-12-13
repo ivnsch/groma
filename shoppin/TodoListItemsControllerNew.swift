@@ -37,7 +37,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     override var isEmpty: Bool {
-        return super.isEmpty && isCartOpen // Assumption: if prices view is expanded, cart contains items. So if price view is expanded it means we are not in an empty state.
+        return super.isEmpty && !isCartOpen // if cart is open it means there must be at least one item (when cart is empty it closes automatically)
     }
     
     override var tableViewBottomInset: CGFloat {
