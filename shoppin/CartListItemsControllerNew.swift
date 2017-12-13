@@ -50,18 +50,14 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     }
     
     override func updateQuantifiables() {
-        guard let list = currentList else {logger.e("No list"); return}
-
-        Prov.listItemsProvider.calculateCartStashAggregate(list: list, successHandler {[weak self] aggregate in
-            self?.showQuantifiables(aggregate: aggregate)
-        })
+        // The Todo controller calculates the aggregates (based on the current list, which is shared by Todo and cart) and updates all the views, including the cart
+        delegate?.onCartUpdatedQuantifiables()
     }
     
     func showQuantifiables(aggregate: ListItemsCartStashAggregate) {
         totalDonePriceButton.setTitle(aggregate.cartPrice.toLocalCurrencyString(), for: .normal)
-//        delegate?.onCartUpdatedQuantifiables()
     }
-    
+
     // Fixes random, rare freezes when coming back to todo controller. See http://stackoverflow.com/a/28919337/930450
     // Curiously implementing gestureRecognizerShouldBegin and returning always true seemed to fix it (tested a long time after it and the bug didn't happen again - could be of course that this was just luck, though normally it appears after switching todo/cart 100 or so times and tested more than this). Letting the count check anyways, since this seems to be the proper fix.
     // Note: I also tried implementing a UI test for this but swipe doesn't work well so need to test manually.

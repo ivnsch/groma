@@ -740,11 +740,11 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     func onChangeQuantity(_ listItem: ListItem, delta: Float) {
         guard let realmData = realmData else {logger.e("No realm data"); return}
 
-        Prov.listItemsProvider.increment(listItem, status: status, delta: delta, remote: true, token: realmData.token, successHandler{incrementedListItem in
+        Prov.listItemsProvider.increment(listItem, status: status, delta: delta, remote: true, token: realmData.token, successHandler{ [weak self] incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! review this todo - the cell is already being incremented in advance. Does this work correctly?
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
-            //            self?.onTableViewChangedQuantifiables()
+            self?.onTableViewChangedQuantifiables()
         })
     }
     
