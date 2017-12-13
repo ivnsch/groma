@@ -18,4 +18,6 @@ public struct ViewTags {
     public static let WebsocketSenderNotification = 127
     public static let WebsocketErrorNotification = 128
     public static let NotePopup = 129
+    public static let StrikeLine = 130
+
 }

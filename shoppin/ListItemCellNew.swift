@@ -33,7 +33,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     @IBOutlet weak var noteButtonWidthConstraint: NSLayoutConstraint!
     
 //    @IBOutlet weak var quantityLabelCenterVerticallyConstraint: NSLayoutConstraint!
-    
+
     @IBOutlet weak var noteButton: UIButton!
     
     @IBOutlet weak var sectionColorView: UIView!
@@ -114,13 +114,12 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
                 } else {
                     backgroundColor = status.map{$0 == .todo ? UIColor.white : Theme.lightBlue} ?? UIColor.white
                 }
-                
+
                 updateStrikeLine()
             }
         }
     }
-    
-    
+
     fileprivate func updateStrikeLine() {
     
         if let strikeLine = strikeLine {
@@ -131,19 +130,26 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
     
         // TODO nameLabel position is not updated yet (centerVerticallyNameLabelConstraint.constant doesn't have effect) where should we call this to not use have to use centerVerticallyNameLabelConstraint.constant? NOTE: Still not displayer correctly in some cells.
 //        let line = UIView(frame: CGRect(x: nameLabel.x - 10, y: height / 2 - nameLabel.height / 2 - strokeWidth / 2, width: self.nameLabel.width + 20, height: strokeWidth))
-        let line = UIView(frame: CGRect(x: nameLabel.x - 10, y: height / 2 - centerVerticallyNameLabelConstraint.constant - strokeWidth / 2, width: self.nameLabel.width + 20, height: strokeWidth))
+        // NOTE: Using constant cell height because final height not calculated yet here (also not in did add to superview / window, also not after layout calls - only when calling with a delay)
+        let contentViewHeight = DimensionsManager.defaultCellHeight
+        let line = UIView(frame: CGRect(x: nameLabel.x - 10, y: (contentViewHeight / 2) - centerVerticallyNameLabelConstraint.constant - (strokeWidth / 2), width: self.nameLabel.width + 20, height: strokeWidth))
         line.backgroundColor = UIColor(hexString: "222222")
-        
-        nameLabel.superview?.addSubview(line)
+
+        // Not sure this is necessary - added a 0.3 delay to add view and with recycling it may make sense to do an extra check to avoid multiple additions
+        line.tag = ViewTags.StrikeLine
+        if nameLabel.superview?.viewWithTag(ViewTags.StrikeLine) == nil {
+            nameLabel.superview?.addSubview(line)
+        }
+
         nameLabel.superview?.bringSubview(toFront: line)
         
         line.layer.anchorPoint = CGPoint(x: 0, y: line.layer.anchorPoint.y)
         line.frame.origin.x = line.frame.origin.x - line.width / 2 // back to original position
-        
+
         let scaleX: CGFloat = startStriked ? 1 : 0
         line.transform = CGAffineTransform(scaleX: scaleX, y: 1) // Note due to bug in iOS this can't be 0 (it never appears in this case)
         line.isHidden = startStriked ? false : true // without this (when !startStriked) the line appears briefly when the list items controller animates in
-        
+
         self.strikeLine = line
     }
     
