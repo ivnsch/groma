@@ -110,7 +110,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     }
 
     @IBAction func onRegisterTap(_ sender: UIButton) {
-        register()
+//        register()
     }
     
 //    @IBAction func onLoginTap(_ sender: UIButton) {
