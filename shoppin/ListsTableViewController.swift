@@ -193,13 +193,9 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             // Note: order of lines important here, list has to be set first for topbar dot to be positioned correctly right of the title
             listItemsController?.currentList = (model as! ExpandableTableViewListModel).list
             listItemsController?.setThemeColor(weakCell.backgroundColor!)
-
+            listItemsController?.onExpand(true)
             // This has to be after onExpand so it gets the updated navbar frame height! (which is set in positionTitleLabelLeft...)
             listItemsController?.topQuickAddControllerManager = listItemsController?.initTopQuickAddControllerManager()
-        }
-        
-        listItemsController.onViewDidAppear = {[weak listItemsController] in
-            listItemsController?.onExpand(true)
         }
 
         return listItemsController
