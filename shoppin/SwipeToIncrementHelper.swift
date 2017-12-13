@@ -12,7 +12,10 @@ import Providers
 protocol SwipeToIncrementHelperDelegate: class {
     func currentQuantity() -> Float
     func onQuantityUpdated(_ quantity: Float)
+
+    // TODO rename this in submitQuantity - it's called only if quantity was changed
     func onFinishSwipe()
+
     var swipeToIncrementEnabled: Bool {get}
 }
 
@@ -25,7 +28,8 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
     fileprivate var panStartPoint: CGPoint!
     
     fileprivate var initQuantitySlider: Float = 0 // capture quantity when we start sliding
-    
+    fileprivate var updatedQuantitySlider: Float?
+
     weak var delegate: SwipeToIncrementHelperDelegate?
     
     init(view: UIView, cancelTouches: Bool = true) {
@@ -48,7 +52,7 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
         guard let view = view else {logger.e("No view"); return}
         guard let delegate = delegate else {logger.e("No delegate"); return}
 
-        let movingHorizontally = abs(recognizer.velocity(in: view).x) > abs(recognizer.velocity(in: view).y)
+        let movingHorizontally = abs(recognizer.velocity(in: view).x) >= abs(recognizer.velocity(in: view).y)
         
         switch recognizer.state {
         case .began:
@@ -64,6 +68,8 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
                 let deltaForQuantity = Int(deltaX / 20)
                 let updatedQuantity = max(0, initQuantitySlider + Float(deltaForQuantity))
                 delegate.onQuantityUpdated(updatedQuantity)
+
+                updatedQuantitySlider = updatedQuantity
             }
     
         case .failed:
@@ -78,8 +84,10 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
             
             guard delegate.swipeToIncrementEnabled else {return}
 
-            if movingHorizontally {
-                delegate.onFinishSwipe()
+            if let updatedQuantity = updatedQuantitySlider {
+                if updatedQuantity != initQuantitySlider {
+                    delegate.onFinishSwipe()
+                }
             }
             
         default:

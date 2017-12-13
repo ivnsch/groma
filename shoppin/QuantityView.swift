@@ -30,7 +30,7 @@ class QuantityView: UIView, UITextFieldDelegate {
     @IBOutlet weak var minusBottomWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var plusBottomWidthConstraint: NSLayoutConstraint!
     
-    fileprivate var mode: QuantityViewMode = .edit
+    fileprivate(set) var mode: QuantityViewMode = .edit
     
     fileprivate var showPlusDeltaTimerTask: DispatchWorkItem?
     fileprivate var showMinusDeltaTimerTask: DispatchWorkItem?
