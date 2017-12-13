@@ -163,6 +163,7 @@ class StatsViewController: UIViewController
     fileprivate func loadInventories() {
         Prov.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             self?.inventoryPicker?.inventories = inventories.toArray()
+            self?.showIsEmpty(inventories.isEmpty)
         })
     }
     
@@ -179,7 +180,6 @@ class StatsViewController: UIViewController
 //        picker.delegate = self
 //        picker.dataSource = self
 //        return picker
-//    }
 
 //    @IBAction func onTimePeriodTap(sender: UIButton) {
 //        if let popup = self.sortByPopup {
@@ -225,7 +225,7 @@ class StatsViewController: UIViewController
         if let inventory = selectedInventory {
             Prov.statsProvider.history(timePeriod, group: AggregateGroup.all, inventory: inventory, successHandler{[weak self] aggregate in
                 if self?.aggregate?.timePeriod != aggregate.timePeriod || self?.aggregate?.monthYearAggregates ?? [] != aggregate.monthYearAggregates { // don't reload if there are no changes
-                    self?.emptyStatsView.setHiddenAnimated(!aggregate.monthYearAggregates.isEmpty)
+                    self?.showIsEmpty(!aggregate.monthYearAggregates.isEmpty)
                     self?.aggregate = aggregate
                     
                     if !aggregate.monthYearAggregates.isEmpty {
@@ -238,7 +238,11 @@ class StatsViewController: UIViewController
             print("Warn: StatsViewController.updateChart: Can't update chart because there's no selected inventory")
         }
     }
-    
+
+    fileprivate func showIsEmpty(_ isEmpty: Bool) {
+        emptyStatsView.setHiddenAnimated(!isEmpty)
+    }
+
     fileprivate func setTimePeriod(_ timePeriod: TimePeriodWithText) {
         currentTimePeriod = timePeriod.timePeriod
         updateChart(timePeriod.timePeriod)
