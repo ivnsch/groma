@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Delegate-->
         <scene sceneID="oOj-9D-kDN">
             <objects>
-                <viewController storyboardIdentifier="LoginController" id="rg4-qz-Lat" customClass="LoginViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginController" id="rg4-qz-Lat" customClass="LoginViewController" customModule="groma" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Pdv-bE-LUR"/>
                         <viewControllerLayoutGuide type="bottom" id="5Cc-Oq-zW1"/>
@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yt4-Ha-XoG" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yt4-Ha-XoG" customClass="LineTextField" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="20" y="60" width="335" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="ZVq-6j-gZY"/>
@@ -40,12 +40,12 @@
                                     <outlet property="delegate" destination="rg4-qz-Lat" id="KjX-KU-SIR"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EgA-OH-X0u" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EgA-OH-X0u" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="95" y="190" width="186" height="50"/>
                                 <color key="backgroundColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="186" id="Hfc-AW-q9v"/>
-                                    <constraint firstAttribute="height" constant="50" id="mfw-SR-EsA" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                    <constraint firstAttribute="height" constant="50" id="mfw-SR-EsA" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                                 <integer key="value" value="40"/>
@@ -83,7 +83,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t83-R4-Wil" customClass="FBSDKLoginButton">
                                 <rect key="frame" x="63" y="391" width="250" height="45"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="KpM-Mj-o2X" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                    <constraint firstAttribute="height" constant="45" id="KpM-Mj-o2X" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                                 <integer key="value" value="40"/>
@@ -120,7 +120,7 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="OFd-Vd-pYg"/>
-                                    <constraint firstAttribute="height" constant="45" id="iIg-YA-BDh" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                    <constraint firstAttribute="height" constant="45" id="iIg-YA-BDh" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                                 <integer key="value" value="40"/>
@@ -145,7 +145,7 @@
                                 <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v0i-2j-jaS" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v0i-2j-jaS" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="159" y="330" width="57" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Register">
@@ -161,7 +161,7 @@
                                     <action selector="onRegisterTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="b1V-IP-ISq"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVU-Pz-cxq" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVU-Pz-cxq" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="126" y="270" width="123" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Forgot password?">
@@ -176,7 +176,7 @@
                                     <action selector="onForgotPasswordTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="42H-u3-AaO"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yQG-pO-NNA" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yQG-pO-NNA" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="136" y="330" width="104" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Use app offline">
@@ -197,7 +197,7 @@
                                 <color key="textColor" red="0.49803921569999998" green="0.49803921569999998" blue="0.49803921569999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TsF-zg-FLy" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TsF-zg-FLy" customClass="LineTextField" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="20" y="120" width="335" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="A2r-64-xJw"/>
@@ -216,7 +216,7 @@
                                     <outlet property="delegate" destination="rg4-qz-Lat" id="NXN-iA-fbp"/>
                                 </connections>
                             </textField>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IE2-Wn-ab8" customClass="EyeView" customModule="shoppin" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IE2-Wn-ab8" customClass="EyeView" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="315" y="125" width="40" height="30"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -229,7 +229,7 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BYN-Hu-cW2" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                            <button hidden="YES" opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BYN-Hu-cW2" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="62.5" y="521" width="250" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="579-uM-Wtn"/>
@@ -250,7 +250,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="EgA-OH-X0u" firstAttribute="top" secondItem="TsF-zg-FLy" secondAttribute="bottom" constant="30" id="1k1-lB-RYq" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                            <constraint firstItem="EgA-OH-X0u" firstAttribute="top" secondItem="TsF-zg-FLy" secondAttribute="bottom" constant="30" id="1k1-lB-RYq" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                         <integer key="value" value="10"/>
@@ -271,7 +271,7 @@
                             <constraint firstAttribute="trailing" secondItem="Yt4-Ha-XoG" secondAttribute="trailing" constant="20" id="A7N-aN-EYy" customClass="LeftRightBigPaddingConstraint"/>
                             <constraint firstAttribute="trailing" secondItem="D7c-wL-aYY" secondAttribute="trailing" constant="20" id="B2D-ZC-c6e"/>
                             <constraint firstAttribute="centerX" secondItem="v0i-2j-jaS" secondAttribute="centerX" id="EV7-Ej-izx"/>
-                            <constraint firstItem="QVU-Pz-cxq" firstAttribute="top" secondItem="EgA-OH-X0u" secondAttribute="bottom" constant="30" id="LFI-VZ-2A7" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                            <constraint firstItem="QVU-Pz-cxq" firstAttribute="top" secondItem="EgA-OH-X0u" secondAttribute="bottom" constant="30" id="LFI-VZ-2A7" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                         <real key="value" value="20"/>
@@ -292,7 +292,7 @@
                             <constraint firstItem="t83-R4-Wil" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="NDQ-dn-mEJ"/>
                             <constraint firstItem="D7c-wL-aYY" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="20" id="NYK-Oa-BEo"/>
                             <constraint firstItem="IE2-Wn-ab8" firstAttribute="trailing" secondItem="TsF-zg-FLy" secondAttribute="trailing" id="UCi-Pg-vM6"/>
-                            <constraint firstItem="Crr-TG-4lg" firstAttribute="top" secondItem="t83-R4-Wil" secondAttribute="bottom" constant="20" id="UbY-6B-uvg" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                            <constraint firstItem="Crr-TG-4lg" firstAttribute="top" secondItem="t83-R4-Wil" secondAttribute="bottom" constant="20" id="UbY-6B-uvg" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                         <integer key="value" value="5"/>
@@ -311,7 +311,7 @@
                             </constraint>
                             <constraint firstItem="D7c-wL-aYY" firstAttribute="top" secondItem="Pdv-bE-LUR" secondAttribute="bottom" constant="10" id="WY8-qe-Y5s"/>
                             <constraint firstItem="IE2-Wn-ab8" firstAttribute="bottom" secondItem="TsF-zg-FLy" secondAttribute="bottom" constant="-5" id="aN0-ye-UEn"/>
-                            <constraint firstItem="TsF-zg-FLy" firstAttribute="top" secondItem="Yt4-Ha-XoG" secondAttribute="bottom" constant="20" id="bbt-tb-zJh" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                            <constraint firstItem="TsF-zg-FLy" firstAttribute="top" secondItem="Yt4-Ha-XoG" secondAttribute="bottom" constant="20" id="bbt-tb-zJh" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                         <integer key="value" value="10"/>
@@ -329,7 +329,7 @@
                                 </userDefinedRuntimeAttributes>
                             </constraint>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="trailing" secondItem="Yt4-Ha-XoG" secondAttribute="trailing" id="bvy-eM-TR4"/>
-                            <constraint firstItem="v0i-2j-jaS" firstAttribute="top" secondItem="QVU-Pz-cxq" secondAttribute="bottom" constant="30" id="d4g-t2-NwM" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                            <constraint firstItem="v0i-2j-jaS" firstAttribute="top" secondItem="QVU-Pz-cxq" secondAttribute="bottom" constant="30" id="d4g-t2-NwM" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                         <integer key="value" value="10"/>
@@ -354,7 +354,7 @@
                             <constraint firstItem="3G3-DS-C6O" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="l47-dr-7sR"/>
                             <constraint firstItem="Yt4-Ha-XoG" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="20" id="moB-wI-T5L" customClass="LeftRightBigPaddingConstraint" customModule="shoppin"/>
                             <constraint firstItem="Yt4-Ha-XoG" firstAttribute="top" secondItem="bQi-hy-w8S" secondAttribute="top" constant="60" id="pAc-tg-rHQ"/>
-                            <constraint firstItem="t83-R4-Wil" firstAttribute="top" secondItem="bQi-hy-w8S" secondAttribute="top" constant="391" id="sKv-n3-veH" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                            <constraint firstItem="t83-R4-Wil" firstAttribute="top" secondItem="bQi-hy-w8S" secondAttribute="top" constant="391" id="sKv-n3-veH" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                         <integer key="value" value="260"/>
@@ -372,7 +372,7 @@
                                 </userDefinedRuntimeAttributes>
                             </constraint>
                             <constraint firstItem="yQG-pO-NNA" firstAttribute="top" secondItem="v0i-2j-jaS" secondAttribute="top" id="ubk-Vt-DK9"/>
-                            <constraint firstItem="BYN-Hu-cW2" firstAttribute="top" secondItem="Crr-TG-4lg" secondAttribute="bottom" constant="20" id="ubz-Fl-Lu5" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                            <constraint firstItem="BYN-Hu-cW2" firstAttribute="top" secondItem="Crr-TG-4lg" secondAttribute="bottom" constant="20" id="ubz-Fl-Lu5" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                         <integer key="value" value="5"/>
