@@ -46,12 +46,18 @@ public enum Model : String {
 }
 
 public extension UIDevice {
-    public var type: Model {
+
+    public var modelCode: String {
         var systemInfo = utsname()
         uname(&systemInfo)
-        let modelCode = withUnsafeMutablePointer(to: &systemInfo.machine) {
+        return withUnsafeMutablePointer(to: &systemInfo.machine) {
             ptr in String(cString: UnsafeRawPointer(ptr).assumingMemoryBound(to: CChar.self))
         }
+    }
+
+    public var type: Model {
+
+        let modelCode = self.modelCode
         var modelMap : [ String : Model ] = [
             "i386"       : .simulator,
             "x86_64"     : .simulator,

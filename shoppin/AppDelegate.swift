@@ -88,13 +88,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         func onIPhoneX() {
             Theme.navBarHeight = Theme.notchNavBarHeight
         }
-        if UIDevice.current.type == .iPhoneX {
-            onIPhoneX()
-        } else if UIDevice.current.type == .simulator {
+//        if UIDevice.current.type == .iPhoneX {
+//            onIPhoneX()
+//        } else if UIDevice.current.type == .simulator {
             if UIDevice.current.userInterfaceIdiom == .phone && UIScreen.main.nativeBounds.height == 2436 {
                 onIPhoneX()
             }
-        }
+//        }
     }
 
     var notificationToken: NotificationToken!

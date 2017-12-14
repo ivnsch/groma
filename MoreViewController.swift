@@ -11,7 +11,7 @@ import UIKit
 import Providers
 
 enum MoreItemType {
-    case history, manageProduct, user, settings, help, share, feedback, community, watchIntro, about
+    case history, manageProduct, user, settings, help, share, feedback, community, watchIntro, about, deviceInfo
 }
 
 typealias MoreItem = (type: MoreItemType, text: String)
@@ -32,7 +32,7 @@ class MoreViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         items = [
             MoreItem(type: .history, text: trans("more_history")),
             MoreItem(type: .manageProduct, text: trans("title_manage_database")),
@@ -42,7 +42,8 @@ class MoreViewController: UITableViewController {
             MoreItem(type: .feedback, text: trans("more_feedback")),
 //            MoreItem(type: .community, text: trans("more_community")),
             MoreItem(type: .watchIntro, text: trans("more_intro")),
-            MoreItem(type: .about, text: trans("more_about"))
+            MoreItem(type: .about, text: trans("more_about")),
+            MoreItem(type: .deviceInfo, text: "\(UIDevice.current.type), \(UIScreen.main.nativeBounds.height)")
         ]
         
         if CountryHelper.isInServerSupportedCountry() {
@@ -50,6 +51,7 @@ class MoreViewController: UITableViewController {
         }
         
         tableView.reloadData()
+
     }
     
     fileprivate func styleBackButton() {
@@ -109,6 +111,8 @@ class MoreViewController: UITableViewController {
         case .about:
             let controller = UIStoryboard.aboutViewController()
             navigationController?.pushViewController(controller, animated: true)
+
+        case .deviceInfo: break
         }
     }
     
