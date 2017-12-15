@@ -43,7 +43,7 @@ class MoreViewController: UITableViewController {
 //            MoreItem(type: .community, text: trans("more_community")),
             MoreItem(type: .watchIntro, text: trans("more_intro")),
             MoreItem(type: .about, text: trans("more_about")),
-            MoreItem(type: .deviceInfo, text: "\(UIDevice.current.type), \(UIScreen.main.nativeBounds.height)")
+            MoreItem(type: .deviceInfo, text: "\(UIDevice.current.modelCode), \(UIScreen.main.nativeBounds.height)")
         ]
         
         if CountryHelper.isInServerSupportedCountry() {
