@@ -376,7 +376,11 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                     guard let noneUnit = units.findFirst({$0.id == .none}) else {
                         let errorMsg = "2 Invalid states: (1) Didn't find a quantifiable product for a product, (2) couldn't retrieve .none unit -crash!"
                         logger.e(errorMsg)
-                        fatalError(errorMsg)
+                        // give time for the error log to be sent otherwise it doesn't appear in swiftybeaver
+                        delay(1) {
+                            fatalError(errorMsg)
+                        }
+                        return
                     }
                     
                     let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: noneUnit, product: product)
