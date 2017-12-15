@@ -108,7 +108,8 @@ public extension UIDevice {
             "iPhone9,4"  : .iPhone7plus,
             "iPhone10,1" : .iPhone8,
             "iPhone10,2" : .iPhone8plus,
-            "iPhone10,3" : .iPhoneX
+            "iPhone10,3" : .iPhoneX,
+            "iPhone10,6" : .iPhoneX
         ]
         
         if let key = NSString(cString: modelCode, encoding: String.Encoding.utf8.rawValue).map({$0 as String}) {
