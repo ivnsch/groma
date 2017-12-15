@@ -9,7 +9,7 @@ project 'Providers/Providers.xcodeproj'
 def shared
     pod 'Reachability', '~> 3.2'
     pod 'RealmSwift', '~> 3.0.2'
-    pod 'SwiftyBeaver'
+    pod 'SwiftyBeaver', '~> 1.5.0'
 end
 
 
