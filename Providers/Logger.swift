@@ -34,9 +34,19 @@ public class Logger {
     public init() { }
 
     public func configure() {
-        let console = ConsoleDestination()
-        console.minLevel = .verbose
-        log.addDestination(console)
+        #if DEBUG
+            let console = ConsoleDestination()
+            console.minLevel = .verbose
+            log.addDestination(console)
+            logger.i("Console logger configured (debug mode only)", .env)
+        #else
+            let platform = SBPlatformDestination(appID: "aJpnwd",
+                                                 appSecret: "dzg0cOPJLgq42azuIwkyzyckudaskkvj",
+                                                 encryptionKey: "cwUdxCS4160sih6gxsefe9l9jayhoe55")
+            platform.minLevel = .warning
+            log.addDestination(platform)
+            print("Cloud logger configured (release mode only)")
+        #endif
     }
 
     public func v(_ message: @autoclosure () -> Any, _ tags: LoggerTag..., file: String = #file,
