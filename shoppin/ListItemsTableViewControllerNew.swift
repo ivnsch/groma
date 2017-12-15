@@ -351,13 +351,15 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     func onItemSwiped(_ listItem: ListItem) {
         
         guard let indexPath = indexPathFor(listItem: listItem) else {logger.e("Invalid state: No indexPath for list item: \(listItem.shortDebugDescription)"); return}
-        
-        listItemsTableViewDelegate?.onListItemSwiped(listItem, indexPath: indexPath)
-        
-        if tableView.numberOfRows(inSection: indexPath.section) == 1 {
-            tableView.deleteSections(IndexSet([indexPath.section]), with: .top)
-        } else {
-            tableView.deleteRows(at: [indexPath], with: .top)
+
+        tableView.wrapUpdates { [weak self] in
+            self?.listItemsTableViewDelegate?.onListItemSwiped(listItem, indexPath: indexPath)
+
+            if self?.tableView.numberOfRows(inSection: indexPath.section) == 1 {
+                self?.tableView.deleteSections(IndexSet([indexPath.section]), with: .top)
+            } else {
+                self?.tableView.deleteRows(at: [indexPath], with: .top)
+            }
         }
     }
     
