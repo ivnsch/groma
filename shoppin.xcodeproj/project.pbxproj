@@ -89,6 +89,9 @@
 		6ACFFBEE1FE55C890000DDEB /* IngredientDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBED1FE55C890000DDEB /* IngredientDataController.swift */; };
 		6ACFFBF11FE570AF0000DDEB /* SelectIngredientDataHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBF01FE570AF0000DDEB /* SelectIngredientDataHeader.swift */; };
 		6ACFFBF31FE5716F0000DDEB /* SelectIngredientDataHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ACFFBF21FE5716F0000DDEB /* SelectIngredientDataHeader.xib */; };
+		6ACFFBF51FE5BEC50000DDEB /* MoundsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBF41FE5BEC50000DDEB /* MoundsView.swift */; };
+		6ACFFBF71FE5C0160000DDEB /* IngredientQuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBF61FE5C0160000DDEB /* IngredientQuantityView.swift */; };
+		6ACFFBF91FE5C4EA0000DDEB /* IngredientQuantityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ACFFBF81FE5C4EA0000DDEB /* IngredientQuantityView.xib */; };
 		6AD51A8F1E4F5E350053934E /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */; };
 		6AD51AAF1E512D7F0053934E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AAE1E512D7F0053934E /* String.swift */; };
 		6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51ABE1E512FAA0053934E /* UIColor.swift */; };
@@ -564,6 +567,9 @@
 		6ACFFBED1FE55C890000DDEB /* IngredientDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientDataController.swift; sourceTree = "<group>"; };
 		6ACFFBF01FE570AF0000DDEB /* SelectIngredientDataHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectIngredientDataHeader.swift; sourceTree = "<group>"; };
 		6ACFFBF21FE5716F0000DDEB /* SelectIngredientDataHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectIngredientDataHeader.xib; sourceTree = "<group>"; };
+		6ACFFBF41FE5BEC50000DDEB /* MoundsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoundsView.swift; sourceTree = "<group>"; };
+		6ACFFBF61FE5C0160000DDEB /* IngredientQuantityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientQuantityView.swift; sourceTree = "<group>"; };
+		6ACFFBF81FE5C4EA0000DDEB /* IngredientQuantityView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IngredientQuantityView.xib; sourceTree = "<group>"; };
 		6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		6AD51AAE1E512D7F0053934E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		6AD51ABE1E512FAA0053934E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -1197,6 +1203,8 @@
 				6ACFFBED1FE55C890000DDEB /* IngredientDataController.swift */,
 				6ACFFBF01FE570AF0000DDEB /* SelectIngredientDataHeader.swift */,
 				6ACFFBF21FE5716F0000DDEB /* SelectIngredientDataHeader.xib */,
+				6ACFFBF61FE5C0160000DDEB /* IngredientQuantityView.swift */,
+				6ACFFBF81FE5C4EA0000DDEB /* IngredientQuantityView.xib */,
 			);
 			name = ingredient;
 			sourceTree = "<group>";
@@ -2343,6 +2351,7 @@
 				6AD51AEA1E5136880053934E /* ViewTags.swift */,
 				6AF46EBF1E5CE19A00BBFF4C /* PickerCollectionView.swift */,
 				6AF0C27D1E646FC300FE14FD /* FillShapeView.swift */,
+				6ACFFBF41FE5BEC50000DDEB /* MoundsView.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -2656,6 +2665,7 @@
 				EB76A7A51BEE8CD700486F30 /* AddEditPlanItemController.xib in Resources */,
 				6A407ABE1E33A44400D77405 /* AddRecipeIngredientCell.xib in Resources */,
 				EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */,
+				6ACFFBF91FE5C4EA0000DDEB /* IngredientQuantityView.xib in Resources */,
 				EB4B39E01CED43B400B41063 /* Register.storyboard in Resources */,
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
 				6AE41A171E49E1E800B8459D /* SelectQuantifiable.storyboard in Resources */,
@@ -2851,6 +2861,7 @@
 				EB0A05901BDFCE8200D1E29D /* ManageProductsViewController.swift in Sources */,
 				EB1B36541BC31B16003519F2 /* HistoryItemGroupHeaderView.swift in Sources */,
 				EB1B365D1BC4653C003519F2 /* PlanTableViewCell.swift in Sources */,
+				6ACFFBF51FE5BEC50000DDEB /* MoundsView.swift in Sources */,
 				EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */,
 				EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */,
 				6A7C54BE1E43F03A00300F8D /* StashListItemsControllerNew.swift in Sources */,
@@ -3068,6 +3079,7 @@
 				EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */,
 				EBF162E21A3C83D50048E37C /* ListItemsViewSection.swift in Sources */,
 				EBF1A1541B82213200F34105 /* HistoryViewController.swift in Sources */,
+				6ACFFBF71FE5C0160000DDEB /* IngredientQuantityView.swift in Sources */,
 				6A05647C1E8C628F00E5C74D /* CenterAlignedCollectionViewFlowLayout.swift in Sources */,
 				EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */,
 				EB22C7111C4B02EE00285352 /* ShareAppViewController.swift in Sources */,

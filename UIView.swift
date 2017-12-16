@@ -326,4 +326,14 @@ extension UIView {
         transform = transform.translatedBy(x: offset.x, y: offset.y)
         return offset
     }
+
+    // Changes the anchor of view without changing its position. Returns internal translation in pt
+    // Uses center translation instead of transform
+    func setAnchorWithoutMovingNoTransform(_ anchor: CGPoint) -> CGPoint {
+        let offsetAnchor = CGPoint(x: anchor.x - layer.anchorPoint.x, y: anchor.y - layer.anchorPoint.y)
+        let offset = CGPoint(x: frame.width * offsetAnchor.x, y: frame.height * offsetAnchor.y)
+        layer.anchorPoint = anchor
+        center = CGPoint(x: center.x + offset.x, y: center.y + offset.y)
+        return offset
+    }
 }

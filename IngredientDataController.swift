@@ -14,13 +14,15 @@ class IngredientDataController: UITableViewController {
     weak var controller: QuickAddListItemViewController?
 
     var inputs: SelectIngredientDataControllerInputs = SelectIngredientDataControllerInputs()
-    var unitsCollectionView: UICollectionView!
+    fileprivate var unitsCollectionView: UICollectionView!
     weak var unitDelegate: SelectUnitControllerDelegate?
     fileprivate var unitsDataSource: UnitsDataSource?
     fileprivate var unitsDelegate: UnitsDelegate? // arc
     fileprivate var unitNames: [String] = [] // we need this because we can't touch the Realm Units in the autocompletions thread (get diff. thread exception). So we have to map to Strings in advance.
     fileprivate let unitCellSize = CGSize(width: 70, height: 50)
     fileprivate var currentNewUnitInput: String?
+
+    fileprivate var quantityView: IngredientQuantityView!
 
     var cellCount = 0
 
@@ -38,18 +40,20 @@ class IngredientDataController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let flowLayout = UICollectionViewFlowLayout()
-        unitsCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
-
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-
         initUnitsCollectionView()
+        initQuantityView()
 
         cellCount = 3
         reload()
     }
 
     fileprivate func initUnitsCollectionView() {
+
+        let flowLayout = UICollectionViewFlowLayout()
+        unitsCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+
         let delegate = UnitsDelegate(delegate: self)
         unitsCollectionView.delegate = delegate
         unitsDelegate = delegate
@@ -68,6 +72,10 @@ class IngredientDataController: UITableViewController {
             self?.unitsCollectionView.reloadData()
             self?.reload()
         })
+    }
+
+    fileprivate func initQuantityView() {
+        quantityView = IngredientQuantityView.createView()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -97,10 +105,19 @@ class IngredientDataController: UITableViewController {
         switch indexPath.row {
         case 0:
             cell.contentView.addSubview(unitsCollectionView)
-            unitsCollectionView.frame = cell.contentView.bounds
+            unitsCollectionView.frame = cell.contentView.bounds // appears to be necessary
             unitsCollectionView.fillSuperview()
             return cell
-        case 1: return cell
+        case 1:
+            cell.contentView.addSubview(quantityView)
+            quantityView.frame = cell.contentView.bounds // appears to be necessary
+            quantityView.fillSuperview()
+
+            if let unitsDataSource = unitsDataSource, let units = unitsDataSource.units {
+                let moundUnit = units.findFirst { $0.id == .spoon}
+                quantityView.configure(unit: moundUnit!, fraction: Fraction(numerator: 1, denominator: 2))
+            }
+            return cell
         case 2: return cell
         default: fatalError("Only 3 cells supported")
         }

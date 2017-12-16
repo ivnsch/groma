@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="IngredientQuantityView" customModule="groma" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="330"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="I9w-sI-Dzx" customClass="ASValueTrackingSlider">
+                    <rect key="frame" x="28" y="220" width="187" height="31"/>
+                    <connections>
+                        <action selector="snapValue:" destination="iN0-l3-epB" eventType="valueChanged" id="EDo-aC-Duq"/>
+                    </connections>
+                </slider>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Zj-yk-Q0t">
+                    <rect key="frame" x="243" y="220" width="102" height="30"/>
+                    <state key="normal" title="Enter manually"/>
+                    <connections>
+                        <action selector="onTapEnterManually:" destination="iN0-l3-epB" eventType="touchUpInside" id="OOj-BV-Qol"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l3n-Dx-To8">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="130"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="130" id="tjW-Fn-Xez"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AXt-PR-8di">
+                    <rect key="frame" x="0.0" y="130" width="375" height="50"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="rOo-ds-L7Z" customClass="QuantityView" customModule="groma" customModuleProvider="target">
+                            <rect key="frame" x="67" y="0.0" width="240" height="50"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="Gyd-Hl-udE"/>
+                        <constraint firstItem="rOo-ds-L7Z" firstAttribute="top" secondItem="AXt-PR-8di" secondAttribute="top" id="Nd2-3d-0if"/>
+                        <constraint firstAttribute="bottom" secondItem="rOo-ds-L7Z" secondAttribute="bottom" id="PiA-Bl-g9X"/>
+                        <constraint firstItem="rOo-ds-L7Z" firstAttribute="centerX" secondItem="AXt-PR-8di" secondAttribute="centerX" id="iBS-5d-MbM"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="40" translatesAutoresizingMaskIntoConstraints="NO" id="1dV-Ty-4nv" customClass="EditableFractionView" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="30" y="270" width="240" height="40"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="iCe-Qi-A7D"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="AXt-PR-8di" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="0CB-iF-GMp"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="8Zj-yk-Q0t" secondAttribute="trailing" constant="30" id="0wg-Q8-QE9" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                <constraint firstItem="8Zj-yk-Q0t" firstAttribute="leading" secondItem="I9w-sI-Dzx" secondAttribute="trailing" constant="30" id="6Cb-JV-web"/>
+                <constraint firstItem="1dV-Ty-4nv" firstAttribute="top" secondItem="I9w-sI-Dzx" secondAttribute="bottom" constant="20" id="Aso-gY-tph"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="l3n-Dx-To8" secondAttribute="trailing" id="EKT-cc-b7o"/>
+                <constraint firstItem="l3n-Dx-To8" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="JVU-7Q-e2S"/>
+                <constraint firstItem="l3n-Dx-To8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Mgf-A7-QH2"/>
+                <constraint firstItem="AXt-PR-8di" firstAttribute="top" secondItem="l3n-Dx-To8" secondAttribute="bottom" id="RpH-dg-Rlg"/>
+                <constraint firstItem="I9w-sI-Dzx" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="30" id="SKP-sf-vF8" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                <constraint firstItem="1dV-Ty-4nv" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="30" id="aIk-8T-s1P" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                <constraint firstItem="8Zj-yk-Q0t" firstAttribute="top" secondItem="I9w-sI-Dzx" secondAttribute="top" id="uxm-xh-6RS"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="AXt-PR-8di" secondAttribute="trailing" id="vTW-4S-CaJ"/>
+                <constraint firstItem="I9w-sI-Dzx" firstAttribute="top" secondItem="AXt-PR-8di" secondAttribute="bottom" constant="40" id="xbH-xz-78l"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="fractionSlider" destination="I9w-sI-Dzx" id="M3g-XB-AID"/>
+                <outlet property="fractionTextInputView" destination="1dV-Ty-4nv" id="x1c-8M-jRJ"/>
+                <outlet property="quantityImageContainer" destination="l3n-Dx-To8" id="qxf-20-lGw"/>
+                <outlet property="quantityView" destination="rOo-ds-L7Z" id="cac-Vc-IXu"/>
+            </connections>
+            <point key="canvasLocation" x="86.5" y="-126"/>
+        </view>
+    </objects>
+</document>
