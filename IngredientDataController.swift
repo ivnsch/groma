@@ -19,10 +19,21 @@ class IngredientDataController: UITableViewController {
     fileprivate var unitsDataSource: UnitsDataSource?
     fileprivate var unitsDelegate: UnitsDelegate? // arc
     fileprivate var unitNames: [String] = [] // we need this because we can't touch the Realm Units in the autocompletions thread (get diff. thread exception). So we have to map to Strings in advance.
-
+    fileprivate let unitCellSize = CGSize(width: 70, height: 50)
     fileprivate var currentNewUnitInput: String?
 
     var cellCount = 0
+
+    fileprivate var unitContentsHeight: CGFloat {
+//        let collectionViewWidth = unitsCollectionView.width
+//        guard collectionViewWidth > 0 else { return 0 } // avoid division by 0
+        let unitCount = unitsDataSource?.units?.count ?? 0
+//        let unitsPerRow = floor(collectionViewWidth / unitCellSize.width)
+        let unitsPerRow = CGFloat(4) // for now hardcoded. Calculating it returns 5 (wrong) + using the collection width causes constraint error (because this is called 2-3 times at the beginning with a width of 0) and collapses entirely the collection view. TODO not hardcoded
+        let rowCount = floor(CGFloat(unitCount) / unitsPerRow)
+        let verticalSpacing: CGFloat = 8 // estimated TODO retrieve
+        return rowCount * (unitCellSize.height + verticalSpacing)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +66,6 @@ class IngredientDataController: UITableViewController {
             self?.unitNames = units.map{ $0.name } // see comment on var why this is necessary
 
             self?.unitsCollectionView.reloadData()
-
             self?.reload()
         })
     }
@@ -98,7 +108,7 @@ class IngredientDataController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
-        case 0: return 400
+        case 0: return unitContentsHeight
         case 1: return 300
         case 2: return 300
         default: fatalError("Only 3 cells supported")
@@ -161,7 +171,7 @@ extension IngredientDataController: UnitsCollectionViewDataSourceDelegate, Units
         if (unitsDataSource?.units.map{unit in
             indexPath.row < unit.count
             }) ?? false {
-            return CGSize(width: 70, height: 50)
+            return unitCellSize
         } else {
             return CGSize(width: 120, height: 50)
         }
