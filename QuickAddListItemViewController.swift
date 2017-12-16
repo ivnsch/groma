@@ -423,6 +423,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
 
         override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            cell.selectionStyle = .none
             cell.backgroundColor = {
                 switch indexPath.row {
                 case 0: return UIColor.flatGreen
