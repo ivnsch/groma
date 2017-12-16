@@ -71,7 +71,7 @@ class ScrollableBottomAttacher {
 
     }
 
-    func hideTop(_ onFinish: @escaping () -> Void) {
+    func hideTop(onFinish: @escaping () -> Void) {
         topViewTopConstraint.constant = targetTopConstantWhenExpanded
         tableViewConrollerHeightConstraint.constant = availableTableViewHeight
         UIView.animate(withDuration: animDuration, animations: {
@@ -87,7 +87,7 @@ class ScrollableBottomAttacher {
         })
     }
 
-    func showTop(_ onFinish: @escaping () -> Void) {
+    func showTop(onFinish: @escaping () -> Void) {
         topViewTopConstraint.constant = initTopConstant
         spacingConstraint.constant = 0
         tableViewConrollerHeightConstraint.constant = availableTableViewHeight
@@ -99,6 +99,18 @@ class ScrollableBottomAttacher {
         })
     }
 
+    func removeBottom(onFinish: @escaping () -> Void) {
+        topViewTopConstraint.constant = initTopConstant
+        spacingConstraint.constant = 0
+        tableViewConrollerHeightConstraint.constant = 0
+        UIView.animate(withDuration: animDuration, animations: {
+            self.parent.view.layoutIfNeeded()
+        }, completion: { (finished) in
+            onFinish()
+            self.bottom.removeFromParentViewControllerWithView()
+        })
+    }
+    
     func onBottomViewDidScroll(_ scrollView: UIScrollView) {
         let yOffset = scrollView.contentOffset.y
 

@@ -110,7 +110,9 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     weak var topParentController: UIViewController?
 
     // Ingredients specific
-    var scrollableBottomAttacher: ScrollableBottomAttacher?
+    fileprivate(set) var scrollableBottomAttacher: ScrollableBottomAttacher?
+    fileprivate var lockAddBottomController = false // prevent issues when tapping item fast multiple times
+    fileprivate var lockRemoveBottomController = false // prevent issues when tapping item fast multiple times
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -482,19 +484,37 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
         tableViewController.view.backgroundColor = Theme.lightGreyBackground
 
-        scrollableBottomAttacher = ScrollableBottomAttacher(parent: topParentController, top: topController,
-                                                            bottom: tableViewController,
-                                                            topViewTopConstraint: topConstraint,
-                                                            onAddedSubview: { [weak self] in
-                                                                self?.delegate?.onAddedIngredientsSubviews()
-                                                            },
-                                                            onExpandBottom: { [weak self] in
-                                                                // if user focused the search box
-                                                                self?.topControllersDelegate?.hideKeyboard()
-                                                            }
-                                                            )
+        func showScrollableBottomAttacher() {
+            guard !lockAddBottomController else { return }
+            lockAddBottomController = true
+            scrollableBottomAttacher = ScrollableBottomAttacher(parent: topParentController, top: topController,
+                                                                bottom: tableViewController,
+                                                                topViewTopConstraint: topConstraint,
+                                                                onAddedSubview: { [weak self] in
+                                                                    self?.delegate?.onAddedIngredientsSubviews()
+                },
+                                                                onExpandBottom: { [weak self] in
+                                                                    // if user focused the search box
+                                                                    self?.topControllersDelegate?.hideKeyboard()
+                }
+            )
 
-        scrollableBottomAttacher?.hideTop {}
+            scrollableBottomAttacher?.hideTop(onFinish: {
+                self.lockAddBottomController = false
+            })
+        }
+
+        if let scrollableBottomAttacher = scrollableBottomAttacher {
+            guard !lockRemoveBottomController else { return }
+            lockRemoveBottomController = true
+            scrollableBottomAttacher.removeBottom(onFinish: {
+                self.lockRemoveBottomController = false
+                showScrollableBottomAttacher()
+            })
+        } else {
+            showScrollableBottomAttacher()
+        }
+
 
 //        guard let cell = collectionView.cellForItem(at: indexPath) else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
 //
