@@ -118,7 +118,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     fileprivate func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
         let top = topBar.frame.height
-        let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 70, animateTableViewInset: false, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
+        let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 70, animateTableViewInset: false, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] _ in
             let controller = EditSectionViewController()
             controller.delegate = self
             return controller

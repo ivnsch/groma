@@ -37,7 +37,7 @@ class ManageItemsBaseQuantitiesController: UITableViewController, SearchableText
     }
     
     fileprivate func initSimpleInputControllerManager(config: ManageDatabaseTopControllerConfig) -> ExpandableTopViewController<EditSingleInputController> {
-        let manager: ExpandableTopViewController<EditSingleInputController> = ExpandableTopViewController(top: config.top, height: DimensionsManager.quickEditItemHeight, animateTableViewInset: config.animateInset, parentViewController: config.parentController, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<EditSingleInputController> = ExpandableTopViewController(top: config.top, height: DimensionsManager.quickEditItemHeight, animateTableViewInset: config.animateInset, parentViewController: config.parentController, tableView: tableView) {[weak self] _ in
             let controller = EditSingleInputController()
             controller.delegate = self
             return controller

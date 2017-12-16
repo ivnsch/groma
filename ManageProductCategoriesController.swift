@@ -107,7 +107,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     
     fileprivate func initAddEditProductControllerManager() -> ExpandableTopViewController<EditProductCategoryController> {
         let top: CGFloat = Theme.navBarHeight
-        let manager: ExpandableTopViewController<EditProductCategoryController> =  ExpandableTopViewController(top: top, height: 60, animateTableViewInset: false, parentViewController: self, tableView: tableView) {
+        let manager: ExpandableTopViewController<EditProductCategoryController> =  ExpandableTopViewController(top: top, height: 60, animateTableViewInset: false, parentViewController: self, tableView: tableView) { _ in
             let controller = EditProductCategoryController()
             controller.delegate = self
             return controller

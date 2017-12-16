@@ -79,7 +79,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     fileprivate func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditInventoryController> {
         let top = topBar.frame.height
-        let expandableTopViewController: ExpandableTopViewController<AddEditInventoryController> = ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight, parentViewController: self, tableView: tableView) {[weak self] in
+        let expandableTopViewController: ExpandableTopViewController<AddEditInventoryController> = ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight, parentViewController: self, tableView: tableView) {[weak self] _ in
             let controller = UIStoryboard.addEditInventory()
             controller.delegate = self
             controller.currentListsCount = self?.inventoriesResult?.count ?? {

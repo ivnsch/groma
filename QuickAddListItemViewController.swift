@@ -31,8 +31,11 @@ protocol QuickAddListItemDelegate: class {
     func onCloseQuickAddTap()
     func onHasItems(_ hasItems: Bool)
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
-    
+
+    func onAddedIngredientsSubviews() // Ingredients screen specific
+
     func parentViewForAddButton() -> UIView?
+    
     
     // addedItem can be QuantifiableProduct or Item, depending on where we use quick add (in e.g. list/inventory items, we add q.products and in ingredients, items).
     func onFinishAddCellAnimation(addedItem: AnyObject)
@@ -100,7 +103,15 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     fileprivate var recipeControllerAnimator: GromFromViewControlerAnimator?
     fileprivate var selectQuantifiablePopup: MyPopup?
     fileprivate var selectIngredientAnimator: GromFromViewControlerAnimator?
-    
+
+    // For now only recipes controller sets this (it's needed for the add ingredient scroller)
+    var topConstraint: NSLayoutConstraint?
+    weak var topController: UIViewController?
+    weak var topParentController: UIViewController?
+
+    // Ingredients specific
+    fileprivate var scrollableBottomAttacher: ScrollableBottomAttacher?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         onViewDidLoad?()
@@ -391,34 +402,124 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             }
         })
     }
-    
-    fileprivate func retrieveQuickAddIngredient(item: Item, indexPath: IndexPath, onRetrieved: @escaping (QuickAddIngredientInput, Float) -> Void) {
-        
-        guard let cell = collectionView.cellForItem(at: indexPath) else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
 
-        view.endEditing(true)
-        topControllersDelegate?.hideKeyboard()
-        
-        
-        let windowHeight: CGFloat = UIApplication.shared.delegate.flatMap{$0.window??.height} ?? 0
-        let controllerHeight = windowHeight - 49 - Theme.navBarHeight // 49 tabbar
-        
-        // Note: the height of the quick add is somewhere up in hierarchy, we pass the hardcoded DimensionsManager value because it's quicker to implement
-        
-        selectIngredientAnimator?.openNoOverlay (button: cell, frame: CGRect(x: 0, y: 0, width: view.width, height: controllerHeight), scrollOffset: self.collectionView.contentOffset.y, controllerCreator: {[weak self] in
-            let container = UIStoryboard.selectIngredientDataContainerController()
-            container.delegate = self
-            
-            container.onUIReady = {[weak container] in
-                container?.item = item
+
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+
+
+    class MyTableViewController : UITableViewController {
+
+        weak var controller: QuickAddListItemViewController?
+
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        }
+
+        override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return 3
+        }
+
+        override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            cell.backgroundColor = {
+                switch indexPath.row {
+                case 0: return UIColor.flatGreen
+                case 1: return UIColor.yellow
+                case 2: return UIColor.flatBlue
+                default: fatalError("Only 3 cells supported")
+                }
+            }()
+            return cell
+        }
+
+        override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            switch indexPath.row {
+            case 0: return 400
+            case 1: return 300
+            case 2: return 300
+            default: fatalError("Only 3 cells supported")
             }
-            
-//            container.onSelectDataControllerReadyBeforeDidLoad = {selectDataController in
-//                selectDataController.delegate = self
+        }
+
+        var lockShowTop = false
+        var lockHideTop = false
+
+        override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            controller?.scrollableBottomAttacher?.onBottomViewDidScroll(scrollView)
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+
+    fileprivate func retrieveQuickAddIngredient(item: Item, indexPath: IndexPath, onRetrieved: @escaping (QuickAddIngredientInput, Float) -> Void) {
+
+        guard let topConstraint = topConstraint else {
+            logger.e("Invalid state: no top constraint - can't show add ingredient", .ui)
+            return
+        }
+
+        guard let topController = topController else {
+            logger.e("Invalid state: no top controller - can't show add ingredient", .ui)
+            return
+        }
+
+        guard let topParentController = topParentController else {
+            logger.e("Invalid state: no topParentController - can't show add ingredient", .ui)
+            return
+        }
+
+        topControllersDelegate?.hideKeyboard()
+
+        let tableViewController = MyTableViewController()
+        tableViewController.controller = self
+        tableViewController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
+        if #available(iOS 11.0, *) {
+            tableViewController.tableView.contentInsetAdjustmentBehavior = .never
+        }
+        tableViewController.view.backgroundColor = Theme.lightGreyBackground
+
+        scrollableBottomAttacher = ScrollableBottomAttacher(parent: topParentController, top: topController,
+                                                            bottom: tableViewController,
+                                                            topViewTopConstraint: topConstraint,
+                                                            onAddedSubview: { [weak self] in
+                                                                self?.delegate?.onAddedIngredientsSubviews()
+                                                            },
+                                                            onExpandBottom: { [weak self] in
+                                                                // if user focused the search box
+                                                                self?.topControllersDelegate?.hideKeyboard()
+                                                            }
+                                                            )
+
+        scrollableBottomAttacher?.hideTop {}
+
+//        guard let cell = collectionView.cellForItem(at: indexPath) else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
+//
+//        view.endEditing(true)
+//        topControllersDelegate?.hideKeyboard()
+//
+//
+//        let windowHeight: CGFloat = UIApplication.shared.delegate.flatMap{$0.window??.height} ?? 0
+//        let controllerHeight = windowHeight - 49 - Theme.navBarHeight // 49 tabbar
+//
+//        // Note: the height of the quick add is somewhere up in hierarchy, we pass the hardcoded DimensionsManager value because it's quicker to implement
+//
+//        selectIngredientAnimator?.openNoOverlay (button: cell, frame: CGRect(x: 0, y: 0, width: view.width, height: controllerHeight), scrollOffset: self.collectionView.contentOffset.y, controllerCreator: {[weak self] in
+//            let container = UIStoryboard.selectIngredientDataContainerController()
+//            container.delegate = self
+//
+//            container.onUIReady = {[weak container] in
+//                container?.item = item
 //            }
-            
-            return container
-        })
+//
+////            container.onSelectDataControllerReadyBeforeDidLoad = {selectDataController in
+////                selectDataController.delegate = self
+////            }
+//
+//            return container
+//        })
     }
     
     func scrollToBottom() {

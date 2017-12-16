@@ -104,7 +104,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     
     fileprivate func initAddEditBrandControllerManager() -> ExpandableTopViewController<EditBrandController> {
         let top: CGFloat = Theme.navBarHeight
-        let manager: ExpandableTopViewController<EditBrandController> =  ExpandableTopViewController(top: top, height: 60, parentViewController: self, tableView: tableView) {
+        let manager: ExpandableTopViewController<EditBrandController> =  ExpandableTopViewController(top: top, height: 60, parentViewController: self, tableView: tableView) { _ in
             let controller = EditBrandController()
             controller.delegate = self
             return controller

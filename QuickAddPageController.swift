@@ -33,7 +33,24 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
 
     var addProductController: QuickAddListItemViewController?
     var addGroupController: QuickAddListItemViewController?
-    
+
+    // For now only ingredients controller sets these (needed for the add ingredient scroller)
+    var topConstraint: NSLayoutConstraint? {
+        didSet {
+            addProductController?.topConstraint = topConstraint
+        }
+    }
+    weak var topController: UIViewController? {
+        didSet {
+            addProductController?.topController = topController
+        }
+    }
+    weak var topParentController: UIViewController? {
+        didSet {
+            addProductController?.topParentController = topParentController
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -80,11 +97,15 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
                 productsController.contentData = (self.itemTypeForFirstPage, .fav)
             }
             productsController.list = list
+            productsController.topConstraint = topConstraint
+            productsController.topController = topController
+            productsController.topParentController = topParentController
+
             currentSwipeController = productsController
             addChildViewController(productsController)
             
             addProductController = productsController
-            
+
             return productsController.view
 
         } else {

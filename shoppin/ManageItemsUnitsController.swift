@@ -43,7 +43,7 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
     }
     
     fileprivate func initSimpleInputControllerManager(config: ManageDatabaseTopControllerConfig) -> ExpandableTopViewController<EditNameButtonController> {
-        let manager: ExpandableTopViewController<EditNameButtonController> = ExpandableTopViewController(top: config.top, height: DimensionsManager.quickEditItemHeight, animateTableViewInset: config.animateInset, parentViewController: config.parentController, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<EditNameButtonController> = ExpandableTopViewController(top: config.top, height: DimensionsManager.quickEditItemHeight, animateTableViewInset: config.animateInset, parentViewController: config.parentController, tableView: tableView) {[weak self] _ in
             let controller = EditNameButtonController()
             controller.delegate = self
             return controller

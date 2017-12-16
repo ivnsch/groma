@@ -85,6 +85,7 @@
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
 		6ACF4D381E51EFBE00DE9D43 /* ManageItemsAccordionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */; };
 		6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */; };
+		6ACFFBEC1FE4376F0000DDEB /* ScrollableBottomAttacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBEB1FE4376F0000DDEB /* ScrollableBottomAttacher.swift */; };
 		6AD51A8F1E4F5E350053934E /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */; };
 		6AD51AAF1E512D7F0053934E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AAE1E512D7F0053934E /* String.swift */; };
 		6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51ABE1E512FAA0053934E /* UIColor.swift */; };
@@ -556,6 +557,7 @@
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
 		6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageItemsAccordionController.swift; path = ../ManageItemsAccordionController.swift; sourceTree = "<group>"; };
 		6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItemsAccordion.storyboard; sourceTree = "<group>"; };
+		6ACFFBEB1FE4376F0000DDEB /* ScrollableBottomAttacher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableBottomAttacher.swift; sourceTree = "<group>"; };
 		6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		6AD51AAE1E512D7F0053934E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		6AD51ABE1E512FAA0053934E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -1592,6 +1594,7 @@
 			isa = PBXGroup;
 			children = (
 				EB2F5D681A50C38B00DBC4AF /* FrozenEffect.swift */,
+				6ACFFBEB1FE4376F0000DDEB /* ScrollableBottomAttacher.swift */,
 			);
 			name = helper;
 			sourceTree = "<group>";
@@ -3038,6 +3041,7 @@
 				EBB2CBC81CF1D16D0040C619 /* NotEmptyTrimmedRule.swift in Sources */,
 				EB7524551BF5830600A97A10 /* QuickAddGroupCell.swift in Sources */,
 				6AF0C2851E65796100FE14FD /* EmptyViewController.swift in Sources */,
+				6ACFFBEC1FE4376F0000DDEB /* ScrollableBottomAttacher.swift in Sources */,
 				EB75E5471CA360C1006AAEAF /* SharedUsersController.swift in Sources */,
 				EB1748D41C7E7AE20067FD16 /* ListInvitationsHandler.swift in Sources */,
 				6AF0C26E1E621E0900FE14FD /* SelectIngredientQuantityController.swift in Sources */,

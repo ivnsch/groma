@@ -37,7 +37,7 @@ protocol QuickAddDelegate: class {
     func onAddGroupItemsOpen()
     
     func parentViewForAddButton() -> UIView
-    
+    func onAddedIngredientsSubviews()
     func addEditSectionOrCategoryColor(_ name: String, handler: @escaping (UIColor?) -> Void)
     
     func onRemovedSectionCategoryName(_ name: String)
@@ -51,6 +51,9 @@ extension QuickAddDelegate {
     
     var offsetForAddCellAnimation: CGFloat {
         return 0
+    }
+
+    func onAddedIngredientsSubviews() {
     }
 }
 
@@ -109,7 +112,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     var modus: AddEditListItemControllerModus = .listItem
     
     var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
-    
+
+    // For now only recipes controller sets this (it's needed for the add ingredient scroller)
+    var topConstraint: NSLayoutConstraint? {
+        didSet {
+            quickAddListItemViewController?.topConstraint = topConstraint
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -363,6 +373,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             }
         }
     }
+
+    func onAddedIngredientsSubviews() {
+        delegate?.onAddedIngredientsSubviews()
+    }
     
     func onFinishAddCellAnimation(addedItem: AnyObject) {
         delegate?.onFinishAddCellAnimation(addedItem: addedItem)
@@ -489,7 +503,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         super.viewWillAppear(animated)
         addObserver()
     }
-    
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        quickAddListItemViewController?.topConstraint = topConstraint
+        quickAddListItemViewController?.topController = self
+        quickAddListItemViewController?.topParentController = self.parent
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         removeObserver()

@@ -39,7 +39,7 @@ class ManageItemsAccordionController: UIViewController {
     
     fileprivate func initEditSectionControllerManager() -> ExpandableTopViewController<AddEditNameNameColorController> {
         let top: CGFloat = 0 // we currently use the system's nav bar so there's no offset (view controller starts below it)
-        let manager: ExpandableTopViewController<AddEditNameNameColorController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickEditItemHeight, animateTableViewInset: true, parentViewController: self, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<AddEditNameNameColorController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickEditItemHeight, animateTableViewInset: true, parentViewController: self, tableView: tableView) {[weak self] _ in
             let controller = UIStoryboard.addEditNameNameColorController()
             controller.delegate = self
             return controller

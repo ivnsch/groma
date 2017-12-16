@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 @objc protocol ExpandableTopViewControllerDelegate: class {
     func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView)
@@ -22,7 +23,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
     fileprivate let closeInset: CGFloat // extra table view inset while closed (additionally to the view's height when expanded)
     fileprivate weak var parentController: UIViewController?
     weak var tableView: UITableView?
-    fileprivate let controllerBuilder: () -> T // initialise lazily the controller
+    fileprivate let controllerBuilder: (ExpandableTopViewController<T>) -> T // initialise lazily the controller
     
     fileprivate(set) var controller: T?
     fileprivate var overlay: UIView?
@@ -32,10 +33,13 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
     fileprivate var blocked = false
     
     weak var delegate: ExpandableTopViewControllerDelegate?
-    
+
+    fileprivate(set) var topViewTopConstraint: NSLayoutConstraint?
+    var onDidSetTopConstraint: ((NSLayoutConstraint) -> Void)?
+
     init(top: CGFloat, height: CGFloat, animateTableViewInset: Bool = true, openInset: CGFloat = 0,
          closeInset: CGFloat = 0, parentViewController: UIViewController, tableView: UITableView,
-         controllerBuilder: @escaping () -> T) {
+         controllerBuilder: @escaping (ExpandableTopViewController<T>) -> T) {
         self.top = top
         self.height = height
         self.animateTableViewInset = animateTableViewInset
@@ -46,18 +50,30 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
         self.controllerBuilder = controllerBuilder
     }
 
+
     fileprivate func initView(_ view: UIView, height: CGFloat) {
         
         if let parentController = parentController {
-            view.frame = CGRect(x: 0, y: top, width: parentController.view.frame.width, height: height)
-            
-            // swift anchor
-            view.layer.anchorPoint = CGPoint(x: 0.5, y: 0)
-            view.frame.origin = CGPoint(x: 0, y: view.frame.origin.y - height / 2)
-            
-            let transform: CGAffineTransform = CGAffineTransform.identity.scaledBy(x: 1, y: 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
-            view.transform = transform
-            
+
+            view.translatesAutoresizingMaskIntoConstraints = false
+
+            let topViewTopConstraint = view.topAnchor.constraint(equalTo: parentController.view.topAnchor, constant: top)
+            topViewTopConstraint.isActive = true
+
+            onDidSetTopConstraint?(topViewTopConstraint)
+
+            self.topViewTopConstraint = topViewTopConstraint
+
+            view.leftAnchor.constraint(equalTo: parentController.view.leftAnchor, constant: 0).isActive = true
+            view.rightAnchor.constraint(equalTo: parentController.view.rightAnchor, constant: 0).isActive = true
+            view.heightAnchor.constraint(equalToConstant: height).isActive = true
+
+            parentController.view.layoutIfNeeded()
+
+            view.transform = view.transform.translatedBy(x: 0, y: -height / 2.0)
+            view.transform = view.transform.scaledBy(x: 1, y: 0.0001) //0.0001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
+
+
             view.layoutIfNeeded()
             
         } else {
@@ -103,16 +119,16 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                 
                 
                 // create and add view
-                let controller = controllerBuilder()  // note: for now we don't use the controller only view
+                let controller = controllerBuilder(self)  // note: for now we don't use the controller only view
                 let view = controller.view
-                self.initView(view!, height: height)
                 parentController.addChildViewControllerAndView(controller)
+                self.initView(view!, height: height)
                 self.controller = controller
                 view?.clipsToBounds = false
                 
                 // self.view.bringSubviewToFront(floatingViews) TODO!
             }
-            
+
             UIView.animate(withDuration: 0.2, animations: {[weak self] in
                 
                 if let weakSelf = self, let view = weakSelf.controller?.view {
@@ -122,8 +138,14 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                     } else {
                         weakSelf.overlay?.alpha = 0
                     }
-                    view.transform = CGAffineTransform.identity.scaledBy(x: 1, y: expanded ? 1 : 0.0001)
-                    
+
+                    if !expanded {
+                        view.transform = view.transform.translatedBy(x: 0, y: -view.frame.size.height / 2.0)
+                        view.transform = view.transform.scaledBy(x: 1, y: expanded ? 1 : 0.0001)
+                    } else {
+                        view.transform = CGAffineTransform.identity
+                    }
+
                     if weakSelf.animateTableViewInset {
                         let topInset = (expanded ? weakSelf.openInset : weakSelf.closeInset) + view.frame.height
                         //                    let bottomInset = weakSelf.navigationController?.tabBarController?.tabBar.frame.height // TODO !!?

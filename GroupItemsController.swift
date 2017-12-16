@@ -96,7 +96,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     fileprivate func initTopQuickAddControllerManager(_ tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {
         let top = topBar.frame.height
-        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] _ in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
             controller.modus = .planItem

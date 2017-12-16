@@ -111,7 +111,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     override func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
         let top = topBar.frame.height
-        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] manager in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
             if let weakSelf = self {
@@ -119,6 +119,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
             }
             controller.modus = .ingredient
             controller.list = self?.list
+            manager.onDidSetTopConstraint = { [weak controller] topConstraint in
+                controller?.topConstraint = topConstraint
+            }
             return controller
         }
         manager.delegate = self
@@ -127,7 +130,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     func initEditIngredientControllerManager() -> ExpandableTopViewController<SelectIngredientDataContainerController> {
         let top = topBar.frame.height
-        let manager: ExpandableTopViewController<SelectIngredientDataContainerController> = ExpandableTopViewController(top: top, height: view.height - topBar.height, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<SelectIngredientDataContainerController> = ExpandableTopViewController(top: top, height: view.height - topBar.height, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] _ in
             let controller = UIStoryboard.selectIngredientDataContainerController()
             controller.delegate = self
             return controller
@@ -397,6 +400,11 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     override func onTopBarTitleTap() {
         back()
+    }
+
+    override func onAddedIngredientsSubviews() {
+        super.onAddedIngredientsSubviews()
+        view.bringSubview(toFront: topBar)
     }
     
     // MARK: - private

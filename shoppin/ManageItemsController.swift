@@ -75,7 +75,7 @@ class ManageItemsController: UITableViewController, SearchableTextController {
     }
     
     fileprivate func initEditSectionControllerManager(config: ManageDatabaseTopControllerConfig) -> ExpandableTopViewController<AddEditNameNameColorController> {
-        let manager: ExpandableTopViewController<AddEditNameNameColorController> = ExpandableTopViewController(top: config.top, height: DimensionsManager.quickEditItemHeight, animateTableViewInset: config.animateInset, parentViewController: config.parentController, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<AddEditNameNameColorController> = ExpandableTopViewController(top: config.top, height: DimensionsManager.quickEditItemHeight, animateTableViewInset: config.animateInset, parentViewController: config.parentController, tableView: tableView) {[weak self] _ in
             let controller = UIStoryboard.addEditNameNameColorController()
             controller.delegate = self
             return controller
