@@ -102,7 +102,6 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     fileprivate var recipeControllerAnimator: GromFromViewControlerAnimator?
     fileprivate var selectQuantifiablePopup: MyPopup?
-    fileprivate var selectIngredientAnimator: GromFromViewControlerAnimator?
 
     // For now only recipes controller sets this (it's needed for the add ingredient scroller)
     var topConstraint: NSLayoutConstraint?
@@ -138,7 +137,6 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         //guard let parent = parent?.parent?.parent else {logger.e("Parent is not set"); return} // parent until view shows on top of quick view + list but not navigation/tab bar
         
         recipeControllerAnimator = recipeControllerAnimator ?? GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
-        selectIngredientAnimator = selectIngredientAnimator ?? GromFromViewControlerAnimator(parent: parent, currentController: self, animateButtonAtEnd: false)
     }
     
     fileprivate func clearAndLoadFirstPage(_ isSearchLoad: Bool) {
@@ -809,18 +807,15 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             selectQuantifiablePopup = nil
             isAnyShowing = true
         }
-        if selectIngredientAnimator?.isShowing ?? false {
-            closeSelectIngredientDataController()
+
+        if let scrollableBottomAttacher = scrollableBottomAttacher {
             isAnyShowing = true
+            scrollableBottomAttacher.removeBottom(onFinish: {
+            })
+            self.scrollableBottomAttacher = nil
         }
-        
+
         return isAnyShowing
-    }
-    
-    fileprivate func closeSelectIngredientDataController() {
-        selectIngredientAnimator?.close()
-        (selectIngredientAnimator?.controller as? SelectIngredientDataController)?.onClose() // important to remove the submit button, that is added to parent
-        topControllersDelegate?.restoreKeyboard()
     }
     
     func closeRecipeController() {
@@ -850,14 +845,14 @@ extension QuickAddListItemViewController: AddRecipeControllerDelegate {
 extension QuickAddListItemViewController: SelectIngredientDataContainerControllerDelegate {
     
     func onSelectIngrentTapOutsideOfContent() {
-        closeSelectIngredientDataController()
+//        closeSelectIngredientDataController()
     }
     
     func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs) {
-        delegate?.onAddIngredient(item: item, ingredientInput: inputs)
-        (selectIngredientAnimator?.controller as? SelectIngredientDataController)?.onClose()
-        topControllersDelegate?.restoreKeyboard()
-        selectIngredientAnimator?.close()
+//        delegate?.onAddIngredient(item: item, ingredientInput: inputs)
+//        (selectIngredientAnimator?.controller as? SelectIngredientDataController)?.onClose()
+//        topControllersDelegate?.restoreKeyboard()
+//        selectIngredientAnimator?.close()
     }
     
     func parentViewForSelectIngredientControllerAddButton() -> UIView? {
