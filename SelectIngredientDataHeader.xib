@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SelectIngredientDataHeader" customModule="groma" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="282" height="90"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" placeholderIntrinsicWidth="160" placeholderIntrinsicHeight="40" translatesAutoresizingMaskIntoConstraints="NO" id="EPq-R0-rdE">
+                    <rect key="frame" x="61" y="25" width="160" height="40"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="PVa-69-XA3" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                            <rect key="frame" x="10" y="11" width="7" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1/2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="ZYg-iN-isP" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                            <rect key="frame" x="27" y="11" width="21" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="spoon" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="4Go-cm-h46" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                            <rect key="frame" x="58" y="11" width="43" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sugar" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="888-br-r7a" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                            <rect key="frame" x="111" y="11" width="39" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="4Go-cm-h46" firstAttribute="centerY" secondItem="EPq-R0-rdE" secondAttribute="centerY" id="5EW-rU-tqa"/>
+                        <constraint firstItem="888-br-r7a" firstAttribute="centerY" secondItem="EPq-R0-rdE" secondAttribute="centerY" id="6oE-Da-jOh"/>
+                        <constraint firstAttribute="trailing" secondItem="888-br-r7a" secondAttribute="trailing" constant="10" id="Enh-sg-raV"/>
+                        <constraint firstItem="4Go-cm-h46" firstAttribute="leading" secondItem="ZYg-iN-isP" secondAttribute="trailing" constant="10" id="V8B-mq-bGa"/>
+                        <constraint firstItem="PVa-69-XA3" firstAttribute="leading" secondItem="EPq-R0-rdE" secondAttribute="leading" constant="10" id="hSX-96-oTd"/>
+                        <constraint firstItem="888-br-r7a" firstAttribute="leading" secondItem="4Go-cm-h46" secondAttribute="trailing" constant="10" id="jPJ-bI-Xhe"/>
+                        <constraint firstItem="PVa-69-XA3" firstAttribute="centerY" secondItem="EPq-R0-rdE" secondAttribute="centerY" id="l4c-zb-aI2"/>
+                        <constraint firstItem="ZYg-iN-isP" firstAttribute="leading" secondItem="PVa-69-XA3" secondAttribute="trailing" constant="10" id="vsi-XK-Mqk"/>
+                        <constraint firstItem="ZYg-iN-isP" firstAttribute="centerY" secondItem="EPq-R0-rdE" secondAttribute="centerY" id="zdl-oe-WRJ"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="EPq-R0-rdE" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="04S-di-p00"/>
+                <constraint firstItem="EPq-R0-rdE" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Pf1-JU-uiO"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="fractionLabel" destination="ZYg-iN-isP" id="dqm-tD-KLT"/>
+                <outlet property="fractionTrailingConstraint" destination="V8B-mq-bGa" id="spL-n8-zDc"/>
+                <outlet property="itemNameLabel" destination="888-br-r7a" id="OJh-z5-BpZ"/>
+                <outlet property="unitLabel" destination="4Go-cm-h46" id="5In-ev-fHq"/>
+                <outlet property="wholeNumberLabel" destination="PVa-69-XA3" id="CEw-5A-6Hx"/>
+                <outlet property="wholeNumberTrailingConstraint" destination="vsi-XK-Mqk" id="Cuh-aD-dgO"/>
+            </connections>
+            <point key="canvasLocation" x="-1" y="520"/>
+        </view>
+    </objects>
+</document>

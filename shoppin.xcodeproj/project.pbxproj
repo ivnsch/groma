@@ -87,6 +87,8 @@
 		6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */; };
 		6ACFFBEC1FE4376F0000DDEB /* ScrollableBottomAttacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBEB1FE4376F0000DDEB /* ScrollableBottomAttacher.swift */; };
 		6ACFFBEE1FE55C890000DDEB /* IngredientDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBED1FE55C890000DDEB /* IngredientDataController.swift */; };
+		6ACFFBF11FE570AF0000DDEB /* SelectIngredientDataHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBF01FE570AF0000DDEB /* SelectIngredientDataHeader.swift */; };
+		6ACFFBF31FE5716F0000DDEB /* SelectIngredientDataHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ACFFBF21FE5716F0000DDEB /* SelectIngredientDataHeader.xib */; };
 		6AD51A8F1E4F5E350053934E /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */; };
 		6AD51AAF1E512D7F0053934E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AAE1E512D7F0053934E /* String.swift */; };
 		6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51ABE1E512FAA0053934E /* UIColor.swift */; };
@@ -560,6 +562,8 @@
 		6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItemsAccordion.storyboard; sourceTree = "<group>"; };
 		6ACFFBEB1FE4376F0000DDEB /* ScrollableBottomAttacher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableBottomAttacher.swift; sourceTree = "<group>"; };
 		6ACFFBED1FE55C890000DDEB /* IngredientDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientDataController.swift; sourceTree = "<group>"; };
+		6ACFFBF01FE570AF0000DDEB /* SelectIngredientDataHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectIngredientDataHeader.swift; sourceTree = "<group>"; };
+		6ACFFBF21FE5716F0000DDEB /* SelectIngredientDataHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectIngredientDataHeader.xib; sourceTree = "<group>"; };
 		6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		6AD51AAE1E512D7F0053934E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		6AD51ABE1E512FAA0053934E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -1191,6 +1195,8 @@
 			isa = PBXGroup;
 			children = (
 				6ACFFBED1FE55C890000DDEB /* IngredientDataController.swift */,
+				6ACFFBF01FE570AF0000DDEB /* SelectIngredientDataHeader.swift */,
+				6ACFFBF21FE5716F0000DDEB /* SelectIngredientDataHeader.xib */,
 			);
 			name = ingredient;
 			sourceTree = "<group>";
@@ -2663,6 +2669,7 @@
 				6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */,
 				EBD667FD1CED4CD00055EE0B /* SharedUsersViewController.storyboard in Resources */,
 				EB9207E81C4C4FC200332332 /* Localizable.strings in Resources */,
+				6ACFFBF31FE5716F0000DDEB /* SelectIngredientDataHeader.xib in Resources */,
 				EB4B39C51CED405600B41063 /* ModalLoginController.storyboard in Resources */,
 				EBD558CD1BF3C11E0048F287 /* Scale.storyboard in Resources */,
 				EB22C7141C4B034400285352 /* ShareApp.storyboard in Resources */,
@@ -2818,6 +2825,7 @@
 			files = (
 				EB2F5D5A1A4F5C8100DBC4AF /* SwipeableCell.swift in Sources */,
 				EB9208241C4EBD4900332332 /* ManageBrandsController.swift in Sources */,
+				6ACFFBF11FE570AF0000DDEB /* SelectIngredientDataHeader.swift in Sources */,
 				EB70327B1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift in Sources */,
 				EB969FE11BE4371200F5BC35 /* ProductAggregateCell.swift in Sources */,
 				6AF0C28D1E657B8300FE14FD /* EmptyViewCell.swift in Sources */,

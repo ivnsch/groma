@@ -9,7 +9,7 @@
 import UIKit
 import Providers
 
-class IngredientDataController : UITableViewController {
+class IngredientDataController: UITableViewController {
 
     weak var controller: QuickAddListItemViewController?
 
@@ -39,9 +39,6 @@ class IngredientDataController : UITableViewController {
     }
 
     fileprivate func initUnitsCollectionView() {
-
-        unitsCollectionView.backgroundColor = UIColor.flatRed
-
         let delegate = UnitsDelegate(delegate: self)
         unitsCollectionView.delegate = delegate
         unitsDelegate = delegate
@@ -61,6 +58,20 @@ class IngredientDataController : UITableViewController {
 
             self?.reload()
         })
+    }
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = SelectIngredientDataHeader.createView()
+        header.backgroundColor = UIColor.flatRed
+        return header
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
