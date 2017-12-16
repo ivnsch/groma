@@ -110,7 +110,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     weak var topParentController: UIViewController?
 
     // Ingredients specific
-    fileprivate var scrollableBottomAttacher: ScrollableBottomAttacher?
+    var scrollableBottomAttacher: ScrollableBottomAttacher?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -474,7 +474,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
 
         topControllersDelegate?.hideKeyboard()
 
-        let tableViewController = MyTableViewController()
+        let tableViewController = IngredientDataController()
         tableViewController.controller = self
         tableViewController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         if #available(iOS 11.0, *) {

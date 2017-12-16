@@ -86,6 +86,7 @@
 		6ACF4D381E51EFBE00DE9D43 /* ManageItemsAccordionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */; };
 		6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */; };
 		6ACFFBEC1FE4376F0000DDEB /* ScrollableBottomAttacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBEB1FE4376F0000DDEB /* ScrollableBottomAttacher.swift */; };
+		6ACFFBEE1FE55C890000DDEB /* IngredientDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBED1FE55C890000DDEB /* IngredientDataController.swift */; };
 		6AD51A8F1E4F5E350053934E /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */; };
 		6AD51AAF1E512D7F0053934E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AAE1E512D7F0053934E /* String.swift */; };
 		6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51ABE1E512FAA0053934E /* UIColor.swift */; };
@@ -558,6 +559,7 @@
 		6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageItemsAccordionController.swift; path = ../ManageItemsAccordionController.swift; sourceTree = "<group>"; };
 		6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItemsAccordion.storyboard; sourceTree = "<group>"; };
 		6ACFFBEB1FE4376F0000DDEB /* ScrollableBottomAttacher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableBottomAttacher.swift; sourceTree = "<group>"; };
+		6ACFFBED1FE55C890000DDEB /* IngredientDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientDataController.swift; sourceTree = "<group>"; };
 		6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		6AD51AAE1E512D7F0053934E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		6AD51ABE1E512FAA0053934E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -1183,6 +1185,14 @@
 			);
 			name = manageItems;
 			path = shoppin;
+			sourceTree = "<group>";
+		};
+		6ACFFBEF1FE564EB0000DDEB /* ingredient */ = {
+			isa = PBXGroup;
+			children = (
+				6ACFFBED1FE55C890000DDEB /* IngredientDataController.swift */,
+			);
+			name = ingredient;
 			sourceTree = "<group>";
 		};
 		6AE34BE21E2E255C0039A2A8 /* recipes */ = {
@@ -1895,6 +1905,7 @@
 		EB85F44F1BD538FC00E19E9B /* quickAdd */ = {
 			isa = PBXGroup;
 			children = (
+				6ACFFBEF1FE564EB0000DDEB /* ingredient */,
 				6A1027651E5E10C9003D2972 /* bases */,
 				6AEB65ED1E4D053B0094B9DE /* selectIngredientDataController */,
 				EB85F4591BD54C4200E19E9B /* cell */,
@@ -2937,6 +2948,7 @@
 				6A10276F1E5E12D8003D2972 /* BasesDataSource.swift in Sources */,
 				6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */,
 				6A3A67C81E57BABF00B5354F /* EditableFractionView.swift in Sources */,
+				6ACFFBEE1FE55C890000DDEB /* IngredientDataController.swift in Sources */,
 				EB8D1D111C389D6E00ADF884 /* ProductsWithQuantityViewController.swift in Sources */,
 				6AD51AE11E5134880053934E /* LabelMore.swift in Sources */,
 				EB8D1D131C396ED600ADF884 /* GroupItemsController.swift in Sources */,

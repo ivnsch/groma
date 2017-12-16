@@ -31,7 +31,8 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return units.map{$0.count + 1} ?? 0
+//        return units.map{$0.count + 1} ?? 0 // no input in collection view anymore
+        return units.map{$0.count} ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
