@@ -55,6 +55,9 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
         unitsManager.configure(controller: self, onSelectUnit: { [weak self] unit in
             self?.inputs.unit = unit
+            delay(0.2) { [weak self] in // make it less abrubt
+                self?.tableView.scrollToRow(at: IndexPath(row: 1, section: 0), at: .top, animated: true)
+            }
         })
         initQuantityView()
 
