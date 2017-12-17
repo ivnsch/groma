@@ -475,6 +475,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         topControllersDelegate?.hideKeyboard()
 
         let tableViewController = IngredientDataController()
+        tableViewController.productName = item.name
         tableViewController.controller = self
         tableViewController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         if #available(iOS 11.0, *) {

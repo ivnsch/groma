@@ -22,13 +22,24 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
     @IBOutlet weak var quantityView: QuantityView!
 
     fileprivate var quantityImage: QuantityImage?
+    
+    var onQuantityChanged: ((Int, Fraction) -> Void)?
 
     static func createView() -> IngredientQuantityView {
         return Bundle.loadView("IngredientQuantityView", owner: self) as! IngredientQuantityView
     }
 
-    fileprivate var wholeQuantity: Int = 1
-    fileprivate var fraction: Fraction = Fraction(numerator: 1, denominator: 2)
+    fileprivate var wholeQuantity: Int = IngredientDataController.defaultQuantity {
+        didSet {
+            notifyQuantityChanged()
+        }
+    }
+
+    fileprivate var fraction: Fraction = IngredientDataController.defaultFraction {
+        didSet {
+            notifyQuantityChanged()
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,12 +56,12 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
         fractionSlider.popUpViewColor = Theme.blue
         //fractionSlider.font =
         fractionSlider.textColor = UIColor.white
-
+        fractionSlider.value = fraction.decimalValue
         fractionSlider.dataSource = self
     }
 
     fileprivate func initQuantityView() {
-        quantityView.quantity = 1
+        quantityView.quantity = Float(wholeQuantity)
         quantityView.delegate = self
     }
 
@@ -102,6 +113,10 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
 
         self.fraction = fraction
 //        delegate?.onSelectFraction(fraction: fraction)
+    }
+
+    fileprivate func notifyQuantityChanged() {
+        onQuantityChanged?(wholeQuantity, fraction)
     }
 
     // MARK: - ASValueTrackingSliderDataSource

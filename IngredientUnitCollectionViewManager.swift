@@ -20,9 +20,9 @@ class IngredientUnitCollectionViewManager: UIView {
         return unitsDataSource?.units
     }
 
-    var inputs: SelectIngredientDataControllerInputs = SelectIngredientDataControllerInputs()
+//    var inputs: SelectIngredientDataControllerInputs = SelectIngredientDataControllerInputs()
     fileprivate var unitsCollectionView: UICollectionView!
-    weak var unitDelegate: SelectUnitControllerDelegate?
+//    weak var unitDelegate: SelectUnitControllerDelegate?
     fileprivate var unitsDataSource: UnitsDataSource?
     fileprivate var unitsDelegate: UnitsDelegate? // arc
     fileprivate var unitNames: [String] = [] // we need this because we can't touch the Realm Units in the autocompletions thread (get diff. thread exception). So we have to map to Strings in advance.
@@ -30,6 +30,9 @@ class IngredientUnitCollectionViewManager: UIView {
     fileprivate var currentNewUnitInput: String?
 
     fileprivate weak var controller: UIViewController?
+
+    fileprivate var onSelectUnit: ((Providers.Unit?) -> Void)?
+    fileprivate var selectedUnit: (() -> Providers.Unit?)?
 
     var unitContentsHeight: CGFloat {
         //        let collectionViewWidth = unitsCollectionView.width
@@ -42,9 +45,10 @@ class IngredientUnitCollectionViewManager: UIView {
         return rowCount * (unitCellSize.height + verticalSpacing)
     }
 
-    func configure(controller: UIViewController) {
+    func configure(controller: UIViewController, onSelectUnit: @escaping ((Providers.Unit?) -> Void)) {
 
         self.controller = controller
+        self.onSelectUnit = onSelectUnit
 
         let flowLayout = UICollectionViewFlowLayout()
         unitsCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
@@ -76,7 +80,7 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
     // MARK: - UnitsCollectionViewDataSourceDelegate
 
     var currentUnitName: String {
-        return inputs.unitName
+        return selectedUnit?()?.name ?? ""
     }
 
     func onUpdateUnitNameInput(nameInput: String) {
@@ -109,9 +113,8 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
             if let cell = cellMaybe {
                 if isSelected(cell: cell) {
                     cellMaybe?.unitView.showSelected(selected: false, animated: true)
-                    inputs.unitName = ""
-                    updateTitle(inputs: inputs)
-
+//                    inputs.unitName = ""
+//                    updateTitle(inputs: inputs)
                 } else {
                     cellMaybe?.unitView.showSelected(selected: true, animated: true)
                     onSelect(unit: units[indexPath.row])
@@ -139,6 +142,8 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
     }
 
     fileprivate func onSelect(unit: Providers.Unit) {
+        onSelectUnit?(unit)
+
         //        inputs.unitName = unit.name
         //
         //        updateInputsAndTitle()
@@ -148,8 +153,8 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
 
     fileprivate func isSelected(cell: UnitCell) -> Bool {
         guard let unitViewUnit = cell.unitView.unit else {return false}
-
-        return unitViewUnit.name == inputs.unitName
+        let selectedUnitName: String? = selectedUnit?()?.name
+        return selectedUnitName.map { $0 == unitViewUnit.name } ?? false
     }
 
     fileprivate func clearSelectedUnits() {

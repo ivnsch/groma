@@ -9,7 +9,14 @@
 import UIKit
 import Providers
 
-class SelectIngredientDataHeader: UIView {
+struct SelectIngredientDataHeaderInputs {
+    var productName: String
+    var unitName: String
+    var quantity: Float
+    var fraction: Fraction
+}
+
+class SelectIngredientDataHeader: UITableViewHeaderFooterView {
 
     @IBOutlet weak var wholeNumberLabel: UILabel!
     @IBOutlet weak var fractionLabel: UILabel!
@@ -22,7 +29,7 @@ class SelectIngredientDataHeader: UIView {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-
+        contentView.backgroundColor = Theme.grey
         titleLabelsFont = itemNameLabel.font // NOTE: Assumes that all labels in title have same font
     }
 
@@ -30,8 +37,12 @@ class SelectIngredientDataHeader: UIView {
         return Bundle.loadView("SelectIngredientDataHeader", owner: nil) as! SelectIngredientDataHeader
     }
 
-    fileprivate func update(inputs: SelectIngredientDataControllerInputs, quantity: Float) {
+    func update(inputs: SelectIngredientDataHeaderInputs) {
         guard let titleLabelsFont = titleLabelsFont else {logger.e("No title labels font. Can't update title."); return}
+
+        itemNameLabel.text = inputs.productName
+        
+        let quantity = inputs.quantity
 
         let fractionStr = inputs.fraction.isValidAndNotZeroOrOneByOne ? inputs.fraction.description : ""
         // Don't show quantity if it's 0 and there's a fraction. If there's no fraction we show quantity 0, because otherwise there wouldn't be any number and this doesn't make sense.

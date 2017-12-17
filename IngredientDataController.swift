@@ -9,7 +9,17 @@
 import UIKit
 import Providers
 
+struct IngredientDataControllerInputs {
+    var unit: Providers.Unit?
+    var whole: Int?
+    var fraction: Fraction?
+}
+
 class IngredientDataController: UITableViewController {
+
+    static let defaultQuantity = 1
+    static let defaultFraction = Fraction.zero
+    static let defaultUnitName = "unit"
 
     weak var controller: QuickAddListItemViewController?
 
@@ -19,21 +29,58 @@ class IngredientDataController: UITableViewController {
 
     var cellCount = 0
 
+    var productName: String = ""
+
+    fileprivate var inputs = IngredientDataControllerInputs() {
+        didSet {
+            updateHeader(inputs: inputs)
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 
-        unitsManager.configure(controller: self)
+        unitsManager.configure(controller: self, onSelectUnit: { [weak self] unit in
+            self?.inputs.unit = unit
+        })
         initQuantityView()
 
         cellCount = 3
         reload()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // Trigger reload (header update with defaults)
+        let inputs = IngredientDataControllerInputs()
+        self.inputs = inputs
+    }
 
     fileprivate func initQuantityView() {
         quantityView = IngredientQuantityView.createView()
+        quantityView.onQuantityChanged = { [weak self] whole, fraction in
+            self?.inputs.whole = whole
+            self?.inputs.fraction = fraction
+        }
+    }
+
+    fileprivate func updateHeader(inputs: IngredientDataControllerInputs) {
+        guard let header = tableView.headerView(forSection: 0) as? SelectIngredientDataHeader else {
+            logger.e("No header or couldn't be casted", .ui)
+            return
+        }
+
+        let headerInputs = SelectIngredientDataHeaderInputs(
+            productName: productName,
+            unitName: inputs.unit?.name ?? IngredientDataController.defaultUnitName,
+            quantity: inputs.whole.map { Float($0) } ?? Float(IngredientDataController.defaultQuantity),
+            fraction: inputs.fraction ?? IngredientDataController.defaultFraction
+        )
+
+        header.update(inputs: headerInputs)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -42,7 +89,6 @@ class IngredientDataController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = SelectIngredientDataHeader.createView()
-        header.backgroundColor = UIColor.flatRed
         return header
     }
 
