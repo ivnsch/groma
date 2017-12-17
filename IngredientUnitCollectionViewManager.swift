@@ -26,7 +26,7 @@ class IngredientUnitCollectionViewManager: UIView {
     fileprivate var unitsDataSource: UnitsDataSource?
     fileprivate var unitsDelegate: UnitsDelegate? // arc
     fileprivate var unitNames: [String] = [] // we need this because we can't touch the Realm Units in the autocompletions thread (get diff. thread exception). So we have to map to Strings in advance.
-    fileprivate let unitCellSize = CGSize(width: 70, height: 50)
+    fileprivate let unitCellSize = CGSize(width: 60, height: 76)
     fileprivate var currentNewUnitInput: String?
 
     fileprivate weak var controller: UIViewController?
@@ -34,15 +34,18 @@ class IngredientUnitCollectionViewManager: UIView {
     fileprivate var onSelectUnit: ((Providers.Unit?) -> Void)?
     fileprivate var selectedUnit: (() -> Providers.Unit?)?
 
+    fileprivate let rowsSpacing: CGFloat = 4
+    fileprivate let topCollectionViewPadding: CGFloat = 20
+    fileprivate let bottomCollectionViewPadding: CGFloat = 20
+
     var unitContentsHeight: CGFloat {
         //        let collectionViewWidth = unitsCollectionView.width
         //        guard collectionViewWidth > 0 else { return 0 } // avoid division by 0
         let unitCount = unitsDataSource?.units?.count ?? 0
         //        let unitsPerRow = floor(collectionViewWidth / unitCellSize.width)
-        let unitsPerRow = CGFloat(4) // for now hardcoded. Calculating it returns 5 (wrong) + using the collection width causes constraint error (because this is called 2-3 times at the beginning with a width of 0) and collapses entirely the collection view. TODO not hardcoded
-        let rowCount = floor(CGFloat(unitCount) / unitsPerRow)
-        let verticalSpacing: CGFloat = 8 // estimated TODO retrieve
-        return rowCount * (unitCellSize.height + verticalSpacing)
+        let unitsPerRow = CGFloat(5) // for now hardcoded. Calculating it returns 5 (wrong) + using the collection width causes constraint error (because this is called 2-3 times at the beginning with a width of 0) and collapses entirely the collection view. TODO not hardcoded
+        let rowCount = ceil(CGFloat(unitCount) / unitsPerRow)
+        return rowCount * (unitCellSize.height + rowsSpacing) + topCollectionViewPadding + bottomCollectionViewPadding
     }
 
     func configure(controller: UIViewController, onSelectUnit: @escaping ((Providers.Unit?) -> Void)) {
@@ -51,7 +54,14 @@ class IngredientUnitCollectionViewManager: UIView {
         self.onSelectUnit = onSelectUnit
 
         let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsetsMake(20, 30, 20, 30)
+        flowLayout.minimumInteritemSpacing = 0
+        flowLayout.minimumLineSpacing = rowsSpacing
+
         unitsCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+
+        unitsCollectionView.bounces = false
+        unitsCollectionView.backgroundColor = UIColor.clear
 
         let delegate = UnitsDelegate(delegate: self)
         unitsCollectionView.delegate = delegate

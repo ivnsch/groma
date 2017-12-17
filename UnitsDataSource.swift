@@ -42,9 +42,7 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "unitCell", for: indexPath) as! UnitCell
             let unit = units[indexPath.row]
             cell.unitView.unit = unit
-            cell.unitView.bgColor = Theme.unitsBGColor
             cell.unitView.fgColor = Theme.unitsFGColor
-            cell.unitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
             cell.unitView.markedToDelete = false
             cell.delegate = self
             

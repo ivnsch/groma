@@ -29,13 +29,21 @@ public enum UnitId: Int {
     case shot = 13
     case clove = 14
     case can = 15
+    case pint = 16
+    case gin = 17
+    case floz = 18
+    case dash = 19
+    case wgf = 20
+    case dram = 21
+    case lb = 22
+    case oz = 23
     
     case custom = 99
 }
 
 public class Unit: DBSyncable, Identifiable {
     
-    public static let unitsWithBase: [UnitId] = [.g, .kg, .liter, .milliliter, .custom]
+    public static let unitsWithBase: [UnitId] = [.g, .kg, .liter, .milliliter, .custom, .lb, .oz]
 
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var name: String = ""

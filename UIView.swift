@@ -96,7 +96,7 @@ extension UIView {
             NSLayoutConstraint.matchHeight(view: self, otherView: view)])
     }
     
-    public func fillSuperview() {
+    public func fillSuperview(constant: Float? = nil) {
         if let superview = superview {
             fill(superview)
         } else {
@@ -130,11 +130,11 @@ extension UIView {
         _ = alignBottom(view)
     }
     
-    public func fill(_ view: UIView) {
-        _ = alignTop(view)
-        _ = alignLeft(view)
-        _ = alignRight(view)
-        _ = alignBottom(view)
+    public func fill(_ view: UIView, constant: Float? = nil) {
+        _ = alignTop(view, constant: constant ?? 0)
+        _ = alignLeft(view, constant: constant ?? 0)
+        _ = alignRight(view, constant: constant ?? 0)
+        _ = alignBottom(view, constant: constant ?? 0)
     }
     
     public func addSubviewFill(_ view: UIView) {

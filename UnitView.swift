@@ -16,7 +16,8 @@ protocol UnitViewDelegate {
 @IBDesignable class UnitView: UIView {
     
     @IBInspectable var isBold: Bool = false
-    
+
+    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     
     var delegate: UnitViewDelegate?
@@ -29,7 +30,38 @@ protocol UnitViewDelegate {
                 nameLabel.text = "\(unit.name.isEmpty ? trans("unit_unit") : unit.name)"
 
                 nameLabel.sizeToFit()
-                
+
+                let image: UIImage = {
+                    switch unit.id {
+                    case .none: return #imageLiteral(resourceName: "can")
+                    case .g: return #imageLiteral(resourceName: "g")
+                    case .kg: return #imageLiteral(resourceName: "kg")
+                    case .ounce: return #imageLiteral(resourceName: "oz")
+                    case .pack: return #imageLiteral(resourceName: "pack")
+                    case .cup: return #imageLiteral(resourceName: "cup")
+                    case .teaspoon: return #imageLiteral(resourceName: "tbsp")
+                    case .spoon: return #imageLiteral(resourceName: "tbsp")
+                    case .pinch: return #imageLiteral(resourceName: "pinch")
+                    case .pound: return #imageLiteral(resourceName: "lb")
+                    case .liter: return #imageLiteral(resourceName: "litre")
+                    case .milliliter: return #imageLiteral(resourceName: "ml")
+                    case .drop: return #imageLiteral(resourceName: "drop")
+                    case .shot: return #imageLiteral(resourceName: "shot")
+                    case .clove: return #imageLiteral(resourceName: "shot")
+                    case .can: return#imageLiteral(resourceName: "can")
+                    case .custom: return#imageLiteral(resourceName: "can")
+                    case .pint: return #imageLiteral(resourceName: "pint")
+                    case .gin: return #imageLiteral(resourceName: "gin")
+                    case .floz: return #imageLiteral(resourceName: "floz")
+                    case .dash: return #imageLiteral(resourceName: "dash")
+                    case .wgf: return #imageLiteral(resourceName: "wgf")
+                    case .dram: return #imageLiteral(resourceName: "dram")
+                    case .lb: return #imageLiteral(resourceName: "lb")
+                    case .oz: return #imageLiteral(resourceName: "oz")
+                    }
+                }()
+                imageView.image = image
+
                 invalidateIntrinsicContentSize()
             }
         }

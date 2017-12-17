@@ -71,10 +71,8 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
 
         let viewToAdd: UIView & QuantityImage = {
             switch unit.id {
-            case .spoon, .teaspoon:
-                return MoundsView()
             default:
-                fatalError("TODO")
+                return MoundsView()
             }
         } ()
 
