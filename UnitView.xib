@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UnitView" customModule="groma" customModuleProvider="target">
             <connections>
                 <outlet property="imageView" destination="E8z-g5-X3t" id="pmo-3i-ekM"/>
+                <outlet property="imageViewContainer" destination="QnG-vO-t6P" id="qPD-SE-RLY"/>
                 <outlet property="nameLabel" destination="ryC-S6-2RO" id="Bm8-Bh-LUJ"/>
             </connections>
         </placeholder>

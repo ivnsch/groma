@@ -17,6 +17,7 @@ protocol UnitViewDelegate {
     
     @IBInspectable var isBold: Bool = false
 
+    @IBOutlet weak var imageViewContainer: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     
@@ -116,13 +117,9 @@ protocol UnitViewDelegate {
     }
     
     func showSelected(selected: Bool, animated: Bool) {
-        
-        let (bg, fg) = selected ? (Theme.unitsSelectedColor, UIColor.white) : (bgColor, fgColor)
-        
-        animIf(animated) {[weak self] in
-            self?.backgroundColor = bg
-            self?.nameLabel.textColor = fg
-        }
+//        animIf(animated) {[weak self] in
+            imageViewContainer.backgroundColor = selected ? Theme.green : Theme.grey
+//        }
     }
     
     override func awakeFromNib() {
