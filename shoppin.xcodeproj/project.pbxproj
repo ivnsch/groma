@@ -92,6 +92,7 @@
 		6ACFFBF51FE5BEC50000DDEB /* MoundsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBF41FE5BEC50000DDEB /* MoundsView.swift */; };
 		6ACFFBF71FE5C0160000DDEB /* IngredientQuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBF61FE5C0160000DDEB /* IngredientQuantityView.swift */; };
 		6ACFFBF91FE5C4EA0000DDEB /* IngredientQuantityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ACFFBF81FE5C4EA0000DDEB /* IngredientQuantityView.xib */; };
+		6ACFFBFB1FE685B10000DDEB /* IngredientUnitCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACFFBFA1FE685B10000DDEB /* IngredientUnitCollectionViewManager.swift */; };
 		6AD51A8F1E4F5E350053934E /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */; };
 		6AD51AAF1E512D7F0053934E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AAE1E512D7F0053934E /* String.swift */; };
 		6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51ABE1E512FAA0053934E /* UIColor.swift */; };
@@ -570,6 +571,7 @@
 		6ACFFBF41FE5BEC50000DDEB /* MoundsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoundsView.swift; sourceTree = "<group>"; };
 		6ACFFBF61FE5C0160000DDEB /* IngredientQuantityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientQuantityView.swift; sourceTree = "<group>"; };
 		6ACFFBF81FE5C4EA0000DDEB /* IngredientQuantityView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IngredientQuantityView.xib; sourceTree = "<group>"; };
+		6ACFFBFA1FE685B10000DDEB /* IngredientUnitCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientUnitCollectionViewManager.swift; sourceTree = "<group>"; };
 		6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		6AD51AAE1E512D7F0053934E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		6AD51ABE1E512FAA0053934E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -1205,6 +1207,7 @@
 				6ACFFBF21FE5716F0000DDEB /* SelectIngredientDataHeader.xib */,
 				6ACFFBF61FE5C0160000DDEB /* IngredientQuantityView.swift */,
 				6ACFFBF81FE5C4EA0000DDEB /* IngredientQuantityView.xib */,
+				6ACFFBFA1FE685B10000DDEB /* IngredientUnitCollectionViewManager.swift */,
 			);
 			name = ingredient;
 			sourceTree = "<group>";
@@ -2976,6 +2979,7 @@
 				EBB2CBCA1CF20AD60040C619 /* LeftRightBigPaddingConstraint.swift in Sources */,
 				6AE41A191E49E61D00B8459D /* SelectQuantifiableCell.swift in Sources */,
 				6A3A67B71E5604E600B5354F /* ManageItemsBaseQuantitiesController.swift in Sources */,
+				6ACFFBFB1FE685B10000DDEB /* IngredientUnitCollectionViewManager.swift in Sources */,
 				EBED0D101C82229900A1EEC4 /* RatingPopupController.swift in Sources */,
 				6A287E991E54794600868244 /* ManageItemsSectionView.swift in Sources */,
 				EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */,
