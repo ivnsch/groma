@@ -9,7 +9,7 @@
 import UIKit
 import Providers
 
-class ScrollableBottomAttacher {
+class ScrollableBottomAttacher<T: UITableViewController> {
 
     fileprivate let animDuration: TimeInterval = 0.3
     fileprivate var topViewHeight: CGFloat = 0
@@ -28,7 +28,7 @@ class ScrollableBottomAttacher {
 
     fileprivate let parent: UIViewController
     fileprivate let top: UIViewController
-    fileprivate let bottom: UITableViewController
+    let bottom: T
 
     fileprivate var lockShowTop = false
     fileprivate var lockHideTop = false
@@ -40,7 +40,7 @@ class ScrollableBottomAttacher {
 
     fileprivate var onExpandBottom: () -> Void
 
-    init(parent: UIViewController, top: UIViewController, bottom: UITableViewController,
+    init(parent: UIViewController, top: UIViewController, bottom: T,
          topViewTopConstraint: NSLayoutConstraint, onAddedSubview: () -> Void, onExpandBottom: @escaping () -> Void) {
         self.parent = parent
         self.top = top

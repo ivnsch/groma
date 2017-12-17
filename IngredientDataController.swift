@@ -9,13 +9,19 @@
 import UIKit
 import Providers
 
-struct IngredientDataControllerInputs {
+struct IngredientDataControllerResult {
+    let unitName: String
+    let whole: Int
+    let fraction: Fraction?
+}
+
+fileprivate struct IngredientDataControllerInputs {
     var unit: Providers.Unit?
     var whole: Int?
     var fraction: Fraction?
 }
 
-class IngredientDataController: UITableViewController {
+class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
     static let defaultQuantity = 1
     static let defaultFraction = Fraction.zero
@@ -27,6 +33,8 @@ class IngredientDataController: UITableViewController {
 
     fileprivate var quantityView: IngredientQuantityView!
 
+    fileprivate var submitView: SubmitView?
+
     var cellCount = 0
 
     var productName: String = ""
@@ -36,6 +44,9 @@ class IngredientDataController: UITableViewController {
             updateHeader(inputs: inputs)
         }
     }
+
+    var onSubmitInputs: ((IngredientDataControllerResult) -> Void)?
+    var submitButtonParent: (() -> UIView?)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +64,8 @@ class IngredientDataController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        initSubmitButton()
 
         // Trigger reload (header update with defaults)
         let inputs = IngredientDataControllerInputs()
@@ -82,6 +95,8 @@ class IngredientDataController: UITableViewController {
 
         header.update(inputs: headerInputs)
     }
+
+    // MARK: Table view
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -140,5 +155,76 @@ class IngredientDataController: UITableViewController {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         controller?.scrollableBottomAttacher?.onBottomViewDidScroll(scrollView)
     }
-}
 
+    // MARK: Submit buttom
+
+    fileprivate func initSubmitButton() {
+        guard self.submitView == nil else {logger.v("Already showing a submit view"); return}
+        //        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {logger.e("No delegate: \(delegate)"); return}
+        guard let submitButtonParent = submitButtonParent else {logger.e("No function to get parent"); return}
+        guard let parent = submitButtonParent() else {logger.e("Function didn't return parent!"); return}
+
+        let height = Theme.submitViewHeight
+        let submitView = SubmitView(frame: CGRect(x: 0, y: parent.frame.maxY - height, width: parent.width, height: height))
+        submitView.delegate = self
+        submitView.setButtonTitle(title: trans("select_ingredient_data_submit"))
+        parent.addSubview(submitView)
+
+        submitView.translatesAutoresizingMaskIntoConstraints = false
+
+//        let tabbarHeight: CGFloat = self.parent?.tabBarController?.tabBar.size.height ?? {
+//            logger.e("Couldn't get tabbar. Parent: \(parent)", .ui)
+//            return 49 // Default to non-iPhoneX tabbar height, though this shouldn't happen
+//        } ()
+
+        _ = submitView.alignLeft(parent)
+        _ = submitView.alignRight(parent)
+        let bottomConstraint = submitView.alignBottom(parent, constant: 0)
+        _ = submitView.heightConstraint(height)
+
+        self.submitView = submitView
+
+        // anchor with center translation doesn't work because autolayout, and transform doesn't work because we have to
+        // scale, so using the bottom constraint instead
+        func setAnchorWithoutMovingWithBottomConstraint(view: UIView, anchor: CGPoint) -> CGPoint {
+            let offsetAnchor = CGPoint(x: anchor.x - view.layer.anchorPoint.x, y: anchor.y - view.layer.anchorPoint.y)
+            let offset = CGPoint(x: view.frame.width * offsetAnchor.x, y: view.frame.height * offsetAnchor.y)
+            view.layer.anchorPoint = anchor
+            bottomConstraint.constant = offset.y
+            return offset
+        }
+
+        _ = setAnchorWithoutMovingWithBottomConstraint(view: submitView, anchor: CGPoint(x: submitView.layer.anchorPoint.x, y: 1))
+        submitView.transform = CGAffineTransform.identity.scaledBy(x: 1, y: 0.00001)
+        delay(0.5) {
+            parent.bringSubview(toFront: submitView)
+            UIView.animate(withDuration: Theme.defaultAnimDuration) {
+                submitView.transform = CGAffineTransform.identity
+            }
+        }
+    }
+
+    func removeSubmitButton(onFinish: @escaping () -> Void) {
+        UIView.animate(withDuration: Theme.defaultAnimDuration, animations: { [weak self] in
+            self?.submitView?.transform = CGAffineTransform.identity.scaledBy(x: 1, y: 0.00001)
+        }, completion: { [weak self] onFinished in
+            self?.submitView?.removeFromSuperview()
+            onFinish()
+        })
+    }
+
+    // MARK: - SubmitViewDelegate
+
+    func onSubmitButton() {
+        submit()
+    }
+
+    fileprivate func submit() {
+        guard let onSubmitInputs = onSubmitInputs else { logger.e("No submit callback"); return }
+        let result = IngredientDataControllerResult(
+            unitName: inputs.unit?.name ?? IngredientDataController.defaultUnitName,
+            whole: inputs.whole ?? IngredientDataController.defaultQuantity,
+            fraction: inputs.fraction)
+        onSubmitInputs(result)
+    }
+}

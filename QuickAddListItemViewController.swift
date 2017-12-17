@@ -109,7 +109,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     weak var topParentController: UIViewController?
 
     // Ingredients specific
-    fileprivate(set) var scrollableBottomAttacher: ScrollableBottomAttacher?
+    fileprivate(set) var scrollableBottomAttacher: ScrollableBottomAttacher<IngredientDataController>?
     fileprivate var lockAddBottomController = false // prevent issues when tapping item fast multiple times
     fileprivate var lockRemoveBottomController = false // prevent issues when tapping item fast multiple times
 
@@ -452,9 +452,6 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////
-
     fileprivate func retrieveQuickAddIngredient(item: Item, indexPath: IndexPath, onRetrieved: @escaping (QuickAddIngredientInput, Float) -> Void) {
 
         guard let topConstraint = topConstraint else {
@@ -472,16 +469,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             return
         }
 
-        topControllersDelegate?.hideKeyboard()
-
         let tableViewController = IngredientDataController()
-        tableViewController.productName = item.name
-        tableViewController.controller = self
-        tableViewController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
-        if #available(iOS 11.0, *) {
-            tableViewController.tableView.contentInsetAdjustmentBehavior = .never
-        }
-        tableViewController.view.backgroundColor = Theme.lightGreyBackground
 
         func showScrollableBottomAttacher() {
             guard !lockAddBottomController else { return }
@@ -503,43 +491,55 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             })
         }
 
-        if let scrollableBottomAttacher = scrollableBottomAttacher {
+        func removeScrollableBottomAttacher(_ scrollableBottomAttacher: ScrollableBottomAttacher<IngredientDataController>,
+                                            onFinish: @escaping () -> Void) {
             guard !lockRemoveBottomController else { return }
             lockRemoveBottomController = true
             scrollableBottomAttacher.removeBottom(onFinish: {
                 self.lockRemoveBottomController = false
-                showScrollableBottomAttacher()
+                onFinish()
+            })
+        }
+
+        topControllersDelegate?.hideKeyboard()
+
+        tableViewController.productName = item.name
+        tableViewController.controller = self
+        tableViewController.onSubmitInputs = { [weak self] result in guard let weakSelf = self else { return }
+            let inputsForDelegate = SelectIngredientDataControllerInputs(
+                unitName: result.unitName,
+                quantity: Float(result.whole),
+                fraction: result.fraction ?? Fraction.zero
+            )
+            self?.delegate?.onAddIngredient(item: item, ingredientInput: inputsForDelegate)
+            self?.topControllersDelegate?.restoreKeyboard()
+            if let scrollableBottomAttacher = weakSelf.scrollableBottomAttacher {
+                self?.scrollableBottomAttacher?.bottom.removeSubmitButton {}
+                removeScrollableBottomAttacher(scrollableBottomAttacher, onFinish: {})
+            } else {
+                logger.e("Invalid state - submitted an item using bottom - bottom should be attached!", .ui)
+            }
+            self?.scrollableBottomAttacher = nil // when tap item it should display again
+
+        }
+        tableViewController.submitButtonParent = { [weak self] in
+            return self?.delegate?.parentViewForAddButton()
+        }
+        tableViewController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
+        if #available(iOS 11.0, *) {
+            tableViewController.tableView.contentInsetAdjustmentBehavior = .never
+        }
+        tableViewController.view.backgroundColor = Theme.lightGreyBackground
+
+        if let scrollableBottomAttacher = scrollableBottomAttacher {
+            removeScrollableBottomAttacher(scrollableBottomAttacher, onFinish: {
+                scrollableBottomAttacher.hideTop(onFinish: { [weak self] in
+                    self?.lockAddBottomController = false
+                })
             })
         } else {
             showScrollableBottomAttacher()
         }
-
-
-//        guard let cell = collectionView.cellForItem(at: indexPath) else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
-//
-//        view.endEditing(true)
-//        topControllersDelegate?.hideKeyboard()
-//
-//
-//        let windowHeight: CGFloat = UIApplication.shared.delegate.flatMap{$0.window??.height} ?? 0
-//        let controllerHeight = windowHeight - 49 - Theme.navBarHeight // 49 tabbar
-//
-//        // Note: the height of the quick add is somewhere up in hierarchy, we pass the hardcoded DimensionsManager value because it's quicker to implement
-//
-//        selectIngredientAnimator?.openNoOverlay (button: cell, frame: CGRect(x: 0, y: 0, width: view.width, height: controllerHeight), scrollOffset: self.collectionView.contentOffset.y, controllerCreator: {[weak self] in
-//            let container = UIStoryboard.selectIngredientDataContainerController()
-//            container.delegate = self
-//
-//            container.onUIReady = {[weak container] in
-//                container?.item = item
-//            }
-//
-////            container.onSelectDataControllerReadyBeforeDidLoad = {selectDataController in
-////                selectDataController.delegate = self
-////            }
-//
-//            return container
-//        })
     }
     
     func scrollToBottom() {
@@ -665,7 +665,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             )
         }
         
-        
+
         func loadProducts() {
             
             Prov.productProvider.products(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
@@ -811,6 +811,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
 
         if let scrollableBottomAttacher = scrollableBottomAttacher {
             isAnyShowing = true
+            scrollableBottomAttacher.bottom.removeSubmitButton {
+            }
             scrollableBottomAttacher.removeBottom(onFinish: {
             })
             self.scrollableBottomAttacher = nil
@@ -838,29 +840,5 @@ extension QuickAddListItemViewController: AddRecipeControllerDelegate {
     
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
         delegate?.getAlreadyHaveText(ingredient: ingredient, handler)
-    }
-}
-
-// MARK: - SelectIngredientDataContainerControllerDelegate
-
-extension QuickAddListItemViewController: SelectIngredientDataContainerControllerDelegate {
-    
-    func onSelectIngrentTapOutsideOfContent() {
-//        closeSelectIngredientDataController()
-    }
-    
-    func onSubmitIngredientInputs(item: Item, inputs: SelectIngredientDataControllerInputs) {
-//        delegate?.onAddIngredient(item: item, ingredientInput: inputs)
-//        (selectIngredientAnimator?.controller as? SelectIngredientDataController)?.onClose()
-//        topControllersDelegate?.restoreKeyboard()
-//        selectIngredientAnimator?.close()
-    }
-    
-    func parentViewForSelectIngredientControllerAddButton() -> UIView? {
-        return delegate?.parentViewForAddButton()
-    }
-    
-    func submitButtonBottomOffset(parent: UIView, buttonHeight: CGFloat) -> CGFloat {
-         return 0
     }
 }
