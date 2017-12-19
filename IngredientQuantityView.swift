@@ -14,15 +14,18 @@ protocol QuantityImage {
     func showQuantity(whole: Int, fraction: Fraction, animated: Bool)
 }
 
-class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityViewDelegate {
+class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityViewDelegate, EditableFractionViewDelegate {
 
     @IBOutlet weak var quantityImageContainer: UIView!
     @IBOutlet weak var fractionSlider: ASValueTrackingSlider!
     @IBOutlet weak var fractionTextInputView: EditableFractionView!
     @IBOutlet weak var quantityView: QuantityView!
+    @IBOutlet weak var enterManuallyButton: UIButton!
 
     fileprivate var quantityImage: QuantityImage?
-    
+
+    fileprivate let sliderFractionLimit: Float = 0.8 // not bigger than this
+
     var onQuantityChanged: ((Int, Fraction) -> Void)?
     fileprivate var didLayoutSubviews = false
 
@@ -66,6 +69,10 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
         quantityView.delegate = self
     }
 
+    fileprivate func initFractionEditableView() {
+        fractionTextInputView.delegate = self
+    }
+
     func configure(unit: Providers.Unit, fraction: Fraction?) {
 
         quantityImageContainer.removeSubviews()
@@ -88,6 +95,7 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
         super.awakeFromNib()
         initSlider()
         initQuantityView()
+        initFractionEditableView()
     }
 
     override func layoutSubviews() {
@@ -102,6 +110,13 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
     }
 
     @IBAction func onTapEnterManually(_ sender: UIButton) {
+        UIView.animate(withDuration: Theme.defaultAnimDuration, animations: {
+            self.enterManuallyButton.alpha = 0
+            self.fractionTextInputView.alpha = 1
+        }) { finished in
+//            self.enterManuallyButton.removeFromSuperview()
+            self.enterManuallyButton.isHidden = true
+        }
     }
 
     // MARK: - Slider
@@ -118,10 +133,13 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
         //            }
         //        }
 
-        quantityImage?.showQuantity(whole: wholeQuantity, fraction: fraction, animated: true)
-        fractionTextInputView.prefill(fraction: fraction)
+        let valueInRange = fraction.decimalValue * sliderFractionLimit
+        let fractionInRange = rationalApproximationOf(x0: Double(valueInRange))
 
-        self.fraction = fraction
+        quantityImage?.showQuantity(whole: wholeQuantity, fraction: fractionInRange, animated: true)
+        fractionTextInputView.prefill(fraction: fractionInRange)
+
+        self.fraction = fractionInRange
 //        delegate?.onSelectFraction(fraction: fraction)
     }
 
@@ -133,12 +151,13 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
 
     func slider(_ slider: ASValueTrackingSlider!, stringForValue value: Float) -> String! {
 
-        let fraction = rationalApproximationOf(x0: Double(value))
+        let valueInRange = value * sliderFractionLimit
+        let fractionInRange = rationalApproximationOf(x0: Double(valueInRange))
 
-        switch fraction.decimalValue {
+        switch fractionInRange.decimalValue {
         case 0: return "0"
         case 1: return "1"
-        default: return "\(fraction.numerator)/\(fraction.denominator)"
+        default: return "\(fractionInRange.numerator)/\(fractionInRange.denominator)"
         }
     }
 
@@ -151,5 +170,23 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
     }
 
     func onQuantityInput(_ quantity: Float) {
+    }
+
+    // MARK: EditableFractionViewDelegate
+
+    func onFractionInputChange(fractionInput: Fraction?) {
+        if let fraction = fractionInput {
+            // Replace possible division by 0 by a valid 0 value fraction - we shouldn't expect maths of the users.
+            let correctedFraction: Fraction = {
+                return fraction.denominator == 0 ? Fraction(numerator: 0, denominator: 1) : fraction
+            } ()
+            let isValid = abs(correctedFraction.decimalValue) < 1
+            if isValid {
+                quantityImage?.showQuantity(whole: wholeQuantity, fraction: correctedFraction, animated: true)
+                fractionSlider.value = correctedFraction.decimalValue
+                self.fraction = correctedFraction
+            }
+            fractionTextInputView.showValid(valid: isValid)
+        }
     }
 }

@@ -9,10 +9,13 @@
 import UIKit
 import Providers
 
+@IBDesignable
 class RoundTextField: UITextField {
     
     @IBInspectable var fontType: Int = -1
-    
+
+    @IBInspectable var cornerRadius: CGFloat = 15
+
     fileprivate var originalTextColor: UIColor?
     
     fileprivate var drawInvalid: Bool = false
@@ -39,7 +42,7 @@ class RoundTextField: UITextField {
     override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         let rect = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
-        let circlePath = UIBezierPath(roundedRect: rect, byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: 15, height: 15))
+        let circlePath = UIBezierPath(roundedRect: rect, byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
         circlePath.close()
         
         context?.setFillColor(UIColor.white.cgColor)
@@ -51,7 +54,7 @@ class RoundTextField: UITextField {
             let borderWidth: CGFloat = 1
             let halfBorderWidth = borderWidth / 2
             
-            let borderPath = UIBezierPath(roundedRect: rect.insetAll(halfBorderWidth), byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: 15, height: 15))
+            let borderPath = UIBezierPath(roundedRect: rect.insetAll(halfBorderWidth), byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
             borderPath.close()
             
             context?.setStrokeColor(UIColor.flatRed.cgColor)

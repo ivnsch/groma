@@ -20,8 +20,8 @@ class EditableFractionView: UIView {
     
     @IBInspectable var isBold: Bool = false
     
-    @IBOutlet weak var numeratorTextField: UITextField!
-    @IBOutlet weak var denominatorTextField: UITextField!
+    @IBOutlet weak var numeratorTextField: RoundTextField!
+    @IBOutlet weak var denominatorTextField: RoundTextField!
     @IBOutlet weak var lineView: UIView!
     
     var delegate: EditableFractionViewDelegate?
@@ -51,8 +51,7 @@ class EditableFractionView: UIView {
         view.backgroundColor = UIColor.clear
         backgroundColor = UIColor.clear
     }
-    
-    
+
     var fraction: Fraction? {
         guard let numerator = (numeratorTextField.text.flatMap{Int($0)}) else {return nil}
         guard let denominator = (denominatorTextField.text.flatMap{Int($0)}) else {return nil}
@@ -88,16 +87,27 @@ class EditableFractionView: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        lineView.rotate(45)
-        
+        lineView.rotate(30)
         initTextListeners()
     }
     
-//    override var intrinsicContentSize: CGSize {
-//        return CGSize(width: numeratorTextField.width + lineView.width + denominatorTextField.width + 5 + 20, height: numeratorTextField.height + 20) // width: 5 pt (*2) spacing to line, 10 pt for 2*2 pt center constraint offset in labels + 6pt just to make a little more space. TODO copied from FractionView - check if these numbers are also valid here
-//    }
-    
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: numeratorTextField.width + lineView.width + denominatorTextField.width + 5 + 20, height: numeratorTextField.height + 20) // width: 5 pt (*2) spacing to line, 10 pt for 2*2 pt center constraint offset in labels + 6pt just to make a little more space. TODO copied from FractionView - check if these numbers are also valid here
+    }
+
     var hasFractionInputFocus: Bool {
         return numeratorTextField.isFirstResponder || denominatorTextField.isFirstResponder
+    }
+
+    func showValid(valid: Bool) {
+        if valid {
+            lineView.backgroundColor = Theme.grey
+            numeratorTextField.textColor = UIColor.black
+            denominatorTextField.textColor = UIColor.black
+        } else {
+            lineView.backgroundColor = UIColor.flatRed
+            numeratorTextField.textColor = UIColor.flatRed
+            denominatorTextField.textColor = UIColor.flatRed
+        }
     }
 }
