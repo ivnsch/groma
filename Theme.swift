@@ -23,10 +23,12 @@ public struct Theme {
     public static let lightGrey2 = UIColor(hexString: "D4D4D4")
     
     public static let grey = UIColor(hexString: "7D8B8C")
-    
+    public static let midGrey = UIColor(hexString: "B7B7B7")
+
     public static let cellBottomBorderColor = UIColor(hexString: "EADFE4")
     
-    public static let blue = UIColor(hexString: "0E95E0")
+    public static let blue = UIColor(hexString: "0E95E0") // tabbar etc
+    public static let darkerBlue = UIColor(hexString: "4D91DF")
     public static let orange = UIColor(hexString: "FFA83E")
     public static var black = UIColor(hexString: "222222")
     

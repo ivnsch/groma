@@ -57,11 +57,13 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
         fractionSlider.maximumValue = 1
         fractionSlider.setMaxFractionDigitsDisplayed(1)
         fractionSlider.popUpViewCornerRadius = 12
-        fractionSlider.popUpViewColor = Theme.blue
+        fractionSlider.popUpViewColor = Theme.darkerBlue
+        fractionSlider.thumbTintColor = Theme.darkerBlue
         //fractionSlider.font =
         fractionSlider.textColor = UIColor.white
         fractionSlider.value = fraction.decimalValue
         fractionSlider.dataSource = self
+        fractionSlider.clipsToBounds = false
     }
 
     fileprivate func initQuantityView() {

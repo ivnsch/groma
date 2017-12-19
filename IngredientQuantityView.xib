@@ -16,15 +16,11 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="330"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="I9w-sI-Dzx" customClass="ASValueTrackingSlider">
-                    <rect key="frame" x="28" y="220" width="187" height="31"/>
-                    <connections>
-                        <action selector="snapValue:" destination="iN0-l3-epB" eventType="valueChanged" id="EDo-aC-Duq"/>
-                    </connections>
-                </slider>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Zj-yk-Q0t">
                     <rect key="frame" x="243" y="220" width="102" height="30"/>
-                    <state key="normal" title="Enter manually"/>
+                    <state key="normal" title="Enter manually">
+                        <color key="titleColor" red="0.30196078431372547" green="0.56862745098039214" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
                     <connections>
                         <action selector="onTapEnterManually:" destination="iN0-l3-epB" eventType="touchUpInside" id="OOj-BV-Qol"/>
                     </connections>
@@ -54,11 +50,16 @@
                 </view>
                 <view alpha="0.0" contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="40" translatesAutoresizingMaskIntoConstraints="NO" id="1dV-Ty-4nv" customClass="EditableFractionView" customModule="groma" customModuleProvider="target">
                     <rect key="frame" x="105" y="210" width="240" height="40"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="iCe-Qi-A7D"/>
                     </constraints>
                 </view>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="I9w-sI-Dzx" customClass="ASValueTrackingSlider">
+                    <rect key="frame" x="28" y="220" width="187" height="31"/>
+                    <connections>
+                        <action selector="snapValue:" destination="iN0-l3-epB" eventType="valueChanged" id="EDo-aC-Duq"/>
+                    </connections>
+                </slider>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
