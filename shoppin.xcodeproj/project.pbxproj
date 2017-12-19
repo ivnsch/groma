@@ -14,6 +14,8 @@
 		58FBD9B31DDCDA19002242D6 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */; };
 		58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */; };
 		6A05647C1E8C628F00E5C74D /* CenterAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A05647B1E8C628F00E5C74D /* CenterAlignedCollectionViewFlowLayout.swift */; };
+		6A0ACE101FE9CED1007E64D5 /* IngredientDataSubHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0ACE0E1FE9CED1007E64D5 /* IngredientDataSubHeaderCell.swift */; };
+		6A0ACE111FE9CED1007E64D5 /* IngredientDataSubHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A0ACE0F1FE9CED1007E64D5 /* IngredientDataSubHeaderCell.xib */; };
 		6A0DE19B1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */; };
 		6A1027671E5E10F0003D2972 /* BaseQuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1027661E5E10F0003D2972 /* BaseQuantityView.swift */; };
 		6A1027691E5E115F003D2972 /* BaseQuantityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1027681E5E115F003D2972 /* BaseQuantityView.xib */; };
@@ -492,6 +494,8 @@
 		58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
 		58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		6A05647B1E8C628F00E5C74D /* CenterAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenterAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		6A0ACE0E1FE9CED1007E64D5 /* IngredientDataSubHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientDataSubHeaderCell.swift; sourceTree = "<group>"; };
+		6A0ACE0F1FE9CED1007E64D5 /* IngredientDataSubHeaderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IngredientDataSubHeaderCell.xib; sourceTree = "<group>"; };
 		6A0DE19A1E3FAE8A0037B4E1 /* ReorderSectionTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderSectionTableViewControllerNew.swift; sourceTree = "<group>"; };
 		6A1027661E5E10F0003D2972 /* BaseQuantityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQuantityView.swift; sourceTree = "<group>"; };
 		6A1027681E5E115F003D2972 /* BaseQuantityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BaseQuantityView.xib; sourceTree = "<group>"; };
@@ -1208,6 +1212,8 @@
 				6ACFFBF61FE5C0160000DDEB /* IngredientQuantityView.swift */,
 				6ACFFBF81FE5C4EA0000DDEB /* IngredientQuantityView.xib */,
 				6ACFFBFA1FE685B10000DDEB /* IngredientUnitCollectionViewManager.swift */,
+				6A0ACE0E1FE9CED1007E64D5 /* IngredientDataSubHeaderCell.swift */,
+				6A0ACE0F1FE9CED1007E64D5 /* IngredientDataSubHeaderCell.xib */,
 			);
 			name = ingredient;
 			sourceTree = "<group>";
@@ -2665,6 +2671,7 @@
 				EB5AD1961BEE2ED400BC6A2F /* EditSectionViewController.xib in Resources */,
 				EB0F5F861B962D2100035175 /* GoogleService-Info.plist in Resources */,
 				6AEB65EC1E4C93620094B9DE /* IngredientsController.storyboard in Resources */,
+				6A0ACE111FE9CED1007E64D5 /* IngredientDataSubHeaderCell.xib in Resources */,
 				EB76A7A51BEE8CD700486F30 /* AddEditPlanItemController.xib in Resources */,
 				6A407ABE1E33A44400D77405 /* AddRecipeIngredientCell.xib in Resources */,
 				EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */,
@@ -2876,6 +2883,7 @@
 				EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
 				6ADC6F421E4E11C9005BE5EB /* UILabel.swift in Sources */,
+				6A0ACE101FE9CED1007E64D5 /* IngredientDataSubHeaderCell.swift in Sources */,
 				EBA9E5EA1C6380ED00A85610 /* SettingsViewController.swift in Sources */,
 				EB75E54B1CA424E1006AAEAF /* NewSharedUserCell.swift in Sources */,
 				6A407AB31E32ACDF00D77405 /* AddRecipeController.swift in Sources */,

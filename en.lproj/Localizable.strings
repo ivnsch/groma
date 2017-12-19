@@ -501,3 +501,5 @@ select_base_quantities = "Base quantities";
 select_units = "Units";
 unit_none_name = "unit (default)";
 select_ingredient_data_submit = "Add";
+select_ingredient_data_header_units = "Unit";
+select_ingredient_data_header_quantity = "Select quantity";

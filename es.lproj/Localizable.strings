@@ -502,3 +502,5 @@ select_base_quantities = "Cantidades base";
 select_units = "Unidades";
 unit_none_name = "unidad (default)";
 select_ingredient_data_submit = "Guardar";
+select_ingredient_data_header_units = "Unidad";
+select_ingredient_data_header_quantity = "Cantidad";

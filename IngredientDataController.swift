@@ -51,17 +51,19 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.separatorStyle = .none
 
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UINib(nibName: "IngredientDataSubHeaderCell", bundle: nil), forCellReuseIdentifier: "subHeaderCell")
         unitsManager.configure(controller: self, onSelectUnit: { [weak self] unit in
             self?.inputs.unit = unit
             delay(0.2) { [weak self] in // make it less abrubt
-                self?.tableView.scrollToRow(at: IndexPath(row: 1, section: 0), at: .top, animated: true)
+                self?.tableView.scrollToRow(at: IndexPath(row: 2, section: 0), at: .top, animated: true)
             }
         })
         initQuantityView()
 
-        cellCount = 3
+        cellCount = 4
         reload()
     }
 
@@ -119,19 +121,32 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.selectionStyle = .none
 
-        cell.contentView.removeSubviews()
+        func dequeueDefaultCell() -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            cell.selectionStyle = .none
+            cell.contentView.removeSubviews()
+            return cell
+        }
+
+        func dequeueSubHeaderCell() -> IngredientDataSubHeaderCell {
+            return tableView.dequeueReusableCell(withIdentifier: "subHeaderCell", for: indexPath) as! IngredientDataSubHeaderCell
+        }
 
         switch indexPath.row {
-        case 0:
+        case 1:
+            let cell = dequeueDefaultCell()
             let view = unitsManager.view
             cell.contentView.addSubview(view)
             view.frame = cell.contentView.bounds // appears to be necessary
             view.fillSuperview()
             return cell
-        case 1:
+        case 0, 2:
+            let header = dequeueSubHeaderCell()
+            header.title.text = indexPath.row == 0 ? trans("select_ingredient_data_header_units") : trans("select_ingredient_data_header_quantity")
+            return header
+        case 3:
+            let cell = dequeueDefaultCell()
             cell.contentView.addSubview(quantityView)
             quantityView.frame = cell.contentView.bounds // appears to be necessary
             quantityView.fillSuperview()
@@ -141,17 +156,16 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
                 quantityView.configure(unit: moundUnit!, fraction: Fraction(numerator: 1, denominator: 2))
             }
             return cell
-        case 2: return cell
-        default: fatalError("Only 3 cells supported")
+        default: fatalError("Only 4 cells supported")
         }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
-        case 0: return unitsManager.unitContentsHeight
-        case 1: return 300
-        case 2: return 300
-        default: fatalError("Only 3 cells supported")
+        case 1: return unitsManager.unitContentsHeight
+        case 0, 2: return 50
+        case 3: return 300
+        default: fatalError("Only 4 cells supported")
         }
     }
 

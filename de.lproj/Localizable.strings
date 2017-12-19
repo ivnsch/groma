@@ -501,3 +501,5 @@ select_base_quantities = "Basismengen";
 select_units = "Einheiten";
 unit_none_name = "Einheit (default)";
 select_ingredient_data_submit = "Speichern";
+select_ingredient_data_header_units = "Einheit";
+select_ingredient_data_header_quantity = "Menge";
