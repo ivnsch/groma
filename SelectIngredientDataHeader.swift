@@ -29,7 +29,7 @@ class SelectIngredientDataHeader: UITableViewHeaderFooterView {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        contentView.backgroundColor = Theme.lightGrey2
+        contentView.backgroundColor = Theme.midGrey
         titleLabelsFont = itemNameLabel.font // NOTE: Assumes that all labels in title have same font
     }
 
