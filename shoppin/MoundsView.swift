@@ -56,8 +56,8 @@ class MoundsView: UIView, QuantityImage {
     fileprivate func calculateWholeViewScale(wholePart: Int) -> CGFloat {
         if wholePart == 0 || wholePart == 1 { return CGFloat(wholePart) }
         else {
-            let mult = 1 + CGFloat(wholePart) * 0.05
-            return min(1.4, mult)
+            let mult = 1 + CGFloat(wholePart) * 0.1 // 0.1 - higher values make it grow quicker
+            return min(1.4, mult) // don't grow more than 1.4x
         }
     }
 
@@ -73,11 +73,11 @@ class MoundsView: UIView, QuantityImage {
         let maxX = minX + wholeView.frame.width + fractionView.frame.width
         let contentWidth = maxX - minX
 
-        let originX = (frame.width - contentWidth) / 2
+        let originX = (frame.width - wholeView.width) / 2
         let originY = (frame.height - wholeOneHeight) / 2
 
         wholeView.frame.origin = CGPoint(x: originX, y: originY)
-        fractionView.frame.origin = CGPoint(x: wholeView.frame.origin.x + wholeView.frame.width, y: wholeView.frame.origin.y)
+        fractionView.frame.origin = CGPoint(x: center.x, y: wholeView.frame.origin.y)
 
         wholeOriginalFrame = wholeView.frame
         fractionOriginalFrame = fractionView.frame
@@ -92,6 +92,7 @@ class MoundsView: UIView, QuantityImage {
         }
 
         xSpacing = 0
+//        wholeView.frame.center = center
         fractionView.frame.origin.x = fractionView.frame.origin.x + xSpacing
 
         let minScale: CGFloat = 0.00001 // if 0 the view disappears and can't be scaled up again
