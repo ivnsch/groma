@@ -11,7 +11,7 @@ import Providers
 import ASValueTrackingSlider
 
 protocol QuantityImage {
-    func showQuantity(whole: Int, fraction: Fraction)
+    func showQuantity(whole: Int, fraction: Fraction, animated: Bool)
 }
 
 class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityViewDelegate {
@@ -24,6 +24,7 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
     fileprivate var quantityImage: QuantityImage?
     
     var onQuantityChanged: ((Int, Fraction) -> Void)?
+    fileprivate var didLayoutSubviews = false
 
     static func createView() -> IngredientQuantityView {
         return Bundle.loadView("IngredientQuantityView", owner: self) as! IngredientQuantityView
@@ -88,7 +89,18 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
         initSlider()
         initQuantityView()
     }
-    
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        guard !didLayoutSubviews else { return }
+        didLayoutSubviews = true
+
+        delay(0.2) { // without delay wholeQuantity disappears! (only fraction should disappear) TODO fix
+            self.quantityImage?.showQuantity(whole: self.wholeQuantity, fraction: self.fraction, animated: false)
+        }
+    }
+
     @IBAction func onTapEnterManually(_ sender: UIButton) {
     }
 
@@ -106,7 +118,7 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
         //            }
         //        }
 
-        quantityImage?.showQuantity(whole: wholeQuantity, fraction: fraction)
+        quantityImage?.showQuantity(whole: wholeQuantity, fraction: fraction, animated: true)
         fractionTextInputView.prefill(fraction: fraction)
 
         self.fraction = fraction
@@ -135,7 +147,7 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
     func onRequestUpdateQuantity(_ delta: Float) {
         wholeQuantity = wholeQuantity + Int(delta)
         quantityView.quantity = Float(wholeQuantity)
-        quantityImage?.showQuantity(whole: wholeQuantity, fraction: fraction)
+        quantityImage?.showQuantity(whole: wholeQuantity, fraction: fraction, animated: true)
     }
 
     func onQuantityInput(_ quantity: Float) {

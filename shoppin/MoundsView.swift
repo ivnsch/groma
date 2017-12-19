@@ -16,9 +16,14 @@ class MoundsView: UIView, QuantityImage {
     fileprivate var fractionView: UIView?
     fileprivate var xSpacing: CGFloat = -10
 
-    fileprivate let wholeOneSize: CGFloat = 50
+    fileprivate let wholeOneSize: CGFloat = 150
+    fileprivate var wholeOneHeight: CGFloat {
+        return wholeOneSize * 0.4622560538
+    }
 
     fileprivate var didLayoutSubviews = false
+    fileprivate var wholeOriginalFrame: CGRect = CGRect.zero
+    fileprivate var fractionOriginalFrame: CGRect = CGRect.zero
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,25 +38,26 @@ class MoundsView: UIView, QuantityImage {
     fileprivate func sharedInit() {
         clipsToBounds = false
 
-        let wholeView = UIView()
-        wholeView.frame.size = CGSize(width: wholeOneSize, height: wholeOneSize)
-        wholeView.backgroundColor = UIColor.flatRed
+        let wholeView = UIImageView()
+        wholeView.image = #imageLiteral(resourceName: "mound1")
+        wholeView.contentMode = .scaleAspectFit
+        wholeView.frame.size = CGSize(width: wholeOneSize, height: wholeOneHeight)
         addSubview(wholeView)
         self.wholeView = wholeView
 
-        let fractionView = UIView()
-        fractionView.frame.size = CGSize(width: wholeOneSize, height: wholeOneSize)
-        fractionView.backgroundColor = UIColor.flatGreen
+        let fractionView = UIImageView()
+        fractionView.image = #imageLiteral(resourceName: "mound1")
+        fractionView.contentMode = .scaleAspectFit
+        fractionView.frame.size = CGSize(width: wholeOneSize, height: wholeOneHeight)
         addSubview(fractionView)
         self.fractionView = fractionView
-
     }
 
     fileprivate func calculateWholeViewScale(wholePart: Int) -> CGFloat {
         if wholePart == 0 || wholePart == 1 { return CGFloat(wholePart) }
         else {
-            let mult = CGFloat(wholePart) * 0.54
-            return min(2, mult)
+            let mult = 1 + CGFloat(wholePart) * 0.05
+            return min(1.4, mult)
         }
     }
 
@@ -63,36 +69,60 @@ class MoundsView: UIView, QuantityImage {
 
         guard let wholeView = wholeView, let fractionView = fractionView else { return }
 
-        _ = wholeView.setAnchorWithoutMovingNoTransform(CGPoint(x: 0, y: 1))
-        _ = fractionView.setAnchorWithoutMovingNoTransform(CGPoint(x: 0, y: 1))
-
         let minX = wholeView.frame.origin.x
         let maxX = minX + wholeView.frame.width + fractionView.frame.width
         let contentWidth = maxX - minX
 
         let originX = (frame.width - contentWidth) / 2
-        let originY = (frame.height - wholeOneSize) / 2
+        let originY = (frame.height - wholeOneHeight) / 2
 
         wholeView.frame.origin = CGPoint(x: originX, y: originY)
         fractionView.frame.origin = CGPoint(x: wholeView.frame.origin.x + wholeView.frame.width, y: wholeView.frame.origin.y)
+
+        wholeOriginalFrame = wholeView.frame
+        fractionOriginalFrame = fractionView.frame
     }
 
     // MARK: QuantityImage
 
-    func showQuantity(whole: Int, fraction: Fraction) {
+    func showQuantity(whole: Int, fraction: Fraction, animated: Bool) {
         guard let wholeView = wholeView, let fractionView = fractionView else {
             print("Views not initialized yet")
             return
         }
 
-//        xSpacing = xSpacing + CGFloat(whole) * 4
         xSpacing = 0
         fractionView.frame.origin.x = fractionView.frame.origin.x + xSpacing
 
         let minScale: CGFloat = 0.00001 // if 0 the view disappears and can't be scaled up again
         let wholeViewScale = max(minScale, calculateWholeViewScale(wholePart: whole))
-        wholeView.transform = CGAffineTransform.identity.scaledBy(x: wholeViewScale, y: wholeViewScale)
+        scaleFrame(view: wholeView, originalFrame: wholeOriginalFrame, scale: wholeViewScale, animated: animated)
         let fractionViewScale = max(minScale, CGFloat(fraction.decimalValue))
-        fractionView.transform = CGAffineTransform.identity.scaledBy(x: fractionViewScale, y: fractionViewScale)
+        scaleFrame(view: fractionView, originalFrame: fractionOriginalFrame, scale: fractionViewScale, animated: animated)
+    }
+
+    fileprivate func scaleFrame(view: UIView, originalFrame: CGRect, scale: CGFloat, animated: Bool) {
+        let scaledWidth = originalFrame.width * scale
+        let scaledHeight = originalFrame.height * scale
+
+        let xDelta = scaledWidth - originalFrame.width
+        let newX = originalFrame.minX - xDelta / 2
+        let newY = originalFrame.maxY - scaledHeight
+        let newFrame = CGRect(x: newX, y: newY, width: scaledWidth, height: scaledHeight)
+
+        func update() {
+            view.frame = newFrame
+        }
+
+        if animated {
+            if view.frame != newFrame {
+                UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.5,
+                               initialSpringVelocity: 0, options: [], animations: {
+                    update()
+                }) { _ in }
+            }
+        } else {
+            update()
+        }
     }
 }
