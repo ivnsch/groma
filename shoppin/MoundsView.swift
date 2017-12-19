@@ -14,11 +14,10 @@ class MoundsView: UIView, QuantityImage {
 
     fileprivate var wholeView: UIView?
     fileprivate var fractionView: UIView?
-    fileprivate var xSpacing: CGFloat = -10
 
     fileprivate let wholeOneSize: CGFloat = 150
     fileprivate var wholeOneHeight: CGFloat {
-        return wholeOneSize * 0.4622560538
+        return wholeOneSize * 0.4622560538 // aspect ratio of the image (this is only for the whole image - it's not exactly the same as the fraction image but for now we reuse it - the bottom line covers the imperfection.
     }
 
     fileprivate var didLayoutSubviews = false
@@ -46,7 +45,7 @@ class MoundsView: UIView, QuantityImage {
         self.wholeView = wholeView
 
         let fractionView = UIImageView()
-        fractionView.image = #imageLiteral(resourceName: "mound1")
+        fractionView.image = #imageLiteral(resourceName: "mound2")
         fractionView.contentMode = .scaleAspectFit
         fractionView.frame.size = CGSize(width: wholeOneSize, height: wholeOneHeight)
         addSubview(fractionView)
@@ -69,10 +68,6 @@ class MoundsView: UIView, QuantityImage {
 
         guard let wholeView = wholeView, let fractionView = fractionView else { return }
 
-        let minX = wholeView.frame.origin.x
-        let maxX = minX + wholeView.frame.width + fractionView.frame.width
-        let contentWidth = maxX - minX
-
         let originX = (frame.width - wholeView.width) / 2
         let originY = (frame.height - wholeOneHeight) / 2
 
@@ -81,6 +76,14 @@ class MoundsView: UIView, QuantityImage {
 
         wholeOriginalFrame = wholeView.frame
         fractionOriginalFrame = fractionView.frame
+
+        // Bottom line
+        let line = UIView()
+        line.backgroundColor = UIColor(hexString: "4A90E2")
+        line.frame.size = CGSize(width: 300, height: 6)
+        line.layer.cornerRadius = 3
+        addSubview(line)
+        line.center = CGPoint(x: center.x, y: wholeView.frame.maxY)
     }
 
     // MARK: QuantityImage
@@ -90,10 +93,6 @@ class MoundsView: UIView, QuantityImage {
             print("Views not initialized yet")
             return
         }
-
-        xSpacing = 0
-//        wholeView.frame.center = center
-        fractionView.frame.origin.x = fractionView.frame.origin.x + xSpacing
 
         let minScale: CGFloat = 0.00001 // if 0 the view disappears and can't be scaled up again
         let wholeViewScale = max(minScale, calculateWholeViewScale(wholePart: whole))
