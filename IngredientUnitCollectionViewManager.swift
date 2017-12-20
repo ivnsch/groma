@@ -31,8 +31,11 @@ class IngredientUnitCollectionViewManager: UIView {
 
     fileprivate weak var controller: UIViewController?
 
-    fileprivate var onSelectUnit: ((Providers.Unit?) -> Void)?
+    var onSelectUnit: ((Providers.Unit?) -> Void)?
     fileprivate var selectedUnit: (() -> Providers.Unit?)?
+    var onMarkedUnitToDelete: ((Providers.Unit?) -> Void)?
+    var unitMarkedToDelete: (() -> Providers.Unit?)?
+    var willDeleteUnit: ((Providers.Unit) -> Void)?
 
     fileprivate let rowsSpacing: CGFloat = 4
     fileprivate let topCollectionViewPadding: CGFloat = 20
@@ -93,6 +96,10 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
         return selectedUnit?()?.name ?? ""
     }
 
+    var unitToDeleteName: String {
+        return unitMarkedToDelete?()?.name ?? ""
+    }
+
     func onUpdateUnitNameInput(nameInput: String) {
         currentNewUnitInput = nameInput
     }
@@ -105,15 +112,22 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
         guard let dataSource = unitsCollectionView.dataSource else {logger.e("No data source"); return}
         guard let unitsDataSource = dataSource as? UnitsDataSource else {logger.e("Data source has wrong type: \(type(of: dataSource))"); return}
         guard let units = unitsDataSource.units else {logger.e("Invalid state: Data source has no units"); return}
+        guard let unitMarkedToDelete = unitMarkedToDelete else {logger.e("Invalid state: Data source has no units"); return}
+
+        let selectedUnit = units[indexPath.row]
 
         let cellMaybe = unitsCollectionView.cellForItem(at: indexPath) as? UnitCell
 
-        if cellMaybe?.unitView.markedToDelete ?? false {
+        if unitMarkedToDelete()?.name == selectedUnit.name {
 
             let unit = units[indexPath.row]
+            willDeleteUnit?(unit)
             Prov.unitProvider.delete(name: unit.name, controller.successHandler {[weak self] in
                 self?.unitsCollectionView.deleteItems(at: [indexPath])
                 self?.unitsCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
+
+
+                logger.w("Results count after delete: \(self?.units?.count)", .wildcard)
             })
 
         } else {
@@ -151,6 +165,14 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
         return true
     }
 
+    func onMarkUnitToDelete(unit: Providers.Unit) {
+        onMarkedUnitToDelete?(unit)
+    }
+
+    var collectionView: UICollectionView {
+        return unitsCollectionView
+    }
+
     fileprivate func onSelect(unit: Providers.Unit) {
         onSelectUnit?(unit)
 
@@ -169,8 +191,8 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
 
     fileprivate func clearSelectedUnits() {
         for cell in unitsCollectionView.visibleCells {
-            if let fractionCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
-                fractionCell.unitView.showSelected(selected: false, animated: true)
+            if let unitCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
+                unitCell.unitView.showSelected(selected: false, animated: true)
             }
         }
     }
@@ -185,6 +207,21 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
 
     fileprivate func updateTitle(inputs: SelectIngredientDataControllerInputs) {
 
+    }
+
+    func markUnitToDelete(unit: Providers.Unit) {
+        for cell in unitsCollectionView.visibleCells {
+            if let unitCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
+                if let cellUnit = unitCell.unitView.unit {
+                    if cellUnit.name == unit.name {
+                        unitCell.unitView.mark(toDelete: true, animated: true)
+                        break
+                    }
+                } else {
+                    logger.e("Illegal state: cell without unit", .ui)
+                }
+            }
+        }
     }
 }
 

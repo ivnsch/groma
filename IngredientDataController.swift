@@ -19,6 +19,7 @@ fileprivate struct IngredientDataControllerInputs {
     var unit: Providers.Unit?
     var whole: Int?
     var fraction: Fraction?
+    var unitMarkedToDelete: Providers.Unit?
 }
 
 class IngredientDataController: UITableViewController, SubmitViewDelegate {
@@ -62,6 +63,28 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
                 self?.tableView.scrollToRow(at: IndexPath(row: 2, section: 0), at: .top, animated: true)
             }
         })
+        unitsManager.onSelectUnit = { [weak self] unit in
+            self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
+            self?.inputs.unit = unit
+        }
+        unitsManager.onMarkedUnitToDelete = { [weak self] unit in
+            self?.inputs.unitMarkedToDelete = unit
+//            if let unit = unit {
+//                self?.unitsManager.markUnitToDelete(unit: unit)
+//            }
+        }
+        unitsManager.unitMarkedToDelete = { [weak self] in
+            return self?.inputs.unitMarkedToDelete
+        }
+        // for now clear variables BEFORE of realm delete - reason: clear possible selected unit - we have to compare with deleted unit to see if it's the same, and this crashes if it is, because after realm delete the object is invalid.
+        // TODO possible solution: Don't retain any Realm objects here, only ids.
+        unitsManager.willDeleteUnit = { [weak self] unit in
+            self?.inputs.unitMarkedToDelete = nil
+            if unit.name == self?.inputs.unit?.name {
+                self?.inputs.unit = nil
+            }
+        }
+
         initQuantityView()
 
         cellCount = 4

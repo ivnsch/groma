@@ -13,9 +13,12 @@ import Providers
 
 protocol UnitsCollectionViewDataSourceDelegate {
     var currentUnitName: String {get}
+    var unitToDeleteName: String { get }
     func onUpdateUnitNameInput(nameInput: String)
     var minUnitTextFieldWidth: CGFloat {get}
     var highlightSelected: Bool {get}
+    func onMarkUnitToDelete(unit: Providers.Unit)
+    var collectionView: UICollectionView { get }
 }
 
 class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, UnitEditableViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -89,11 +92,20 @@ class UnitsDataSource: NSObject, UICollectionViewDataSource, UnitCellDelegate, U
 //            return cell
 //        }
     }
-    
+
+
     // MARK: - UnitCellDelegate
     
     func onLongPress(cell: UnitCell) {
-        cell.unitView.markedToDelete = true
+        guard let delegate = delegate else { logger.e("No delegate"); return }
+        guard let indexPath = delegate.collectionView.indexPath(for: cell) else {
+            logger.e("Couldn't find cell!", .ui)
+            return
+        }
+        guard let units = units else { logger.e("No units"); return }
+        let unit = units[indexPath.row]
+        delegate.onMarkUnitToDelete(unit: unit)
+//        cell.unitView.markedToDelete = true
         cell.unitView.mark(toDelete: true, animated: true)
     }
     

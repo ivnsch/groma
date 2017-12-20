@@ -506,8 +506,12 @@ extension SelectIngredientDataController: UnitsCollectionViewDataSourceDelegate,
     var currentUnitName: String {
         return inputs.unitName
     }
-    
+
+    var unitToDeleteName: String {
+        return "" // TODO -- is this class used?
+    }
     func onUpdateUnitNameInput(nameInput: String) {
+        
         currentNewUnitInput = nameInput
     }
     
@@ -564,5 +568,13 @@ extension SelectIngredientDataController: UnitsCollectionViewDataSourceDelegate,
         return true
     }
     
+    func onMarkUnitToDelete(unit: Providers.Unit) {
+        fatalError("TODO?")
+    }
+
+    var collectionView: UICollectionView {
+        fatalError("TODO?")
+    }
+
 }
 

@@ -112,7 +112,7 @@ protocol UnitViewDelegate {
     func mark(toDelete: Bool, animated: Bool) {
         markedToDelete = toDelete
         animIf(animated) {[weak self] in guard let weakSelf = self else {return}
-            self?.backgroundColor = toDelete ? UIColor.flatRed : weakSelf.bgColor
+            self?.imageViewContainer.backgroundColor = toDelete ? UIColor.flatRed : Theme.grey
         }
     }
     
@@ -138,7 +138,9 @@ protocol UnitViewDelegate {
 //        return CGSize(width: minLabelWidth, height: nameLabel.height + 20) // + 20 to add some padding
 //    }
     
-    @objc func longPress(_ sender: Any) {
-        delegate?.onLongPress()
+    @objc func longPress(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            delegate?.onLongPress()
+        }
     }
 }

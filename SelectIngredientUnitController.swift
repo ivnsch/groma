@@ -171,7 +171,11 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
     var currentUnitName: String {
         return selectedUnit?.name ?? ""
     }
-    
+
+    var unitToDeleteName: String {
+        return "" // TODO -- is this class used?
+    }
+
     func onUpdateUnitNameInput(nameInput: String) {
         currentNewUnitInput = nameInput
     }
@@ -227,6 +231,14 @@ class SelectIngredientUnitController: UIViewController, UnitsCollectionViewDataS
     
     var highlightSelected: Bool {
         return true
+    }
+
+    func onMarkUnitToDelete(unit: Providers.Unit) {
+        fatalError("TODO?")
+    }
+
+    var collectionView: UICollectionView {
+        fatalError("TODO?")
     }
     
     var isUnitInputFocused: Bool {

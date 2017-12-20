@@ -306,7 +306,11 @@ extension ProductQuantityController: UnitsCollectionViewDataSourceDelegate {
     var currentUnitName: String {
         return currentUnitInput ?? ""
     }
-    
+
+    var unitToDeleteName: String {
+        return "" // TODO
+    }
+
     func onUpdateUnitNameInput(nameInput: String) {
         currentUnitInput = nameInput
     }
@@ -317,6 +321,14 @@ extension ProductQuantityController: UnitsCollectionViewDataSourceDelegate {
     
     var highlightSelected: Bool {
         return false
+    }
+
+    func onMarkUnitToDelete(unit: Providers.Unit) {
+        fatalError("TODO?")
+    }
+
+    var collectionView: UICollectionView {
+        fatalError("TODO?")
     }
 }
 

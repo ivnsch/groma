@@ -84,8 +84,9 @@ extension RealmConfig {
     static var localRlmRealmConfig: RLMRealmConfiguration {
 
         let configuration = RLMRealmConfiguration()
+        configuration.schemaVersion = 26
         configuration.fileURL = localRealmUrl
-        //configuration.dynamic = true
+//        configuration.dynamic = true
         //configuration.readOnly = true
         return configuration
     }
