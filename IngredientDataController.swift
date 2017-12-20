@@ -52,6 +52,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         super.viewDidLoad()
 
         tableView.separatorStyle = .none
+        tableView.bottomInset = Theme.submitViewHeight
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.register(UINib(nibName: "IngredientDataSubHeaderCell", bundle: nil), forCellReuseIdentifier: "subHeaderCell")
@@ -153,7 +154,9 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
             if let units = unitsManager.units {
                 let moundUnit = units.findFirst { $0.id == .spoon}
-                quantityView.configure(unit: moundUnit!, fraction: Fraction(numerator: 1, denominator: 2))
+                let whole = inputs.whole ?? IngredientDataController.defaultQuantity
+                let fraction = inputs.fraction ?? IngredientDataController.defaultFraction
+                quantityView.configure(unit: moundUnit!, whole: whole, fraction: fraction)
             }
             return cell
         default: fatalError("Only 4 cells supported")

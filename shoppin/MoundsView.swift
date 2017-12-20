@@ -90,7 +90,7 @@ class MoundsView: UIView, QuantityImage {
 
     func showQuantity(whole: Int, fraction: Fraction, animated: Bool) {
         guard let wholeView = wholeView, let fractionView = fractionView else {
-            print("Views not initialized yet")
+            logger.e("Views not initialized yet")
             return
         }
 

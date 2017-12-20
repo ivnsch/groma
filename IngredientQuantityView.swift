@@ -75,9 +75,7 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
         fractionTextInputView.delegate = self
     }
 
-    func configure(unit: Providers.Unit, fraction: Fraction?) {
-
-        quantityImageContainer.removeSubviews()
+    func configure(unit: Providers.Unit, whole: Int, fraction: Fraction) {
 
         let viewToAdd: UIView & QuantityImage = {
             switch unit.id {
@@ -85,12 +83,20 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
                 return MoundsView()
             }
         } ()
+        self.quantityImage = viewToAdd
 
+        self.wholeQuantity = whole
+        self.fraction = fraction
+
+        quantityImageContainer.removeSubviews()
         viewToAdd.translatesAutoresizingMaskIntoConstraints = false
         quantityImageContainer.addSubview(viewToAdd)
         viewToAdd.fillSuperview()
+        layoutIfNeeded()
 
-        self.quantityImage = viewToAdd
+        quantityImage?.showQuantity(whole: wholeQuantity, fraction: fraction, animated: false)
+        quantityView.quantity = Float(wholeQuantity)
+        fractionSlider.value = fraction.decimalValue
     }
 
     override func awakeFromNib() {
