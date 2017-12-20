@@ -31,7 +31,7 @@
                         </userDefinedRuntimeAttributes>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fx8-eh-i5S">
-                        <rect key="frame" x="120" y="45.5" width="80" height="2"/>
+                        <rect key="frame" x="120" y="49.5" width="80" height="2"/>
                         <color key="backgroundColor" red="0.83137254901960778" green="0.83137254901960778" blue="0.83137254901960778" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="80" id="6Qj-aN-0QD"/>
@@ -40,7 +40,7 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Fx8-eh-i5S" firstAttribute="top" secondItem="Asa-2M-YfR" secondAttribute="bottom" constant="4" id="QP8-r0-Ei2"/>
+                    <constraint firstItem="Fx8-eh-i5S" firstAttribute="top" secondItem="Asa-2M-YfR" secondAttribute="bottom" constant="8" id="QP8-r0-Ei2"/>
                     <constraint firstItem="Asa-2M-YfR" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="Ykl-8d-fyH"/>
                     <constraint firstItem="Asa-2M-YfR" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="nKY-6p-421"/>
                     <constraint firstItem="Fx8-eh-i5S" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="q10-hy-uIF"/>

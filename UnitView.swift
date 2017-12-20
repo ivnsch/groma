@@ -19,6 +19,7 @@ protocol UnitViewDelegate {
 
     @IBOutlet weak var imageViewContainer: UIView!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var initialsLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     
     var delegate: UnitViewDelegate?
@@ -32,7 +33,9 @@ protocol UnitViewDelegate {
 
                 nameLabel.sizeToFit()
 
-                let image: UIImage = {
+                initialsLabel.isHidden = true
+
+                let image: UIImage? = {
                     switch unit.id {
                     case .none: return #imageLiteral(resourceName: "can")
                     case .g: return #imageLiteral(resourceName: "g")
@@ -50,7 +53,6 @@ protocol UnitViewDelegate {
                     case .shot: return #imageLiteral(resourceName: "shot")
                     case .clove: return #imageLiteral(resourceName: "shot")
                     case .can: return#imageLiteral(resourceName: "can")
-                    case .custom: return#imageLiteral(resourceName: "can")
                     case .pint: return #imageLiteral(resourceName: "pint")
                     case .gin: return #imageLiteral(resourceName: "gin")
                     case .floz: return #imageLiteral(resourceName: "floz")
@@ -59,9 +61,16 @@ protocol UnitViewDelegate {
                     case .dram: return #imageLiteral(resourceName: "dram")
                     case .lb: return #imageLiteral(resourceName: "lb")
                     case .oz: return #imageLiteral(resourceName: "oz")
+                    case .custom: return nil
                     }
                 }()
+
                 imageView.image = image
+
+                if unit.id == .custom {
+                    initialsLabel.text = String(unit.name.prefix(2).uppercased())
+                    initialsLabel.isHidden = false
+                }
 
                 invalidateIntrinsicContentSize()
             }

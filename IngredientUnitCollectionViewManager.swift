@@ -189,7 +189,7 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
         return selectedUnitName.map { $0 == unitViewUnit.name } ?? false
     }
 
-    fileprivate func clearSelectedUnits() {
+    func clearSelectedUnits() {
         for cell in unitsCollectionView.visibleCells {
             if let unitCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
                 unitCell.unitView.showSelected(selected: false, animated: true)
@@ -197,7 +197,7 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
         }
     }
 
-    fileprivate func clearToDeleteUnits() {
+    func clearToDeleteUnits() {
         for cell in unitsCollectionView.visibleCells {
             if let fractionCell = cell as? UnitCell { // Note that we cast individual cells, because the collection view is mixed
                 fractionCell.unitView.mark(toDelete: false, animated: true)

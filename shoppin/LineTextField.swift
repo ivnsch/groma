@@ -9,6 +9,7 @@
 import UIKit
 import Providers
 
+@IBDesignable
 class LineTextField: UITextField {
 
     @IBInspectable var fontType: Int = -1
@@ -16,7 +17,13 @@ class LineTextField: UITextField {
     fileprivate let lineWidth: CGFloat = 1
     
     fileprivate static let defaultLineColor = UIColor.gray
-    fileprivate var lineColor = defaultLineColor
+
+    @IBInspectable
+    var lineColor = defaultLineColor {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()

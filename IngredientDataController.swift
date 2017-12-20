@@ -17,6 +17,7 @@ struct IngredientDataControllerResult {
 
 fileprivate struct IngredientDataControllerInputs {
     var unit: Providers.Unit?
+    var newUnitInput: String?
     var whole: Int?
     var fraction: Fraction?
     var unitMarkedToDelete: Providers.Unit?
@@ -57,6 +58,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.register(UINib(nibName: "IngredientDataSubHeaderCell", bundle: nil), forCellReuseIdentifier: "subHeaderCell")
+        tableView.register(UINib(nibName: "AddNewItemInputCell", bundle: nil), forCellReuseIdentifier: "unitInputCell")
         unitsManager.configure(controller: self, onSelectUnit: { [weak self] unit in
             self?.inputs.unit = unit
             delay(0.2) { [weak self] in // make it less abrubt
@@ -87,7 +89,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
         initQuantityView()
 
-        cellCount = 4
+        cellCount = 5
         reload()
     }
 
@@ -153,10 +155,6 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
             return cell
         }
 
-        func dequeueSubHeaderCell() -> IngredientDataSubHeaderCell {
-            return tableView.dequeueReusableCell(withIdentifier: "subHeaderCell", for: indexPath) as! IngredientDataSubHeaderCell
-        }
-
         switch indexPath.row {
         case 1:
             let cell = dequeueDefaultCell()
@@ -165,11 +163,22 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
             view.frame = cell.contentView.bounds // appears to be necessary
             view.fillSuperview()
             return cell
-        case 0, 2:
-            let header = dequeueSubHeaderCell()
+        case 0, 3:
+            let header = tableView.dequeueReusableCell(withIdentifier: "subHeaderCell", for: indexPath) as! IngredientDataSubHeaderCell
             header.title.text = indexPath.row == 0 ? trans("select_ingredient_data_header_units") : trans("select_ingredient_data_header_quantity")
             return header
-        case 3:
+        case 2:
+            let unitInputCell = tableView.dequeueReusableCell(withIdentifier: "unitInputCell", for: indexPath) as! AddNewItemInputCell
+            unitInputCell.configure(placeholder: trans("enter_custom_unit_placeholder"), onInputUpdate: { [weak self] unitInput in
+                self?.inputs.newUnitInput = unitInput.isEmpty ? nil : unitInput
+                if !unitInput.isEmpty {
+                    self?.inputs.unit = nil
+                    self?.unitsManager.clearSelectedUnits() // Input overwrites possible selection
+                    self?.unitsManager.clearToDeleteUnits() // Clear delete state too
+                }
+            })
+            return unitInputCell
+        case 4:
             let cell = dequeueDefaultCell()
             cell.contentView.addSubview(quantityView)
             quantityView.frame = cell.contentView.bounds // appears to be necessary
@@ -182,16 +191,17 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
                 quantityView.configure(unit: moundUnit!, whole: whole, fraction: fraction)
             }
             return cell
-        default: fatalError("Only 4 cells supported")
+        default: fatalError("Not supported index: \(indexPath.row)")
         }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 1: return unitsManager.unitContentsHeight
-        case 0, 2: return 50
-        case 3: return 300
-        default: fatalError("Only 4 cells supported")
+        case 0, 3: return 50
+        case 2: return 80
+        case 4: return 300
+        default: fatalError("Not supported index: \(indexPath.row)")
         }
     }
 
@@ -265,7 +275,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
     fileprivate func submit() {
         guard let onSubmitInputs = onSubmitInputs else { logger.e("No submit callback"); return }
         let result = IngredientDataControllerResult(
-            unitName: inputs.unit?.name ?? IngredientDataController.defaultUnitName,
+            unitName: inputs.newUnitInput ?? inputs.unit?.name ?? IngredientDataController.defaultUnitName,
             whole: inputs.whole ?? IngredientDataController.defaultQuantity,
             fraction: inputs.fraction)
         onSubmitInputs(result)

@@ -504,3 +504,5 @@ unit_none_name = "unidad (default)";
 select_ingredient_data_submit = "Guardar";
 select_ingredient_data_header_units = "Unidad";
 select_ingredient_data_header_quantity = "Cantidad";
+enter_custom_unit_placeholder = "O ingresa tu propia unidad";
+

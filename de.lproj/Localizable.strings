@@ -503,3 +503,4 @@ unit_none_name = "Einheit (default)";
 select_ingredient_data_submit = "Speichern";
 select_ingredient_data_header_units = "Einheit";
 select_ingredient_data_header_quantity = "Menge";
+enter_custom_unit_placeholder = "Oder gib eine eigene Einheit ein";

@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="imageView" destination="E8z-g5-X3t" id="pmo-3i-ekM"/>
                 <outlet property="imageViewContainer" destination="QnG-vO-t6P" id="qPD-SE-RLY"/>
+                <outlet property="initialsLabel" destination="bEx-25-6VJ" id="Kz3-pT-F1c"/>
                 <outlet property="nameLabel" destination="ryC-S6-2RO" id="Bm8-Bh-LUJ"/>
             </connections>
         </placeholder>
@@ -27,14 +28,24 @@
                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="E8z-g5-X3t">
                             <rect key="frame" x="10" y="10" width="36" height="36"/>
                         </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bEx-25-6VJ">
+                            <rect key="frame" x="10" y="10" width="36" height="36"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.49019607843137253" green="0.54509803921568623" blue="0.5490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="E8z-g5-X3t" secondAttribute="trailing" constant="10" id="C1B-78-DV0"/>
                         <constraint firstAttribute="height" constant="56" id="GXR-XS-VJL"/>
                         <constraint firstItem="E8z-g5-X3t" firstAttribute="leading" secondItem="QnG-vO-t6P" secondAttribute="leading" constant="10" id="JpQ-B0-AV4"/>
+                        <constraint firstItem="bEx-25-6VJ" firstAttribute="leading" secondItem="E8z-g5-X3t" secondAttribute="leading" id="KAz-Cs-rtt"/>
+                        <constraint firstItem="bEx-25-6VJ" firstAttribute="top" secondItem="E8z-g5-X3t" secondAttribute="top" id="LMm-ho-mF1"/>
+                        <constraint firstItem="bEx-25-6VJ" firstAttribute="bottom" secondItem="E8z-g5-X3t" secondAttribute="bottom" id="VO3-dg-A7F"/>
                         <constraint firstAttribute="width" constant="56" id="W4C-Yz-i6P"/>
                         <constraint firstItem="E8z-g5-X3t" firstAttribute="top" secondItem="QnG-vO-t6P" secondAttribute="top" constant="10" id="ZPk-uo-dL4"/>
+                        <constraint firstItem="bEx-25-6VJ" firstAttribute="trailing" secondItem="E8z-g5-X3t" secondAttribute="trailing" id="bHb-dq-hXk"/>
                         <constraint firstAttribute="bottom" secondItem="E8z-g5-X3t" secondAttribute="bottom" constant="10" id="q76-kj-SkS"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>

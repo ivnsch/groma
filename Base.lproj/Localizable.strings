@@ -497,3 +497,4 @@ unit_none_name = "unit (default)";
 select_ingredient_data_submit = "Add";
 select_ingredient_data_header_units = "Unit";
 select_ingredient_data_header_quantity = "Select quantity";
+enter_custom_unit_placeholder = "Or enter custom unit";
