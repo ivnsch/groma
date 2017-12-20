@@ -36,6 +36,7 @@ protocol UnitViewDelegate {
                 initialsLabel.isHidden = true
 
                 imageView.image = Theme.unitImage(unitId: unit.id)
+                imageView.tintColor = UIColor.white
 
                 if unit.id == .custom {
                     initialsLabel.text = String(unit.name.prefix(2).uppercased())
