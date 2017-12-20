@@ -62,7 +62,6 @@ class AddRecipeIngredientCell: UITableViewCell {
     
     var indexPath: IndexPath?
     
-    
     // MARK: -
 
     var model: AddRecipeIngredientModel? {
@@ -75,16 +74,19 @@ class AddRecipeIngredientCell: UITableViewCell {
             ingredientNameLabel.text = "\(quantityPart)\(model.productPrototype.name)"
             productNameTextField.text = model.productPrototype.name
             brandTextField.text = model.productPrototype.brand
-            
-            productQuantityController?.onPickersInitialized = {[weak productQuantityController] in
-                productQuantityController?.selectUnitWithName(model.productPrototype.unit)
-                productQuantityController?.selectBaseWithValue(model.productPrototype.baseQuantity)
-            }
-            
+
+            // TODO remove?
+//            productQuantityController?.onPickersInitialized = {[weak productQuantityController] in
+//                productQuantityController?.selectUnitWithName(model.productPrototype.unit)
+//                productQuantityController?.selectBaseWithValue(model.productPrototype.baseQuantity)
+//            }
+
             productQuantityController?.currentBaseInput = model.productPrototype.baseQuantity
             
             productQuantityController?.quantity = model.quantity
-            
+
+            productQuantityController?.config(unitId: .none, unitName: "Foo", base: 766)
+
             updateQuantitySummary()
             
             initAlreadyHaveText()
@@ -137,27 +139,28 @@ class AddRecipeIngredientCell: UITableViewCell {
     fileprivate func submitUnitOrBasePickers() {
         
         guard let productQuantityController = productQuantityController else {logger.e("No product quantity controller"); return}
-        
-        productQuantityController.setUnitPickerOpen(false)
-        productQuantityController.setBasesPickerOpen(false)
-        
-        if let currentUnitInput = productQuantityController.currentUnitInput, !currentUnitInput.isEmpty {
-            delegate?.addUnit(name: currentUnitInput) {(unit, isNew) in
-                if isNew {
-                    productQuantityController.appendNewUnitCell(unit: unit)
-                }
-                productQuantityController.currentUnitInput = nil
-            }
-        }
-        
-        if let currentBaseInput = productQuantityController.currentBaseInput {
-            delegate?.addBaseQuantity(val: currentBaseInput) {isNew in
-                if isNew {
-                    productQuantityController.appendNewBaseCell()
-                }
-                productQuantityController.currentBaseInput = nil
-            }
-        }
+
+        // TODO remove?
+//        productQuantityController.setUnitPickerOpen(false)
+//        productQuantityController.setBasesPickerOpen(false)
+//
+//        if let currentUnitInput = productQuantityController.currentUnitInput, !currentUnitInput.isEmpty {
+//            delegate?.addUnit(name: currentUnitInput) {(unit, isNew) in
+//                if isNew {
+//                    productQuantityController.appendNewUnitCell(unit: unit)
+//                }
+//                productQuantityController.currentUnitInput = nil
+//            }
+//        }
+//
+//        if let currentBaseInput = productQuantityController.currentBaseInput {
+//            delegate?.addBaseQuantity(val: currentBaseInput) {isNew in
+//                if isNew {
+//                    productQuantityController.appendNewBaseCell()
+//                }
+//                productQuantityController.currentBaseInput = nil
+//            }
+//        }
     }
     
     // MARK: - Private

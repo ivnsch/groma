@@ -8,6 +8,7 @@
 
 import UIKit
 import ChameleonFramework
+import Providers
 
 public struct Theme {
 
@@ -73,5 +74,37 @@ public struct Theme {
     public static let submitViewHeight: CGFloat = 60
     
     public static let topControllerOverlayAlpha: CGFloat = 0.2
+
+    public static func unitImage(unitId: UnitId) -> UIImage? {
+        return {
+            switch unitId {
+            case .none: return #imageLiteral(resourceName: "none")
+            case .g: return #imageLiteral(resourceName: "g")
+            case .kg: return #imageLiteral(resourceName: "kg")
+            case .ounce: return #imageLiteral(resourceName: "oz")
+            case .pack: return #imageLiteral(resourceName: "pack")
+            case .cup: return #imageLiteral(resourceName: "cup")
+            case .teaspoon: return #imageLiteral(resourceName: "tbsp")
+            case .spoon: return #imageLiteral(resourceName: "tbsp")
+            case .pinch: return #imageLiteral(resourceName: "pinch")
+            case .pound: return #imageLiteral(resourceName: "lb")
+            case .liter: return #imageLiteral(resourceName: "litre")
+            case .milliliter: return #imageLiteral(resourceName: "ml")
+            case .drop: return #imageLiteral(resourceName: "drop")
+            case .shot: return #imageLiteral(resourceName: "shot")
+            case .clove: return #imageLiteral(resourceName: "shot")
+            case .can: return#imageLiteral(resourceName: "can")
+            case .pint: return #imageLiteral(resourceName: "pint")
+            case .gin: return #imageLiteral(resourceName: "gin")
+            case .floz: return #imageLiteral(resourceName: "floz")
+            case .dash: return #imageLiteral(resourceName: "dash")
+            case .wgf: return #imageLiteral(resourceName: "wgf")
+            case .dram: return #imageLiteral(resourceName: "dram")
+            case .lb: return #imageLiteral(resourceName: "lb")
+            case .oz: return #imageLiteral(resourceName: "oz")
+            case .custom: return nil
+            }
+        }()
+    }
 
 }

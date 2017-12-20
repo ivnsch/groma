@@ -355,29 +355,29 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     
     fileprivate func submitUnitOrBasePickers() {
-        
-        guard let productQuantityController = productQuantityController else {logger.e("No product quantity controller"); return}
-        
-        productQuantityController.setUnitPickerOpen(false)
-        productQuantityController.setBasesPickerOpen(false)
-        
-        if let currentUnitInput = productQuantityController.currentUnitInput, !currentUnitInput.isEmpty {
-            addUnit(name: currentUnitInput) {(unit, isNew) in
-                if isNew {
-                    productQuantityController.appendNewUnitCell(unit: unit)
-                }
-                productQuantityController.currentUnitInput = nil
-            }
-        }
-        
-        if let currentBaseInput = productQuantityController.currentBaseInput {
-            addBaseQuantity(val: currentBaseInput) {isNew in
-                if isNew {
-                    productQuantityController.appendNewBaseCell()
-                }
-                productQuantityController.currentBaseInput = nil
-            }
-        }
+       // TODO remove?
+//        guard let productQuantityController = productQuantityController else {logger.e("No product quantity controller"); return}
+//
+//        productQuantityController.setUnitPickerOpen(false)
+//        productQuantityController.setBasesPickerOpen(false)
+//
+//        if let currentUnitInput = productQuantityController.currentUnitInput, !currentUnitInput.isEmpty {
+//            addUnit(name: currentUnitInput) {(unit, isNew) in
+//                if isNew {
+//                    productQuantityController.appendNewUnitCell(unit: unit)
+//                }
+//                productQuantityController.currentUnitInput = nil
+//            }
+//        }
+//
+//        if let currentBaseInput = productQuantityController.currentBaseInput {
+//            addBaseQuantity(val: currentBaseInput) {isNew in
+//                if isNew {
+//                    productQuantityController.appendNewBaseCell()
+//                }
+//                productQuantityController.currentBaseInput = nil
+//            }
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -417,12 +417,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         edibleSelected = item.item.edible
 
-        productQuantityController?.onPickersInitialized = {[weak productQuantityController] in
-            if let quantifiableproduct = item.product {
-                productQuantityController?.selectUnitWithName(quantifiableproduct.unit.name)
-                productQuantityController?.selectBaseWithValue(quantifiableproduct.baseQuantity)
-            }
-        }
+        // TODO remove?
+//        productQuantityController?.onPickersInitialized = {[weak productQuantityController] in
+//            if let quantifiableproduct = item.product {
+//                productQuantityController?.selectUnitWithName(quantifiableproduct.unit.name)
+//                productQuantityController?.selectBaseWithValue(quantifiableproduct.baseQuantity)
+//            }
+//        }
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {

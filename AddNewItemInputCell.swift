@@ -14,6 +14,11 @@ class AddNewItemInputCell: UITableViewCell {
 
     fileprivate var onInputUpdate: ((String) -> Void)?
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        selectionStyle = .none
+    }
+
     func configure(placeholder: String, onInputUpdate: @escaping (String) -> Void) {
         self.onInputUpdate = onInputUpdate
         textField.setPlaceholderWithColor(placeholder, color: Theme.midGrey)
