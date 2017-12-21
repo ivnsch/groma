@@ -20,7 +20,7 @@ fileprivate struct IngredientDataControllerInputs {
     var newUnitInput: String?
     var whole: Int?
     var fraction: Fraction?
-    var unitMarkedToDelete: Providers.Unit?
+    var unitMarkedToDelete: String? // name (assumed to be unique)
 }
 
 class IngredientDataController: UITableViewController, SubmitViewDelegate {
@@ -31,7 +31,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
     weak var controller: QuickAddListItemViewController?
 
-    fileprivate var unitsManager = IngredientUnitCollectionViewManager()
+    fileprivate var unitsManager = UnitCollectionViewManager()
 
     fileprivate var quantityView: IngredientQuantityView!
 
@@ -59,18 +59,18 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.register(UINib(nibName: "IngredientDataSubHeaderCell", bundle: nil), forCellReuseIdentifier: "subHeaderCell")
         tableView.register(UINib(nibName: "AddNewItemInputCell", bundle: nil), forCellReuseIdentifier: "unitInputCell")
-        unitsManager.configure(controller: self, onSelectUnit: { [weak self] unit in
+        unitsManager.configure(controller: self, onSelectItem: { [weak self] unit in
             self?.inputs.unit = unit
             delay(0.2) { [weak self] in // make it less abrubt
                 self?.tableView.scrollToRow(at: IndexPath(row: 2, section: 0), at: .top, animated: true)
             }
         })
-        unitsManager.onSelectUnit = { [weak self] unit in
+        unitsManager.onSelectItem = { [weak self] unit in
             self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.unit = unit
         }
-        unitsManager.onMarkedUnitToDelete = { [weak self] unit in
-            self?.inputs.unitMarkedToDelete = unit
+        unitsManager.onMarkedUnitToDelete = { [weak self] uniqueName in
+            self?.inputs.unitMarkedToDelete = uniqueName
 //            if let unit = unit {
 //                self?.unitsManager.markUnitToDelete(unit: unit)
 //            }
@@ -80,7 +80,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         }
         // for now clear variables BEFORE of realm delete - reason: clear possible selected unit - we have to compare with deleted unit to see if it's the same, and this crashes if it is, because after realm delete the object is invalid.
         // TODO possible solution: Don't retain any Realm objects here, only ids.
-        unitsManager.willDeleteUnit = { [weak self] unit in
+        unitsManager.willDeleteItem = { [weak self] unit in
             self?.inputs.unitMarkedToDelete = nil
             if unit.name == self?.inputs.unit?.name {
                 self?.inputs.unit = nil
@@ -173,8 +173,8 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
                 self?.inputs.newUnitInput = unitInput.isEmpty ? nil : unitInput
                 if !unitInput.isEmpty {
                     self?.inputs.unit = nil
-                    self?.unitsManager.clearSelectedUnits() // Input overwrites possible selection
-                    self?.unitsManager.clearToDeleteUnits() // Clear delete state too
+                    self?.unitsManager.clearSelectedItems() // Input overwrites possible selection
+                    self?.unitsManager.clearToDeleteItems() // Clear delete state too
                 }
             })
             return unitInputCell

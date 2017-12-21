@@ -10,7 +10,7 @@ import UIKit
 import Providers
 import RealmSwift
 
-class IngredientUnitCollectionViewManager: UIView {
+class IngredientUnitCollectionViewManager {
 
     var view: UIView {
         return unitsCollectionView
@@ -224,4 +224,5 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
         }
     }
 }
+
 

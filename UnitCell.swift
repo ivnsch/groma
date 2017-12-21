@@ -12,12 +12,23 @@ protocol UnitCellDelegate {
     func onLongPress(cell: UnitCell)
 }
 
-class UnitCell: UICollectionViewCell, UnitViewDelegate {
+class UnitCell: DefaultItemMeasureCell, UnitViewDelegate {
     
     @IBOutlet weak var unitView: UnitView!
     
     var delegate: UnitCellDelegate?
-    
+
+    override var itemName: String {
+        return unitView.unit?.name ?? ""
+    }
+
+    override func show(selected: Bool, animated: Bool) {
+        unitView.showSelected(selected: selected, animated: animated)
+    }
+
+    override func show(toDelete: Bool, animated: Bool) {
+        unitView.mark(toDelete: toDelete, animated: animated)
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,4 +41,8 @@ class UnitCell: UICollectionViewCell, UnitViewDelegate {
     func onLongPress() {
         delegate?.onLongPress(cell: self)
     }
+
+    // MARK: - DefaultItemMeasureCell
+
+
 }
