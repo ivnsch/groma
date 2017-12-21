@@ -75,11 +75,12 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
         fractionTextInputView.delegate = self
     }
 
-    func configure(unit: Providers.Unit, whole: Int, fraction: Fraction) {
+    func configure(unitId: UnitId, whole: Int, fraction: Fraction) {
 
         let viewToAdd: UIView & QuantityImage = {
-            switch unit.id {
+            switch unitId {
             default:
+                // We could use different images for different types of units
                 return MoundsView()
             }
         } ()

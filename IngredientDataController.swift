@@ -185,10 +185,10 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
             quantityView.fillSuperview()
 
             if let units = unitsManager.units {
-                let moundUnit = units.findFirst { $0.id == .spoon}
+                let moundUnit = inputs.unit?.id ?? .none
                 let whole = inputs.whole ?? IngredientDataController.defaultQuantity
                 let fraction = inputs.fraction ?? IngredientDataController.defaultFraction
-                quantityView.configure(unit: moundUnit!, whole: whole, fraction: fraction)
+                quantityView.configure(unitId: moundUnit, whole: whole, fraction: fraction)
             }
             return cell
         default: fatalError("Not supported index: \(indexPath.row)")
