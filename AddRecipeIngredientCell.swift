@@ -11,9 +11,16 @@ import Providers
 
 import RealmSwift
 
+// TODO remove not anymore needed methods
 protocol AddRecipeIngredientCellDelegate {
+
+    func showUnitBaseViewController(from: UIView, cell: AddRecipeIngredientCell)
+
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
-    
+
+    func onUpdateNew(unitName: String, indexPath: IndexPath)
+    func onUpdateNew(baseQuantity: Float, indexPath: IndexPath)
+
     func onUpdate(productName: String, indexPath: IndexPath)
     func onUpdate(brand: String, indexPath: IndexPath)
     func onUpdate(quantity: Float, indexPath: IndexPath)
@@ -55,13 +62,16 @@ class AddRecipeIngredientCell: UITableViewCell {
     @IBOutlet weak var quantitiesContainer: UIView!
     
     fileprivate var productQuantityController: ProductQuantityController?
+
+    weak var controller: UIViewController?
     
     var delegate: AddRecipeIngredientCellDelegate?
     var didMoveToSuperviewCalledOnce = false
 
+    fileprivate var unitBasePopup: MyPopup?
     
     var indexPath: IndexPath?
-    
+
     // MARK: -
 
     var model: AddRecipeIngredientModel? {
@@ -85,14 +95,42 @@ class AddRecipeIngredientCell: UITableViewCell {
             
             productQuantityController?.quantity = model.quantity
 
-            productQuantityController?.config(unitId: .none, unitName: "Foo", base: 766)
+            productQuantityController?.config(unitId: .none, unitName: model.productPrototype.unit, base: model.productPrototype.baseQuantity, onTapUnitBase: { [weak self] in
+                guard let weakSelf = self else { return }
+                guard let productQuantityController = weakSelf.productQuantityController else { return }
+                self?.delegate?.showUnitBaseViewController(from: productQuantityController.view, cell: weakSelf)
+            })
 
             updateQuantitySummary()
             
             initAlreadyHaveText()
         }
     }
-    
+
+//    fileprivate func showUnitBaseViewController() {
+//        guard let currentController = self.controller else { logger.e("No controller"); return }
+//        guard let parent = currentController.parent else { logger.e("No parent!", .db); return }
+//        guard let productQuantityController = productQuantityController else { logger.e("No productQuantityController!", .db); return }
+//
+//        let topBarHeight: CGFloat = Theme.navBarHeight
+//
+//        let popupFrame = CGRect(x: parent.view.x, y: topBarHeight, width: parent.view.width, height: parent.view.height)
+//        let popup = MyPopup(parent: parent.view, frame: popupFrame)
+//        let controller = SelectUnitAndBaseController(nibName: "SelectUnitAndBaseController", bundle: nil)
+////        controller.delegate = self
+//        controller.onSubmit = { [weak self] result in
+//            self?.onSubmitUnitAndBaseQuantity(result: result)
+//        }
+//
+//        parent.addChildViewController(controller)
+//
+//        controller.view.frame = CGRect(x: 0, y: 0, width: parent.view.width, height: parent.view.height)
+//        popup.contentView = controller.view
+//        self.unitBasePopup = popup
+//
+//        popup.show(from: productQuantityController.view)
+//    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
     
@@ -105,7 +143,21 @@ class AddRecipeIngredientCell: UITableViewCell {
         configQuantifiablesView()
     }
     
-    
+
+    fileprivate func onSubmitUnitAndBaseQuantity(result: SelectUnitAndBaseControllerResult) {
+
+        guard let indexPath = indexPath else { logger.e("Illegal state: no index path"); return }
+
+        delegate?.onUpdateNew(unitName: result.unitName, indexPath: indexPath)
+        delegate?.onUpdateNew(baseQuantity: result.baseQuantity, indexPath: indexPath)
+
+        updateQuantitySummary()
+
+        unitBasePopup?.hide(onFinish: { [weak self] in
+            self?.unitBasePopup = nil
+        })
+    }
+
     var options: AddRecipeIngredientCellOptions? {
         didSet {
             // TODO update autosuggestion/popover etc
@@ -164,8 +216,12 @@ class AddRecipeIngredientCell: UITableViewCell {
     }
     
     // MARK: - Private
-    
-    fileprivate func updateQuantitySummary() {
+
+    func showBaseUnit(base: Float, unitId: UnitId, unitName: String) {
+        productQuantityController?.showBaseUnit(base: base, unitId: unitId, unitName: unitName)
+    }
+
+    func updateQuantitySummary() {
         let unitText = Ingredient.quantityFullText(quantity: quantityInput, baseQuantity: productQuantityController?.selectedBase ?? 1, unit: productQuantityController?.selectedUnit)
         let allUnitText = trans("recipe_you_will_add", unitText)
         quantitySummaryLabel.text = allUnitText
@@ -210,7 +266,7 @@ class AddRecipeIngredientCell: UITableViewCell {
 }
 
 // MARK: - Inputs
-
+// TODO keep this only in the controller - cell should get inputs either in a "config" method or via a delegate/callback
 extension AddRecipeIngredientCell {
 
     fileprivate var nameInput: String {

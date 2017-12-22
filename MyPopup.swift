@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 class MyPopup: UIView {
 
@@ -45,7 +46,11 @@ class MyPopup: UIView {
     fileprivate var showFrom: CGPoint?
 
     convenience init(parent: UIView) {
-        self.init(frame: parent.bounds)
+        self.init(parent: parent, frame: parent.bounds)
+    }
+
+    convenience init(parent: UIView, frame: CGRect) {
+        self.init(frame: frame)
         self.parent = parent
     }
 
@@ -63,7 +68,7 @@ class MyPopup: UIView {
     }
 
     func show(from: UIView) {
-        guard let parent = parent else { print("No parent!"); return }
+        guard let parent = parent else { logger.e("No parent!"); return }
         if let superview = from.superview {
             let from = superview.convert(from.center, to: parent)
             show(parent: parent, from: from)

@@ -16,7 +16,7 @@ struct IngredientDataControllerResult {
 }
 
 fileprivate struct IngredientDataControllerInputs {
-    var unit: Providers.Unit?
+    var unit: Providers.Unit? // TODO use only the name?
     var newUnitInput: String?
     var whole: Int?
     var fraction: Fraction?
@@ -69,13 +69,13 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
             self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.unit = unit
         }
-        unitsManager.onMarkedUnitToDelete = { [weak self] uniqueName in
+        unitsManager.onMarkedItemToDelete = { [weak self] uniqueName in
             self?.inputs.unitMarkedToDelete = uniqueName
 //            if let unit = unit {
 //                self?.unitsManager.markUnitToDelete(unit: unit)
 //            }
         }
-        unitsManager.unitMarkedToDelete = { [weak self] in
+        unitsManager.itemMarkedToDelete = { [weak self] in
             return self?.inputs.unitMarkedToDelete
         }
         // for now clear variables BEFORE of realm delete - reason: clear possible selected unit - we have to compare with deleted unit to see if it's the same, and this crashes if it is, because after realm delete the object is invalid.
@@ -197,7 +197,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
-        case 1: return unitsManager.unitContentsHeight
+        case 1: return unitsManager.collectionViewContentsHeight
         case 0, 3: return 50
         case 2: return 80
         case 4: return 300

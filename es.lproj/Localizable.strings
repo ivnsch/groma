@@ -500,9 +500,10 @@ select_items = "Items";
 select_brands = "Marcas";
 select_base_quantities = "Cantidades base";
 select_units = "Unidades";
-unit_none_name = "unidad (default)";
+unit_none_name = "Unidad";
 select_ingredient_data_submit = "Guardar";
 select_ingredient_data_header_units = "Unidad";
 select_ingredient_data_header_quantity = "Cantidad";
 enter_custom_unit_placeholder = "O ingresa tu propia unidad";
-
+enter_custom_base_quantity_placeholder = "O ingresa tu propia cantidad base";
+update_base_unit_submit_button_title = "Actualizar";

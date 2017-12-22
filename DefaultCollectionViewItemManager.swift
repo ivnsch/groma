@@ -7,10 +7,8 @@
 //
 
 import UIKit
-import UIKit
 import Providers
 import RealmSwift
-
 
 protocol WithUniqueName {
     var uniqueName: String { get }
@@ -51,48 +49,47 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
         return myCollectionView
     }
 
-    var units: Results<T>? {
+    var units: AnyRealmCollection<T>? {
         return dataSource?.items
     }
 
     //    var inputs: SelectIngredientDataControllerInputs = SelectIngredientDataControllerInputs()
-    fileprivate var myCollectionView: UICollectionView!
+    fileprivate(set) var myCollectionView: UICollectionView!
     //    weak var unitDelegate: SelectUnitControllerDelegate?
-    fileprivate var dataSource: UnitOrBaseDataSource<T>?
+    fileprivate(set) var dataSource: UnitOrBaseDataSource<T>?
     fileprivate var itemsDelegate: CollectionViewDelegate? // arc
     fileprivate var itemNames: [String] = [] // we need this because we can't touch the Realm Units in the autocompletions thread (get diff. thread exception). So we have to map to Strings in advance.
-    fileprivate let unitCellSize = CGSize(width: 60, height: 76)
     fileprivate var currentNewUnitInput: String?
 
     fileprivate(set) weak var controller: UIViewController?
 
     var onSelectItem: ((T?) -> Void)?
-    fileprivate var selectedUnit: (() -> T?)?
-    var onMarkedUnitToDelete: ((String?) -> Void)?
-    var unitMarkedToDelete: (() -> String?)? // returns name (assumed to be unique)
+    fileprivate var selectedItem: (() -> T?)?
+    var onMarkedItemToDelete: ((String?) -> Void)?
+    var itemMarkedToDelete: (() -> String?)? // returns name (assumed to be unique)
     var willDeleteItem: ((T) -> Void)?
 
-    fileprivate let rowsSpacing: CGFloat = 4
-    fileprivate let topCollectionViewPadding: CGFloat = 20
-    fileprivate let bottomCollectionViewPadding: CGFloat = 20
+    let rowsSpacing: CGFloat = 4
+    let topCollectionViewPadding: CGFloat = 20
+    let bottomCollectionViewPadding: CGFloat = 20
+    let leftRightCollectionViewPadding: CGFloat = 30
 
-    var unitContentsHeight: CGFloat {
-        //        let collectionViewWidth = myCollectionView.width
-        //        guard collectionViewWidth > 0 else { return 0 } // avoid division by 0
-        let unitCount = dataSource?.items?.count ?? 0
-        //        let unitsPerRow = floor(collectionViewWidth / unitCellSize.width)
-        let unitsPerRow = CGFloat(5) // for now hardcoded. Calculating it returns 5 (wrong) + using the collection width causes constraint error (because this is called 2-3 times at the beginning with a width of 0) and collapses entirely the collection view. TODO not hardcoded
-        let rowCount = ceil(CGFloat(unitCount) / unitsPerRow)
-        return rowCount * (unitCellSize.height + rowsSpacing) + topCollectionViewPadding + bottomCollectionViewPadding
+    var collectionViewContentsHeight: CGFloat {
+        fatalError("Override")
     }
 
-    func configure(controller: UIViewController, onSelectItem: @escaping ((T?) -> Void)) {
+    func sizeFotItemCell(indexPath: IndexPath) -> CGSize {
+        fatalError("Override")
+    }
 
-        self.controller = controller
-        self.onSelectItem = onSelectItem
+    func calculateCollectionViewContentsHeight(collectionViewWidth: CGFloat, items: AnyRealmCollection<T>) -> CGFloat {
+        fatalError("Override")
+    }
 
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsetsMake(20, 30, 20, 30)
+    init() {
+//        let flowLayout = UICollectionViewFlowLayout()
+        let flowLayout = LeftAlignedCollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsetsMake(topCollectionViewPadding, leftRightCollectionViewPadding, bottomCollectionViewPadding, leftRightCollectionViewPadding)
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = rowsSpacing
 
@@ -100,6 +97,17 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
 
         myCollectionView.bounces = false
         myCollectionView.backgroundColor = UIColor.clear
+    }
+
+    func collectionViewContentHeight() -> CGFloat {
+        guard let items = dataSource?.items else { logger.d("No items (yet?), returning 0 contents height"); return 0 }
+        return calculateCollectionViewContentsHeight(collectionViewWidth: collectionView.width, items: items)
+    }
+
+    func configure(controller: UIViewController, onSelectItem: @escaping ((T?) -> Void)) {
+
+        self.controller = controller
+        self.onSelectItem = onSelectItem
 
         // TODO# ? remove todo after test? seems to be done already
         let delegate = CollectionViewDelegate(delegate: self)
@@ -124,11 +132,11 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
         myCollectionView.register(UINib(nibName: "UnitCell", bundle: nil), forCellWithReuseIdentifier: "unitCell")
     }
 
-    func createDataSource(items: Results<T>) -> UnitOrBaseDataSource<T> {
+    func createDataSource(items: AnyRealmCollection<T>) -> UnitOrBaseDataSource<T> {
         fatalError("Override")
     }
 
-    func fetchItems(controller: UIViewController, onSucces: @escaping (Results<T>) -> Void) {
+    func fetchItems(controller: UIViewController, onSucces: @escaping (AnyRealmCollection<T>) -> Void) {
         fatalError("Override")
     }
 }
@@ -139,11 +147,11 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
     // MARK: - UnitsCollectionViewDataSourceDelegate
 
     var currentItemName: String {
-        return selectedUnit?()?.uniqueName ?? ""
+        return selectedItem?()?.uniqueName ?? ""
     }
 
     var itemToDeleteName: String {
-        return unitMarkedToDelete?() ?? ""
+        return itemMarkedToDelete?() ?? ""
     }
 
     func onUpdateItemNameInput(nameInput: String) {
@@ -160,7 +168,7 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
     }
 
     func onMarkUnitToDelete(uniqueName: String) {
-        onMarkedUnitToDelete?(uniqueName)
+        onMarkedItemToDelete?(uniqueName)
     }
 
     var collectionView: UICollectionView {
@@ -178,7 +186,7 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
     }
 
     fileprivate func isSelected(cell: DefaultItemMeasureCell) -> Bool {
-        let selectedUnitName: String? = selectedUnit?()?.uniqueName
+        let selectedUnitName: String? = selectedItem?()?.uniqueName
         return selectedUnitName.map { $0 == cell.itemName } ?? false
     }
 
@@ -214,16 +222,8 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
 
 extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
 
-    func sizeFotItemCell(indexPath: IndexPath) -> CGSize {
-        if (dataSource?.items.map{unit in
-            indexPath.row < unit.count
-            }) ?? false {
-            return unitCellSize
-        } else {
-            return CGSize(width: 120, height: 50)
-        }
-    }
-
+    // sizeFotItemCell implemented in main class to be able to override in subclasses
+    
     func didSelectItem(indexPath: IndexPath) {
         guard let controller = controller else { logger.e("No controller!"); return }
 
@@ -231,7 +231,7 @@ extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
         guard let unitsOrBaseDataSource = dataSource as? UnitOrBaseDataSource<T> else {
             logger.e("Data source has wrong type: \(type(of: dataSource))"); return}
         guard let items = unitsOrBaseDataSource.items else {logger.e("Invalid state: Data source has no units"); return}
-        guard let unitMarkedToDelete = unitMarkedToDelete else {logger.e("Invalid state: Data source has no units"); return}
+        guard let unitMarkedToDelete = itemMarkedToDelete else {logger.e("Invalid state: Data source has no units"); return}
 
         let selectedItem = items[indexPath.row]
 

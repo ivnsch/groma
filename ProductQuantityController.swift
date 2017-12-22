@@ -35,11 +35,10 @@ protocol ProductQuantityControlleDelegate {
 class ProductQuantityController: UIViewController {
 
     @IBOutlet weak var unitWithBaseView: UnitWithBaseView!
-
     @IBOutlet weak var quantityView: QuantityView!
-    
+
     var delegate: ProductQuantityControlleDelegate?
-    
+
     // MARK: - Inputs
 
     var quantity: Float {
@@ -71,15 +70,17 @@ class ProductQuantityController: UIViewController {
 
     var onPickersInitialized: (() -> Void)?
     
-    func config(unitId: UnitId, unitName: String, base: Float) {
+    func config(unitId: UnitId, unitName: String, base: Float, onTapUnitBase: @escaping () -> Void) {
+
         initQuantitiesView()
-        unitWithBaseView.configure(unitId: unitId, unitName: unitName, base: base)
+        unitWithBaseView.configure(unitId: unitId, unitName: unitName, base: base, onTap: {
+            onTapUnitBase()
+        })
 
         quantityView.delegate = self
     }
 
     override func viewDidLoad() {
-
         super.viewDidLoad()
 
         // TODO remove?
@@ -93,7 +94,11 @@ class ProductQuantityController: UIViewController {
 
         onPickersInitialized?()
     }
-    
+
+
+    func showBaseUnit(base: Float, unitId: UnitId, unitName: String) {
+        unitWithBaseView.show(base: base, unitId: unitId, unitName: unitName)
+    }
 //    func selectBaseWithValue(_ val: Float) {
 //        if let bases = basesDataSource?.bases {
 //            if let (index, base) = (bases.enumerated().filter {$0.element.val == val}.first) {

@@ -15,7 +15,9 @@ public protocol UnitProvider {
     func units(buyable: Bool?, _ handler: @escaping (ProviderResult<Results<Unit>>) -> Void)
     
     func unitsContainingText(_ text: String, _ handler: @escaping (ProviderResult<Results<Unit>>) -> Void)
-    
+
+    func findUnit(name: String, _ handler: @escaping (ProviderResult<Unit?>) -> Void)
+
     func getOrCreate(name: String, _ handler: @escaping (ProviderResult<(unit: Unit, isNew: Bool)>) -> Void)
 
     func initDefaultUnits(_ handler: @escaping (ProviderResult<[Unit]>) -> Void)

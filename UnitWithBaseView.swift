@@ -10,7 +10,7 @@ import UIKit
 import Providers
 
 @IBDesignable
-class UnitWithBaseView: UIView {
+class UnitWithBaseView: HandlingView {
 
     @IBOutlet weak var unitImageView: UIImageView!
     @IBOutlet weak var label: UILabel!
@@ -40,8 +40,14 @@ class UnitWithBaseView: UIView {
         layer.cornerRadius = 4
     }
 
-    func configure(unitId: UnitId, unitName: String, base: Float) {
+    func configure(unitId: UnitId, unitName: String, base: Float, onTap: (() -> Void)?) {
+        touchHandler = {
+            onTap?()
+        }
+        show(base: base, unitId: unitId, unitName: unitName)
+    }
 
+    func show(base: Float, unitId: UnitId, unitName: String) {
         unitImageView.image = Theme.unitImage(unitId: unitId)
         unitImageView.tintColor = Theme.midGrey
 

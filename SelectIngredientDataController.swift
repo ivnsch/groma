@@ -518,36 +518,37 @@ extension SelectIngredientDataController: UnitsCollectionViewDataSourceDelegate,
     // MARK: - UnitsCollectionViewDelegateDelegate
 
     func didSelectUnit(indexPath: IndexPath) {
-        guard let dataSource = unitsCollectionView.dataSource else {logger.e("No data source"); return}
-        guard let unitsDataSource = dataSource as? UnitsDataSource else {logger.e("Data source has wrong type: \(type(of: dataSource))"); return}
-        guard let units = unitsDataSource.units else {logger.e("Invalid state: Data source has no units"); return}
-        
-        let cellMaybe = unitsCollectionView.cellForItem(at: indexPath) as? UnitCell
-        
-        if cellMaybe?.unitView.markedToDelete ?? false {
-            
-            let unit = units[indexPath.row]
-            Prov.unitProvider.delete(name: unit.name, successHandler {[weak self] in
-                self?.unitsCollectionView.deleteItems(at: [indexPath])
-                self?.unitsCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
-            })
-            
-        } else {
-            clearToDeleteUnits()
-            clearSelectedUnits()
-            
-            if let cell = cellMaybe {
-                if isSelected(cell: cell) {
-                    cellMaybe?.unitView.showSelected(selected: false, animated: true)
-                    inputs.unitName = ""
-                    updateTitle(inputs: inputs)
-                    
-                } else {
-                    cellMaybe?.unitView.showSelected(selected: true, animated: true)
-                    onSelect(unit: units[indexPath.row])
-                }
-            }
-        }
+        // TODO remove this class
+//        guard let dataSource = unitsCollectionView.dataSource else {logger.e("No data source"); return}
+//        guard let unitsDataSource = dataSource as? UnitsDataSource else {logger.e("Data source has wrong type: \(type(of: dataSource))"); return}
+//        guard let units = unitsDataSource.units else {logger.e("Invalid state: Data source has no units"); return}
+//
+//        let cellMaybe = unitsCollectionView.cellForItem(at: indexPath) as? UnitCell
+//
+//        if cellMaybe?.unitView.markedToDelete ?? false {
+//
+//            let unit = units[indexPath.row]
+//            Prov.unitProvider.delete(name: unit.name, successHandler {[weak self] in
+//                self?.unitsCollectionView.deleteItems(at: [indexPath])
+//                self?.unitsCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
+//            })
+//
+//        } else {
+//            clearToDeleteUnits()
+//            clearSelectedUnits()
+//
+//            if let cell = cellMaybe {
+//                if isSelected(cell: cell) {
+//                    cellMaybe?.unitView.showSelected(selected: false, animated: true)
+//                    inputs.unitName = ""
+//                    updateTitle(inputs: inputs)
+//
+//                } else {
+//                    cellMaybe?.unitView.showSelected(selected: true, animated: true)
+//                    onSelect(unit: units[indexPath.row])
+//                }
+//            }
+//        }
     }
     
     func sizeFotUnitCell(indexPath: IndexPath) -> CGSize {

@@ -13,7 +13,7 @@ import Foundation
 public class QuickAddItem: Identifiable {
 
     public var boldRange: NSRange?
-    public var textSize: CGSize? = nil
+    public var textSize: CGSize? = nil // cache
     public var didAnimateAlready: Bool = false
     
     public init(boldRange: NSRange? = nil) {

@@ -17,6 +17,7 @@ protocol AddRecipeControllerDelegate: class {
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
 }
 
+// TODO! rewrite this (and the cells)
 class AddRecipeController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
@@ -40,7 +41,9 @@ class AddRecipeController: UIViewController {
     fileprivate var baseQuantities: RealmSwift.List<BaseQuantity>?
     
     weak var delegate: AddRecipeControllerDelegate?
-    
+
+    fileprivate var unitBasePopup: MyPopup?
+
     // MARK: - Controller
     
     override func viewDidLoad() {
@@ -126,7 +129,7 @@ class AddRecipeController: UIViewController {
             let quantity = $0.pQuantity == 0 ? $0.quantity : $0.pQuantity // Use prefill quantity, if not set quantity (0 in pre-fill means not set)
             let finalQuantity = max(quantity, 1) // Start with min. 1 - ingredients can have a quantity of 0 (because they have a fraction, which is not included in quantity or because it's really 0 which can be used to indicate "to taste", e.g. with spices.
             
-            return AddRecipeIngredientModel(productPrototype: prototype, quantity: finalQuantity, ingredient: $0)
+            return AddRecipeIngredientModel(productPrototype: prototype, unitId: $0.unit.id, quantity: finalQuantity, ingredient: $0)
         })
         
         tableView.reloadData()
@@ -137,9 +140,16 @@ class AddRecipeController: UIViewController {
             }
         }
     }
-    
+
+    // Close any added views to superviews of this controller (e.g. popups)
+    func closeAddedNonChildren() {
+        unitBasePopup?.hide(onFinish: { [weak self] in
+            self?.unitBasePopup = nil
+        })
+    }
+
     // MARK: - Keyboard
-    
+
     fileprivate func addKeyboardObserver() {
         NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillChangeFrame(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillDisappear(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -195,8 +205,13 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
 
             cell.delegate = self
             cell.indexPath = indexPath
-            cell.model = models[indexPath.row]
-            
+
+            let model = models[indexPath.row]
+
+            cell.model = model
+
+            cell.controller = self
+
 //            cell.configQuantifiablesView()
             
             if let units = units {
@@ -225,8 +240,51 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
 // MARK: - Cell delegate
 
 extension AddRecipeController: AddRecipeIngredientCellDelegate {
-    
+
+    func showUnitBaseViewController(from: UIView, cell: AddRecipeIngredientCell) {
+
+        let parent = self
+
+//        guard let parent = self else { logger.e("No parent!", .db); return }
+        // maybe it makes more sende to get the index path using the tableview
+        guard let indexPath = cell.indexPath else { logger.e("No indexPath!", .db); return }
+
+        let popupFrame = CGRect(x: parent.view.x, y: 0, width: parent.view.width, height: parent.view.height)
+        let popup = MyPopup(parent: parent.view, frame: popupFrame)
+        let controller = SelectUnitAndBaseController(nibName: "SelectUnitAndBaseController", bundle: nil)
+        //        controller.delegate = self
+        controller.onSubmit = { [weak self, weak cell] result in guard let weakSelf = self else { return }
+            weakSelf.onUpdateNew(unitName: result.unitName, indexPath: indexPath)
+            weakSelf.onUpdateNew(baseQuantity: result.baseQuantity, indexPath: indexPath)
+
+            // TODO refactor cell update
+            cell?.updateQuantitySummary()
+            // Retrieve unit to get id. For now we prefer to not have to pass the original objects through everywhere.
+            Prov.unitProvider.findUnit(name: result.unitName, weakSelf.successHandler { unit in
+                if let unit = unit {
+                    cell?.showBaseUnit(base: result.baseQuantity, unitId: unit.id, unitName: result.unitName)
+                } else {
+                    logger.e("Submitted unit not found in db (!?)", .db)
+                    cell?.showBaseUnit(base: result.baseQuantity, unitId: .none, unitName: trans("unit_none_name"))
+                }
+            })
+
+            self?.unitBasePopup?.hide(onFinish: { [weak self] in
+                self?.unitBasePopup = nil
+            })
+        }
+
+        parent.addChildViewController(controller)
+
+        controller.view.frame = CGRect(x: 0, y: 0, width: parent.view.width, height: parent.view.height)
+        popup.contentView = controller.view
+        self.unitBasePopup = popup
+
+        popup.show(from: from)
+    }
+
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void) {
+
         delegate?.getAlreadyHaveText(ingredient: ingredient, handler)
     }
     
@@ -243,8 +301,17 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
     
     // MARK: - Model update
-    
+
+    func onUpdateNew(unitName: String, indexPath: IndexPath) {
+        models[indexPath.row].productPrototype.unit = unitName
+    }
+
+    func onUpdateNew(baseQuantity: Float, indexPath: IndexPath) {
+        models[indexPath.row].productPrototype.baseQuantity = baseQuantity
+    }
+
     func onUpdate(productName: String, indexPath: IndexPath) {
+
         models[indexPath.row].productPrototype.name = productName
     }
 

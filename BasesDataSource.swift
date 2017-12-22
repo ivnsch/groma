@@ -33,60 +33,62 @@ class BasesDataSource: NSObject, UICollectionViewDataSource, BaseQuantityCellDel
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let bases = bases else {logger.e("No bases"); return UICollectionViewCell()}
-        
-        if indexPath.row < bases.count {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "baseCell", for: indexPath) as! BaseQuantityCell
-            let base = bases[indexPath.row]
-            cell.baseQuantityView.base = base
-            cell.baseQuantityView.bgColor = Theme.baseQuantitiesBGColor
-            cell.baseQuantityView.fgColor = Theme.baseQuantitiesFGColor
-            cell.baseQuantityView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
-            cell.baseQuantityView.markedToDelete = false
-            cell.delegate = self
-            
-            if let delegate = delegate {
-                if delegate.highlightSelectedBaseQuantity {
-                    let selected = delegate.currentBaseQuantity == base.val
-                    cell.baseQuantityView.showSelected(selected: selected, animated: false)
-                }
-            } else {
-                logger.e("No delegate")
-            }
-            
-            // HACK: For some reason after scrolled the label doesn't use its center constraint and appears aligned to the left. Debugging view hierarchy shows the label has the correct constraints, parent also has correct size but for some reason it's aligned at the left.
-            cell.baseQuantityView.baseQuantityLabel.center = cell.baseQuantityView.center
-            //            cell.setNeedsLayout()
-            
-            return cell
-            
-        } else /*if indexPath.row == bases.count*/ {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "unitEditableCell", for: indexPath) as! UnitEditableCell
-            cell.editableUnitView.backgroundColor = Theme.baseQuantitiesBGColor
-            cell.editableUnitView.nameTextField.textColor = Theme.baseQuantitiesFGColor
-            cell.editableUnitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
-            cell.editableUnitView.delegate = self
-            
-            
-            if let delegate = delegate {
-                cell.editableUnitView.prefill(name: delegate.currentBaseQuantity.quantityString)
-                
-                cell.setMinTextFieldWidth(delegate.minBaseQuantityTextFieldWidth)
-                
-            } else {
-                logger.e("No delegate")
-            }
-            
-            return cell
-            
-        }
+        fatalError("Remove this file")
+//        guard let bases = bases else {logger.e("No bases"); return UICollectionViewCell()}
+//
+//        if indexPath.row < bases.count {
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "baseCell", for: indexPath) as! BaseQuantityCell
+//            let base = bases[indexPath.row]
+//            cell.baseQuantityView.base = base
+//            cell.baseQuantityView.bgColor = Theme.baseQuantitiesBGColor
+//            cell.baseQuantityView.fgColor = Theme.baseQuantitiesFGColor
+//            cell.baseQuantityView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
+//            cell.baseQuantityView.markedToDelete = false
+//            cell.delegate = self
+//
+//            if let delegate = delegate {
+//                if delegate.highlightSelectedBaseQuantity {
+//                    let selected = delegate.currentBaseQuantity == base.val
+//                    cell.baseQuantityView.showSelected(selected: selected, animated: false)
+//                }
+//            } else {
+//                logger.e("No delegate")
+//            }
+//
+//            // HACK: For some reason after scrolled the label doesn't use its center constraint and appears aligned to the left. Debugging view hierarchy shows the label has the correct constraints, parent also has correct size but for some reason it's aligned at the left.
+//            cell.baseQuantityView.baseQuantityLabel.center = cell.baseQuantityView.center
+//            //            cell.setNeedsLayout()
+//
+//            return cell
+//
+//        } else /*if indexPath.row == bases.count*/ {
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "unitEditableCell", for: indexPath) as! UnitEditableCell
+//            cell.editableUnitView.backgroundColor = Theme.baseQuantitiesBGColor
+//            cell.editableUnitView.nameTextField.textColor = Theme.baseQuantitiesFGColor
+//            cell.editableUnitView.layer.cornerRadius = DimensionsManager.quickAddCollectionViewCellCornerRadius
+//            cell.editableUnitView.delegate = self
+//
+//
+//            if let delegate = delegate {
+//                cell.editableUnitView.prefill(name: delegate.currentBaseQuantity.quantityString)
+//
+//                cell.setMinTextFieldWidth(delegate.minBaseQuantityTextFieldWidth)
+//
+//            } else {
+//                logger.e("No delegate")
+//            }
+//
+//            return cell
+//
+//        }
     }
     
     // MARK: - BaseQuantityCellDelegate
     
     func onLongPress(cell: BaseQuantityCell) {
-        cell.baseQuantityView.markedToDelete = true
-        cell.baseQuantityView.mark(toDelete: true, animated: true)
+        fatalError("Remove this file")
+//        cell.baseQuantityView.markedToDelete = true
+//        cell.baseQuantityView.mark(toDelete: true, animated: true)
     }
     
     // MARK: - EditableUnitCellDelegate

@@ -13,15 +13,14 @@ protocol BaseQuantityViewDelegate {
     func onLongPress()
 }
 
-@IBDesignable class BaseQuantityView: UIView {
+@IBDesignable class BaseQuantityView: UIView, BaseOrUnitCellView {
     
     @IBInspectable var isBold: Bool = false
-    
+
+    @IBOutlet weak var labelContainer: UIView!
     @IBOutlet weak var baseQuantityLabel: UILabel!
     
     var delegate: BaseQuantityViewDelegate?
-    
-    var markedToDelete: Bool = false
     
     var base: BaseQuantity? {
         didSet {
@@ -75,24 +74,7 @@ protocol BaseQuantityViewDelegate {
         backgroundColor = UIColor.clear
         view.backgroundColor = UIColor.clear
     }
-    
-    func mark(toDelete: Bool, animated: Bool) {
-        markedToDelete = toDelete
-        animIf(animated) {[weak self] in guard let weakSelf = self else {return}
-            self?.backgroundColor = toDelete ? UIColor.flatRed : weakSelf.bgColor
-        }
-    }
-    
-    func showSelected(selected: Bool, animated: Bool) {
-        
-        let (bg, fg) = selected ? (Theme.unitsSelectedColor, UIColor.white) : (bgColor, fgColor)
-        
-        animIf(animated) {[weak self] in
-            self?.backgroundColor = bg
-            self?.baseQuantityLabel.textColor = fg
-        }
-    }
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -111,5 +93,11 @@ protocol BaseQuantityViewDelegate {
     
     @objc func longPress(_ sender: Any) {
         delegate?.onLongPress()
+    }
+
+    // MARK: BaseOrUnitCellView
+
+    var backgroundView: UIView {
+        return labelContainer
     }
 }

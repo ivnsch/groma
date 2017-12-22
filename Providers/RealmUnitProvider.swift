@@ -122,9 +122,17 @@ class RealmUnitProvider: RealmProvider {
             handler(nil)
         }
     }
-    
+
+    func findUnit(name: String, handler: (Unit?) -> Void) {
+        handler(findUnit(name: name))
+    }
+
     // MARK: - Sync
-    
+
+    func findUnit(name: String) -> Unit? {
+        return loadFirstSync(filter: Unit.createFilter(name: name))
+    }
+
     func unitsSync(buyable: Bool?) -> Results<Unit>? {
         return loadSync(filter: buyable.map{Unit.createBuyable(buyable: $0)})
     }

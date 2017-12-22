@@ -9,24 +9,144 @@
 import UIKit
 import Providers
 
+struct SelectUnitAndBaseControllerInputs {
+    var unitName: String? = nil // assumed to be unique
+    var baseQuantityName: String? = nil // assumed to be unique // TODO remove this
+
+    var baseQuantity: Float? = nil // assumed to be unique
+
+    var unitMarkedToDelete: String? = nil // name (assumed to be unique)
+    var baseQuantityMarkedToDelete: String? = nil // name (assumed to be unique)
+}
+
+struct SelectUnitAndBaseControllerResult {
+    var unitName: String // assumed to be unique
+    var baseQuantity: Float // assumed to be unique
+}
+
 class SelectUnitAndBaseController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
 
-    fileprivate var unitsManager = IngredientUnitCollectionViewManager()
+    fileprivate var unitsManager = UnitCollectionViewManager()
+    fileprivate var baseQuantitiesManager = BaseQuantitiesCollectionViewManager()
+
+    fileprivate var inputs = SelectUnitAndBaseControllerInputs()
+
+    fileprivate var unitsViewHeight: CGFloat?
+    fileprivate var baseQuantitiesViewHeight: CGFloat?
+
+    var onSubmit: ((SelectUnitAndBaseControllerResult) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        initTableView()
+        configUnitsManager()
+        configBaseQuantitiesManager()
+    }
 
+    fileprivate func initTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.register(UINib(nibName: "IngredientDataSubHeaderCell", bundle: nil), forCellReuseIdentifier: "subHeaderCell")
         tableView.register(UINib(nibName: "AddNewItemInputCell", bundle: nil), forCellReuseIdentifier: "inputCell")
     }
+
+    fileprivate func configUnitsManager() {
+        unitsManager.configure(controller: self, onSelectItem: { [weak self] unit in
+            self?.inputs.unitName = unit?.name
+            delay(0.2) { [weak self] in // make it less abrubt
+                self?.tableView.scrollToRow(at: IndexPath(row: 2, section: 0), at: .top, animated: true)
+            }
+        })
+
+        unitsManager.onSelectItem = { [weak self] unit in
+            self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
+            self?.inputs.unitName = unit?.name
+        }
+        unitsManager.onMarkedItemToDelete = { [weak self] uniqueName in
+            self?.inputs.unitMarkedToDelete = uniqueName
+            //            if let unit = unit {
+            //                self?.unitsManager.markUnitToDelete(unit: unit)
+            //            }
+        }
+        unitsManager.itemMarkedToDelete = { [weak self] in
+            return self?.inputs.unitMarkedToDelete
+        }
+        // for now clear variables BEFORE of realm delete - reason: clear possible selected unit - we have to compare with deleted unit to see if it's the same, and this crashes if it is, because after realm delete the object is invalid.
+        // TODO possible solution: Don't retain any Realm objects here, only ids.
+        unitsManager.willDeleteItem = { [weak self] unit in
+            self?.inputs.unitMarkedToDelete = nil
+            if unit.name == self?.inputs.unitName {
+                self?.inputs.unitName = nil
+            }
+        }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Here collection view width (needed to calculate the content height) is corrent
+        initVariableCellHeights()
+    }
+
+    fileprivate func initVariableCellHeights() {
+        unitsViewHeight = unitsManager.collectionViewContentHeight()
+        baseQuantitiesViewHeight = baseQuantitiesManager.collectionViewContentHeight()
+        tableView.reloadData()
+    }
+
+    fileprivate func configBaseQuantitiesManager() {
+        baseQuantitiesManager.configure(controller: self, onSelectItem: { [weak self] baseQuantity in
+            self?.inputs.baseQuantityName = baseQuantity?.val.quantityString
+        })
+
+        baseQuantitiesManager.onSelectItem = { [weak self] base in
+            self?.inputs.baseQuantityMarkedToDelete = nil // clear possible marked to delete unit
+            self?.inputs.baseQuantity = base?.val
+        }
+        baseQuantitiesManager.onMarkedItemToDelete = { [weak self] base in
+            self?.inputs.baseQuantityMarkedToDelete = base
+            //            if let unit = unit {
+            //                self?.unitsManager.markUnitToDelete(unit: unit)
+            //            }
+        }
+        baseQuantitiesManager.itemMarkedToDelete = { [weak self] in
+            return self?.inputs.baseQuantityMarkedToDelete
+        }
+        // for now clear variables BEFORE of realm delete - reason: clear possible selected unit - we have to compare with deleted unit to see if it's the same, and this crashes if it is, because after realm delete the object is invalid.
+        // TODO possible solution: Don't retain any Realm objects here, only ids.
+        baseQuantitiesManager.willDeleteItem = { [weak self] base in
+            self?.inputs.baseQuantityMarkedToDelete = nil
+            if base.val.quantityString == self?.inputs.baseQuantityName {
+                self?.inputs.baseQuantityName = nil
+            }
+        }
+    }
+
+    fileprivate func submit() {
+        // TODO don't allow empty inputs - preselect unit and base, don't allow user to de-select
+        let result = SelectUnitAndBaseControllerResult(
+            unitName: inputs.unitName ?? "",
+            baseQuantity: inputs.baseQuantity ?? 1
+        )
+        onSubmit?(result)
+    }
 }
+
 extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return 6
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let submitView = SubmitView()
+        submitView.setButtonTitle(title: trans("update_base_unit_submit_button_title"))
+        submitView.delegate = self
+        return submitView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return Theme.submitViewHeight
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -48,7 +168,7 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
             return cell
         case 4:
             let cell = dequeueDefaultCell()
-            let view = unitsManager.view
+            let view = baseQuantitiesManager.view
             cell.contentView.addSubview(view)
             view.frame = cell.contentView.bounds // appears to be necessary
             view.fillSuperview()
@@ -57,23 +177,46 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
             let header = tableView.dequeueReusableCell(withIdentifier: "subHeaderCell", for: indexPath) as! IngredientDataSubHeaderCell
             header.title.text = indexPath.row == 0 ? trans("select_ingredient_data_header_units") : trans("select_ingredient_data_header_quantity")
             return header
-        case 2, 5: // inputs
-//            let unitInputCell = tableView.dequeueReusableCell(withIdentifier: "unitInputCell", for: indexPath) as! AddNewItemInputCell
-//            unitInputCell.configure(placeholder: trans("enter_custom_unit_placeholder"), onInputUpdate: { [weak self] unitInput in
-//                self?.inputs.newUnitInput = unitInput.isEmpty ? nil : unitInput
-//                if !unitInput.isEmpty {
-//                    self?.inputs.unit = nil
-//                    self?.unitsManager.clearSelectedUnits() // Input overwrites possible selection
-//                    self?.unitsManager.clearToDeleteUnits() // Clear delete state too
-//                }
-//            })
-//            return unitInputCell
-            fatalError("TODO")
+        case 2: // unit input
+            let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
+            itemInputCell.configure(placeholder: trans("enter_custom_unit_placeholder"), onInputUpdate: { [weak self] unitInput in
+                self?.inputs.unitName = unitInput.isEmpty ? nil : unitInput
+                if !unitInput.isEmpty {
+                    self?.inputs.unitName = nil
+                    self?.unitsManager.clearSelectedItems() // Input overwrites possible selection
+                    self?.unitsManager.clearToDeleteItems() // Clear delete state too
+                }
+            })
+            return itemInputCell
+        case 5: // base input
+            let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
+            itemInputCell.configure(placeholder: trans("enter_custom_base_quantity_placeholder"), onInputUpdate: { [weak self] unitInput in
+                self?.inputs.baseQuantityName = unitInput.isEmpty ? nil : unitInput
+                if !unitInput.isEmpty {
+                    self?.inputs.baseQuantityName = nil
+                    self?.baseQuantitiesManager.clearSelectedItems() // Input overwrites possible selection
+                    self?.baseQuantitiesManager.clearToDeleteItems() // Clear delete state too
+                }
+            })
+            return itemInputCell
         default: fatalError("Not supported index: \(indexPath.row)")
         }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        fatalError("TODO")
+        switch indexPath.row {
+        case 1: return unitsViewHeight ?? 600 // dummy big default size, with 0 constraint errors in console (at the beginning the collection collection view has no width)
+        case 4: return baseQuantitiesViewHeight ?? 600
+        case 0, 3: return 50 // header
+        case 2, 5: return 80 // text inputs
+        default: fatalError("Not supported index: \(indexPath.row)")
+        }
+    }
+}
+
+extension SelectUnitAndBaseController: SubmitViewDelegate {
+
+    func onSubmitButton() {
+        submit()
     }
 }

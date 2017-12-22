@@ -214,7 +214,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let item = filteredQuickAddItems[(indexPath as NSIndexPath).row]
+        let item = filteredQuickAddItems[indexPath.row]
         
         if let textSize = item.textSize {
             return textSize
@@ -799,7 +799,17 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         var isAnyShowing: Bool = false
         
         if recipeControllerAnimator?.isShowing ?? false {
+            // TODO use generics
+            if
+                let controller = recipeControllerAnimator?.controller,
+                let addRecipeController = controller as? AddRecipeController {
+                addRecipeController.closeAddedNonChildren()
+            } else {
+                logger.e("No controller / couldn't be casted", .ui)
+            }
+
             recipeControllerAnimator?.close()
+            
             isAnyShowing = true
         }
 

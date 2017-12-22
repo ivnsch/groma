@@ -21,15 +21,15 @@ protocol UnitOrBaseDataSourceDelegate {
     var collectionView: UICollectionView { get }
 }
 
-class UnitOrBaseDataSource<T: DBSyncable & WithUniqueName>: NSObject, UICollectionViewDataSource, UnitCellDelegate, UnitEditableViewDelegate, UICollectionViewDelegateFlowLayout {
+class UnitOrBaseDataSource<T: DBSyncable & WithUniqueName>: NSObject, UICollectionViewDataSource, DefaultItemMeasureCellDelegate, UnitEditableViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    var items: Results<T>?
+    var items: AnyRealmCollection<T>?
     
     var delegate: UnitOrBaseDataSourceDelegate?
     
     fileprivate var addNewUnitCell: UnitEditableCell? // to ask if it has focus
     
-    init(items: Results<T>?) {
+    init(items: AnyRealmCollection<T>?) {
         self.items = items
     }
     
@@ -41,11 +41,10 @@ class UnitOrBaseDataSource<T: DBSyncable & WithUniqueName>: NSObject, UICollecti
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         fatalError("Override")
     }
-    
-    
+
     // MARK: - UnitCellDelegate
     
-    func onLongPress(cell: UnitCell) {
+    func onLongPress(cell: DefaultItemMeasureCell) {
         guard let delegate = delegate else { logger.e("No delegate"); return }
         guard let indexPath = delegate.collectionView.indexPath(for: cell) else {
             logger.e("Couldn't find cell!", .ui)
@@ -55,7 +54,7 @@ class UnitOrBaseDataSource<T: DBSyncable & WithUniqueName>: NSObject, UICollecti
         let item = items[indexPath.row]
         delegate.onMarkUnitToDelete(uniqueName: item.uniqueName)
         //        cell.unitView.markedToDelete = true
-        cell.unitView.mark(toDelete: true, animated: true)
+        cell.show(toDelete: true, animated: true)
     }
     
     

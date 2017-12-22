@@ -8,15 +8,15 @@
 
 import UIKit
 
-protocol UnitCellDelegate {
-    func onLongPress(cell: UnitCell)
+protocol DefaultItemMeasureCellDelegate {
+    func onLongPress(cell: DefaultItemMeasureCell)
 }
 
 class UnitCell: DefaultItemMeasureCell, UnitViewDelegate {
     
     @IBOutlet weak var unitView: UnitView!
     
-    var delegate: UnitCellDelegate?
+    var delegate: DefaultItemMeasureCellDelegate?
 
     override var itemName: String {
         return unitView.unit?.name ?? ""

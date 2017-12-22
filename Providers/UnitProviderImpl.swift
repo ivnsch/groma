@@ -30,7 +30,13 @@ class UnitProviderImpl: UnitProvider {
             handler(ProviderResult(status: .databaseUnknown))
         }
     }
-    
+
+    func findUnit(name: String, _ handler: @escaping (ProviderResult<Unit?>) -> Void) {
+        DBProv.unitProvider.findUnit(name: name) { unit in
+            handler(ProviderResult(status: .success, sucessResult: unit))
+        }
+    }
+
     func getOrCreate(name: String, _ handler: @escaping (ProviderResult<(unit: Unit, isNew: Bool)>) -> Void) {
         if let unit = DBProv.unitProvider.getOrCreateSync(name: name) {
             handler(ProviderResult(status: .success, sucessResult: unit))

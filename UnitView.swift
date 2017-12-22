@@ -13,8 +13,9 @@ protocol UnitViewDelegate {
     func onLongPress()
 }
 
-@IBDesignable class UnitView: UIView {
-    
+@IBDesignable class UnitView: UIView, BaseOrUnitCellView {
+
+
     @IBInspectable var isBold: Bool = false
 
     @IBOutlet weak var imageViewContainer: UIView!
@@ -24,8 +25,8 @@ protocol UnitViewDelegate {
     
     var delegate: UnitViewDelegate?
     
-    var markedToDelete: Bool = false
-    
+//    var markedToDelete: Bool = false
+
     var unit: Providers.Unit? {
         didSet {
             if let unit = unit {
@@ -47,7 +48,7 @@ protocol UnitViewDelegate {
             }
         }
     }
-    
+
     var bgColor: UIColor = Theme.unitsBGColor {
         didSet {
             backgroundColor = bgColor
@@ -88,20 +89,7 @@ protocol UnitViewDelegate {
         backgroundColor = UIColor.clear
         view.backgroundColor = UIColor.clear
     }
-    
-    func mark(toDelete: Bool, animated: Bool) {
-        markedToDelete = toDelete
-        animIf(animated) {[weak self] in guard let weakSelf = self else {return}
-            self?.imageViewContainer.backgroundColor = toDelete ? UIColor.flatRed : Theme.grey
-        }
-    }
-    
-    func showSelected(selected: Bool, animated: Bool) {
-//        animIf(animated) {[weak self] in
-            imageViewContainer.backgroundColor = selected ? Theme.green : Theme.grey
-//        }
-    }
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -122,5 +110,11 @@ protocol UnitViewDelegate {
         if sender.state == .began {
             delegate?.onLongPress()
         }
+    }
+
+    // MARK: BaseOrUnitCellView
+
+    var backgroundView: UIView {
+        return imageViewContainer
     }
 }

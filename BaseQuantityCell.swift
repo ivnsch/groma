@@ -8,16 +8,24 @@
 
 import UIKit
 
-protocol BaseQuantityCellDelegate {
-    func onLongPress(cell: BaseQuantityCell)
-}
-
-class BaseQuantityCell: UICollectionViewCell, BaseQuantityViewDelegate {
+class BaseQuantityCell: DefaultItemMeasureCell, BaseQuantityViewDelegate {
     
     @IBOutlet weak var baseQuantityView: BaseQuantityView!
     
-    var delegate: BaseQuantityCellDelegate?
-    
+    var delegate: DefaultItemMeasureCellDelegate?
+
+    override var itemName: String {
+        return baseQuantityView.base?.val.quantityString ?? ""
+    }
+
+    override func show(selected: Bool, animated: Bool) {
+        baseQuantityView.showSelected(selected: selected, animated: animated)
+    }
+
+    override func show(toDelete: Bool, animated: Bool) {
+        baseQuantityView.mark(toDelete: toDelete, animated: animated)
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
         

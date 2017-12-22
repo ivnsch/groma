@@ -42,7 +42,7 @@ public struct ProductPrototype {
     
     public var baseQuantity: Float
     public var unit: String
-
+    
     public var edible: Bool
     
     var productUnique: ProductUnique {

@@ -12,17 +12,49 @@ import RealmSwift
 
 class UnitCollectionViewManager: DefaultCollectionViewItemManager<Providers.Unit> {
 
+    fileprivate let unitCellSize = CGSize(width: 60, height: 76)
+
+    override var collectionViewContentsHeight: CGFloat {
+        //        let collectionViewWidth = myCollectionView.width
+        //        guard collectionViewWidth > 0 else { return 0 } // avoid division by 0
+        let unitCount = dataSource?.items?.count ?? 0
+        //        let unitsPerRow = floor(collectionViewWidth / unitCellSize.width)
+        let unitsPerRow = CGFloat(5) // for now hardcoded. Calculating it returns 5 (wrong) + using the collection width causes constraint error (because this is called 2-3 times at the beginning with a width of 0) and collapses entirely the collection view. TODO not hardcoded
+        let rowCount = ceil(CGFloat(unitCount) / unitsPerRow)
+        return rowCount * (unitCellSize.height + rowsSpacing) + topCollectionViewPadding + bottomCollectionViewPadding
+    }
+
+    override func sizeFotItemCell(indexPath: IndexPath) -> CGSize {
+        if (dataSource?.items.map{unit in
+            indexPath.row < unit.count
+            }) ?? false {
+            return unitCellSize
+        } else {
+            return CGSize(width: 120, height: 50)
+        }
+    }
+
+    override func calculateCollectionViewContentsHeight(collectionViewWidth: CGFloat, items: AnyRealmCollection<Providers.Unit>) -> CGFloat {
+        //        let collectionViewWidth = myCollectionView.width
+        //        guard collectionViewWidth > 0 else { return 0 } // avoid division by 0
+        let unitCount = dataSource?.items?.count ?? 0
+        //        let unitsPerRow = floor(collectionViewWidth / unitCellSize.width)
+        let unitsPerRow = CGFloat(5) // for now hardcoded. Calculating it returns 5 (wrong) + using the collection width causes constraint error (because this is called 2-3 times at the beginning with a width of 0) and collapses entirely the collection view. TODO not hardcoded
+        let rowCount = ceil(CGFloat(unitCount) / unitsPerRow)
+        return rowCount * (unitCellSize.height + rowsSpacing) + topCollectionViewPadding + bottomCollectionViewPadding
+    }
+
     override func registerCell() {
         collectionView.register(UINib(nibName: "UnitCell", bundle: nil), forCellWithReuseIdentifier: "unitCell")
     }
 
-    override func createDataSource(items: Results<Providers.Unit>) -> UnitOrBaseDataSource<Providers.Unit> {
+    override func createDataSource(items: AnyRealmCollection<Providers.Unit>) -> UnitOrBaseDataSource<Providers.Unit> {
         return UnitsDataSourceNew(items: items)
     }
 
-    override func fetchItems(controller: UIViewController, onSucces: @escaping (Results<Providers.Unit>) -> Void) {
+    override func fetchItems(controller: UIViewController, onSucces: @escaping (AnyRealmCollection<Providers.Unit>) -> Void) {
         Prov.unitProvider.units(buyable: nil, controller.successHandler{ units in
-            onSucces(units)
+            onSucces(AnyRealmCollection(units))
         })
     }
 }
@@ -37,9 +69,7 @@ class UnitsDataSourceNew: UnitOrBaseDataSource<Providers.Unit> {
         let unit = units[indexPath.row]
         cell.unitView.unit = unit
         cell.unitView.fgColor = Theme.unitsFGColor
-        cell.unitView.markedToDelete = false
         cell.delegate = self
-
 
         if let delegate = delegate {
             if delegate.highlightSelected {
@@ -51,7 +81,7 @@ class UnitsDataSourceNew: UnitOrBaseDataSource<Providers.Unit> {
         }
 
         // HACK: For some reason after scrolled the label doesn't use its center constraint and appears aligned to the left. Debugging view hierarchy shows the label has the correct constraints, parent also has correct size but for some reason it's aligned at the left.
-        cell.unitView.nameLabel.center = cell.unitView.center
+//        cell.unitView.nameLabel.center = cell.unitView.center
         //            cell.setNeedsLayout()
 
         return cell
