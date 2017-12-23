@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="267" id="KGk-i7-Jjw" customClass="AddRecipeIngredientCell" customModule="groma" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="267" id="KGk-i7-Jjw" customClass="AddRecipeIngredientCellNew" customModule="groma" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="372" height="267"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -57,6 +57,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                         <connections>
+                            <action selector="onBrandNameChanged:" destination="KGk-i7-Jjw" eventType="editingChanged" id="KT2-q7-97C"/>
                             <outlet property="autoCompleteDataSource" destination="KGk-i7-Jjw" id="hby-T8-J2l"/>
                             <outlet property="autoCompleteDelegate" destination="KGk-i7-Jjw" id="PwK-iQ-Dkf"/>
                         </connections>
@@ -78,6 +79,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                         <connections>
+                            <action selector="onBrandChanged:" destination="KGk-i7-Jjw" eventType="editingChanged" id="NBg-QP-Mbd"/>
                             <outlet property="autoCompleteDataSource" destination="KGk-i7-Jjw" id="NQZ-lw-IOU"/>
                             <outlet property="autoCompleteDelegate" destination="KGk-i7-Jjw" id="hkH-AA-kvi"/>
                         </connections>
@@ -141,7 +143,7 @@
                 <outlet property="brandTextField" destination="wf2-UD-agf" id="UNd-uM-sEi"/>
                 <outlet property="ingredientNameLabel" destination="Qd6-eV-Zpm" id="R1Q-Lt-kIg"/>
                 <outlet property="productNameTextField" destination="KAK-sU-TMz" id="EX1-58-WUF"/>
-                <outlet property="quantitiesContainer" destination="QeG-wY-fI5" id="uRF-6i-nMX"/>
+                <outlet property="quantitiesContainer" destination="QeG-wY-fI5" id="0ln-FH-tsE"/>
                 <outlet property="quantitySummaryLabel" destination="dO9-oa-KP9" id="leG-Lr-mq6"/>
             </connections>
             <point key="canvasLocation" x="-28" y="130.5"/>

@@ -13,13 +13,11 @@ import RealmSwift
 
 public struct AddRecipeIngredientModel {
     public var productPrototype: ProductPrototype
-    public var unitId: UnitId // TODO refactor - productPrototype has the name (solution is not to move unitId to productPrototype)
     public var quantity: Float
     public let ingredient: Ingredient // The unmodified ingredient (to pass around)
     
-    public init(productPrototype: ProductPrototype, unitId: UnitId, quantity: Float, ingredient: Ingredient) {
+    public init(productPrototype: ProductPrototype, quantity: Float, ingredient: Ingredient) {
         self.productPrototype = productPrototype
-        self.unitId = unitId
         self.quantity = quantity
         self.ingredient = ingredient
     }

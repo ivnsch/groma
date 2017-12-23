@@ -15,20 +15,21 @@ import RealmSwift
 protocol ProductQuantityControlleDelegate {
 
     func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void)
-    func addUnit(name: String, _ handler: @escaping ((unit: Providers.Unit, isNew: Bool)) -> Void)
-    func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void)
-    
     func baseQuantities(_ handler: @escaping (RealmSwift.List<BaseQuantity>?) -> Void)
-    func addBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void)
+
+    func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void)
     func deleteBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void)
-    
-    var quantity: Float {get}
+
+    // TODO remove - saved now on submit
+    func addUnit(name: String, _ handler: @escaping ((unit: Providers.Unit, isNew: Bool)) -> Void)
+    func addBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void)
 
     func onSelect(unit: Providers.Unit)
     func onSelect(base: Float)
     func onChangeQuantity(quantity: Float)
-    
-    var parentForPickers: UIView {get}
+
+    // TODO remove - no pickers anymore
+    var parentForPickers: UIView { get }
 }
 
 
@@ -70,13 +71,13 @@ class ProductQuantityController: UIViewController {
 
     var onPickersInitialized: (() -> Void)?
     
-    func config(unitId: UnitId, unitName: String, base: Float, onTapUnitBase: @escaping () -> Void) {
+    func config(quantity: Float, unitId: UnitId, unitName: String, base: Float, onTapUnitBase: @escaping () -> Void) {
 
-        initQuantitiesView()
         unitWithBaseView.configure(unitId: unitId, unitName: unitName, base: base, onTap: {
             onTapUnitBase()
         })
-
+        
+        quantityView.quantity = quantity
         quantityView.delegate = self
     }
 
@@ -184,7 +185,8 @@ class ProductQuantityController: UIViewController {
     func initQuantitiesView() {
         guard let delegate = delegate else {logger.e("No delegate, can't add picker"); return}
 
-        quantityView.quantity = delegate.quantity
+        //TODO# unidirectional - init/update method - no fetching from delegate
+//        quantityView.quantity = delegate.quantity
     }
     
     /// Some of the views added by this controller, are not added as subviews of this controller's view but above in the hierarchy so we have to hide them explicitly.

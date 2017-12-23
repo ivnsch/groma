@@ -27,7 +27,10 @@ public final class Ingredient: Object {
     @objc public dynamic var pBase: Float = 1
     @objc public dynamic var pQuantity: Float = 0
     @objc public dynamic var pUnit: String = ""
-    
+    // pUnitIdVal is redundant - it can be derived from pUnit, but to keep the code simple/performance, otherwise we have to do an additional query
+    // to retrive the ids using the names.
+    @objc public dynamic var pUnitIdVal: Int = 0
+
     public static var quantityFieldName: String {
         return "quantity"
     }
@@ -62,7 +65,19 @@ public final class Ingredient: Object {
             unitOpt = newValue
         }
     }
-    
+
+    public var pUnitId: UnitId {
+        get {
+            return UnitId(rawValue: pUnitIdVal) ?? {
+                logger.e("Invalid id val: \(pUnitIdVal), defaulting to none", .db)
+                return UnitId.none
+            } ()
+        }
+        set {
+            pUnitIdVal = pUnitId.rawValue
+        }
+    }
+
     public var fraction: Fraction {
         get {
             return Fraction(wholeNumber: 0, numerator: fractionNumerator, denominator: fractionDenominator)
@@ -187,19 +202,23 @@ public final class Ingredient: Object {
     }
     
     public static func quantityFullText(quantity: Float, baseQuantity: Float, unit: Providers.Unit?) -> String {
-        
+        return quantityFullText(quantity: quantity, baseQuantity: baseQuantity, unitId: unit?.id, unitName: unit?.name ?? "")
+    }
+
+    public static func quantityFullText(quantity: Float, baseQuantity: Float, unitId: UnitId?, unitName: String) -> String {
+
         let noneUnitName = quantity > 1 ? trans("recipe_unit_plural") : trans("recipe_unit_singular")
 
-        let showBaseQuantity = unit.map {
-            Providers.Unit.unitsWithBase.contains($0.id)
+        let showBaseQuantity = unitId.map {
+            Providers.Unit.unitsWithBase.contains($0)
         } ?? false /* false: if there's no unit, unit is none -> none has no base */ && baseQuantity > 1
 
         let baseText = showBaseQuantity ? " x \(baseQuantity.quantityString)" : ""
-        let unitText = unit.map{$0.id == .none ? noneUnitName : $0.name} ?? noneUnitName
+        let unitText = unitId.map{$0 == .none ? noneUnitName : unitName} ?? noneUnitName
         let baseAndUnitTextSeparator = baseText.isEmpty && unitText.isEmpty ? "" : " "
         let baseAndUnitText = "\(baseText)\(baseAndUnitTextSeparator)\(unitText)"
         let afterQuantity = baseAndUnitText.isEmpty ? "" : "\(baseAndUnitText)"
-        
+
         return "\(quantity.quantityString)\(afterQuantity)"
     }
 }

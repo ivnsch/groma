@@ -9,17 +9,16 @@
 import UIKit
 import RealmSwift
 
-
 public struct AddableIngredients {
-    public let results: Results<Ingredient>
+    public let results: Results<Ingredient> // todo rename in ingredients!
     public let brands: [String: [String]] // ingredient uuid - brands (which are associated with products with the same name as the ingredient product)
     public let units: Results<Unit> // all units in the app
     public let baseQuantities: RealmSwift.List<BaseQuantity> // for now this is all base quantities that exist in all products
 }
 
-
 class AddableIngredientProviderImpl: AddableIngredientProvider {
- 
+
+    // Fetches all data needed by add recipe to list use case (ingredients, brands, units and bases)
     func addableIngredients(recipe: Recipe, handler: @escaping (ProviderResult<AddableIngredients>) -> Void) {
         
         Prov.ingredientProvider.ingredients(recipe: recipe, sortBy: .alphabetic) {ingredientsResult in

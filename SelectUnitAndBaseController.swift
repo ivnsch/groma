@@ -10,6 +10,7 @@ import UIKit
 import Providers
 
 struct SelectUnitAndBaseControllerInputs {
+    var unitId: UnitId? = nil
     var unitName: String? = nil // assumed to be unique
     var baseQuantityName: String? = nil // assumed to be unique // TODO remove this
 
@@ -20,6 +21,7 @@ struct SelectUnitAndBaseControllerInputs {
 }
 
 struct SelectUnitAndBaseControllerResult {
+    var unitId: UnitId // TODO remove unitName?
     var unitName: String // assumed to be unique
     var baseQuantity: Float // assumed to be unique
 }
@@ -61,6 +63,7 @@ class SelectUnitAndBaseController: UIViewController {
 
         unitsManager.onSelectItem = { [weak self] unit in
             self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
+            self?.inputs.unitId = unit?.id
             self?.inputs.unitName = unit?.name
         }
         unitsManager.onMarkedItemToDelete = { [weak self] uniqueName in
@@ -123,10 +126,15 @@ class SelectUnitAndBaseController: UIViewController {
     }
 
     fileprivate func submit() {
-        // TODO don't allow empty inputs - preselect unit and base, don't allow user to de-select
+        // TODO ensure that there's always a unit and a base selected!
+        guard let unitId = inputs.unitId else { logger.e("Can't submit without a unit"); return }
+        guard let unitName = inputs.unitName else { logger.e("Can't submit without unit name"); return } // TODO remove name?
+        guard let baseQuantity = inputs.baseQuantity else { logger.e("Can't submit without base"); return }
+
         let result = SelectUnitAndBaseControllerResult(
-            unitName: inputs.unitName ?? "",
-            baseQuantity: inputs.baseQuantity ?? 1
+            unitId: unitId,
+            unitName: unitName,
+            baseQuantity: baseQuantity
         )
         onSubmit?(result)
     }
