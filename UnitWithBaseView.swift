@@ -60,10 +60,12 @@ class UnitWithBaseView: HandlingView {
         } ()
 
         label.text = "\(base.quantityStringHideZero) \(unitName)"
+        label.sizeToFit()
+        invalidateIntrinsicContentSize()
     }
 
     override var intrinsicContentSize: CGSize {
         // width: + left space + middle + right space, height: + top space * 2
-        return CGSize(width: label.width + 10 + 15 + 10 + unitImageView.width, height: max(label.height, unitImageView.height) + 2 * 4)
+        return CGSize(width: label.intrinsicContentSize.width + 10 + 15 + 10 + unitImageView.width, height: max(label.height, unitImageView.height) + 2 * 4)
     }
 }

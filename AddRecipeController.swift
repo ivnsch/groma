@@ -147,6 +147,7 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = AddRecipeTableViewHeader.createView()
         header.config(title: recipeName)
+        header.backgroundColor = Theme.lightGreyBackground
         return header
     }
 

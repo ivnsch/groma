@@ -8,12 +8,15 @@
 
 import UIKit
 
+@IBDesignable
 class LineAutocompleteTextField: MyAutoCompleteTextField {
 
     fileprivate let lineWidth: CGFloat = 1
     
-    fileprivate static let defaultLineColor = UIColor.gray
-    fileprivate var lineColor = defaultLineColor
+    fileprivate static let defaultLineColor = Theme.lightGrey2
+
+    @IBInspectable
+    var lineColor = defaultLineColor
 
     // TODO review - had to be commented while swift 4 migration (extension declaration cannot be overriden)
 //    override func showValidationError() {

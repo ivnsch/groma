@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,7 +24,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3bg-dS-GSw">
-                    <rect key="frame" x="72" y="0.0" width="41" height="122"/>
+                    <rect key="frame" x="0.0" y="0.0" width="41" height="122"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="41" id="wwx-ae-Pii"/>
                     </constraints>
@@ -35,7 +35,7 @@
                     </connections>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mNy-bI-3Ag" customClass="TextFieldMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="113" y="49" width="10" height="24"/>
+                    <rect key="frame" x="41" y="49" width="82" height="24"/>
                     <nil key="textColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad"/>
@@ -69,6 +69,7 @@
                 <constraint firstItem="3bg-dS-GSw" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Grv-ad-CMG"/>
                 <constraint firstItem="mNy-bI-3Ag" firstAttribute="leading" secondItem="3bg-dS-GSw" secondAttribute="trailing" id="WJt-KP-HEr"/>
                 <constraint firstAttribute="bottom" secondItem="3bg-dS-GSw" secondAttribute="bottom" id="Znh-Nb-H6x"/>
+                <constraint firstItem="3bg-dS-GSw" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="g7J-gU-EF5"/>
                 <constraint firstItem="mNy-bI-3Ag" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="sWC-r3-rBS"/>
                 <constraint firstItem="3bg-dS-GSw" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="vbE-l3-tWo"/>
             </constraints>

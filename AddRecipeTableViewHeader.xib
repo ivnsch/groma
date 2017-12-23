@@ -16,8 +16,9 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="86"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PP9-G1-4pp" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="166.5" y="32.5" width="42" height="21"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PP9-G1-4pp" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="86"/>
+                    <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -28,10 +29,14 @@
                     </userDefinedRuntimeAttributes>
                 </label>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="PP9-G1-4pp" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="LWZ-nn-dO3"/>
                 <constraint firstItem="PP9-G1-4pp" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="NkZ-t1-nna"/>
+                <constraint firstItem="PP9-G1-4pp" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="fGC-Ii-aOd"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="PP9-G1-4pp" secondAttribute="bottom" id="h4r-FO-OFn"/>
+                <constraint firstItem="PP9-G1-4pp" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="m3e-aD-aj1"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="PP9-G1-4pp" secondAttribute="trailing" id="m8G-3e-lOT"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>

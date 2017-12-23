@@ -21,10 +21,12 @@ public struct Theme {
     public static var notchHeight: CGFloat = 44
 
     public static let lightGrey = UIColor(hexString: "ACACAC")
-    public static let lightGrey2 = UIColor(hexString: "D4D4D4")
-    
+    public static let lightGrey2 = UIColor(hexString: "D2D2D2")
+    public static let lightGrey3 = UIColor(hexString: "EFEFEF")
+
     public static let grey = UIColor(hexString: "7D8B8C")
     public static let midGrey = UIColor(hexString: "B7B7B7")
+    public static let midGrey2 = UIColor(hexString: "9B9B9B")
 
     public static let cellBottomBorderColor = UIColor(hexString: "EADFE4")
     

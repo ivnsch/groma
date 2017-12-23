@@ -125,7 +125,7 @@ class MyAutoCompleteTextField: MLPAutoCompleteTextField {
             borderLayer.frame = v.bounds
             borderLayer.path  = borderPath
             borderLayer.lineWidth   = 1
-            borderLayer.strokeColor = UIColor.gray.cgColor
+            borderLayer.strokeColor = Theme.midGrey.cgColor
             borderLayer.fillColor   = UIColor.clear.cgColor
             v.layer.addSublayer(borderLayer)
             self.borderLayer = borderLayer

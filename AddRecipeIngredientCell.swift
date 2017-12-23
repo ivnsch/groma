@@ -61,12 +61,13 @@ class AddRecipeIngredientCell: UITableViewCell {
         var alreadyHaveText: String?
     }
 
-    @IBOutlet weak var ingredientNameLabel: UILabel!
+    @IBOutlet weak var ingredientNameLabel: LabelMore!
 
     @IBOutlet weak var productNameTextField: LineAutocompleteTextField!
     @IBOutlet weak var brandTextField: LineAutocompleteTextField!
 
     @IBOutlet weak var quantitySummaryLabel: UILabel!
+    @IBOutlet weak var quantitySummaryValueLabel: UILabel!
     @IBOutlet weak var alreadyHaveLabel: UILabel!
 
     @IBOutlet weak var quantitiesContainer: UIView!
@@ -83,7 +84,7 @@ class AddRecipeIngredientCell: UITableViewCell {
         productNameTextField.text = state.productName
         brandTextField.text = state.brandName
 
-        quantitySummaryLabel.text = generateSummary(
+        showSummary(
             unitId: state.unitData.unitId,
             unitName: state.unitData.unitName,
             base: state.baseQuantity,
@@ -106,13 +107,14 @@ class AddRecipeIngredientCell: UITableViewCell {
     }
 
     func showSummary(unitId: UnitId, unitName: String, base: Float, quantity: Float) {
-        let summary = generateSummary(unitId: unitId, unitName: unitName, base: base, quantity: quantity)
-        quantitySummaryLabel.text = summary
+        let summary = Ingredient.quantityFullText(quantity: quantity, baseQuantity: base, unitId: unitId, unitName: unitName)
+        quantitySummaryValueLabel.text = summary
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        initStaticText()
         initProductQuantityController()
     }
 
@@ -130,9 +132,10 @@ class AddRecipeIngredientCell: UITableViewCell {
         self.productQuantityController = productQuantityController
     }
 
-    fileprivate func generateSummary(unitId: UnitId, unitName: String, base: Float, quantity: Float) -> String {
-        let unitText = Ingredient.quantityFullText(quantity: quantity, baseQuantity: base, unitId: unitId, unitName: unitName)
-        return trans("recipe_you_will_add", unitText)
+    fileprivate func initStaticText() {
+        quantitySummaryLabel.text = trans("add_recipe_to_list_placeholder_to_add")
+        productNameTextField.setPlaceholderWithColor(trans("add_recipe_to_list_placeholder_name"), color: Theme.midGrey2)
+        productNameTextField.setPlaceholderWithColor(trans("add_recipe_to_list_placeholder_brand"), color: Theme.midGrey2)
     }
 
     @IBAction func onBrandChanged(_ sender: LineAutocompleteTextField) {

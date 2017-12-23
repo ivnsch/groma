@@ -460,7 +460,6 @@ share_subject = "Groma";
 recipe_already_has = "Ya en la lista: %@";
 recipe_unit_singular = "Artículo";
 recipe_unit_plural = "Artículos";
-recipe_you_will_add = "Se agregará: %@";
 
 
 unit_none = "";
@@ -509,3 +508,7 @@ enter_custom_base_quantity_placeholder = "O ingresa tu propia cantidad base";
 update_base_unit_submit_button_title = "Actualizar";
 
 add_recipe_to_list_submit_button_title = "Agregar a lista";
+add_recipe_to_list_placeholder_name = "Nombre del producto";
+add_recipe_to_list_placeholder_brand = "Marca";
+add_recipe_to_list_placeholder_to_add = "Agregar:";
+
