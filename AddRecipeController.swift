@@ -129,10 +129,10 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
         cell.config(state: cellState, delegate: self)
 
         if let alreadyHaveText = cellState.alreadyHaveText {
-            cell.setAlreadyHaveText(alreadyHaveText)
+            cell.showAlreadyHaveText(alreadyHaveText)
         } else {
             delegate?.getAlreadyHaveText(ingredient: ingredient, { [weak self] text in
-                cell.setAlreadyHaveText(text)
+                cell.showAlreadyHaveText(text)
                 self?.cellStates[indexPath.row]?.alreadyHaveText = text
             })
         }
@@ -236,6 +236,16 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     func onChange(quantity: Float, cell: AddRecipeIngredientCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return}
         cellStates[indexPath.row]?.quantity = quantity
+        if let cellState = cellStates[indexPath.row] {
+            cell.showSummary(
+                unitId: cellState.unitData.unitId,
+                unitName: cellState.unitData.unitName,
+                base: cellState.baseQuantity,
+                quantity: cellState.quantity
+            )
+        } else {
+            logger.e("Invalid state", .ui)
+        }
     }
 
     func onChange(brandName: String, cell: AddRecipeIngredientCell) {

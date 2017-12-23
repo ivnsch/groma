@@ -101,8 +101,13 @@ class AddRecipeIngredientCell: UITableViewCell {
         )
     }
 
-    func setAlreadyHaveText(_ text: String) {
+    func showAlreadyHaveText(_ text: String) {
         alreadyHaveLabel.text = text
+    }
+
+    func showSummary(unitId: UnitId, unitName: String, base: Float, quantity: Float) {
+        let summary = generateSummary(unitId: unitId, unitName: unitName, base: base, quantity: quantity)
+        quantitySummaryLabel.text = summary
     }
 
     override func awakeFromNib() {
