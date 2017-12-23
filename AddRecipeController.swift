@@ -280,6 +280,41 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         popup.show(from: baseUnitView)
     }
 
+    func productNamesContaining(text: String, handler: @escaping ([String]) -> Void) {
+        Prov.productProvider.products(text, range: NSRange(location: 0, length: 10000), sortBy: .alphabetic, successHandler {tuple in
+            let names = tuple.products.map{$0.item.name}
+            handler(names)
+        })
+    }
+
+    func brandsContaining(text: String, handler: @escaping ([String]) -> Void) {
+        Prov.brandProvider.brandsContainingText(text, successHandler{brands in
+            handler(brands)
+        })
+    }
+
+    func delete(productNameSuggestion: String, handler: @escaping () -> Void) {
+        Prov.productProvider.delete(productName: productNameSuggestion, successHandler{
+            handler()
+        })
+    }
+
+    func delete(brandNameSuggestion: String, handler: @escaping () -> Void) {
+        ConfirmationPopup.show(
+            title: trans("popup_title_confirm"),
+            message: trans("popup_remove_brand_completion_confirm", brandNameSuggestion),
+            okTitle: trans("popup_button_yes"),
+            cancelTitle: trans("popup_button_no"),
+            controller: self,
+            onOk: { [weak self] in guard let weakSelf = self else {return}
+                Prov.brandProvider.removeProductsWithBrand(brandNameSuggestion, remote: true, weakSelf.successHandler {
+                    AlertPopup.show(message: trans("popup_was_removed", brandNameSuggestion), controller: weakSelf)
+                    handler()
+                })
+            }
+        )
+    }
+
     // TODO remove
     var parentForPickers: UIView {
         fatalError("remove")

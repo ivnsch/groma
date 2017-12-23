@@ -60,6 +60,7 @@
                             <action selector="onBrandNameChanged:" destination="KGk-i7-Jjw" eventType="editingChanged" id="KT2-q7-97C"/>
                             <outlet property="autoCompleteDataSource" destination="KGk-i7-Jjw" id="hby-T8-J2l"/>
                             <outlet property="autoCompleteDelegate" destination="KGk-i7-Jjw" id="PwK-iQ-Dkf"/>
+                            <outlet property="myDelegate" destination="KGk-i7-Jjw" id="RHQ-mP-BDI"/>
                         </connections>
                     </textField>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Ivan's Farms GmbH" placeholder="Brand (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="wf2-UD-agf" customClass="LineAutocompleteTextField" customModule="groma" customModuleProvider="target">
@@ -82,6 +83,7 @@
                             <action selector="onBrandChanged:" destination="KGk-i7-Jjw" eventType="editingChanged" id="NBg-QP-Mbd"/>
                             <outlet property="autoCompleteDataSource" destination="KGk-i7-Jjw" id="NQZ-lw-IOU"/>
                             <outlet property="autoCompleteDelegate" destination="KGk-i7-Jjw" id="hkH-AA-kvi"/>
+                            <outlet property="myDelegate" destination="KGk-i7-Jjw" id="tyf-oP-lZK"/>
                         </connections>
                     </textField>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You have currently 1x250g chicken breast in the list" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HoV-Lx-ei4" customClass="LabelMore" customModule="Providers">

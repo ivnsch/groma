@@ -10,15 +10,16 @@ import UIKit
 
 import Providers
 
-protocol MyAutoCompleteTextFieldDelegate {
+@objc protocol MyAutoCompleteTextFieldDelegate: class {
     func onDeleteSuggestion(_ string: String, sender: MyAutoCompleteTextField)
 }
 
+@IBDesignable
 class MyAutoCompleteTextField: MLPAutoCompleteTextField {
 
     @IBInspectable var fontType: Int = -1
     
-    var myDelegate: MyAutoCompleteTextFieldDelegate?
+    @IBOutlet weak var myDelegate: MyAutoCompleteTextFieldDelegate?
 
     fileprivate var borderLayer: CALayer?
     fileprivate var v: UIView?

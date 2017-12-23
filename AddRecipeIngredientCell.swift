@@ -31,6 +31,12 @@ protocol AddRecipeIngredientCellDelegate: class {
 
     func onTapUnitBaseView(cell: AddRecipeIngredientCell)
 
+    // Autocomplete
+    func productNamesContaining(text: String, handler: @escaping ([String]) -> Void)
+    func brandsContaining(text: String, handler: @escaping ([String]) -> Void)
+    func delete(productNameSuggestion: String, handler: @escaping () -> Void)
+    func delete(brandNameSuggestion: String, handler: @escaping () -> Void)
+
     // TODO remove - no pickers anymore
     var parentForPickers: UIView { get }
 }
@@ -138,22 +144,22 @@ class AddRecipeIngredientCell: UITableViewCell {
 extension AddRecipeIngredientCell: MLPAutoCompleteTextFieldDataSource {
 
     func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, possibleCompletionsFor string: String!, completionHandler handler: @escaping (([Any]?) -> Void)) {
-//        switch textField {
-//
-//        case productNameTextField:
-//            delegate?.productNamesContaining(text: string) {productNames in
-//                handler(productNames)
-//            }
-//
-//        case brandTextField:
-//            delegate?.brandsContaining(text: string) {brands in
-//                handler(brands)
-//            }
-//
-//        case _:
-//            print("Error: Not handled text field in autoCompleteTextField")
-//            break
-//        }
+        switch textField {
+
+        case productNameTextField:
+            delegate?.productNamesContaining(text: string) {productNames in
+                handler(productNames)
+            }
+
+        case brandTextField:
+            delegate?.brandsContaining(text: string) {brands in
+                handler(brands)
+            }
+
+        case _:
+            print("Error: Not handled text field in autoCompleteTextField")
+            break
+        }
     }
 }
 
@@ -162,19 +168,19 @@ extension AddRecipeIngredientCell: MLPAutoCompleteTextFieldDataSource {
 extension AddRecipeIngredientCell: MyAutoCompleteTextFieldDelegate {
 
     func onDeleteSuggestion(_ string: String, sender: MyAutoCompleteTextField) {
-        //        switch sender {
-        //        case productNameTextField:
-        //            delegate?.delete(productName: string) {
-        //                self.productNameTextField.closeAutoCompleteTableView()
-        //            }
-        //
-        //        case brandTextField:
-        //            delegate?.delete(brand: string) {
-        //                self.brandTextField.closeAutoCompleteTableView()
-        //            }
-        //
-        //        default: logger.e("Not handled input")
-        //        }
+        switch sender {
+        case productNameTextField:
+            delegate?.delete(productNameSuggestion: string) {
+                self.productNameTextField.closeAutoCompleteTableView()
+            }
+
+        case brandTextField:
+            delegate?.delete(brandNameSuggestion: string) {
+                self.brandTextField.closeAutoCompleteTableView()
+            }
+
+        default: logger.e("Not handled input")
+        }
     }
 }
 
