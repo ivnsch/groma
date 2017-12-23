@@ -21,7 +21,7 @@ class RealmUnitProvider: RealmProvider {
         // TODO different ordering for device's country - countries that don't/rarely use OZ and LB should have them at the end
         
         let defaultUnits: [Unit] = [
-            Unit(uuid: UUID().uuidString, name: trans("unit_none"), id: .none, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_unit"), id: .none, buyable: true),
             
             Unit(uuid: UUID().uuidString, name: trans("unit_g"), id: .g, buyable: true),
             Unit(uuid: UUID().uuidString, name: trans("unit_kg"), id: .kg, buyable: true),
@@ -145,7 +145,7 @@ class RealmUnitProvider: RealmProvider {
         return loadSync(filter: Unit.createFilter(id: id))?.first
     }
     
-    func getOrCreateSync(name: String) -> (unit: Unit, isNew: Bool)? {
+    func getOrCreateSync(name: String, realmData: RealmData? = nil, doTransaction: Bool = true) -> (unit: Unit, isNew: Bool)? {
         if name.isEmpty {
             let noneUnit = unitSync(id: .none)
             if noneUnit == nil {
@@ -166,8 +166,23 @@ class RealmUnitProvider: RealmProvider {
             return (existingUnit, false)
         } else {
             let newUnit = Unit(uuid: UUID().uuidString, name: name, id: .custom, buyable: true)
-            let success = saveObjSync(newUnit)
-            return success ? (newUnit, true) : nil
+            func transactionContent(realm: Realm) -> (unit: Unit, isNew: Bool)? {
+                realm.add(newUnit, update: true) // should be update: false but why not use true if it's safer
+                return (newUnit, true)
+            }
+            if doTransaction {
+                return doInWriteTransactionSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm: nil) {realm in
+                    return transactionContent(realm: realm)
+                }
+            } else {
+                do {
+                    let realm = try RealmConfig.realm()
+                    return transactionContent(realm: realm)
+                } catch (let e) {
+                    logger.e("Error creating default realm: \(e)")
+                    return nil
+                }
+            }
         }
     }
     
@@ -178,7 +193,8 @@ class RealmUnitProvider: RealmProvider {
     
     
     func deleteSync(name: String) -> Bool {
-        
+
+        // TODO# delete store products and list items too!
         return doInWriteTransactionSync(realmData: nil) {realm in
             
             let quantifiableProducts = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(unitName: name))

@@ -461,7 +461,6 @@ recipe_unit_singular = "Einheit";
 recipe_unit_plural = "Einheiten";
 
 
-unit_none = "";
 unit_unit = "Einheit";
 unit_unit_pl = "Einheiten";
 unit_g = "g";
@@ -498,7 +497,6 @@ select_items = "Items";
 select_brands = "Marken";
 select_base_quantities = "Basismengen";
 select_units = "Einheiten";
-unit_none_name = "Einheit";
 select_ingredient_data_submit = "Speichern";
 select_ingredient_data_header_units = "Einheit";
 select_ingredient_data_header_quantity = "Menge";

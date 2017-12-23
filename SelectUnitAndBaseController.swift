@@ -30,7 +30,7 @@ class SelectUnitAndBaseController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
 
-    fileprivate var unitsManager = UnitCollectionViewManager()
+    fileprivate var unitsManager = UnitCollectionViewManager(filterBuyable: true)
     fileprivate var baseQuantitiesManager = BaseQuantitiesCollectionViewManager()
 
     fileprivate var inputs = SelectUnitAndBaseControllerInputs()
@@ -45,6 +45,17 @@ class SelectUnitAndBaseController: UIViewController {
         initTableView()
         configUnitsManager()
         configBaseQuantitiesManager()
+    }
+
+    func config(selectedUnitId: UnitId, selectedUnitName: String, selectedBaseQuantity: Float) {
+        // TODO redundancy - only one identifier for unit and base respectively
+        inputs.unitId = selectedUnitId
+        inputs.unitName = selectedUnitName
+        inputs.baseQuantity = selectedBaseQuantity
+        inputs.baseQuantityName = selectedBaseQuantity.quantityString
+
+        unitsManager.reload()
+        baseQuantitiesManager.reload()
     }
 
     fileprivate func initTableView() {
@@ -82,6 +93,10 @@ class SelectUnitAndBaseController: UIViewController {
             if unit.name == self?.inputs.unitName {
                 self?.inputs.unitName = nil
             }
+        }
+
+        unitsManager.selectedItem = { [weak self] in
+            return self?.inputs.unitName
         }
     }
 
@@ -122,6 +137,10 @@ class SelectUnitAndBaseController: UIViewController {
             if base.val.quantityString == self?.inputs.baseQuantityName {
                 self?.inputs.baseQuantityName = nil
             }
+        }
+
+        baseQuantitiesManager.selectedItem = { [weak self] in
+            return self?.inputs.baseQuantityName
         }
     }
 

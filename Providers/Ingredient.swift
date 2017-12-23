@@ -27,9 +27,6 @@ public final class Ingredient: Object {
     @objc public dynamic var pBase: Float = 1
     @objc public dynamic var pQuantity: Float = 0
     @objc public dynamic var pUnit: String = ""
-    // pUnitIdVal is redundant - it can be derived from pUnit, but to keep the code simple/performance, otherwise we have to do an additional query
-    // to retrive the ids using the names.
-    @objc public dynamic var pUnitIdVal: Int = 0
 
     public static var quantityFieldName: String {
         return "quantity"
@@ -63,18 +60,6 @@ public final class Ingredient: Object {
         }
         set {
             unitOpt = newValue
-        }
-    }
-
-    public var pUnitId: UnitId {
-        get {
-            return UnitId(rawValue: pUnitIdVal) ?? {
-                logger.e("Invalid id val: \(pUnitIdVal), defaulting to none", .db)
-                return UnitId.none
-            } ()
-        }
-        set {
-            pUnitIdVal = pUnitId.rawValue
         }
     }
 

@@ -31,6 +31,9 @@ class AddRecipeController: UIViewController {
 
     fileprivate var unitBasePopup: MyPopup?
 
+    // Quick access, to get the unit images (derived from id) in the cells
+    fileprivate var unitNameToIdDictionary: Dictionary<String, UnitId> = [:]
+
     func config(recipe: Recipe, delegate: AddRecipeControllerDelegate) {
         self.delegate = delegate
 
@@ -52,13 +55,23 @@ class AddRecipeController: UIViewController {
 
     fileprivate func retrieveData(recipe: Recipe) {
         Prov.addableIngredientProvider.addableIngredients(recipe: recipe, handler: successHandler { [weak self] addableIngredients in
-            self?.modelData = addableIngredients
-            self?.tableView.reloadData()
+            guard let weakSelf = self else { return }
+            weakSelf.modelData = addableIngredients
+            weakSelf.unitNameToIdDictionary = weakSelf.createUnitNameToIdDictionary(units: addableIngredients.units)
+
+            weakSelf.tableView.reloadData()
         })
     }
 
-    fileprivate func submit() {
+    fileprivate func createUnitNameToIdDictionary(units: Results<Providers.Unit>) -> Dictionary<String, UnitId> {
+        var dictionary = [String: UnitId]()
+        for unit in units {
+            dictionary[unit.name] = unit.id
+        }
+        return dictionary
+    }
 
+    fileprivate func submit() {
         guard let ingredients = modelData?.results else { logger.e("Invalid state - no model data", .ui); return }
 
         // Translate to objects for delegate
@@ -123,7 +136,7 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
 
         let ingredient = modelData.results[indexPath.row]
 
-        let cellState = cellStates[indexPath.row] ?? toCellState(ingredient: ingredient)
+        let cellState = cellStates[indexPath.row] ?? toCellState(ingredient: ingredient, unitNameToIdDictionary: unitNameToIdDictionary)
         cellStates[indexPath.row] = cellState
 
         cell.config(state: cellState, delegate: self)
@@ -168,15 +181,41 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
 
     // MARK: - Helpers
 
-    fileprivate func toCellState(ingredient: Ingredient) -> AddRecipeIngredientCell.CellState {
+    fileprivate func determineUnit(ingredient: Ingredient, unitNameToIdDictionary: Dictionary<String, UnitId>) -> (UnitId, String) {
+
+        if !ingredient.pUnit.isEmpty {
+            if let unitId = unitNameToIdDictionary[ingredient.pUnit] {
+                return (unitId, ingredient.pUnit)
+            } else {
+                // pUnit but no unit id found - invalid state!
+                // This shouldn't happen also if user deletes the unit, since this deletes the ingredient
+                logger.e("Couldn't get unit id for name: \(ingredient.pUnit). Defaulting to none.", .ui)
+                return (.none, trans("unit_unit"))
+            }
+        } else { // pUnit is empty! User has never entered store data for this ingredient
+            if ingredient.unit.buyable { // Try to use the same unit of ingredient - if it's buyable
+                return (ingredient.unit.id, ingredient.unit.name)
+            } else { // Default otherwise to none unit
+                return (.none, trans("unit_unit"))
+            }
+        }
+    }
+
+    // Unit id: since this can be derived from name it's not stored in the ingredient. We get this from a separate fetch.
+    // Unit name optional: Normally unit name is in ingredient - but for error handling consistency we can override it
+    // with a default value.
+    fileprivate func toCellState(ingredient: Ingredient, unitNameToIdDictionary: Dictionary<String, UnitId>) -> AddRecipeIngredientCell.CellState {
+
+        let (unitId, unitName) = determineUnit(ingredient: ingredient, unitNameToIdDictionary: unitNameToIdDictionary)
+
         return AddRecipeIngredientCell.CellState(
             ingredientId: ingredient.uuid,
             ingredientName: ingredient.item.name,
             productName: ingredient.pName.isEmpty ? ingredient.item.name : ingredient.pName,
             brandName: ingredient.pBrand,
             unitData: AddRecipeIngredientCell.CellUnitState(
-                unitId: ingredient.pUnitId,
-                unitName: ingredient.pUnit
+                unitId: unitId,
+                unitName: unitName
             ),
             baseQuantity: ingredient.pBase,
             quantity: ingredient.pQuantity == 0 ? 1 : ingredient.pQuantity, // Default is 1
@@ -261,6 +300,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
 
     func onTapUnitBaseView(cell: AddRecipeIngredientCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return }
+        guard let cellState = cellStates[indexPath.row] else { logger.e("Couldn't find cell state!", .ui); return }
         guard let baseUnitView = cell.productQuantityController?.unitWithBaseView else { logger.e("Couldn't find cell state!", .ui); return }
 
         let parent = self
@@ -288,6 +328,9 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         popup.contentView = controller.view
         self.unitBasePopup = popup
 
+        controller.config(selectedUnitId: cellState.unitData.unitId,
+                          selectedUnitName: cellState.unitData.unitName,
+                          selectedBaseQuantity: cellState.baseQuantity)
         popup.show(from: baseUnitView)
     }
 

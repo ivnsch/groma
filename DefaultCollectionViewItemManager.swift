@@ -64,7 +64,7 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     fileprivate(set) weak var controller: UIViewController?
 
     var onSelectItem: ((T?) -> Void)?
-    fileprivate var selectedItem: (() -> T?)?
+    var selectedItem: (() -> String?)?
     var onMarkedItemToDelete: ((String?) -> Void)?
     var itemMarkedToDelete: (() -> String?)? // returns name (assumed to be unique)
     var willDeleteItem: ((T) -> Void)?
@@ -139,6 +139,10 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     func fetchItems(controller: UIViewController, onSucces: @escaping (AnyRealmCollection<T>) -> Void) {
         fatalError("Override")
     }
+
+    func reload() {
+        collectionView.reloadData()
+    }
 }
 
 
@@ -147,7 +151,7 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
     // MARK: - UnitsCollectionViewDataSourceDelegate
 
     var currentItemName: String {
-        return selectedItem?()?.uniqueName ?? ""
+        return selectedItem?() ?? ""
     }
 
     var itemToDeleteName: String {
@@ -186,7 +190,7 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
     }
 
     fileprivate func isSelected(cell: DefaultItemMeasureCell) -> Bool {
-        let selectedUnitName: String? = selectedItem?()?.uniqueName
+        let selectedUnitName: String? = selectedItem?()
         return selectedUnitName.map { $0 == cell.itemName } ?? false
     }
 

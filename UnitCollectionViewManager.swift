@@ -14,6 +14,12 @@ class UnitCollectionViewManager: DefaultCollectionViewItemManager<Providers.Unit
 
     fileprivate let unitCellSize = CGSize(width: 60, height: 76)
 
+    fileprivate let filterBuyable: Bool
+
+    init(filterBuyable: Bool = false) {
+        self.filterBuyable = filterBuyable
+    }
+
     override var collectionViewContentsHeight: CGFloat {
         //        let collectionViewWidth = myCollectionView.width
         //        guard collectionViewWidth > 0 else { return 0 } // avoid division by 0
@@ -53,7 +59,7 @@ class UnitCollectionViewManager: DefaultCollectionViewItemManager<Providers.Unit
     }
 
     override func fetchItems(controller: UIViewController, onSucces: @escaping (AnyRealmCollection<Providers.Unit>) -> Void) {
-        Prov.unitProvider.units(buyable: nil, controller.successHandler{ units in
+        Prov.unitProvider.units(buyable: filterBuyable ? true : nil, controller.successHandler{ units in
             onSucces(AnyRealmCollection(units))
         })
     }

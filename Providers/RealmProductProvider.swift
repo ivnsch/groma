@@ -1329,7 +1329,7 @@ class RealmProductProvider: RealmProvider {
                     return .ok((existingProduct, false))
                     
                 } else {
-                    if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
+                    if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit, realmData: realmData, doTransaction: false) {
                         
                         let product = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit.unit, product: product)
                         if save {
