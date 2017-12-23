@@ -1,5 +1,5 @@
 //
-//  AddRecipeIngredientCellNew.swift
+//  AddRecipeIngredientCell.swift
 //  groma
 //
 //  Created by Ivan Schuetz on 22.12.17.
@@ -10,7 +10,7 @@ import UIKit
 import Providers
 import RealmSwift
 
-protocol AddRecipeIngredientCellNewDelegate: class {
+protocol AddRecipeIngredientCellDelegate: class {
 
     func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void)
     func baseQuantities(_ handler: @escaping (RealmSwift.List<BaseQuantity>?) -> Void)
@@ -23,19 +23,19 @@ protocol AddRecipeIngredientCellNewDelegate: class {
     func addBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void)
 
     // State updaters
-    func onSelect(unit: Providers.Unit, cell: AddRecipeIngredientCellNew)
-    func onSelect(base: Float, cell: AddRecipeIngredientCellNew)
-    func onChange(quantity: Float, cell: AddRecipeIngredientCellNew)
-    func onChange(productName: String, cell: AddRecipeIngredientCellNew)
-    func onChange(brandName: String, cell: AddRecipeIngredientCellNew)
+    func onSelect(unit: Providers.Unit, cell: AddRecipeIngredientCell)
+    func onSelect(base: Float, cell: AddRecipeIngredientCell)
+    func onChange(quantity: Float, cell: AddRecipeIngredientCell)
+    func onChange(productName: String, cell: AddRecipeIngredientCell)
+    func onChange(brandName: String, cell: AddRecipeIngredientCell)
 
-    func onTapUnitBaseView(cell: AddRecipeIngredientCellNew)
+    func onTapUnitBaseView(cell: AddRecipeIngredientCell)
 
     // TODO remove - no pickers anymore
     var parentForPickers: UIView { get }
 }
 
-class AddRecipeIngredientCellNew: UITableViewCell {
+class AddRecipeIngredientCell: UITableViewCell {
 
     struct CellUnitState {
         let unitId: UnitId
@@ -67,9 +67,9 @@ class AddRecipeIngredientCellNew: UITableViewCell {
 
     fileprivate(set) var productQuantityController: ProductQuantityController?
 
-    fileprivate weak var delegate: AddRecipeIngredientCellNewDelegate?
+    fileprivate weak var delegate: AddRecipeIngredientCellDelegate?
 
-    func config(state: CellState, delegate: AddRecipeIngredientCellNewDelegate) {
+    func config(state: CellState, delegate: AddRecipeIngredientCellDelegate) {
 
         self.delegate = delegate
 
@@ -135,7 +135,7 @@ class AddRecipeIngredientCellNew: UITableViewCell {
 
 // MARK: - MLPAutoCompleteTextFieldDataSource
 
-extension AddRecipeIngredientCellNew: MLPAutoCompleteTextFieldDataSource {
+extension AddRecipeIngredientCell: MLPAutoCompleteTextFieldDataSource {
 
     func autoCompleteTextField(_ textField: MLPAutoCompleteTextField!, possibleCompletionsFor string: String!, completionHandler handler: @escaping (([Any]?) -> Void)) {
 //        switch textField {
@@ -159,7 +159,7 @@ extension AddRecipeIngredientCellNew: MLPAutoCompleteTextFieldDataSource {
 
 // MARK: - MyAutoCompleteTextFieldDelegate
 
-extension AddRecipeIngredientCellNew: MyAutoCompleteTextFieldDelegate {
+extension AddRecipeIngredientCell: MyAutoCompleteTextFieldDelegate {
 
     func onDeleteSuggestion(_ string: String, sender: MyAutoCompleteTextField) {
         //        switch sender {
@@ -178,7 +178,7 @@ extension AddRecipeIngredientCellNew: MyAutoCompleteTextFieldDelegate {
     }
 }
 
-extension AddRecipeIngredientCellNew: ProductQuantityControlleDelegate {
+extension AddRecipeIngredientCell: ProductQuantityControlleDelegate {
 
     func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void) {
         delegate?.units(handler)

@@ -1,5 +1,5 @@
 //
-//  AddRecipeControllerNew.swift
+//  AddRecipeController.swift
 //  groma
 //
 //  Created by Ivan Schuetz on 22.12.17.
@@ -11,11 +11,11 @@ import Providers
 import RealmSwift
 
 protocol AddRecipeControllerDelegate: class {
-    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], addRecipeController: AddRecipeControllerNew) // Delegate can decide when/if to close the recipe controller
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], addRecipeController: AddRecipeController) // Delegate can decide when/if to close the recipe controller
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
 }
 
-class AddRecipeControllerNew: UIViewController {
+class AddRecipeController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -25,7 +25,7 @@ class AddRecipeControllerNew: UIViewController {
     fileprivate var recipeName: String = ""
 
     // Of cells presented so far
-    fileprivate var cellStates: Dictionary<Int, AddRecipeIngredientCellNew.CellState> = [:]
+    fileprivate var cellStates: Dictionary<Int, AddRecipeIngredientCell.CellState> = [:]
 
     fileprivate weak var delegate: AddRecipeControllerDelegate?
 
@@ -62,9 +62,9 @@ class AddRecipeControllerNew: UIViewController {
         guard let ingredients = modelData?.results else { logger.e("Invalid state - no model data", .ui); return }
 
         // Translate to objects for delegate
-        func toIngredientModels(ingredients: Results<Ingredient>, cellStates: Dictionary<Int, AddRecipeIngredientCellNew.CellState>) -> [AddRecipeIngredientModel] {
+        func toIngredientModels(ingredients: Results<Ingredient>, cellStates: Dictionary<Int, AddRecipeIngredientCell.CellState>) -> [AddRecipeIngredientModel] {
 
-            var cellStatesById = [String: AddRecipeIngredientCellNew.CellState]()
+            var cellStatesById = [String: AddRecipeIngredientCell.CellState]()
             for cellState in Array(cellStates.values) {
                 cellStatesById[cellState.ingredientId] = cellState
             }
@@ -101,20 +101,20 @@ class AddRecipeControllerNew: UIViewController {
     }
 
     fileprivate func initTableView() {
-        tableView.register(UINib(nibName: "AddRecipeIngredientCellNew", bundle: nil), forCellReuseIdentifier: "cell")
+        tableView.register(UINib(nibName: "AddRecipeIngredientCell", bundle: nil), forCellReuseIdentifier: "cell")
     }
 }
 
 // MARK: - Table view
 
-extension AddRecipeControllerNew: UITableViewDataSource, UITableViewDelegate {
+extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return modelData?.results.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! AddRecipeIngredientCellNew
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! AddRecipeIngredientCell
 
         guard let modelData = modelData else {
             logger.e("Invalid state: Should have model data", .ui)
@@ -167,13 +167,13 @@ extension AddRecipeControllerNew: UITableViewDataSource, UITableViewDelegate {
 
     // MARK: - Helpers
 
-    fileprivate func toCellState(ingredient: Ingredient) -> AddRecipeIngredientCellNew.CellState {
-        return AddRecipeIngredientCellNew.CellState(
+    fileprivate func toCellState(ingredient: Ingredient) -> AddRecipeIngredientCell.CellState {
+        return AddRecipeIngredientCell.CellState(
             ingredientId: ingredient.uuid,
             ingredientName: ingredient.item.name,
             productName: ingredient.pName.isEmpty ? ingredient.item.name : ingredient.pName,
             brandName: ingredient.pBrand,
-            unitData: AddRecipeIngredientCellNew.CellUnitState(
+            unitData: AddRecipeIngredientCell.CellUnitState(
                 unitId: ingredient.pUnitId,
                 unitName: ingredient.pUnit
             ),
@@ -184,9 +184,9 @@ extension AddRecipeControllerNew: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-// MARK: - AddRecipeIngredientCellNewDelegate
+// MARK: - AddRecipeIngredientCellDelegate
 
-extension AddRecipeControllerNew: AddRecipeIngredientCellNewDelegate {
+extension AddRecipeController: AddRecipeIngredientCellDelegate {
 
     func units(_ handler: @escaping (Results<Providers.Unit>?) -> Void) {
         handler(modelData?.units)
@@ -223,32 +223,32 @@ extension AddRecipeControllerNew: AddRecipeIngredientCellNewDelegate {
         })
     }
 
-    func onSelect(unit: Providers.Unit, cell: AddRecipeIngredientCellNew) {
+    func onSelect(unit: Providers.Unit, cell: AddRecipeIngredientCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return }
-        cellStates[indexPath.row]?.unitData = AddRecipeIngredientCellNew.CellUnitState(unitId: unit.id, unitName: unit.name)
+        cellStates[indexPath.row]?.unitData = AddRecipeIngredientCell.CellUnitState(unitId: unit.id, unitName: unit.name)
     }
 
-    func onSelect(base: Float, cell: AddRecipeIngredientCellNew) {
+    func onSelect(base: Float, cell: AddRecipeIngredientCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return }
         cellStates[indexPath.row]?.baseQuantity = base
     }
 
-    func onChange(quantity: Float, cell: AddRecipeIngredientCellNew) {
+    func onChange(quantity: Float, cell: AddRecipeIngredientCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return}
         cellStates[indexPath.row]?.quantity = quantity
     }
 
-    func onChange(brandName: String, cell: AddRecipeIngredientCellNew) {
+    func onChange(brandName: String, cell: AddRecipeIngredientCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return}
         cellStates[indexPath.row]?.brandName = brandName
     }
 
-    func onChange(productName: String, cell: AddRecipeIngredientCellNew) {
+    func onChange(productName: String, cell: AddRecipeIngredientCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return}
         cellStates[indexPath.row]?.productName = productName
     }
 
-    func onTapUnitBaseView(cell: AddRecipeIngredientCellNew) {
+    func onTapUnitBaseView(cell: AddRecipeIngredientCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return }
         guard let baseUnitView = cell.productQuantityController?.unitWithBaseView else { logger.e("Couldn't find cell state!", .ui); return }
 
@@ -259,7 +259,7 @@ extension AddRecipeControllerNew: AddRecipeIngredientCellNewDelegate {
         let controller = SelectUnitAndBaseController(nibName: "SelectUnitAndBaseController", bundle: nil)
 
         controller.onSubmit = { [weak self] result in guard let weakSelf = self else { return }
-            weakSelf.cellStates[indexPath.row]?.unitData = AddRecipeIngredientCellNew.CellUnitState(
+            weakSelf.cellStates[indexPath.row]?.unitData = AddRecipeIngredientCell.CellUnitState(
                 unitId: result.unitId,
                 unitName: result.unitName
             )
@@ -288,7 +288,7 @@ extension AddRecipeControllerNew: AddRecipeIngredientCellNewDelegate {
 
 // MARK: - SubmitViewDelegate
 
-extension AddRecipeControllerNew: SubmitViewDelegate {
+extension AddRecipeController: SubmitViewDelegate {
 
     func onSubmitButton() {
         submit()

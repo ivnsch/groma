@@ -281,7 +281,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             guard let cell = collectionView.cellForItem(at: indexPath) else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
 
             recipeControllerAnimator?.open (button: cell, inset: (left: 0, top: 0, right: 0, bottom: 0), controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
-                let controller = AddRecipeControllerNew()
+                let controller = AddRecipeController()
                 _ = controller.view // Load view / outlets
 //                controller.delegate = weakSelf
 //                controller.list = weakSelf.list
@@ -804,7 +804,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             // TODO use generics
             if
                 let controller = recipeControllerAnimator?.controller,
-                let addRecipeController = controller as? AddRecipeControllerNew {
+                let addRecipeController = controller as? AddRecipeController {
                 addRecipeController.closeAddedNonChildren()
             } else {
                 logger.e("No controller / couldn't be casted", .ui)
@@ -846,7 +846,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
 
 extension QuickAddListItemViewController: AddRecipeControllerDelegate {
     
-    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], addRecipeController: AddRecipeControllerNew) {
+    func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], addRecipeController: AddRecipeController) {
         delegate?.onAddRecipe(ingredientModels: ingredientModels, quickListController: self)
     }
     
