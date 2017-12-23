@@ -106,9 +106,9 @@ class AddRecipeIngredientCell: UITableViewCell {
     }
 
     fileprivate func initProductQuantityController() {
+        // TODO shouldn't we add the controller as a child of the parent controller? but how/when to remove it?
         let productQuantityController = ProductQuantityController()
 
-        // TODO!!!!!!!!!!!!!!!!!!! is it correct to do this here (awake from nib) - does this work with recycled cells?
         productQuantityController.delegate = self
 
         productQuantityController.view.translatesAutoresizingMaskIntoConstraints = false
