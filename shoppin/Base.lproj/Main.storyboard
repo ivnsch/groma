@@ -325,8 +325,15 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dhQ-jr-KOI">
+                                            <rect key="frame" x="20" y="10" width="40" height="40"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="40" id="TAo-jR-NBj"/>
+                                                <constraint firstAttribute="width" constant="40" id="tDt-5l-MBr"/>
+                                            </constraints>
+                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="History" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93P-6p-iJK" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                            <rect key="frame" x="20" y="18" width="62.5" height="24"/>
+                                            <rect key="frame" x="80" y="18" width="62.5" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -338,9 +345,12 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                         </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="93P-6p-iJK" firstAttribute="leading" secondItem="dhQ-jr-KOI" secondAttribute="trailing" constant="20" id="1zx-x0-G5Y"/>
                                         <constraint firstItem="93P-6p-iJK" firstAttribute="centerY" secondItem="pzx-ip-Qus" secondAttribute="centerY" id="6Fu-2V-9Ze"/>
-                                        <constraint firstItem="93P-6p-iJK" firstAttribute="leading" secondItem="pzx-ip-Qus" secondAttribute="leading" constant="20" id="MIk-7N-nu2" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                                        <constraint firstItem="dhQ-jr-KOI" firstAttribute="leading" secondItem="pzx-ip-Qus" secondAttribute="leading" constant="20" id="CpE-nU-0Gc"/>
+                                        <constraint firstAttribute="bottom" secondItem="dhQ-jr-KOI" secondAttribute="bottom" constant="10" id="bgT-C4-ei5"/>
                                         <constraint firstItem="93P-6p-iJK" firstAttribute="leading" secondItem="pzx-ip-Qus" secondAttribute="leading" constant="8" id="n1K-jy-jIC"/>
+                                        <constraint firstItem="dhQ-jr-KOI" firstAttribute="top" secondItem="pzx-ip-Qus" secondAttribute="top" constant="10" id="z1U-Cy-lnl"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
@@ -350,6 +360,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="label" destination="93P-6p-iJK" id="99W-LA-Xb3"/>
+                                    <outlet property="myImageView" destination="dhQ-jr-KOI" id="eFi-Fk-qlj"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

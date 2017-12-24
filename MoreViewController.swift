@@ -14,7 +14,7 @@ enum MoreItemType {
     case history, manageProduct, user, settings, help, share, feedback, community, watchIntro, about, deviceInfo
 }
 
-typealias MoreItem = (type: MoreItemType, text: String)
+typealias MoreItem = (type: MoreItemType, text: String, image: UIImage)
 
 class MoreViewController: UITableViewController {
    
@@ -34,20 +34,20 @@ class MoreViewController: UITableViewController {
         super.viewWillAppear(animated)
 
         items = [
-            MoreItem(type: .history, text: trans("more_history")),
-            MoreItem(type: .manageProduct, text: trans("title_manage_database")),
-            MoreItem(type: .settings, text: trans("more_settings")),
-            MoreItem(type: .help, text: trans("more_help")),
-            MoreItem(type: .share, text: trans("more_share")),
-            MoreItem(type: .feedback, text: trans("more_feedback")),
-//            MoreItem(type: .community, text: trans("more_community")),
-            MoreItem(type: .watchIntro, text: trans("more_intro")),
-            MoreItem(type: .about, text: trans("more_about")),
-            MoreItem(type: .deviceInfo, text: "\(UIDevice.current.modelCode), \(UIScreen.main.nativeBounds.height)")
+            MoreItem(type: .history, text: trans("more_history"), image: #imageLiteral(resourceName: "more_history")),
+            MoreItem(type: .manageProduct, text: trans("title_manage_database"), image: #imageLiteral(resourceName: "more_manage_items")),
+            MoreItem(type: .settings, text: trans("more_settings"), image: #imageLiteral(resourceName: "more_settings")),
+            MoreItem(type: .help, text: trans("more_help"), image: #imageLiteral(resourceName: "more_help")),
+            MoreItem(type: .share, text: trans("more_share"), image: #imageLiteral(resourceName: "more_share")),
+            MoreItem(type: .feedback, text: trans("more_feedback"), image: #imageLiteral(resourceName: "more_feedback")),
+//                        MoreItem(type: .community, text: trans("more_community"), image: #imageLiteral(resourceName: "more_community")),
+            MoreItem(type: .watchIntro, text: trans("more_intro"), image: #imageLiteral(resourceName: "more_intro")),
+            MoreItem(type: .about, text: trans("more_about"), image: #imageLiteral(resourceName: "more_info")),
+//            MoreItem(type: .deviceInfo, text: "\(UIDevice.current.modelCode), \(UIScreen.main.nativeBounds.height)")
         ]
         
         if CountryHelper.isInServerSupportedCountry() {
-            items.insert((type: .user, text: trans("more_user")), at: 2)
+            items.insert((type: .user, text: trans("more_user"), image: #imageLiteral(resourceName: "more_user")), at: 2)
         }
         
         tableView.reloadData()

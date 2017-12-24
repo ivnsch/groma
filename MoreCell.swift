@@ -11,11 +11,13 @@ import Providers
 
 class MoreCell: UITableViewCell {
 
+    @IBOutlet weak var myImageView: UIImageView!
     @IBOutlet weak var label: UILabel!
     
     var moreItem: MoreItem? {
         didSet {
             if let label = label {
+                myImageView.image = moreItem?.image
                 label.text = moreItem?.text
             } else {
                 logger.w("Outlets not set")
