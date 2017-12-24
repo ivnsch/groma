@@ -75,10 +75,6 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     let bottomCollectionViewPadding: CGFloat = 20
     let leftRightCollectionViewPadding: CGFloat = 30
 
-    var collectionViewContentsHeight: CGFloat {
-        fatalError("Override")
-    }
-
     func sizeFotItemCell(indexPath: IndexPath) -> CGSize {
         fatalError("Override")
     }

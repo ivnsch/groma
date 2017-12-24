@@ -41,6 +41,8 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
     var productName: String = ""
 
+    fileprivate var unitsViewHeight: CGFloat?
+
     fileprivate var inputs = IngredientDataControllerInputs() {
         didSet {
             updateHeader(inputs: inputs)
@@ -105,11 +107,17 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        initVariableCellHeights()
         initSubmitButton()
 
         // Trigger reload (header update with defaults)
         let inputs = IngredientDataControllerInputs()
         self.inputs = inputs
+    }
+
+    fileprivate func initVariableCellHeights() {
+        unitsViewHeight = unitsManager.collectionViewContentHeight()
+        tableView.reloadData()
     }
 
     fileprivate func initQuantityView() {
@@ -206,7 +214,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
-        case 1: return unitsManager.collectionViewContentsHeight
+        case 1: return  unitsViewHeight ?? 600 // dummy big default size, with 0 constraint errors in console (at the beginning the collection collection view has no width)
         case 0, 3: return 50
         case 2: return 80
         case 4: return 300

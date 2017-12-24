@@ -12,20 +12,6 @@ import RealmSwift
 
 class BaseQuantitiesCollectionViewManager: DefaultCollectionViewItemManager<BaseQuantity> {
 
-    override var collectionViewContentsHeight: CGFloat {
-        fatalError("Remove")
-//        let collectionViewWidth = myCollectionView.width
-////        logger.w("collectionViewWidth: \(collectionViewWidth)", .wildcard)
-//        guard collectionViewWidth > 0 else { return 0 } // avoid division by 0
-//        let itemCount = dataSource?.items?.count ?? 0
-//        let itemsPerRow = floor(collectionViewWidth / unitCellSize.width)
-////        let unitsPerRow = CGFloat(5) // for now hardcoded. Calculating it returns 5 (wrong) + using the collection width causes constraint error (because this is called 2-3 times at the beginning with a width of 0) and collapses entirely the collection view. TODO not hardcoded
-//        logger.w("collectionViewWidth: \(collectionViewWidth), items per row: \(itemsPerRow)", .wildcard)
-//
-//        let rowCount = ceil(CGFloat(itemCount) / itemsPerRow)
-//        return rowCount * (unitCellSize.height + rowsSpacing) + topCollectionViewPadding + bottomCollectionViewPadding
-    }
-
     override func calculateCollectionViewContentsHeight(collectionViewWidth: CGFloat, items: AnyRealmCollection<BaseQuantity>) -> CGFloat {
 
         let availableWidth = collectionViewWidth - (leftRightCollectionViewPadding * 2)

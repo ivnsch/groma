@@ -20,16 +20,6 @@ class UnitCollectionViewManager: DefaultCollectionViewItemManager<Providers.Unit
         self.filterBuyable = filterBuyable
     }
 
-    override var collectionViewContentsHeight: CGFloat {
-        //        let collectionViewWidth = myCollectionView.width
-        //        guard collectionViewWidth > 0 else { return 0 } // avoid division by 0
-        let unitCount = dataSource?.items?.count ?? 0
-        //        let unitsPerRow = floor(collectionViewWidth / unitCellSize.width)
-        let unitsPerRow = CGFloat(5) // for now hardcoded. Calculating it returns 5 (wrong) + using the collection width causes constraint error (because this is called 2-3 times at the beginning with a width of 0) and collapses entirely the collection view. TODO not hardcoded
-        let rowCount = ceil(CGFloat(unitCount) / unitsPerRow)
-        return rowCount * (unitCellSize.height + rowsSpacing) + topCollectionViewPadding + bottomCollectionViewPadding
-    }
-
     override func sizeFotItemCell(indexPath: IndexPath) -> CGSize {
         if (dataSource?.items.map{unit in
             indexPath.row < unit.count
