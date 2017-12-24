@@ -19,10 +19,15 @@ class AddNewItemInputCell: UITableViewCell {
         selectionStyle = .none
     }
 
-    func configure(placeholder: String, onInputUpdate: @escaping (String) -> Void) {
+    func configure(placeholder: String, onlyNumbers: Bool, onInputUpdate: @escaping (String) -> Void) {
         self.onInputUpdate = onInputUpdate
         textField.setPlaceholderWithColor(placeholder, color: Theme.midGrey)
         textField.lineColor = Theme.midGrey
+        if onlyNumbers {
+            textField.keyboardType = .numberPad
+        } else {
+            textField.keyboardType = .default
+        }
     }
 
     @IBAction func onTextInputChange(_ sender: LineTextField) {

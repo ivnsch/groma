@@ -186,7 +186,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
             return header
         case 2:
             let unitInputCell = tableView.dequeueReusableCell(withIdentifier: "unitInputCell", for: indexPath) as! AddNewItemInputCell
-            unitInputCell.configure(placeholder: trans("enter_custom_unit_placeholder"), onInputUpdate: { [weak self] unitInput in
+            unitInputCell.configure(placeholder: trans("enter_custom_unit_placeholder"), onlyNumbers: false, onInputUpdate: { [weak self] unitInput in
                 self?.inputs.newUnitInput = unitInput.isEmpty ? nil : unitInput
                 if !unitInput.isEmpty {
                     self?.inputs.unit = nil

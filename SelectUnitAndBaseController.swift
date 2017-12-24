@@ -228,7 +228,7 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
             return header
         case 2: // unit input
             let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
-            itemInputCell.configure(placeholder: trans("enter_custom_unit_placeholder"), onInputUpdate: { [weak self] unitInput in
+            itemInputCell.configure(placeholder: trans("enter_custom_unit_placeholder"), onlyNumbers: false, onInputUpdate: { [weak self] unitInput in
                 self?.inputs.unitId = .custom
                 self?.inputs.unitName = unitInput.isEmpty ? nil : unitInput
                 if !unitInput.isEmpty {
@@ -239,7 +239,7 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
             return itemInputCell
         case 5: // base input
             let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
-            itemInputCell.configure(placeholder: trans("enter_custom_base_quantity_placeholder"), onInputUpdate: { [weak self] baseInput in
+            itemInputCell.configure(placeholder: trans("enter_custom_base_quantity_placeholder"), onlyNumbers: true, onInputUpdate: { [weak self] baseInput in
                 self?.inputs.baseQuantityName = baseInput.isEmpty ? nil : baseInput
                 self?.inputs.baseQuantity = baseInput.isEmpty ? nil : baseInput.floatValue
                 if !baseInput.isEmpty {
