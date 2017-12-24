@@ -31,6 +31,7 @@ public struct Theme {
     public static let cellBottomBorderColor = UIColor(hexString: "EADFE4")
     
     public static let blue = UIColor(hexString: "0E95E0") // tabbar etc
+    public static let lighterBlue = UIColor(hexString: "35A8E8") // tooltip selected row color
     public static let darkerBlue = UIColor(hexString: "4D91DF")
     public static let orange = UIColor(hexString: "FFA83E")
     public static var black = UIColor(hexString: "222222")

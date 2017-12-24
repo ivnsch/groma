@@ -71,7 +71,7 @@ class StatsViewController: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        inventoryPicker = InventoryPicker(button: inventoriesButton, view: view) {[weak self] inventory in
+        inventoryPicker = InventoryPicker(button: inventoriesButton, controller: self) {[weak self] inventory in
             self?.selectedInventory = inventory
         }
         

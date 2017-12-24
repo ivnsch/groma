@@ -10,7 +10,7 @@ import UIKit
 import CMPopTipView
 import Providers
 
-class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
+class InventoryPicker: NSObject {
     
     var inventories: [DBInventory] = [] {
         didSet {
@@ -19,8 +19,8 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     fileprivate weak var button: UIButton!
-    fileprivate weak var view: UIView!
-    
+    fileprivate weak var controller: UIViewController!
+
     fileprivate var selectedInventory: DBInventory? {
         didSet {
             if let inventory = selectedInventory {
@@ -34,18 +34,20 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
     
     fileprivate var inventoriesPopup: CMPopTipView?
     
-    
-    fileprivate func createPicker() -> UIPickerView {
-        let picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
-        picker.delegate = self
-        picker.dataSource = self
+    fileprivate func createPicker(options: [String], selectedOption: String?) -> UIViewController {
+        let picker = TooltipPicker()
+        picker.view.frame = CGRect(x: 0, y: 0, width: 150, height: 100)
+        picker.config(options: options, selectedOption: selectedOption) { [weak self] selectedOption in
+            guard let weakSelf = self else { return }
+            weakSelf.selectedInventory = weakSelf.inventories.findFirst { $0.name == selectedOption }
+        }
         return picker
     }
     
-    init(button: UIButton, view: UIView, onInventorySelected: ((DBInventory) -> Void)?) {
+    init(button: UIButton, controller: UIViewController, onInventorySelected: ((DBInventory) -> Void)?) {
         self.button = button
-        self.view = view
         self.onInventorySelected = onInventorySelected
+        self.controller = controller
         
         super.init()
         
@@ -56,44 +58,14 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         if let popup = inventoriesPopup {
             popup.dismiss(animated: true)
         } else {
-            let picker = createPicker()
-            let popup = MyTipPopup(customView: picker)
-            popup.presentPointing(at: sender, in: view, animated: true)
-
-            if let selectedInventory = selectedInventory {
-                let rowIndexMaybe: Int? = inventories.index { inventory -> Bool in
-                    inventory.uuid == selectedInventory.uuid
-                    } ?? {
-                        logger.e("Invalid state: no matching inventory! selected inventory: \(selectedInventory)", .ui)
-                        return nil
-                    } ()
-                if let rowIndex = rowIndexMaybe {
-                    picker.selectRow(rowIndex, inComponent: 0, animated: false)
-                }
+            let options = inventories.map { $0.name }
+            let picker = createPicker(options: options, selectedOption: selectedInventory?.name)
+            let popup = MyTipPopup(customView: picker.view)
+            popup.presentPointing(at: sender, in: controller.view, animated: true)
+            controller?.addChildViewController(picker)
+            popup.onDismiss = { [weak picker] in
+                picker?.removeFromParentViewController()
             }
         }
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return inventories.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        let label = view as? UILabel ?? UILabel()
-        label.font = Fonts.regularLight
-        label.text = inventories[row].name
-        return label
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return DimensionsManager.pickerRowHeight
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedInventory = inventories[row]
     }
 }

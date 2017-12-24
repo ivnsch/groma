@@ -49,7 +49,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         dateFormatter.dateStyle = .full
         dateFormatter.timeStyle = .short
         
-        inventoryPicker = InventoryPicker(button: inventoriesButton, view: view) {[weak self] inventory in
+        inventoryPicker = InventoryPicker(button: inventoriesButton, controller: self) {[weak self] inventory in
             self?.selectedInventory = inventory
         }
         

@@ -19,7 +19,7 @@ protocol AddEditListControllerDelegate: class {
 }
 
 // TODO try to refactor with AddEditInventoryController, lot of repeated code
-class AddEditListController: UIViewController, FlatColorPickerControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, SharedUsersControllerDelegate, UITextFieldDelegate, CMPopTipViewDelegate {
+class AddEditListController: UIViewController, FlatColorPickerControllerDelegate, SharedUsersControllerDelegate, UITextFieldDelegate, CMPopTipViewDelegate {
     
     @IBOutlet weak var listNameInputField: UITextField!
     
@@ -200,37 +200,17 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     }
     
     // MARK: - Inventories picker
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return inventories.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        let label = view as? UILabel ?? UILabel()
-        label.font = Fonts.regularLight
-        label.text = inventories[row].name
-        return label
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return DimensionsManager.pickerRowHeight
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedInventory = inventories[row]
-    }
-    
-    fileprivate func createPicker() -> UIPickerView {
-        let picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
-        picker.delegate = self
-        picker.dataSource = self
+
+    fileprivate func createPicker(options: [String], selectedOption: String?) -> UIViewController {
+        let picker = TooltipPicker()
+        picker.view.frame = CGRect(x: 0, y: 0, width: 150, height: 100)
+        picker.config(options: options, selectedOption: selectedOption) { [weak self] selectedOption in
+            guard let weakSelf = self else { return }
+            weakSelf.selectedInventory = weakSelf.inventories.findFirst { $0.name == selectedOption }
+        }
         return picker
     }
-    
+
     fileprivate func loadInventories() {
         Prov.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             self?.inventories = inventories.toArray()
@@ -242,23 +222,16 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             popup.dismiss(animated: true)
             (view as? AddEditListControllerView)?.popupFrame = nil // restore normal tap area
         } else {
-            let picker = createPicker()
-            let popup = MyTipPopup(customView: picker)
+            let options = inventories.map { $0.name }
+            let selectedInventory = self.selectedInventory ?? listToEdit?.inventory // if user hasn't selected, select list's inventory
+            let picker = createPicker(options: options, selectedOption: selectedInventory?.name)
+            let popup = MyTipPopup(customView: picker.view)
             
             popup.delegate = self
             popup.presentPointing(at: inventoriesButton, in: view, animated: true)
-
-            let inventoryUuids = inventories.map{$0.uuid} // index of using uuids just in case - equals includes timestamps etc.
-            if let selectedInventory = selectedInventory {
-                if let row = inventoryUuids.index(of: selectedInventory.uuid) {
-                    picker.selectRow(row, inComponent: 0, animated: false)
-                } else {
-                    logger.e("Invalid state = selected inventory can't be selected in picker. \(selectedInventory)", .ui)
-                }
-            } else if
-                let listToEdit = listToEdit,
-                let row = inventoryUuids.index(of: listToEdit.inventory.uuid) { // if user hasn't selected, select list's inventory
-                picker.selectRow(row, inComponent: 0, animated: false)
+            addChildViewController(picker)
+            popup.onDismiss = { [weak picker] in
+                picker?.removeFromParentViewController()
             }
 
             if let view = view as? AddEditListControllerView {

@@ -9,16 +9,18 @@
 import UIKit
 import CMPopTipView
 
-class MyTipPopup: CMPopTipView {
+class MyTipPopup: CMPopTipView, CMPopTipViewDelegate {
 
-    init(customView: UIView, borderColor: UIColor? = UIColor.flatGray) {
+    var onDismiss: (() -> Void)?
+
+    override init(customView: UIView) {
         super.init(customView: customView)
-        self.borderColor = borderColor
         sharedInit()
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        sharedInit()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -26,13 +28,23 @@ class MyTipPopup: CMPopTipView {
     }
     
     fileprivate func sharedInit() {
+        borderColor = nil
+        borderWidth = 0
+        cornerRadius = 6
         hasShadow = false
-        borderWidth = 1
         has3DStyle = false
         hasGradientBackground = false
-        backgroundColor = UIColor.white
+        backgroundColor = Theme.blue
         dismissTapAnywhere = true
         disableTapToDismiss = false
         animation = CMPopTipAnimation.pop
+
+        delegate = self
+    }
+
+    // MARK: - CMPopTipViewDelegate
+
+    func popTipViewWasDismissed(byUser popTipView: CMPopTipView!) {
+        onDismiss?()
     }
 }

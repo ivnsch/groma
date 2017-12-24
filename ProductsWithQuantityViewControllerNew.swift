@@ -39,7 +39,7 @@ protocol ProductsWithQuantityViewControllerDelegateNew: class {
 
 
 /// Generic controller for sorted products with a quantity, which can be incremented and decremented
-class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ExplanationViewDelegate {
+class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, ExplanationViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
 
@@ -459,59 +459,26 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             }
         }
     }
-    
-    // MARK: - UIPicker
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return sortByOptions.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        sortBy = sortByOptions[row]
-        load()
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        let label = view as? UILabel ?? UILabel()
-        label.font = Fonts.regularLight
-        label.text = sortByOptions[row].key
-        return label
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return DimensionsManager.pickerRowHeight
-    }
-    
-    @IBAction func onSortByTap(_ sender: UIButton) {
-        //        if let popup = self.sortByPopup {
-        //            popup.dismissAnimated(true)
-        //        } else {
-        let picker = createPicker()
 
-        let popup = MyTipPopup(customView: picker)
+    @IBAction func onSortByTap(_ sender: UIButton) {
+        let picker = createPicker()
+        let popup = MyTipPopup(customView: picker.view)
         popup.presentPointing(at: sortByButton, in: view, animated: true)
-        //        }
-        if let sortBy = sortBy {
-            let rowIndexMaybe: Int? = sortByOptions.index { tuple -> Bool in
-                tuple.value == sortBy.value
-                } ?? {
-                    logger.e("Invalid state: no matching sortby! sortBy: \(sortBy)", .ui)
-                    return nil
-                } ()
-            if let rowIndex = rowIndexMaybe {
-                picker.selectRow(rowIndex, inComponent: 0, animated: false)
-            }
+        addChildViewController(picker)
+        popup.onDismiss = { [weak picker] in
+            picker?.removeFromParentViewController()
         }
     }
 
-    fileprivate func createPicker() -> UIPickerView {
-        let picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
-        picker.delegate = self
-        picker.dataSource = self
+    fileprivate func createPicker() -> UIViewController {
+        let picker = TooltipPicker()
+        picker.view.frame = CGRect(x: 0, y: 0, width: 150, height: 100)
+        let optionNames = sortByOptions.map { $0.key }
+        picker.config(options: optionNames, selectedOption: sortBy?.key) { [weak self] selectedOption in
+            guard let weakSelf = self else { return }
+            weakSelf.sortBy = weakSelf.sortByOptions.findFirst { $0.key == selectedOption }
+            weakSelf.load()
+        }
         return picker
     }
     
