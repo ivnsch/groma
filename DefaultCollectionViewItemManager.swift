@@ -259,8 +259,6 @@ extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
                 self?.delete(item: item, controller: controller, onFinish: {
                     self?.myCollectionView.deleteItems(at: [indexPath])
                     self?.myCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
-
-                    logger.w("Results count after delete: \(String(describing: self?.units?.count))", .wildcard)
                 })
             }, onCancel: { [weak self] in
                 self?.clearToDeleteItems()

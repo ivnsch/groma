@@ -127,9 +127,6 @@ extension IngredientUnitCollectionViewManager: UnitsCollectionViewDataSourceDele
             Prov.unitProvider.delete(name: unit.name, controller.successHandler {[weak self] in
                 self?.unitsCollectionView.deleteItems(at: [indexPath])
                 self?.unitsCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
-
-
-                logger.w("Results count after delete: \(self?.units?.count)", .wildcard)
             })
 
         } else {
