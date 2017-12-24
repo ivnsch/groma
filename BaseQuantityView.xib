@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BaseQuantityView" customModule="groma" customModuleProvider="target">
             <connections>
                 <outlet property="baseQuantityLabel" destination="4JE-fK-usg" id="5fz-0l-7vO"/>
+                <outlet property="deleteImageView" destination="0fa-t6-U29" id="T8e-2V-6Uu"/>
                 <outlet property="labelContainer" destination="vSy-5I-hAs" id="jb9-4v-2pb"/>
             </connections>
         </placeholder>
@@ -34,12 +35,19 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </label>
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cross" translatesAutoresizingMaskIntoConstraints="NO" id="0fa-t6-U29">
+                            <rect key="frame" x="0.0" y="0.0" width="74" height="37"/>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstAttribute="trailing" secondItem="0fa-t6-U29" secondAttribute="trailing" id="6kc-c5-ktA"/>
                         <constraint firstItem="4JE-fK-usg" firstAttribute="top" secondItem="vSy-5I-hAs" secondAttribute="top" constant="8" id="7Sg-wo-5xS"/>
                         <constraint firstItem="4JE-fK-usg" firstAttribute="leading" secondItem="vSy-5I-hAs" secondAttribute="leading" constant="16" id="EUZ-gw-vrk"/>
+                        <constraint firstItem="0fa-t6-U29" firstAttribute="leading" secondItem="vSy-5I-hAs" secondAttribute="leading" id="GFR-QM-wJF"/>
+                        <constraint firstItem="0fa-t6-U29" firstAttribute="top" secondItem="vSy-5I-hAs" secondAttribute="top" id="HjS-PM-ohk"/>
                         <constraint firstAttribute="bottom" secondItem="4JE-fK-usg" secondAttribute="bottom" constant="8" id="gu4-f7-A5V"/>
+                        <constraint firstAttribute="bottom" secondItem="0fa-t6-U29" secondAttribute="bottom" id="vQh-Lq-TjO"/>
                         <constraint firstAttribute="trailing" secondItem="4JE-fK-usg" secondAttribute="trailing" constant="16" id="xdm-6L-a42"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
@@ -58,4 +66,7 @@
             <point key="canvasLocation" x="25.5" y="-225.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="cross" width="27" height="26"/>
+    </resources>
 </document>

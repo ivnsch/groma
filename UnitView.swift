@@ -15,7 +15,6 @@ protocol UnitViewDelegate {
 
 @IBDesignable class UnitView: UIView, BaseOrUnitCellView {
 
-
     @IBInspectable var isBold: Bool = false
 
     @IBOutlet weak var imageViewContainer: UIView!
@@ -24,6 +23,8 @@ protocol UnitViewDelegate {
     @IBOutlet weak var nameLabel: UILabel!
     
     var delegate: UnitViewDelegate?
+
+    fileprivate var image: UIImage?
     
 //    var markedToDelete: Bool = false
 
@@ -37,6 +38,8 @@ protocol UnitViewDelegate {
                 initialsLabel.isHidden = true
 
                 imageView.image = Theme.unitImage(unitId: unit.id)
+                self.image = imageView.image
+
                 imageView.tintColor = UIColor.white
 
                 if unit.id == .custom {
@@ -88,6 +91,12 @@ protocol UnitViewDelegate {
         
         backgroundColor = UIColor.clear
         view.backgroundColor = UIColor.clear
+    }
+
+    func additionalMarkToDeleteActions(toDelete: Bool, animated: Bool) {
+        guard let originalImage = self.image else { logger.e("Invalid state, no image"); return }
+        let image = toDelete ? #imageLiteral(resourceName: "cross") : originalImage
+        imageView.image = image
     }
 
     override func awakeFromNib() {

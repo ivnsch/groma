@@ -19,7 +19,8 @@ protocol BaseQuantityViewDelegate {
 
     @IBOutlet weak var labelContainer: UIView!
     @IBOutlet weak var baseQuantityLabel: UILabel!
-    
+    @IBOutlet weak var deleteImageView: UIImageView!
+
     var delegate: BaseQuantityViewDelegate?
     
     var base: BaseQuantity? {
@@ -85,7 +86,12 @@ protocol BaseQuantityViewDelegate {
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
         addGestureRecognizer(longPress)
     }
-    
+
+    func additionalMarkToDeleteActions(toDelete: Bool, animated: Bool) {
+        deleteImageView.isHidden = !toDelete
+        baseQuantityLabel.isHidden = toDelete
+    }
+
     //    override var intrinsicContentSize: CGSize {
     //        let minLabelWidth = max(40, baseQuantityLabel.width) // the >= constaint in .xib seems not to work so hardcoded
     //        return CGSize(width: minLabelWidth, height: baseQuantityLabel.height + 20) // + 20 to add some padding
