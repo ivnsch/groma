@@ -89,7 +89,12 @@ public class StoreProduct: DBSyncable, Identifiable {
     static func createFilter(_ uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
-    
+
+    static func createFilter(quantifiableProductUuids: [String]) -> String {
+        let uuidsStr: String = quantifiableProductUuids.map{"'\($0)'"}.joined(separator: ",")
+        return "productOpt.uuid IN {\(uuidsStr)}"
+    }
+
     static func createFilterBrand(_ brand: String) -> String {
         return "productOpt.productOpt.brand == '\(brand)'"
     }

@@ -200,7 +200,18 @@ class RealmUnitProvider: RealmProvider {
             let quantifiableProducts = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(unitName: name))
             let ingredients = realm.objects(Ingredient.self).filter(Ingredient.createFilter(unitName: name))
             let units = realm.objects(Unit.self).filter(Unit.createFilter(name: name))
-            
+
+            let quantifiableProductsIds: [String] = quantifiableProducts.map { $0.uuid }
+            let storeProducts = realm.objects(StoreProduct.self).filter(StoreProduct.createFilter(quantifiableProductUuids: quantifiableProductsIds))
+
+            let storeProductsIds: [String] = storeProducts.map { $0.uuid }
+            let listItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithStoreProducts(storeProductsIds))
+
+            let historyItems = realm.objects(HistoryItem.self).filter(HistoryItem.createFilter(quantifiableProductUuids: quantifiableProductsIds))
+
+            realm.delete(historyItems)
+            realm.delete(listItems)
+            realm.delete(storeProducts)
             realm.delete(quantifiableProducts)
             realm.delete(ingredients)
             realm.delete(units)

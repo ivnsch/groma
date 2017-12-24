@@ -50,7 +50,7 @@ class RealmStoreProductProvider: RealmProvider {
     
     func deleteStoreProductsAndDependenciesSync(_ realm: Realm, storeProducts: Results<StoreProduct>, markForSync: Bool) -> Bool {
         let uuids = Array(storeProducts.map{$0.uuid})
-        let listItemResult = realm.objects(ListItem.self).filter(ListItem.createFilterWithProducts(uuids))
+        let listItemResult = realm.objects(ListItem.self).filter(ListItem.createFilterWithStoreProducts(uuids))
         if markForSync {
             let toRemoveListItems = Array(listItemResult.map{DBRemoveListItem($0)})
             saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)

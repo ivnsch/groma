@@ -278,15 +278,9 @@ public class ListItem: DBSyncable, Identifiable {
         return "\(createFilterList(list.uuid)) AND productOpt.productOpt.productOpt.itemOpt.name == '\(productName)' AND productOpt.productOpt.productOpt.brand == '\(productBrand)' AND uuid != '\(notUuid)'"
     }
     
-    // TODO!!!!!!!!!!!!!!!! is this store / quantifiable / product?
-    static func createFilterWithProducts(_ productUuids: [String]) -> String {
-        let productUuidsStr: String = productUuids.map{"'\($0)'"}.joined(separator: ",")
-        return "productOpt.uuid IN {\(productUuidsStr)}"
-    }
-    
-    // TODO!!!!!!!!!!!!!!!! is this store / quantifiable / product?
-    static func createFilterWithProduct(_ productUuid: String) -> String {
-        return "productOpt.uuid == '\(productUuid)'"
+    static func createFilterWithStoreProducts(_ uuids: [String]) -> String {
+        let uuidsStr: String = uuids.map{"'\($0)'"}.joined(separator: ",")
+        return "productOpt.uuid IN {\(uuidsStr)}"
     }
     
     static func createFilterWithProductName(_ productName: String, listUuid: String) -> String {
