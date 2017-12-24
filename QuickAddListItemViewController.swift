@@ -382,24 +382,26 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 popup.show(from: cell)
 
             } else {
-                logger.w("Invalid state?: No quantifiable product for product: \(product.uuid)::\(product.item.name). Creating a new quantifiable product.") // we create a new one as "emergency solution". TODO review this - maybe this is not an invalid state - if a user e.g. deletes all the quantifiable products in product manager (this isn't possible yet but it may be implemented in the future), it's possible that we keep only the product but no quantifiable products for it. So we either have to ensure there's always a quantifiable product for a product or allow to create them "lazily" here.
+                logger.i("No quantifiable product for product: \(product.uuid)::\(product.item.name). Creating a new quantifiable product.") // This state can happen if user deleted a unit or base quantity, which deletes all quantifiable products referencing them.
 
-                Prov.unitProvider.units(buyable: nil, self.successHandler {units in
-                    
-                    guard let noneUnit = units.findFirst({$0.id == .none}) else {
-                        let errorMsg = "2 Invalid states: (1) Didn't find a quantifiable product for a product, (2) couldn't retrieve .none unit -crash!"
-                        logger.e(errorMsg)
-                        // give time for the error log to be sent otherwise it doesn't appear in swiftybeaver
-                        delay(1) {
-                            fatalError(errorMsg)
-                        }
-                        return
+                // Since there's no quantifiable product for this product, we don't know which unit to use - use default unit.
+                Prov.unitProvider.units(buyable: nil, self.successHandler { [weak self] units in guard let wealSelf = self else { return }
+
+                    func onHasDefaultUnit(_ defaultUnit: Providers.Unit) {
+                        let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: defaultUnit, product: product)
+                        Prov.productProvider.add(newQuantifiableProduct, wealSelf.successHandler {
+                            onRetrieved(newQuantifiableProduct, 1)
+                        })
                     }
-                    
-                    let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: noneUnit, product: product)
-                    Prov.productProvider.add(newQuantifiableProduct, self.successHandler {
-                        onRetrieved(newQuantifiableProduct, 1)
-                    })
+
+                    if let defaultUnit = units.findFirst({$0.id == .none}) {
+                        onHasDefaultUnit(defaultUnit)
+                    } else { // The app shouldn't make possible to delete the default unit - so this is an invalid state. But just in case, don't let the app crash, send an error message.
+                        logger.e("Invalid state: The default unit was deleted! - recreating.")
+                        Prov.unitProvider.addUnit(unitId: .none, name: trans(""), buyable: true, wealSelf.successHandler { addedUnit in
+                            onHasDefaultUnit(addedUnit)
+                        })
+                    }
                 })
             }
         })

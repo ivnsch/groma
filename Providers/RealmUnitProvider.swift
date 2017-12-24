@@ -123,6 +123,18 @@ class RealmUnitProvider: RealmProvider {
         }
     }
 
+    func addUnit(unitId: UnitId, name: String, buyable: Bool, _ handler: (Unit?) -> Void) {
+        handler(addUnitSync(unitId: unitId, name: name, buyable: buyable))
+    }
+
+    func addUnitSync(unitId: UnitId, name: String, buyable: Bool) -> Unit? {
+        let unit = Unit(uuid: UUID().uuidString, name: name, id: unitId, buyable: false)
+        if saveObjSync(unit, update: true) { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
+            return unit
+        }
+        return nil
+    }
+
     func findUnit(name: String, handler: (Unit?) -> Void) {
         handler(findUnit(name: name))
     }

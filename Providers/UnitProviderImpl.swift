@@ -44,7 +44,15 @@ class UnitProviderImpl: UnitProvider {
             handler(ProviderResult(status: .databaseUnknown))
         }
     }
-    
+
+    func addUnit(unitId: UnitId, name: String, buyable: Bool, _ handler: @escaping (ProviderResult<Unit>) -> Void) {
+        if let unit = DBProv.unitProvider.addUnitSync(unitId: unitId, name: name, buyable: buyable) {
+            handler(ProviderResult(status: .success, sucessResult: unit))
+        } else {
+            handler(ProviderResult(status: .databaseUnknown))
+        }
+    }
+
     func initDefaultUnits(_ handler: @escaping (ProviderResult<[Unit]>) -> Void) {
         
         DBProv.unitProvider.initDefaultUnits{units in

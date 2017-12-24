@@ -33,6 +33,8 @@ public protocol UnitProvider {
     func baseQuantities(_ handler: @escaping (ProviderResult<RealmSwift.List<BaseQuantity>>) -> Void)
     
     func getOrCreate(baseQuantity: Float, _ handler: @escaping (ProviderResult<(base: BaseQuantity, isNew: Bool)>) -> Void)
-    
+
+    func addUnit(unitId: UnitId, name: String, buyable: Bool, _ handler: @escaping (ProviderResult<Unit>) -> Void)
+
     func delete(baseQuantity: Float, _ handler: @escaping (ProviderResult<Any>) -> Void)
 }
