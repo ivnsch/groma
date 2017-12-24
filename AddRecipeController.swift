@@ -51,6 +51,7 @@ class AddRecipeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initTableView()
+        initSubmitView()
     }
 
     fileprivate func retrieveData(recipe: Recipe) {
@@ -115,6 +116,20 @@ class AddRecipeController: UIViewController {
 
     fileprivate func initTableView() {
         tableView.register(UINib(nibName: "AddRecipeIngredientCell", bundle: nil), forCellReuseIdentifier: "cell")
+        tableView.bottomInset = Theme.submitViewHeight
+    }
+
+    fileprivate func initSubmitView() {
+        let submitView = SubmitView()
+        submitView.setButtonTitle(title: trans("add_recipe_to_list_submit_button_title"))
+        submitView.delegate = self
+        view.addSubview(submitView)
+
+        submitView.translatesAutoresizingMaskIntoConstraints = false
+        _ = submitView.alignLeft(self.view)
+        _ = submitView.alignRight(self.view)
+        _ = submitView.alignBottom(self.view, constant: 0)
+        _ = submitView.heightConstraint(Theme.submitViewHeight)
     }
 }
 
@@ -166,17 +181,6 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
-    }
-
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let submitView = SubmitView()
-        submitView.setButtonTitle(title: trans("add_recipe_to_list_submit_button_title"))
-        submitView.delegate = self
-        return submitView
-    }
-
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return Theme.submitViewHeight
     }
 
     // MARK: - Helpers
