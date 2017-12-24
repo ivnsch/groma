@@ -94,7 +94,14 @@ protocol UnitViewDelegate {
     }
 
     func additionalMarkToDeleteActions(toDelete: Bool, animated: Bool) {
-        guard let originalImage = self.image else { logger.e("Invalid state, no image"); return }
+        let originalImage = self.image
+        initialsLabel.isHidden = {
+            if originalImage != nil {
+                return true // On units with images, initials label is always hidden
+            } else {
+                return toDelete
+            }
+        } ()
         let image = toDelete ? #imageLiteral(resourceName: "cross") : originalImage
         imageView.image = image
     }
