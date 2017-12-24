@@ -160,12 +160,24 @@ class SelectUnitAndBaseController: UIViewController {
         guard let unitName = inputs.unitName else { logger.e("Can't submit without unit name"); return } // TODO remove name?
         guard let baseQuantity = inputs.baseQuantity else { logger.e("Can't submit without base"); return }
 
-        let result = SelectUnitAndBaseControllerResult(
-            unitId: unitId,
-            unitName: unitName,
-            baseQuantity: baseQuantity
-        )
-        onSubmit?(result)
+        // Possible creation of unit/base quantity, if they were entered via text input
+        Prov.unitProvider.getOrCreate(name: unitName) { result in
+            if !result.success {
+                logger.e("Couldn't get/create unit: \(unitName)", .db)
+            }
+            Prov.unitProvider.getOrCreate(baseQuantity: baseQuantity) { [weak self] result in
+                if !result.success {
+                    logger.e("Couldn't get/create unit: \(unitName)", .db)
+                }
+
+                let result = SelectUnitAndBaseControllerResult(
+                    unitId: unitId,
+                    unitName: unitName,
+                    baseQuantity: baseQuantity
+                )
+                self?.onSubmit?(result)
+            }
+        }
     }
 }
 
@@ -217,9 +229,9 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
         case 2: // unit input
             let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
             itemInputCell.configure(placeholder: trans("enter_custom_unit_placeholder"), onInputUpdate: { [weak self] unitInput in
+                self?.inputs.unitId = .custom
                 self?.inputs.unitName = unitInput.isEmpty ? nil : unitInput
                 if !unitInput.isEmpty {
-                    self?.inputs.unitName = nil
                     self?.unitsManager.clearSelectedItems() // Input overwrites possible selection
                     self?.unitsManager.clearToDeleteItems() // Clear delete state too
                 }
@@ -227,10 +239,10 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
             return itemInputCell
         case 5: // base input
             let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
-            itemInputCell.configure(placeholder: trans("enter_custom_base_quantity_placeholder"), onInputUpdate: { [weak self] unitInput in
-                self?.inputs.baseQuantityName = unitInput.isEmpty ? nil : unitInput
-                if !unitInput.isEmpty {
-                    self?.inputs.baseQuantityName = nil
+            itemInputCell.configure(placeholder: trans("enter_custom_base_quantity_placeholder"), onInputUpdate: { [weak self] baseInput in
+                self?.inputs.baseQuantityName = baseInput.isEmpty ? nil : baseInput
+                self?.inputs.baseQuantity = baseInput.isEmpty ? nil : baseInput.floatValue
+                if !baseInput.isEmpty {
                     self?.baseQuantitiesManager.clearSelectedItems() // Input overwrites possible selection
                     self?.baseQuantitiesManager.clearToDeleteItems() // Clear delete state too
                 }
