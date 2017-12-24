@@ -43,7 +43,7 @@ public enum UnitId: Int {
 
 public class Unit: DBSyncable, Identifiable {
     
-    public static let unitsWithBase: [UnitId] = [.g, .kg, .liter, .milliliter, .custom, .lb, .oz]
+    public static let unitsWithBase: [UnitId] = [.none, .g, .kg, .liter, .milliliter, .custom, .lb, .oz]
 
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var name: String = ""

@@ -194,8 +194,9 @@ public final class Ingredient: Object {
 
         let noneUnitName = quantity > 1 ? trans("recipe_unit_plural") : trans("recipe_unit_singular")
 
-        let showBaseQuantity = unitId.map {
-            Providers.Unit.unitsWithBase.contains($0)
+        let showBaseQuantity = unitId.map { _ in
+//            Providers.Unit.unitsWithBase.contains($0)
+            true
         } ?? false /* false: if there's no unit, unit is none -> none has no base */ && baseQuantity > 1
 
         let baseText = showBaseQuantity ? " x \(baseQuantity.quantityString)" : ""
