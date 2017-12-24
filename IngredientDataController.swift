@@ -70,6 +70,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
             self?.inputs.unit = unit
         }
         unitsManager.onMarkedItemToDelete = { [weak self] uniqueName in
+            self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.unitMarkedToDelete = uniqueName
 //            if let unit = unit {
 //                self?.unitsManager.markUnitToDelete(unit: unit)
@@ -85,6 +86,14 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
             if unit.name == self?.inputs.unit?.name {
                 self?.inputs.unit = nil
             }
+        }
+
+        unitsManager.clearToDeleteItemsState = { [weak self] in
+            self?.inputs.unitMarkedToDelete = nil
+        }
+
+        unitsManager.selectedItem = { [weak self] in
+            return self?.inputs.unit?.name
         }
 
         initQuantityView()
