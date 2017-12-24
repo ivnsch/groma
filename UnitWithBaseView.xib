@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UnitWithBaseView" customModule="groma" customModuleProvider="target">
             <connections>
+                <outlet property="initialsLabel" destination="ptl-Ti-oxp" id="qsX-KX-Drn"/>
                 <outlet property="label" destination="Wo6-Yh-vol" id="DUZ-j3-hGM"/>
                 <outlet property="unitImageView" destination="PuL-X4-LrH" id="Dxn-sn-aqJ"/>
             </connections>
@@ -28,6 +29,12 @@
                         <constraint firstAttribute="height" constant="30" id="P5N-Kg-xSc"/>
                     </constraints>
                 </imageView>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ptl-Ti-oxp">
+                    <rect key="frame" x="10" y="15" width="30" height="30"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                    <color key="textColor" red="0.82352941180000006" green="0.82352941180000006" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wo6-Yh-vol" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                     <rect key="frame" x="50" y="19.5" width="91" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -43,10 +50,14 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="PuL-X4-LrH" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="06Q-3I-ZZo"/>
+                <constraint firstItem="ptl-Ti-oxp" firstAttribute="trailing" secondItem="PuL-X4-LrH" secondAttribute="trailing" id="1gi-RX-51g"/>
+                <constraint firstItem="ptl-Ti-oxp" firstAttribute="bottom" secondItem="PuL-X4-LrH" secondAttribute="bottom" id="3Gi-ge-Gh5"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Wo6-Yh-vol" secondAttribute="trailing" constant="10" id="Avm-cL-S6R"/>
                 <constraint firstItem="PuL-X4-LrH" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="R9u-As-mAk"/>
+                <constraint firstItem="ptl-Ti-oxp" firstAttribute="top" secondItem="PuL-X4-LrH" secondAttribute="top" id="oAM-HD-2eN"/>
                 <constraint firstItem="Wo6-Yh-vol" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="oT1-jg-4GL"/>
                 <constraint firstItem="Wo6-Yh-vol" firstAttribute="leading" secondItem="PuL-X4-LrH" secondAttribute="trailing" constant="10" id="qeS-lh-yUq"/>
+                <constraint firstItem="ptl-Ti-oxp" firstAttribute="leading" secondItem="PuL-X4-LrH" secondAttribute="leading" id="xGe-PG-Djm"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>

@@ -13,6 +13,7 @@ import Providers
 class UnitWithBaseView: HandlingView {
 
     @IBOutlet weak var unitImageView: UIImageView!
+    @IBOutlet weak var initialsLabel: UILabel!
     @IBOutlet weak var label: UILabel!
 
     override init(frame: CGRect) {
@@ -35,6 +36,8 @@ class UnitWithBaseView: HandlingView {
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        unitImageView.tintColor = Theme.lightGrey2
+        
         layer.borderColor = Theme.midGrey.cgColor
         layer.borderWidth = 1
         layer.cornerRadius = 4
@@ -49,7 +52,12 @@ class UnitWithBaseView: HandlingView {
 
     func show(base: Float, unitId: UnitId, unitName: String) {
         unitImageView.image = Theme.unitImage(unitId: unitId)
-        unitImageView.tintColor = Theme.midGrey
+        if unitImageView.image == nil { // Custom units
+            initialsLabel.text = String(unitName.prefix(2).uppercased())
+            initialsLabel.isHidden = false
+        } else {
+            initialsLabel.isHidden = true
+        }
 
         let unitName: String = {
             if unitId == .none {
