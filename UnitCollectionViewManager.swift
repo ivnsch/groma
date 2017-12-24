@@ -64,6 +64,12 @@ class UnitCollectionViewManager: DefaultCollectionViewItemManager<Providers.Unit
         })
     }
 
+    override func delete(item: Providers.Unit, controller: UIViewController, onFinish: @escaping () -> Void) {
+        Prov.unitProvider.delete(name: item.uniqueName, controller.successHandler {
+            onFinish()
+        })
+    }
+
     override func confirmRemoveItemPopupMessage(item: Providers.Unit) -> String {
         return trans("popup_remove_unit_completion_confirm", item.name)
     }

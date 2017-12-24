@@ -79,6 +79,12 @@ class BaseQuantitiesCollectionViewManager: DefaultCollectionViewItemManager<Base
         })
     }
 
+    override func delete(item: BaseQuantity, controller: UIViewController, onFinish: @escaping () -> Void) {
+        Prov.unitProvider.delete(baseQuantity: item.val, controller.successHandler {
+            onFinish()
+        })
+    }
+
     override func confirmRemoveItemPopupMessage(item: BaseQuantity) -> String {
         return trans("popup_remove_base_completion_confirm", item.val.quantityString)
     }

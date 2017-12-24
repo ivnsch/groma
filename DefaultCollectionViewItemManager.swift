@@ -141,6 +141,10 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
         fatalError("Override")
     }
 
+    func delete(item: T, controller: UIViewController, onFinish: @escaping () -> Void) {
+        fatalError("Override")
+    }
+
     func reload() {
         collectionView.reloadData()
     }
@@ -256,13 +260,12 @@ extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
 
                 let item = items[indexPath.row]
                 self?.willDeleteItem?(item)
-                Prov.unitProvider.delete(name: item.uniqueName, controller.successHandler {[weak self] in
+                self?.delete(item: item, controller: controller, onFinish: {
                     self?.myCollectionView.deleteItems(at: [indexPath])
                     self?.myCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
 
                     logger.w("Results count after delete: \(String(describing: self?.units?.count))", .wildcard)
                 })
-
             }, onCancel: { [weak self] in
                 self?.clearToDeleteItems()
             })
