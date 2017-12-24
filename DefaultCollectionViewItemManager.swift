@@ -68,6 +68,7 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     var onMarkedItemToDelete: ((String?) -> Void)?
     var itemMarkedToDelete: (() -> String?)? // returns name (assumed to be unique)
     var willDeleteItem: ((T) -> Void)?
+    var clearToDeleteItemsState: (() -> Void)? // Used by popup on cancel
 
     let rowsSpacing: CGFloat = 4
     let topCollectionViewPadding: CGFloat = 20
@@ -143,6 +144,10 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     func reload() {
         collectionView.reloadData()
     }
+
+    func confirmRemoveItemPopupMessage(item: T) -> String {
+        fatalError("Override")
+    }
 }
 
 
@@ -172,6 +177,7 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
     }
 
     func onMarkUnitToDelete(uniqueName: String) {
+        clearToDeleteItems()
         onMarkedItemToDelete?(uniqueName)
     }
 
@@ -202,6 +208,7 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
     }
 
     func clearToDeleteItems() {
+        clearToDeleteItemsState?()
         let cells = myCollectionView.visibleCells as! [DefaultItemMeasureCell]
         for cell in cells {
             cell.show(toDelete: false, animated: true)
@@ -212,6 +219,8 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
     }
 
     func markUnitToDelete(unit: Providers.Unit) {
+        clearToDeleteItems()
+
         let cells = myCollectionView.visibleCells as! [DefaultItemMeasureCell]
         for cell in cells {
             if cell.itemName == unit.name {
@@ -231,25 +240,31 @@ extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
     func didSelectItem(indexPath: IndexPath) {
         guard let controller = controller else { logger.e("No controller!"); return }
 
-        guard let dataSource = myCollectionView.dataSource else {logger.e("No data source"); return}
+        guard let dataSource = myCollectionView.dataSource else {logger.e("No data source"); return }
         guard let unitsOrBaseDataSource = dataSource as? UnitOrBaseDataSource<T> else {
-            logger.e("Data source has wrong type: \(type(of: dataSource))"); return}
-        guard let items = unitsOrBaseDataSource.items else {logger.e("Invalid state: Data source has no units"); return}
-        guard let unitMarkedToDelete = itemMarkedToDelete else {logger.e("Invalid state: Data source has no units"); return}
+            logger.e("Data source has wrong type: \(type(of: dataSource))"); return }
+        guard let items = unitsOrBaseDataSource.items else {logger.e("Invalid state: Data source has no units"); return }
+        guard let itemMarkedToDelete = itemMarkedToDelete else {logger.e("Invalid state: No item marked to delete function"); return }
 
         let selectedItem = items[indexPath.row]
 
         let cellMaybe = myCollectionView.cellForItem(at: indexPath) as? DefaultItemMeasureCell
 
-        if unitMarkedToDelete() == selectedItem.uniqueName {
+        if itemMarkedToDelete() == selectedItem.uniqueName {
 
-            let item = items[indexPath.row]
-            willDeleteItem?(item)
-            Prov.unitProvider.delete(name: item.uniqueName, controller.successHandler {[weak self] in
-                self?.myCollectionView.deleteItems(at: [indexPath])
-                self?.myCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
+            ConfirmationPopup.show(title: trans("popup_title_confirm"), message: confirmRemoveItemPopupMessage(item: selectedItem), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_cancel"), controller: controller, onOk: { [weak self] in
 
-                logger.w("Results count after delete: \(String(describing: self?.units?.count))", .wildcard)
+                let item = items[indexPath.row]
+                self?.willDeleteItem?(item)
+                Prov.unitProvider.delete(name: item.uniqueName, controller.successHandler {[weak self] in
+                    self?.myCollectionView.deleteItems(at: [indexPath])
+                    self?.myCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
+
+                    logger.w("Results count after delete: \(String(describing: self?.units?.count))", .wildcard)
+                })
+
+            }, onCancel: { [weak self] in
+                self?.clearToDeleteItems()
             })
 
         } else {

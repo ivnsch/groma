@@ -78,6 +78,10 @@ class BaseQuantitiesCollectionViewManager: DefaultCollectionViewItemManager<Base
             onSucces(AnyRealmCollection(bases))
         })
     }
+
+    override func confirmRemoveItemPopupMessage(item: BaseQuantity) -> String {
+        return trans("popup_remove_base_completion_confirm", item.val.quantityString)
+    }
 }
 
 // TODO implement edit also with this and remove UnitsDataSource, previous controller. Rename this in UnitsDataSource.

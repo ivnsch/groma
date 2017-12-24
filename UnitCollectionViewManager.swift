@@ -63,6 +63,10 @@ class UnitCollectionViewManager: DefaultCollectionViewItemManager<Providers.Unit
             onSucces(AnyRealmCollection(units))
         })
     }
+
+    override func confirmRemoveItemPopupMessage(item: Providers.Unit) -> String {
+        return trans("popup_remove_unit_completion_confirm", item.name)
+    }
 }
 
 // TODO implement edit also with this and remove UnitsDataSource, previous controller. Rename this in UnitsDataSource.
