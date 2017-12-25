@@ -313,19 +313,20 @@
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="wSc-mF-ACk" firstAttribute="top" secondItem="Qmz-dg-bQL" secondAttribute="bottom" constant="50" id="91l-Te-dLi"/>
                             <constraint firstAttribute="trailing" secondItem="wSc-mF-ACk" secondAttribute="trailing" id="Htb-Uh-nZh"/>
                             <constraint firstItem="cpK-no-yeS" firstAttribute="top" secondItem="wSc-mF-ACk" secondAttribute="bottom" id="JkK-w9-ZW4"/>
                             <constraint firstItem="wSc-mF-ACk" firstAttribute="leading" secondItem="mya-NU-eDe" secondAttribute="leading" id="MUv-AV-Dlc"/>
                             <constraint firstAttribute="trailing" secondItem="wcl-fH-zQ7" secondAttribute="trailing" id="T5L-sF-eyv"/>
                             <constraint firstItem="wcl-fH-zQ7" firstAttribute="top" secondItem="Qmz-dg-bQL" secondAttribute="bottom" id="anD-eP-nSt"/>
                             <constraint firstItem="wcl-fH-zQ7" firstAttribute="leading" secondItem="mya-NU-eDe" secondAttribute="leading" id="icJ-Ak-9Wk"/>
-                            <constraint firstItem="wSc-mF-ACk" firstAttribute="top" secondItem="wcl-fH-zQ7" secondAttribute="bottom" id="oqo-vy-uU3"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="tcN-zM-Mnk"/>
                     <connections>
                         <outlet property="slidingTabsView" destination="wcl-fH-zQ7" id="Eos-bg-ji7"/>
                         <outlet property="swipeView" destination="wSc-mF-ACk" id="B6c-uv-JtM"/>
+                        <outlet property="swipeViewTopConstraint" destination="91l-Te-dLi" id="MeW-kI-e74"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xpc-vj-YeO" userLabel="First Responder" sceneMemberID="firstResponder"/>

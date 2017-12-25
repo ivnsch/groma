@@ -21,9 +21,10 @@ protocol QuickAddPageControllerDelegate: class {
 
 class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDelegate, SlidingTabsViewDelegate, QuickAddListItemTopControllersDelegate {
 
-    @IBOutlet weak var slidingTabsView: SlidingTabsView!
+    @IBOutlet weak var slidingTabsView: SlidingTabsView?
     @IBOutlet weak var swipeView: SwipeView!
-    
+    @IBOutlet weak var swipeViewTopConstraint: NSLayoutConstraint!
+
     weak var delegate: QuickAddPageControllerDelegate?
     weak var quickAddListItemDelegate: QuickAddListItemDelegate?
     
@@ -33,6 +34,8 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
 
     var addProductController: QuickAddListItemViewController?
     var addGroupController: QuickAddListItemViewController?
+
+    var pageCount: Int = 2 // For now a quick implementation for ingredients needs only products - here we just set page count to 1
 
     // For now only ingredients controller sets these (needed for the add ingredient scroller)
     var topConstraint: NSLayoutConstraint? {
@@ -51,28 +54,39 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         }
     }
 
+    fileprivate var hasSlidingTabsView: Bool {
+        return pageCount > 1
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        slidingTabsView.delegate = self
         swipeView.delegate = self
         
         swipeView.isPagingEnabled = true
         swipeView.defersItemViewLoading = true
-        
-        slidingTabsView.onViewsReady = {[weak self] in
-            self?.slidingTabsView.setSelected(0)
+
+        // If we don't need it remove it - its easier than adding it
+        if hasSlidingTabsView {
+            slidingTabsView?.delegate = self
+            slidingTabsView?.onViewsReady = {[weak self] in
+                self?.slidingTabsView?.setSelected(0)
+            }
+        } else {
+            swipeViewTopConstraint.constant = 10
+            slidingTabsView?.removeFromSuperview()
+            slidingTabsView = nil
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        slidingTabsView.onFinishLayout() // only here the bounds width is correct (maybe also in didMoveToParentViewController, which is called a bit earlier? - didn't test that one)
+        slidingTabsView?.onFinishLayout() // only here the bounds width is correct (maybe also in didMoveToParentViewController, which is called a bit earlier? - didn't test that one)
     }
     
     // MARK: - SwipeViewDataSource
     
     func numberOfItems(in swipeView: SwipeView!) -> Int {
-        return 2
+        return pageCount
     }
     
     fileprivate var currentSwipeController: QuickAddListItemViewController?
@@ -152,7 +166,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     
     func swipeViewCurrentItemIndexDidChange(_ swipeView: SwipeView!) {
         let index = swipeView.currentItemIndex
-        slidingTabsView.setSelected(index)
+        slidingTabsView?.setSelected(index)
         
         if index == 0 {
             currentSwipeController = addProductController
@@ -168,7 +182,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     }
     
     func swipeViewDidScroll(_ swipeView: SwipeView!) {
-        slidingTabsView.moveLine(swipeView.scrollOffset)
+        slidingTabsView?.moveLine(swipeView.scrollOffset)
     }
     
     // MARK: - SlidingTabsViewDelegate
@@ -180,7 +194,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     // MARK: - QuickAddPageControllerDelegate
     
     func onPagerScroll(_ xOffset: CGFloat) {
-        slidingTabsView.moveLine(xOffset)
+        slidingTabsView?.moveLine(xOffset)
     }
     
     // MARK: - QuickAddListItemTopControllersDelegate
