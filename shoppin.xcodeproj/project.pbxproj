@@ -129,6 +129,8 @@
 		6AE41A141E49E15300B8459D /* SelectQuantifiableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE41A121E49E15300B8459D /* SelectQuantifiableController.swift */; };
 		6AE41A171E49E1E800B8459D /* SelectQuantifiable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AE41A161E49E1E800B8459D /* SelectQuantifiable.storyboard */; };
 		6AE41A191E49E61D00B8459D /* SelectQuantifiableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE41A181E49E61D00B8459D /* SelectQuantifiableCell.swift */; };
+		6AE548C31FF1236400A72BFE /* RecipeTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE548C11FF1236400A72BFE /* RecipeTextCell.swift */; };
+		6AE548C61FF1279700A72BFE /* RecipeEditableTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE548C51FF1279700A72BFE /* RecipeEditableTextCell.swift */; };
 		6AEA4EA41E0461660040557D /* Providers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AEA4EA31E0461660040557D /* Providers.framework */; };
 		6AEA4EA51E0461660040557D /* Providers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6AEA4EA31E0461660040557D /* Providers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6AEB65E81E4C8BE90094B9DE /* IngredientsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB65E71E4C8BE90094B9DE /* IngredientsControllerNew.swift */; };
@@ -627,6 +629,8 @@
 		6AE41A121E49E15300B8459D /* SelectQuantifiableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectQuantifiableController.swift; sourceTree = "<group>"; };
 		6AE41A161E49E1E800B8459D /* SelectQuantifiable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectQuantifiable.storyboard; sourceTree = "<group>"; };
 		6AE41A181E49E61D00B8459D /* SelectQuantifiableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectQuantifiableCell.swift; sourceTree = "<group>"; };
+		6AE548C11FF1236400A72BFE /* RecipeTextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTextCell.swift; sourceTree = "<group>"; };
+		6AE548C51FF1279700A72BFE /* RecipeEditableTextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditableTextCell.swift; sourceTree = "<group>"; };
 		6AEA4EA31E0461660040557D /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AEB65E71E4C8BE90094B9DE /* IngredientsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientsControllerNew.swift; sourceTree = "<group>"; };
 		6AEB65E91E4C92B50094B9DE /* IngredientCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientCell.swift; sourceTree = "<group>"; };
@@ -1289,6 +1293,8 @@
 				6AEB65E71E4C8BE90094B9DE /* IngredientsControllerNew.swift */,
 				6AEB65E91E4C92B50094B9DE /* IngredientCell.swift */,
 				6AEB65EB1E4C93620094B9DE /* IngredientsController.storyboard */,
+				6AE548C11FF1236400A72BFE /* RecipeTextCell.swift */,
+				6AE548C51FF1279700A72BFE /* RecipeEditableTextCell.swift */,
 			);
 			name = recipes;
 			sourceTree = "<group>";
@@ -3008,6 +3014,7 @@
 				6AD51AE51E5134F80053934E /* UIFont.swift in Sources */,
 				EBF1F9EB1CD7F75E00F8016F /* SimpleSettingCell.swift in Sources */,
 				6AEB65EF1E4D056C0094B9DE /* SelectIngredientDataController.swift in Sources */,
+				6AE548C31FF1236400A72BFE /* RecipeTextCell.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
 				EB451C4B1B864A19000DE208 /* SingleSelectionPopup.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
@@ -3125,6 +3132,7 @@
 				6A4D04CE1FEB16FB005BDA52 /* UnitCollectionViewManager.swift in Sources */,
 				6AF46EB61E5B6F6000BBFF4C /* UnitsDataSource.swift in Sources */,
 				EB7D241F1CB959440017EFE6 /* CellUncoverer.swift in Sources */,
+				6AE548C61FF1279700A72BFE /* RecipeEditableTextCell.swift in Sources */,
 				EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */,
 				EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */,
 				EB4147CD1BE2288E00549CE4 /* ManageGroupsCell.swift in Sources */,

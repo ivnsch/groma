@@ -85,7 +85,15 @@ class RealmRecipeProvider: RealmProvider {
         }
         handler(successMaybe ?? false)
     }
-    
+
+    public func update(_ recipe: Recipe, recipeText: String, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken]) {realm -> Bool in
+            recipe.text = recipeText
+            return true
+        }
+        handler(successMaybe ?? false)
+    }
+
     public func move(from: Int, to: Int, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: recipes.realm) {realm -> Bool in
             recipes.move(from: from, to: to)

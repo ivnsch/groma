@@ -34,7 +34,7 @@ public struct RealmConfig {
     public static var config = Realm.Configuration(
         // Set the new schema version. This must be greater than the previously used
         // version (if you've never set a schema version before, the version is 0).
-        schemaVersion: 28,
+        schemaVersion: 29,
         
         // Set the block which will be called automatically when opening a Realm with
         // a schema version lower than the one set above
@@ -84,7 +84,7 @@ extension RealmConfig {
     static var localRlmRealmConfig: RLMRealmConfiguration {
 
         let configuration = RLMRealmConfiguration()
-        configuration.schemaVersion = 26
+        configuration.schemaVersion = 29
         configuration.fileURL = localRealmUrl
 //        configuration.dynamic = true
         //configuration.readOnly = true

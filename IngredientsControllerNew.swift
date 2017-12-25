@@ -19,6 +19,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         didSet {
             if let recipe = recipe {
                 topBar.title = recipe.name
+                recipeText = recipe.text
                 delay(0.2) { // smoother animation when showing controller
                     self.load()
                 }
@@ -72,8 +73,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
 
     // To differenciate from add, etc. We need to disable the animation of top menu to bottom in this case
     fileprivate var triggeredExpandEditIngredient = false
-    
-    
+
+    fileprivate var recipeText: String = ""
+
     override var tableView: UITableView {
         return tableViewController.tableView
     }
@@ -107,6 +109,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         
         sortBy = (.alphabetic, trans("sort_by_alphabetic"))
         topMenusHeightConstraint.constant = 0
+
+        // Automatic cell height (any value bigger than 0)
+        tableView.estimatedRowHeight = 70
     }
     
     override func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
@@ -390,6 +395,17 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         })
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        guard let recipe = recipe else { logger.e("No recipe"); return }
+        guard let notificationToken = notificationToken else { logger.e("No notification token"); return }
+
+        Prov.recipeProvider.update(recipe, recipeText: recipeText, notificationToken: notificationToken, successHandler {
+            logger.i("Updated recipe!", .ui)
+        })
+    }
+
     override func onRemovedSectionCategoryName(_ name: String) {
         load()
     }
@@ -580,6 +596,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     override func setEditing(_ editing: Bool, animated: Bool, tryCloseTopViewController: Bool = true) {
         super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
         tableViewController.setEditing(editing, animated: animated)
+
+        // Switch between editable and non editable cell
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
 
     
@@ -666,7 +685,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return itemsCount + (explanationManager.showExplanation ? 1 : 0)
-        return itemsCount + (false ? 1 : 0)
+        return itemsCount + (false ? 1 : 0) + 1 // (+ 1 recipe text row)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -683,6 +702,18 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
             explanationView.imageView.startAnimating()
             return cell
             
+        } else if (itemsResult.map { $0.count == indexPath.row } ?? false) { // Recipe text cell
+            if isEditing {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "recipeTextView", for: indexPath) as! RecipeEditableTextCell
+                cell.config(recipeText: recipeText, onTextChangeHandler: { [weak self] text in
+                    self?.recipeText = text
+                })
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "recipeTextCell", for: indexPath) as! RecipeTextCell
+                cell.config(recipeText: recipeText)
+                return cell
+            }
         } else { // Normal cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "ingredientCell", for: indexPath) as! IngredientCell
             
@@ -698,13 +729,14 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
             
             return cell
         }
-
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
         if false && indexPath.row == explanationManager.row { // Explanation cell
             return explanationManager.rowHeight
+        } else if indexPath.row == itemsResult?.count {
+            return UITableViewAutomaticDimension
         } else {
             return DimensionsManager.ingredientsCellHeight
         }
@@ -726,15 +758,20 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditing {
-            guard let itemsResult = itemsResult else {logger.e("No result"); return}
-            
-            let ingredient = itemsResult[indexPath.row]
-            
-            triggeredExpandEditIngredient = true
-            topSelectIngredientControllerManager?.expand(true)
-            topSelectIngredientControllerManager?.controller?.item = itemsResult[indexPath.row].item
-            topSelectIngredientControllerManager?.controller?.configForEditMode(ingredient: ingredient)
-            topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+            if indexPath.row == 0 {
+
+            } else {
+                guard let itemsResult = itemsResult else {logger.e("No result"); return}
+
+                let ingredient = itemsResult[indexPath.row]
+
+                triggeredExpandEditIngredient = true
+                topSelectIngredientControllerManager?.expand(true)
+                topSelectIngredientControllerManager?.controller?.item = itemsResult[indexPath.row].item
+                topSelectIngredientControllerManager?.controller?.configForEditMode(ingredient: ingredient)
+                topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
+            }
+
         }
     }
 }

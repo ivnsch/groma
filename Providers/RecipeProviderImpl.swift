@@ -44,7 +44,13 @@ public class RecipeProviderImpl: RecipeProvider {
             handler(ProviderResult(status: success ? .success : .databaseUnknown))
         }
     }
-    
+
+    public func update(_ recipe: Recipe, recipeText: String, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.recipeProvider.update(recipe, recipeText: recipeText, notificationToken: notificationToken) { success in
+            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        }
+    }
+
     public func move(from: Int, to: Int, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
         DBProv.recipeProvider.move(from: from, to: to, recipes: recipes, notificationToken: notificationToken) {success in
             handler(ProviderResult(status: success ? .success : .databaseUnknown))

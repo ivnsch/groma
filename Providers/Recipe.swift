@@ -20,7 +20,8 @@ public class Recipe: Object, Identifiable {
     @objc public dynamic var name: String = ""
     @objc public dynamic var bgColorHex: String = "000000"
     @objc public dynamic var fav: Int = 0
-    
+    @objc public dynamic var text: String = ""
+
     public var color: UIColor {
         get {
             return UIColor(hexString: bgColorHex)
@@ -30,13 +31,14 @@ public class Recipe: Object, Identifiable {
         }
     }
     
-    public convenience init(uuid: String, name: String, color: UIColor, fav: Int = 0) {
+    public convenience init(uuid: String, name: String, color: UIColor, fav: Int = 0, text: String = "") {
         self.init()
         
         self.uuid = uuid
         self.name = name
         self.color = color
         self.fav = fav
+        self.text = text
     }
     
     public override static func primaryKey() -> String? {
@@ -77,12 +79,13 @@ public class Recipe: Object, Identifiable {
         return "{\(type(of: self)) uuid: \(uuid), name: \(name), bgColor: \(color.hexStr), fav: \(fav)}"
     }
     
-    public func copy(uuid: String? = nil, name: String? = nil, bgColor: UIColor? = nil, fav: Int? = nil) -> Recipe {
+    public func copy(uuid: String? = nil, name: String? = nil, bgColor: UIColor? = nil, fav: Int? = nil, text: String? = nil) -> Recipe {
         return Recipe(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             color: bgColor ?? self.color,
-            fav: fav ?? self.fav
+            fav: fav ?? self.fav,
+            text: text ?? self.text
         )
     }
 }

@@ -204,13 +204,12 @@ class DimensionsManager {
     }
     
     static var ingredientsCellHeight: CGFloat {
-        return defaultCellHeight
-//        switch heightDimension {
-//        case .verySmall: return 50
-//        case .small: return 50
-//        case .middle: return 60
-//        case .large: return 60
-//        }
+        switch heightDimension {
+        case .verySmall: return 40
+        case .small: return 40
+        case .middle: return 50
+        case .large: return 50
+        }
     }
     
     static var ingredientsUnitCellHeight: CGFloat {
