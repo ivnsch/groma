@@ -721,7 +721,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         for span in spans {
             switch span.attribute {
             case .bold:
-                attributedText.addAttributes([.font: UIFont.boldSystemFont(ofSize: 17)], range: span.nsRange)
+                attributedText.addAttributes([.font: UIFont.boldSystemFont(ofSize: 19)], range: span.nsRange)
 //            case .fontSize(let size):
 //                attributedText.setAttributes([.font: UIFont.systemFont(ofSize: size)], range: span.nsRange)
             }

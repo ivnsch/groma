@@ -437,7 +437,7 @@ add_edit_list_item_edit_item = "Item editieren";
 
 quick_add_slider_tab_products = "Produkte";
 quick_add_slider_tab_groups = "Gruppen";
-quick_add_slider_tab_recipes = "Zutatengruppen";
+quick_add_slider_tab_recipes = "Rezepte";
 
 
 add_button_title = "Speichern";
