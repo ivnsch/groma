@@ -26,7 +26,7 @@ public protocol RecipeProvider {
     
     func update(_ recipe: Recipe, input: RecipeInput, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
-    func update(_ recipe: Recipe, recipeText: String, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
+    func update(_ recipe: Recipe, recipeText: String, spans: [TextSpan], notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
 
     func move(from: Int, to: Int, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void)
     

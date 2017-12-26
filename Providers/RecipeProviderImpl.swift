@@ -45,8 +45,8 @@ public class RecipeProviderImpl: RecipeProvider {
         }
     }
 
-    public func update(_ recipe: Recipe, recipeText: String, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.recipeProvider.update(recipe, recipeText: recipeText, notificationToken: notificationToken) { success in
+    public func update(_ recipe: Recipe, recipeText: String, spans: [TextSpan], notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.recipeProvider.update(recipe, recipeText: recipeText, spans: spans, notificationToken: notificationToken) { success in
             handler(ProviderResult(status: success ? .success : .databaseUnknown))
         }
     }

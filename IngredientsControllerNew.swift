@@ -19,7 +19,11 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         didSet {
             if let recipe = recipe {
                 topBar.title = recipe.name
-                recipeText = recipe.text
+                recipeText = NSAttributedString(string: recipe.text)
+                spans = recipe.textAttributeSpans.map {
+                    TextSpan(start: $0.start, length: $0.length, attribute: TextAttribute(rawValue: $0.attribute)!)
+                }
+                updateTextView()
                 delay(0.2) { // smoother animation when showing controller
                     self.load()
                 }
@@ -45,6 +49,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var topMenusHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var boldButton: UIButton!
 
     fileprivate weak var tableViewController: UITableViewController!
     
@@ -74,7 +80,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     // To differenciate from add, etc. We need to disable the animation of top menu to bottom in this case
     fileprivate var triggeredExpandEditIngredient = false
 
-    fileprivate var recipeText: String = ""
+    fileprivate var recipeText = NSAttributedString()
 
     override var tableView: UITableView {
         return tableViewController.tableView
@@ -401,7 +407,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         guard let recipe = recipe else { logger.e("No recipe"); return }
         guard let notificationToken = notificationToken else { logger.e("No notification token"); return }
 
-        Prov.recipeProvider.update(recipe, recipeText: recipeText, notificationToken: notificationToken, successHandler {
+        Prov.recipeProvider.update(recipe, recipeText: recipeText.string, spans: spans, notificationToken: notificationToken, successHandler {
             logger.i("Updated recipe!", .ui)
         })
     }
@@ -598,7 +604,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         tableViewController.setEditing(editing, animated: animated)
 
         // Switch between editable and non editable cell
-        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+        if let itemsResult = itemsResult {
+            tableView.reloadRows(at: [IndexPath(row: itemsResult.count, section: 0)], with: .none)
+        }
     }
 
     
@@ -672,7 +680,125 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     func submitButtonBottomOffset(parent: UIView, buttonHeight: CGFloat) -> CGFloat {
         return -(tabBarController?.tabBar.height ?? 0)
     }
-    
+
+    // MARK: Text editor
+
+    fileprivate var currentTextViewSelection: NSRange?
+    fileprivate var spans = [TextSpan]()
+//    fileprivate let defaultRecipeTextFontSize: CGFloat = 12
+
+    fileprivate func onTapTextViewBold() {
+        if let range = currentTextViewSelection {
+            updateAttribute(in: range, attribute: .bold)
+        }
+    }
+
+    func updateTextView() {
+        recipeText = buildAttributedString()
+
+        if let itemsResult = itemsResult {
+            if let cell = tableView.cellForRow(at: IndexPath(row: itemsResult.count, section: 0)) as? RecipeEditableTextCell {
+                cell.recipeTextView.attributedText = recipeText
+            }
+        }
+    }
+
+    func buildAttributedString() -> NSAttributedString {
+        return buildAttributedString(spans: spans, text: recipeText.string)
+    }
+
+    func buildAttributedString(spans: [TextSpan], text: String) -> NSAttributedString {
+        let attributedText = NSMutableAttributedString(string: text)
+
+        // Default attributes
+        // Note: text size from storyboard
+        let fullRange = NSRange(location: 0, length: text.count)
+        attributedText.setAttributes([
+            .font: UIFont.systemFont(ofSize: 17),
+            .foregroundColor: UIColor.white
+        ], range: fullRange)
+
+        for span in spans {
+            switch span.attribute {
+            case .bold:
+                attributedText.addAttributes([.font: UIFont.boldSystemFont(ofSize: 17)], range: span.nsRange)
+//            case .fontSize(let size):
+//                attributedText.setAttributes([.font: UIFont.systemFont(ofSize: size)], range: span.nsRange)
+            }
+        }
+        return attributedText
+    }
+
+    fileprivate func updateAttribute(in selection: NSRange, attribute: TextAttribute) {
+
+        getSpansInRange(range: selection, attributedText: recipeText, handler: { foundSpans in
+
+            // No spans in selection! Make selection bold
+            if foundSpans.isEmpty {
+                spans.append(TextSpan(range: selection, attribute: attribute))
+                updateTextView()
+            }
+
+            for (i, span) in spans.enumerated().reversed() {
+                for foundSpan in foundSpans {
+                    // Selection == span: Remove span (Note: assumes that 1. "Regular" has no spans, 2. There's only one possible attribute). In current use case this means: Selected text is bold, unbold it.
+                    if foundSpan == span {
+                        spans.remove(at: i)
+                        updateTextView()
+                    } else {
+                        // No intersection between the span and the selection - nothing to do (performance - code works correctly also without this)
+                        guard span.nsRange.myIntersection(range: selection).length > 0 else { return }
+
+                        let res = span.substract(subrange: selection)
+                        switch res {
+                        // The selection is at the start, the end, or is the complete span
+                        case .one(let range):
+                            if range != span.nsRange {
+                                // Remove original span
+                                spans.remove(at: i)
+                                // Insert shortened (or equal if selection == span) span
+                                spans.insert(TextSpan(range: range, attribute: span.attribute), at: i)
+
+                                updateTextView()
+                            }
+                        //The selection is in the middle - this divides the span in 2 parts, one before the selection (range1) and another after the selection (range2)
+                        case .two(let range1, let range2):
+                            // Remove original span
+                            spans.remove(at: i)
+                            // Insert part 1
+                            spans.insert(TextSpan(range: range1, attribute: span.attribute), at: i)
+                            // Insert part 2
+                            spans.insert(TextSpan(range: range2, attribute: span.attribute), at: i)
+
+                            updateTextView()
+
+                        case .somethingWentWrong:
+                            print("Unexpected: span: \(span), selection: \(selection)")
+                            break
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    // Creates subranges with found attributes in given range
+    func getSpansInRange(range: NSRange, attributedText: NSAttributedString, handler: ([TextSpan]) -> Void) {
+        var spans: [TextSpan] = []
+        attributedText.enumerateAttribute(.font, in: range, options: []) { (font, range, stop) in
+            if let f = font as? UIFont {
+                if f.fontName.contains("bold") {
+                    spans.append(TextSpan(start: range.location, length: range.length, attribute: .bold))
+                }
+            }
+        }
+        handler(spans)
+    }
+
+    @IBAction func onBoldTap(_ sender: UIButton) {
+        onTapTextViewBold()
+    }
+
     // MARK: -
     
     deinit {
@@ -707,6 +833,10 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "recipeTextView", for: indexPath) as! RecipeEditableTextCell
                 cell.config(recipeText: recipeText, onTextChangeHandler: { [weak self] text in
                     self?.recipeText = text
+                }, onTextFocusHandler: { [weak self] focused in
+                    self?.boldButton.setHiddenAnimated(!focused)
+                }, selectionChangeHandler: { [weak self] range in
+                    self?.currentTextViewSelection = range
                 })
                 return cell
             } else {
@@ -758,7 +888,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditing {
-            if indexPath.row == 0 {
+            if itemsResult.map ({ indexPath.row == $0.count }) ?? false {
 
             } else {
                 guard let itemsResult = itemsResult else {logger.e("No result"); return}
@@ -774,4 +904,5 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
 
         }
     }
+
 }

@@ -12,7 +12,7 @@ class RecipeTextCell: UITableViewCell {
 
     @IBOutlet weak var recipeTextLabel: UILabel!
 
-    func config(recipeText: String) {
-        recipeTextLabel.text = recipeText
+    func config(recipeText: NSAttributedString) {
+        recipeTextLabel.attributedText = recipeText
     }
 }

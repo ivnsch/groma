@@ -308,6 +308,8 @@
 		6AE34BFA1E2FECAD0039A2A8 /* IngredientInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE34BF91E2FECAD0039A2A8 /* IngredientInput.swift */; };
 		6AEB65E41E4B65F10094B9DE /* ItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB65E31E4B65F10094B9DE /* ItemProvider.swift */; };
 		6AEB65E61E4B66590094B9DE /* ItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB65E51E4B66590094B9DE /* ItemProviderImpl.swift */; };
+		6AF707E81FF2EBF400CEE59D /* DBTextSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF707E71FF2EBF400CEE59D /* DBTextSpan.swift */; };
+		6AF707EC1FF2F33F00CEE59D /* TextSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF707EB1FF2F33E00CEE59D /* TextSpan.swift */; };
 		A017C1D3506C3F772B9F386F /* Pods_Providers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 999680B0DB094F9A28664E3C /* Pods_Providers.framework */; };
 /* End PBXBuildFile section */
 
@@ -616,6 +618,8 @@
 		6AE34BF91E2FECAD0039A2A8 /* IngredientInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientInput.swift; sourceTree = "<group>"; };
 		6AEB65E31E4B65F10094B9DE /* ItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemProvider.swift; sourceTree = "<group>"; };
 		6AEB65E51E4B66590094B9DE /* ItemProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemProviderImpl.swift; sourceTree = "<group>"; };
+		6AF707E71FF2EBF400CEE59D /* DBTextSpan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBTextSpan.swift; sourceTree = "<group>"; };
+		6AF707EB1FF2F33E00CEE59D /* TextSpan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSpan.swift; sourceTree = "<group>"; };
 		999680B0DB094F9A28664E3C /* Pods_Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9B2C9DFF72144BA2B5046ED /* Pods-Providers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Providers.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-Providers/Pods-Providers.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -936,6 +940,7 @@
 				6A3A67CF1E57CDFF00B5354F /* DBFraction.swift */,
 				6A1027701E5E167F003D2972 /* BaseQuantity.swift */,
 				6AD51A901E4F87840053934E /* Unit.swift */,
+				6AF707E71FF2EBF400CEE59D /* DBTextSpan.swift */,
 			);
 			name = realm;
 			sourceTree = "<group>";
@@ -1068,6 +1073,7 @@
 		6A256D591E04069A004F5028 /* plain */ = {
 			isa = PBXGroup;
 			children = (
+				6AF707EB1FF2F33E00CEE59D /* TextSpan.swift */,
 				6A256D2A1E040694004F5028 /* ListItem.swift */,
 				6A256D2B1E040694004F5028 /* OrderUpdate.swift */,
 				6A256D2D1E040694004F5028 /* UserIdentity.swift */,
@@ -1340,6 +1346,7 @@
 				6A256BFC1E040540004F5028 /* RemoteGlobalProvider.swift in Sources */,
 				6AE34BEA1E2E28280039A2A8 /* RecipeProviderImpl.swift in Sources */,
 				6A256BD31E040530004F5028 /* RealmInventoryProvider.swift in Sources */,
+				6AF707EC1FF2F33F00CEE59D /* TextSpan.swift in Sources */,
 				6A256C231E040579004F5028 /* InventoryProvider.swift in Sources */,
 				6A256C901E0405D7004F5028 /* DBStoreProductToRemove.swift in Sources */,
 				6A256BFF1E040540004F5028 /* RemotePullProvider.swift in Sources */,
@@ -1598,6 +1605,7 @@
 				6AD8DDB31E489255000A4C36 /* InventoriesContainer.swift in Sources */,
 				6A256C471E0405A7004F5028 /* StoreProductInput.swift in Sources */,
 				6A256C571E0405B6004F5028 /* ProductMapper.swift in Sources */,
+				6AF707E81FF2EBF400CEE59D /* DBTextSpan.swift in Sources */,
 				6A256CB11E0405FF004F5028 /* Array_List.swift in Sources */,
 				6A256CF11E040613004F5028 /* RemoteSocialLoginResult.swift in Sources */,
 				6A256BDC1E040530004F5028 /* RealmPlanProvider.swift in Sources */,

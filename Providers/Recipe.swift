@@ -21,6 +21,7 @@ public class Recipe: Object, Identifiable {
     @objc public dynamic var bgColorHex: String = "000000"
     @objc public dynamic var fav: Int = 0
     @objc public dynamic var text: String = ""
+    public var textAttributeSpans = RealmSwift.List<DBTextSpan>()
 
     public var color: UIColor {
         get {

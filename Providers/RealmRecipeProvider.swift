@@ -86,9 +86,15 @@ class RealmRecipeProvider: RealmProvider {
         handler(successMaybe ?? false)
     }
 
-    public func update(_ recipe: Recipe, recipeText: String, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+    public func update(_ recipe: Recipe, recipeText: String, spans: [TextSpan], notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+
+        let dbSpans = spans.map {
+            DBTextSpan(start: $0.start, length: $0.length, attribute: $0.attribute.rawValue)
+        }
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken]) {realm -> Bool in
             recipe.text = recipeText
+            recipe.textAttributeSpans.removeAll()
+            recipe.textAttributeSpans.add(dbSpans)
             return true
         }
         handler(successMaybe ?? false)

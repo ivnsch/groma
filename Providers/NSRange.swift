@@ -12,4 +12,8 @@ public extension NSRange {
     public var end: Int {
         return location + length
     }
+
+    func myIntersection(range: NSRange) -> NSRange {
+        return NSIntersectionRange(self, range)
+    }
 }
