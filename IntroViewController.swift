@@ -170,8 +170,18 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     (trans("pr_pepper"), 0, Fraction.zero, .none)
                 ]
                 
-                
-                let recipe = Recipe(uuid: UUID().uuidString, name: trans("tomato_soup"), color: UIColor.flatRed)
+                let spans: [TextSpan] = {
+                    switch LangHelper.currentAppLang() {
+                    default: return [
+                        TextSpan(start: 0, length: 5, attribute: .bold),
+                        TextSpan(start: 15, length: 7, attribute: .bold),
+                        TextSpan(start: 26, length: 2, attribute: .bold),
+                        TextSpan(start: 331, length: 2, attribute: .bold)
+                        ]
+                    }
+                } ()
+
+                let recipe = Recipe(uuid: UUID().uuidString, name: trans("tomato_soup"), color: UIColor.flatRed, text: trans("tomato_soup_text"), spans: spans)
                 
                 let itemNames = ingredientModels.map {$0.name}
                 Prov.itemsProvider.items(names: itemNames, weakSelf.resultHandler(onSuccess: {[weak self] itemsResults in guard let weakSelf = self else {onFinish?(); return}

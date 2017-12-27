@@ -31,7 +31,15 @@ public class Recipe: Object, Identifiable {
             bgColorHex = newValue.hexStr
         }
     }
-    
+
+    public convenience init(uuid: String, name: String, color: UIColor, fav: Int = 0, text: String = "", spans: [TextSpan]) {
+        self.init(uuid: uuid, name: name, color: color, fav: fav, text: text)
+        for span in spans {
+            let dbSpan = DBTextSpan(start: span.start, length: span.length, attribute: span.attribute.rawValue)
+            textAttributeSpans.append(dbSpan)
+        }
+    }
+
     public convenience init(uuid: String, name: String, color: UIColor, fav: Int = 0, text: String = "") {
         self.init()
         

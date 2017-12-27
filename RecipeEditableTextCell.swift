@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Providers
 
 class RecipeEditableTextCell: UITableViewCell, UITextViewDelegate {
 
@@ -25,6 +26,7 @@ class RecipeEditableTextCell: UITableViewCell, UITextViewDelegate {
 
 
     func textViewDidChangeSelection(_ textView: UITextView) {
+        logger.v("Selection changed: \(textView.selectedRange)", .ui)
         selectionChangeHandler?(textView.selectedRange)
     }
 
