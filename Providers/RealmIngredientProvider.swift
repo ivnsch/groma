@@ -93,10 +93,13 @@ class RealmIngredientProvider: RealmProvider {
         handler(quantityMaybe)
     }
 
-    public func update(_ ingredient: Ingredient, input: IngredientInput, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
+    public func update(_ ingredient: Ingredient, input: IngredientInput, item: Item?, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
             ingredient.quantity = input.quantity
-            // TODO!!!!!!!!!!!!!!!!!!!!!
+            ingredient.unit = input.unit
+            if let item = item {
+                ingredient.item = item
+            }
             return true
         }
         handler(successMaybe ?? false)

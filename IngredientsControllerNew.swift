@@ -340,8 +340,13 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         
         func onEditItem(_ input: IngredientInput, editingItem: Ingredient) {
 //            submittedAddOrEdit.edit = true
-            Prov.ingredientProvider.update(editingItem, input: input, ingredients: itemsResult, notificationToken: notificationToken, successHandler{(inventoryItem, replaced) in
-                print("replaced: \(replaced)") // TODO!!!!!!!!!!!!!!!!! do something with this?
+            Prov.ingredientProvider.update(editingItem, input: input, ingredients: itemsResult, notificationToken: notificationToken, successHandler{ [weak self] (inventoryItem, replaced) in
+
+                if let index = itemsResult.index(of: inventoryItem) {
+                    self?.tableView.updateRow(index)
+                } else {
+                    logger.w("Item couldn't be found after update: \(inventoryItem), results: \(itemsResult.count)", .ui)
+                }
             })
         }
         

@@ -17,7 +17,8 @@ public struct IngredientInput: Equatable, Hashable {
     public let brand: String // TODO!!!!!!!!! remove
     public let unit: Unit
     public let baseQuantity: Float // TODO!!!!!!!!! remove
-    
+    // TODO add fraction
+
     public init(name: String, quantity: Float, category: String, categoryColor: UIColor, brand: String, unit: Unit, baseQuantity: Float) {
         self.name = name
         self.quantity = quantity

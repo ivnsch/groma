@@ -147,7 +147,11 @@ extension UITableView {
     func updateRow(indexPath: IndexPath) {
         reloadRows(at: [indexPath], with: .none)
     }
-    
+
+    func updateRow(_ row: Int) {
+        updateRow(indexPath: IndexPath(row: row, section: 0))
+    }
+
     func deleteSection(index: Int) {
         deleteSections(IndexSet([index]), with: .top)
     }

@@ -78,36 +78,23 @@ class IngredientProviderImpl: IngredientProvider {
         // Remove a (different) possible already existing item with same unique (name+brand) in the same list (imagine I'm editing an item A and my new inputs correspond to unique from another item B which is in the list how do we handle this? we could alert the user but this may be a bit of an overkill, at least for now, so we simply replace (i.e. delete) the other item. We return the deleted item to be able to delete it from the table view. Note that we exclude the editing item from the delete - since this is not being executed in a transaction it's not safe to just delete it to re-add it in subsequent steps.
         DBProv.ingredientProvider.deletePossibleIngredient(itemName: ingredient.item.name, recipe: ingredient.recipe, notUuid: ingredient.uuid) {foundAndDeletedIngredient in
             
-            self.addOrUpdateItem(input: input, notificationToken: notificationToken, doTransaction: true) {itemResult in
+            self.addOrUpdateItem(input: input, notificationToken: notificationToken, doTransaction: true) { itemResult in
                 
                 if let item = itemResult.sucessResult {
-                    let updatedIngredient = ingredient.copy(quantity: input.quantity, item: item.0)
-                    
-                    // Now do plain update of the item
-                    DBProv.ingredientProvider.update(ingredient, input: input, ingredients: ingredients, notificationToken: notificationToken) {success in
+
+                    DBProv.ingredientProvider.update(ingredient, input: input, item: item.0, ingredients: ingredients, notificationToken: notificationToken) { success in
                         if success {
-                            handler(ProviderResult(status: .success, sucessResult: (ingredient: updatedIngredient, replaced: foundAndDeletedIngredient)))
+                            handler(ProviderResult(status: .success, sucessResult: (ingredient: ingredient, replaced: foundAndDeletedIngredient)))
                         } else {
                             logger.e("Error updating ingredient: \(itemResult)")
                             handler(ProviderResult(status: itemResult.status))
                         }
                     }
                     
-                    //                    self?.update(updatedIngredient) {result in
-                    //                        if result.success {
-                    //                            handler(ProviderResult(status: .success, sucessResult: (recipe: updatedIngredient, replaced: foundAndDeletedIngredient)))
-                    //                        } else {
-                    //                            logger.e("Error updating ingredient: \(result)")
-                    //                            handler(ProviderResult(status: result.status))
-                    //                        }
-                    //                    }
-                    
-                    
                 } else {
-                    logger.e("Error fetching product: \(itemResult.status)")
+                    logger.e("Error retrieving item: \(itemResult.status)")
                     handler(ProviderResult(status: .databaseUnknown))
                 }
-                
             }
         }
     }

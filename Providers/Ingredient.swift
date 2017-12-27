@@ -100,7 +100,7 @@ public final class Ingredient: Object {
     }
     
     static func createFilter(name: String, recipeUuid: String) -> String {
-        return "item.name == '\(name)' AND recipe.uuid == '\(recipeUuid)'"
+        return "itemOpt.name == '\(name)' AND recipeOpt.uuid == '\(recipeUuid)'"
     }
     
     static func createFilter(recipeUuid: String) -> String {

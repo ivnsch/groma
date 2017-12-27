@@ -179,6 +179,7 @@ class RealmItemProvider: RealmProvider {
     // load item and update or create one
     // if we find an item with the unique we update it - this is for the case the user changes category color etc for an existing item while adding it
     // NOTE: This doesn't save anything to the database (no particular reason, except that the current caller of this method does the saving)
+    // Returns tuple with item and whether it's new (was created) or already existed
     func mergeOrCreateItemSync(itemInput: ItemInput, updateCategory: Bool, doTransaction: Bool, saveItem: Bool = false, notificationToken: NotificationToken?) -> ProvResult<(Item, Bool), DatabaseError> {
 
         func transactionContent() -> ProvResult<(Item, Bool), DatabaseError> {
