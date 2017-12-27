@@ -480,7 +480,14 @@ unit_shot = "shot";
 unit_pinch = "pzc";
 unit_clove = "diente";
 unit_can = "lata";
-
+unit_pint = "Pint(s)";
+unit_gin = "Gin(s)";
+unit_floz = "fl.oz.";
+unit_dash = "ds";
+unit_wgf = "Wgf";
+unit_dram = "Dracma(s)";
+unit_lb = "lb";
+unit_oz = "oz";
 
 tomato_soup = "Sopa de tomate";
 tomato_soup_text = "Time: 30 mins\n\nPeople: 4\n\n1. In a stockpot, over medium heat, combine the tomatoes, onion, cloves and chicken broth. Bring to a boil, and gently boil for about 20 minutes to blend all of the flavors. Remove from heat and run the mixture through a food mill into a large bowl, or pan. Discard any stuff left over in the food mill.\n\n2. In the now empty stockpot, melt the butter over medium heat. Stir in the flour to make a roux, cooking until the roux is a medium brown. Gradually whisk in a bit of the tomato mixture, so that no lumps form, then stir in the rest. Season with sugar and salt, and adjust to taste.";
