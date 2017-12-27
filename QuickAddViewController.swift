@@ -87,7 +87,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     fileprivate var editingItem: AddEditItem? {
         didSet {
             if let editingItem = editingItem {
-                searchBar.text = editingItem.product?.product.item.name ?? ""
+                searchBar.text = editingItem.item.name
             } else {
                 logger.w("Setting a nil editingItem")
             }

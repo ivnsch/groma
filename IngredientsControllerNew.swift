@@ -799,6 +799,10 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         onTapTextViewBold()
     }
 
+    override func openQuickAdd(rotateTopBarButton: Bool, itemToEdit: AddEditItem?) {
+        topQuickAddControllerManager?.height = DimensionsManager.quickAddHeight
+        super.openQuickAdd(rotateTopBarButton: rotateTopBarButton, itemToEdit: itemToEdit)
+    }
     // MARK: -
     
     deinit {
@@ -888,17 +892,16 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditing {
-            if itemsResult.map ({ indexPath.row == $0.count }) ?? false {
+            if itemsResult.map ({ indexPath.row == $0.count }) ?? false { // Recipe text row
+                // Do nothing
 
-            } else {
+            } else { // Ingredient row
                 guard let itemsResult = itemsResult else {logger.e("No result"); return}
 
                 let ingredient = itemsResult[indexPath.row]
 
-                triggeredExpandEditIngredient = true
-                topSelectIngredientControllerManager?.expand(true)
-                topSelectIngredientControllerManager?.controller?.item = itemsResult[indexPath.row].item
-                topSelectIngredientControllerManager?.controller?.configForEditMode(ingredient: ingredient)
+                topQuickAddControllerManager?.height = 120
+                super.openQuickAdd(itemToEdit: AddEditItem(item: ingredient))
                 topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
             }
 
