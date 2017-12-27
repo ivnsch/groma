@@ -892,9 +892,23 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
             if isEditing {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "recipeTextView", for: indexPath) as! RecipeEditableTextCell
                 cell.config(recipeText: recipeText, onTextChangeHandler: { [weak self] text in
-                    self?.recipeText = text
+                    guard let weakSelf = self else { return }
+                    weakSelf.recipeText = text
+
+                    // Content offset and disable animations is to avoid jumps with begin/end updates, see http://candycode.io/self-sizing-uitextview-in-a-uitableview-using-auto-layout-like-reminders-app/
+                    let currentOffset = weakSelf.tableView.contentOffset
+                    UIView.setAnimationsEnabled(false)
+
+                    // This is necessary for the cell to adjust to the textview's size
+                    weakSelf.tableView.beginUpdates()
+                    weakSelf.tableView.endUpdates()
+
+                    UIView.setAnimationsEnabled(true)
+                    weakSelf.tableView.setContentOffset(currentOffset, animated: false)
+
                 }, onTextFocusHandler: { [weak self] focused in
                     self?.boldButton.setHiddenAnimated(!focused)
+
                 }, selectionChangeHandler: { [weak self] range in
                     self?.currentTextViewSelection = range
                 })
