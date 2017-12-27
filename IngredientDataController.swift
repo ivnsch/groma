@@ -53,6 +53,15 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
     var submitButtonParent: (() -> UIView?)?
     var onDidScroll: ((UIScrollView) -> Void)?
 
+    // Optional config, e.g. for edit
+    func config(productName: String, unit: Providers.Unit, whole: Int, fraction: Fraction) {
+        self.productName = productName
+        inputs.unit = unit
+        inputs.whole = whole
+        inputs.fraction = fraction
+        tableView.reloadData()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -111,9 +120,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         initVariableCellHeights()
         initSubmitButton()
 
-        // Trigger reload (header update with defaults)
-        let inputs = IngredientDataControllerInputs()
-        self.inputs = inputs
+        tableView.reloadData()
     }
 
     fileprivate func initVariableCellHeights() {
@@ -134,15 +141,16 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
             logger.e("No header or couldn't be casted", .ui)
             return
         }
+        header.update(inputs: generateHeaderInputs())
+    }
 
-        let headerInputs = SelectIngredientDataHeaderInputs(
+    fileprivate func generateHeaderInputs() -> SelectIngredientDataHeaderInputs {
+        return SelectIngredientDataHeaderInputs(
             productName: productName,
             unitName: inputs.unit?.name ?? IngredientDataController.defaultUnitName,
             quantity: inputs.whole.map { Float($0) } ?? Float(IngredientDataController.defaultQuantity),
             fraction: inputs.fraction ?? IngredientDataController.defaultFraction
         )
-
-        header.update(inputs: headerInputs)
     }
 
     // MARK: Table view
@@ -153,6 +161,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = SelectIngredientDataHeader.createView()
+        header.update(inputs: generateHeaderInputs())
         return header
     }
 

@@ -147,9 +147,6 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     fileprivate func attachIngredientDataControllerToEditController(topConstraint: NSLayoutConstraint, topController: UIViewController) {
 
         let tableViewController = IngredientDataController()
-        tableViewController.onSubmitInputs = { [weak self] result in guard let weakSelf = self else { return }
-
-        }
 
         tableViewController.onDidScroll = { [weak self] scrollView in
             self?.scrollableBottomAttacher?.onBottomViewDidScroll(scrollView)
@@ -972,6 +969,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
 
                 topQuickAddControllerManager?.height = 120
                 super.openQuickAdd(itemToEdit: AddEditItem(item: ingredient))
+                scrollableBottomAttacher?.bottom.config(productName: ingredient.item.name, unit: ingredient.unit, whole: Int(ingredient.quantity), fraction: ingredient.fraction)
                 topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
             }
 
