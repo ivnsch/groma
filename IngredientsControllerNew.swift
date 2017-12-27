@@ -82,6 +82,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
 
     fileprivate var recipeText = NSAttributedString()
 
+    fileprivate(set) var scrollableBottomAttacher: ScrollableBottomAttacher<IngredientDataController>?
+
     override var tableView: UITableView {
         return tableViewController.tableView
     }
@@ -130,15 +132,42 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
             }
             controller.modus = .ingredient
             controller.list = self?.list
-            manager.onDidSetTopConstraint = { [weak controller] topConstraint in
-                controller?.topConstraint = topConstraint
+            manager.onDidSetTopConstraint = { [weak self, weak controller] topConstraint in guard let controller = controller else { return }
+                controller.topConstraint = topConstraint
+                if self?.isEditing ?? false { // On non-edit the bottom is attached on item tap (in quick add - we probably should refactor this)
+                    self?.attachIngredientDataControllerToEditController(topConstraint: topConstraint, topController: controller)
+                }
             }
             return controller
         }
         manager.delegate = self
         return manager
     }
-    
+
+    fileprivate func attachIngredientDataControllerToEditController(topConstraint: NSLayoutConstraint, topController: UIViewController) {
+
+        let tableViewController = IngredientDataController()
+        tableViewController.onSubmitInputs = { [weak self] result in guard let weakSelf = self else { return }
+
+        }
+
+        tableViewController.onDidScroll = { [weak self] scrollView in
+            self?.scrollableBottomAttacher?.onBottomViewDidScroll(scrollView)
+        }
+
+        scrollableBottomAttacher = ScrollableBottomAttacher(parent: self, top: topController,
+                                                            bottom: tableViewController,
+                                                            topViewTopConstraint: topConstraint,
+                                                            onAddedSubview: { [weak self] in
+                                                                self?.onAddedIngredientsSubviews()
+                                                            },
+                                                            onExpandBottom: { // [weak self] in
+                                                                // if user focused the search box
+//                                                                self?.topControllersDelegate?.hideKeyboard()
+                                                            })
+        scrollableBottomAttacher?.showBottom {}
+    }
+
     func initEditIngredientControllerManager() -> ExpandableTopViewController<SelectIngredientDataContainerController> {
         let top = topBar.frame.height
         let manager: ExpandableTopViewController<SelectIngredientDataContainerController> = ExpandableTopViewController(top: top, height: view.height - topBar.height, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] _ in
@@ -331,15 +360,32 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     override func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
         // Not used
     }
-    
+
+    // Called from add/edit form
     override func onSubmitAddEditItem(_ input: ListItemInput, editingItem: Any?) {
-        guard let itemsResult = itemsResult else {logger.e("No result"); return}
-        guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
-        guard let recipe = recipe else {logger.e("No recipe"); return}
-        
-        
-        func onEditItem(_ input: IngredientInput, editingItem: Ingredient) {
+        guard let itemsResult = itemsResult else { logger.e("No result"); return }
+        guard let notificationToken = notificationToken else { logger.e("No notification token"); return }
+        guard let recipe = recipe else { logger.e("No recipe"); return }
+
+        guard let ingredientDataController = scrollableBottomAttacher?.bottom else {
+            logger.e("Illegal state: no ingredient data controller", .ui)
+            return
+        }
+
+        let ingredientDataResult = ingredientDataController.getResult()
+
+        func onEditItem(editingItem: Ingredient, unit: Providers.Unit) {
 //            submittedAddOrEdit.edit = true
+
+            let input = IngredientInput(
+                name: input.name,
+                quantity: Float(ingredientDataResult.whole),
+                category: input.section,
+                categoryColor: input.sectionColor,
+                unit: unit,
+                fraction: ingredientDataResult.fraction
+            )
+
             Prov.ingredientProvider.update(editingItem, input: input, ingredients: itemsResult, notificationToken: notificationToken, successHandler{ [weak self] (inventoryItem, replaced) in
 
                 if let index = itemsResult.index(of: inventoryItem) {
@@ -347,12 +393,18 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                 } else {
                     logger.w("Item couldn't be found after update: \(inventoryItem), results: \(itemsResult.count)", .ui)
                 }
+
+                self?.scrollableBottomAttacher?.removeBottom(onFinish: { [weak self] in
+                    self?.scrollableBottomAttacher = nil
+                    self?.closeTopController()
+                })
             })
         }
         
-        func onAddItem(_ input: IngredientInput) {
+        func onAddItem(unit: Providers.Unit) {
 //            submittedAddOrEdit.add = true
-            
+            let input = IngredientInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, unit: unit, fraction: nil)
+
             Prov.ingredientProvider.add(input, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, resultHandler (onSuccess: {addedItem in
                 
                 if addedItem.isNew {
@@ -374,20 +426,19 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         }
         
         func onHasUnit(_ unit: Providers.Unit) {
-            let input = IngredientInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand, unit: unit, baseQuantity: input.storeProductInput.baseQuantity)
-            
+
             if let editingItem = editingItem as? Ingredient {
-                onEditItem(input, editingItem: editingItem)
+                onEditItem(editingItem: editingItem, unit: unit)
             } else {
                 if editingItem == nil {
-                    onAddItem(input)
+                    onAddItem(unit: unit)
                 } else {
                     logger.e("Cast didn't work: \(String(describing: editingItem))")
                 }
             }
         }
         
-        Prov.unitProvider.getOrCreate(name: input.storeProductInput.unit, successHandler{unit in
+        Prov.unitProvider.getOrCreate(name: ingredientDataResult.unitName, successHandler{unit in
             onHasUnit(unit.unit)
         })
     }

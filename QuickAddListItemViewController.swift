@@ -529,6 +529,10 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         tableViewController.submitButtonParent = { [weak self] in
             return self?.delegate?.parentViewForAddButton()
         }
+        tableViewController.onDidScroll = { [weak self] scrollView in
+            self?.scrollableBottomAttacher?.onBottomViewDidScroll(scrollView)
+        }
+
         tableViewController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         if #available(iOS 11.0, *) {
             tableViewController.tableView.contentInsetAdjustmentBehavior = .never

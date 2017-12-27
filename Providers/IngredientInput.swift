@@ -14,40 +14,36 @@ public struct IngredientInput: Equatable, Hashable {
     public let quantity: Float
     public let category: String
     public let categoryColor: UIColor
-    public let brand: String // TODO!!!!!!!!! remove
     public let unit: Unit
-    public let baseQuantity: Float // TODO!!!!!!!!! remove
-    // TODO add fraction
+    public let fraction: Fraction?
 
-    public init(name: String, quantity: Float, category: String, categoryColor: UIColor, brand: String, unit: Unit, baseQuantity: Float) {
+    public init(name: String, quantity: Float, category: String, categoryColor: UIColor, unit: Unit, fraction: Fraction?) {
         self.name = name
         self.quantity = quantity
         self.category = category
         self.categoryColor = categoryColor
-        self.brand = brand
         self.unit = unit
-        self.baseQuantity = baseQuantity
+        self.fraction = fraction
     }
     
     public var hashValue: Int {
         return name.hashValue
     }
     
-    public func copy(name: String? = nil, quantity: Float? = nil, category: String? = nil, categoryColor: UIColor? = nil, brand: String? = nil, unit: Unit? = nil, baseQuantity: Float? = nil) -> IngredientInput {
+    public func copy(name: String? = nil, quantity: Float? = nil, category: String? = nil, categoryColor: UIColor? = nil, unit: Unit? = nil, fraction: Fraction? = nil) -> IngredientInput {
         return IngredientInput(
             name: name ?? self.name,
             quantity: quantity ?? self.quantity,
             category: category ?? self.category,
             categoryColor: categoryColor ?? self.categoryColor,
-            brand: brand ?? self.brand,
             unit: unit ?? self.unit,
-            baseQuantity: baseQuantity ?? self.baseQuantity
+            fraction: fraction ?? self.fraction
         )
     }
 }
 
 public func ==(lhs: IngredientInput, rhs: IngredientInput) -> Bool {
-    return lhs.name == rhs.name && lhs.quantity == rhs.quantity && lhs.category == rhs.category && lhs.categoryColor == rhs.categoryColor && lhs.brand == rhs.brand && lhs.unit == rhs.unit && lhs.baseQuantity == rhs.baseQuantity
+    return lhs.name == rhs.name && lhs.quantity == rhs.quantity && lhs.category == rhs.category && lhs.categoryColor == rhs.categoryColor && lhs.unit == rhs.unit && lhs.fraction == rhs.fraction
 }
 
 

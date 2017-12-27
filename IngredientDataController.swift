@@ -29,7 +29,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
     static let defaultFraction = Fraction.zero
     static let defaultUnitName = "unit"
 
-    weak var controller: QuickAddListItemViewController?
+    weak var controller: UIViewController?
 
     fileprivate var unitsManager = UnitCollectionViewManager()
 
@@ -51,6 +51,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
     var onSubmitInputs: ((IngredientDataControllerResult) -> Void)?
     var submitButtonParent: (() -> UIView?)?
+    var onDidScroll: ((UIScrollView) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -223,15 +224,17 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        controller?.scrollableBottomAttacher?.onBottomViewDidScroll(scrollView)
+        onDidScroll?(scrollView)
     }
 
     // MARK: Submit buttom
 
     fileprivate func initSubmitButton() {
+        // Some places where we show this already have a submit button, so we don't add a submit button here.
+        guard let submitButtonParent = submitButtonParent else { logger.d("No function to get parent"); return }
+
         guard self.submitView == nil else {logger.v("Already showing a submit view"); return}
         //        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {logger.e("No delegate: \(delegate)"); return}
-        guard let submitButtonParent = submitButtonParent else {logger.e("No function to get parent"); return}
         guard let parent = submitButtonParent() else {logger.e("Function didn't return parent!"); return}
 
         let height = Theme.submitViewHeight
@@ -289,12 +292,16 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         submit()
     }
 
-    fileprivate func submit() {
-        guard let onSubmitInputs = onSubmitInputs else { logger.e("No submit callback"); return }
-        let result = IngredientDataControllerResult(
+    func getResult() -> IngredientDataControllerResult {
+        return IngredientDataControllerResult(
             unitName: inputs.newUnitInput ?? inputs.unit?.name ?? IngredientDataController.defaultUnitName,
             whole: inputs.whole ?? IngredientDataController.defaultQuantity,
-            fraction: inputs.fraction)
-        onSubmitInputs(result)
+            fraction: inputs.fraction
+        )
+    }
+
+    fileprivate func submit() {
+        guard let onSubmitInputs = onSubmitInputs else { logger.e("No submit callback"); return }
+        onSubmitInputs(getResult())
     }
 }

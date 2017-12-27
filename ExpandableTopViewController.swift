@@ -35,7 +35,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
     weak var delegate: ExpandableTopViewControllerDelegate?
 
     fileprivate(set) var topViewTopConstraint: NSLayoutConstraint?
-    var onDidSetTopConstraint: ((NSLayoutConstraint) -> Void)?
+    var onDidSetTopConstraint: ((NSLayoutConstraint) -> Void)? // TODO rename on onLayoutTopController
 
     init(top: CGFloat, height: CGFloat, animateTableViewInset: Bool = true, openInset: CGFloat = 0,
          closeInset: CGFloat = 0, parentViewController: UIViewController, tableView: UITableView,
@@ -60,7 +60,6 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
             let topViewTopConstraint = view.topAnchor.constraint(equalTo: parentController.view.topAnchor, constant: top)
             topViewTopConstraint.isActive = true
 
-            onDidSetTopConstraint?(topViewTopConstraint)
 
             self.topViewTopConstraint = topViewTopConstraint
 
@@ -70,12 +69,14 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
 
             parentController.view.layoutIfNeeded()
 
+            onDidSetTopConstraint?(topViewTopConstraint)
+
             view.transform = view.transform.translatedBy(x: 0, y: -height / 2.0)
             view.transform = view.transform.scaledBy(x: 1, y: 0.0001) //0.0001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
 
 
             view.layoutIfNeeded()
-            
+
         } else {
             print("Warn: no parentController in ExpandableTopViewController.initView")
         }

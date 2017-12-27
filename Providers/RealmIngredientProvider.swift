@@ -97,6 +97,9 @@ class RealmIngredientProvider: RealmProvider {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
             ingredient.quantity = input.quantity
             ingredient.unit = input.unit
+            if let fraction = input.fraction {
+                ingredient.fraction = fraction
+            }
             if let item = item {
                 ingredient.item = item
             }

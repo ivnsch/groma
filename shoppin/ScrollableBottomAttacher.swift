@@ -93,9 +93,19 @@ class ScrollableBottomAttacher<T: UITableViewController> {
         tableViewConrollerHeightConstraint.constant = availableTableViewHeight
         UIView.animate(withDuration: animDuration, animations: {
             self.parent.view.layoutIfNeeded()
-        }, completion: { (finished) in
+        }, completion: { finished in
             onFinish()
             self.bottom.tableView.bounces = false
+        })
+    }
+
+    func showBottom(onFinish: @escaping () -> Void) {
+        tableViewConrollerHeightConstraint.constant = availableTableViewHeight
+        UIView.animate(withDuration: animDuration, animations: {
+            self.parent.view.layoutIfNeeded()
+        }, completion: { finished in
+            onFinish()
+            self.bottom.tableView.bounces = true
         })
     }
 
