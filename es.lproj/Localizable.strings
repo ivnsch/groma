@@ -460,7 +460,8 @@ share_subject = "Groma";
 recipe_already_has = "Ya en la lista: %@";
 recipe_unit_singular = "Artículo";
 recipe_unit_plural = "Artículos";
-
+recipe_edit_to_enter_text = "Edita para ingresar texto";
+recipe_enter_text = "Ingresa texto";
 
 unit_unit = "unidad";
 unit_unit_pl = "unidades";

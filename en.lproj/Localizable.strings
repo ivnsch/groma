@@ -459,7 +459,8 @@ share_subject = "Groma";
 recipe_already_has = "Currently in list: %@";
 recipe_unit_singular = "unit";
 recipe_unit_plural = "units";
-
+recipe_edit_to_enter_text = "Edit to enter recipe text";
+recipe_enter_text = "Enter recipe text";
 
 unit_unit = "unit";
 unit_unit_pl = "units";
