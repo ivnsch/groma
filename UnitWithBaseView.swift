@@ -43,11 +43,10 @@ class UnitWithBaseView: HandlingView {
         layer.cornerRadius = 4
     }
 
-    func configure(unitId: UnitId, unitName: String, base: Float, onTap: (() -> Void)?) {
+    func configure(onTap: (() -> Void)?) {
         touchHandler = {
             onTap?()
         }
-        show(base: base, unitId: unitId, unitName: unitName)
     }
 
     func show(base: Float, unitId: UnitId, unitName: String) {

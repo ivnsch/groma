@@ -71,14 +71,16 @@ class ProductQuantityController: UIViewController {
 
     var onPickersInitialized: (() -> Void)?
     
-    func config(quantity: Float, unitId: UnitId, unitName: String, base: Float, onTapUnitBase: @escaping () -> Void) {
-
-        unitWithBaseView.configure(unitId: unitId, unitName: unitName, base: base, onTap: {
+    func config(onTapUnitBase: @escaping () -> Void) {
+        unitWithBaseView.configure(onTap: {
             onTapUnitBase()
         })
-        
-        quantityView.quantity = quantity
         quantityView.delegate = self
+    }
+
+    func show(base: Float, unitId: UnitId, unitName: String, quantity: Float) {
+        quantityView.quantity = quantity
+        unitWithBaseView.show(base: base, unitId: unitId, unitName: unitName)
     }
 
     override func viewDidLoad() {

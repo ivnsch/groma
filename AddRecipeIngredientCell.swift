@@ -92,13 +92,15 @@ class AddRecipeIngredientCell: UITableViewCell {
         )
 
         productQuantityController?.config(
-            quantity: state.quantity,
-            unitId: state.unitData.unitId,
-            unitName: state.unitData.unitName,
-            base: state.baseQuantity,
             onTapUnitBase: { [weak self, weak delegate] in guard let weakSelf = self else { return }
                 delegate?.onTapUnitBaseView(cell: weakSelf)
             }
+        )
+        productQuantityController?.show(
+            base: state.baseQuantity,
+            unitId: state.unitData.unitId,
+            unitName: state.unitData.unitName,
+            quantity: state.quantity
         )
     }
 

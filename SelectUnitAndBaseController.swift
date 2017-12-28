@@ -45,6 +45,9 @@ class SelectUnitAndBaseController: UIViewController {
         initTableView()
         configUnitsManager()
         configBaseQuantitiesManager()
+
+        extendedLayoutIncludesOpaqueBars = true
+        edgesForExtendedLayout = .all
     }
 
     func config(selectedUnitId: UnitId, selectedUnitName: String, selectedBaseQuantity: Float) {

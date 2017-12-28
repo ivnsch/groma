@@ -67,11 +67,12 @@ class MyPopup: UIView {
         addSubview(backgroundView)
     }
 
-    func show(from: UIView) {
+    func show(from: UIView, offsetY: CGFloat = 0) {
         guard let parent = parent else { logger.e("No parent!"); return }
         if let superview = from.superview {
             let from = superview.convert(from.center, to: parent)
-            show(parent: parent, from: from)
+            let finalfrom = CGPoint(x: from.x, y: from.y + offsetY)
+            show(parent: parent, from: finalfrom)
         }
     }
 

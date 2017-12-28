@@ -177,6 +177,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     fileprivate var currentQuantity: Float = 0
     fileprivate var currentUnit: String = ""
+    fileprivate var currentUnitId: UnitId = .none
     fileprivate var currentBase: Float = 1
 
     fileprivate var showingColorPicker: FlatColorPickerController?
@@ -281,6 +282,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     fileprivate var addButtonHelper: AddButtonHelper?
 
+    fileprivate var unitBasePopup: MyPopup?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -331,6 +334,76 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         productQuantityController.view.fillSuperview()
         
         self.productQuantityController = productQuantityController
+
+        productQuantityController.config(
+            onTapUnitBase: { [weak self] in guard let weakSelf = self else { return }
+                weakSelf.onTapUnitBaseView()
+            }
+        )
+        currentUnitId = .none
+        currentUnit = trans("unit_unit")
+        currentQuantity = 1
+        currentBase = 1
+
+        updateProductQuantityController()
+    }
+
+    fileprivate func updateProductQuantityController() {
+        productQuantityController?.show(
+            base: currentBase,
+            unitId: currentUnitId,
+            unitName: currentUnit,
+            quantity: currentQuantity
+        )
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+    }
+
+    func onTapUnitBaseView() {
+        // Parent is expected to be list items controller
+        guard let parent = self.parent?.parent?.parent else { logger.e("No parent! Can't show popup"); return }
+        guard let unitBaseView = productQuantityController?.unitWithBaseView else { logger.e("No unit base view! Can't show popup"); return }
+        guard let tabBarHeight = tabBarController?.tabBar.height else { logger.e("No tabbar!"); return }
+
+//        let height = parent.view.height - Theme.navBarHeight
+        let height = parent.view.height - Theme.navBarHeight
+        let popupFrame = CGRect(x: parent.view.x, y: Theme.navBarHeight, width: parent.view.width, height: height)
+        let popup = MyPopup(parent: parent.view, frame: popupFrame)
+        popup.contentCenter = popup.bounds.center
+        let controller = SelectUnitAndBaseController(nibName: "SelectUnitAndBaseController", bundle: nil)
+
+        delegate?.endEditing()
+        dismissKeyboard(nil)
+
+        controller.onSubmit = { [weak self] result in guard let weakSelf = self else { return }
+            weakSelf.currentBase = result.baseQuantity
+            weakSelf.currentUnit = result.unitName
+            weakSelf.currentUnitId = result.unitId
+
+            self?.unitBasePopup?.hide(onFinish: { [weak self] in guard let weakSelf = self else { return }
+                self?.unitBasePopup = nil
+                self?.productQuantityController?.show(
+                    base: weakSelf.currentBase,
+                    unitId: weakSelf.currentUnitId,
+                    unitName: weakSelf.currentUnit,
+                    quantity: weakSelf.currentQuantity
+                )
+            })
+        }
+
+        parent.addChildViewController(controller)
+
+        controller.view.frame = popup.bounds
+        popup.contentView = controller.view
+        self.unitBasePopup = popup
+
+        controller.config(selectedUnitId: currentUnitId,
+                          selectedUnitName: currentUnit,
+                          selectedBaseQuantity: currentBase)
+        popup.show(from: unitBaseView, offsetY: -Theme.navBarHeight)
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
@@ -416,6 +489,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         // TODO!!!!!!!!!!!!!!! quantifiable product - unit?
         
         edibleSelected = item.item.edible
+
+        currentUnitId = item.product?.unit.id ?? .none
+        currentUnit = item.product?.unit.name ?? trans("unit_unit")
+        currentQuantity = item.quantity
+        currentBase = item.product?.baseQuantity ?? 1
+
+        updateProductQuantityController()
 
         // TODO remove?
 //        productQuantityController?.onPickersInitialized = {[weak productQuantityController] in
@@ -505,13 +585,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             
             if let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
                 
-                let baseQuantity: Float = productQuantityController?.selectedBase ?? 1
-                let unit: String = productQuantityController?.selectedUnit?.name ?? ""
-                
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
                 // Explanation category/section name: for list items, the section input refers to the list item's section. For the rest the product category. When we store the list items, if a category with the entered section name doesn't exist yet, one is created with the section's data.
-                delegate?.onOkTap(price, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
+                delegate?.onOkTap(price, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: currentBase, unit: currentUnit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
                 
             } else {
                 logger.e("Validation was not implemented correctly, price: \(String(describing: priceInput.text)), quantity: \(String(describing: productQuantityController?.quantity)), brand: \(String(describing: brandInput.text)), sectionColor: \(String(describing: sectionColorButton.textColor))")
@@ -972,6 +1049,7 @@ extension AddEditListItemViewController: ProductQuantityControlleDelegate {
     
     func onSelect(unit: Providers.Unit) {
         currentUnit = unit.name
+        currentUnitId = unit.id // This is needed for the unit image in the unit/base selection view
     }
     
     func onSelect(base: Float) {
