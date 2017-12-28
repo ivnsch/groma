@@ -973,7 +973,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="105" width="375" height="513"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="fLS-kD-P95">
-                                        <rect key="frame" x="75" y="150" width="225" height="206"/>
+                                        <rect key="frame" x="67.5" y="150" width="240" height="206"/>
                                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="qfF-kD-5b6"/>
@@ -998,7 +998,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mark your first cart items as &quot;bought&quot; to start seeing reports" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dm0-uo-IfV" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="40" y="406" width="295" height="36"/>
+                                        <rect key="frame" x="20" y="406" width="335" height="36"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1011,12 +1011,24 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="fLS-kD-P95" firstAttribute="width" secondItem="Qfw-EP-IMI" secondAttribute="width" multiplier="0.6" id="ANM-eV-h5k"/>
-                                    <constraint firstAttribute="trailing" secondItem="dm0-uo-IfV" secondAttribute="trailing" constant="40" id="i61-5T-T1d"/>
-                                    <constraint firstItem="fLS-kD-P95" firstAttribute="top" secondItem="Qfw-EP-IMI" secondAttribute="top" constant="150" id="isL-Xr-l5F" customClass="TopEmptyViewConstraint" customModule="groma" customModuleProvider="target"/>
+                                    <constraint firstAttribute="trailing" secondItem="dm0-uo-IfV" secondAttribute="trailing" constant="20" id="i61-5T-T1d"/>
+                                    <constraint firstItem="fLS-kD-P95" firstAttribute="top" secondItem="Qfw-EP-IMI" secondAttribute="top" constant="150" id="isL-Xr-l5F" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
+                                                <real key="value" value="59"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
+                                                <real key="value" value="109"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
+                                                <real key="value" value="159"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </constraint>
                                     <constraint firstItem="dm0-uo-IfV" firstAttribute="top" secondItem="9Fg-gJ-nkw" secondAttribute="bottom" constant="8" id="jt8-ff-Uni"/>
                                     <constraint firstItem="9Fg-gJ-nkw" firstAttribute="centerX" secondItem="Qfw-EP-IMI" secondAttribute="centerX" id="kqK-3u-Vbb"/>
-                                    <constraint firstItem="dm0-uo-IfV" firstAttribute="leading" secondItem="Qfw-EP-IMI" secondAttribute="leading" constant="40" id="x2p-1a-uYV"/>
+                                    <constraint firstItem="dm0-uo-IfV" firstAttribute="leading" secondItem="Qfw-EP-IMI" secondAttribute="leading" constant="20" id="x2p-1a-uYV"/>
                                     <constraint firstItem="fLS-kD-P95" firstAttribute="centerX" secondItem="Qfw-EP-IMI" secondAttribute="centerX" id="xQW-lE-Wyj"/>
                                     <constraint firstItem="9Fg-gJ-nkw" firstAttribute="top" secondItem="fLS-kD-P95" secondAttribute="bottom" constant="20" id="z8Z-HB-R2B"/>
                                 </constraints>
@@ -1179,7 +1191,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LCT-3P-whg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1210" y="2325"/>
+            <point key="canvasLocation" x="-1210.4000000000001" y="2324.8875562218891"/>
         </scene>
         <!--History-->
         <scene sceneID="x0r-cA-6dN">
