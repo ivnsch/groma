@@ -356,6 +356,8 @@ empty_inventory_line1 = "Hoppla! Es gibt noch keine Items";
 empty_inventory_line2 = "Tappe um welche hinzuzufügen\noder kaufe sie im Einkaufswagen!";
 empty_group_line1 = "Hoppla! Es gibt noch keine Items";
 empty_group_line2 = "Tappe um Items hinzuzufügen!";
+empty_recipe_line1 = "Hoppla! Es gibt keine Zutaten";
+empty_recipe_line2 = "Tappe um welche hinzuzufügen";
 
 generic_login = "Einloggen";
 generic_color = "Farbe";

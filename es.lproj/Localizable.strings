@@ -357,7 +357,8 @@ empty_inventory_line1 = "Tu inventario está vacío";
 empty_inventory_line2 = "Para agregar ítems,\nusa \"comprar\" en el carrito.";
 empty_group_line1 = "Tu grupo está vacío";
 empty_group_line2 = "Pulsa para agregar ítems";
-
+empty_recipe_line1 = "Tu receta no tiene ingredientes";
+empty_recipe_line2 = "Pulsa para agregar";
 
 generic_login = "Sesión";
 generic_color = "Color";
