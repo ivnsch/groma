@@ -16,6 +16,7 @@ protocol QuickAddDelegate: class {
     
     func onAddItem(_ item: Item) // Maybe remove this - now that we have onAddIngredient it's not necessarily. We currently don't add only items anywhere.
     func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) // only used with item type .ingredient
+    var ingredientCellAnimationNameLabelTargetX: CGFloat { get }
 
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) // TODO!!!!!!!!!!!!!! remove (from origin)
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickAddController: QuickAddViewController)
@@ -53,7 +54,13 @@ extension QuickAddDelegate {
         return 0
     }
 
+    // Optional - only for ingredients.
     func onAddedIngredientsSubviews() {
+    }
+
+    // Optional - only for ingredients. -1 is not used
+    var ingredientCellAnimationNameLabelTargetX: CGFloat {
+        return -1
     }
 }
 
@@ -350,6 +357,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) {
         delegate?.onAddIngredient(item: item, ingredientInput: ingredientInput)
+    }
+
+    var ingredientCellAnimationNameLabelTargetX: CGFloat {
+        return delegate?.ingredientCellAnimationNameLabelTargetX ?? {
+            logger.w("No delegate!, returning -1 label target x", .ui)
+            return -1
+        } ()
     }
     
     func onCloseQuickAddTap() {

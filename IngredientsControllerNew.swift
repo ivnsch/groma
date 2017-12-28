@@ -84,6 +84,9 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
 
     fileprivate(set) var scrollableBottomAttacher: ScrollableBottomAttacher<IngredientDataController>?
 
+    fileprivate(set) var placeHolderItem: (indexPath: IndexPath, item: Ingredient)?
+    fileprivate let placeholderIdentifier = "placeholder"
+
     override var tableView: UITableView {
         return tableViewController.tableView
     }
@@ -319,9 +322,10 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                 let indexPath = IndexPath(row: finalItemIndex, section: 0)
                 
                 if addedItem.isNew {
-                    weakSelf.tableView.insertRows(at: [indexPath], with: Theme.defaultRowAnimation)
-                    weakSelf.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-                    
+                    self?.placeHolderItem = (indexPath: indexPath, item: addedItem.ingredient)
+                    self?.tableView.insertRows(at: [indexPath], with: Theme.defaultRowAnimation)
+                    self?.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+
                     weakSelf.updateLargestLeftSideWidth()
                     
                     if let cells = weakSelf.tableView.visibleCells as? [IngredientCell] {
@@ -481,7 +485,16 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         super.onAddedIngredientsSubviews()
         view.bringSubview(toFront: topBar)
     }
-    
+
+    override var ingredientCellAnimationNameLabelTargetX: CGFloat {
+        return maxLeftSideWidth
+    }
+
+    override func onFinishAddCellAnimation(addedItem: AnyObject) {
+        placeHolderItem = nil
+        tableView.reloadData()
+    }
+
     // MARK: - private
     
     // Inserts item in table view, considering the current sortBy
@@ -885,6 +898,11 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
             explanationView.imageView.startAnimating()
             return cell
             
+        } else if let placeHolderItem = placeHolderItem, placeHolderItem.indexPath == indexPath {
+            let cell = tableView.dequeueReusableCell(withIdentifier: placeholderIdentifier) as! PlaceHolderItemCell
+            cell.categoryColorView.backgroundColor = placeHolderItem.item.item.category.color
+            return cell
+
         } else if (itemsResult.map { $0.count == indexPath.row } ?? false) { // Recipe text cell
             if isEditing {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "recipeTextView", for: indexPath) as! RecipeEditableTextCell

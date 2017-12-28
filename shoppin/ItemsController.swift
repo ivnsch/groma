@@ -397,7 +397,11 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
 
     func onAddedIngredientsSubviews() {
     }
-    
+
+    var ingredientCellAnimationNameLabelTargetX: CGFloat {
+        return -1 // Optional override - only used in ingredients
+    }
+
     // MARK: - ExpandableTopViewControllerDelegate
     
     func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {

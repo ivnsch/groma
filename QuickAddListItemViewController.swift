@@ -22,8 +22,7 @@ protocol QuickAddListItemDelegate: class {
     
     func onAddItem(_ item: Item)
 
-    func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs)
-    
+
     func onAddGroup(_ group: ProductGroup)
     func onAddRecipe(ingredientModels: [AddRecipeIngredientModel], quickListController: QuickAddListItemViewController)
     func getAlreadyHaveText(ingredient: Ingredient, _ handler: @escaping (String) -> Void)
@@ -32,7 +31,10 @@ protocol QuickAddListItemDelegate: class {
     func onHasItems(_ hasItems: Bool)
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
 
-    func onAddedIngredientsSubviews() // Ingredients screen specific
+    // Ingredients screen specific
+    func onAddedIngredientsSubviews()
+    var ingredientCellAnimationNameLabelTargetX: CGFloat { get }
+    func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs)
 
     func parentViewForAddButton() -> UIView?
     
@@ -302,9 +304,24 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     fileprivate func animateItemToCell(indexPath: IndexPath, quantifiableProduct: QuantifiableProduct, quantity: Float) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? QuickAddItemCell else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
-        guard let windowMaybe = UIApplication.shared.delegate?.window, let window = windowMaybe else {logger.e("No window: can't animate cell"); return}
-        
+
         let copy = cell.copyCell(quantifiableProduct: quantifiableProduct, quantity: quantity)
+        let categoryColorViewWidth: CGFloat = 4
+        let targetNameLabelX = DimensionsManager.leftRightPaddingConstraint + categoryColorViewWidth
+        animateItemToCell(indexPath: indexPath, addedItem: quantifiableProduct, copy: copy, targetFrameX: categoryColorViewWidth, targetNameLabelX: targetNameLabelX, targetFrameHeight: DimensionsManager.defaultCellHeight)
+    }
+
+    fileprivate func animateItemToCell(indexPath: IndexPath, ingredient: Item, targetNameLabelX: CGFloat) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? QuickAddItemCell else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
+
+        let copy = cell.copyCell(ingredient: ingredient)
+        animateItemToCell(indexPath: indexPath, addedItem: ingredient, copy: copy, targetFrameX: 0, targetNameLabelX: targetNameLabelX, targetFrameHeight: DimensionsManager.ingredientsCellHeight)
+    }
+
+    fileprivate func animateItemToCell(indexPath: IndexPath, addedItem: AnyObject, copy: UIView & QuickAddItemAnimatableCellCopy, targetFrameX: CGFloat, targetNameLabelX: CGFloat, targetFrameHeight: CGFloat) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? QuickAddItemCell else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
+        guard let windowMaybe = UIApplication.shared.delegate?.window, let window = windowMaybe else {logger.e("No window: can't animate cell"); return}
+
         let cellPointInWindow = window.convert(cell.center, from: collectionView)
         window.addSubview(copy)
         copy.center = cellPointInWindow
@@ -313,11 +330,11 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         let quickAddFrameRelativeToWindow = window.convert(view.frame, from: view.superview!)
         
         let categoryColorViewWidth: CGFloat = 4
-        
-        let targetCellFrame = CGRect(x: categoryColorViewWidth, y: quickAddFrameRelativeToWindow.maxY + (delegate?.offsetForAddCellAnimation ?? 0), width: view.width - categoryColorViewWidth, height: DimensionsManager.defaultCellHeight)
-        
-        copy.animateAddToList(targetFrame: targetCellFrame) {[weak self] in
-            self?.delegate?.onFinishAddCellAnimation(addedItem: quantifiableProduct)
+
+        let targetCellFrame = CGRect(x: targetFrameX, y: quickAddFrameRelativeToWindow.maxY + (delegate?.offsetForAddCellAnimation ?? 0), width: view.width - categoryColorViewWidth, height: targetFrameHeight)
+
+        copy.animateAddToList(targetFrame: targetCellFrame, targetNameLabelX: targetNameLabelX) {[weak self] in
+            self?.delegate?.onFinishAddCellAnimation(addedItem: addedItem)
         }
     }
 
@@ -519,7 +536,14 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             self?.topControllersDelegate?.restoreKeyboard()
             if let scrollableBottomAttacher = weakSelf.scrollableBottomAttacher {
                 self?.scrollableBottomAttacher?.bottom.removeSubmitButton {}
-                removeScrollableBottomAttacher(scrollableBottomAttacher, onFinish: {})
+                removeScrollableBottomAttacher(scrollableBottomAttacher, onFinish: { [weak self] in guard let weakSelf = self else { return }
+                    // After remove bottom animation finishes, animate the collection item cell to the ingredients table view
+                    if let targetNameLabelX = weakSelf.delegate?.ingredientCellAnimationNameLabelTargetX {
+                        weakSelf.animateItemToCell(indexPath: indexPath, ingredient: item, targetNameLabelX: targetNameLabelX)
+                    } else {
+                        logger.e("No delegate! Can't animate to cell.", .ui)
+                    }
+                })
             } else {
                 logger.e("Invalid state - submitted an item using bottom - bottom should be attached!", .ui)
             }

@@ -61,19 +61,25 @@ class QuickAddItemCell: UICollectionViewCell {
     func copyCell(quantifiableProduct: QuantifiableProduct, quantity: Float) -> QuickAddItemCellAnimatableCopy {
         return QuickAddItemCellAnimatableCopy(cell: self, quantifiableProduct: quantifiableProduct, quantity: quantity)
     }
+
+    func copyCell(ingredient: Item) -> QuickAddIngredientCellAnimatableCopy {
+        return QuickAddIngredientCellAnimatableCopy(cell: self, item: ingredient)
+    }
 }
 
+protocol QuickAddItemAnimatableCellCopy {
+    func animateAddToList(targetFrame: CGRect, targetNameLabelX: CGFloat, onFinish: @escaping () -> Void)
+}
 
-
-class QuickAddItemCellAnimatableCopy: UIView {
+class QuickAddItemCellAnimatableCopy: UIView, QuickAddItemAnimatableCellCopy {
     
-    var nameLabel: UILabel!
-    var brandLabel: UILabel!
-    var baseLabel: UILabel!
-    var quantityLabel: UILabel!
+    fileprivate var nameLabel: UILabel!
+    fileprivate var brandLabel: UILabel!
+    fileprivate var baseLabel: UILabel!
+    fileprivate var quantityLabel: UILabel!
     
-    var overlay: UIView!
-    var baseQuantityLabel: UILabel!
+    fileprivate var overlay: UIView!
+    fileprivate var baseQuantityLabel: UILabel!
     
     
     init(cell: QuickAddItemCell, quantifiableProduct: QuantifiableProduct, quantity: Float) {
@@ -154,7 +160,7 @@ class QuickAddItemCellAnimatableCopy: UIView {
         return quantityView.quantityLabel.frame.size
     }
     
-    func animateAddToList(targetFrame: CGRect, onFinish: @escaping () -> Void) {
+    func animateAddToList(targetFrame: CGRect, targetNameLabelX: CGFloat, onFinish: @escaping () -> Void) {
         nameLabel.frame.origin = CGPoint(x: 0, y: 0) // TODO what's this for ?
 
         // Fix for: small jump of label position after animation finishes (i.e. there's a delta between the final animated label and the cell's label).
@@ -174,7 +180,8 @@ class QuickAddItemCellAnimatableCopy: UIView {
             
             let categoryColorViewWidth: CGFloat = 0
             self.nameLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
-            self.nameLabel.frame.origin.x = DimensionsManager.leftRightPaddingConstraint + categoryColorViewWidth
+//            self.nameLabel.frame.origin.x = DimensionsManager.leftRightPaddingConstraint + categoryColorViewWidth
+            self.nameLabel.frame.origin.x = targetNameLabelX
             self.nameLabel.center.y = DimensionsManager.defaultCellHeight / 2
             self.nameLabel.textColor = Theme.black
             
@@ -199,4 +206,93 @@ class QuickAddItemCellAnimatableCopy: UIView {
     }
     
     
+}
+
+
+
+class QuickAddIngredientCellAnimatableCopy: UIView, QuickAddItemAnimatableCellCopy {
+
+    fileprivate var nameLabel: UILabel!
+    fileprivate var unitLabel: UILabel!
+    fileprivate var fractionLabel: UILabel!
+    fileprivate var quantityLabel: UILabel!
+
+    fileprivate var overlay: UIView!
+    fileprivate var baseQuantityLabel: UILabel!
+
+
+    init(cell: QuickAddItemCell, item: Item) {
+
+        super.init(frame: cell.frame)
+
+        layer.cornerRadius = cell.contentView.layer.cornerRadius
+        backgroundColor = cell.contentView.backgroundColor
+
+        let nameLabel = UILabel()
+        nameLabel.text = cell.nameLabel.text
+        nameLabel.frame = cell.nameLabel.frame
+        //        nameLabel.font = cell.nameLabel.font
+        nameLabel.font = UIFont.systemFont(ofSize: LabelMore.mapToFontSize(50) ?? 20)
+
+
+        nameLabel.textColor = cell.nameLabel.textColor
+        addSubview(nameLabel)
+        self.nameLabel = nameLabel
+        nameLabel.sizeToFit()
+
+        // anchor at the left so it will scale only to the right
+        _ = nameLabel.setAnchorWithoutMoving(CGPoint(x: 0, y: nameLabel.layer.anchorPoint.y))
+
+        let scale: CGFloat = 0.7
+
+        self.nameLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
+
+        addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.ingredientsCellHeight)
+
+
+        let overlay = UIView(frame: bounds)
+        addSubview(overlay)
+        self.overlay = overlay
+        overlay.backgroundColor = UIColor.clear
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
+    func animateAddToList(targetFrame: CGRect, targetNameLabelX: CGFloat, onFinish: @escaping () -> Void) {
+        nameLabel.frame.origin = CGPoint(x: 0, y: 0) // TODO what's this for ?
+
+        anim(0.3, {
+            self.frame = targetFrame
+            self.overlay.frame = targetFrame.bounds
+            self.layer.cornerRadius = 0
+
+            self.backgroundColor = UIColor.white
+            self.overlay.backgroundColor = UIColor.black.withAlphaComponent(Theme.topControllerOverlayAlpha)
+            //                    copy.frame.origin = CGPoint(x: 0, y: quickAddFrameRelativeToWindow.maxY)
+
+            let scale: CGFloat = 1
+
+            let categoryColorViewWidth: CGFloat = 0
+            self.nameLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
+//            self.nameLabel.frame.origin.x = DimensionsManager.leftRightPaddingConstraint + categoryColorViewWidth
+            self.nameLabel.frame.origin.x = targetNameLabelX
+            self.nameLabel.center.y = DimensionsManager.ingredientsCellHeight / 2
+            self.nameLabel.textColor = Theme.black
+
+        }, onFinish: {
+            delay(0.1) {
+                self.removeFromSuperview()
+                onFinish()
+            }
+        })
+    }
+
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+
 }
