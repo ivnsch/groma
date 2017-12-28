@@ -107,7 +107,7 @@ class AddRecipeIngredientCell: UITableViewCell {
     }
 
     func showSummary(unitId: UnitId, unitName: String, base: Float, quantity: Float) {
-        let summary = Ingredient.quantityFullText(quantity: quantity, baseQuantity: base, unitId: unitId, unitName: unitName)
+        let summary = Ingredient.quantityFullText(quantity: quantity, baseQuantity: base, unitId: unitId, unitName: unitName, showNoneUnitName: true)
         quantitySummaryValueLabel.text = summary
     }
 

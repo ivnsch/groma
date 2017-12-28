@@ -190,7 +190,7 @@ public final class Ingredient: Object {
         return quantityFullText(quantity: quantity, baseQuantity: baseQuantity, unitId: unit?.id, unitName: unit?.name ?? "")
     }
 
-    public static func quantityFullText(quantity: Float, baseQuantity: Float, unitId: UnitId?, unitName: String) -> String {
+    public static func quantityFullText(quantity: Float, baseQuantity: Float, unitId: UnitId?, unitName: String, showNoneUnitName: Bool = false) -> String {
 
         let noneUnitName = quantity > 1 ? trans("recipe_unit_plural") : trans("recipe_unit_singular")
 
@@ -200,7 +200,10 @@ public final class Ingredient: Object {
         } ?? false /* false: if there's no unit, unit is none -> none has no base */ && baseQuantity > 1
 
         let baseText = showBaseQuantity ? " x \(baseQuantity.quantityString)" : ""
-        let unitText = unitId.map{$0 == .none ? noneUnitName : unitName} ?? noneUnitName
+        var unitText = unitId.map{$0 == .none ? noneUnitName : unitName} ?? noneUnitName
+        if !showNoneUnitName && unitText == noneUnitName {
+            unitText = ""
+        }
         let baseAndUnitTextSeparator = baseText.isEmpty && unitText.isEmpty ? "" : " "
         let baseAndUnitText = "\(baseText)\(baseAndUnitTextSeparator)\(unitText)"
         let afterQuantity = baseAndUnitText.isEmpty ? "" : "\(baseAndUnitText)"
