@@ -69,6 +69,7 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
             if let tableViewListItem = tableViewListItem {
                 quantityView.quantity = shownQuantity
                 quantityView.quantityText = String("\(tableViewListItem.product.product.quantityWithMaybeUnitText(quantity: shownQuantity))")
+                quantityView.invalidateIntrinsicContentSize()
             }
         }
     }
