@@ -37,20 +37,10 @@
                         <action selector="onBoldTapWith_sender:" destination="iN0-l3-epB" eventType="touchUpInside" id="wgm-uX-HqR"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSi-IK-QxJ">
-                    <rect key="frame" x="0.0" y="76" width="375" height="1"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="1" id="4G3-TS-kfU"/>
-                    </constraints>
-                </view>
             </subviews>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="GRk-KD-Bt3" secondAttribute="trailing" constant="20" id="W3b-NG-pbv"/>
-                <constraint firstItem="sSi-IK-QxJ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="e0i-sQ-cM3"/>
                 <constraint firstItem="GRk-KD-Bt3" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="jfo-uB-5kj"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="sSi-IK-QxJ" secondAttribute="trailing" id="pk0-r4-7Ic"/>
-                <constraint firstAttribute="bottom" secondItem="sSi-IK-QxJ" secondAttribute="bottom" id="zfn-Uv-7aJ"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
