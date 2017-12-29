@@ -152,10 +152,10 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                     weakSelf.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
                     weakSelf.tableView.endUpdates()
                     
-                    // TODO close only when receiving own notification, not from someone else (possible?)
-                    weakSelf.topAddEditListControllerManager?.expand(false)
-                    weakSelf.setTopBarState(.normalFromExpanded)
-                    
+//                    // TODO close only when receiving own notification, not from someone else (possible?)
+//                    weakSelf.topAddEditListControllerManager?.expand(false)
+//                    weakSelf.setTopBarState(.normalFromExpanded)
+
                     
                 case .error(let error):
                     // An error occurred while opening the Realm file on the background worker thread
