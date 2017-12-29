@@ -484,6 +484,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     func endEditing() {
         view.endEditing(true)
     }
+
+    func focusSearchBar() {
+        searchBar.becomeFirstResponder()
+    }
     
     // Not using plan for now
 //    func planItem(productName: String, handler: PlanItem? -> ()) {

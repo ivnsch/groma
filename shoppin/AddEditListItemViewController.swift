@@ -29,6 +29,8 @@ protocol AddEditListItemViewControllerDelegate: class {
     func onRemovedBrand(_ name: String)
 
     func endEditing()
+    func focusSearchBar()
+
 //    func productNameAutocompletions(text: String, handler: [String] -> Void)
 //    func sectionNameAutocompletions(text: String, handler: [String] -> Void)
 //    func storeNameAutocompletions(text: String, handler: [String] -> Void)
@@ -366,14 +368,26 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         // Parent is expected to be list items controller
         guard let parent = self.parent?.parent?.parent else { logger.e("No parent! Can't show popup"); return }
         guard let unitBaseView = productQuantityController?.unitWithBaseView else { logger.e("No unit base view! Can't show popup"); return }
-        guard let tabBarHeight = tabBarController?.tabBar.height else { logger.e("No tabbar!"); return }
 
-//        let height = parent.view.height - Theme.navBarHeight
         let height = parent.view.height - Theme.navBarHeight
         let popupFrame = CGRect(x: parent.view.x, y: Theme.navBarHeight, width: parent.view.width, height: height)
         let popup = MyPopup(parent: parent.view, frame: popupFrame)
         popup.contentCenter = popup.bounds.center
         let controller = SelectUnitAndBaseController(nibName: "SelectUnitAndBaseController", bundle: nil)
+
+        let focusedTextField: UITextField? = {
+            if sectionInput.isFirstResponder {
+                return sectionInput
+            } else if brandInput.isFirstResponder {
+                return brandInput
+            } else if priceInput.isFirstResponder {
+                return priceInput
+            } else if noteInput.isFirstResponder {
+                return noteInput
+            } else {
+                return nil
+            }
+        } ()
 
         delegate?.endEditing()
         dismissKeyboard(nil)
@@ -391,6 +405,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                     unitName: weakSelf.currentUnit,
                     quantity: weakSelf.currentQuantity
                 )
+
+                if let focusedTextField = focusedTextField {
+                    focusedTextField.becomeFirstResponder()
+                } else {
+                    // There must always be a text field focused - if it's none of ours it can be only the search bar
+                    self?.delegate?.focusSearchBar()
+                }
             })
         }
 
