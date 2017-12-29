@@ -835,13 +835,17 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             if
                 let controller = recipeControllerAnimator?.controller,
                 let addRecipeController = controller as? AddRecipeController {
-                addRecipeController.closeAddedNonChildren()
+                let anyChildWasShowing = addRecipeController.closeAddedNonChildren()
+
+                // Allow to close only the unit/base popup
+                // So if unit/base popup is open: first x -> close unit/base popup, second x -> close add recipe controller, third x -> close quick add
+                if !anyChildWasShowing {
+                    recipeControllerAnimator?.close()
+                }
             } else {
                 logger.e("No controller / couldn't be casted", .ui)
             }
 
-            recipeControllerAnimator?.close()
-            
             isAnyShowing = true
         }
 

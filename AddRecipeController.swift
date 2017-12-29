@@ -42,10 +42,13 @@ class AddRecipeController: UIViewController {
     }
 
     // Close any added views to superviews of this controller (e.g. popups)
-    func closeAddedNonChildren() {
+    // Returns if any was showing
+    func closeAddedNonChildren() -> Bool {
+        var anyWasShowing = unitBasePopup != nil
         unitBasePopup?.hide(onFinish: { [weak self] in
             self?.unitBasePopup = nil
         })
+        return anyWasShowing
     }
 
     override func viewDidLoad() {
