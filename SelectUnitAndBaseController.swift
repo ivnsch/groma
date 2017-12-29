@@ -65,6 +65,7 @@ class SelectUnitAndBaseController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.register(UINib(nibName: "IngredientDataSubHeaderCell", bundle: nil), forCellReuseIdentifier: "subHeaderCell")
         tableView.register(UINib(nibName: "AddNewItemInputCell", bundle: nil), forCellReuseIdentifier: "inputCell")
+        tableView.keyboardDismissMode = .onDrag
     }
 
     fileprivate func configUnitsManager() {

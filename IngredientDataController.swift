@@ -72,6 +72,9 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.register(UINib(nibName: "IngredientDataSubHeaderCell", bundle: nil), forCellReuseIdentifier: "subHeaderCell")
         tableView.register(UINib(nibName: "AddNewItemInputCell", bundle: nil), forCellReuseIdentifier: "unitInputCell")
+
+        tableView.keyboardDismissMode = .onDrag
+
         unitsManager.configure(controller: self, onSelectItem: { [weak self] unit in
             self?.inputs.unit = unit
             delay(0.2) { [weak self] in // make it less abrubt

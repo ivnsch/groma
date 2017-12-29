@@ -120,6 +120,7 @@ class AddRecipeController: UIViewController {
     fileprivate func initTableView() {
         tableView.register(UINib(nibName: "AddRecipeIngredientCell", bundle: nil), forCellReuseIdentifier: "cell")
         tableView.bottomInset = Theme.submitViewHeight
+        tableView.keyboardDismissMode = .onDrag
     }
 
     fileprivate func initSubmitView() {
@@ -340,7 +341,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
                           selectedBaseQuantity: cellState.baseQuantity)
 
         view.endEditing(true)
-        
+
         popup.show(from: baseUnitView)
     }
 
