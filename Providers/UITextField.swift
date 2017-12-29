@@ -63,4 +63,18 @@ extension UITextField {
     public func setPlaceholderWithColor(_ placeholder: String, color: UIColor) {
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedStringKey.foregroundColor: color])
     }
+
+    public var cursorPosition: Int? {
+        if let selectedRange = selectedTextRange {
+            return offset(from: beginningOfDocument, to: selectedRange.start)
+        } else {
+            return nil
+        }
+    }
+
+    public func moveCursor(to: Int) {
+        if let newPosition = position(from: beginningOfDocument, offset: to) {
+            selectedTextRange = textRange(from: newPosition, to: newPosition)
+        }
+    }
 }

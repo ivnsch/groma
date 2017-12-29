@@ -296,6 +296,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         initAutocompletionTextFields()
         
         priceInput.delegate = self
+        priceInput.addTarget(self, action: #selector(priceInputDidChange(_:)), for: .editingChanged)
 
         sectionColorButton.textColor = UIColor.gray
         sectionColorButton.text = trans("generic_color") // string from storyboard localization doesn't work, seems to be xcode bug
@@ -315,7 +316,74 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         initGlobalTap()
     }
-    
+
+    fileprivate func getNumberStringFromCurrencyString(string: String) -> String? {
+
+        let pat = "\\d+([\\.|\\,]?\\d*)"
+        let regex = try! NSRegularExpression(pattern: pat, options: [])
+        let result = regex.matches(in: string, options: [], range: NSRange(location: 0, length: string.count))
+
+        if let result = result.first {
+            if let range = Range(result.range, in: string) {
+                let numberString = string[range]
+                return String(numberString)
+            }
+        }
+
+        return nil
+    }
+
+    fileprivate func getCurrencySymbolResult(string: String) -> NSTextCheckingResult? {
+        let currencySymbolPattern = "[^0-9|\\.|\\s]"
+        let currencySymbolRegex = try! NSRegularExpression(pattern: currencySymbolPattern, options: [])
+        let currencySymbolResult = currencySymbolRegex.matches(in: string, options: [], range: NSRange(location: 0, length: string.count))
+        return currencySymbolResult.first
+    }
+
+    @objc func priceInputDidChange(_ sender: UITextField) {
+
+        guard let currentInputText = priceInput.text else { return }
+
+        guard let numberString = getNumberStringFromCurrencyString(string: currentInputText) else {
+            logger.e("Couldn't get number string from: \(currentInputText)", .ui)
+            return
+        }
+        guard let textWithCurrency = numberString.floatValue?.toLocalCurrencyString() else {
+            logger.e("Couldn't get textWithCurrency from: \(numberString)", .ui)
+            return
+        }
+
+        let currencySymbolResult = getCurrencySymbolResult(string: currentInputText)
+        let hasCurrencySymbolAlready = currencySymbolResult != nil
+        let currentCursorPosition = priceInput.cursorPosition
+
+        if let currentCursorPosition = currentCursorPosition {
+            let currencySymbolResult = getCurrencySymbolResult(string: textWithCurrency)
+
+            if let currencySymbolResult = currencySymbolResult {
+
+                let currencyIsLeading = currencySymbolResult.range.location == 0
+
+                if let range = Range(currencySymbolResult.range, in: textWithCurrency) {
+                    let currencySymbol = String(textWithCurrency[range])
+                    let newText = (currencyIsLeading ? currencySymbol : "") + numberString + (currencyIsLeading ? "" : currencySymbol)
+                    priceInput.text = newText
+                }
+                let currencySymbolPosition = currencySymbolResult.range.location
+
+                let updatedCursorPosition = currentCursorPosition > currencySymbolPosition ?
+                    (hasCurrencySymbolAlready ? currentCursorPosition : currentCursorPosition + 1) : currentCursorPosition
+
+                priceInput.moveCursor(to: updatedCursorPosition)
+
+            } else {
+                logger.e("Couldn't get currencySymbolResult. String: \(textWithCurrency)", .ui)
+            }
+        } else {
+            logger.e("Couldn't get current cursor position. Selected range: \(String(describing: priceInput.selectedTextRange))", .ui)
+        }
+    }
+
     fileprivate func initGlobalTap() {
         let tap = UITapGestureRecognizer()
         tap.cancelsTouchesInView = false
@@ -505,7 +573,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         productQuantityController?.quantity = item.quantity
         
         let price = item.storeProduct?.price ?? 0
-        priceInput.text = price > 0 ? price.toString(2) : ""
+        priceInput.text = price.toLocalCurrencyString()
         noteInput.text = item.note
         // TODO!!!!!!!!!!!!!!! quantifiable product - unit?
         
@@ -602,7 +670,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }
             
-            let price: Float = priceInput.text?.floatValue ?? 0
+            let price: Float = (priceInput.text.flatMap {
+                self.getNumberStringFromCurrencyString(string: $0)
+            })?.floatValue ?? 0
             
             if let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
                 

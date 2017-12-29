@@ -24,10 +24,15 @@ public extension String {
         return trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
-    // TODO!!!!!!!!!!!!!!!!!!!!!!!! on device (english) float value of e.g. 500.0 or 1.0 returns nil. Probably locale doesn't accept this separator.
     public var floatValue: Float? {
+        // Accepts , and . as separator
+        return floatValueWithSeparator(separator: ".") ?? floatValueWithSeparator(separator: ",")
+    }
+
+    fileprivate func floatValueWithSeparator(separator: String) -> Float? {
         let formatter = NumberFormatter()
         formatter.isLenient = true
+        formatter.decimalSeparator = separator
         return formatter.number(from: self)?.floatValue
     }
     

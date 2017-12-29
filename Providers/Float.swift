@@ -15,6 +15,9 @@ public extension Float {
         let f = NumberFormatter()
         f.numberStyle = .currency
         f.locale = Locale.current
+        f.minimumFractionDigits = 0
+        f.maximumFractionDigits = 2
+        f.currencySymbol = Locale.current.currencySymbol
         return f
     }()
 
