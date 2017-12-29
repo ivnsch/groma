@@ -155,4 +155,21 @@ extension UITableView {
     func deleteSection(index: Int) {
         deleteSections(IndexSet([index]), with: .top)
     }
+
+    // This was originally only for autogrow textview in table view, but it turned out to help also to toggle footer visibility
+    // without calling reloadData() - reloadData() in this case would take away the focus of the textfield (also when calling
+    // becomeFirstResponder after it). Maybe helps also for other situations.
+    // Src: http://candycode.io/self-sizing-uitextview-in-a-uitableview-using-auto-layout-like-reminders-app/
+    func updateWithoutReloadData() {
+        // Content offset and disable animations is to avoid jumps with begin/end updates
+        let currentOffset = contentOffset
+        UIView.setAnimationsEnabled(false)
+
+        // This is necessary for the cell to adjust to the textview's size
+        beginUpdates()
+        endUpdates()
+
+        UIView.setAnimationsEnabled(true)
+        setContentOffset(currentOffset, animated: false)
+    }
 }

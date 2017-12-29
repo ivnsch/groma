@@ -52,6 +52,8 @@
 		6A287EA31E55DD3D00868244 /* ManageDatabaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287EA21E55DD3D00868244 /* ManageDatabaseController.swift */; };
 		6A287EA71E55E2EF00868244 /* ManageItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A287EA61E55E2EF00868244 /* ManageItemsController.swift */; };
 		6A287EAB1E55E3BE00868244 /* ManageItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A287EAA1E55E3BE00868244 /* ManageItems.storyboard */; };
+		6A28ADB31FF6669E00C1F4BA /* IngredientsEditModeTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A28ADB21FF6669E00C1F4BA /* IngredientsEditModeTableViewFooter.swift */; };
+		6A28ADB51FF6670000C1F4BA /* IngredientsEditModeTableViewFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A28ADB41FF6670000C1F4BA /* IngredientsEditModeTableViewFooter.xib */; };
 		6A2D506B1E3F5D0300B0F7EA /* ListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */; };
 		6A2D506D1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */; };
 		6A2D506F1E3F611F00B0F7EA /* ListItemCellNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */; };
@@ -551,6 +553,8 @@
 		6A287EA21E55DD3D00868244 /* ManageDatabaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageDatabaseController.swift; sourceTree = "<group>"; };
 		6A287EA61E55E2EF00868244 /* ManageItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageItemsController.swift; sourceTree = "<group>"; };
 		6A287EAA1E55E3BE00868244 /* ManageItems.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItems.storyboard; sourceTree = "<group>"; };
+		6A28ADB21FF6669E00C1F4BA /* IngredientsEditModeTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsEditModeTableViewFooter.swift; sourceTree = "<group>"; };
+		6A28ADB41FF6670000C1F4BA /* IngredientsEditModeTableViewFooter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IngredientsEditModeTableViewFooter.xib; sourceTree = "<group>"; };
 		6A2D506A1E3F5D0300B0F7EA /* ListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A2D506C1E3F5D3700B0F7EA /* ListItemsTableViewControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsTableViewControllerNew.swift; sourceTree = "<group>"; };
 		6A2D506E1E3F611F00B0F7EA /* ListItemCellNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellNew.swift; sourceTree = "<group>"; };
@@ -1295,6 +1299,8 @@
 				6AEB65EB1E4C93620094B9DE /* IngredientsController.storyboard */,
 				6AE548C11FF1236400A72BFE /* RecipeTextCell.swift */,
 				6AE548C51FF1279700A72BFE /* RecipeEditableTextCell.swift */,
+				6A28ADB21FF6669E00C1F4BA /* IngredientsEditModeTableViewFooter.swift */,
+				6A28ADB41FF6670000C1F4BA /* IngredientsEditModeTableViewFooter.xib */,
 			);
 			name = recipes;
 			sourceTree = "<group>";
@@ -2693,6 +2699,7 @@
 				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
 				6AFF38361E89B0D3009AD368 /* ManageDatabase.storyboard in Resources */,
 				6A7E648B1FEABE8B00F75DFD /* UnitWithBaseView.xib in Resources */,
+				6A28ADB51FF6670000C1F4BA /* IngredientsEditModeTableViewFooter.xib in Resources */,
 				EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */,
 				6A278F901E6A663100126F8E /* PlaceHolderItemCell.xib in Resources */,
 				EBD668201CED4EB00055EE0B /* EditableChoiceModal.storyboard in Resources */,
@@ -2955,6 +2962,7 @@
 				EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */,
 				EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */,
 				6A7C54BE1E43F03A00300F8D /* StashListItemsControllerNew.swift in Sources */,
+				6A28ADB31FF6669E00C1F4BA /* IngredientsEditModeTableViewFooter.swift in Sources */,
 				EB21A3001D00A638000C594C /* AboutController.swift in Sources */,
 				EB6E3D131C56D0ED00D65DD5 /* PathButton.swift in Sources */,
 				6AEE5ECB1E720D3300C2A2FB /* EditNameButtonController.swift in Sources */,

@@ -50,8 +50,6 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var topMenusHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var boldButton: UIButton!
-
     fileprivate weak var tableViewController: UITableViewController!
     
     fileprivate var explanationManager: ExplanationManager = ExplanationManager()
@@ -105,6 +103,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     fileprivate var initializedTableViewBottomInset = false
 
+    fileprivate var recipeTextEditIsFocused = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -117,7 +117,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         topSelectIngredientControllerManager = initEditIngredientControllerManager()
         
         tableView.allowsSelectionDuringEditing = true
-        
+        tableView.register(UINib(nibName: "PlaceHolderItemCell", bundle: nil), forCellReuseIdentifier: placeholderIdentifier)
+
         sortBy = (.alphabetic, trans("sort_by_alphabetic"))
         topMenusHeightConstraint.constant = 0
 
@@ -671,7 +672,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
 
         // Switch between editable and non editable cell
         if let itemsResult = itemsResult {
-            tableView.reloadRows(at: [IndexPath(row: itemsResult.count, section: 0)], with: .none)
+            tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
         }
     }
 
@@ -763,8 +764,10 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         recipeText = buildAttributedString()
 
         if let itemsResult = itemsResult {
-            if let cell = tableView.cellForRow(at: IndexPath(row: itemsResult.count, section: 0)) as? RecipeEditableTextCell {
+            if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? RecipeEditableTextCell {
                 cell.recipeTextView.attributedText = recipeText
+            } else {
+                logger.e("Invalid state: editable cell not found!", .ui)
             }
         }
     }
@@ -813,7 +816,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                         updateTextView()
                     } else {
                         // No intersection between the span and the selection - nothing to do (performance - code works correctly also without this)
-                        guard span.nsRange.myIntersection(range: selection).length > 0 else { return }
+                        guard span.nsRange.myIntersection(range: selection).length > 0 else { break }
 
                         let res = span.substract(subrange: selection)
                         switch res {
@@ -861,10 +864,6 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         handler(spans)
     }
 
-    @IBAction func onBoldTap(_ sender: UIButton) {
-        onTapTextViewBold()
-    }
-
     override func openQuickAdd(rotateTopBarButton: Bool, itemToEdit: AddEditItem?) {
         topQuickAddControllerManager?.height = DimensionsManager.quickAddHeight
         super.openQuickAdd(rotateTopBarButton: rotateTopBarButton, itemToEdit: itemToEdit)
@@ -881,9 +880,17 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return itemsCount + (explanationManager.showExplanation ? 1 : 0)
-        return itemsCount + (false ? 1 : 0) + 1 // (+ 1 recipe text row)
+        if section == 0 {
+            return itemsCount + (false ? 1 : 0)
+        } else {
+            return 1 // Recipe text label/textview
+        }
     }
-    
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
 //        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
@@ -903,26 +910,19 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
             cell.categoryColorView.backgroundColor = placeHolderItem.item.item.category.color
             return cell
 
-        } else if (itemsResult.map { $0.count == indexPath.row } ?? false) { // Recipe text cell
+        } else if indexPath.section == 1 { // Recipe text cell
+//        } else if (itemsResult.map { $0.count == indexPath.row } ?? false) { // Recipe text cell
             if isEditing {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "recipeTextView", for: indexPath) as! RecipeEditableTextCell
                 cell.config(recipeText: recipeText, onTextChangeHandler: { [weak self] text in
-                    guard let weakSelf = self else { return }
-                    weakSelf.recipeText = text
-
-                    // Content offset and disable animations is to avoid jumps with begin/end updates, see http://candycode.io/self-sizing-uitextview-in-a-uitableview-using-auto-layout-like-reminders-app/
-                    let currentOffset = weakSelf.tableView.contentOffset
-                    UIView.setAnimationsEnabled(false)
-
-                    // This is necessary for the cell to adjust to the textview's size
-                    weakSelf.tableView.beginUpdates()
-                    weakSelf.tableView.endUpdates()
-
-                    UIView.setAnimationsEnabled(true)
-                    weakSelf.tableView.setContentOffset(currentOffset, animated: false)
+                    self?.recipeText = text
+                    // Autogrow textview / cell
+                    self?.tableView.updateWithoutReloadData()
 
                 }, onTextFocusHandler: { [weak self] focused in
-                    self?.boldButton.setHiddenAnimated(!focused)
+                    self?.recipeTextEditIsFocused = focused
+                    // Toggle footer visibility without reloadData (which takes away focus from text view)
+//                    self?.tableView.updateWithoutReloadData()
 
                 }, selectionChangeHandler: { [weak self] range in
                     self?.currentTextViewSelection = range
@@ -954,7 +954,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
 //        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
         if false && indexPath.row == explanationManager.row { // Explanation cell
             return explanationManager.rowHeight
-        } else if indexPath.row == itemsResult?.count {
+        } else if indexPath.section == 1 {
             return UITableViewAutomaticDimension
         } else {
             return DimensionsManager.ingredientsCellHeight
@@ -962,7 +962,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return itemsResult.map ({ indexPath.row != $0.count }) ?? false // Don't allow to delete recipe text cell
+        return indexPath.section != 1 // Don't allow to delete recipe text cell
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -974,7 +974,27 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
             remove(indexPath, onSuccess: {}, onError: {_ in })
         }
     }
-    
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if isEditing && section == 1 {
+            let footer = IngredientsEditModeTableViewFooter.createView()
+            footer.boldTapHandler = { [weak self] in
+                self?.onTapTextViewBold()
+            }
+            return footer
+        } else {
+            return nil
+        }
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if isEditing && section == 1 {
+            return 50
+        } else {
+            return 0
+        }
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditing {
             if itemsResult.map ({ indexPath.row == $0.count }) ?? false { // Recipe text row
