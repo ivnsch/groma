@@ -154,6 +154,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     // MARK: -
     
     func onClose() {
+        if let addEditListItemViewController = showingController as? AddEditListItemViewController {
+            addEditListItemViewController.closeChildControllers()
+        }
         _ = quickAddListItemViewController?.closeChildControllers()
     }
     

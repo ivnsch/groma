@@ -1088,9 +1088,21 @@ extension AddEditListItemViewController: ProductQuantityControlleDelegate {
     
     // Returns if any child controller was showing (was closed)
     func closeChildControllers() -> Bool {
-        let showingColorPicker = self.showingColorPicker
-        dismissColorPicker(nil)
-        return showingColorPicker != nil
+        var showingAnyChild = false
+
+        if showingColorPicker != nil {
+            dismissColorPicker(nil)
+            showingAnyChild = true
+        }
+
+        if unitBasePopup != nil {
+            showingAnyChild = true
+            unitBasePopup?.hide(onFinish: { [weak self] in
+                self?.unitBasePopup = nil
+            })
+        }
+
+        return showingAnyChild
     }
 }
 
