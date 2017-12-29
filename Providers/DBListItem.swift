@@ -559,9 +559,19 @@ public class ListItem: DBSyncable, Identifiable {
 
         let baseQuantityText = product.product.baseQuantity > 1 ? QuantifiableProduct.baseQuantityNumberFormatter.string(from: NSNumber(value: product.product.baseQuantity))! : ""
         let finalBaseQuantityText = baseQuantityText.isEmpty ? "" : "x \(baseQuantityText)"
-        
-        let unitText = QuantifiableProduct.unitText(unitName: product.product.unit.name, showNoneText: true, pluralUnit: quantity > 1)
-        
+
+        let unitText: String = {
+            if product.product.unit.id == .none {
+                if quantity == 1 {
+                    return trans("unit_unit")
+                } else {
+                    return trans("unit_unit_pl")
+                }
+            } else {
+                return product.product.unit.name
+            }
+        } ()
+
         let unitSeparator = !product.product.unit.name.isEmpty && !baseQuantityText.isEmpty ? " " : ""
         let baseAndUnitText = "\(finalBaseQuantityText)\(unitSeparator)\(unitText)"
         
