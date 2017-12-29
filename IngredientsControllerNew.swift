@@ -283,9 +283,21 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     
     override func closeTopControllers(rotateTopBarButton: Bool) {
-        super.closeTopControllers(rotateTopBarButton: rotateTopBarButton)
-        if topSelectIngredientControllerManager?.expanded ?? false {
-            topSelectIngredientControllerManager?.expand(false)
+
+        func closeTop() {
+            super.closeTopControllers(rotateTopBarButton: rotateTopBarButton)
+            if topSelectIngredientControllerManager?.expanded ?? false {
+                topSelectIngredientControllerManager?.expand(false)
+            }
+        }
+
+        if let scrollableBottomAttacher = scrollableBottomAttacher {
+            scrollableBottomAttacher.removeBottom(onFinish: { [weak self] in
+                closeTop()
+                self?.scrollableBottomAttacher = nil
+            })
+        } else {
+            closeTop()
         }
     }
     
