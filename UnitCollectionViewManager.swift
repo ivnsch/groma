@@ -90,6 +90,11 @@ class UnitsDataSourceNew: UnitOrBaseDataSource<Providers.Unit> {
 //        cell.unitView.nameLabel.center = cell.unitView.center
         //            cell.setNeedsLayout()
 
+
+        // To center label horizontally in some cases - see note in UnitView.layoutSubviews
+        cell.unitView.setNeedsLayout()
+        cell.unitView.layoutIfNeeded()
+
         return cell
     }
 }

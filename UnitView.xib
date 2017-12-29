@@ -73,8 +73,9 @@
             <constraints>
                 <constraint firstItem="QnG-vO-t6P" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="66s-0e-Fhd"/>
                 <constraint firstItem="ryC-S6-2RO" firstAttribute="top" secondItem="QnG-vO-t6P" secondAttribute="bottom" constant="2" id="FhO-Q7-C75"/>
-                <constraint firstItem="ryC-S6-2RO" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ZIM-9r-cH6"/>
                 <constraint firstItem="QnG-vO-t6P" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="kqU-8F-dDn"/>
+                <constraint firstAttribute="trailing" secondItem="ryC-S6-2RO" secondAttribute="trailing" constant="2.5" id="rOD-4m-stF"/>
+                <constraint firstItem="ryC-S6-2RO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="2.5" id="rPU-2w-MnQ"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="-25.5" y="-247.5"/>

@@ -59,6 +59,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         inputs.unit = unit
         inputs.whole = whole
         inputs.fraction = fraction
+        unitsManager.reload()
         tableView.reloadData()
     }
 

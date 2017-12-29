@@ -93,6 +93,13 @@ protocol UnitViewDelegate {
         view.backgroundColor = UIColor.clear
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        // For some reason calling reloadData (at least from IngredientDataController.config) makes that the label forgets its pin to edges constraints and appears at the left side of the cell. This fixes it.
+        nameLabel.center.x = center.x
+    }
+
     func additionalMarkToDeleteActions(toDelete: Bool, animated: Bool) {
         let originalImage = self.image
         initialsLabel.isHidden = {
