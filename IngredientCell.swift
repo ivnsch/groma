@@ -34,7 +34,18 @@ class IngredientCell: UITableViewCell {
             
             quantityLabel.text = ingredient.quantity.quantityStringHideZero
             
-            unitLabel.text = ingredient.unit.name
+            unitLabel.text = {
+                if ingredient.unit.id == .none {
+                    if ingredient.quantity == 1 {
+                        return trans("unit_unit")
+                    } else {
+                        return trans("unit_unit_pl")
+                    }
+                } else {
+                    return ingredient.unit.name
+                }
+            } ()
+
             if ingredient.unit.name.isEmpty {
                 unitLeadingConstraint.constant = 0
             } else {
