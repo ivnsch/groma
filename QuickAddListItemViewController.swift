@@ -38,7 +38,8 @@ protocol QuickAddListItemDelegate: class {
 
     func parentViewForAddButton() -> UIView?
     
-    
+    func endEditing()
+
     // addedItem can be QuantifiableProduct or Item, depending on where we use quick add (in e.g. list/inventory items, we add q.products and in ingredients, items).
     func onFinishAddCellAnimation(addedItem: AnyObject)
     var offsetForAddCellAnimation: CGFloat {get}
@@ -281,6 +282,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             Prov.recipeProvider.incrementFav(recipeItem.recipe.uuid, successHandler{})
             
             guard let cell = collectionView.cellForItem(at: indexPath) else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
+
+            delegate?.endEditing()
 
             recipeControllerAnimator?.open (button: cell, inset: (left: 0, top: 0, right: 0, bottom: 0), controllerCreator: {[weak self] in guard let weakSelf = self else {return nil}
                 let controller = AddRecipeController()

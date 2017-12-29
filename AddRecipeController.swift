@@ -338,6 +338,9 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         controller.config(selectedUnitId: cellState.unitData.unitId,
                           selectedUnitName: cellState.unitData.unitName,
                           selectedBaseQuantity: cellState.baseQuantity)
+
+        view.endEditing(true)
+        
         popup.show(from: baseUnitView)
     }
 
