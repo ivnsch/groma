@@ -43,4 +43,9 @@ class RecipeEditableTextCell: UITableViewCell, UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         onTextFocusHandler?(false)
     }
+
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newLen = (textView.text.count - range.length) + text.count
+        return newLen <= 6000 // a generous limit - a normal recipe is 1000-2000 chars
+    }
 }
