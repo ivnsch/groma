@@ -36,7 +36,7 @@ class HelpProviderImpl: HelpProvider {
         //        // #new
         //        HelpItem(title: "How are the Lists, Cart, Inventory and History related?", text: "Shopping Lists are where you keep Lists of items you want to buy, when you marked them as bought in the Cart they go to the Inventory. The Inventory defaults to ‘Home’, but you can add other locations if you need. The best way to use Lists is to name each for the store where you will use it (this means that when you add prices it will be the right price for that store). When you mark an item as purchased the app also automatically adds it to your History.
 
-        HelpItem(title: "How can I reorder sections?", text: "you can do a zoom out gesture (put 2 fingers on the screen and move them towards each other) over the list items to switch to section-only mode, where you can reorder sections. You leave with the opposite gesture."),
+        HelpItem(title: "How do I reorder sections?", text: "You can do a zoom out gesture (put 2 fingers on the screen and move them towards each other) over the list items to switch to section-only mode, where you can reorder sections. You leave with the opposite gesture."),
 
         HelpItem(title: "What is the relationship between categories and sections?", text: "Category is how you generally want to classify a product. E.g. for apples you probably would use 'fruit'. A Section is the area of the store where you find the product. The section can be different than the category! For example tuna, could have 'fish' as category but be in the 'canned food' section.\nProducts have always a category, which is used everywhere in the app. Sections only exist in Shopping Lists."),
         
