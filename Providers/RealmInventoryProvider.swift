@@ -273,7 +273,22 @@ class RealmInventoryProvider: RealmProvider {
     public func delete(index: Int, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: inventories.realm) {realm -> Bool in
             let inventory = inventories[index]
+
+            // Delete dependencies
+            let inventoryItems = realm.objects(InventoryItem.self).filter(InventoryItem.createFilterInventory(inventory.uuid))
+            let lists = realm.objects(List.self).filter(List.createInventoryFilter(inventory.uuid))
+            let sections = realm.objects(Section.self).filter(Section.createFilter(inventoryUuid: inventory.uuid))
+            let listItems = realm.objects(ListItem.self).filter(ListItem.createFilter(inventoryUuid: inventory.uuid))
+            let historyItems = realm.objects(HistoryItem.self).filter(HistoryItem.createFilterWithInventory(inventory.uuid))
+
+            realm.delete(inventoryItems)
+            realm.delete(lists)
+            realm.delete(sections)
+            realm.delete(listItems)
+            realm.delete(historyItems)
+
             realm.delete(inventory)
+
             return true
         }
         handler(successMaybe ?? false)

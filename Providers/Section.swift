@@ -135,6 +135,10 @@ public class Section: DBSyncable, Identifiable {
     static func createFilterList(_ listUuid: String) -> String {
         return "listOpt.uuid == '\(listUuid)'"
     }
+
+    static func createFilter(inventoryUuid: String) -> String {
+        return "listOpt.inventoryOpt.uuid == '\(inventoryUuid)'"
+    }
     
     // MARK: -
     
