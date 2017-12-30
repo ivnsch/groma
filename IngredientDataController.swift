@@ -215,12 +215,11 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
             quantityView.frame = cell.contentView.bounds // appears to be necessary
             quantityView.fillSuperview()
 
-            if let units = unitsManager.units {
-                let moundUnit = inputs.unit?.id ?? .none
-                let whole = inputs.whole ?? IngredientDataController.defaultQuantity
-                let fraction = inputs.fraction ?? IngredientDataController.defaultFraction
-                quantityView.configure(unitId: moundUnit, whole: whole, fraction: fraction)
-            }
+            let moundUnit = inputs.unit?.id ?? .none
+            let whole = inputs.whole ?? IngredientDataController.defaultQuantity
+            let fraction = inputs.fraction ?? IngredientDataController.defaultFraction
+            quantityView.configure(unitId: moundUnit, whole: whole, fraction: fraction)
+            
             return cell
         default: fatalError("Not supported index: \(indexPath.row)")
         }
