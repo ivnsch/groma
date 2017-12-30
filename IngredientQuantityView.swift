@@ -131,25 +131,35 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
     // MARK: - Slider
 
     @IBAction func snapValue(_ sender: UISlider) {
-        let fraction = rationalApproximationOf(x0: Double(fractionSlider.value))
-        fractionSlider.value = fraction.decimalValue
+        let fraction = toFraction(decimal: fractionSlider.value)
 
-        //        let sliderFractions: [Float] = [0, 1/4, 1/3, 2/4, 2/3, 3/4, 1]
-        //        for snapPosition in sliderFractions {
-        //            if fractionSlider.value < snapPosition {
-        //                fractionSlider.value = snapPosition
-        //                break
-        //            }
-        //        }
+        quantityImage?.showQuantity(whole: wholeQuantity, fraction: fraction, animated: true)
+        fractionTextInputView.prefill(fraction: fraction)
 
-        let valueInRange = fraction.decimalValue * sliderFractionLimit
-        let fractionInRange = rationalApproximationOf(x0: Double(valueInRange))
-
-        quantityImage?.showQuantity(whole: wholeQuantity, fraction: fractionInRange, animated: true)
-        fractionTextInputView.prefill(fraction: fractionInRange)
-
-        self.fraction = fractionInRange
+        self.fraction = fraction
 //        delegate?.onSelectFraction(fraction: fraction)
+    }
+
+    fileprivate func toFraction(decimal: Float) -> Fraction {
+        let biggestFraction = Fraction(numerator: 3, denominator: 4)  // 0.75
+
+        let sliderFractions: [Fraction] = [
+            Fraction(numerator: 0, denominator: 1),
+            Fraction(numerator: 1, denominator: 4), // 0.25
+            Fraction(numerator: 1, denominator: 3), // 0.33
+            Fraction(numerator: 1, denominator: 2), // 0.5
+            Fraction(numerator: 2, denominator: 3), // 0.66
+            biggestFraction
+        ]
+
+        var fraction: Fraction = biggestFraction
+        for sliderFraction in sliderFractions {
+            if fractionSlider.value <= sliderFraction.decimalValue {
+                fraction = sliderFraction
+                break
+            }
+        }
+        return fraction
     }
 
     fileprivate func notifyQuantityChanged() {
@@ -160,13 +170,12 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
 
     func slider(_ slider: ASValueTrackingSlider!, stringForValue value: Float) -> String! {
 
-        let valueInRange = value * sliderFractionLimit
-        let fractionInRange = rationalApproximationOf(x0: Double(valueInRange))
+        let fraction = toFraction(decimal: value)
 
-        switch fractionInRange.decimalValue {
-        case 0: return "0"
-        case 1: return "1"
-        default: return "\(fractionInRange.numerator)/\(fractionInRange.denominator)"
+        if fraction.decimalValue == 0 {
+            return "0"
+        } else {
+            return "\(fraction.numerator)/\(fraction.denominator)"
         }
     }
 
