@@ -708,13 +708,13 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     
-    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
+    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float, note: String?, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
         guard let realmData = realmData else {logger.e("No realm data"); return}
      
         if let list = currentList {
             
             // TODO!!!!!!!!!!! don't pass store, list has the store!
-            Prov.listItemsProvider.addNew(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, status: status, realmData: realmData, successHandler {[weak self] (addResult:
+            Prov.listItemsProvider.addNew(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, note: note, status: status, realmData: realmData, successHandler {[weak self] (addResult:
                 AddListItemResult) in
                 
                 onAddToProvider(QuickAddAddProductResult(isNewItem: addResult.isNewItem))

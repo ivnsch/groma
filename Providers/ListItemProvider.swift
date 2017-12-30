@@ -123,7 +123,7 @@ public protocol ListItemProvider {
     
     
     /// Quick add
-    func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
+    func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, note: String?, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
     
     func addNew(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void)
 

@@ -545,7 +545,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         })
     }
 
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, note: String?, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
         guard let realmData = realmData else {logger.e("No realm data"); return}
         
         if let list = currentList {

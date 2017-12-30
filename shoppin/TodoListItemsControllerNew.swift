@@ -430,11 +430,11 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         }
     }
 
-    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
+    override func onAddProduct(_ product: QuantifiableProduct, quantity: Float, note: String?, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
         if isCartOpen {
-            cartController?.onAddProduct(product, quantity: quantity, onAddToProvider: onAddToProvider)
+            cartController?.onAddProduct(product, quantity: quantity, note: note, onAddToProvider: onAddToProvider)
         } else {
-            super.onAddProduct(product, quantity: quantity, onAddToProvider: onAddToProvider)
+            super.onAddProduct(product, quantity: quantity, note: note, onAddToProvider: onAddToProvider)
         }
     }
     

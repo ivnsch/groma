@@ -231,7 +231,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func onAddGroup(_ group: ProductGroup, onFinish: VoidFunction?) {
     }
     
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, note: String?, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
     }
     
     func onAddItem(_ item: Item) {

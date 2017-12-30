@@ -12,7 +12,7 @@ import SwiftValidator
 import Providers
 
 protocol QuickAddDelegate: class {
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void)
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, note: String?, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void)
     
     func onAddItem(_ item: Item) // Maybe remove this - now that we have onAddIngredient it's not necessarily. We currently don't add only items anywhere.
     func onAddIngredient(item: Item, ingredientInput: SelectIngredientDataControllerInputs) // only used with item type .ingredient
@@ -345,8 +345,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
     
     // product was selected in product quick list
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
-        delegate?.onAddProduct(product, quantity: quantity, onAddToProvider: {[weak self] result in
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, note: String?, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
+        delegate?.onAddProduct(product, quantity: quantity, note: note, onAddToProvider: {[weak self] result in
             if result.isNewItem {
                 self?.showTapToAddMoreHintIfEnabled()
             }
@@ -452,7 +452,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
                 
                 if editingItem == nil { // add - item was not in the db yet
                     _ = self?.hideAddProductController() // go back to quick add items
-                    self?.quickAddListItemViewController?.addProductController?.showAddedItem(quickAddItem: quickAddItem, quantity: quantity)
+                    self?.quickAddListItemViewController?.addProductController?.showAddedItem(quickAddItem: quickAddItem, quantity: quantity, note: note)
                     
                 } else {
                     // Update - we don't go back to quick list here but display "old" way to update i.e. simply update item in table view and scroll to row, without any additional animation.

@@ -18,7 +18,7 @@ struct QuickAddAddProductResult {
 // TODO rename this controller in only groups controller and remove the old groups controller. Also delegate methods not with "Add" but simply "Tap" - the implementation of this delegate decides what the tap means.
 
 protocol QuickAddListItemDelegate: class {
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void)
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, note: String?, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void)
     
     func onAddItem(_ item: Item)
 
@@ -265,7 +265,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             
             func onRetrievedQuantifiableProduct(quantifiableProduct: QuantifiableProduct, quantity: Float) {
 
-                delegate?.onAddProduct(quantifiableProduct, quantity: quantity) {[weak self] result in
+                delegate?.onAddProduct(quantifiableProduct, quantity: quantity, note: nil) {[weak self] result in
                     if result.isNewItem {
                         self?.animateItemToCell(indexPath: indexPath, quantifiableProduct: quantifiableProduct, quantity: 1)
                     }
@@ -593,7 +593,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     // TODO refactor this, it was implemented without time and motivation
     // The whole workflow here has to be rewritten, probably a problem of quick add controller in general
     // We shouldn't have to cast quickAddItem to know in which (main) controller we are/which delegate method to call, the main controller shouldn't have to instantiate directly quick add items, etc. etc.
-    func showAddedItem(quickAddItem: QuickAddItem, quantity: Float) {
+    func showAddedItem(quickAddItem: QuickAddItem, quantity: Float, note: String?) {
         
         let myDelay: Double = 0.3
         
@@ -618,7 +618,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 if let quantifiableProduct = quickAddProduct.quantifiableProduct { // list or inventory item
 
                     delay(myDelay) {[weak self] in
-                        self?.delegate?.onAddProduct(quantifiableProduct, quantity: quantity) {[weak self] result in
+                        self?.delegate?.onAddProduct(quantifiableProduct, quantity: quantity, note: note) {[weak self] result in
                             if result.isNewItem {
                                 self?.animateItemToCell(indexPath: newItemIndexPath, quantifiableProduct: quantifiableProduct, quantity: quantity)
                             }

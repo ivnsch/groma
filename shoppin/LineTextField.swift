@@ -16,7 +16,7 @@ class LineTextField: UITextField {
     
     fileprivate let lineWidth: CGFloat = 1
     
-    fileprivate static let defaultLineColor = UIColor.gray
+    fileprivate static let defaultLineColor = Theme.lightGrey2
 
     @IBInspectable
     var lineColor = defaultLineColor {

@@ -328,7 +328,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         fatalError("Not supported") // It doesn't make sense to add recipes to the inventory
     }
     
-    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
+    func onAddProduct(_ product: QuantifiableProduct, quantity: Float, note: String?, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
         guard let inventoryItemsResult = inventoryItemsResult else {logger.e("No result"); return}
         guard let realmData = realmData else {logger.e("No realm data"); return}
         
