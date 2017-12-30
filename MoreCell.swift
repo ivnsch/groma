@@ -18,6 +18,7 @@ class MoreCell: UITableViewCell {
         didSet {
             if let label = label {
                 myImageView.image = moreItem?.image
+                myImageView.tintColor = UIColor(hexString: "#666766")
                 label.text = moreItem?.text
             } else {
                 logger.w("Outlets not set")
