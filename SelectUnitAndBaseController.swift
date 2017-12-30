@@ -45,9 +45,16 @@ class SelectUnitAndBaseController: UIViewController {
         initTableView()
         configUnitsManager()
         configBaseQuantitiesManager()
+        initSubmitView()
+        registerKeyboardNotifications()
 
         extendedLayoutIncludesOpaqueBars = true
         edgesForExtendedLayout = .all
+    }
+
+    fileprivate func registerKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectUnitAndBaseController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SelectUnitAndBaseController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
     }
 
     func config(selectedUnitId: UnitId, selectedUnitName: String, selectedBaseQuantity: Float) {
@@ -65,6 +72,7 @@ class SelectUnitAndBaseController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.register(UINib(nibName: "IngredientDataSubHeaderCell", bundle: nil), forCellReuseIdentifier: "subHeaderCell")
         tableView.register(UINib(nibName: "AddNewItemInputCell", bundle: nil), forCellReuseIdentifier: "inputCell")
+        tableView.bottomInset = Theme.submitViewHeight
         tableView.keyboardDismissMode = .onDrag
     }
 
@@ -183,23 +191,40 @@ class SelectUnitAndBaseController: UIViewController {
             }
         }
     }
+
+    fileprivate func initSubmitView() {
+        let submitView = SubmitView()
+        submitView.setButtonTitle(title: trans("update_base_unit_submit_button_title"))
+        submitView.delegate = self
+        view.addSubview(submitView)
+
+        submitView.translatesAutoresizingMaskIntoConstraints = false
+        _ = submitView.alignLeft(self.view)
+        _ = submitView.alignRight(self.view)
+        _ = submitView.alignBottom(self.view, constant: 0)
+        _ = submitView.heightConstraint(Theme.submitViewHeight)
+    }
+
+    // MARK: Keyboard Notifications
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardHeight = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+            self.tableView.bottomInset = keyboardHeight
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        UIView.animate(withDuration: 0.2, animations: {
+            // For some reason adding inset in keyboardWillShow is animated by itself but removing is not, that's why we have to use animateWithDuration here
+            self.tableView.bottomInset = Theme.submitViewHeight
+        })
+    }
 }
 
 extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 6
-    }
-
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let submitView = SubmitView()
-        submitView.setButtonTitle(title: trans("update_base_unit_submit_button_title"))
-        submitView.delegate = self
-        return submitView
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return Theme.submitViewHeight
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

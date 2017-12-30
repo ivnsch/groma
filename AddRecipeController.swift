@@ -44,7 +44,7 @@ class AddRecipeController: UIViewController {
     // Close any added views to superviews of this controller (e.g. popups)
     // Returns if any was showing
     func closeAddedNonChildren() -> Bool {
-        var anyWasShowing = unitBasePopup != nil
+        let anyWasShowing = unitBasePopup != nil
         unitBasePopup?.hide(onFinish: { [weak self] in
             self?.unitBasePopup = nil
         })
@@ -55,6 +55,12 @@ class AddRecipeController: UIViewController {
         super.viewDidLoad()
         initTableView()
         initSubmitView()
+        registerKeyboardNotifications()
+    }
+
+    fileprivate func registerKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(AddRecipeController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AddRecipeController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
     }
 
     fileprivate func retrieveData(recipe: Recipe) {
@@ -134,6 +140,21 @@ class AddRecipeController: UIViewController {
         _ = submitView.alignRight(self.view)
         _ = submitView.alignBottom(self.view, constant: 0)
         _ = submitView.heightConstraint(Theme.submitViewHeight)
+    }
+
+    // MARK: Keyboard Notifications
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardHeight = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+            self.tableView.bottomInset = keyboardHeight
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        UIView.animate(withDuration: 0.2, animations: {
+            // For some reason adding inset in keyboardWillShow is animated by itself but removing is not, that's why we have to use animateWithDuration here
+            self.tableView.bottomInset = Theme.submitViewHeight
+        })
     }
 }
 
