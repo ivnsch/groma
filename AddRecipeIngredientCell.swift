@@ -118,6 +118,7 @@ class AddRecipeIngredientCell: UITableViewCell {
 
         initStaticText()
         initProductQuantityController()
+        initAutocompletionTextFields()
     }
 
     fileprivate func initProductQuantityController() {
@@ -146,6 +147,13 @@ class AddRecipeIngredientCell: UITableViewCell {
 
     @IBAction func onBrandNameChanged(_ sender: LineAutocompleteTextField) {
         delegate?.onChange(productName: sender.text ?? "", cell: self)
+    }
+
+    fileprivate func initAutocompletionTextFields() {
+        for textField in [productNameTextField, brandTextField] {
+            textField?.defaultAutocompleteStyle()
+            textField?.myDelegate = self
+        }
     }
 }
 
