@@ -347,7 +347,9 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
 
             self?.unitBasePopup?.hide(onFinish: { [weak self] in
                 self?.unitBasePopup = nil
-                self?.tableView.reloadRows(at: [indexPath], with: .none)
+                UIView.performWithoutAnimation { [weak self] in
+                    self?.tableView.reloadRows(at: [indexPath], with: .none)
+                }
             })
         }
 
