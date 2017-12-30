@@ -365,7 +365,9 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
 
         view.endEditing(true)
 
-        popup.show(from: baseUnitView)
+        popup.show(from: baseUnitView, onFinish: {
+            controller.loadItems()
+        })
     }
 
     func productNamesContaining(text: String, handler: @escaping ([String]) -> Void) {

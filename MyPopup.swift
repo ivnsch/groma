@@ -67,16 +67,16 @@ class MyPopup: UIView {
         addSubview(backgroundView)
     }
 
-    func show(from: UIView, offsetY: CGFloat = 0) {
+    func show(from: UIView, offsetY: CGFloat = 0, onFinish: (() -> Void)? = nil) {
         guard let parent = parent else { logger.e("No parent!"); return }
         if let superview = from.superview {
             let from = superview.convert(from.center, to: parent)
             let finalfrom = CGPoint(x: from.x, y: from.y + offsetY)
-            show(parent: parent, from: finalfrom)
+            show(parent: parent, from: finalfrom, onFinish: onFinish)
         }
     }
 
-    fileprivate func show(parent: UIView, from: CGPoint? = nil) {
+    fileprivate func show(parent: UIView, from: CGPoint? = nil, onFinish: (() -> Void)?) {
         parent.addSubview(self)
 
         if let from = from {
@@ -84,10 +84,13 @@ class MyPopup: UIView {
 
             contentView?.center = from
             contentView?.transform = CGAffineTransform(scaleX: 0.00001, y: 0.00001)
-            UIView.animate(withDuration: scaleDuration) {
+
+            UIView.animate(withDuration: scaleDuration, animations: {
                 self.contentView?.center = self.contentCenter ?? parent.center
                 self.contentView?.transform = CGAffineTransform(scaleX: 1, y: 1)
-            }
+            }, completion: { finished in
+                onFinish?()
+            })
         }
 
         if backgroundAlpha > 0 {

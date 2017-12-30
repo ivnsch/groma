@@ -52,6 +52,11 @@ class SelectUnitAndBaseController: UIViewController {
         edgesForExtendedLayout = .all
     }
 
+    func loadItems() {
+        unitsManager.loadItems()
+        baseQuantitiesManager.loadItems()
+    }
+
     fileprivate func registerKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectUnitAndBaseController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SelectUnitAndBaseController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
@@ -115,11 +120,16 @@ class SelectUnitAndBaseController: UIViewController {
         unitsManager.selectedItem = { [weak self] in
             return self?.inputs.unitName
         }
+
+        unitsManager.onFetchedData = { [weak self] in
+            self?.initVariableCellHeights()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // Here collection view width (needed to calculate the content height) is corrent
+        // Here collection view width (needed to calculate the content height) is correct - this is for the case
+        // where data is fetched before did appear (loadItems() called before showing view)
         initVariableCellHeights()
     }
 
@@ -163,6 +173,10 @@ class SelectUnitAndBaseController: UIViewController {
 
         baseQuantitiesManager.selectedItem = { [weak self] in
             return self?.inputs.baseQuantityName
+        }
+
+        baseQuantitiesManager.onFetchedData = { [weak self] in
+            self?.initVariableCellHeights()
         }
     }
 
@@ -240,6 +254,7 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
         case 1:
             let cell = dequeueDefaultCell()
             let view = unitsManager.view
+            view.translatesAutoresizingMaskIntoConstraints = false
             cell.contentView.addSubview(view)
             view.frame = cell.contentView.bounds // appears to be necessary
             view.fillSuperview()
@@ -247,6 +262,7 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
         case 4:
             let cell = dequeueDefaultCell()
             let view = baseQuantitiesManager.view
+            view.translatesAutoresizingMaskIntoConstraints = false
             cell.contentView.addSubview(view)
             view.frame = cell.contentView.bounds // appears to be necessary
             view.fillSuperview()

@@ -69,6 +69,7 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     var itemMarkedToDelete: (() -> String?)? // returns name (assumed to be unique)
     var willDeleteItem: ((T) -> Void)?
     var clearToDeleteItemsState: (() -> Void)? // Used by popup on cancel
+    var onFetchedData: (() -> Void)?
 
     let rowsSpacing: CGFloat = 4
     let topCollectionViewPadding: CGFloat = 20
@@ -112,6 +113,10 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
         itemsDelegate = delegate
 
         registerCell()
+    }
+
+    func loadItems() {
+        guard let controller = controller else { logger.e("No controller", .ui); return }
 
         fetchItems(controller: controller) { items in
             let dataSource = self.createDataSource(items: items)
@@ -122,6 +127,8 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
             self.itemNames = items.map{ $0.uniqueName } // see comment on var why this is necessary
 
             self.myCollectionView.reloadData()
+
+            self.onFetchedData?()
         }
     }
 
