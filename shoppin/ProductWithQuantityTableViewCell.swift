@@ -123,6 +123,12 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
 
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
         addGestureRecognizer(longPress)
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
+        tap.cancelsTouchesInView = false
+        tap.delegate = self
+        addGestureRecognizer(tap)
+        tap.require(toFail: longPress)
     }
 
     @objc func longPress(_ sender: UILongPressGestureRecognizer) {
@@ -132,6 +138,11 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         }
     }
 
+    @objc func onTap(_ sender: UITapGestureRecognizer) {
+        // Cancel edit mode for cells that were put in edit mode via long press
+        setMode(.readonly, animated: true)
+    }
+    
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
