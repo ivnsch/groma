@@ -53,6 +53,7 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
         layout()
 
         if let first = selectOptions.first {
+            selectedOption = first
             load(option: first)
         } else {
             logger.e("No options")
@@ -77,7 +78,6 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
     // MARK: -
     
     fileprivate func load(option: ManageDatabaseControllerOption) {
-        
         selectOptionButton.setTitle(option.key, for: UIControlState())
         
         (selectedOptionController as? UIViewController)?.removeFromParentViewControllerWithView()
@@ -147,18 +147,28 @@ class ManageDatabaseController: UIViewController, UIPickerViewDataSource, UIPick
     }
     
     @IBAction func onSelectTypeTap(_ sender: UIButton) {
-        //        if let popup = self.sortByPopup {
-        //            popup.dismissAnimated(true)
-        //        } else {
-        let popup = MyTipPopup(customView: createPicker())
+        let picker = createPicker()
+        let popup = MyTipPopup(customView: picker.view)
         popup.presentPointing(at: selectOptionButton, in: view, animated: true)
-        //        }
+        addChildViewController(picker)
+        popup.onDismiss = { [weak picker] in
+            picker?.removeFromParentViewController()
+        }
     }
     
-    fileprivate func createPicker() -> UIPickerView {
-        let picker = UIPickerView(frame: CGRect(x: 0, y: 0, width: 150, height: 100))
-        picker.delegate = self
-        picker.dataSource = self
+    fileprivate func createPicker() -> UIViewController {
+        let picker = TooltipPicker()
+        picker.view.frame = CGRect(x: 0, y: 0, width: 150, height: 100)
+        let optionNames = selectOptions.map { $0.key }
+        picker.config(options: optionNames, selectedOption: selectedOption?.key) { [weak self] selectedOptionStr in
+            guard let weakSelf = self else { return }
+            guard let selectedOption = (weakSelf.selectOptions.findFirst { $0.key == selectedOptionStr }) else {
+                logger.e("Invalid state: no selectedOption", .ui)
+                return
+            }
+            weakSelf.selectedOption = selectedOption
+            weakSelf.load(option: selectedOption)
+        }
         return picker
     }
 }
