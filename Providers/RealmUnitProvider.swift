@@ -18,43 +18,6 @@ class RealmUnitProvider: RealmProvider {
     
     func initDefaultUnits(_ handler: @escaping ([Unit]?) -> Void) {
         
-        // TODO different ordering for device's country - countries that don't/rarely use OZ and LB should have them at the end
-        
-        let defaultUnits: [Unit] = [
-            Unit(uuid: UUID().uuidString, name: trans("unit_unit"), id: .none, buyable: true),
-            
-            Unit(uuid: UUID().uuidString, name: trans("unit_g"), id: .g, buyable: true),
-            Unit(uuid: UUID().uuidString, name: trans("unit_kg"), id: .kg, buyable: true),
-            Unit(uuid: UUID().uuidString, name: trans("unit_liter"), id: .liter, buyable: true),
-            Unit(uuid: UUID().uuidString, name: trans("unit_milliliter"), id: .milliliter, buyable: true),
-            
-            Unit(uuid: UUID().uuidString, name: trans("unit_ounce"), id: .ounce, buyable: true),
-            Unit(uuid: UUID().uuidString, name: trans("unit_pound"), id: .pound, buyable: true),
-            
-            Unit(uuid: UUID().uuidString, name: trans("unit_pack"), id: .pack, buyable: true),
-            
-            Unit(uuid: UUID().uuidString, name: trans("unit_cup"), id: .cup, buyable: false),
-            Unit(uuid: UUID().uuidString, name: trans("unit_spoon"), id: .spoon, buyable: false),
-            Unit(uuid: UUID().uuidString, name: trans("unit_teaspoon"), id: .teaspoon, buyable: false),
-            
-            Unit(uuid: UUID().uuidString, name: trans("unit_drop"), id: .drop, buyable: false),
-            Unit(uuid: UUID().uuidString, name: trans("unit_shot"), id: .shot, buyable: false),
-            Unit(uuid: UUID().uuidString, name: trans("unit_pinch"), id: .pinch, buyable: false),
-            
-            Unit(uuid: UUID().uuidString, name: trans("unit_clove"), id: .clove, buyable: false),
-
-            Unit(uuid: UUID().uuidString, name: trans("unit_can"), id: .can, buyable: true),
-
-            Unit(uuid: UUID().uuidString, name: trans("unit_pint"), id: .pint, buyable: false),
-            Unit(uuid: UUID().uuidString, name: trans("unit_gin"), id: .gin, buyable: true),
-            Unit(uuid: UUID().uuidString, name: trans("unit_floz"), id: .floz, buyable: false),
-            Unit(uuid: UUID().uuidString, name: trans("unit_dash"), id: .dash, buyable: false),
-            Unit(uuid: UUID().uuidString, name: trans("unit_wgf"), id: .wgf, buyable: false),
-            Unit(uuid: UUID().uuidString, name: trans("unit_dram"), id: .dram, buyable: true),
-            Unit(uuid: UUID().uuidString, name: trans("unit_lb"), id: .lb, buyable: true),
-            Unit(uuid: UUID().uuidString, name: trans("unit_oz"), id: .oz, buyable: true),
-        ]
-        
         // let's add the fractions here too because I'm too lazy to write a new method for this (should be moved to fractions provider in the future)
         let defaultFractions: [DBFraction] = [
             DBFraction(numerator: 1, denominator: 2),
@@ -92,9 +55,10 @@ class RealmUnitProvider: RealmProvider {
         ]
         
 //        let objs: [Object] = defaultUnits + defaultFractions
-        
-        if saveObjsSync(defaultUnits) { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
-            
+
+        let (savedSuccess, units) = savePredefinedUnitsSync(update: false)
+        if savedSuccess { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
+
             var fractionsSuccess = true
             for fraction in defaultFractions {
                 let (success, _) = DBProv.fractionProvider.add(fraction: fraction) // We use here provider method to append to list, not only save object
@@ -116,10 +80,63 @@ class RealmUnitProvider: RealmProvider {
             }
             
             
-            handler(defaultUnits)
+            handler(units)
             
         } else {
             handler(nil)
+        }
+    }
+
+    fileprivate var predefinedUnits: [Unit] {
+        return [
+            Unit(uuid: UUID().uuidString, name: trans("unit_unit"), id: .none, buyable: true),
+
+            Unit(uuid: UUID().uuidString, name: trans("unit_g"), id: .g, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_kg"), id: .kg, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_liter"), id: .liter, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_milliliter"), id: .milliliter, buyable: true),
+
+            Unit(uuid: UUID().uuidString, name: trans("unit_ounce"), id: .ounce, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_pound"), id: .pound, buyable: true),
+
+            Unit(uuid: UUID().uuidString, name: trans("unit_pack"), id: .pack, buyable: true),
+
+            Unit(uuid: UUID().uuidString, name: trans("unit_cup"), id: .cup, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_spoon"), id: .spoon, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_teaspoon"), id: .teaspoon, buyable: false),
+
+            Unit(uuid: UUID().uuidString, name: trans("unit_drop"), id: .drop, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_shot"), id: .shot, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_pinch"), id: .pinch, buyable: false),
+
+            Unit(uuid: UUID().uuidString, name: trans("unit_clove"), id: .clove, buyable: false),
+
+            Unit(uuid: UUID().uuidString, name: trans("unit_can"), id: .can, buyable: true),
+
+            Unit(uuid: UUID().uuidString, name: trans("unit_pint"), id: .pint, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_gin"), id: .gin, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_floz"), id: .floz, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_dash"), id: .dash, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_wgf"), id: .wgf, buyable: false),
+            Unit(uuid: UUID().uuidString, name: trans("unit_dram"), id: .dram, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_lb"), id: .lb, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_oz"), id: .oz, buyable: true),
+        ]
+    }
+
+    func savePredefinedUnitsSync(update: Bool) -> (saved: Bool, units: [Unit]) {
+        let predefinedUnits = self.predefinedUnits
+        if update {
+            var storedUnits: [Unit] = []
+            for predefinedUnit in predefinedUnits {
+                if let storedUnit = addIfNotExistsSync(unit: predefinedUnit) {
+                    storedUnits.append(storedUnit)
+                }
+            }
+            return (true, storedUnits)
+        } else {
+            return (saveObjsSync(predefinedUnits, update: true), // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
+                predefinedUnits)
         }
     }
 
@@ -133,6 +150,19 @@ class RealmUnitProvider: RealmProvider {
             return unit
         }
         return nil
+    }
+
+    func addIfNotExistsSync(unit: Unit) -> Unit? {
+        if let storedUnit = findUnit(name: unit.name) {
+            return storedUnit
+        } else {
+            if saveObjSync(unit, update: false) { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
+                return unit
+            } else {
+                logger.e("Error saving unit", .db)
+                return nil
+            }
+        }
     }
 
     func findUnit(name: String, handler: (Unit?) -> Void) {

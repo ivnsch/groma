@@ -53,6 +53,11 @@ class UnitProviderImpl: UnitProvider {
         }
     }
 
+    func restorePredefinedUnits(_ handler: @escaping (ProviderResult<Any>) -> Void) {
+        let (saveSuccess, _) = DBProv.unitProvider.savePredefinedUnitsSync(update: true)
+        handler(ProviderResult(status: saveSuccess ? .success : .databaseUnknown))
+    }
+
     func initDefaultUnits(_ handler: @escaping (ProviderResult<[Unit]>) -> Void) {
         
         DBProv.unitProvider.initDefaultUnits{units in

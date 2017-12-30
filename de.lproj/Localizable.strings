@@ -222,6 +222,7 @@ popup_title_validation_failed = "Validierung fehlgeschlagen";
 popup_title_rate_app = "Rate Groma";
 popup_title_restore_bundled_products = "Produkte wiederherstellen";
 popup_title_bundled_products_restored = "Produkte wiederhergestellt";
+popup_title_bundled_unit_restored = "Messeinheiten wiederhergestellt";
 popup_title_size_limit = "Maximale Anzahl überschritten";
 popup_title_psst = "Psst!";
 
@@ -255,6 +256,7 @@ popup_hints_restored = "Hinweise wiederhergestellt.";
 popups_settings_overwrite = "Dies wird deine (Groma) Daten auf diesem Gerät mit den Daten die du das letzte Mal erfolgreich synchronisieren konntest überschreiben.\nDies ist eine Notlösung für technische Probleme und nicht für den Normalgebraucht gedacht.";
 popups_restore_bundled_products = "Stellt gelöschte gebündelte Produkte wieder her, oder in dem Fall dass du die Sprache gewechselt hast, fügt die gebündelte Produkte in der neuen Sprache ein. Deine existierende Produkte werden hiervon nicht berührt.";
 popups_restore_hints = "Stellt alle Hinweise wieder her.";
+popups_restore_units = "Stellt die gebündelten Messeinheiten wieder her. Eigene Messeinheiten werden nicht gelöscht.";
 popups_participants_you_dont_have_to_add_yourself = "Du musst dich nicht selbst hinzufügen.";
 popups_participants_user_already_in_list = "%@\n ist bereits in den Teilnehmern.";
 popups_participants_user_not_registered = "%@\n ist nicht registriert.";
@@ -328,6 +330,7 @@ setting_overwrite_data = "Daten überschreiben";
 setting_remove_account = "Benutzerkonto entfernen";
 setting_restore_bundled_products = "Gebündelte Produkte wiederherstellen";
 setting_restore_hints = "Hinweise wiederherstellen";
+setting_restore_units = "Messeinheiten wiederherstellen";
 setting_real_time_connection = "Echtzeitverbindung";
 
 

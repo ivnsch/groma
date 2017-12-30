@@ -36,5 +36,7 @@ public protocol UnitProvider {
 
     func addUnit(unitId: UnitId, name: String, buyable: Bool, _ handler: @escaping (ProviderResult<Unit>) -> Void)
 
+    func restorePredefinedUnits(_ handler: @escaping (ProviderResult<Any>) -> Void)
+
     func delete(baseQuantity: Float, _ handler: @escaping (ProviderResult<Any>) -> Void)
 }

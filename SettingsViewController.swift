@@ -14,7 +14,7 @@ import Providers
 import RealmSwift
 
 enum SettingId {
-    case clearHistory, overwriteData, removeAccount, enableRealTime, addDummyHistoryItems, clearAllData, restorePrefillProducts, restoreHints
+    case clearHistory, overwriteData, removeAccount, enableRealTime, addDummyHistoryItems, clearAllData, restorePrefillProducts, restoreHints, restoreUnits
 }
 
 class Setting {
@@ -55,7 +55,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     fileprivate let removeAccountSetting = SimpleSetting(id: .removeAccount, label: trans("setting_remove_account"), labelColor: UIColor.flatRed)
     fileprivate let restorePrefillProductsSetting = SimpleSetting(id: .restorePrefillProducts, label: trans("setting_restore_bundled_products"), hasHelp: true)
     fileprivate let restoreHintsSetting = SimpleSetting(id: .restoreHints, label: trans("setting_restore_hints"), hasHelp: true)
-    
+    fileprivate let restoreUnitsSetting = SimpleSetting(id: .restoreUnits, label: trans("setting_restore_units"), hasHelp: true)
+
     // developer
     fileprivate let addDummyHistoryItemsSetting = SimpleSetting(id: .addDummyHistoryItems, label: "Add dummy history items") // debug
     fileprivate let clearAllDataSetting = SimpleSetting(id: .clearAllData, label: "Clear all data") // debug
@@ -67,7 +68,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     fileprivate let restoreProductsMessage: String = trans("popups_restore_bundled_products")
     
     fileprivate let restoreHintsMessage: String = trans("popups_restore_hints")
-    
+
+    fileprivate let restoreUnitsMessage: String = trans("popups_restore_units")
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -94,7 +97,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 //                addDummyHistoryItemsSetting,
 //                clearAllDataSetting,
                 restorePrefillProductsSetting,
-                restoreHintsSetting
+                restoreHintsSetting,
+                restoreUnitsSetting
             ]
         } else {
             settings = [
@@ -102,7 +106,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 //                addDummyHistoryItemsSetting,
 //                clearAllDataSetting,
                 restorePrefillProductsSetting,
-                restoreHintsSetting
+                restoreHintsSetting,
+                restoreUnitsSetting
             ]
         }
         
@@ -253,7 +258,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         PreferencesManager.savePreference(.showedTapToEditCounter, value: NSNumber(value: 0))
         AlertPopup.show(message: trans("popup_hints_restored"), controller: self)
     }
-    
+
+    fileprivate func restoreUnits() {
+        Prov.unitProvider.restorePredefinedUnits(successHandler {
+            AlertPopup.show(message: trans("popup_title_bundled_unit_restored"), controller: self)
+        })
+    }
+
     // MARK: - UITableView
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -280,6 +291,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             restorePrefillProducts()
         case .restoreHints:
             restoreHints()
+        case .restoreUnits:
+            restoreUnits()
         }
     }
     
@@ -337,6 +350,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         case .restoreHints:
             AlertPopup.show(message: restoreHintsMessage, controller: self)
+
+        case .restoreUnits:
+            AlertPopup.show(message: restoreUnitsMessage, controller: self)
 
         default: logger.e("No supported setting: \(setting)")
         }
