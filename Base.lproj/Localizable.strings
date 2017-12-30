@@ -299,6 +299,9 @@ popup_button_remove_list = "Remove list";
 
 error_not_authenticated = "Please login and try again.";
 error_already_exists = "Already exists";
+error_list_already_exists = "The list \"%@\" already exists.";
+error_inventory_already_exists = "The inventory \"%@\" already exists.";
+error_recipe_already_exists = "The recipe \"%@\" already exists.";
 error_not_found = "Not found";
 error_invalid_credentials = "Invalid credentials";
 error_blacklisted = "We thought we saw suspicious activity and blocked your account.\nPlease contact support.";

@@ -61,7 +61,7 @@ public class Recipe: Object, Identifiable {
     }
     
     static func createFilterName(_ name: String) -> String {
-        return "name = '\(name)'"
+        return "name == '\(name)'"
     }
     
     static func createFilterNameContains(_ text: String) -> String {

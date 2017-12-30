@@ -55,8 +55,8 @@ class InventoryProviderImpl: InventoryProvider {
     }
    
     public func add(_ inventory: DBInventory, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.inventoryProvider.add(inventory, inventories: inventories, notificationToken: notificationToken) {success in
-            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        DBProv.inventoryProvider.add(inventory, inventories: inventories, notificationToken: notificationToken) { result in
+            handler(ProviderResult(status: result.providerStatus))
         }
     }
     
@@ -135,8 +135,8 @@ class InventoryProviderImpl: InventoryProvider {
     
     func addInventory(_ inventory: DBInventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
         
-        DBProv.inventoryProvider.add(inventory, notificationToken: nil) {saved in
-            if saved {
+        DBProv.inventoryProvider.add(inventory, notificationToken: nil) { result in
+            if result.isSuccess {
                 handler(ProviderResult(status: .success))
                 
                 // Remove all backend code?
@@ -156,7 +156,7 @@ class InventoryProviderImpl: InventoryProvider {
                 //                }
                 
             } else {
-                handler(ProviderResult(status: .databaseSavingError))
+                handler(ProviderResult(status: result.providerStatus))
             }
         }
     }

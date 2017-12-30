@@ -1329,7 +1329,7 @@ class RealmListItemProvider: RealmProvider {
     
     public func calculateCartStashAggregate(listUuid: String) -> ListItemsCartStashAggregate? {
         
-        guard let list = DBProv.listProvider.loadListSync(listUuid) else {
+        guard let list = DBProv.listProvider.loadListSync(uuid: listUuid) else {
             logger.e("couldn't load list with uuid: \(listUuid)")
             return nil
         }

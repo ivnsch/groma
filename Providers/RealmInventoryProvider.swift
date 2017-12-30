@@ -92,7 +92,7 @@ class RealmInventoryProvider: RealmProvider {
    
         removeInventoryDependenciesSync(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
         
-        let inventoryResults = realm.objects(DBInventory.self).filter(DBInventory.createFilter(inventoryUuid))
+        let inventoryResults = realm.objects(DBInventory.self).filter(DBInventory.createFilter(uuid: inventoryUuid))
         if markForSync {
             let toRemove = Array(inventoryResults.map{DBRemoveInventory($0)})
             saveObjsSyncInt(realm, objs: toRemove, update: true)
@@ -215,10 +215,10 @@ class RealmInventoryProvider: RealmProvider {
         handler(inventoriesContainer.inventories)
     }
     
-    public func add(_ inventory: DBInventory, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
+    public func add(_ inventory: DBInventory, notificationToken: NotificationToken?, _ handler: @escaping (DBProviderResult) -> Void) {
         
         guard let inventoriesContainer: InventoriesContainer = loadSync(predicate: nil)?.first else {
-            handler(false)
+            handler(.unknown)
             logger.e("Invalid state: no container")
             return
         }
@@ -226,15 +226,33 @@ class RealmInventoryProvider: RealmProvider {
         add(inventory, inventories: inventoriesContainer.inventories, notificationToken: notificationToken, handler)
     }
 
-    public func add(_ inventory: DBInventory, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
-        let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: inventories.realm) {realm -> Bool in
-            realm.add(inventory, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
-            inventories.append(inventory)
-            return true
+    public func add(_ inventory: DBInventory, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken?, _ handler: @escaping (DBProviderResult) -> Void) {
+
+        func onNotExists() {
+
+            let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: inventories.realm) {realm -> Bool in
+                realm.add(inventory, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
+                inventories.append(inventory)
+                return true
+            }
+
+            let isSuccess = successMaybe ?? false
+            handler(isSuccess ? .success : .unknown)
         }
-        handler(successMaybe ?? false)
+
+        exists(inventory.name) { exists in
+            if exists {
+                handler(.nameAlreadyExists)
+            } else {
+                onNotExists()
+            }
+        }
     }
-    
+
+    public func exists(_ name: String, _ handler: @escaping (Bool) -> Void) {
+        handler(loadInventorySync(name: name) != nil)
+    }
+
     public func update(_ inventory: DBInventory, input: InventoryInput, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: inventory.realm) {realm -> Bool in
             inventory.name = input.name
@@ -254,12 +272,17 @@ class RealmInventoryProvider: RealmProvider {
     
     public func delete(index: Int, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: inventories.realm) {realm -> Bool in
-            inventories.remove(at: index)
+            let inventory = inventories[index]
+            realm.delete(inventory)
             return true
         }
         handler(successMaybe ?? false)
     }
-    
+
+    func loadInventorySync(name: String) -> DBInventory? {
+        return loadFirstSync(filter: DBInventory.createFilter(name: name))
+    }
+
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
     

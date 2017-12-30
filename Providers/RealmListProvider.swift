@@ -43,7 +43,7 @@ class RealmListProvider: RealmProvider {
     }
     
     func loadList(_ uuid: String, handler: @escaping (List?) -> Void) {
-        handler(loadListSync(uuid))
+        handler(loadListSync(uuid: uuid))
     }
 
     //////////////////////////////////////////////////////////
@@ -60,10 +60,10 @@ class RealmListProvider: RealmProvider {
         handler(listsContainer.lists)
     }
     
-    public func add(_ list: List, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
+    public func add(_ list: List, notificationToken: NotificationToken?, _ handler: @escaping (DBProviderResult) -> Void) {
         
         guard let listsContainer: ListsContainer = loadSync(predicate: nil)?.first else {
-            handler(false)
+            handler(.unknown)
             logger.e("Invalid state: no container")
             return
         }
@@ -71,15 +71,32 @@ class RealmListProvider: RealmProvider {
         add(list, lists: listsContainer.lists, notificationToken: notificationToken, handler)
     }
     
-    public func add(_ list: List, lists: RealmSwift.List<List>, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
-        let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: list.realm) {realm -> Bool in
-            realm.add(list, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
-            lists.append(list)
-            return true
+    public func add(_ list: List, lists: RealmSwift.List<List>, notificationToken: NotificationToken?, _ handler: @escaping (DBProviderResult) -> Void) {
+
+        func onNotExists() {
+            let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: list.realm) {realm -> Bool in
+                realm.add(list, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
+                lists.append(list)
+                return true
+            }
+
+            let isSuccess = successMaybe ?? false
+            handler(isSuccess ? .success : .unknown)
         }
-        handler(successMaybe ?? false)
+
+        exists(list.name) { exists in
+            if exists {
+                handler(.nameAlreadyExists)
+            } else {
+                onNotExists()
+            }
+        }
     }
-    
+
+    public func exists(_ name: String, _ handler: @escaping (Bool) -> Void) {
+        handler(loadListSync(name: name) != nil)
+    }
+
     public func update(_ list: List, input: ListInput, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: list.realm) {realm -> Bool in
             list.name = input.name
@@ -101,7 +118,8 @@ class RealmListProvider: RealmProvider {
     
     public func delete(index: Int, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: lists.realm) {realm -> Bool in
-            lists.remove(at: index)
+            let list = lists[index]
+            realm.delete(list)
             return true
         }
         handler(successMaybe ?? false)
@@ -143,7 +161,7 @@ class RealmListProvider: RealmProvider {
         _ = removeListDependenciesSync(realm, listUuid: listUuid, markForSync: markForSync)
         
         // delete list
-        if let dbList = realm.objects(List.self).filter(List.createFilter(listUuid)).first {
+        if let dbList = realm.objects(List.self).filter(List.createFilter(uuid: listUuid)).first {
             if markForSync {
                 let toRemoveList = DBRemoveList(dbList)
                 saveObjsSyncInt(realm, objs: [toRemoveList], update: true)
@@ -229,8 +247,12 @@ class RealmListProvider: RealmProvider {
     
     // MARK: - Sync
     
-    func loadListSync(_ uuid: String) -> List? {
-        return loadFirstSync(filter: List.createFilter(uuid))
+    func loadListSync(uuid: String) -> List? {
+        return loadFirstSync(filter: List.createFilter(uuid: uuid))
     }
-    
+
+    func loadListSync(name: String) -> List? {
+        return loadFirstSync(filter: List.createFilter(name: name))
+    }
+
 }

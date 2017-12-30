@@ -59,8 +59,8 @@ class ListProviderImpl: ListProvider {
     }
     
     public func add(_ list: List, lists: RealmSwift.List<List>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.listProvider.add(list, lists: lists, notificationToken: notificationToken) {success in
-            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        DBProv.listProvider.add(list, lists: lists, notificationToken: notificationToken) { result in
+            handler(ProviderResult(status: result.providerStatus))
         }
     }
     
@@ -101,11 +101,11 @@ class ListProviderImpl: ListProvider {
 
     func add(_ list: List, remote: Bool, _ handler: @escaping (ProviderResult<List>) -> Void) {
         
-        DBProv.listProvider.add(list, notificationToken: nil) {saved in
-            if saved {
+        DBProv.listProvider.add(list, notificationToken: nil) { result in
+            if result.isSuccess {
                 handler(ProviderResult(status: .success, sucessResult: list))
             } else {
-                handler(ProviderResult(status: .databaseUnknown))
+                handler(ProviderResult(status: result.providerStatus))
             }
         }
             

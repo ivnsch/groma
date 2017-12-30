@@ -12,6 +12,7 @@ import Foundation
 // Status codes relevant to the user
 public enum ProviderStatusCode: Int {
     case success = 1
+
     // Remote related
     case notAuthenticated = 3
     case alreadyExists = 4
@@ -20,6 +21,7 @@ public enum ProviderStatusCode: Int {
     case sizeLimit = 7
     case registeredWithOtherProvider = 8
     case blacklisted = 10
+    case nameAlreadyExists = 11
     case serverError = 101 // Generic server error - invalid json, etc.
     case serverNotReachable = 102 // This is currently both server is down and no internet connection (detected when doing the request, opposed to .NoConnection).
     case unknownServerCommunicationError = 103 // e.g. request timed out

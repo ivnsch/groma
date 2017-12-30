@@ -45,8 +45,12 @@ public class DBInventory: DBSyncable {
     
     // MARK: - Filters
     
-    static func createFilter(_ uuid: String) -> String {
+    static func createFilter(uuid: String) -> String {
         return "uuid == '\(uuid)'"
+    }
+
+    static func createFilter(name: String) -> String {
+        return "name == '\(name)'"
     }
     
     // MARK: - Update

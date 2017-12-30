@@ -245,15 +245,20 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     func onAddList(_ list: Providers.List) {
         guard let listsResult = listsResult else {logger.e("No result"); return}
         guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
-        
+
         Prov.listProvider.add(list, lists: listsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
-            
+
             self?.tableView.insertRows(at: [IndexPath(row: listsResult.count - 1, section: 0)], with: .top) // Note -1 as at this point the new item is already inserted in results
-            
+
             self?.afterAddOrUpdateList()
-            
-        }, onErrorAdditional: {[weak self] result in
-            self?.onListAddOrUpdateError(list)
+
+            }, onError: {[weak self] result in guard let weakSelf = self else { return }
+                if result.status == .nameAlreadyExists {
+                    AlertPopup.show(title: trans("popup_title_error"), message: trans("error_list_already_exists", list.name), controller: weakSelf)
+                } else {
+                    weakSelf.defaultErrorHandler()(result)
+                }
+                weakSelf.onListAddOrUpdateError(list)
             }
         ))
     }

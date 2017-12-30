@@ -14,6 +14,7 @@ public struct RequestErrorToMsgMapper {
         switch status {
             case .notAuthenticated: return trans("error_not_authenticated")
             case .alreadyExists: return trans("error_already_exists")
+            case .nameAlreadyExists: return trans("error_unknown") // The actual message in each controller, because it has a placeholder (and also needs to be different for lists/inventories/receipts)
             case .notFound: return trans("error_not_found")
             case .invalidCredentials: return trans("error_invalid_credentials")
             case .blacklisted: return trans("error_blacklisted")

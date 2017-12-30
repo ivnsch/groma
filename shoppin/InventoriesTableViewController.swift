@@ -236,15 +236,20 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         guard let notificationToken = notificationToken else {logger.e("No notification token"); return}
 
         Prov.inventoryProvider.add(inventory, inventories: inventoriesResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
-            
+
             self?.tableView.insertRows(at: [IndexPath(row: inventoriesResult.count - 1, section: 0)], with: .top) // Note -1 as at this point the new item is already inserted in results
-            
+
             self?.topAddEditListControllerManager?.expand(false)
             self?.setTopBarState(.normalFromExpanded)
             self?.updateEmptyUI()
-            
-        }, onErrorAdditional: {[weak self] result in
-            self?.onInventoryAddOrUpdateError(inventory)
+
+            }, onError: {[weak self] result in guard let weakSelf = self else { return }
+                if result.status == .nameAlreadyExists {
+                    AlertPopup.show(title: trans("popup_title_error"), message: trans("error_inventory_already_exists", inventory.name), controller: weakSelf)
+                } else {
+                    weakSelf.defaultErrorHandler()(result)
+                }
+                weakSelf.onInventoryAddOrUpdateError(inventory)
             }
         ))
     }

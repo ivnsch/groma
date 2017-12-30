@@ -9,6 +9,24 @@
 import Foundation
 import RealmSwift
 
+enum DBProviderResult {
+    case success
+    case nameAlreadyExists
+    case unknown
+
+    var isSuccess: Bool {
+        return self == .success
+    }
+
+    var providerStatus: ProviderStatusCode {
+        switch self {
+        case .success: return .success
+        case .nameAlreadyExists: return .nameAlreadyExists
+        case .unknown: return .databaseUnknown
+        }
+    }
+}
+
 
 // TODO maybe remove the mapping toArray later if we want to stick with realm, as this can increase performance
 // this would mean the provider is more coupled with realm but that's ok in this case

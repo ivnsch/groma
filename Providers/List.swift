@@ -69,10 +69,14 @@ public class List: DBSyncable, Identifiable {
         
     // MARK: - Filters
     
-    static func createFilter(_ uuid: String) -> String {
+    static func createFilter(uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
-    
+
+    static func createFilter(name: String) -> String {
+        return "name == '\(name)'"
+    }
+
     static func createInventoryFilter(_ inventoryUuid: String) -> String {
         return "inventoryOpt.uuid == '\(inventoryUuid)'"
     }

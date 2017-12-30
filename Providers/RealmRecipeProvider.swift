@@ -58,25 +58,42 @@ class RealmRecipeProvider: RealmProvider {
         }
     }
 
-    public func add(_ recipe: Recipe, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
-        let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: recipes.realm) {realm -> Bool in
-            realm.add(recipe, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
-            recipes.append(recipe)
-            return true
+    public func add(_ recipe: Recipe, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken?, _ handler: @escaping (DBProviderResult) -> Void) {
+
+        func onNotExists() {
+            let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: recipes.realm) {realm -> Bool in
+                realm.add(recipe, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
+                recipes.append(recipe)
+                return true
+            }
+
+            let isSuccess = successMaybe ?? false
+            handler(isSuccess ? .success : .unknown)
         }
-        handler(successMaybe ?? false)
-    }
-    
-    public func add(_ recipe: Recipe, notificationToken: NotificationToken?, _ handler: @escaping (Bool) -> Void) {
-        recipes(sortBy: .order) {[weak self] recipesMaybe in
-            if let recipes = recipesMaybe {
-                self?.add(recipe, recipes: recipes, notificationToken: notificationToken, handler)
+
+        exists(recipe.name) { exists in
+            if exists {
+                handler(.nameAlreadyExists)
             } else {
-                handler(false)
+                onNotExists()
             }
         }
     }
     
+    public func add(_ recipe: Recipe, notificationToken: NotificationToken?, _ handler: @escaping (DBProviderResult) -> Void) {
+        recipes(sortBy: .order) {[weak self] recipesMaybe in
+            if let recipes = recipesMaybe {
+                self?.add(recipe, recipes: recipes, notificationToken: notificationToken, handler)
+            } else {
+                handler(.unknown)
+            }
+        }
+    }
+
+    public func exists(_ name: String, _ handler: @escaping (Bool) -> Void) {
+        handler(loadRecipeSync(name: name) != nil)
+    }
+
     public func update(_ recipe: Recipe, input: RecipeInput, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: recipes.realm) {realm -> Bool in
             recipe.name = input.name
@@ -110,7 +127,8 @@ class RealmRecipeProvider: RealmProvider {
     
     public func delete(index: Int, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: recipes.realm) {realm -> Bool in
-            recipes.remove(at: index)
+            let recipe = recipes[index]
+            realm.delete(recipe)
             return true
         }
         handler(successMaybe ?? false)
@@ -129,5 +147,9 @@ class RealmRecipeProvider: RealmProvider {
         }, finishHandler: {savedMaybe in
             handler(savedMaybe ?? false)
         })
+    }
+
+    func loadRecipeSync(name: String) -> Recipe? {
+        return loadFirstSync(filter: Recipe.createFilterName(name))
     }
 }

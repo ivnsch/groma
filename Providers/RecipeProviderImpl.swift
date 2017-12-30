@@ -28,14 +28,14 @@ public class RecipeProviderImpl: RecipeProvider {
     }
     
     public func add(_ recipe: Recipe, recipes: RealmSwift.List<Recipe>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.recipeProvider.add(recipe, recipes: recipes, notificationToken: notificationToken) {success in
-            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        DBProv.recipeProvider.add(recipe, recipes: recipes, notificationToken: notificationToken) { result in
+            handler(ProviderResult(status: result.providerStatus))
         }
     }
     
     public func add(_ recipe: Recipe, notificationToken: NotificationToken?, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.recipeProvider.add(recipe, notificationToken: notificationToken) {success in
-            handler(ProviderResult(status: success ? .success : .databaseUnknown))
+        DBProv.recipeProvider.add(recipe, notificationToken: notificationToken) {result in
+            handler(ProviderResult(status: result.providerStatus))
         }
     }
 

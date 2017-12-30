@@ -402,7 +402,7 @@ class RealmSectionProvider: RealmProvider {
     // Load the sections directly from Realm - to ensure the resulting RealmSwift.List references a realm (which is not the case when using "copy") as well as it's fetched from the current thread.
     // RealmSwift.List not referencing a Realm currently results in an exception when calling filter on it - "This method may only be called on RLMArray instances retrieved from an RLMRealm"
     func sectionsSync(list: List, status: ListItemStatus) -> RealmSwift.List<Section>? {
-        if let l: List = loadSync(filter: List.createFilter(list.uuid))?.first {
+        if let l: List = loadSync(filter: List.createFilter(uuid: list.uuid))?.first {
             return l.sections(status: status)
         } else {
             return nil
