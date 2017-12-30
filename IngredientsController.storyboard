@@ -162,7 +162,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G5G-bR-cvc" customClass="LabelMore" customModule="groma">
-                                            <rect key="frame" x="138.5" y="27.5" width="9" height="22"/>
+                                            <rect key="frame" x="139.5" y="27.5" width="9" height="22"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                             <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -198,7 +198,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" placeholderIntrinsicWidth="30" placeholderIntrinsicHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mwK-SJ-DPa" customClass="FractionView" customModule="groma" customModuleProvider="target">
-                                            <rect key="frame" x="147.5" y="24" width="30" height="28"/>
+                                            <rect key="frame" x="150.5" y="24" width="30" height="28"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="isBold" value="YES"/>
@@ -223,12 +223,12 @@
                                         <constraint firstItem="iu9-Mq-1aV" firstAttribute="leading" secondItem="MYG-wi-HRh" secondAttribute="leading" id="5te-CM-NWn"/>
                                         <constraint firstItem="TAa-db-Q7O" firstAttribute="centerY" secondItem="G5G-bR-cvc" secondAttribute="centerY" id="8uZ-Uj-Llv"/>
                                         <constraint firstItem="iu9-Mq-1aV" firstAttribute="top" secondItem="MYG-wi-HRh" secondAttribute="top" constant="4" id="90H-za-WAL"/>
-                                        <constraint firstItem="TAa-db-Q7O" firstAttribute="leading" secondItem="mwK-SJ-DPa" secondAttribute="trailing" constant="9" id="Fr4-qQ-XJO"/>
+                                        <constraint firstItem="TAa-db-Q7O" firstAttribute="leading" secondItem="mwK-SJ-DPa" secondAttribute="trailing" constant="6" id="Fr4-qQ-XJO"/>
                                         <constraint firstAttribute="centerY" secondItem="kBK-Tm-FlM" secondAttribute="centerY" id="H1f-GA-I1g"/>
                                         <constraint firstItem="8gZ-RJ-4PM" firstAttribute="leading" secondItem="MYG-wi-HRh" secondAttribute="leading" id="IlF-my-Fvb"/>
                                         <constraint firstItem="kBK-Tm-FlM" firstAttribute="leading" secondItem="TAa-db-Q7O" secondAttribute="trailing" constant="20" id="bof-y6-Gw8"/>
                                         <constraint firstAttribute="centerY" secondItem="G5G-bR-cvc" secondAttribute="centerY" id="jYN-sj-hD6"/>
-                                        <constraint firstItem="mwK-SJ-DPa" firstAttribute="leading" secondItem="G5G-bR-cvc" secondAttribute="trailing" id="ngC-0S-YXq"/>
+                                        <constraint firstItem="mwK-SJ-DPa" firstAttribute="leading" secondItem="G5G-bR-cvc" secondAttribute="trailing" constant="2" id="ngC-0S-YXq"/>
                                         <constraint firstItem="kBK-Tm-FlM" firstAttribute="leading" secondItem="MYG-wi-HRh" secondAttribute="leading" constant="240" id="ptN-CE-sbA"/>
                                         <constraint firstAttribute="trailing" secondItem="8gZ-RJ-4PM" secondAttribute="trailing" id="s0g-HU-U9G"/>
                                     </constraints>

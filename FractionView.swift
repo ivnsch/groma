@@ -20,7 +20,8 @@ protocol FractionViewDelegate {
     @IBOutlet weak var numeratorLabel: UILabel!
     @IBOutlet weak var denominatorLabel: UILabel!
     @IBOutlet weak var lineView: UIView!
-    
+    @IBOutlet weak var fractionToUnitSpaceConstraint: NSLayoutConstraint!
+
     var delegate: FractionViewDelegate?
     
     var markedToDelete: Bool = false
@@ -79,7 +80,7 @@ protocol FractionViewDelegate {
             self?.backgroundColor = toDelete ? UIColor.flatRed : UIColor.white
         }
     }
-    
+
     func showSelected(selected: Bool, animated: Bool) {
         
         let (bgColor, fgColor) = selected ? (Theme.unitsSelectedColor, UIColor.white) : (UIColor.white, UIColor.black)
@@ -94,7 +95,7 @@ protocol FractionViewDelegate {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        lineView.rotate(45)
+        lineView.rotate(30)
         
         if isBold {
             _ = numeratorLabel.makeBold()
@@ -110,7 +111,7 @@ protocol FractionViewDelegate {
             return CGSize(width: 0, height: 0)
             
         } else {
-            return CGSize(width: numeratorLabel.width + lineView.width + denominatorLabel.width + 5 + 20, height: numeratorLabel.height + 20) // width: 5 pt (*2) spacing to line, 10 pt for 2*2 pt center constraint offset in labels + 20pt just to make a little more space.
+            return CGSize(width: numeratorLabel.width + 1 + denominatorLabel.width + 4, height: numeratorLabel.height + 20) // width: 1 pt line width, 4 pt for 2*2 pt center constraint offset in labels
         }
     }
     

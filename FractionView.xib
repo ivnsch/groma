@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,24 +22,24 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ykz-WH-7MC" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="145" y="68" width="37.5" height="18"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <rect key="frame" x="152.5" y="67" width="33" height="16"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                            <integer key="value" value="30"/>
+                            <integer key="value" value="20"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4MM-PJ-jcW" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="193" y="72" width="37.5" height="18"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <rect key="frame" x="190" y="75" width="33" height="16"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                            <integer key="value" value="30"/>
+                            <integer key="value" value="20"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </label>
@@ -53,12 +53,12 @@
                 </view>
             </subviews>
             <constraints>
-                <constraint firstItem="4MM-PJ-jcW" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="2" id="1gI-4B-Y66"/>
+                <constraint firstItem="4MM-PJ-jcW" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="4" id="1gI-4B-Y66"/>
                 <constraint firstItem="DmR-cu-Gkn" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="3Wk-CU-T3b"/>
-                <constraint firstItem="4MM-PJ-jcW" firstAttribute="leading" secondItem="DmR-cu-Gkn" secondAttribute="trailing" constant="5" id="KZL-pW-XiX"/>
+                <constraint firstItem="4MM-PJ-jcW" firstAttribute="leading" secondItem="DmR-cu-Gkn" secondAttribute="trailing" constant="2" id="KZL-pW-XiX"/>
                 <constraint firstItem="DmR-cu-Gkn" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="jq5-Dm-jLQ"/>
-                <constraint firstItem="Ykz-WH-7MC" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-2" id="pRV-hF-2w8"/>
-                <constraint firstItem="DmR-cu-Gkn" firstAttribute="leading" secondItem="Ykz-WH-7MC" secondAttribute="trailing" constant="5" id="yEf-Sc-9Kg"/>
+                <constraint firstItem="Ykz-WH-7MC" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-4" id="pRV-hF-2w8"/>
+                <constraint firstItem="DmR-cu-Gkn" firstAttribute="leading" secondItem="Ykz-WH-7MC" secondAttribute="trailing" constant="2" id="yEf-Sc-9Kg"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="26.5" y="-202"/>

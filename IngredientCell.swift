@@ -46,14 +46,14 @@ class IngredientCell: UITableViewCell {
                 }
             } ()
 
+            fractionView.fraction = DBFraction(numerator: ingredient.fraction.numerator, denominator: ingredient.fraction.denominator)
+
             if ingredient.unit.name.isEmpty {
                 unitLeadingConstraint.constant = 0
             } else {
-                unitLeadingConstraint.constant = 8
+                unitLeadingConstraint.constant = 6
             }
-            
-            fractionView.fraction = DBFraction(numerator: ingredient.fraction.numerator, denominator: ingredient.fraction.denominator)
-            
+
             categoryColorView.backgroundColor = ingredient.item.category.color
 
             // height now calculated yet so we pass the position of border
