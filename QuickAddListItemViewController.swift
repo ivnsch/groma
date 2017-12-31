@@ -418,7 +418,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                         onHasDefaultUnit(defaultUnit)
                     } else { // The app shouldn't make possible to delete the default unit - so this is an invalid state. But just in case, don't let the app crash, send an error message.
                         logger.e("Invalid state: The default unit was deleted! - recreating.")
-                        Prov.unitProvider.addUnit(unitId: .none, name: trans(""), buyable: true, wealSelf.successHandler { addedUnit in
+                        Prov.unitProvider.addUnit(unitId: .none, name: trans(""), buyable: true, units: nil, wealSelf.successHandler { addedUnit in
                             onHasDefaultUnit(addedUnit)
                         })
                     }

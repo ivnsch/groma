@@ -65,7 +65,7 @@ public struct RealmConfig {
                               DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self,
                               DBRemoveInventoryItem.self, DBRemoveProductGroup.self, Item.self, Unit.self,
                               QuantifiableProduct.self, RecipesContainer.self, InventoriesContainer.self,
-                              ListsContainer.self, BaseQuantitiesContainer.self, BaseQuantity.self
+                              ListsContainer.self, BaseQuantitiesContainer.self, BaseQuantity.self, UnitsContainer.self
         ]
 
         return config

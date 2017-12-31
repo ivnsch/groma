@@ -122,43 +122,65 @@ class RealmUnitProvider: RealmProvider {
     }
 
     func savePredefinedUnitsSync(update: Bool) -> (saved: Bool, units: [Unit]) {
+        guard let unitsContainer: UnitsContainer = loadSync(predicate: nil)?.first else {
+            logger.e("Invalid state: no container")
+            return (false, [])
+        }
+
         let predefinedUnits = self.predefinedUnits
+        var storedUnits: [Unit] = []
+
         if update {
-            var storedUnits: [Unit] = []
             for predefinedUnit in predefinedUnits {
-                if let storedUnit = addIfNotExistsSync(unit: predefinedUnit) {
+                if let storedUnit = addIfNotExistsSync(unit: predefinedUnit, units: unitsContainer.units) {
                     storedUnits.append(storedUnit)
                 }
             }
             return (true, storedUnits)
         } else {
+            for predefinedUnit in predefinedUnits {
+                if let unit = addUnitSync(unit: predefinedUnit, units: unitsContainer.units){
+                    storedUnits.append(unit)
+                }
+            }
+
             return (saveObjsSync(predefinedUnits, update: true), // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
                 predefinedUnits)
         }
     }
 
-    func addUnit(unitId: UnitId, name: String, buyable: Bool, _ handler: (Unit?) -> Void) {
-        handler(addUnitSync(unitId: unitId, name: name, buyable: buyable))
+    func addUnit(unitId: UnitId, name: String, buyable: Bool, units: RealmSwift.List<Unit>, _ handler: (Unit?) -> Void) {
+        handler(addUnitSync(unitId: unitId, name: name, buyable: buyable, units: units))
     }
 
-    func addUnitSync(unitId: UnitId, name: String, buyable: Bool) -> Unit? {
+    func addUnitSync(unitId: UnitId, name: String, buyable: Bool, units: RealmSwift.List<Unit>?) -> Unit? {
+        let finalUnitsMaybe: RealmSwift.List<Unit>? = units ?? {
+            let unitsContainer: UnitsContainer? = loadSync(predicate: nil)?.first
+            return unitsContainer?.units
+        } ()
+
+        guard let finalUnits = finalUnitsMaybe else {
+            logger.e("Couldn't retrieve units container!", .db)
+            return nil
+        }
+
         let unit = Unit(uuid: UUID().uuidString, name: name, id: unitId, buyable: false)
-        if saveObjSync(unit, update: true) { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
+        return addUnitSync(unit: unit, units: finalUnits)
+    }
+
+    fileprivate func addUnitSync(unit: Unit, units: RealmSwift.List<Unit>) -> Unit? {
+        return doInWriteTransactionSync {realm -> Unit in
+            realm.add(unit, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
+            units.append(unit)
             return unit
         }
-        return nil
     }
 
-    func addIfNotExistsSync(unit: Unit) -> Unit? {
+    func addIfNotExistsSync(unit: Unit, units: RealmSwift.List<Unit>) -> Unit? {
         if let storedUnit = findUnit(name: unit.name) {
             return storedUnit
         } else {
-            if saveObjSync(unit, update: false) { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
-                return unit
-            } else {
-                logger.e("Error saving unit", .db)
-                return nil
-            }
+            return addUnitSync(unit: unit, units: units)
         }
     }
 
@@ -173,15 +195,31 @@ class RealmUnitProvider: RealmProvider {
     }
 
     func unitsSync(buyable: Bool?) -> Results<Unit>? {
-        return loadSync(filter: buyable.map{Unit.createBuyable(buyable: $0)})
+        guard let units = unitsList() else { logger.e("Couldn't get list"); return nil }
+        if let filter = (buyable.map{ Unit.createBuyable(buyable: $0) }) {
+            return units.filter(filter)
+        } else {
+            return units.filter(Unit.createAlwaysTrueFilter())
+        }
     }
-    
+
+    fileprivate func unitsList() -> RealmSwift.List<Unit>? {
+        guard let unitsContainer: UnitsContainer = loadSync(predicate: nil)?.first else {
+            logger.e("Invalid state: no container")
+            return nil
+        }
+
+        return unitsContainer.units
+    }
+
     func unitSync(name: String) -> Unit? {
-        return loadSync(filter: Unit.createFilter(name: name))?.first
+        guard let units = unitsList() else { logger.e("Couldn't get list"); return nil }
+        return units.filter(Unit.createFilter(name: name)).first
     }
 
     func unitSync(id: UnitId) -> Unit? {
-        return loadSync(filter: Unit.createFilter(id: id))?.first
+        guard let units = unitsList() else { logger.e("Couldn't get list"); return nil }
+        return units.filter(Unit.createFilter(id: id)).first
     }
     
     func getOrCreateSync(name: String, realmData: RealmData? = nil, doTransaction: Bool = true) -> (unit: Unit, isNew: Bool)? {

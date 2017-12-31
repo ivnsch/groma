@@ -316,7 +316,12 @@ class RealmGlobalProvider: RealmProvider {
             if baseQuantitiesContainer == nil {
                 realm.add(BaseQuantitiesContainer())
             }
-            
+
+            let unitsContainer: UnitsContainer? = self.loadFirstSync()
+            if unitsContainer == nil {
+                realm.add(UnitsContainer())
+            }
+
             return true
         }) {successMaybe in
             handler(successMaybe ?? false)

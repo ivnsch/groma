@@ -45,8 +45,8 @@ class UnitProviderImpl: UnitProvider {
         }
     }
 
-    func addUnit(unitId: UnitId, name: String, buyable: Bool, _ handler: @escaping (ProviderResult<Unit>) -> Void) {
-        if let unit = DBProv.unitProvider.addUnitSync(unitId: unitId, name: name, buyable: buyable) {
+    func addUnit(unitId: UnitId, name: String, buyable: Bool, units: RealmSwift.List<Unit>?, _ handler: @escaping (ProviderResult<Unit>) -> Void) {
+        if let unit = DBProv.unitProvider.addUnitSync(unitId: unitId, name: name, buyable: buyable, units: units) {
             handler(ProviderResult(status: .success, sucessResult: unit))
         } else {
             handler(ProviderResult(status: .databaseUnknown))

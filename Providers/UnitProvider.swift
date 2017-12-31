@@ -34,7 +34,7 @@ public protocol UnitProvider {
     
     func getOrCreate(baseQuantity: Float, _ handler: @escaping (ProviderResult<(base: BaseQuantity, isNew: Bool)>) -> Void)
 
-    func addUnit(unitId: UnitId, name: String, buyable: Bool, _ handler: @escaping (ProviderResult<Unit>) -> Void)
+    func addUnit(unitId: UnitId, name: String, buyable: Bool, units: RealmSwift.List<Unit>?, _ handler: @escaping (ProviderResult<Unit>) -> Void)
 
     func restorePredefinedUnits(_ handler: @escaping (ProviderResult<Any>) -> Void)
 

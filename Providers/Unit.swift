@@ -94,6 +94,12 @@ public class Unit: DBSyncable, Identifiable {
     static func createBuyable(buyable: Bool) -> String {
         return "buyable == \(buyable)"
     }
+
+    // Used to convert List to Results
+    static func createAlwaysTrueFilter() -> String {
+        // There's should be something better than this...
+        return "idVal >= 0"
+    }
     
     public func copy(uuid: String? = nil, name: String? = nil, id: UnitId? = nil, buyable: Bool = true) -> Unit {
         return Unit(
