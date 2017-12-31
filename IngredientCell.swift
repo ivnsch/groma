@@ -32,7 +32,7 @@ class IngredientCell: UITableViewCell {
             
             nameLabel.text = ingredient.item.name
             
-            quantityLabel.text = ingredient.quantity.quantityStringHideZero
+            quantityLabel.text = ingredient.quantity.quantityString
             
             unitLabel.text = {
                 if ingredient.unit.id == .none {
