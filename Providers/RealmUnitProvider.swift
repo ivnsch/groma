@@ -96,9 +96,6 @@ class RealmUnitProvider: RealmProvider {
             Unit(uuid: UUID().uuidString, name: trans("unit_liter"), id: .liter, buyable: true),
             Unit(uuid: UUID().uuidString, name: trans("unit_milliliter"), id: .milliliter, buyable: true),
 
-            Unit(uuid: UUID().uuidString, name: trans("unit_ounce"), id: .ounce, buyable: true),
-            Unit(uuid: UUID().uuidString, name: trans("unit_pound"), id: .pound, buyable: true),
-
             Unit(uuid: UUID().uuidString, name: trans("unit_pack"), id: .pack, buyable: true),
 
             Unit(uuid: UUID().uuidString, name: trans("unit_cup"), id: .cup, buyable: false),
