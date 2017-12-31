@@ -30,9 +30,13 @@ class AddRecipeController: UIViewController {
     fileprivate weak var delegate: AddRecipeControllerDelegate?
 
     fileprivate var unitBasePopup: MyPopup?
+    fileprivate var unitBaseViewController: SelectUnitAndBaseController?
 
     // Quick access, to get the unit images (derived from id) in the cells
     fileprivate var unitNameToIdDictionary: Dictionary<String, UnitId> = [:]
+
+    fileprivate var units: Results<Providers.Unit>?
+    fileprivate var baseQuantities: RealmSwift.List<BaseQuantity>?
 
     func config(recipe: Recipe, delegate: AddRecipeControllerDelegate) {
         self.delegate = delegate
@@ -53,6 +57,10 @@ class AddRecipeController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        loadUnits()
+        loadBaseQuantities()
+
         initTableView()
         initSubmitView()
         registerKeyboardNotifications()
@@ -154,6 +162,22 @@ class AddRecipeController: UIViewController {
         UIView.animate(withDuration: 0.2, animations: {
             // For some reason adding inset in keyboardWillShow is animated by itself but removing is not, that's why we have to use animateWithDuration here
             self.tableView.bottomInset = Theme.submitViewHeight
+        })
+    }
+
+    // MARK: Data
+
+    fileprivate func loadUnits() {
+        Prov.unitProvider.units(buyable: true, successHandler{ [weak self] units in
+            self?.units = units
+            self?.unitBaseViewController?.loadItems()
+        })
+    }
+
+    fileprivate func loadBaseQuantities() {
+        Prov.unitProvider.baseQuantities(successHandler{ [weak self] baseQuantities in
+            self?.baseQuantities = baseQuantities
+            self?.unitBaseViewController?.loadItems()
         })
     }
 }
@@ -347,10 +371,20 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
 
             self?.unitBasePopup?.hide(onFinish: { [weak self] in
                 self?.unitBasePopup = nil
+                self?.unitBaseViewController?.removeFromParentViewController()
+                self?.unitBaseViewController = nil
                 UIView.performWithoutAnimation { [weak self] in
                     self?.tableView.reloadRows(at: [indexPath], with: .none)
                 }
             })
+        }
+
+        controller.fetchUnitsFunc = { [weak self] in
+            return self?.units.map { AnyRealmCollection($0) }
+        }
+
+        controller.fetchBaseQuantitiesFunc = { [weak self] in
+            return self?.baseQuantities.map { AnyRealmCollection($0) }
         }
 
         parent.addChildViewController(controller)
@@ -358,15 +392,16 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         controller.view.frame = CGRect(x: 0, y: 0, width: parent.view.width, height: parent.view.height)
         popup.contentView = controller.view
         self.unitBasePopup = popup
+        self.unitBaseViewController = controller
 
         controller.config(selectedUnitId: cellState.unitData.unitId,
                           selectedUnitName: cellState.unitData.unitName,
                           selectedBaseQuantity: cellState.baseQuantity)
+        controller.loadItems()
 
         view.endEditing(true)
 
         popup.show(from: baseUnitView, onFinish: {
-            controller.loadItems()
         })
     }
 

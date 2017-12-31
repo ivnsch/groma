@@ -8,6 +8,7 @@
 
 import UIKit
 import Providers
+import RealmSwift
 
 struct SelectUnitAndBaseControllerInputs {
     var unitId: UnitId? = nil
@@ -46,6 +47,10 @@ class SelectUnitAndBaseController: UIViewController {
     fileprivate var baseQuantitiesViewHeight: CGFloat?
 
     var onSubmit: ((SelectUnitAndBaseControllerResult) -> Void)?
+
+    // Optional - if not provided this controller will fetch the units/bases. Reason: Improve performance when it's possible to pre-fetch the unit/bases (e.g. in add recipe to list controller) instead of doing this each time we open this controller, which causes a noticeable delay.
+    var fetchUnitsFunc: (() -> AnyRealmCollection<Providers.Unit>?)?
+    var fetchBaseQuantitiesFunc: (() -> AnyRealmCollection<BaseQuantity>?)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,6 +133,8 @@ class SelectUnitAndBaseController: UIViewController {
         unitsManager.onFetchedData = { [weak self] in
             self?.initVariableCellHeights()
         }
+
+        unitsManager.fetchFunc = fetchUnitsFunc
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -179,6 +186,8 @@ class SelectUnitAndBaseController: UIViewController {
         baseQuantitiesManager.onFetchedData = { [weak self] in
             self?.initVariableCellHeights()
         }
+
+        baseQuantitiesManager.fetchFunc = fetchBaseQuantitiesFunc
     }
 
     fileprivate func submit() {

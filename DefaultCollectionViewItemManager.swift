@@ -70,6 +70,7 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     var willDeleteItem: ((T) -> Void)?
     var clearToDeleteItemsState: (() -> Void)? // Used by popup on cancel
     var onFetchedData: (() -> Void)?
+    var fetchFunc: (() -> AnyRealmCollection<T>?)?
 
     let rowsSpacing: CGFloat = 4
     let topCollectionViewPadding: CGFloat = 20
@@ -118,7 +119,7 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     func loadItems() {
         guard let controller = controller else { logger.e("No controller", .ui); return }
 
-        fetchItems(controller: controller) { items in
+        func onHasItems(items: AnyRealmCollection<T>) {
             let dataSource = self.createDataSource(items: items)
             dataSource.delegate = self
             self.myCollectionView.dataSource = dataSource
@@ -129,6 +130,18 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
             self.myCollectionView.reloadData()
 
             self.onFetchedData?()
+        }
+
+        if let fetchFunc = self.fetchFunc {
+            if let items = fetchFunc() {
+                onHasItems(items: items)
+            } else {
+                logger.i("Fetch function didn't return items - maybe not available yet", .ui)
+            }
+        } else {
+            fetchItems(controller: controller) { items in
+                onHasItems(items: items)
+            }
         }
     }
 
