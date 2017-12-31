@@ -76,15 +76,13 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         tableView.keyboardDismissMode = .onDrag
 
         unitsManager.configure(controller: self, onSelectItem: { [weak self] unit in
-            self?.inputs.unit = unit
-            delay(0.2) { [weak self] in // make it less abrubt
-                self?.tableView.scrollToRow(at: IndexPath(row: 2, section: 0), at: .top, animated: true)
-            }
-        })
-        unitsManager.onSelectItem = { [weak self] unit in
             self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.unit = unit
-        }
+            delay(0.2) { [weak self] in // make it less abrubt
+                self?.tableView.scrollTo(row: 2)
+            }
+        })
+
         unitsManager.onMarkedItemToDelete = { [weak self] uniqueName in
             self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.unitMarkedToDelete = uniqueName

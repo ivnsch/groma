@@ -63,7 +63,7 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
 
     fileprivate(set) weak var controller: UIViewController?
 
-    var onSelectItem: ((T?) -> Void)?
+    fileprivate var onSelectItem: ((T?) -> Void)?
     var selectedItem: (() -> String?)?
     var onMarkedItemToDelete: ((String?) -> Void)?
     var itemMarkedToDelete: (() -> String?)? // returns name (assumed to be unique)

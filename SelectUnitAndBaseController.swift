@@ -28,6 +28,13 @@ struct SelectUnitAndBaseControllerResult {
 
 class SelectUnitAndBaseController: UIViewController {
 
+    fileprivate let unitsHeaderIndex = 0
+    fileprivate let unitsCollectionViewIndex = 1
+    fileprivate let unitInputIndex = 2
+    fileprivate let basesHeaderIndex = 3
+    fileprivate let basesCollectionViewIndex = 4
+    fileprivate let basesInputIndex = 5
+
     @IBOutlet weak var tableView: UITableView!
 
     fileprivate var unitsManager = UnitCollectionViewManager(filterBuyable: true)
@@ -82,18 +89,15 @@ class SelectUnitAndBaseController: UIViewController {
     }
 
     fileprivate func configUnitsManager() {
-        unitsManager.configure(controller: self, onSelectItem: { [weak self] unit in
-            self?.inputs.unitName = unit?.name
-            delay(0.2) { [weak self] in // make it less abrubt
-                self?.tableView.scrollToRow(at: IndexPath(row: 2, section: 0), at: .top, animated: true)
-            }
-        })
-
-        unitsManager.onSelectItem = { [weak self] unit in
+        unitsManager.configure(controller: self, onSelectItem: { [weak self] unit in guard let weakSelf = self else { return }
             self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.unitId = unit?.id
             self?.inputs.unitName = unit?.name
-        }
+            delay(0.2) { [weak self] in // make it less abrubt
+                self?.tableView.scrollTo(row: weakSelf.basesCollectionViewIndex)
+            }
+        })
+
         unitsManager.onMarkedItemToDelete = { [weak self] uniqueName in
             self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.unitMarkedToDelete = uniqueName
@@ -141,13 +145,10 @@ class SelectUnitAndBaseController: UIViewController {
 
     fileprivate func configBaseQuantitiesManager() {
         baseQuantitiesManager.configure(controller: self, onSelectItem: { [weak self] baseQuantity in
-            self?.inputs.baseQuantityName = baseQuantity?.val.quantityString
+            self?.inputs.baseQuantityMarkedToDelete = nil // clear possible marked to delete unit
+            self?.inputs.baseQuantity = baseQuantity?.val
         })
 
-        baseQuantitiesManager.onSelectItem = { [weak self] base in
-            self?.inputs.baseQuantityMarkedToDelete = nil // clear possible marked to delete unit
-            self?.inputs.baseQuantity = base?.val
-        }
         baseQuantitiesManager.onMarkedItemToDelete = { [weak self] base in
             self?.inputs.baseQuantityMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.baseQuantityMarkedToDelete = base
@@ -251,7 +252,7 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
         }
 
         switch indexPath.row {
-        case 1:
+        case unitsCollectionViewIndex:
             let cell = dequeueDefaultCell()
             let view = unitsManager.view
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -259,7 +260,7 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
             view.frame = cell.contentView.bounds // appears to be necessary
             view.fillSuperview()
             return cell
-        case 4:
+        case basesCollectionViewIndex:
             let cell = dequeueDefaultCell()
             let view = baseQuantitiesManager.view
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -267,11 +268,11 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
             view.frame = cell.contentView.bounds // appears to be necessary
             view.fillSuperview()
             return cell
-        case 0, 3: // headers
+        case unitsHeaderIndex, basesHeaderIndex: // headers
             let header = tableView.dequeueReusableCell(withIdentifier: "subHeaderCell", for: indexPath) as! IngredientDataSubHeaderCell
             header.title.text = indexPath.row == 0 ? trans("select_ingredient_data_header_units") : trans("select_ingredient_data_header_quantity")
             return header
-        case 2: // unit input
+        case unitInputIndex: // unit input
             let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
             itemInputCell.configure(placeholder: trans("enter_custom_unit_placeholder"), onlyNumbers: false, onInputUpdate: { [weak self] unitInput in
                 self?.inputs.unitId = .custom
@@ -282,7 +283,7 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
                 }
             })
             return itemInputCell
-        case 5: // base input
+        case basesInputIndex: // base input
             let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
             itemInputCell.configure(placeholder: trans("enter_custom_base_quantity_placeholder"), onlyNumbers: true, onInputUpdate: { [weak self] baseInput in
                 self?.inputs.baseQuantityName = baseInput.isEmpty ? nil : baseInput
@@ -299,10 +300,10 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
-        case 1: return unitsViewHeight ?? 600 // dummy big default size, with 0 constraint errors in console (at the beginning the collection collection view has no width)
-        case 4: return baseQuantitiesViewHeight ?? 600
-        case 0, 3: return 50 // header
-        case 2, 5: return 80 // text inputs
+        case unitsCollectionViewIndex: return unitsViewHeight ?? 600 // dummy big default size, with 0 constraint errors in console (at the beginning the collection collection view has no width)
+        case basesCollectionViewIndex: return baseQuantitiesViewHeight ?? 600
+        case unitsHeaderIndex, basesHeaderIndex: return 50 // header
+        case unitInputIndex, basesInputIndex: return 80 // text inputs
         default: fatalError("Not supported index: \(indexPath.row)")
         }
     }

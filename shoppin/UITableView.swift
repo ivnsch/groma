@@ -152,6 +152,10 @@ extension UITableView {
         updateRow(indexPath: IndexPath(row: row, section: 0))
     }
 
+    func scrollTo(row: Int) {
+        scrollToRow(at: IndexPath(row: row, section: 0), at: .top, animated: true)
+    }
+
     func deleteSection(index: Int) {
         deleteSections(IndexSet([index]), with: .top)
     }
