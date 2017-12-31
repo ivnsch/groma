@@ -113,6 +113,9 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         initQuantityView()
 
         cellCount = 5
+
+        unitsManager.loadItems()
+        
         reload()
     }
 
