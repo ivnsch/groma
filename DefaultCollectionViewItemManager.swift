@@ -155,6 +155,11 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     func confirmRemoveItemPopupMessage(item: T) -> String {
         fatalError("Override")
     }
+
+    func allowRemoveItem(item: T, controller: UIViewController) -> Bool {
+        // Optional override
+        return true
+    }
 }
 
 
@@ -257,13 +262,12 @@ extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
 
         let cellMaybe = myCollectionView.cellForItem(at: indexPath) as? DefaultItemMeasureCell
 
-        if itemMarkedToDelete() == selectedItem.uniqueName {
+        if itemMarkedToDelete() == selectedItem.uniqueName && allowRemoveItem(item: selectedItem, controller: controller) {
 
             ConfirmationPopup.show(title: trans("popup_title_confirm"), message: confirmRemoveItemPopupMessage(item: selectedItem), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_cancel"), controller: controller, onOk: { [weak self] in
 
-                let item = items[indexPath.row]
-                self?.willDeleteItem?(item)
-                self?.delete(item: item, controller: controller, onFinish: {
+                self?.willDeleteItem?(selectedItem)
+                self?.delete(item: selectedItem, controller: controller, onFinish: {
                     self?.myCollectionView.deleteItems(at: [indexPath])
                     self?.myCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
                 })
@@ -287,6 +291,7 @@ extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
             }
         }
     }
+
 }
 
 // Our class can't implement directly the collection view delegates because it has a generic parameter (Swift...) so we use an intermediary

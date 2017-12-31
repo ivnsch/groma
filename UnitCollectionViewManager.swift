@@ -63,6 +63,15 @@ class UnitCollectionViewManager: DefaultCollectionViewItemManager<Providers.Unit
     override func confirmRemoveItemPopupMessage(item: Providers.Unit) -> String {
         return trans("popup_remove_unit_completion_confirm", item.name)
     }
+
+    override func allowRemoveItem(item: Providers.Unit, controller: UIViewController) -> Bool {
+        if item.id == .none {
+            AlertPopup.show(message: trans("popup_you_cant_delete_default_unit"), controller: controller)
+            return false
+        } else {
+            return true
+        }
+    }
 }
 
 // TODO implement edit also with this and remove UnitsDataSource, previous controller. Rename this in UnitsDataSource.
