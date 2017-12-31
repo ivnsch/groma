@@ -384,9 +384,18 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
 
     func delete(productNameSuggestion: String, handler: @escaping () -> Void) {
-        Prov.productProvider.delete(productName: productNameSuggestion, successHandler{
-            handler()
-        })
+        ConfirmationPopup.show(
+            title: trans("popup_title_confirm"),
+            message: trans("popup_remove_product_completion_confirm", productNameSuggestion),
+            okTitle: trans("popup_button_yes"),
+            cancelTitle: trans("popup_button_no"),
+            controller: self,
+            onOk: { [weak self] in guard let weakSelf = self else {return}
+                Prov.productProvider.delete(productName: productNameSuggestion, weakSelf.successHandler{
+                    handler()
+                })
+            }
+        )
     }
 
     func delete(brandNameSuggestion: String, handler: @escaping () -> Void) {

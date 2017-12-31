@@ -238,6 +238,7 @@ popup_please_update_app_to_use_account = "Por favor actualiza Groma para poder c
 popup_buy_will_add_to_history_stats = "Los artículos en tu carrito de compra se agregarán al inventario, historial y reportes";
 popup_you_cant_buy_cart = "No tienes autorización para mover ítems al inventario \"%@\"\nPídele a alguien con autorización que te agregue como participante.";
 popup_remove_section_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá todas las secciones y categorías con este nombre e ítems en listas, grupos, inventarios e historial asociados con ellos.";
+popup_remove_product_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá también entradas en listas, inventarios o recetas con este nombre.";
 popup_remove_brand_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá todos los productos con esta marca e ítems en listas, grupos, inventarios e historial asociados con ellos.";
 popup_remove_unit_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá todos los productos utilizando esta unidad e ítems en listas, grupos, inventarios e historial asociados con ellos.";
 popup_remove_base_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá todos los productos utilizando esta cantidad base e ítems en listas, grupos, inventarios e historial asociados con ellos.";
