@@ -568,9 +568,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
 
         if let scrollableBottomAttacher = scrollableBottomAttacher {
             removeScrollableBottomAttacher(scrollableBottomAttacher, onFinish: {
-                scrollableBottomAttacher.hideTop(onFinish: { [weak self] in
-                    self?.lockAddBottomController = false
-                })
+                showScrollableBottomAttacher() // TODO review memory - does the old bottom attacher release everything?
             })
         } else {
             showScrollableBottomAttacher()
