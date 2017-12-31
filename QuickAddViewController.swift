@@ -315,6 +315,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             searchBar.becomeFirstResponder()
             
             delegate?.onAddProductOpen()
+            quickAddListItemViewController?.onShowAddEditItemForm()
             
             return true
         }

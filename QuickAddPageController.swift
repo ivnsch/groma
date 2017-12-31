@@ -161,7 +161,11 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     func onTapNavBarCloseTap() -> Bool {
         return currentSwipeController?.onTapNavBarCloseTap() ?? false
     }
-    
+
+    func onShowAddEditItemForm() {
+        addProductController?.onShowAddEditItemForm()
+    }
+
     // MARK: - SwipeViewDelegate
     
     func swipeViewCurrentItemIndexDidChange(_ swipeView: SwipeView!) {

@@ -574,7 +574,14 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             showScrollableBottomAttacher()
         }
     }
-    
+
+    func onShowAddEditItemForm() {
+        scrollableBottomAttacher?.bottom.removeSubmitButton(onFinish: {})
+        scrollableBottomAttacher?.removeBottom(onFinish: { [weak self] in
+            self?.scrollableBottomAttacher = nil
+        })
+    }
+
     func scrollToBottom() {
         collectionView.scrollToItem(at: IndexPath(row: filteredQuickAddItems.count - 1, section: 0), at: .top, animated: true)
     }
