@@ -72,9 +72,10 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Can I share with other users in real time?", text: "You can share with other users in real time, by using the same login! If your current login is private (e.g. Facebook account) you have to create a new account which can be shared."),
         
         HelpItem(title: "Can I change the store that a List is linked to?", text: "No, once the List is submitted, the store can't be changed. If you need to do this you have to delete the List and create a new one with the new store."),
-        
-        HelpItem(title: "I cannot find the information I'm looking for", text: "Send a feedback email! I’m super happy to answer your questions."),
-        
+
+        HelpItem(title: "What are purchasable units?", text: "Units that can be purchased! Examples: A liter or a pack are purchasable, as you find things in stores measured directly in liters (e.g. a 2L beverage) or packs (e.g. a pack of sweets). A tablespoon or a shot are not purchasable, as normally stores do not sell products measured in these units. You can edit this property."),
+
+        HelpItem(title: "What are edible products?", text: "Products that you can eat! This is to filter out non-edible products from the recipe section (you will not be able to add e.g. cleaning agent to a recipe). You can edit this property."),
         
 //        HelpItem(title: "Do I need an account?", text: "Nope, unless that is you’d like to share your Lists or Inventories with other users or other devices."),
 //        
@@ -135,10 +136,13 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Kann ich mit anderen Nutzern in Echtzeit teilen?", text: "Ja, dafür müsst ihr euch mit dem gleichen Daten einloggen. Wenn dies nicht möglich ist, z.B. weil du mit deinem persönlichen Facebook Konto eingeloggt bist, muss ein neues Konto angelegt werden, das geteilt werden kann."),
         
         HelpItem(title: "Kann ich den Laden von einer Liste ändern?", text: "Nein, nachdem die Liste gespeichert wurde, kann der Laden nicht mehr geändert werden. Falls du dies brauchst, musst du die alte Liste löschen und eine neue mit dem neuen Laden erstellen."),
-        
+
+        HelpItem(title: "Was sind kaufbare Messeinheiten?", text: "Einheiten, die gekauft werden können! Zum Beispiel: Ein Liter oder eine Packung sind kaufbar, da Produkte in diesen Einheiten verkauft werden. Ein Teelöffel oder ein Schuss sind nicht (direktkaufbar. Diese Eigenschaft kann editiert werden."),
+
+        HelpItem(title: "Was sind verzehbare Produkte?", text: "Wie die Bezeichnung sagt, Produkte die verzehrt werden können! Dies hat den Zweck nicht verzehrbare Produkte von der Zutaten-Auswahl in den Rezepten rauszufiltern (es ist z.B. nicht möglich Putzmittel in ein Rezept einzufügen). Diese Eingenschaft kann editiert werden."),
+
         HelpItem(title: "Ich kann nicht die Information finden, die ich suche", text: "Sende uns eine Feedback Email! Wir beantworten gerne deine Fragen."),
 
-        
 //        HelpItem(title: "Brauche ich einen Benutzerkonto?", text: "Wenn du listen oder Inventare mit anderen nicht teilen willst, oder mit anderen Geräten synchronisieren willst, ist ein Benutzerkonto unnötig. Die Funktionalität von dieser App mit und ohne Benutzerkonto, außer diesen Eigenschaften ist gleich."),
 //        
 //        HelpItem(title: "Kann ich die App offline benutzen?", text: "Ja, du musst nicht einen Benutzerkonto haben. Wenn du eingeloggt bist und offline gehst, wird sich die App automatisch synchronisieren sobald du zurück online bist."),
@@ -195,6 +199,10 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Puedo sincronizar con otros usuarios en tiempo real?", text: "Sí, para esto tienen todos que conectarse con el mismo usuario. Si esto no es posible (por ejemplo por que usas tu cuenta personal de Facebook) tienen que crear una nueva cuenta que se puede compartir."),
         
         HelpItem(title: "Puedo cambiar el almacén de una lista?", text: "No, después que guardas la lista, el almacén no se puede cambiar. Si necesitas cambiarlo tienes que borrar la lista y crear una nueva con el nuevo almacén."),
+
+        HelpItem(title: "Qué son unidades comprables?", text: "Unidades de medida que puedes comprar directamente! Por ejemplo, un litro o un paquete son comprables, ja que encuetras productos en estas unidades en los almacenes. Por otro lado, por una cucharada o un trago no se compran directamente. Esta propiedad es editable."),
+
+        HelpItem(title: "Qué son productos comestibles?", text: "Como el adjetivo lo indica, productos que se pueden comer! Esto es para remover productos que no se pueden comer del menú en las recetas - por ejemplo, no puedes agregar detergente a una receta. Esta propiedad es editable."),
 
         HelpItem(title: "No encuentro la información que estoy buscando", text: "Envíanos un feedback email! Nos alegra mucho responder todas tus preguntas!"),
         
