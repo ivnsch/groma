@@ -49,10 +49,6 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
         return myCollectionView
     }
 
-    var units: AnyRealmCollection<T>? {
-        return dataSource?.items
-    }
-
     //    var inputs: SelectIngredientDataControllerInputs = SelectIngredientDataControllerInputs()
     fileprivate(set) var myCollectionView: UICollectionView!
     //    weak var unitDelegate: SelectUnitControllerDelegate?
