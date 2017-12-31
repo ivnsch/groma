@@ -673,13 +673,19 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             let price: Float = (priceInput.text.flatMap {
                 self.getNumberStringFromCurrencyString(string: $0)
             })?.floatValue ?? 0
-            
+
+            // There's a bug in which sometimes a store product (blueberries the time I spotted it) has a -1 price - have no idea what causes this, so adding this as a safety measure - if it happens again and there's no error log at least we know this isn't the reason.
+            let correctedPrice = price < 0 ? ({
+                logger.e("Negative price! \(price)", .ui)
+                return 0
+            } ()) : price
+
             if let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
                 
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
                 // Explanation category/section name: for list items, the section input refers to the list item's section. For the rest the product category. When we store the list items, if a category with the entered section name doesn't exist yet, one is created with the section's data.
-                delegate?.onOkTap(price, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: currentBase, unit: currentUnit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
+                delegate?.onOkTap(correctedPrice, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: currentBase, unit: currentUnit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
                 
             } else {
                 logger.e("Validation was not implemented correctly, price: \(String(describing: priceInput.text)), quantity: \(String(describing: productQuantityController?.quantity)), brand: \(String(describing: brandInput.text)), sectionColor: \(String(describing: sectionColorButton.textColor))")
