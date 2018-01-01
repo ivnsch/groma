@@ -75,6 +75,7 @@
 		6A3A67DE1E59D50C00B5354F /* UnitEditableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A3A67DD1E59D50C00B5354F /* UnitEditableCell.xib */; };
 		6A3A67E01E59D57500B5354F /* UnitEditableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3A67DF1E59D57500B5354F /* UnitEditableCell.swift */; };
 		6A3B2B7C1E59E93600798424 /* UnitView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A3B2B7B1E59E93600798424 /* UnitView.xib */; };
+		6A3B4CCE1FF986AC00D90BFD /* AddItemsToCartTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3B4CCD1FF986AB00D90BFD /* AddItemsToCartTest.swift */; };
 		6A3F5DDB1FEAFC5E003085F6 /* SelectUnitAndBaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F5DD91FEAFC5E003085F6 /* SelectUnitAndBaseController.swift */; };
 		6A3F5DDC1FEAFC5E003085F6 /* SelectUnitAndBaseController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A3F5DDA1FEAFC5E003085F6 /* SelectUnitAndBaseController.xib */; };
 		6A3F5DE01FEAFE5E003085F6 /* DefaultCollectionViewItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F5DDF1FEAFE5E003085F6 /* DefaultCollectionViewItemManager.swift */; };
@@ -83,6 +84,7 @@
 		6A42C3851E437C4900F8E0E6 /* SimpleListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A42C3831E437C4900F8E0E6 /* SimpleListItemsController.swift */; };
 		6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A42C3841E437C4900F8E0E6 /* SimpleListItemsController.xib */; };
 		6A4D04CE1FEB16FB005BDA52 /* UnitCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4D04CD1FEB16FB005BDA52 /* UnitCollectionViewManager.swift */; };
+		6A4DBFDA1FF9B18800B2AB15 /* Providers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A4DBFDB1FF9B18800B2AB15 /* Providers.framework */; };
 		6A66D3461E413A300028240C /* TodoListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */; };
 		6A76C3C61E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */; };
 		6A78ADA21FEBD57A00058D27 /* BaseQuantitiesCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78ADA11FEBD57A00058D27 /* BaseQuantitiesCollectionViewManager.swift */; };
@@ -166,6 +168,7 @@
 		6AF46EBC1E5BBBC900BBFF4C /* UnitSubmitCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF46EBA1E5BBBC900BBFF4C /* UnitSubmitCell.xib */; };
 		6AF46EC01E5CE19A00BBFF4C /* PickerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EBF1E5CE19A00BBFF4C /* PickerCollectionView.swift */; };
 		6AFF38361E89B0D3009AD368 /* ManageDatabase.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF38381E89B0D3009AD368 /* ManageDatabase.storyboard */; };
+		ABCC0C60A2DB87DCAF62D76A /* Pods_shoppinUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7F3478CE41426B11D1A08D9 /* Pods_shoppinUITests.framework */; };
 		AE4ACBEA0F92FC70EBA5FB3A /* Pods_groma.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */; };
 		EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0587DB1BBED86B00080626 /* IntroPageView.xib */; };
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
@@ -508,6 +511,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		350AE7940462A672F24DC919 /* Pods-shoppinUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppinUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5819FB5D1DDDF59500FB2CC1 /* Validatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validatable.swift; sourceTree = "<group>"; };
 		58FA07151DE1F2550059F2D0 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		58FBD9AD1DDCDA18002242D6 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
@@ -529,6 +533,7 @@
 		6A17C4DA1FF027F300372DDB /* TooltipPicker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TooltipPicker.xib; sourceTree = "<group>"; };
 		6A17C4DD1FF02FB200372DDB /* TooltipPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipPickerCell.swift; sourceTree = "<group>"; };
 		6A17C4DE1FF02FB200372DDB /* TooltipPickerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TooltipPickerCell.xib; sourceTree = "<group>"; };
+		6A1B5A291FF99392002E5BAC /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewController.swift; sourceTree = "<group>"; };
 		6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ListItemCell.xib; path = ../ListItemCell.xib; sourceTree = "<group>"; };
 		6A278F8B1E69CA1A00126F8E /* SwipeToDeleteHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteHelper.swift; sourceTree = "<group>"; };
@@ -576,6 +581,7 @@
 		6A3A67DD1E59D50C00B5354F /* UnitEditableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnitEditableCell.xib; sourceTree = "<group>"; };
 		6A3A67DF1E59D57500B5354F /* UnitEditableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitEditableCell.swift; sourceTree = "<group>"; };
 		6A3B2B7B1E59E93600798424 /* UnitView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnitView.xib; sourceTree = "<group>"; };
+		6A3B4CCD1FF986AB00D90BFD /* AddItemsToCartTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemsToCartTest.swift; sourceTree = "<group>"; };
 		6A3F5DD91FEAFC5E003085F6 /* SelectUnitAndBaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectUnitAndBaseController.swift; sourceTree = "<group>"; };
 		6A3F5DDA1FEAFC5E003085F6 /* SelectUnitAndBaseController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectUnitAndBaseController.xib; sourceTree = "<group>"; };
 		6A3F5DDF1FEAFE5E003085F6 /* DefaultCollectionViewItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCollectionViewItemManager.swift; sourceTree = "<group>"; };
@@ -584,6 +590,9 @@
 		6A42C3831E437C4900F8E0E6 /* SimpleListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleListItemsController.swift; sourceTree = "<group>"; };
 		6A42C3841E437C4900F8E0E6 /* SimpleListItemsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleListItemsController.xib; sourceTree = "<group>"; };
 		6A4D04CD1FEB16FB005BDA52 /* UnitCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitCollectionViewManager.swift; sourceTree = "<group>"; };
+		6A4DBFD71FF9B0C000B2AB15 /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A4DBFD91FF9B10D00B2AB15 /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A4DBFDB1FF9B18800B2AB15 /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A58B0D21E48D5D50012F4C9 /* groma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = groma.entitlements; sourceTree = "<group>"; };
 		6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
@@ -672,10 +681,12 @@
 		6AFF383E1E89B0DF009AD368 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ManageDatabase.strings; sourceTree = "<group>"; };
 		8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_groma.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90786A7A2BEDAE7F0308001C /* Pods-groma.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-groma.debug.xcconfig"; path = "Pods/Target Support Files/Pods-groma/Pods-groma.debug.xcconfig"; sourceTree = "<group>"; };
+		9205D4FFE19B37AD4CFEE52E /* Pods-shoppinUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppinUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests.release.xcconfig"; sourceTree = "<group>"; };
 		98053CCC7F57AECBD28D4F1D /* Pods_shoppin_osxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E255758FF7D0B9EA448C576 /* Pods_shoppin_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0402B4CFFCE62A7F089CFBD /* Pods-shoppin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.release.xcconfig"; sourceTree = "<group>"; };
 		B242A1FEAA96009C120C8E2A /* Pods_shoppin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7F3478CE41426B11D1A08D9 /* Pods_shoppinUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppinUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE92BCDD9D065E2AC1384DF9 /* Pods-groma.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-groma.release.xcconfig"; path = "Pods/Target Support Files/Pods-groma/Pods-groma.release.xcconfig"; sourceTree = "<group>"; };
 		EB0587DB1BBED86B00080626 /* IntroPageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroPageView.xib; sourceTree = "<group>"; };
 		EB0587DD1BBED9C800080626 /* IntroPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroPageView.swift; sourceTree = "<group>"; };
@@ -1054,6 +1065,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A4DBFDA1FF9B18800B2AB15 /* Providers.framework in Frameworks */,
+				ABCC0C60A2DB87DCAF62D76A /* Pods_shoppinUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1390,6 +1403,8 @@
 				B0402B4CFFCE62A7F089CFBD /* Pods-shoppin.release.xcconfig */,
 				90786A7A2BEDAE7F0308001C /* Pods-groma.debug.xcconfig */,
 				CE92BCDD9D065E2AC1384DF9 /* Pods-groma.release.xcconfig */,
+				350AE7940462A672F24DC919 /* Pods-shoppinUITests.debug.xcconfig */,
+				9205D4FFE19B37AD4CFEE52E /* Pods-shoppinUITests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1397,6 +1412,10 @@
 		E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6A4DBFDB1FF9B18800B2AB15 /* Providers.framework */,
+				6A4DBFD91FF9B10D00B2AB15 /* Realm.framework */,
+				6A4DBFD71FF9B0C000B2AB15 /* RealmSwift.framework */,
+				6A1B5A291FF99392002E5BAC /* Providers.framework */,
 				58FA07151DE1F2550059F2D0 /* Bolts.framework */,
 				58FBD9AD1DDCDA18002242D6 /* FBSDKCoreKit.framework */,
 				58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */,
@@ -1407,6 +1426,7 @@
 				9E255758FF7D0B9EA448C576 /* Pods_shoppin_osx.framework */,
 				98053CCC7F57AECBD28D4F1D /* Pods_shoppin_osxTests.framework */,
 				8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */,
+				B7F3478CE41426B11D1A08D9 /* Pods_shoppinUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1722,6 +1742,7 @@
 			children = (
 				EB33D5641CE00FAA0097AD58 /* OpenAndCloseListTest.swift */,
 				EB33D56E1CE010410097AD58 /* Info.plist */,
+				6A3B4CCD1FF986AB00D90BFD /* AddItemsToCartTest.swift */,
 			);
 			path = shoppinUITests;
 			sourceTree = "<group>";
@@ -2555,9 +2576,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB33D5711CE010420097AD58 /* Build configuration list for PBXNativeTarget "shoppinUITests" */;
 			buildPhases = (
+				2914BDFAD188B5991A65938A /* [CP] Check Pods Manifest.lock */,
 				EB33D5661CE010400097AD58 /* Sources */,
 				EB33D5671CE010400097AD58 /* Frameworks */,
 				EB33D5681CE010400097AD58 /* Resources */,
+				CB2B61D9196D84D5944AF372 /* [CP] Embed Pods Frameworks */,
+				C813AC1C461C35A3D70C7EE9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2634,7 +2658,9 @@
 					};
 					EB33D5691CE010400097AD58 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 37QAPDY2PR;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Manual;
 						TestTargetID = EB1DDEA41A3334EC00D778DE;
 					};
 					EB9F6CE11A8610550038355B = {
@@ -2872,6 +2898,93 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		2914BDFAD188B5991A65938A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-shoppinUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C813AC1C461C35A3D70C7EE9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CB2B61D9196D84D5944AF372 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
+				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework",
+				"${BUILT_PRODUCTS_DIR}/Valet/Valet.framework",
+				"${BUILT_PRODUCTS_DIR}/ASValueTrackingSlider/ASValueTrackingSlider.framework",
+				"${BUILT_PRODUCTS_DIR}/CMPopTipView/CMPopTipView.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/KLCPopup/KLCPopup.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftCharts/SwiftCharts.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
+				"${BUILT_PRODUCTS_DIR}/SwipeView/SwipeView.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyBeaver.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Valet.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ASValueTrackingSlider.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CMPopTipView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KLCPopup.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftCharts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeView.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D7A0B09196426BECD3C0C00D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2880,7 +2993,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle,
+				"$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -3216,6 +3329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB33D5741CE0104C0097AD58 /* OpenAndCloseListTest.swift in Sources */,
+				6A3B4CCE1FF986AC00D90BFD /* AddItemsToCartTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3723,35 +3837,50 @@
 		};
 		EB33D5721CE010420097AD58 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 350AE7940462A672F24DC919 /* Pods-shoppinUITests.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = groma.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 37QAPDY2PR;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = shoppinUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.schuetz.shoppinUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8df1da7b-f838-47e5-99b0-7f0eeb370d0b";
+				PROVISIONING_PROFILE_SPECIFIER = development;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = shoppin;
+				SWIFT_VERSION = 4.0;
+				TEST_TARGET_NAME = groma;
 				USES_XCTRUNNER = YES;
 			};
 			name = Debug;
 		};
 		EB33D5731CE010420097AD58 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9205D4FFE19B37AD4CFEE52E /* Pods-shoppinUITests.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = groma.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 37QAPDY2PR;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = shoppinUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.schuetz.shoppinUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8df1da7b-f838-47e5-99b0-7f0eeb370d0b";
+				PROVISIONING_PROFILE_SPECIFIER = development;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = shoppin;
+				SWIFT_VERSION = 4.0;
+				TEST_TARGET_NAME = groma;
 				USES_XCTRUNNER = YES;
 			};
 			name = Release;

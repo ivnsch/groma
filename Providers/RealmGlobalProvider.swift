@@ -186,7 +186,8 @@ class RealmGlobalProvider: RealmProvider {
             self?.clearAllDataSync(realm)
         }
     }
-    
+
+    // NOTE: Outdated
     fileprivate func clearAllDataSync(_ realm: Realm) {
         realm.delete(realm.objects(GroupItem.self))
         realm.delete(realm.objects(ListItem.self))
@@ -284,47 +285,79 @@ class RealmGlobalProvider: RealmProvider {
             }
         }
     }
-    
+
+
+    fileprivate func initContainers(realm: Realm) {
+        realm.deleteAll() // This is only for debugging, to avoid multiple instances of prefill objects. During debugging we can force-show intro, which will prefill each time the database. Note that this assumes initContainers is executed before adding the prefill objects. This is a well founded assumption as the containers are a requirements for the pre-fill to work or most other database operations. In production this operation has no effect, as this will be executed only once (intro is shown only first time the user starts the app), and this being the first database write operation, there's nothing to delete.
+        logger.v("Cleared realm")
+
+        let fractionsContainer: FractionsContainer? = self.loadFirstSync()
+        if fractionsContainer == nil {
+            realm.add(FractionsContainer())
+        }
+
+        let inventoriesContainer: InventoriesContainer? = self.loadFirstSync()
+        if inventoriesContainer == nil {
+            realm.add(InventoriesContainer())
+        }
+
+        let listsContainer: ListsContainer? = self.loadFirstSync()
+        if listsContainer == nil {
+            realm.add(ListsContainer())
+        }
+
+        let recipesContainer: RecipesContainer? = self.loadFirstSync()
+        if recipesContainer == nil {
+            realm.add(RecipesContainer())
+        }
+
+        let baseQuantitiesContainer: BaseQuantitiesContainer? = self.loadFirstSync()
+        if baseQuantitiesContainer == nil {
+            realm.add(BaseQuantitiesContainer())
+        }
+
+        let unitsContainer: UnitsContainer? = self.loadFirstSync()
+        if unitsContainer == nil {
+            realm.add(UnitsContainer())
+        }
+    }
+
     func initContainers(handler: @escaping (Bool) -> Void) {
         
-        doInWriteTransaction({realm in
-            
-            realm.deleteAll() // This is only for debugging, to avoid multiple instances of prefill objects. During debugging we can force-show intro, which will prefill each time the database. Note that this assumes initContainers is executed before adding the prefill objects. This is a well founded assumption as the containers are a requirements for the pre-fill to work or most other database operations. In production this operation has no effect, as this will be executed only once (intro is shown only first time the user starts the app), and this being the first database write operation, there's nothing to delete.
-            logger.v("Cleared realm")
-            
-            let fractionsContainer: FractionsContainer? = self.loadFirstSync()
-            if fractionsContainer == nil {
-                realm.add(FractionsContainer())
-            }
-            
-            let inventoriesContainer: InventoriesContainer? = self.loadFirstSync()
-            if inventoriesContainer == nil {
-                realm.add(InventoriesContainer())
-            }
-            
-            let listsContainer: ListsContainer? = self.loadFirstSync()
-            if listsContainer == nil {
-                realm.add(ListsContainer())
-            }
-            
-            let recipesContainer: RecipesContainer? = self.loadFirstSync()
-            if recipesContainer == nil {
-                realm.add(RecipesContainer())
-            }
-            
-            let baseQuantitiesContainer: BaseQuantitiesContainer? = self.loadFirstSync()
-            if baseQuantitiesContainer == nil {
-                realm.add(BaseQuantitiesContainer())
-            }
-
-            let unitsContainer: UnitsContainer? = self.loadFirstSync()
-            if unitsContainer == nil {
-                realm.add(UnitsContainer())
-            }
+        doInWriteTransaction({ [weak self] realm in
+            self?.initContainers(realm: realm)
 
             return true
         }) {successMaybe in
             handler(successMaybe ?? false)
+        }
+    }
+
+
+    // MARK: - UI Tests
+
+    public func clearAppForUITests() {
+        doInWriteTransactionSync() { [weak self] realm in
+            self?.initContainers(realm: realm)
+
+            guard let inventoriesContainer: InventoriesContainer = loadSync(predicate: nil)?.first else {
+                logger.e("Invalid state: no container")
+                return
+            }
+            let inventory = DBInventory(uuid: UUID().uuidString, name: "Test inventory", bgColor: UIColor.flatRed, order: 0)
+            realm.add(inventory)
+            logger.d("Added test inventory!", .db)
+            inventoriesContainer.inventories.append(inventory)
+
+            guard let listsContainer: ListsContainer = loadSync(predicate: nil)?.first else {
+                logger.e("Invalid state: no container")
+                return
+            }
+
+            let list = List(uuid: UUID().uuidString, name: "Test list", color: UIColor.flatRed, order: 0, inventory: inventory, store: nil)
+            realm.add(list)
+            logger.d("Added test list!", .db)
+            listsContainer.lists.append(list)
         }
     }
 }
