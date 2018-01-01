@@ -45,7 +45,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     }
 
     var tableViewBottomInset: CGFloat {
-        return 0
+        return Theme.submitViewHeight
     }
     
     // TODO refactor with ListItemsTableViewControllerNew (duplicate code)
