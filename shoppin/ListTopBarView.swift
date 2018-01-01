@@ -317,12 +317,7 @@ class ListTopBarView: UIView {
                 button.imageView?.tintColor = tintColor
                 
                 button.setImage(UIImage(named: imgName), for: UIControlState())
-                if left {
-                    leftButtons.append(button)
-                } else {
-                    rightButtons.append(button)
-                }
-                
+
                 button.tag = model.buttonId.rawValue
                 
                 button.isUserInteractionEnabled = false
@@ -332,6 +327,12 @@ class ListTopBarView: UIView {
                 tapView.tag = model.buttonId.rawValue
 //                logger.v("model.buttonId: \(model.buttonId), tag: \(tapView.tag)")
                 tapView.addSubview(button)
+                tapView.accessibilityIdentifier = model.buttonId.name
+                if left {
+                    leftButtons.append(tapView)
+                } else {
+                    rightButtons.append(tapView)
+                }
 
                 _ = button.centerYInParent(centerYOffsetInExpandedState)
                 _ = button.centerXInParent()
