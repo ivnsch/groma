@@ -186,7 +186,22 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //    private var showingNoteInputPopup: SimpleInputPopupController?
 
     var keyboardHeight: CGFloat?
-    
+
+    fileprivate var textFields: [UITextField] {
+        switch modus {
+        case .listItem:
+            return [brandInput, sectionInput, noteInput, priceInput]
+
+        case .ingredient:
+            return [sectionInput]
+
+        case .product:
+            return [brandInput, sectionInput] // Used?
+
+        case .groupItem, .planItem: return [] // Not used
+        }
+    }
+
     var edibleSelected: Bool = false {
         didSet {
             if let edibleButton = edibleButton {
@@ -315,6 +330,12 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //        updatePlanLeftQuantity(0) // no quantity yet -> 0
         
         initGlobalTap()
+
+        initTextFieldsReturnType()
+    }
+
+    fileprivate func initTextFieldsReturnType() {
+        textFields.last?.returnKeyType = .done
     }
 
     fileprivate func getNumberStringFromCurrencyString(string: String) -> String? {
@@ -508,7 +529,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     func focusFirstTextField() {
-        brandInput.becomeFirstResponder()
+        textFields.first?.becomeFirstResponder()
     }
     
     @objc func onTapView(_ tap: UITapGestureRecognizer) {
@@ -694,11 +715,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     func textFieldShouldReturn(_ sender: UITextField) -> Bool {
-        if sender == noteInput {
+        if sender == textFields.last {
             submit()
             sender.resignFirstResponder()
         } else {
-            let textFields = [brandInput, sectionInput, priceInput, noteInput] as [UITextField]
             if let index = textFields.index(of: sender) {
                 if let next = textFields[safe: index + 1] {
                     next.becomeFirstResponder()

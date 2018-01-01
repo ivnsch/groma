@@ -138,4 +138,8 @@ extension ManageItemsUnitsController: EditNameButtonDelegate {
             self?.tableView.reloadData()
         })
     }
+
+    func onEditNameButtonNavigateToNextTextField() {
+        // Do nothing - no next text field in top controller
+    }
 }

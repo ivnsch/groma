@@ -21,7 +21,17 @@ enum InputsResult<T> {
 }
 
 enum TopControllerMode {
-    case embedded, standalone
+    case embedded(isLast: Bool) // isLast: Whether it's the last (at the bottom/end of parent) - used for text fields return type
+    case standalone
+
+    static func ==(a: TopControllerMode, b: TopControllerMode) -> Bool {
+        switch (a, b) {
+        case (.embedded(let isLast1), .embedded(let isLast2)):
+            return isLast1 == isLast2
+        case (.standalone, .standalone): return true
+        default: return false
+        }
+    }
 }
 
 ////////////////
@@ -48,7 +58,7 @@ protocol EditNameColorViewDelegate: class {
 }
 
 
-class EditNameColorController: UIViewController, FlatColorPickerControllerDelegate {
+class EditNameColorController: UIViewController, FlatColorPickerControllerDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var colorView: UITextField!
@@ -90,6 +100,8 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
         
         colorView.textColor = UIColor.gray
         colorView.text = trans("generic_color") // string from storyboard localization doesn't work, seems to be xcode bug
+
+        nameTextField.delegate = self
         
         initTextFieldPlaceholders()
     }
@@ -127,12 +139,16 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
         
         nameTextField.attributedPlaceholder = NSAttributedString(string: settings.namePlaceholder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
         initValidator(emptyNameMessage: settings.nameEmptyValidationMessage)
-        
-        if mode == .standalone {
+
+        switch mode {
+        case .standalone:
             addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
             addButtonHelper?.addObserver()
-            
+            nameTextField.returnKeyType = .done
             focus()
+
+        case .embedded(let isLast):
+            nameTextField.returnKeyType = isLast ? .default : .next
         }
     }
     
@@ -145,17 +161,7 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
         validator.registerField(nameTextField, rules: [MinLengthRule(length: 1, message: emptyNameMessage)])
         self.validator = validator
     }
-    
-    // TODO navigate between text fields - note has to work with .embedded mode (use delegate)
-//    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
-//        if sender == nameTextField {
-//            submit()
-//            sender.resignFirstResponder()
-//        }
-//        
-//        return false
-//    }
-    
+
     func submit() -> InputsResult<EditNameColorResult>? {
         
         guard let validator = validator else {logger.e("No validator"); return nil}
@@ -199,9 +205,30 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
     
     func onDismiss() {
     }
-    
+
+    // MARK: - UITextFieldDelegate
+
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
+
+        if sender == nameTextField {
+            switch mode {
+            case .embedded(let isLast):
+                if isLast {
+                    // Do nothing - parent controller submits everything with save button
+                } else {
+                    // delegate?.onEditNameColorNavigateToNextTextField() // Not needed right now...
+                }
+                break
+            case .standalone:
+                _ = submit()
+                sender.resignFirstResponder()
+            }
+        }
+        return false
+    }
+
     // MARK: -
-    
+
     func closeColorPicker(_ selectedColor: UIColor?) {
         if colorControllerAnimator?.isShowing ?? false {
             colorControllerAnimator?.close {[weak self] in

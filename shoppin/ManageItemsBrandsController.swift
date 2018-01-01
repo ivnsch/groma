@@ -96,7 +96,7 @@ class ManageItemsBrandsController: UITableViewController, SearchableTextControll
         topEditSectionControllerManager?.controller?.config(mode: .standalone, prefillName: brand, settings: EditSingleInputControllerSettings(
             namePlaceholder: "placeholder_name",
             nameEmptyValidationMessage: "validation_name_not_empty"
-        ), editingObj: brand)
+        ), editingObj: brand, keyboardType: .default)
         
         //        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
     }

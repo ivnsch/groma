@@ -108,7 +108,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] _ in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
-            controller.modus = .planItem
+            controller.modus = .product
             return controller
         }
         manager.delegate = self

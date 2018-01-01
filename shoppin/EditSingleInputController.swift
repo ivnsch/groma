@@ -77,11 +77,13 @@ class EditSingleInputController: UIViewController {
         return addButtonHelper
     }
 
-    func config(mode: TopControllerMode, prefillName: String, settings: EditSingleInputControllerSettings, editingObj: Any?) {
+    func config(mode: TopControllerMode, prefillName: String, settings: EditSingleInputControllerSettings, editingObj: Any?, keyboardType: UIKeyboardType) {
         guard nameTextField != nil else {logger.e("Outlets not initialized"); return}
         
         self.mode = mode
 
+        nameTextField.keyboardType = keyboardType
+        
         nameTextField.text = prefillName
         
         nameTextField.attributedPlaceholder = NSAttributedString(string: settings.namePlaceholder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])

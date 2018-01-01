@@ -96,7 +96,7 @@ class ManageItemsBaseQuantitiesController: UITableViewController, SearchableText
         topEditSectionControllerManager?.controller?.config(mode: .standalone, prefillName: base.quantityString, settings: EditSingleInputControllerSettings(
             namePlaceholder: "placeholder_name",
             nameEmptyValidationMessage: "validation_name_not_empty"
-        ), editingObj: base)
+        ), editingObj: base, keyboardType: .decimalPad)
         
         //        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
     }

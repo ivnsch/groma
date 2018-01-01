@@ -43,7 +43,7 @@ struct AddEditNameNameColorResult {
 
 // TODO rename - now the first controller is name-button, not only "name". The reason is that item now has field "edible" which shows a button to toggle it next to the name.
 /// Note: for now this controller is assumed to be always standalone (see "mode" var in e.g. EditSingleInputController to see what this means)
-class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegate {
+class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegate, EditNameButtonDelegate {
 
     fileprivate weak var nameController: EditNameButtonController!
     fileprivate weak var nameColorController: EditNameColorController!
@@ -58,7 +58,7 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
         guard nameController != nil else {logger.e("Controllers not initialized yet"); return}
         
         nameController?.config(
-            mode: .embedded,
+            mode: .embedded(isLast: false),
             
             prefillData: EditNameButtonViewInputs(
                 name: prefillData.name,
@@ -69,8 +69,9 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
                 nameEmptyValidationMessage: settings.nameEmptyValidationMessage,
                 buttonTitle: settings.buttonTitle
         ), editingObj: editingObj)
-        
-        nameColorController.config(mode: .embedded, prefillData: EditNameColorViewInputs(name: prefillData.nameColorName, color: prefillData.nameColorColor), settings: EditNameColorViewSettings(namePlaceholder: settings.nameNameColorPlaceholder, nameEmptyValidationMessage: settings.nameNameColorEmptyValidationMessage))
+        nameController.delegate = self
+
+        nameColorController.config(mode: .embedded(isLast: true), prefillData: EditNameColorViewInputs(name: prefillData.nameColorName, color: prefillData.nameColorColor), settings: EditNameColorViewSettings(namePlaceholder: settings.nameNameColorPlaceholder, nameEmptyValidationMessage: settings.nameNameColorEmptyValidationMessage))
         nameColorController.editingObj = editingObj
         nameColorController.delegate = self
         
@@ -142,9 +143,19 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
             nameColorController = segue.destination as? EditNameColorController
         }
     }
-    
+
+    // MARK: - EditNameButtonDelegate
+
+    func onSubmitNameButtonInput(result: EditNameButtonResult, editingObj: Any?) {
+        // Do nothing - we retrieve the data when this controller is submitted
+    }
+
+    func onEditNameButtonNavigateToNextTextField() {
+        nameColorController.focus()
+    }
+
     // MARK: - EditNameColorViewDelegate
-    
+
     func onSubmitNameColor(result: EditNameColorResult) {
         // Do nothing - we retrieve the data when this controller is submitted
     }

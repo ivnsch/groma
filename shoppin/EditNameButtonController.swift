@@ -31,10 +31,11 @@ struct EditNameButtonViewSettings {
 
 protocol EditNameButtonDelegate: class {
     func onSubmitNameButtonInput(result: EditNameButtonResult, editingObj: Any?)
+    func onEditNameButtonNavigateToNextTextField()
 }
 
 
-class EditNameButtonController: UIViewController {
+class EditNameButtonController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var button: UIButton!
@@ -67,7 +68,9 @@ class EditNameButtonController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        nameTextField.delegate = self
+
         initTextFieldPlaceholders()
     }
     
@@ -102,17 +105,21 @@ class EditNameButtonController: UIViewController {
         nameTextField.text = prefillData.name
         button.setTitle(settings.buttonTitle, for: .normal)
         buttonSelected = prefillData.buttonSelected
-        
+
         nameTextField.attributedPlaceholder = NSAttributedString(string: settings.namePlaceholder, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
         initValidator(emptyNameMessage: settings.nameEmptyValidationMessage)
         
         self.editingObj = editingObj
-        
-        if mode == .standalone {
+
+        switch mode {
+        case .standalone:
             addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
             addButtonHelper?.addObserver()
-            
+            nameTextField.returnKeyType = .done
             focus()
+
+        case .embedded(let isLast):
+            nameTextField.returnKeyType = isLast ? .default : .next
         }
     }
     
@@ -125,17 +132,7 @@ class EditNameButtonController: UIViewController {
         validator.registerField(nameTextField, rules: [MinLengthRule(length: 1, message: emptyNameMessage)])
         self.validator = validator
     }
-    
-    // TODO navigate between text fields - note has to work with .embedded mode (use delegate)
-    //    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
-    //        if sender == nameTextField {
-    //            submit()
-    //            sender.resignFirstResponder()
-    //        }
-    //
-    //        return false
-    //    }
-    
+
     func submit() -> InputsResult<EditNameButtonResult>? {
         
         guard let validator = validator else {logger.e("No validator"); return nil}
@@ -170,7 +167,27 @@ class EditNameButtonController: UIViewController {
             }
         }
     }
-    
+
+    // MARK: - UITextFieldDelegate
+
+    func textFieldShouldReturn(_ sender: UITextField) -> Bool {
+
+        if sender == nameTextField {
+            switch mode {
+            case .embedded(let isLast):
+                if isLast {
+                    // Do nothing - parent controller submits everything with save button
+                } else {
+                    delegate?.onEditNameButtonNavigateToNextTextField()
+                }
+            case .standalone:
+                _ = submit()
+                sender.resignFirstResponder()
+            }
+        }
+        return false
+    }
+
     // MARK: -
     
     @IBAction func onButtonTap(_ sender: UIButton) {
