@@ -143,7 +143,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
     fileprivate func updateHeader(inputs: IngredientDataControllerInputs) {
         guard let header = tableView.headerView(forSection: 0) as? SelectIngredientDataHeader else {
-            logger.e("No header or couldn't be casted", .ui)
+            logger.d("No header or couldn't be casted", .ui)
             return
         }
         header.update(inputs: generateHeaderInputs())
