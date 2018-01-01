@@ -70,7 +70,9 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "How do I make sense of the report?", text: "The bar chart shows your monthly spend for the last year. 'Monthly average' is the average of what you have spent in the last year, 'Daily average in this month' is the average of what you have spent so far in the current month, 'Projected total this month' is an estimation of what you will spend in total in the current month based on what you have spent so far in this month. Tapping on a bar shows you a detailed view of its month. The pie chart shows the top categories and below you see an aggregate of all the purchased products."),
         
         HelpItem(title: "Can I share with other users in real time?", text: "You can share with other users in real time, by using the same login! If your current login is private (e.g. Facebook account) you have to create a new account which can be shared."),
-        
+
+        HelpItem(title: "What is the list store? How do prices work?", text: "Each shopping list can be associated with a store. The prices you assign to products are specific for each store. This means, for example, that if you have a list associated with a certain store \"My super grocery market\" every price you assign in this list will be remembered only in lists that have \"My super grocery market\" as a store. All lists have a store: When there's no name, it means that you are using the anonymous store."),
+
         HelpItem(title: "Can I change the store that a List is linked to?", text: "No, once the List is submitted, the store can't be changed. If you need to do this you have to delete the List and create a new one with the new store."),
 
         HelpItem(title: "What are purchasable units?", text: "Units that can be purchased! Examples: A liter or a pack are purchasable, as you find things in stores measured directly in liters (e.g. a 2L beverage) or packs (e.g. a pack of sweets). A tablespoon or a shot are not purchasable, as normally stores do not sell products measured in these units. You can edit this property."),
@@ -134,7 +136,9 @@ class HelpProviderImpl: HelpProvider {
         
         
         HelpItem(title: "Kann ich mit anderen Nutzern in Echtzeit teilen?", text: "Ja, dafür müsst ihr euch mit dem gleichen Daten einloggen. Wenn dies nicht möglich ist, z.B. weil du mit deinem persönlichen Facebook Konto eingeloggt bist, muss ein neues Konto angelegt werden, das geteilt werden kann."),
-        
+
+        HelpItem(title: "Was ist der Laden einer Liste? Wie funktionieren Preise?", text: "Jede Einkaufsliste hat kann mit einem Laden verknüpft werden. Die Preise, die du Waren in einer Liste zuweist, beziehen sich nur auf diesen Laden. Dies bedeutet, dass, wenn du z.B. eine Liste mit \"Tolles Kaufhaus\" als Laden hast, alle Listen die \"Tolles Kaufhaus\" als Laden haben die Preise Teilen werden. Listen mit einem anderen Laden bekommen von diesen Preisen nichts mit. Alle Listen haben einen Laden: Wenn er keinen Namen hat, benutzt du den anonymen Laden."),
+
         HelpItem(title: "Kann ich den Laden von einer Liste ändern?", text: "Nein, nachdem die Liste gespeichert wurde, kann der Laden nicht mehr geändert werden. Falls du dies brauchst, musst du die alte Liste löschen und eine neue mit dem neuen Laden erstellen."),
 
         HelpItem(title: "Was sind kaufbare Messeinheiten?", text: "Einheiten, die gekauft werden können! Zum Beispiel: Ein Liter oder eine Packung sind kaufbar, da Produkte in diesen Einheiten verkauft werden. Ein Teelöffel oder ein Schuss sind nicht (direktkaufbar. Diese Eigenschaft kann editiert werden."),
@@ -197,7 +201,9 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Cómo interpreto el reporte?", text: "La estadística de barras the muestra los gastos mensuales desde que empezaste a utilizar la app, hasta 1 año en el pasado. 'Promedio mensual' es el promedio de los gastos durante los meses que has usado la app. 'Promedio diario en este mes' es el promedio diario de lo que has gastado durante el mes actual. 'Gastos estimados para este mes'  es una estimación de lo que habrás gastado al final del mes actual (sólo para este mes). Pulsar en las barras te lleva a la vista de gastos para el mes correspondiente. El gráfico de torta muestra las categorías por las que más has gastado y abajo hay una lista de agregados de los productos que compraste durante el mes."),
         
         HelpItem(title: "Puedo sincronizar con otros usuarios en tiempo real?", text: "Sí, para esto tienen todos que conectarse con el mismo usuario. Si esto no es posible (por ejemplo por que usas tu cuenta personal de Facebook) tienen que crear una nueva cuenta que se puede compartir."),
-        
+
+        HelpItem(title: "Qué es el almacén de una lista? Cómo funcionan los precios?", text: "Cada lista de compras se puede asociar con un almacén. Los precios que asignas a los productos en esta lista sólo son aplicados a este almacén. Esto significa que si, por ejemplo, tienes una lista con \"Super Almacenes Mundo\" como almacén, todas las listas con el almacén \"Super Almacenes Mundo\" compartirán los precios. Todas las listas tienen un almacén: Si el nombre está vacío, significa que es el almacén anónimo."),
+
         HelpItem(title: "Puedo cambiar el almacén de una lista?", text: "No, después que guardas la lista, el almacén no se puede cambiar. Si necesitas cambiarlo tienes que borrar la lista y crear una nueva con el nuevo almacén."),
 
         HelpItem(title: "Qué son unidades comprables?", text: "Unidades de medida que puedes comprar directamente! Por ejemplo, un litro o un paquete son comprables, ja que encuetras productos en estas unidades en los almacenes. Por otro lado, por una cucharada o un trago no se compran directamente. Esta propiedad es editable."),
