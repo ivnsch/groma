@@ -62,14 +62,16 @@ class AddItemsToCartTest: XCTestCase {
 
         func tapItems() {
             var continueLoop = true
-            for i in 0..<100 where continueLoop {
+            for i in 8..<100 where continueLoop {
                 let itemCell = quickAddCollectionView.cells.element(boundBy: i)
                 if itemCell.exists {
-                    itemCell.tap()
+                    if itemCell.isHittable {
+                        itemCell.tap()
+                    }
                 } else {
                     continueLoop = false
                 }
-                Thread.sleep(forTimeInterval: 0.5)
+                Thread.sleep(forTimeInterval: 0.3)
             }
         }
 
@@ -79,6 +81,14 @@ class AddItemsToCartTest: XCTestCase {
             start.press(forDuration: 0, thenDragTo: finish)
         }
 
+        swipeUpALittle()
+        tapItems()
+        swipeUpALittle()
+        tapItems()
+        swipeUpALittle()
+        tapItems()
+        swipeUpALittle()
+        tapItems()
         swipeUpALittle()
         tapItems()
         swipeUpALittle()

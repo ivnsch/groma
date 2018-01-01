@@ -1077,21 +1077,30 @@ class RealmListItemProvider: RealmProvider {
                 }
                 
             } else { // new list item
-                
-                
-                print("list items before create list item: \(section.listItems.count)")
-                
-                // TODO section, list - see note on create
-                if let createdListItem = createCartSync(quantifiableProduct, store: store, price: nil, section: section, list: list, quantity: quantity, realmData: realmData, doTransaction: doTransaction) {
-                    
-                    print("list items after create list item: \(section.listItems.count)")
-                    
-                    
+
+                func transactionContent(realm: Realm) -> AddCartListItemResult {
+                    // NOTE: fetching the store product has to be inside the transaction! Don't know why, but otherwise sometimes (when the section is new, apparently) it causes the notification block to be called, which then crashes the app. The UI test AddItemsToCartTest exists because of this.
+                    let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store, price: nil)
+                    // TODO section, list - see note on create
+                    let createdListItem = ListItem(uuid: UUID().uuidString, product: storeProduct, section: section, list: list, note: nil, quantity: quantity)
+                    realm.add(createdListItem, update: true)
+                    list.doneListItems.insert(createdListItem, at: 0) // in cart we pre-pend
                     // WARNING: quick impl: listItemIndex 0 assumes createCartSync inserts item at 0
                     return AddCartListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, listItemIndex: 0)
+
+                }
+
+                if doTransaction {
+                    return doInWriteTransactionSync(realmData: realmData) { realm in
+                        return transactionContent(realm: realm)
+                    }
                 } else {
-                    logger.e("Couldn't create list item, quantifiableProduct: \(quantifiableProduct)")
-                    return nil
+                    if let realm = realmData?.realm {
+                        return transactionContent(realm: realm)
+                    } else {
+                        logger.e("Invalid state: should be executed in existing transaction but didn't pass a realm")
+                        return nil
+                    }
                 }
             }
             
