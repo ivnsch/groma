@@ -406,10 +406,6 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
         
         if let tableViewListItem = tableViewListItem {
             let delta = shownQuantity - tableViewListItem.quantity
-            
-            
-            logger.w("delta: \(delta), shownQuantity: \(shownQuantity), tableViewListItem.quantity(status): \(tableViewListItem.quantity)")
-            
             shownQuantity = quantity
             
             quantityView.showDelta(delta)
