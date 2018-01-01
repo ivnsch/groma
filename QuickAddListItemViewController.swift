@@ -566,8 +566,11 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
         tableViewController.view.backgroundColor = Theme.lightGreyBackground
 
+        // If showing already (for previously tapped item), remove it and re-add
         if let scrollableBottomAttacher = scrollableBottomAttacher {
+            scrollableBottomAttacher.bottom.removeSubmitButton {}
             removeScrollableBottomAttacher(scrollableBottomAttacher, onFinish: {
+
                 showScrollableBottomAttacher() // TODO review memory - does the old bottom attacher release everything?
             })
         } else {
