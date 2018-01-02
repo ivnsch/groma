@@ -171,6 +171,9 @@ class AddRecipeController: UIViewController {
         Prov.unitProvider.units(buyable: true, successHandler{ [weak self] units in
             self?.units = units
             self?.unitBaseViewController?.loadItems()
+            delay(0.3) { // FIXME - temporary hack - sometimes (very rarely) units/bases don't appear - debug message "No items (yet?), returning 0 contents height"
+                self?.unitBaseViewController?.loadItems()
+            }
         })
     }
 
@@ -178,6 +181,9 @@ class AddRecipeController: UIViewController {
         Prov.unitProvider.baseQuantities(successHandler{ [weak self] baseQuantities in
             self?.baseQuantities = baseQuantities
             self?.unitBaseViewController?.loadItems()
+            delay(0.3) { // FIXME - temporary hack - sometimes (very rarely) units/bases don't appear - debug message "No items (yet?), returning 0 contents height"
+                self?.unitBaseViewController?.loadItems()
+            }
         })
     }
 }
