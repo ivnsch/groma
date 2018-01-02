@@ -362,10 +362,7 @@ class RealmSectionProvider: RealmProvider {
         if let section = list.sections(status: status).filter(Section.createFilter(unique: sectionUnique)).first { // The target status already contains the section
             return section
         
-        } else if let section = loadSectionSync(name, list: list).getOk().flatMap({$0}) { // The target status doesn't contain the section, but it exists
-            return appendSection(section: section)
-            
-        } else { // The section doesn't exist
+        }  else { // The section doesn't exist in the target status
             let section = Section(uuid: UUID().uuidString, name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0), status: status) // TODO!!!!!!!!! remove order from sections
             return appendSection(section: section)
         }
