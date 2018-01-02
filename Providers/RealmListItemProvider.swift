@@ -1492,7 +1492,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     fileprivate func switchCartOrStashToTodoSync(listItem: ListItem, from: Int, cartOrStashListItems: RealmSwift.List<ListItem>, realmData: RealmData, doTransaction: Bool = true) -> Bool {
-        guard let realm = listItem.section.realm else {logger.e("No realm"); return false}
+        let realm = realmData.realm
         
         let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
 
