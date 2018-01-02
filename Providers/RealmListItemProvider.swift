@@ -1265,17 +1265,20 @@ class RealmListItemProvider: RealmProvider {
 
             if status == .todo {
                 let section = list.sections(status: status)[indexPath.section]
-                
-                section.listItems.remove(at: indexPath.row)
-                
-                if self.deleteSectionIfEmpty(sections: list.sections(status: status), section: section) {
+
+                let listItem = section.listItems[indexPath.row]
+                realm.delete(listItem)
+
+                if self.deleteSectionIfEmpty(sections: list.sections(status: status), section: section, realm: realm) {
                     return DeleteListItemResult(deletedSection: true)
                 } else {
                     return DeleteListItemResult(deletedSection: false)
                 }
 
             } else {
-                list.listItems(status: status).remove(at: indexPath.row)
+                let listItem = list.listItems(status: status)[indexPath.row]
+                realm.delete(listItem)
+
                 return DeleteListItemResult(deletedSection: false)
             }
         }
@@ -1283,10 +1286,11 @@ class RealmListItemProvider: RealmProvider {
     
     /// Returns if section was empty and removed. Note both section not empty and error removing return false.
     /// NOTE: Has to be executed in a write transaction
-    fileprivate func deleteSectionIfEmpty(sections: RealmSwift.List<Section>, section: Section) -> Bool {
+    fileprivate func deleteSectionIfEmpty(sections: RealmSwift.List<Section>, section: Section, realm: Realm) -> Bool {
         if section.listItems.isEmpty {
             if let sectionIndex = sections.index(of: section) {
-                sections.remove(at: sectionIndex)
+                let section = sections[sectionIndex]
+                realm.delete(section)
                 return true
             } else {
                 logger.e("Invalid state: Src section isn't in the list: srcSection: \(section), sections: \(sections)")
@@ -1315,9 +1319,11 @@ class RealmListItemProvider: RealmProvider {
                 listItem.section = dstSection
             }
 
+            // If src section is empty, delete it
             if srcSection.listItems.isEmpty {
                 if let sectionIndex = list.sections(status: status).index(of: srcSection) {
-                    list.sections(status: status).remove(at: sectionIndex)
+                    let section = list.sections(status: status)
+                    realm.delete(section)
                     return MoveListItemResult(deletedSrcSection: true)
                 } else {
                     logger.e("Invalid state: Src section isn't in the list: srcSection: \(srcSection), status: \(status), list: \(list)")
@@ -1434,7 +1440,7 @@ class RealmListItemProvider: RealmProvider {
             
             // TODO remove src section if empty
             
-            if self.deleteSectionIfEmpty(sections: list.todoSections, section: srcSection) {
+            if self.deleteSectionIfEmpty(sections: list.todoSections, section: srcSection, realm: realm) {
                 return SwitchListItemResult(deletedSection: true)
             } else {
                 return SwitchListItemResult(deletedSection: false)
