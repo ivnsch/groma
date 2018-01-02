@@ -139,8 +139,8 @@ class QuickAddItemCellAnimatableCopy: UIView, QuickAddItemAnimatableCellCopy {
         self.nameLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
         self.quantityLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
         
-        addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
-        
+//        addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
+
         
         let overlay = UIView(frame: bounds)
         addSubview(overlay)
@@ -247,7 +247,7 @@ class QuickAddIngredientCellAnimatableCopy: UIView, QuickAddItemAnimatableCellCo
 
         self.nameLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
 
-        addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.ingredientsCellHeight)
+//        addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.ingredientsCellHeight)
 
 
         let overlay = UIView(frame: bounds)
