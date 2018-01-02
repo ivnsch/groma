@@ -309,7 +309,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         guard let cell = collectionView.cellForItem(at: indexPath) as? QuickAddItemCell else {logger.e("Unexpected: No cell for index path: \(indexPath)"); return}
 
         let copy = cell.copyCell(quantifiableProduct: quantifiableProduct, quantity: quantity)
-        let categoryColorViewWidth: CGFloat = 4
+        let categoryColorViewWidth: CGFloat = 2 // TODO Why does it look good with 2 instead of 4 - the category color view width is 4
         let targetNameLabelX = DimensionsManager.leftRightPaddingConstraint + categoryColorViewWidth
         animateItemToCell(indexPath: indexPath, addedItem: quantifiableProduct, copy: copy, targetFrameX: categoryColorViewWidth, targetNameLabelX: targetNameLabelX, targetFrameHeight: DimensionsManager.defaultCellHeight)
     }
