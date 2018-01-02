@@ -670,7 +670,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             ListItemInput(
                 name: model.productPrototype.name,
                 quantity: model.quantity,
-                price: -1, // No prices here - use existing store product or default for new store product
+                price: 0,
                 section: model.ingredient.item.category.name,
                 sectionColor: model.ingredient.item.category.color,
                 note: nil,
