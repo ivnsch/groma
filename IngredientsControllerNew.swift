@@ -156,6 +156,22 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
             self?.scrollableBottomAttacher?.onBottomViewDidScroll(scrollView)
         }
 
+        ////////////////////////////////////////////////////////////////////
+        // Quick fix! - so the thing is that we have a submit button which is part of the add/edit form (always shown above the keyboard)
+        // but when we scroll down to the ingredient data controller the keyboard is hidden and no more textfields -> no submit button!
+        // so we add also our own submit button (meaning that if we are in the form there are 2 submit buttons on the screen at the same time,
+        // one above the keyboard and the other hidden behind). Since the logic to submit is in the add/edit form, we call it (via the quick add controller)!
+        // this is the quickest - otherwise we have to either change the logic to show our own submit button above the keyboard and make the add/edit form not
+        // show its own (etc.) or make the add/edit submit button don't disappear when hiding the keyboard, or(?).
+        // Note that the buttons are labelled differently ("save" in add/edit button and "add" in our own) but this is a minor inconsistency with which we are ok for now.
+        tableViewController.submitButtonParent = { [weak self] in
+            return self?.view
+        }
+        tableViewController.onSubmitInputs = { _ in
+            self.topQuickAddControllerManager?.controller?.submitAddEditControllerIfOpen()
+        }
+        ////////////////////////////////////////////////////////////////////
+
         scrollableBottomAttacher = ScrollableBottomAttacher(parent: self, top: topController,
                                                             bottom: tableViewController,
                                                             topViewTopConstraint: topConstraint,

@@ -518,7 +518,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     func closeRecipeController() {
         quickAddListItemViewController?.addGroupController?.closeRecipeController()
     }
-    
+
+    // Trigger submit externally
+    func submitAddEditControllerIfOpen() {
+        if let addEditListItemViewController = showingController as? AddEditListItemViewController {
+            addEditListItemViewController.submit()
+        }
+    }
+
     // MARK: - Keyboard
     // We need to remember the keyboard height here, in order to pass it to AddEditListItemViewController such that the submit view can be animated to the correct position
     
