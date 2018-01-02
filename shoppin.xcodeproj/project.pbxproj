@@ -85,6 +85,7 @@
 		6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A42C3841E437C4900F8E0E6 /* SimpleListItemsController.xib */; };
 		6A4D04CE1FEB16FB005BDA52 /* UnitCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4D04CD1FEB16FB005BDA52 /* UnitCollectionViewManager.swift */; };
 		6A4DBFDA1FF9B18800B2AB15 /* Providers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A4DBFDB1FF9B18800B2AB15 /* Providers.framework */; };
+		6A4DBFDD1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFDC1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift */; };
 		6A66D3461E413A300028240C /* TodoListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */; };
 		6A76C3C61E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */; };
 		6A78ADA21FEBD57A00058D27 /* BaseQuantitiesCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78ADA11FEBD57A00058D27 /* BaseQuantitiesCollectionViewManager.swift */; };
@@ -593,6 +594,7 @@
 		6A4DBFD71FF9B0C000B2AB15 /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A4DBFD91FF9B10D00B2AB15 /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A4DBFDB1FF9B18800B2AB15 /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A4DBFDC1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveItemsToCartTest.swift; sourceTree = "<group>"; };
 		6A58B0D21E48D5D50012F4C9 /* groma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = groma.entitlements; sourceTree = "<group>"; };
 		6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsControllerNew.swift; sourceTree = "<group>"; };
 		6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
@@ -1743,6 +1745,7 @@
 				EB33D5641CE00FAA0097AD58 /* OpenAndCloseListTest.swift */,
 				EB33D56E1CE010410097AD58 /* Info.plist */,
 				6A3B4CCD1FF986AB00D90BFD /* AddItemsToCartTest.swift */,
+				6A4DBFDC1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift */,
 			);
 			path = shoppinUITests;
 			sourceTree = "<group>";
@@ -3329,6 +3332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB33D5741CE0104C0097AD58 /* OpenAndCloseListTest.swift in Sources */,
+				6A4DBFDD1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift in Sources */,
 				6A3B4CCE1FF986AC00D90BFD /* AddItemsToCartTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
