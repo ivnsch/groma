@@ -307,6 +307,12 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
             logger.e("No model, can't update quantity")
         }
     }
+
+    var isControllerInEditMode: Bool {
+        return isEditing
+    }
+
+    // MARK: -
     
     fileprivate func findFirstVisibleItem(_ f: (ProductWithQuantity2) -> Bool) -> (index: Int, model: ProductWithQuantity2, cell: ProductWithQuantityTableViewCell)? {
         return (tableView.visibleCells.flatMap {cell in

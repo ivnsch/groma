@@ -19,6 +19,7 @@ enum QuantityViewMode {
 }
 
 // TODO for some reason the buttons are not interactive! outlets are connected, all views up in the hierarchy have userInteractionEnables = yes (until the custom view -in storyboard- in which this was contained). But nothing happens on tap also no press effect on the button. It should not be anything related with the cell, only the custom view, because when the buttons are added directly to the cell (like now) there are no problems.
+@IBDesignable
 class QuantityView: UIView, UITextFieldDelegate {
     
     weak var delegate: QuantityViewDelegate?
@@ -29,7 +30,8 @@ class QuantityView: UIView, UITextFieldDelegate {
     
     @IBOutlet weak var minusBottomWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var plusBottomWidthConstraint: NSLayoutConstraint!
-    
+    @IBOutlet weak var labelTrailingConstraint: NSLayoutConstraint!
+
     fileprivate(set) var mode: QuantityViewMode = .edit
     
     fileprivate var showPlusDeltaTimerTask: DispatchWorkItem?
@@ -82,6 +84,9 @@ class QuantityView: UIView, UITextFieldDelegate {
         
         quantityLabel.delegate = self
         quantityLabel.addTarget(self, action: #selector(onQuantityTextChange(_:)), for: .editingChanged)
+
+        plusButton.isExclusiveTouch = true
+        minusButton.isExclusiveTouch = true
     }
     
     
@@ -156,7 +161,7 @@ class QuantityView: UIView, UITextFieldDelegate {
     override var intrinsicContentSize: CGSize {
         return CGSize(width: minusBottomWidthConstraint.constant + quantityLabel.intrinsicContentSize.width + plusBottomWidthConstraint.constant, height: minusButton.height + quantityLabel.intrinsicContentSize.height + plusButton.height)
     }
-    
+
     func setMode(_ mode: QuantityViewMode, animated: Bool) {
         guard mode != self.mode else {return}
         
@@ -165,21 +170,21 @@ class QuantityView: UIView, UITextFieldDelegate {
         if mode == .edit || mode == .readonly {
             let widthConstant: CGFloat = mode == .edit ? 41 : 0
 
-            minusBottomWidthConstraint.constant = widthConstant
-            plusBottomWidthConstraint.constant = widthConstant
-
-
             if animated {
+
+                self.minusBottomWidthConstraint.constant = widthConstant
+                self.plusBottomWidthConstraint.constant = widthConstant
                 anim(Theme.defaultAnimDuration, {
                     self.layoutIfNeeded()
-                }, onFinish: {
-                    // call invalidate intrinsic size after constraint finish (otherwise weird jumps)
-                    // This is necessary so the area adjust to the updated contents - in particular to receive touch events
                     self.invalidateIntrinsicContentSize()
+
+                }, onFinish: {
                 })
             } else {
+
+                self.minusBottomWidthConstraint.constant = widthConstant
+                self.plusBottomWidthConstraint.constant = widthConstant
                 layoutIfNeeded()
-                invalidateIntrinsicContentSize()
             }
         }
     }

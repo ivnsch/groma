@@ -260,6 +260,10 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     func onDeleteTap(_ cell: ProductWithQuantityTableViewCell) {
         fatalError("Outdated - delete this controller!")
     }
+
+    var isControllerInEditMode: Bool {
+        fatalError("Outdated - delete this controller!")
+    }
     
     /**
     Unwrap optionals safely

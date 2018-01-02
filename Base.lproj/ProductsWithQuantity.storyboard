@@ -559,7 +559,7 @@
                                                         <constraint firstItem="efF-zQ-80q" firstAttribute="leading" secondItem="j26-uq-DjU" secondAttribute="trailing" constant="5" id="M0B-S1-Ucg"/>
                                                         <constraint firstItem="2R5-6Q-YBr" firstAttribute="centerY" secondItem="Enh-q4-RPK" secondAttribute="centerY" constant="10" id="NkO-b2-23E"/>
                                                         <constraint firstItem="jov-l0-4Qz" firstAttribute="leading" secondItem="Enh-q4-RPK" secondAttribute="leading" constant="20" id="OlW-Iv-UIE"/>
-                                                        <constraint firstAttribute="trailing" secondItem="Hff-Wc-kvx" secondAttribute="trailing" id="Sew-e6-g4s"/>
+                                                        <constraint firstAttribute="trailing" secondItem="Hff-Wc-kvx" secondAttribute="trailing" constant="25" id="Sew-e6-g4s" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                                         <constraint firstItem="jov-l0-4Qz" firstAttribute="top" secondItem="Enh-q4-RPK" secondAttribute="top" constant="20" id="d4r-6r-nKs"/>
                                                         <constraint firstAttribute="trailing" secondItem="jov-l0-4Qz" secondAttribute="trailing" constant="20" id="gpy-NT-tMQ"/>
                                                         <constraint firstAttribute="bottom" secondItem="I6W-x1-2IM" secondAttribute="bottom" constant="4" id="ssh-t0-b38"/>

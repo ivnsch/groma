@@ -14,6 +14,7 @@ protocol ProductWithQuantityTableViewCellDelegate: class {
     func onChangeQuantity(_ cell: ProductWithQuantityTableViewCell, delta: Float)
     func onQuantityInput(_ cell: ProductWithQuantityTableViewCell, quantity: Float)
     func onDeleteTap(_ cell: ProductWithQuantityTableViewCell)
+    var isControllerInEditMode: Bool { get }
 }
 
 class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperDelegate, SwipeToDeleteHelperDelegate, QuantityViewDelegate {
@@ -131,6 +132,17 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
         tap.require(toFail: longPress)
     }
 
+    // MARK: - UIGestureRecognizerDelegate
+
+    override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if touch.view?.isDescendant(of: quantityView) ?? false {
+            return false
+        }
+        return true
+    }
+
+    // MARK: -
+
     @objc func longPress(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began: setMode(quantityView.mode == .edit ? .readonly : .edit, animated: true)
@@ -139,8 +151,10 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     }
 
     @objc func onTap(_ sender: UITapGestureRecognizer) {
-        // Cancel edit mode for cells that were put in edit mode via long press
-        setMode(.readonly, animated: true)
+        if delegate.map ({ !$0.isControllerInEditMode }) ?? false {
+            // Cancel edit mode for cells that were put in edit mode via long press
+            setMode(.readonly, animated: true)
+        }
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -191,8 +205,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     
     func setMode(_ mode: QuantityViewMode, animated: Bool) {
         isEditing = mode == .edit
-        quantityViewTrailingConstraint.constant = mode == .edit ? DimensionsManager.leftRightPaddingConstraint :
-            DimensionsManager.leftRightPaddingConstraint
+        quantityViewTrailingConstraint.constant = mode == .edit ? DimensionsManager.leftRightPaddingConstraint : DimensionsManager.leftRightPaddingConstraint
         quantityView.setMode(mode, animated: animated)
     }
     
