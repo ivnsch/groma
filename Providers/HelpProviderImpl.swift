@@ -40,7 +40,7 @@ class HelpProviderImpl: HelpProvider {
 
         HelpItem(title: "What is the relationship between categories and sections?", text: "Category is how you generally want to classify a product. E.g. for apples you probably would use 'fruit'. A Section is the area of the store where you find the product. The section can be different than the category! For example tuna, could have 'fish' as category but be in the 'canned food' section.\nProducts have always a category, which is used everywhere in the app. Sections only exist in Shopping Lists."),
         
-        HelpItem(title: "Do I need to use prices, units, base quantities, stores, etc.?", text: "No! All this is optional - you go as far as you want to. You can use Groma as a very simple grocery list app - using only basic item attributes like name and quantity."),
+        HelpItem(title: "Do I need to use prices, units, base quantities, stores, etc.?", text: "No! All this is optional - you go only as far as you want to. You can use Groma as a dead simple grocery list app - using only basic attributes like name and quantity."),
 
 //        HelpItem(title: "What are groups? Are they the same as recipes?", text: "Groups are a handy way of adding multiple items to a List at once. For example make a hamburger group with beef, buns, cheese and pickles, and add all the items to the List with only one click of a button – perfect for recipes you use often"),
 
