@@ -230,9 +230,15 @@ class RealmUnitProvider: RealmProvider {
         if let existingUnit = unitSync(name: name) {
             return (existingUnit, false)
         } else {
+            guard let unitsContainer: UnitsContainer = loadSync(predicate: nil)?.first else {
+                logger.e("Invalid state: no container")
+                return nil
+            }
+
             let newUnit = Unit(uuid: UUID().uuidString, name: name, id: .custom, buyable: true)
             func transactionContent(realm: Realm) -> (unit: Unit, isNew: Bool)? {
-                realm.add(newUnit, update: true) // should be update: false but why not use true if it's safer
+                realm.add(newUnit, update: true)  // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450 --- should be update: false but just in case!
+                unitsContainer.units.append(newUnit)
                 return (newUnit, true)
             }
             if doTransaction {
