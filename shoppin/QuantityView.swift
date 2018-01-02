@@ -181,9 +181,9 @@ class QuantityView: UIView, UITextFieldDelegate {
                 }, onFinish: {
                 })
             } else {
-
-                self.minusBottomWidthConstraint.constant = widthConstant
-                self.plusBottomWidthConstraint.constant = widthConstant
+                minusBottomWidthConstraint.constant = widthConstant
+                plusBottomWidthConstraint.constant = widthConstant
+                invalidateIntrinsicContentSize()
                 layoutIfNeeded()
             }
         }
