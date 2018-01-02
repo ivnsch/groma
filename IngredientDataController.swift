@@ -107,7 +107,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
         }
 
         unitsManager.selectedItem = { [weak self] in
-            return self?.inputs.unit?.name
+            return self?.inputs.unit?.name ?? trans("unit_unit")
         }
 
         initQuantityView()
