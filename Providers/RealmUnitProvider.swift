@@ -33,25 +33,13 @@ class RealmUnitProvider: RealmProvider {
         // and the base quantities too...
         let defaultBaseQuantities: [BaseQuantity] = [
             BaseQuantity(1),
+            BaseQuantity(1.5),
             BaseQuantity(2),
-            BaseQuantity(100),
-            BaseQuantity(150),
-            BaseQuantity(200),
-            BaseQuantity(250),
-            BaseQuantity(300),
-            BaseQuantity(350),
-            BaseQuantity(400),
-            BaseQuantity(450),
+            BaseQuantity(4),
+            BaseQuantity(6),
+            BaseQuantity(12),
             BaseQuantity(500),
-            BaseQuantity(550),
-            BaseQuantity(600),
-            BaseQuantity(650),
-            BaseQuantity(700),
-            BaseQuantity(750),
-            BaseQuantity(800),
-            BaseQuantity(850),
-            BaseQuantity(900),
-            BaseQuantity(950),
+            BaseQuantity(750)
         ]
         
 //        let objs: [Object] = defaultUnits + defaultFractions
