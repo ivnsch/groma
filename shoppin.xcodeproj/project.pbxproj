@@ -232,7 +232,6 @@
 		EB33D5561CDFA2000097AD58 /* CountryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5541CDFA2000097AD58 /* CountryHelper.swift */; };
 		EB33D5581CDFAB640097AD58 /* LocalizedFloatRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5571CDFAB640097AD58 /* LocalizedFloatRule.swift */; };
 		EB33D55E1CDFFC8D0097AD58 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D55D1CDFFC8D0097AD58 /* UIDevice.swift */; };
-		EB33D5741CE0104C0097AD58 /* OpenAndCloseListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5641CE00FAA0097AD58 /* OpenAndCloseListTest.swift */; };
 		EB37ABA21C9F249300FE9D7A /* LineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA11C9F249300FE9D7A /* LineTextField.swift */; };
 		EB37ABA61C9F2DA400FE9D7A /* LineAutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */; };
 		EB37ABAA1C9F4C0D00FE9D7A /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */; };
@@ -760,7 +759,6 @@
 		EB33D5541CDFA2000097AD58 /* CountryHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryHelper.swift; sourceTree = "<group>"; };
 		EB33D5571CDFAB640097AD58 /* LocalizedFloatRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedFloatRule.swift; sourceTree = "<group>"; };
 		EB33D55D1CDFFC8D0097AD58 /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
-		EB33D5641CE00FAA0097AD58 /* OpenAndCloseListTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpenAndCloseListTest.swift; path = ../OpenAndCloseListTest.swift; sourceTree = "<group>"; };
 		EB33D56A1CE010400097AD58 /* shoppinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shoppinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB33D56E1CE010410097AD58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB37ABA11C9F249300FE9D7A /* LineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineTextField.swift; sourceTree = "<group>"; };
@@ -1757,7 +1755,6 @@
 		EB33D56B1CE010400097AD58 /* shoppinUITests */ = {
 			isa = PBXGroup;
 			children = (
-				EB33D5641CE00FAA0097AD58 /* OpenAndCloseListTest.swift */,
 				EB33D56E1CE010410097AD58 /* Info.plist */,
 				6A4DBFE01FFBBCD300B2AB15 /* cart_todo_items */,
 			);
@@ -3345,7 +3342,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB33D5741CE0104C0097AD58 /* OpenAndCloseListTest.swift in Sources */,
 				6A4DBFDF1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift in Sources */,
 				6A4DBFDD1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift in Sources */,
 				6A3B4CCE1FF986AC00D90BFD /* AddItemsToCartTest.swift in Sources */,
