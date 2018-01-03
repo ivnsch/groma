@@ -381,6 +381,8 @@ placeholder_store = "Laden (freiwillig)";
 placeholder_inventory_name = "Name";
 placeholder_group_name = "Name";
 placeholder_recipe_name = "Rezeptname";
+placeholder_price_inputs_price = "Preis";
+placeholder_price_inputs_quantity = "Menge";
 
 
 validation_missing_password = "Bitte gib dein Passwort ein";

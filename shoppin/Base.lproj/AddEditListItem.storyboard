@@ -77,7 +77,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="25" y="156" width="240" height="40"/>
+                                <rect key="frame" x="25" y="156" width="107" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
                                 </constraints>
@@ -127,27 +127,6 @@
                                     <constraint firstAttribute="height" constant="50" id="Hoz-cP-VPS"/>
                                 </constraints>
                             </view>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="y3W-hW-EO2" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="285" y="156" width="70" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="A2j-Cc-Oys"/>
-                                    <constraint firstAttribute="height" constant="40" id="lSf-Pq-AHa" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
-                                </constraints>
-                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="decimalPad" returnKeyType="done"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
-                                        <integer key="value" value="30"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                        <integer key="value" value="40"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <outlet property="delegate" destination="CI5-0y-OAL" id="DQX-JH-hfI"/>
-                                </connections>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yvM-Su-XEx" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="309" y="31" width="46" height="30"/>
                                 <state key="normal" title="Button">
@@ -162,6 +141,14 @@
                                     <action selector="onTapEdible" destination="CI5-0y-OAL" eventType="touchUpInside" id="E93-hj-CAC"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UDF-SL-sE5" customClass="PriceView" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="152" y="156" width="203" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="Crz-3g-lYS"/>
+                                    <constraint firstAttribute="height" constant="40" id="yad-CA-gYD"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -169,30 +156,30 @@
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="top" secondItem="If7-20-6Xv" secondAttribute="top" constant="8" id="5vc-zY-2WJ"/>
                             <constraint firstItem="Yfv-oA-AU6" firstAttribute="top" secondItem="eS5-Cx-hK7" secondAttribute="bottom" id="7ph-aU-CSg"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" id="8QS-gR-4dR"/>
+                            <constraint firstItem="UDF-SL-sE5" firstAttribute="centerY" secondItem="Yfv-oA-AU6" secondAttribute="centerY" id="Hrc-VT-ZIl"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="width" secondItem="Xjl-8k-ZTY" secondAttribute="width" id="Ixd-KJ-nvO"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="height" secondItem="Xjl-8k-ZTY" secondAttribute="height" id="KLz-mz-O6h"/>
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="top" secondItem="If7-20-6Xv" secondAttribute="top" constant="66" id="Kao-Gj-zMX"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="bottom" secondItem="CcK-74-2fx" secondAttribute="bottom" id="LLD-Xt-dbo"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="Xjl-8k-ZTY" secondAttribute="top" id="Lj3-kE-rMA"/>
-                            <constraint firstItem="y3W-hW-EO2" firstAttribute="baseline" secondItem="Yfv-oA-AU6" secondAttribute="baseline" id="Mrf-Dx-rgd"/>
                             <constraint firstItem="eS5-Cx-hK7" firstAttribute="trailing" secondItem="yvM-Su-XEx" secondAttribute="trailing" id="NpB-a7-6ei"/>
                             <constraint firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" constant="14" id="PTH-u2-0Wm"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="bottom" secondItem="Xjl-8k-ZTY" secondAttribute="bottom" id="Qj0-os-Vco"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="top" id="Sha-Jh-tLV"/>
                             <constraint firstItem="r5b-Sz-J4o" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="25" id="Sra-Uc-AlA" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                             <constraint firstItem="eS5-Cx-hK7" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="SyX-oJ-bwd"/>
+                            <constraint firstItem="UDF-SL-sE5" firstAttribute="leading" secondItem="Yfv-oA-AU6" secondAttribute="trailing" constant="20" id="UYj-iu-5kH"/>
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="top" secondItem="r5b-Sz-J4o" secondAttribute="bottom" id="Uys-Mm-t4a"/>
                             <constraint firstItem="yvM-Su-XEx" firstAttribute="baseline" secondItem="r5b-Sz-J4o" secondAttribute="baseline" id="VFQ-1a-5Dt"/>
                             <constraint firstItem="Yfv-oA-AU6" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="VUC-z5-1Dn"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="leading" secondItem="CcK-74-2fx" secondAttribute="leading" id="XB8-fm-XNW"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="baseline" secondItem="i1w-xi-aFz" secondAttribute="baseline" id="ZXj-Jt-gIn"/>
-                            <constraint firstItem="y3W-hW-EO2" firstAttribute="leading" secondItem="Yfv-oA-AU6" secondAttribute="trailing" constant="20" id="ZaE-Dl-ZCp"/>
+                            <constraint firstItem="yvM-Su-XEx" firstAttribute="trailing" secondItem="UDF-SL-sE5" secondAttribute="trailing" id="bXY-xu-ffa"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" id="chq-t4-DD0"/>
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="centerX" secondItem="If7-20-6Xv" secondAttribute="centerX" id="ei9-BK-Nvk"/>
                             <constraint firstItem="yvM-Su-XEx" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="trailing" constant="30" id="fUB-Yc-W2v"/>
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="fUq-lg-gn6"/>
                             <constraint firstItem="Xjl-8k-ZTY" firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" id="g2U-te-7jt"/>
-                            <constraint firstItem="y3W-hW-EO2" firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" id="iDd-Nq-czh"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="Xjl-8k-ZTY" secondAttribute="trailing" id="lg7-IJ-coN"/>
                             <constraint firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" constant="14" id="m3p-bh-n5t"/>
                             <constraint firstItem="yvM-Su-XEx" firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" id="pRZ-LY-RdP"/>
@@ -229,7 +216,7 @@
                         <outlet property="categoryOrSectionTextFieldTopToSuperviewConstraint" destination="Kao-Gj-zMX" id="j41-r7-fxB"/>
                         <outlet property="edibleButton" destination="yvM-Su-XEx" id="8gJ-V7-lYH"/>
                         <outlet property="noteInput" destination="Yfv-oA-AU6" id="5Hv-hJ-1gn"/>
-                        <outlet property="priceInput" destination="y3W-hW-EO2" id="TPH-RX-eBF"/>
+                        <outlet property="priceView" destination="UDF-SL-sE5" id="D0X-0O-TfT"/>
                         <outlet property="quantitiesContainer" destination="eS5-Cx-hK7" id="oua-Y4-fsi"/>
                         <outlet property="sectionColorButton" destination="CcK-74-2fx" id="ZsK-bj-Mmn"/>
                         <outlet property="sectionInput" destination="i1w-xi-aFz" id="8ba-aL-isS"/>

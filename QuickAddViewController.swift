@@ -71,7 +71,7 @@ private enum AddProductOrGroupContent {
 
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
 class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, QuickAddPageControllerDelegate, UITextFieldDelegate {
-    
+
     weak var delegate: QuickAddDelegate?
     weak var addIngredientDelegate: QuickAddDelegate? // Used only when items type == .ingredient
     
@@ -443,11 +443,24 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(_ price: Float, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: String, brand: String, edible: Bool, editingItem: Any?) {
+    func onOkTap(_ price: Float, refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: String, brand: String, edible: Bool, editingItem: Any?) {
         
         if let name = searchBar.text?.trim() {
             
-            let listItemInput = ListItemInput(name: name, quantity: quantity, price: price, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, edible: edible)
+            let listItemInput = ListItemInput(
+                name: name,
+                quantity: quantity,
+                price: price,
+                refPrice: refPrice,
+                refQuantity: refQuantity,
+                section: section,
+                sectionColor: sectionColor,
+                note: note,
+                baseQuantity: baseQuantity,
+                unit: unit,
+                brand: brand,
+                edible: edible
+            )
 
             delegate?.onSubmitAddEditItem2(listItemInput, editingItem: editingItem) {[weak self] quickAddItem, isNew in
                 

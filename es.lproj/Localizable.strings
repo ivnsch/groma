@@ -382,6 +382,9 @@ placeholder_store = "Tienda (opcional)";
 placeholder_inventory_name = "Nombre del inventario";
 placeholder_group_name = "Nombre del grupo";
 placeholder_recipe_name = "Nombre de la receta";
+placeholder_price_inputs_price = "Precio";
+placeholder_price_inputs_quantity = "Cantidad";
+
 
 validation_email_format = "Formato incorrecto de e-mail";
 validation_missing_password = "Por favor ingresa tu clave";

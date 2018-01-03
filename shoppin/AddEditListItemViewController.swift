@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-
+import CMPopTipView
 import Providers
 import RealmSwift
 
@@ -19,7 +19,7 @@ protocol AddEditListItemViewControllerDelegate: class {
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>)
     
-    func onOkTap(_ price: Float, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: String, brand: String, edible: Bool, editingItem: Any?)
+    func onOkTap(_ price: Float, refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: String, brand: String, edible: Bool, editingItem: Any?)
     
     func parentViewForAddButton() -> UIView?
     
@@ -136,8 +136,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     @IBOutlet weak var sectionInput: LineAutocompleteTextField!
     @IBOutlet weak var sectionColorButton: LineTextField!
 
-    @IBOutlet weak var priceInput: LineTextField!
-    
+    @IBOutlet weak var priceView: PriceView!
+
     @IBOutlet weak var titleLabel: UILabel!
 
     @IBOutlet weak var edibleButton: UIButton!
@@ -175,22 +175,39 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
     fileprivate var productQuantityController: ProductQuantityController?
 
+    fileprivate var priceInputs: PriceInputsState = PriceInputsState(quantity: 0, price: 0) {
+        didSet {
+            updateTotalPrice()
+        }
+    }
+
     weak var delegate: AddEditListItemViewControllerDelegate?
     
-    fileprivate var currentQuantity: Float = 0
-    fileprivate var currentUnit: String = ""
+    fileprivate var currentQuantity: Float = 0 {
+        didSet {
+            updateTotalPrice()
+        }
+    }
+    fileprivate var currentUnit: String = trans("unit_unit")
     fileprivate var currentUnitId: UnitId = .none
-    fileprivate var currentBase: Float = 1
+    fileprivate var currentBase: Float = 1  {
+        didSet {
+            updateTotalPrice()
+        }
+    }
 
     fileprivate var showingColorPicker: FlatColorPickerController?
 //    private var showingNoteInputPopup: SimpleInputPopupController?
+
+    fileprivate var priceInputPopup: CMPopTipView?
+    fileprivate var priceInputsPopupController: PriceInputsController?
 
     var keyboardHeight: CGFloat?
 
     fileprivate var textFields: [UITextField] {
         switch modus {
         case .listItem:
-            return [brandInput, sectionInput, noteInput, priceInput]
+            return [brandInput, sectionInput, noteInput]
 
         case .ingredient:
             return [sectionInput]
@@ -241,7 +258,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 
                 let isListItem = modus == .listItem
                 noteInput.isHidden = !isListItem
-                priceInput.isHidden = !isListItem
+                priceView.isHidden = !isListItem
                 
 //                let sectionText = "Section"
 //                let categoryText = "Category"
@@ -309,9 +326,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         setInputsDefaultValues()
         initTextFieldPlaceholders()
         initAutocompletionTextFields()
-        
-        priceInput.delegate = self
-        priceInput.addTarget(self, action: #selector(priceInputDidChange(_:)), for: .editingChanged)
+
+        priceView.configure(onTap: { [weak self] in
+            self?.onPriceViewTap()
+        })
+        priceView.show(price: 0)
+//        priceInput.delegate = self
+//        priceInput.addTarget(self, action: #selector(priceInputDidChange(_:)), for: .editingChanged)
 
         sectionColorButton.textColor = UIColor.gray
         sectionColorButton.text = trans("generic_color") // string from storyboard localization doesn't work, seems to be xcode bug
@@ -334,75 +355,43 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         initTextFieldsReturnType()
     }
 
+    fileprivate func updateTotalPrice() {
+        let basePrice = StoreProduct.calculateBasePrice(refQuantity: priceInputs.quantity, refPrice: priceInputs.price, baseQuantity: currentBase)
+        let totalPrice = currentQuantity * basePrice
+        priceView.show(price: totalPrice)
+        priceInputsPopupController?.updateUnitName(unitName: unitNameForPriceInputsController())
+    }
+
+    fileprivate func unitNameForPriceInputsController() -> String {
+        return currentUnitId == .none ? (priceInputs.quantity == 1 ? trans("unit_unit") : trans("unit_unit_pl")) : currentUnit
+    }
+
+    fileprivate func onPriceViewTap() {
+        let controller = createPriceInputsControler()
+        let popup = MyTipPopup(customView: controller.view)
+        popup.presentPointing(at: priceView, in: view, animated: true)
+        addChildViewController(controller)
+        popup.onDismiss = { [weak self, weak controller] in
+            controller?.removeFromParentViewController()
+            self?.priceInputPopup = nil
+            self?.priceInputsPopupController = controller
+        }
+        self.priceInputPopup = popup
+        self.priceInputsPopupController = controller
+    }
+
+    fileprivate func createPriceInputsControler() -> PriceInputsController {
+        let controller = PriceInputsController()
+        controller.view.frame = CGRect(x: 0, y: 0, width: view.width - 80, height: 50)
+        controller.onInputsChange = { [weak self] inputs in
+            self?.priceInputs = inputs
+        }
+        controller.prefill(quantity: priceInputs.quantity, price: priceInputs.price, unitName: unitNameForPriceInputsController())
+        return controller
+    }
+
     fileprivate func initTextFieldsReturnType() {
         textFields.last?.returnKeyType = .done
-    }
-
-    fileprivate func getNumberStringFromCurrencyString(string: String) -> String? {
-
-        let pat = "\\d+([\\.|\\,]?\\d*)"
-        let regex = try! NSRegularExpression(pattern: pat, options: [])
-        let result = regex.matches(in: string, options: [], range: NSRange(location: 0, length: string.count))
-
-        if let result = result.first {
-            if let range = Range(result.range, in: string) {
-                let numberString = string[range]
-                return String(numberString)
-            }
-        }
-
-        return nil
-    }
-
-    fileprivate func getCurrencySymbolResult(string: String) -> NSTextCheckingResult? {
-        let currencySymbolPattern = "[^0-9|\\.|\\s]"
-        let currencySymbolRegex = try! NSRegularExpression(pattern: currencySymbolPattern, options: [])
-        let currencySymbolResult = currencySymbolRegex.matches(in: string, options: [], range: NSRange(location: 0, length: string.count))
-        return currencySymbolResult.first
-    }
-
-    @objc func priceInputDidChange(_ sender: UITextField) {
-
-        guard let currentInputText = priceInput.text else { return }
-
-        guard let numberString = getNumberStringFromCurrencyString(string: currentInputText) else {
-            logger.e("Couldn't get number string from: \(currentInputText)", .ui)
-            return
-        }
-        guard let textWithCurrency = numberString.floatValue?.toLocalCurrencyString() else {
-            logger.e("Couldn't get textWithCurrency from: \(numberString)", .ui)
-            return
-        }
-
-        let currencySymbolResult = getCurrencySymbolResult(string: currentInputText)
-        let hasCurrencySymbolAlready = currencySymbolResult != nil
-        let currentCursorPosition = priceInput.cursorPosition
-
-        if let currentCursorPosition = currentCursorPosition {
-            let currencySymbolResult = getCurrencySymbolResult(string: textWithCurrency)
-
-            if let currencySymbolResult = currencySymbolResult {
-
-                let currencyIsLeading = currencySymbolResult.range.location == 0
-
-                if let range = Range(currencySymbolResult.range, in: textWithCurrency) {
-                    let currencySymbol = String(textWithCurrency[range])
-                    let newText = (currencyIsLeading ? currencySymbol : "") + numberString + (currencyIsLeading ? "" : currencySymbol)
-                    priceInput.text = newText
-                }
-                let currencySymbolPosition = currencySymbolResult.range.location
-
-                let updatedCursorPosition = currentCursorPosition > currencySymbolPosition ?
-                    (hasCurrencySymbolAlready ? currentCursorPosition : currentCursorPosition + 1) : currentCursorPosition
-
-                priceInput.moveCursor(to: updatedCursorPosition)
-
-            } else {
-                logger.e("Couldn't get currencySymbolResult. String: \(textWithCurrency)", .ui)
-            }
-        } else {
-            logger.e("Couldn't get current cursor position. Selected range: \(String(describing: priceInput.selectedTextRange))", .ui)
-        }
     }
 
     fileprivate func initGlobalTap() {
@@ -469,8 +458,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 return sectionInput
             } else if brandInput.isFirstResponder {
                 return brandInput
-            } else if priceInput.isFirstResponder {
-                return priceInput
             } else if noteInput.isFirstResponder {
                 return noteInput
             } else {
@@ -596,7 +583,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         productQuantityController?.quantity = item.quantity
         
         let price = item.storeProduct?.price ?? 0
-        priceInput.text = price.toLocalCurrencyString()
+        priceView.show(price: price)
         noteInput.text = item.note
         // TODO!!!!!!!!!!!!!!! quantifiable product - unit?
         
@@ -618,16 +605,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //        }
     }
 
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField == priceInput {
-            textField.selectAll(nil)
-        }
-    }
-    
+
     fileprivate func initTextFieldPlaceholders() {
         brandInput.attributedPlaceholder = NSAttributedString(string: brandInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
         sectionInput.attributedPlaceholder = NSAttributedString(string: sectionInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
-        priceInput.attributedPlaceholder = NSAttributedString(string: priceInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
         noteInput.attributedPlaceholder = NSAttributedString(string: noteInput.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
         
         edibleButton.setTitle(trans("edible_button_title"), for: .normal)
@@ -692,26 +673,21 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                     error.field.clearValidationError()
                 }
             }
-            
-            let price: Float = (priceInput.text.flatMap {
-                self.getNumberStringFromCurrencyString(string: $0)
-            })?.floatValue ?? 0
 
-            // There's a bug in which sometimes a store product (blueberries the time I spotted it) has a -1 price - have no idea what causes this, so adding this as a safety measure - if it happens again and there's no error log at least we know this isn't the reason.
-            let correctedPrice = price < 0 ? ({
-                logger.e("Negative price! \(price)", .ui)
-                return 0
-            } ()) : price
+            let price: Float = 0 // TODO not used as an independent value anymore - only derived!
+
+            let refPrice: Float? = priceInputs.price
+            let refQuantity: Float? = priceInputs.quantity
 
             if let section = sectionInput.text?.trim(), let brand = brandInput.text?.trim(), let note = noteInput.text?.trim(), let sectionColor = sectionColorButton.textColor {
                 
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
                 // Explanation category/section name: for list items, the section input refers to the list item's section. For the rest the product category. When we store the list items, if a category with the entered section name doesn't exist yet, one is created with the section's data.
-                delegate?.onOkTap(correctedPrice, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: currentBase, unit: currentUnit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
+                delegate?.onOkTap(price, refPrice: refPrice, refQuantity: refQuantity, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: currentBase, unit: currentUnit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
                 
             } else {
-                logger.e("Validation was not implemented correctly, price: \(String(describing: priceInput.text)), quantity: \(String(describing: productQuantityController?.quantity)), brand: \(String(describing: brandInput.text)), sectionColor: \(String(describing: sectionColorButton.textColor))")
+                logger.e("Validation was not implemented correctly, refPrice: \(refPrice), refQuantity: \(refQuantity), quantity: \(String(describing: productQuantityController?.quantity)), brand: \(String(describing: brandInput.text)), sectionColor: \(String(describing: sectionColorButton.textColor))")
             }
         }
     }
@@ -731,13 +707,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     func clearInputs() {
-        for field in [sectionInput, priceInput] as [UITextField] {
+        for field in [brandInput, noteInput, sectionInput] as [UITextField] {
             field.text = ""
         }
     }
     
     func dismissKeyboard(_ sender: AnyObject?) {
-        for field in [sectionInput, priceInput] as [UITextField] {
+        for field in [brandInput, noteInput, sectionInput] as [UITextField] {
             _ = field.resignFirstResponder()
         }
     }

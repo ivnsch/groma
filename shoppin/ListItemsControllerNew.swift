@@ -671,6 +671,8 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                 name: model.productPrototype.name,
                 quantity: model.quantity,
                 price: 0,
+                refPrice: nil,
+                refQuantity: nil,
                 section: model.ingredient.item.category.name,
                 sectionColor: model.ingredient.item.category.color,
                 note: nil,

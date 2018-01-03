@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PriceInputsController" customModule="groma" customModuleProvider="target">
+            <connections>
+                <outlet property="priceTextField" destination="A6m-hT-9jJ" id="JvW-DC-hFS"/>
+                <outlet property="quantityTextField" destination="5kw-7f-EGo" id="aMx-MA-dwy"/>
+                <outlet property="unitLabel" destination="h45-IC-433" id="XBa-G1-iGV"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="67"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5kw-7f-EGo" customClass="LineTextField" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="20" y="13" width="50" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="Zoh-8h-gz6" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
+                        <constraint firstAttribute="width" constant="50" id="pQ4-nu-pDc"/>
+                    </constraints>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" keyboardType="decimalPad" returnKeyType="next"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                            <integer key="value" value="30"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
+                            <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="A6m-hT-9jJ" customClass="LineTextField" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="300" y="13" width="80" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="Do3-CA-ZDx" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
+                        <constraint firstAttribute="width" constant="80" id="S0n-7Z-NG7"/>
+                    </constraints>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" keyboardType="decimalPad" returnKeyType="next"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                            <integer key="value" value="30"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
+                            <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </textField>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="L" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h45-IC-433" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="76" y="24" width="9" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="=" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WT0-1G-crm" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="270.5" y="24" width="9.5" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </label>
+            </subviews>
+            <constraints>
+                <constraint firstItem="h45-IC-433" firstAttribute="centerY" secondItem="5kw-7f-EGo" secondAttribute="centerY" id="0Ap-i2-DCW"/>
+                <constraint firstItem="WT0-1G-crm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="h45-IC-433" secondAttribute="trailing" constant="10" id="2N5-HX-Dad"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="A6m-hT-9jJ" secondAttribute="trailing" constant="20" id="9H7-qH-LUu" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                <constraint firstItem="5kw-7f-EGo" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="DgS-JW-6tn"/>
+                <constraint firstItem="h45-IC-433" firstAttribute="leading" secondItem="5kw-7f-EGo" secondAttribute="trailing" constant="6" id="ENH-27-ezN"/>
+                <constraint firstItem="A6m-hT-9jJ" firstAttribute="centerY" secondItem="5kw-7f-EGo" secondAttribute="centerY" id="IJO-oj-JIW"/>
+                <constraint firstItem="5kw-7f-EGo" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="hHW-aa-XKL" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                <constraint firstItem="A6m-hT-9jJ" firstAttribute="leading" secondItem="WT0-1G-crm" secondAttribute="trailing" constant="20" id="rDc-bM-lCx"/>
+                <constraint firstItem="WT0-1G-crm" firstAttribute="centerY" secondItem="5kw-7f-EGo" secondAttribute="centerY" id="ywT-az-Zfz"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="-55" y="354.5"/>
+        </view>
+    </objects>
+</document>

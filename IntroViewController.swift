@@ -344,7 +344,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 
                                 let inputs = productsIngredients.map {
                                     // NOTE: Assumes all example list items are edible (edible: true). To change this set this flag in the productsWithQuantity tuples.
-                                    ListItemInput(name: $0.product.product.item.name, quantity: $0.quantity, price: 0, section: $0.product.product.item.category.name, sectionColor: $0.product.product.item.category.color, note: nil, baseQuantity: $0.product.baseQuantity, unit: $0.product.unit.name, brand: $0.product.product.brand, edible: true)
+                                    ListItemInput(name: $0.product.product.item.name, quantity: $0.quantity, price: 0, refPrice: nil, refQuantity: nil, section: $0.product.product.item.category.name, sectionColor: $0.product.product.item.category.color, note: nil, baseQuantity: $0.product.baseQuantity, unit: $0.product.unit.name, brand: $0.product.product.brand, edible: true)
                                 }
                                 
                                 Prov.listItemsProvider.addNew(listItemInputs: inputs, list: exampleList, status: .todo, realmData: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in

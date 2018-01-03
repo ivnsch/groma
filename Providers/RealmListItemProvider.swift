@@ -1018,7 +1018,16 @@ class RealmListItemProvider: RealmProvider {
     /// Input form (new) TODO put in product / store product providers. Don't use ListItemInput but store - specific input type
     func addStoreProductSync(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (StoreProduct, Bool)? {
         
-        switch DBProv.productProvider.mergeOrCreateStoreProductSync(prototype: listItemInput.toProductPrototype(), price: listItemInput.storeProductInput.price, updateCategory: true, save: true, realmData: realmData, doTransaction: true) {
+        switch DBProv.productProvider.mergeOrCreateStoreProductSync(
+            prototype: listItemInput.toProductPrototype(),
+            price: listItemInput.storeProductInput.price,
+            refPrice: listItemInput.storeProductInput.refPrice,
+            refQuantity: listItemInput.storeProductInput.refQuantity,
+            updateCategory: true,
+            save: true,
+            realmData: realmData,
+            doTransaction: true
+        ) {
             
         case .ok(let result):
             return result

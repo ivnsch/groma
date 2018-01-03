@@ -174,7 +174,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
         let listItemPrototypes: [ListItemPrototype] = groupItems.map{
-            let storeProductInput = StoreProductInput(price: 0, baseQuantity: $0.product.baseQuantity, unit: $0.product.unit.name)
+            let storeProductInput = StoreProductInput(price: 0, refPrice: nil, refQuantity: nil, baseQuantity: $0.product.baseQuantity, unit: $0.product.unit.name)
             return ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.item.category.name, targetSectionColor: $0.product.product.item.category.color, storeProductInput: storeProductInput)
         }
         self.add(listItemPrototypes, status: status, list: list, token: nil, handler)
@@ -332,7 +332,14 @@ class ListItemProviderImpl: ListItemProvider {
                 if let (section, product) = result.sucessResult {
 
 //                    , baseQuantity: listItemInput.storeProductInput.baseQuantity, unit: listItemInput.storeProductInput.unit
-                    let storeProduct = StoreProduct(uuid: updatingListItem.product.uuid, price: listItemInput.storeProductInput.price, store: updatingListItem.list.store ?? "", product: product) // possible store product update
+                    let storeProduct = StoreProduct(
+                        uuid: updatingListItem.product.uuid,
+                        price: listItemInput.storeProductInput.price,
+                        refPrice: listItemInput.storeProductInput.refPrice,
+                        refQuantity: listItemInput.storeProductInput.refQuantity,
+                        store: updatingListItem.list.store ?? "",
+                        product: product
+                    ) // possible store product update
                     
                     let listItem = ListItem(
                         uuid: updatingListItem.uuid,

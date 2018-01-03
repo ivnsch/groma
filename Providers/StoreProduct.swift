@@ -37,9 +37,21 @@ public class StoreProduct: DBSyncable, Identifiable {
     
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var price: Float = 0
+    let refPrice = RealmOptional<Float>()
+    let refQuantity = RealmOptional<Float>()
+
     @objc dynamic var productOpt: QuantifiableProduct? = QuantifiableProduct()
-    
-    
+
+    // Multiply this with quantity = totalPrice
+    public var basePrice: Float {
+        let refQuantity = self.refQuantity.value ?? 0
+        return StoreProduct.calculateBasePrice(refQuantity: refQuantity, refPrice: refPrice.value ?? 0, baseQuantity: product.baseQuantity)
+    }
+
+    public static func calculateBasePrice(refQuantity: Float, refPrice: Float, baseQuantity: Float) -> Float {
+        return refQuantity == 0 ? 0 : (baseQuantity * refPrice) / refQuantity
+    }
+
     // TODO remove
     @objc public dynamic var baseQuantity: String = ""
     
@@ -58,12 +70,14 @@ public class StoreProduct: DBSyncable, Identifiable {
         return "uuid"
     }
 
-    public convenience init(uuid: String, price: Float, store: String = "", product: QuantifiableProduct, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(uuid: String, price: Float, refPrice: Float?, refQuantity: Float?, store: String = "", product: QuantifiableProduct, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
         self.uuid = uuid
         self.price = price
+        self.refPrice.value = refPrice
+        self.refQuantity.value = refQuantity
         self.store = store
         self.product = product
         
@@ -73,10 +87,12 @@ public class StoreProduct: DBSyncable, Identifiable {
         self.removed = removed
     }
 
-    public func copy(uuid: String? = nil, price: Float? = nil, store: String? = nil, product: QuantifiableProduct? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> StoreProduct {
+    public func copy(uuid: String? = nil, price: Float? = nil, refPrice: Float? = nil, refQuantity: Float? = nil, store: String? = nil, product: QuantifiableProduct? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> StoreProduct {
         return StoreProduct(
             uuid: uuid ?? self.uuid,
             price: price ?? self.price,
+            refPrice: refPrice ?? self.refPrice.value,
+            refQuantity: refQuantity ?? self.refQuantity.value,
             store: store ?? self.store,
             product: product ?? self.product.copy(),
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
@@ -242,10 +258,12 @@ public class StoreProduct: DBSyncable, Identifiable {
 
 extension StoreProduct {
     
-    static func createDefault(quantifiableProduct: QuantifiableProduct, store: String, price: Float?) -> StoreProduct {
+    static func createDefault(quantifiableProduct: QuantifiableProduct, store: String, price: Float?, refPrice: Float? = nil, refQuantity: Float? = nil) -> StoreProduct {
         return StoreProduct(
             uuid: UUID().uuidString,
             price: price ?? 0,
+            refPrice: refPrice ?? 0,
+            refQuantity: refQuantity ?? 0,
             store: store,
             product: quantifiableProduct
         )

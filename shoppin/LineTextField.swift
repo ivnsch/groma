@@ -19,7 +19,7 @@ class LineTextField: UITextField {
     fileprivate static let defaultLineColor = Theme.lightGrey2
 
     @IBInspectable
-    var lineColor = defaultLineColor {
+    var lineColor: UIColor = defaultLineColor {
         didSet {
             setNeedsDisplay()
         }

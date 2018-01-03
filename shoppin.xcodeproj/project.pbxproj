@@ -170,6 +170,10 @@
 		6AF46EBB1E5BBBC900BBFF4C /* UnitSubmitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EB91E5BBBC900BBFF4C /* UnitSubmitCell.swift */; };
 		6AF46EBC1E5BBBC900BBFF4C /* UnitSubmitCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AF46EBA1E5BBBC900BBFF4C /* UnitSubmitCell.xib */; };
 		6AF46EC01E5CE19A00BBFF4C /* PickerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF46EBF1E5CE19A00BBFF4C /* PickerCollectionView.swift */; };
+		6AFDAFAA1FFCFA5900C57703 /* PriceInputsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AFDAFA81FFCFA5900C57703 /* PriceInputsController.swift */; };
+		6AFDAFAB1FFCFA5900C57703 /* PriceInputsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AFDAFA91FFCFA5900C57703 /* PriceInputsController.xib */; };
+		6AFDAFAD1FFCFF2500C57703 /* PriceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AFDAFAC1FFCFF2500C57703 /* PriceView.swift */; };
+		6AFDAFAF1FFCFFC000C57703 /* PriceView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AFDAFAE1FFCFFC000C57703 /* PriceView.xib */; };
 		6AFF38361E89B0D3009AD368 /* ManageDatabase.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF38381E89B0D3009AD368 /* ManageDatabase.storyboard */; };
 		ABCC0C60A2DB87DCAF62D76A /* Pods_shoppinUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7F3478CE41426B11D1A08D9 /* Pods_shoppinUITests.framework */; };
 		AE4ACBEA0F92FC70EBA5FB3A /* Pods_groma.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7FB21D26491D0783CDCBAE /* Pods_groma.framework */; };
@@ -680,6 +684,10 @@
 		6AF46EB91E5BBBC900BBFF4C /* UnitSubmitCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitSubmitCell.swift; sourceTree = "<group>"; };
 		6AF46EBA1E5BBBC900BBFF4C /* UnitSubmitCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnitSubmitCell.xib; sourceTree = "<group>"; };
 		6AF46EBF1E5CE19A00BBFF4C /* PickerCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerCollectionView.swift; sourceTree = "<group>"; };
+		6AFDAFA81FFCFA5900C57703 /* PriceInputsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceInputsController.swift; sourceTree = "<group>"; };
+		6AFDAFA91FFCFA5900C57703 /* PriceInputsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PriceInputsController.xib; sourceTree = "<group>"; };
+		6AFDAFAC1FFCFF2500C57703 /* PriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceView.swift; sourceTree = "<group>"; };
+		6AFDAFAE1FFCFFC000C57703 /* PriceView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PriceView.xib; sourceTree = "<group>"; };
 		6AFF38371E89B0D3009AD368 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ManageDatabase.storyboard; sourceTree = "<group>"; };
 		6AFF383A1E89B0D6009AD368 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ManageDatabase.strings; sourceTree = "<group>"; };
 		6AFF383C1E89B0DC009AD368 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ManageDatabase.strings; sourceTree = "<group>"; };
@@ -1362,6 +1370,8 @@
 				6AF46EB71E5B6F7500BBFF4C /* UnitsDelegate.swift */,
 				6A7E64881FEABE7B00F75DFD /* UnitWithBaseView.swift */,
 				6A7E648A1FEABE8B00F75DFD /* UnitWithBaseView.xib */,
+				6AFDAFAC1FFCFF2500C57703 /* PriceView.swift */,
+				6AFDAFAE1FFCFFC000C57703 /* PriceView.xib */,
 			);
 			name = selectIngredientDataController;
 			sourceTree = "<group>";
@@ -2069,6 +2079,8 @@
 			children = (
 				EB85F47B1BD6ED8F00E19E9B /* AddEditListItemViewController.swift */,
 				EBD667E31CED49EB0055EE0B /* AddEditListItem.storyboard */,
+				6AFDAFA81FFCFA5900C57703 /* PriceInputsController.swift */,
+				6AFDAFA91FFCFA5900C57703 /* PriceInputsController.xib */,
 			);
 			name = addEditListItem;
 			sourceTree = "<group>";
@@ -2745,6 +2757,7 @@
 				EBD668201CED4EB00055EE0B /* EditableChoiceModal.storyboard in Resources */,
 				EBAEB23E1BDC263800FCDA5C /* FloatingViews.xib in Resources */,
 				EBD667EF1CED4BF30055EE0B /* AddEditList.storyboard in Resources */,
+				6AFDAFAF1FFCFFC000C57703 /* PriceView.xib in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB1B365B1BC4637A003519F2 /* PlanTableViewCell_.xib in Resources */,
 				6A287EAB1E55E3BE00868244 /* ManageItems.storyboard in Resources */,
@@ -2790,6 +2803,7 @@
 				6A287E891E52672600868244 /* EditNameColorController.xib in Resources */,
 				6AD23FFF1FED922C0080161E /* AddRecipeController.xib in Resources */,
 				EBB655A81CF3D13D00B49A55 /* ProductsWithQuantity.storyboard in Resources */,
+				6AFDAFAB1FFCFA5900C57703 /* PriceInputsController.xib in Resources */,
 				EB4B39D21CED425000B41063 /* UserDetails.storyboard in Resources */,
 				EB5AD1961BEE2ED400BC6A2F /* EditSectionViewController.xib in Resources */,
 				EB0F5F861B962D2100035175 /* GoogleService-Info.plist in Resources */,
@@ -3093,6 +3107,7 @@
 				EB21A3001D00A638000C594C /* AboutController.swift in Sources */,
 				EB6E3D131C56D0ED00D65DD5 /* PathButton.swift in Sources */,
 				6AEE5ECB1E720D3300C2A2FB /* EditNameButtonController.swift in Sources */,
+				6AFDAFAD1FFCFF2500C57703 /* PriceView.swift in Sources */,
 				6A3A67BE1E56141200B5354F /* ManageItemsUnitsController.swift in Sources */,
 				EB8D1D091C37318500ADF884 /* GroupsController.swift in Sources */,
 				EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */,
@@ -3256,6 +3271,7 @@
 				EB5737B31BF25DFB00D52FB8 /* AddEditInventoryController.swift in Sources */,
 				EBED0CE31C7FB8E200A1EEC4 /* InventoryInvitationsHandler.swift in Sources */,
 				EB741A5C1C22185900E1585D /* ListsTableViewController.swift in Sources */,
+				6AFDAFAA1FFCFA5900C57703 /* PriceInputsController.swift in Sources */,
 				6A78ADA71FEC360400058D27 /* BaseOrUnitCellView.swift in Sources */,
 				EB7BFA7B1BDA5BE500F4C74A /* QuantityCell.swift in Sources */,
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,
