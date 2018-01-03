@@ -581,9 +581,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         // TODO!!!!!!!!!!!!!!!!! redundancy - review if we really need to return quantity in delegate as well as pass here
         currentQuantity = item.quantity
         productQuantityController?.quantity = item.quantity
-        
-        let price = item.storeProduct?.price ?? 0
-        priceView.show(price: price)
+
         noteInput.text = item.note
         // TODO!!!!!!!!!!!!!!! quantifiable product - unit?
         
@@ -595,6 +593,12 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         currentBase = item.product?.baseQuantity ?? 1
 
         updateProductQuantityController()
+
+        priceInputs.price = item.storeProduct?.refPrice.value ?? 0
+        priceInputs.quantity = item.storeProduct?.refQuantity.value ?? 0
+
+        let price = item.storeProduct?.totalPrice(quantity: currentQuantity) ?? 0
+        priceView.show(price: price)
 
         // TODO remove?
 //        productQuantityController?.onPickersInitialized = {[weak productQuantityController] in

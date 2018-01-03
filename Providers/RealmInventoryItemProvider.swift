@@ -289,7 +289,7 @@ class RealmInventoryItemProvider: RealmProvider {
             
             let addedOrIncrementedInventoryItem = addOrIncrementInventoryItem(realm, inventory: inventory, product: item.product.product, quantity: item.quantity, dirty: dirty)
 
-            let historyItem = HistoryItem(uuid: UUID().uuidString, inventory: inventory, product: item.product.product, addedDate: addedDate, quantity: item.quantity, user: sharedUser, paidPrice: item.product.price)
+            let historyItem = HistoryItem(uuid: UUID().uuidString, inventory: inventory, product: item.product.product, addedDate: addedDate, quantity: item.quantity, user: sharedUser, paidPrice: item.product.basePrice)
             realm.add(historyItem, update: true)
             
             adddedOrUpdatedItems.append((inventoryItem: addedOrIncrementedInventoryItem.inventoryItem, historyItem: historyItem))

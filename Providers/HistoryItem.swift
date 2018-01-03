@@ -16,7 +16,7 @@ public class HistoryItem: DBSyncable, Identifiable {
     @objc public dynamic var addedDate: Int64 = 0
     @objc public dynamic var quantity: Float = 0
     @objc dynamic var userOpt: DBSharedUser? = DBSharedUser()
-    @objc public dynamic var paidPrice: Float = 0 // product price at the moment of buying the item (per unit)
+    @objc public dynamic var paidPrice: Float = 0 // product price at the moment of buying the item (per unit ~ meaning price (including base, etc.) before being multiplied with quantity)
     
     public static let addedDateKey = "addedDate"
     

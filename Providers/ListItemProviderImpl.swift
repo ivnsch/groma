@@ -334,7 +334,6 @@ class ListItemProviderImpl: ListItemProvider {
 //                    , baseQuantity: listItemInput.storeProductInput.baseQuantity, unit: listItemInput.storeProductInput.unit
                     let storeProduct = StoreProduct(
                         uuid: updatingListItem.product.uuid,
-                        price: listItemInput.storeProductInput.price,
                         refPrice: listItemInput.storeProductInput.refPrice,
                         refQuantity: listItemInput.storeProductInput.refQuantity,
                         store: updatingListItem.list.store ?? "",
@@ -1308,7 +1307,7 @@ class ListItemProviderImpl: ListItemProvider {
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
     func addNew(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, note: String?, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<AddListItemResult>) -> Void) {
        
-        if let tuple = DBProv.listItemProvider.addSync(quantifiableProduct: quantifiableProduct, store: store, price: nil, list: list, quantity: quantity, note: note, status: status, realmData: realmData) {
+        if let tuple = DBProv.listItemProvider.addSync(quantifiableProduct: quantifiableProduct, store: store, refPrice: nil, refQuantity: nil, list: list, quantity: quantity, note: note, status: status, realmData: realmData) {
             handler(ProviderResult(status: .success, sucessResult: tuple))
         } else {
             handler(ProviderResult(status: .databaseUnknown))

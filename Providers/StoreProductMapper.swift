@@ -27,7 +27,6 @@ class StoreProductMapper {
     class func productWithRemote(_ storeProduct: RemoteStoreProduct, product: QuantifiableProduct) -> StoreProduct {
         return StoreProduct(
             uuid: storeProduct.uuid,
-            price: storeProduct.price,
             // TODO - new fields
             refPrice: nil,
             refQuantity: nil,

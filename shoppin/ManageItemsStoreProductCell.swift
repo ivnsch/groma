@@ -15,10 +15,12 @@ class ManageItemsStoreProductCell: UITableViewCell {
     @IBOutlet weak var priceLabel: UILabel!
     
     func config(storeProduct: StoreProduct) {
-        
-        storeNameLabel.text = storeProduct.store.isEmpty ? trans("manage_items_empty_store_name") : storeProduct.store
-        priceLabel.text = storeProduct.price.toLocalCurrencyString()
-        
+
+        // TODO needs probably a new view with refQuantity and refPrice - what we show in the price inputs popup in add/edit list item controller
+        // and also probably needs unit and base quantity(ies)
+//        storeNameLabel.text = storeProduct.store.isEmpty ? trans("manage_items_empty_store_name") : storeProduct.storeprice ?? 0
+//        priceLabel.text = storeProduct.price.toLocalCurrencyString()
+
         // height now calculated yet so we pass the position of border
         addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.ingredientsCellHeight)
     }

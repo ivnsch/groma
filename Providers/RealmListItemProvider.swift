@@ -888,8 +888,8 @@ class RealmListItemProvider: RealmProvider {
     
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
     // price: only used when product doesn't exist. price == nil means use default value to initialize price.
-    fileprivate func createSync(_ quantifiableProduct: QuantifiableProduct, store: String, price: Float?, section: Section, list: List, quantity: Float, note: String?, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
-        let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store, price: price)
+    fileprivate func createSync(_ quantifiableProduct: QuantifiableProduct, store: String, refPrice: Float?, refQuantity: Float?, section: Section, list: List, quantity: Float, note: String?, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
+        let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store, refPrice: refPrice, refQuantity: refQuantity)
         return createSync(storeProduct, section: section, list: list, quantity: quantity, note: note, realmData: realmData, doTransaction: doTransaction)
     }
     
@@ -940,7 +940,7 @@ class RealmListItemProvider: RealmProvider {
     /// Quick add / form
     /// price set when used in form
     // TODO!!!!!!!!!!!!!!!!!! remove RealmData and "doTransaction" everywhere -- to indicate that a transaction already exists, pass a Realm. Notification token separately where needed.
-    func addSync(quantifiableProduct: QuantifiableProduct, store: String, price: Float?, list: List, quantity: Float, note: String?, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (AddListItemResult)? {
+    func addSync(quantifiableProduct: QuantifiableProduct, store: String, refPrice: Float?, refQuantity: Float?, list: List, quantity: Float, note: String?, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (AddListItemResult)? {
         
         refresh()
 
@@ -981,7 +981,7 @@ class RealmListItemProvider: RealmProvider {
                 print("list items before create list item: \(section.listItems.count)")
                 
                 // TODO section, list - see note on create
-                if let createdListItem = createSync(quantifiableProduct, store: store, price: price, section: section, list: list, quantity: quantity, note: note, realmData: realmData, doTransaction: doTransaction) {
+                if let createdListItem = createSync(quantifiableProduct, store: store, refPrice: refPrice, refQuantity: refQuantity, section: section, list: list, quantity: quantity, note: note, realmData: realmData, doTransaction: doTransaction) {
                     
                     print("list items after create list item: \(section.listItems.count)")
                     
@@ -1007,7 +1007,7 @@ class RealmListItemProvider: RealmProvider {
         switch DBProv.productProvider.mergeOrCreateQuantifiableProductSync(prototype: listItemInput.toProductPrototype(), updateCategory: true, save: false, realmData: realmData, doTransaction: doTransaction) {
             
         case .ok(let quantifiableProduct):
-            return addSync(quantifiableProduct: quantifiableProduct.0, store: list.store ?? "", price: listItemInput.storeProductInput.price, list: list, quantity: listItemInput.quantity, note: listItemInput.note, status: status, realmData: realmData, doTransaction: doTransaction)
+            return addSync(quantifiableProduct: quantifiableProduct.0, store: list.store ?? "", refPrice: listItemInput.storeProductInput.refPrice, refQuantity: listItemInput.storeProductInput.refQuantity, list: list, quantity: listItemInput.quantity, note: listItemInput.note, status: status, realmData: realmData, doTransaction: doTransaction)
 
         case .err(let error):
             logger.e("Couldn't add/update quantifiable product: \(error)")
@@ -1089,7 +1089,7 @@ class RealmListItemProvider: RealmProvider {
 
                 func transactionContent(realm: Realm) -> AddCartListItemResult {
                     // NOTE: fetching the store product has to be inside the transaction! Don't know why, but otherwise sometimes (when the section is new, apparently) it causes the notification block to be called, which then crashes the app. The UI test AddItemsToCartTest exists because of this.
-                    let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store, price: nil)
+                    let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store, refPrice: nil, refQuantity: nil)
                     // TODO section, list - see note on create
                     let createdListItem = ListItem(uuid: UUID().uuidString, product: storeProduct, section: section, list: list, note: nil, quantity: quantity)
                     realm.add(createdListItem, update: true)
@@ -1122,8 +1122,8 @@ class RealmListItemProvider: RealmProvider {
     
     // TODO maybe remove references to section, list of list items so we don't have to pass them here
     // price: only used when product doesn't exist. price == nil means use default value to initialize price.
-    fileprivate func createCartSync(_ quantifiableProduct: QuantifiableProduct, store: String, price: Float?, section: Section, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
-        let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store, price: price)
+    fileprivate func createCartSync(_ quantifiableProduct: QuantifiableProduct, store: String, refPrice: Float?, refQuantity: Float?, section: Section, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> ListItem? {
+        let storeProduct = DBProv.storeProductProvider.storeProductSync(quantifiableProduct, store: store) ?? StoreProduct.createDefault(quantifiableProduct: quantifiableProduct, store: store, refPrice: refPrice, refQuantity: refQuantity)
         return createCartSync(storeProduct, section: section, list: list, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
     }
     
@@ -1247,7 +1247,8 @@ class RealmListItemProvider: RealmProvider {
             func onHasSectionAndProduct(sectionResult: AddSectionPlainResult, product: QuantifiableProduct) -> UpdateListItemResult {
                 
                 // update list item
-                updatingListItem.product.price = listItemInput.storeProductInput.price
+                updatingListItem.product.refPrice.value = listItemInput.storeProductInput.refPrice
+                updatingListItem.product.refQuantity.value = listItemInput.storeProductInput.refQuantity
                 updatingListItem.product.product = product
                 updatingListItem.section = sectionResult.section
                 updatingListItem.note = listItemInput.note ?? ""

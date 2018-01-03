@@ -1382,12 +1382,13 @@ class RealmProductProvider: RealmProvider {
             return quantifiableProductResult.flatMap {quantifiableProduct in
                 if let existingProduct = loadStoreProductWithUniqueSync(prototype.quantifiableProductUnique) {
                     existingProduct.product = quantifiableProduct.0
-                    existingProduct.price = price
+                    existingProduct.refPrice.value = refPrice
+                    existingProduct.refQuantity.value = refQuantity
                     // store not updatable in app so for now we don't update it (TODO review)
                     return .ok((existingProduct, false))
                     
                 } else {
-                    let storeProduct = StoreProduct(uuid: UUID().uuidString, price: price, refPrice: refPrice, refQuantity: refQuantity, product: quantifiableProduct.0)
+                    let storeProduct = StoreProduct(uuid: UUID().uuidString, refPrice: refPrice, refQuantity: refQuantity, product: quantifiableProduct.0)
                     if save {
                         realm.add(storeProduct, update: true)
                     }
