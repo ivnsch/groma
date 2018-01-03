@@ -13,11 +13,21 @@ import RealmSwift
 struct SelectUnitAndBaseControllerInputs {
     var unitId: UnitId? = nil
     var unitName: String? = nil // assumed to be unique
-    var baseQuantityName: String? = nil // assumed to be unique // TODO remove this
-    var secondBaseQuantityName: String? = nil // assumed to be unique // TODO remove this
+    var textInputUnitId: UnitId? = nil
+    var textInputUnitName: String? = nil
+    var hideUnitSelected = false // hide selected state while there's something in the input - we can't just clear the selection input because we have to restore it if the text field is emptied
 
     var baseQuantity: Float? = nil // assumed to be unique
+    var baseQuantityName: String? = nil // assumed to be unique // TODO remove this
+    var textInputBaseQuantity: Float? = nil
+    var textInputBaseQuantityName: String? = nil
+    var hideBaseQuantitySelected = false // see comment for analogous field in unit
+
     var secondBaseQuantity: Float? = nil // assumed to be unique
+    var secondBaseQuantityName: String? = nil // assumed to be unique // TODO remove this
+    var textInputSecondBaseQuantity: Float? = nil
+    var textInputSecondBaseQuantityName: String? = nil
+    var hideSecondBaseQuantitySelected = false // see comment for analogous field in unit
 
     var unitMarkedToDelete: String? = nil // name (assumed to be unique)
     var baseQuantityMarkedToDelete: String? = nil // name (assumed to be unique)
@@ -139,8 +149,8 @@ class SelectUnitAndBaseController: UIViewController {
             self?.inputs.unitMarkedToDelete = nil
         }
 
-        unitsManager.selectedItem = { [weak self] in
-            return self?.inputs.unitName
+        unitsManager.selectedItem = { [weak self] in guard let weakSelf = self else { return nil }
+            return weakSelf.inputs.hideUnitSelected ? nil : weakSelf.inputs.unitName
         }
 
         unitsManager.onFetchedData = { [weak self] in
@@ -193,8 +203,8 @@ class SelectUnitAndBaseController: UIViewController {
             self?.inputs.baseQuantityMarkedToDelete = nil
         }
 
-        baseQuantitiesManager.selectedItem = { [weak self] in
-            return self?.inputs.baseQuantityName
+        baseQuantitiesManager.selectedItem = { [weak self] in guard let weakSelf = self else { return nil }
+            return weakSelf.inputs.hideBaseQuantitySelected ? nil : weakSelf.inputs.baseQuantityName
         }
 
         baseQuantitiesManager.onFetchedData = { [weak self] in
@@ -234,8 +244,8 @@ class SelectUnitAndBaseController: UIViewController {
             self?.inputs.secondBaseQuantityMarkedToDelete = nil
         }
 
-        secondBaseQuantitiesManager.selectedItem = { [weak self] in
-            return self?.inputs.secondBaseQuantityName
+        secondBaseQuantitiesManager.selectedItem = { [weak self] in guard let weakSelf = self else { return nil }
+            return weakSelf.inputs.hideSecondBaseQuantitySelected ? nil : weakSelf.inputs.secondBaseQuantityName
         }
 
         secondBaseQuantitiesManager.onFetchedData = { [weak self] in
@@ -251,16 +261,22 @@ class SelectUnitAndBaseController: UIViewController {
         guard let unitName = inputs.unitName else { logger.e("Can't submit without unit name"); return } // TODO remove name?
         guard let baseQuantity = inputs.baseQuantity else { logger.e("Can't submit without base"); return }
 
+        // Text input overrides collection view selection
+        let finalUnitId = inputs.textInputUnitId ?? unitId
+        let finalUnitName = inputs.textInputUnitName ?? unitName
+        let finalBaseQuantity = inputs.textInputBaseQuantity ?? baseQuantity
+        let finalSecondBaseQuantity = inputs.textInputSecondBaseQuantity ?? inputs.secondBaseQuantity // optional
+
         // TODO why are we handling errors here with logger instead of the default handler (alert)?
         
         // Possible creation of unit/base quantity, if they were entered via text input
-        Prov.unitProvider.getOrCreate(name: unitName) { result in
+        Prov.unitProvider.getOrCreate(name: finalUnitName) { result in
             if !result.success {
                 logger.e("Couldn't get/create unit: \(unitName)", .db)
             }
-            Prov.unitProvider.getOrCreate(baseQuantity: baseQuantity) { [weak self] result in
+            Prov.unitProvider.getOrCreate(baseQuantity: finalBaseQuantity) { [weak self] result in
                 if !result.success {
-                    logger.e("Couldn't get/create base quantity: \(baseQuantity)", .db)
+                    logger.e("Couldn't get/create base quantity: \(finalBaseQuantity)", .db)
                 }
 
                 func doSubmit(secondBaseQuantity: Float?) {
@@ -273,7 +289,7 @@ class SelectUnitAndBaseController: UIViewController {
                     self?.onSubmit?(result)
                 }
 
-                if let secondBaseQuantity = self?.inputs.secondBaseQuantity {
+                if let secondBaseQuantity = finalSecondBaseQuantity {
                     Prov.unitProvider.getOrCreate(baseQuantity: secondBaseQuantity) { result in
                         if !result.success {
                             logger.e("Couldn't get/create second base quantity: \(secondBaseQuantity)", .db)
@@ -362,33 +378,42 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
         case unitInputIndex: // unit input
             let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
             itemInputCell.configure(placeholder: trans("enter_custom_unit_placeholder"), onlyNumbers: false, onInputUpdate: { [weak self] unitInput in
-                self?.inputs.unitId = .custom
-                self?.inputs.unitName = unitInput.isEmpty ? nil : unitInput
+                self?.inputs.textInputUnitId = .custom
+                self?.inputs.textInputUnitName = unitInput.isEmpty ? nil : unitInput
+                self?.inputs.hideUnitSelected = !unitInput.isEmpty
                 if !unitInput.isEmpty {
                     self?.unitsManager.clearSelectedItems() // Input overwrites possible selection
                     self?.unitsManager.clearToDeleteItems() // Clear delete state too
+                } else {
+                    self?.unitsManager.reload() // make last selection show
                 }
             })
             return itemInputCell
         case basesInputIndex: // base input
             let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
             itemInputCell.configure(placeholder: trans("enter_custom_base_quantity_placeholder"), onlyNumbers: true, onInputUpdate: { [weak self] baseInput in
-                self?.inputs.baseQuantityName = baseInput.isEmpty ? nil : baseInput
-                self?.inputs.baseQuantity = baseInput.isEmpty ? nil : baseInput.floatValue
+                self?.inputs.textInputBaseQuantityName = baseInput.isEmpty ? nil : baseInput
+                self?.inputs.textInputBaseQuantity = baseInput.isEmpty ? nil : baseInput.floatValue
+                self?.inputs.hideBaseQuantitySelected = !baseInput.isEmpty
                 if !baseInput.isEmpty {
                     self?.baseQuantitiesManager.clearSelectedItems() // Input overwrites possible selection
                     self?.baseQuantitiesManager.clearToDeleteItems() // Clear delete state too
+                } else {
+                    self?.baseQuantitiesManager.reload() // make last selection show
                 }
             })
             return itemInputCell
         case secondBasesInputIndex: // second base input
             let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
             itemInputCell.configure(placeholder: trans("enter_custom_base_quantity_placeholder"), onlyNumbers: true, onInputUpdate: { [weak self] baseInput in
-                self?.inputs.secondBaseQuantityName = baseInput.isEmpty ? nil : baseInput
-                self?.inputs.secondBaseQuantity = baseInput.isEmpty ? nil : baseInput.floatValue
+                self?.inputs.textInputSecondBaseQuantityName = baseInput.isEmpty ? nil : baseInput
+                self?.inputs.textInputSecondBaseQuantity = baseInput.isEmpty ? nil : baseInput.floatValue
+                self?.inputs.hideSecondBaseQuantitySelected = !baseInput.isEmpty
                 if !baseInput.isEmpty {
                     self?.secondBaseQuantitiesManager.clearSelectedItems() // Input overwrites possible selection
                     self?.secondBaseQuantitiesManager.clearToDeleteItems() // Clear delete state too
+                } else {
+                    self?.secondBaseQuantitiesManager.reload() // make last selection show
                 }
             })
             return itemInputCell
