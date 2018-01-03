@@ -39,6 +39,7 @@ class UnitWithBaseView: HandlingView {
         unitImageView.tintColor = Theme.lightGrey2
         
         layer.borderColor = Theme.midGrey.cgColor
+        layer.backgroundColor = UIColor.white.cgColor
         layer.borderWidth = 1
         layer.cornerRadius = 4
     }
