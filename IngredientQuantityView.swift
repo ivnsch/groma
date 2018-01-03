@@ -98,6 +98,7 @@ class IngredientQuantityView: UIView, ASValueTrackingSliderDataSource, QuantityV
         quantityImage?.showQuantity(whole: wholeQuantity, fraction: fraction, animated: false)
         quantityView.quantity = Float(wholeQuantity)
         fractionSlider.value = fraction.decimalValue
+        fractionTextInputView.prefill(fraction: fraction)
     }
 
     override func awakeFromNib() {
