@@ -78,9 +78,9 @@ class ProductQuantityController: UIViewController {
         quantityView.delegate = self
     }
 
-    func show(base: Float, unitId: UnitId, unitName: String, quantity: Float) {
+    func show(base: Float, secondBase: Float?, unitId: UnitId, unitName: String, quantity: Float) {
         quantityView.quantity = quantity
-        unitWithBaseView.show(base: base, unitId: unitId, unitName: unitName)
+        unitWithBaseView.show(base: base, secondBase: secondBase, unitId: unitId, unitName: unitName)
     }
 
     override func viewDidLoad() {
@@ -99,8 +99,8 @@ class ProductQuantityController: UIViewController {
     }
 
 
-    func showBaseUnit(base: Float, unitId: UnitId, unitName: String) {
-        unitWithBaseView.show(base: base, unitId: unitId, unitName: unitName)
+    func showBaseUnit(base: Float, secondBase: Float?, unitId: UnitId, unitName: String) {
+        unitWithBaseView.show(base: base, secondBase: secondBase, unitId: unitId, unitName: unitName)
     }
 //    func selectBaseWithValue(_ val: Float) {
 //        if let bases = basesDataSource?.bases {

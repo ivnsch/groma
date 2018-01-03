@@ -38,6 +38,7 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     @objc public dynamic var uuid: String = ""
     @objc dynamic var productOpt: Product? = Product()
     @objc public dynamic var baseQuantity: Float = 1
+    public let secondBaseQuantity = RealmOptional<Float>()
     @objc dynamic var unitOpt: Unit? = Unit()
     @objc public dynamic var fav: Int = 0 // not used anymore as we fav again the product, but letting it here just in case. Maybe remove.
     
@@ -63,21 +64,23 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         return "uuid"
     }
     
-    public convenience init(uuid: String, baseQuantity: Float, unit: Unit, product: Product, fav: Int = 1) {
+    public convenience init(uuid: String, baseQuantity: Float, secondBaseQuantity: Float? = nil, unit: Unit, product: Product, fav: Int = 1) {
         
         self.init()
         
         self.uuid = uuid
         self.baseQuantity = baseQuantity
+        self.secondBaseQuantity.value = secondBaseQuantity
         self.unit = unit
         self.product = product
         self.fav = fav
     }
     
-    public func copy(uuid: String? = nil, baseQuantity: Float? = nil, unit: Unit? = nil, product: Product? = nil, fav: Int? = nil) -> QuantifiableProduct {
+    public func copy(uuid: String? = nil, baseQuantity: Float? = nil, secondBaseQuantity: Float? = nil, unit: Unit? = nil, product: Product? = nil, fav: Int? = nil) -> QuantifiableProduct {
         return QuantifiableProduct(
             uuid: uuid ?? self.uuid,
             baseQuantity: baseQuantity ?? self.baseQuantity,
+            secondBaseQuantity: secondBaseQuantity ?? self.secondBaseQuantity.value,
             unit: unit ?? self.unit.copy(),
             product: product ?? self.product.copy(),
             fav: fav ?? self.fav
@@ -91,7 +94,8 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
     
     static func createFilter(unique: QuantifiableProductUnique) -> String {
-        return "productOpt.itemOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND baseQuantity == \(unique.baseQuantity) AND unitOpt.name == '\(unique.unit)'"
+        let secondBaseQuantityString: Any = unique.secondBaseQuantity.map { $0 } ?? "nil" // apparently nil is correct for look after not set, see https://github.com/realm/realm-cocoa/issues/3300
+        return "productOpt.itemOpt.name == '\(unique.name)' AND productOpt.brand == '\(unique.brand)' AND baseQuantity == \(unique.baseQuantity) AND unitOpt.name == '\(unique.unit)' AND secondBaseQuantity == \(secondBaseQuantityString)"
     }
     
     static func createFilterBrand(_ brand: String) -> String {
@@ -190,11 +194,11 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
     }
 
     public var unique: QuantifiableProductUnique {
-        return (name: product.item.name, brand: product.brand, unit: unit.name, baseQuantity: baseQuantity)
+        return (name: product.item.name, brand: product.brand, unit: unit.name, baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity.value)
     }
     
     public func matches(unique: QuantifiableProductUnique) -> Bool {
-        return product.item.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit.name == unique.unit
+        return product.item.name == unique.name && product.brand == unique.brand && baseQuantity == unique.baseQuantity && unit.name == unique.unit && secondBaseQuantity.value == unique.secondBaseQuantity
     }
     
     static var baseQuantityNumberFormatter: NumberFormatter = {

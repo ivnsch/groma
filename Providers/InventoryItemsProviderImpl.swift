@@ -375,7 +375,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             addToInventory(inventory, product: product, quantity: 1, remote: remote, realmData: nil, handler)
         }
         
-        Prov.productProvider.quantifiableProduct(QuantifiableProductUnique(name: itemInput.productPrototype.name, brand: itemInput.productPrototype.brand, unit: itemInput.productPrototype.unit, baseQuantity: itemInput.productPrototype.baseQuantity)) {productResult in
+        Prov.productProvider.quantifiableProduct(QuantifiableProductUnique(name: itemInput.productPrototype.name, brand: itemInput.productPrototype.brand, unit: itemInput.productPrototype.unit, baseQuantity: itemInput.productPrototype.baseQuantity, secondBaseQuantity: itemInput.productPrototype.secondBaseQuantity)) {productResult in
             // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
             if productResult.success || productResult.status == .notFound {
                 if let product = productResult.sucessResult {

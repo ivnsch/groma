@@ -677,6 +677,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                 sectionColor: model.ingredient.item.category.color,
                 note: nil,
                 baseQuantity: model.productPrototype.baseQuantity,
+                secondBaseQuantity: model.productPrototype.secondBaseQuantity,
                 unit: model.productPrototype.unit,
                 brand: model.productPrototype.brand,
                 edible: model.productPrototype.edible

@@ -50,7 +50,9 @@ class UnitWithBaseView: HandlingView {
         }
     }
 
-    func show(base: Float, unitId: UnitId, unitName: String) {
+    func show(base: Float, secondBase: Float?, unitId: UnitId, unitName: String) {
+
+        // Unit image
         unitImageView.image = Theme.unitImage(unitId: unitId)
         if unitImageView.image == nil { // Custom units
             initialsLabel.text = String(unitName.prefix(2).uppercased())
@@ -59,6 +61,7 @@ class UnitWithBaseView: HandlingView {
             initialsLabel.isHidden = true
         }
 
+        // Text label
         let unitName: String = {
             if unitId == .none {
                 return base > 1 ? trans("recipe_unit_plural") : trans("recipe_unit_singular")
@@ -66,8 +69,10 @@ class UnitWithBaseView: HandlingView {
                 return unitName
             }
         } ()
-
-        label.text = "\(base.quantityStringHideZero) \(unitName)"
+        let baseString = base.quantityStringHideZero
+        let secondBaseString = secondBase.map { $0.quantityStringHideZero } ?? ""
+        let basesSeparator = !baseString.isEmpty && !secondBaseString.isEmpty ? "x" : ""
+        label.text = "\(secondBaseString)\(basesSeparator)\(baseString) \(unitName)"
         label.sizeToFit()
         invalidateIntrinsicContentSize()
     }

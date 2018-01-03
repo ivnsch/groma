@@ -115,6 +115,7 @@ class AddRecipeController: UIViewController {
                         categoryColor: ingredient.item.category.color,
                         brand: cellState?.brandName ?? "",
                         baseQuantity: cellState?.baseQuantity ?? 1,
+                        secondBaseQuantity: cellState?.secondBaseQuantity,
                         unit: cellState?.unitData.unitName ?? ingredient.unit.name,
                         edible: true),
                     quantity: cellState?.quantity ?? ingredient.quantity,
@@ -277,6 +278,7 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
                 unitName: unitName
             ),
             baseQuantity: ingredient.pBase,
+            secondBaseQuantity: ingredient.pSecondBase.value,
             quantity: ingredient.pQuantity == 0 ? 1 : ingredient.pQuantity, // Default is 1
             alreadyHaveText: nil
         )
@@ -332,6 +334,11 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         cellStates[indexPath.row]?.baseQuantity = base
     }
 
+    func onSelect(secondBase: Float, cell: AddRecipeIngredientCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return }
+        cellStates[indexPath.row]?.secondBaseQuantity = secondBase
+    }
+
     func onChange(quantity: Float, cell: AddRecipeIngredientCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return}
         cellStates[indexPath.row]?.quantity = quantity
@@ -374,6 +381,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
                 unitName: result.unitName
             )
             weakSelf.cellStates[indexPath.row]?.baseQuantity = result.baseQuantity
+            weakSelf.cellStates[indexPath.row]?.secondBaseQuantity = result.secondBaseQuantity
 
             self?.unitBasePopup?.hide(onFinish: { [weak self] in
                 self?.unitBasePopup = nil
@@ -402,7 +410,8 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
 
         controller.config(selectedUnitId: cellState.unitData.unitId,
                           selectedUnitName: cellState.unitData.unitName,
-                          selectedBaseQuantity: cellState.baseQuantity)
+                          selectedBaseQuantity: cellState.baseQuantity,
+                          secondSelectedBaseQuantity: cellState.secondBaseQuantity)
         controller.loadItems()
 
         view.endEditing(true)

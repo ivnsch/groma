@@ -25,6 +25,7 @@ public final class Ingredient: Object {
     @objc public dynamic var pName: String = ""
     @objc public dynamic var pBrand: String = ""
     @objc public dynamic var pBase: Float = 1
+    public let pSecondBase = RealmOptional<Float>()
     @objc public dynamic var pQuantity: Float = 0
     @objc public dynamic var pUnit: String = ""
 
@@ -174,6 +175,7 @@ public final class Ingredient: Object {
         pBrand = prototype.brand
         pUnit = prototype.unit
         pBase = prototype.baseQuantity
+        pSecondBase.value = prototype.secondBaseQuantity
         pQuantity = quantity
     }
     

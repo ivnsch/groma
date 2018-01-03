@@ -25,6 +25,7 @@ protocol AddRecipeIngredientCellDelegate: class {
     // State updaters
     func onSelect(unit: Providers.Unit, cell: AddRecipeIngredientCell)
     func onSelect(base: Float, cell: AddRecipeIngredientCell)
+    func onSelect(secondBase: Float, cell: AddRecipeIngredientCell)
     func onChange(quantity: Float, cell: AddRecipeIngredientCell)
     func onChange(productName: String, cell: AddRecipeIngredientCell)
     func onChange(brandName: String, cell: AddRecipeIngredientCell)
@@ -55,6 +56,7 @@ class AddRecipeIngredientCell: UITableViewCell {
         var brandName: String
         var unitData: CellUnitState
         var baseQuantity: Float
+        var secondBaseQuantity: Float?
         var quantity: Float
 
         // Cache - to fetch it only once
@@ -98,6 +100,7 @@ class AddRecipeIngredientCell: UITableViewCell {
         )
         productQuantityController?.show(
             base: state.baseQuantity,
+            secondBase: state.secondBaseQuantity,
             unitId: state.unitData.unitId,
             unitName: state.unitData.unitName,
             quantity: state.quantity

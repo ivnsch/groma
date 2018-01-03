@@ -443,7 +443,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(_ price: Float, refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: String, brand: String, edible: Bool, editingItem: Any?) {
+    func onOkTap(_ price: Float, refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, secondBaseQuantity: Float?, unit: String, brand: String, edible: Bool, editingItem: Any?) {
         
         if let name = searchBar.text?.trim() {
             
@@ -457,6 +457,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
                 sectionColor: sectionColor,
                 note: note,
                 baseQuantity: baseQuantity,
+                secondBaseQuantity: secondBaseQuantity,
                 unit: unit,
                 brand: brand,
                 edible: edible

@@ -44,11 +44,12 @@ public class StoreProduct: DBSyncable, Identifiable {
     // Multiply this with quantity = totalPrice
     public var basePrice: Float {
         let refQuantity = self.refQuantity.value ?? 0
-        return StoreProduct.calculateBasePrice(refQuantity: refQuantity, refPrice: refPrice.value ?? 0, baseQuantity: product.baseQuantity)
+        return StoreProduct.calculateBasePrice(refQuantity: refQuantity, refPrice: refPrice.value ?? 0, baseQuantity: product.baseQuantity, secondBaseQuantity: product.secondBaseQuantity.value)
     }
 
-    public static func calculateBasePrice(refQuantity: Float, refPrice: Float, baseQuantity: Float) -> Float {
-        return refQuantity == 0 ? 0 : (baseQuantity * refPrice) / refQuantity
+    public static func calculateBasePrice(refQuantity: Float, refPrice: Float, baseQuantity: Float, secondBaseQuantity: Float?) -> Float {
+        let secondBaseQuantityForMaths = secondBaseQuantity ?? 1 // no second base = 1, which is identity
+        return refQuantity == 0 ? 0 : (secondBaseQuantityForMaths * baseQuantity * refPrice) / refQuantity
     }
 
 

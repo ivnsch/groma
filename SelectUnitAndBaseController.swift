@@ -14,17 +14,21 @@ struct SelectUnitAndBaseControllerInputs {
     var unitId: UnitId? = nil
     var unitName: String? = nil // assumed to be unique
     var baseQuantityName: String? = nil // assumed to be unique // TODO remove this
+    var secondBaseQuantityName: String? = nil // assumed to be unique // TODO remove this
 
     var baseQuantity: Float? = nil // assumed to be unique
+    var secondBaseQuantity: Float? = nil // assumed to be unique
 
     var unitMarkedToDelete: String? = nil // name (assumed to be unique)
     var baseQuantityMarkedToDelete: String? = nil // name (assumed to be unique)
+    var secondBaseQuantityMarkedToDelete: String? = nil // name (assumed to be unique)
 }
 
 struct SelectUnitAndBaseControllerResult {
     var unitId: UnitId // TODO remove unitName?
     var unitName: String // assumed to be unique
     var baseQuantity: Float // assumed to be unique
+    var secondBaseQuantity: Float? // assumed to be unique
 }
 
 class SelectUnitAndBaseController: UIViewController {
@@ -35,11 +39,15 @@ class SelectUnitAndBaseController: UIViewController {
     fileprivate let basesHeaderIndex = 3
     fileprivate let basesCollectionViewIndex = 4
     fileprivate let basesInputIndex = 5
+    fileprivate let secondBasesHeaderIndex = 6
+    fileprivate let secondBasesCollectionViewIndex = 7
+    fileprivate let secondBasesInputIndex = 8
 
     @IBOutlet weak var tableView: UITableView!
 
     fileprivate var unitsManager = UnitCollectionViewManager(filterBuyable: true)
     fileprivate var baseQuantitiesManager = BaseQuantitiesCollectionViewManager()
+    fileprivate var secondBaseQuantitiesManager = BaseQuantitiesCollectionViewManager()
 
     fileprivate var inputs = SelectUnitAndBaseControllerInputs()
 
@@ -57,6 +65,7 @@ class SelectUnitAndBaseController: UIViewController {
         initTableView()
         configUnitsManager()
         configBaseQuantitiesManager()
+        configSecondBaseQuantitiesManager()
         initSubmitView()
         registerKeyboardNotifications()
 
@@ -67,6 +76,7 @@ class SelectUnitAndBaseController: UIViewController {
     func loadItems() {
         unitsManager.loadItems()
         baseQuantitiesManager.loadItems()
+        secondBaseQuantitiesManager.loadItems()
     }
 
     fileprivate func registerKeyboardNotifications() {
@@ -74,15 +84,17 @@ class SelectUnitAndBaseController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(SelectUnitAndBaseController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
     }
 
-    func config(selectedUnitId: UnitId, selectedUnitName: String, selectedBaseQuantity: Float) {
+    func config(selectedUnitId: UnitId, selectedUnitName: String, selectedBaseQuantity: Float, secondSelectedBaseQuantity: Float?) {
         // TODO redundancy - only one identifier for unit and base respectively
         inputs.unitId = selectedUnitId
         inputs.unitName = selectedUnitName
         inputs.baseQuantity = selectedBaseQuantity
         inputs.baseQuantityName = selectedBaseQuantity.quantityString
+        inputs.secondBaseQuantityName = secondSelectedBaseQuantity?.quantityString
 
         unitsManager.reload()
         baseQuantitiesManager.reload()
+        secondBaseQuantitiesManager.reload()
     }
 
     fileprivate func initTableView() {
@@ -190,12 +202,54 @@ class SelectUnitAndBaseController: UIViewController {
         baseQuantitiesManager.fetchFunc = fetchBaseQuantitiesFunc
     }
 
+    fileprivate func configSecondBaseQuantitiesManager() {
+        secondBaseQuantitiesManager.configure(controller: self, onSelectItem: { [weak self] baseQuantity in
+            self?.inputs.secondBaseQuantityMarkedToDelete = nil // clear possible marked to delete unit
+            self?.inputs.secondBaseQuantity = baseQuantity?.val
+        })
+
+        secondBaseQuantitiesManager.onMarkedItemToDelete = { [weak self] base in
+            self?.inputs.secondBaseQuantityMarkedToDelete = nil // clear possible marked to delete unit
+            self?.inputs.secondBaseQuantityMarkedToDelete = base
+            //            if let unit = unit {
+            //                self?.unitsManager.markUnitToDelete(unit: unit)
+            //            }
+        }
+        secondBaseQuantitiesManager.itemMarkedToDelete = { [weak self] in
+            return self?.inputs.secondBaseQuantityMarkedToDelete
+        }
+        // for now clear variables BEFORE of realm delete - reason: clear possible selected unit - we have to compare with deleted unit to see if it's the same, and this crashes if it is, because after realm delete the object is invalid.
+        // TODO possible solution: Don't retain any Realm objects here, only ids.
+        secondBaseQuantitiesManager.willDeleteItem = { [weak self] base in
+            self?.inputs.secondBaseQuantityMarkedToDelete = nil
+            if base.val.quantityString == self?.inputs.secondBaseQuantityName {
+                self?.inputs.secondBaseQuantityName = nil
+            }
+        }
+
+        secondBaseQuantitiesManager.clearToDeleteItemsState = { [weak self] in
+            self?.inputs.secondBaseQuantityMarkedToDelete = nil
+        }
+
+        secondBaseQuantitiesManager.selectedItem = { [weak self] in
+            return self?.inputs.secondBaseQuantityName
+        }
+
+        secondBaseQuantitiesManager.onFetchedData = { [weak self] in
+            self?.initVariableCellHeights()
+        }
+
+        secondBaseQuantitiesManager.fetchFunc = fetchBaseQuantitiesFunc
+    }
+
     fileprivate func submit() {
         // TODO ensure that there's always a unit and a base selected!
         guard let unitId = inputs.unitId else { logger.e("Can't submit without a unit"); return }
         guard let unitName = inputs.unitName else { logger.e("Can't submit without unit name"); return } // TODO remove name?
         guard let baseQuantity = inputs.baseQuantity else { logger.e("Can't submit without base"); return }
 
+        // TODO why are we handling errors here with logger instead of the default handler (alert)?
+        
         // Possible creation of unit/base quantity, if they were entered via text input
         Prov.unitProvider.getOrCreate(name: unitName) { result in
             if !result.success {
@@ -203,15 +257,29 @@ class SelectUnitAndBaseController: UIViewController {
             }
             Prov.unitProvider.getOrCreate(baseQuantity: baseQuantity) { [weak self] result in
                 if !result.success {
-                    logger.e("Couldn't get/create unit: \(unitName)", .db)
+                    logger.e("Couldn't get/create base quantity: \(baseQuantity)", .db)
                 }
 
-                let result = SelectUnitAndBaseControllerResult(
-                    unitId: unitId,
-                    unitName: unitName,
-                    baseQuantity: baseQuantity
-                )
-                self?.onSubmit?(result)
+                func doSubmit(secondBaseQuantity: Float?) {
+                    let result = SelectUnitAndBaseControllerResult(
+                        unitId: unitId,
+                        unitName: unitName,
+                        baseQuantity: baseQuantity,
+                        secondBaseQuantity: secondBaseQuantity
+                    )
+                    self?.onSubmit?(result)
+                }
+
+                if let secondBaseQuantity = self?.inputs.secondBaseQuantity {
+                    Prov.unitProvider.getOrCreate(baseQuantity: secondBaseQuantity) { result in
+                        if !result.success {
+                            logger.e("Couldn't get/create second base quantity: \(secondBaseQuantity)", .db)
+                        }
+                        doSubmit(secondBaseQuantity: secondBaseQuantity)
+                    }
+                } else {
+                    doSubmit(secondBaseQuantity: nil)
+                }
             }
         }
     }
@@ -248,7 +316,7 @@ class SelectUnitAndBaseController: UIViewController {
 extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return 8
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -269,17 +337,24 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
             view.frame = cell.contentView.bounds // appears to be necessary
             view.fillSuperview()
             return cell
-        case basesCollectionViewIndex:
+        case basesCollectionViewIndex, secondBasesCollectionViewIndex:
             let cell = dequeueDefaultCell()
-            let view = baseQuantitiesManager.view
+            let view = indexPath.row == basesCollectionViewIndex ? baseQuantitiesManager.view : secondBaseQuantitiesManager.view
             view.translatesAutoresizingMaskIntoConstraints = false
             cell.contentView.addSubview(view)
             view.frame = cell.contentView.bounds // appears to be necessary
             view.fillSuperview()
             return cell
-        case unitsHeaderIndex, basesHeaderIndex: // headers
+        case unitsHeaderIndex, basesHeaderIndex, secondBasesHeaderIndex: // headers
             let header = tableView.dequeueReusableCell(withIdentifier: "subHeaderCell", for: indexPath) as! IngredientDataSubHeaderCell
-            header.title.text = indexPath.row == 0 ? trans("select_ingredient_data_header_units") : trans("select_ingredient_data_header_quantity")
+            header.title.text = {
+                switch indexPath.row {
+                case unitsHeaderIndex: return trans("select_ingredient_data_header_units")
+                case basesHeaderIndex: return trans("select_ingredient_data_header_quantity")
+                case secondBasesHeaderIndex: return trans("select_ingredient_data_header_second_quantity")
+                default: fatalError("Forgot to handle index: \(indexPath.row)")
+                }
+            } ()
             return header
         case unitInputIndex: // unit input
             let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
@@ -303,6 +378,17 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
                 }
             })
             return itemInputCell
+        case secondBasesInputIndex: // second base input
+            let itemInputCell = tableView.dequeueReusableCell(withIdentifier: "inputCell", for: indexPath) as! AddNewItemInputCell
+            itemInputCell.configure(placeholder: trans("enter_custom_base_quantity_placeholder"), onlyNumbers: true, onInputUpdate: { [weak self] baseInput in
+                self?.inputs.secondBaseQuantityName = baseInput.isEmpty ? nil : baseInput
+                self?.inputs.secondBaseQuantity = baseInput.isEmpty ? nil : baseInput.floatValue
+                if !baseInput.isEmpty {
+                    self?.secondBaseQuantitiesManager.clearSelectedItems() // Input overwrites possible selection
+                    self?.secondBaseQuantitiesManager.clearToDeleteItems() // Clear delete state too
+                }
+            })
+            return itemInputCell
         default: fatalError("Not supported index: \(indexPath.row)")
         }
     }
@@ -310,9 +396,9 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case unitsCollectionViewIndex: return unitsViewHeight ?? 600 // dummy big default size, with 0 constraint errors in console (at the beginning the collection collection view has no width)
-        case basesCollectionViewIndex: return baseQuantitiesViewHeight ?? 600
-        case unitsHeaderIndex, basesHeaderIndex: return 50 // header
-        case unitInputIndex, basesInputIndex: return 80 // text inputs
+        case basesCollectionViewIndex, secondBasesCollectionViewIndex: return baseQuantitiesViewHeight ?? 600
+        case unitsHeaderIndex, basesHeaderIndex, secondBasesHeaderIndex: return 50 // header
+        case unitInputIndex, basesInputIndex, secondBasesInputIndex: return 80 // text inputs
         default: fatalError("Not supported index: \(indexPath.row)")
         }
     }

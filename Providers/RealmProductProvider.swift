@@ -22,7 +22,7 @@ public struct ProductUnique {
     }
 }
 
-public typealias QuantifiableProductUnique = (name: String, brand: String, unit: String, baseQuantity: Float)
+public typealias QuantifiableProductUnique = (name: String, brand: String, unit: String, baseQuantity: Float, secondBaseQuantity: Float?)
 //public struct QuantifiableProductUnique {
 //    let name: String
 //    let brand: String
@@ -41,6 +41,7 @@ public struct ProductPrototype {
     public var brand: String
     
     public var baseQuantity: Float
+    public var secondBaseQuantity: Float?
     public var unit: String
     
     public var edible: Bool
@@ -50,16 +51,16 @@ public struct ProductPrototype {
     }
     
     var quantifiableProductUnique: QuantifiableProductUnique {
-        return QuantifiableProductUnique(name: name, brand: brand, unit: unit, baseQuantity: baseQuantity)
+        return QuantifiableProductUnique(name: name, brand: brand, unit: unit, baseQuantity: baseQuantity, secondBaseQuantity: secondBaseQuantity)
     }
     
-    // TODO!!!!!!!!!!!!! remove defaults
-    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: Float = 1, unit: String, edible: Bool) {
+    public init(name: String, category: String, categoryColor: UIColor, brand: String, baseQuantity: Float, secondBaseQuantity: Float?, unit: String, edible: Bool) {
         self.name = name
         self.category = category
         self.categoryColor = categoryColor
         self.brand = brand
         self.baseQuantity = baseQuantity
+        self.secondBaseQuantity = secondBaseQuantity
         self.unit = unit
         self.edible = edible
     }
@@ -765,7 +766,7 @@ class RealmProductProvider: RealmProvider {
                 return
             }
             
-            self.loadQuantifiableProductWithUnique((name: prototype.name, brand: prototype.brand, unit: prototype.unit, baseQuantity: prototype.baseQuantity)) {quantifiableProductMaybe in
+            self.loadQuantifiableProductWithUnique((name: prototype.name, brand: prototype.brand, unit: prototype.unit, baseQuantity: prototype.baseQuantity, secondBaseQuantity: prototype.secondBaseQuantity)) {quantifiableProductMaybe in
              
                 if let existingQuantifiableProduct = quantifiableProductMaybe {
                     // nothing to update (there are no fields in quantifiable product that don't belong to unique)
@@ -773,7 +774,7 @@ class RealmProductProvider: RealmProvider {
 
                 } else {
                     if let unit = DBProv.unitProvider.getOrCreateSync(name: prototype.unit) {
-                        let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, unit: unit.unit, product: product)
+                        let newQuantifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: prototype.baseQuantity, secondBaseQuantity: prototype.secondBaseQuantity, unit: unit.unit, product: product)
                         self.doInWriteTransactionSync({realm in
                             realm.add(newQuantifiableProduct)
                         })

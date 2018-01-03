@@ -174,7 +174,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(_ groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: @escaping (ProviderResult<[ListItem]>) -> ()) {
         let listItemPrototypes: [ListItemPrototype] = groupItems.map{
-            let storeProductInput = StoreProductInput(price: 0, refPrice: nil, refQuantity: nil, baseQuantity: $0.product.baseQuantity, unit: $0.product.unit.name)
+            let storeProductInput = StoreProductInput(price: 0, refPrice: nil, refQuantity: nil, baseQuantity: $0.product.baseQuantity, secondBaseQuantity: $0.product.secondBaseQuantity.value, unit: $0.product.unit.name)
             return ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.product.item.category.name, targetSectionColor: $0.product.product.item.category.color, storeProductInput: storeProductInput)
         }
         self.add(listItemPrototypes, status: status, list: list, token: nil, handler)
@@ -379,7 +379,7 @@ class ListItemProviderImpl: ListItemProvider {
                 
                 // updateCategory: false: we don't touch product's category from list items - our inputs affect only the section. We use them though to create a category in the case a category with the section's name doesn't exists already. A product needs a category and it's logical to simply default this to the section if it doesn't exist, instead of making user enter a second input for the category. From user's perspective, most times category = section.
                 //Prov.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store, updateCategory: false)
-                let prototype = ProductPrototype(name: listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, brand: listItemInput.brand, baseQuantity: listItemInput.storeProductInput.baseQuantity, unit: listItemInput.storeProductInput.unit, edible: listItemInput.edible)
+                let prototype = ProductPrototype(name: listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, brand: listItemInput.brand, baseQuantity: listItemInput.storeProductInput.baseQuantity, secondBaseQuantity: listItemInput.storeProductInput.secondBaseQuantity, unit: listItemInput.storeProductInput.unit, edible: listItemInput.edible)
                 Prov.productProvider.mergeOrCreateProduct(prototype: prototype, updateCategory: false, updateItem: false, realmData: realmData) {(result: ProviderResult<(QuantifiableProduct, Bool)>) in
                     if let product = result.sucessResult {
                         handler(ProviderResult(status: .success, sucessResult: (section, product.0)))

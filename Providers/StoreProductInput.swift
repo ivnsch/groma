@@ -14,17 +14,19 @@ public class StoreProductInput {
     public let refPrice: Float?
     public let refQuantity: Float?
     public let baseQuantity: Float
+    public let secondBaseQuantity: Float?
     public let unit: String
     
-    public init(price: Float, refPrice: Float?, refQuantity: Float?, baseQuantity: Float, unit: String) {
+    public init(price: Float, refPrice: Float?, refQuantity: Float?, baseQuantity: Float, secondBaseQuantity: Float?, unit: String) {
         self.price = price
         self.refPrice = refPrice
         self.refQuantity = refQuantity
         self.baseQuantity = baseQuantity
+        self.secondBaseQuantity = secondBaseQuantity
         self.unit = unit
     }
 }
 
 public func ==(lhs: StoreProductInput, rhs: StoreProductInput) -> Bool {
-    return lhs.price == rhs.price && lhs.refPrice == rhs.price && lhs.refQuantity == rhs.refQuantity && lhs.baseQuantity == rhs.baseQuantity && lhs.unit == rhs.unit
+    return lhs.price == rhs.price && lhs.refPrice == rhs.price && lhs.refQuantity == rhs.refQuantity && lhs.baseQuantity == rhs.baseQuantity && lhs.secondBaseQuantity == rhs.secondBaseQuantity && lhs.unit == rhs.unit
 }

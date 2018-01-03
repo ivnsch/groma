@@ -12,8 +12,14 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PriceInputsController" customModule="groma" customModuleProvider="target">
             <connections>
+                <outlet property="multiplySignLabel" destination="VXn-cu-onf" id="nua-BM-6zi"/>
+                <outlet property="multiplySignToBaseConstraint" destination="P9L-R1-FUu" id="Ehi-ii-ZvF"/>
+                <outlet property="multiplySignWidthConstraint" destination="mPl-4c-HBh" id="ORR-5A-p6g"/>
                 <outlet property="priceTextField" destination="A6m-hT-9jJ" id="JvW-DC-hFS"/>
                 <outlet property="quantityTextField" destination="5kw-7f-EGo" id="aMx-MA-dwy"/>
+                <outlet property="secondBaseToMultiplySignConstraint" destination="eaX-tI-wrW" id="l9x-lB-oAl"/>
+                <outlet property="secondBaseWidthConstraint" destination="nbZ-52-PJJ" id="DgC-GS-dKF"/>
+                <outlet property="secondQuantityTextField" destination="yNO-vT-TMJ" id="wn0-dI-oO3"/>
                 <outlet property="unitLabel" destination="h45-IC-433" id="XBa-G1-iGV"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -23,11 +29,11 @@
             <rect key="frame" x="0.0" y="0.0" width="400" height="67"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5kw-7f-EGo" customClass="LineTextField" customModule="groma" customModuleProvider="target">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yNO-vT-TMJ" customClass="LineTextField" customModule="groma" customModuleProvider="target">
                     <rect key="frame" x="20" y="13" width="50" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="40" id="Zoh-8h-gz6" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
-                        <constraint firstAttribute="width" constant="50" id="pQ4-nu-pDc"/>
+                        <constraint firstAttribute="width" constant="50" id="nbZ-52-PJJ"/>
+                        <constraint firstAttribute="height" constant="40" id="pMH-Q8-zDX" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
                     </constraints>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -66,7 +72,7 @@
                     </userDefinedRuntimeAttributes>
                 </textField>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="L" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h45-IC-433" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="76" y="24" width="9" height="18"/>
+                    <rect key="frame" x="150" y="24" width="9" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
@@ -87,6 +93,41 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="x" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VXn-cu-onf" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="78" y="24" width="8" height="18"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="8" id="mPl-4c-HBh"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5kw-7f-EGo" customClass="LineTextField" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="94" y="13" width="50" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="Zoh-8h-gz6" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
+                        <constraint firstAttribute="width" constant="50" id="pQ4-nu-pDc"/>
+                    </constraints>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" keyboardType="decimalPad" returnKeyType="next"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                            <integer key="value" value="30"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
+                            <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </textField>
             </subviews>
             <constraints>
                 <constraint firstItem="h45-IC-433" firstAttribute="centerY" secondItem="5kw-7f-EGo" secondAttribute="centerY" id="0Ap-i2-DCW"/>
@@ -95,7 +136,11 @@
                 <constraint firstItem="5kw-7f-EGo" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="DgS-JW-6tn"/>
                 <constraint firstItem="h45-IC-433" firstAttribute="leading" secondItem="5kw-7f-EGo" secondAttribute="trailing" constant="6" id="ENH-27-ezN"/>
                 <constraint firstItem="A6m-hT-9jJ" firstAttribute="centerY" secondItem="5kw-7f-EGo" secondAttribute="centerY" id="IJO-oj-JIW"/>
-                <constraint firstItem="5kw-7f-EGo" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="hHW-aa-XKL" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                <constraint firstItem="5kw-7f-EGo" firstAttribute="leading" secondItem="VXn-cu-onf" secondAttribute="trailing" constant="8" id="P9L-R1-FUu"/>
+                <constraint firstItem="yNO-vT-TMJ" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Zkh-Wa-yss"/>
+                <constraint firstItem="VXn-cu-onf" firstAttribute="leading" secondItem="yNO-vT-TMJ" secondAttribute="trailing" constant="8" id="eaX-tI-wrW"/>
+                <constraint firstItem="yNO-vT-TMJ" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="hf1-cZ-4qp"/>
+                <constraint firstItem="VXn-cu-onf" firstAttribute="centerY" secondItem="yNO-vT-TMJ" secondAttribute="centerY" id="i35-7R-Ecz"/>
                 <constraint firstItem="A6m-hT-9jJ" firstAttribute="leading" secondItem="WT0-1G-crm" secondAttribute="trailing" constant="20" id="rDc-bM-lCx"/>
                 <constraint firstItem="WT0-1G-crm" firstAttribute="centerY" secondItem="5kw-7f-EGo" secondAttribute="centerY" id="ywT-az-Zfz"/>
             </constraints>

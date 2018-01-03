@@ -19,7 +19,7 @@ protocol AddEditListItemViewControllerDelegate: class {
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>)
     
-    func onOkTap(_ price: Float, refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: String, brand: String, edible: Bool, editingItem: Any?)
+    func onOkTap(_ price: Float, refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, secondBaseQuantity: Float?, unit: String, brand: String, edible: Bool, editingItem: Any?)
     
     func parentViewForAddButton() -> UIView?
     
@@ -175,7 +175,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
     fileprivate var productQuantityController: ProductQuantityController?
 
-    fileprivate var priceInputs: PriceInputsState = PriceInputsState(quantity: 0, price: 0) {
+    fileprivate var priceInputs: PriceInputsState = PriceInputsState(quantity: 0, secondQuantity: nil, price: 0) {
         didSet {
             updateTotalPrice()
         }
@@ -197,6 +197,15 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             // e.g. 6 eggs pack - normally we use a base of 6 for this, and also want to attach the price to the 6 eggs pack (there's no per-egg price), so we open the picker with 6 as default reference quantity and user only has to enter the price. In cases like a box of 6 bottles of 1.5 coca-cola, it's also helpful identifying what the inputs are meant to be - we open the picker with 6 x 1.5 -> <price> - if user wants to change these defaults, e.g. to per-liter basis (<empty> x 1 -> <price>), they at least have an intuition of what the fields mean at this point.
             if !refQuantityWasEnteredByUser {
                 priceInputs.quantity = currentBase
+            }
+        }
+    }
+    fileprivate var currentSecondBase: Float? {
+        didSet {
+            updateTotalPrice()
+            // See comments in currentBase didSet - apply here as well
+            if !refQuantityWasEnteredByUser {
+                priceInputs.secondQuantity = currentSecondBase
             }
         }
     }
@@ -365,7 +374,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
 
     fileprivate func updateTotalPrice() {
-        let basePrice = StoreProduct.calculateBasePrice(refQuantity: priceInputs.quantity, refPrice: priceInputs.price, baseQuantity: currentBase)
+        let basePrice = StoreProduct.calculateBasePrice(refQuantity: priceInputs.quantity, refPrice: priceInputs.price, baseQuantity: currentBase, secondBaseQuantity: currentSecondBase)
         let totalPrice = currentQuantity * basePrice
         priceView.show(price: totalPrice)
         priceInputsPopupController?.updateUnitName(unitName: unitNameForPriceInputsController())
@@ -402,7 +411,12 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             self?.priceInputs.quantity = quantity
         }
 
-        controller.prefill(quantity: priceInputs.quantity, price: priceInputs.price, unitName: unitNameForPriceInputsController())
+        controller.onSecondQuantityChange = { [weak self] quantity in
+            self?.refQuantityWasEnteredByUser = true
+            self?.priceInputs.secondQuantity = quantity
+        }
+
+        controller.prefill(quantity: priceInputs.quantity, secondQuantity: priceInputs.secondQuantity, price: priceInputs.price, unitName: unitNameForPriceInputsController())
         return controller
     }
 
@@ -447,6 +461,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     fileprivate func updateProductQuantityController() {
         productQuantityController?.show(
             base: currentBase,
+            secondBase: currentSecondBase,
             unitId: currentUnitId,
             unitName: currentUnit,
             quantity: currentQuantity
@@ -486,6 +501,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
         controller.onSubmit = { [weak self] result in guard let weakSelf = self else { return }
             weakSelf.currentBase = result.baseQuantity
+            weakSelf.currentSecondBase = result.secondBaseQuantity
             weakSelf.currentUnit = result.unitName
             weakSelf.currentUnitId = result.unitId
 
@@ -493,6 +509,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 self?.unitBasePopup = nil
                 self?.productQuantityController?.show(
                     base: weakSelf.currentBase,
+                    secondBase: weakSelf.currentSecondBase,
                     unitId: weakSelf.currentUnitId,
                     unitName: weakSelf.currentUnit,
                     quantity: weakSelf.currentQuantity
@@ -515,7 +532,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
         controller.config(selectedUnitId: currentUnitId,
                           selectedUnitName: currentUnit,
-                          selectedBaseQuantity: currentBase)
+                          selectedBaseQuantity: currentBase,
+                          secondSelectedBaseQuantity: currentSecondBase)
         popup.show(from: unitBaseView, offsetY: -Theme.navBarHeight)
 
         controller.loadItems()
@@ -712,10 +730,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
                 // Explanation category/section name: for list items, the section input refers to the list item's section. For the rest the product category. When we store the list items, if a category with the entered section name doesn't exist yet, one is created with the section's data.
-                delegate?.onOkTap(price, refPrice: refPrice, refQuantity: refQuantity, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: currentBase, unit: currentUnit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
+                delegate?.onOkTap(price, refPrice: refPrice, refQuantity: refQuantity, quantity: currentQuantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: currentBase, secondBaseQuantity: currentSecondBase, unit: currentUnit, brand: brand, edible: edibleSelected, editingItem: editingItem?.model)
                 
             } else {
-                logger.e("Validation was not implemented correctly, refPrice: \(refPrice), refQuantity: \(refQuantity), quantity: \(String(describing: productQuantityController?.quantity)), brand: \(String(describing: brandInput.text)), sectionColor: \(String(describing: sectionColorButton.textColor))")
+                logger.e("Validation was not implemented correctly, refPrice: \(String(describing: refPrice)), refQuantity: \(String(describing: refQuantity)), quantity: \(String(describing: productQuantityController?.quantity)), brand: \(String(describing: brandInput.text)), sectionColor: \(String(describing: sectionColorButton.textColor))")
             }
         }
     }
