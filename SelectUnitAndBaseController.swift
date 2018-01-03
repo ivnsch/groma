@@ -369,8 +369,8 @@ extension SelectUnitAndBaseController: UITableViewDataSource, UITableViewDelegat
             header.title.text = {
                 switch indexPath.row {
                 case unitsHeaderIndex: return trans("select_ingredient_data_header_units")
-                case basesHeaderIndex: return trans("select_ingredient_data_header_quantity")
-                case secondBasesHeaderIndex: return trans("select_ingredient_data_header_second_quantity")
+                case basesHeaderIndex: return trans("select_unit_base_header_quantity")
+                case secondBasesHeaderIndex: return trans("select_unit_base_header_second_quantity")
                 default: fatalError("Forgot to handle index: \(indexPath.row)")
                 }
             } ()
