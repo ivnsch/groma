@@ -31,8 +31,9 @@ class IngredientCell: UITableViewCell {
             guard let ingredient = ingredient else {logger.w("Model is nil"); return}
             
             nameLabel.text = ingredient.item.name
-            
-            quantityLabel.text = ingredient.quantity.quantityString
+
+            // Don't show 0 quantity if there's a fraction
+            quantityLabel.text = ingredient.quantity == 0 && ingredient.fraction.decimalValue > 0 ? "" : ingredient.quantity.quantityString
             
             unitLabel.text = {
                 if ingredient.unit.id == .none {
