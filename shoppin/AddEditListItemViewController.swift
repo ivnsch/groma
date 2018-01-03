@@ -400,7 +400,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
     fileprivate func createPriceInputsControler() -> PriceInputsController {
         let controller = PriceInputsController()
-        controller.view.frame = CGRect(x: 0, y: 0, width: view.width - 80, height: 50)
+        let tooltipWidth = priceInputs.secondQuantity == nil ? view.width - 120 : view.width - 60
+        controller.view.frame = CGRect(x: 0, y: 0, width: tooltipWidth, height: 50)
         controller.onPriceChange = { [weak self] price in
             self?.refQuantityWasEnteredByUser = true // interpret price input as also "ack-ing" the current quantity input. This causes the ref quantity to not be affected anymore by changing the base quantity.
             self?.priceInputs.price = price

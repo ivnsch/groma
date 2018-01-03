@@ -47,7 +47,7 @@ class PriceInputsController: UIViewController, UITextFieldDelegate {
         } else {
             multiplySignLabel.text = "x"
             multiplySignWidthConstraint.constant = 8
-            secondBaseWidthConstraint.constant = 50
+            secondBaseWidthConstraint.constant = 40
             secondBaseToMultiplySignConstraint.constant = 8
             multiplySignToBaseConstraint.constant = 8
         }

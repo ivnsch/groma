@@ -30,9 +30,9 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yNO-vT-TMJ" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="20" y="13" width="50" height="40"/>
+                    <rect key="frame" x="20" y="13" width="40" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="50" id="nbZ-52-PJJ"/>
+                        <constraint firstAttribute="width" constant="40" id="nbZ-52-PJJ"/>
                         <constraint firstAttribute="height" constant="40" id="pMH-Q8-zDX" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
                     </constraints>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -51,10 +51,10 @@
                     </userDefinedRuntimeAttributes>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="A6m-hT-9jJ" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="300" y="13" width="80" height="40"/>
+                    <rect key="frame" x="310" y="13" width="70" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="Do3-CA-ZDx" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
-                        <constraint firstAttribute="width" constant="80" id="S0n-7Z-NG7"/>
+                        <constraint firstAttribute="width" constant="70" id="S0n-7Z-NG7"/>
                     </constraints>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -72,7 +72,7 @@
                     </userDefinedRuntimeAttributes>
                 </textField>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="L" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h45-IC-433" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="150" y="24" width="9" height="18"/>
+                    <rect key="frame" x="130" y="24" width="9" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
@@ -83,7 +83,7 @@
                     </userDefinedRuntimeAttributes>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="=" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WT0-1G-crm" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="270.5" y="24" width="9.5" height="18"/>
+                    <rect key="frame" x="280.5" y="24" width="9.5" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
@@ -94,7 +94,7 @@
                     </userDefinedRuntimeAttributes>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="x" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VXn-cu-onf" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="78" y="24" width="8" height="18"/>
+                    <rect key="frame" x="68" y="24" width="8" height="18"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="8" id="mPl-4c-HBh"/>
                     </constraints>
@@ -108,10 +108,10 @@
                     </userDefinedRuntimeAttributes>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5kw-7f-EGo" customClass="LineTextField" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="94" y="13" width="50" height="40"/>
+                    <rect key="frame" x="84" y="13" width="40" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="Zoh-8h-gz6" customClass="TextFieldHeightConstraint" customModule="groma" customModuleProvider="target"/>
-                        <constraint firstAttribute="width" constant="50" id="pQ4-nu-pDc"/>
+                        <constraint firstAttribute="width" constant="40" id="pQ4-nu-pDc"/>
                     </constraints>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
