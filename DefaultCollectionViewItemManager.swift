@@ -206,7 +206,7 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
         return myCollectionView
     }
 
-    fileprivate func onSelect(item: T) {
+    fileprivate func onSelect(item: T?) {
         onSelectItem?(item)
 
         //        inputs.unitName = unit.name
@@ -217,8 +217,8 @@ extension DefaultCollectionViewItemManager: UnitOrBaseDataSourceDelegate {
     }
 
     fileprivate func isSelected(cell: DefaultItemMeasureCell) -> Bool {
-        let selectedUnitName: String? = selectedItem?()
-        return selectedUnitName.map { $0 == cell.itemName } ?? false
+        let selectedItemName: String? = selectedItem?()
+        return selectedItemName.map { $0 == cell.itemName } ?? false
     }
 
     func clearSelectedItems() {
@@ -290,6 +290,7 @@ extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
 
             if let cell = cellMaybe {
                 if isSelected(cell: cell) {
+                    onSelect(item: nil)
                     cellMaybe?.show(selected: false, animated: true)
                     //                    inputs.unitName = ""
                     //                    updateTitle(inputs: inputs)

@@ -122,6 +122,7 @@ class SelectUnitAndBaseController: UIViewController {
             //                self?.unitsManager.markUnitToDelete(unit: unit)
             //            }
         }
+        
         unitsManager.itemMarkedToDelete = { [weak self] in
             return self?.inputs.unitMarkedToDelete
         }
@@ -166,6 +167,7 @@ class SelectUnitAndBaseController: UIViewController {
         baseQuantitiesManager.configure(controller: self, onSelectItem: { [weak self] baseQuantity in
             self?.inputs.baseQuantityMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.baseQuantity = baseQuantity?.val
+            self?.inputs.baseQuantityName = baseQuantity?.uniqueName
         })
 
         baseQuantitiesManager.onMarkedItemToDelete = { [weak self] base in
@@ -206,6 +208,7 @@ class SelectUnitAndBaseController: UIViewController {
         secondBaseQuantitiesManager.configure(controller: self, onSelectItem: { [weak self] baseQuantity in
             self?.inputs.secondBaseQuantityMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.secondBaseQuantity = baseQuantity?.val
+            self?.inputs.secondBaseQuantityName = baseQuantity?.uniqueName
         })
 
         secondBaseQuantitiesManager.onMarkedItemToDelete = { [weak self] base in
