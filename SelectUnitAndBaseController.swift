@@ -106,7 +106,7 @@ class SelectUnitAndBaseController: UIViewController {
     }
 
     fileprivate func configUnitsManager() {
-        unitsManager.configure(controller: self, onSelectItem: { [weak self] unit in guard let weakSelf = self else { return }
+        unitsManager.configure(controller: self, canDeselect: false, onSelectItem: { [weak self] unit in guard let weakSelf = self else { return }
             self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.unitId = unit?.id
             self?.inputs.unitName = unit?.name
@@ -122,7 +122,7 @@ class SelectUnitAndBaseController: UIViewController {
             //                self?.unitsManager.markUnitToDelete(unit: unit)
             //            }
         }
-        
+
         unitsManager.itemMarkedToDelete = { [weak self] in
             return self?.inputs.unitMarkedToDelete
         }
@@ -164,7 +164,7 @@ class SelectUnitAndBaseController: UIViewController {
     }
 
     fileprivate func configBaseQuantitiesManager() {
-        baseQuantitiesManager.configure(controller: self, onSelectItem: { [weak self] baseQuantity in
+        baseQuantitiesManager.configure(controller: self, canDeselect: false, onSelectItem: { [weak self] baseQuantity in
             self?.inputs.baseQuantityMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.baseQuantity = baseQuantity?.val
             self?.inputs.baseQuantityName = baseQuantity?.uniqueName
@@ -205,7 +205,7 @@ class SelectUnitAndBaseController: UIViewController {
     }
 
     fileprivate func configSecondBaseQuantitiesManager() {
-        secondBaseQuantitiesManager.configure(controller: self, onSelectItem: { [weak self] baseQuantity in
+        secondBaseQuantitiesManager.configure(controller: self, canDeselect: true, onSelectItem: { [weak self] baseQuantity in
             self?.inputs.secondBaseQuantityMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.secondBaseQuantity = baseQuantity?.val
             self?.inputs.secondBaseQuantityName = baseQuantity?.uniqueName

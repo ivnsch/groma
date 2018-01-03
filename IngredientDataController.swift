@@ -75,7 +75,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
 
         tableView.keyboardDismissMode = .onDrag
 
-        unitsManager.configure(controller: self, onSelectItem: { [weak self] unit in
+        unitsManager.configure(controller: self, canDeselect: false, onSelectItem: { [weak self] unit in
             self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.unit = unit
             delay(0.2) { [weak self] in // make it less abrubt

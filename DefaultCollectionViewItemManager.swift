@@ -73,6 +73,8 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     let bottomCollectionViewPadding: CGFloat = 20
     let leftRightCollectionViewPadding: CGFloat = 30
 
+    fileprivate var canDeselect: Bool = false // if it's allowed to de-select items (with this we can enforce that there's always an item selected)
+
     func sizeFotItemCell(indexPath: IndexPath) -> CGSize {
         fatalError("Override")
     }
@@ -99,9 +101,10 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
         return calculateCollectionViewContentsHeight(collectionViewWidth: collectionView.width, items: items)
     }
 
-    func configure(controller: UIViewController, onSelectItem: @escaping ((T?) -> Void)) {
+    func configure(controller: UIViewController, canDeselect: Bool, onSelectItem: @escaping ((T?) -> Void)) {
 
         self.controller = controller
+        self.canDeselect = canDeselect
         self.onSelectItem = onSelectItem
 
         // TODO# ? remove todo after test? seems to be done already
@@ -285,16 +288,22 @@ extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
             })
 
         } else {
-            clearToDeleteItems()
-            clearSelectedItems()
 
             if let cell = cellMaybe {
                 if isSelected(cell: cell) {
-                    onSelect(item: nil)
-                    cellMaybe?.show(selected: false, animated: true)
-                    //                    inputs.unitName = ""
-                    //                    updateTitle(inputs: inputs)
+                    if canDeselect {
+                        clearToDeleteItems()
+                        clearSelectedItems()
+
+                        onSelect(item: nil)
+                        cellMaybe?.show(selected: false, animated: true)
+                        //                    inputs.unitName = ""
+                        //                    updateTitle(inputs: inputs)
+                    }
                 } else {
+                    clearToDeleteItems()
+                    clearSelectedItems()
+
                     cellMaybe?.show(selected: true, animated: true)
                     onSelect(item: items[indexPath.row])
                 }
