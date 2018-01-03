@@ -99,11 +99,11 @@ class RealmUnitProvider: RealmProvider {
             Unit(uuid: UUID().uuidString, name: trans("unit_can"), id: .can, buyable: true),
 
             Unit(uuid: UUID().uuidString, name: trans("unit_pint"), id: .pint, buyable: false),
-            Unit(uuid: UUID().uuidString, name: trans("unit_gin"), id: .gin, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_gin"), id: .gin, buyable: false),
             Unit(uuid: UUID().uuidString, name: trans("unit_floz"), id: .floz, buyable: false),
             Unit(uuid: UUID().uuidString, name: trans("unit_dash"), id: .dash, buyable: false),
             Unit(uuid: UUID().uuidString, name: trans("unit_wgf"), id: .wgf, buyable: false),
-            Unit(uuid: UUID().uuidString, name: trans("unit_dram"), id: .dram, buyable: true),
+            Unit(uuid: UUID().uuidString, name: trans("unit_dram"), id: .dram, buyable: false),
             Unit(uuid: UUID().uuidString, name: trans("unit_lb"), id: .lb, buyable: true),
             Unit(uuid: UUID().uuidString, name: trans("unit_oz"), id: .oz, buyable: true),
         ]
