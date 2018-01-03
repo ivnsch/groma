@@ -514,6 +514,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                           selectedUnitName: currentUnit,
                           selectedBaseQuantity: currentBase)
         popup.show(from: unitBaseView, offsetY: -Theme.navBarHeight)
+
+        controller.loadItems()
     }
     
     fileprivate func initAddButtonHelper() -> AddButtonHelper? {
