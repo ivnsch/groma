@@ -193,6 +193,11 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     fileprivate var currentBase: Float = 1  {
         didSet {
             updateTotalPrice()
+            // If user hasn't entered a ref quantity yet, use base as default - base if often correct as reference quantity and it's also in general a good orientation for the user.
+            // e.g. 6 eggs pack - normally we use a base of 6 for this, and also want to attach the price to the 6 eggs pack (there's no per-egg price), so we open the picker with 6 as default reference quantity and user only has to enter the price. In cases like a box of 6 bottles of 1.5 coca-cola, it's also helpful identifying what the inputs are meant to be - we open the picker with 6 x 1.5 -> <price> - if user wants to change these defaults, e.g. to per-liter basis (<empty> x 1 -> <price>), they at least have an intuition of what the fields mean at this point.
+            if !refQuantityWasEnteredByUser {
+                priceInputs.quantity = currentBase
+            }
         }
     }
 
@@ -318,6 +323,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
     fileprivate var unitBasePopup: MyPopup?
 
+    // includes in a previous session, i.e. was loaded from the stored product. Used to differentiate it from base where we default it to base quantity
+    // Value is set to true on: prefill (edit case) and items has a refQuantity set, and when there are inputs in the price input view (either on the ref quantity or the price - doing inputs here is seen as accepting/validating the shown ref quantity, so we don't replace it with base anymore after this)
+    fileprivate var refQuantityWasEnteredByUser = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -383,9 +392,16 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     fileprivate func createPriceInputsControler() -> PriceInputsController {
         let controller = PriceInputsController()
         controller.view.frame = CGRect(x: 0, y: 0, width: view.width - 80, height: 50)
-        controller.onInputsChange = { [weak self] inputs in
-            self?.priceInputs = inputs
+        controller.onPriceChange = { [weak self] price in
+            self?.refQuantityWasEnteredByUser = true // interpret price input as also "ack-ing" the current quantity input. This causes the ref quantity to not be affected anymore by changing the base quantity.
+            self?.priceInputs.price = price
         }
+
+        controller.onQuantityChange = { [weak self] quantity in
+            self?.refQuantityWasEnteredByUser = true
+            self?.priceInputs.quantity = quantity
+        }
+
         controller.prefill(quantity: priceInputs.quantity, price: priceInputs.price, unitName: unitNameForPriceInputsController())
         return controller
     }
@@ -595,9 +611,17 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         updateProductQuantityController()
 
         priceInputs.price = item.storeProduct?.refPrice.value ?? 0
-        priceInputs.quantity = item.storeProduct?.refQuantity.value ?? 0
 
         let price = item.storeProduct?.totalPrice(quantity: currentQuantity) ?? 0
+
+        if let refQuantity = item.storeProduct?.refQuantity.value {
+            refQuantityWasEnteredByUser = true
+            priceInputs.quantity = refQuantity
+        } else {
+            refQuantityWasEnteredByUser = false
+            priceInputs.quantity = currentBase // use base as default reference quantity
+
+        }
         priceView.show(price: price)
 
         // TODO remove?

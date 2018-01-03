@@ -20,16 +20,10 @@ class PriceInputsController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var priceTextField: UITextField!
     @IBOutlet weak var unitLabel: UILabel!
 
-    var onInputsChange: ((PriceInputsState) -> Void)?
-
-    fileprivate var inputs: PriceInputsState = PriceInputsState(quantity: 0, price: 0) {
-        didSet {
-            onInputsChange?(inputs)
-        }
-    }
+    var onPriceChange: ((Float) -> Void)?
+    var onQuantityChange: ((Float) -> Void)?
 
     func prefill(quantity: Float, price: Float, unitName: String) {
-        inputs = PriceInputsState(quantity: quantity, price: price)
         quantityTextField.text = quantity.quantityString
         priceTextField.text = price.toLocalCurrencyString()
         updateUnitName(unitName: unitName)
@@ -63,7 +57,7 @@ class PriceInputsController: UIViewController, UITextFieldDelegate {
     }
 
     @objc func quantityTextFieldDidChange(_ sender: UITextField) {
-        inputs.quantity = sender.text?.floatValue ?? 0
+        onQuantityChange?(sender.text?.floatValue ?? 0)
         sender.invalidateIntrinsicContentSize()
     }
 
@@ -80,7 +74,7 @@ class PriceInputsController: UIViewController, UITextFieldDelegate {
             return
         }
 
-        inputs.price = numberString.floatValue ?? 0
+        onPriceChange?(numberString.floatValue ?? 0)
 
         let currencySymbolResult = getCurrencySymbolResult(string: currentInputText)
         let hasCurrencySymbolAlready = currencySymbolResult != nil
