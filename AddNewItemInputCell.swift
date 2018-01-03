@@ -24,7 +24,7 @@ class AddNewItemInputCell: UITableViewCell {
         textField.setPlaceholderWithColor(placeholder, color: Theme.midGrey)
         textField.lineColor = Theme.midGrey
         if onlyNumbers {
-            textField.keyboardType = .numberPad
+            textField.keyboardType = .decimalPad
         } else {
             textField.keyboardType = .default
         }
