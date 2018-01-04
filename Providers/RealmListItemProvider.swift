@@ -1414,14 +1414,14 @@ class RealmListItemProvider: RealmProvider {
                 return nil
             }
             listItem.section = dstSection
-            
+            dstSection.listItems.append(listItem)
+
             // delete from src section. This is only for .todo items - the cart and stash sections have like all sections a list of list items too but this is not used since we don't need ordering relative to section there.
             srcSection.listItems.remove(at: from.row)
             
             
-            
             let existingListItemMaybe = list.doneListItems.filter(ListItem.createFilter(quantifiableProductUnique: listItem.product.product.unique)).first // we should be able to use the uuid of the store product or quantifiable product too, but let's for now stick to the semantic unique for consistency and since it's the easiest to reason about. (TODO review this)
-            
+
             if let existingListItem = existingListItemMaybe {
                 let quantityMaybe = incrementSync(existingListItem, quantity: listItem.quantity, realmData: realmData, doTransaction: false)
                 if quantityMaybe != nil {
@@ -1513,7 +1513,9 @@ class RealmListItemProvider: RealmProvider {
         let list = listItem.list // TODO!!!!!!!!! do we still want to keep references to list and sections in list item? does this work correctly?
 
         func transactionContent(realm: Realm) -> Bool? {
-            
+
+            let srcSection = listItem.section
+
             guard let dstSection = DBProv.sectionProvider.getOrCreateTodo(name: listItem.section.name, color: listItem.section.color, list: list, notificationToken: realmData.token, realm: realm, doTransaction: false) else {
                 logger.e("Couldn't get or create dst section, can't switch")
                 return nil
@@ -1528,7 +1530,16 @@ class RealmListItemProvider: RealmProvider {
             
             // delete from src list items
             cartOrStashListItems.remove(at: from)
-            
+
+            // Delete from src section
+            if let srcSectionIndex = srcSection.listItems.index(of: listItem) {
+                srcSection.listItems.remove(at: srcSectionIndex)
+                // If src section is empty, also delete it
+                if srcSection.listItems.isEmpty {
+                    realm.delete(srcSection)
+                }
+            }
+
             return true
         }
         
