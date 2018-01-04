@@ -474,7 +474,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     }
     
     override func onSubmitAddEditItem2(_ input: ListItemInput, editingItem: Any?, onFinish: ((QuickAddItem, Bool) -> Void)?) {
-        let itemInput = ItemInput(name: input.name, categoryName: input.section, categoryColor: input.sectionColor, edible: input.edible)
+        // Note that we override the input's "edible" attribute - since there's no "edible" button in the form it will a always be false, but the reason is that there's no button in the ingredient form is that they are assumed to be always edible! So we override with true.
+        let itemInput = ItemInput(name: input.name, categoryName: input.section, categoryColor: input.sectionColor, edible: true)
         Prov.itemsProvider.addOrUpdate(input: itemInput, successHandler {item in
             let quickAddItem = QuickAddDBItem(item.0)
             onFinish?(quickAddItem, item.1)
