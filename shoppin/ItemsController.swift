@@ -295,7 +295,7 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     // MARK: - ListItemsTableViewDelegate
     
     func onTableViewScroll(_ scrollView: UIScrollView) {
-        toggleButtonRotator.rotateForOffset(-Theme.navBarHeight, topBar: topBar, scrollView: scrollView)
+        toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
     }
     
     func onPullToAdd() {
