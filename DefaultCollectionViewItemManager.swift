@@ -279,9 +279,13 @@ extension DefaultCollectionViewItemManager: CollectionViewDelegateDelegate {
             ConfirmationPopup.show(title: trans("popup_title_confirm"), message: confirmRemoveItemPopupMessage(item: selectedItem), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_cancel"), controller: controller, onOk: { [weak self] in
 
                 self?.willDeleteItem?(selectedItem)
-                self?.delete(item: selectedItem, controller: controller, onFinish: {
+                self?.delete(item: selectedItem, controller: controller, onFinish: { [weak self] in
                     self?.myCollectionView.deleteItems(at: [indexPath])
-                    self?.myCollectionView?.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
+                    self?.myCollectionView.collectionViewLayout.invalidateLayout() // seems to fix weird space appearing before last cell (input cell) sometimes
+                    // If we deleted the currently selected unit, the container changed the active to "none" - reload collection view to reflect this. Remember that there has to be always something selected - otherwise we need validation and we don't want this. Note: A delay less than 0.5 (or 0.2 at least, which I tried first) doesn't work!
+                    delay(0.5) {
+                        self?.myCollectionView.reloadData()
+                    }
                 })
             }, onCancel: { [weak self] in
                 self?.clearToDeleteItems()

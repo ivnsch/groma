@@ -140,7 +140,8 @@ class SelectUnitAndBaseController: UIViewController {
         unitsManager.willDeleteItem = { [weak self] unit in
             self?.inputs.unitMarkedToDelete = nil
             if unit.name == self?.inputs.unitName {
-                self?.inputs.unitName = nil
+                self?.inputs.unitName = trans("unit_unit")
+                self?.inputs.unitId = UnitId.none
             }
         }
 
