@@ -301,6 +301,7 @@ popup_button_restore_bundled_product = "Wiederherstellen";
 popup_button_remove_list = "Liste entfernen";
 
 popup_you_cant_delete_default_unit = "Die Basiseinheit kann nicht gelöscht werden!";
+popup_you_cant_delete_default_base_quantity = "Die Default Basismenge kann nicht gelöscht werden!";
 
 error_not_authenticated = "Nicht authentifiziert. Bitte log dich ein und versuch es noch mal.";
 error_already_exists = "Eintrag existiert bereits";

@@ -74,6 +74,15 @@ class BaseQuantitiesCollectionViewManager: DefaultCollectionViewItemManager<Base
     override func confirmRemoveItemPopupMessage(item: BaseQuantity) -> String {
         return trans("popup_remove_base_completion_confirm", item.val.quantityString)
     }
+
+    override func allowRemoveItem(item: BaseQuantity, controller: UIViewController) -> Bool {
+        if item.val == 1 {
+            AlertPopup.show(message: trans("popup_you_cant_delete_default_base_quantity"), controller: controller)
+            return false
+        } else {
+            return true
+        }
+    }
 }
 
 // TODO implement edit also with this and remove UnitsDataSource, previous controller. Rename this in UnitsDataSource.

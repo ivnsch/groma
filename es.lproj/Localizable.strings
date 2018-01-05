@@ -302,6 +302,7 @@ popup_button_restore_bundled_product = "Restablecer";
 popup_button_remove_list = "Remover lista";
 
 popup_you_cant_delete_default_unit = "La unidad de medida básica no se puede eliminar!";
+popup_you_cant_delete_default_base_quantity = "La cantidad base default no se puede eliminar!";
 
 error_not_authenticated = "No hay una sesión activa. Por favor conéctate e intenta de nuevo.";
 error_already_exists = "Ya existe";
