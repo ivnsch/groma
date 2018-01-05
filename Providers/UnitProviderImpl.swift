@@ -69,8 +69,8 @@ class UnitProviderImpl: UnitProvider {
         }
     }
     
-    func delete(name: String, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        if DBProv.unitProvider.deleteSync(name: name) {
+    func delete(name: String, notificationToken: NotificationToken?, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        if DBProv.unitProvider.deleteSync(name: name, notificationToken: notificationToken) {
             handler(ProviderResult(status: .success))
         } else {
             logger.e("Couldn't delete units with name: \(name)")
@@ -103,8 +103,8 @@ class UnitProviderImpl: UnitProvider {
         }
     }
     
-    func delete(baseQuantity: Float, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        if DBProv.unitProvider.deleteSync(baseQuantity: baseQuantity) {
+    func delete(baseQuantity: Float, notificationToken: NotificationToken?, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        if DBProv.unitProvider.deleteSync(baseQuantity: baseQuantity, notificationToken: notificationToken) {
             handler(ProviderResult(status: .success))
         } else {
             logger.e("Couldn't delete base quantities with stringVal: \(baseQuantity)")

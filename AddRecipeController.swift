@@ -37,6 +37,9 @@ class AddRecipeController: UIViewController {
 
     fileprivate var units: Results<Providers.Unit>?
     fileprivate var baseQuantities: RealmSwift.List<BaseQuantity>?
+    fileprivate var unitsNotificationToken: NotificationToken?
+    fileprivate var baseQuantitiesNotificationToken: NotificationToken?
+    fileprivate var secondBaseQuantitiesNotificationToken: NotificationToken?
 
     func config(recipe: Recipe, delegate: AddRecipeControllerDelegate) {
         self.delegate = delegate
@@ -59,7 +62,8 @@ class AddRecipeController: UIViewController {
         super.viewDidLoad()
 
         loadUnits()
-        loadBaseQuantities()
+        loadFirstBaseQuantities()
+        loadSecondBaseQuantities()
 
         initTableView()
         initSubmitView()
@@ -175,16 +179,66 @@ class AddRecipeController: UIViewController {
             delay(0.3) { // FIXME - temporary hack - sometimes (very rarely) units/bases don't appear - debug message "No items (yet?), returning 0 contents height"
                 self?.unitBaseViewController?.loadItems()
             }
+
+            let notificationToken = units.observe({ changes in
+
+                switch changes {
+                case .initial: break
+                case .update(_, let deletions, let insertions, let modifications):
+                    logger.d("Units notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+
+                    self?.unitBaseViewController?.updateUnits(insertions: insertions, deletions: deletions, modifications: modifications)
+
+                case .error(let error):
+                    // An error occurred while opening the Realm file on the background worker thread
+                    fatalError(String(describing: error))
+                }
+            })
+
+            self?.unitsNotificationToken = notificationToken
         })
     }
 
-    fileprivate func loadBaseQuantities() {
+    fileprivate func loadBaseQuantities(onHasNotificationToken: @escaping (NotificationToken) -> Void, onChanges: @escaping ([Int], [Int], [Int]) -> Void) {
         Prov.unitProvider.baseQuantities(successHandler{ [weak self] baseQuantities in
             self?.baseQuantities = baseQuantities
             self?.unitBaseViewController?.loadItems()
             delay(0.3) { // FIXME - temporary hack - sometimes (very rarely) units/bases don't appear - debug message "No items (yet?), returning 0 contents height"
                 self?.unitBaseViewController?.loadItems()
             }
+
+            let notificationToken = baseQuantities.observe({ changes in
+
+                switch changes {
+                case .initial: break
+                case .update(_, let deletions, let insertions, let modifications):
+                    onChanges(deletions, insertions, modifications)
+
+                case .error(let error):
+                    // An error occurred while opening the Realm file on the background worker thread
+                    fatalError(String(describing: error))
+                }
+            })
+
+            onHasNotificationToken(notificationToken)
+        })
+    }
+
+    fileprivate func loadFirstBaseQuantities() {
+        loadBaseQuantities (onHasNotificationToken: { [weak self] notificationToken in
+            self?.baseQuantitiesNotificationToken = notificationToken
+        }, onChanges: { [weak self] deletions, insertions, modifications in
+            logger.d("First base quantities notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+            self?.unitBaseViewController?.updateBaseQuantities(insertions: insertions, deletions: deletions, modifications: modifications)
+        })
+    }
+
+    fileprivate func loadSecondBaseQuantities() {
+        loadBaseQuantities (onHasNotificationToken: { [weak self] notificationToken in
+            self?.secondBaseQuantitiesNotificationToken = notificationToken
+        }, onChanges: { [weak self] deletions, insertions, modifications in
+            logger.d("Second base quantities notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+            self?.unitBaseViewController?.updateSecondBaseQuantities(insertions: insertions, deletions: deletions, modifications: modifications)
         })
     }
 }
@@ -298,7 +352,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
 
     func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void) {
-        Prov.unitProvider.delete(name: name, successHandler {
+        Prov.unitProvider.delete(name: name, notificationToken: nil, successHandler {
             handler(true)
         })
     }
@@ -412,6 +466,23 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
                           selectedUnitName: cellState.unitData.unitName,
                           selectedBaseQuantity: cellState.baseQuantity,
                           secondSelectedBaseQuantity: cellState.secondBaseQuantity)
+
+        if let unitsNotificationToken = self.unitsNotificationToken {
+            controller.setUnitsNotificationToken(token: unitsNotificationToken)
+        } else {
+            logger.w("No unit notification token", .ui)
+        }
+        if let firstBaseQuantitiesNotificationToken = self.baseQuantitiesNotificationToken {
+            controller.setFirstBaseQuantitiesNotificationToken(token: firstBaseQuantitiesNotificationToken)
+        } else {
+            logger.w("No first base quantities notification token", .ui)
+        }
+        if let secondBaseQuantitiesNotificationToken = self.secondBaseQuantitiesNotificationToken {
+            controller.setSecondBaseQuantitiesNotificationToken(token: secondBaseQuantitiesNotificationToken)
+        } else {
+            logger.w("No second base quantities notification token", .ui)
+        }
+
         controller.loadItems()
 
         view.endEditing(true)

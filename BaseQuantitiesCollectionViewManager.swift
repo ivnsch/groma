@@ -66,7 +66,8 @@ class BaseQuantitiesCollectionViewManager: DefaultCollectionViewItemManager<Base
     }
 
     override func delete(item: BaseQuantity, controller: UIViewController, onFinish: @escaping () -> Void) {
-        Prov.unitProvider.delete(baseQuantity: item.val, controller.successHandler {
+        guard let notificationToken = self.notificationToken else { logger.e("No notification token!"); return }
+        Prov.unitProvider.delete(baseQuantity: item.val, notificationToken: notificationToken, controller.successHandler {
             onFinish()
         })
     }

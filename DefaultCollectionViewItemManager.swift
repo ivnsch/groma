@@ -67,6 +67,7 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     var clearToDeleteItemsState: (() -> Void)? // Used by popup on cancel
     var onFetchedData: (() -> Void)?
     var fetchFunc: (() -> AnyRealmCollection<T>?)?
+    var reloadContainerData: (() -> Void)?
 
     let rowsSpacing: CGFloat = 4
     let topCollectionViewPadding: CGFloat = 20
@@ -74,6 +75,8 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
     let leftRightCollectionViewPadding: CGFloat = 30
 
     fileprivate var canDeselect: Bool = false // if it's allowed to de-select items (with this we can enforce that there's always an item selected)
+
+    var notificationToken: NotificationToken? // Exposed for subclasses
 
     func sizeFotItemCell(indexPath: IndexPath) -> CGSize {
         fatalError("Override")
@@ -142,6 +145,15 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
                 onHasItems(items: items)
             }
         }
+    }
+
+    // Realm notifications entry point
+    func update(insertions: [Int], deletions: [Int], modifications: [Int]) {
+        myCollectionView.performBatchUpdates({
+            myCollectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
+            myCollectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
+            myCollectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
+        }) { _ in }
     }
 
     func registerCell() {

@@ -1160,7 +1160,7 @@ extension AddEditListItemViewController: ProductQuantityControlleDelegate {
     }
     
     func deleteUnit(name: String, _ handler: @escaping (Bool) -> Void) {
-        Prov.unitProvider.delete(name: name, successHandler {
+        Prov.unitProvider.delete(name: name, notificationToken: nil, successHandler {
             handler(true)
         })
     }
@@ -1179,7 +1179,7 @@ extension AddEditListItemViewController: ProductQuantityControlleDelegate {
     }
     
     func deleteBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void) {
-        Prov.unitProvider.delete(baseQuantity: val, successHandler {
+        Prov.unitProvider.delete(baseQuantity: val, notificationToken: nil, successHandler {
             handler(true)
         })
     }

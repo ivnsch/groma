@@ -85,7 +85,7 @@ class ManageItemsUnitsController: UITableViewController, SearchableTextControlle
             guard let units = units else {logger.e("No units"); return}
             
             // Removing base is equivalent to remove products with base, base doesn't exist outside of products.
-            Prov.unitProvider.delete(name: units[indexPath.row].name, successHandler{[weak self] in
+            Prov.unitProvider.delete(name: units[indexPath.row].name, notificationToken: nil, successHandler{[weak self] in
                 self?.tableView.deleteRows(at: [indexPath], with: Theme.defaultRowAnimation)
             })
         }

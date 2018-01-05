@@ -49,13 +49,28 @@ class UnitCollectionViewManager: DefaultCollectionViewItemManager<Providers.Unit
     }
 
     override func fetchItems(controller: UIViewController, onSucces: @escaping (AnyRealmCollection<Providers.Unit>) -> Void) {
-        Prov.unitProvider.units(buyable: filterBuyable ? true : nil, controller.successHandler{ units in
+        Prov.unitProvider.units(buyable: filterBuyable ? true : nil, controller.successHandler{ [weak self] units in
             onSucces(AnyRealmCollection(units))
+
+            self?.notificationToken = units.observe({ changes in
+                switch changes {
+                case .initial: break
+                case .update(_, let deletions, let insertions, let modifications):
+                    logger.d("Units notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
+
+                    self?.update(insertions: insertions, deletions: deletions, modifications: modifications)
+
+                case .error(let error):
+                    // An error occurred while opening the Realm file on the background worker thread
+                    fatalError(String(describing: error))
+                }
+            })
         })
     }
 
     override func delete(item: Providers.Unit, controller: UIViewController, onFinish: @escaping () -> Void) {
-        Prov.unitProvider.delete(name: item.uniqueName, controller.successHandler {
+        guard let notificationToken = self.notificationToken else { logger.e("No notification token!"); return }
+        Prov.unitProvider.delete(name: item.uniqueName, notificationToken: notificationToken, controller.successHandler {
             onFinish()
         })
     }

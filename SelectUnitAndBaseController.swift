@@ -212,6 +212,37 @@ class SelectUnitAndBaseController: UIViewController {
         }
 
         baseQuantitiesManager.fetchFunc = fetchBaseQuantitiesFunc
+
+        baseQuantitiesManager.reloadContainerData = { [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+
+    func setUnitsNotificationToken(token: NotificationToken) {
+        unitsManager.notificationToken = token
+    }
+
+    func setFirstBaseQuantitiesNotificationToken(token: NotificationToken) {
+        baseQuantitiesManager.notificationToken = token
+    }
+
+    func setSecondBaseQuantitiesNotificationToken(token: NotificationToken) {
+        secondBaseQuantitiesManager.notificationToken = token
+    }
+
+    // Realm notifications entry point
+    func updateUnits(insertions: [Int], deletions: [Int], modifications: [Int]) {
+        unitsManager.update(insertions: insertions, deletions: deletions, modifications: modifications)
+    }
+
+    // Realm notifications entry point
+    func updateBaseQuantities(insertions: [Int], deletions: [Int], modifications: [Int]) {
+        baseQuantitiesManager.update(insertions: insertions, deletions: deletions, modifications: modifications)
+    }
+
+    // Realm notifications entry point
+    func updateSecondBaseQuantities(insertions: [Int], deletions: [Int], modifications: [Int]) {
+        secondBaseQuantitiesManager.update(insertions: insertions, deletions: deletions, modifications: modifications)
     }
 
     fileprivate func configSecondBaseQuantitiesManager() {

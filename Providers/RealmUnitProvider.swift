@@ -263,10 +263,10 @@ class RealmUnitProvider: RealmProvider {
     }
     
     
-    func deleteSync(name: String) -> Bool {
+    func deleteSync(name: String, notificationToken: NotificationToken?) -> Bool {
 
         // TODO# delete store products and list items too!
-        return doInWriteTransactionSync(realmData: nil) {realm in
+        return doInWriteTransactionSync(withoutNotifying: notificationToken.map {[$0]} ?? []) {realm in
             
             let quantifiableProducts = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(unitName: name))
             let ingredients = realm.objects(Ingredient.self).filter(Ingredient.createFilter(unitName: name))
@@ -359,9 +359,9 @@ class RealmUnitProvider: RealmProvider {
         }
     }
     
-    func deleteSync(baseQuantity: Float) -> Bool {
+    func deleteSync(baseQuantity: Float, notificationToken: NotificationToken?) -> Bool {
         
-        return doInWriteTransactionSync(realmData: nil) {realm in
+        return doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: nil) {realm in
             
             let quantifiableProducts = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(base: baseQuantity))
             let units = realm.objects(BaseQuantity.self).filter(BaseQuantity.createFilter(val: baseQuantity))
