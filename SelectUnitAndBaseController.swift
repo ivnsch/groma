@@ -235,6 +235,7 @@ class SelectUnitAndBaseController: UIViewController {
         secondBaseQuantitiesManager.willDeleteItem = { [weak self] base in
             self?.inputs.secondBaseQuantityMarkedToDelete = nil
             if base.val.quantityString == self?.inputs.secondBaseQuantityName {
+                self?.inputs.baseQuantity = nil
                 self?.inputs.secondBaseQuantityName = nil
             }
         }
