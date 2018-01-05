@@ -299,6 +299,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     func onListItemSelected(_ tableViewListItem: ListItem, indexPath: IndexPath) {
         if isEditing {
+            beforeToggleTopAddController(willExpand: true)
             openQuickAdd(itemToEdit: AddEditItem(item: tableViewListItem, currentStatus: status))
         }
     }
