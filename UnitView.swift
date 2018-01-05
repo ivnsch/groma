@@ -116,7 +116,14 @@ protocol UnitViewDelegate {
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
         addGestureRecognizer(longPress)
     }
-    
+   
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // For some reason calling reloadData (at least from IngredientDataController.config) makes that the label forgets its pin to edges constraints and appears at the left side of the cell. This fixes it.
+        nameLabel.center.x = center.x
+    }
+
 //    override var intrinsicContentSize: CGSize {
 //        let minLabelWidth = max(40, nameLabel.width) // the >= constaint in .xib seems not to work so hardcoded
 //        return CGSize(width: minLabelWidth, height: nameLabel.height + 20) // + 20 to add some padding
