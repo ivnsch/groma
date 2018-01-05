@@ -22,7 +22,7 @@ class BaseQuantitiesCollectionViewManager: DefaultCollectionViewItemManager<Base
         for item in items {
             let itemSize = calculateItemSize(item: item)
             if rowHeight == 0 { // take any item height - we take the first
-                rowHeight = itemSize.height + 2 + 14 // 2->mystery height delta with actual cells in view hierarchy + 10 vertical row spacing
+                rowHeight = itemSize.height + 2 + 14 // 2->mystery height delta with actual cells in view hierarchy + 14 vertical row spacing
             }
             currentRowWidth += itemSize.width // add item to row
             if currentRowWidth > availableWidth { // row is too big now!

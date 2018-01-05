@@ -97,6 +97,8 @@ class DefaultCollectionViewItemManager<T: DBSyncable & WithUniqueName> {
 
         myCollectionView.bounces = false
         myCollectionView.backgroundColor = UIColor.clear
+
+        myCollectionView.isScrollEnabled = false
     }
 
     func collectionViewContentHeight() -> CGFloat {
