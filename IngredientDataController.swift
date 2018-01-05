@@ -79,7 +79,7 @@ class IngredientDataController: UITableViewController, SubmitViewDelegate {
             self?.inputs.unitMarkedToDelete = nil // clear possible marked to delete unit
             self?.inputs.unit = unit
             delay(0.2) { [weak self] in // make it less abrubt
-                self?.tableView.scrollTo(row: 2)
+                self?.tableView.scrollTo(row: 3)
             }
         })
 
