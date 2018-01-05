@@ -7,8 +7,7 @@
 //
 
 import UIKit
-
-
+import Providers
 
 class ToggleButtonRotator {
 
@@ -23,7 +22,8 @@ class ToggleButtonRotator {
     
     func rotateForOffset(_ start: CGFloat, topBar: ListTopBarView, scrollView: UIScrollView) {
         guard enabled else {return}
-        guard let toggleButton = topBar.rightButton(.toggleOpen) else {return}
+        guard let toggleButtonParent = topBar.rightButton(.toggleOpen) else {return}
+        guard let toggleButton = toggleButtonParent.subviews.first else { logger.e("Unexpected structure: - inner button not found"); return }
 
         let startOffset: CGFloat = start
         let offset: CGFloat = scrollView.contentOffset.y
