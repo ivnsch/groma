@@ -194,7 +194,8 @@ class SelectUnitAndBaseController: UIViewController {
         baseQuantitiesManager.willDeleteItem = { [weak self] base in
             self?.inputs.baseQuantityMarkedToDelete = nil
             if base.val.quantityString == self?.inputs.baseQuantityName {
-                self?.inputs.baseQuantityName = nil
+                self?.inputs.baseQuantity = 1
+                self?.inputs.baseQuantityName = "1"
             }
         }
 
