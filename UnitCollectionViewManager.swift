@@ -31,11 +31,11 @@ class UnitCollectionViewManager: DefaultCollectionViewItemManager<Providers.Unit
     }
 
     override func calculateCollectionViewContentsHeight(collectionViewWidth: CGFloat, items: AnyRealmCollection<Providers.Unit>) -> CGFloat {
-        //        let collectionViewWidth = myCollectionView.width
-        //        guard collectionViewWidth > 0 else { return 0 } // avoid division by 0
+        let collectionViewWidth = myCollectionView.width
+        guard collectionViewWidth > 0 else { return 0 } // avoid division by 0
         let unitCount = dataSource?.items?.count ?? 0
-        //        let unitsPerRow = floor(collectionViewWidth / unitCellSize.width)
-        let unitsPerRow = CGFloat(5) // for now hardcoded. Calculating it returns 5 (wrong) + using the collection width causes constraint error (because this is called 2-3 times at the beginning with a width of 0) and collapses entirely the collection view. TODO not hardcoded
+        let unitsPerRow = floor((collectionViewWidth - leftRightCollectionViewPadding * 2) / unitCellSize.width)
+//        let unitsPerRow = CGFloat(5) // for now hardcoded. Calculating it returns 6 (wrong) + using the collection width causes constraint error (because this is called 2-3 times at the beginning with a width of 0) and collapses entirely the collection view. TODO not hardcoded
         let rowCount = ceil(CGFloat(unitCount) / unitsPerRow)
         return rowCount * (unitCellSize.height + rowsSpacing) + topCollectionViewPadding + bottomCollectionViewPadding
     }
