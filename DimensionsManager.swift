@@ -75,7 +75,7 @@ class DimensionsManager {
     static var quickAddHeight: CGFloat {
         switch heightDimension {
         case .verySmall: return 150
-        case .small: return 210
+        case .small: return 220
         case .middle: return 285
         case .large: return 310
         }
@@ -170,7 +170,24 @@ class DimensionsManager {
         case .large: return 18
         }
     }
+    
+    static var unitInUnitBaseViewSize: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 25
+        case .small: return 25
+        case .middle: return 30
+        case .large: return 30
+        }
+    }
 
+    static var unitBaseViewTopBottomPadding: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 0
+        case .small: return 0
+        case .middle: return 10
+        case .large: return 10
+        }
+    }
     // MARK: list items
     
     static var listItemsHeaderHeight: CGFloat {

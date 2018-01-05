@@ -22,11 +22,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="137" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="61B-UY-Irf" customClass="QuantityView" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="20" y="-12" width="137" height="128"/>
+                    <rect key="frame" x="0.0" y="-12" width="137" height="128"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="150" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="xlV-aC-3ij" customClass="UnitWithBaseView" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="326" y="27" width="150" height="50"/>
+                    <rect key="frame" x="356" y="27" width="150" height="50"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>

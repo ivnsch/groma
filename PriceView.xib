@@ -21,7 +21,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dET-3b-fEp" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                    <rect key="frame" x="10" y="10" width="85" height="30"/>
+                    <rect key="frame" x="10" y="15" width="85" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -33,10 +33,9 @@
                 </label>
             </subviews>
             <constraints>
-                <constraint firstItem="dET-3b-fEp" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="43x-4a-HaH"/>
+                <constraint firstItem="dET-3b-fEp" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="8pa-Co-8WO"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="dET-3b-fEp" secondAttribute="trailing" constant="10" id="GiI-6D-GFX"/>
                 <constraint firstItem="dET-3b-fEp" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="hJP-W9-7d9"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="dET-3b-fEp" secondAttribute="bottom" constant="10" id="n3P-Xj-2je"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>

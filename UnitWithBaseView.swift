@@ -13,6 +13,10 @@ import Providers
 class UnitWithBaseView: HandlingView {
 
     @IBOutlet weak var unitImageView: UIImageView!
+
+    @IBOutlet weak var unitImageViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var unitImageViewHeightConstraint: NSLayoutConstraint!
+
     @IBOutlet weak var initialsLabel: UILabel!
     @IBOutlet weak var label: UILabel!
 
@@ -42,6 +46,9 @@ class UnitWithBaseView: HandlingView {
         layer.backgroundColor = UIColor.white.cgColor
         layer.borderWidth = 1
         layer.cornerRadius = 4
+
+        unitImageViewWidthConstraint.constant = DimensionsManager.unitInUnitBaseViewSize
+        unitImageViewHeightConstraint.constant = DimensionsManager.unitInUnitBaseViewSize
     }
 
     func configure(onTap: (() -> Void)?) {
@@ -79,6 +86,6 @@ class UnitWithBaseView: HandlingView {
 
     override var intrinsicContentSize: CGSize {
         // width: + left space + middle + right space, height: + top space * 2
-        return CGSize(width: label.intrinsicContentSize.width + 10 + 15 + 10 + unitImageView.width, height: max(label.height, unitImageView.height) + 2 * 4)
+        return CGSize(width: label.intrinsicContentSize.width + 10 + 15 + 10 + unitImageView.width, height: max(label.height, unitImageView.height) + 2 * DimensionsManager.unitBaseViewTopBottomPadding)
     }
 }

@@ -51,6 +51,6 @@ class PriceView: HandlingView {
     }
 
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: priceLabel.intrinsicContentSize.width + 2 * 10, height: priceLabel.intrinsicContentSize.height + 2 * 4)
+        return CGSize(width: priceLabel.intrinsicContentSize.width + 2 * 10, height: priceLabel.intrinsicContentSize.height + 2 * DimensionsManager.unitBaseViewTopBottomPadding)
     }
 }
