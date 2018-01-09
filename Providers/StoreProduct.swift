@@ -33,7 +33,7 @@ import RealmSwift
 
 public typealias StoreProductUnique = (quantifiableProductUnique: QuantifiableProductUnique, store: String)
 
-public class StoreProduct: DBSyncable, Identifiable {
+public class StoreProduct: DBSyncable, Identifiable, WithUuid {
     
     @objc public dynamic var uuid: String = ""
     public let refPrice = RealmOptional<Float>()
@@ -176,6 +176,15 @@ public class StoreProduct: DBSyncable, Identifiable {
     // Note these invalid objects will be removed on sync response when db is overwritten
     public static func createFilterDirtyAndValid() -> String {
         return "\(DBSyncable.dirtyFilter()) && uuid != ''"
+    }
+
+    func toRealmMigrationDict(quantifiableProduct: QuantifiableProduct) -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid as AnyObject?
+        dict["refPrice"] = refPrice as AnyObject?
+        dict["refQuantity"] = refQuantity as AnyObject?
+        dict["productOpt"] = quantifiableProduct
+        return dict
     }
 
     // MARK: -

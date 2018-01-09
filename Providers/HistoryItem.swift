@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class HistoryItem: DBSyncable, Identifiable {
+public class HistoryItem: DBSyncable, Identifiable, WithUuid {
 
     @objc public dynamic var uuid: String = ""
     @objc dynamic var inventoryOpt: DBInventory? = DBInventory()
@@ -148,7 +148,19 @@ public class HistoryItem: DBSyncable, Identifiable {
 //        setSyncableFieldsInDict(&dict)
         return dict
     }
-    
+
+    func toRealmMigrationDict(inventory: DBInventory, quantifiableProduct: QuantifiableProduct, user: DBSharedUser) -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid as AnyObject?
+        dict["addedDate"] = addedDate as AnyObject?
+        dict["quantity"] = quantity as AnyObject?
+        dict["paidPrice"] = paidPrice as AnyObject?
+        dict["userOpt"] = user
+        dict["inventoryOpt"] = inventory
+        dict["productOpt"] = productOpt
+        return dict
+    }
+
     public func copy(uuid: String? = nil, inventory: DBInventory? = nil, product: QuantifiableProduct? = nil, addedDate: Int64? = nil, quantity: Float? = nil, user: DBSharedUser? = nil, paidPrice: Float? = nil, lastServerUpdate: Int64? = nil, removed: Bool = false) -> HistoryItem {
         return HistoryItem(
             uuid: uuid ?? self.uuid,

@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 
-public final class Ingredient: Object {
+public final class Ingredient: Object, WithUuid {
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var quantity: Float = 0
     @objc public dynamic var fractionNumerator: Int = 0

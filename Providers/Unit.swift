@@ -41,7 +41,7 @@ public enum UnitId: Int {
     case custom = 99
 }
 
-public class Unit: DBSyncable, Identifiable {
+public class Unit: DBSyncable, Identifiable, WithUuid {
     
     public static let unitsWithBase: [UnitId] = [.none, .g, .kg, .liter, .milliliter, .custom, .lb, .oz]
 

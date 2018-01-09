@@ -56,10 +56,23 @@ class RealmUserProviderImpl: UserProvider {
                             logger.w("User: \(user) has no identity")
                         }
 
-                        RealmConfig.copyLocalToSyncRealm(user: user) {
-                            // Pass a sync result for compatibility with the protocol interface (originally written for own server)
-                            handler(ProviderResult(status: .success, sucessResult: SyncResult(listInvites: [], inventoryInvites: [])))
+                        guard let localRealm = RealmConfig.localRealm() else {
+                            logger.e("Couldn't create local realm - can't migrate!", .db)
+                            handler(ProviderResult(status: .databaseUnknown))
+                            return
                         }
+
+                        RealmConfig.syncedRealm(user: user, onReady: { syncedRealm in
+                            guard let syncedRealm = syncedRealm else {
+                                logger.e("Couldn't create remote realm - can't migrate!", .db)
+                                handler(ProviderResult(status: .databaseUnknown))
+                                return
+                            }
+                            if syncedRealm.isEmpty {
+                                RealmGlobalProvider().migrate(srcRealm: localRealm, targetRealm: syncedRealm)
+                            }
+                            handler(ProviderResult(status: .success, sucessResult: SyncResult(listInvites: [], inventoryInvites: [])))
+                        })
 
                     } catch let error {
                         logger.e("Couldn't instantiate Realm during login/register: \(error)")

@@ -21,7 +21,7 @@ public struct SectionUnique {
     }
 }
 
-public class Section: DBSyncable, Identifiable {
+public class Section: DBSyncable, Identifiable, WithUuid {
 
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var name: String = ""
@@ -30,6 +30,8 @@ public class Section: DBSyncable, Identifiable {
 //    let listItems = RealmSwift.List<String>()
     
     @objc dynamic var listOpt: List? = List()
+
+    // TODO remove
     @objc public dynamic var todoOrder: Int = 0
     @objc public dynamic var doneOrder: Int = 0
     @objc public dynamic var stashOrder: Int = 0
@@ -139,9 +141,13 @@ public class Section: DBSyncable, Identifiable {
     static func createFilter(inventoryUuid: String) -> String {
         return "listOpt.inventoryOpt.uuid == '\(inventoryUuid)'"
     }
-    
+
+    static func createFilterListStatus(listUuid: String, status: ListItemStatus) -> String {
+        return "listOpt.uuid == '\(listUuid)' AND statusVal == \(status.rawValue)"
+    }
+
     // MARK: -
-    
+
     static func fromDict(_ dict: [String: AnyObject], list: List) -> Section {
         let item = Section()
         item.uuid = dict["uuid"]! as! String
@@ -161,13 +167,47 @@ public class Section: DBSyncable, Identifiable {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid as AnyObject?
         dict["name"] = name as AnyObject?
-        dict["color"] = bgColorHex as AnyObject?
+        dict["bgColorHex"] = bgColorHex as AnyObject?
         dict["list"] = list.toDict() as AnyObject?        
         dict["todoOrder"] = todoOrder as AnyObject?
         dict["doneOrder"] = doneOrder as AnyObject?
         dict["stashOrder"] = stashOrder as AnyObject?
         dict["listInput"] = list.toDict() as AnyObject?
         setSyncableFieldsInDict(&dict)
+        return dict
+    }
+
+    func toRealmMigrationDict(list: List) -> [String: Any] {
+
+        var dict = [String: Any]()
+        dict["uuid"] = uuid
+        dict["name"] = name as AnyObject?
+        dict["bgColorHex"] = bgColorHex as AnyObject?
+
+        dict["listOpt"] = list
+
+        dict["todoOrder"] = todoOrder as AnyObject?
+        dict["doneOrder"] = doneOrder as AnyObject?
+        dict["stashOrder"] = stashOrder as AnyObject?
+
+        dict["statusVal"] = statusVal as AnyObject?
+
+        return dict
+    }
+
+    func toRealmMigrationDict2(listDict: Dictionary<String, Any>) -> [String: Any] {
+
+        var dict = [String: Any]()
+        dict["uuid"] = uuid
+        dict["name"] = name as AnyObject?
+        dict["bgColorHex"] = bgColorHex as AnyObject?
+
+        dict["listOpt"] = listDict
+
+        dict["todoOrder"] = todoOrder as AnyObject?
+        dict["doneOrder"] = doneOrder as AnyObject?
+        dict["stashOrder"] = stashOrder as AnyObject?
+
         return dict
     }
 

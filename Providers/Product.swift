@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-public class Product: DBSyncable, Identifiable {
+public class Product: DBSyncable, Identifiable, WithUuid {
     
     @objc public dynamic var uuid: String = ""
     @objc dynamic var itemOpt: Item? = Item()
@@ -173,7 +173,16 @@ public class Product: DBSyncable, Identifiable {
         setSyncableFieldsInDict(&dict)
         return dict
     }
-    
+
+    func toRealmMigrationDict(item: Item) -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid as AnyObject?
+        dict["brand"] = brand as AnyObject?
+        dict["fav"] = fav as AnyObject?
+        dict["itemOpt"] = item
+        return dict
+    }
+
     // This function doesn't really have to here but don't have a better place yet
     // A key that can be used e.g. in dictionaries
     static func nameBrandKey(_ name: String, brand: String) -> String {

@@ -14,7 +14,7 @@ import Realm.Dynamic
 public struct RealmConfig {
 
     #if (arch(i386) || arch(x86_64)) && os(iOS)
-        fileprivate static let syncHost = "127.0.0.1"
+        fileprivate static let syncHost = "192.168.0.208"
     #else // device
         fileprivate static let syncHost = "192.168.0.208"
     #endif
@@ -34,7 +34,7 @@ public struct RealmConfig {
     public static var config = Realm.Configuration(
         // Set the new schema version. This must be greater than the previously used
         // version (if you've never set a schema version before, the version is 0).
-        schemaVersion: 33,
+        schemaVersion: 0,
         
         // Set the block which will be called automatically when opening a Realm with
         // a schema version lower than the one set above
@@ -53,6 +53,36 @@ public struct RealmConfig {
         return config
     }
 
+    static func localRealm() -> Realm? {
+        do {
+            return try Realm(configuration: localRealmConfig)
+        } catch (let e) {
+            logger.e("Error instantiating local realm: \(e)", .db)
+            return nil
+        }
+    }
+
+    /// Loads realm with asyncOpen, which executes the callback after all the data is available.
+    static func syncedRealm(user: SyncUser, onReady: @escaping (Realm?) -> Void) {
+        Realm.asyncOpen(configuration: syncedRealmConfigutation(user: user)) { realm, error in
+            guard let realm = realm else {
+                logger.e("Error instantiating synced realm: \(String(describing: error))", .db)
+                onReady(nil)
+                return
+            }
+            onReady(realm)
+        }
+    }
+
+    static func syncedRealm(user: SyncUser) -> Realm? {
+        do {
+            return try Realm(configuration: syncedRealmConfigutation(user: user))
+        } catch (let e) {
+            logger.e("Error instantiating synced realm: \(e)", .db)
+            return nil
+        }
+    }
+
     static func syncedRealmConfigutation(user: SyncUser) -> Realm.Configuration {
         var config = RealmConfig.config
 
@@ -65,15 +95,18 @@ public struct RealmConfig {
                               DBRemoveSharedUser.self, DBRemoveGroupItem.self, DBRemoveProductCategory.self,
                               DBRemoveInventoryItem.self, DBRemoveProductGroup.self, Item.self, Unit.self,
                               QuantifiableProduct.self, RecipesContainer.self, InventoriesContainer.self,
-                              ListsContainer.self, BaseQuantitiesContainer.self, BaseQuantity.self, UnitsContainer.self
+                              ListsContainer.self, BaseQuantitiesContainer.self, BaseQuantity.self, UnitsContainer.self,
+                              DBTextSpan.self, DBFraction.self, FractionsContainer.self
         ]
 
         return config
     }
 
     public static func realm() throws -> Realm {
-        return try Realm(configuration: localRealmConfig)
+//        return try Realm(configuration: localRealmConfig)
+        return try Realm()
     }
+
 }
 
 // MARK: RLM
@@ -84,7 +117,7 @@ extension RealmConfig {
     static var localRlmRealmConfig: RLMRealmConfiguration {
 
         let configuration = RLMRealmConfiguration()
-        configuration.schemaVersion = 33
+        configuration.schemaVersion = 0
         configuration.fileURL = localRealmUrl
 //        configuration.dynamic = true
         //configuration.readOnly = true

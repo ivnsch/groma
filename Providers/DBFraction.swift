@@ -11,7 +11,7 @@ import RealmSwift
 
 
 // See https://github.com/realm/realm-cocoa/issues/1192 for explanations about compoundKey and setters.
-
+// TODO do we still need DBFraction? - num and den are stored directly in the ingredient, and we don't show a collection view with them anymore (but a slider)
 public class DBFraction: Object {
     
     @objc public dynamic var numerator: Int = 0
@@ -39,7 +39,7 @@ public class DBFraction: Object {
         return "compoundKey"
     }
     
-    private func compoundKeyValue() -> String {
+    func compoundKeyValue() -> String {
         return "\(numerator)-\(denominator)"
     }
     

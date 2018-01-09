@@ -9,12 +9,7 @@
 import Foundation
 import RealmSwift
 
-class RecipesContainer: Object { // to be able to hold recipes in realm's list
-    
-    let recipes: RealmSwift.List<Recipe> = RealmSwift.List<Recipe>()
-}
-
-public class Recipe: Object, Identifiable {
+public class Recipe: Object, Identifiable, WithUuid {
     
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var name: String = ""

@@ -286,10 +286,7 @@ class RealmGlobalProvider: RealmProvider {
         }
     }
 
-
     fileprivate func initContainers(realm: Realm) {
-        realm.deleteAll() // This is only for debugging, to avoid multiple instances of prefill objects. During debugging we can force-show intro, which will prefill each time the database. Note that this assumes initContainers is executed before adding the prefill objects. This is a well founded assumption as the containers are a requirements for the pre-fill to work or most other database operations. In production this operation has no effect, as this will be executed only once (intro is shown only first time the user starts the app), and this being the first database write operation, there's nothing to delete.
-        logger.v("Cleared realm")
 
         let fractionsContainer: FractionsContainer? = self.loadFirstSync()
         if fractionsContainer == nil {
@@ -325,6 +322,8 @@ class RealmGlobalProvider: RealmProvider {
     func initContainers(handler: @escaping (Bool) -> Void) {
         
         doInWriteTransaction({ [weak self] realm in
+            realm.deleteAll() // This is only for debugging, to avoid multiple instances of prefill objects. During debugging we can force-show intro, which will prefill each time the database. Note that this assumes initContainers is executed before adding the prefill objects. This is a well founded assumption as the containers are a requirements for the pre-fill to work or most other database operations. In production this operation has no effect, as this will be executed only once (intro is shown only first time the user starts the app), and this being the first database write operation, there's nothing to delete.
+            logger.v("Cleared realm")
             self?.initContainers(realm: realm)
 
             return true
@@ -333,11 +332,223 @@ class RealmGlobalProvider: RealmProvider {
         }
     }
 
+    func migrate(srcRealm: Realm, targetRealm: Realm) {
+
+        doInWriteTransactionWithRealmSync(targetRealm) { realm in
+
+            initContainers(realm: targetRealm)
+            guard let listsContainer = targetRealm.objects(ListsContainer.self).first else {
+                logger.e("Can't migrate - missing container", .db)
+                return
+            }
+            guard let inventoriesContainer = targetRealm.objects(InventoriesContainer.self).first else {
+                logger.e("Can't migrate - missing container", .db)
+                return
+            }
+            guard let recipesContainer = targetRealm.objects(RecipesContainer.self).first else {
+                logger.e("Can't migrate - missing container", .db)
+                return
+            }
+            guard let unitsContainer = targetRealm.objects(UnitsContainer.self).first else {
+                logger.e("Can't migrate - missing container", .db)
+                return
+            }
+            guard let baseQuantitiesContainer = targetRealm.objects(BaseQuantitiesContainer.self).first else {
+                logger.e("Can't migrate - missing container", .db)
+                return
+            }
+            guard let fractionsContainer = targetRealm.objects(FractionsContainer.self).first else {
+                logger.e("Can't migrate - missing container", .db)
+                return
+            }
+
+            // Units
+            let srcUnits: Results<Unit> = srcRealm.objects(Unit.self)
+            var addedUnits = [String: Unit]()
+            for srcUnit in srcUnits {
+                let unit = targetRealm.create(Unit.self, value: srcUnit, update: true)
+                addedUnits[unit.uuid] = unit
+                unitsContainer.units.append(unit)
+            }
+
+            // Base quantities
+            let srcBaseQuantities: Results<BaseQuantity> = srcRealm.objects(BaseQuantity.self)
+            var addedBaseQuantities = [Float: BaseQuantity]()
+            for srcBaseQuantity in srcBaseQuantities {
+                let baseQuantity = targetRealm.create(BaseQuantity.self, value: srcBaseQuantity, update: true)
+                addedBaseQuantities[baseQuantity.val] = baseQuantity
+                baseQuantitiesContainer.bases.append(baseQuantity)
+            }
+
+            // Fractions
+            let srcFractions: Results<DBFraction> = srcRealm.objects(DBFraction.self)
+            var addedFractions = [String: DBFraction]()
+            for srcFraction in srcFractions {
+                let fraction = targetRealm.create(DBFraction.self, value: srcFraction, update: true)
+                addedFractions[fraction.compoundKeyValue()] = fraction
+                fractionsContainer.fractions.append(fraction)
+            }
+
+            // Categories
+            let srcCategories: Results<ProductCategory> = srcRealm.objects(ProductCategory.self)
+            var addedCategories = [String: ProductCategory]()
+            for srcCategory in srcCategories {
+                let category = targetRealm.create(ProductCategory.self, value: srcCategory, update: true)
+                addedCategories[category.uuid] = category
+            }
+
+            // Items
+            let srcItems: Results<Item> = srcRealm.objects(Item.self)
+            var addedItems = [String: Item]()
+            for srcItem in srcItems {
+                guard let category = addedCategories[srcItem.category.uuid] else {
+                    logger.e("Couldn't find category! Skipping item.", .db)
+                    continue
+                }
+                let item = targetRealm.create(Item.self, value: srcItem.toRealmMigrationDict(category: category), update: true)
+                addedItems[item.uuid] = item
+            }
+
+            // Products
+            let srcProducts: Results<Product> = srcRealm.objects(Product.self)
+            var addedProducts = [String: Product]()
+            for srcProduct in srcProducts {
+                guard let item = addedItems[srcProduct.item.uuid] else {
+                    logger.e("Couldn't find item! Skipping item.", .db)
+                    continue
+                }
+                let product = targetRealm.create(Product.self, value: srcProduct.toRealmMigrationDict(item: item), update: true)
+                addedProducts[product.uuid] = product
+            }
+
+            // Quantifiable products
+            let srcQuantifiableProducts: Results<QuantifiableProduct> = srcRealm.objects(QuantifiableProduct.self)
+            var addedQuantifiableProducts = [String: QuantifiableProduct]()
+            for srcQuantifiableProduct in srcQuantifiableProducts {
+                guard let product = addedProducts[srcQuantifiableProduct.product.uuid] else {
+                    logger.e("Couldn't find product! Skipping item.", .db)
+                    continue
+                }
+                guard let unit = addedUnits[srcQuantifiableProduct.unit.uuid] else {
+                    logger.e("Couldn't find unit! Skipping item.", .db)
+                    continue
+                }
+                let quantifiableProduct = targetRealm.create(QuantifiableProduct.self, value: srcQuantifiableProduct.toRealmMigrationDict(product: product, unit: unit), update: true)
+                quantifiableProduct.secondBaseQuantity.value = srcQuantifiableProduct.secondBaseQuantity.value
+                addedQuantifiableProducts[quantifiableProduct.uuid] = quantifiableProduct
+            }
+
+            // Store products
+            let srcStoreProducts: Results<StoreProduct> = srcRealm.objects(StoreProduct.self)
+            var addedStoreProducts = [String: StoreProduct]()
+            for srcStoreProduct in srcStoreProducts {
+                guard let quantifiableProduct = addedQuantifiableProducts[srcStoreProduct.product.uuid] else {
+                    logger.e("Couldn't find quantifiable product! Skipping item.", .db)
+                    continue
+                }
+                let storeProduct = targetRealm.create(StoreProduct.self, value: srcStoreProduct.toRealmMigrationDict(quantifiableProduct: quantifiableProduct), update: true)
+                addedStoreProducts[storeProduct.uuid] = storeProduct
+            }
+
+            // Inventories
+            let srcInventories: Results<DBInventory> = srcRealm.objects(DBInventory.self)
+            var addedInventories = [String: DBInventory]()
+            for srcInventory in srcInventories {
+                let inventory = targetRealm.create(DBInventory.self, value: srcInventory, update: true)
+                addedInventories[inventory.uuid] = inventory
+                inventoriesContainer.inventories.append(inventory)
+            }
+
+            // Lists
+            let lists: Results<List> = srcRealm.objects(List.self)
+            var addedLists = [String: List]()
+            for srcList in lists {
+                guard let  inventory = addedInventories[srcList.inventory.uuid] else {
+                    logger.e("Couldn't find inventory! Skipping item.", .db)
+                    continue
+                }
+                let list = targetRealm.create(List.self, value: srcList.toRealmMigrationDict(inventory: inventory), update: true)
+                addedLists[list.uuid] = list
+                listsContainer.lists.append(list)
+            }
+
+            // Sections
+            let srcSections: Results<Section> = srcRealm.objects(Section.self)
+            var addedSections = [String: Section]()
+            for srcSection in srcSections {
+                guard let list = addedLists[srcSection.list.uuid] else {
+                    logger.e("Couldn't find list! Skipping item.", .db)
+                    continue
+                }
+
+                let section = targetRealm.create(Section.self, value: srcSection.toRealmMigrationDict(list: list), update: true)
+
+                switch section.status {
+                case .todo:
+                    list.todoSections.append(section)
+                case .done, .stash: break // done and stash sections exist but aren't stored in lists (this is not necessary since we don't display / don't need reordering of these sections)
+                }
+                addedSections[section.uuid] = section
+            }
+
+            // List items
+            let srcListItems: Results<ListItem> = srcRealm.objects(ListItem.self)
+            for srcListItem in srcListItems {
+                guard let list = addedLists[srcListItem.list.uuid] else {
+                    logger.e("Couldn't find list! Skipping item.", .db)
+                    continue
+                }
+                guard let section = addedSections[srcListItem.section.uuid] else {
+                    logger.e("Couldn't find section! Skipping item.", .db)
+                    continue
+                }
+                guard let storeProduct = addedStoreProducts[srcListItem.product.uuid] else {
+                    logger.e("Couldn't find store product! Skipping item.", .db)
+                    continue
+                }
+                let listItem = targetRealm.create(ListItem.self, value: srcListItem.toRealmMigrationDict(section: section, storeProduct: storeProduct, list: list), update: true)
+                section.listItems.append(listItem)
+                switch section.status {
+                case .done: list.doneListItems.append(listItem)
+                case .stash: list.stashListItems.append(listItem)
+                case .todo: break // .todo uses sections
+                }
+            }
+
+            // Users
+            let srcUsers: Results<DBSharedUser> = srcRealm.objects(DBSharedUser.self)
+            var addedUsers = [String: DBSharedUser]()
+            for srcUser in srcUsers {
+                let user = targetRealm.create(DBSharedUser.self, value: srcUser, update: true)
+                addedUsers[user.email] = user
+            }
+
+            // History items
+            let srcHistoryItems: Results<HistoryItem> = srcRealm.objects(HistoryItem.self)
+            for srcHistoryItem in srcHistoryItems {
+                guard let inventory = addedInventories[srcHistoryItem.inventory.uuid] else {
+                    logger.e("Error!", .db)
+                    continue
+                }
+                guard let quantifiableProduct = addedQuantifiableProducts[srcHistoryItem.product.uuid] else {
+                    logger.e("Couldn't find quantifiable product! Skipping item.", .db)
+                    continue
+                }
+                let user = addedUsers[srcHistoryItem.user.email] ?? {
+                    logger.i("Couldn't find user! Using default shared user.", .db)
+                    return DBSharedUser(email: "")
+                    } ()
+                _ = targetRealm.create(HistoryItem.self, value: srcHistoryItem.toRealmMigrationDict(inventory: inventory, quantifiableProduct: quantifiableProduct, user: user), update: true)
+            }
+        }
+    }
 
     // MARK: - UI Tests
 
     public func clearAppForUITests() {
         doInWriteTransactionSync() { [weak self] realm in
+            realm.deleteAll() // This is only for debugging, to avoid multiple instances of prefill objects. During debugging we can force-show intro, which will prefill each time the database. Note that this assumes initContainers is executed before adding the prefill objects. This is a well founded assumption as the containers are a requirements for the pre-fill to work or most other database operations. In production this operation has no effect, as this will be executed only once (intro is shown only first time the user starts the app), and this being the first database write operation, there's nothing to delete.
+            logger.v("Cleared realm")
             self?.initContainers(realm: realm)
 
             guard let inventoriesContainer: InventoriesContainer = loadSync(predicate: nil)?.first else {

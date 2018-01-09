@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-public class ProductGroup: DBSyncable, Identifiable {
+public class ProductGroup: DBSyncable, Identifiable, WithUuid {
 
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var name: String = ""

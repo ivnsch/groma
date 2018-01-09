@@ -16,7 +16,7 @@ public struct ListCopyStore {
     }
 }
 
-public class List: DBSyncable, Identifiable {
+public class List: DBSyncable, Identifiable, WithUuid {
     
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var name: String = ""
@@ -115,7 +115,18 @@ public class List: DBSyncable, Identifiable {
         item.setSyncableFieldswithRemoteDict(listDict)
         return item
     }
-    
+
+    func toRealmMigrationDict(inventory: DBInventory) -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid as AnyObject?
+        dict["name"] = name as AnyObject?
+        dict["bgColorHex"] = bgColorHex as AnyObject?
+        dict["order"] = order as AnyObject?
+        dict["store"] = store as AnyObject?
+        dict["inventoryOpt"] = inventory
+        return dict
+    }
+
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid as AnyObject?

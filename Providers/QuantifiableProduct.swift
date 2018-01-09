@@ -33,7 +33,7 @@ public enum ItemUnit: Int {
 }
 
 
-public class QuantifiableProduct: DBSyncable, Identifiable {
+public class QuantifiableProduct: DBSyncable, Identifiable, WithUuid {
     
     @objc public dynamic var uuid: String = ""
     @objc dynamic var productOpt: Product? = Product()
@@ -261,5 +261,16 @@ public class QuantifiableProduct: DBSyncable, Identifiable {
         } else {
             return unitName
         }
+    }
+
+    func toRealmMigrationDict(product: Product, unit: Unit) -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid as AnyObject?
+        dict["baseQuantity"] = baseQuantity as AnyObject?
+//        dict["secondBaseQuantity"] = secondBaseQuantity // crash! needs to be copied via setting value manually
+        dict["fav"] = fav as AnyObject?
+        dict["productOpt"] = product
+        dict["unitOpt"] = unit
+        return dict
     }
 }

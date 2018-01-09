@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 // TODO rename in ItemCategory
-public class ProductCategory: DBSyncable, Identifiable {
+public class ProductCategory: DBSyncable, Identifiable, WithUuid {
     
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var name: String = ""

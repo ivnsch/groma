@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2 {
+public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2, WithUuid {
 
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var quantity: Float = 0

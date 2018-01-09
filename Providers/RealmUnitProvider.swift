@@ -11,71 +11,31 @@ import RealmSwift
 
 
 class RealmUnitProvider: RealmProvider {
-    
-    func units(buyable: Bool?, _ handler: @escaping (Results<Unit>?) -> Void) {
-        handler(unitsSync(buyable: buyable))
-    }
-    
-    func initDefaultUnits(_ handler: @escaping ([Unit]?) -> Void) {
-        
-        // let's add the fractions here too because I'm too lazy to write a new method for this (should be moved to fractions provider in the future)
-        let defaultFractions: [DBFraction] = [
-            DBFraction(numerator: 1, denominator: 2),
-            DBFraction(numerator: 1, denominator: 3),
-            DBFraction(numerator: 1, denominator: 4),
-            DBFraction(numerator: 1, denominator: 5),
-            DBFraction(numerator: 1, denominator: 6),
-            DBFraction(numerator: 1, denominator: 7),
-            DBFraction(numerator: 1, denominator: 8),
-            DBFraction(numerator: 2, denominator: 3),
-            DBFraction(numerator: 3, denominator: 4),
+
+    let defaultBaseQuantities: [BaseQuantity] = [
+        BaseQuantity(1),
+        BaseQuantity(1.5),
+        BaseQuantity(2),
+        BaseQuantity(4),
+        BaseQuantity(6),
+        BaseQuantity(12),
+        BaseQuantity(500),
+        BaseQuantity(750)
+    ]
+
+    let defaultFractions: [DBFraction] = [
+        DBFraction(numerator: 1, denominator: 2),
+        DBFraction(numerator: 1, denominator: 3),
+        DBFraction(numerator: 1, denominator: 4),
+        DBFraction(numerator: 1, denominator: 5),
+        DBFraction(numerator: 1, denominator: 6),
+        DBFraction(numerator: 1, denominator: 7),
+        DBFraction(numerator: 1, denominator: 8),
+        DBFraction(numerator: 2, denominator: 3),
+        DBFraction(numerator: 3, denominator: 4),
         ]
-        // and the base quantities too...
-        let defaultBaseQuantities: [BaseQuantity] = [
-            BaseQuantity(1),
-            BaseQuantity(1.5),
-            BaseQuantity(2),
-            BaseQuantity(4),
-            BaseQuantity(6),
-            BaseQuantity(12),
-            BaseQuantity(500),
-            BaseQuantity(750)
-        ]
-        
-//        let objs: [Object] = defaultUnits + defaultFractions
 
-        let (savedSuccess, units) = savePredefinedUnitsSync(update: false)
-        if savedSuccess { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
-
-            var fractionsSuccess = true
-            for fraction in defaultFractions {
-                let (success, _) = DBProv.fractionProvider.add(fraction: fraction) // We use here provider method to append to list, not only save object
-                
-                fractionsSuccess = fractionsSuccess && success
-            }
-            if !fractionsSuccess {
-                logger.e("Couldn't prefill some or all fractions") // only log, prefilling fractions is not critical for the app to work
-            }
-            
-            var basesSuccess = true
-            for base in defaultBaseQuantities {
-                let (success, _) = DBProv.unitProvider.add(base: base) // We use here provider method to append to list, not only save object
-                
-                basesSuccess = basesSuccess && success
-            }
-            if !basesSuccess {
-                logger.e("Couldn't prefill some or all bases") // only log, prefilling bases is not critical for the app to work
-            }
-            
-            
-            handler(units)
-            
-        } else {
-            handler(nil)
-        }
-    }
-
-    fileprivate var predefinedUnits: [Unit] {
+    var predefinedUnits: [Unit] {
         return [
             Unit(uuid: UUID().uuidString, name: trans("unit_unit"), id: .none, buyable: true),
 
@@ -107,6 +67,45 @@ class RealmUnitProvider: RealmProvider {
             Unit(uuid: UUID().uuidString, name: trans("unit_lb"), id: .lb, buyable: true),
             Unit(uuid: UUID().uuidString, name: trans("unit_oz"), id: .oz, buyable: true),
         ]
+    }
+
+    func units(buyable: Bool?, _ handler: @escaping (Results<Unit>?) -> Void) {
+        handler(unitsSync(buyable: buyable))
+    }
+    
+    func initDefaultUnits(_ handler: @escaping ([Unit]?) -> Void) {
+
+//        let objs: [Object] = defaultUnits + defaultFractions
+
+        let (savedSuccess, units) = savePredefinedUnitsSync(update: false)
+        if savedSuccess { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
+
+            var fractionsSuccess = true
+            for fraction in defaultFractions {
+                let (success, _) = DBProv.fractionProvider.add(fraction: fraction) // We use here provider method to append to list, not only save object
+                
+                fractionsSuccess = fractionsSuccess && success
+            }
+            if !fractionsSuccess {
+                logger.e("Couldn't prefill some or all fractions") // only log, prefilling fractions is not critical for the app to work
+            }
+            
+            var basesSuccess = true
+            for base in defaultBaseQuantities {
+                let (success, _) = DBProv.unitProvider.add(base: base) // We use here provider method to append to list, not only save object
+                
+                basesSuccess = basesSuccess && success
+            }
+            if !basesSuccess {
+                logger.e("Couldn't prefill some or all bases") // only log, prefilling bases is not critical for the app to work
+            }
+            
+            
+            handler(units)
+            
+        } else {
+            handler(nil)
+        }
     }
 
     func savePredefinedUnitsSync(update: Bool) -> (saved: Bool, units: [Unit]) {

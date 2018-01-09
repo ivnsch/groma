@@ -19,7 +19,7 @@ public typealias ListItemStatusQuantity = (status: ListItemStatus, quantity: Flo
 public typealias ListItemStatusOrder = (status: ListItemStatus, order: Int) // TODO rename as this is used now for sections too
 
 
-public class ListItem: DBSyncable, Identifiable {
+public class ListItem: DBSyncable, Identifiable, WithUuid {
     
     // TODO maybe remove references to Section and List
     
@@ -392,7 +392,31 @@ public class ListItem: DBSyncable, Identifiable {
         setSyncableFieldsInDict(&dict)
         return dict
     }
-    
+
+    func toRealmMigrationDict(section: Section, storeProduct: StoreProduct, list: List) -> [String: Any] {
+
+        var dict = [String: Any]()
+        dict["uuid"] = uuid
+
+        dict["sectionOpt"] = section
+        dict["productOpt"] = storeProduct
+        dict["listOpt"] = list
+
+        dict["note"] = note
+
+        // TODO remove - for now letting here for consistency, as the model has them
+        dict["todoQuantity"] = todoQuantity
+        dict["todoOrder"] = todoOrder
+        dict["doneQuantity"] = doneQuantity
+        dict["doneOrder"] = doneOrder
+        dict["stashQuantity"] = stashQuantity
+        dict["stashOrder"] = stashOrder
+
+        dict["quantity"] = quantity
+
+        return dict
+    }
+
     public override static func ignoredProperties() -> [String] {
         return ["list", "section", "product", "swiped"]
     }

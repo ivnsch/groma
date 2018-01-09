@@ -49,7 +49,7 @@
 		0E836B2EAB5E9CD1BE6C86F07E91F204 /* RLMRealmConfiguration.mm in Sources */ = {isa = PBXBuildFile; fileRef = E08EE27AFA30FBCDC8C092DE21EB7455 /* RLMRealmConfiguration.mm */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"3.0.2\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
 		0F72DCA34115AC8E991B4EFAA263EDBC /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B7BBF82960F1151EA5479E09CD54CD /* Int.swift */; };
 		0FBBBA327A0F7AC6A0B358F68EBDFE66 /* ChartCandleStickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB632813615861ED12A7323EF89A0CD6 /* ChartCandleStickView.swift */; };
-		1062155C41A142DF03A0A6ED6822B4AF /* Pods-groma-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = BC7E592177BA325D4C7DCDA71269D8D6 /* Pods-groma-dummy.m */; };
+		1062155C41A142DF03A0A6ED6822B4AF /* Pods-groma-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEC92ACE6C232DA6EC1B2C5E91218E8 /* Pods-groma-dummy.m */; };
 		10789E57C7CFA6DF03B7A320EF4382B0 /* RLMObjectBase.h in Copy . Public Headers */ = {isa = PBXBuildFile; fileRef = 7F17788F3C9F2CCAEB2B413F97626318 /* RLMObjectBase.h */; };
 		10DFE6DAEC0DE18A3E91D7DE05CE9748 /* MaxLengthRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23A0A492269E270D04F6FCE11B628F5 /* MaxLengthRule.swift */; };
 		10EB23E9ECC4B33E16933BB1EA560B6A /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293F0E4AE0051F21D01737A44AE94DF4 /* Timeline.swift */; };
@@ -72,6 +72,7 @@
 		1B704F3C816C4532F9B7FDFE0625732E /* ChameleonFramework-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 07BD4F4A7E4C622994152C28F32927F9 /* ChameleonFramework-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B8D8EF8BAA06CF4925462972EE99302 /* RLMRealmConfiguration.h in Copy . Public Headers */ = {isa = PBXBuildFile; fileRef = 18F8D33ED9D53B86FFF1D9813F7961F0 /* RLMRealmConfiguration.h */; };
 		1B9EDEDC964E6B08F78920B4F4B9DB84 /* Alamofire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 720C34535BE0365D86CCFD07BCA09DF5 /* Alamofire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1C61DD7E1C9E34B3E758BC5B8A59C726 /* Pods-ProvidersTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E4237ED4244DA647F64AD0C69D5BD2ED /* Pods-ProvidersTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1CAD2D19B6043B494770E9DC585D276D /* GTMMIMEDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ADD5160984E27857C8AD9B5603CED5C /* GTMMIMEDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1CBA33BF019247CD36DBAC742C86111A /* TrendlineGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923F65B7B959A91CB94B48ACCDB463A9 /* TrendlineGenerator.swift */; };
 		1CFD60DCD9F18F5827E1CC3904A55277 /* Starscream-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCCBFBB0B46A83A91A79DC775ACF6D19 /* Starscream-dummy.m */; };
@@ -119,6 +120,7 @@
 		31070F3EDE2C7BEBE3178DE4D12F964C /* SBPlatformDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4F9758FB0DAEE1F094A01E8EBEE0F2 /* SBPlatformDestination.swift */; };
 		310BB9B586C77DFA7B0E9F54835C4CCE /* Starscream-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 58DE310F91A2AFD63E93B630238C3CCB /* Starscream-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		31A17D8E7663090166267CB950E5DB45 /* GTMOAuth2Authentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 14618F3BF6471769CD35101D2B8EDEB9 /* GTMOAuth2Authentication.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		31B8EEBA223FC306E94FF5BB2AC178A0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA1AB63001640BF4F3CDD9F45541687 /* Foundation.framework */; };
 		31E0AB1D3481BACDE50CDFD654725A5D /* Reachability-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 14E23C207154D240D58D7DC22D8791F5 /* Reachability-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		324A4A6EC4DA9BE9E0B190E8384CF567 /* ChartPointsAreaLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69352EA52443E9139F2AC3787B2F8CB4 /* ChartPointsAreaLayer.swift */; };
 		333726D18E7D4FC18D95792999A41B80 /* GTMOAuth2SignIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 6177E2608ADC0707D4E9DC083D501E9A /* GTMOAuth2SignIn.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -149,7 +151,7 @@
 		4141A59250C529169EA76A74E48ED786 /* ValidationRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE07E71B02812EF677D5B1A086EFF355 /* ValidationRule.swift */; };
 		41BA83FAD3AD566651E0F0943E0C4481 /* ThreadSafeReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = F316E3571BEAFEDC3C19B71621318CCB /* ThreadSafeReference.swift */; };
 		42F9495609E13E84D02F91ABB28300AB /* RLMArray.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23F51D2F466FF7DB643479C8345A9408 /* RLMArray.mm */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"3.0.2\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
-		433423C5C1FF7B4DEA4554DC99F1CFBE /* Pods-Providers-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C60ABB2E7D259ED30E5D7A2047A33C4 /* Pods-Providers-dummy.m */; };
+		433423C5C1FF7B4DEA4554DC99F1CFBE /* Pods-Providers-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE97227B1B66D7E135E430E2589468E /* Pods-Providers-dummy.m */; };
 		437AA21C3A4AB90265CE9B0F754FA4C5 /* GTMReadMonitorInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = D31292F2AA4388EDCB63ABED7941DA34 /* GTMReadMonitorInputStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		44117424757A5E62D87B8BF4B41A4207 /* UIColor+ChameleonPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 80E128028243CDC50BF6A119DCFC96AB /* UIColor+ChameleonPrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		449F071B61B8FF2F304C0A9CF2D15905 /* BaseDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0E8C52B4E4171DEC95257831A19232 /* BaseDestination.swift */; };
@@ -344,6 +346,7 @@
 		96310F61786549AC6777EDC880C9F024 /* ChartPointsLineLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6493BD180958F49CDF6E996242E4D74 /* ChartPointsLineLayer.swift */; };
 		966F134CD29DD78D866BCBB60AF644BB /* RealmConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431A035A1D0A3C93C19D991CBBC2CBD1 /* RealmConfiguration.swift */; };
 		96ACDA4D360DF9B9C30420A889E4416C /* GTMOAuth2ViewControllerTouch.m in Sources */ = {isa = PBXBuildFile; fileRef = AE8F4A3A07097A972CF5EA0372951340 /* GTMOAuth2ViewControllerTouch.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		97D10F8E0CAED9C6838801EEB7D56B2E /* Pods-ProvidersTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C5BBA809C3F71B00875A82605EBEB269 /* Pods-ProvidersTests-dummy.m */; };
 		98714C893E8D07613970FF200FF873CB /* GTMGatherInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 45F5EAEF20703934D1E5895E2B74D2AA /* GTMGatherInputStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98E3CB3DB6914C4C2748EB9B3A22470F /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE15B4E6F654778ED2BFDB529FB7B01 /* Optional.swift */; };
 		99983BA039CF54CE759B7AD5D1C374CB /* partial_sync.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BD5D14B9C43F25ECC5D65ED8691F998D /* partial_sync.cpp */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"3.0.2\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
@@ -414,7 +417,7 @@
 		B73A419BA20F2F07A61FE4B0B5192377 /* GTMSessionFetcherService.h in Headers */ = {isa = PBXBuildFile; fileRef = 76FB0CC38571B3F8BDC3A38291ABB0C6 /* GTMSessionFetcherService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B75260E4B7FAA038FE25B68A51224C1A /* ConfirmRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F306581B3304BA2469D6ECD757B32A8 /* ConfirmRule.swift */; };
 		B76123CD8F3B72125C0FAB8E40954B24 /* Valet-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F921F120158FD10BD3BC17D8C5B6E9 /* Valet-dummy.m */; };
-		B7F8484CABF5CC956F335A5F6E90D942 /* Pods-groma-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DEA1AC4188975125354F71774DA7E513 /* Pods-groma-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B7F8484CABF5CC956F335A5F6E90D942 /* Pods-groma-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5172F983FF3CDE63F0978F0CD0A5860A /* Pods-groma-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B85FDD7D0672C8631BEE7DD28898526E /* ChartLabelDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E910EAFEF84FB91B709959B4A79C0C /* ChartLabelDrawer.swift */; };
 		B874B448CFAB419EDB703AC7DD5E5736 /* HexColorRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C01DAFE67DA09BC87F0622A9EEE3D6 /* HexColorRule.swift */; };
 		B892FE98FFEACDA7F4990EC1D996B135 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66BA542E74C18D63FFEDC8EC8D11E69B /* UIKit.framework */; };
@@ -429,7 +432,7 @@
 		BBEFE2F9CEB73DC7BD97FFA66A0D9D4F /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0DEA2B7B0502721333F7E8AED97A5C /* Validation.swift */; };
 		BC75BFAB0516C0EB57BAF5D97114095B /* ChartViewAlphaAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8312D5BFC2D8DED80A3B3FB4C536A8D4 /* ChartViewAlphaAnimator.swift */; };
 		BCE36A08892B78FB5CFC822C7BEDEFB5 /* ChartAxisXLayerDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53331ADCD1D55B5F675EF6F90F6E6F5C /* ChartAxisXLayerDefault.swift */; };
-		BD82DEA7AD0862052DA31F6E101ABF14 /* Pods-shoppinUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B0BDE2A840AD82DD5F15C4B44DA6CD56 /* Pods-shoppinUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BD82DEA7AD0862052DA31F6E101ABF14 /* Pods-shoppinUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 219DDDDCBA1883FCEA1187A1EEED4BE7 /* Pods-shoppinUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BD9480639E4528D7BB77FE80CCBAF799 /* ChartAxisValueDouble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7651B1F7A21C5D55EACF5C6BA0CACFA4 /* ChartAxisValueDouble.swift */; };
 		BE3207FE80C7C2BBF57463B3342ED00C /* ChartLayerBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BE585A4D4B75E15A8BDB29A94E2AF8 /* ChartLayerBase.swift */; };
 		BE5C67A07E289FE1F9BE27335B159997 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7AA231684116BA44E207121C5F82F2 /* ParameterEncoding.swift */; };
@@ -535,7 +538,7 @@
 		EBE964B458F1EB496369D6C7D12F2257 /* ChartBarsLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14BB35083719BBD992A28BED8373988 /* ChartBarsLayer.swift */; };
 		EC786817C5CEBCD51A4C9EC9B883ED6F /* ChameleonEnums.h in Headers */ = {isa = PBXBuildFile; fileRef = 4157F8384049B6FE91B18FA1C468B1ED /* ChameleonEnums.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ECB26F341979A36FBD0CFD973FCEF9CB /* CubicLinePathGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8F97A13229F70350258A3523AB6EEA /* CubicLinePathGenerator.swift */; };
-		ECD04950BBE04AEE59BD95BEE7955787 /* Pods-shoppinUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 63FDEFF6C47761C7378A015E786B7976 /* Pods-shoppinUITests-dummy.m */; };
+		ECD04950BBE04AEE59BD95BEE7955787 /* Pods-shoppinUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E751D06130E6209FAF2FA686299B1AC /* Pods-shoppinUITests-dummy.m */; };
 		ED4DBD1E13182AA813DC1237FA6E3A42 /* Chameleon.h in Headers */ = {isa = PBXBuildFile; fileRef = 602C09EA08BE5D243D00B47B080E2704 /* Chameleon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EDC402FB21A68EA94B3AE0596C08EB7C /* ChartCandleStickLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987B83ED9090A799AD6CA65D02F8E1E7 /* ChartCandleStickLayer.swift */; };
 		EDF55FB702E676A45E8B46E2D7E6D739 /* ChartPointsViewsLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912B745323527EE0D1A5A40DD13FDEA3 /* ChartPointsViewsLayer.swift */; };
@@ -561,7 +564,7 @@
 		F7832D722DC20EA1887B494B5E50969F /* feedbackActivity@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = B0361AF54A0BEB8B7EA67FC40FB3C59D /* feedbackActivity@2x~ipad.png */; };
 		F812C142FAA8CE50C9FDC2F1E7582562 /* VALSecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = AC4DCF3AEEE373B1C6F916EA2B931F55 /* VALSecureEnclaveValet_Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F8B3D3092ED0417E8CDF32033F6122F5 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA75EE3B1AF43722C628863483E16EE /* Alamofire.swift */; };
-		F8DB46AF0ABD45B5082A3B08C5B3F611 /* Pods-Providers-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 53EE9E50E35903D072467ACB141BFBA2 /* Pods-Providers-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F8DB46AF0ABD45B5082A3B08C5B3F611 /* Pods-Providers-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ED0788F6A5EA38CCCB39A38DC9E48A /* Pods-Providers-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F938ABA1060DB7E936DEB73D0014A2AF /* ChartAxisLabelsGeneratorFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B60E35B83BE2233A278650A7F592B1 /* ChartAxisLabelsGeneratorFunc.swift */; };
 		F93D762E66C4C543A0BB8B71CEB9CBE8 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 34CCD6834E622D54E3DA639E8BCE788E /* bg.png */; };
 		F9772A0297BF24596B9D863E78C206C0 /* external_commit_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 524AD2E1641EE1B1469C24969245E7F1 /* external_commit_helper.cpp */; settings = {COMPILER_FLAGS = "-DREALM_HAVE_CONFIG -DREALM_COCOA_VERSION='@\"3.0.2\"' -D__ASSERTMACROS__ -DREALM_ENABLE_SYNC"; }; };
@@ -625,12 +628,40 @@
 			remoteGlobalIDString = 6781484AACA274D8D41414AE3B594109;
 			remoteInfo = KLCPopup;
 		};
+		2FCD4B31E197214EF10A4B295932CAE8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F17C2F26BD98B0375B33EB47E83A1CB0;
+			remoteInfo = Starscream;
+		};
 		32D869E18234279B161AE3AD0D0B266D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 6781484AACA274D8D41414AE3B594109;
 			remoteInfo = KLCPopup;
+		};
+		3661B663884E9E461FE84E140AE69B5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 76BD4592010354D6C23D6ECCA20D83A8;
+			remoteInfo = ChameleonFramework;
+		};
+		44D00A7F36B57DDCEF513080C074E838 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C74B45AC4579C03F25AFBAE82C01FB0;
+			remoteInfo = Realm;
+		};
+		44D6667A6696DC9F05F7E29770615BDE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8FEF65E733AA5E921143580AD98439CB;
+			remoteInfo = Reachability;
 		};
 		47CCFB8A754EA1EC6E7B008830C5FA3B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -660,6 +691,13 @@
 			remoteGlobalIDString = 9E6DCA6F1C772EF86EC9606FCCDBC140;
 			remoteInfo = SwipeView;
 		};
+		5CB79657DC9C5A64F3CBB5BE8B4579BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9FA91ED9FA4BD8B9595232DCB979945;
+			remoteInfo = Valet;
+		};
 		5F52EC58C2A5001C0200B83AF64534D9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
@@ -680,6 +718,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 76BD4592010354D6C23D6ECCA20D83A8;
 			remoteInfo = ChameleonFramework;
+		};
+		64F8A303C9231C3BB4F66606D15FE5BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 88E9EC28B8B46C3631E6B242B50F4442;
+			remoteInfo = Alamofire;
 		};
 		65BC0BC7051324D20E07D5297BC43309 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -764,6 +809,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 202B1AA2AAA8853131436854AD1151B1;
 			remoteInfo = SwiftyBeaver;
+		};
+		86101E95FFB32B24AED6D36B0A1502EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 202B1AA2AAA8853131436854AD1151B1;
+			remoteInfo = SwiftyBeaver;
+		};
+		8AFB7EDDABCFB4302ACAC80735FDCEF8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E88F2F016877B4510395F493E55C96C;
+			remoteInfo = RealmSwift;
 		};
 		93FF9CE43C1B26E5F81FFC6FBD587B89 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -971,10 +1030,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		000724B153A3E1898F095BB206138C8E /* Pods_shoppinUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_shoppinUITests.framework; path = "Pods-shoppinUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00A568D137CBAE145A0C8A7E95C346E7 /* RLMMigration_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMMigration_Private.h; path = include/RLMMigration_Private.h; sourceTree = "<group>"; };
+		00E3B55B783411C1941F7FED38B6B6C8 /* ChameleonFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ChameleonFramework.framework; path = ChameleonFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		00EDCCDC3627AD5F69A131B63A055F1D /* fr.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = fr.lproj; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/fr.lproj"; sourceTree = "<group>"; };
 		015526732847CC48E7F3621CDD82F508 /* sync_permission.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = sync_permission.cpp; path = Realm/ObjectStore/src/sync/sync_permission.cpp; sourceTree = "<group>"; };
 		0183CC5B93793A23336130308BDBF03E /* RLMRealmConfiguration_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMRealmConfiguration_Private.h; path = include/RLMRealmConfiguration_Private.h; sourceTree = "<group>"; };
+		02336D29CFF8D678EF830ADE1ADB0646 /* Pods-Providers-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Providers-acknowledgements.markdown"; sourceTree = "<group>"; };
 		02382D69ECFD3127320E62D012AE5513 /* RLMSyncSession.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMSyncSession.mm; path = Realm/RLMSyncSession.mm; sourceTree = "<group>"; };
 		024B3331DB3224DF233DA4D948EDC492 /* Valet.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = Valet.modulemap; sourceTree = "<group>"; };
 		026B3E9B920AF3363E5586A1D8E0F41F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
@@ -985,7 +1047,7 @@
 		0528BD289E58FDB7B4D29DA8E7C20641 /* transact_log_handler.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = transact_log_handler.cpp; path = Realm/ObjectStore/src/impl/transact_log_handler.cpp; sourceTree = "<group>"; };
 		054DBAF00FBF4994C1B49A69D8213EE9 /* RLMThreadSafeReference.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMThreadSafeReference.mm; path = Realm/RLMThreadSafeReference.mm; sourceTree = "<group>"; };
 		06037C5036C26B1535B47BAB0863013B /* weak_realm_notifier.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = weak_realm_notifier.cpp; path = Realm/ObjectStore/src/impl/weak_realm_notifier.cpp; sourceTree = "<group>"; };
-		07729BB71B6B3E44C2D3116C882DD0D3 /* Pods-groma-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-groma-acknowledgements.plist"; sourceTree = "<group>"; };
+		069926A2F3D668D3741046F760432E8E /* Pods-Providers.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-Providers.modulemap"; sourceTree = "<group>"; };
 		078F281B871C336580FF44F01CC85AFB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		07BD4F4A7E4C622994152C28F32927F9 /* ChameleonFramework-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ChameleonFramework-umbrella.h"; sourceTree = "<group>"; };
 		083B45A1047ADD24ED092CCD640BC0FD /* SwiftyBeaver.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = SwiftyBeaver.modulemap; sourceTree = "<group>"; };
@@ -999,15 +1061,14 @@
 		0B36C41514B95753ADBE83C13E154FCC /* ChameleonFramework.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = ChameleonFramework.modulemap; sourceTree = "<group>"; };
 		0C162D37324858D1B7F616E3D860F036 /* RLMCollection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMCollection.h; path = include/RLMCollection.h; sourceTree = "<group>"; };
 		0C477F6EEEEB00691007F9F0F72F6723 /* ChartAxisLabelGeneratorDate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisLabelGeneratorDate.swift; path = SwiftCharts/Axis/ChartAxisLabelGeneratorDate.swift; sourceTree = "<group>"; };
-		0C60ABB2E7D259ED30E5D7A2047A33C4 /* Pods-Providers-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Providers-dummy.m"; sourceTree = "<group>"; };
 		0C9B7613602361C308F1CA147FC04663 /* ChartPointBubble.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointBubble.swift; path = SwiftCharts/ChartPoint/ChartPointBubble.swift; sourceTree = "<group>"; };
 		0CD8394BC5D82C4A8C46CF9F454BE4AD /* RLMObject_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMObject_Private.h; path = include/RLMObject_Private.h; sourceTree = "<group>"; };
 		0DC4842A96AEFE8EA8242F00A7B432E4 /* RLMSchema.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMSchema.mm; path = Realm/RLMSchema.mm; sourceTree = "<group>"; };
 		0DE25610C47E172CDA7B3ECCB50DDF32 /* Rectangle@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Rectangle@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Rectangle@2x.png"; sourceTree = "<group>"; };
 		0E73E7D7E6B719C5CAE194619CC18CF2 /* GTMOAuth2Authentication.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GTMOAuth2Authentication.h; path = Source/GTMOAuth2Authentication.h; sourceTree = "<group>"; };
 		0EEE33D80E35BDC9C108CEC218D9E6E6 /* list.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = list.cpp; path = Realm/ObjectStore/src/list.cpp; sourceTree = "<group>"; };
-		0F379BFC14EEFAE4D439B25DDF855188 /* Pods-Providers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Providers.debug.xcconfig"; sourceTree = "<group>"; };
 		0F6DD8D9026FA5B0D32D4DD192A720A0 /* CharacterSetRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CharacterSetRule.swift; path = SwiftValidator/Rules/CharacterSetRule.swift; sourceTree = "<group>"; };
+		0F6F7FE2C5E886F55CFB7B385B90695D /* Pods-Providers.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Providers.debug.xcconfig"; sourceTree = "<group>"; };
 		0FB8BC25866866E99876F644EC6125DE /* keychain_helper.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = keychain_helper.cpp; path = Realm/ObjectStore/src/impl/apple/keychain_helper.cpp; sourceTree = "<group>"; };
 		0FC388E2E1BDAC05E3A567A2D3B22F17 /* Starscream.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = Starscream.modulemap; sourceTree = "<group>"; };
 		100ED7ABD7D1E499A3419A3CDC3EB8C0 /* RLMSyncManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMSyncManager.mm; path = Realm/RLMSyncManager.mm; sourceTree = "<group>"; };
@@ -1016,34 +1077,33 @@
 		111E7E93EFC546B160005D05178AC988 /* ChartAxisValueDate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValueDate.swift; path = SwiftCharts/AxisValues/ChartAxisValueDate.swift; sourceTree = "<group>"; };
 		112D235F4D10D1803A898F769C056D7A /* RealmCollection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RealmCollection.swift; path = RealmSwift/RealmCollection.swift; sourceTree = "<group>"; };
 		121D771B05304457AF4CD95768004D10 /* UIAppearance+Swift.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIAppearance+Swift.m"; path = "Pod/Classes/Objective-C/UIAppearance+Swift.m"; sourceTree = "<group>"; };
-		1225F2C8498FFBFCF92F3AE6C01F58B0 /* Pods_groma.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_groma.framework; path = "Pods-groma.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1251051FD6ECA1ABDEAD61D8469E4FB5 /* HockeySDKResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = HockeySDKResources.bundle; path = HockeySDKResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		12A9238DA128AB150199FB19AFD509EC /* ExactLengthRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExactLengthRule.swift; path = SwiftValidator/Rules/ExactLengthRule.swift; sourceTree = "<group>"; };
+		12D87CCB979FFE781C689031F9E3346E /* Pods-ProvidersTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-ProvidersTests.modulemap"; sourceTree = "<group>"; };
 		142A0FB4774FF446EEEFA09F23669435 /* RLMProperty.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMProperty.h; path = include/RLMProperty.h; sourceTree = "<group>"; };
 		14618F3BF6471769CD35101D2B8EDEB9 /* GTMOAuth2Authentication.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GTMOAuth2Authentication.m; path = Source/GTMOAuth2Authentication.m; sourceTree = "<group>"; };
-		1496357F29DEDD5D864C591197F5C04A /* Pods_shoppinUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_shoppinUITests.framework; path = "Pods-shoppinUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14A8499DF6A689F659F70473D5C04AAE /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14AC23853B1057759111C12B1E3F75DE /* FeedbackPlaceholder.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = FeedbackPlaceholder.png; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/FeedbackPlaceholder.png"; sourceTree = "<group>"; };
 		14E23C207154D240D58D7DC22D8791F5 /* Reachability-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Reachability-umbrella.h"; sourceTree = "<group>"; };
 		14F60AAF5984D965E36977BBE09BAB06 /* RLMSyncUser.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMSyncUser.mm; path = Realm/RLMSyncUser.mm; sourceTree = "<group>"; };
 		1509BF6A498B6D76B8ED7A10BEE4B7ED /* ChartAxisYLowLayerDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisYLowLayerDefault.swift; path = SwiftCharts/Axis/ChartAxisYLowLayerDefault.swift; sourceTree = "<group>"; };
+		1565F8896531ABD4AD8CEEDF35390F80 /* SwipeView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwipeView.framework; path = SwipeView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		159C670B00D47D835147FFEDEC7214D1 /* thread_safe_reference.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = thread_safe_reference.cpp; path = Realm/ObjectStore/src/thread_safe_reference.cpp; sourceTree = "<group>"; };
 		15B7CE014D1DD5CBDAD4514123CF95D6 /* es.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = es.lproj; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/es.lproj"; sourceTree = "<group>"; };
 		15B8FDE80DE2A2F7802F49E6130792B5 /* GoogleToolboxForMac-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GoogleToolboxForMac-prefix.pch"; sourceTree = "<group>"; };
 		15DE0B4589CA09C9A3674EB29C894A94 /* ChartPointViewBarGreyOut.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointViewBarGreyOut.swift; path = SwiftCharts/Views/ChartPointViewBarGreyOut.swift; sourceTree = "<group>"; };
 		16D7F577AA6389D79EB3F1E55F381574 /* ChartPointViewBarStacked.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointViewBarStacked.swift; path = SwiftCharts/Views/ChartPointViewBarStacked.swift; sourceTree = "<group>"; };
 		1787069E2D71156373E5A019F7580F99 /* hu.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = hu.lproj; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/hu.lproj"; sourceTree = "<group>"; };
-		17D47047F380B1350D3861BCA486291D /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = GTMSessionFetcher.framework; path = GTMSessionFetcher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		17F2BE419FC178FD9A384798F92A7CF4 /* RLMOptionalBase.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMOptionalBase.mm; path = Realm/RLMOptionalBase.mm; sourceTree = "<group>"; };
 		180A26712EA37C88F54EFD8C6855A2DE /* Request.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Request.swift; path = Source/Request.swift; sourceTree = "<group>"; };
+		180F38C6F5AFF56A68220D4DC64ED65E /* Pods_ProvidersTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ProvidersTests.framework; path = "Pods-ProvidersTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		187089F18D790B1F5FAD06034593CB26 /* RLMSyncPermission.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMSyncPermission.h; path = include/RLMSyncPermission.h; sourceTree = "<group>"; };
-		18DD99C0B2E90CB58C408A751696C0EF /* Pods-shoppinUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shoppinUITests-acknowledgements.plist"; sourceTree = "<group>"; };
-		18EC5C3298651AF5A429C875E1AF7099 /* CMPopTipView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CMPopTipView.framework; path = CMPopTipView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		18F8D33ED9D53B86FFF1D9813F7961F0 /* RLMRealmConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMRealmConfiguration.h; path = include/RLMRealmConfiguration.h; sourceTree = "<group>"; };
 		199EC710D85167C2599FB40B63F68F5F /* Chameleon_.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Chameleon_.m; path = "Pod/Classes/Objective-C/Chameleon_.m"; sourceTree = "<group>"; };
 		19EB0682B1B2D68345C9EB6127001A0B /* PasswordRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PasswordRule.swift; path = SwiftValidator/Rules/PasswordRule.swift; sourceTree = "<group>"; };
 		1A4309292B842FFDFF6795E4A94BC345 /* authorize_denied@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "authorize_denied@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/authorize_denied@2x.png"; sourceTree = "<group>"; };
+		1A76937BD97033FD40F3D6D6E8A1E0D0 /* Pods-groma-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-groma-acknowledgements.markdown"; sourceTree = "<group>"; };
 		1A94E1143ED516E503C4ED4023826BBA /* feedbackActivity~ipad.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "feedbackActivity~ipad.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/feedbackActivity~ipad.png"; sourceTree = "<group>"; };
+		1B398657A1B3E94AC04CCFAB2A1B417A /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Alamofire.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B883517B9171D01442BB6134B73C023 /* ChartAxisValuesGeneratorFixed.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValuesGeneratorFixed.swift; path = SwiftCharts/Axis/ChartAxisValuesGeneratorFixed.swift; sourceTree = "<group>"; };
 		1C0099FF43480E5D9FD368FB1AAAB16F /* Chameleon_.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Chameleon_.h; path = "Pod/Classes/Objective-C/Chameleon_.h"; sourceTree = "<group>"; };
 		1C0CA6A016CA59B1BF3AAE30C01DC639 /* RLMArray_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMArray_Private.h; path = include/RLMArray_Private.h; sourceTree = "<group>"; };
@@ -1053,13 +1113,18 @@
 		1DC4C1DE7A29DF32EFE2663B27886882 /* GTMGatherInputStream.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GTMGatherInputStream.m; path = Source/GTMGatherInputStream.m; sourceTree = "<group>"; };
 		1E6BE5B78DA19BC502D5A13C3B49083D /* RegexRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RegexRule.swift; path = SwiftValidator/Rules/RegexRule.swift; sourceTree = "<group>"; };
 		1EA5C1B32261C7E8A170D2232B60C4CB /* ConsoleDestination.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConsoleDestination.swift; path = Sources/ConsoleDestination.swift; sourceTree = "<group>"; };
+		1EE811FE3D567DC6B88E40C9ECA045E0 /* SwiftValidator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftValidator.framework; path = SwiftValidator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1EEC92ACE6C232DA6EC1B2C5E91218E8 /* Pods-groma-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-groma-dummy.m"; sourceTree = "<group>"; };
+		1F8A3C9B88E821A7CFB88E5A46439DAB /* Pods-Providers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Providers.release.xcconfig"; sourceTree = "<group>"; };
 		209D4AFCF7A106E6DFB0ED608033B562 /* GTMSessionFetcher-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GTMSessionFetcher-prefix.pch"; sourceTree = "<group>"; };
 		216C00D425512F8C8953E7320BB2FB51 /* CMPopTipView.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CMPopTipView.xcconfig; sourceTree = "<group>"; };
 		216CCBB5D6092C442C2684BD3C6B5BB3 /* RequiredRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RequiredRule.swift; path = SwiftValidator/Rules/RequiredRule.swift; sourceTree = "<group>"; };
 		21810CA6D046FB5B9CE1CD43F69CDDBE /* RLMSchema.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMSchema.h; path = include/RLMSchema.h; sourceTree = "<group>"; };
+		219DDDDCBA1883FCEA1187A1EEED4BE7 /* Pods-shoppinUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppinUITests-umbrella.h"; sourceTree = "<group>"; };
 		21B11AFC7BA43D6DB6CCBA3D3065C455 /* collection_notifier.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = collection_notifier.cpp; path = Realm/ObjectStore/src/impl/collection_notifier.cpp; sourceTree = "<group>"; };
 		2218629D52421587679B8D9A357A1622 /* ChartPointsLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointsLayer.swift; path = SwiftCharts/Layers/ChartPointsLayer.swift; sourceTree = "<group>"; };
 		221E58017FDE62DA93F9E1CCAAEAB936 /* GTMOAuth2-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "GTMOAuth2-dummy.m"; sourceTree = "<group>"; };
+		228846FF2C9911B011337D66E5F16DBA /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = GoogleToolboxForMac.framework; path = GoogleToolboxForMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		232CB7D0E4E744D921FDFF0AA12AD74B /* RealmSwift.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = RealmSwift.xcconfig; sourceTree = "<group>"; };
 		237246C71017163B8BAFB588C7604493 /* ChartPointsSingleViewLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointsSingleViewLayer.swift; path = SwiftCharts/Layers/ChartPointsSingleViewLayer.swift; sourceTree = "<group>"; };
 		23C035BC42BE29FEDC5B8EA65B5D44FC /* Reachability-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Reachability-dummy.m"; sourceTree = "<group>"; };
@@ -1075,35 +1140,28 @@
 		29F0CB26B3DFD251DE1C95095D995E59 /* ChartLineModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartLineModel.swift; path = SwiftCharts/ChartLineModel.swift; sourceTree = "<group>"; };
 		2A9EBD1CDA01D3BF9164FE135A5F9220 /* Blur@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Blur@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Blur@2x.png"; sourceTree = "<group>"; };
 		2AAC7CAA62B57DA8A36718F2DC672AC7 /* ChartAxisValuesGeneratorDate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValuesGeneratorDate.swift; path = SwiftCharts/Axis/ChartAxisValuesGeneratorDate.swift; sourceTree = "<group>"; };
-		2ADE66A33AED2A94EA7A583B2263B0E3 /* SwipeView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwipeView.framework; path = SwipeView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B35CF43396CDD89EFD02C7930513911 /* RLMRealm.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMRealm.h; path = include/RLMRealm.h; sourceTree = "<group>"; };
-		2C18344ECD11255749E485DAC101C358 /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Valet.framework; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C48230635E8F9D7F25307A4DB51E913 /* SwiftCharts-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftCharts-prefix.pch"; sourceTree = "<group>"; };
 		2C5734C056657CC41E5D9EFC8368C5AE /* buttonRoundedRegularHighlighted.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = buttonRoundedRegularHighlighted.png; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/buttonRoundedRegularHighlighted.png"; sourceTree = "<group>"; };
 		2C5C4640D1F62135EEA65C955813EBFF /* collection_change_builder.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = collection_change_builder.cpp; path = Realm/ObjectStore/src/impl/collection_change_builder.cpp; sourceTree = "<group>"; };
-		2C7110FDBA5FFACEF37E9F3458AFE0A8 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2CB5FADC6E40A52169F8D775FD9AC763 /* ChartAxisLayerDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisLayerDefault.swift; path = SwiftCharts/Axis/ChartAxisLayerDefault.swift; sourceTree = "<group>"; };
 		2D1199E36B34884E80517F5BBA74028D /* AFError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFError.swift; path = Source/AFError.swift; sourceTree = "<group>"; };
 		2DB882BF8D2F5056459D6EC5FE085B0D /* Optional.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Optional.swift; path = RealmSwift/Optional.swift; sourceTree = "<group>"; };
 		2E16D55741F0F1A15AE98A5AB19C527A /* NetworkReachabilityManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NetworkReachabilityManager.swift; path = Source/NetworkReachabilityManager.swift; sourceTree = "<group>"; };
 		2E9624582031521287728C5C2F531F2C /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = Frameworks/GoogleSignIn.framework; sourceTree = "<group>"; };
 		2F075348DD325C28F6E789CE8C182234 /* ASValuePopUpView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ASValuePopUpView.m; path = ASValueTrackingSlider/ASValuePopUpView.m; sourceTree = "<group>"; };
-		2F09C8DE65C1D328D437E0F9D0059E09 /* Pods-shoppinUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppinUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		2F798566552182C1BB2B32A86FEF7C83 /* ChartAxisValueArray.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValueArray.swift; path = SwiftCharts/ChartAxisValueArray.swift; sourceTree = "<group>"; };
 		303A0B5D0D2755212E4F8F6B5723BBF7 /* RLMQueryUtil.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMQueryUtil.mm; path = Realm/RLMQueryUtil.mm; sourceTree = "<group>"; };
 		30C916E1A6D50E0AFC2CEEF8BADEAA46 /* Reachability.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Reachability.xcconfig; sourceTree = "<group>"; };
 		3108CB6629575F5E61396B1A664FFCB4 /* SwiftValidator-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftValidator-umbrella.h"; sourceTree = "<group>"; };
 		3184535D67B5C6AA90D638005FAB3A21 /* ChartAxisValuesGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValuesGenerator.swift; path = SwiftCharts/Axis/ChartAxisValuesGenerator.swift; sourceTree = "<group>"; };
-		326F9D299615633930D6974A47E2A161 /* Pods-Providers-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Providers-acknowledgements.plist"; sourceTree = "<group>"; };
 		3274422D83EDBD9C823A4B4A18EF6AD1 /* ChartViewsConflictSolver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartViewsConflictSolver.swift; path = SwiftCharts/ChartViewsConflictSolver.swift; sourceTree = "<group>"; };
 		32E6F844C8F00FB71775DF568936210A /* Migration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Migration.swift; path = RealmSwift/Migration.swift; sourceTree = "<group>"; };
-		3329796CA4385DF21263DA3F363B1E19 /* Reachability.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Reachability.framework; path = Reachability.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		334D5241FAABEBEC37859A6F7E9715C5 /* TaskDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskDelegate.swift; path = Source/TaskDelegate.swift; sourceTree = "<group>"; };
 		34CCD6834E622D54E3DA639E8BCE788E /* bg.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = bg.png; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/bg.png"; sourceTree = "<group>"; };
 		354CEEDF5FE18FDA3740696C844B09DE /* AppIconPlaceHolder.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = AppIconPlaceHolder.png; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/AppIconPlaceHolder.png"; sourceTree = "<group>"; };
 		35B4035B72DA3BDEA27C31551C8D8677 /* UIColor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UIColor.swift; path = SwiftCharts/UIColor.swift; sourceTree = "<group>"; };
 		368A27C446E540079B47DEC0745C9209 /* SwiftValidator-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftValidator-prefix.pch"; sourceTree = "<group>"; };
-		36A21222773212E02D73F1963E6E3B20 /* Pods-shoppinUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppinUITests.release.xcconfig"; sourceTree = "<group>"; };
 		3726094616E9654A0D6CC86551527D68 /* ASValueTrackingSlider.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = ASValueTrackingSlider.modulemap; sourceTree = "<group>"; };
 		37BE71D42F024732ABCB99673AF146B2 /* Response.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Response.swift; path = Source/Response.swift; sourceTree = "<group>"; };
 		37F0377E1DAF24C0918EEEB40C255F6B /* RLMObjectBase_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMObjectBase_Private.h; path = include/RLMObjectBase_Private.h; sourceTree = "<group>"; };
@@ -1112,7 +1170,7 @@
 		38D8722A3E0CE0B3D1F38F93E36053CE /* sync_user.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = sync_user.cpp; path = Realm/ObjectStore/src/sync/sync_user.cpp; sourceTree = "<group>"; };
 		38DB18DFE7B5FF342D1C0360D960CF35 /* ChartPointsTrackerLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointsTrackerLayer.swift; path = SwiftCharts/Layers/ChartPointsTrackerLayer.swift; sourceTree = "<group>"; };
 		399381DA8D30D4F4A38AD5349D10FCDE /* ValidationError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ValidationError.swift; path = SwiftValidator/Core/ValidationError.swift; sourceTree = "<group>"; };
-		3A8ADC21D072FA25E67BC2B2CA7A0598 /* Pods-groma-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-groma-acknowledgements.markdown"; sourceTree = "<group>"; };
+		39AFA002005402F8CDE0AEE31DF21F96 /* Pods-ProvidersTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ProvidersTests-acknowledgements.plist"; sourceTree = "<group>"; };
 		3AB9A32323D1E947C95DFF7E7F64F962 /* SwipeView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwipeView-dummy.m"; sourceTree = "<group>"; };
 		3B313F5F12CC6A5BCDE5F37A7839A364 /* ChartLinesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartLinesView.swift; path = SwiftCharts/Views/ChartLinesView.swift; sourceTree = "<group>"; };
 		3BA1AB63001640BF4F3CDD9F45541687 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -1122,20 +1180,20 @@
 		3C2806239599D7A1DAFE59620D9AC566 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D3AB952AF32609FEF44D697BDEF22F5 /* Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = Alamofire.modulemap; sourceTree = "<group>"; };
 		3D68218D2FC11FF1B42A1F28B046FCB5 /* RLMRealm+Sync.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = "RLMRealm+Sync.mm"; path = "Realm/RLMRealm+Sync.mm"; sourceTree = "<group>"; };
+		3E0E929D2A9DA6DFD9FCD864D95193A5 /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Valet.framework; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E751D06130E6209FAF2FA686299B1AC /* Pods-shoppinUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppinUITests-dummy.m"; sourceTree = "<group>"; };
 		40C2F06C3B03F4E87756E0AC7B153FBB /* ja.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = ja.lproj; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/ja.lproj"; sourceTree = "<group>"; };
 		40EBE331362A8BCFBBE002C5EFB1406E /* UIViewController+Chameleon.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Chameleon.h"; path = "Pod/Classes/Objective-C/UIViewController+Chameleon.h"; sourceTree = "<group>"; };
 		41553C18371264965056219F4EAB69AE /* buttonRoundedDeleteHighlighted.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = buttonRoundedDeleteHighlighted.png; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/buttonRoundedDeleteHighlighted.png"; sourceTree = "<group>"; };
 		4157F8384049B6FE91B18FA1C468B1ED /* ChameleonEnums.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ChameleonEnums.h; path = "Pod/Classes/Objective-C/ChameleonEnums.h"; sourceTree = "<group>"; };
 		42E5F355D76B5C22F227135B84F350EF /* SwiftyBeaver-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyBeaver-prefix.pch"; sourceTree = "<group>"; };
 		431A035A1D0A3C93C19D991CBBC2CBD1 /* RealmConfiguration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RealmConfiguration.swift; path = RealmSwift/RealmConfiguration.swift; sourceTree = "<group>"; };
-		43560A2992358930AEAD6C17F221888C /* Pods-Providers-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Providers-resources.sh"; sourceTree = "<group>"; };
 		43E95CE00D8577E29F44C35AACA10E6D /* ChartViewAnimators.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartViewAnimators.swift; path = SwiftCharts/Views/ChartViewAnimators.swift; sourceTree = "<group>"; };
 		44E05042E0FD0B655AF10AE23B718042 /* RLMAccessor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMAccessor.h; path = include/RLMAccessor.h; sourceTree = "<group>"; };
 		45BDB13F6D042A2AD7EF90EBA4EAA34A /* ObjectSchema.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ObjectSchema.swift; path = RealmSwift/ObjectSchema.swift; sourceTree = "<group>"; };
 		45F4058FB0D15C2FB907267A5D09C340 /* CMPopTipView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = CMPopTipView.m; path = CMPopTipView/CMPopTipView.m; sourceTree = "<group>"; };
 		45F5EAEF20703934D1E5895E2B74D2AA /* GTMGatherInputStream.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GTMGatherInputStream.h; path = Source/GTMGatherInputStream.h; sourceTree = "<group>"; };
 		46246C1C1D0BBAEBB84B46DA94257344 /* RLMSyncSessionRefreshHandle.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMSyncSessionRefreshHandle.mm; path = Realm/RLMSyncSessionRefreshHandle.mm; sourceTree = "<group>"; };
-		468843DD90EFC688930742A843716447 /* Pods-shoppinUITests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppinUITests-resources.sh"; sourceTree = "<group>"; };
 		46D1CD4EFC349BE04F8B3D66892310BE /* GoogleCloudDestination.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GoogleCloudDestination.swift; path = Sources/GoogleCloudDestination.swift; sourceTree = "<group>"; };
 		472F433FAE616B2C229E87E2B19212D1 /* ChartAxisX.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisX.swift; path = SwiftCharts/Axis/ChartAxisX.swift; sourceTree = "<group>"; };
 		47521E4CBF0296D07DFA26683C4F9B71 /* KLCPopup.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = KLCPopup.xcconfig; sourceTree = "<group>"; };
@@ -1143,27 +1201,31 @@
 		47A5CAECAA9453D7A1941B953DE08581 /* ChartCoordsSpace.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartCoordsSpace.swift; path = SwiftCharts/ChartCoordsSpace.swift; sourceTree = "<group>"; };
 		47BC53372599AEB2106DB2830DED1FB0 /* ChartPointsCandleStickViewsLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointsCandleStickViewsLayer.swift; path = SwiftCharts/Layers/ChartPointsCandleStickViewsLayer.swift; sourceTree = "<group>"; };
 		486090AC5FADCA59213272D176E907FD /* RLMCollection.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMCollection.mm; path = Realm/RLMCollection.mm; sourceTree = "<group>"; };
+		48E316E01DC851AED3F58E4D43C376BB /* Pods-shoppinUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-shoppinUITests.modulemap"; sourceTree = "<group>"; };
 		4990B6FA28C7D283DC5E1469CFF51729 /* AES256CBC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AES256CBC.swift; path = Sources/AES256CBC.swift; sourceTree = "<group>"; };
 		49A371846A7734459EF8135E9594C58E /* HandlingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HandlingView.swift; path = SwiftCharts/Views/HandlingView.swift; sourceTree = "<group>"; };
 		4A378839B2FA0920FFC6D5D29724FFAD /* FloatRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FloatRule.swift; path = SwiftValidator/Rules/FloatRule.swift; sourceTree = "<group>"; };
 		4A66B91F9CB5B8831910B45119324DB1 /* GTMOAuth2ViewTouch.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = GTMOAuth2ViewTouch.xib; path = Source/Touch/GTMOAuth2ViewTouch.xib; sourceTree = "<group>"; };
 		4AA289948046088EBD1E1757B1C73301 /* GTMSessionFetcherLogging.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GTMSessionFetcherLogging.m; path = Source/GTMSessionFetcherLogging.m; sourceTree = "<group>"; };
 		4ADEA6DB42C0A6282A3DD2E55342D9E8 /* RLMSchema_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMSchema_Private.h; path = include/RLMSchema_Private.h; sourceTree = "<group>"; };
-		4B50212B3800757CAF19C705C588ACC9 /* Pods-Providers.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-Providers.modulemap"; sourceTree = "<group>"; };
 		4C009459CEABB6BDA57861503F5EEAA0 /* InfoBubble.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InfoBubble.swift; path = SwiftCharts/Views/InfoBubble.swift; sourceTree = "<group>"; };
+		4C588947F8F42E39A7B95EA0C97C1672 /* Pods-ProvidersTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ProvidersTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4C5CCC8D13C3605CA4FAFF7694F0486C /* ChartViewSelector.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartViewSelector.swift; path = SwiftCharts/Utils/ChartViewSelector.swift; sourceTree = "<group>"; };
+		4D478289E53CD75B4712666C7A9FC5DB /* Pods-shoppinUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shoppinUITests-acknowledgements.plist"; sourceTree = "<group>"; };
 		4DAFA0499FC4E3F8FDA36A6F2CA59C3E /* FileDestination.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FileDestination.swift; path = Sources/FileDestination.swift; sourceTree = "<group>"; };
 		4F306581B3304BA2469D6ECD757B32A8 /* ConfirmRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConfirmRule.swift; path = SwiftValidator/Rules/ConfirmRule.swift; sourceTree = "<group>"; };
 		4F54D58A57DCDE3357292564D2FF3179 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F856C9C65D02CD376660DE1DE424AEB /* ServerTrustPolicy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ServerTrustPolicy.swift; path = Source/ServerTrustPolicy.swift; sourceTree = "<group>"; };
 		4FC53E88E2DE049E582CD2C2E49F0FFE /* buttonRoundedDeleteHighlighted@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "buttonRoundedDeleteHighlighted@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/buttonRoundedDeleteHighlighted@2x.png"; sourceTree = "<group>"; };
+		5014BB27919FB7ED487CB40EC4DC354A /* Pods-ProvidersTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ProvidersTests.release.xcconfig"; sourceTree = "<group>"; };
 		504491E203F1BFA88F04105FF6D62EA6 /* ChartAxisValueInt.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValueInt.swift; path = SwiftCharts/AxisValues/ChartAxisValueInt.swift; sourceTree = "<group>"; };
 		50A143F651B11BB31280CBA425C6A8B8 /* SwiftyBeaver.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftyBeaver.xcconfig; sourceTree = "<group>"; };
+		5172F983FF3CDE63F0978F0CD0A5860A /* Pods-groma-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-groma-umbrella.h"; sourceTree = "<group>"; };
 		521958F88137BC6E3159764EF99B4B07 /* UILabel+Chameleon.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UILabel+Chameleon.m"; path = "Pod/Classes/Objective-C/UILabel+Chameleon.m"; sourceTree = "<group>"; };
 		524AD2E1641EE1B1469C24969245E7F1 /* external_commit_helper.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = external_commit_helper.cpp; path = Realm/ObjectStore/src/impl/apple/external_commit_helper.cpp; sourceTree = "<group>"; };
 		53331ADCD1D55B5F675EF6F90F6E6F5C /* ChartAxisXLayerDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisXLayerDefault.swift; path = SwiftCharts/Axis/ChartAxisXLayerDefault.swift; sourceTree = "<group>"; };
-		53EE9E50E35903D072467ACB141BFBA2 /* Pods-Providers-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Providers-umbrella.h"; sourceTree = "<group>"; };
 		54757E63AEB313AEF4D7226BFB107CA3 /* ASValuePopUpView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ASValuePopUpView.h; path = ASValueTrackingSlider/ASValuePopUpView.h; sourceTree = "<group>"; };
+		54D0BF2789C26643F2452EBE1CEA41D0 /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = GTMSessionFetcher.framework; path = GTMSessionFetcher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		55F9CCE08C95D1D68DAEA91CBB3573D3 /* ChartViewGrowAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartViewGrowAnimator.swift; path = SwiftCharts/Views/ChartViewGrowAnimator.swift; sourceTree = "<group>"; };
 		562C3E5E159C57172EDA649E4F5C7989 /* ChartAxisLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisLayer.swift; path = SwiftCharts/Axis/ChartAxisLayer.swift; sourceTree = "<group>"; };
 		5664840E0DE7987F7B66FBC99C47B3A9 /* ChartAxisValuesGeneratorFixedNonOverlapping.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValuesGeneratorFixedNonOverlapping.swift; path = SwiftCharts/Axis/ChartAxisValuesGeneratorFixedNonOverlapping.swift; sourceTree = "<group>"; };
@@ -1173,12 +1235,12 @@
 		58DE310F91A2AFD63E93B630238C3CCB /* Starscream-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Starscream-umbrella.h"; sourceTree = "<group>"; };
 		5958E6ABEBA3E5B59E17B2661ED47AC4 /* ChartAxisValue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValue.swift; path = SwiftCharts/AxisValues/ChartAxisValue.swift; sourceTree = "<group>"; };
 		59591B4E391BBC495C2899BA46D1D3C6 /* PhoneNumberRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PhoneNumberRule.swift; path = SwiftValidator/Rules/PhoneNumberRule.swift; sourceTree = "<group>"; };
+		5A152058E148B396F8A87A1D582491AC /* Pods-shoppinUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppinUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5A24672A4C838F2C3D2C05BC0658541E /* RLMCollection_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMCollection_Private.h; path = include/RLMCollection_Private.h; sourceTree = "<group>"; };
 		5A72A0619AFED5C8F9390A26FA81444B /* Arrow@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Arrow@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Arrow@2x.png"; sourceTree = "<group>"; };
 		5AAC240D3CC84C9B80FFC90DC77AA178 /* AlphaRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AlphaRule.swift; path = SwiftValidator/Rules/AlphaRule.swift; sourceTree = "<group>"; };
 		5AADDCD8DE4A51A0D8622A2AEDD1C75B /* ChartContextDrawer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartContextDrawer.swift; path = SwiftCharts/Drawers/ChartContextDrawer.swift; sourceTree = "<group>"; };
 		5AF7E774C17C85BA0C47CAE39DB67A30 /* ASValueTrackingSlider.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ASValueTrackingSlider.xcconfig; sourceTree = "<group>"; };
-		5B8FF1DCFDA050DBC3F3114EE7907E39 /* SwiftValidator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftValidator.framework; path = SwiftValidator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BD14754B21EAA11D8F776FA057894F2 /* ChartAxisYLayerDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisYLayerDefault.swift; path = SwiftCharts/Axis/ChartAxisYLayerDefault.swift; sourceTree = "<group>"; };
 		5BEE7AE007C423EA15F7D2BD31FF16C6 /* Cancel@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Cancel@3x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Cancel@3x.png"; sourceTree = "<group>"; };
 		5BF7252A233A5E6190BE2BC35C8FA26C /* Ok@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Ok@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Ok@2x.png"; sourceTree = "<group>"; };
@@ -1188,6 +1250,7 @@
 		5CAF8E4DEFE540B2EEE58C1951165165 /* UIButton+Chameleon.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+Chameleon.h"; path = "Pod/Classes/Objective-C/UIButton+Chameleon.h"; sourceTree = "<group>"; };
 		5CC344FFBDAD6B3F7006B3682EBB0367 /* Ok@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Ok@3x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Ok@3x.png"; sourceTree = "<group>"; };
 		5D7AA231684116BA44E207121C5F82F2 /* ParameterEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ParameterEncoding.swift; path = Source/ParameterEncoding.swift; sourceTree = "<group>"; };
+		5D8F4CFF2A9937EC280E2B02AD0889D7 /* Pods-groma-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-groma-resources.sh"; sourceTree = "<group>"; };
 		5DE15B4E6F654778ED2BFDB529FB7B01 /* Optional.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Optional.swift; path = SwiftCharts/Optional.swift; sourceTree = "<group>"; };
 		5E4BAC8C89CE534FD9B720F73E14D46A /* GTMReadMonitorInputStream.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GTMReadMonitorInputStream.m; path = Source/GTMReadMonitorInputStream.m; sourceTree = "<group>"; };
 		5F6391C37492D8642D7EF5BBC9CECAB5 /* RLMSyncUtil.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMSyncUtil.h; path = include/RLMSyncUtil.h; sourceTree = "<group>"; };
@@ -1196,18 +1259,15 @@
 		6040277A98A0253C59FC42EA6DAFE7A5 /* CatmullPathGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatmullPathGenerator.swift; path = SwiftCharts/Views/CatmullPathGenerator.swift; sourceTree = "<group>"; };
 		60C4FB9053A6AC507C6D4651184CAA78 /* KLCPopup-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "KLCPopup-prefix.pch"; sourceTree = "<group>"; };
 		610070C448077C3A50E1088F6E975EDE /* results.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = results.cpp; path = Realm/ObjectStore/src/results.cpp; sourceTree = "<group>"; };
-		610A1A23BC7C8A5E62385E0C38BCC18F /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = GoogleToolboxForMac.framework; path = GoogleToolboxForMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6177E2608ADC0707D4E9DC083D501E9A /* GTMOAuth2SignIn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GTMOAuth2SignIn.h; path = Source/GTMOAuth2SignIn.h; sourceTree = "<group>"; };
+		61D53A674FC7A77EBD6B3AD317747B6A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		61F7866222F1A08D18F7F28117642327 /* GTMDebugSelectorValidation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GTMDebugSelectorValidation.h; path = DebugUtils/GTMDebugSelectorValidation.h; sourceTree = "<group>"; };
 		623C50DDF46FCFE0CA9AEF4CF21B70D5 /* ChartShowCoordsLinesLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartShowCoordsLinesLayer.swift; path = SwiftCharts/Layers/ChartShowCoordsLinesLayer.swift; sourceTree = "<group>"; };
 		62CAAF8FFF474131F3E3A2CC48271974 /* GTMDebugThreadValidation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GTMDebugThreadValidation.h; path = DebugUtils/GTMDebugThreadValidation.h; sourceTree = "<group>"; };
-		62D12D9DDD3A18C9C02F14241DF46DB7 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		63FDEFF6C47761C7378A015E786B7976 /* Pods-shoppinUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppinUITests-dummy.m"; sourceTree = "<group>"; };
 		646E09A20666190FEEEC15EEEE067361 /* object_notifier.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = object_notifier.cpp; path = Realm/ObjectStore/src/impl/object_notifier.cpp; sourceTree = "<group>"; };
-		64FDEA4573354145C76180DBEAFD89E8 /* GTMOAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = GTMOAuth2.framework; path = GTMOAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6584F923B4C97AC87530F9CCE05868AB /* ChartViewSelectorAlpha.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartViewSelectorAlpha.swift; path = SwiftCharts/Utils/ChartViewSelectorAlpha.swift; sourceTree = "<group>"; };
 		65D5A017324553E135169C911505F199 /* sync_config.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = sync_config.cpp; path = Realm/ObjectStore/src/sync/sync_config.cpp; sourceTree = "<group>"; };
-		66957D7C81B3F4440FC670A809AA2D6E /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = RealmSwift.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		66043D4E1874C00B63653B52D58BB3DC /* Pods-shoppinUITests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppinUITests-resources.sh"; sourceTree = "<group>"; };
 		66BA542E74C18D63FFEDC8EC8D11E69B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		674666EE855FA6D802FC78989C4A5F7B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67520CEB9C3B637C1920B727FDFA4B2D /* RLMSyncUtil_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMSyncUtil_Private.h; path = include/RLMSyncUtil_Private.h; sourceTree = "<group>"; };
@@ -1215,26 +1275,26 @@
 		68AF282AD05EBDF4CA976D361B1DE358 /* ChartAxisLabelsGeneratorNumberSuffix.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisLabelsGeneratorNumberSuffix.swift; path = SwiftCharts/Axis/ChartAxisLabelsGeneratorNumberSuffix.swift; sourceTree = "<group>"; };
 		6923B7287523A3A7C9F91CC11EE0B3F3 /* VALValet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = VALValet.m; path = Valet/VALValet.m; sourceTree = "<group>"; };
 		69352EA52443E9139F2AC3787B2F8CB4 /* ChartPointsAreaLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointsAreaLayer.swift; path = SwiftCharts/Layers/ChartPointsAreaLayer.swift; sourceTree = "<group>"; };
-		6966079D3DACBF446FF948B76B465BE9 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftyBeaver.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		69B5870324F38F65D0113E3B016EC4FC /* GTMOAuth2-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GTMOAuth2-umbrella.h"; sourceTree = "<group>"; };
-		6A8A4C0A268CC05FC83E2BC8E3318947 /* ChameleonFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ChameleonFramework.framework; path = ChameleonFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AAD42CDCFC010469746E234C9462D19 /* SSLSecurity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SSLSecurity.swift; path = Sources/SSLSecurity.swift; sourceTree = "<group>"; };
 		6AADCE5659EFFBE6255CB8A6BAB5F6C5 /* KLCPopup.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = KLCPopup.h; path = KLCPopup/KLCPopup.h; sourceTree = "<group>"; };
 		6AAF36E095F3E6B9BFC56D56EC9EAA58 /* ChartNiceNumberCalculator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartNiceNumberCalculator.swift; path = SwiftCharts/Utils/ChartNiceNumberCalculator.swift; sourceTree = "<group>"; };
 		6ADAF49FE4751E87D8A3E2F47B85D5A1 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6CE960CC35B1E16F7FB7840CC77CE5A0 /* Pods-Providers-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Providers-resources.sh"; sourceTree = "<group>"; };
 		6CFE224AA1347B688230B7A799B19070 /* Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = Sources/Extensions.swift; sourceTree = "<group>"; };
 		6D003C1ACAF157DB93F3A36596776D26 /* RLMSyncManager_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMSyncManager_Private.h; path = include/RLMSyncManager_Private.h; sourceTree = "<group>"; };
 		6D0404FF0A295193A5C4B9525C595277 /* Valet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Valet.xcconfig; sourceTree = "<group>"; };
+		6DE97227B1B66D7E135E430E2589468E /* Pods-Providers-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Providers-dummy.m"; sourceTree = "<group>"; };
 		6DF3A7CC0514F1F8315A430C65B33099 /* ObjectiveCSupport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ObjectiveCSupport.swift; path = RealmSwift/ObjectiveCSupport.swift; sourceTree = "<group>"; };
 		6E0BF3AEAF584FBDD73C2999A12B173B /* ChameleonFramework-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ChameleonFramework-dummy.m"; sourceTree = "<group>"; };
 		6E9A8E9CA4D8D16D7D29AC20B2EDD120 /* RLMAnalytics.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMAnalytics.mm; path = Realm/RLMAnalytics.mm; sourceTree = "<group>"; };
 		6E9E68D94BBD7ED79624F46E2C1A3D4A /* GTMSessionFetcher-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GTMSessionFetcher-umbrella.h"; sourceTree = "<group>"; };
 		6F48A98CC012840FCFE1169FC004DF1D /* List.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = List.swift; path = RealmSwift/List.swift; sourceTree = "<group>"; };
 		6F748D559049894C3E09097CE1132D33 /* ChartPoint.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPoint.swift; path = SwiftCharts/ChartPoint/ChartPoint.swift; sourceTree = "<group>"; };
-		6FA6BF603EE671D92223460FC7B923D0 /* Pods-groma.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-groma.modulemap"; sourceTree = "<group>"; };
+		70481FB2D98E1501DAFFDF2741D654D6 /* Pods-ProvidersTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ProvidersTests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		7096C29BFB953C0071F87083A865DDAB /* ASValueTrackingSlider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ASValueTrackingSlider.framework; path = ASValueTrackingSlider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		720C34535BE0365D86CCFD07BCA09DF5 /* Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Alamofire-umbrella.h"; sourceTree = "<group>"; };
 		7220C98479C71B057493BB9F7DAD8255 /* ChartPointsLineTrackerLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointsLineTrackerLayer.swift; path = SwiftCharts/Layers/ChartPointsLineTrackerLayer.swift; sourceTree = "<group>"; };
-		72AFDDE7F6CFA1D349FFEC3E038514A3 /* SwiftCharts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftCharts.framework; path = SwiftCharts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		72C212AF387C8D17F7D796AFC04B687F /* ChartTextUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartTextUtils.swift; path = SwiftCharts/Utils/ChartTextUtils.swift; sourceTree = "<group>"; };
 		72DCB01B775BE1807BBDE30E1F784672 /* RLMArray.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMArray.h; path = include/RLMArray.h; sourceTree = "<group>"; };
 		731E7757F9D7EFD6BBD555952AC8B4A3 /* Realm.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Realm.xcconfig; sourceTree = "<group>"; };
@@ -1257,12 +1317,14 @@
 		7AD836A700EEBF3F319E256D8BB8AB7A /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AEDE26CB678825BF4FA6C54B8A6707B /* network_reachability_observer.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = network_reachability_observer.cpp; path = Realm/ObjectStore/src/sync/impl/apple/network_reachability_observer.cpp; sourceTree = "<group>"; };
 		7B044CAAE2188D9695ADBF58508C6EDC /* GoogleToolboxForMac.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = GoogleToolboxForMac.modulemap; sourceTree = "<group>"; };
+		7B8FDA8D0C3D42E3FACDAD1393E8D2B1 /* Reachability.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Reachability.framework; path = Reachability.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C25F2951AB937A3605D639A47958B1D /* Reachability.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = Reachability.modulemap; sourceTree = "<group>"; };
-		7D95B4A5BEB966541DCC1D205B2F006A /* Pods-groma.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-groma.debug.xcconfig"; sourceTree = "<group>"; };
+		7DB97FD080DED395ACA171CEA0F83A0D /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Realm.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DC2DA657A3312ED37045FED09ADFB48 /* RLMRealm_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMRealm_Private.h; path = include/RLMRealm_Private.h; sourceTree = "<group>"; };
 		7DC9310C90B47060248426BD86DE373C /* RLMObjectSchema_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMObjectSchema_Private.h; path = include/RLMObjectSchema_Private.h; sourceTree = "<group>"; };
 		7E3B4C6605AF0193557CF9DCED82B6C8 /* SwiftCharts-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftCharts-umbrella.h"; sourceTree = "<group>"; };
-		7E8E512AB58E9D4207A036C36F3F5009 /* Pods-shoppinUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-shoppinUITests.modulemap"; sourceTree = "<group>"; };
+		7E680E6A65D04072D23805C72C688ADD /* Pods-groma-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-groma-frameworks.sh"; sourceTree = "<group>"; };
+		7EFB9F48520F14C17FF90072A8D64F09 /* KLCPopup.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = KLCPopup.framework; path = KLCPopup.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F17788F3C9F2CCAEB2B413F97626318 /* RLMObjectBase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMObjectBase.h; path = include/RLMObjectBase.h; sourceTree = "<group>"; };
 		7F40AC37C668151E3773CB64DFDFDE96 /* ChartViewAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartViewAnimator.swift; path = SwiftCharts/Views/ChartViewAnimator.swift; sourceTree = "<group>"; };
 		7FEBE412DC7413CB18EA5C08B3DCD6AA /* RLMListBase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMListBase.h; path = include/RLMListBase.h; sourceTree = "<group>"; };
@@ -1285,7 +1347,6 @@
 		873FF376C1FAF8B77E952017670B6270 /* ASValueTrackingSlider-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ASValueTrackingSlider-dummy.m"; sourceTree = "<group>"; };
 		87677514761303521E8DC2A5A9E3AFA8 /* StraightLinePathGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StraightLinePathGenerator.swift; path = SwiftCharts/Views/StraightLinePathGenerator.swift; sourceTree = "<group>"; };
 		8784893FB63D9F52BA2EC97113E853CC /* VALSecureEnclaveValet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = VALSecureEnclaveValet.m; path = Valet/VALSecureEnclaveValet.m; sourceTree = "<group>"; };
-		887937784E4A13761ADB7B826554FED9 /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Starscream.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88BE585A4D4B75E15A8BDB29A94E2AF8 /* ChartLayerBase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartLayerBase.swift; path = SwiftCharts/Layers/ChartLayerBase.swift; sourceTree = "<group>"; };
 		8950EC36B436EEBAF93F991784CB3899 /* GTMNSDictionary+URLArguments.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "GTMNSDictionary+URLArguments.h"; path = "Foundation/GTMNSDictionary+URLArguments.h"; sourceTree = "<group>"; };
 		89B889BF0EF3C05D91B9E38D79AE0D8F /* ChartPointsBubbleLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointsBubbleLayer.swift; path = SwiftCharts/Layers/ChartPointsBubbleLayer.swift; sourceTree = "<group>"; };
@@ -1294,7 +1355,6 @@
 		8ACA752939F9CC4B0D10CA7CC7D642C3 /* RLMRealm_Dynamic.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMRealm_Dynamic.h; path = include/RLMRealm_Dynamic.h; sourceTree = "<group>"; };
 		8B9806A4D6EF9380BE548F1F94623B4E /* Reachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		8CA5BB4C9FB3FB7330EC1AF79CD67280 /* VALSinglePromptSecureEnclaveValet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = VALSinglePromptSecureEnclaveValet.m; path = Valet/VALSinglePromptSecureEnclaveValet.m; sourceTree = "<group>"; };
-		8CBC580A24C85D1EC58853DDB49D6A8F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8CC9407335616FCB72AD210E84E82602 /* SwiftCharts.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = SwiftCharts.modulemap; sourceTree = "<group>"; };
 		8D47C19F1ECE6849EA42B1983ECCDFE5 /* SwiftVersion.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftVersion.swift; path = RealmSwift/SwiftVersion.swift; sourceTree = "<group>"; };
 		8D9204CE97CC0E1764353E1663D3793F /* RLMSyncPermissionResults.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMSyncPermissionResults.mm; path = Realm/RLMSyncPermissionResults.mm; sourceTree = "<group>"; };
@@ -1307,13 +1367,14 @@
 		8FCEE2D9D70C9986C7D5697290AF01F8 /* ChartAxisValuesGeneratorXFixedNonOverlapping.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValuesGeneratorXFixedNonOverlapping.swift; path = SwiftCharts/Axis/ChartAxisValuesGeneratorXFixedNonOverlapping.swift; sourceTree = "<group>"; };
 		8FD1206156E1505D926E7334B9954A7D /* schema.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = schema.cpp; path = Realm/ObjectStore/src/schema.cpp; sourceTree = "<group>"; };
 		8FE99D1E285FD9A70F28229DCAE1B527 /* Aliases.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Aliases.swift; path = RealmSwift/Aliases.swift; sourceTree = "<group>"; };
+		900CEE01467B22AD0AA9F5C08855DD6A /* Pods-ProvidersTests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ProvidersTests-frameworks.sh"; sourceTree = "<group>"; };
 		90AC87A1B8165F3A718288D70E6F5265 /* index_set.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = index_set.cpp; path = Realm/ObjectStore/src/index_set.cpp; sourceTree = "<group>"; };
 		912B745323527EE0D1A5A40DD13FDEA3 /* ChartPointsViewsLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointsViewsLayer.swift; path = SwiftCharts/Layers/ChartPointsViewsLayer.swift; sourceTree = "<group>"; };
 		923F65B7B959A91CB94B48ACCDB463A9 /* TrendlineGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TrendlineGenerator.swift; path = SwiftCharts/Utils/Trendlines/TrendlineGenerator.swift; sourceTree = "<group>"; };
 		926530675AE5F5DEC9C7A7327DE151A7 /* SwipeView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwipeView-prefix.pch"; sourceTree = "<group>"; };
+		92C48D9A479478DBDF88CD90FDADF6EB /* Pods-groma.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-groma.modulemap"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		93C0F559496E4F8A324B25A8865E8A1E /* GroupedBarsCompanionsLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GroupedBarsCompanionsLayer.swift; path = SwiftCharts/Layers/GroupedBarsCompanionsLayer.swift; sourceTree = "<group>"; };
-		94562BBD8C55CCF75CDDE9D61C5712A3 /* Pods-Providers-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Providers-acknowledgements.markdown"; sourceTree = "<group>"; };
 		9487DFE377981463E2CD37514EB63026 /* RLMClassInfo.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMClassInfo.mm; path = Realm/RLMClassInfo.mm; sourceTree = "<group>"; };
 		94A41EB30635BA950D277438F40B21C5 /* CMPopTipView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CMPopTipView-dummy.m"; sourceTree = "<group>"; };
 		957F2FA8EBC5439EDDEFE04C91813B18 /* ChartAreasView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAreasView.swift; path = SwiftCharts/Views/ChartAreasView.swift; sourceTree = "<group>"; };
@@ -1323,18 +1384,23 @@
 		96861140F329BF3D19B963CE9FA7BED9 /* RLMObject.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMObject.mm; path = Realm/RLMObject.mm; sourceTree = "<group>"; };
 		96E73803B6311366975E41E10E93A226 /* IconGradient.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = IconGradient.png; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/IconGradient.png"; sourceTree = "<group>"; };
 		976138B4F5C0F02CE0849C2AE049E36C /* GTMMethodCheck.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GTMMethodCheck.h; path = DebugUtils/GTMMethodCheck.h; sourceTree = "<group>"; };
+		97945C3C1E7E0B92F43C191882FB9A25 /* Pods-groma.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-groma.debug.xcconfig"; sourceTree = "<group>"; };
 		97D269814FCC08D8B876AB97A32ADF33 /* hr.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = hr.lproj; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/hr.lproj"; sourceTree = "<group>"; };
-		97E55BABEF7B83F9F466E6A10FF7C566 /* Pods_Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Providers.framework; path = "Pods-Providers.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		987B83ED9090A799AD6CA65D02F8E1E7 /* ChartCandleStickLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartCandleStickLayer.swift; path = SwiftCharts/Layers/ChartCandleStickLayer.swift; sourceTree = "<group>"; };
+		98BA91893DEDC59A8F58E3B83F522746 /* Pods-groma-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-groma-acknowledgements.plist"; sourceTree = "<group>"; };
+		9958F4009ABED3B1AE5949FBCE598DBB /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = RealmSwift.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		995FA162C3ECAA53371A3419B05720B0 /* ChartAxisLabelsGeneratorBase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisLabelsGeneratorBase.swift; path = SwiftCharts/Axis/ChartAxisLabelsGeneratorBase.swift; sourceTree = "<group>"; };
 		9A03345FA228270F3CA7FD94BEA83287 /* format.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = format.cpp; path = Realm/ObjectStore/src/util/format.cpp; sourceTree = "<group>"; };
 		9A1B4915F50592EF148D5EE70608C2F1 /* list_notifier.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = list_notifier.cpp; path = Realm/ObjectStore/src/impl/list_notifier.cpp; sourceTree = "<group>"; };
+		9A8E88A912C0793ED2F4F9B7B2FBF75F /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftyBeaver.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9ADAE55053ADFB8B2A78461D60AC8C05 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9AF1940DF909897E82FBD61853588168 /* RLMRealmConfiguration+Sync.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "RLMRealmConfiguration+Sync.h"; path = "include/RLMRealmConfiguration+Sync.h"; sourceTree = "<group>"; };
 		9B2EBA4C7DFDDCE816769411733DCBFD /* Pannable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Pannable.swift; path = SwiftCharts/Pannable.swift; sourceTree = "<group>"; };
 		9B45463BF2AEDEBA5209B92E36CACDB3 /* Base64.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Base64.swift; path = Sources/Base64.swift; sourceTree = "<group>"; };
 		9B50788E899E7FFCDE1879F9125CBF24 /* GTMNSString+URLArguments.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "GTMNSString+URLArguments.m"; path = "Foundation/GTMNSString+URLArguments.m"; sourceTree = "<group>"; };
 		9B80A684306F6A099F69E2B9EC28E036 /* NSArray+Chameleon.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSArray+Chameleon.h"; path = "Pod/Classes/Objective-C/NSArray+Chameleon.h"; sourceTree = "<group>"; };
 		9BBF51C89621D5096F9E95E7C4E46FFE /* RealmSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "RealmSwift-umbrella.h"; sourceTree = "<group>"; };
+		9BC2F1763354AF1FC5029DF9AC66DEA3 /* Pods-shoppinUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shoppinUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		9C2D6B3B0CA18713284710AE796C9C50 /* Realm.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Realm.swift; path = RealmSwift/Realm.swift; sourceTree = "<group>"; };
 		9C2DE57DCC93F855AD40E190BDB5C134 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = GoogleSignIn.bundle; path = Resources/GoogleSignIn.bundle; sourceTree = "<group>"; };
 		9C41DE78459F9B9C245604B0A9379660 /* ChameleonConstants.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ChameleonConstants.h; path = "Pod/Classes/Objective-C/ChameleonConstants.h"; sourceTree = "<group>"; };
@@ -1349,27 +1415,31 @@
 		9FA19046A90808AC6D4D19689865EA31 /* RLMObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMObject.h; path = include/RLMObject.h; sourceTree = "<group>"; };
 		9FDD741C98C54BD4D60E6B416D22DBFF /* buttonRoundedRegular@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "buttonRoundedRegular@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/buttonRoundedRegular@2x.png"; sourceTree = "<group>"; };
 		A00AED0D7C0F2EF202DAA0A4621A6007 /* NSDate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NSDate.swift; path = SwiftCharts/NSDate.swift; sourceTree = "<group>"; };
-		A04F55D4C6057B81D68D93C27C99013F /* Pods-groma.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-groma.release.xcconfig"; sourceTree = "<group>"; };
 		A0707CE407F8669945ED1245AD88DF8A /* system_configuration.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = system_configuration.cpp; path = Realm/ObjectStore/src/sync/impl/apple/system_configuration.cpp; sourceTree = "<group>"; };
 		A07D3CC17CE060A5A40F11A0119E6ED0 /* ru.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = ru.lproj; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/ru.lproj"; sourceTree = "<group>"; };
 		A0F7DE7AF757F20316627AAA7E8502D9 /* VALSynchronizableValet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = VALSynchronizableValet.m; path = Valet/VALSynchronizableValet.m; sourceTree = "<group>"; };
 		A1CDF6D22C0A00971C9DA004FD2DF23A /* Alamofire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Alamofire-dummy.m"; sourceTree = "<group>"; };
 		A1D2435B7630D45E1F1287664E302F2E /* en.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = en.lproj; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/en.lproj"; sourceTree = "<group>"; };
+		A1ED0788F6A5EA38CCCB39A38DC9E48A /* Pods-Providers-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Providers-umbrella.h"; sourceTree = "<group>"; };
 		A2C4531756241DF4747DC3EA0E8FA0FF /* buttonRoundedDelete@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "buttonRoundedDelete@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/buttonRoundedDelete@2x.png"; sourceTree = "<group>"; };
 		A390609D05EA8DA16740B0B734ACB1DC /* MinLengthRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MinLengthRule.swift; path = SwiftValidator/Rules/MinLengthRule.swift; sourceTree = "<group>"; };
 		A41F6ABC8E59CFD493BFC4D8A2CB6B83 /* WebSocket.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WebSocket.swift; path = Sources/WebSocket.swift; sourceTree = "<group>"; };
 		A48E8BCBB317A76736DB443D1A3E1145 /* RLMOptionalBase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMOptionalBase.h; path = include/RLMOptionalBase.h; sourceTree = "<group>"; };
+		A4C26FC907CCC359EDB6CECC1547622F /* Pods-shoppinUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppinUITests-frameworks.sh"; sourceTree = "<group>"; };
 		A4EB348F0A74C1FCEA1D5C2D11DDF715 /* RLMThreadSafeReference.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMThreadSafeReference.h; path = include/RLMThreadSafeReference.h; sourceTree = "<group>"; };
+		A642AEC78A2B719FE301762607930E32 /* HockeySDKResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = HockeySDKResources.bundle; path = HockeySDKResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6493BD180958F49CDF6E996242E4D74 /* ChartPointsLineLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointsLineLayer.swift; path = SwiftCharts/Layers/ChartPointsLineLayer.swift; sourceTree = "<group>"; };
 		A67D4E5DA7F2E5B505391C57640BF3A1 /* AlphaNumericRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AlphaNumericRule.swift; path = SwiftValidator/Rules/AlphaNumericRule.swift; sourceTree = "<group>"; };
 		A682665A5824C377E367E1742F3D25F4 /* ChartAxisLabelsGeneratorFixed.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisLabelsGeneratorFixed.swift; path = SwiftCharts/Axis/ChartAxisLabelsGeneratorFixed.swift; sourceTree = "<group>"; };
 		A69C41400A740029DD6CB10BDC7A2C73 /* UIViewController+Chameleon.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Chameleon.m"; path = "Pod/Classes/Objective-C/UIViewController+Chameleon.m"; sourceTree = "<group>"; };
 		A71D2F90487A4929C129679DEA60535D /* UINavigationController+Chameleon.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UINavigationController+Chameleon.m"; path = "Pod/Classes/Objective-C/UINavigationController+Chameleon.m"; sourceTree = "<group>"; };
 		A79D831FDFC688DF761E0652BDA114C9 /* ASValueTrackingSlider-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ASValueTrackingSlider-umbrella.h"; sourceTree = "<group>"; };
+		A800EEC5190C6B6AFD746E1388148381 /* Pods-shoppinUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppinUITests.release.xcconfig"; sourceTree = "<group>"; };
 		A80EC3C2752AC0619724A43D74991C05 /* Realm-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Realm-prefix.pch"; sourceTree = "<group>"; };
 		A874D5CBDBF93A91A958084C9D7D7AD9 /* UIImage+ChameleonPrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+ChameleonPrivate.h"; path = "Pod/Classes/Objective-C/UIImage+ChameleonPrivate.h"; sourceTree = "<group>"; };
 		A8AE9A79DE014C6E3EC55F37F076C4D5 /* Validator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Validator.swift; path = SwiftValidator/Core/Validator.swift; sourceTree = "<group>"; };
 		A908EFF9D61069E438F3F6AC592F5D4D /* binding_callback_thread_observer.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = binding_callback_thread_observer.cpp; path = Realm/ObjectStore/src/binding_callback_thread_observer.cpp; sourceTree = "<group>"; };
+		A92D6EF04D563792428445AB6D4515A1 /* SwiftCharts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftCharts.framework; path = SwiftCharts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9E4C49B5EE39579BEE8FD5F1A62DA22 /* RLMManagedArray.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMManagedArray.mm; path = Realm/RLMManagedArray.mm; sourceTree = "<group>"; };
 		AA0E8C52B4E4171DEC95257831A19232 /* BaseDestination.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BaseDestination.swift; path = Sources/BaseDestination.swift; sourceTree = "<group>"; };
 		AA1A0E85E9B0B9B4ADD6224AD68B5EF1 /* Cancel.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = Cancel.png; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Cancel.png"; sourceTree = "<group>"; };
@@ -1393,14 +1463,13 @@
 		AF7C4547E1809E204397193B7D81305A /* GTMSessionFetcherLogging.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GTMSessionFetcherLogging.h; path = Source/GTMSessionFetcherLogging.h; sourceTree = "<group>"; };
 		AFC4AEB6ECD6544FAD23DF47D6CAC486 /* Util.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Util.swift; path = RealmSwift/Util.swift; sourceTree = "<group>"; };
 		B0361AF54A0BEB8B7EA67FC40FB3C59D /* feedbackActivity@2x~ipad.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "feedbackActivity@2x~ipad.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/feedbackActivity@2x~ipad.png"; sourceTree = "<group>"; };
-		B0BDE2A840AD82DD5F15C4B44DA6CD56 /* Pods-shoppinUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppinUITests-umbrella.h"; sourceTree = "<group>"; };
 		B0E49846B225101BEDA1805BE80F32E2 /* Sync.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Sync.swift; path = RealmSwift/Sync.swift; sourceTree = "<group>"; };
 		B134451665BE40CB182D5A7740B78CA4 /* object.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = object.cpp; path = Realm/ObjectStore/src/object.cpp; sourceTree = "<group>"; };
 		B1F775DBE6F92A5978915BE8BA5E8D93 /* ChartTimeUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartTimeUtils.swift; path = SwiftCharts/Utils/ChartTimeUtils.swift; sourceTree = "<group>"; };
-		B2886546B5195728387BA28A25F989D1 /* Pods-shoppinUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shoppinUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		B2B86D1A4E7BAFC2FB35697DA8A77EDD /* Starscream.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Starscream.xcconfig; sourceTree = "<group>"; };
 		B307A5D5632A1FFE93C2A9CB3837695B /* KLCPopup-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "KLCPopup-dummy.m"; sourceTree = "<group>"; };
 		B3453D69E5D4A22BE2D940A3DD13FDA8 /* SwipeView.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = SwipeView.modulemap; sourceTree = "<group>"; };
+		B48E4067ACFA5FBE9DC1E97BDACDCF08 /* Pods_groma.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_groma.framework; path = "Pods-groma.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B530AF382C3B5F5A9939FF67C73E2429 /* RLMSyncPermission.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMSyncPermission.mm; path = Realm/RLMSyncPermission.mm; sourceTree = "<group>"; };
 		B54B4314B24A0A487B162BD857483568 /* Cancel@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Cancel@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Cancel@2x.png"; sourceTree = "<group>"; };
 		B59A06027CB6EEACC8CCD6DC7C34BD80 /* NSError+RLMSync.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSError+RLMSync.m"; path = "Realm/NSError+RLMSync.m"; sourceTree = "<group>"; };
@@ -1414,25 +1483,20 @@
 		B85196F1B731A79BA36D72972608FF02 /* pt-PT.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = "pt-PT.lproj"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/pt-PT.lproj"; sourceTree = "<group>"; };
 		B96EB1739BA0822E4C9D88A2700925D4 /* sync_file.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = sync_file.cpp; path = Realm/ObjectStore/src/sync/impl/sync_file.cpp; sourceTree = "<group>"; };
 		B9847D5B0C6E043B327E19BB6BA9DB3F /* EmailRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EmailRule.swift; path = SwiftValidator/Rules/EmailRule.swift; sourceTree = "<group>"; };
-		BA07EC8FDA12F4A7CC64AF520D0CA9C2 /* Pods-Providers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Providers.release.xcconfig"; sourceTree = "<group>"; };
 		BA9A4EBA430E7769745750A5456CC0C7 /* RLMSyncCredentials.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RLMSyncCredentials.m; path = Realm/RLMSyncCredentials.m; sourceTree = "<group>"; };
 		BAB0C8FD0E056AB0B07A500E9BF2DC24 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB39E295184756E42E8E40257756106E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BC5DA148819D2F036E04922BA83E7C8C /* IPV4Rule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IPV4Rule.swift; path = SwiftValidator/Rules/IPV4Rule.swift; sourceTree = "<group>"; };
-		BC7E592177BA325D4C7DCDA71269D8D6 /* Pods-groma-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-groma-dummy.m"; sourceTree = "<group>"; };
 		BC9D486FDA3D8A6E8FF80DB01436438E /* SwiftyBeaver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftyBeaver.swift; path = Sources/SwiftyBeaver.swift; sourceTree = "<group>"; };
 		BCB9864E7370D2D08DF5F27E3640E9DE /* Rectangle@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Rectangle@3x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Rectangle@3x.png"; sourceTree = "<group>"; };
-		BD0AF1B769719D21264F664A8C127F7C /* Pods-groma-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-groma-frameworks.sh"; sourceTree = "<group>"; };
 		BD5D14B9C43F25ECC5D65ED8691F998D /* partial_sync.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = partial_sync.cpp; path = Realm/ObjectStore/src/sync/partial_sync.cpp; sourceTree = "<group>"; };
 		BD70B729F691CF3D3E4CFAFB0DEB73B3 /* RLMJSONModels.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RLMJSONModels.m; path = Realm/RLMJSONModels.m; sourceTree = "<group>"; };
 		BE37680827AEC4D3735BA355BA9D5FF1 /* ISBNRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ISBNRule.swift; path = SwiftValidator/Rules/ISBNRule.swift; sourceTree = "<group>"; };
-		BFA526C7F277335665F23164B0DF10F3 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Alamofire.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA6E3C67D17BAF51537BBE52A2CE702 /* RLMObjectSchema.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMObjectSchema.mm; path = Realm/RLMObjectSchema.mm; sourceTree = "<group>"; };
 		BFFC834893FEC4B33ECE6ADE2A7CFDF0 /* DispatchQueue+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "DispatchQueue+Alamofire.swift"; path = "Source/DispatchQueue+Alamofire.swift"; sourceTree = "<group>"; };
 		C013A184F881333A4B600DDD49C42581 /* GTMNSString+URLArguments.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "GTMNSString+URLArguments.h"; path = "Foundation/GTMNSString+URLArguments.h"; sourceTree = "<group>"; };
 		C05B2A94C20A1374C83365497660BFA6 /* Operators.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Operators.swift; path = SwiftCharts/Utils/Operators.swift; sourceTree = "<group>"; };
 		C08B859158A7F6B9DF2359DBA2B1595A /* ChartAxisLabelsGeneratorBasic.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisLabelsGeneratorBasic.swift; path = SwiftCharts/Axis/ChartAxisLabelsGeneratorBasic.swift; sourceTree = "<group>"; };
-		C0F13883AD21D97081F99CF2F134FB40 /* ASValueTrackingSlider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ASValueTrackingSlider.framework; path = ASValueTrackingSlider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C11DF583030CCF43F1D050EF5BC3760C /* Arrow@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "Arrow@3x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Arrow@3x.png"; sourceTree = "<group>"; };
 		C14BB35083719BBD992A28BED8373988 /* ChartBarsLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartBarsLayer.swift; path = SwiftCharts/Layers/ChartBarsLayer.swift; sourceTree = "<group>"; };
 		C1C01DAFE67DA09BC87F0622A9EEE3D6 /* HexColorRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HexColorRule.swift; path = SwiftValidator/Rules/HexColorRule.swift; sourceTree = "<group>"; };
@@ -1442,6 +1506,8 @@
 		C3908AFE010D97559B37950553275C18 /* ChartPointEllipseView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointEllipseView.swift; path = SwiftCharts/Views/ChartPointEllipseView.swift; sourceTree = "<group>"; };
 		C4093ABAA9D0B2C5D05FF2AF14B66F40 /* IconGradient@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "IconGradient@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/IconGradient@2x.png"; sourceTree = "<group>"; };
 		C48E3F3C1685E4DBD07EB4533069CD34 /* SessionManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionManager.swift; path = Source/SessionManager.swift; sourceTree = "<group>"; };
+		C5813B290AD0299B39E5F0810DB6B4D9 /* GTMOAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = GTMOAuth2.framework; path = GTMOAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5BBA809C3F71B00875A82605EBEB269 /* Pods-ProvidersTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ProvidersTests-dummy.m"; sourceTree = "<group>"; };
 		C65F7F68948097ED4DCAAEA4A145CD2F /* realm_coordinator.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = realm_coordinator.cpp; path = Realm/ObjectStore/src/impl/realm_coordinator.cpp; sourceTree = "<group>"; };
 		C6D898CA6AAAE85392DC5946F47AABAE /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Source/Result.swift; sourceTree = "<group>"; };
 		C6E1563816EC1E1215BAE4AC0CADE454 /* GTMSessionFetcher.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = GTMSessionFetcher.modulemap; sourceTree = "<group>"; };
@@ -1453,6 +1519,8 @@
 		CA4203EF1588CA4CD919E44579347315 /* RLMResults_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMResults_Private.h; path = include/RLMResults_Private.h; sourceTree = "<group>"; };
 		CB14C0F41E57B9F27BA71531A68C71F3 /* ChartAxis.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxis.swift; path = SwiftCharts/Axis/ChartAxis.swift; sourceTree = "<group>"; };
 		CB4F14A69C1A8295437BB10591EFA186 /* UIColor+Chameleon.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Chameleon.m"; path = "Pod/Classes/Objective-C/UIColor+Chameleon.m"; sourceTree = "<group>"; };
+		CB4FFFC47DF1EFCE2BE01E3F3D5DD1E2 /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Starscream.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB682785FDAFC479DCF45892F307EF5A /* Pods-groma.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-groma.release.xcconfig"; sourceTree = "<group>"; };
 		CB83F3E038F76EE6E76CBF93B0F65FB7 /* UIImage+ChameleonPrivate.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ChameleonPrivate.m"; path = "Pod/Classes/Objective-C/UIImage+ChameleonPrivate.m"; sourceTree = "<group>"; };
 		CB939111188E7D5A6DB02118AE337E0A /* CMPopTipView-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CMPopTipView-umbrella.h"; sourceTree = "<group>"; };
 		CC73BB3FAF8BEDF4B4AB79ACB383B70B /* VALValet_Protected.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = VALValet_Protected.h; path = Valet/VALValet_Protected.h; sourceTree = "<group>"; };
@@ -1462,6 +1530,7 @@
 		CD47A7BAB6B93843A9894CF0F9BEDCEF /* SwiftyBeaver-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftyBeaver-dummy.m"; sourceTree = "<group>"; };
 		CD8491AC889F128B51C797C2A38BEA21 /* feedbackActivity@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "feedbackActivity@2x.png"; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/feedbackActivity@2x.png"; sourceTree = "<group>"; };
 		CE5B078CDC627D454094D55EA10BE61B /* ChartDrawerFunctions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartDrawerFunctions.swift; path = SwiftCharts/Drawers/ChartDrawerFunctions.swift; sourceTree = "<group>"; };
+		CEC54F307726BB233346D76C693DAF03 /* Pods-Providers-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Providers-acknowledgements.plist"; sourceTree = "<group>"; };
 		CF6F2635BDE0193A48547AF36719DCD5 /* GTMOAuth2SignIn.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GTMOAuth2SignIn.m; path = Source/GTMOAuth2SignIn.m; sourceTree = "<group>"; };
 		CF8BAA15B47D2AE2B3A0E1C6C2C5D199 /* ChartAxisLabel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisLabel.swift; path = SwiftCharts/Axis/ChartAxisLabel.swift; sourceTree = "<group>"; };
 		CF9C10CD846D025AD400F86F62DDA1CC /* KLCPopup-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "KLCPopup-umbrella.h"; sourceTree = "<group>"; };
@@ -1484,6 +1553,7 @@
 		D58CC34147BC23EC0E8A14F93B1E0243 /* GTMNSDictionary+URLArguments.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "GTMNSDictionary+URLArguments.m"; path = "Foundation/GTMNSDictionary+URLArguments.m"; sourceTree = "<group>"; };
 		D599B1F4DAEF527E511832757F98AF13 /* UILabel+Chameleon.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UILabel+Chameleon.h"; path = "Pod/Classes/Objective-C/UILabel+Chameleon.h"; sourceTree = "<group>"; };
 		D5B55745B2A576772D015CC3F8C7B2AC /* RLMSyncManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMSyncManager.h; path = include/RLMSyncManager.h; sourceTree = "<group>"; };
+		D6C320B0A9DDF73F9655F16415ECCBDD /* Pods-ProvidersTests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ProvidersTests-resources.sh"; sourceTree = "<group>"; };
 		D6D3D3648395E3C61C8AA87B6D391E96 /* ChartAxisLabelsGeneratorNumber.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisLabelsGeneratorNumber.swift; path = SwiftCharts/Axis/ChartAxisLabelsGeneratorNumber.swift; sourceTree = "<group>"; };
 		D6F7860A72D798C125C41A7985B7B698 /* RLMSyncUtil.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMSyncUtil.mm; path = Realm/RLMSyncUtil.mm; sourceTree = "<group>"; };
 		D7334D240B5C1A8507729D11ED9AE805 /* GTMOAuth2-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GTMOAuth2-prefix.pch"; sourceTree = "<group>"; };
@@ -1492,6 +1562,7 @@
 		D7D0A1B7874725C4A44260C85D49D2F8 /* sync_metadata.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = sync_metadata.cpp; path = Realm/ObjectStore/src/sync/impl/sync_metadata.cpp; sourceTree = "<group>"; };
 		D83EF04435AB4D2DEE9F3E9AD14BC857 /* ChartAxisXLowLayerDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisXLowLayerDefault.swift; path = SwiftCharts/Axis/ChartAxisXLowLayerDefault.swift; sourceTree = "<group>"; };
 		D844B1ACF013C56B5A7883DCE70B9F52 /* UIView+ChameleonPrivate.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIView+ChameleonPrivate.m"; path = "Pod/Classes/Objective-C/UIView+ChameleonPrivate.m"; sourceTree = "<group>"; };
+		D8DA154B6C708668F0E8A087594C7BC1 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D9092E25D0D8575D4FC7955D0CB94135 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D92996139A50896F5BD84BD525E28A0E /* Object.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Object.swift; path = RealmSwift/Object.swift; sourceTree = "<group>"; };
 		DAA49DFAFE70A54D79A6E819690FAC48 /* RLMObjectStore.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMObjectStore.mm; path = Realm/RLMObjectStore.mm; sourceTree = "<group>"; };
@@ -1502,7 +1573,7 @@
 		DC03F5FF9E33B49DE65D0A6076D88F74 /* ChartLineDrawer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartLineDrawer.swift; path = SwiftCharts/Drawers/ChartLineDrawer.swift; sourceTree = "<group>"; };
 		DDFD7D8F094258240ADFDEABFD5F5602 /* ChartAxisModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisModel.swift; path = SwiftCharts/Axis/ChartAxisModel.swift; sourceTree = "<group>"; };
 		DE07E71B02812EF677D5B1A086EFF355 /* ValidationRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ValidationRule.swift; path = SwiftValidator/Rules/ValidationRule.swift; sourceTree = "<group>"; };
-		DEA1AC4188975125354F71774DA7E513 /* Pods-groma-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-groma-umbrella.h"; sourceTree = "<group>"; };
+		DE31F4C901D2988F8F93521FAB24A993 /* Pods_Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Providers.framework; path = "Pods-Providers.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEE27BB6F5A0E27B8C1FAF7DDBADC0DD /* pt.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = pt.lproj; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/pt.lproj"; sourceTree = "<group>"; };
 		DEEBBD7DFC6F2D352ADEC72EB7A2E570 /* ChartPointsTouchHighlightLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartPointsTouchHighlightLayer.swift; path = SwiftCharts/Layers/ChartPointsTouchHighlightLayer.swift; sourceTree = "<group>"; };
 		DF32293A3EF43AAFBA84152660F9BAED /* ChartAxisValueStaticGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValueStaticGenerator.swift; path = SwiftCharts/Axis/ChartAxisValueStaticGenerator.swift; sourceTree = "<group>"; };
@@ -1510,14 +1581,15 @@
 		E08EE27AFA30FBCDC8C092DE21EB7455 /* RLMRealmConfiguration.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RLMRealmConfiguration.mm; path = Realm/RLMRealmConfiguration.mm; sourceTree = "<group>"; };
 		E0EF4FE45DBFAAE53A4946B112B9F00E /* CGRect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CGRect.swift; path = SwiftCharts/CGRect.swift; sourceTree = "<group>"; };
 		E0FFE97416E691FAA570FCAEB69445CE /* Rectangle.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = Rectangle.png; path = "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/Rectangle.png"; sourceTree = "<group>"; };
-		E15DB66A2AF4BF28DF48BEDD423E4E6F /* Pods-groma-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-groma-resources.sh"; sourceTree = "<group>"; };
 		E204510F457BD71593820302BE6B0858 /* ChameleonMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ChameleonMacros.h; path = "Pod/Classes/Objective-C/ChameleonMacros.h"; sourceTree = "<group>"; };
 		E23A0A492269E270D04F6FCE11B628F5 /* MaxLengthRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MaxLengthRule.swift; path = SwiftValidator/Rules/MaxLengthRule.swift; sourceTree = "<group>"; };
+		E4237ED4244DA647F64AD0C69D5BD2ED /* Pods-ProvidersTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ProvidersTests-umbrella.h"; sourceTree = "<group>"; };
 		E472655A022EF9316BA0AF09A9A93ACC /* FullNameRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FullNameRule.swift; path = SwiftValidator/Rules/FullNameRule.swift; sourceTree = "<group>"; };
 		E489D53ECF0BFC58CDE42A6AF9BCB4CD /* ChameleonFramework.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ChameleonFramework.xcconfig; sourceTree = "<group>"; };
 		E4B7BBF82960F1151EA5479E09CD54CD /* Int.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Int.swift; path = SwiftCharts/Int.swift; sourceTree = "<group>"; };
 		E5200F865E9956B4AB56AF9B51528E61 /* ChartAxisXHighLayerDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisXHighLayerDefault.swift; path = SwiftCharts/Axis/ChartAxisXHighLayerDefault.swift; sourceTree = "<group>"; };
 		E58ED5F44ADD5369B40F601B96BDB757 /* Schema.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Schema.swift; path = RealmSwift/Schema.swift; sourceTree = "<group>"; };
+		E59A7A184AA7FAFBE25CF5E51E16039E /* CMPopTipView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CMPopTipView.framework; path = CMPopTipView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E618F3F09F6B868B43A30FD7489EAAEA /* Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Alamofire.xcconfig; sourceTree = "<group>"; };
 		E66859C6FE6739035E7DC167159376D0 /* SwipeView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SwipeView.m; path = SwipeView/SwipeView.m; sourceTree = "<group>"; };
 		E67192B90B11D5FE34B1D658E0C5BD54 /* LinkingObjects.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LinkingObjects.swift; path = RealmSwift/LinkingObjects.swift; sourceTree = "<group>"; };
@@ -1536,9 +1608,7 @@
 		E9DC6DAA5EF0A35B0DAFA07726CF819E /* ValidatorDictionary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ValidatorDictionary.swift; path = SwiftValidator/Core/ValidatorDictionary.swift; sourceTree = "<group>"; };
 		EA29B468BD95EBE96AC1C6F66BB50BC8 /* RealmSwift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = RealmSwift.modulemap; sourceTree = "<group>"; };
 		EA9824ECB169399364521206CDFE19AF /* SortDescriptor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SortDescriptor.swift; path = RealmSwift/SortDescriptor.swift; sourceTree = "<group>"; };
-		EA9D1C377FEF2173E301756DF4DDBCE8 /* KLCPopup.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = KLCPopup.framework; path = KLCPopup.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB0792C75BD5C7D3E45732BA099F7217 /* ChartLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartLayer.swift; path = SwiftCharts/Layers/ChartLayer.swift; sourceTree = "<group>"; };
-		EB4A0E74A1B440FDC69CD4BC006EFF58 /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Realm.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB5150C54D7B7CFF5AD57D132A6F47C6 /* Results.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Results.swift; path = RealmSwift/Results.swift; sourceTree = "<group>"; };
 		EC506BB718BF28A8C896F3D0049D522E /* GTMSessionFetcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GTMSessionFetcher.m; path = Source/GTMSessionFetcher.m; sourceTree = "<group>"; };
 		EE55B0AAD3616E9221962ADBB4EC2BE3 /* ChartViewSelectorBrightness.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartViewSelectorBrightness.swift; path = SwiftCharts/Utils/ChartViewSelectorBrightness.swift; sourceTree = "<group>"; };
@@ -1568,7 +1638,6 @@
 		F6DF58F631A858F6F97335C6AC15E893 /* GTMSessionFetcherService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GTMSessionFetcherService.m; path = Source/GTMSessionFetcherService.m; sourceTree = "<group>"; };
 		F7999F9C04667756E712AC281AA2E4DD /* ChartAxisValueFloat.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChartAxisValueFloat.swift; path = SwiftCharts/AxisValues/ChartAxisValueFloat.swift; sourceTree = "<group>"; };
 		F7DD41E142017EBA41590642FB2664A1 /* SwipeView-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwipeView-umbrella.h"; sourceTree = "<group>"; };
-		F80551309151B865D0B4601C38A09605 /* Pods-shoppinUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppinUITests-frameworks.sh"; sourceTree = "<group>"; };
 		F86C405951E44BE9AF0A54B923DAB752 /* GoogleToolboxForMac.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GoogleToolboxForMac.xcconfig; sourceTree = "<group>"; };
 		F887DDFA1684728E0556D9ABA3081B3E /* RLMRealmConfiguration+Sync.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = "RLMRealmConfiguration+Sync.mm"; path = "Realm/RLMRealmConfiguration+Sync.mm"; sourceTree = "<group>"; };
 		F9061F5DAF1A99D8A8A34641D9BF84CE /* librealmcore-ios.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "librealmcore-ios.a"; path = "core/librealmcore-ios.a"; sourceTree = "<group>"; };
@@ -1581,6 +1650,7 @@
 		FDB17D2CB3CCC65E65657D0CC480BDA0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		FE2F2021E903503575B40A5F93632363 /* Valet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Valet.h; path = Valet/Valet.h; sourceTree = "<group>"; };
 		FE46A5C84DAFD13D7FC57B7365DB38A3 /* RealmSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "RealmSwift-dummy.m"; sourceTree = "<group>"; };
+		FEC4AC3E0F09DF396AD2DEB120D96F71 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1612,6 +1682,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4160CF12F1E7BAF6C1FFDE530D6BAAED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31B8EEBA223FC306E94FF5BB2AC178A0 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1916,6 +1994,23 @@
 			path = ChameleonFramework;
 			sourceTree = "<group>";
 		};
+		13530365864B72BDA84D65BE4A066805 /* Pods-Providers */ = {
+			isa = PBXGroup;
+			children = (
+				61D53A674FC7A77EBD6B3AD317747B6A /* Info.plist */,
+				069926A2F3D668D3741046F760432E8E /* Pods-Providers.modulemap */,
+				02336D29CFF8D678EF830ADE1ADB0646 /* Pods-Providers-acknowledgements.markdown */,
+				CEC54F307726BB233346D76C693DAF03 /* Pods-Providers-acknowledgements.plist */,
+				6DE97227B1B66D7E135E430E2589468E /* Pods-Providers-dummy.m */,
+				6CE960CC35B1E16F7FB7840CC77CE5A0 /* Pods-Providers-resources.sh */,
+				A1ED0788F6A5EA38CCCB39A38DC9E48A /* Pods-Providers-umbrella.h */,
+				0F6F7FE2C5E886F55CFB7B385B90695D /* Pods-Providers.debug.xcconfig */,
+				1F8A3C9B88E821A7CFB88E5A46439DAB /* Pods-Providers.release.xcconfig */,
+			);
+			name = "Pods-Providers";
+			path = "Target Support Files/Pods-Providers";
+			sourceTree = "<group>";
+		};
 		153A4EFC8B7602E69A986BE271CE917E /* SwiftCharts */ = {
 			isa = PBXGroup;
 			children = (
@@ -2129,24 +2224,6 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		2E912B937EB40C33FF5084807AF75649 /* Pods-groma */ = {
-			isa = PBXGroup;
-			children = (
-				62D12D9DDD3A18C9C02F14241DF46DB7 /* Info.plist */,
-				6FA6BF603EE671D92223460FC7B923D0 /* Pods-groma.modulemap */,
-				3A8ADC21D072FA25E67BC2B2CA7A0598 /* Pods-groma-acknowledgements.markdown */,
-				07729BB71B6B3E44C2D3116C882DD0D3 /* Pods-groma-acknowledgements.plist */,
-				BC7E592177BA325D4C7DCDA71269D8D6 /* Pods-groma-dummy.m */,
-				BD0AF1B769719D21264F664A8C127F7C /* Pods-groma-frameworks.sh */,
-				E15DB66A2AF4BF28DF48BEDD423E4E6F /* Pods-groma-resources.sh */,
-				DEA1AC4188975125354F71774DA7E513 /* Pods-groma-umbrella.h */,
-				7D95B4A5BEB966541DCC1D205B2F006A /* Pods-groma.debug.xcconfig */,
-				A04F55D4C6057B81D68D93C27C99013F /* Pods-groma.release.xcconfig */,
-			);
-			name = "Pods-groma";
-			path = "Target Support Files/Pods-groma";
-			sourceTree = "<group>";
-		};
 		2EF3FA63718B0E85A29378F42006CF41 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -2159,16 +2236,6 @@
 			);
 			name = "Support Files";
 			path = "../Target Support Files/Reachability";
-			sourceTree = "<group>";
-		};
-		2FDD763B77C5E1E6D91737C6441A899D /* Targets Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				2E912B937EB40C33FF5084807AF75649 /* Pods-groma */,
-				C5E2632462A8972EAB9563D57CCD0AA2 /* Pods-Providers */,
-				F023DE6C1411A928FE50B1496F521D38 /* Pods-shoppinUITests */,
-			);
-			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
 		321C4C1C8D5D6439ED7244F55C53299E /* Realm */ = {
@@ -2288,34 +2355,6 @@
 			);
 			name = "Support Files";
 			path = "../Target Support Files/SwiftyBeaver";
-			sourceTree = "<group>";
-		};
-		33D4A0C6F7E9D8713DFBD63E861CA6FB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				BFA526C7F277335665F23164B0DF10F3 /* Alamofire.framework */,
-				C0F13883AD21D97081F99CF2F134FB40 /* ASValueTrackingSlider.framework */,
-				6A8A4C0A268CC05FC83E2BC8E3318947 /* ChameleonFramework.framework */,
-				18EC5C3298651AF5A429C875E1AF7099 /* CMPopTipView.framework */,
-				610A1A23BC7C8A5E62385E0C38BCC18F /* GoogleToolboxForMac.framework */,
-				64FDEA4573354145C76180DBEAFD89E8 /* GTMOAuth2.framework */,
-				17D47047F380B1350D3861BCA486291D /* GTMSessionFetcher.framework */,
-				1251051FD6ECA1ABDEAD61D8469E4FB5 /* HockeySDKResources.bundle */,
-				EA9D1C377FEF2173E301756DF4DDBCE8 /* KLCPopup.framework */,
-				1225F2C8498FFBFCF92F3AE6C01F58B0 /* Pods_groma.framework */,
-				97E55BABEF7B83F9F466E6A10FF7C566 /* Pods_Providers.framework */,
-				1496357F29DEDD5D864C591197F5C04A /* Pods_shoppinUITests.framework */,
-				3329796CA4385DF21263DA3F363B1E19 /* Reachability.framework */,
-				EB4A0E74A1B440FDC69CD4BC006EFF58 /* Realm.framework */,
-				66957D7C81B3F4440FC670A809AA2D6E /* RealmSwift.framework */,
-				887937784E4A13761ADB7B826554FED9 /* Starscream.framework */,
-				72AFDDE7F6CFA1D349FFEC3E038514A3 /* SwiftCharts.framework */,
-				5B8FF1DCFDA050DBC3F3114EE7907E39 /* SwiftValidator.framework */,
-				6966079D3DACBF446FF948B76B465BE9 /* SwiftyBeaver.framework */,
-				2ADE66A33AED2A94EA7A583B2263B0E3 /* SwipeView.framework */,
-				2C18344ECD11255749E485DAC101C358 /* Valet.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		3D66BE99F3B74C0476CD67C0B236FFF2 /* Support Files */ = {
@@ -2468,6 +2507,24 @@
 			path = "../Target Support Files/Realm";
 			sourceTree = "<group>";
 		};
+		6805FF05EAFCBA3246F44A7874EDDAB3 /* Pods-ProvidersTests */ = {
+			isa = PBXGroup;
+			children = (
+				FEC4AC3E0F09DF396AD2DEB120D96F71 /* Info.plist */,
+				12D87CCB979FFE781C689031F9E3346E /* Pods-ProvidersTests.modulemap */,
+				70481FB2D98E1501DAFFDF2741D654D6 /* Pods-ProvidersTests-acknowledgements.markdown */,
+				39AFA002005402F8CDE0AEE31DF21F96 /* Pods-ProvidersTests-acknowledgements.plist */,
+				C5BBA809C3F71B00875A82605EBEB269 /* Pods-ProvidersTests-dummy.m */,
+				900CEE01467B22AD0AA9F5C08855DD6A /* Pods-ProvidersTests-frameworks.sh */,
+				D6C320B0A9DDF73F9655F16415ECCBDD /* Pods-ProvidersTests-resources.sh */,
+				E4237ED4244DA647F64AD0C69D5BD2ED /* Pods-ProvidersTests-umbrella.h */,
+				4C588947F8F42E39A7B95EA0C97C1672 /* Pods-ProvidersTests.debug.xcconfig */,
+				5014BB27919FB7ED487CB40EC4DC354A /* Pods-ProvidersTests.release.xcconfig */,
+			);
+			name = "Pods-ProvidersTests";
+			path = "Target Support Files/Pods-ProvidersTests";
+			sourceTree = "<group>";
+		};
 		68A3FE72A987F03110E968CBE4560D5F /* DebugUtils */ = {
 			isa = PBXGroup;
 			children = (
@@ -2514,8 +2571,8 @@
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
 				D1DE125989C6104B3D780B8597B847E4 /* Frameworks */,
 				DB761591FA836EDA01316E8D2F7E9AA0 /* Pods */,
-				33D4A0C6F7E9D8713DFBD63E861CA6FB /* Products */,
-				2FDD763B77C5E1E6D91737C6441A899D /* Targets Support Files */,
+				9EC9F0D590988B91E3E329B7EE7E1DFA /* Products */,
+				C5DA84590DD562D7037C60501B2FA21E /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2589,6 +2646,35 @@
 			path = "../Target Support Files/GTMOAuth2";
 			sourceTree = "<group>";
 		};
+		9EC9F0D590988B91E3E329B7EE7E1DFA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1B398657A1B3E94AC04CCFAB2A1B417A /* Alamofire.framework */,
+				7096C29BFB953C0071F87083A865DDAB /* ASValueTrackingSlider.framework */,
+				00E3B55B783411C1941F7FED38B6B6C8 /* ChameleonFramework.framework */,
+				E59A7A184AA7FAFBE25CF5E51E16039E /* CMPopTipView.framework */,
+				228846FF2C9911B011337D66E5F16DBA /* GoogleToolboxForMac.framework */,
+				C5813B290AD0299B39E5F0810DB6B4D9 /* GTMOAuth2.framework */,
+				54D0BF2789C26643F2452EBE1CEA41D0 /* GTMSessionFetcher.framework */,
+				A642AEC78A2B719FE301762607930E32 /* HockeySDKResources.bundle */,
+				7EFB9F48520F14C17FF90072A8D64F09 /* KLCPopup.framework */,
+				B48E4067ACFA5FBE9DC1E97BDACDCF08 /* Pods_groma.framework */,
+				DE31F4C901D2988F8F93521FAB24A993 /* Pods_Providers.framework */,
+				180F38C6F5AFF56A68220D4DC64ED65E /* Pods_ProvidersTests.framework */,
+				000724B153A3E1898F095BB206138C8E /* Pods_shoppinUITests.framework */,
+				7B8FDA8D0C3D42E3FACDAD1393E8D2B1 /* Reachability.framework */,
+				7DB97FD080DED395ACA171CEA0F83A0D /* Realm.framework */,
+				9958F4009ABED3B1AE5949FBCE598DBB /* RealmSwift.framework */,
+				CB4FFFC47DF1EFCE2BE01E3F3D5DD1E2 /* Starscream.framework */,
+				A92D6EF04D563792428445AB6D4515A1 /* SwiftCharts.framework */,
+				1EE811FE3D567DC6B88E40C9ECA045E0 /* SwiftValidator.framework */,
+				9A8E88A912C0793ED2F4F9B7B2FBF75F /* SwiftyBeaver.framework */,
+				1565F8896531ABD4AD8CEEDF35390F80 /* SwipeView.framework */,
+				3E0E929D2A9DA6DFD9FCD864D95193A5 /* Valet.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A33EFBD66C6B0C66A08C89BBD98C44BF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2624,6 +2710,24 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		B3A96E3A9E26B91B339C00D3EC54F007 /* Pods-groma */ = {
+			isa = PBXGroup;
+			children = (
+				D8DA154B6C708668F0E8A087594C7BC1 /* Info.plist */,
+				92C48D9A479478DBDF88CD90FDADF6EB /* Pods-groma.modulemap */,
+				1A76937BD97033FD40F3D6D6E8A1E0D0 /* Pods-groma-acknowledgements.markdown */,
+				98BA91893DEDC59A8F58E3B83F522746 /* Pods-groma-acknowledgements.plist */,
+				1EEC92ACE6C232DA6EC1B2C5E91218E8 /* Pods-groma-dummy.m */,
+				7E680E6A65D04072D23805C72C688ADD /* Pods-groma-frameworks.sh */,
+				5D8F4CFF2A9937EC280E2B02AD0889D7 /* Pods-groma-resources.sh */,
+				5172F983FF3CDE63F0978F0CD0A5860A /* Pods-groma-umbrella.h */,
+				97945C3C1E7E0B92F43C191882FB9A25 /* Pods-groma.debug.xcconfig */,
+				CB682785FDAFC479DCF45892F307EF5A /* Pods-groma.release.xcconfig */,
+			);
+			name = "Pods-groma";
+			path = "Target Support Files/Pods-groma";
+			sourceTree = "<group>";
+		};
 		B452A1728390231D985E07C282296AAD /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -2648,21 +2752,15 @@
 			path = GoogleSignIn;
 			sourceTree = "<group>";
 		};
-		C5E2632462A8972EAB9563D57CCD0AA2 /* Pods-Providers */ = {
+		C5DA84590DD562D7037C60501B2FA21E /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				8CBC580A24C85D1EC58853DDB49D6A8F /* Info.plist */,
-				4B50212B3800757CAF19C705C588ACC9 /* Pods-Providers.modulemap */,
-				94562BBD8C55CCF75CDDE9D61C5712A3 /* Pods-Providers-acknowledgements.markdown */,
-				326F9D299615633930D6974A47E2A161 /* Pods-Providers-acknowledgements.plist */,
-				0C60ABB2E7D259ED30E5D7A2047A33C4 /* Pods-Providers-dummy.m */,
-				43560A2992358930AEAD6C17F221888C /* Pods-Providers-resources.sh */,
-				53EE9E50E35903D072467ACB141BFBA2 /* Pods-Providers-umbrella.h */,
-				0F379BFC14EEFAE4D439B25DDF855188 /* Pods-Providers.debug.xcconfig */,
-				BA07EC8FDA12F4A7CC64AF520D0CA9C2 /* Pods-Providers.release.xcconfig */,
+				B3A96E3A9E26B91B339C00D3EC54F007 /* Pods-groma */,
+				13530365864B72BDA84D65BE4A066805 /* Pods-Providers */,
+				6805FF05EAFCBA3246F44A7874EDDAB3 /* Pods-ProvidersTests */,
+				F8A6560A56EC50E1D1FE4B973DA6AB24 /* Pods-shoppinUITests */,
 			);
-			name = "Pods-Providers";
-			path = "Target Support Files/Pods-Providers";
+			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
 		C5FCD9795A6106D01CD43E383599BD9D /* GTMSessionFetcher */ = {
@@ -2830,24 +2928,6 @@
 			path = "../Target Support Files/GTMSessionFetcher";
 			sourceTree = "<group>";
 		};
-		F023DE6C1411A928FE50B1496F521D38 /* Pods-shoppinUITests */ = {
-			isa = PBXGroup;
-			children = (
-				2C7110FDBA5FFACEF37E9F3458AFE0A8 /* Info.plist */,
-				7E8E512AB58E9D4207A036C36F3F5009 /* Pods-shoppinUITests.modulemap */,
-				B2886546B5195728387BA28A25F989D1 /* Pods-shoppinUITests-acknowledgements.markdown */,
-				18DD99C0B2E90CB58C408A751696C0EF /* Pods-shoppinUITests-acknowledgements.plist */,
-				63FDEFF6C47761C7378A015E786B7976 /* Pods-shoppinUITests-dummy.m */,
-				F80551309151B865D0B4601C38A09605 /* Pods-shoppinUITests-frameworks.sh */,
-				468843DD90EFC688930742A843716447 /* Pods-shoppinUITests-resources.sh */,
-				B0BDE2A840AD82DD5F15C4B44DA6CD56 /* Pods-shoppinUITests-umbrella.h */,
-				2F09C8DE65C1D328D437E0F9D0059E09 /* Pods-shoppinUITests.debug.xcconfig */,
-				36A21222773212E02D73F1963E6E3B20 /* Pods-shoppinUITests.release.xcconfig */,
-			);
-			name = "Pods-shoppinUITests";
-			path = "Target Support Files/Pods-shoppinUITests";
-			sourceTree = "<group>";
-		};
 		F40A4E18F8DE4FF5178DD02F0634FC1A /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -2869,6 +2949,24 @@
 				D58CC34147BC23EC0E8A14F93B1E0243 /* GTMNSDictionary+URLArguments.m */,
 			);
 			name = "NSDictionary+URLArguments";
+			sourceTree = "<group>";
+		};
+		F8A6560A56EC50E1D1FE4B973DA6AB24 /* Pods-shoppinUITests */ = {
+			isa = PBXGroup;
+			children = (
+				9ADAE55053ADFB8B2A78461D60AC8C05 /* Info.plist */,
+				48E316E01DC851AED3F58E4D43C376BB /* Pods-shoppinUITests.modulemap */,
+				9BC2F1763354AF1FC5029DF9AC66DEA3 /* Pods-shoppinUITests-acknowledgements.markdown */,
+				4D478289E53CD75B4712666C7A9FC5DB /* Pods-shoppinUITests-acknowledgements.plist */,
+				3E751D06130E6209FAF2FA686299B1AC /* Pods-shoppinUITests-dummy.m */,
+				A4C26FC907CCC359EDB6CECC1547622F /* Pods-shoppinUITests-frameworks.sh */,
+				66043D4E1874C00B63653B52D58BB3DC /* Pods-shoppinUITests-resources.sh */,
+				219DDDDCBA1883FCEA1187A1EEED4BE7 /* Pods-shoppinUITests-umbrella.h */,
+				5A152058E148B396F8A87A1D582491AC /* Pods-shoppinUITests.debug.xcconfig */,
+				A800EEC5190C6B6AFD746E1388148381 /* Pods-shoppinUITests.release.xcconfig */,
+			);
+			name = "Pods-shoppinUITests";
+			path = "Target Support Files/Pods-shoppinUITests";
 			sourceTree = "<group>";
 		};
 		F93BD68DA593C1606FDF19F8008837EF /* Core */ = {
@@ -2957,6 +3055,14 @@
 			files = (
 				D82D611DB9AFAA2A152F7BC05D0F2291 /* CMPopTipView-umbrella.h in Headers */,
 				E344464A31BAB7B5A1C2B7546C47F032 /* CMPopTipView.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E1A37332C1D19622BA5CBC874EA6F62 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C61DD7E1C9E34B3E758BC5B8A59C726 /* Pods-ProvidersTests-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3200,7 +3306,7 @@
 			);
 			name = "Pods-shoppinUITests";
 			productName = "Pods-shoppinUITests";
-			productReference = 1496357F29DEDD5D864C591197F5C04A /* Pods_shoppinUITests.framework */;
+			productReference = 000724B153A3E1898F095BB206138C8E /* Pods_shoppinUITests.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		1E88F2F016877B4510395F493E55C96C /* RealmSwift */ = {
@@ -3218,7 +3324,7 @@
 			);
 			name = RealmSwift;
 			productName = RealmSwift;
-			productReference = 66957D7C81B3F4440FC670A809AA2D6E /* RealmSwift.framework */;
+			productReference = 9958F4009ABED3B1AE5949FBCE598DBB /* RealmSwift.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		202B1AA2AAA8853131436854AD1151B1 /* SwiftyBeaver */ = {
@@ -3235,7 +3341,7 @@
 			);
 			name = SwiftyBeaver;
 			productName = SwiftyBeaver;
-			productReference = 6966079D3DACBF446FF948B76B465BE9 /* SwiftyBeaver.framework */;
+			productReference = 9A8E88A912C0793ED2F4F9B7B2FBF75F /* SwiftyBeaver.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		2956FAA9A60AB64BAA3F8BCE697C9191 /* Pods-groma */ = {
@@ -3270,7 +3376,7 @@
 			);
 			name = "Pods-groma";
 			productName = "Pods-groma";
-			productReference = 1225F2C8498FFBFCF92F3AE6C01F58B0 /* Pods_groma.framework */;
+			productReference = B48E4067ACFA5FBE9DC1E97BDACDCF08 /* Pods_groma.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		676F09334626B8F98147C5C010C821E9 /* SwiftCharts */ = {
@@ -3287,7 +3393,7 @@
 			);
 			name = SwiftCharts;
 			productName = SwiftCharts;
-			productReference = 72AFDDE7F6CFA1D349FFEC3E038514A3 /* SwiftCharts.framework */;
+			productReference = A92D6EF04D563792428445AB6D4515A1 /* SwiftCharts.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		6781484AACA274D8D41414AE3B594109 /* KLCPopup */ = {
@@ -3304,7 +3410,7 @@
 			);
 			name = KLCPopup;
 			productName = KLCPopup;
-			productReference = EA9D1C377FEF2173E301756DF4DDBCE8 /* KLCPopup.framework */;
+			productReference = 7EFB9F48520F14C17FF90072A8D64F09 /* KLCPopup.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		681BE6E3D02A43F9BA63777AC435C8FD /* GTMSessionFetcher */ = {
@@ -3321,7 +3427,7 @@
 			);
 			name = GTMSessionFetcher;
 			productName = GTMSessionFetcher;
-			productReference = 17D47047F380B1350D3861BCA486291D /* GTMSessionFetcher.framework */;
+			productReference = 54D0BF2789C26643F2452EBE1CEA41D0 /* GTMSessionFetcher.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		6C74B45AC4579C03F25AFBAE82C01FB0 /* Realm */ = {
@@ -3340,7 +3446,32 @@
 			);
 			name = Realm;
 			productName = Realm;
-			productReference = EB4A0E74A1B440FDC69CD4BC006EFF58 /* Realm.framework */;
+			productReference = 7DB97FD080DED395ACA171CEA0F83A0D /* Realm.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		76AF13C130A1A777D015BA5703A1BB82 /* Pods-ProvidersTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7D08E72F720CC62060EA5BB76601BC0 /* Build configuration list for PBXNativeTarget "Pods-ProvidersTests" */;
+			buildPhases = (
+				79DFE0333FE59034493B0483E76D2491 /* Sources */,
+				4160CF12F1E7BAF6C1FFDE530D6BAAED /* Frameworks */,
+				4E1A37332C1D19622BA5CBC874EA6F62 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1FC44C6F0A6054AA0E16C9CFD4EDACD1 /* PBXTargetDependency */,
+				CB0FF151AE7BEA0B9A3E94F3B1FF5624 /* PBXTargetDependency */,
+				B33E09C3B284F54BC38DE10F53C3C2FB /* PBXTargetDependency */,
+				7343A52B55081A92A6C880CE2C3933B8 /* PBXTargetDependency */,
+				6C77D967B7F3041B83FEB037D7EB8A8E /* PBXTargetDependency */,
+				3513BE89CD197B3378257DEC23074D25 /* PBXTargetDependency */,
+				5A14B93F73D9CBCD05FD92DC22CE8DB9 /* PBXTargetDependency */,
+				95A6285B632E3C5FBBE35DBA4A83C9E4 /* PBXTargetDependency */,
+			);
+			name = "Pods-ProvidersTests";
+			productName = "Pods-ProvidersTests";
+			productReference = 180F38C6F5AFF56A68220D4DC64ED65E /* Pods_ProvidersTests.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		76BD4592010354D6C23D6ECCA20D83A8 /* ChameleonFramework */ = {
@@ -3357,7 +3488,7 @@
 			);
 			name = ChameleonFramework;
 			productName = ChameleonFramework;
-			productReference = 6A8A4C0A268CC05FC83E2BC8E3318947 /* ChameleonFramework.framework */;
+			productReference = 00E3B55B783411C1941F7FED38B6B6C8 /* ChameleonFramework.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		88E9EC28B8B46C3631E6B242B50F4442 /* Alamofire */ = {
@@ -3374,7 +3505,7 @@
 			);
 			name = Alamofire;
 			productName = Alamofire;
-			productReference = BFA526C7F277335665F23164B0DF10F3 /* Alamofire.framework */;
+			productReference = 1B398657A1B3E94AC04CCFAB2A1B417A /* Alamofire.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		8FEF65E733AA5E921143580AD98439CB /* Reachability */ = {
@@ -3391,7 +3522,7 @@
 			);
 			name = Reachability;
 			productName = Reachability;
-			productReference = 3329796CA4385DF21263DA3F363B1E19 /* Reachability.framework */;
+			productReference = 7B8FDA8D0C3D42E3FACDAD1393E8D2B1 /* Reachability.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		99F6FD9CF8D1F73545990E577E46FE33 /* SwiftValidator */ = {
@@ -3408,7 +3539,7 @@
 			);
 			name = SwiftValidator;
 			productName = SwiftValidator;
-			productReference = 5B8FF1DCFDA050DBC3F3114EE7907E39 /* SwiftValidator.framework */;
+			productReference = 1EE811FE3D567DC6B88E40C9ECA045E0 /* SwiftValidator.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		9E6DCA6F1C772EF86EC9606FCCDBC140 /* SwipeView */ = {
@@ -3425,7 +3556,7 @@
 			);
 			name = SwipeView;
 			productName = SwipeView;
-			productReference = 2ADE66A33AED2A94EA7A583B2263B0E3 /* SwipeView.framework */;
+			productReference = 1565F8896531ABD4AD8CEEDF35390F80 /* SwipeView.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		9F510D2B6A00360BAB8430120448D98C /* ASValueTrackingSlider */ = {
@@ -3442,7 +3573,7 @@
 			);
 			name = ASValueTrackingSlider;
 			productName = ASValueTrackingSlider;
-			productReference = C0F13883AD21D97081F99CF2F134FB40 /* ASValueTrackingSlider.framework */;
+			productReference = 7096C29BFB953C0071F87083A865DDAB /* ASValueTrackingSlider.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		A9FA91ED9FA4BD8B9595232DCB979945 /* Valet */ = {
@@ -3459,7 +3590,7 @@
 			);
 			name = Valet;
 			productName = Valet;
-			productReference = 2C18344ECD11255749E485DAC101C358 /* Valet.framework */;
+			productReference = 3E0E929D2A9DA6DFD9FCD864D95193A5 /* Valet.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		AF7F79ADD2E54B7E1857C7EEBCD327A3 /* CMPopTipView */ = {
@@ -3476,7 +3607,7 @@
 			);
 			name = CMPopTipView;
 			productName = CMPopTipView;
-			productReference = 18EC5C3298651AF5A429C875E1AF7099 /* CMPopTipView.framework */;
+			productReference = E59A7A184AA7FAFBE25CF5E51E16039E /* CMPopTipView.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		B1C4AAFAF49036C7007633DAA3C806AD /* GTMOAuth2 */ = {
@@ -3495,7 +3626,7 @@
 			);
 			name = GTMOAuth2;
 			productName = GTMOAuth2;
-			productReference = 64FDEA4573354145C76180DBEAFD89E8 /* GTMOAuth2.framework */;
+			productReference = C5813B290AD0299B39E5F0810DB6B4D9 /* GTMOAuth2.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		E2DFFE10AB5598FF0C09717EEEAAA148 /* Pods-Providers */ = {
@@ -3520,7 +3651,7 @@
 			);
 			name = "Pods-Providers";
 			productName = "Pods-Providers";
-			productReference = 97E55BABEF7B83F9F466E6A10FF7C566 /* Pods_Providers.framework */;
+			productReference = DE31F4C901D2988F8F93521FAB24A993 /* Pods_Providers.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		EB9AD825427F216B54E693242E671FA1 /* HockeySDK-HockeySDKResources */ = {
@@ -3537,7 +3668,7 @@
 			);
 			name = "HockeySDK-HockeySDKResources";
 			productName = "HockeySDK-HockeySDKResources";
-			productReference = 1251051FD6ECA1ABDEAD61D8469E4FB5 /* HockeySDKResources.bundle */;
+			productReference = A642AEC78A2B719FE301762607930E32 /* HockeySDKResources.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		F05BBF0ABCBAB1D55C2FE0C052A8CF62 /* GoogleToolboxForMac */ = {
@@ -3554,7 +3685,7 @@
 			);
 			name = GoogleToolboxForMac;
 			productName = GoogleToolboxForMac;
-			productReference = 610A1A23BC7C8A5E62385E0C38BCC18F /* GoogleToolboxForMac.framework */;
+			productReference = 228846FF2C9911B011337D66E5F16DBA /* GoogleToolboxForMac.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		F17C2F26BD98B0375B33EB47E83A1CB0 /* Starscream */ = {
@@ -3571,7 +3702,7 @@
 			);
 			name = Starscream;
 			productName = Starscream;
-			productReference = 887937784E4A13761ADB7B826554FED9 /* Starscream.framework */;
+			productReference = CB4FFFC47DF1EFCE2BE01E3F3D5DD1E2 /* Starscream.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -3591,7 +3722,7 @@
 				en,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
-			productRefGroup = 33D4A0C6F7E9D8713DFBD63E861CA6FB /* Products */;
+			productRefGroup = 9EC9F0D590988B91E3E329B7EE7E1DFA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -3606,6 +3737,7 @@
 				6781484AACA274D8D41414AE3B594109 /* KLCPopup */,
 				2956FAA9A60AB64BAA3F8BCE697C9191 /* Pods-groma */,
 				E2DFFE10AB5598FF0C09717EEEAAA148 /* Pods-Providers */,
+				76AF13C130A1A777D015BA5703A1BB82 /* Pods-ProvidersTests */,
 				0CEA197C13D8322EBCD1E3DCC570C33F /* Pods-shoppinUITests */,
 				8FEF65E733AA5E921143580AD98439CB /* Reachability */,
 				6C74B45AC4579C03F25AFBAE82C01FB0 /* Realm */,
@@ -3836,6 +3968,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		79DFE0333FE59034493B0483E76D2491 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				97D10F8E0CAED9C6838801EEB7D56B2E /* Pods-ProvidersTests-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4199,6 +4339,12 @@
 			target = 202B1AA2AAA8853131436854AD1151B1 /* SwiftyBeaver */;
 			targetProxy = 831BC6A04C103BE16128C9EFE27C61C3 /* PBXContainerItemProxy */;
 		};
+		1FC44C6F0A6054AA0E16C9CFD4EDACD1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Alamofire;
+			target = 88E9EC28B8B46C3631E6B242B50F4442 /* Alamofire */;
+			targetProxy = 64F8A303C9231C3BB4F66606D15FE5BA /* PBXContainerItemProxy */;
+		};
 		23B949B97A69A15B279942231625CE3B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = SwiftCharts;
@@ -4235,6 +4381,12 @@
 			target = F17C2F26BD98B0375B33EB47E83A1CB0 /* Starscream */;
 			targetProxy = 93FF9CE43C1B26E5F81FFC6FBD587B89 /* PBXContainerItemProxy */;
 		};
+		3513BE89CD197B3378257DEC23074D25 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Starscream;
+			target = F17C2F26BD98B0375B33EB47E83A1CB0 /* Starscream */;
+			targetProxy = 2FCD4B31E197214EF10A4B295932CAE8 /* PBXContainerItemProxy */;
+		};
 		3685CC549B13D25F9B663361874E198F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GTMSessionFetcher;
@@ -4264,6 +4416,12 @@
 			name = Realm;
 			target = 6C74B45AC4579C03F25AFBAE82C01FB0 /* Realm */;
 			targetProxy = 23F390A5294194FF472718AAE5179B2A /* PBXContainerItemProxy */;
+		};
+		5A14B93F73D9CBCD05FD92DC22CE8DB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwiftyBeaver;
+			target = 202B1AA2AAA8853131436854AD1151B1 /* SwiftyBeaver */;
+			targetProxy = 86101E95FFB32B24AED6D36B0A1502EB /* PBXContainerItemProxy */;
 		};
 		5B03FB7E895D93B3C5220CA3CE6DE6FD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4295,6 +4453,18 @@
 			target = F17C2F26BD98B0375B33EB47E83A1CB0 /* Starscream */;
 			targetProxy = B1AA09F6E5C70E41CAC77C1C71DE6549 /* PBXContainerItemProxy */;
 		};
+		6C77D967B7F3041B83FEB037D7EB8A8E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RealmSwift;
+			target = 1E88F2F016877B4510395F493E55C96C /* RealmSwift */;
+			targetProxy = 8AFB7EDDABCFB4302ACAC80735FDCEF8 /* PBXContainerItemProxy */;
+		};
+		7343A52B55081A92A6C880CE2C3933B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Realm;
+			target = 6C74B45AC4579C03F25AFBAE82C01FB0 /* Realm */;
+			targetProxy = 44D00A7F36B57DDCEF513080C074E838 /* PBXContainerItemProxy */;
+		};
 		74185B0D7E72C8F59C2B8DC42EEBF585 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Alamofire;
@@ -4325,6 +4495,12 @@
 			target = A9FA91ED9FA4BD8B9595232DCB979945 /* Valet */;
 			targetProxy = 667594F72D6E097239AC1008DC3C60D1 /* PBXContainerItemProxy */;
 		};
+		95A6285B632E3C5FBBE35DBA4A83C9E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Valet;
+			target = A9FA91ED9FA4BD8B9595232DCB979945 /* Valet */;
+			targetProxy = 5CB79657DC9C5A64F3CBB5BE8B4579BA /* PBXContainerItemProxy */;
+		};
 		95B70CDF43126BCDDFE5BC94B353B011 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ASValueTrackingSlider;
@@ -4349,6 +4525,12 @@
 			target = 1E88F2F016877B4510395F493E55C96C /* RealmSwift */;
 			targetProxy = B24E69C1D9656E61CF24C30195959539 /* PBXContainerItemProxy */;
 		};
+		B33E09C3B284F54BC38DE10F53C3C2FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Reachability;
+			target = 8FEF65E733AA5E921143580AD98439CB /* Reachability */;
+			targetProxy = 44D6667A6696DC9F05F7E29770615BDE /* PBXContainerItemProxy */;
+		};
 		BA482B56B95856CE9EB3707A89937576 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Alamofire;
@@ -4366,6 +4548,12 @@
 			name = GoogleToolboxForMac;
 			target = F05BBF0ABCBAB1D55C2FE0C052A8CF62 /* GoogleToolboxForMac */;
 			targetProxy = 5F52EC58C2A5001C0200B83AF64534D9 /* PBXContainerItemProxy */;
+		};
+		CB0FF151AE7BEA0B9A3E94F3B1FF5624 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ChameleonFramework;
+			target = 76BD4592010354D6C23D6ECCA20D83A8 /* ChameleonFramework */;
+			targetProxy = 3661B663884E9E461FE84E140AE69B5B /* PBXContainerItemProxy */;
 		};
 		CF1E04F7CCCC8AD35F84519F2395024A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4631,7 +4819,7 @@
 		};
 		20914AE4F37A5F588F989ED913259CEC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BA07EC8FDA12F4A7CC64AF520D0CA9C2 /* Pods-Providers.release.xcconfig */;
+			baseConfigurationReference = 1F8A3C9B88E821A7CFB88E5A46439DAB /* Pods-Providers.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -4881,7 +5069,7 @@
 		};
 		4081A4F312E8736CC2F327F85E928587 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2F09C8DE65C1D328D437E0F9D0059E09 /* Pods-shoppinUITests.debug.xcconfig */;
+			baseConfigurationReference = 5A152058E148B396F8A87A1D582491AC /* Pods-shoppinUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -5431,7 +5619,7 @@
 		};
 		B980C5A585D5583FFF5D7D3BEEF99653 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A04F55D4C6057B81D68D93C27C99013F /* Pods-groma.release.xcconfig */;
+			baseConfigurationReference = CB682785FDAFC479DCF45892F307EF5A /* Pods-groma.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -5526,9 +5714,43 @@
 			};
 			name = Debug;
 		};
+		D2815FCA9DFBFE1E69A2D83DC4EE54CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5014BB27919FB7ED487CB40EC4DC354A /* Pods-ProvidersTests.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ProvidersTests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ProvidersTests/Pods-ProvidersTests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_ProvidersTests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		D5BB9051D7D8264A0D1FAE91D84B854D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7D95B4A5BEB966541DCC1D205B2F006A /* Pods-groma.debug.xcconfig */;
+			baseConfigurationReference = 97945C3C1E7E0B92F43C191882FB9A25 /* Pods-groma.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -5584,6 +5806,40 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DC9C89FD676CEE88CDA49B9EE2873AFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C588947F8F42E39A7B95EA0C97C1672 /* Pods-ProvidersTests.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ProvidersTests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ProvidersTests/Pods-ProvidersTests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_ProvidersTests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -5655,7 +5911,7 @@
 		};
 		F1D304BFF4E7B205759A3A48B419B559 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0F379BFC14EEFAE4D439B25DDF855188 /* Pods-Providers.debug.xcconfig */;
+			baseConfigurationReference = 0F6F7FE2C5E886F55CFB7B385B90695D /* Pods-Providers.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -5749,7 +6005,7 @@
 		};
 		F59EB807ECB84F91A117A7A6C80C92E1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 36A21222773212E02D73F1963E6E3B20 /* Pods-shoppinUITests.release.xcconfig */;
+			baseConfigurationReference = A800EEC5190C6B6AFD746E1388148381 /* Pods-shoppinUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -6021,6 +6277,15 @@
 			buildConfigurations = (
 				3ADC916E9FBABCDBB2DE0666BD08E90C /* Debug */,
 				323C9553683195C79E4330756B808C3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7D08E72F720CC62060EA5BB76601BC0 /* Build configuration list for PBXNativeTarget "Pods-ProvidersTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC9C89FD676CEE88CDA49B9EE2873AFF /* Debug */,
+				D2815FCA9DFBFE1E69A2D83DC4EE54CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

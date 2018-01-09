@@ -9,9 +9,13 @@
 import Foundation
 
 public protocol Identifiable {
-    
+
     /**
     If objects have the same semantic identity. Identity is equivalent to a primary key in a database.
     */
     func same(_ rhs: Self) -> Bool
+}
+
+public protocol WithUuid {
+    var uuid: String { get }
 }

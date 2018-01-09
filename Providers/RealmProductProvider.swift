@@ -1181,9 +1181,16 @@ class RealmProductProvider: RealmProvider {
         doInWriteTransaction({realm in
             
             guard let units = DBProv.unitProvider.unitsSync(buyable: nil) else {logger.e("Couldn't load units. Can't restore prefill product"); return false}
-            
-            let prefillProducts = SuggestionsPrefiller().prefillProducts(LangManager().appLang, defaultUnits: units.toArray()).products
-            
+
+            let lang = LangManager().appLang
+
+            guard let path = Bundle.main.path(forResource: lang, ofType: "lproj") else { logger.e("No path for lang: \(lang)"); return nil }
+            guard let bundle = Bundle(path: path) else { logger.e("No bundle for path: \(path)"); return nil }
+
+            let prefillProducts = SuggestionsPrefiller().prefillProducts(LangManager().appLang, defaultUnits: units.toArray(), trFunction: { key, lang in
+                return bundle.localizedString(forKey: key, value: nil, table: nil)
+            }).products
+
             var restoredSomething: Bool = false
             
             for prefillProduct in prefillProducts {

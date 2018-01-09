@@ -167,7 +167,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     }
     
     @IBAction func loginTapped(_ sender: AnyObject) {
-//        login()
+        login()
     }
     
     fileprivate func login() {

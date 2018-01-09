@@ -6,10 +6,17 @@ project 'shoppin.xcodeproj'
 project 'Providers/Providers.xcodeproj'
 
 
-def shared
+def providersdeps
     pod 'Reachability', '~> 3.2'
     pod 'RealmSwift', '~> 3.0.2'
     pod 'SwiftyBeaver', '~> 1.5.0'
+
+    # fixme - shouldn't be necessary to have these dependencies here see http://stackoverflow.com/q/41191028/930450
+    pod 'Alamofire', '~> 4.5'
+    pod 'Valet', '~> 2.4.2'
+    pod 'Starscream', '3.0.2'
+    pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
+
 end
 
 # Shared by app and ui tests
@@ -24,13 +31,7 @@ def gromadeps
     pod 'HockeySDK'
     pod 'ASValueTrackingSlider', '~> 0.12.1'
     
-    shared
-
-    # fixme - shouldn't be necessary to have these dependencies here see http://stackoverflow.com/q/41191028/930450
-    pod 'Alamofire', '~> 4.5'
-    pod 'Valet', '~> 2.4.2'
-    pod 'Starscream', '3.0.2'
-    pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
+    providersdeps
 end
 
 #target 'shoppin_osx' do
@@ -40,11 +41,7 @@ end
 
 target 'Providers' do
     project 'Providers/Providers.xcodeproj'
-    pod 'Alamofire', '~> 4.5'
-    pod 'Valet', '~> 2.4.2'
-    pod 'Starscream', '3.0.2'
-    pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
-    shared
+    providersdeps
 end
 
 target 'groma' do
@@ -57,6 +54,12 @@ target 'shoppinUITests' do
     project 'shoppin.xcodeproj'
     platform :ios, '9.0'
     gromadeps
+end
+
+target 'ProvidersTests' do
+    project 'Providers/Providers.xcodeproj'
+    platform :ios, '9.0'
+    providersdeps
 end
 
 #target 'shoppin_osxTests' do

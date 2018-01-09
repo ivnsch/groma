@@ -31,10 +31,22 @@ public class SuggestionsPrefiller {
     }
 
     public func prefill(_ lang: String, onFinished: @escaping ((categories: [ProductCategory], products: [QuantifiableProduct], defaultUnits: [Unit])?) -> Void) {
+
+        func noResult() -> (categories: [ProductCategory], products: [QuantifiableProduct], defaultUnits: [Unit]) {
+            return (categories: [], products: [], defaultUnits: [])
+        }
+
+        guard let path = Bundle.main.path(forResource: lang, ofType: "lproj") else { logger.e("No path for lang: \(lang)"); onFinished(noResult()); return }
+        guard let bundle = Bundle(path: path) else { logger.e("No bundle for path: \(path)"); onFinished(noResult()); return }
+
         Prov.unitProvider.initDefaultUnits {[weak self] result in guard let weakSelf = self else {return}
-            
+
             if let defaultUnits = result.sucessResult {
-                let (categories, products) = weakSelf.prefillProducts(lang, defaultUnits: defaultUnits)
+
+                let (categories, products) = weakSelf.prefillProducts(lang, defaultUnits: defaultUnits, trFunction: { key, lang in
+                    return bundle.localizedString(forKey: key, value: nil, table: nil)
+                })
+
                 weakSelf.dbProvider.save(categories, dbProducts: products) {saved in
                     onFinished((categories, products, defaultUnits))
                 }
@@ -114,8 +126,9 @@ public class SuggestionsPrefiller {
     fileprivate var uuid: String {
         return UUID().uuidString
     }
-    
-    func prefillProducts(_ lang: String, defaultUnits: [Unit]) -> (categories: [ProductCategory], products: [QuantifiableProduct]) {
+
+    // trFunction: Function to generate translations based on key+lang - this was needed for the Providers unit test (which doesn't have a host app) since it can't access the bundle (I didn't searched for solutions/workarounds though).
+    public func prefillProducts(_ lang: String, defaultUnits: [Unit], trFunction: @escaping (String, String) -> String) -> (categories: [ProductCategory], products: [QuantifiableProduct]) {
 
         let unitDict = defaultUnits.toDictionary {defaultUnit in
             (defaultUnit.id, defaultUnit)
@@ -131,12 +144,9 @@ public class SuggestionsPrefiller {
         func noResult() -> (categories: [ProductCategory], products: [QuantifiableProduct]) {
             return (categories: [], products: [])
         }
-        
-        guard let path = Bundle.main.path(forResource: lang, ofType: "lproj") else {logger.e("No path for lang: \(lang)"); return noResult()}
-        guard let bundle = Bundle(path: path) else {logger.e("No bundle for path: \(path)"); return noResult()}
-        
+
         func tr(_ key: String, _ lang: String) -> String {
-            return bundle.localizedString(forKey: key, value: nil, table: nil)
+            return trFunction(key, lang)
         }
         
         let fruitsCat = ProductCategory(uuid: uuid, name: tr("pr_fruits", lang), color: UIColor.flatRed.hexStr)

@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-public class Item: DBSyncable, Identifiable {
+public class Item: DBSyncable, Identifiable, WithUuid {
 
     @objc public dynamic var uuid: String = ""
     @objc public dynamic var name: String = ""
@@ -117,4 +117,15 @@ public class Item: DBSyncable, Identifiable {
 //        let updatedCategory = category.updateWithoutChangingReferences(item.category)
         return copy(category: category)
     }
+
+    func toRealmMigrationDict(category: ProductCategory) -> [String: Any] {
+        var dict = [String: Any]()
+        dict["uuid"] = uuid
+        dict["name"] = name
+        dict["fav"] = fav
+        dict["edible"] = edible
+        dict["categoryOpt"] = category
+        return dict
+    }
+
 }
