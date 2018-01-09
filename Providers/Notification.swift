@@ -24,6 +24,8 @@ public enum Notification: String {
     
     // TODO maybe remove LogoutUI
     case Logout = "Logout"
+
+    case realmSwapped = "RealmSwapped"
     
     public static func send(_ notification: Notification, dict: [String: AnyObject]? = nil) {
         NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: notification.rawValue), object: nil, userInfo: dict)

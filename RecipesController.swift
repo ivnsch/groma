@@ -74,8 +74,15 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
         setNavTitle(trans("title_recipes"))
         
         topAddEditListControllerManager = initTopAddEditListControllerManager()
+
+        Notification.subscribe(.realmSwapped, selector: #selector(ListsTableViewController.onRealmSwapped(_:)), observer: self)
     }
-    
+
+    @objc func onRealmSwapped(_ note: Foundation.Notification) {
+        closeIngredientsController()
+        initModels()
+    }
+
     deinit {
         logger.v("Deinit recipes controller")
         NotificationCenter.default.removeObserver(self)
@@ -285,7 +292,15 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
             }
         }
     }
-    
+
+    fileprivate func closeIngredientsController() {
+        for childViewController in childViewControllers {
+            if let todoListItemController = childViewController as? IngredientsControllerNew {
+                todoListItemController.back()
+            }
+        }
+    }
+
     // MARK: - ExpandableTopViewControllerDelegate
     
     func animationsForExpand(_ controller: UIViewController, expand: Bool, view: UIView) {

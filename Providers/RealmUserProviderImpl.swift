@@ -72,6 +72,7 @@ class RealmUserProviderImpl: UserProvider {
                                 RealmGlobalProvider().migrate(srcRealm: localRealm, targetRealm: syncedRealm)
                             }
                             handler(ProviderResult(status: .success, sucessResult: SyncResult(listInvites: [], inventoryInvites: [])))
+                            Notification.send(.realmSwapped)
                         })
 
                     } catch let error {

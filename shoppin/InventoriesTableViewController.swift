@@ -66,8 +66,15 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         setNavTitle(trans("title_inventories"))
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
+
+        Notification.subscribe(.realmSwapped, selector: #selector(InventoriesTableViewController.onRealmSwapped(_:)), observer: self)
     }
-    
+
+    @objc func onRealmSwapped(_ note: Foundation.Notification) {
+        closeInventoryItemsController()
+        initModels()
+    }
+
     deinit {
         logger.v("Deinit inventories controller")
         NotificationCenter.default.removeObserver(self)
@@ -292,7 +299,15 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             }
         }
     }
-    
+
+    fileprivate func closeInventoryItemsController() {
+        for childViewController in childViewControllers {
+            if let todoListItemController = childViewController as? InventoryItemsController {
+                todoListItemController.back()
+            }
+        }
+    }
+
     // New
     
     override func loadModels(onSuccess: @escaping () -> Void) {

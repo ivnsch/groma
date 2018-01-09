@@ -74,8 +74,15 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         topAddEditListControllerManager = initTopAddEditListControllerManager()
         
         initGlobalTabBar() // since ListsTableViewController is the always the first controller (that shows a tabbar) init tabBar insets here. Tried to do this in AppDelegate with root controller it doesn't have tabBarController.
+
+        Notification.subscribe(.realmSwapped, selector: #selector(ListsTableViewController.onRealmSwapped(_:)), observer: self)
     }
-    
+
+    @objc func onRealmSwapped(_ note: Foundation.Notification) {
+        closeListItemsController()
+        initModels()
+    }
+
     deinit {
         logger.v("Deinit lists controller")
         NotificationCenter.default.removeObserver(self)
@@ -305,6 +312,14 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 if (todoListItemController.currentList.map{$0.same(list)}) ?? false {
                     todoListItemController.back()
                 }
+            }
+        }
+    }
+
+    fileprivate func closeListItemsController() {
+        for childViewController in childViewControllers {
+            if let todoListItemController = childViewController as? TodoListItemsControllerNew {
+                todoListItemController.back()
             }
         }
     }

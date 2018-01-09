@@ -70,18 +70,27 @@ class StatsViewController: UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        inventoryPicker = InventoryPicker(button: inventoriesButton, controller: self) {[weak self] inventory in
-            self?.selectedInventory = inventory
-        }
+
+        initPicker()
         
         NotificationCenter.default.addObserver(self, selector: #selector(StatsViewController.onWebsocketListItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ListItem.rawValue), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(StatsViewController.onWebsocketProduct(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Product.rawValue), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(StatsViewController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)        
         NotificationCenter.default.addObserver(self, selector: #selector(StatsViewController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
-        
+
+        Notification.subscribe(.realmSwapped, selector: #selector(InventoriesTableViewController.onRealmSwapped(_:)), observer: self)
     }
-    
+
+    fileprivate func initPicker() {
+        inventoryPicker = InventoryPicker(button: inventoriesButton, controller: self) {[weak self] inventory in
+            self?.selectedInventory = inventory
+        }
+    }
+
+    @objc func onRealmSwapped(_ note: Foundation.Notification) {
+        loadInventories()
+    }
+
     deinit {
         logger.v("Deinit stats controller")
         NotificationCenter.default.removeObserver(self)
