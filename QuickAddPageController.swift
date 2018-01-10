@@ -68,6 +68,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
 
         // If we don't need it remove it - its easier than adding it
         if hasSlidingTabsView {
+            swipeViewTopConstraint.constant = DimensionsManager.quickAddSlidingTabsViewHeight
             slidingTabsView?.delegate = self
             slidingTabsView?.onViewsReady = {[weak self] in
                 self?.slidingTabsView?.setSelected(0)
