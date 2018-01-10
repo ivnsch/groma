@@ -144,6 +144,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     @IBOutlet weak var categoryOrSectionTextFieldTopToSuperviewConstraint: NSLayoutConstraint!
     @IBOutlet weak var categoryOrSectionTextFieldTopToBrandEdibleRowConstraint: NSLayoutConstraint!
+    @IBOutlet weak var unitBaseViewHeightConstraint: NSLayoutConstraint!
 
 /////////////////////////////////////////////////////////////////////////
 // for now disabled, see comments at the bottom
@@ -360,7 +361,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         onViewDidLoad?()
         
         initValidator()
-        
+
+        unitBaseViewHeightConstraint.constant = DimensionsManager.unitBaseViewHeightConstraint
         view.clipsToBounds = false
         
         initStaticLabels()

@@ -188,6 +188,16 @@ class DimensionsManager {
         case .large: return 10
         }
     }
+
+    static var unitBaseViewHeightConstraint: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 30
+        case .small: return 30
+        case .middle: return 35
+        case .large: return 35
+        }
+    }
+
     // MARK: list items
     
     static var listItemsHeaderHeight: CGFloat {

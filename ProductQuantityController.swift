@@ -38,6 +38,8 @@ class ProductQuantityController: UIViewController {
     @IBOutlet weak var unitWithBaseView: UnitWithBaseView!
     @IBOutlet weak var quantityView: QuantityView!
 
+    @IBOutlet weak var unitBaseViewHeightConstraint: NSLayoutConstraint!
+
     var delegate: ProductQuantityControlleDelegate?
 
     // MARK: - Inputs
@@ -85,6 +87,8 @@ class ProductQuantityController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        unitBaseViewHeightConstraint.constant = DimensionsManager.unitBaseViewHeightConstraint
 
         // TODO remove?
 //        setBasesVisible(visible: false, animated: false)

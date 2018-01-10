@@ -236,6 +236,7 @@
                         <outlet property="quantitiesContainer" destination="eS5-Cx-hK7" id="oua-Y4-fsi"/>
                         <outlet property="sectionColorButton" destination="CcK-74-2fx" id="ZsK-bj-Mmn"/>
                         <outlet property="sectionInput" destination="i1w-xi-aFz" id="8ba-aL-isS"/>
+                        <outlet property="unitBaseViewHeightConstraint" destination="yad-CA-gYD" id="ZJy-4q-pAC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tgx-6o-HeU" userLabel="First Responder" sceneMemberID="firstResponder"/>

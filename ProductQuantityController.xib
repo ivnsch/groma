@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProductQuantityController" customModule="groma" customModuleProvider="target">
             <connections>
                 <outlet property="quantityView" destination="61B-UY-Irf" id="G2T-CS-80l"/>
+                <outlet property="unitBaseViewHeightConstraint" destination="YOd-dO-eDM" id="YFs-y7-30P"/>
                 <outlet property="unitWithBaseView" destination="xlV-aC-3ij" id="4Fs-em-UgV"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -25,9 +26,28 @@
                     <rect key="frame" x="0.0" y="-12" width="137" height="128"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
-                <view contentMode="scaleToFill" placeholderIntrinsicWidth="150" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="xlV-aC-3ij" customClass="UnitWithBaseView" customModule="groma" customModuleProvider="target">
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xlV-aC-3ij" customClass="UnitWithBaseView" customModule="groma" customModuleProvider="target">
                     <rect key="frame" x="356" y="27" width="150" height="50"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="YOd-dO-eDM" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                    <integer key="value" value="30"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                    <integer key="value" value="30"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                    <integer key="value" value="40"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                    <integer key="value" value="40"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </constraint>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
