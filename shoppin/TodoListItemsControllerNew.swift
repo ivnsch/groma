@@ -342,8 +342,6 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     fileprivate func addCartController() {
-        guard let tabBarHeight = tabBarController?.tabBar.height else { logger.e("No tabbar! Can't add cart controller"); return }
-
         let cartController = UIStoryboard.cartViewControllerNew()
         self.cartController = cartController
         
@@ -357,7 +355,7 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         cartController.delegate = self
         
         _ = cartController.view.positionBelowView(pricesView)
-        _ = cartController.view.heightConstraint(view.height - topBar.height - pricesView.height - tabBarHeight)
+        _ = cartController.view.heightConstraint(view.height - topBar.height - cartController.buyViewHeightConstraint.constant)
         _ = cartController.view.alignLeft(view)
         _ = cartController.view.alignRight(view)
     }
