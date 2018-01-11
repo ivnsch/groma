@@ -295,7 +295,7 @@
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="nGB-Uf-2MT"/>
                                             </constraints>
                                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             <connections>
@@ -303,7 +303,7 @@
                                             </connections>
                                         </textView>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstItem="TgZ-JD-U8D" firstAttribute="top" secondItem="fR8-5l-IGZ" secondAttribute="top" constant="20" id="Sme-kM-2cA"/>
                                         <constraint firstAttribute="bottom" secondItem="TgZ-JD-U8D" secondAttribute="bottom" constant="60" id="gOG-7b-jwz"/>
