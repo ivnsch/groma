@@ -89,6 +89,7 @@ class RealmUserProviderImpl: UserProvider {
                     case let nsError as NSError:
                         switch nsError.code {
                         case 611: handler(ProviderResult(status: .invalidCredentials))
+                        case -1004: handler(ProviderResult(status: .serverNotReachable))
                         default: handler(ProviderResult(status: .unknown))
                         }
                     default: handler(ProviderResult(status: .unknown))
