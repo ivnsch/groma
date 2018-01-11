@@ -977,13 +977,8 @@ class RealmListItemProvider: RealmProvider {
 
             } else { // new list item
                 
-                
-                print("list items before create list item: \(section.listItems.count)")
-                
                 // TODO section, list - see note on create
                 if let createdListItem = createSync(quantifiableProduct, store: store, refPrice: refPrice, refQuantity: refQuantity, section: section, list: list, quantity: quantity, note: note, realmData: realmData, doTransaction: doTransaction) {
-                    
-                    print("list items after create list item: \(section.listItems.count)")
                     
                     incrementFav()
                     
