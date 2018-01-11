@@ -48,7 +48,7 @@ class RealmIngredientProvider: RealmProvider {
         handler(result)
     }
     
-    func add(_ quickAddInput: QuickAddIngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping ((ingredient: Ingredient, isNew: Bool)?) -> Void) {
+    func add(_ quickAddInput: QuickAddIngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationTokens: [NotificationToken], _ handler: @escaping ((ingredient: Ingredient, isNew: Bool)?) -> Void) {
         
         // We don't wait until execution finishes or handle error if it fails, since this is not critical
         func incrementFav() {
@@ -64,7 +64,7 @@ class RealmIngredientProvider: RealmProvider {
         let existingIngredientMaybe = ingredients.filter(Ingredient.createFilter(item: quickAddInput.item, recipe: recipe)).first
         
         if let existingIngredient = existingIngredientMaybe {
-            update(existingIngredient, input: quickAddInput, ingredients: ingredients, notificationToken: notificationToken) {updateSuccess in
+            update(existingIngredient, input: quickAddInput, ingredients: ingredients, notificationTokens: notificationTokens) {updateSuccess in
                 if updateSuccess {
                     incrementFav()
                     handler((ingredient: existingIngredient, isNew: false))
@@ -74,7 +74,7 @@ class RealmIngredientProvider: RealmProvider {
                 }
             }
         } else {
-            create(quickAddInput, recipe: recipe, ingredients: ingredients, notificationToken: notificationToken) {addedIngredient in
+            create(quickAddInput, recipe: recipe, ingredients: ingredients, notificationTokens: notificationTokens) {addedIngredient in
                 incrementFav()
                 handler(addedIngredient.map{(ingredient: $0, isNew: true)})
             }
@@ -85,16 +85,16 @@ class RealmIngredientProvider: RealmProvider {
         return saveObjsSync(ingredients)
     }
     
-    func increment(_ ingredient: Ingredient, quantity: Float, notificationToken: NotificationToken, realm: Realm, _ handler: @escaping (Float?) -> Void) {
-        let quantityMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: realm) {realm -> Float in
+    func increment(_ ingredient: Ingredient, quantity: Float, notificationTokens: [NotificationToken], realm: Realm, _ handler: @escaping (Float?) -> Void) {
+        let quantityMaybe = doInWriteTransactionSync(withoutNotifying: notificationTokens, realm: realm) {realm -> Float in
             ingredient.incrementQuantity(quantity)
             return ingredient.quantity
         }
         handler(quantityMaybe)
     }
 
-    public func update(_ ingredient: Ingredient, input: IngredientInput, item: Item?, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
-        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
+    public func update(_ ingredient: Ingredient, input: IngredientInput, item: Item?, ingredients: Results<Ingredient>, notificationTokens: [NotificationToken], _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationTokens, realm: ingredients.realm) {realm -> Bool in
             ingredient.quantity = input.quantity
             ingredient.unit = input.unit
             if let fraction = input.fraction {
@@ -110,8 +110,8 @@ class RealmIngredientProvider: RealmProvider {
     
     
     /// When ingredients added via quick add already exist in recipe - since we don't increment ingredients, we just replace, which in this case means updating the existing item with the properties that can be entered using the quick add form.
-    public func update(_ ingredient: Ingredient, input: QuickAddIngredientInput, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
-        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
+    public func update(_ ingredient: Ingredient, input: QuickAddIngredientInput, ingredients: Results<Ingredient>, notificationTokens: [NotificationToken], _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationTokens, realm: ingredients.realm) {realm -> Bool in
             ingredient.quantity = input.quantity
             ingredient.fraction = input.fraction
             ingredient.unit = input.unit
@@ -130,8 +130,8 @@ class RealmIngredientProvider: RealmProvider {
         handler(successMaybe ?? false)
     }
     
-    public func delete(_ ingredient: Ingredient, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Bool) -> Void) {
-        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
+    public func delete(_ ingredient: Ingredient, ingredients: Results<Ingredient>, notificationTokens: [NotificationToken], _ handler: @escaping (Bool) -> Void) {
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationTokens, realm: ingredients.realm) {realm -> Bool in
             let toDelete = ingredients.filter(Ingredient.createFilter(uuid: ingredient.uuid))
             ingredients.realm?.delete(toDelete)
             return true
@@ -171,9 +171,9 @@ class RealmIngredientProvider: RealmProvider {
     
     // MARK: - private
     
-    fileprivate func create(_ quickAddInput: QuickAddIngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationToken: NotificationToken, _ handler: @escaping (Ingredient?) -> Void) {
+    fileprivate func create(_ quickAddInput: QuickAddIngredientInput, recipe: Recipe, ingredients: Results<Ingredient>, notificationTokens: [NotificationToken], _ handler: @escaping (Ingredient?) -> Void) {
         let ingredient = Ingredient(uuid: UUID().uuidString, quantity: quickAddInput.quantity, fraction: quickAddInput.fraction, unit: quickAddInput.unit, item: quickAddInput.item, recipe: recipe)
-        let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: ingredients.realm) {realm -> Bool in
+        let successMaybe = doInWriteTransactionSync(withoutNotifying: notificationTokens, realm: ingredients.realm) {realm -> Bool in
             realm.add(ingredient, update: true) // update: true "just in case", not really necessary
             return true
         }

@@ -516,7 +516,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 weakSelf.inventoryItemsResult = inventoryItems
                 guard let realm = inventoryItems.realm else {logger.e("No realm. Will not init notification token"); return}
         
-                weakSelf.realmData?.token.invalidate()
+                weakSelf.realmData?.invalidateTokens()
 
                 let notificationToken = inventoryItems.observe { changes in
                     

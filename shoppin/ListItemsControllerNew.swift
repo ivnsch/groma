@@ -38,7 +38,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     fileprivate var realmData: RealmData?
     fileprivate var notificationToken: NotificationToken? {
-        return realmData?.token
+        return realmData?.tokens.first
     }
 
     // Status of current controller - with the current hierarchy this can be only .done (hierachy changed and code was not updated)
@@ -150,7 +150,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         guard let sections = listItemsTableViewController.sections else {logger.e("No sections"); return}
         guard let sectionsRealm = sections.realm else {logger.e("No realm"); return}
 
-        realmData?.token.invalidate()
+        realmData?.invalidateTokens()
         
         let notificationToken = sections.observe {[weak self] changes in guard let weakSelf = self else {return}
 
@@ -392,7 +392,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     func onIncrementItem(_ tableViewListItem: ListItem, delta: Float) {
         guard let realmData = realmData else {logger.e("No realm data"); return}
 
-        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, token: realmData.token, successHandler{incrementedListItem in
+        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, tokens: realmData.tokens, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
 //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
 //            self?.onTableViewChangedQuantifiables()
@@ -912,7 +912,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
                     sectionsTableViewController.status = weakSelf.status
                     sectionsTableViewController.delegate = weakSelf
                     
-                    sectionsTableViewController.listItemsNotificationToken = weakSelf.realmData?.token
+                    sectionsTableViewController.listItemsNotificationToken = weakSelf.realmData?.tokens.first
                     
                     sectionsTableViewController.onViewDidLoad = {[weak self, weak sectionsTableViewController] in guard let weakSelf = self else {return}
                         _ = weakSelf.topBar.frame.height

@@ -55,7 +55,7 @@ class ManageItemsController: UITableViewController, SearchableTextController {
         guard let items = items else {logger.e("No sections"); return}
         guard let realm = items.realm else {logger.e("No realm"); return}
         
-        realmData?.token.invalidate()
+        realmData?.invalidateTokens()
         
         let notificationToken = items.observe {changes in
             

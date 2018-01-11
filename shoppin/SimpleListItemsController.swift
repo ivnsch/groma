@@ -33,7 +33,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     
     var realmData: RealmData?
     fileprivate var notificationToken: NotificationToken? {
-        return realmData?.token
+        return realmData?.tokens.first
     }
     
     var status: ListItemStatus {
@@ -174,7 +174,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         guard let sections = listItemsTableViewController.listItems else {logger.e("No listItems"); return}
         guard let sectionsRealm = sections.realm else {logger.e("No realm"); return}
         
-        realmData?.token.invalidate()
+        realmData?.invalidateTokens()
         
         let notificationToken = sections.observe {[weak self] changes in guard let weakSelf = self else {return}
             
@@ -349,7 +349,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     func onIncrementItem(_ tableViewListItem: ListItem, delta: Float) {
         guard let realmData = realmData else {logger.e("No realm data"); return}
 
-        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, token: realmData.token, successHandler{incrementedListItem in
+        Prov.listItemsProvider.increment(tableViewListItem, status: status, delta: delta, remote: true, tokens: realmData.tokens, successHandler{incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
             //            self?.onTableViewChangedQuantifiables()
@@ -743,7 +743,7 @@ extension SimpleListItemsController: ListItemCellDelegateNew {
     func onChangeQuantity(_ listItem: ListItem, delta: Float) {
         guard let realmData = realmData else {logger.e("No realm data"); return}
 
-        Prov.listItemsProvider.increment(listItem, status: status, delta: delta, remote: true, token: realmData.token, successHandler{ [weak self] incrementedListItem in
+        Prov.listItemsProvider.increment(listItem, status: status, delta: delta, remote: true, tokens: realmData.tokens, successHandler{ [weak self] incrementedListItem in
             // TODO!!!!!!!!!!!!!!!!! review this todo - the cell is already being incremented in advance. Does this work correctly?
             // TODO!!!!!!!!!!!!!!!!! should we maybe do increment in advance like everything else? otherwise adapt
             //            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)

@@ -1279,7 +1279,7 @@ class RealmProductProvider: RealmProvider {
             
             // Always fetch/create item (whether product already exists or not), since we need to ensure we have the item identified by unique from prototype, which is not necessarily the same as the one referenced by existing product (we want to update only non-unique properties).
             // doTransaction: false: we either are already either in an external transaction (mergeOrCreateeProductSync doTransaction: false) or in the transaction started in this method (true) so in both cases it's not necessary to make item provider start an own transaction
-            let itemRes = DBProv.itemProvider.mergeOrCreateItemSync(itemInput: ItemInput(name: prototype.name, categoryName: prototype.category, categoryColor: prototype.categoryColor, edible: prototype.edible), updateCategory: updateCategory, doTransaction: false, notificationToken: realmData?.token)
+            let itemRes = DBProv.itemProvider.mergeOrCreateItemSync(itemInput: ItemInput(name: prototype.name, categoryName: prototype.category, categoryColor: prototype.categoryColor, edible: prototype.edible), updateCategory: updateCategory, doTransaction: false, notificationTokens: realmData?.tokens ?? [])
             
             return itemRes.map {item -> Product in
                 if let existingProduct = loadProductWithUniqueSync(prototype.productUnique) {
@@ -1298,7 +1298,7 @@ class RealmProductProvider: RealmProvider {
         }
         
         if doTransaction {
-            return doInWriteTransactionSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm: nil) {realm in
+            return doInWriteTransactionSync(withoutNotifying: realmData?.tokens ?? [], realm: nil) {realm in
                 return transactionContent(realm: realm)
             } ?? .err(.unknown)
             
@@ -1354,7 +1354,7 @@ class RealmProductProvider: RealmProvider {
         }
         
         if doTransaction {
-            return doInWriteTransactionSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm: nil) {realm in
+            return doInWriteTransactionSync(withoutNotifying: realmData?.tokens ?? [], realm: nil) {realm in
                 return transactionContent(realm: realm)
             } ?? .err(.unknown)
             
@@ -1406,7 +1406,7 @@ class RealmProductProvider: RealmProvider {
         }
         
         if doTransaction {
-            return doInWriteTransactionSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm: nil) {realm in
+            return doInWriteTransactionSync(withoutNotifying: realmData?.tokens ?? [], realm: nil) {realm in
                 return transactionContent(realm: realm)
                 } ?? .err(.unknown)
             

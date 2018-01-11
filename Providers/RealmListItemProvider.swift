@@ -532,8 +532,8 @@ class RealmListItemProvider: RealmProvider {
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     // TODO probably remove TODO above, outdated
     // TODO remove status parameter we don't use this anymore (list item itself belongs to a status)
-    func incrementListItem(_ item: ListItem, delta: Float, status: ListItemStatus, token: NotificationToken?, handler: @escaping (ListItem?) -> Void) {
-        let listItemMaybe: ListItem? = doInWriteTransactionSync(withoutNotifying: token.map{[$0]} ?? []) {realm in
+    func incrementListItem(_ item: ListItem, delta: Float, status: ListItemStatus, tokens: [NotificationToken], handler: @escaping (ListItem?) -> Void) {
+        let listItemMaybe: ListItem? = doInWriteTransactionSync(withoutNotifying: tokens) {realm in
             item.quantity = item.quantity + delta
             return item
         }
@@ -1045,7 +1045,7 @@ class RealmListItemProvider: RealmProvider {
         
         var addedListItems = [(listItem: ListItem, isNew: Bool)]()
         
-        doInWriteTransactionSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm: nil) {realm in
+        doInWriteTransactionSync(withoutNotifying: realmData?.tokens ?? [], realm: nil) {realm in
             
             for listItemInput in listItemInputs {
                 if let result = addSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData, doTransaction: false) {
@@ -1271,7 +1271,7 @@ class RealmListItemProvider: RealmProvider {
 
     public func deleteSync(indexPath: IndexPath, status: ListItemStatus, list: List, realmData: RealmData) -> DeleteListItemResult? {
         
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> DeleteListItemResult? in
+        return doInWriteTransactionSync(withoutNotifying: realmData.tokens, realm: realmData.realm) {realm -> DeleteListItemResult? in
 
             if status == .todo {
                 let section = list.sections(status: status)[indexPath.section]
@@ -1318,7 +1318,7 @@ class RealmListItemProvider: RealmProvider {
         
         let listItem = srcSection.listItems[from.row]
         
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> MoveListItemResult? in
+        return doInWriteTransactionSync(withoutNotifying: realmData.tokens, realm: realmData.realm) {realm -> MoveListItemResult? in
 
             // delete from src section
             srcSection.listItems.remove(at: from.row)
@@ -1346,7 +1346,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     public func moveCartOrStash(from: IndexPath, to: IndexPath, status: ListItemStatus, list: List, realmData: RealmData) -> Bool? {
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm in
+        return doInWriteTransactionSync(withoutNotifying: realmData.tokens, realm: realmData.realm) {realm in
            list.listItems(status: status).move(from: from.row, to: to.row)
             return true
         }
@@ -1382,7 +1382,7 @@ class RealmListItemProvider: RealmProvider {
         
         let inventory = list.inventory
         
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Bool? in
+        return doInWriteTransactionSync(withoutNotifying: realmData.tokens, realm: realmData.realm) {realm -> Bool? in
             
             // NOTE: maybe we can pass a block to add the inventory item for each list item to switchCartOrStashToTodoSync instead of iterating through the list items again
             
@@ -1406,10 +1406,10 @@ class RealmListItemProvider: RealmProvider {
         
         let srcSection = listItem.section
 
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {realm -> SwitchListItemResult? in
+        return doInWriteTransactionSync(withoutNotifying: realmData.tokens, realm: realm) {realm -> SwitchListItemResult? in
 
             // Update the section referenced by the list item, for consistency. The cart has no section list / visible sections.
-            guard let dstSection = DBProv.sectionProvider.getOrCreateCartStash(name: listItem.section.name, color: listItem.section.color, list: list, status: .done, notificationToken: realmData.token, realm: realm, doTransaction: false) else {
+            guard let dstSection = DBProv.sectionProvider.getOrCreateCartStash(name: listItem.section.name, color: listItem.section.color, list: list, status: .done, notificationTokens: realmData.tokens, realm: realm, doTransaction: false) else {
                 logger.e("Couldn't get or create dst section, can't switch")
                 return nil
             }
@@ -1460,7 +1460,7 @@ class RealmListItemProvider: RealmProvider {
 
     // TODO!!!!!!!!!!!!!!!!!!! remove this, duplicate, only needed in buy
     func switchCartToStashSync(listItems: [ListItem], list: List, realmData: RealmData) -> Bool {
-        return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Bool? in
+        return doInWriteTransactionSync(withoutNotifying: realmData.tokens, realm: realmData.realm) {realm -> Bool? in
             for listItem in listItems {
                 list.stashListItems.append(listItem)
             }
@@ -1494,7 +1494,7 @@ class RealmListItemProvider: RealmProvider {
         let success: Bool = {
            
             if doTransaction {
-                return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realmData.realm) {realm -> Bool? in
+                return doInWriteTransactionSync(withoutNotifying: realmData.tokens, realm: realmData.realm) {realm -> Bool? in
                     return transactionContent()
                 } ?? false
                 
@@ -1516,7 +1516,7 @@ class RealmListItemProvider: RealmProvider {
 
             let srcSection = listItem.section
 
-            guard let dstSection = DBProv.sectionProvider.getOrCreateTodo(name: listItem.section.name, color: listItem.section.color, list: list, notificationToken: realmData.token, realm: realm, doTransaction: false) else {
+            guard let dstSection = DBProv.sectionProvider.getOrCreateTodo(name: listItem.section.name, color: listItem.section.color, list: list, notificationTokens: realmData.tokens, realm: realm, doTransaction: false) else {
                 logger.e("Couldn't get or create dst section, can't switch")
                 return nil
             }
@@ -1545,7 +1545,7 @@ class RealmListItemProvider: RealmProvider {
         
         return {
             if doTransaction {
-                return doInWriteTransactionSync(withoutNotifying: [realmData.token], realm: realm) {realm -> Bool? in
+                return doInWriteTransactionSync(withoutNotifying: realmData.tokens, realm: realm) {realm -> Bool? in
                     transactionContent(realm: realm)
                 }
             } else {

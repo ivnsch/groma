@@ -449,7 +449,7 @@ class RealmProvider {
     func doInWriteTransactionSync<T>(realmData: RealmData?, _ f: (Realm) -> T?) -> T? {
         do {
             let realm = try realmData?.realm ?? RealmConfig.realm()
-            return doInWriteTransactionWithRealmSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm, f: f)
+            return doInWriteTransactionWithRealmSync(withoutNotifying: realmData?.tokens ?? [], realm, f: f)
         } catch let error as NSError {
             logger.e("Realm error: \(error)")
             return nil

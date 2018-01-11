@@ -339,7 +339,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         func onHasUnit(_ unit: Providers.Unit) {
             let quickAddIngredientInput = QuickAddIngredientInput(item: item, quantity: ingredientInput.quantity, unit: unit, fraction: ingredientInput.fraction)
             
-            Prov.ingredientProvider.add(quickAddIngredientInput, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, successHandler{[weak self] addedItem in guard let weakSelf = self else {return}
+            Prov.ingredientProvider.add(quickAddIngredientInput, recipe: recipe, ingredients: itemsResult, notificationTokens: [notificationToken], successHandler{[weak self] addedItem in guard let weakSelf = self else {return}
                 
                 guard let itemIndex = weakSelf.itemsResult?.index(of: addedItem.ingredient) else {
                     logger.e("Illegal state: Just added/updated ingredient but didn't find it in results. Or results are not set")
@@ -416,7 +416,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
                 fraction: ingredientDataResult.fraction
             )
 
-            Prov.ingredientProvider.update(editingItem, input: input, ingredients: itemsResult, notificationToken: notificationToken, successHandler{ [weak self] (inventoryItem, replaced) in
+            Prov.ingredientProvider.update(editingItem, input: input, ingredients: itemsResult, notificationTokens: [notificationToken], successHandler{ [weak self] (inventoryItem, replaced) in
 
                 if let index = itemsResult.index(of: inventoryItem) {
                     self?.tableView.updateRow(index)
@@ -435,7 +435,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
 //            submittedAddOrEdit.add = true
             let input = IngredientInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, unit: unit, fraction: nil)
 
-            Prov.ingredientProvider.add(input, recipe: recipe, ingredients: itemsResult, notificationToken: notificationToken, resultHandler (onSuccess: {addedItem in
+            Prov.ingredientProvider.add(input, recipe: recipe, ingredients: itemsResult, notificationTokens: [notificationToken], resultHandler (onSuccess: {addedItem in
                 
                 if addedItem.isNew {
                     self.insert(item: addedItem.ingredient, scrollToRow: true)
@@ -685,7 +685,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         let row = false ? indexPath.row + 1 : indexPath.row
         let updatedIndexPath = IndexPath(row: row, section: 0)
         
-        Prov.ingredientProvider.delete(itemsResult[updatedIndexPath.row], ingredients: itemsResult, notificationToken: notificationToken, resultHandler(onSuccess: {[weak self] in
+        Prov.ingredientProvider.delete(itemsResult[updatedIndexPath.row], ingredients: itemsResult, notificationTokens: [notificationToken], resultHandler(onSuccess: {[weak self] in
             self?.tableView.deleteRows(at: [updatedIndexPath], with: Theme.defaultRowAnimation)
             self?.updateEmptyUI()
             onSuccess()

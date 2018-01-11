@@ -332,7 +332,7 @@ class RealmSectionProvider: RealmProvider {
     // MARK: - Sync
     
     /// Get or create for .todo (takes into consideration that section is in a RealmSwift.List)
-    func getOrCreateTodo(name: String, color: UIColor, list: List, notificationToken: NotificationToken, realm: Realm, doTransaction: Bool = true) -> Section? {
+    func getOrCreateTodo(name: String, color: UIColor, list: List, notificationTokens: [NotificationToken], realm: Realm, doTransaction: Bool = true) -> Section? {
         
         let status: ListItemStatus = .todo
         
@@ -346,7 +346,7 @@ class RealmSectionProvider: RealmProvider {
             
             let sectionMaybe: Section? = {
                 if doTransaction {
-                    return doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: realm, {realm in
+                    return doInWriteTransactionSync(withoutNotifying: notificationTokens, realm: realm, {realm in
                         return transactionContent(realm: realm)
                     })
                 } else {
@@ -369,7 +369,7 @@ class RealmSectionProvider: RealmProvider {
     }
     
     /// Get or create for .cart and .stash (section is not in a RealmSwift.List)
-    func getOrCreateCartStash(name: String, color: UIColor, list: List, status: ListItemStatus, notificationToken: NotificationToken, realm: Realm, doTransaction: Bool = true) -> Section? {
+    func getOrCreateCartStash(name: String, color: UIColor, list: List, status: ListItemStatus, notificationTokens: [NotificationToken], realm: Realm, doTransaction: Bool = true) -> Section? {
         func transactionContent(realm: Realm) -> Section? {
             let sectionUnique = SectionUnique(name: name, listUuid: list.uuid, status: status)
             if let section = realm.objects(Section.self).filter(Section.createFilter(unique: sectionUnique)).first { // The target status already contains the section
@@ -385,7 +385,7 @@ class RealmSectionProvider: RealmProvider {
             
         let sectionMaybe: Section? = {
             if doTransaction {
-                return doInWriteTransactionSync(withoutNotifying: [notificationToken], realm: realm, {realm in
+                return doInWriteTransactionSync(withoutNotifying: notificationTokens, realm: realm, {realm in
                     return transactionContent(realm: realm)
                 })
             } else {

@@ -241,7 +241,7 @@ class RealmUnitProvider: RealmProvider {
                 return (newUnit, true)
             }
             if doTransaction {
-                return doInWriteTransactionSync(withoutNotifying: realmData.map{[$0.token]} ?? [], realm: nil) {realm in
+                return doInWriteTransactionSync(withoutNotifying: realmData?.tokens ?? [], realm: nil) {realm in
                     return transactionContent(realm: realm)
                 }
             } else {

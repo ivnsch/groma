@@ -14,11 +14,19 @@ import RealmSwift
 // if it's not necessary, remove RealmData and pass only the notification token.
 public struct RealmData {
     public var realm: Realm
-    public var token: NotificationToken
+    public var tokens: [NotificationToken]
 
     public init(realm: Realm, token: NotificationToken) {
+        self.init(realm: realm, tokens: [token])
+    }
+
+    public init(realm: Realm, tokens: [NotificationToken]) {
         self.realm = realm
-        self.token = token
+        self.tokens = tokens
+    }
+
+    public func invalidateTokens() {
+        tokens.forEach { $0.invalidate() }
     }
 }
 
@@ -73,7 +81,7 @@ public protocol ListItemProvider {
     // This is currently used only to retrieve possible product's list item on receiving a websocket notification with a product update
     func listItem(_ product: Product, list: List, _ handler: @escaping (ProviderResult<ListItem?>) -> ())
     
-    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Float, remote: Bool, token: NotificationToken?, _ handler: @escaping (ProviderResult<ListItem>) -> ())
+    func increment(_ listItem: ListItem, status: ListItemStatus, delta: Float, remote: Bool, tokens: [NotificationToken], _ handler: @escaping (ProviderResult<ListItem>) -> ())
 
     func increment(_ increment: RemoteListItemIncrement, remote: Bool, _ handler: @escaping (ProviderResult<ListItem>) -> ())
     
@@ -130,7 +138,8 @@ public protocol ListItemProvider {
     func addNewStoreProduct(listItemInput: ListItemInput, list: List, status: ListItemStatus, realmData: RealmData, _ handler: @escaping (ProviderResult<(StoreProduct, Bool)>) -> Void)
     
     func addNew(listItemInputs: [ListItemInput], list: List, status: ListItemStatus, realmData: RealmData?, _ handler: @escaping (ProviderResult<[(listItem: ListItem, isNew: Bool)]>) -> Void)
-    
+
+    /// Quick add
     func addToCart(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, realmData: RealmData, _ handler: @escaping (ProviderResult<AddCartListItemResult>) -> Void)
     
     func updateNew(_ listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, realmData: RealmData, _ handler: @escaping (ProviderResult<(UpdateListItemResult)>) -> Void)

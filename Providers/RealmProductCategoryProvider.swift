@@ -242,7 +242,7 @@ class RealmProductCategoryProvider: RealmProvider {
     
     
     // TODO!!!!!!!!!!!!!!! orient maybe with similar method in product for transaction etc. Product also needs refactoring though
-    func mergeOrCreateCategorySync(categoryInput: CategoryInput, doTransaction: Bool, notificationToken: NotificationToken?) -> ProvResult<ProductCategory, DatabaseError> {
+    func mergeOrCreateCategorySync(categoryInput: CategoryInput, doTransaction: Bool, notificationTokens: [NotificationToken]) -> ProvResult<ProductCategory, DatabaseError> {
         
         func transactionContent() -> ProvResult<ProductCategory, DatabaseError> {
             
@@ -262,7 +262,7 @@ class RealmProductCategoryProvider: RealmProvider {
         }
         
         if doTransaction {
-            return doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: nil) {realm in
+            return doInWriteTransactionSync(withoutNotifying: notificationTokens, realm: nil) {realm in
                 return transactionContent()
                 } ?? .err(.unknown)
         } else {

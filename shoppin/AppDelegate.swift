@@ -22,8 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
     fileprivate let debugAddDummyData = false
     fileprivate let debugGeneratePrefillDatabases = false // remove this?
-    fileprivate let debugForceShowIntro = false
-    fileprivate let debugForceIsFirstAppLaunch = false
+    fileprivate let debugForceShowIntro = true
+    fileprivate let debugForceIsFirstAppLaunch = true
     
     var window: UIWindow?
     

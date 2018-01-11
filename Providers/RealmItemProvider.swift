@@ -82,7 +82,7 @@ class RealmItemProvider: RealmProvider {
     }
     
     func addOrUpdate(input: ItemInput, _ handler: @escaping ((Item, Bool)?) -> Void) {
-        switch mergeOrCreateItemSync(itemInput: input, updateCategory: true, doTransaction: true, notificationToken: nil) {
+        switch mergeOrCreateItemSync(itemInput: input, updateCategory: true, doTransaction: true, notificationTokens: []) {
         case .ok(let item, let isNew):
             handler((item, isNew))
         case .err(let error):
@@ -180,12 +180,12 @@ class RealmItemProvider: RealmProvider {
     // if we find an item with the unique we update it - this is for the case the user changes category color etc for an existing item while adding it
     // NOTE: This doesn't save anything to the database (no particular reason, except that the current caller of this method does the saving)
     // Returns tuple with item and whether it's new (was created) or already existed
-    func mergeOrCreateItemSync(itemInput: ItemInput, updateCategory: Bool, doTransaction: Bool, saveItem: Bool = false, notificationToken: NotificationToken?) -> ProvResult<(Item, Bool), DatabaseError> {
+    func mergeOrCreateItemSync(itemInput: ItemInput, updateCategory: Bool, doTransaction: Bool, saveItem: Bool = false, notificationTokens: [NotificationToken]) -> ProvResult<(Item, Bool), DatabaseError> {
 
         func transactionContent() -> ProvResult<(Item, Bool), DatabaseError> {
             
             // Always fetch/create category (whether item already exists or not), since we need to ensure we have the category identified by unique from prototype, which is not necessarily the same as the one referenced by existing item (we want to update only non-unique properties).
-            return DBProv.productCategoryProvider.mergeOrCreateCategorySync(categoryInput: itemInput.categoryInput, doTransaction: false, notificationToken: notificationToken).flatMap {category in
+            return DBProv.productCategoryProvider.mergeOrCreateCategorySync(categoryInput: itemInput.categoryInput, doTransaction: false, notificationTokens: notificationTokens).flatMap {category in
                 
                 switch findSync(name: itemInput.name) {
                 case .ok(let itemMaybe):
@@ -208,7 +208,7 @@ class RealmItemProvider: RealmProvider {
         }
         
         if doTransaction {
-            return doInWriteTransactionSync(withoutNotifying: notificationToken.map{[$0]} ?? [], realm: nil) {realm in
+            return doInWriteTransactionSync(withoutNotifying: notificationTokens, realm: nil) {realm in
                 return transactionContent()
             } ?? .err(.unknown)
         } else {
