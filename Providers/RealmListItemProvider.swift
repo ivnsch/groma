@@ -1066,6 +1066,16 @@ class RealmListItemProvider: RealmProvider {
     /// Quick add
     func addToCartSync(quantifiableProduct: QuantifiableProduct, store: String, list: List, quantity: Float, realmData: RealmData?, doTransaction: Bool = true) -> (AddCartListItemResult)? {
 
+        // We execute this on successful add/increment(where increment here means also "add to list" user action).
+        // We don't wait until execution finishes or handle error if it fails, since this is not critical
+        func incrementFav() {
+            DBProv.productProvider.incrementFav(productUuid: quantifiableProduct.product.uuid, transactionRealm: doTransaction ? nil : realmData?.realm, {saved in
+                if !saved {
+                    logger.e("Couldn't increment product fav")
+                }
+            })
+        }
+
         switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, possibleNewOrder: nil, list: list, status: .done, realmData: realmData) {
             
         case .ok(let sectionResult):
@@ -1077,7 +1087,9 @@ class RealmListItemProvider: RealmProvider {
             if let existingListItem = existingListItemMaybe, let listItemIndex = list.doneListItems.index(of: existingListItem) {
                 let quantityMaybe = incrementSync(existingListItem, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
                 if quantityMaybe != nil {
-                    
+
+                    incrementFav()
+
                     return AddCartListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, listItemIndex: listItemIndex)
                     //return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
                 } else {
@@ -1094,6 +1106,9 @@ class RealmListItemProvider: RealmProvider {
                     let createdListItem = ListItem(uuid: UUID().uuidString, product: storeProduct, section: section, list: list, note: nil, quantity: quantity)
                     realm.add(createdListItem, update: true)
                     list.doneListItems.insert(createdListItem, at: 0) // in cart we pre-pend
+
+                    incrementFav()
+
                     // WARNING: quick impl: listItemIndex 0 assumes createCartSync inserts item at 0
                     return AddCartListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, listItemIndex: 0)
 
