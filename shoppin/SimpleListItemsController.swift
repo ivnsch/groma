@@ -20,7 +20,9 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     
     var onViewWillAppear: VoidFunction?
     var onViewDidAppear: VoidFunction?
-    
+
+    var additionalAddQuickAddItemToListTokens: [NotificationToken] = []
+
     var currentList: Providers.List? {
         didSet {
             updatePossibleList()
@@ -550,13 +552,15 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
 
     func onAddProduct(_ product: QuantifiableProduct, quantity: Float, note: String?, onAddToProvider: @escaping (QuickAddAddProductResult) -> Void) {
         guard let realmData = realmData else {logger.e("No realm data"); return}
-        
+
+        let completeRealmData = RealmData(realm: realmData.realm, tokens: realmData.tokens + additionalAddQuickAddItemToListTokens)
+
         if let list = currentList {
             
             // TODO!!!!!!!!!!! review if (in other places, here we do after) it's ok to manipulate table view before doing the realm operation or if we should rather wait for realm, otherwise we may get crash when realm fails
             
             // TODO!!!!!!!!!!! don't pass store, list has the store!
-            Prov.listItemsProvider.addToCart(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, realmData: realmData, successHandler {[weak self] (addResult: AddCartListItemResult) in
+            Prov.listItemsProvider.addToCart(quantifiableProduct: product, store: list.store ?? "", list: list, quantity: quantity, realmData: completeRealmData, successHandler {[weak self] (addResult: AddCartListItemResult) in
                 
                 let indexPath = IndexPath(row: addResult.listItemIndex, section: 0)
                 if addResult.isNewItem {

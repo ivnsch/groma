@@ -36,7 +36,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         }
     }
     
-    fileprivate var realmData: RealmData?
+    var realmData: RealmData?
     fileprivate var notificationToken: NotificationToken? {
         return realmData?.tokens.first
     }

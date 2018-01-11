@@ -32,6 +32,14 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         return isCartOpen ? .done : .todo
     }
 
+    override var realmData: RealmData? {
+        didSet {
+            if let tokens = realmData?.tokens {
+                cartController?.additionalAddQuickAddItemToListTokens = tokens
+            }
+        }
+    }
+
     fileprivate var isCartOpen: Bool {
         return pricesView.expandedNew
     }
@@ -342,8 +350,13 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     }
     
     fileprivate func addCartController() {
+
         let cartController = UIStoryboard.cartViewControllerNew()
         self.cartController = cartController
+
+        if let tokens = realmData?.tokens {
+            cartController.additionalAddQuickAddItemToListTokens = tokens
+        }
         
         cartController.onViewWillAppear = {[weak self, weak cartController] in guard let weakSelf = self else {return}
             cartController?.currentList = weakSelf.currentList
