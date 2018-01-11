@@ -184,14 +184,16 @@ public class SuggestionsPrefiller {
         let ovenCat = ProductCategory(uuid: uuid, name: tr("pr_oven", lang), color: UIColor.flatWatermelonDark.hexStr)
         let stationeriesCat = ProductCategory(uuid: uuid, name: tr("pr_stationeries", lang), color: UIColor.flatNavyBlueDark.hexStr)
 
+        // Products
+        let fantaProduct = Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat, edible: true)
+        let cocaColaProduct = Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)
+        let spriteProduct = Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat, edible: true)
+
         let quantifiableProducts: [QuantifiableProduct] = [
+
             // fruits
-            
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_peaches", lang), category: fruitsCat, edible: true)),
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_bananas", lang), category: fruitsCat, edible: true)),
-            
-            
-            
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_apples", lang), category: fruitsCat, edible: true)),
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_nectarines", lang), category: fruitsCat, edible: true)),
             QuantifiableProduct(uuid: uuid, baseQuantity: 500, unit: g, product: Product(uuid: uuid, name: tr("pr_cherries", lang), category: fruitsCat, edible: true)),
@@ -275,18 +277,16 @@ public class SuggestionsPrefiller {
             
             // drinks
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_water", lang), category: drinksCat, edible: true)),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: cocaColaProduct),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1.5, unit: l, product: cocaColaProduct),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 2, unit: l, product: cocaColaProduct),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: fantaProduct),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1.5, unit: l, product: fantaProduct),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 2, unit: l, product: fantaProduct),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: spriteProduct),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 1.5, unit: l, product:spriteProduct),
+            QuantifiableProduct(uuid: uuid, baseQuantity: 2, unit: l, product: spriteProduct),
 
-            //            Product(uuid: uuid, name: tr("pr_club_mate", lang), category: drinksCat)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_cola", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_fanta", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 1.5, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat, edible: true)),
-            QuantifiableProduct(uuid: uuid, baseQuantity: 2, unit: l, product: Product(uuid: uuid, name: tr("pr_sprite", lang), category: drinksCat, edible: true)),
-            
             // alcohol
             QuantifiableProduct(uuid: uuid, baseQuantity: 0.5, unit: l, product: Product(uuid: uuid, name: tr("pr_beer", lang), category: alcoholCat, edible: true)), // TODO!!!!!!! liter unit
             QuantifiableProduct(uuid: uuid, baseQuantity: 1, unit: noneUnit, product: Product(uuid: uuid, name: tr("pr_whisky", lang), category: alcoholCat, edible: true)),
