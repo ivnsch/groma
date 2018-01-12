@@ -46,12 +46,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
+        configRealm()
+
         initNavBarHeight()
 
         initIsFirstLaunch()
         
         ifDebugLaunchActions()
-        
+
         showController()
 
         initReachability()
@@ -69,8 +71,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
 //        initWebsocket()
 
-        configRealm()
-        
         Notification.subscribe(.LoginTokenExpired, selector: #selector(AppDelegate.onLoginTokenExpired(_:)), observer: self)
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.onWebsocketConnectionChange(_:)), name: NSNotification.Name(rawValue: WSNotificationName.Connection.rawValue), object: nil)
         
@@ -78,7 +78,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 //        NotificationCenter.default.addObserver(self, selector: #selector(UserTabItemViewController.onLogoutNotification(_:)), name: NSNotification.Name(rawValue: Notification.Logout.rawValue), object: nil)
         
         checkClearHistory()
-        
+
+
         return initFb
     }
 
@@ -100,7 +101,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     var notificationToken: NotificationToken!
 
     fileprivate func configRealm() {
-        Realm.Configuration.defaultConfiguration = RealmConfig.config
+        if let user = SyncUser.current {
+            logger.i("Realm user exists: \(String(describing: user.identity)), initializing synced realm.", .db)
+            Realm.Configuration.defaultConfiguration = RealmConfig.syncedRealmConfigutation(user: user)
+        } else {
+            Realm.Configuration.defaultConfiguration = RealmConfig.localRealmConfig
+        }
 
         logger.i("Realm path: \(String(describing: Realm.Configuration.defaultConfiguration.fileURL))", .db)
     }

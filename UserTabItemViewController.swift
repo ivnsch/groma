@@ -14,8 +14,8 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if ProviderFactory().userProvider.hasLoginToken {
+
+        if Prov.userProvider.hasLoginToken {
             self.showUserDetailsController()
         } else {
             self.showLoginController()

@@ -47,7 +47,7 @@ public struct RealmConfig {
             }
     })
 
-    static var localRealmConfig: Realm.Configuration {
+    public static var localRealmConfig: Realm.Configuration {
         var config = RealmConfig.config
         config.fileURL = localRealmUrl
         return config
@@ -83,7 +83,7 @@ public struct RealmConfig {
         }
     }
 
-    static func syncedRealmConfigutation(user: SyncUser) -> Realm.Configuration {
+    public static func syncedRealmConfigutation(user: SyncUser) -> Realm.Configuration {
         var config = RealmConfig.config
 
         config.syncConfiguration = SyncConfiguration(user: user, realmURL: syncServerURL)

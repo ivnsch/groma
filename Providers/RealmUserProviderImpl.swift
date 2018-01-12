@@ -162,8 +162,7 @@ class RealmUserProviderImpl: UserProvider {
     }
     
     var hasLoginToken: Bool {
-        logger.e("Not implemented") // this method is not necessary for realm provider
-        return true
+        return SyncUser.current != nil
     }
     
     var hasSignedInOnce: Bool {
