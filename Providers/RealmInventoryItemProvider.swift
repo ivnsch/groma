@@ -304,7 +304,7 @@ class RealmInventoryItemProvider: RealmProvider {
         // We execute this on successful add/increment(where increment here means also "add to list" user action).
         // We don't wait until execution finishes or handle error if it fails, since this is not critical
         func incrementFav() {
-            DBProv.productProvider.incrementFav(productUuid: product.product.uuid, transactionRealm: realm, {saved in
+            DBProv.productProvider.incrementFav(productUuid: product.product.uuid, realm: realm, notificationTokens: [], doTransaction: false, { saved in
                 if !saved {
                     logger.e("Couldn't increment product fav")
                 }

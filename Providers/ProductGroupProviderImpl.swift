@@ -429,7 +429,7 @@ class ProductGroupProviderImpl: ProductGroupProvider {
     }
     
     func incrementFav(_ groupUuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        DBProv.listItemGroupProvider.incrementFav(groupUuid, {saved in
+        DBProv.listItemGroupProvider.incrementFav(groupUuid, { saved in
             handler(ProviderResult(status: saved ? .success : .databaseUnknown))
 
             // Disabled while impl. realm sync

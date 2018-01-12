@@ -972,8 +972,8 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func incrementFav(productUuid: String, transactionRealm: Realm? = nil,  _ handler: @escaping (Bool) -> Void) {
-        
+    func incrementFav(productUuid: String, realm: Realm? = nil, notificationTokens: [NotificationToken], doTransaction: Bool, _ handler: @escaping (Bool) -> Void) {
+
         func transactionContent(realm: Realm) -> Bool {
             if let existingProduct = realm.objects(Product.self).filter(Product.createFilter(productUuid)).first {
                 existingProduct.fav += 1
@@ -983,15 +983,21 @@ class RealmProductProvider: RealmProvider {
                 return false
             }
         }
-        
-        if let realm = transactionRealm {
-            _ = transactionContent(realm: realm)
+
+        if doTransaction {
+            // Note: sync (assumes this is being called on main thread and everything else in current transaction as well - because we may pass multiple tokens, which belong to different realms and it crashes if use a different thread - see https://github.com/realm/realm-cocoa/issues/4753)
+            let result = doInWriteTransactionSync(realm: realm) { realm in
+                transactionContent(realm: realm)
+            }
+            handler(result ?? false)
         } else {
-            doInWriteTransaction({realm in
-                return transactionContent(realm: realm)
-            }, finishHandler: {savedMaybe in
-                handler(savedMaybe ?? false)
-            })
+            if let realm = realm {
+                let result = transactionContent(realm: realm)
+                handler(result)
+            } else {
+                logger.e("Invalid state: when do own transaction == false a realm should be passed")
+                handler(false)
+            }
         }
     }
     

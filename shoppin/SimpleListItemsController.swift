@@ -567,8 +567,13 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
                     self?.listItemsTableViewController.tableView.insertRows(at: [indexPath], with: .top)
 //                    self?.listItemsTableViewController.addRow(indexPath: IndexPath(row: addResult.listItemIndex, section: 0), isNewSection: addResult.isNewSection)
                 } else {
-//                    self?.listItemsTableViewController.updateRow(indexPath: IndexPath(row: addResult.listItemIndex, section: 0))
-                    self?.listItemsTableViewController.tableView.reloadRows(at: [indexPath], with: .none)
+                    if let originalIndex = addResult.originalListItemIndex {
+                        self?.listItemsTableViewController.tableView.moveRow(at: IndexPath(row: originalIndex, section: 0), to: indexPath)
+                        self?.listItemsTableViewController.tableView.reloadRows(at: [indexPath], with: .none)
+
+                    } else {
+                        logger.w("Unexpected: updated item has no original index", .ui)
+                    }
                 }
                 self?.listItemsTableViewController.tableView.scrollToRow(at: indexPath, at: Theme.defaultRowPosition, animated: true)
 

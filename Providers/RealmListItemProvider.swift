@@ -37,6 +37,7 @@ public struct AddCartListItemResult {
     public let section: Section
     public let isNewItem: Bool
     public let isNewSection: Bool
+    public let originalListItemIndex: Int? // Set if item was moved (original index - in update case items are moved to the top of the list)
     public let listItemIndex: Int
 }
 
@@ -947,7 +948,7 @@ class RealmListItemProvider: RealmProvider {
         // We execute this on successful add/increment(where increment here means also "add to list" user action).
         // We don't wait until execution finishes or handle error if it fails, since this is not critical
         func incrementFav() {
-            DBProv.productProvider.incrementFav(productUuid: quantifiableProduct.product.uuid, transactionRealm: doTransaction ? nil : realmData?.realm, {saved in
+            DBProv.productProvider.incrementFav(productUuid: quantifiableProduct.product.uuid, realm: realmData?.realm, notificationTokens: realmData?.tokens ?? [], doTransaction: doTransaction, {saved in
                 if !saved {
                     logger.e("Couldn't increment product fav")
                 }
@@ -1040,8 +1041,10 @@ class RealmListItemProvider: RealmProvider {
         
         var addedListItems = [(listItem: ListItem, isNew: Bool)]()
         
-        doInWriteTransactionSync(withoutNotifying: realmData?.tokens ?? [], realm: nil) {realm in
-            
+        doInWriteTransactionSync(withoutNotifying: realmData?.tokens ?? [], realm: nil) { realm in
+
+            let realmData = realmData ?? RealmData(realm: realm, tokens: [])
+
             for listItemInput in listItemInputs {
                 if let result = addSync(listItemInput: listItemInput, list: list, status: status, realmData: realmData, doTransaction: false) {
                     addedListItems.append((result.listItem, result.isNewItem))
@@ -1064,7 +1067,7 @@ class RealmListItemProvider: RealmProvider {
         // We execute this on successful add/increment(where increment here means also "add to list" user action).
         // We don't wait until execution finishes or handle error if it fails, since this is not critical
         func incrementFav() {
-            DBProv.productProvider.incrementFav(productUuid: quantifiableProduct.product.uuid, transactionRealm: doTransaction ? nil : realmData?.realm, {saved in
+            DBProv.productProvider.incrementFav(productUuid: quantifiableProduct.product.uuid, realm: realmData?.realm, notificationTokens: realmData?.tokens ?? [], doTransaction: false, { saved in
                 if !saved {
                     logger.e("Couldn't increment product fav")
                 }
@@ -1080,16 +1083,35 @@ class RealmListItemProvider: RealmProvider {
             let existingListItemMaybe = list.doneListItems.filter(ListItem.createFilter(quantifiableProductUnique: quantifiableProduct.unique)).first
             
             if let existingListItem = existingListItemMaybe, let listItemIndex = list.doneListItems.index(of: existingListItem) {
-                let quantityMaybe = incrementSync(existingListItem, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
-                if quantityMaybe != nil {
 
-                    incrementFav()
+                func transactionContent(realm: Realm) -> AddCartListItemResult? {
+                    let quantityMaybe = incrementSync(existingListItem, quantity: quantity, realmData: realmData, doTransaction: false)
+                    if quantityMaybe != nil {
 
-                    return AddCartListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, listItemIndex: listItemIndex)
-                    //return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
+                        // Move the item to the top of the list
+                        list.doneListItems.move(from: listItemIndex, to: 0)
+
+                        incrementFav()
+
+                        return AddCartListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, originalListItemIndex: listItemIndex, listItemIndex: 0)
+                        //return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
+                    } else {
+                        logger.e("Couldn't increment existing list item")
+                        return nil
+                    }
+                }
+
+                if doTransaction {
+                    return doInWriteTransactionSync(realmData: realmData) { realm in
+                        return transactionContent(realm: realm)
+                    }
                 } else {
-                    logger.e("Couldn't increment existing list item")
-                    return nil
+                    if let realm = realmData?.realm {
+                        return transactionContent(realm: realm)
+                    } else {
+                        logger.e("Invalid state: should be executed in existing transaction but didn't pass a realm")
+                        return nil
+                    }
                 }
                 
             } else { // new list item
@@ -1105,8 +1127,7 @@ class RealmListItemProvider: RealmProvider {
                     incrementFav()
 
                     // WARNING: quick impl: listItemIndex 0 assumes createCartSync inserts item at 0
-                    return AddCartListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, listItemIndex: 0)
-
+                    return AddCartListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, originalListItemIndex: nil, listItemIndex: 0)
                 }
 
                 if doTransaction {
