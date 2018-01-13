@@ -1406,4 +1406,16 @@ class ListItemProviderImpl: ListItemProvider {
         let success = DBProv.listItemProvider.switchCartToTodoSync(listItem: listItem, from: from, realmData: realmData)
         handler(ProviderResult(status: success ? .success : .databaseUnknown))
     }
+
+    func removePossibleSectionDuplicates(list: List, status: ListItemStatus, _ handler: @escaping (ProviderResult<Bool>) -> Void) {
+        let dbResult = DBProv.listItemProvider.removePossibleSectionDuplicates(list: list, status: status)
+        let providerResult: ProviderResult<Bool> = {
+            switch dbResult.status {
+            case .success: return ProviderResult(status: .success, sucessResult: false)
+            case .removedADuplicate: return ProviderResult(status: .success, sucessResult: true)
+            default: return ProviderResult(status: .databaseUnknown)
+            }
+        } ()
+        handler(providerResult)
+    }
 }

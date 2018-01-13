@@ -504,7 +504,26 @@ class RealmProvider {
             return nil
         }
     }
-    
+
+    // See comment on safeWrite to why we need this
+    func doInSafeWriteTransactionSync<T>(f: (Realm) -> T?) -> T? {
+        do {
+            let realm = try RealmConfig.realm()
+            var obj: T?
+            try realm.safeWrite {
+                obj = f(realm)
+            }
+            return obj
+
+        } catch let error as NSError {
+            logger.e("Realm error: \(error)")
+            return nil
+        } catch let error {
+            logger.e("Realm error: \(error)")
+            return nil
+        }
+    }
+
     func withRealm<T>(_ f: @escaping (Realm) throws -> T?, resultHandler: @escaping (T?) -> Void) {
         background({[weak self] in
             return self?.withRealmSync(f)

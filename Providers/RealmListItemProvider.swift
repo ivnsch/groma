@@ -1477,8 +1477,6 @@ class RealmListItemProvider: RealmProvider {
                 list.doneListItems.insert(listItem, at: 0)
             }
             
-            
-            
             // TODO remove src section if empty
             
             if self.deleteSectionIfEmpty(sections: list.todoSections, section: srcSection, realm: realm) {
@@ -1487,6 +1485,64 @@ class RealmListItemProvider: RealmProvider {
                 return SwitchListItemResult(deletedSection: false)
             }
         }
+    }
+
+    /**
+     * When multiple users swipe the same list item at the same time (e.g. .todo to .cart or .cart to .todo) and it has to create a new section in the destination (because there's none yet) it will create multiple sections - which manifests to the user visually as multiple list items (same list item appears multiple times).
+     Ideally this would be solved using semantic uniques for the sections, but realm doesn't support this, so we manually remove possible duplicates when receiving remote updates.
+     The first found section wins - sections with the same name+list+status after it are removed.
+     */
+    func removePossibleSectionDuplicates(list: List, status: ListItemStatus) -> DBResult<()> {
+
+        func doInTransaction(realm: Realm) -> DBResult<()> {
+            let sections = realm.objects(Section.self).filter(Section.createFilterListStatus(listUuid: list.uuid, status: status))
+
+            var foundSections = Set<String>()
+            var removedADuplicate = false
+            for section in sections.reversed() {
+                if foundSections.contains(section.name) {
+                    logger.i("Found a duplicate section! Removing...", .db)
+                    realm.delete(section)
+                    removedADuplicate = true
+                } else {
+                    foundSections.insert(section.name)
+                }
+            }
+
+            for section in sections.reversed() {
+                var foundListItems = Set<String>() // Checks only for duplicates in same section (seems unlikely to happen in different sections (review this))
+                for li in section.listItems.reversed() {
+                    if foundListItems.contains(li.uuid) {
+                        logger.i("Found a duplicate reference to list item in a .todo section! Removing...", .db)
+                        if !section.listItems.remove(li) {
+                            logger.e("Invalid state - list item was in section but couldn't be removed", .db)
+                        }
+                        removedADuplicate = true
+                    } else {
+                        foundListItems.insert(li.uuid)
+                    }
+                }
+            }
+
+            var foundListItems = Set<String>()
+            for li in list.doneListItems.reversed() {
+                if foundListItems.contains(li.uuid) {
+                    logger.i("Found a duplicate reference to list item in .done! Removing...", .db)
+                    if !list.doneListItems.remove(li) {
+                        logger.e("Invalid state - list item was in done list items but couldn't be removed", .db)
+                    }
+                    removedADuplicate = true
+                } else {
+                    foundListItems.insert(li.uuid)
+                }
+            }
+
+            return DBResult(status: removedADuplicate ? .removedADuplicate : .success)
+        }
+
+        return doInSafeWriteTransactionSync { realm in
+            return doInTransaction(realm: realm)
+        } ?? DBResult(status: .unknown)
     }
 
     // TODO!!!!!!!!!!!!!!!!!!! remove this, duplicate, only needed in buy

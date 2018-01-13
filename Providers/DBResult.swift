@@ -10,7 +10,8 @@ import Foundation
 
 enum DBStatusCode: Int {
     case success = 1
-    
+    case removedADuplicate = 2
+
     case alreadyExists = 4
     case notFound = 5
     

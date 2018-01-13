@@ -167,4 +167,6 @@ public protocol ListItemProvider {
     func switchStashToTodoSync(listItem: ListItem, from: IndexPath, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func switchCartToTodoSync(listItem: ListItem, from: IndexPath, realmData: RealmData, _ handler: @escaping (ProviderResult<Any>) -> Void)
+
+    func removePossibleSectionDuplicates(list: List, status: ListItemStatus, _ handler: @escaping (ProviderResult<Bool>) -> Void)
 }

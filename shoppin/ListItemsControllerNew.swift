@@ -191,6 +191,22 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 
 //                    self?.onTableViewChangedQuantifiables()
 
+                // TODO crash: both devices delete their duplicate at the same time, which sends a delete for an out of index item
+                // e.g. testing with only 1 list item -> add to cart at the same time -> both get a duplicated section and delete it (with removePossibleSectionDuplicates), send it to the other (index of deleted section is 1) since duplicate was deleted locally already receiver has only 1 section and deleted index 1 is out of bounds -> crash
+//                if !insertions.isEmpty {
+//                    logger.w("TODO LIST insertions not empty! will remove possible duplicates thread: \(Thread.current)", .ui)
+//                    if let list = weakSelf.currentList {
+//                        Prov.listItemsProvider.removePossibleSectionDuplicates(list: list, status: weakSelf.status, weakSelf.successHandler { removedADuplicate in
+//                            if removedADuplicate {
+//                                logger.i("Removed a section duplicate! Reloading table view", .ui)
+//                                weakSelf.listItemsTableViewController.tableView.reloadData()
+//                            }
+//                        })
+//                    } else {
+//                        logger.e("Unexpected: No list.", .ui)
+//                    }
+//                }
+
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread
                 fatalError(String(describing: error))
