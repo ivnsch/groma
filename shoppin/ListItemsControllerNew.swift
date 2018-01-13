@@ -189,7 +189,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 
 //                logger.d("self?.onTableViewChangedQuantifiables(")
 
-//                    self?.onTableViewChangedQuantifiables()
+                weakSelf.onTableViewChangedQuantifiables()
 
                 // TODO crash: both devices delete their duplicate at the same time, which sends a delete for an out of index item
                 // e.g. testing with only 1 list item -> add to cart at the same time -> both get a duplicated section and delete it (with removePossibleSectionDuplicates), send it to the other (index of deleted section is 1) since duplicate was deleted locally already receiver has only 1 section and deleted index 1 is out of bounds -> crash

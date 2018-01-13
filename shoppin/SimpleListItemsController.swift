@@ -216,7 +216,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
                 
                 //                logger.d("self?.onTableViewChangedQuantifiables(")
                 
-                //                    self?.onTableViewChangedQuantifiables()
+                weakSelf.onTableViewChangedQuantifiables()
 
 
                 // TODO crash: both devices delete their duplicate at the same time, which sends a delete for an out of index item
