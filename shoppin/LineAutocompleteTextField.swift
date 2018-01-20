@@ -9,7 +9,7 @@
 import UIKit
 
 @IBDesignable
-class LineAutocompleteTextField: MyAutoCompleteTextField {
+class LineAutocompleteTextField: MyAutoCompleteTextField, UITextFieldDelegate {
 
     fileprivate let lineWidth: CGFloat = 1
     
@@ -17,6 +17,13 @@ class LineAutocompleteTextField: MyAutoCompleteTextField {
 
     @IBInspectable
     var lineColor = defaultLineColor
+
+    var onBeginEditing: (() -> Void)?
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.delegate = self
+    }
 
     // TODO review - had to be commented while swift 4 migration (extension declaration cannot be overriden)
 //    override func showValidationError() {
@@ -38,5 +45,11 @@ class LineAutocompleteTextField: MyAutoCompleteTextField {
         context?.move(to: CGPoint(x: 0, y: y))
         context?.addLine(to: CGPoint(x: frame.width, y: y))
         context?.drawPath(using: .stroke)
+    }
+
+    // MARK: - UITextFieldDelegate
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        onBeginEditing?()
     }
 }

@@ -167,6 +167,7 @@
             <connections>
                 <outlet property="alreadyHaveLabel" destination="HoV-Lx-ei4" id="C09-7Z-Q4v"/>
                 <outlet property="brandTextField" destination="wf2-UD-agf" id="UNd-uM-sEi"/>
+                <outlet property="containerView" destination="j6I-li-DCH" id="bQR-8F-S9R"/>
                 <outlet property="ingredientNameLabel" destination="Qd6-eV-Zpm" id="R1Q-Lt-kIg"/>
                 <outlet property="productNameTextField" destination="KAK-sU-TMz" id="EX1-58-WUF"/>
                 <outlet property="quantitiesContainer" destination="QeG-wY-fI5" id="0ln-FH-tsE"/>

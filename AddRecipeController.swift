@@ -334,8 +334,23 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
             baseQuantity: ingredient.pBase,
             secondBaseQuantity: ingredient.pSecondBase.value,
             quantity: ingredient.pQuantity == 0 ? 1 : ingredient.pQuantity, // Default is 1
+            isHighlighted: false,
             alreadyHaveText: nil
         )
+    }
+
+    fileprivate func highlightCell(indexPath: IndexPath) {
+        // Update models
+        for var cellState in cellStates {
+            cellState.value.isHighlighted = false
+        }
+        cellStates[indexPath.row]?.isHighlighted = true
+
+        // Update views
+        let highlightedCell = tableView.cellForRow(at: indexPath)
+        for visibleCell in (tableView.visibleCells as! [AddRecipeIngredientCell]) {
+            visibleCell.showSelected(visibleCell == highlightedCell)
+        }
     }
 }
 
@@ -406,6 +421,8 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
         } else {
             logger.e("Invalid state", .ui)
         }
+
+        highlightCell(indexPath: indexPath)
     }
 
     func onChange(brandName: String, cell: AddRecipeIngredientCell) {
@@ -416,6 +433,12 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     func onChange(productName: String, cell: AddRecipeIngredientCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return}
         cellStates[indexPath.row]?.productName = productName
+    }
+
+    // Generic cell touch handler - used to highlight the cell when interacted with it
+    func onTouchCell(cell: AddRecipeIngredientCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { logger.e("Couldn't find cell!", .ui); return}
+        highlightCell(indexPath: indexPath)
     }
 
     func onTapUnitBaseView(cell: AddRecipeIngredientCell) {

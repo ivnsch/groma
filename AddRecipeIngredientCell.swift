@@ -31,6 +31,7 @@ protocol AddRecipeIngredientCellDelegate: class {
     func onChange(brandName: String, cell: AddRecipeIngredientCell)
 
     func onTapUnitBaseView(cell: AddRecipeIngredientCell)
+    func onTouchCell(cell: AddRecipeIngredientCell)
 
     // Autocomplete
     func productNamesContaining(text: String, handler: @escaping ([String]) -> Void)
@@ -58,6 +59,7 @@ class AddRecipeIngredientCell: UITableViewCell {
         var baseQuantity: Float
         var secondBaseQuantity: Float?
         var quantity: Float
+        var isHighlighted: Bool
 
         // Cache - to fetch it only once
         var alreadyHaveText: String?
@@ -73,6 +75,8 @@ class AddRecipeIngredientCell: UITableViewCell {
     @IBOutlet weak var alreadyHaveLabel: UILabel!
 
     @IBOutlet weak var quantitiesContainer: UIView!
+
+    @IBOutlet weak var containerView: UIView!
 
     fileprivate(set) var productQuantityController: ProductQuantityController?
 
@@ -105,6 +109,8 @@ class AddRecipeIngredientCell: UITableViewCell {
             unitName: state.unitData.unitName,
             quantity: state.quantity
         )
+
+        showSelected(state.isHighlighted)
     }
 
     func showAlreadyHaveText(_ text: String) {
@@ -122,6 +128,31 @@ class AddRecipeIngredientCell: UITableViewCell {
         initStaticText()
         initProductQuantityController()
         initAutocompletionTextFields()
+
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
+        tapRecognizer.cancelsTouchesInView = false
+        addGestureRecognizer(tapRecognizer)
+
+        // Detect tap separately on text views as the cell tap recognizer doesn't detect this
+        productNameTextField.onBeginEditing = { [weak self] in guard let weakSelf = self else { return }
+            weakSelf.delegate?.onTouchCell(cell: weakSelf)
+        }
+        brandTextField.onBeginEditing = { [weak self] in guard let weakSelf = self else { return }
+            weakSelf.delegate?.onTouchCell(cell: weakSelf)
+        }
+    }
+
+    func showSelected(_ selected: Bool) {
+        if selected {
+            containerView.layer.borderColor = Theme.blue.cgColor
+            containerView.layer.borderWidth = 1
+        } else {
+            containerView.layer.borderWidth = 0
+        }
+    }
+
+    @objc func onTap(_ sender: UITapGestureRecognizer) {
+        delegate?.onTouchCell(cell: self)
     }
 
     fileprivate func initProductQuantityController() {
