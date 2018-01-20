@@ -105,8 +105,8 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     fileprivate func tryAddInputUser() {
         if !ConnectionProvider.connectedAndLoggedIn {
-            AlertPopup.show(message: trans("popups_participants_must_be_logged_in"), controller: self)
-            
+            MyPopupHelper.showPopup(parent: self, type: .error, message: trans("popups_participants_must_be_logged_in"), centerYOffset: -80)
+
         } else {
             validateInputs(userInputsValidator) {[weak self] in
                 
@@ -118,7 +118,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
                             weakSelf.addUserInputField.clear()
                             
                             // TODO!!!! improve this, functionality is a bit weird. either submit the users immediately (needs maybe separate service?) or add some sort of indicator to add/edit screen showing that submitting the updated users is pending. At very least add a preference to show this dialog only once.
-                            AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_invitation_explanation"), controller: weakSelf, okMsg: trans("popup_button_got_it"))
+                            MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popups_participants_invitation_explanation"), okText: trans("popup_button_got_it"), centerYOffset: -80)
                         })
                     } else {
                         print("Error: validation was not implemented correctly")
@@ -242,6 +242,6 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: - InvitedSharedUserCellDelegate
     
     func onInviteInfoSharedUser(_ sharedUser: DBSharedUser, cell: InvitedUserCell) {
-        AlertPopup.show(message: trans("popups_invitation_pending"), controller: self)
+        MyPopupHelper.showPopup(parent: self, type: .info, message: trans("popups_invitation_pending"), centerYOffset: -80)
     }
 }

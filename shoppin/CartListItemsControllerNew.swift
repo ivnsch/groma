@@ -22,7 +22,9 @@ protocol CartListItemsControllerDelegate: class {
     func onCartPullToAdd()
     
     func cartCloseTopControllers()
-    
+
+    func showBuyPopup(list: List, onOk: @escaping () -> Void)
+
     var cartParentForAddButton: UIView {get}
     
     func onCartSelectListItem(listItem: ListItem, indexPath: IndexPath)
@@ -149,15 +151,14 @@ class CartListItemsControllerNew: SimpleListItemsController, UIGestureRecognizer
     }
 
     @IBAction func onAddToInventoryTap(_ sender: UIBarButtonItem) {
+
         if let list = currentList {
-            if InventoryAuthChecker.checkAccess(list.inventory) {                
-                ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_buy_will_add_to_history_stats", list.inventory.name), okTitle: trans("popup_button_buy"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in
-                    self?.addAllItemsToInventory()
-                }, onCancel: nil)
-                
-            } else {
-                AlertPopup.show(message: trans("popup_you_cant_buy_cart", list.inventory.name), controller: self)
-            }
+
+            // We do this in delegate (i.e. todo controller) since the price view on top doesn't belong to this controller, so the popup will show behind it
+            delegate?.showBuyPopup(list: list, onOk: { [weak self] in
+                self?.addAllItemsToInventory()
+            })
+
         } else {
             logger.w("Warn: DoneViewController.onAddToInventoryTap: list is not set, can't add to inventory")
         }

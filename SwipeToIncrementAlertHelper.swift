@@ -55,7 +55,7 @@ class SwipeToIncrementAlertHelper {
     // Shows alert explaining swipe to increment if user has incremented x times.
     static func check(_ controller: UIViewController) {
         if showPopup() {
-            AlertPopup.show(title: trans("popup_title_psst"), message: trans("popups_swipe_to_increment_explanation"), controller: controller)
+            MyPopupHelper.showPopup(parent: controller, type: .info, title: trans("popup_title_psst"), message: trans("popups_swipe_to_increment_explanation"), centerYOffset: -80)
         }
     }
     

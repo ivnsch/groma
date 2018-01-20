@@ -268,7 +268,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
             }
         
         } else {
-            AlertPopup.show(message: NSLocalizedString("popup_please_login_for_participants", comment: ""), controller: self)
+            MyPopupHelper.showPopup(parent: self, type: .info, message: trans("popup_please_login_for_participants"), centerYOffset: -80)
         }
     }
     
@@ -351,7 +351,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         if let inventory = listToEdit {
             Prov.pullProvider.pullInventoryProducs(inventory.uuid, srcUser: user, successHandler{[weak self] products in  guard let weakSelf = self else {return}
                 self?.progressVisible(false)
-                AlertPopup.show(title: trans("popup_title_success"), message: trans("popup_please_login_for_participants"), controller: weakSelf)
+                MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_please_login_for_participants"), centerYOffset: -80)
             })
         }
     }

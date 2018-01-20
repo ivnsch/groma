@@ -149,8 +149,8 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         } else {
             
             if !acceptedTerms {
-                AlertPopup.show(message: trans("popup_please_accept_terms"), controller: self)
-                
+                MyPopupHelper.showPopup(parent: self, type: .info, message: trans("popup_please_accept_terms"), centerYOffset: -80)
+
             } else {
                 if let email = emailField.text, let password = passwordField.text/*, firstName = firstNameField.text, lastName = lastNameField.text*/ {
                     

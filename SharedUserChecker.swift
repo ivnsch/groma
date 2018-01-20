@@ -14,12 +14,12 @@ struct SharedUserChecker {
     static func check(_ email: String, users: [DBSharedUser], controller: UIViewController, onSuccess: @escaping VoidFunction) {
         
         if (Prov.userProvider.mySharedUser.map{$0.email == email}) ?? false {
-            AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_you_dont_have_to_add_yourself"), controller: controller)
-            
+            MyPopupHelper.showPopup(parent: controller, type: .info, message: trans("popups_participants_you_dont_have_to_add_yourself"), centerYOffset: -80)
+
         } else {
             if users.contains(where: {$0.email == email}) {
-                AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_user_already_in_list", email), controller: controller)
-                
+                MyPopupHelper.showPopup(parent: controller, type: .info, message: trans("popups_participants_user_already_in_list"), centerYOffset: -80)
+
             } else {
                 controller.progressVisible()
                 Prov.userProvider.isRegistered(email) {result in
@@ -29,8 +29,8 @@ struct SharedUserChecker {
                         onSuccess()
                         
                     case .notFound:
-                        AlertPopup.show(title: trans("popup_title_info"), message: trans("popups_participants_user_not_registered", email), controller: controller)
-                        
+                        MyPopupHelper.showPopup(parent: controller, type: .info, message: trans("popups_participants_user_not_registered"), centerYOffset: -80)
+
                     default:
                         controller.defaultErrorHandler()(result)
                         print("Error: AddEditListController.onAddUserTap: unexpeted result status in isRegistered: \(result), input: \(email)")

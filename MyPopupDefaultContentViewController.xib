@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyPopupDefaultContentViewController" customModule="groma" customModuleProvider="target">
+            <connections>
+                <outlet property="cancelButton" destination="UXx-EL-nm4" id="iqc-St-vip"/>
+                <outlet property="cancelButtonBottomConstraint" destination="KDz-lp-PQH" id="TWa-ra-knU"/>
+                <outlet property="cancelButtonHeightConstraint" destination="KhD-ce-jvZ" id="rdT-xl-QkD"/>
+                <outlet property="imageBottomConstraint" destination="hgM-h9-hp1" id="VuR-YH-LZO"/>
+                <outlet property="imageHeightConstraint" destination="NbP-qc-2ws" id="M6O-k4-UTx"/>
+                <outlet property="imageView" destination="zGw-he-MjV" id="Lis-wH-Tte"/>
+                <outlet property="messageBottomConstraint" destination="VGG-Xh-eJs" id="Md1-3m-WaT"/>
+                <outlet property="messageTextView" destination="JEj-oE-46m" id="6Kf-aF-cMx"/>
+                <outlet property="okButtonBottomConstraint" destination="AS4-Ag-aND" id="luc-wt-tje"/>
+                <outlet property="okButtonHeightConstraint" destination="EXf-ga-rUZ" id="HQM-Mz-Wua"/>
+                <outlet property="titleBottomConstraint" destination="o9v-9N-Xem" id="Zs8-P9-rKB"/>
+                <outlet property="titleTextView" destination="HHh-Hb-iMf" id="Kv9-3Z-S6w"/>
+                <outlet property="topConstraint" destination="luJ-aA-193" id="mXn-aE-Wgl"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="452"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="255" placeholderIntrinsicHeight="205" translatesAutoresizingMaskIntoConstraints="NO" id="zGw-he-MjV">
+                    <rect key="frame" x="40" y="70" width="295" height="170"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="170" id="NbP-qc-2ws"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HHh-Hb-iMf" customClass="LabelMore" customModule="groma">
+                    <rect key="frame" x="40" y="260" width="295" height="20"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                    <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="50"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JEj-oE-46m" customClass="LabelMore" customModule="groma">
+                    <rect key="frame" x="40" y="290" width="295" height="22"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="50"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ChX-ss-J4v" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="40" y="332" width="295" height="50"/>
+                    <color key="backgroundColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="EXf-ga-rUZ" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                    <integer key="value" value="40"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                    <integer key="value" value="40"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </constraint>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <state key="normal" title="OK">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" red="0.49803921569999998" green="0.49803921569999998" blue="0.49803921569999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="25"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="50"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onOkPress:" destination="-1" eventType="touchUpInside" id="hgK-fg-UDI"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UXx-EL-nm4" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                    <rect key="frame" x="94.5" y="382" width="186" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="186" id="4mS-70-jvy"/>
+                        <constraint firstAttribute="height" constant="50" id="KhD-ce-jvZ" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                    <integer key="value" value="40"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                    <integer key="value" value="40"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </constraint>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <state key="normal" title="Cancel">
+                        <color key="titleColor" red="0.054901960780000002" green="0.58431372550000005" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" red="0.49803921569999998" green="0.49803921569999998" blue="0.49803921569999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="25"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="50"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onCancelPress:" destination="-1" eventType="touchUpInside" id="hpb-v6-uLp"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="UXx-EL-nm4" firstAttribute="top" secondItem="ChX-ss-J4v" secondAttribute="bottom" id="AS4-Ag-aND"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="UXx-EL-nm4" secondAttribute="bottom" constant="20" id="KDz-lp-PQH"/>
+                <constraint firstItem="UXx-EL-nm4" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Ltw-GK-ehU"/>
+                <constraint firstItem="HHh-Hb-iMf" firstAttribute="leading" secondItem="zGw-he-MjV" secondAttribute="leading" id="MnB-pj-9hn"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="zGw-he-MjV" secondAttribute="trailing" constant="40" id="Mre-by-gzI"/>
+                <constraint firstItem="ChX-ss-J4v" firstAttribute="trailing" secondItem="zGw-he-MjV" secondAttribute="trailing" id="NeI-h3-fKO"/>
+                <constraint firstItem="zGw-he-MjV" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="40" id="QjW-sd-7h7"/>
+                <constraint firstItem="ChX-ss-J4v" firstAttribute="top" secondItem="JEj-oE-46m" secondAttribute="bottom" constant="20" id="VGG-Xh-eJs"/>
+                <constraint firstItem="HHh-Hb-iMf" firstAttribute="top" secondItem="zGw-he-MjV" secondAttribute="bottom" constant="20" id="hgM-h9-hp1"/>
+                <constraint firstItem="zGw-he-MjV" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="70" id="luJ-aA-193"/>
+                <constraint firstItem="JEj-oE-46m" firstAttribute="top" secondItem="HHh-Hb-iMf" secondAttribute="bottom" constant="10" id="o9v-9N-Xem"/>
+                <constraint firstItem="HHh-Hb-iMf" firstAttribute="trailing" secondItem="zGw-he-MjV" secondAttribute="trailing" id="qCO-rX-Svh"/>
+                <constraint firstItem="JEj-oE-46m" firstAttribute="leading" secondItem="zGw-he-MjV" secondAttribute="leading" id="rUT-CE-kuv"/>
+                <constraint firstItem="JEj-oE-46m" firstAttribute="trailing" secondItem="zGw-he-MjV" secondAttribute="trailing" id="vMf-5j-rGG"/>
+                <constraint firstItem="ChX-ss-J4v" firstAttribute="leading" secondItem="zGw-he-MjV" secondAttribute="leading" id="w42-aM-mmP"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="61.5" y="-54"/>
+        </view>
+    </objects>
+</document>

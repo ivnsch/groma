@@ -58,7 +58,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
 
             controller.present(mail, animated: true, completion: nil)
         } else {
-            AlertPopup.show(message: trans("popup_couldnt_find_email_account", email), controller: controller)
+            MyPopupHelper.showPopup(parent: controller, type: .info, message: trans("popup_couldnt_find_email_account"), centerYOffset: -80)
         }
     }
     

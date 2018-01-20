@@ -266,7 +266,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             }, onError: {[weak self] result in guard let weakSelf = self else {return}
                 switch result.status {
                 case .isEmpty:
-                    AlertPopup.show(title: trans("popup_title_group_is_empty"), message: trans("popup_group_is_empty"), controller: weakSelf)
+                    MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_group_is_empty"), centerYOffset: -80)
                 default:
                     self?.defaultErrorHandler()(result)
                 }

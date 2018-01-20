@@ -317,7 +317,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         bottomConstraint.constant = 0
         heightConstraint.constant = 0
         
-        UIView.animate(withDuration: Theme.defaultAnimDuration, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             todoController.view.layoutIfNeeded()
         }) {finished in
             onFinishAnim?()

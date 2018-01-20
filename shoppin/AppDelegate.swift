@@ -639,7 +639,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                             
                         } else {
                             logger.v("Rating dialog: Couldn't open app store url")
-                            AlertPopup.show(message: trans("popup_couldnt_open_app_store_url"), controller: controller)
+                            MyPopupHelper.showPopup(parent: controller, type: .info, message: trans("popup_couldnt_open_app_store_url"), centerYOffset: -80)
                         }
                     } else {
                         logger.e("Url is nil, can't go to app store")
@@ -669,7 +669,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                         
                     } else {
                         logger.v("Rating dialog: Couldn't open app store url")
-                        AlertPopup.show(message: trans("popup_couldnt_open_app_store_url"), controller: controller)
+                        MyPopupHelper.showPopup(parent: controller, type: .error, message: trans("popup_couldnt_open_app_store_url"), centerYOffset: -80)
                     }
                 } else {
                     logger.e("Url is nil, can't go to app store")

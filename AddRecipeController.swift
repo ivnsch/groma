@@ -360,7 +360,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     func deleteBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void) {
         ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_base_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
             Prov.productProvider.deleteProductsWith(base: val, weakSelf.successHandler {
-                AlertPopup.show(message: trans("popup_was_removed", val), controller: weakSelf)
+                MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_was_removed"), centerYOffset: -80)
                 handler(true)
             })
         })
@@ -528,7 +528,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
             controller: self,
             onOk: { [weak self] in guard let weakSelf = self else {return}
                 Prov.brandProvider.removeProductsWithBrand(brandNameSuggestion, remote: true, weakSelf.successHandler {
-                    AlertPopup.show(message: trans("popup_was_removed", brandNameSuggestion), controller: weakSelf)
+                    MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_was_removed"), centerYOffset: -80)
                     handler()
                 })
             }

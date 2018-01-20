@@ -220,10 +220,16 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             if alreadyShowedPopup {
                 delete()
             } else {
-                AlertPopup.show(title: trans("popup_title_info"), message: trans("popup_delete_history_also_deletes_stats"), controller: self, okMsg: trans("popup_button_got_it")) {
+                func onOkOrDismiss() {
                     PreferencesManager.savePreference(PreferencesManagerKey.showedDeleteHistoryItemHelp, value: true)
                     delete()
                 }
+
+                MyPopupHelper.showPopup(parent: self, type: .info, message: trans("popup_delete_history_also_deletes_stats"), okText: trans("popup_button_got_it"), centerYOffset: -80, onOk: {
+                    onOkOrDismiss()
+                }, onCancel: {
+                    onOkOrDismiss()
+                })
             }
 
         } else if editingStyle == .insert {

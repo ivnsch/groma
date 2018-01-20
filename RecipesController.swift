@@ -241,7 +241,7 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
 
             }, onError: {[weak self] result in guard let weakSelf = self else { return }
                 if result.status == .nameAlreadyExists {
-                    AlertPopup.show(title: trans("popup_title_error"), message: trans("error_recipe_already_exists", recipe.name), controller: weakSelf)
+                    MyPopupHelper.showPopup(parent: weakSelf, type: .error, message: trans("error_recipe_already_exists", recipe.name), centerYOffset: -80)
                 } else {
                     weakSelf.defaultErrorHandler()(result)
                 }

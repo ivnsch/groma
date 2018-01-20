@@ -176,8 +176,8 @@ extension UIViewController {
         case .sizeLimit:
             let size = errorObj.map{$0}
             let sizeStr = size.map{"(\($0))"} ?? ""
-            AlertPopup.show(title: title, message: trans("size_limit_exceeded", sizeStr), controller: self)
-        
+            MyPopupHelper.showPopup(parent: self, type: .error, title: title, message: trans("size_limit_exceeded", sizeStr), centerYOffset: -80)
+
         case .mustUpdateApp:
             logger.v("Controller received: \(status), do nothing.") // popup in this case is shown by AppDelegate
             
@@ -192,7 +192,7 @@ extension UIViewController {
     // MARK: - Popup
     
     func showInfoAlert(title: String? = nil, message: String) {
-        AlertPopup.show(title: title, message: message, controller: self)
+        MyPopupHelper.showPopup(parent: self, type: .info, title: title, message: message, centerYOffset: -80)
     }
     
     

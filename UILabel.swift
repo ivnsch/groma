@@ -30,4 +30,12 @@ public extension UILabel {
         
         return true
     }
+
+    func estimatedHeight() -> CGFloat {
+        let size = CGSize(width: frame.width, height: 1000)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        let attributes = [NSAttributedStringKey.font: font]
+        let rectangleHeight = String(describing: text).boundingRect(with: size, options: options, attributes: attributes, context: nil).height
+        return rectangleHeight
+    }
 }

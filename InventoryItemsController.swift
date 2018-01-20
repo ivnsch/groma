@@ -255,10 +255,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         if alreadyShowedPopup {
             onContinue()
         } else {
-            AlertPopup.show(title: trans("popup_title_info"), message: trans("popup_add_items_directly_inventory"), controller: self, okMsg: trans("popup_button_got_it")) {
+            MyPopupHelper.showPopup(parent: self, type: .info, message: trans("popup_add_items_directly_inventory"), okText: trans("popup_button_got_it"), onOk: {
                 PreferencesManager.savePreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp, value: true)
                 onContinue()
-            }
+            })
         }
     }
     

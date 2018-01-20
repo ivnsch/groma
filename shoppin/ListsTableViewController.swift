@@ -261,7 +261,8 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
 
             }, onError: {[weak self] result in guard let weakSelf = self else { return }
                 if result.status == .nameAlreadyExists {
-                    AlertPopup.show(title: trans("popup_title_error"), message: trans("error_list_already_exists", list.name), controller: weakSelf)
+                    MyPopupHelper.showPopup(parent: weakSelf, type: .error, message: trans("error_list_already_exists", list.name), centerYOffset: -80)
+
                 } else {
                     weakSelf.defaultErrorHandler()(result)
                 }

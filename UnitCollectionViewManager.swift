@@ -81,7 +81,7 @@ class UnitCollectionViewManager: DefaultCollectionViewItemManager<Providers.Unit
 
     override func allowRemoveItem(item: Providers.Unit, controller: UIViewController) -> Bool {
         if item.id == .none {
-            AlertPopup.show(message: trans("popup_you_cant_delete_default_unit"), controller: controller)
+            MyPopupHelper.showPopup(parent: controller, type: .info, message: trans("popup_you_cant_delete_default_unit"), centerYOffset: -80)
             return false
         } else {
             return true

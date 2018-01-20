@@ -31,10 +31,17 @@ class ProviderPopupManager {
             let title = trans("popup_title_error")
             let message: String = RequestErrorToMsgMapper.message(status)
 
-            AlertPopup.show(title: title, message: message, controller: controller, onDismiss: {[weak self] in
-                // IMPORTANT: When implementing dismissal by tapping outside, ensure the status is also cleared. See http://stackoverflow.com/a/25469305/930450
-                self?.currentStatus = nil
+            func onOkOrCancel() {
+                // IMPORTANT: When implementing dismissal by tapping outside, ensure the status is also cleared. See http://stackoverflow.com/a/25469305/930450 -- is this note still valid?
+                currentStatus = nil
+            }
+
+            MyPopupHelper.showPopup(parent: controller, type: .error, title: title, message: message, centerYOffset: -80, onOk: {
+                onOkOrCancel()
+            }, onCancel: {
+                onOkOrCancel()
             })
+
         } else {
             logger.d("Skipping error popup, currentStatus: \(String(describing: currentStatus)), status: \(status)")
             delay(1) {[weak self] in // If for somOe reason a popup wasn't closed properly, clear status after a while. Since this is used only to not show many popups of the same type at the same time, clearing after a delay is ok. This situation shouldn't happen, now that we added controller.presentedViewController == nil check, but adding this anyway as it's very, very bad when user can't see popups anymore until the next restart of the app, so even if it's just a small possibility we want to avoid this.
@@ -55,11 +62,18 @@ class ProviderPopupManager {
                 let pathErrorsStr = e.validationErrors.map{$0.msg}.joined(separator: ", ")
                 return ("\(e.path): \(pathErrorsStr)")
             }.joined(separator: "\n")
-            
-            AlertPopup.show(title: title, message: message, controller: controller, onDismiss: {[weak self] in
+
+            func onOkOrCancel() {
                 // IMPORTANT: When implementing dismissal by tapping outside, ensure the status is also cleared. See http://stackoverflow.com/a/25469305/930450
-                self?.currentStatus = nil
+                self.currentStatus = nil
+            }
+
+            MyPopupHelper.showPopup(parent: controller, type: .error, title: title, message: message, centerYOffset: -80, onOk: {
+                onOkOrCancel()
+            }, onCancel: {
+                onOkOrCancel()
             })
+
         } else {
             logger.d("Skipping error popup, currentStatus: \(String(describing: currentStatus)), status: \(status)")
             delay(1) {[weak self] in

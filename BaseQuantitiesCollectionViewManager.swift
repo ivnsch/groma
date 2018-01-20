@@ -78,7 +78,7 @@ class BaseQuantitiesCollectionViewManager: DefaultCollectionViewItemManager<Base
 
     override func allowRemoveItem(item: BaseQuantity, controller: UIViewController) -> Bool {
         if item.val == 1 {
-            AlertPopup.show(message: trans("popup_you_cant_delete_default_base_quantity"), controller: controller)
+            MyPopupHelper.showPopup(parent: controller, type: .info, message: trans("popup_you_cant_delete_default_base_quantity"), centerYOffset: -80)
             return false
         } else {
             return true

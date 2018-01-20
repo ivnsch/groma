@@ -59,7 +59,7 @@ class SizeLimitChecker {
     
     fileprivate static func check(_ itemsCount: Int, limit: Int, line1: String, afterLine1: String, controller: UIViewController, onSuccess: VoidFunction) {
         if itemsCount > limit {
-            AlertPopup.show(title: trans("popup_title_size_limit"), message: "\(line1)\(afterLine1)" , controller: controller)
+            MyPopupHelper.showPopup(parent: controller, type: .info, message: "\(line1)\(afterLine1)", centerYOffset: -80)
         } else {
             onSuccess()
         }

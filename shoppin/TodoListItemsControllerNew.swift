@@ -341,7 +341,18 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
     func cartCloseTopControllers() {
         closeTopControllers()
     }
-    
+
+    func showBuyPopup(list: List, onOk: @escaping () -> Void) {
+        if InventoryAuthChecker.checkAccess(list.inventory) {
+            MyPopupHelper.showPopup(parent: self, type: .confirmCartBuy, message: trans("popup_buy_will_add_to_history_stats", list.inventory.name), centerYOffset: 20, onOk: {
+                delay(0.3) { // give a little time for dismiss animation to finish (there's an animation to add the items to inventory/history/stats after it, so we don't want these animations to overlap)
+                    onOk()
+                }
+            })
+        } else {
+            MyPopupHelper.showPopup(parent: self, type: .error, message: trans("popup_you_cant_buy_cart", list.inventory.name), centerYOffset: 20)
+        }
+    }
     
     // MARK: - TodoListItemsEditBottomViewDelegate
     

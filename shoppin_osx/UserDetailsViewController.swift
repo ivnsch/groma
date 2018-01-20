@@ -44,9 +44,16 @@ class UserDetailsViewController: NSViewController {
                     weakSelf.progressVisible(true)
                     weakSelf.userProvider.removeAccount(weakSelf.successHandler({
 
-                        AlertPopup.show(title: trans("popup_title_success"), message: trans("popup_your_account_was_removed"), window: window, onDismiss: {
+                        func onOkOrCancel() {
                             weakSelf.delegate?.onRemoveAccount() ?? print("Warn: no login delegate")
+                        }
+
+                        MyPopupHelper.showPopup(parent: controller, type: .error, title: trans("popup_title_success"), message: trans("popup_your_account_was_removed"), centerYOffset: -80, onOk: {
+                            onOkOrCancel()
+                        }, onCancel: {
+                            onOkOrCancel()
                         })
+
                     }))
                 }
             })

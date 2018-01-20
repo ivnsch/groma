@@ -923,7 +923,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 Prov.sectionProvider.removeAllWithName(string, remote: true, weakSelf.successHandler {
                     Prov.productCategoryProvider.removeAllCategoriesWithName(string, remote: true, weakSelf.successHandler {
                         self?.delegate?.onRemovedSectionCategoryName(string)
-                        AlertPopup.show(message: trans("popup_was_removed", string), controller: weakSelf)
+                        MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_was_removed", string), centerYOffset: -80)
                     })
                 })
             })
@@ -931,7 +931,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_brand_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
                 Prov.brandProvider.removeProductsWithBrand(string, remote: true, weakSelf.successHandler {
                     self?.delegate?.onRemovedBrand(string)
-                    AlertPopup.show(message: trans("popup_was_removed", string), controller: weakSelf)
+                    MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_was_removed", string), centerYOffset: -80)
                 })
             })
         default: logger.e("Not handled input")
