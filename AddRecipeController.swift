@@ -23,6 +23,7 @@ class AddRecipeController: UIViewController {
     fileprivate var modelData: AddableIngredients?
 
     fileprivate var recipeName: String = ""
+    fileprivate var recipeColor: UIColor = Theme.lightGreyBackground
 
     // Of cells presented so far
     fileprivate var cellStates: Dictionary<Int, AddRecipeIngredientCell.CellState> = [:]
@@ -45,6 +46,8 @@ class AddRecipeController: UIViewController {
         self.delegate = delegate
 
         recipeName = recipe.name
+        recipeColor = recipe.color
+
         retrieveData(recipe: recipe)
     }
 
@@ -284,8 +287,7 @@ extension AddRecipeController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = AddRecipeTableViewHeader.createView()
-        header.config(title: recipeName)
-        header.backgroundColor = Theme.lightGreyBackground
+        header.config(title: recipeName, recipeColor: recipeColor)
         return header
     }
 

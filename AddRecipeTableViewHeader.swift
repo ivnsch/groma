@@ -16,7 +16,9 @@ class AddRecipeTableViewHeader: UITableViewHeaderFooterView {
         return Bundle.loadView("AddRecipeTableViewHeader", owner: nil) as! AddRecipeTableViewHeader
     }
 
-    func config(title: String) {
+    func config(title: String, recipeColor: UIColor) {
         titleLabel.text = title
+        titleLabel.backgroundColor = recipeColor
+        titleLabel.textColor = UIColor(contrastingBlackOrWhiteColorOn: recipeColor, isFlat: true)
     }
 }
