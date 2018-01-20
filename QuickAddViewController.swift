@@ -193,7 +193,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             
         } else {
             let controller = UIStoryboard.quickAddPageController()
-            controller.pageCount = itemType == .ingredients ? 1 : 2 // See note in pageCount
+            controller.pageCount = itemType.hasRecipeTab ? 2 : 1 // See note in pageCount
             controller.delegate = self
             controller.quickAddListItemDelegate = self
             

@@ -53,6 +53,10 @@ protocol QuickAddListItemTopControllersDelegate: class {
 
 enum QuickAddItemType {
     case product, group, recipe, productForList, ingredients
+
+    var hasRecipeTab: Bool {
+        return self == .productForList
+    }
 }
 
 enum QuickAddContent {
