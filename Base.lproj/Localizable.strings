@@ -461,9 +461,10 @@ add_button_title = "Save";
 pull_to_add = "Pull to add";
 
 
-list_items_items_in_cart_singular = "%@ item in your cart";
-list_items_items_in_cart_plural = "%@ items in your cart";
+list_items_items_in_cart_singular = "item";
+list_items_items_in_cart_plural = "items";
 list_items_items_in_backstore = "%@ in the backstore";
+list_items_items_price_view_price = "Total";
 
 
 email_device = "Device: %@";

@@ -460,9 +460,10 @@ add_button_title = "Guardar";
 pull_to_add = "Arrastra para agregar";
 
 
-list_items_items_in_cart_singular = "%@ ítem en el carrito";
-list_items_items_in_cart_plural = "%@ ítems en el carrito";
+list_items_items_in_cart_singular = "ítem";
+list_items_items_in_cart_plural = "ítems";
 list_items_items_in_backstore = "%@ en el depósito";
+list_items_items_price_view_price = "Total";
 
 
 email_device = "Dispositivo: %@";

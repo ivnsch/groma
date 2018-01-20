@@ -46,7 +46,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
 
     weak var delegate: ItemActionsDelegate?
     
-    fileprivate let headerFont = Fonts.regular
+    fileprivate let headerFont = LabelMore.mapToFontSize(50).map { UIFont.systemFont(ofSize: $0) } ?? UIFont.systemFont(ofSize: 18)
 
     var cellMode: ListItemCellMode = .note
     var cellSwipeDirection: SwipeableCellDirection = .right

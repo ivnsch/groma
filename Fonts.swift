@@ -31,10 +31,10 @@ class Fonts {
     //////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////
     // deprecated! from now on only size categories
-    static let fontName: String = "HelveticaNeue"
-    static let fontNameLight: String = "\(fontName)-Light"
-    static let fontNameBold: String = "\(fontName)-Bold"
-    
+//    static let fontName: String = "HelveticaNeue"
+//    static let fontNameLight: String = "\(fontName)-Light"
+//    static let fontNameBold: String = "\(fontName)-Bold"
+
     static let largeSize: CGFloat = 20
     static let regularSize: CGFloat = 18
     static let smallSize: CGFloat = 15
@@ -42,26 +42,26 @@ class Fonts {
     static let verySmallSize: CGFloat = 13
     static let superSmallSize: CGFloat = 11
 
-    static var large: UIFont = {UIFont(name: fontName, size: largeSize) ?? UIFont.systemFont(ofSize: largeSize)}()
-    static var regular: UIFont = {UIFont(name: fontName, size: regularSize) ?? UIFont.systemFont(ofSize: regularSize)}()
-    static var small: UIFont = {UIFont(name: fontName, size: smallSize) ?? UIFont.systemFont(ofSize: smallSize)}()
-    static var smaller: UIFont = {UIFont(name: fontName, size: smallerSize) ?? UIFont.systemFont(ofSize: smallerSize)}()
-    static var verySmall: UIFont = {UIFont(name: fontName, size: verySmallSize) ?? UIFont.systemFont(ofSize: verySmallSize)}()
-    static var superSmall: UIFont = {UIFont(name: fontName, size: superSmallSize) ?? UIFont.systemFont(ofSize: superSmallSize)}()
+    static var large: UIFont = {UIFont.systemFont(ofSize: largeSize)}()
+    static var regular: UIFont = {UIFont.systemFont(ofSize: regularSize)}()
+    static var small: UIFont = {UIFont.systemFont(ofSize: smallSize)}()
+    static var smaller: UIFont = {UIFont.systemFont(ofSize: smallerSize)}()
+    static var verySmall: UIFont = {UIFont.systemFont(ofSize: verySmallSize)}()
+    static var superSmall: UIFont = {UIFont.systemFont(ofSize: superSmallSize)}()
     
-    static var largeLight: UIFont = {UIFont(name: fontNameLight, size: largeSize) ?? UIFont.systemFont(ofSize: largeSize)}()
-    static var regularLight: UIFont = {UIFont(name: fontNameLight, size: regularSize) ?? UIFont.systemFont(ofSize: regularSize)}()
-    static var smallLight: UIFont = {UIFont(name: fontNameLight, size: smallSize) ?? UIFont.systemFont(ofSize: smallSize)}()
-    static var smallerLight: UIFont = {UIFont(name: fontNameLight, size: smallerSize) ?? UIFont.systemFont(ofSize: smallerSize)}()
-    static var verySmallLight: UIFont = {UIFont(name: fontNameLight, size: verySmallSize) ?? UIFont.systemFont(ofSize: verySmallSize)}()
-    static var superSmallLight: UIFont = {UIFont(name: fontNameLight, size: superSmallSize) ?? UIFont.systemFont(ofSize: superSmallSize)}()
+    static var largeLight: UIFont = {UIFont.systemFont(ofSize: largeSize)}()
+    static var regularLight: UIFont = {UIFont.systemFont(ofSize: regularSize)}()
+    static var smallLight: UIFont = {UIFont.systemFont(ofSize: smallSize)}()
+    static var smallerLight: UIFont = {UIFont.systemFont(ofSize: smallerSize)}()
+    static var verySmallLight: UIFont = {UIFont.systemFont(ofSize: verySmallSize)}()
+    static var superSmallLight: UIFont = {UIFont.systemFont(ofSize: superSmallSize)}()
     
-    static var largeBold: UIFont = {UIFont(name: fontNameBold, size: largeSize) ?? UIFont.systemFont(ofSize: largeSize)}()
-    static var regularBold: UIFont = {UIFont(name: fontNameBold, size: regularSize) ?? UIFont.systemFont(ofSize: regularSize)}()
-    static var smallBold: UIFont = {UIFont(name: fontNameBold, size: smallSize) ?? UIFont.systemFont(ofSize: smallSize)}()
-    static var smallerBold: UIFont = {UIFont(name: fontNameBold, size: smallerSize) ?? UIFont.systemFont(ofSize: smallerSize)}()
-    static var verySmallBold: UIFont = {UIFont(name: fontNameBold, size: verySmallSize) ?? UIFont.systemFont(ofSize: verySmallSize)}()
-    static var superSmallBold: UIFont = {UIFont(name: fontNameBold, size: superSmallSize) ?? UIFont.systemFont(ofSize: superSmallSize)}()
+    static var largeBold: UIFont = {UIFont.systemFont(ofSize: largeSize)}()
+    static var regularBold: UIFont = {UIFont.systemFont(ofSize: regularSize)}()
+    static var smallBold: UIFont = {UIFont.systemFont(ofSize: smallSize)}()
+    static var smallerBold: UIFont = {UIFont.systemFont(ofSize: smallerSize)}()
+    static var verySmallBold: UIFont = {UIFont.systemFont(ofSize: verySmallSize)}()
+    static var superSmallBold: UIFont = {UIFont.systemFont(ofSize: superSmallSize)}()
 
     static func fontSize(_ heightDimension: HeightDimension, size: FontSize) -> CGFloat {
         switch heightDimension {
@@ -105,14 +105,14 @@ class Fonts {
         }
     }
     
-    fileprivate static func fontName(_ type: FontType) -> String {
-        switch type {
-        case .light: return fontNameLight
-        case .regular: return fontName
-        case .bold: return fontNameBold
-        }
-    }
-    
+//    fileprivate static func fontName(_ type: FontType) -> String {
+//        switch type {
+//        case .light: return fontNameLight
+//        case .regular: return fontName
+//        case .bold: return fontNameBold
+//        }
+//    }
+//
     static func font(_ heightDimension: HeightDimension, size: FontSize, type: FontType) -> UIFont {
         
         // TODO optimisation: lazy variables for fonts?
@@ -133,7 +133,7 @@ class Fonts {
 //        }
         
         let size = fontSize(heightDimension, size: size)
-        return UIFont(name: fontName(type), size: size) ?? UIFont.systemFont(ofSize: size)
+        return UIFont.systemFont(ofSize: size)
     }
     //////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////

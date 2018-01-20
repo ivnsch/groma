@@ -257,11 +257,11 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iVM-Kg-U2m" customClass="PricesView" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="666" width="375" height="1"/>
+                                <rect key="frame" x="0.0" y="567" width="375" height="100"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mNO-iA-eWt" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="355" y="1" width="0.0" height="0.0"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" tag="111" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="753" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mNO-iA-eWt" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="343" y="44.5" width="12" height="21.5"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                         <userDefinedRuntimeAttributes>
@@ -271,8 +271,8 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80h-ha-9Dw" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="344" y="-10" width="11" height="22"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <rect key="frame" x="343" y="44" width="12" height="22"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                         <userDefinedRuntimeAttributes>
@@ -281,15 +281,37 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cart" translatesAutoresizingMaskIntoConstraints="NO" id="jvm-6H-Duz">
-                                        <rect key="frame" x="20" y="-11" width="27" height="23"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QQK-bj-Xcp" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="294.5" y="44" width="42.5" height="22"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <color key="textColor" red="0.72156862745098038" green="0.72156862745098038" blue="0.72156862745098038" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="50"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="cart" translatesAutoresizingMaskIntoConstraints="NO" id="jvm-6H-Duz">
+                                        <rect key="frame" x="20" y="43.5" width="27" height="23"/>
                                         <color key="backgroundColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="E7V-vH-7DE" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="60" y="-9" width="285" height="0.0"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Items" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="E7V-vH-7DE" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="71" y="34.5" width="262" height="21.5"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <color key="textColor" red="0.72156862745098038" green="0.72156862745098038" blue="0.72156862745098038" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="50"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="FMk-6f-dB8" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="55" y="34.5" width="12" height="21.5"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="fontType">
@@ -298,7 +320,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fgk-0h-BDM" customClass="LabelMore" customModule="groma">
-                                        <rect key="frame" x="60" y="11" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="60" y="65" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -308,8 +330,15 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hAt-aR-JO9" customClass="DragView" customModule="groma" customModuleProvider="target">
+                                        <rect key="frame" x="172.5" y="10" width="30" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="Nsb-Uc-ZmZ"/>
+                                            <constraint firstAttribute="height" constant="30" id="hVw-vg-vTq"/>
+                                        </constraints>
+                                    </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Om-sR-QxE">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                                         <connections>
                                             <action selector="onCartTap:" destination="QHZ-uV-ZSM" eventType="touchUpInside" id="95P-SU-3Lw"/>
                                         </connections>
@@ -318,22 +347,28 @@
                                 <color key="backgroundColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <accessibility key="accessibilityConfiguration" identifier="pricesView"/>
                                 <constraints>
-                                    <constraint firstItem="80h-ha-9Dw" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" id="7Ho-ih-Y8v"/>
+                                    <constraint firstItem="mNO-iA-eWt" firstAttribute="leading" secondItem="QQK-bj-Xcp" secondAttribute="trailing" constant="6" id="4kM-g7-EV5"/>
+                                    <constraint firstItem="hAt-aR-JO9" firstAttribute="centerX" secondItem="iVM-Kg-U2m" secondAttribute="centerX" id="6Fi-xm-WdI"/>
+                                    <constraint firstItem="80h-ha-9Dw" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" constant="5" id="7Ho-ih-Y8v"/>
+                                    <constraint firstItem="E7V-vH-7DE" firstAttribute="leading" secondItem="FMk-6f-dB8" secondAttribute="trailing" constant="4" id="BGE-n6-LxT"/>
                                     <constraint firstAttribute="trailing" secondItem="80h-ha-9Dw" secondAttribute="trailing" constant="20" id="EFj-TJ-Exd"/>
-                                    <constraint firstAttribute="height" constant="1" id="FDi-oR-jaL"/>
+                                    <constraint firstAttribute="height" constant="100" id="FDi-oR-jaL"/>
                                     <constraint firstItem="jvm-6H-Duz" firstAttribute="leading" secondItem="iVM-Kg-U2m" secondAttribute="leading" constant="20" id="N2L-3E-box"/>
                                     <constraint firstItem="8Om-sR-QxE" firstAttribute="width" secondItem="iVM-Kg-U2m" secondAttribute="width" id="RXv-Ls-2G1"/>
                                     <constraint firstAttribute="bottom" secondItem="8Om-sR-QxE" secondAttribute="bottom" id="SXe-fT-Hgl"/>
-                                    <constraint firstItem="mNO-iA-eWt" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" id="a0J-pk-79B"/>
+                                    <constraint firstItem="FMk-6f-dB8" firstAttribute="leading" secondItem="jvm-6H-Duz" secondAttribute="trailing" constant="8" id="VYp-6W-SYm"/>
+                                    <constraint firstItem="mNO-iA-eWt" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" constant="5" id="a0J-pk-79B"/>
                                     <constraint firstAttribute="trailing" secondItem="mNO-iA-eWt" secondAttribute="trailing" constant="20" id="b0s-wD-ouu"/>
                                     <constraint firstItem="8Om-sR-QxE" firstAttribute="leading" secondItem="iVM-Kg-U2m" secondAttribute="leading" id="dTa-M3-0Dy"/>
-                                    <constraint firstItem="Fgk-0h-BDM" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" constant="10" id="ehR-wG-94L"/>
+                                    <constraint firstItem="Fgk-0h-BDM" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" constant="15" id="ehR-wG-94L"/>
                                     <constraint firstItem="8Om-sR-QxE" firstAttribute="top" secondItem="iVM-Kg-U2m" secondAttribute="top" id="hiO-0Z-gGF"/>
-                                    <constraint firstItem="E7V-vH-7DE" firstAttribute="leading" secondItem="iVM-Kg-U2m" secondAttribute="leading" constant="60" id="oAM-wa-Cl9"/>
                                     <constraint firstItem="mNO-iA-eWt" firstAttribute="leading" secondItem="E7V-vH-7DE" secondAttribute="trailing" constant="10" id="oMd-Fu-9mY"/>
-                                    <constraint firstItem="jvm-6H-Duz" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" id="osV-Cj-ABu"/>
+                                    <constraint firstItem="jvm-6H-Duz" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" constant="5" id="osV-Cj-ABu"/>
+                                    <constraint firstItem="E7V-vH-7DE" firstAttribute="centerY" secondItem="FMk-6f-dB8" secondAttribute="centerY" id="pYz-ow-B0y"/>
                                     <constraint firstItem="Fgk-0h-BDM" firstAttribute="leading" secondItem="iVM-Kg-U2m" secondAttribute="leading" constant="60" id="qKp-qe-yJa"/>
-                                    <constraint firstItem="E7V-vH-7DE" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" constant="-10" id="ufs-0F-FLZ"/>
+                                    <constraint firstItem="hAt-aR-JO9" firstAttribute="top" secondItem="iVM-Kg-U2m" secondAttribute="top" constant="10" id="uLU-ve-tel"/>
+                                    <constraint firstItem="QQK-bj-Xcp" firstAttribute="centerY" secondItem="mNO-iA-eWt" secondAttribute="centerY" id="udQ-4C-1c9"/>
+                                    <constraint firstItem="E7V-vH-7DE" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" constant="-5" id="ufs-0F-FLZ"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="button" destination="8Om-sR-QxE" id="6AZ-uD-fAs"/>
@@ -342,8 +377,10 @@
                                     <outlet property="donePriceLabel" destination="mNO-iA-eWt" id="VER-DG-ld2"/>
                                     <outlet property="heightConstraint" destination="FDi-oR-jaL" id="P8B-4h-wQs"/>
                                     <outlet property="leftLayoutConstraint" destination="R3l-IW-TzB" id="MEl-ba-T3l"/>
+                                    <outlet property="priceLabel" destination="QQK-bj-Xcp" id="ot0-Io-DI2"/>
                                     <outlet property="quantityCenterConstraint" destination="ufs-0F-FLZ" id="mIA-oq-vd6"/>
                                     <outlet property="quantityLabel" destination="E7V-vH-7DE" id="Paq-ev-gGV"/>
+                                    <outlet property="quantityNumberLabel" destination="FMk-6f-dB8" id="L1C-Gd-AgO"/>
                                     <outlet property="stashQuantityLabel" destination="Fgk-0h-BDM" id="agH-Pg-xTs"/>
                                     <outlet property="totalPriceLabel" destination="80h-ha-9Dw" id="FyR-T8-nRe"/>
                                     <outlet property="widthConstraint" destination="CQQ-wq-7AI" id="iHr-Tc-Eji"/>
@@ -357,7 +394,7 @@
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tfl-kh-PsZ">
-                                <rect key="frame" x="0.0" y="64" width="375" height="602"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="503"/>
                             </containerView>
                         </subviews>
                         <constraints>
@@ -390,7 +427,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Url-oC-rlR" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="674" y="375"/>
+            <point key="canvasLocation" x="672.79999999999995" y="374.66266866566718"/>
         </scene>
         <!--List Items Table View Controller New-->
         <scene sceneID="afQ-am-JE1">

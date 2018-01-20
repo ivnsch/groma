@@ -93,6 +93,7 @@
 		6A71886C20135EF500DD3958 /* MyPopupHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A71886B20135EF500DD3958 /* MyPopupHelper.swift */; };
 		6A7188712013602300DD3958 /* MyPopupDefaultContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A71886F2013602300DD3958 /* MyPopupDefaultContentViewController.swift */; };
 		6A7188722013602300DD3958 /* MyPopupDefaultContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A7188702013602300DD3958 /* MyPopupDefaultContentViewController.xib */; };
+		6A7188742013E4EB00DD3958 /* DragView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7188732013E4EB00DD3958 /* DragView.swift */; };
 		6A76C3C61E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */; };
 		6A78ADA21FEBD57A00058D27 /* BaseQuantitiesCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78ADA11FEBD57A00058D27 /* BaseQuantitiesCollectionViewManager.swift */; };
 		6A78ADA71FEC360400058D27 /* BaseOrUnitCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78ADA61FEC360400058D27 /* BaseOrUnitCellView.swift */; };
@@ -612,6 +613,7 @@
 		6A71886B20135EF500DD3958 /* MyPopupHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPopupHelper.swift; sourceTree = "<group>"; };
 		6A71886F2013602300DD3958 /* MyPopupDefaultContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPopupDefaultContentViewController.swift; sourceTree = "<group>"; };
 		6A7188702013602300DD3958 /* MyPopupDefaultContentViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyPopupDefaultContentViewController.xib; sourceTree = "<group>"; };
+		6A7188732013E4EB00DD3958 /* DragView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragView.swift; sourceTree = "<group>"; };
 		6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		6A78ADA11FEBD57A00058D27 /* BaseQuantitiesCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseQuantitiesCollectionViewManager.swift; sourceTree = "<group>"; };
 		6A78ADA61FEC360400058D27 /* BaseOrUnitCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOrUnitCellView.swift; sourceTree = "<group>"; };
@@ -1704,6 +1706,7 @@
 				EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */,
 				EBD667F11CED4BF30055EE0B /* AddEditList.storyboard */,
 				EBEBA6B61BF16492000E5653 /* FlatColorPickerController.swift */,
+				6A7188732013E4EB00DD3958 /* DragView.swift */,
 			);
 			name = list;
 			path = shoppin;
@@ -3262,6 +3265,7 @@
 				EBEBA6B71BF16492000E5653 /* FlatColorPickerController.swift in Sources */,
 				6AE34BFC1E301B280039A2A8 /* ProductsWithQuantityViewControllerNew.swift in Sources */,
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
+				6A7188742013E4EB00DD3958 /* DragView.swift in Sources */,
 				EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */,
 				EB79AC271BF0E3B700685B30 /* AddEditListController.swift in Sources */,
 				6AF46EB21E5B422600BBFF4C /* SubmitView.swift in Sources */,

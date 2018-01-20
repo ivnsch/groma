@@ -20,15 +20,17 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     @IBOutlet weak var cartImg: UIImageView!
 
     @IBOutlet weak var quantityCenterConstraint: NSLayoutConstraint!
-    
+
+    @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
+    @IBOutlet weak var quantityNumberLabel: UILabel!
     @IBOutlet weak var stashQuantityLabel: UILabel!
     
     fileprivate(set) var totalPrice: Float?
     fileprivate(set) var donePrice: Float?
     
     fileprivate(set) var originalHeight: CGFloat = 0
-    fileprivate var originalPriceFont: UIFont!
+//    fileprivate var originalPriceFont: UIFont!
     fileprivate var originalCartImgLeftConstraint: CGFloat = 0
     fileprivate(set) var originalY: CGFloat = 0
     
@@ -64,10 +66,12 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     fileprivate(set) var cartQuantity: Float = 0 {
         didSet {
             if let cartQuantityLabel = quantityLabel {
+                quantityNumberLabel.text = "\(cartQuantity.quantityString)"
+
                 if cartQuantity == 1 {
-                    cartQuantityLabel.text = trans("list_items_items_in_cart_singular", "\(cartQuantity.quantityString)")
+                    cartQuantityLabel.text = trans("list_items_items_in_cart_singular")
                 } else {
-                    cartQuantityLabel.text = trans("list_items_items_in_cart_plural", "\(cartQuantity.quantityString)")
+                    cartQuantityLabel.text = trans("list_items_items_in_cart_plural")
                 }
                 
             } else {
@@ -103,14 +107,14 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     }
     
     fileprivate func updateQuantityCenterConstraint() {
-        quantityCenterConstraint.constant = stashQuantity == 0 ? 0 : -10
+        quantityCenterConstraint.constant = stashQuantity == 0 ? 5 : 0
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
 //        backgroundColor = UIColor.clearColor() // we add the background with layer (because of triangle shape)
         originalHeight = DimensionsManager.listItemsPricesViewHeight
-        originalPriceFont = totalPriceLabel.font
+//        originalPriceFont = totalPriceLabel.font
         originalCartImgLeftConstraint = cartImgLeftConstraint.constant
 
         setExpandedVerticalSimple(false, animated: false)
@@ -128,6 +132,8 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         panRecognizer.delegate = self
         addGestureRecognizer(self.panRecognizer)
 //        translatesAutoresizingMaskIntoConstraints = false
+
+        priceLabel.text = trans("list_items_items_price_view_price")
     }
 
     override func updateConstraints() {
@@ -174,11 +180,11 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
             if animated {
                 UIView.animate(withDuration: 0.15, animations: {
                     label.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
-                    label.font = Fonts.largeBold
+//                    label.font = Fonts.largeBold
                 }, completion: {finished in
                     UIView.animate(withDuration: 0.15, animations: {
                         label.transform = CGAffineTransform.identity
-                        label.font = Fonts.regularLight
+//                        label.font = Fonts.regularLight
                         }, completion: {finished in
                     }) 
                 }) 
@@ -265,9 +271,9 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
                     self?.donePriceLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
                     }, completion: {[weak self] finished in
                         if let weakSelf = self {
-                            let font = expanded ? weakSelf.originalPriceFont : Fonts.verySmallLight
-                            weakSelf.totalPriceLabel.font = font
-                            weakSelf.donePriceLabel.font = font
+//                            let font = expanded ? weakSelf.originalPriceFont : Fonts.verySmallLight
+//                            weakSelf.totalPriceLabel.font = font
+//                            weakSelf.donePriceLabel.font = font
                             self?.totalPriceLabel.transform = CGAffineTransform.identity
                             self?.donePriceLabel.transform = CGAffineTransform.identity
                             weakSelf.layoutIfNeeded()

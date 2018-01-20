@@ -459,9 +459,10 @@ add_button_title = "Speichern";
 pull_to_add = "Ziehen zum Hinzufügen";
 
 
-list_items_items_in_cart_singular = "%@ Item im Einkaufswagen";
-list_items_items_in_cart_plural = "%@ Items im Einkaufswagen";
+list_items_items_in_cart_singular = "Item";
+list_items_items_in_cart_plural = "Items";
 list_items_items_in_backstore = "%@ im Zwischenlager";
+list_items_items_price_view_price = "Total";
 
 
 email_device = "Gerät: %@";

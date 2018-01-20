@@ -15,8 +15,8 @@ extension MLPAutoCompleteTextField {
         autoCompleteTableBorderColor = UIColor.gray
         autoCompleteTableBorderWidth = 0.3
 //        autoCompleteTableCornerRadius = 8
-        autoCompleteBoldFontName = Fonts.fontNameBold
-        autoCompleteRegularFontName = Fonts.fontName
+        autoCompleteBoldFontName = UIFont.systemFont(ofSize: 12).bold?.fontName
+        autoCompleteRegularFontName = UIFont.systemFont(ofSize: 12).fontName
         showTextFieldDropShadowWhenAutoCompleteTableIsOpen = false
         reverseAutoCompleteSuggestionsBoldEffect = true // to mark the matched part as bold and the rest regular
         maximumNumberOfAutoCompleteRows = 4
