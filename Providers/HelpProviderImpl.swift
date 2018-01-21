@@ -58,8 +58,6 @@ class HelpProviderImpl: HelpProvider {
         
         HelpItem(title: "Can I edit items globally? What are products?", text: "Products are the 'common unit' of all the items you manage in the app. If you want to edit the name of an item and want this to be done also in list, group, inventory and history items, you just have to edit it once in the products screen. Also, if you want to remove a product, because e.g. you don't want to see it in the top-menu items anymore, do it in this screen."),
 
-        HelpItem(title: "How are units managed? How do I store e.g. a 4 kiwi pack or 500g ground beef?", text: "Everything that is sold in the store as a unit, is a product. In this case you would create new products for the 4 kiwi pack and the 500g ground beef.\nThis may be refined in future versions, by allowing to e.g. store prices relative to custom units (grams, etc).\nSend us a feedback email and tell us what's important to you! Happy to involve you in the process of evolving Groma."),
-        
         HelpItem(title: "How do I remove Products from the top menu?", text: "You can remove them in the Products screen (in the ... tab)."),
         
         HelpItem(title: "I bought items with incorrect prices, how do I fix it?", text: "The History is a snapshot of what you bought and isn’t editable, you can delete History items and buy the List items again with the corrected price though."),
@@ -122,8 +120,6 @@ class HelpProviderImpl: HelpProvider {
 
         HelpItem(title: "Kann ich Einträge global editieren? Was sind Produkte?", text: "Produkte sind die zugrundeliegende Einheit aller Einträge in dieser App. Um global Eigenschaften zu editieren, also so dass es auch in den Listen, Gruppen, Inventare, Verlauf und Statistiken gemacht wird, musst du es nur einmal in der 'Produktverwaltung' Ansicht machen. Ebenso, wenn du Produkte global löschen willst, musst du es nur einmal in dieser Ansicht machen."),
 
-        HelpItem(title: "Wie werden Einheiten verwaltet? Wie speichere ich z.B. eine 4er Kiwi Verpackung oder 500g Hackfleisch?", text: "Alles was im Laden als Einheit verkauft wird, ist ein Produkt. Für die 4er Kiwi Packung, oder 500g Hackfleisch, musst du jeweils neue Produkte anlegen.\nDies kann in künftigen Versionen verfeinert werden, z.B. um Preis/Gramm zu unterstützen.\nWenn du Ideen oder besondere Wünsche hast, sende uns eine Feedback email! Wir freuen uns über zusätzlichen Input um Groma besser zu machen."),
-        
         HelpItem(title: "Wie kann ich Produktvorschläge aus dem Top-Menü entfernen?", text: "Du kannst sie in der Ansicht 'Produktverwaltung' (im ... Tab) entfernen."),
         
 //        HelpItem(title: "Wird der Bericht geändert wenn ich Preise editiere?", text: "Nein, die Preise werden natürlich 'eingefroren' im Moment wo du sie kaufst. Sollte es allerdings dazu kommen, dass du Preise für bereits gekaufte Produkte korrigieren möchtest, kannst du die jeweiligen Einträge aus dem Verlauf löschen, und sie nochmal mit den korrigierten Preisen kaufen."),
@@ -191,8 +187,6 @@ class HelpProviderImpl: HelpProvider {
 //        HelpItem(title: "Qué son grupos? Son lo mismo que recetas?", text: "Grupos es una forma conveniente de guardar ítems juntos que puedes agregar después a listas u otros sitios de una sola vez. Un posible uso es para guardar los ingredientes que tienes que comprar para recetas."),
 
         HelpItem(title: "Puedo editar ítems globalmente? Qué son productos?", text: "Productos son la 'unidad común' de todos los ítems. Si quieres editar el nombre de un item de modo que también se editen todos los ítems con este nombre en las listas, grupos, inventarios, el menú de adición rápida, historial y reportes, sólo tienes que editarlo en la vista 'administrar productos'. De igual manera, si quieres remover un producto, de modo que desaparezca en todas partes sólo tienes que removerlo en 'administrar productos'."),
-        
-        HelpItem(title: "Cómo son manejadas las unidades? Cómo guardo por ejemplo un paquete con 4 kiwis o 500g de carne picada?", text: "Todo lo que es vendido en un almacén como unidad es un producto. En este caso tienes que crear un nuevo producto para el paquete con 4 kiwis o los 500g de carne picada.\nParte de esto se refinará posiblemente en futuras versiones, permitiéndote por ejemplo utilizar unidades relativas, como precio por gramo.\nEnvíanos un email si tienes ideas o te falta algo! Tu opinión nos interesa mucho y será considerada para decidir cómo continuar desarrollando Groma."),
         
         HelpItem(title: "Cómo puedo remover productos del menú de adición rápida?", text: "Puedes removerlos en la vista 'Administrar products' la cual encuentras en el ... tab."),
         
