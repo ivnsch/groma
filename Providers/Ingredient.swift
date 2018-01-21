@@ -189,10 +189,10 @@ public final class Ingredient: Object, WithUuid {
     }
     
     public static func quantityFullText(quantity: Float, baseQuantity: Float, unit: Providers.Unit?) -> String {
-        return quantityFullText(quantity: quantity, baseQuantity: baseQuantity, unitId: unit?.id, unitName: unit?.name ?? "")
+        return quantityFullText(quantity: quantity, baseQuantity: baseQuantity, secondBaseQuantity: nil,  unitId: unit?.id, unitName: unit?.name ?? "")
     }
 
-    public static func quantityFullText(quantity: Float, baseQuantity: Float, unitId: UnitId?, unitName: String, showNoneUnitName: Bool = false) -> String {
+    public static func quantityFullText(quantity: Float, baseQuantity: Float, secondBaseQuantity: Float?, unitId: UnitId?, unitName: String, showNoneUnitName: Bool = false) -> String {
 
         let noneUnitName = quantity > 1 ? trans("recipe_unit_plural") : trans("recipe_unit_singular")
 
@@ -201,7 +201,9 @@ public final class Ingredient: Object, WithUuid {
             true
         } ?? false /* false: if there's no unit, unit is none -> none has no base */ && baseQuantity > 1
 
-        let baseText = showBaseQuantity ? " x \(baseQuantity.quantityString)" : ""
+        let secondBaseText = showBaseQuantity ? (secondBaseQuantity.map { "\($0.quantityString)"} ?? "") : ""
+        let secondBaseSuffix = secondBaseText.isEmpty ? "" : " x "
+        let baseText = showBaseQuantity ? " x \(secondBaseText)\(secondBaseSuffix)\(baseQuantity.quantityString)" : ""
         var unitText = unitId.map{$0 == .none ? noneUnitName : unitName} ?? noneUnitName
         if !showNoneUnitName && unitText == noneUnitName {
             unitText = ""

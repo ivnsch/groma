@@ -418,6 +418,7 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
                 unitId: cellState.unitData.unitId,
                 unitName: cellState.unitData.unitName,
                 base: cellState.baseQuantity,
+                secondBase: cellState.secondBaseQuantity,
                 quantity: cellState.quantity
             )
         } else {
