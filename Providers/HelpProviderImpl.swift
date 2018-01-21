@@ -40,7 +40,7 @@ class HelpProviderImpl: HelpProvider {
 
         HelpItem(title: "What is the relationship between categories and sections?", text: "Category is how you generally want to classify a product. E.g. for apples you probably would use 'fruit'. A Section is the area of the store where you find the product. The section can be different than the category! For example tuna, could have 'fish' as category but be in the 'canned food' section.\nProducts have always a category, which is used everywhere in the app. Sections only exist in Shopping Lists."),
         
-        HelpItem(title: "Do I need to use prices, units, base quantities, stores, etc.?", text: "No! All this is optional - you go only as far as you want to. You can use Groma as a dead simple grocery list app - using only basic attributes like name and quantity."),
+        HelpItem(title: "Do I need to use prices, units, base quantities, stores, etc.?", text: "No! All this is optional - you go only as far as you want to. You can use Groma as a dead simple grocery list app - using only basic attributes like name and quantity. Feel also free to experiment with these values - there are no fixed rules! You'll figure out with time what makes sense for you."),
 
 //        HelpItem(title: "What are groups? Are they the same as recipes?", text: "Groups are a handy way of adding multiple items to a List at once. For example make a hamburger group with beef, buns, cheese and pickles, and add all the items to the List with only one click of a button – perfect for recipes you use often"),
 
@@ -112,7 +112,7 @@ class HelpProviderImpl: HelpProvider {
 
         HelpItem(title: "Was ist der Unterschied zwischen Abteilungen und Kategorien?", text: "Kategorien ist wie du generell etwas einordnen willst. Die Abteilung ist der Ort im Laden, wo sich das Produkt befindet. Z.B. für Thunfisch könnte die Kategorie 'Fisch' lauten, und die Abteilung 'Dosenprodukte'."),
 
-        HelpItem(title: "Muss ich Preis, Einheit, Basis-Menge usw. benutzen?", text: "Nein! Das ist alles optional. Du kannst Groma als eine einfache Einkauflisten-App benutzen, wo du nur Eigenschaften wie Name oder Menge benutzt. Du bestimmst wie weit du gehen willst!"),
+        HelpItem(title: "Muss ich Preis, Einheit, Basis-Menge usw. benutzen?", text: "Nein! Das ist alles optional. Du kannst Groma als eine einfache Einkauflisten-App benutzen, wo du nur Eigenschaften wie Name oder Menge benutzt. Du bestimmst wie weit du gehen willst! Du kanns auch gerne mit diesen Werten experimentieren. Mit Zeit findest du was für dich Sinn macht."),
 
 //        HelpItem(title: "Was ist das Zwischenlager?", text: "Das Zwischenlager dient zur Ablage von einzelnen Listeneinträgen, falls du nur ein Teil der Liste kaufst. Sobald alle Einträge gekauft sind, werden sie automatisch zurückgesetzt (in die Todo-Liste verschoben). Du kannst auch jederzeit die Einträge manuell zurücksetzen."),
 //
@@ -180,7 +180,7 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Cuál es la diferencia entre categorías y secciones?", text: "Categoría es como clasificas un producto. Por ejemplo para manzanas probablemente usarías 'frutas'. Una sección es la parte del almacén donde encuentras el producto. La sección no siempre es lo mismo que la categoría! Por ejemplo atún, podría tener 'pez' como categoría pero estar en la sección 'enlatados'.\nProductos siempre tienen una categoría (en listas, grupos, inventarios, etc.) mientras que la sección sólo es utilizada en las listas."),
 
 
-        HelpItem(title: "Tengo que utilizar precio, unidad, candidad básica, etc.?", text: "No! Todo esto es opcional. Tú puedes utlizar Groma como una app de compras simple  - guardando sólo informaciones cruciales como nombre y cantidad. Tú vas tan lejos como quieres, la app no te obliga!"),
+        HelpItem(title: "Tengo que utilizar precio, unidad, candidad básica, etc.?", text: "No! Todo esto es opcional. Tú puedes utlizar Groma como una app de compras simple  - guardando sólo informaciones cruciales como nombre y cantidad. Tú vas tan lejos como quieres, la app no te obliga! También puedes experimentar con estos elementos - con el tiempo encontrarás lo que hace más sentido para tí."),
 
 //        HelpItem(title: "Qué es el depósito?", text: "Es el sitio a donde van tus ítems cuando no compras la lista completa. Los ítems en el depósito son movidos a la lista \"todo\" automáticamente cuando completas la lista. También los puedes mover manualmente. Para acceder el depósito arrastra la vista en donde aparece la cantidad de ítems en el depósito (en la parte inferior de la lista \"todo\"), hacia la izquierda y selecciona la vista que aparece atrás."),
 
