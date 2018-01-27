@@ -20,6 +20,7 @@ class MyPopupHelper {
     static func showPopup(parent: UIViewController, type: MyPopupDefaultContentType, title: String? = nil, message: String, okText: String = trans("popup_button_ok"), centerYOffset: CGFloat = 0, swipeEnabled: Bool = true, onOk: (() -> Void)? = nil, onCancel: (() -> Void)? = nil) {
 
         let contentController = MyPopupDefaultContentViewController()
+        _ = contentController.view // trigger view load
         contentController.config(type: type, message: message)
 
         let popup = createPopup(parent: parent)
