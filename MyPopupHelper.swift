@@ -15,20 +15,14 @@ class MyPopupHelper {
 
     fileprivate static var swipeHelper: GenericSwipeHelper? // arc
 
+    // Default popup with type
     // Optional title: overrides default titles for `type`
-    static func showPopup(parent: UIViewController, type: MyPopupDefaultContentType, title: String? = nil, message: String, okText: String = trans("popup_button_ok"), centerYOffset: CGFloat = 0, onOk: (() -> Void)? = nil, onCancel: (() -> Void)? = nil) {
+    static func showPopup(parent: UIViewController, type: MyPopupDefaultContentType, title: String? = nil, message: String, okText: String = trans("popup_button_ok"), centerYOffset: CGFloat = 0, swipeEnabled: Bool = true, onOk: (() -> Void)? = nil, onCancel: (() -> Void)? = nil) {
 
         let contentController = MyPopupDefaultContentViewController()
-
-        let popup = MyPopup(parent: parent.view, frame: parent.view.bounds)
-        popup.backgroundAlpha = 0.3
-        popup.cornerRadius = 6
-        popup.contentView = contentController.view
-        popup.contentView?.frame = contentFrame
-
-        parent.addChildViewController(contentController)
-
         contentController.config(type: type, message: message)
+
+        let popup = createPopup(parent: parent)
 
         func onOkOrCancel() {
             contentController.removeFromParentViewController()
@@ -45,31 +39,72 @@ class MyPopupHelper {
             onCancel?()
         }
 
+        showPopup(popup: popup, parent: parent, centerYOffset: centerYOffset, contentController: contentController, swipeEnabled: swipeEnabled, onDismissWithSwipe: {
+            onCancel?()
+        })
+    }
+
+    static func showCustomPopup(parent: UIViewController, centerYOffset: CGFloat = 0, contentController: UIViewController, swipeEnabled: Bool = true, useDefaultFrame: Bool = true, onDismissWithSwipe: (() -> Void)? = nil) -> MyPopup {
+        let popup = createPopup(parent: parent)
+        showPopup(popup: popup, parent: parent, contentController: contentController, swipeEnabled: swipeEnabled, useDefaultFrame: useDefaultFrame)
+        return popup
+    }
+
+    static func showCustomPopupFrom(parent: UIViewController, centerYOffset: CGFloat = 0, contentController: UIViewController, swipeEnabled: Bool = true, useDefaultFrame: Bool = true, from: UIView? = nil) -> MyPopup {
+        let popup = createPopup(parent: parent)
+        showPopup(popup: popup, parent: parent, contentController: contentController, swipeEnabled: swipeEnabled, from: from, useDefaultFrame: useDefaultFrame)
+        return popup
+    }
+
+    fileprivate static func createPopup(parent: UIViewController) -> MyPopup {
+        let popup = MyPopup(parent: parent.view, frame: parent.view.bounds)
+        return popup
+    }
+
+    // Optional title: overrides default titles for `type`
+    fileprivate static func showPopup(popup: MyPopup, parent: UIViewController, centerYOffset: CGFloat = 0, contentController: UIViewController, swipeEnabled: Bool = true, from: UIView? = nil, useDefaultFrame: Bool = true, onDismissWithSwipe: (() -> Void)? = nil) {
+
+        popup.backgroundAlpha = 0.3
+        popup.cornerRadius = Theme.popupCornerRadius
+        popup.contentView = contentController.view
+        if useDefaultFrame {
+            popup.contentView?.frame = contentFrame
+        }
+
+        parent.addChildViewController(contentController)
+
         // After this totalDelta (up or down) the popup is dimissed
         let totalDeltaToDismiss: CGFloat = 100
-        swipeHelper = GenericSwipeHelper(view: popup, delta: 20, orientation: .vertical, cancelTouches: true, onDelta: { delta, totalDelta in
 
-            popup.contentView?.y += delta
+        if swipeEnabled {
+            swipeHelper = GenericSwipeHelper(view: popup, delta: 20, orientation: .vertical, cancelTouches: true, onDelta: { delta, totalDelta in
 
-            // Decrease content view alpha as it's moved up and down
-            // -> map totalDelta 0...200 to alpha 1...0 (at >= 200 the alpha is 0)
-            let normalizedTotalDelta = min(abs(totalDelta) / 200, 1)
-            let alpha = 1 - normalizedTotalDelta
-            popup.contentView?.alpha = alpha
+                popup.contentView?.y += delta
 
-        }, onEnded: { totalDelta in
-            if abs(totalDelta) > totalDeltaToDismiss { // Past limit -> dismiss
-                popup.hideFullFall(direction: totalDelta > 0 ? .down : .up, onFinish: {
-                    contentController.removeFromParentViewController()
-                    onCancel?()
-                })
-            } else { // Gesture stopped before limit -> return to original position
-                popup.returnToOriginFall(onFinish: {
-                })
-            }
-        })
+                // Decrease content view alpha as it's moved up and down
+                // -> map totalDelta 0...200 to alpha 1...0 (at >= 200 the alpha is 0)
+                let normalizedTotalDelta = min(abs(totalDelta) / 200, 1)
+                let alpha = 1 - normalizedTotalDelta
+                popup.contentView?.alpha = alpha
 
-        popup.showFall(centerYOffset: centerYOffset, onFinish: {
-        })
+            }, onEnded: { totalDelta in
+                if abs(totalDelta) > totalDeltaToDismiss { // Past limit -> dismiss
+                    popup.hideFullFall(direction: totalDelta > 0 ? .down : .up, onFinish: {
+                        contentController.removeFromParentViewController()
+                        onDismissWithSwipe?()
+                    })
+                } else { // Gesture stopped before limit -> return to original position
+                    popup.returnToOriginFall(onFinish: {
+                    })
+                }
+            })
+        }
+
+        if let from = from {
+            popup.show(from: from)
+        } else {
+            popup.showFall(centerYOffset: centerYOffset, onFinish: {
+            })
+        }
     }
 }

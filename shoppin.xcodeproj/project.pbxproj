@@ -89,11 +89,15 @@
 		6A4DBFDF1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFDE1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift */; };
 		6A4DBFE21FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFE11FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift */; };
 		6A66D3461E413A300028240C /* TodoListItemsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */; };
+		6A6FD92A201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6FD928201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.swift */; };
+		6A6FD92B201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A6FD929201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.xib */; };
 		6A71886A20135C5A00DD3958 /* GenericSwipeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A71886920135C5A00DD3958 /* GenericSwipeHelper.swift */; };
 		6A71886C20135EF500DD3958 /* MyPopupHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A71886B20135EF500DD3958 /* MyPopupHelper.swift */; };
 		6A7188712013602300DD3958 /* MyPopupDefaultContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A71886F2013602300DD3958 /* MyPopupDefaultContentViewController.swift */; };
 		6A7188722013602300DD3958 /* MyPopupDefaultContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A7188702013602300DD3958 /* MyPopupDefaultContentViewController.xib */; };
 		6A7188742013E4EB00DD3958 /* DragView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7188732013E4EB00DD3958 /* DragView.swift */; };
+		6A718879201693A800DD3958 /* BaseUnitHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A718877201693A800DD3958 /* BaseUnitHelpViewController.swift */; };
+		6A71887A201693A800DD3958 /* BaseUnitHelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A718878201693A800DD3958 /* BaseUnitHelpViewController.xib */; };
 		6A76C3C61E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */; };
 		6A78ADA21FEBD57A00058D27 /* BaseQuantitiesCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78ADA11FEBD57A00058D27 /* BaseQuantitiesCollectionViewManager.swift */; };
 		6A78ADA71FEC360400058D27 /* BaseOrUnitCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A78ADA61FEC360400058D27 /* BaseOrUnitCellView.swift */; };
@@ -143,6 +147,8 @@
 		6AE41A191E49E61D00B8459D /* SelectQuantifiableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE41A181E49E61D00B8459D /* SelectQuantifiableCell.swift */; };
 		6AE548C31FF1236400A72BFE /* RecipeTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE548C11FF1236400A72BFE /* RecipeTextCell.swift */; };
 		6AE548C61FF1279700A72BFE /* RecipeEditableTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE548C51FF1279700A72BFE /* RecipeEditableTextCell.swift */; };
+		6AE5DA882017C0C1003E4C7B /* UnitBaseHelpCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE5DA862017C0C1003E4C7B /* UnitBaseHelpCell.swift */; };
+		6AE5DA892017C0C1003E4C7B /* UnitBaseHelpCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AE5DA872017C0C1003E4C7B /* UnitBaseHelpCell.xib */; };
 		6AEA4EA41E0461660040557D /* Providers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AEA4EA31E0461660040557D /* Providers.framework */; };
 		6AEA4EA51E0461660040557D /* Providers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6AEA4EA31E0461660040557D /* Providers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6AEB65E81E4C8BE90094B9DE /* IngredientsControllerNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB65E71E4C8BE90094B9DE /* IngredientsControllerNew.swift */; };
@@ -609,11 +615,15 @@
 		6A4DBFE11FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartTodoItemsTestUtils.swift; sourceTree = "<group>"; };
 		6A58B0D21E48D5D50012F4C9 /* groma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = groma.entitlements; sourceTree = "<group>"; };
 		6A66D3451E413A300028240C /* TodoListItemsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsControllerNew.swift; sourceTree = "<group>"; };
+		6A6FD928201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseUnitHelpExplanationCell.swift; sourceTree = "<group>"; };
+		6A6FD929201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BaseUnitHelpExplanationCell.xib; sourceTree = "<group>"; };
 		6A71886920135C5A00DD3958 /* GenericSwipeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSwipeHelper.swift; sourceTree = "<group>"; };
 		6A71886B20135EF500DD3958 /* MyPopupHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPopupHelper.swift; sourceTree = "<group>"; };
 		6A71886F2013602300DD3958 /* MyPopupDefaultContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPopupDefaultContentViewController.swift; sourceTree = "<group>"; };
 		6A7188702013602300DD3958 /* MyPopupDefaultContentViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyPopupDefaultContentViewController.xib; sourceTree = "<group>"; };
 		6A7188732013E4EB00DD3958 /* DragView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragView.swift; sourceTree = "<group>"; };
+		6A718877201693A800DD3958 /* BaseUnitHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseUnitHelpViewController.swift; sourceTree = "<group>"; };
+		6A718878201693A800DD3958 /* BaseUnitHelpViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BaseUnitHelpViewController.xib; sourceTree = "<group>"; };
 		6A76C3C51E4A7CC800BC8817 /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		6A78ADA11FEBD57A00058D27 /* BaseQuantitiesCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseQuantitiesCollectionViewManager.swift; sourceTree = "<group>"; };
 		6A78ADA61FEC360400058D27 /* BaseOrUnitCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOrUnitCellView.swift; sourceTree = "<group>"; };
@@ -663,6 +673,8 @@
 		6AE41A181E49E61D00B8459D /* SelectQuantifiableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectQuantifiableCell.swift; sourceTree = "<group>"; };
 		6AE548C11FF1236400A72BFE /* RecipeTextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTextCell.swift; sourceTree = "<group>"; };
 		6AE548C51FF1279700A72BFE /* RecipeEditableTextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditableTextCell.swift; sourceTree = "<group>"; };
+		6AE5DA862017C0C1003E4C7B /* UnitBaseHelpCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitBaseHelpCell.swift; sourceTree = "<group>"; };
+		6AE5DA872017C0C1003E4C7B /* UnitBaseHelpCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UnitBaseHelpCell.xib; sourceTree = "<group>"; };
 		6AEA4EA31E0461660040557D /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AEB65E71E4C8BE90094B9DE /* IngredientsControllerNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientsControllerNew.swift; sourceTree = "<group>"; };
 		6AEB65E91E4C92B50094B9DE /* IngredientCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngredientCell.swift; sourceTree = "<group>"; };
@@ -1237,6 +1249,12 @@
 				6AD23FFD1FED922C0080161E /* AddRecipeController.xib */,
 				6AD240021FEDD22B0080161E /* AddRecipeTableViewHeader.swift */,
 				6AD240041FEDD2370080161E /* AddRecipeTableViewHeader.xib */,
+				6A718877201693A800DD3958 /* BaseUnitHelpViewController.swift */,
+				6A718878201693A800DD3958 /* BaseUnitHelpViewController.xib */,
+				6AE5DA862017C0C1003E4C7B /* UnitBaseHelpCell.swift */,
+				6AE5DA872017C0C1003E4C7B /* UnitBaseHelpCell.xib */,
+				6A6FD928201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.swift */,
+				6A6FD929201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.xib */,
 			);
 			name = addRecipe;
 			sourceTree = "<group>";
@@ -2758,6 +2776,7 @@
 				6A1BBAE01E44B57300BC7404 /* ListItemCell.xib in Resources */,
 				6AF0C2761E630A6000FE14FD /* SelectIngredientDataContainerController.storyboard in Resources */,
 				EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */,
+				6AE5DA892017C0C1003E4C7B /* UnitBaseHelpCell.xib in Resources */,
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
 				EBB0A8071CD39821003CB7BA /* TodoListItemsEditBottomView.xib in Resources */,
 				6A3A67DE1E59D50C00B5354F /* UnitEditableCell.xib in Resources */,
@@ -2839,8 +2858,10 @@
 				6A7E64871FEAAD1E00F75DFD /* AddNewItemInputCell.xib in Resources */,
 				6A10276D1E5E11D8003D2972 /* BaseQuantityCell.xib in Resources */,
 				6AF0C2731E622A4100FE14FD /* SelectIngredientFractionController.xib in Resources */,
+				6A71887A201693A800DD3958 /* BaseUnitHelpViewController.xib in Resources */,
 				6A3A67B91E5604F500B5354F /* ManageItemsBaseQuantities.storyboard in Resources */,
 				6A17C4E01FF02FB200372DDB /* TooltipPickerCell.xib in Resources */,
+				6A6FD92B201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.xib in Resources */,
 				6AEB65F11E4D06DD0094B9DE /* SelectIngredientData.storyboard in Resources */,
 				6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */,
 				EBD667FD1CED4CD00055EE0B /* SharedUsersViewController.storyboard in Resources */,
@@ -2909,6 +2930,7 @@
 				"${BUILT_PRODUCTS_DIR}/Valet/Valet.framework",
 				"${BUILT_PRODUCTS_DIR}/ASValueTrackingSlider/ASValueTrackingSlider.framework",
 				"${BUILT_PRODUCTS_DIR}/CMPopTipView/CMPopTipView.framework",
+				"${BUILT_PRODUCTS_DIR}/ChartLegends/ChartLegends.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
@@ -2929,6 +2951,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Valet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ASValueTrackingSlider.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CMPopTipView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChartLegends.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
@@ -2996,6 +3019,7 @@
 				"${BUILT_PRODUCTS_DIR}/Valet/Valet.framework",
 				"${BUILT_PRODUCTS_DIR}/ASValueTrackingSlider/ASValueTrackingSlider.framework",
 				"${BUILT_PRODUCTS_DIR}/CMPopTipView/CMPopTipView.framework",
+				"${BUILT_PRODUCTS_DIR}/ChartLegends/ChartLegends.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
@@ -3016,6 +3040,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Valet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ASValueTrackingSlider.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CMPopTipView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChartLegends.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
@@ -3103,6 +3128,7 @@
 				6A3F5DDB1FEAFC5E003085F6 /* SelectUnitAndBaseController.swift in Sources */,
 				EBA2C8C61C4F18AC00A970B8 /* ManageProductCategoriesController.swift in Sources */,
 				6ADC6F3A1E4D2C88005BE5EB /* FractionView.swift in Sources */,
+				6A718879201693A800DD3958 /* BaseUnitHelpViewController.swift in Sources */,
 				EBDF8D0F1BFB7E2A00F6830A /* ListTopBarView.swift in Sources */,
 				6A71886A20135C5A00DD3958 /* GenericSwipeHelper.swift in Sources */,
 				EBEA0CC81CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift in Sources */,
@@ -3126,6 +3152,7 @@
 				6AEE5ECB1E720D3300C2A2FB /* EditNameButtonController.swift in Sources */,
 				6AFDAFAD1FFCFF2500C57703 /* PriceView.swift in Sources */,
 				6A3A67BE1E56141200B5354F /* ManageItemsUnitsController.swift in Sources */,
+				6A6FD92A201CE4CF00B09A77 /* BaseUnitHelpExplanationCell.swift in Sources */,
 				EB8D1D091C37318500ADF884 /* GroupsController.swift in Sources */,
 				EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
@@ -3274,6 +3301,7 @@
 				EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */,
 				EBB6D7521CD6910D00F9C711 /* LeftRightPaddingConstraint.swift in Sources */,
 				6A287E9F1E54FFC800868244 /* ManageItemsStoreProductCell.swift in Sources */,
+				6AE5DA882017C0C1003E4C7B /* UnitBaseHelpCell.swift in Sources */,
 				EBBF2B9B1CA4BBA1003A9449 /* InvitedUserCell.swift in Sources */,
 				EB1219DB1BD8EB23004351E0 /* QuickAddViewController.swift in Sources */,
 				EB4B39C41CEBF05300B41063 /* TopEmptyViewConstraint.swift in Sources */,

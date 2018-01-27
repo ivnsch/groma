@@ -67,7 +67,7 @@ public struct Theme {
     
     public static let defaultTableViewBGColor = lightGreyBackground
     
-    public static let popupCornerRadius: CGFloat = 10
+    public static let popupCornerRadius: CGFloat = 6
     
     public static let defaultAnimDuration: Double = 0.2
     

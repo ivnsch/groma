@@ -300,6 +300,8 @@ popup_button_rate_dont_ask_again = "Nicht wieder fragen";
 popup_button_restore_bundled_product = "Wiederherstellen";
 popup_button_remove_list = "Liste entfernen";
 
+button_close_help = "Hilfe schließen";
+
 popup_you_cant_delete_default_unit = "Die Basiseinheit kann nicht gelöscht werden!";
 popup_you_cant_delete_default_base_quantity = "Die Default Basismenge kann nicht gelöscht werden!";
 
@@ -530,3 +532,7 @@ add_recipe_to_list_submit_button_title = "Hinzufügen";
 add_recipe_to_list_placeholder_name = "Produktname";
 add_recipe_to_list_placeholder_brand = "Marke";
 add_recipe_to_list_placeholder_to_add = "Hinzufügen:";
+
+base_unit_help_title = "Hilfe";
+base_unit_help_note_explanation_title = "Anmerkung";
+base_unit_help_note_explanation_text = "Du *musst* nicht diese Sachen benutzen. Du kannst einfach alles im Namen schreiben, z.B. \"Eier 6x\", einen Preis setzen und fertig! Benutze einfach das, was dir am Besten passt. Der Preis ist übrigens auch optional.";

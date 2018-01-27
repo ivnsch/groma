@@ -1,0 +1,6 @@
+framework module ChartLegends {
+  umbrella header "ChartLegends-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -30,7 +30,7 @@ def gromadeps
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
     pod 'HockeySDK'
     pod 'ASValueTrackingSlider', '~> 0.12.1'
-    
+    pod 'ChartLegends', '~> 0.0.6'
     providersdeps
 end
 

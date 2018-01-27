@@ -531,34 +531,32 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
 
     func delete(productNameSuggestion: String, handler: @escaping () -> Void) {
-        ConfirmationPopup.show(
+        MyPopupHelper.showPopup(
+            parent: self,
+            type: .warning,
             title: trans("popup_title_confirm"),
-            message: trans("popup_remove_product_completion_confirm", productNameSuggestion),
-            okTitle: trans("popup_button_yes"),
-            cancelTitle: trans("popup_button_no"),
-            controller: self,
-            onOk: { [weak self] in guard let weakSelf = self else {return}
+            message: trans("popup_remove_product_completion_confirm"),
+            okText: trans("popup_button_yes"),
+            centerYOffset: 80, onOk: { [weak self] in guard let weakSelf = self else {return}
                 Prov.productProvider.delete(productName: productNameSuggestion, weakSelf.successHandler{
                     handler()
                 })
-            }
-        )
+        }, onCancel: nil)
     }
 
     func delete(brandNameSuggestion: String, handler: @escaping () -> Void) {
-        ConfirmationPopup.show(
+        MyPopupHelper.showPopup(
+            parent: self,
+            type: .warning,
             title: trans("popup_title_confirm"),
             message: trans("popup_remove_brand_completion_confirm", brandNameSuggestion),
-            okTitle: trans("popup_button_yes"),
-            cancelTitle: trans("popup_button_no"),
-            controller: self,
-            onOk: { [weak self] in guard let weakSelf = self else {return}
+            okText: trans("popup_button_yes"),
+            centerYOffset: 80, onOk: { [weak self] in guard let weakSelf = self else {return}
                 Prov.brandProvider.removeProductsWithBrand(brandNameSuggestion, remote: true, weakSelf.successHandler {
                     MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_was_removed"), centerYOffset: -80)
                     handler()
                 })
-            }
-        )
+            }, onCancel: nil)
     }
 
     // TODO remove

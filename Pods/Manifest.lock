@@ -4,6 +4,7 @@ PODS:
   - ChameleonFramework/Default (2.1.0)
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
+  - ChartLegends (0.0.6)
   - CMPopTipView (2.3.0)
   - GoogleSignIn (4.1.0):
     - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
@@ -46,6 +47,7 @@ DEPENDENCIES:
   - Alamofire (~> 4.5)
   - ASValueTrackingSlider (~> 0.12.1)
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
+  - ChartLegends (~> 0.0.6)
   - CMPopTipView (~> 2.0)
   - GoogleSignIn
   - HockeySDK
@@ -78,6 +80,7 @@ SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
   ASValueTrackingSlider: 5261de3fcf00adb339efc93885e8f0bc99e703cd
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
+  ChartLegends: bd0b58d74772f35dc14fc6a3ff245cccf3204a59
   CMPopTipView: 774e0230b5c73abb3c39051da6d8a383373c4f7f
   GoogleSignIn: 8c599fc10d25b2af86a3f82fd9631e863f2b1400
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
@@ -95,6 +98,6 @@ SPEC CHECKSUMS:
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009
   Valet: 14463ef24fab8fd5809044ecedb61484b799fdd6
 
-PODFILE CHECKSUM: b4fe727b0f1bf744b3870c5b91f4fac6359726ac
+PODFILE CHECKSUM: 887a3ec4058537458e9154bf6dc0a05a9e08c531
 
 COCOAPODS: 1.3.1

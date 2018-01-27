@@ -54,6 +54,7 @@ class SelectUnitAndBaseController: UIViewController {
     fileprivate let secondBasesInputIndex = 8
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var helpButton: UIButton!
 
     fileprivate var unitsManager = UnitCollectionViewManager(filterBuyable: true)
     fileprivate var baseQuantitiesManager = BaseQuantitiesCollectionViewManager()
@@ -360,6 +361,22 @@ class SelectUnitAndBaseController: UIViewController {
             // For some reason adding inset in keyboardWillShow is animated by itself but removing is not, that's why we have to use animateWithDuration here
             self.tableView.bottomInset = Theme.submitViewHeight
         })
+    }
+
+    // MARK: Help
+
+    @IBAction func onHelpTap(_ sender: UIButton) {
+        let helpController = BaseUnitHelpViewController()
+        helpController.view.frame = CGRect(x: 100, y: 10, width: 340, height: 520)
+        helpController.view.layer.cornerRadius = Theme.popupCornerRadius
+        helpController.view.clipsToBounds = true
+
+        let popup = MyPopupHelper.showCustomPopupFrom(parent: self, centerYOffset: 0, contentController: helpController, swipeEnabled: false, useDefaultFrame: false, from: helpButton)
+
+        helpController.closeTapHandler = {
+            helpController.removeFromParentViewController()
+            popup.hide()
+        }
     }
 }
 

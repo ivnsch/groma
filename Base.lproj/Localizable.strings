@@ -299,6 +299,8 @@ popup_button_rate_dont_ask_again = "Don't ask again";
 popup_button_restore_bundled_product = "Restore";
 popup_button_remove_list = "Remove list";
 
+button_close_help = "Close help";
+
 popup_you_cant_delete_default_unit = "You can't remove the default unit!";
 popup_you_cant_delete_default_base_quantity = "You can't remove the default base quantity!";
 
@@ -533,3 +535,7 @@ add_recipe_to_list_submit_button_title = "Add to list";
 add_recipe_to_list_placeholder_name = "Product name";
 add_recipe_to_list_placeholder_brand = "Brand";
 add_recipe_to_list_placeholder_to_add = "To add:";
+
+base_unit_help_title = "Help";
+base_unit_help_note_explanation_title = "Note";
+base_unit_help_note_explanation_text = "You dont *have* to use all this. You can instead put everything in the names, e.g. \"eggs 6x\", assign a price to it (which is optional as well) and that's it! Use what you like best!";
