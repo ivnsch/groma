@@ -31,11 +31,10 @@
                     </connections>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w04-HF-g7k">
-                    <rect key="frame" x="315" y="30" width="40" height="40"/>
-                    <color key="backgroundColor" red="0.054901960780000002" green="0.58431372550000005" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <rect key="frame" x="325" y="0.0" width="50" height="50"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="40" id="9QS-9k-VGj"/>
-                        <constraint firstAttribute="height" constant="40" id="ZQP-Ta-zHt"/>
+                        <constraint firstAttribute="width" constant="50" id="9QS-9k-VGj"/>
+                        <constraint firstAttribute="height" constant="50" id="ZQP-Ta-zHt"/>
                     </constraints>
                     <color key="tintColor" red="0.72156862749999995" green="0.72156862749999995" blue="0.72156862749999995" alpha="1" colorSpace="calibratedRGB"/>
                     <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
@@ -49,8 +48,8 @@
             <constraints>
                 <constraint firstItem="Oc8-ZA-PFk" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="9ab-W1-THM"/>
                 <constraint firstItem="Oc8-ZA-PFk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Amu-R8-H8T"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="w04-HF-g7k" secondAttribute="trailing" constant="20" id="Gc9-uL-zBk"/>
-                <constraint firstItem="w04-HF-g7k" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="30" id="ogT-zc-Vcs"/>
+                <constraint firstAttribute="trailing" secondItem="w04-HF-g7k" secondAttribute="trailing" id="Gc9-uL-zBk"/>
+                <constraint firstItem="w04-HF-g7k" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="ogT-zc-Vcs"/>
                 <constraint firstAttribute="trailing" secondItem="Oc8-ZA-PFk" secondAttribute="trailing" id="rN4-eO-wjH"/>
                 <constraint firstAttribute="bottom" secondItem="Oc8-ZA-PFk" secondAttribute="bottom" id="ssk-eX-eYi"/>
             </constraints>
