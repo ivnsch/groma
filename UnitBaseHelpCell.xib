@@ -20,11 +20,11 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="258" placeholderIntrinsicHeight="128" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="CyC-th-ecn">
-                        <rect key="frame" x="28.5" y="60" width="258" height="160"/>
+                        <rect key="frame" x="67.5" y="60" width="180" height="160"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="160" id="T2q-dk-d3K"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="160" id="cEx-NL-YeD"/>
-                            <constraint firstAttribute="width" constant="258" id="t9O-Gm-phr"/>
+                            <constraint firstAttribute="width" constant="180" id="t9O-Gm-phr"/>
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" placeholderIntrinsicWidth="255" placeholderIntrinsicHeight="70" translatesAutoresizingMaskIntoConstraints="NO" id="CZy-39-GRU">

@@ -26,10 +26,10 @@ class BaseUnitHelpViewController: UIViewController {
     fileprivate let noteCellIndex = 1
 
     fileprivate let cellModels: [UnitBaseHelpCell.CellModel] = [
-        UnitBaseHelpCell.CellModel(itemName: trans("pr_eggs"), quantity: 1, baseQuantity: 6, secondBaseQuantity: nil, unit: trans("unit_unit_pl"), referenceQuantity: 6, price: 1.99, image: #imageLiteral(resourceName: "empty_page")),
-        UnitBaseHelpCell.CellModel(itemName: trans("pr_grapes"), quantity: 1, baseQuantity: 500, secondBaseQuantity: nil, unit: trans("unit_g"), referenceQuantity: 1000, price: 1.99, image: #imageLiteral(resourceName: "empty_page")),
-        UnitBaseHelpCell.CellModel(itemName: trans("pr_cola"), quantity: 1, baseQuantity: 2, secondBaseQuantity: nil, unit: trans("unit_liter"), referenceQuantity: 1, price: 1.99, image: #imageLiteral(resourceName: "empty_page")),
-        UnitBaseHelpCell.CellModel(itemName: trans("pr_cola"), quantity: 1, baseQuantity: 6, secondBaseQuantity: 1, unit: trans("unit_liter"), referenceQuantity: 1, price: 0.98, image: #imageLiteral(resourceName: "empty_page"))
+        UnitBaseHelpCell.CellModel(itemName: trans("pr_eggs"), quantity: 1, baseQuantity: 6, secondBaseQuantity: nil, unit: trans("unit_unit_pl"), referenceQuantity: 6, price: 1.99, image: #imageLiteral(resourceName: "eggs6x")),
+        UnitBaseHelpCell.CellModel(itemName: trans("pr_grapes"), quantity: 1, baseQuantity: 500, secondBaseQuantity: nil, unit: trans("unit_g"), referenceQuantity: 1000, price: 1.99, image: #imageLiteral(resourceName: "grapes")),
+        UnitBaseHelpCell.CellModel(itemName: trans("pr_cola"), quantity: 1, baseQuantity: 2, secondBaseQuantity: nil, unit: trans("unit_liter"), referenceQuantity: 1, price: 1.99, image: #imageLiteral(resourceName: "coke")),
+        UnitBaseHelpCell.CellModel(itemName: trans("pr_cola"), quantity: 1, baseQuantity: 6, secondBaseQuantity: 1, unit: trans("unit_liter"), referenceQuantity: 1, price: 0.98, image: #imageLiteral(resourceName: "coke6x"))
     ]
 
     fileprivate var itemTypeColors: [BaseUnitHelpItemType: UIColor] = [

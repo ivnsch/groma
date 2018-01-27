@@ -43,10 +43,10 @@ class MyPopupDefaultContentViewController: UIViewController {
     func config(type: MyPopupDefaultContentType, title: String? = nil, message: String) {
         let contents: Contents = {
             switch type {
-            case .info: return Contents(title: title ?? trans("popup_title_info"), image: #imageLiteral(resourceName: "empty_page"), message: message, hasCancel: false)
-            case .warning: return Contents(title: title ?? trans("popup_title_warning"), image: #imageLiteral(resourceName: "empty_page"), message: message, hasCancel: true)
-            case .error: return Contents(title: title ?? trans("popup_title_error"), image: #imageLiteral(resourceName: "empty_page"), message: message, hasCancel: false)
-            case .confirmCartBuy: return Contents(title: title ?? trans("popup_title_confirm"), image: #imageLiteral(resourceName: "empty_page"), message: message, hasCancel: true)
+            case .info: return Contents(title: title ?? trans("popup_title_info"), image: #imageLiteral(resourceName: "popup_info"), message: message, hasCancel: false)
+            case .warning: return Contents(title: title ?? trans("popup_title_warning"), image: #imageLiteral(resourceName: "popup_warning"), message: message, hasCancel: true)
+            case .error: return Contents(title: title ?? trans("popup_title_error"), image: #imageLiteral(resourceName: "popup_error"), message: message, hasCancel: false)
+            case .confirmCartBuy: return Contents(title: title ?? trans("popup_title_confirm"), image: #imageLiteral(resourceName: "popup_buy"), message: message, hasCancel: true)
             }
         } ()
         fill(contents: contents)
