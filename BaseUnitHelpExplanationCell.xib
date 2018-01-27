@@ -56,6 +56,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="popup_info_no_bottom" width="463" height="372"/>
+        <image name="popup_info_no_bottom" width="126" height="102"/>
     </resources>
 </document>
