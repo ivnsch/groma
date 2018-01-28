@@ -17,13 +17,18 @@ protocol LoginOrRegisterDelegate: class {
     func onLoginOrRegisterSuccess()
 }
 
-class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, EyeViewDelegate {
+enum LoginOrRegisterControllerMode {
+    case login, register
+}
+
+class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, LoginOrRegisterDelegate {
 
     @IBOutlet weak var userNameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    @IBOutlet weak var loginButton: UIButton!
-    @IBOutlet weak var fbButton: FBSDKLoginButton!
-    @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var loginButton: UIButton! // action button - register when in .register mode
+    @IBOutlet weak var forgotPWOrTermsButton: UIButton!
+    @IBOutlet weak var fbButton: UIButton!
+    @IBOutlet weak var registerButton: UIButton! // switch to other screen button - login when in .register mode
     @IBOutlet weak var eyeView: UIButton!
 
     weak var delegate: LoginOrRegisterDelegate?
@@ -31,6 +36,28 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
     fileprivate var validator: Validator?
 
     var onUIReady: VoidFunction?
+
+    var mode: LoginOrRegisterControllerMode = .login {
+        didSet {
+            switch mode {
+            case .login:
+                title = trans("title_login")
+                loginButton.setTitle(trans("title_login"), for: .normal)
+                registerButton.setTitle(trans("title_register"), for: .normal)
+
+                forgotPWOrTermsButton.setTitle(trans("title_forgot_password"), for: .normal)
+
+            case .register:
+                title = trans("title_register")
+                loginButton.setTitle(trans("title_register"), for: .normal)
+                registerButton.setTitle(trans("title_login"), for: .normal)
+
+                let buttonTranslation = trans("register_accept_terms")
+                let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
+                forgotPWOrTermsButton.setAttributedTitle(attributedText, for: .normal)
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,8 +73,6 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
         self.fillTestInput()
 
         self.initValidator()
-
-        fbButton.readPermissions = ["public_profile"]
 
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(LoginViewController.handleTap(_:)))
         recognizer.delegate = self
@@ -118,14 +143,17 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
                 progressVisible()
 
-                let loginData = LoginData(email: email, password: password)
+                func onLoginOrRegister() {
+                    onLoginSuccess()
+                }
 
-                Prov.userProvider.login(loginData, controller: self, rootController.resultHandler(onSuccess: {[weak self] syncResult in guard let weakSelf = self else {return}
-
-                    weakSelf.onLoginSuccess()
+                switch mode {
+                case .login:
+                    let loginData = LoginData(email: email, password: password)
+                    Prov.userProvider.login(loginData, controller: self, rootController.resultHandler(onSuccess: { syncResult in
+                        onLoginOrRegister()
 
                     }, onError: {[weak self] result in guard let weakSelf = self else {return}
-
                         switch result.status {
                         case .syncFailed:
                             rootController.defaultErrorHandler()(result) // show alert (on root view controller since in login success we switch controller)
@@ -138,8 +166,15 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
                             self?.defaultErrorHandler()(result)
                             Prov.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
                         }
-                    }
-                ))
+                    }))
+
+                case .register:
+                    let user = UserInput(email: email, password: password, firstName: "", lastName: "")
+                    Prov.userProvider.register(user, controller: self, successHandler{
+                        onLoginOrRegister()
+                    })
+                }
+
             } else {
                 print("Error: validation was not implemented correctly")
             }
@@ -154,29 +189,15 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
     }
 
     @IBAction func onRegisterTap(_ sender: UIButton) {
-        // TODO#
-//        let registerController = UIStoryboard.registerViewController()
-//        registerController.delegate = self
-//        self.navigationController?.pushViewController(registerController, animated: true)
+        let registerController = UIStoryboard.loginOrRegisterViewController()
+        registerController.delegate = self
+        self.navigationController?.pushViewController(registerController, animated: true)
+        registerController.onUIReady = { [weak self, weak registerController] in guard let weakSelf = self else { return }
+            registerController?.mode = weakSelf.mode == .login ? .register : .login // toggle mode
+        }
     }
 
-    // MARK: - RegisterDelegate
-
-    func onRegisterSuccess(_ email: String) {
-        //        self.mode = .afterRegister // TODO# ?
-
-        // Set the email in the input field so user don't have to type it again after confirming.
-        // Note this is in memory only! If user leaves this screen and comes back this email is lost. The email in prefs is saved only after a successful login (this is a requirement for some checks to function correctly - don't change it!). If we see another email when we come back it should be an email of an account with which we previously logged in successfully.
-        userNameField.text = email
-
-        _ = navigationController?.popViewController(animated: true)
-        //        self.delegate?.onRegisterFromLoginSuccess() // TODO#
-    }
-
-    func onLoginFromRegisterSuccess() {
-        // TODO remove register from login
-    }
-
+    // TODO do we still need this?
     func onSocialSignupInRegisterScreenSuccess() {
         _ = navigationController?.popViewController(animated: true)
         self.delegate?.onLoginOrRegisterSuccess()
@@ -202,6 +223,13 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
         return false
     }
 
+    // MARK: LoginOrRegisterDelegate
+
+    // Login or Register success in controller started by this one (remember that there are no separate login/register controllers - we always use this controller - and that login/register can be pushed indefinitely on the stack)
+    func onLoginOrRegisterSuccess() {
+        _ = navigationController?.popViewController(animated: false)
+        delegate?.onLoginOrRegisterSuccess()
+    }
 
     // MARK: ForgotPasswordDelegate
 
@@ -215,33 +243,53 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
         delegate?.onLoginOrRegisterSuccess()
     }
 
-    // TODO refactor, same code as in LoginController
-    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+    // MARK: Facebook
+
+    @IBAction func onFacebookLoginButtonTap() {
+        FBSDKLoginManager().logIn(withReadPermissions: ["public_profile"], from: self) { [weak self] result, error in
+            self?.onFacebookLoginResult(result: result, error: error)
+        }
+    }
+
+    fileprivate func onFacebookLoginResult(result: FBSDKLoginManagerLoginResult?, error: Error?) {
         if let error = error {
             logger.e("Facebook login error: \(error)")
             defaultErrorHandler()(ProviderResult(status: .socialLoginError))
             progressVisible(false)
             FBSDKLoginManager().logOut() // toggle "logout" label on button
-        } else if result.isCancelled {
-            logger.v("Facebook login cancelled")
-            progressVisible(false)
-            FBSDKLoginManager().logOut() // toggle "logout" label on button
         } else {
-            logger.v("Facebook login success, calling our server...")
-            progressVisible()
-            if let tokenString = result.token.tokenString {
-                Prov.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+            guard let result = result else {
+                logger.e("Facebook login invalid state: No error but also no result!")
+                progressVisible(false)
+                FBSDKLoginManager().logOut() // toggle "logout" label on button
+                return
+            }
+            if result.isCancelled {
+                logger.v("Facebook login cancelled")
+                progressVisible(false)
+                FBSDKLoginManager().logOut() // toggle "logout" label on button
             } else {
-                logger.e("Facebook no token")
+                logger.v("Facebook login success, calling our server...")
+                progressVisible()
+                if let tokenString = result.token.tokenString {
+                    Prov.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
+                } else {
+                    logger.e("Facebook no token")
+                }
             }
         }
     }
 
+    // Remove this? we don't have a social logout...
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         FBSDKLoginManager().logOut()
     }
 
     // MARK: GIDSignInDelegate
+
+    @IBAction func onGoogleLoginButtonTap() {
+        GIDSignIn.sharedInstance().signIn()
+    }
 
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if (error == nil) {
@@ -291,11 +339,13 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
         }
     }
 
-    // MARK: - EyeViewDelegate
-
-    func onEyeChange(_ open: Bool) {
-        passwordField.isSecureTextEntry = open
-    }
+    // TODO# eye
+//
+//    // MARK: - EyeViewDelegate
+//
+//    func onEyeChange(_ open: Bool) {
+//        passwordField.isSecureTextEntry = open
+//    }
 
     deinit {
         logger.v("Deinit loginOrRegister controller")

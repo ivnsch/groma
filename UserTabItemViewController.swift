@@ -80,19 +80,22 @@ class UserTabItemViewController: UIViewController, LoginOrRegisterDelegate, User
     fileprivate func replaceController(_ newController: UIViewController) {
 
         let currentChildControllers = childViewControllers // normally this should be only 1 - the login controller or user details view
-        
+
+        // add new controller with 0 alpha
         newController.view.translatesAutoresizingMaskIntoConstraints = false
         newController.view.alpha = 0
         addChildViewControllerAndViewFill(newController)
         
         // cross fade
         UIView.animate(withDuration: 0.3, animations: {
+            // fade out old controller
             for controller in currentChildControllers {
                 controller.view.alpha = 0
             }
             newController.view.alpha = 1
             }, completion: {finished in
             for controller in currentChildControllers {
+                // remove old controller
                 controller.removeFromParentViewControllerWithView()
             }
         })
