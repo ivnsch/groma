@@ -537,3 +537,4 @@ add_recipe_to_list_placeholder_to_add = "Agregar:";
 base_unit_help_title = "Ayuda";
 base_unit_help_note_explanation_title = "Nota";
 base_unit_help_note_explanation_text = "No *tienes* que usar todo esto. Puedes también simplemente poner todo en el nombre, por ejemplo \"huevos 6x\", poner un precio (el cual también es opcional) y ya está! Utiliza lo que mejor te parezca!";
+base_unit_help_reference_quantity_price = "La cantidad de referencia y el precio van aquí:";

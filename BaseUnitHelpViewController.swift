@@ -77,6 +77,9 @@ class BaseUnitHelpViewController: UIViewController {
     fileprivate func setupTableView() {
         tableView.register(UINib(nibName: "UnitBaseHelpCell", bundle: nil), forCellReuseIdentifier: "cell")
         tableView.register(UINib(nibName: "BaseUnitHelpExplanationCell", bundle: nil), forCellReuseIdentifier: "noteCell")
+        tableView.register(UINib(nibName: "UnitBaseHelpBasesExplanationCell", bundle: nil), forCellReuseIdentifier: "unitBaseExplanation")
+        tableView.register(UINib(nibName: "ReferenceQuantityPriceHelpCell", bundle: nil), forCellReuseIdentifier: "referencePriceCell")
+
         tableView.dataSource = self
         tableView.delegate = self
 
@@ -103,15 +106,19 @@ extension BaseUnitHelpViewController: SubmitViewDelegate {
 extension BaseUnitHelpViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cellModels.count + 1 // + 1 note cell
+        return cellModels.count + 1 + 1 + 1 // + 1 note cell + 1 base unit explanation + 1 reference quantity / price explanation
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        if indexPath.row == noteCellIndex {
+        switch indexPath.row {
+        case noteCellIndex:
             return tableView.dequeueReusableCell(withIdentifier: "noteCell", for: indexPath) as! BaseUnitHelpExplanationCell
-
-        } else {
+        case cellModels.count + 1:
+            return tableView.dequeueReusableCell(withIdentifier: "unitBaseExplanation", for: indexPath) as! UnitBaseHelpBasesExplanationCell
+        case cellModels.count + 2:
+            return tableView.dequeueReusableCell(withIdentifier: "referencePriceCell", for: indexPath) as! ReferenceQuantityPriceHelpCell
+        default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UnitBaseHelpCell
             let index = indexPath.row < noteCellIndex ? indexPath.row : indexPath.row - 1
             cell.config(model: cellModels[index], circleColorsDictionary: itemTypeColors, animateCircles: animateCirclesInCell)
@@ -123,9 +130,15 @@ extension BaseUnitHelpViewController: UITableViewDataSource {
 
 extension BaseUnitHelpViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == noteCellIndex {
+
+        switch indexPath.row {
+        case noteCellIndex:
             return 100
-        } else {
+        case cellModels.count + 1:
+            return 70
+        case cellModels.count + 2:
+            return 200
+        default:
             return 350
         }
     }
