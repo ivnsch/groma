@@ -10,7 +10,7 @@ import UIKit
 
 import Providers
 
-class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsViewControllerDelegate {
+class UserTabItemViewController: UIViewController, LoginOrRegisterDelegate, UserDetailsViewControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,23 +23,29 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
         
         NotificationCenter.default.addObserver(self, selector: #selector(UserTabItemViewController.onLogoutNotification(_:)), name: NSNotification.Name(rawValue: Notification.LogoutUI.rawValue), object: nil)
     }
-    
-    // MARK: - LoginDelegate
-    
-    func onLoginError() {
-        print("login error!") // TODO handle
-    }
-    
-    func onLoginSuccess() {
+
+    // MARK: - LoginOrRegisterDelegate
+
+    func onLoginOrRegisterSuccess() {
         showUserDetailsController()
     }
-    
-    func onRegisterFromLoginError() {
-        print("register error!") // TODO handle
-    }
-    
-    func onRegisterFromLoginSuccess() {
-    }
+
+//    // MARK: - LoginDelegate
+//
+//    func onLoginError() {
+//        print("login error!") // TODO handle
+//    }
+//
+//    func onLoginSuccess() {
+//        showUserDetailsController()
+//    }
+//
+//    func onRegisterFromLoginError() {
+//        print("register error!") // TODO handle
+//    }
+//
+//    func onRegisterFromLoginSuccess() {
+//    }
 
     // MARK: - UserDetailsViewControllerDelegate
 
@@ -61,11 +67,12 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     // MARK:
     
     fileprivate func showLoginController() {
-        let loginController = UIStoryboard.loginViewController()
+//        let loginController = UIStoryboard.loginViewController()
+        let loginController = UIStoryboard.loginOrRegisterViewController()
         loginController.delegate = self
-        loginController.onUIReady = {[weak loginController] in
-            loginController?.mode = .normal
-        }
+//        loginController.onUIReady = {[weak loginController] in
+//            loginController?.mode = .normal
+//        }
         navigationItem.title = trans("title_login")
         self.replaceController(loginController)
     }

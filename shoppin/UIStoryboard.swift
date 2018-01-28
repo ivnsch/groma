@@ -14,6 +14,7 @@ extension UIStoryboard {
     fileprivate class func listItemGroupsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ProductGroups", bundle: Bundle.main) }
     fileprivate class func introStoryboard() -> UIStoryboard { return UIStoryboard(name: "Intro", bundle: Bundle.main) }
     fileprivate class func loginStoryboard() -> UIStoryboard { return UIStoryboard(name: "Login", bundle: Bundle.main) }
+    fileprivate class func loginOrRegisterStoryboard() -> UIStoryboard { return UIStoryboard(name: "LoginOrRegister", bundle: Bundle.main) }
     fileprivate class func registerStoryboard() -> UIStoryboard { return UIStoryboard(name: "Register", bundle: Bundle.main) }
     fileprivate class func userDetailsStoryboard() -> UIStoryboard { return UIStoryboard(name: "UserDetails", bundle: Bundle.main) }
     fileprivate class func forgotPasswordStoryboard() -> UIStoryboard { return UIStoryboard(name: "ForgotPassword", bundle: Bundle.main) }
@@ -99,7 +100,11 @@ extension UIStoryboard {
     }
 
     // MARK: - User
-    
+
+    class func loginOrRegisterViewController() -> LoginOrRegisterController {
+        return loginOrRegisterStoryboard().instantiateViewController(withIdentifier: "LoginOrRegisterController") as! LoginOrRegisterController
+    }
+
     class func loginViewController() -> LoginViewController {
         return loginStoryboard().instantiateViewController(withIdentifier: "LoginController") as! LoginViewController
     }
