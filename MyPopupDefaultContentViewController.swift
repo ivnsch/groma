@@ -83,7 +83,9 @@ class MyPopupDefaultContentViewController: UIViewController {
 
         logger.i("Content height: \(contentHeight), label height: \(messageTextView.height), est. height: \(messageTextView.estimatedHeight())", .ui)
 
-        view.frame = view.frame.copy(height: contentHeight)
+        DispatchQueue.main.async {
+            self.view.frame = self.view.frame.copy(height: contentHeight)
+        }
     }
 
     @IBAction func onOkPress(_ sender: UIButton) {
