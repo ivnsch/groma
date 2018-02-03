@@ -344,7 +344,14 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
 
     func showBuyPopup(list: List, onOk: @escaping () -> Void) {
         if InventoryAuthChecker.checkAccess(list.inventory) {
-            MyPopupHelper.showPopup(parent: self, type: .confirmCartBuy, message: trans("popup_buy_will_add_to_history_stats", list.inventory.name), centerYOffset: 20, onOk: {
+            let message = trans("popup_buy_will_add_to_history_stats", list.inventory.name)
+            // Show inventory name in blue
+            let ranges = message.range(list.inventory.name).map { [$0] } ?? {
+                logger.e("Invalid state inventory name not contained in: \(message)", .ui)
+                return []
+            } ()
+
+            MyPopupHelper.showPopup(parent: self, type: .confirmCartBuy, message: trans("popup_buy_will_add_to_history_stats", list.inventory.name), highlightRanges: ranges, centerYOffset: 20, onOk: {
                 delay(0.3) { // give a little time for dismiss animation to finish (there's an animation to add the items to inventory/history/stats after it, so we don't want these animations to overlap)
                     onOk()
                 }

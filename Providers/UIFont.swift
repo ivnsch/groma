@@ -9,19 +9,20 @@
 import UIKit
 
 extension UIFont {
-    
+
     public var isBold: Bool {
         return fontDescriptor.symbolicTraits.contains(.traitBold)
     }
-    
+
     public var isItalic: Bool {
         return fontDescriptor.symbolicTraits.contains(.traitItalic)
     }
-    
-    
+
+
     public var bold: UIFont? {
         return fontDescriptor.withSymbolicTraits(UIFontDescriptorSymbolicTraits.traitBold).map {descriptor in
             UIFont(descriptor: descriptor, size: pointSize)
         }
     }
 }
+

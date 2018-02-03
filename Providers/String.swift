@@ -61,7 +61,38 @@ public extension String {
         }
         return attributedString
     }
-    
+
+    public func applyColor(ranges: [NSRange] = [], font: UIFont, color: UIColor) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedStringKey.font: font])
+        for range in ranges {
+            attributedString.setAttributes([NSAttributedStringKey.foregroundColor: color], range: range)
+        }
+        return attributedString
+    }
+
+    public func applyBold(ranges: [NSRange] = [], font: UIFont) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedStringKey.font: font])
+        for range in ranges {
+            attributedString.setAttributes([NSAttributedStringKey.font: font.bold ?? {
+                logger.e("Couldn't make font bold - using default font", .ui)
+                return font
+            } ()], range: range)
+        }
+        return attributedString
+    }
+
+    public func applyBoldColor(ranges: [NSRange] = [], font: UIFont, color: UIColor) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSAttributedStringKey.font: font])
+        for range in ranges {
+            attributedString.setAttributes([NSAttributedStringKey.font: font.bold ?? {
+                logger.e("Couldn't make font bold - using default font", .ui)
+                return font
+            } (), NSAttributedStringKey.foregroundColor: color], range: range)
+        }
+        return attributedString
+    }
+
+
     // Convert entire string to attributed text without any specific attributes, this can be useful sometimes when we need our string to simply be an attributed text instance
     public func toAttributedText() -> NSMutableAttributedString {
         let attributedString = NSMutableAttributedString(string: self)

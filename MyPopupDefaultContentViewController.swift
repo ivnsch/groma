@@ -19,6 +19,7 @@ class MyPopupDefaultContentViewController: UIViewController {
         let title: String
         let image: UIImage
         let message: String
+        let highlightRanges: [NSRange]
         let hasCancel: Bool
     }
 
@@ -40,13 +41,13 @@ class MyPopupDefaultContentViewController: UIViewController {
     var handleOkPress: (() -> Void)?
     var handleCancelPress: (() -> Void)?
 
-    func config(type: MyPopupDefaultContentType, title: String? = nil, message: String) {
+    func config(type: MyPopupDefaultContentType, title: String? = nil, message: String, highlightRanges: [NSRange] = []) {
         let contents: Contents = {
             switch type {
-            case .info: return Contents(title: title ?? trans("popup_title_info"), image: #imageLiteral(resourceName: "popup_info"), message: message, hasCancel: false)
-            case .warning: return Contents(title: title ?? trans("popup_title_warning"), image: #imageLiteral(resourceName: "popup_warning"), message: message, hasCancel: true)
-            case .error: return Contents(title: title ?? trans("popup_title_error"), image: #imageLiteral(resourceName: "popup_error"), message: message, hasCancel: false)
-            case .confirmCartBuy: return Contents(title: title ?? trans("popup_title_confirm"), image: #imageLiteral(resourceName: "popup_buy"), message: message, hasCancel: true)
+            case .info: return Contents(title: title ?? trans("popup_title_info"), image: #imageLiteral(resourceName: "popup_info"), message: message, highlightRanges: highlightRanges, hasCancel: false)
+            case .warning: return Contents(title: title ?? trans("popup_title_warning"), image: #imageLiteral(resourceName: "popup_warning"), message: message, highlightRanges: highlightRanges, hasCancel: true)
+            case .error: return Contents(title: title ?? trans("popup_title_error"), image: #imageLiteral(resourceName: "popup_error"), message: message, highlightRanges: highlightRanges, hasCancel: false)
+            case .confirmCartBuy: return Contents(title: title ?? trans("popup_title_confirm"), image: #imageLiteral(resourceName: "popup_buy"), message: message, highlightRanges: highlightRanges, hasCancel: true)
             }
         } ()
         fill(contents: contents)
@@ -55,7 +56,19 @@ class MyPopupDefaultContentViewController: UIViewController {
     fileprivate func fill(contents: Contents) {
         imageView.image = contents.image
         titleTextView.text = contents.title
-        messageTextView.text = contents.message
+
+        if contents.highlightRanges.isEmpty {
+            messageTextView.text = contents.message
+        } else {
+            if let fontSize = LabelMore.mapToFontSize(40) {
+                let normalFont = UIFont.systemFont(ofSize: fontSize)
+                messageTextView.attributedText = contents.message.applyBoldColor(ranges: contents.highlightRanges, font: normalFont, color: Theme.blue)
+            } else {
+                logger.e("An error ocurred loading font/font size - defaulting to plain label", .ui)
+                messageTextView.text = contents.message
+            }
+        }
+
         cancelButton.isHidden = !contents.hasCancel
 
         if !contents.hasCancel {

@@ -17,11 +17,11 @@ class MyPopupHelper {
 
     // Default popup with type
     // Optional title: overrides default titles for `type`
-    static func showPopup(parent: UIViewController, type: MyPopupDefaultContentType, title: String? = nil, message: String, okText: String = trans("popup_button_ok"), centerYOffset: CGFloat = 0, swipeEnabled: Bool = true, onOk: (() -> Void)? = nil, onCancel: (() -> Void)? = nil) {
+    static func showPopup(parent: UIViewController, type: MyPopupDefaultContentType, title: String? = nil, message: String, highlightRanges: [NSRange] = [], okText: String = trans("popup_button_ok"), centerYOffset: CGFloat = 0, swipeEnabled: Bool = true, onOk: (() -> Void)? = nil, onCancel: (() -> Void)? = nil) {
 
         let contentController = MyPopupDefaultContentViewController()
         _ = contentController.view // trigger view load
-        contentController.config(type: type, message: message)
+        contentController.config(type: type, message: message, highlightRanges: highlightRanges)
 
         let popup = createPopup(parent: parent)
 

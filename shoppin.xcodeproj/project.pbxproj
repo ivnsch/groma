@@ -144,7 +144,6 @@
 		6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51ABE1E512FAA0053934E /* UIColor.swift */; };
 		6AD51AE11E5134880053934E /* LabelMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AE01E5134880053934E /* LabelMore.swift */; };
 		6AD51AE31E5134D00053934E /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AE21E5134D00053934E /* NSLayoutConstraint.swift */; };
-		6AD51AE51E5134F80053934E /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AE41E5134F80053934E /* UIFont.swift */; };
 		6AD51AE91E51360C0053934E /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AE81E51360C0053934E /* UIView.swift */; };
 		6AD51AEB1E5136880053934E /* ViewTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD51AEA1E5136880053934E /* ViewTags.swift */; };
 		6ADC6F3A1E4D2C88005BE5EB /* FractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC6F391E4D2C88005BE5EB /* FractionView.swift */; };
@@ -681,7 +680,6 @@
 		6AD51ABE1E512FAA0053934E /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		6AD51AE01E5134880053934E /* LabelMore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LabelMore.swift; path = ../LabelMore.swift; sourceTree = "<group>"; };
 		6AD51AE21E5134D00053934E /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
-		6AD51AE41E5134F80053934E /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		6AD51AE81E51360C0053934E /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		6AD51AEA1E5136880053934E /* ViewTags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewTags.swift; sourceTree = "<group>"; };
 		6ADC6F391E4D2C88005BE5EB /* FractionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FractionView.swift; sourceTree = "<group>"; };
@@ -2015,7 +2013,6 @@
 			isa = PBXGroup;
 			children = (
 				6AD51AE81E51360C0053934E /* UIView.swift */,
-				6AD51AE41E5134F80053934E /* UIFont.swift */,
 				6AD51AE21E5134D00053934E /* NSLayoutConstraint.swift */,
 				EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */,
 				EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */,
@@ -3253,7 +3250,6 @@
 				EB1D69731CAC82BF004892A2 /* AddButtonHelper.swift in Sources */,
 				6A633757201E2841001E4969 /* MyGoogleLoginButton.swift in Sources */,
 				EBB526851BEFE6DD0002A286 /* SectionModel.swift in Sources */,
-				6AD51AE51E5134F80053934E /* UIFont.swift in Sources */,
 				6A7188712013602300DD3958 /* MyPopupDefaultContentViewController.swift in Sources */,
 				EBF1F9EB1CD7F75E00F8016F /* SimpleSettingCell.swift in Sources */,
 				6AEB65EF1E4D056C0094B9DE /* SelectIngredientDataController.swift in Sources */,
