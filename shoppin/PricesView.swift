@@ -121,13 +121,19 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         
         clipsToBounds = true
 
+        let gradient = CAGradientLayer()
+        gradient.frame = bounds
+        gradient.colors = [UIColor(hexString: "7E8A8C").cgColor, UIColor(hexString: "768183").cgColor]
+        gradient.locations = [0, 0.70]
+        layer.insertSublayer(gradient, at: 0)
+
         // For now disabled as we don't use stash
 //        cellUncoverer = CellUncoverer(parentView: self, button: button, leftLayoutConstraint: leftLayoutConstraint)
 //        cellUncoverer?.delegate = self
         
         cartImg.tintColor = UIColor.white
-        cartImg.backgroundColor = Theme.grey // seems to be necessary for the tint color to work (and only programmatically)
-        
+        cartImg.backgroundColor = UIColor.clear
+
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPanCell(_:)))
         panRecognizer.delegate = self
         addGestureRecognizer(self.panRecognizer)
