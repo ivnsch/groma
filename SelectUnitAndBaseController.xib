@@ -12,7 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectUnitAndBaseController" customModule="groma" customModuleProvider="target">
             <connections>
-                <outlet property="helpButton" destination="w04-HF-g7k" id="Er7-Zi-d3f"/>
+                <outlet property="helpButtonImage" destination="USL-0C-y2Q" id="Rz0-4t-3pP"/>
                 <outlet property="tableView" destination="Oc8-ZA-PFk" id="JNO-Iy-J8P"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -30,15 +30,20 @@
                         <outlet property="delegate" destination="-1" id="EFU-sV-yVx"/>
                     </connections>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w04-HF-g7k">
-                    <rect key="frame" x="325" y="0.0" width="50" height="50"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="help" translatesAutoresizingMaskIntoConstraints="NO" id="USL-0C-y2Q">
+                    <rect key="frame" x="330" y="10" width="35" height="35"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="50" id="9QS-9k-VGj"/>
-                        <constraint firstAttribute="height" constant="50" id="ZQP-Ta-zHt"/>
+                        <constraint firstAttribute="width" constant="35" id="mD5-90-T2k"/>
+                        <constraint firstAttribute="height" constant="35" id="wbt-AH-0me"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w04-HF-g7k">
+                    <rect key="frame" x="312.5" y="-7.5" width="70" height="70"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="9QS-9k-VGj"/>
+                        <constraint firstAttribute="height" constant="70" id="ZQP-Ta-zHt"/>
                     </constraints>
                     <color key="tintColor" red="0.72156862749999995" green="0.72156862749999995" blue="0.72156862749999995" alpha="1" colorSpace="calibratedRGB"/>
-                    <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
-                    <state key="normal" image="more_help"/>
                     <connections>
                         <action selector="onHelpTap:" destination="-1" eventType="touchUpInside" id="GAP-Z7-WGu"/>
                     </connections>
@@ -47,16 +52,18 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="Oc8-ZA-PFk" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="9ab-W1-THM"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="USL-0C-y2Q" secondAttribute="trailing" constant="10" id="ADk-QR-OO9"/>
                 <constraint firstItem="Oc8-ZA-PFk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Amu-R8-H8T"/>
-                <constraint firstAttribute="trailing" secondItem="w04-HF-g7k" secondAttribute="trailing" id="Gc9-uL-zBk"/>
-                <constraint firstItem="w04-HF-g7k" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="ogT-zc-Vcs"/>
+                <constraint firstItem="w04-HF-g7k" firstAttribute="centerY" secondItem="USL-0C-y2Q" secondAttribute="centerY" id="IWK-JD-H58"/>
+                <constraint firstItem="w04-HF-g7k" firstAttribute="centerX" secondItem="USL-0C-y2Q" secondAttribute="centerX" id="Mec-Gv-Lk5"/>
                 <constraint firstAttribute="trailing" secondItem="Oc8-ZA-PFk" secondAttribute="trailing" id="rN4-eO-wjH"/>
                 <constraint firstAttribute="bottom" secondItem="Oc8-ZA-PFk" secondAttribute="bottom" id="ssk-eX-eYi"/>
+                <constraint firstItem="USL-0C-y2Q" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="10" id="wrG-pj-T8F"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
         </view>
     </objects>
     <resources>
-        <image name="more_help" width="64" height="64"/>
+        <image name="help" width="64" height="64"/>
     </resources>
 </document>

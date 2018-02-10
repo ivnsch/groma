@@ -54,7 +54,7 @@ class SelectUnitAndBaseController: UIViewController {
     fileprivate let secondBasesInputIndex = 8
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var helpButton: UIButton!
+    @IBOutlet weak var helpButtonImage: UIImageView!
 
     fileprivate var unitsManager = UnitCollectionViewManager(filterBuyable: true)
     fileprivate var baseQuantitiesManager = BaseQuantitiesCollectionViewManager()
@@ -78,6 +78,7 @@ class SelectUnitAndBaseController: UIViewController {
         configBaseQuantitiesManager()
         configSecondBaseQuantitiesManager()
         initSubmitView()
+        initHelpButton()
         registerKeyboardNotifications()
 
         extendedLayoutIncludesOpaqueBars = true
@@ -348,6 +349,32 @@ class SelectUnitAndBaseController: UIViewController {
         _ = submitView.heightConstraint(Theme.submitViewHeight)
     }
 
+    fileprivate func initHelpButton() {
+        helpButtonImage.backgroundColor = UIColor.white
+        helpButtonImage.layer.cornerRadius = helpButtonImage.width / 2
+        helpButtonImage.tintColor = Theme.grey
+        helpButtonImage.layer.borderColor = Theme.grey.cgColor
+        helpButtonImage.layer.borderWidth = 3
+
+        if !(PreferencesManager.loadPreference(.hasTappedOnUnitBaseHelp) ?? false) {
+            UIView.animateKeyframes(withDuration: 2, delay: 1, options: [.`repeat`],
+                                    animations: {
+                                        UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.3, animations: { [weak self] in
+                                            self?.helpButtonImage.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
+                                        })
+                                        UIView.addKeyframe(withRelativeStartTime: 0.3, relativeDuration: 0.2, animations: { [weak self] in
+                                            self?.helpButtonImage.transform = CGAffineTransform(scaleX: 1.15, y: 1.15).concatenating(CGAffineTransform(rotationAngle: 0.15))
+                                        })
+                                        UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.2, animations: { [weak self] in
+                                            self?.helpButtonImage.transform = CGAffineTransform(scaleX: 1.15, y: 1.15).concatenating(CGAffineTransform(rotationAngle: -0.15))
+                                        })
+                                        UIView.addKeyframe(withRelativeStartTime: 0.7, relativeDuration: 0.3, animations: { [weak self] in
+                                            self?.helpButtonImage.transform = CGAffineTransform.identity
+                                        })
+            }, completion: nil)
+        }
+    }
+
     // MARK: Keyboard Notifications
 
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -371,12 +398,16 @@ class SelectUnitAndBaseController: UIViewController {
         helpController.view.layer.cornerRadius = Theme.popupCornerRadius
         helpController.view.clipsToBounds = true
 
-        let popup = MyPopupHelper.showCustomPopupFrom(parent: self, centerYOffset: 0, contentController: helpController, swipeEnabled: false, useDefaultFrame: false, from: helpButton)
+        let popup = MyPopupHelper.showCustomPopupFrom(parent: self, centerYOffset: 0, contentController: helpController, swipeEnabled: false, useDefaultFrame: false, from: helpButtonImage)
 
         helpController.closeTapHandler = {
             helpController.removeFromParentViewController()
             popup.hide()
         }
+
+        helpButtonImage.layer.removeAllAnimations()
+        helpButtonImage.transform = CGAffineTransform.identity
+        PreferencesManager.savePreference(PreferencesManagerKey.hasTappedOnUnitBaseHelp, value: true)
     }
 }
 

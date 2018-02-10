@@ -22,7 +22,9 @@ public enum PreferencesManagerKey: String {
     case lastAppRatingDialogDate = "lastAppRatingDialogDate"
 
     case shownCanSwipeToOpenStash = "shownCanSwipeToOpenStash"
-    
+
+    case hasTappedOnUnitBaseHelp = "hasTappedOnUnitBaseHelp"
+
     // explanation popups that are displayed only once after installation
     case showedAddDirectlyToInventoryHelp = "showedAddDirectlyToInventoryHelp"
     case showedDeleteHistoryItemHelp = "showedDeleteHistoryItemHelp"
