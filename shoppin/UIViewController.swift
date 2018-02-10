@@ -188,7 +188,21 @@ extension UIViewController {
     fileprivate func showRemoteValidationErrorAlert(_ status: ProviderStatusCode, error: RemoteInvalidParametersResult) {
         ProviderPopupManager.instance.showRemoteValidationPopup(status, error: error, controller: self)
     }
-    
+
+    var root: UIViewController {
+        guard let parent = self.parent else {
+            return self // no parent - this is the root controller
+        }
+        var parentVar: UIViewController = parent
+        while true {
+            if let parent = parentVar.parent {
+                parentVar = parent
+            } else { // parent is nil - this is the root controller
+                return parentVar
+            }
+        }
+    }
+
     // MARK: - Popup
     
     func showInfoAlert(title: String? = nil, message: String) {

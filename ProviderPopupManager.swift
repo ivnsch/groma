@@ -36,7 +36,7 @@ class ProviderPopupManager {
                 currentStatus = nil
             }
 
-            MyPopupHelper.showPopup(parent: controller, type: .error, title: title, message: message, centerYOffset: -80, onOk: {
+           MyPopupHelper.showPopup(parent: controller.root, type: .error, title: title, message: message, centerYOffset: 0, onOk: {
                 onOkOrCancel()
             }, onCancel: {
                 onOkOrCancel()

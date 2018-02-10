@@ -73,6 +73,7 @@ class MyPopupHelper {
         }
 
         parent.addChildViewController(contentController)
+        contentController.viewWillAppear(false)
 
         // After this totalDelta (up or down) the popup is dimissed
         let totalDeltaToDismiss: CGFloat = 100
