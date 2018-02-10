@@ -241,7 +241,12 @@ class RecipesController: ExpandableItemsTableViewController, AddEditGroupControl
 
             }, onError: {[weak self] result in guard let weakSelf = self else { return }
                 if result.status == .nameAlreadyExists {
-                    MyPopupHelper.showPopup(parent: weakSelf, type: .error, message: trans("error_recipe_already_exists", recipe.name), centerYOffset: -80)
+                    let message = trans("error_recipe_already_exists", recipe.name)
+                    let ranges = message.range(recipe.name).map { [$0] } ?? {
+                        logger.e("Invalid state inventory name not contained in: \(message)", .ui)
+                        return []
+                    } ()
+                    MyPopupHelper.showPopup(parent: weakSelf, type: .error, message: message, highlightRanges: ranges, centerYOffset: -80)
                 } else {
                     weakSelf.defaultErrorHandler()(result)
                 }

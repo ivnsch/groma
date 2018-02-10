@@ -237,11 +237,11 @@ popup_couldnt_open_app_store_url = "Konnte die App Store URL nicht öffnen.";
 popup_please_update_app_to_use_account = "Bitte aktualisiere Groma um weiterhin dein Benutzerkonto zu benutzen.";
 popup_buy_will_add_to_history_stats = "Dies wird deine Einträge in das Inventar %@, Verlauf und Statistiken hinzufügen.";
 popup_you_cant_buy_cart = "Dz kannst keine Einträge in das Inventar \"%@\" verschieben\nBitte einen Benutzer mit Zugang zu diesem Inventar dich als Teilnehmer hinzuzufügen.";
-popup_remove_section_completion_confirm = "Willst du \"%@\" wirklich löschen?\nDies wird alle Abteilungen und Kategorien mit diesem Namen und damit verbundene Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
-popup_remove_brand_completion_confirm = "Willst du \"%@\" wirklich löschen?\nDies wird alle Produkte, die mit dieser Marke und alle damit verbundenen Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
-popup_remove_product_completion_confirm = "Willst du \"%@\" wirklich löschen?\nDies wird auch alle Listen/Inventar-Einträge und Zutaten mit diesem Namen löschen.";
-popup_remove_unit_completion_confirm = "Willst du \"%@\" wirklich löschen?\nDies wird alle Produkte, die diese Einheit benutzen, sowie alle damit verbundenen Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
-popup_remove_base_completion_confirm = "Willst du \"%@\" wirklich löschen?\nDies wird alle Produkte, die diese Basis-Menge benutzen, sowie alle damit verbundenen Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
+popup_remove_section_completion_confirm = "Willst du %@ wirklich löschen?\nDies wird alle Abteilungen und Kategorien mit diesem Namen und damit verbundene Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
+popup_remove_brand_completion_confirm = "Willst du %@ wirklich löschen?\nDies wird alle Produkte, die mit dieser Marke und alle damit verbundenen Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
+popup_remove_product_completion_confirm = "Willst du %@ wirklich löschen?\nDies wird auch alle Listen/Inventar-Einträge und Zutaten mit diesem Namen löschen.";
+popup_remove_unit_completion_confirm = "Willst du %@ wirklich löschen?\nDies wird alle Produkte, die diese Einheit benutzen, sowie alle damit verbundenen Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
+popup_remove_base_completion_confirm = "Willst du %@ wirklich löschen?\nDies wird alle Produkte, die diese Basis-Menge benutzen, sowie alle damit verbundenen Listen, Gruppen, Inventar und Verlaufseinträge löschen.";
 popup_couldnt_find_email_account = "Konnte keine e-Mail Konto finden.";
 popup_group_was_deleted_in_other_device = "Die Gruppe \"%@\" wurde auf einem anderen Gerät gelöscht.";
 popup_delete_history_also_deletes_stats = "Entfernung von Verlaufseinträge modifiziert entsprechend den Bericht.";
@@ -269,7 +269,7 @@ popup_title_group_is_empty = "Leer";
 popup_group_is_empty = "Diese Gruppe hat keine Einträge!";
 popups_password_email_sent = "Eine e-Mail um deinen Passwort zurückzusetzen wurde gesendet.";
 popup_remove_list_warning = "Dies wird die Lise \"%@\" auch für die anderen Teilnehmer entfernen.\nFalls du dich nur austragen willst, benutze bitte die Teilnehmerliste.";
-popup_remove_section_confirm = "Bist du sicher dass du die Abteilung \"%@\" entfernen willst?\nDies wird auch die Einträge, die sich derzeit in der Abteilung befinden, löschen.";
+popup_remove_section_confirm = "Bist du sicher dass du die Abteilung %@ entfernen willst?\nDies wird auch die Einträge, die sich derzeit in der Abteilung befinden, löschen.";
 popup_remove_inventory_warning = "Die mit diesem Inventar verknüpfen Listen, Verlaufs- und Berichtsdaten werden auch gelöscht.";
 
 

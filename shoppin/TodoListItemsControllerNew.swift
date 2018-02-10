@@ -357,7 +357,13 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
                 }
             })
         } else {
-            MyPopupHelper.showPopup(parent: self, type: .error, message: trans("popup_you_cant_buy_cart", list.inventory.name), centerYOffset: 20)
+            let message = trans("popup_you_cant_buy_cart", list.inventory.name)
+            let ranges = message.range(list.inventory.name).map { [$0] } ?? {
+                logger.e("Invalid state inventory name not contained in: \(message)", .ui)
+                return []
+            } ()
+
+            MyPopupHelper.showPopup(parent: self, type: .error, message: message, highlightRanges: ranges, centerYOffset: 20)
         }
     }
     

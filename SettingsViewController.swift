@@ -232,26 +232,32 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         func onRestored() {
             showPopup(parent: self, type: .info, message: trans("popup_title_bundled_products_restored"))
         }
-        
-        ConfirmationPopup.show(title: trans("popup_title_restore_bundled_products"), message: restoreProductsMessage, okTitle: trans("popup_button_restore_bundled_product"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-        
-            Prov.productProvider.restorePrefillProductsLocal(weakSelf.resultHandler(resetProgress: false, onSuccess: {restoredSomething in
-                if restoredSomething {
-                    if ConnectionProvider.connectedAndLoggedIn {
-                        weakSelf.progressVisible()
-                        Prov.globalProvider.sync(false, handler: weakSelf.successHandler{syncResult in
-                            onRestored()
-                        })
-                    } else {
-                        onRestored()
-                    }
-                } else {
-                    weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("popup_you_already_use_bundled_products"))
-                }
-            }, onErrorAdditional: {_ in }))
-            
-        }, onCancel: nil)
 
+        MyPopupHelper.showPopup(
+            parent: self,
+            type: .warning,
+            title: trans("popup_title_restore_bundled_products"),
+            message: restoreProductsMessage,
+            okText: trans("popup_button_restore_bundled_product"),
+            centerYOffset: -80, onOk: { [weak self] in guard let weakSelf = self else {return}
+                Prov.productProvider.restorePrefillProductsLocal(weakSelf.resultHandler(resetProgress: false, onSuccess: { restoredSomething in
+                    if restoredSomething {
+                        if ConnectionProvider.connectedAndLoggedIn {
+                            weakSelf.progressVisible()
+                            Prov.globalProvider.sync(false, handler: weakSelf.successHandler{ syncResult in
+                                onRestored()
+                            })
+                        } else {
+                            onRestored()
+                        }
+                    } else {
+                        weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("popup_you_already_use_bundled_products"))
+                    }
+                }, onErrorAdditional: {_ in }))
+
+        }, onCancel: {
+        }
+        )
     }
     
     fileprivate func restoreHints() {

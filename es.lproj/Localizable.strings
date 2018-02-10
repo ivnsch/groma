@@ -237,11 +237,11 @@ popup_couldnt_open_app_store_url = "Imposible conectarse a la app store.";
 popup_please_update_app_to_use_account = "Por favor actualiza Groma para poder continuar utilizando tu cuenta de usuario.";
 popup_buy_will_add_to_history_stats = "Los artículos en tu carrito de compra se agregarán al inventario, historial y reportes";
 popup_you_cant_buy_cart = "No tienes autorización para mover ítems al inventario %@\nPídele a alguien con autorización que te agregue como participante.";
-popup_remove_section_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá todas las secciones y categorías con este nombre e ítems en listas, grupos, inventarios e historial asociados con ellos.";
-popup_remove_product_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá también entradas en listas, inventarios o recetas con este nombre.";
-popup_remove_brand_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá todos los productos con esta marca e ítems en listas, grupos, inventarios e historial asociados con ellos.";
-popup_remove_unit_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá todos los productos utilizando esta unidad e ítems en listas, grupos, inventarios e historial asociados con ellos.";
-popup_remove_base_completion_confirm = "Quieres remover \"%@\"?\nEsto removerá todos los productos utilizando esta cantidad base e ítems en listas, grupos, inventarios e historial asociados con ellos.";
+popup_remove_section_completion_confirm = "Quieres remover %@?\nEsto removerá todas las secciones y categorías con este nombre e ítems en listas, grupos, inventarios e historial asociados con ellos.";
+popup_remove_product_completion_confirm = "Quieres remover %@?\nEsto removerá también entradas en listas, inventarios o recetas con este nombre.";
+popup_remove_brand_completion_confirm = "Quieres remover %@?\nEsto removerá todos los productos con esta marca e ítems en listas, grupos, inventarios e historial asociados con ellos.";
+popup_remove_unit_completion_confirm = "Quieres remover %@?\nEsto removerá todos los productos utilizando esta unidad e ítems en listas, grupos, inventarios e historial asociados con ellos.";
+popup_remove_base_completion_confirm = "Quieres remover %@?\nEsto removerá todos los productos utilizando esta cantidad base e ítems en listas, grupos, inventarios e historial asociados con ellos.";
 popup_couldnt_find_email_account = "No se encontró una cuenta de email.";
 popup_group_was_deleted_in_other_device = "El grupo \"%@\" fue removido en otro dispositivo. Retorno a grupos.";
 popup_delete_history_also_deletes_stats = "Remover entradas del historial también remueve estos datos del reporte.";
@@ -269,7 +269,7 @@ popup_title_group_is_empty = "Vacío";
 popup_group_is_empty = "Este grupo no tiene ítems!";
 popups_password_email_sent = "Recibirás próximamente un e-mail para restaurar tu clave";
 popup_remove_list_warning = "Esto removerá la lista \"%@\" para todos los participantes.\nSi sólo deseas removerte como participante hazlo en la lista de participantes.";
-popup_remove_section_confirm = "Estás seguro(a) que quieres remover la sección \"%@\"?\nEsto también removerá los ítems que están en esta sección.";
+popup_remove_section_confirm = "Estás seguro(a) que quieres remover la sección %@?\nEsto también removerá los ítems que están en esta sección.";
 popup_remove_inventory_warning = "Las listas, ítems de historial y estadística asociados con este inventario también serán removidos.";
 
 

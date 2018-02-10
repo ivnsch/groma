@@ -261,7 +261,12 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
 
             }, onError: {[weak self] result in guard let weakSelf = self else { return }
                 if result.status == .nameAlreadyExists {
-                    MyPopupHelper.showPopup(parent: weakSelf, type: .error, message: trans("error_list_already_exists", list.name), centerYOffset: -80)
+                    let message = trans("error_list_already_exists", list.name)
+                    let ranges = message.range(list.name).map { [$0] } ?? {
+                        logger.e("Invalid state list name not contained in: \(message)", .ui)
+                        return []
+                    } ()
+                    MyPopupHelper.showPopup(parent: weakSelf, type: .error, message: message, highlightRanges: ranges, centerYOffset: -80)
 
                 } else {
                     weakSelf.defaultErrorHandler()(result)

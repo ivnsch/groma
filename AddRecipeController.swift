@@ -375,12 +375,25 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
 
     func deleteBaseQuantity(val: Float, _ handler: @escaping (Bool) -> Void) {
-        ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_base_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-            Prov.productProvider.deleteProductsWith(base: val, weakSelf.successHandler {
-                MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_was_removed"), centerYOffset: -80)
-                handler(true)
-            })
-        })
+        let message = trans("popup_remove_base_completion_confirm", val.quantityString)
+        let ranges = message.range(val.quantityString).map { [$0] } ?? {
+            logger.e("Invalid state product name not contained in: \(message)", .ui)
+            return []
+        } ()
+
+        MyPopupHelper.showPopup(
+            parent: self,
+            type: .warning,
+            title: trans("popup_title_confirm"),
+            message: message,
+            highlightRanges: ranges,
+            okText: trans("popup_button_yes"),
+            centerYOffset: 80, onOk: { [weak self] in guard let weakSelf = self else {return}
+                Prov.productProvider.deleteProductsWith(base: val, weakSelf.successHandler {
+                    MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_was_removed"), centerYOffset: -80)
+                    handler(true)
+                })
+            }, onCancel: nil)
     }
 
     func addUnit(name: String, _ handler: @escaping ((unit: Providers.Unit, isNew: Bool)) -> Void) {
@@ -531,13 +544,28 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
 
     func delete(productNameSuggestion: String, handler: @escaping () -> Void) {
+
+        guard let parent = self.parent?.parent?.parent?.parent else {
+            logger.e("No parent!", .ui)
+            return
+        }
+
+        view.endEditing(true)
+
+        let message = trans("popup_remove_product_completion_confirm", productNameSuggestion)
+        let ranges = message.range(productNameSuggestion).map { [$0] } ?? {
+            logger.e("Invalid state product name not contained in: \(message)", .ui)
+            return []
+        } ()
+
         MyPopupHelper.showPopup(
-            parent: self,
+            parent: parent,
             type: .warning,
             title: trans("popup_title_confirm"),
-            message: trans("popup_remove_product_completion_confirm"),
+            message: message,
+            highlightRanges: ranges,
             okText: trans("popup_button_yes"),
-            centerYOffset: 80, onOk: { [weak self] in guard let weakSelf = self else {return}
+            centerYOffset: 0,  onOk: { [weak self] in guard let weakSelf = self else {return}
                 Prov.productProvider.delete(productName: productNameSuggestion, weakSelf.successHandler{
                     handler()
                 })
@@ -545,13 +573,28 @@ extension AddRecipeController: AddRecipeIngredientCellDelegate {
     }
 
     func delete(brandNameSuggestion: String, handler: @escaping () -> Void) {
+
+        guard let parent = self.parent?.parent?.parent?.parent else {
+            logger.e("No parent!", .ui)
+            return
+        }
+
+        view.endEditing(true)
+
+        let message = trans("popup_remove_brand_completion_confirm", brandNameSuggestion)
+        let ranges = message.range(brandNameSuggestion).map { [$0] } ?? {
+            logger.e("Invalid state brand name not contained in: \(message)", .ui)
+            return []
+        } ()
+
         MyPopupHelper.showPopup(
-            parent: self,
+            parent: parent,
             type: .warning,
             title: trans("popup_title_confirm"),
             message: trans("popup_remove_brand_completion_confirm", brandNameSuggestion),
+            highlightRanges: ranges,
             okText: trans("popup_button_yes"),
-            centerYOffset: 80, onOk: { [weak self] in guard let weakSelf = self else {return}
+            centerYOffset: 0, onOk: { [weak self] in guard let weakSelf = self else {return}
                 Prov.brandProvider.removeProductsWithBrand(brandNameSuggestion, remote: true, weakSelf.successHandler {
                     MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_was_removed"), centerYOffset: -80)
                     handler()

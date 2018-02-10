@@ -142,17 +142,21 @@ class StatsViewController: UIViewController
                         
                         // If there's actually data for this month, otherwise there's nothing to remove so we don't bother user asking
                         Prov.statsProvider.hasDataForMonthYear(oldestDateMonthYear, inventory: inventory, handler: weakSelf.successHandler{hasData in
-                            
-                            ConfirmationPopup.show(title: "First month start", message: "Congrats! You started a complete month report. If the previous month is incomplete (you didn't use the app the full month) you can remove it now, to improve the average calculations.", okTitle: "Remove", cancelTitle: "Cancel", controller: weakSelf, onOk: {
-                                
-                                Prov.statsProvider.clearMonthYearData(oldestDateMonthYear, inventory: inventory, remote: true, handler: weakSelf.successHandler{[weak self] in
-                                    PreferencesManager.savePreference(PreferencesManagerKey.clearedFirstIncompleteMonthStats, value: true)
-                                    self?.loadChart()
+                            MyPopupHelper.showPopup(
+                                parent: weakSelf,
+                                type: .warning,
+                                title: "First month start",
+                                message: "Congrats! You started a complete month report. If the previous month is incomplete (you didn't use the app the full month) you can remove it now, to improve the average calculations.",
+                                okText: trans("popup_button_remove"),
+                                centerYOffset: 80, onOk: {
+                                    Prov.statsProvider.clearMonthYearData(oldestDateMonthYear, inventory: inventory, remote: true, handler: weakSelf.successHandler{[weak self] in
+                                        PreferencesManager.savePreference(PreferencesManagerKey.clearedFirstIncompleteMonthStats, value: true)
+                                        self?.loadChart()
                                     })
-                                
-                                }, onCancel: {
-                                    PreferencesManager.savePreference(PreferencesManagerKey.cancelledClearFirstIncompleteMonthStats, value: true)
-                            })
+                            }, onCancel: {
+                                PreferencesManager.savePreference(PreferencesManagerKey.cancelledClearFirstIncompleteMonthStats, value: true)
+                            }
+                            )
                         })
                         
                     } else {

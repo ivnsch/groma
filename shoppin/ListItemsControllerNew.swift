@@ -1008,11 +1008,25 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     }
     
     func canRemoveSection(_ section: Section, can: @escaping (Bool) -> Void) {
-        ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_section_confirm", section.name), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {
-            can(true)
-        }, onCancel: {
-            can(false)
-        })
+        let message = trans("popup_remove_section_confirm", section.name)
+        let ranges = message.range(section.name).map { [$0] } ?? {
+            logger.e("Invalid state section name not contained in: \(message)", .ui)
+            return []
+        } ()
+
+        MyPopupHelper.showPopup(
+            parent: self,
+            type: .warning,
+            title: trans("popup_title_confirm"),
+            message: message,
+            highlightRanges: ranges,
+            okText: trans("popup_button_yes"),
+            centerYOffset: 80, onOk: {
+                can(true)
+            }, onCancel: {
+                can(false)
+            }
+        )
     }
     
     func onSectionRemoved(_ section: Section) {

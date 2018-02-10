@@ -155,11 +155,18 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     override func canRemoveModel(_ model: ExpandableTableViewModel, can: @escaping (Bool) -> Void) {
 //        _ = (model as! ExpandableTableViewInventoryModelRealm).inventory
-        ConfirmationPopup.show(title: trans("popup_title_warning"), message: trans("popup_remove_inventory_warning"), okTitle: trans("popup_button_remove"), cancelTitle: trans("popup_button_cancel"), controller: self, onOk: {
+        MyPopupHelper.showPopup(
+            parent: self,
+            type: .warning,
+            title: trans("popup_title_confirm"),
+            message: trans("popup_remove_inventory_warning"),
+            okText: trans("popup_button_remove"),
+            centerYOffset: 80, onOk: {
                 can(true)
             }, onCancel: {
                 can(false)
-            })
+        }
+        )
     }
     
     override func initDetailController(_ cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
@@ -252,7 +259,12 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
 
             }, onError: {[weak self] result in guard let weakSelf = self else { return }
                 if result.status == .nameAlreadyExists {
-                    MyPopupHelper.showPopup(parent: weakSelf, type: .error, message: trans("error_inventory_already_exists", inventory.name), centerYOffset: -80)
+                    let message = trans("error_inventory_already_exists", inventory.name)
+                    let ranges = message.range(inventory.name).map { [$0] } ?? {
+                        logger.e("Invalid state inventory name not contained in: \(message)", .ui)
+                        return []
+                    } ()
+                    MyPopupHelper.showPopup(parent: weakSelf, type: .error, message: message, highlightRanges: ranges, centerYOffset: -80)
                 } else {
                     weakSelf.defaultErrorHandler()(result)
                 }

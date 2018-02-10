@@ -917,23 +917,83 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     // MARK: - MyAutoCompleteTextFieldDelegate
 
     func onDeleteSuggestion(_ string: String, sender: MyAutoCompleteTextField) {
+
+        guard let parent = self.parent?.parent?.parent else {
+            logger.e("No parent!", .ui)
+            return
+        }
+
         switch sender {
         case sectionInput:
-            ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_section_completion_confirm", string), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-                Prov.sectionProvider.removeAllWithName(string, remote: true, weakSelf.successHandler {
+            let message = trans("popup_remove_section_completion_confirm", string)
+            let ranges = message.range(string).map { [$0] } ?? {
+                logger.e("Invalid state section not contained in: \(message)", .ui)
+                return []
+            } ()
+
+            dismissKeyboard(nil)
+
+            MyPopupHelper.showPopup(
+                parent: parent,
+                type: .warning,
+                title: trans("popup_title_confirm"),
+                message: message,
+                highlightRanges: ranges,
+                okText: trans("popup_button_yes"),
+                centerYOffset: 0, onOk: { [weak self] in guard let weakSelf = self else { return }
                     Prov.productCategoryProvider.removeAllCategoriesWithName(string, remote: true, weakSelf.successHandler {
                         self?.delegate?.onRemovedSectionCategoryName(string)
-                        MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_was_removed", string), centerYOffset: -80)
+
+                        let message = trans("popup_was_removed", string)
+                        let ranges = message.range(string).map { [$0] } ?? {
+                            logger.e("Invalid state string name not contained in: \(message)", .ui)
+                            return []
+                            } ()
+                        MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: message, highlightRanges: ranges, centerYOffset: -80, onOk: { [weak self] in
+                            self?.sectionInput.becomeFirstResponder()
+                        }, onCancel: { [weak self] in
+                            self?.sectionInput.becomeFirstResponder()
+                        })
                     })
-                })
-            })
+                }, onCancel: {
+                }
+            )
+
         case brandInput:
-            ConfirmationPopup.show(title: trans("popup_title_confirm"), message: trans("popup_remove_brand_completion_confirm"), okTitle: trans("popup_button_yes"), cancelTitle: trans("popup_button_no"), controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-                Prov.brandProvider.removeProductsWithBrand(string, remote: true, weakSelf.successHandler {
-                    self?.delegate?.onRemovedBrand(string)
-                    MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_was_removed", string), centerYOffset: -80)
-                })
-            })
+            let message = trans("popup_remove_brand_completion_confirm", string)
+            let ranges = message.range(string).map { [$0] } ?? {
+                logger.e("Invalid state brand not contained in: \(message)", .ui)
+                return []
+            } ()
+
+            dismissKeyboard(nil)
+
+            MyPopupHelper.showPopup(
+                parent: parent,
+                type: .warning,
+                title: trans("popup_title_confirm"),
+                message: message,
+                highlightRanges: ranges,
+                okText: trans("popup_button_yes"),
+                centerYOffset: 0, onOk: { [weak self] in guard let weakSelf = self else { return }
+                    Prov.brandProvider.removeProductsWithBrand(string, remote: true, weakSelf.successHandler {
+                        self?.delegate?.onRemovedBrand(string)
+
+                        let message = trans("popup_was_removed", string)
+                        let ranges = message.range(string).map { [$0] } ?? {
+                            logger.e("Invalid state string name not contained in: \(message)", .ui)
+                            return []
+                            } ()
+                        MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: message, highlightRanges: ranges, centerYOffset: -80, onOk: { [weak self] in
+                            self?.brandInput.becomeFirstResponder()
+                        }, onCancel: { [weak self] in
+                            self?.brandInput.becomeFirstResponder()
+                        })
+                    })
+                }, onCancel: {
+                }
+            )
+
         default: logger.e("Not handled input")
         }
     }
