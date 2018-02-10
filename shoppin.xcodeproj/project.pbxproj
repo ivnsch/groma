@@ -88,6 +88,7 @@
 		6A4DBFDD1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFDC1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift */; };
 		6A4DBFDF1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFDE1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift */; };
 		6A4DBFE21FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFE11FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift */; };
+		6A501D69202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A501D68202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift */; };
 		6A633751201DFBCC001E4969 /* LoginOrRegister.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A633750201DFBCC001E4969 /* LoginOrRegister.storyboard */; };
 		6A633753201E0120001E4969 /* LoginOrRegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A633752201E0120001E4969 /* LoginOrRegisterController.swift */; };
 		6A633755201E06AE001E4969 /* DesignableUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A633754201E06AE001E4969 /* DesignableUITextField.swift */; };
@@ -623,6 +624,7 @@
 		6A4DBFDC1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveItemsToCartTest.swift; sourceTree = "<group>"; };
 		6A4DBFDE1FFBBC8600B2AB15 /* SwitchItemsBetweenTodoCartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchItemsBetweenTodoCartTests.swift; sourceTree = "<group>"; };
 		6A4DBFE11FFBBCFE00B2AB15 /* CartTodoItemsTestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartTodoItemsTestUtils.swift; sourceTree = "<group>"; };
+		6A501D68202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitBaseHelpCellExplanationHighlighter.swift; sourceTree = "<group>"; };
 		6A58B0D21E48D5D50012F4C9 /* groma.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = groma.entitlements; sourceTree = "<group>"; };
 		6A633750201DFBCC001E4969 /* LoginOrRegister.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginOrRegister.storyboard; sourceTree = "<group>"; };
 		6A633752201E0120001E4969 /* LoginOrRegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginOrRegisterController.swift; sourceTree = "<group>"; };
@@ -1338,6 +1340,7 @@
 				6A80370D201D3B6A00FAD9C3 /* ReferenceQuantityPriceHelpCell.swift */,
 				6A80370E201D3B6A00FAD9C3 /* ReferenceQuantityPriceHelpCell.xib */,
 				6A80370A201D351B00FAD9C3 /* UnitBaseHelpBasesExplanationCell.xib */,
+				6A501D68202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift */,
 			);
 			name = help;
 			sourceTree = "<group>";
@@ -3225,6 +3228,7 @@
 				6A3A67CC1E57BF4400B5354F /* EditableFractionCell.swift in Sources */,
 				EB7032801BEBBBB100779EBB /* ReorderSectionTableViewController.swift in Sources */,
 				6AD240031FEDD22B0080161E /* AddRecipeTableViewHeader.swift in Sources */,
+				6A501D69202F889E00F2297E /* UnitBaseHelpCellExplanationHighlighter.swift in Sources */,
 				6AD23FFE1FED922C0080161E /* AddRecipeController.swift in Sources */,
 				EBB526891BF016910002A286 /* ButtonMore.swift in Sources */,
 				EB3E92F11CDA3A620048DA0D /* LangHelper.swift in Sources */,

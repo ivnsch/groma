@@ -16,13 +16,17 @@ class ReferenceQuantityPriceHelpCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        explanationLabel.text = trans("base_unit_help_reference_quantity_price")
 
         priceView.show(price: 0)
 
         DispatchQueue.main.async {
             self.showTooltip()
         }
+    }
+
+    func config(colorDict: [BaseUnitHelpItemType: UIColor]) {
+        let text = trans("base_unit_help_reference_quantity_price")
+        explanationLabel.attributedText = UnitBaseHelpCellExplanationHighlighter().generateAttributedString(colorDict: colorDict, text: text, font: explanationLabel.font)
     }
 
     func showTooltip() {

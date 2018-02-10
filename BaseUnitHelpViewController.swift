@@ -115,9 +115,13 @@ extension BaseUnitHelpViewController: UITableViewDataSource {
         case noteCellIndex:
             return tableView.dequeueReusableCell(withIdentifier: "noteCell", for: indexPath) as! BaseUnitHelpExplanationCell
         case cellModels.count + 1:
-            return tableView.dequeueReusableCell(withIdentifier: "unitBaseExplanation", for: indexPath) as! UnitBaseHelpBasesExplanationCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "unitBaseExplanation", for: indexPath) as! UnitBaseHelpBasesExplanationCell
+            cell.config(colorDict: itemTypeColors)
+            return cell
         case cellModels.count + 2:
-            return tableView.dequeueReusableCell(withIdentifier: "referencePriceCell", for: indexPath) as! ReferenceQuantityPriceHelpCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "referencePriceCell", for: indexPath) as! ReferenceQuantityPriceHelpCell
+            cell.config(colorDict: itemTypeColors)
+            return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UnitBaseHelpCell
             let index = indexPath.row < noteCellIndex ? indexPath.row : indexPath.row - 1

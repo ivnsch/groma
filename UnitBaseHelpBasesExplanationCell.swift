@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import Providers
 
 class UnitBaseHelpBasesExplanationCell: UITableViewCell {
 
     @IBOutlet weak var label: UILabel!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        label.text = "You enter unit, base quantity and second base quantity in the view where you opened this popup";
+    
+    func config(colorDict: [BaseUnitHelpItemType: UIColor]) {
+        let text = trans("base_unit_help_unit_bases");
+        label.attributedText = UnitBaseHelpCellExplanationHighlighter().generateAttributedString(colorDict: colorDict, text: text, font: label.font)
     }
 }
