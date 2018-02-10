@@ -18,10 +18,12 @@
                 <outlet property="imageBottomConstraint" destination="hgM-h9-hp1" id="VuR-YH-LZO"/>
                 <outlet property="imageHeightConstraint" destination="NbP-qc-2ws" id="M6O-k4-UTx"/>
                 <outlet property="imageView" destination="zGw-he-MjV" id="Lis-wH-Tte"/>
+                <outlet property="leftConstraint" destination="QjW-sd-7h7" id="XfI-ED-Ld3"/>
                 <outlet property="messageBottomConstraint" destination="VGG-Xh-eJs" id="Md1-3m-WaT"/>
                 <outlet property="messageTextView" destination="JEj-oE-46m" id="6Kf-aF-cMx"/>
                 <outlet property="okButtonBottomConstraint" destination="AS4-Ag-aND" id="luc-wt-tje"/>
                 <outlet property="okButtonHeightConstraint" destination="EXf-ga-rUZ" id="HQM-Mz-Wua"/>
+                <outlet property="rightConstraint" destination="Mre-by-gzI" id="1AF-zk-PHQ"/>
                 <outlet property="titleBottomConstraint" destination="o9v-9N-Xem" id="Zs8-P9-rKB"/>
                 <outlet property="titleTextView" destination="HHh-Hb-iMf" id="Kv9-3Z-S6w"/>
                 <outlet property="topConstraint" destination="luJ-aA-193" id="mXn-aE-Wgl"/>

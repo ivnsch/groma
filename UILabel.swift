@@ -31,11 +31,9 @@ public extension UILabel {
         return true
     }
 
-    func estimatedHeight() -> CGFloat {
-        let size = CGSize(width: frame.width, height: 1000)
-        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-        let attributes = [NSAttributedStringKey.font: font]
-        let rectangleHeight = String(describing: text).boundingRect(with: size, options: options, attributes: attributes, context: nil).height
-        return rectangleHeight
+    // Param: overrideWidth: if for some reason the label's width isn't ready yet, allow to pass a pre-computed (e.g. using the constraint constants) one.
+    func estimatedHeight(overrideWidth: CGFloat? = nil) -> CGFloat {
+        let labelWidth = overrideWidth ?? frame.width
+        return sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude)).height
     }
 }

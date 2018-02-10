@@ -38,6 +38,9 @@ class MyPopupDefaultContentViewController: UIViewController {
     @IBOutlet weak var cancelButtonHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var cancelButtonBottomConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var leftConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightConstraint: NSLayoutConstraint!
+
     var handleOkPress: (() -> Void)?
     var handleCancelPress: (() -> Void)?
 
@@ -74,18 +77,16 @@ class MyPopupDefaultContentViewController: UIViewController {
         if !contents.hasCancel {
             cancelButtonHeightConstraint.constant = 0
         }
+    }
 
-        titleTextView.sizeToFit()
-        messageTextView.sizeToFit()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
-        // Adjust frame height to contents
-        let contentHeight = topConstraint.constant + imageHeightConstraint.constant + imageBottomConstraint.constant + titleBottomConstraint.constant + messageBottomConstraint.constant + okButtonHeightConstraint.constant + okButtonBottomConstraint.constant + cancelButtonHeightConstraint.constant + cancelButtonBottomConstraint.constant + titleTextView.height + messageTextView.estimatedHeight()
+        // Several attempts to calculate the labels height correctly (including sizeToFit, DispatchQueue.main.async, using only height or the default (that is, without passing the precalculated width) estimatedHeight, etc. failed, either it shows incorrectly when msg is one liner or when message is long. So we calculate the width manually and pass this to estimatedHeight - this seems to be working. Note in didAppear probably this works but that seems too late to set the frame.
+        let labelsWidth = view.width - leftConstraint.constant - rightConstraint.constant
 
-        logger.i("Content height: \(contentHeight), label height: \(messageTextView.height), est. height: \(messageTextView.estimatedHeight())", .ui)
-
-        DispatchQueue.main.async {
-            self.view.frame = self.view.frame.copy(height: contentHeight)
-        }
+        let contentHeight = topConstraint.constant + imageHeightConstraint.constant + imageBottomConstraint.constant + titleBottomConstraint.constant + messageBottomConstraint.constant + okButtonHeightConstraint.constant + okButtonBottomConstraint.constant + cancelButtonHeightConstraint.constant + cancelButtonBottomConstraint.constant + titleTextView.estimatedHeight(overrideWidth: labelsWidth) + messageTextView.estimatedHeight(overrideWidth: labelsWidth)
+        self.view.frame = self.view.frame.copy(height: contentHeight)
     }
 
     @IBAction func onOkPress(_ sender: UIButton) {
