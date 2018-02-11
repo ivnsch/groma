@@ -54,7 +54,8 @@ public struct Theme {
     public static let green = UIColor(hexString: "1FAC6A")
     public static let lighterGreen = UIColor(hexString: "28c75d")
     public static let lightGray = UIColor.lightGray
-    
+    public static let lightGray2 = UIColor(hexString: "d2d2d2")
+
     public static let fractionsBGColor = UIColor.gray
     public static let unitsBGColor = UIColor.white
     public static let unitsFGColor = UIColor.black

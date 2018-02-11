@@ -1,14 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--User Details View Controller-->
         <scene sceneID="qCn-nu-Ry4">
             <objects>
-                <viewController storyboardIdentifier="UserDetailsController" id="h7G-yZ-k7i" customClass="UserDetailsViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UserDetailsController" id="h7G-yZ-k7i" customClass="UserDetailsViewController" customModule="groma" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="pJa-rp-3ws"/>
                         <viewControllerLayoutGuide type="bottom" id="e08-Sl-Rs6"/>
@@ -17,12 +21,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vg-i2-1c4" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="95" y="475" width="186" height="50"/>
-                                <color key="backgroundColor" red="0.93725490196078431" green="0.29803921568627451" blue="0.29803921568627451" alpha="1" colorSpace="calibratedRGB"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vg-i2-1c4" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="95" y="445" width="186" height="50"/>
+                                <color key="backgroundColor" red="0.93725490196078431" green="0.29803921568627451" blue="0.29803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="186" id="Deo-1L-Ruz"/>
-                                    <constraint firstAttribute="height" constant="50" id="UNj-ti-flC" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                    <constraint firstAttribute="height" constant="50" id="UNj-ti-flC" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                             <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
@@ -42,8 +46,8 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Logout">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -57,40 +61,102 @@
                                     <action selector="onLogoutTap:" destination="h7G-yZ-k7i" eventType="touchUpInside" id="2IZ-Di-JNv"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGa-Ql-gOa" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="119.5" y="505" width="135" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Y2f-sb-aT6" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                                <real key="value" value="40"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                                <real key="value" value="40"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                                <real key="value" value="50"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                                <real key="value" value="50"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </constraint>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Remove account">
+                                    <color key="titleColor" red="0.93725490196078431" green="0.29803921568627451" blue="0.29803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="onDeleteAccountTap:" destination="h7G-yZ-k7i" eventType="touchUpInside" id="Rvh-HT-fhj"/>
+                                </connections>
+                            </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile_pic" translatesAutoresizingMaskIntoConstraints="NO" id="1U0-96-zMB">
-                                <rect key="frame" x="40" y="170" width="295" height="187"/>
+                                <rect key="frame" x="40" y="140" width="295" height="187"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pxN-pH-E7g">
-                                <rect key="frame" x="169" y="387" width="38" height="18"/>
+                                <rect key="frame" x="169" y="357" width="38" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.054901960784313725" green="0.58431372549019611" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.054901960784313725" green="0.58431372549019611" blue="0.8784313725490196" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="more_help" translatesAutoresizingMaskIntoConstraints="NO" id="oyc-x9-uYR">
+                                <rect key="frame" x="264.5" y="518" width="25" height="25"/>
+                                <color key="tintColor" red="0.82352941180000006" green="0.82352941180000006" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="25" id="5y5-hU-eG4"/>
+                                    <constraint firstAttribute="height" constant="25" id="LEX-nq-Ea5"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YOw-JS-K4l">
+                                <rect key="frame" x="257" y="510.5" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="URD-7b-oQh"/>
+                                    <constraint firstAttribute="width" constant="40" id="kDK-eu-AQc"/>
+                                </constraints>
+                                <color key="tintColor" red="0.82352941180000006" green="0.82352941180000006" blue="0.82352941180000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="onDeleteAccountHelpTap:" destination="h7G-yZ-k7i" eventType="touchUpInside" id="H5n-UN-Vht"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="oyc-x9-uYR" firstAttribute="leading" secondItem="lGa-Ql-gOa" secondAttribute="trailing" constant="10" id="4Af-lo-b6s"/>
+                            <constraint firstItem="oyc-x9-uYR" firstAttribute="centerY" secondItem="lGa-Ql-gOa" secondAttribute="centerY" id="D3x-pF-9cw"/>
                             <constraint firstItem="pxN-pH-E7g" firstAttribute="top" secondItem="1U0-96-zMB" secondAttribute="bottom" constant="30" id="EmJ-aP-vrO"/>
                             <constraint firstItem="pxN-pH-E7g" firstAttribute="centerX" secondItem="FsR-KS-FXf" secondAttribute="centerX" id="HuE-ZO-W0c"/>
                             <constraint firstItem="7vg-i2-1c4" firstAttribute="top" secondItem="pxN-pH-E7g" secondAttribute="bottom" constant="70" id="NNr-Xq-QFi"/>
-                            <constraint firstItem="1U0-96-zMB" firstAttribute="centerY" secondItem="FsR-KS-FXf" secondAttribute="centerY" constant="-70" id="PJl-E7-OBh"/>
+                            <constraint firstItem="1U0-96-zMB" firstAttribute="centerY" secondItem="FsR-KS-FXf" secondAttribute="centerY" constant="-100" id="PJl-E7-OBh"/>
                             <constraint firstAttribute="trailing" secondItem="1U0-96-zMB" secondAttribute="trailing" constant="40" id="REb-il-EWV"/>
+                            <constraint firstItem="lGa-Ql-gOa" firstAttribute="top" secondItem="7vg-i2-1c4" secondAttribute="bottom" constant="10" id="SVn-Sq-ePO"/>
                             <constraint firstItem="1U0-96-zMB" firstAttribute="leading" secondItem="FsR-KS-FXf" secondAttribute="leading" constant="40" id="dcr-jr-NhZ"/>
+                            <constraint firstItem="YOw-JS-K4l" firstAttribute="centerX" secondItem="oyc-x9-uYR" secondAttribute="centerX" id="dqL-ho-Wjj"/>
                             <constraint firstItem="1U0-96-zMB" firstAttribute="centerX" secondItem="FsR-KS-FXf" secondAttribute="centerX" id="fC3-af-cYM"/>
+                            <constraint firstItem="YOw-JS-K4l" firstAttribute="centerY" secondItem="oyc-x9-uYR" secondAttribute="centerY" id="uxa-iU-mmC"/>
                             <constraint firstAttribute="centerX" secondItem="7vg-i2-1c4" secondAttribute="centerX" id="v37-Nk-YTL"/>
+                            <constraint firstItem="lGa-Ql-gOa" firstAttribute="centerX" secondItem="FsR-KS-FXf" secondAttribute="centerX" id="yKg-l9-yp0"/>
                         </constraints>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="deleteAccountButton" destination="7vg-i2-1c4" id="omd-Bw-zWn"/>
+                        <outlet property="helpButtonImage" destination="oyc-x9-uYR" id="0Zy-N5-Kxn"/>
                         <outlet property="logoutButton" destination="7vg-i2-1c4" id="oyi-ej-0OZ"/>
                         <outlet property="userIdLabel" destination="pxN-pH-E7g" id="Nr7-k2-9jq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uDG-wC-KnL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="221" y="455"/>
+            <point key="canvasLocation" x="220" y="454.72263868065971"/>
         </scene>
     </scenes>
     <resources>
+        <image name="more_help" width="64" height="64"/>
         <image name="profile_pic" width="304" height="187"/>
     </resources>
 </document>

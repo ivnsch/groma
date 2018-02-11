@@ -22,6 +22,7 @@ public struct RealmConfig {
 
     static let syncAuthURL = URL(string: "http://\(syncHost):9080")!
     static let syncServerURL = URL(string: "realm://\(syncHost):9080/~/\(syncRealmPath)")!
+    static let syncUserUrl = URL(string: "http://\(syncHost):9080/auth/user/")!
 
     fileprivate static var documentsDirectoryUrl: URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!

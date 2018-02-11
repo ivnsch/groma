@@ -251,6 +251,7 @@ popup_list_was_deleted_in_other_device = "Die Liste \"%@\" wurde auf einem ander
 popup_please_accept_terms = "Bitte akzeptiere die AGB.";
 popup_your_data_was_overwritten = "Deine lokale Daten wurden überschrieben.";
 popup_are_you_sure_remove_account = "Bist du sicher dass du dein Benutzerkonto löschen willst?";
+popup_remove_account_help = "Löscht dein Konto aus dem Server. Deine Daten auf deinen Geräten bleiben erhalten und du kannst weiterhin die app benutzen.";
 popup_your_account_was_removed = "Dein Benutzerkonto wurde gelöscht.";
 popup_you_already_use_bundled_products = "Du benutzt alle gebündelte Produkte bereits.";
 popup_hints_restored = "Hinweise wiederhergestellt.";

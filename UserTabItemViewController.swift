@@ -50,13 +50,17 @@ class UserTabItemViewController: UIViewController, LoginOrRegisterDelegate, User
     // MARK: - UserDetailsViewControllerDelegate
 
     func onLogoutSuccess() {
-        self.showLoginController()
+        showLoginController()
     }
 
     func onLogoutError() {
         print("login error!") // TODO handle
     }
-    
+
+    func onAccountRemoved() {
+        showLoginController()
+    }
+
     fileprivate func showUserDetailsController() {
         let userDetailsController = UIStoryboard.userDetailsViewController()
         userDetailsController.delegate = self

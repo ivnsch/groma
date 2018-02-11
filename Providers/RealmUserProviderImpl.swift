@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 import CloudKit
+import Alamofire
 
 class RealmUserProviderImpl: UserProvider {
 
@@ -149,8 +150,33 @@ class RealmUserProviderImpl: UserProvider {
     }
     
     func removeAccount(_ handler: @escaping (ProviderResult<Any>) -> ()) {
-        logger.e("Not implemented") // TODO
-        handler(ProviderResult(status: .success))
+        guard let currentUser = SyncUser.current else {
+            logger.e("No current user! can't remove account", .api, .db)
+            handler(ProviderResult(status: .unknown))
+            return
+        }
+
+        guard let identity = currentUser.identity else {
+            logger.e("User has no identity! can't remove account. User: \(currentUser)", .api, .db)
+            handler(ProviderResult(status: .unknown))
+            return
+        }
+
+        // TODO test that removing account works
+
+        // TODO confirm that identity is what we send here
+        let urlString = RealmConfig.syncUserUrl.appendingPathComponent(identity).absoluteString
+
+        // TODO refresh token, see https://github.com/realm/realm-object-server/issues/315
+        Alamofire.request(urlString, method: .delete, headers: ["authorization": "TODO token"])
+            .responseJSON { response in
+                if let error = response.result.error {
+                    logger.e("Error ocurred deleting user from ros: \(error)", .api)
+                    handler(ProviderResult(status: .serverError))
+                } else {
+                    handler(ProviderResult(status: .success))
+                }
+        }
     }
     
     func removeLoginToken() {

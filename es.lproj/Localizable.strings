@@ -251,6 +251,7 @@ popup_list_was_deleted_in_other_device = "La lista \"%@\" fue removida por otro 
 popup_please_accept_terms = "Por favor acepta las condiciones";
 popup_your_data_was_overwritten = "Tus datos locales fueron sobrescritos.";
 popup_are_you_sure_remove_account = "Quieres realmente borrar tu cuenta? Los datos serán removidos permanentemente.";
+popup_remove_account_help = "Borra tu cuenta del servidor. Tus datos locales no serán borrados y puedes continuar utilizando la app normalmente.";
 popup_your_account_was_removed = "Tu cuenta fue removida";
 popup_you_already_use_bundled_products = "Ya estas usando todos los productos predefinidos.";
 popup_hints_restored = "Explicaciones restablecidas";

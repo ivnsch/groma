@@ -44,7 +44,12 @@ class MyPopupDefaultContentViewController: UIViewController {
     var handleOkPress: (() -> Void)?
     var handleCancelPress: (() -> Void)?
 
-    func config(type: MyPopupDefaultContentType, title: String? = nil, message: String, highlightRanges: [NSRange] = []) {
+    // maxMsgLines: override default from nib - can be used when showing exceptionally long messages
+    func config(type: MyPopupDefaultContentType, title: String? = nil, message: String, highlightRanges: [NSRange] = [], maxMsgLines: Int? = nil) {
+        if let maxMsgLines = maxMsgLines {
+            messageTextView.numberOfLines = maxMsgLines
+        }
+
         let contents: Contents = {
             switch type {
             case .info: return Contents(title: title ?? trans("popup_title_info"), image: #imageLiteral(resourceName: "popup_info"), message: message, highlightRanges: highlightRanges, hasCancel: false)
