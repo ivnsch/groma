@@ -32,10 +32,12 @@ public struct RealmConfig {
         return documentsDirectoryUrl.appendingPathComponent("default.realm")
     }
 
+    fileprivate static let schemaVersion: UInt64 = 1
+
     public static var config = Realm.Configuration(
         // Set the new schema version. This must be greater than the previously used
         // version (if you've never set a schema version before, the version is 0).
-        schemaVersion: 0,
+        schemaVersion: RealmConfig.schemaVersion,
         
         // Set the block which will be called automatically when opening a Realm with
         // a schema version lower than the one set above
@@ -118,7 +120,7 @@ extension RealmConfig {
     static var localRlmRealmConfig: RLMRealmConfiguration {
 
         let configuration = RLMRealmConfiguration()
-        configuration.schemaVersion = 0
+        configuration.schemaVersion = RealmConfig.schemaVersion
         configuration.fileURL = localRealmUrl
 //        configuration.dynamic = true
         //configuration.readOnly = true
