@@ -50,25 +50,31 @@ class MyAutoCompleteTextField: MLPAutoCompleteTextField {
         
         if var _ = cell as? MyAutocompleteCell {
             
-            let button: HandlingButton = cell.contentView.viewWithTag(ViewTags.AutoCompleteCellButton) as? HandlingButton ?? {
+            let button: HandlingImageView = cell.contentView.viewWithTag(ViewTags.AutoCompleteCellButton) as? HandlingImageView ?? {
                 // Ended adding button programatically because for some reason the cell's contents from xib are not shown. It's loading the correct cell and everything but the content looks like the default cells. Removing the IB button for now.
-                let button = HandlingButton(frame: CGRect(x: self.bounds.width - 50, y: -3, width: 50, height: cell.contentView.bounds.height)) // needs some negative y offset otherwise looks not aligned with the text label
-                button.setTitle("x", for: UIControlState())
-                button.titleLabel?.font = Fonts.smallLight
-                button.setTitleColor(UIColor.gray, for: UIControlState())
+                let button = HandlingImageView()
+                button.frame = CGRect(x: self.bounds.width - 50, y: -3, width: 50, height: cell.contentView.bounds.height)
+                button.image = UIImage(named: "cross")?
+//                    .withAlignmentRectInsets(UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)) // seems not to work...
+                    .imageScaled(to: CGSize(width: 8, height: 8))
+                    .withRenderingMode(.alwaysTemplate)
+                button.contentMode = .center
+                button.tintColor = UIColor.lightGray
                 button.tag = ViewTags.AutoCompleteCellButton
                 cell.contentView.addSubview(button)
                 return button
             }()
-            
-            button.tapHandler = {[weak self] in guard let weakSelf = self else {return}
+
+            button.isUserInteractionEnabled = true
+
+            button.touchHandler = {[weak self] in guard let weakSelf = self else {return}
                 self?.myDelegate?.onDeleteSuggestion(string, sender: weakSelf)
             }
         } else {
             logger.w("Cell is has not expected type: \(cell)")
         }
     }
-    
+
     override func autoCompleteTermsDidSort(_ completions: [Any]!) {
         super.autoCompleteTermsDidSort(completions)
         
