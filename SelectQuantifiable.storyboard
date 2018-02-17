@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,12 +18,16 @@
                         <viewControllerLayoutGuide type="bottom" id="jtb-NF-Q33"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="MZj-Ok-SHN">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select unit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R1C-VX-HDz" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="264" y="10" width="73" height="18"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select unit" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R1C-VX-HDz" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                <color key="backgroundColor" red="0.50588235294117645" green="0.63921568627450975" blue="0.9882352941176471" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="aTi-F0-zLF"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -29,22 +36,15 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e1y-I2-P6K" userLabel="Divider">
-                                <rect key="frame" x="0.0" y="40" width="600" height="0.0"/>
-                                <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="0.5" id="pHT-wj-BIi"/>
-                                </constraints>
-                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3zs-vj-rtN">
-                                <rect key="frame" x="0.0" y="48" width="600" height="540"/>
+                                <rect key="frame" x="0.0" y="70" width="375" height="585"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="ey9-NE-F4E" customClass="SelectQuantifiableCell" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ey9-NE-F4E" id="ofd-M3-pbk">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="500" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d2w-mu-80D" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -59,14 +59,14 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0kZ-l4-Ysa" customClass="QuantityView" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="430" y="0.0" width="170" height="44"/>
+                                                    <rect key="frame" x="185" y="0.0" width="170" height="44"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="170" id="QE1-5I-gRN"/>
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="g" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vwr-mH-4J2" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="58" y="10" width="362" height="24"/>
+                                                    <rect key="frame" x="58" y="10" width="117" height="24"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -84,8 +84,8 @@
                                                 <constraint firstItem="Vwr-mH-4J2" firstAttribute="centerY" secondItem="d2w-mu-80D" secondAttribute="centerY" id="euf-jg-uhM"/>
                                                 <constraint firstItem="0kZ-l4-Ysa" firstAttribute="top" secondItem="ofd-M3-pbk" secondAttribute="top" id="jZl-Le-GdN"/>
                                                 <constraint firstItem="d2w-mu-80D" firstAttribute="centerY" secondItem="ofd-M3-pbk" secondAttribute="centerY" id="jf3-rz-o5q"/>
-                                                <constraint firstItem="d2w-mu-80D" firstAttribute="leading" secondItem="ofd-M3-pbk" secondAttribute="leading" constant="20" id="rNK-Ic-E6I" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
-                                                <constraint firstAttribute="trailing" secondItem="0kZ-l4-Ysa" secondAttribute="trailing" id="sRj-SI-xfq"/>
+                                                <constraint firstItem="d2w-mu-80D" firstAttribute="leading" secondItem="ofd-M3-pbk" secondAttribute="leading" constant="20" id="rNK-Ic-E6I" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                                                <constraint firstAttribute="trailing" secondItem="0kZ-l4-Ysa" secondAttribute="trailing" constant="20" id="sRj-SI-xfq" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -103,14 +103,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="R1C-VX-HDz" firstAttribute="top" secondItem="MZj-Ok-SHN" secondAttribute="topMargin" constant="10" id="0Nc-KB-Ent"/>
-                            <constraint firstItem="e1y-I2-P6K" firstAttribute="leading" secondItem="MZj-Ok-SHN" secondAttribute="leading" id="1os-A4-fwO"/>
-                            <constraint firstItem="3zs-vj-rtN" firstAttribute="top" secondItem="R1C-VX-HDz" secondAttribute="bottom" constant="20" id="2h8-Do-Ybw"/>
-                            <constraint firstAttribute="trailing" secondItem="e1y-I2-P6K" secondAttribute="trailing" id="4en-Is-uEX"/>
-                            <constraint firstItem="e1y-I2-P6K" firstAttribute="top" secondItem="MZj-Ok-SHN" secondAttribute="top" constant="40" id="4qk-1D-SCY"/>
+                            <constraint firstItem="R1C-VX-HDz" firstAttribute="top" secondItem="MZj-Ok-SHN" secondAttribute="top" id="0Nc-KB-Ent"/>
+                            <constraint firstAttribute="trailing" secondItem="R1C-VX-HDz" secondAttribute="trailing" id="18N-q1-gEr"/>
+                            <constraint firstItem="3zs-vj-rtN" firstAttribute="top" secondItem="R1C-VX-HDz" secondAttribute="bottom" id="2h8-Do-Ybw"/>
                             <constraint firstItem="jtb-NF-Q33" firstAttribute="top" secondItem="3zs-vj-rtN" secondAttribute="bottom" constant="12" id="FKW-Y7-MCs"/>
-                            <constraint firstItem="R1C-VX-HDz" firstAttribute="centerX" secondItem="MZj-Ok-SHN" secondAttribute="centerX" id="G88-fg-flc"/>
                             <constraint firstAttribute="trailing" secondItem="3zs-vj-rtN" secondAttribute="trailing" id="Zer-jg-JN7"/>
+                            <constraint firstItem="R1C-VX-HDz" firstAttribute="leading" secondItem="MZj-Ok-SHN" secondAttribute="leading" id="qcK-Vm-r80"/>
                             <constraint firstItem="3zs-vj-rtN" firstAttribute="leading" secondItem="MZj-Ok-SHN" secondAttribute="leading" id="u33-lr-BlP"/>
                         </constraints>
                     </view>

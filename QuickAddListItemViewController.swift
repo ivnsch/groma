@@ -358,12 +358,17 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 
                 // TODO!!!!!!!!!!!!!!!!!!!!!!!! bottom inset different varies for different screen sizes - bottom border has to be slightly about keyboard
 
-                let leftRightInset: CGFloat = 50
+                let titleLabelHeight: CGFloat = 70 // TODO dynamically or at least from dimensions manager
+                let cellsTotalHeight = DimensionsManager.defaultCellHeight * CGFloat(quantifiableProducts.count)
+                let popupMaxHeight: CGFloat = 400
+                let popupHeight = min(cellsTotalHeight, popupMaxHeight) + titleLabelHeight
+
+                let leftRightInset: CGFloat = 20
                 let contentFrame = CGRect(
                     x: leftRightInset,
                     y: 30,
                     width: self.view.frame.width - (leftRightInset * 2),
-                    height: 220
+                    height: popupHeight
                 )
 
                 guard let parent = self.parent?.parent?.parent?.parent else { logger.e("Parent is not set"); return } // parent until view shows on top of quick view + list but not navigation/tab bar
@@ -381,6 +386,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                         //                            cell.scaleUpAndDown(scale: 1.1) {
                         onRetrieved(quantifiableProduct, quantity)
                         //                            }
+                        self?.topControllersDelegate?.restoreKeyboard()
                     })
                 }
 
@@ -399,11 +405,14 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 popup.onTapBackground = { [weak self, weak popup] in
                     self?.selectQuantifiablePopup = nil
                     popup?.hide()
+                    self?.topControllersDelegate?.restoreKeyboard()
                 }
 
                 self.selectQuantifiablePopup = popup
 
                 popup.show(from: cell)
+
+                self.topControllersDelegate?.hideKeyboard()
 
             } else {
                 logger.i("No quantifiable product for product: \(product.uuid)::\(product.item.name). Creating a new quantifiable product.") // This state can happen if user deleted a unit or base quantity, which deletes all quantifiable products referencing them.

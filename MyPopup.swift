@@ -20,6 +20,7 @@ class MyPopup: UIView {
             if let contentView = contentView {
                 addSubview(contentView)
                 contentView.layer.cornerRadius = cornerRadius
+                contentView.layer.masksToBounds = true
             }
         }
     }
