@@ -42,6 +42,10 @@ public class DBFraction: Object {
     func compoundKeyValue() -> String {
         return "\(numerator)-\(denominator)"
     }
+
+    func toFraction() -> Fraction {
+        return Fraction(numerator: numerator, denominator: denominator)
+    }
     
     // MARK: - Filters
     

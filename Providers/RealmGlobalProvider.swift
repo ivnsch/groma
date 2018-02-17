@@ -459,6 +459,53 @@ class RealmGlobalProvider: RealmProvider {
                 inventoriesContainer.inventories.append(inventory)
             }
 
+            // Inventory items
+            let srcInventoryItems: Results<InventoryItem> = srcRealm.objects(InventoryItem.self)
+            for srcInventoryItem in srcInventoryItems {
+                guard let product = addedQuantifiableProducts[srcInventoryItem.product.uuid] else {
+                    logger.e("Couldn't find product! Skipping item.", .db)
+                    continue
+                }
+                guard let inventory = addedInventories[srcInventoryItem.inventory.uuid] else {
+                    logger.e("Couldn't find inventory! Skipping item.", .db)
+                    continue
+                }
+                _ = targetRealm.create(InventoryItem.self, value: srcInventoryItem.toRealmMigrationDict(product: product, inventory: inventory), update: true)
+            }
+
+            // Recipes
+            let srcRecipes: Results<Recipe> = srcRealm.objects(Recipe.self)
+            var addedRecipes = [String: Recipe]()
+            for srcRecipe in srcRecipes {
+                let recipe = targetRealm.create(Recipe.self, value: srcRecipe, update: true)
+                addedRecipes[recipe.uuid] = recipe
+                recipesContainer.recipes.append(recipe)
+            }
+
+            // Text spans
+            let srcTextSpans: Results<DBTextSpan> = srcRealm.objects(DBTextSpan.self)
+            for srcTextSpan in srcTextSpans {
+                _ = targetRealm.create(DBTextSpan.self, value: srcTextSpan, update: true)
+            }
+
+            // Ingredients
+            let srcIngredients: Results<Ingredient> = srcRealm.objects(Ingredient.self)
+            for srcIngredient in srcIngredients {
+                guard let recipe = addedRecipes[srcIngredient.recipe.uuid] else {
+                    logger.e("Couldn't find recipe! Skipping item.", .db)
+                    continue
+                }
+                guard let unit = addedUnits[srcIngredient.unit.uuid] else {
+                    logger.e("Couldn't find unit! Skipping item.", .db)
+                    continue
+                }
+                guard let item = addedItems[srcIngredient.item.uuid] else {
+                    logger.e("Couldn't find item! Skipping item.", .db)
+                    continue
+                }
+                _ = targetRealm.create(Ingredient.self, value: srcIngredient.toRealmMigrationDict(recipe: recipe, unit: unit, item: item), update: true)
+           }
+
             // Lists
             let lists: Results<List> = srcRealm.objects(List.self)
             var addedLists = [String: List]()

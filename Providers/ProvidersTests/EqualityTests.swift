@@ -48,9 +48,9 @@ class EqualityTests {
         }
     }
 
-    static func equals(arr1: [ListItem], arr2: [ListItem]) {
+    static func equals(arr1: [ListItem], arr2: [ListItem], compareLists: Bool) {
         for(obj1, obj2) in zip(arr1, arr2) {
-            equals(listItem1: obj1, listItem2: obj2)
+            equals(listItem1: obj1, listItem2: obj2, compareLists: compareLists)
         }
     }
 
@@ -96,6 +96,30 @@ class EqualityTests {
         }
     }
 
+    static func equals(arr1: [InventoryItem], arr2: [InventoryItem]) {
+        for(obj1, obj2) in zip(arr1, arr2) {
+            equals(obj1: obj1, obj2: obj2)
+        }
+    }
+
+    static func equals(arr1: [DBTextSpan], arr2: [DBTextSpan]) {
+        for(obj1, obj2) in zip(arr1, arr2) {
+            equals(obj1: obj1, obj2: obj2)
+        }
+    }
+
+    static func equals(arr1: [Recipe], arr2: [Recipe]) {
+        for(obj1, obj2) in zip(arr1, arr2) {
+            equals(obj1: obj1, obj2: obj2)
+        }
+    }
+
+    static func equals1(arr1: [Ingredient], arr2: [Ingredient]) {
+        for(obj1, obj2) in zip(arr1, arr2) {
+            equals(obj1: obj1, obj2: obj2)
+        }
+    }
+
     static func equals(obj1: Providers.Unit, obj2: Providers.Unit) {
         XCTAssertEqual(obj1.uuid, obj2.uuid)
         XCTAssertEqual(obj1.id, obj2.id)
@@ -120,6 +144,14 @@ class EqualityTests {
         equals(arr1: inv1.users.toArray(), arr2: inv2.users.toArray())
     }
 
+    static func equals(obj1: InventoryItem, obj2: InventoryItem) {
+        XCTAssertEqual(obj1.uuid, obj2.uuid)
+        XCTAssertEqual(obj1.quantity, obj2.quantity)
+
+        equals(quantifiableProduct1: obj1.product, quantifiableProduct2: obj2.product)
+        equals(inv1: obj1.inventory, inv2: obj2.inventory)
+    }
+
     static func equals(list1: List, list2: List) {
         XCTAssertEqual(list1.uuid, list2.uuid)
         XCTAssertEqual(list1.name, list2.name)
@@ -128,9 +160,9 @@ class EqualityTests {
         XCTAssertEqual(list1.store, list2.store)
 
         equals(inv1: list1.inventory, inv2: list2.inventory)
-        equals(arr1: list1.doneListItems.toArray(), arr2: list2.doneListItems.toArray())
+        equals(arr1: list1.doneListItems.toArray(), arr2: list2.doneListItems.toArray(), compareLists: false)
         equals(arr1: list1.todoSections.toArray(), arr2: list2.todoSections.toArray())
-        equals(arr1: list1.stashListItems.toArray(), arr2: list2.stashListItems.toArray())
+        equals(arr1: list1.stashListItems.toArray(), arr2: list2.stashListItems.toArray(), compareLists: false)
     }
 
     static func equals(section1: Section, section2: Section) {
@@ -183,13 +215,15 @@ class EqualityTests {
         equals(quantifiableProduct1: storeProduct1.product, quantifiableProduct2: storeProduct2.product)
     }
 
-    static func equals(listItem1: ListItem, listItem2: ListItem) {
+    static func equals(listItem1: ListItem, listItem2: ListItem, compareLists: Bool) {
         XCTAssertEqual(listItem1.uuid, listItem2.uuid)
         XCTAssertEqual(listItem1.quantity, listItem2.quantity)
         XCTAssertEqual(listItem1.note, listItem2.note)
 
         equals(section1: listItem1.section, section2: listItem2.section)
-        equals(list1: listItem1.list, list2: listItem2.list)
+        if compareLists {
+            equals(list1: listItem1.list, list2: listItem2.list)
+        }
         equals(storeProduct1: listItem1.product, storeProduct2: listItem2.product)
 
         // TODO remove when the fields in the original object are also removed
@@ -208,6 +242,42 @@ class EqualityTests {
         equals(quantifiableProduct1: obj1.product, quantifiableProduct2: obj2.product)
         equals(user1: obj1.user, user2: obj2.user)
     }
+    
+    static func equals(obj1: DBTextSpan, obj2: DBTextSpan) {
+        XCTAssertEqual(obj1.start, obj2.start)
+        XCTAssertEqual(obj1.length, obj2.length)
+        XCTAssertEqual(obj1.attribute, obj2.attribute)
+    }
+
+    static func equals(obj1: Recipe, obj2: Recipe) {
+        XCTAssertEqual(obj1.uuid, obj2.uuid)
+        XCTAssertEqual(obj1.name, obj2.name)
+        XCTAssertEqual(obj1.color, obj2.color)
+        XCTAssertEqual(obj1.fav, obj2.fav)
+        XCTAssertEqual(obj1.text, obj2.text)
+
+        equals(arr1: obj1.textAttributeSpans.toArray(), arr2: obj2.textAttributeSpans.toArray())
+    }
+
+    static func equals(obj1: Ingredient, obj2: Ingredient) {
+        XCTAssertEqual(obj1.uuid, obj2.uuid)
+        XCTAssertEqual(obj1.quantity, obj2.quantity)
+        XCTAssertEqual(obj1.fraction, obj2.fraction)
+        XCTAssertEqual(obj1.fractionNumerator, obj2.fractionNumerator)
+        XCTAssertEqual(obj1.fractionDenominator, obj2.fractionDenominator)
+
+        equals(obj1: obj1.unit, obj2: obj2.unit)
+        equals(item1: obj1.item, item2: obj2.item)
+        equals(obj1: obj1.recipe, obj2: obj2.recipe)
+
+        XCTAssertEqual(obj1.pName, obj2.pName)
+        XCTAssertEqual(obj1.pBrand, obj2.pBrand)
+        XCTAssertEqual(obj1.pBase, obj2.pBase)
+        XCTAssertEqual(obj1.pSecondBase.value, obj2.pSecondBase.value)
+        XCTAssertEqual(obj1.pQuantity, obj2.pQuantity)
+        XCTAssertEqual(obj1.pUnit, obj2.pUnit)
+    }
+
 }
 
 

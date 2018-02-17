@@ -139,6 +139,12 @@ class ProvidersTests: XCTestCase {
         let inventories = [inventory]
         inventoriesContainer.inventories.add([inventory])
 
+        // Add some inventory items
+        let inventoryItem1 = InventoryItem(uuid: "1", quantity: 1, product: quantifiableProducts[0], inventory: inventories[0])
+        let inventoryItem2 = InventoryItem(uuid: "2", quantity: 1, product: quantifiableProducts[0], inventory: inventories[0])
+        let inventoryItems = [inventoryItem1, inventoryItem2]
+        realm.add(inventoryItems)
+
         // Add list
         let list = List(uuid: UUID().uuidString, name: "my list", color: UIColor.flatOrange, order: 0, inventory: inventory, store: nil)
         realm.add(list)
@@ -189,9 +195,27 @@ class ProvidersTests: XCTestCase {
             realm.add(historyItem)
         }
 
+        // Add text spans
+        let textSpan1 = DBTextSpan(start: 0, length: 3, attribute: TextAttribute.bold.rawValue)
+        let textSpan2 = DBTextSpan(start: 4, length: 10, attribute: TextAttribute.bold.rawValue)
+        let textSpans = [textSpan1, textSpan2]
+        realm.add(textSpans, update: false)
+
+        // Add Recipe
+        let recipe = Recipe(uuid: UUID().uuidString, name: "my recipe", color: UIColor.flatBlue, fav: 2, text: "foo bar", spans: textSpans)
+        realm.add(recipe)
+        let recipes = [recipe]
+        recipesContainer.recipes.add([recipe])
+
+        // Add some ingredients
+        let item = quantifiableProducts[0].product.item
+        let ingredient1 = Ingredient(uuid: "1", quantity: 1, fraction: fractions[0].toFraction(), unit: units[0], item: item, recipe: recipe)
+        let ingredient2 = Ingredient(uuid: "2", quantity: 1, fraction: fractions[0].toFraction(), unit: units[0], item: item, recipe: recipe)
+        let ingredient3 = Ingredient(uuid: "3", quantity: 1, fraction: fractions[0].toFraction(), unit: units[0], item: item, recipe: recipe)
+        let ingredients = [ingredient1, ingredient2, ingredient3]
+        realm.add(ingredients)
+
         try! realm.commitWrite()
-
-
 
         //////////////////////////////////////////////////////////////////////////////////////
         // Read added stuff and check that everything is as expected
@@ -259,6 +283,11 @@ class ProvidersTests: XCTestCase {
             XCTAssertEqual(dbInventories.count, 1)
             EqualityTests.equals(arr1: [inventory].sortedByUuid(), arr2: dbInventories.toArray().sortedByUuid())
 
+            // Inventory items
+            let dbInventoryItems = realm.objects(InventoryItem.self)
+            XCTAssertEqual(dbInventoryItems.count, inventoryItems.count)
+            EqualityTests.equals(arr1: inventoryItems.sortedByUuid(), arr2: dbInventoryItems.toArray().sortedByUuid())
+
             // Lists
             let dbLists = realm.objects(List.self)
             XCTAssertEqual(dbLists.count, 1)
@@ -274,8 +303,6 @@ class ProvidersTests: XCTestCase {
             EqualityTests.equals(arr1: lists.first!.todoSections.toArray().sortedByUuid(), arr2: todoSections.sortedByUuid())
             let dbTodoSections = realm.objects(Section.self).filter(Section.createFilterListStatus(listUuid: lists.first!.uuid, status: .todo))
 
-            print("???: \(dbTodoSections)")
-
             XCTAssertEqual(dbTodoSections.count, todoSections.count)
             EqualityTests.equals(arr1: dbTodoSections.toArray().sortedByUuid(), arr2: todoSections.sortedByUuid())
             let dbDoneSections = realm.objects(Section.self).filter(Section.createFilterListStatus(listUuid: lists.first!.uuid, status: .done))
@@ -285,20 +312,33 @@ class ProvidersTests: XCTestCase {
             // List items
             let dbListItems = realm.objects(ListItem.self)
             XCTAssertEqual(dbListItems.count, listItems.count)
-            EqualityTests.equals(arr1: listItems.sortedByUuid(), arr2: dbListItems.toArray().sortedByUuid())
+            EqualityTests.equals(arr1: listItems.sortedByUuid(), arr2: dbListItems.toArray().sortedByUuid(), compareLists: true)
 //            XCTAssertEqual(lists.first!.doneListItems.count, 1) // See todo on commented code adding list item, to see why this is commented
-            EqualityTests.equals(arr1: lists.first!.doneListItems.toArray().sortedByUuid(), arr2: doneListItems.sortedByUuid())
-            EqualityTests.equals(arr1: dbTodoSections.first!.listItems.toArray().sortedByUuid(), arr2: todoListItems.sortedByUuid())
-            EqualityTests.equals(arr1: dbDoneSections.first!.listItems.toArray().sortedByUuid(), arr2: doneListItems.sortedByUuid())
+            EqualityTests.equals(arr1: lists.first!.doneListItems.toArray().sortedByUuid(), arr2: doneListItems.sortedByUuid(), compareLists: true)
+            EqualityTests.equals(arr1: dbTodoSections.first!.listItems.toArray().sortedByUuid(), arr2: todoListItems.sortedByUuid(), compareLists: true)
+            EqualityTests.equals(arr1: dbDoneSections.first!.listItems.toArray().sortedByUuid(), arr2: doneListItems.sortedByUuid(), compareLists: true)
 
             // History items
             let dbHistoryItems = realm.objects(HistoryItem.self)
             XCTAssertEqual(dbHistoryItems.count, historyItems.count)
             EqualityTests.equals(arr1: historyItems.sortedByUuid(), arr2: dbHistoryItems.toArray().sortedByUuid())
 
-            // TODO Recipes
+            // Recipes
+            let dbRecipes = realm.objects(Recipe.self)
+            XCTAssertEqual(dbRecipes.count, 1)
+            EqualityTests.equals(arr1: recipes.sortedByUuid(), arr2: dbRecipes.toArray().sortedByUuid())
+            XCTAssertEqual(recipesContainers.first!.recipes.count, recipes.count)
+            EqualityTests.equals(arr1: recipes.sortedByUuid(), arr2: recipesContainers.first!.recipes.toArray().sortedByUuid())
 
-            // TODO Ingredients
+            // Text spans
+            let dbTextSpans = realm.objects(DBTextSpan.self)
+            XCTAssertEqual(dbTextSpans.count, textSpans.count)
+            EqualityTests.equals(arr1: textSpans.sortedByStart(), arr2: dbTextSpans.toArray().sortedByStart())
+
+            // Ingredients
+            let dbIngredients = realm.objects(Ingredient.self)
+            XCTAssertEqual(dbIngredients.count, ingredients.count)
+            EqualityTests.equals1(arr1: ingredients.sortedByUuid(), arr2: dbIngredients.toArray().sortedByUuid())
         }
 
         // Check src realm state is as expected

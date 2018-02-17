@@ -214,4 +214,26 @@ public final class Ingredient: Object, WithUuid {
 
         return "\(quantity.quantityString)\(afterQuantity)"
     }
+
+    func toRealmMigrationDict(recipe: Recipe, unit: Unit, item: Item) -> [String: Any] {
+        var dict = [String: Any]()
+        dict["uuid"] = uuid as AnyObject?
+        dict["quantity"] = quantity as AnyObject?
+        dict["fractionNumerator"] = fractionNumerator as AnyObject?
+        dict["fractionDenominator"] = fractionDenominator as AnyObject?
+
+        dict["unitOpt"] = unit
+        dict["itemOpt"] = item
+        dict["recipeOpt"] = recipe
+
+        dict["pName"] = pName as AnyObject?
+        dict["pBrand"] = pBrand as AnyObject?
+        dict["pBase"] = pBase as AnyObject?
+        dict["pSecondBase"] = pSecondBase.value as AnyObject?
+        dict["pQuantity"] = pQuantity as AnyObject?
+        dict["pUnit"] = pUnit as AnyObject?
+
+        return dict
+    }
+
 }

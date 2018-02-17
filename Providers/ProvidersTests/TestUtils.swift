@@ -25,3 +25,12 @@ extension Array where Element == BaseQuantity {
         })
     }
 }
+
+extension Array where Element == DBTextSpan {
+
+    func sortedByStart() -> [Element] {
+        return sorted(by: { (item1, item2) -> Bool in
+            item1.start > item2.start
+        })
+    }
+}

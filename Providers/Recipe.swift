@@ -28,10 +28,16 @@ public class Recipe: Object, Identifiable, WithUuid {
     }
 
     public convenience init(uuid: String, name: String, color: UIColor, fav: Int = 0, text: String = "", spans: [TextSpan]) {
+        let dbSpans = spans.map { span in
+            DBTextSpan(start: span.start, length: span.length, attribute: span.attribute.rawValue)
+        }
+        self.init(uuid: uuid, name: name, color: color, fav: fav, text: text, spans: dbSpans)
+    }
+
+    public convenience init(uuid: String, name: String, color: UIColor, fav: Int = 0, text: String = "", spans: [DBTextSpan]) {
         self.init(uuid: uuid, name: name, color: color, fav: fav, text: text)
         for span in spans {
-            let dbSpan = DBTextSpan(start: span.start, length: span.length, attribute: span.attribute.rawValue)
-            textAttributeSpans.append(dbSpan)
+            textAttributeSpans.append(span)
         }
     }
 

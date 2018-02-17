@@ -151,6 +151,17 @@ public final class InventoryItem: DBSyncable, Identifiable, ProductWithQuantity2
     public func same(_ inventoryItem: InventoryItem) -> Bool {
         return uuid == inventoryItem.uuid
     }
+
+    func toRealmMigrationDict(product: QuantifiableProduct, inventory: DBInventory) -> [String: Any] {
+        var dict = [String: Any]()
+        dict["uuid"] = uuid
+        dict["quantity"] = quantity as AnyObject?
+
+        dict["productOpt"] = product
+        dict["inventoryOpt"] = inventory
+
+        return dict
+    }
     
     // MARK: - ProductWithQuantity2
     
