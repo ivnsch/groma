@@ -948,8 +948,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                         let ranges = message.range(string).map { [$0] } ?? {
                             logger.e("Invalid state string name not contained in: \(message)", .ui)
                             return []
-                            } ()
-                        MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: message, highlightRanges: ranges, centerYOffset: -80, onOk: { [weak self] in
+                        } ()
+                        MyPopupHelper.showPopup(parent: parent, type: .info, message: message, highlightRanges: ranges, centerYOffset: 0, onOk: { [weak self] in
                             self?.sectionInput.becomeFirstResponder()
                         }, onCancel: { [weak self] in
                             self?.sectionInput.becomeFirstResponder()
@@ -984,7 +984,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                             logger.e("Invalid state string name not contained in: \(message)", .ui)
                             return []
                             } ()
-                        MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: message, highlightRanges: ranges, centerYOffset: -80, onOk: { [weak self] in
+                        MyPopupHelper.showPopup(parent: parent, type: .info, message: message, highlightRanges: ranges, centerYOffset: 0, onOk: { [weak self] in
                             self?.brandInput.becomeFirstResponder()
                         }, onCancel: { [weak self] in
                             self?.brandInput.becomeFirstResponder()
