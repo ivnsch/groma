@@ -538,5 +538,6 @@ base_unit_help_title = "Hilfe";
 base_unit_help_note_explanation_title = "Anmerkung";
 base_unit_help_note_explanation_text = "Du *musst* nicht diese Sachen benutzen. Du kannst einfach alles im Namen schreiben, z.B. \"Eier 6x\", einen Preis setzen und fertig! Benutze einfach das, was dir am Besten passt. Der Preis ist übrigens auch optional.";
 base_unit_help_reference_quantity_price = "Die %%4Referenzmenge%%4 und %%5Preis%%5 kommen hier rein:";
+base_unit_help_reference_quantity_price_2 = "Dieses Tooltip erscheint wenn du auf den Preis (hier auch angezeigt) in der Item hinzufügen (oder editieren) Ansicht tappst";
 base_unit_help_unit_bases = "%%1Einheit%%1, %%2Basismenge%%2 und %%3zweite Basismenge%%3 trägst du in die Ansicht ein, wo du dieses Popup geöffnet hast";
 

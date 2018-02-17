@@ -13,11 +13,14 @@ class ReferenceQuantityPriceHelpCell: UITableViewCell {
 
     @IBOutlet weak var explanationLabel: UILabel!
     @IBOutlet weak var priceView: PriceView!
+    @IBOutlet weak var secondExplanationLabel: UILabel!
+    @IBOutlet weak var touchBlocker: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
 
         priceView.show(price: 0)
+        secondExplanationLabel.text = trans("base_unit_help_reference_quantity_price_2")
 
         DispatchQueue.main.async {
             self.showTooltip()
@@ -34,7 +37,9 @@ class ReferenceQuantityPriceHelpCell: UITableViewCell {
         let popup = MyTipPopup(customView: controller.view)
         popup.preferredPointDirection = .down
         popup.dismissTapAnywhere = false
+        popup.sidePadding = 50
         popup.presentPointing(at: priceView, in: contentView, animated: false)
+        contentView.bringSubview(toFront: touchBlocker)
     }
 
     fileprivate func createPriceInputsControler() -> PriceInputsController {

@@ -141,7 +141,7 @@ extension BaseUnitHelpViewController: UITableViewDelegate {
         case cellModels.count + 1:
             return 70
         case cellModels.count + 2:
-            return 200
+            return 270
         default:
             return 350
         }
