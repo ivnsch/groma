@@ -105,30 +105,42 @@ extension BaseUnitHelpViewController: SubmitViewDelegate {
 
 extension BaseUnitHelpViewController: UITableViewDataSource {
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    var cellCount: Int {
         return cellModels.count + 1 + 1 + 1 // + 1 note cell + 1 base unit explanation + 1 reference quantity / price explanation
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return cellCount
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        switch indexPath.row {
-        case noteCellIndex:
-            return tableView.dequeueReusableCell(withIdentifier: "noteCell", for: indexPath) as! BaseUnitHelpExplanationCell
-        case cellModels.count + 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "unitBaseExplanation", for: indexPath) as! UnitBaseHelpBasesExplanationCell
-            cell.config(colorDict: itemTypeColors)
-            return cell
-        case cellModels.count + 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "referencePriceCell", for: indexPath) as! ReferenceQuantityPriceHelpCell
-            cell.config(colorDict: itemTypeColors)
-            return cell
-        default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UnitBaseHelpCell
-            let index = indexPath.row < noteCellIndex ? indexPath.row : indexPath.row - 1
-            cell.config(model: cellModels[index], circleColorsDictionary: itemTypeColors, animateCircles: animateCirclesInCell)
-            animateCirclesInCell = false
-            return cell
+        let cell: UITableViewCell = {
+            switch indexPath.row {
+            case noteCellIndex:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for: indexPath) as! BaseUnitHelpExplanationCell
+                return cell
+            case cellModels.count + 1:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "unitBaseExplanation", for: indexPath) as! UnitBaseHelpBasesExplanationCell
+                cell.config(colorDict: itemTypeColors)
+                return cell
+            case cellModels.count + 2:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "referencePriceCell", for: indexPath) as! ReferenceQuantityPriceHelpCell
+                cell.config(colorDict: itemTypeColors)
+                return cell
+            default:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UnitBaseHelpCell
+                let index = indexPath.row < noteCellIndex ? indexPath.row : indexPath.row - 1
+                cell.config(model: cellModels[index], circleColorsDictionary: itemTypeColors, animateCircles: animateCirclesInCell)
+                animateCirclesInCell = false
+                return cell
+            }
+        }()
+
+        if indexPath.row < cellCount - 1 {
+            cell.contentView.addBottomBorderWithColor(Theme.cellBottomBorderColor, width: 1)
         }
+        return cell
     }
 }
 
