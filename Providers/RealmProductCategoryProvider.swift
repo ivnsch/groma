@@ -55,9 +55,9 @@ class RealmProductCategoryProvider: RealmProvider {
             handler(text, categories)
         }
     }
-    
-    func categoriesWithName(_ name: String, handler: @escaping (Results<ProductCategory>?) -> Void) {
-        self.load(filter: ProductCategory.createFilterName(name), handler: handler)
+
+    func categoriesWithNameSync(_ name: String) -> Results<ProductCategory>? {
+        return loadSync(filter: ProductCategory.createFilterName(name))
     }
     
     func updateCategory(_ category: ProductCategory, _ handler: @escaping (Bool) -> Void) {
@@ -86,20 +86,15 @@ class RealmProductCategoryProvider: RealmProvider {
     }
     
     func category(name: String, handler: @escaping (ProductCategory?) -> Void) {
-        
-        categoriesWithName(name) {categoriesResult in
-            if let categoriesResult = categoriesResult {
-                if let category = categoriesResult.first {
-                    handler(category)
-                    
-                } else {
-                    logger.e("Couldn't load categories")
-                    handler(nil)
-                }
-                
-            } else { // category doesn't exist
+        if let categoriesResult = categoriesWithNameSync(name) {
+            if let category = categoriesResult.first {
+                handler(category)
+            } else {
+                logger.e("Couldn't load categories")
                 handler(nil)
             }
+        } else { // category doesn't exist
+            handler(nil)
         }
     }
     
@@ -146,27 +141,27 @@ class RealmProductCategoryProvider: RealmProvider {
             saveObjsSyncInt(realm, objs: toRemoveCategories, update: true)
         }
     }
-    
+
     func removeAllWithName(_ categoryName: String, markForSync: Bool, handler: @escaping (Results<ProductCategory>?) -> Void) {
-        categoriesWithName(categoryName) {[weak self] categories in guard let weakSelf = self else {return}
-            guard let categories = categories else {logger.e("No results"); handler(nil); return}
+        if let categories = categoriesWithNameSync(categoryName) {
             if !categories.isEmpty {
-                weakSelf.doInWriteTransaction({realm in
+                let result: Bool? = doInWriteTransactionSync(realmData: nil) {[weak self] realm in
                     for category in categories {
                         self?.removeCategorySync(realm, categoryUuid: category.uuid, markForSync: markForSync)
                     }
-                    return categories
-                    }, finishHandler: {removedSectionsMaybe in
-                        handler(removedSectionsMaybe)
-                })
-                
+                    return true
+                }
+                handler((result ?? false) ? categories : nil)
             } else {
                 logger.d("No categories with name: \(categoryName) - nothing to remove") // this is not an error, this can be used e.g. in the autosuggestions where we list also section names.
                 handler(nil)
             }
+        } else {
+            logger.e("No categories result", .ui)
+            handler(nil)
         }
     }
-    
+
     // MARK: - Sync
     
     func updateLastSyncTimeStamp(_ category: RemoteProductCategory, handler: @escaping (Bool) -> Void) {
