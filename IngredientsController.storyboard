@@ -261,24 +261,63 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nM2-6o-Xpv" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                             <rect key="frame" x="30" y="20" width="315" height="36"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
+                                            <color key="textColor" red="0.4823529411764706" green="0.4823529411764706" blue="0.4823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="highlightedColor" red="0.4823529412" green="0.4823529412" blue="0.4823529412" alpha="1" colorSpace="calibratedRGB"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="number" keyPath="fontType">
                                                     <integer key="value" value="40"/>
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="guk-Xp-C9u">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cross" translatesAutoresizingMaskIntoConstraints="NO" id="aOB-5R-law">
+                                                    <rect key="frame" x="30" y="11" width="54" height="57"/>
+                                                    <color key="tintColor" red="0.73333333329999995" green="0.73333333329999995" blue="0.73333333329999995" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="10" id="pEr-H4-8YJ"/>
+                                                        <constraint firstAttribute="height" constant="10" id="wYR-Xe-YeN"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23z-xZ-Fpz" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                                    <rect key="frame" x="100" y="20" width="315" height="36"/>
+                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
+                                                    <color key="textColor" red="0.73333333329999995" green="0.73333333329999995" blue="0.73333333329999995" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="40"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" red="0.90588235294117647" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstItem="aOB-5R-law" firstAttribute="leading" secondItem="guk-Xp-C9u" secondAttribute="leading" constant="20" id="4W4-YM-Kiq"/>
+                                                <constraint firstItem="aOB-5R-law" firstAttribute="centerY" secondItem="guk-Xp-C9u" secondAttribute="centerY" id="9Qg-Fs-t6c"/>
+                                                <constraint firstItem="23z-xZ-Fpz" firstAttribute="leading" secondItem="aOB-5R-law" secondAttribute="trailing" constant="15" id="AJX-ta-EwF"/>
+                                                <constraint firstItem="23z-xZ-Fpz" firstAttribute="centerY" secondItem="guk-Xp-C9u" secondAttribute="centerY" id="O9z-3H-teU"/>
+                                                <constraint firstAttribute="trailing" secondItem="23z-xZ-Fpz" secondAttribute="trailing" constant="20" id="Ycg-Gu-xck"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="backgroundColor" red="0.90588235289999997" green="0.92156862750000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="nM2-6o-Xpv" secondAttribute="trailing" constant="30" id="4Hk-lU-v8R" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstAttribute="bottom" secondItem="nM2-6o-Xpv" secondAttribute="bottom" constant="20" id="5Ab-DO-CUC"/>
+                                        <constraint firstAttribute="trailing" secondItem="guk-Xp-C9u" secondAttribute="trailing" id="8Mc-8g-ftt"/>
                                         <constraint firstItem="nM2-6o-Xpv" firstAttribute="top" secondItem="fhf-wa-0hJ" secondAttribute="top" constant="20" id="Ghf-fM-ram"/>
+                                        <constraint firstItem="guk-Xp-C9u" firstAttribute="top" secondItem="fhf-wa-0hJ" secondAttribute="top" id="PnX-sP-jYe"/>
+                                        <constraint firstItem="guk-Xp-C9u" firstAttribute="leading" secondItem="fhf-wa-0hJ" secondAttribute="leading" id="Twp-27-Plk"/>
+                                        <constraint firstAttribute="bottom" secondItem="guk-Xp-C9u" secondAttribute="bottom" id="aAz-cZ-E5D"/>
                                         <constraint firstItem="nM2-6o-Xpv" firstAttribute="leading" secondItem="fhf-wa-0hJ" secondAttribute="leading" constant="30" id="kAX-zV-9k0" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="noTextContainer" destination="guk-Xp-C9u" id="o9z-tQ-k2e"/>
+                                    <outlet property="noTextLabel" destination="23z-xZ-Fpz" id="QuG-Ky-Nle"/>
+                                    <outlet property="noTextPlusImageView" destination="aOB-5R-law" id="UUC-bh-sOQ"/>
                                     <outlet property="recipeTextLabel" destination="nM2-6o-Xpv" id="W1p-Fm-Gb7"/>
                                 </connections>
                             </tableViewCell>
@@ -295,7 +334,7 @@
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="nGB-Uf-2MT"/>
                                             </constraints>
                                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                            <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.4823529411764706" green="0.4823529411764706" blue="0.4823529411764706" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             <connections>
@@ -303,7 +342,7 @@
                                             </connections>
                                         </textView>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" red="0.90588235294117647" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstItem="TgZ-JD-U8D" firstAttribute="top" secondItem="fR8-5l-IGZ" secondAttribute="top" constant="20" id="Sme-kM-2cA"/>
                                         <constraint firstAttribute="bottom" secondItem="TgZ-JD-U8D" secondAttribute="bottom" constant="60" id="gOG-7b-jwz"/>
@@ -345,4 +384,7 @@
             <point key="canvasLocation" x="774" y="-220"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="cross" width="27" height="26"/>
+    </resources>
 </document>

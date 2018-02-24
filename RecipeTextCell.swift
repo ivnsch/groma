@@ -12,8 +12,18 @@ import Providers
 class RecipeTextCell: UITableViewCell {
 
     @IBOutlet weak var recipeTextLabel: UILabel!
+    @IBOutlet weak var noTextContainer: UIView!
+    @IBOutlet weak var noTextPlusImageView: UIImageView!
+    @IBOutlet weak var noTextLabel: UILabel!
 
     func config(recipeText: NSAttributedString) {
-        recipeTextLabel.attributedText = recipeText.string.isEmpty ? NSAttributedString(string: trans("recipe_edit_to_enter_text")) : recipeText
+        if recipeText.string.isEmpty {
+            noTextLabel.text = trans("recipe_edit_to_enter_text")
+            noTextPlusImageView.rotate(22.5) // reusing cross image, so rotate it to make it a "+"
+            noTextContainer.isHidden = false
+        } else {
+            noTextContainer.isHidden = true
+            recipeTextLabel.attributedText = recipeText
+        }
     }
 }

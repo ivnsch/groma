@@ -105,6 +105,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
 
     fileprivate var recipeTextEditIsFocused = false
 
+    fileprivate var tappedOnAddRecipeTextCell = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -813,7 +815,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         let fullRange = NSRange(location: 0, length: text.count)
         attributedText.setAttributes([
             .font: UIFont.systemFont(ofSize: 17),
-            .foregroundColor: UIColor.white
+            .foregroundColor: UIColor(hexString: "b7b7b7")
         ], range: fullRange)
 
         for span in spans {
@@ -920,6 +922,10 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
         return 2
     }
 
+    private func isRecipeTextCellInEditMode() -> Bool {
+        return isEditing || tappedOnAddRecipeTextCell
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
 //        if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell
@@ -941,7 +947,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
 
         } else if indexPath.section == 1 { // Recipe text cell
 //        } else if (itemsResult.map { $0.count == indexPath.row } ?? false) { // Recipe text cell
-            if isEditing {
+            if isRecipeTextCellInEditMode() {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "recipeTextView", for: indexPath) as! RecipeEditableTextCell
                 cell.config(recipeText: recipeText, onTextChangeHandler: { [weak self] text in
                     self?.recipeText = text
@@ -956,6 +962,11 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
                 }, selectionChangeHandler: { [weak self] range in
                     self?.currentTextViewSelection = range
                 })
+
+                if tappedOnAddRecipeTextCell {
+                    cell.recipeTextView.becomeFirstResponder()
+                }
+
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "recipeTextCell", for: indexPath) as! RecipeTextCell
@@ -1025,13 +1036,13 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let itemsResult = itemsResult else {logger.e("No result"); return}
+
         if isEditing {
-            if itemsResult.map ({ indexPath.row == $0.count }) ?? false { // Recipe text row
+            if indexPath.section == 1 { // Recipe text row
                 // Do nothing
 
             } else { // Ingredient row
-                guard let itemsResult = itemsResult else {logger.e("No result"); return}
-
                 let ingredient = itemsResult[indexPath.row]
 
                 topQuickAddControllerManager?.height = 120
@@ -1039,7 +1050,11 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
                 scrollableBottomAttacher?.bottom.config(productName: ingredient.item.name, unit: ingredient.unit, whole: Int(ingredient.quantity), fraction: ingredient.fraction)
                 topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
             }
-
+        } else {
+            if indexPath.section == 1 { // Recipe text row
+                tappedOnAddRecipeTextCell = true
+                tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .top)
+            }
         }
     }
 }

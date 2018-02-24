@@ -50,6 +50,8 @@ import Providers
             self.font = {
                 if font.isBold {
                     return UIFont.boldSystemFont(ofSize: size)
+                } else if font.isItalic { // for now mutually exclusive with bold... (TODO allow both)
+                    return UIFont.italicSystemFont(ofSize: size)
                 } else {
                     return UIFont.systemFont(ofSize: size)
                 }
