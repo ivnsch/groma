@@ -72,6 +72,8 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = Theme.mainBGColor
+
         initProgrammaticViews()
         
         setEditing(false, animated: false)
@@ -103,7 +105,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
 
         listItemsTableViewController.enablePullToAdd()
 
-        listItemsTableViewController.view.backgroundColor = Theme.lightGreyBackground
+        listItemsTableViewController.view.backgroundColor = Theme.mainBGColor
         
         view.sendSubview(toBack: listItemsTableViewController.view)
         
@@ -855,8 +857,6 @@ class SimpleListItemsTableViewController: UITableViewController {
 //            attributeString.addAttribute(NSStrikethroughStyleAttributeName, value: 1, range: NSMakeRange(0, attributeString.length))
 //            cell.nameLabel.attributedText = attributeString
             
-            cell.myContentView.backgroundColor = Theme.lightBlue
-            cell.backgroundColor = Theme.lightBlue
             cell.sectionColorView.backgroundColor = UIColor.clear // in cart/stash no section colors
             
         } else {
@@ -908,7 +908,7 @@ class SimpleListItemsTableViewController: UITableViewController {
     // MARK: - Pull to refresh
     
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.lightGreyBackground, tableView: tableView)
+        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.mainBGColor, tableView: tableView)
         refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
         self.refreshControl = refreshControl
         self.pullToAddView = refreshControl

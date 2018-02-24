@@ -48,7 +48,9 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         recognizer.delegate = self
         recognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(recognizer)
-        
+
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
+
         Prov.helpProvider.helpItems(successHandler {[weak self] helpItems in
             self?.sectionModels = helpItems.map{HelpItemSectionModel(obj: $0)}
         })
@@ -73,6 +75,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) as! HelpCell
         let sectionModel = self.filteredModels[(indexPath as NSIndexPath).section]
         cell.sectionModel = sectionModel
+        cell.contentView.backgroundColor = Theme.mainBGColor
         return cell
     }
     
@@ -84,6 +87,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         view.sectionIndex = section
         // height now calculated yet so we pass the position of border
         view.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
+        view.backgroundColor = Theme.mainBGColor
         return view
     }
     

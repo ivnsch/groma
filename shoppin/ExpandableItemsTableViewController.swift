@@ -99,7 +99,10 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        view.backgroundColor = Theme.mainBGColor
+        tableView.backgroundColor = Theme.mainBGColor
+
         tableView.allowsSelectionDuringEditing = true
         
 //        setEmptyUI(false, animated: false) // start with hidden empty view, this way there's no "fade in" animation when starting (non empty) screens the first time
@@ -108,7 +111,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         tableViewController.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(ExpandableItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)
         self.pullToAddView = refreshControl
-
         
         originalNavBarFrame = topBar.frame
         

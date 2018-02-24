@@ -79,6 +79,8 @@ class StatsViewController: UIViewController
         NotificationCenter.default.addObserver(self, selector: #selector(StatsViewController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)
 
         Notification.subscribe(.realmSwapped, selector: #selector(InventoriesTableViewController.onRealmSwapped(_:)), observer: self)
+
+        view.backgroundColor = Theme.defaultTableViewBGColor
     }
 
     fileprivate func initPicker() {

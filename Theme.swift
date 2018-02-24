@@ -56,6 +56,8 @@ public struct Theme {
     public static let lightGray = UIColor.lightGray
     public static let lightGray2 = UIColor(hexString: "d2d2d2")
 
+    public static let mainBGColor = UIColor(hexString: "f4f8f9")
+
     public static let fractionsBGColor = UIColor.gray
     public static let unitsBGColor = UIColor.white
     public static let unitsFGColor = UIColor.black
@@ -66,7 +68,7 @@ public struct Theme {
     public static let fractionsSelectedColor = blue
     public static let deleteRed = UIColor(hexString: "F66823")
     
-    public static let defaultTableViewBGColor = lightGreyBackground
+    public static let defaultTableViewBGColor = mainBGColor
     
     public static let popupCornerRadius: CGFloat = 6
     

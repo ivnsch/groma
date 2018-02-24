@@ -273,14 +273,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cross" translatesAutoresizingMaskIntoConstraints="NO" id="aOB-5R-law">
-                                                    <rect key="frame" x="30" y="11" width="54" height="57"/>
+                                                    <rect key="frame" x="20" y="33" width="10" height="10"/>
                                                     <color key="tintColor" red="0.73333333329999995" green="0.73333333329999995" blue="0.73333333329999995" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="10" id="pEr-H4-8YJ"/>
                                                         <constraint firstAttribute="height" constant="10" id="wYR-Xe-YeN"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23z-xZ-Fpz" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="23z-xZ-Fpz" customClass="LabelMore" customModule="groma" customModuleProvider="target">
                                                     <rect key="frame" x="100" y="20" width="315" height="36"/>
                                                     <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
                                                     <color key="textColor" red="0.73333333329999995" green="0.73333333329999995" blue="0.73333333329999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -302,7 +302,7 @@
                                             </constraints>
                                         </view>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.90588235289999997" green="0.92156862750000001" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" red="0.90196078431372551" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="nM2-6o-Xpv" secondAttribute="trailing" constant="30" id="4Hk-lU-v8R" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstAttribute="bottom" secondItem="nM2-6o-Xpv" secondAttribute="bottom" constant="20" id="5Ab-DO-CUC"/>
@@ -342,7 +342,7 @@
                                             </connections>
                                         </textView>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.90588235294117647" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" red="0.90196078431372551" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstItem="TgZ-JD-U8D" firstAttribute="top" secondItem="fR8-5l-IGZ" secondAttribute="top" constant="20" id="Sme-kM-2cA"/>
                                         <constraint firstAttribute="bottom" secondItem="TgZ-JD-U8D" secondAttribute="bottom" constant="60" id="gOG-7b-jwz"/>

@@ -44,7 +44,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
 
         tableView.topInset = 40 // (menu bar)
-        
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
+
         dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .full
         dateFormatter.timeStyle = .short

@@ -66,6 +66,8 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
         navigationItem.title = trans("Login")
 
+        view.backgroundColor = Theme.mainBGColor
+
         passwordField.isSecureTextEntry = true
 
         GoogleSignInHelper.configure(uiDelegate: self, delegate: self)

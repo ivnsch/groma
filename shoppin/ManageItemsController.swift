@@ -36,7 +36,9 @@ class ManageItemsController: UITableViewController, SearchableTextController {
         super.viewDidLoad()
         
         filterItems(str: "")
-        
+
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
+
         if let delegate = delegate {
             topEditSectionControllerManager = initEditSectionControllerManager(config: delegate.topControllerConfig)
         } else {

@@ -92,7 +92,6 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
 //        self.tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         self.tableView.allowsSelectionDuringEditing = true
         
-        
         tableView.register(UINib(nibName: "PlaceHolderItemCell", bundle: nil), forCellReuseIdentifier: placeholderIdentifier)
         
         tableView.backgroundColor = Theme.defaultTableViewBGColor

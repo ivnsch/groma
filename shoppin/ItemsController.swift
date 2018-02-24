@@ -59,13 +59,13 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        view.backgroundColor = Theme.mainBGColor
+
         initProgrammaticViews()
         
         initTitleLabel()
-        
 
-        
         topBar.delegate = self
     }
     

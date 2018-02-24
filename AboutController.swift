@@ -12,6 +12,11 @@ class AboutController: UIViewController {
 
     fileprivate var emailHelper: EmailHelper?
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = Theme.mainBGColor
+    }
+
     @IBAction func onContactTap(_ sender: UIButton) {
         emailHelper = EmailHelper(controller: self)
         emailHelper?.showEmail(appendSpecs: false)

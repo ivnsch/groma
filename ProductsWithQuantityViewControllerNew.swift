@@ -105,7 +105,9 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         tableView.delegate = self
         
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
-     
+
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
+
         sortBy = sortByOptions.first
 
         if delegate?.isPullToAddEnabled() ?? false {
