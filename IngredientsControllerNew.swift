@@ -1017,19 +1017,27 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if isEditing && section == 1 {
-            let footer = IngredientsEditModeTableViewFooter.createView()
-            footer.boldTapHandler = { [weak self] in
-                self?.onTapTextViewBold()
-            }
-            return footer
+            // For now disabled, since there's no design for this.
+//            return createRecipeTextEditableCellHeader()
+            return nil
         } else {
             return nil
         }
     }
 
+    fileprivate func createRecipeTextEditableCellHeader() -> UIView {
+        let footer = IngredientsEditModeTableViewFooter.createView()
+        footer.boldTapHandler = { [weak self] in
+            self?.onTapTextViewBold()
+        }
+        return footer
+    }
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if isEditing && section == 1 {
-            return 50
+            // For now disabled, since there's no design for this.
+//            return 50
+            return 0
         } else {
             return 0
         }
