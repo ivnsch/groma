@@ -23,8 +23,8 @@ enum LoginOrRegisterControllerMode {
 
 class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, LoginOrRegisterDelegate {
 
-    @IBOutlet weak var userNameField: UITextField!
-    @IBOutlet weak var passwordField: UITextField!
+    @IBOutlet weak var userNameField: DesignableUITextField!
+    @IBOutlet weak var passwordField: DesignableUITextField!
     @IBOutlet weak var loginButton: UIButton! // action button - register when in .register mode
     @IBOutlet weak var forgotPWOrTermsButton: UIButton!
     @IBOutlet weak var fbButton: UIButton!
@@ -69,6 +69,10 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
         view.backgroundColor = Theme.mainBGColor
 
         passwordField.isSecureTextEntry = true
+
+        // These views/images are just random fillers to make the text appear more to the right. Make them invisible.
+        userNameField.leftView?.isHidden = true
+        passwordField.leftView?.isHidden = true
 
         GoogleSignInHelper.configure(uiDelegate: self, delegate: self)
 

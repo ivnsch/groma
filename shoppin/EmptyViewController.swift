@@ -37,7 +37,9 @@ class EmptyViewController: UITableViewController {
         super.viewDidLoad()
         
         enablePullToAdd()
-        
+
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
+
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
         view.addGestureRecognizer(tapRecognizer)
     }
