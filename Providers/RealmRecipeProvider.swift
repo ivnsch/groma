@@ -109,6 +109,9 @@ class RealmRecipeProvider: RealmProvider {
             DBTextSpan(start: $0.start, length: $0.length, attribute: $0.attribute.rawValue)
         }
         let successMaybe = doInWriteTransactionSync(withoutNotifying: [notificationToken]) { realm -> Bool in
+            for dbSpan in dbSpans {
+                realm.add(dbSpan, update: true)
+            }
             recipe.text = recipeText
             recipe.textAttributeSpans.removeAll()
             recipe.textAttributeSpans.add(dbSpans)
