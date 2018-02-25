@@ -834,7 +834,7 @@ class SimpleListItemsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.allowsSelectionDuringEditing = true
-        
+        tableView.separatorStyle = .none
         tableView.register(UINib(nibName: "ListItemCell", bundle: nil), forCellReuseIdentifier: "cell")
     }
     
