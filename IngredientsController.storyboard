@@ -341,17 +341,26 @@
                                                 <outlet property="delegate" destination="Fs3-Nr-i5l" id="3tN-Bi-08V"/>
                                             </connections>
                                         </textView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BxK-dj-unw" customClass="LabelMore" customModule="groma" customModuleProvider="target">
+                                            <rect key="frame" x="35" y="25" width="42" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.73333333329999995" green="0.73333333329999995" blue="0.73333333329999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" red="0.90196078431372551" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
+                                        <constraint firstItem="BxK-dj-unw" firstAttribute="leading" secondItem="TgZ-JD-U8D" secondAttribute="leading" constant="5" id="Fc4-P4-9uA"/>
                                         <constraint firstItem="TgZ-JD-U8D" firstAttribute="top" secondItem="fR8-5l-IGZ" secondAttribute="top" constant="20" id="Sme-kM-2cA"/>
                                         <constraint firstAttribute="bottom" secondItem="TgZ-JD-U8D" secondAttribute="bottom" constant="60" id="gOG-7b-jwz"/>
                                         <constraint firstItem="TgZ-JD-U8D" firstAttribute="leading" secondItem="fR8-5l-IGZ" secondAttribute="leading" constant="30" id="hVX-2r-y2F" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                         <constraint firstAttribute="trailing" secondItem="TgZ-JD-U8D" secondAttribute="trailing" constant="30" id="rja-Ub-vA3" customClass="LeftRightBigPaddingConstraint" customModule="groma" customModuleProvider="target"/>
+                                        <constraint firstItem="BxK-dj-unw" firstAttribute="top" secondItem="TgZ-JD-U8D" secondAttribute="top" constant="8" id="xa7-6a-OdM"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="recipeTextView" destination="TgZ-JD-U8D" id="005-2e-sk2"/>
+                                    <outlet property="recipeTextViewPlaceholder" destination="BxK-dj-unw" id="lG0-Ec-t7w"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

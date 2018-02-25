@@ -105,7 +105,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
 
     fileprivate var recipeTextEditIsFocused = false
 
-    fileprivate var tappedOnAddRecipeTextCell = false
+    fileprivate var recipeTextCellIsInEditModeWhileTableViewIsInReadMode = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -701,6 +701,11 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
         tableViewController.setEditing(editing, animated: animated)
 
+        // If user turns off edit mode, ensure recipe text cell returns to read-only mode (for the cases where user put the cell in edit mode via tapping on "add recipe text")
+        if !editing {
+            recipeTextCellIsInEditModeWhileTableViewIsInReadMode = false
+        }
+
         // Switch between editable and non editable cell
         if let itemsResult = itemsResult {
             tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
@@ -923,7 +928,8 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
     }
 
     private func isRecipeTextCellInEditMode() -> Bool {
-        return isEditing || tappedOnAddRecipeTextCell
+        return isEditing || recipeTextCellIsInEditModeWhileTableViewIsInReadMode
+
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -963,7 +969,7 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
                     self?.currentTextViewSelection = range
                 })
 
-                if tappedOnAddRecipeTextCell {
+                if recipeTextCellIsInEditModeWhileTableViewIsInReadMode {
                     cell.recipeTextView.becomeFirstResponder()
                 }
 
@@ -1060,8 +1066,9 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
             }
         } else {
             if indexPath.section == 1 { // Recipe text row
-                tappedOnAddRecipeTextCell = true
-                tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .top)
+                recipeTextCellIsInEditModeWhileTableViewIsInReadMode
+         = true
+                tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .fade)
             }
         }
     }

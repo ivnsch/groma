@@ -476,7 +476,7 @@ share_subject = "Groma";
 recipe_already_has = "Derzeit in der Liste: %@";
 recipe_unit_singular = "Einheit";
 recipe_unit_plural = "Einheiten";
-recipe_edit_to_enter_text = "Bearbeite um Text einzutragen";
+recipe_edit_to_enter_text = "Füge Text hinzu";
 recipe_enter_text = "Trage den Text deines Rezeptes ein";
 
 unit_unit = "Einheit";

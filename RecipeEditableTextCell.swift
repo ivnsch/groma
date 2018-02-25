@@ -12,6 +12,7 @@ import Providers
 class RecipeEditableTextCell: UITableViewCell, UITextViewDelegate {
 
     @IBOutlet weak var recipeTextView: UITextView!
+    @IBOutlet weak var recipeTextViewPlaceholder: UILabel!
 
     fileprivate var onTextChangeHandler: ((NSAttributedString) -> Void)?
     fileprivate var onTextFocusHandler: ((Bool) -> Void)?
@@ -22,8 +23,18 @@ class RecipeEditableTextCell: UITableViewCell, UITextViewDelegate {
         self.onTextChangeHandler = onTextChangeHandler
         self.onTextFocusHandler = onTextFocusHandler
         self.selectionChangeHandler = selectionChangeHandler
+
+        updateRecipeTextViewPlaceholderAlpha()
     }
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        recipeTextViewPlaceholder.text = trans("recipe_enter_text")
+    }
+
+    fileprivate func updateRecipeTextViewPlaceholderAlpha() {
+        recipeTextViewPlaceholder.alpha = recipeTextView.text.isEmpty ? 1 : 0
+    }
 
     func textViewDidChangeSelection(_ textView: UITextView) {
         logger.v("Selection changed: \(textView.selectedRange)", .ui)
@@ -34,6 +45,9 @@ class RecipeEditableTextCell: UITableViewCell, UITextViewDelegate {
 
     func textViewDidChange(_ textView: UITextView) {
         onTextChangeHandler?(textView.attributedText)
+        UIView.animate(withDuration: 0.3) {
+            self.updateRecipeTextViewPlaceholderAlpha()
+        }
     }
 
     func textViewDidBeginEditing(_ textView: UITextView) {
