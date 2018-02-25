@@ -93,18 +93,16 @@ class RealmSectionProvider: RealmProvider {
     }
     
     func removeAllWithName(_ sectionName: String, markForSync: Bool, handler: @escaping ([Section]?) -> Void) {
-        loadSections(sectionName) {[weak self] sections in guard let weakSelf = self else {return}
-            guard let sections = sections else {logger.v("Sections is nil"); handler(nil); return}
+        loadSections(sectionName) { [weak self] sections in guard let weakSelf = self else { return }
+            guard let sections = sections else { logger.v("Sections is nil"); handler(nil); return }
             if !sections.isEmpty {
-                weakSelf.doInWriteTransaction({(realm: Realm) -> Results<Section> in
+                _ = weakSelf.doInWriteTransactionSync({(realm: Realm) -> Results<Section> in
                     for section in sections {
                         _ = weakSelf.removeSectionAndDependenciesSync(realm, sectionUuid: section.uuid, markForSync: markForSync)
                     }
                     return sections
-                }, finishHandler: {removedSectionsResult in
-                    handler(removedSectionsResult?.toArray())
                 })
-                
+                handler(sections.toArray())
             } else {
                 logger.d("No sections with name: \(sectionName) - nothing to remove") // this is not an error, this can be used e.g. in the autosuggestions where we list also category names.
                 handler([])

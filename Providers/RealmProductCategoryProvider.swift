@@ -142,7 +142,7 @@ class RealmProductCategoryProvider: RealmProvider {
         }
     }
 
-    func removeAllWithName(_ categoryName: String, markForSync: Bool, handler: @escaping (Results<ProductCategory>?) -> Void) {
+    func removeAllWithName(_ categoryName: String, markForSync: Bool, handler: @escaping (DBResult<Results<ProductCategory>>) -> Void) {
         if let categories = categoriesWithNameSync(categoryName) {
             if !categories.isEmpty {
                 let result: Bool? = doInWriteTransactionSync(realmData: nil) {[weak self] realm in
@@ -151,14 +151,15 @@ class RealmProductCategoryProvider: RealmProvider {
                     }
                     return true
                 }
-                handler((result ?? false) ? categories : nil)
+                let res = result.map { _ in DBResult(status: .success, sucessResult: categories) } ?? DBResult(status: .unknown)
+                handler(res)
             } else {
                 logger.d("No categories with name: \(categoryName) - nothing to remove") // this is not an error, this can be used e.g. in the autosuggestions where we list also section names.
-                handler(nil)
+                handler(DBResult(status: .noMatchingItems))
             }
         } else {
             logger.e("No categories result", .ui)
-            handler(nil)
+            handler(DBResult(status: .unknown))
         }
     }
 

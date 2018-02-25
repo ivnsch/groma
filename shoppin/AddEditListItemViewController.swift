@@ -933,6 +933,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
             dismissKeyboard(nil)
 
+
             MyPopupHelper.showPopup(
                 parent: parent,
                 type: .warning,
@@ -941,18 +942,20 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 highlightRanges: ranges,
                 okText: trans("popup_button_yes"),
                 centerYOffset: 0, onOk: { [weak self] in guard let weakSelf = self else { return }
-                    Prov.productCategoryProvider.removeAllCategoriesWithName(string, remote: true, weakSelf.successHandler {
-                        self?.delegate?.onRemovedSectionCategoryName(string)
+                    Prov.sectionProvider.removeAllWithName(string, remote: true, weakSelf.successHandler {
+                        Prov.productCategoryProvider.removeAllCategoriesWithName(string, remote: true, weakSelf.successHandler {
+                            self?.delegate?.onRemovedSectionCategoryName(string)
 
-                        let message = trans("popup_was_removed", string)
-                        let ranges = message.range(string).map { [$0] } ?? {
-                            logger.e("Invalid state string name not contained in: \(message)", .ui)
-                            return []
-                        } ()
-                        MyPopupHelper.showPopup(parent: parent, type: .info, message: message, highlightRanges: ranges, centerYOffset: 0, onOk: { [weak self] in
-                            self?.sectionInput.becomeFirstResponder()
-                        }, onCancel: { [weak self] in
-                            self?.sectionInput.becomeFirstResponder()
+                            let message = trans("popup_was_removed", string)
+                            let ranges = message.range(string).map { [$0] } ?? {
+                                logger.e("Invalid state string name not contained in: \(message)", .ui)
+                                return []
+                                } ()
+                            MyPopupHelper.showPopup(parent: parent, type: .info, message: message, highlightRanges: ranges, centerYOffset: 0, onOk: { [weak self] in
+                                self?.sectionInput.becomeFirstResponder()
+                                }, onCancel: { [weak self] in
+                                    self?.sectionInput.becomeFirstResponder()
+                            })
                         })
                     })
                 }, onCancel: {

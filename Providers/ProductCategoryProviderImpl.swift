@@ -114,9 +114,11 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
     }
     
     func removeAllCategoriesWithName(_ categoryName: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.productCategoryProvider.removeAllWithName(categoryName, markForSync: true) {removedCategoriesMaybe in
-            if let _ = removedCategoriesMaybe {
-                handler(ProviderResult(status: .success))
+        DBProv.productCategoryProvider.removeAllWithName(categoryName, markForSync: true) { removedCategoriesResult in
+            switch removedCategoriesResult.status {
+            case .success, .noMatchingItems: handler(ProviderResult(status: .success)) // .noMatchingItems means there was nothing to remove - not an error.
+            default: handler(ProviderResult(status: .databaseUnknown))
+            }
 
                 // for now remote disabled
 //                if remote {
@@ -134,10 +136,7 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
 //                        }
 //                    }
 //                }
-            } else {
-                logger.e("Couldn't remove sections from db for name: \(categoryName)")
-                handler(ProviderResult(status: .databaseUnknown))
-            }
         }
     }
+
 }
