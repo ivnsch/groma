@@ -56,7 +56,11 @@ class RealmStoreProductProvider: RealmProvider {
             saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
         }
         realm.delete(listItemResult)
-        
+
+        // After removing list items some sections may be empty - remove them too
+        let sectionsResult = realm.objects(Section.self).filter(Section.createFilterListItemsIsEmpty())
+        realm.delete(sectionsResult)
+
         if markForSync {
             let toRemoveStoreProducts = Array(storeProducts.map{StoreProductToRemove($0)})
             saveObjsSyncInt(realm, objs: toRemoveStoreProducts, update: true)

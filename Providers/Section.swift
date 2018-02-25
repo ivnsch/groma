@@ -146,6 +146,10 @@ public class Section: DBSyncable, Identifiable, WithUuid {
         return "listOpt.uuid == '\(listUuid)' AND statusVal == \(status.rawValue)"
     }
 
+    static func createFilterListItemsIsEmpty() -> String {
+        return "listItems.@count == 0"
+    }
+    
     // MARK: -
 
     static func fromDict(_ dict: [String: AnyObject], list: List) -> Section {
