@@ -195,13 +195,16 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     fileprivate func validateInputs(_ validator: Validator?, onValid: () -> ()) {
         
         guard validator != nil else {return}
-        
+
         if let errors = validator?.validate() {
             for (_, error) in errors {
                 error.field.showValidationError()
             }
-            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
-            
+
+            let currentFirstResponder = listNameInputField.isFirstResponder ? listNameInputField : nil
+            view.endEditing(true)
+            ValidationAlertCreator.present(errors, parent: root, firstResponder: currentFirstResponder)
+
         } else {
             if let lastErrors = validator?.errors {
                 for (_, error) in lastErrors {

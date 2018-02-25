@@ -81,7 +81,12 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     @IBOutlet weak var searchBar: RoundTextField!
     @IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
-    
+
+    // Returns add edit list item controller, if it's being currently shown
+    fileprivate var addEditListItemController: AddEditListItemViewController? {
+        return navController?.viewControllers.last as? AddEditListItemViewController
+    }
+
     fileprivate weak var navController: UINavigationController?
     fileprivate var quickAddListItemViewController: QuickAddPageController? {
         return navController?.viewControllers.first as? QuickAddPageController
@@ -262,7 +267,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     // returns: status changed: if it was showing and was subsequently hidden
     fileprivate func hideAddProductController() -> Bool {
-        if navController?.viewControllers.last as? AddEditListItemViewController != nil {
+        if addEditListItemController != nil {
             _ = navController?.popViewController(animated: false)
             
             // Change back from "Next" to default
@@ -282,7 +287,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     fileprivate func showAddProductController() -> Bool {
         
         // TODO now that we removed all the topbar buttons and added swiper, do we still need this check?
-        if navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
+        if addEditListItemController == nil { // don't show if already showing
             let controller = UIStoryboard.addEditListItemViewController()
             controller.delegate = self
             
@@ -439,8 +444,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>) {
-        // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
-        present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+        let currentFirstResponder = addEditListItemController?.currentFirstResponder
+        view.endEditing(true)
+        ValidationAlertCreator.present(errors, parent: root, firstResponder: currentFirstResponder)
     }
     
     func onOkTap(_ price: Float, refPrice: Float?, refQuantity: Float?, quantity: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, secondBaseQuantity: Float?, unit: String, brand: String, edible: Bool, editingItem: Any?) {
@@ -517,9 +523,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func textFieldShouldReturn(_ sender: UITextField) -> Bool {
         if sender == searchBar {
-            if let addEditListItemController = navController?.viewControllers.last as? AddEditListItemViewController {
-                addEditListItemController.focusFirstTextField()
-            }
+            addEditListItemController?.focusFirstTextField()
         }
         return false
     }

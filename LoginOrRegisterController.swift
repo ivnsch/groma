@@ -37,6 +37,10 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
     var onUIReady: VoidFunction?
 
+    fileprivate var currentFirstResponder: UITextField? {
+        return [userNameField, passwordField].findFirst { $0.isFirstResponder }
+    }
+
     var mode: LoginOrRegisterControllerMode = .login {
         didSet {
             switch mode {
@@ -112,7 +116,8 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
     fileprivate func initValidator() {
         let validator = Validator()
-        //        validator.registerField(self.userNameField, rules: [EmailRule(message: trans("validation_email_format"))])
+        validator.registerField(self.userNameField, rules: [NotEmptyTrimmedRule(message: trans("validation_name_not_empty"))])
+//        validator.registerField(self.userNameField, rules: [EmailRule(message: trans("validation_email_format"))])
         validator.registerField(self.passwordField, rules: [RequiredRule(message: trans("validation_missing_password"))]) // TODO repl with translation key, for now this so testers understand
         self.validator = validator
     }
@@ -129,15 +134,15 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
     }
 
     fileprivate func login() {
-
-
         guard self.validator != nil else {return}
 
         if let errors = self.validator?.validate() {
             for (_, error) in errors {
                 error.field.showValidationError()
             }
-            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            let currentFirstResponder = self.currentFirstResponder
+            view.endEditing(true)
+            ValidationAlertCreator.present(errors, parent: root, firstResponder: currentFirstResponder)
 
         } else {
             if let email = userNameField.text, let password = passwordField.text {

@@ -53,7 +53,11 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
     fileprivate var editingObj: Any?
 
     var delegate: AddEditNameNameColorControllerDelegate?
-    
+
+    fileprivate var currentFirstResponder: UITextField? {
+        return [nameController.nameTextField, nameController.nameTextField].findFirst { $0.isFirstResponder }
+    }
+
     func config(prefillData: AddEditNameNameColorControllerInputs, settings: AddEditNameNameColorControllerSettings, editingObj: Any?) {
         guard nameController != nil else {logger.e("Controllers not initialized yet"); return}
         
@@ -107,7 +111,7 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
     func submit() {
         guard let editingObj = editingObj else {logger.e("No editing object"); return}
         guard nameController != nil else {logger.e("Controllers not initialized yet"); return}
-        
+
         guard let nameControllerResult = nameController.submit() else {logger.e("Couldn't retrieve results"); return}
         guard let nameColorControllerResult = nameColorController.submit() else {logger.e("Couldn't retrieve results"); return}
         
@@ -130,7 +134,10 @@ class AddEditNameNameColorController: UIViewController, EditNameColorViewDelegat
             
         } else {
             guard let allErrors = (nameErrors.fOrAny(nameColorErrors){$0 + $1}) else {logger.e("Invalid state: there should be errors here!"); return}
-            present(ValidationAlertCreator.create(allErrors), animated: true, completion: nil)
+
+            let currentFirstResponder = self.currentFirstResponder
+            view.endEditing(true)
+            ValidationAlertCreator.present(allErrors, parent: root, firstResponder: currentFirstResponder)
         }
     }
     

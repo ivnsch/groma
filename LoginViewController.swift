@@ -179,8 +179,9 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
             for (_, error) in errors {
                 error.field.showValidationError()
             }
-            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
-            
+            // Outdated implementation (TODO remove?)
+//            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+
         } else {
             if let email = userNameField.text, let password = passwordField.text {
 

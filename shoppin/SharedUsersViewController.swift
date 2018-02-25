@@ -52,8 +52,9 @@ class SharedUsersViewController: UIViewController {
             for (_, error) in errors {
                 error.field.showValidationError()
             }
-            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
-            
+            // Outdated implementation
+//            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+
         } else {
             if let lastErrors = validator?.errors {
                 for (_, error) in lastErrors {

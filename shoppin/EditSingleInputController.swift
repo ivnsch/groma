@@ -118,7 +118,9 @@ class EditSingleInputController: UIViewController {
                 error.field.showValidationError()
             }
             if mode == .standalone {
-                present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+                let currentFirstResponder = nameTextField.isFirstResponder ? nameTextField : nil
+                view.endEditing(true)
+                ValidationAlertCreator.present(errors, parent: root, firstResponder: currentFirstResponder)
             }
             return .err(errors)
             

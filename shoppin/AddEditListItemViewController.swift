@@ -234,6 +234,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
 
+    var currentFirstResponder: UITextField? {
+        return textFields.findFirst { $0.isFirstResponder }
+    }
+
     var edibleSelected: Bool = false {
         didSet {
             if let edibleButton = edibleButton {
@@ -487,18 +491,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         popup.contentCenter = popup.bounds.center
         let controller = SelectUnitAndBaseController(nibName: "SelectUnitAndBaseController", bundle: nil)
 
-        let focusedTextField: UITextField? = {
-            if sectionInput.isFirstResponder {
-                return sectionInput
-            } else if brandInput.isFirstResponder {
-                return brandInput
-            } else if noteInput.isFirstResponder {
-                return noteInput
-            } else {
-                return nil
-            }
-        } ()
-
         delegate?.endEditing()
         dismissKeyboard(nil)
 
@@ -518,7 +510,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                     quantity: weakSelf.currentQuantity
                 )
 
-                if let focusedTextField = focusedTextField {
+                if let focusedTextField = weakSelf.currentFirstResponder {
                     focusedTextField.becomeFirstResponder()
                 } else {
                     // There must always be a text field focused - if it's none of ours it can be only the search bar

@@ -12,11 +12,17 @@ import Providers
 
 struct ValidationAlertCreator { // had some problems subclassing UIAlertController because convenience init etc. so using creator instead
 
-    static func create(_ errors: ValidatorDictionary<ValidationError>) -> UIAlertController {
-        let errorMessages = errors.map {$0.value.errorMessage}
-        
-        let alert: UIAlertController = UIAlertController(title: trans("popup_title_validation_failed"), message: ValidationErrorMsgBuilder.errorMsg(errorMessages), preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: trans("popup_button_ok"), style: UIAlertActionStyle.default, handler: nil))
-        return alert
+    static func present(_ errors: ValidatorDictionary<ValidationError>, parent: UIViewController, firstResponder: UITextField? = nil) {
+        let errorMessages = errors.map { $0.value.errorMessage }
+
+        func onOkOrCancel() {
+            firstResponder?.becomeFirstResponder()
+        }
+
+        MyPopupHelper.showPopup(parent: parent, type: .warning, message: ValidationErrorMsgBuilder.errorMsg(errorMessages), centerYOffset: 0, onOk: {
+            onOkOrCancel()
+        }, onCancel: {
+            onOkOrCancel()
+        })
     }
 }

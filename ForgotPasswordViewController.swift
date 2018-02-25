@@ -30,6 +30,8 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = Theme.mainBGColor
+
         emailField.placeholder = trans("placeholder_enter_email")
         
         initValidator()
@@ -86,14 +88,16 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
     
     fileprivate func send() {
         
-        guard validator != nil else {return}
-        
+        guard validator != nil else { return }
+
         if let errors = validator?.validate() {
             for (_, error) in errors {
                 error.field.showValidationError()
             }
-            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
-            
+            let currentFirstResponder = emailField.isFirstResponder ? emailField : nil
+            view.endEditing(true)
+            ValidationAlertCreator.present(errors, parent: root, firstResponder: currentFirstResponder)
+
         } else {
             if let email = emailField.text {
                 progressVisible()

@@ -205,7 +205,8 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>) {
         // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
-        present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+        // Outdated implementation (TODO remove?)
+//        present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
     func onCategoryUpdated(_ editingData: AddEditCategoryControllerEditingData) {

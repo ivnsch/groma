@@ -59,7 +59,8 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
         if let errors = validator.validate() {
             for (_, error) in errors {
                 error.field.showValidationError()
-                present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+                // Outdated implementation TODO remove?
+//                present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             }
             
         } else {

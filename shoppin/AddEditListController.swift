@@ -52,6 +52,10 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     fileprivate var addButtonHelper: AddButtonHelper?
 
+    fileprivate var currentFirstResponder: UITextField? {
+        return [listNameInputField, storeInputField].findFirst { $0.isFirstResponder }
+    }
+
     fileprivate var users: [DBSharedUser] = [] {
         didSet {
             if !users.isEmpty {
@@ -329,13 +333,16 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     fileprivate func validateInputs(_ validator: Validator?, onValid: () -> ()) {
         
         guard validator != nil else {return}
-        
+
         if let errors = validator?.validate() {
             for (_, error) in errors {
                 error.field.showValidationError()
             }
-            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
-            
+
+            let currentFirstResponder = self.currentFirstResponder
+            view.endEditing(true)
+            ValidationAlertCreator.present(errors, parent: root, firstResponder: currentFirstResponder)
+
         } else {
             if let lastErrors = validator?.errors {
                 for (_, error) in lastErrors {

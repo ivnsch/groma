@@ -103,11 +103,14 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
             print("Error: EditSectionViewController.submit: no section")
             return
         }
-        
+
         if let errors = validator.validate() {
             for (_, error) in errors {
                 error.field.showValidationError()
-                present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+
+                let currentFirstResponder = nameTextField.isFirstResponder ? nameTextField : nil
+                view.endEditing(true)
+                ValidationAlertCreator.present(errors, parent: root, firstResponder: currentFirstResponder)
             }
             
         } else {

@@ -192,7 +192,8 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     // MARK: - EditBrandControllerDelegate
     
     func onValidationErrors(_ errors: ValidatorDictionary<ValidationError>) {
-        present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+        // Outdated implementation (TODO remove?)
+//        present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
     func onBrandUpdated(_ brand: AddEditBrandControllerEditingData) {

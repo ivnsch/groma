@@ -137,13 +137,15 @@ class EditNameButtonController: UIViewController, UITextFieldDelegate {
         
         guard let validator = validator else {logger.e("No validator"); return nil}
         guard let editingObj = editingObj else {logger.e("No editing object"); return nil}
-        
+
         if let errors = validator.validate() {
             for (_, error) in errors {
                 error.field.showValidationError()
             }
             if mode == .standalone {
-                present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+                let currentFirstResponder = nameTextField.isFirstResponder ? nameTextField : nil
+                view.endEditing(true)
+                ValidationAlertCreator.present(errors, parent: root, firstResponder: currentFirstResponder)
             }
             return .err(errors)
             
