@@ -24,7 +24,7 @@
                                     <constraint firstAttribute="height" constant="100" id="yug-5y-IhS"/>
                                 </constraints>
                             </imageView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nUK-Yj-LWy" customClass="DesignableUITextField" customModule="groma" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nUK-Yj-LWy" customClass="DesignableUITextField" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="52.5" y="120" width="270" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="Syj-Pt-nFq"/>
