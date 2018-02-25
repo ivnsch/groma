@@ -19,7 +19,7 @@ class RecipeTextCell: UITableViewCell {
     func config(recipeText: NSAttributedString) {
         if recipeText.string.isEmpty {
             noTextLabel.text = trans("recipe_edit_to_enter_text")
-            noTextPlusImageView.rotate(22.5) // reusing cross image, so rotate it to make it a "+"
+            noTextPlusImageView.transform = CGAffineTransform(rotationAngle: CGFloat(45.degreesToRadians))
             noTextPlusImageView.tintColor = UIColor(hexString: "BBBBBB")
             noTextContainer.isHidden = false
         } else {
