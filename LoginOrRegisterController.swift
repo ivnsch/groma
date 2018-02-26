@@ -350,13 +350,14 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
         }
     }
 
-    // TODO# eye
-//
-//    // MARK: - EyeViewDelegate
-//
-//    func onEyeChange(_ open: Bool) {
-//        passwordField.isSecureTextEntry = open
-//    }
+    @IBAction func onEyePress(_ sender: UIButton) {
+        setIsPasswordSecure(!passwordField.isSecureTextEntry)
+    }
+
+    fileprivate func setIsPasswordSecure(_ secure: Bool) {
+        eyeView.setImage(secure ? #imageLiteral(resourceName: "eye_open") : #imageLiteral(resourceName: "inventory"), for: .normal) // TODO# closed image
+        passwordField.isSecureTextEntry = secure
+    }
 
     deinit {
         logger.v("Deinit loginOrRegister controller")

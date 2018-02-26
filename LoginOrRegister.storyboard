@@ -217,14 +217,18 @@
                                     <action selector="onGoogleLoginButtonTap" destination="4xN-Sk-YzP" eventType="touchUpInside" id="pRa-Uk-GPw"/>
                                 </connections>
                             </button>
-                            <button userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6r8-Eq-vDW">
+                            <button contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6r8-Eq-vDW">
                                 <rect key="frame" x="300.5" y="167.5" width="20" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="756-bu-OWV"/>
-                                    <constraint firstAttribute="width" constant="20" id="fvy-W4-a9j"/>
+                                    <constraint firstAttribute="height" constant="40" id="756-bu-OWV"/>
+                                    <constraint firstAttribute="width" constant="40" id="fvy-W4-a9j"/>
                                 </constraints>
                                 <viewLayoutGuide key="safeArea" id="IYZ-pu-Jna"/>
+                                <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                 <state key="normal" image="eye_open"/>
+                                <connections>
+                                    <action selector="onEyePress:" destination="4xN-Sk-YzP" eventType="touchUpInside" id="ulm-Tq-MXR"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="evX-Gm-bbJ" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
                                 <rect key="frame" x="126" y="265" width="123" height="30"/>
@@ -284,7 +288,7 @@
                             <constraint firstItem="evX-Gm-bbJ" firstAttribute="top" secondItem="pYQ-Up-a4i" secondAttribute="bottom" constant="10" id="rL8-EW-KFc"/>
                             <constraint firstItem="nUK-Yj-LWy" firstAttribute="top" secondItem="awZ-eE-jJR" secondAttribute="bottom" constant="10" id="swD-iI-TXy"/>
                             <constraint firstItem="yKm-uq-lwo" firstAttribute="centerY" secondItem="bw0-j8-uAM" secondAttribute="centerY" id="x0i-64-R8D"/>
-                            <constraint firstItem="6r8-Eq-vDW" firstAttribute="trailing" secondItem="bw0-j8-uAM" secondAttribute="trailing" constant="-2" id="z2o-Ln-4ef"/>
+                            <constraint firstItem="6r8-Eq-vDW" firstAttribute="trailing" secondItem="bw0-j8-uAM" secondAttribute="trailing" constant="10" id="z2o-Ln-4ef"/>
                             <constraint firstItem="sVW-c9-pTZ" firstAttribute="top" secondItem="i2w-Ea-Xfq" secondAttribute="bottom" constant="15" id="z8T-e9-Z9e"/>
                             <constraint firstItem="bw0-j8-uAM" firstAttribute="top" secondItem="nUK-Yj-LWy" secondAttribute="bottom" constant="5" id="zl8-gI-que"/>
                         </constraints>
