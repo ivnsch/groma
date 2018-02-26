@@ -699,46 +699,47 @@ class ListItemProviderImpl: ListItemProvider {
     // Switches in memory status of listItems to target status, also updates order & quantity for which it loads list items from database
     // param: orderInDstStatus: To override default dst order with a manual order. This is used for undo cell, where we want to the item to be inserted back at the original position.
     fileprivate func switchStatusInsertInDst(_ listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int? = nil, remote: Bool, _ handler: @escaping ((switchedItems: [ListItem], storedItems: [ListItem])?) -> Void) {
-        
-        self.listItems(list, sortOrderByStatus: status, fetchMode: .memOnly) {result in // TODO review .First suitable here
-            
-            if let storedListItems = result.sucessResult {
-                
-                // Update quantity and order field - by changing quantity we are moving list items from one status to another
-                // we append the items at the end of the dst section (order == section.count)
-                var dstSectionsDict = storedListItems.sectionCountDict(status)
-                for listItem in listItems {
-                    
-                    let listItemOrderInDstStatus: Int? = orderInDstStatus ?? (listItem.hasStatus(status) ? listItem.order(status) : nil) // catch this before switching quantity
-                    
-                    listItem.switchStatusQuantityMutable(status1, targetStatus: status)
-                    if let sectionCount = dstSectionsDict[listItem.section.uuid] { // TODO rename this sounds like count of sections but it's count of list item in sections
 
-                        // If there's already a list item in the target status don't update order. If there's not, set order to last item in section
-                        let listItemOrder: Int = listItemOrderInDstStatus ?? sectionCount
-                        
-                        listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: listItemOrder))
-                        dstSectionsDict[listItem.section.uuid]! += 1 // we are adding an item to section - increment count for possible next item
-                        
-                    } else { // item's section is not in target status - set order 0 (first item in section) and add section to the dictionary
-                        listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))
-                        // update order such that section is appended at the end
-                        listItem.section.updateOrderMutable(ListItemStatusOrder(status: status, order: dstSectionsDict.count))
-                        dstSectionsDict[listItem.section.uuid] = 1 // we are adding an item to section - items count is 1
-                    }
-                    // this is not really necessary, but for consistency - reset order to 0 in the src status.
-                    listItem.updateOrderMutable(ListItemStatusOrder(status: status1, order: 0))
-                    
-//                    logger.d("List item after status update: \(listItem.quantityDebugDescription)")
-                }
-                
-                handler((switchedItems: listItems, storedItems: storedListItems.toArray()))
-        
-            } else {
-                logger.e("Didn't get listItems: \(result.status), can't switch")
-                handler(nil)
-            }
-        }
+        // Outdated implementation
+//        self.listItems(list, sortOrderByStatus: status, fetchMode: .memOnly) {result in // TODO review .First suitable here
+//
+//            if let storedListItems = result.sucessResult {
+//
+//                // Update quantity and order field - by changing quantity we are moving list items from one status to another
+//                // we append the items at the end of the dst section (order == section.count)
+//                var dstSectionsDict = storedListItems.sectionCountDict(status)
+//                for listItem in listItems {
+//
+//                    let listItemOrderInDstStatus: Int? = orderInDstStatus ?? (listItem.hasStatus(status) ? listItem.order(status) : nil) // catch this before switching quantity
+//
+//                    listItem.switchStatusQuantityMutable(status1, targetStatus: status)
+//                    if let sectionCount = dstSectionsDict[listItem.section.uuid] { // TODO rename this sounds like count of sections but it's count of list item in sections
+//
+//                        // If there's already a list item in the target status don't update order. If there's not, set order to last item in section
+//                        let listItemOrder: Int = listItemOrderInDstStatus ?? sectionCount
+//
+//                        listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: listItemOrder))
+//                        dstSectionsDict[listItem.section.uuid]! += 1 // we are adding an item to section - increment count for possible next item
+//
+//                    } else { // item's section is not in target status - set order 0 (first item in section) and add section to the dictionary
+//                        listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))
+//                        // update order such that section is appended at the end
+//                        listItem.section.updateOrderMutable(ListItemStatusOrder(status: status, order: dstSectionsDict.count))
+//                        dstSectionsDict[listItem.section.uuid] = 1 // we are adding an item to section - items count is 1
+//                    }
+//                    // this is not really necessary, but for consistency - reset order to 0 in the src status.
+//                    listItem.updateOrderMutable(ListItemStatusOrder(status: status1, order: 0))
+//
+////                    logger.d("List item after status update: \(listItem.quantityDebugDescription)")
+//                }
+//
+//                handler((switchedItems: listItems, storedItems: storedListItems.toArray()))
+//
+//            } else {
+//                logger.e("Didn't get listItems: \(result.status), can't switch")
+//                handler(nil)
+//            }
+//        }
     }
 
     // Websocket list item switch

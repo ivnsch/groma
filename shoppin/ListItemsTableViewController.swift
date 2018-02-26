@@ -328,11 +328,11 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 
     func updateSections(_ sections: [Section]) {
         
-        let sectionsDict = sections.toDictionary{($0.uuid, $0)}
+        let sectionsDict = sections.toDictionary{($0.unique.toString(), $0)}
         
         // This is maybe not the most performant way to do this update but it guarantees consistency as it uses the "official" entry point to initialise the table, which is setListItems
         let updatedItems: [ListItem] = items.map{item in
-            if let section = sectionsDict[item.section.uuid] {
+            if let section = sectionsDict[item.section.unique.toString()] {
                 return item.copy(section: section, note: nil)
             } else {
                 return item
@@ -356,8 +356,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 
                 let tableViewListItem = TableViewListItem(listItem: listItem)
 
-                if set[listItem.section.uuid] == nil { // section not created yet - create one
-                    set[listItem.section.uuid] = 1 // dummy value... swift doesn't have Set
+                if set[listItem.section.unique.toString()] == nil { // section not created yet - create one
+                    set[listItem.section.unique.toString()] = 1 // dummy value... swift doesn't have Set
 
                     sections.append(listItem.section)
                     
@@ -456,7 +456,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             
             // remove section if no items
             if tableViewSection.tableViewListItems.isEmpty {
-                removeSection(tableViewSection.section.uuid, indexPath: indexPath, animation: animation)
+                removeSection(tableViewSection.section.unique, indexPath: indexPath, animation: animation)
             }
             self.tableView.endUpdates()
         }
@@ -490,12 +490,12 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // TODO why do we need indexPath and have to look for the index in the sections array using uuid, shouldn't both have the same index?
-    fileprivate func removeSection(_ uuid: String, indexPath: IndexPath, animation: UITableViewRowAnimation = .bottom) {
+    fileprivate func removeSection(_ unique: SectionUnique, indexPath: IndexPath, animation: UITableViewRowAnimation = .bottom) {
         tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
             // remove table view section
             weakSelf.tableViewSections.remove(at: (indexPath as NSIndexPath).section)
             // remove model section TODO better way
-            let sectionIndexMaybe: Int? = weakSelf.getSectionIndex(uuid)
+            let sectionIndexMaybe: Int? = weakSelf.getSectionIndex(unique)
             if let sectionIndex = sectionIndexMaybe {
                 weakSelf.sections.remove(at: sectionIndex)
                 // remove from table view
@@ -504,9 +504,9 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    func removeSection(_ uuid: String) {
-        if let indexPath = getSectionIndexPath(uuid) {
-            removeSection(uuid, indexPath: indexPath)
+    func removeSection(_ unique: SectionUnique) {
+        if let indexPath = getSectionIndexPath(unique) {
+            removeSection(unique, indexPath: indexPath)
         }
     }
     
@@ -566,21 +566,21 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     func getIndex(_ section: Section) -> Int? {
-        return getSectionIndex(section.uuid)
+        return getSectionIndex(section.unique)
     }
     
-    func getSectionIndex(_ uuid: String) -> Int? {
+    func getSectionIndex(_ unique: SectionUnique) -> Int? {
         for (index, s) in self.sections.enumerated() {
-            if uuid == s.uuid {
+            if unique == s.unique {
                 return index
             }
         }
         return nil
     }
     
-    func getSectionIndexPath(_ uuid: String) -> IndexPath? {
+    func getSectionIndexPath(_ unique: SectionUnique) -> IndexPath? {
         for (sectionIndex, s) in self.tableViewSections.enumerated() {
-            if (uuid == s.section.uuid) {
+            if (unique == s.section.unique) {
                 return IndexPath(row: 0, section: sectionIndex)
             }
         }

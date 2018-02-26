@@ -295,16 +295,10 @@ public class ListItem: DBSyncable, Identifiable, WithUuid {
         return "productOpt.productOpt.productOpt.itemOpt.name == '\(name)' AND productOpt.productOpt.unitOpt.name == '\(unit.name)'"
     }
 
-    static func createFilterWithSection(_ sectionUuid: String) -> String {
-        return "sectionOpt.uuid == '\(sectionUuid)'"
+    static func createFilterWithSection(_ sectionUnique: SectionUnique) -> String {
+        return "sectionOpt.name == '\(sectionUnique.name)' && sectionOpt.statusVal == '\(sectionUnique.status.rawValue)' && sectionOpt.list.uuid == '\(sectionUnique.listUuid)'"
     }
-    
-    
-    
-    
-    
-    
-    
+
     static func createFilter(quantifiableProductUnique: QuantifiableProductUnique) -> String {
         return "productOpt.productOpt.productOpt.itemOpt.name == '\(quantifiableProductUnique.name)' AND productOpt.productOpt.productOpt.brand == '\(quantifiableProductUnique.brand)' AND productOpt.productOpt.unitOpt.name == '\(quantifiableProductUnique.unit)' AND productOpt.productOpt.baseQuantity == \(quantifiableProductUnique.baseQuantity)"
     }

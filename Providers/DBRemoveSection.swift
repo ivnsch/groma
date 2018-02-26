@@ -15,12 +15,11 @@ class DBRemoveSection: Object {
     @objc dynamic var lastServerUpdate: Int64 = 0
     
     convenience init(_ dbSection: Section) {
-        self.init(uuid: dbSection.uuid, lastServerUpdate: dbSection.lastServerUpdate)
+        self.init(lastServerUpdate: dbSection.lastServerUpdate)
     }
     
-    convenience init(uuid: String, lastServerUpdate: Int64) {
+    convenience init(lastServerUpdate: Int64) {
         self.init()
-        self.uuid = uuid
         self.lastServerUpdate = lastServerUpdate
     }
     

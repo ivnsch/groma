@@ -105,29 +105,30 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func updateListItemsOrderLocal(_ orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: @escaping (Bool) -> Void) {
-        doInWriteTransaction({realm in
-            
-            // order update can change the section a list item is in, so we need to update the section too.
-            let sectionDict = sections.toDictionary{($0.uuid, $0)}
-            
-            for orderUpdate in orderUpdates {
-                if let section = sectionDict[orderUpdate.sectionUuid] {
-                    realm.create(ListItem.self, value: orderUpdate.updateDict(status, dbSection: section), update: true)
-                } else {
-                    logger.e("Invalid state, section object corresponding to uuid: \(orderUpdate.sectionUuid) was not found")
-                }
-            }
-            
-            return true
-            
-            }, finishHandler: {(successMaybe: Bool?) in
-                if let success = successMaybe {
-                    if success {
-                        Prov.listItemsProvider.invalidateMemCache()
-                    }
-                }
-                handler(successMaybe ?? false)
-        })
+        // Outdated implementation
+//        doInWriteTransaction({realm in
+//
+//            // order update can change the section a list item is in, so we need to update the section too.
+//            let sectionDict = sections.toDictionary{($0.uuid, $0)}
+//
+//            for orderUpdate in orderUpdates {
+//                if let section = sectionDict[orderUpdate.sectionUuid] {
+//                    realm.create(ListItem.self, value: orderUpdate.updateDict(status, dbSection: section), update: true)
+//                } else {
+//                    logger.e("Invalid state, section object corresponding to uuid: \(orderUpdate.sectionUuid) was not found")
+//                }
+//            }
+//
+//            return true
+//
+//            }, finishHandler: {(successMaybe: Bool?) in
+//                if let success = successMaybe {
+//                    if success {
+//                        Prov.listItemsProvider.invalidateMemCache()
+//                    }
+//                }
+//                handler(successMaybe ?? false)
+//        })
     }
     
     func storeRemoteListItemSwitchResult(_ statusUpdate: ListItemStatusUpdate, result: RemoteSwitchListItemResult, _ handler: @escaping (Bool) -> Void) {
@@ -422,10 +423,10 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func remove(_ listItem: ListItem, markForSync: Bool, token: RealmToken?, handler: @escaping (Bool) -> ()) {
-        remove(listItem.uuid, listUuid: listItem.list.uuid, sectionUuid: listItem.section.uuid, markForSync: markForSync, token: token, handler: handler)
+        remove(listItem.uuid, listUuid: listItem.list.uuid, sectionUnique: listItem.section.unique, markForSync: markForSync, token: token, handler: handler)
     }
 
-    func remove(_ listItemUuid: String, listUuid: String, sectionUuid sectionUuidMaybe: String? = nil, markForSync: Bool, token: RealmToken?, handler: @escaping (Bool) -> ()) {
+    func remove(_ listItemUuid: String, listUuid: String, sectionUnique sectionUniqueMaybe: SectionUnique? = nil, markForSync: Bool, token: RealmToken?, handler: @escaping (Bool) -> ()) {
 
         let tokens = token.map{[$0.token]} ?? []
         

@@ -19,7 +19,7 @@ public protocol SectionProvider {
     
     func remove(_ section: Section, notificationTokens: [NotificationToken], _ handler: @escaping (ProviderResult<Any>) -> Void)
     
-    func remove(_ sectionUuid: String, notificationTokens: [NotificationToken], listUuid: String?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
+    func remove(_ sectionUnique: SectionUnique, notificationTokens: [NotificationToken], listUuid: String?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
     
     // Removes all the sections found with given name (across lists)
     func removeAllWithName(_ sectionName: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void)

@@ -11,7 +11,6 @@ import Foundation
 import RealmSwift
 
 class SectionProviderImpl: SectionProvider {
-    
     let dbProvider = RealmListItemProvider()
     let remoteProvider = RemoteSectionProvider()
     
@@ -34,8 +33,8 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func remove(_ sectionUuid: String, notificationTokens: [NotificationToken], listUuid: String?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.sectionProvider.remove(sectionUuid, notificationTokens: notificationTokens, markForSync: true) {removed in
+    func remove(_ sectionUnique: SectionUnique, notificationTokens: [NotificationToken], listUuid: String?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> Void) {
+        DBProv.sectionProvider.remove(sectionUnique, notificationTokens: notificationTokens, markForSync: true) {removed in
             handler(ProviderResult(status: removed ? .success : .databaseUnknown))
 //            if removed {
 //                
@@ -63,7 +62,7 @@ class SectionProviderImpl: SectionProvider {
     }
     
     func remove(_ section: Section, notificationTokens: [NotificationToken], _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        remove(section.uuid, notificationTokens: notificationTokens, listUuid: section.list.uuid, remote: true) {result in
+        remove(section.unique, notificationTokens: notificationTokens, listUuid: section.list.uuid, remote: true) {result in
             if result.success {
                 handler(result)
             } else {
@@ -86,12 +85,13 @@ class SectionProviderImpl: SectionProvider {
                     self?.remoteProvider.removeSectionsWithName(sectionName) {remoteResult in
                         if remoteResult.success {
                             
-                            let removedSectionsUuids = removedSections.map{$0.uuid}
-                            DBProv.sectionProvider.clearSectionsTombstones(removedSectionsUuids) {removeTombstoneSuccess in
-                                if !removeTombstoneSuccess {
-                                    logger.e("Couldn't delete tombstones for sections: \(removedSections)")
-                                }
-                            }
+//                            let removedSectionsUniques = removedSections.map{$0.unique}
+                            // Outdated implementation
+//                            DBProv.sectionProvider.clearSectionsTombstones(removedSectionsUniques) {removeTombstoneSuccess in
+//                                if !removeTombstoneSuccess {
+//                                    logger.e("Couldn't delete tombstones for sections: \(removedSections)")
+//                                }
+//                            }
                         } else {
                             DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                         }
@@ -144,7 +144,7 @@ class SectionProviderImpl: SectionProvider {
                     
                 } else {
                     if let order = possibleNewOrder {
-                        let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: order, status: status)
+                        let section = Section(name: sectionName, color: sectionColor, list: list, order: order, status: status)
                         handler(ProviderResult(status: .success, sucessResult: section))
                         
                     } else { // no order known in advance - fetch listItems to count how many sections, order at the end
@@ -154,9 +154,9 @@ class SectionProviderImpl: SectionProvider {
                             if let listItems = result.sucessResult {
                                 let order = listItems.sectionCount(status)
                                 
-                                let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order), status: status)
+                                let section = Section(name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order), status: status)
                                 
-                                logger.v("Section: \(sectionName) doesn't exist, will create a new one. New uuid: \(section.uuid). List uuid: \(list.uuid)")
+                                logger.v("Section: \(sectionName) doesn't exist, will create a new one. New unique: \(section.unique.toString()). List uuid: \(list.uuid)")
                                 handler(ProviderResult(status: .success, sucessResult: section))
                                 
                             } else {

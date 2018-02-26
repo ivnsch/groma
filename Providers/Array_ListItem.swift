@@ -69,10 +69,10 @@ extension Array where Element: ListItem {
     public func groupBySection() -> [String: [ListItem]] {
         var dictionary = [String: [ListItem]]()
         for listItem in self {
-            if dictionary[listItem.section.uuid] == nil {
-                dictionary[listItem.section.uuid] = []
+            if dictionary[listItem.section.unique.toString()] == nil {
+                dictionary[listItem.section.unique.toString()] = []
             }
-            dictionary[listItem.section.uuid]?.append(listItem)
+            dictionary[listItem.section.unique.toString()]?.append(listItem)
         }
         return dictionary
     }
@@ -80,10 +80,10 @@ extension Array where Element: ListItem {
     public func groupBySectionOrdered() -> OrderedDictionary<String, (section: Section, listItems: [ListItem])> {
         var dictionary = OrderedDictionary<String, (section: Section, listItems: [ListItem])>()
         for listItem in self {
-            if dictionary[listItem.section.uuid] == nil {
-                dictionary[listItem.section.uuid] = (section: listItem.section, listItems: [])
+            if dictionary[listItem.section.unique.toString()] == nil {
+                dictionary[listItem.section.unique.toString()] = (section: listItem.section, listItems: [])
             }
-            dictionary[listItem.section.uuid]?.listItems.append(listItem)
+            dictionary[listItem.section.unique.toString()]?.listItems.append(listItem)
         }
         return dictionary
     }
@@ -96,7 +96,7 @@ extension Array where Element: ListItem {
         
         let sectionsOfItemsWithStatus: [String] = collect({
             if $0.hasStatus(status) {
-                return $0.section.uuid
+                return $0.section.unique.toString()
             } else {
                 return nil
             }
@@ -120,8 +120,8 @@ extension Array where Element: ListItem {
         var set = Set<String>()
         var sections = [Section]()
         for listItem in self {
-            if !set.contains(listItem.section.uuid) {
-                set.insert(listItem.section.uuid)
+            if !set.contains(listItem.section.unique.toString()) {
+                set.insert(listItem.section.unique.toString())
                 sections.append(listItem.section)
             }
         }
@@ -257,10 +257,10 @@ extension Results where Element: ListItem {
     public func groupBySection() -> [String: [ListItem]] {
         var dictionary = [String: [ListItem]]()
         for listItem in self {
-            if dictionary[listItem.section.uuid] == nil {
-                dictionary[listItem.section.uuid] = []
+            if dictionary[listItem.section.unique.toString()] == nil {
+                dictionary[listItem.section.unique.toString()] = []
             }
-            dictionary[listItem.section.uuid]?.append(listItem)
+            dictionary[listItem.section.unique.toString()]?.append(listItem)
         }
         return dictionary
     }
@@ -268,10 +268,10 @@ extension Results where Element: ListItem {
     public func groupBySectionOrdered() -> OrderedDictionary<String, (section: Section, listItems: [ListItem])> {
         var dictionary = OrderedDictionary<String, (section: Section, listItems: [ListItem])>()
         for listItem in self {
-            if dictionary[listItem.section.uuid] == nil {
-                dictionary[listItem.section.uuid] = (section: listItem.section, listItems: [])
+            if dictionary[listItem.section.unique.toString()] == nil {
+                dictionary[listItem.section.unique.toString()] = (section: listItem.section, listItems: [])
             }
-            dictionary[listItem.section.uuid]?.listItems.append(listItem)
+            dictionary[listItem.section.unique.toString()]?.listItems.append(listItem)
         }
         return dictionary
     }
@@ -284,7 +284,7 @@ extension Results where Element: ListItem {
         
         let sectionsOfItemsWithStatus: [String] = collect({
             if $0.hasStatus(status) {
-                return $0.section.uuid
+                return $0.section.unique.toString()
             } else {
                 return nil
             }
@@ -308,8 +308,8 @@ extension Results where Element: ListItem {
         var set = Set<String>()
         var sections = [Section]()
         for listItem in self {
-            if !set.contains(listItem.section.uuid) {
-                set.insert(listItem.section.uuid)
+            if !set.contains(listItem.section.unique.toString()) {
+                set.insert(listItem.section.unique.toString())
                 sections.append(listItem.section)
             }
         }

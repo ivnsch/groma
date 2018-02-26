@@ -56,9 +56,10 @@ class RemoteListItemProvider {
     }
     
     func remove(_ section: Section, handler: @escaping (RemoteResult<NoOpSerializable>) -> ()) {
-        RemoteProvider.authenticatedRequest(.delete, Urls.section + "/\(section.uuid)", toRequestParams(section)) {result in
-            handler(result)
-        }
+        // Outdated impl
+//        RemoteProvider.authenticatedRequest(.delete, Urls.section + "/\(section.uuid)", toRequestParams(section)) {result in
+//            handler(result)
+//        }
     }
     
     
@@ -136,20 +137,21 @@ class RemoteListItemProvider {
     
     // TODO!!!! review these responses, the server isn't sending anything back. Do we want to update timestamp on order updates (list, inventory, group, listitem) or not?
     func updateListItemsOrder(_ listItems: [ListItem], status: ListItemStatus, handler: @escaping (RemoteResult<[RemoteOrderUpdate]>) -> ()) {
-        let params: [[String: AnyObject]] = listItems.map{
-            ["uuid": $0.uuid as AnyObject, "sectionUuid": $0.section.uuid as AnyObject, "order": $0.order(status) as AnyObject]
-        }
-        let url: String = {
-            switch status {
-            case .todo: return Urls.listItemsOrder
-            case .done: return Urls.listItemsDoneOrder
-            case .stash: return Urls.listItemsStashOrder
-            }
-        }()
-        
-        RemoteProvider.authenticatedRequestArray(.put, url, params) {result in
-            handler(result)
-        }
+        // Outdated implementation
+//        let params: [[String: AnyObject]] = listItems.map{
+//            ["uuid": $0.uuid as AnyObject, "sectionUuid": $0.section.uuid as AnyObject, "order": $0.order(status) as AnyObject]
+//        }
+//        let url: String = {
+//            switch status {
+//            case .todo: return Urls.listItemsOrder
+//            case .done: return Urls.listItemsDoneOrder
+//            case .stash: return Urls.listItemsStashOrder
+//            }
+//        }()
+//
+//        RemoteProvider.authenticatedRequestArray(.put, url, params) {result in
+//            handler(result)
+//        }
     }
     
     func updateListsOrder(_ orderUpdates: [OrderUpdate], handler: @escaping (RemoteResult<[RemoteOrderUpdate]>) -> ()) {
@@ -184,7 +186,6 @@ class RemoteListItemProvider {
         let listDict = toRequestParams(section.list)
 
         let parameters: [String: AnyObject] = [
-            "uuid": section.uuid as AnyObject,
             "name": section.name as AnyObject,
             "color": section.color.hexStr as AnyObject,
             "list": listDict as AnyObject,
@@ -319,7 +320,6 @@ class RemoteListItemProvider {
         let listDict = toRequestParams(section.list)
 
         var dict: [String: AnyObject] = [
-            "uuid": section.uuid as AnyObject,
             "name": section.name as AnyObject,
             "color": section.color.hexStr as AnyObject,
             "todoOrder": section.todoOrder as AnyObject,
@@ -367,7 +367,6 @@ class RemoteListItemProvider {
             "src": statusUpdate.src.rawValue as AnyObject,
             "dst": statusUpdate.dst.rawValue as AnyObject,
             "l": listItem.list.uuid as AnyObject,
-            "s": listItem.section.uuid as AnyObject
         ]
     }
 

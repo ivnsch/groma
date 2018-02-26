@@ -360,20 +360,20 @@ class RealmProductProvider: RealmProvider {
 //                return (product, sectionMaybe)
 //            }
 
-            let productsWithMaybeSectionsUuids: [(product: String, section: String?)] = products.map {product in
+            let productsWithMaybeSectionsUniques: [(product: String, section: SectionUnique?)] = products.map {product in
                 let sectionMaybe = sectionsDict[product.product.item.category.name]
-                return (product.uuid, sectionMaybe?.uuid)
+                return (product.uuid, sectionMaybe?.unique)
             }
 
             
-            return productsWithMaybeSectionsUuids
+            return productsWithMaybeSectionsUniques
             
-        }, resultHandler: {(productsWithMaybeSectionsUuids: [(product: String, section: String?)]?) in
+        }, resultHandler: {(productsWithMaybeSectionsUuids: [(product: String, section: SectionUnique?)]?) in
             do {
                 let realm = try RealmConfig.realm()
-                let productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)]? = productsWithMaybeSectionsUuids?.flatMap {productUuid, sectionUuid in
+                let productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)]? = productsWithMaybeSectionsUuids?.flatMap {productUuid, sectionUnique in
                     if let product = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(productUuid)).first {
-                        let section = sectionUuid.flatMap{realm.objects(Section.self).filter(Section.createFilter($0)).first}
+                        let section = sectionUnique.flatMap{realm.objects(Section.self).filter(Section.createFilter(unique: $0)).first}
                         return (product, section)
                     } else {
                         logger.e("Error/Warning: Product for just retrieved uuid is not there")
@@ -422,20 +422,20 @@ class RealmProductProvider: RealmProvider {
             //                return (product, sectionMaybe)
             //            }
             
-            let productsWithMaybeSectionsUuids: [(product: String, section: String?)] = products.map {product in
+            let productsWithMaybeSectionsUniques: [(product: String, section: SectionUnique?)] = products.map { product in
                 let sectionMaybe = sectionsDict[product.item.category.name]
-                return (product.uuid, sectionMaybe?.uuid)
+                return (product.uuid, sectionMaybe?.unique)
             }
             
             
-            return productsWithMaybeSectionsUuids
+            return productsWithMaybeSectionsUniques
             
-            }, resultHandler: {(productsWithMaybeSectionsUuids: [(product: String, section: String?)]?) in
+            }, resultHandler: {(productsWithMaybeSectionsUniques: [(product: String, section: SectionUnique?)]?) in
                 do {
                     let realm = try RealmConfig.realm()
-                    let productsWithMaybeSections: [(product: Product, section: Section?)]? = productsWithMaybeSectionsUuids?.flatMap {productUuid, sectionUuid in
+                    let productsWithMaybeSections: [(product: Product, section: Section?)]? = productsWithMaybeSectionsUniques?.flatMap {productUuid, sectionUnique in
                         if let product = realm.objects(Product.self).filter(Product.createFilter(productUuid)).first {
-                            let section = sectionUuid.flatMap{realm.objects(Section.self).filter(Section.createFilter($0)).first}
+                            let section = sectionUnique.flatMap{ realm.objects(Section.self).filter(Section.createFilter(unique: $0)).first }
                             return (product, section)
                         } else {
                             logger.e("Error/Warning: Product for just retrieved uuid is not there")
@@ -445,7 +445,7 @@ class RealmProductProvider: RealmProvider {
                     handler(substring, productsWithMaybeSections)
                     
                 } catch let e {
-                    logger.e("Error retrieving objects for uuids: \(String(describing: productsWithMaybeSectionsUuids)), error: \(e)")
+                    logger.e("Error retrieving objects for uuids: \(String(describing: productsWithMaybeSectionsUniques)), error: \(e)")
                     handler(substring, nil)
                 }
         })

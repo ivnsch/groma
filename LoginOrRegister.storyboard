@@ -218,7 +218,7 @@
                                 </connections>
                             </button>
                             <button contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6r8-Eq-vDW">
-                                <rect key="frame" x="300.5" y="167.5" width="20" height="20"/>
+                                <rect key="frame" x="292.5" y="157.5" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="756-bu-OWV"/>
                                     <constraint firstAttribute="width" constant="40" id="fvy-W4-a9j"/>

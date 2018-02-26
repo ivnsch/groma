@@ -32,7 +32,7 @@ public struct RealmConfig {
         return documentsDirectoryUrl.appendingPathComponent("default.realm")
     }
 
-    fileprivate static let schemaVersion: UInt64 = 1
+    fileprivate static let schemaVersion: UInt64 = 2
 
     public static var config = Realm.Configuration(
         // Set the new schema version. This must be greater than the previously used

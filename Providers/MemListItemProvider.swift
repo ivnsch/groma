@@ -96,7 +96,7 @@ class MemListItemProvider {
 
             var listItemOrder = 0
             for existingListItem in self.listItems![list.uuid]! {
-                if existingListItem.section.uuid == prototype.section.uuid && existingListItem.hasStatus(status) { // count list items in my section (e.g. "vegetables") and status (e.g. "todo") to determine my order
+                if existingListItem.section.unique == prototype.section.unique && existingListItem.hasStatus(status) { // count list items in my section (e.g. "vegetables") and status (e.g. "todo") to determine my order
                     listItemOrder += 1
                 }
             }
@@ -253,33 +253,34 @@ class MemListItemProvider {
     // listUuid: this is only an optimisation, in case we have the list uuid we avoid iterating through all the lists. Passing list uuid or not doesn't affect the result.
     // Note that currently this optimisation doesn't matter since we clear the mem cache after we leave a list so we have only one list in mem cache at a time. But we let it just in case.
     func removeSection(_ uuid: String, listUuid listUuidMaybe: String?) -> Bool {
-        guard enabled else {return false}
-        guard listItems != nil else {return false}
-        
-        if let listUuid = listUuidMaybe {
-            // TODO the dictionary accessing logic is a bit weird, improve
-            if let listUuid = (listItems?.keys.filter{$0 == listUuid})?.first {
-                if let listListItems = listItems?[listUuid] {
-                    let updatedListItems = listListItems.removeAllWithCondition{$0.section.uuid == uuid}
-                    listItems?[listUuid] = updatedListItems
-                    
-                } else {
-                    logger.v("No list items for section: \(uuid) in list: \(listUuid)")
-                    return false
-                }
-                
-            } else {
-                logger.w("Didn't find list: \(listUuid)")
-                return false
-            }
-            
-        } else {
-            for (listUuid, listListItems) in listItems! {
-                let updatedListItems = listListItems.removeAllWithCondition{$0.section.uuid == uuid}
-                listItems?[listUuid] = updatedListItems
-            }
-        }
-        
+        // Outdated implementation
+//        guard enabled else {return false}
+//        guard listItems != nil else {return false}
+//
+//        if let listUuid = listUuidMaybe {
+//            // TODO the dictionary accessing logic is a bit weird, improve
+//            if let listUuid = (listItems?.keys.filter{$0 == listUuid})?.first {
+//                if let listListItems = listItems?[listUuid] {
+//                    let updatedListItems = listListItems.removeAllWithCondition{$0.section.uuid == uuid}
+//                    listItems?[listUuid] = updatedListItems
+//
+//                } else {
+//                    logger.v("No list items for section: \(uuid) in list: \(listUuid)")
+//                    return false
+//                }
+//
+//            } else {
+//                logger.w("Didn't find list: \(listUuid)")
+//                return false
+//            }
+//
+//        } else {
+//            for (listUuid, listListItems) in listItems! {
+//                let updatedListItems = listListItems.removeAllWithCondition{$0.section.uuid == uuid}
+//                listItems?[listUuid] = updatedListItems
+//            }
+//        }
+//
         return true
     }
     

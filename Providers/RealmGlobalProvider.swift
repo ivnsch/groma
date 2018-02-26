@@ -244,46 +244,47 @@ class RealmGlobalProvider: RealmProvider {
     }
     
     func markAllDirty(_ handler: @escaping (Bool) -> Void) {
-        
-        func markObjsDirty<T: Object>(_ realm: Realm, obj: T.Type, idExtractor: (T) -> String) {
-            for obj in realm.objects(T.self) {
-                realm.create(T.self, value: ["uuid": idExtractor(obj), "dirty": true], update: true)
-            }
-        }
-        
-        func markAllDirtySync(_ realm: Realm) {
-            markObjsDirty(realm, obj: GroupItem.self, idExtractor: {$0.uuid})
-            markObjsDirty(realm, obj: ListItem.self, idExtractor: {$0.uuid})
-            markObjsDirty(realm, obj: InventoryItem.self, idExtractor: {$0.uuid})
-            markObjsDirty(realm, obj: HistoryItem.self, idExtractor: {$0.uuid})
-            
-            markObjsDirty(realm, obj: Section.self, idExtractor: {$0.uuid})
-            
-            markObjsDirty(realm, obj: ProductGroup.self, idExtractor: {$0.uuid})
-            markObjsDirty(realm, obj: List.self, idExtractor: {$0.uuid})
-            markObjsDirty(realm, obj: DBInventory.self, idExtractor: {$0.uuid})
-
-            markObjsDirty(realm, obj: StoreProduct.self, idExtractor: {$0.uuid})
-            markObjsDirty(realm, obj: Product.self, idExtractor: {$0.uuid})
-            markObjsDirty(realm, obj: ProductCategory.self, idExtractor: {$0.uuid})
-            
-//            this is not synced
-//            markObjsDirty(realm, obj: DBSharedUser.self, idExtractor: {$0.uuid})
-        }
-        
-        doInWriteTransaction({realm in
-            markAllDirtySync(realm)
-            return true
-            
-        }) {(successMaybe: Bool?) in
-            if let success = successMaybe {
-                handler(success)
-                
-            } else {
-                logger.e("No success result")
-                handler(false)
-            }
-        }
+        // Outdated implementation (section uuid -> unique)
+//
+//        func markObjsDirty<T: Object>(_ realm: Realm, obj: T.Type, idExtractor: (T) -> String) {
+//            for obj in realm.objects(T.self) {
+//                realm.create(T.self, value: ["uuid": idExtractor(obj), "dirty": true], update: true)
+//            }
+//        }
+//
+//        func markAllDirtySync(_ realm: Realm) {
+//            markObjsDirty(realm, obj: GroupItem.self, idExtractor: {$0.uuid})
+//            markObjsDirty(realm, obj: ListItem.self, idExtractor: {$0.uuid})
+//            markObjsDirty(realm, obj: InventoryItem.self, idExtractor: {$0.uuid})
+//            markObjsDirty(realm, obj: HistoryItem.self, idExtractor: {$0.uuid})
+//
+//            markObjsDirty(realm, obj: Section.self, idExtractor: {$0.uuid})
+//
+//            markObjsDirty(realm, obj: ProductGroup.self, idExtractor: {$0.uuid})
+//            markObjsDirty(realm, obj: List.self, idExtractor: {$0.uuid})
+//            markObjsDirty(realm, obj: DBInventory.self, idExtractor: {$0.uuid})
+//
+//            markObjsDirty(realm, obj: StoreProduct.self, idExtractor: {$0.uuid})
+//            markObjsDirty(realm, obj: Product.self, idExtractor: {$0.uuid})
+//            markObjsDirty(realm, obj: ProductCategory.self, idExtractor: {$0.uuid})
+//
+////            this is not synced
+////            markObjsDirty(realm, obj: DBSharedUser.self, idExtractor: {$0.uuid})
+//        }
+//
+//        doInWriteTransaction({realm in
+//            markAllDirtySync(realm)
+//            return true
+//
+//        }) {(successMaybe: Bool?) in
+//            if let success = successMaybe {
+//                handler(success)
+//
+//            } else {
+//                logger.e("No success result")
+//                handler(false)
+//            }
+//        }
     }
 
     fileprivate func initContainers(realm: Realm) {
@@ -535,7 +536,7 @@ class RealmGlobalProvider: RealmProvider {
                     list.todoSections.append(section)
                 case .done, .stash: break // done and stash sections exist but aren't stored in lists (this is not necessary since we don't display / don't need reordering of these sections)
                 }
-                addedSections[section.uuid] = section
+                addedSections[section.unique.toString()] = section
             }
 
             // List items
@@ -545,7 +546,7 @@ class RealmGlobalProvider: RealmProvider {
                     logger.e("Couldn't find list! Skipping item.", .db)
                     continue
                 }
-                guard let section = addedSections[srcListItem.section.uuid] else {
+                guard let section = addedSections[srcListItem.section.unique.toString()] else {
                     logger.e("Couldn't find section! Skipping item.", .db)
                     continue
                 }

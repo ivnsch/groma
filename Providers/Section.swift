@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-public struct SectionUnique {
+public struct SectionUnique: Equatable {
     let name: String
     let listUuid: String
     let status: ListItemStatus
@@ -19,17 +19,33 @@ public struct SectionUnique {
         self.listUuid = listUuid
         self.status = status
     }
+
+    public func toString() -> String {
+        return "\(name)-\(listUuid)-\(status.rawValue)"
+    }
+
+    public static func ==(lhs: SectionUnique, rhs: SectionUnique) -> Bool {
+        return lhs.name == rhs.name && lhs.listUuid == rhs.listUuid && lhs.status == rhs.status
+    }
 }
 
-public class Section: DBSyncable, Identifiable, WithUuid {
+public class Section: DBSyncable, Identifiable {
 
-    @objc public dynamic var uuid: String = ""
-    @objc public dynamic var name: String = ""
+//    @objc public dynamic var uuid: String = ""
+    @objc public dynamic var name: String = "" {
+        didSet {
+            updateCompoundKey()
+        }
+    }
     @objc dynamic var bgColorHex: String = "000000"
     
 //    let listItems = RealmSwift.List<String>()
     
-    @objc dynamic var listOpt: List? = List()
+    @objc dynamic var listOpt: List? = List() {
+        didSet {
+            updateCompoundKey()
+        }
+    }
 
     // TODO remove
     @objc public dynamic var todoOrder: Int = 0
@@ -39,13 +55,20 @@ public class Section: DBSyncable, Identifiable, WithUuid {
     public let listItems = RealmSwift.List<ListItem>()
     
     @objc public dynamic var statusVal: Int = 0
-    
+
+    @objc public dynamic var compoundKey: String = "0-0-0"
+
+    public var unique: SectionUnique {
+        return SectionUnique(name: name, listUuid: list.uuid, status: status)
+    }
+
     public var status: ListItemStatus {
         get {
             return ListItemStatus(rawValue: statusVal)!
         }
         set {
             statusVal = status.rawValue
+            updateCompoundKey()
         }
     }
     
@@ -68,18 +91,25 @@ public class Section: DBSyncable, Identifiable, WithUuid {
     }
     
     public override static func primaryKey() -> String? {
-        return "uuid"
+        return "compoundKey"
     }
     
     public override class func indexedProperties() -> [String] {
         return ["name", "status"]
     }
-    
-    public convenience init(uuid: String, name: String, color: UIColor, list: List, todoOrder: Int, doneOrder: Int, stashOrder: Int, status: ListItemStatus, lastUpdate: Date = Date(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
+
+    func compoundKeyValue() -> String {
+        return "\(name)-\(list.uuid)-\(statusVal)"
+    }
+
+    fileprivate func updateCompoundKey() {
+        compoundKey = compoundKeyValue()
+    }
+
+    public convenience init(name: String, color: UIColor, list: List, todoOrder: Int, doneOrder: Int, stashOrder: Int, status: ListItemStatus, lastUpdate: Date = Date(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
-        self.uuid = uuid
         self.name = name
         self.color = color
         self.list = list
@@ -93,10 +123,12 @@ public class Section: DBSyncable, Identifiable, WithUuid {
             self.lastServerUpdate = lastServerUpdate
         }
         self.removed = removed
+
+        updateCompoundKey()
     }
     
     // NOTE: we reuse ListItemStatusOrder from list items, as content is what we need here also, maybe we should rename it
-    public convenience init(uuid: String, name: String, color: UIColor, list: List, order: ListItemStatusOrder, status: ListItemStatus, lastServerUpdate: Int64? = nil, removed: Bool = false) {
+    public convenience init(name: String, color: UIColor, list: List, order: ListItemStatusOrder, status: ListItemStatus, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         let (todoOrder, doneOrder, stashOrder): (Int, Int, Int) = {
             switch order.status {
@@ -106,14 +138,10 @@ public class Section: DBSyncable, Identifiable, WithUuid {
             }
         }()
         
-        self.init(uuid: uuid, name: name, color: color, list: list, todoOrder: todoOrder, doneOrder: doneOrder, stashOrder: stashOrder, status: status, lastServerUpdate: lastServerUpdate, removed: removed)
+        self.init(name: name, color: color, list: list, todoOrder: todoOrder, doneOrder: doneOrder, stashOrder: stashOrder, status: status, lastServerUpdate: lastServerUpdate, removed: removed)
     }
     
     // MARK: - Filters
-    
-    static func createFilter(_ uuid: String) -> String {
-        return "uuid == '\(uuid)'"
-    }
     
     // TODO review why this is used
     static func createFilterWithName(_ name: String) -> String {
@@ -154,7 +182,6 @@ public class Section: DBSyncable, Identifiable, WithUuid {
 
     static func fromDict(_ dict: [String: AnyObject], list: List) -> Section {
         let item = Section()
-        item.uuid = dict["uuid"]! as! String
         item.name = dict["name"]! as! String
         let colorStr = dict["color"]! as! String
         let color = UIColor(hexString: colorStr)
@@ -169,7 +196,6 @@ public class Section: DBSyncable, Identifiable, WithUuid {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["uuid"] = uuid as AnyObject?
         dict["name"] = name as AnyObject?
         dict["bgColorHex"] = bgColorHex as AnyObject?
         dict["list"] = list.toDict() as AnyObject?        
@@ -184,7 +210,6 @@ public class Section: DBSyncable, Identifiable, WithUuid {
     func toRealmMigrationDict(list: List) -> [String: Any] {
 
         var dict = [String: Any]()
-        dict["uuid"] = uuid
         dict["name"] = name as AnyObject?
         dict["bgColorHex"] = bgColorHex as AnyObject?
 
@@ -202,7 +227,6 @@ public class Section: DBSyncable, Identifiable, WithUuid {
     func toRealmMigrationDict2(listDict: Dictionary<String, Any>) -> [String: Any] {
 
         var dict = [String: Any]()
-        dict["uuid"] = uuid
         dict["name"] = name as AnyObject?
         dict["bgColorHex"] = bgColorHex as AnyObject?
 
@@ -220,12 +244,12 @@ public class Section: DBSyncable, Identifiable, WithUuid {
     }
     
     override func deleteWithDependenciesSync(_ realm: Realm, markForSync: Bool) {
-        _ = RealmSectionProvider().removeSectionDependenciesSync(realm, sectionUuid: uuid, markForSync: markForSync)
+        _ = RealmSectionProvider().removeSectionDependenciesSync(realm, sectionUnique: unique, markForSync: markForSync)
         realm.delete(self)
     }
     
     public func same(_ section: Section) -> Bool {
-        return section.uuid == self.uuid
+        return section.unique == self.unique
     }
 
     public func order(_ status: ListItemStatus) -> Int {
@@ -254,7 +278,6 @@ public class Section: DBSyncable, Identifiable, WithUuid {
     
     public func copy(uuid: String? = nil, name: String? = nil, color: UIColor? = nil, list: List? = nil, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, status: ListItemStatus? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Section {
         return Section(
-            uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             color: color ?? self.color,
             list: list ?? self.list.copy(),
@@ -275,7 +298,7 @@ public class Section: DBSyncable, Identifiable, WithUuid {
     }
 
     public override var debugDescription: String {
-        return "{\(type(of: self)) uuid: \(uuid), name: \(name), color: \(color), listUuid: \(list), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)}}"
+        return "{\(type(of: self)) name: \(name), color: \(color), listUuid: \(list), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)}}"
     }
     
     public static func orderFieldName(_ status: ListItemStatus) -> String {

@@ -146,24 +146,24 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         tableView.reloadData()
     }
     
-    func removeSection(_ uuid: String) {
-        if let index = getSectionIndex(uuid) {
-            removeSection(uuid, index: index)
+    func removeSection(_ unique: SectionUnique) {
+        if let index = getSectionIndex(unique) {
+            removeSection(unique, index: index)
         } else {
-            logger.d("Section to remove not found: \(uuid)")
+            logger.d("Section to remove not found: \(unique.toString())")
         }
     }
     
-    func getSectionIndex(_ uuid: String) -> Int? {
+    func getSectionIndex(_ unique: SectionUnique) -> Int? {
         for (i, s) in sections.enumerated() {
-            if s.uuid == uuid {
+            if s.unique == unique {
                 return i
             }
         }
         return nil
     }
     
-    fileprivate func removeSection(_ uuid: String, index: Int) {
+    fileprivate func removeSection(_ unique: SectionUnique, index: Int) {
         tableView.wrapUpdates{[weak self] in
             self?.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .bottom)
             self?.sections.remove(at: index)

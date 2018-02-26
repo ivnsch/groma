@@ -16,7 +16,8 @@ class SectionToRemove: Object {
     @objc dynamic var lastServerUpdate: Int64 = 0
     
     convenience init(_ dbSection: Section) {
-        self.init(uuid: dbSection.uuid, lastServerUpdate: dbSection.lastServerUpdate)
+        fatalError("Outdated implementation")
+//        self.init(uuid: dbSection.uuid, lastServerUpdate: dbSection.lastServerUpdate)
     }
     
     convenience init(uuid: String, lastServerUpdate: Int64) {

@@ -40,8 +40,8 @@ class RealmSectionProvider: RealmProvider {
         handler(loadSectionsSync(list: list))
     }
     
-    func loadSectionWithUuid(_ uuid: String, handler: @escaping (Section?) -> Void) {
-        handler(loadFirstSync(filter: Section.createFilter(uuid)))
+    func loadSectionWithUnique(_ unique: SectionUnique, handler: @escaping (Section?) -> Void) {
+        handler(loadFirstSync(filter: Section.createFilter(unique: unique)))
     }
     
     func loadSection(_ name: String, list: List, handler: @escaping (Section?) -> ()) {
@@ -77,9 +77,9 @@ class RealmSectionProvider: RealmProvider {
 
     func saveSection(_ section: Section, handler: @escaping (Bool) -> ()) {
         let dbSection = Section()
-        dbSection.uuid = section.uuid
         dbSection.name = section.name
-        
+        dbSection.status = section.status
+        dbSection.list = section.list
         self.saveObj(dbSection, handler: handler)
     }
     
@@ -89,7 +89,7 @@ class RealmSectionProvider: RealmProvider {
     }
     
     func remove(_ section: Section, notificationTokens: [NotificationToken], markForSync: Bool, handler: @escaping (Bool) -> Void) {
-        remove(section.uuid, notificationTokens: notificationTokens, markForSync: markForSync, handler: handler)
+        remove(section.unique, notificationTokens: notificationTokens, markForSync: markForSync, handler: handler)
     }
     
     func removeAllWithName(_ sectionName: String, markForSync: Bool, handler: @escaping ([Section]?) -> Void) {
@@ -98,7 +98,7 @@ class RealmSectionProvider: RealmProvider {
             if !sections.isEmpty {
                 _ = weakSelf.doInWriteTransactionSync({(realm: Realm) -> Results<Section> in
                     for section in sections {
-                        _ = weakSelf.removeSectionAndDependenciesSync(realm, sectionUuid: section.uuid, markForSync: markForSync)
+                        _ = weakSelf.removeSectionAndDependenciesSync(realm, sectionUnique: section.unique, markForSync: markForSync)
                     }
                     return sections
                 })
@@ -110,14 +110,14 @@ class RealmSectionProvider: RealmProvider {
         }
     }
     
-    func remove(_ sectionUuid: String, notificationTokens: [NotificationToken], markForSync: Bool, handler: @escaping (Bool) -> Void) {
-        handler(removeSectionAndDependenciesSync(sectionUuid, notificationTokens: notificationTokens, markForSync: markForSync))
+    func remove(_ sectionUnique: SectionUnique, notificationTokens: [NotificationToken], markForSync: Bool, handler: @escaping (Bool) -> Void) {
+        handler(removeSectionAndDependenciesSync(sectionUnique, notificationTokens: notificationTokens, markForSync: markForSync))
     }
     
-    func removeSectionAndDependenciesSync(_ sectionUuid: String, notificationTokens: [NotificationToken], markForSync: Bool) -> Bool {
+    func removeSectionAndDependenciesSync(_ sectionUnique: SectionUnique, notificationTokens: [NotificationToken], markForSync: Bool) -> Bool {
         return doInWriteTransactionSync(withoutNotifying: notificationTokens) {[weak self] realm in
             if let weakSelf = self {
-                _ = weakSelf.removeSectionAndDependenciesSync(realm, sectionUuid: sectionUuid, markForSync: markForSync)
+                _ = weakSelf.removeSectionAndDependenciesSync(realm, sectionUnique: sectionUnique, markForSync: markForSync)
                 return true
             } else {
                 logger.e("self is nil")
@@ -127,12 +127,12 @@ class RealmSectionProvider: RealmProvider {
     }
     
     // Expected to be executed in a transaction
-    func removeSectionAndDependenciesSync(_ realm: Realm, sectionUuid: String, markForSync: Bool) -> Bool {
+    func removeSectionAndDependenciesSync(_ realm: Realm, sectionUnique: SectionUnique, markForSync: Bool) -> Bool {
         
-        _ = removeSectionDependenciesSync(realm, sectionUuid: sectionUuid, markForSync: markForSync)
+        _ = removeSectionDependenciesSync(realm, sectionUnique: sectionUnique, markForSync: markForSync)
         
         // delete section
-        if let dbSection = realm.objects(Section.self).filter(Section.createFilter(sectionUuid)).first {
+        if let dbSection = realm.objects(Section.self).filter(Section.createFilter(unique: sectionUnique)).first {
             if markForSync {
                 let toRemove = SectionToRemove(dbSection) // create this before the delete or it crashes TODO!!!! also in other places of the app, this error is in several other providers
                 realm.add(toRemove, update: true)
@@ -140,14 +140,14 @@ class RealmSectionProvider: RealmProvider {
             realm.delete(dbSection)
             return true
         } else {
-            logger.w("Didn't find section to be deleted: \(sectionUuid)")
+            logger.w("Didn't find section to be deleted: \(sectionUnique)")
             return false
         }
     }
     
-    func removeSectionDependenciesSync(_ realm: Realm, sectionUuid: String, markForSync: Bool) -> Bool {
+    func removeSectionDependenciesSync(_ realm: Realm, sectionUnique: SectionUnique, markForSync: Bool) -> Bool {
         // delete list items referencing the section
-        let dbListItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithSection(sectionUuid))
+        let dbListItems = realm.objects(ListItem.self).filter(ListItem.createFilterWithSection(sectionUnique))
         if markForSync {
             let toRemoveListItems = Array(dbListItems.map{DBRemoveListItem($0)}) // create this before the delete or it crashes
             saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
@@ -195,9 +195,9 @@ class RealmSectionProvider: RealmProvider {
         }
     }
     
-    func removeSectionIfEmptySync(_ realm: Realm, sectionUuid: String) {
-        if realm.objects(ListItem.self).filter(ListItem.self.createFilterWithSection(sectionUuid)).isEmpty { // if no list items reference the section
-            let dbSection = realm.objects(Section.self).filter(Section.createFilter(sectionUuid))
+    func removeSectionIfEmptySync(_ realm: Realm, sectionUnique: SectionUnique) {
+        if realm.objects(ListItem.self).filter(ListItem.self.createFilterWithSection(sectionUnique)).isEmpty { // if no list items reference the section
+            let dbSection = realm.objects(Section.self).filter(Section.createFilter(unique: sectionUnique))
             realm.delete(dbSection)
         }
     }
@@ -258,7 +258,7 @@ class RealmSectionProvider: RealmProvider {
                     realm.add(section, update: true) // TODO is this necessary?
                     return AddSectionResult(section: section, isNew: false, index: index)
                 } else {
-                    let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: status, order: 123), status: status) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
+                    let section = Section(name: sectionName, color: sectionColor, list: list, order: (status: status, order: 123), status: status) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
                     sections.append(section)
                     return AddSectionResult(section: section, isNew: true, index: sections.count - 1)
                 }
@@ -294,7 +294,7 @@ class RealmSectionProvider: RealmProvider {
                     realm.add(section, update: true) // TODO is this necessary?
                     return AddSectionPlainResult(section: section, isNew: false)
                 } else { // doesn't exist
-                    let section = Section(uuid: UUID().uuidString, name: sectionName, color: sectionColor, list: list, order: (status: .done, order: 123), status: status) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
+                    let section = Section(name: sectionName, color: sectionColor, list: list, order: (status: .done, order: 123), status: status) // TODO!!!!!!!!!!!!!! order for now leaving this out because it's not clear how list items / sections will be re-implemented to support real time sync. If we use RealmSwift.List, order field can be removed.
 //                    sections.append(section)
                     realm.add(section, update: true)
                     return AddSectionPlainResult(section: section, isNew: true)
@@ -361,7 +361,7 @@ class RealmSectionProvider: RealmProvider {
             return section
         
         }  else { // The section doesn't exist in the target status
-            let section = Section(uuid: UUID().uuidString, name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0), status: status) // TODO!!!!!!!!! remove order from sections
+            let section = Section(name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0), status: status) // TODO!!!!!!!!! remove order from sections
             return appendSection(section: section)
         }
     }
@@ -374,7 +374,7 @@ class RealmSectionProvider: RealmProvider {
                 return section
 
             } else {
-                let section = Section(uuid: UUID().uuidString, name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0), status: status) // TODO!!!!!!!!! remove order from sections
+                let section = Section(name: name, color: color, list: list, order: ListItemStatusOrder(status: status, order: 0), status: status) // TODO!!!!!!!!! remove order from sections
                 realm.add(section, update: true)
                 return section
             }

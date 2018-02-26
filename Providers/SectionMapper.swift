@@ -36,7 +36,6 @@ class SectionMapper {
     
     class func dbWithRemote(_ section: RemoteSection, list: List) -> Section {
         let dbSection = Section()
-        dbSection.uuid = section.uuid
         dbSection.name = section.name
         dbSection.color = section.color
         dbSection.list = list
