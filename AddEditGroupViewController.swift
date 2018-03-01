@@ -161,7 +161,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         
         if let errors = validator?.validate() {
             for (_, error) in errors {
-                error.field.showValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
             // TODO outdated implementation (TODO remove?)
 //            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
@@ -169,7 +169,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         } else {
             if let lastErrors = validator?.errors {
                 for (_, error) in lastErrors {
-                    error.field.clearValidationError()
+                    (error.field as? ValidatableTextField)?.showValidationError()
                 }
             }
             

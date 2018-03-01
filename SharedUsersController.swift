@@ -134,7 +134,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         
         if let errors = validator?.validate() {
             for (_, error) in errors {
-                error.field.showValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
             // Outdated implementation
 //            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
@@ -142,7 +142,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         } else {
             if let lastErrors = validator?.errors {
                 for (_, error) in lastErrors {
-                    error.field.clearValidationError()
+                    (error.field as? ValidatableTextField)?.showValidationError()
                 }
             }
             

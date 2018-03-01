@@ -198,7 +198,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
 
         if let errors = validator?.validate() {
             for (_, error) in errors {
-                error.field.showValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
 
             let currentFirstResponder = listNameInputField.isFirstResponder ? listNameInputField : nil
@@ -208,7 +208,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         } else {
             if let lastErrors = validator?.errors {
                 for (_, error) in lastErrors {
-                    error.field.clearValidationError()
+                    (error.field as? ValidatableTextField)?.showValidationError()
                 }
             }
             

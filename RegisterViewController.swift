@@ -142,7 +142,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         
         if let errors = self.validator?.validate() {
             for (_, error) in errors {
-                error.field.showValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
             // TODO outdated implementation (TODO remove?)
 //            present(ValidationAlertCreator.create(errors), animated: true, completion: nil)

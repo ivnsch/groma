@@ -336,7 +336,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
 
         if let errors = validator?.validate() {
             for (_, error) in errors {
-                error.field.showValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
 
             let currentFirstResponder = self.currentFirstResponder
@@ -346,7 +346,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         } else {
             if let lastErrors = validator?.errors {
                 for (_, error) in lastErrors {
-                    error.field.clearValidationError()
+                    (error.field as? ValidatableTextField)?.showValidationError()
                 }
             }
 

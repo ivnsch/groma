@@ -106,7 +106,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
 
         if let errors = validator.validate() {
             for (_, error) in errors {
-                error.field.showValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
 
                 let currentFirstResponder = nameTextField.isFirstResponder ? nameTextField : nil
                 view.endEditing(true)
@@ -115,7 +115,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
             
         } else {
             for (_, error) in validator.errors {
-                error.field.clearValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
             
             if let name = nameTextField.text, let color = view.backgroundColor {

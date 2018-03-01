@@ -58,14 +58,14 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
         
         if let errors = validator.validate() {
             for (_, error) in errors {
-                error.field.showValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
                 // Outdated implementation TODO remove?
 //                present(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             }
             
         } else {
             for (_, error) in validator.errors {
-                error.field.clearValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
             
             if let updatedName = nameTextField.text, let color = categoryColorButton.imageView?.tintColor {

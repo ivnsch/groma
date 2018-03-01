@@ -169,7 +169,7 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
 
         if let errors = validator.validate() {
             for (_, error) in errors {
-                error.field.showValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
             if mode == .standalone {
                 let currentFirstResponder = nameTextField.isFirstResponder ? nameTextField : nil
@@ -180,7 +180,7 @@ class EditNameColorController: UIViewController, FlatColorPickerControllerDelega
             
         } else {
             for (_, error) in validator.errors {
-                error.field.clearValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
             
             if let name = nameTextField.text, let color = colorView.textColor {

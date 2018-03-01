@@ -10,7 +10,7 @@ import UIKit
 import Providers
 
 @IBDesignable
-class LineTextField: UITextField {
+class LineTextField: UITextField, ValidatableTextField {
 
     @IBInspectable var fontType: Int = -1
     
@@ -32,16 +32,15 @@ class LineTextField: UITextField {
         }
     }
 
-    // TODO review - had to be commented while swift 4 migration (extension declaration cannot be overriden)
-//    override func showValidationError() {
-//        lineColor = UIColor.flatRed
-//        setNeedsDisplay()
-//    }
-//
-//    override func clearValidationError() {
-//        lineColor = LineTextField.defaultLineColor
-//        setNeedsDisplay()
-//    }
+    func showValidationError() {
+        lineColor = UIColor.flatRed
+        setNeedsDisplay()
+    }
+
+    func clearValidationError() {
+        lineColor = LineTextField.defaultLineColor
+        setNeedsDisplay()
+    }
 
     override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()

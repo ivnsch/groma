@@ -9,7 +9,7 @@
 import UIKit
 
 @IBDesignable
-class LineAutocompleteTextField: MyAutoCompleteTextField, UITextFieldDelegate {
+class LineAutocompleteTextField: MyAutoCompleteTextField, UITextFieldDelegate, ValidatableTextField {
 
     fileprivate let lineWidth: CGFloat = 1
     
@@ -25,16 +25,15 @@ class LineAutocompleteTextField: MyAutoCompleteTextField, UITextFieldDelegate {
         self.delegate = self
     }
 
-    // TODO review - had to be commented while swift 4 migration (extension declaration cannot be overriden)
-//    override func showValidationError() {
-//        lineColor = UIColor.flatRed
-//        setNeedsDisplay()
-//    }
-//
-//    override func clearValidationError() {
-//        lineColor = LineAutocompleteTextField.defaultLineColor
-//        setNeedsDisplay()
-//    }
+    func showValidationError() {
+        lineColor = UIColor.flatRed
+        setNeedsDisplay()
+    }
+
+    func clearValidationError() {
+        lineColor = LineAutocompleteTextField.defaultLineColor
+        setNeedsDisplay()
+    }
 
     override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()

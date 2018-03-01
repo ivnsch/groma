@@ -138,7 +138,7 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 
         if let errors = self.validator?.validate() {
             for (_, error) in errors {
-                error.field.showValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
             let currentFirstResponder = self.currentFirstResponder
             view.endEditing(true)

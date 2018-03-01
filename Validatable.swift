@@ -9,8 +9,7 @@
 import UIKit
 import SwiftValidator
 
-extension Validatable {
-
-    func showValidationError() {}
-    func clearValidationError() {}
+protocol ValidatableTextField: Validatable {
+    func showValidationError()
+    func clearValidationError()
 }

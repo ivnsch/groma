@@ -10,7 +10,7 @@ import UIKit
 import Providers
 
 @IBDesignable
-class RoundTextField: UITextField {
+class RoundTextField: UITextField, ValidatableTextField {
     
     @IBInspectable var fontType: Int = -1
 
@@ -28,16 +28,15 @@ class RoundTextField: UITextField {
         self.originalTextColor = textColor
     }
 
-    // TODO review - had to be commented while swift 4 migration (extension declaration cannot be overriden)
-//    override func showValidationError() {
-//        drawInvalid = true
-//        setNeedsDisplay()
-//    }
-//
-//    override func clearValidationError() {
-//        drawInvalid = false
-//        setNeedsDisplay()
-//    }
+    func showValidationError() {
+        drawInvalid = true
+        setNeedsDisplay()
+    }
+
+    func clearValidationError() {
+        drawInvalid = false
+        setNeedsDisplay()
+    }
 
     override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()

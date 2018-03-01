@@ -703,7 +703,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             }
 
             for (_, error) in allValidationErrors {
-                error.field.showValidationError()
+                (error.field as? ValidatableTextField)?.showValidationError()
             }
             
             delegate?.onValidationErrors(allValidationErrors)
@@ -711,7 +711,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         } else {
             if let lastErrors = validator?.errors {
                 for (_, error) in lastErrors {
-                    error.field.clearValidationError()
+                    (error.field as? ValidatableTextField)?.showValidationError()
                 }
             }
 

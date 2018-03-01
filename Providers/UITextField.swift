@@ -12,14 +12,6 @@ private var maxLengthDictionary = [UITextField: Int]()
 
 extension UITextField {
 
-    open func showValidationError() {
-        // override
-    }
-    
-    open func clearValidationError() {
-        // override
-    }
-    
     public func clear() {
         self.text = ""
     }
