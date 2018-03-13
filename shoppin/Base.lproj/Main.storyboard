@@ -58,7 +58,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ijr-7n-zCH" id="9EK-bc-0K7">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O8d-6A-xsA" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -322,7 +322,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="28" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ANJ-05-PvP" id="pzx-ip-Qus">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dhQ-jr-KOI">
@@ -396,7 +396,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                         <rect key="frame" x="0.0" y="28" width="375" height="91"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NKn-m5-Zdh" id="eIB-7N-JEC">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="90.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="gE1-hG-c7M" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -457,7 +457,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                         <rect key="frame" x="0.0" y="119" width="375" height="91"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1sk-H4-Z72" id="9w2-Ot-jee">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="90.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="91"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9u4-kk-kdw" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -689,7 +689,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="28" width="375" height="76"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Okf-Mk-RuK" id="jdz-dt-wvN">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iL4-5Y-aAl" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -978,7 +978,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <nil key="highlightedColor"/>
                             </label>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qfw-EP-IMI">
-                                <rect key="frame" x="0.0" y="105" width="375" height="513"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="fLS-kD-P95">
                                         <rect key="frame" x="67.5" y="150" width="240" height="206"/>
@@ -1020,20 +1020,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="dm0-uo-IfV" secondAttribute="trailing" constant="20" id="i61-5T-T1d"/>
-                                    <constraint firstItem="fLS-kD-P95" firstAttribute="top" secondItem="Qfw-EP-IMI" secondAttribute="top" constant="150" id="isL-Xr-l5F" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
-                                                <real key="value" value="59"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
-                                                <real key="value" value="109"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
-                                                <real key="value" value="159"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </constraint>
+                                    <constraint firstItem="fLS-kD-P95" firstAttribute="top" secondItem="Qfw-EP-IMI" secondAttribute="top" constant="150" id="isL-Xr-l5F" customClass="EmptyViewTopConstraint" customModule="groma" customModuleProvider="target"/>
                                     <constraint firstItem="dm0-uo-IfV" firstAttribute="top" secondItem="9Fg-gJ-nkw" secondAttribute="bottom" constant="8" id="jt8-ff-Uni"/>
                                     <constraint firstItem="9Fg-gJ-nkw" firstAttribute="centerX" secondItem="Qfw-EP-IMI" secondAttribute="centerX" id="kqK-3u-Vbb"/>
                                     <constraint firstItem="dm0-uo-IfV" firstAttribute="leading" secondItem="Qfw-EP-IMI" secondAttribute="leading" constant="20" id="x2p-1a-uYV"/>
@@ -1073,7 +1060,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             <constraint firstAttribute="trailing" secondItem="H9i-XV-A40" secondAttribute="trailing" id="I7j-Zv-4ws"/>
                             <constraint firstAttribute="trailing" secondItem="aQD-q2-WPN" secondAttribute="trailing" id="JrO-0B-AbO"/>
                             <constraint firstItem="yZf-9B-noG" firstAttribute="top" secondItem="QHy-Ek-0nU" secondAttribute="bottom" id="Ju6-mv-Ukx"/>
-                            <constraint firstItem="Qfw-EP-IMI" firstAttribute="top" secondItem="fwZ-a2-d32" secondAttribute="bottom" id="KSW-fb-eAI"/>
+                            <constraint firstItem="Qfw-EP-IMI" firstAttribute="top" secondItem="QHy-Ek-0nU" secondAttribute="top" id="KSW-fb-eAI"/>
                             <constraint firstItem="P5t-9b-PXe" firstAttribute="centerY" secondItem="CcA-yY-Wpn" secondAttribute="centerY" id="LHZ-a2-pQw"/>
                             <constraint firstItem="QHy-Ek-0nU" firstAttribute="leading" secondItem="llX-YW-eE9" secondAttribute="leading" id="LX8-u8-97P"/>
                             <constraint firstItem="Bvb-VA-geS" firstAttribute="centerY" secondItem="V34-s8-kUI" secondAttribute="centerY" id="M6d-gQ-wzq"/>
@@ -1318,10 +1305,10 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 </connections>
                             </tableView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dl2-3s-zxQ">
-                                <rect key="frame" x="0.0" y="60" width="375" height="607"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="L5s-CW-xfh">
-                                        <rect key="frame" x="75" y="150" width="226" height="206"/>
+                                        <rect key="frame" x="68" y="150" width="240" height="206"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="200" id="6Jj-Dt-BsC"/>
                                             <constraint firstAttribute="height" constant="200" id="OJU-kg-uEU"/>
@@ -1362,8 +1349,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                     <constraint firstItem="eL2-CC-5WO" firstAttribute="top" secondItem="L5s-CW-xfh" secondAttribute="bottom" constant="20" id="QTk-XT-EUN"/>
                                     <constraint firstAttribute="trailing" secondItem="dmx-RZ-FMQ" secondAttribute="trailing" constant="40" id="R8X-PK-CVa"/>
                                     <constraint firstItem="dmx-RZ-FMQ" firstAttribute="top" secondItem="eL2-CC-5WO" secondAttribute="bottom" constant="8" id="Zlt-D1-cvP"/>
-                                    <constraint firstItem="L5s-CW-xfh" firstAttribute="top" secondItem="dl2-3s-zxQ" secondAttribute="top" constant="150" id="emr-vS-NIg"/>
-                                    <constraint firstItem="L5s-CW-xfh" firstAttribute="width" secondItem="dl2-3s-zxQ" secondAttribute="width" multiplier="0.6" constant="1" id="rnZ-cJ-PEz"/>
+                                    <constraint firstItem="L5s-CW-xfh" firstAttribute="top" secondItem="dl2-3s-zxQ" secondAttribute="top" constant="150" id="emr-vS-NIg" customClass="EmptyViewTopConstraint" customModule="groma" customModuleProvider="target"/>
                                     <constraint firstItem="eL2-CC-5WO" firstAttribute="centerX" secondItem="dl2-3s-zxQ" secondAttribute="centerX" id="rxy-dZ-rNC"/>
                                     <constraint firstItem="dmx-RZ-FMQ" firstAttribute="leading" secondItem="dl2-3s-zxQ" secondAttribute="leading" constant="40" id="zwd-zV-0nN"/>
                                 </constraints>
@@ -1430,7 +1416,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             <constraint firstItem="Vmw-7d-k3a" firstAttribute="top" secondItem="XF6-Wi-vHV" secondAttribute="bottom" id="m1Z-9a-qTm"/>
                             <constraint firstAttribute="trailing" secondItem="XF6-Wi-vHV" secondAttribute="trailing" id="swb-7c-58P"/>
                             <constraint firstAttribute="trailing" secondItem="auc-2c-2Qj" secondAttribute="trailing" id="u9m-ET-Oo5"/>
-                            <constraint firstItem="dl2-3s-zxQ" firstAttribute="top" secondItem="auc-2c-2Qj" secondAttribute="bottom" id="yl2-Df-UkD"/>
+                            <constraint firstItem="dl2-3s-zxQ" firstAttribute="top" secondItem="xO6-op-izh" secondAttribute="bottom" id="yl2-Df-UkD"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -1447,6 +1433,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                     <connections>
                         <outlet property="emptyHistoryView" destination="dl2-3s-zxQ" id="Pr2-17-6pm"/>
                         <outlet property="inventoriesButton" destination="cfR-FR-ibb" id="RpE-2o-8hb"/>
+                        <outlet property="menuBar" destination="auc-2c-2Qj" id="JKP-Rp-TCO"/>
                         <outlet property="tableView" destination="XF6-Wi-vHV" id="4JU-R5-kwv"/>
                         <outlet property="tableViewFooter" destination="Lxj-To-pGn" id="mMi-wg-xQE"/>
                     </connections>
@@ -1566,7 +1553,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="28" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vlG-IH-rnp" id="HrI-DL-GBd">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="67.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="68"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JGo-Cb-Ord" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -1648,7 +1635,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="28" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="K72-Pl-rS1" id="g0y-il-hwG">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="67.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="68"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxv-Gd-l65" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -1778,7 +1765,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                 <rect key="frame" x="0.0" y="28" width="375" height="76"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="L9Z-YA-iLL" id="scG-Is-T8O">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0cw-8e-IWU" customClass="LabelMore" customModule="groma" customModuleProvider="target">

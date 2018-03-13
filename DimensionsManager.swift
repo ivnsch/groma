@@ -15,6 +15,7 @@ import UIKit
 * 5/C/S/SE: 320x568
 * 6/S: 375x667
 * 6+/S: 414x736
+* X: 375x812
 *
 * We will not use fixed dimensions but continuous ranges, just in case. The ranges match 1:1 with the current available iPhones (a range contains max. 1 iPhone and every iPhone has a range). We use biger or equal than the size of each iPhone such that if there happens to be some unexpected screen size in the middle, it uses the next lowest size - which is less worse  than using the biggest size, as the latest can lead to layout overflowing the screen. Note: Also, substracting 1pt from max in comparisons below (e.g. using w >= 413 instead of w >= 414), for possible innacuracy (don't know if this is necessary but it doesn't hurt to do it).
 */
@@ -30,6 +31,7 @@ enum HeightDimension {
     case small // iPhone 5 / SE
     case middle // iPhone 6
     case large // iPhone 6+
+    case xLarge // iPhone X
 }
 
 class DimensionsManager {
@@ -54,6 +56,7 @@ class DimensionsManager {
     static var heightDimension: HeightDimension {
         let dimension: HeightDimension = {
             switch screenSize.height {
+            case let h where h >= 812: return .xLarge // iPhone X
             case let h where h >= 735: return .large // iPhone 6+
             case let h where h >= 666: return .middle // iPhone 6
             case let h where h >= 567: return .small // iPhone 5
@@ -77,7 +80,7 @@ class DimensionsManager {
         case .verySmall: return 150
         case .small: return 220
         case .middle: return 285
-        case .large: return 310
+        case .large, .xLarge: return 310
         }
     }
     
@@ -86,7 +89,7 @@ class DimensionsManager {
         case .verySmall: return 160
         case .small: return 160
         case .middle: return 160
-        case .large: return 160
+        case .large, .xLarge: return 160
         }
     }
 
@@ -95,7 +98,7 @@ class DimensionsManager {
         case .verySmall: return 150
         case .small: return 150
         case .middle: return 180
-        case .large: return 200
+        case .large, .xLarge: return 200
         }
     }
     
@@ -104,7 +107,7 @@ class DimensionsManager {
         case .verySmall: return 30
         case .small: return 35
         case .middle: return 50
-        case .large: return 50
+        case .large, .xLarge: return 50
         }
     }
     
@@ -113,7 +116,7 @@ class DimensionsManager {
         case .verySmall: return 0
         case .small: return 5
         case .middle: return 10
-        case .large: return 10
+        case .large, .xLarge: return 10
         }
     }
 
@@ -130,7 +133,7 @@ class DimensionsManager {
         case .verySmall: return 10
         case .small: return 10
         case .middle: return 20
-        case .large: return 20
+        case .large, .xLarge: return 20
         }
     }
 
@@ -139,7 +142,7 @@ class DimensionsManager {
         case .verySmall: return 10
         case .small: return 10
         case .middle: return 20
-        case .large: return 20
+        case .large, .xLarge: return 20
         }
     }
 
@@ -148,7 +151,7 @@ class DimensionsManager {
         case .verySmall: return 0
         case .small: return 3
         case .middle: return 6
-        case .large: return 6
+        case .large, .xLarge: return 6
         }
     }
     
@@ -158,7 +161,7 @@ class DimensionsManager {
         case .verySmall: return 30
         case .small: return 35
         case .middle: return 35
-        case .large: return 40
+        case .large, .xLarge: return 40
         }
     }
     
@@ -167,7 +170,7 @@ class DimensionsManager {
         case .verySmall: return 16
         case .small: return 16
         case .middle: return 18
-        case .large: return 18
+        case .large, .xLarge: return 18
         }
     }
     
@@ -176,7 +179,7 @@ class DimensionsManager {
         case .verySmall: return 25
         case .small: return 25
         case .middle: return 30
-        case .large: return 30
+        case .large, .xLarge: return 30
         }
     }
 
@@ -185,7 +188,7 @@ class DimensionsManager {
         case .verySmall: return 0
         case .small: return 0
         case .middle: return 10
-        case .large: return 10
+        case .large, .xLarge: return 10
         }
     }
 
@@ -194,7 +197,7 @@ class DimensionsManager {
         case .verySmall: return 30
         case .small: return 30
         case .middle: return 35
-        case .large: return 35
+        case .large, .xLarge: return 35
         }
     }
 
@@ -205,7 +208,7 @@ class DimensionsManager {
         case .verySmall: return 25
         case .small: return 25
         case .middle: return 30
-        case .large: return 30
+        case .large, .xLarge: return 30
         }
     }
 
@@ -215,7 +218,7 @@ class DimensionsManager {
         case .verySmall: return 64
         case .small: return 64
         case .middle: return 70
-        case .large: return 70
+        case .large, .xLarge: return 70
         }
     }
     
@@ -226,7 +229,7 @@ class DimensionsManager {
         case .verySmall: return 62
         case .small: return 62
         case .middle: return 82
-        case .large: return 91
+        case .large, .xLarge: return 91
         }
     }
     
@@ -235,7 +238,7 @@ class DimensionsManager {
         case .verySmall: return 40
         case .small: return 40
         case .middle: return 50
-        case .large: return 50
+        case .large, .xLarge: return 50
         }
     }
     
@@ -244,7 +247,7 @@ class DimensionsManager {
         case .verySmall: return 40
         case .small: return 40
         case .middle: return 40
-        case .large: return 40
+        case .large, .xLarge: return 40
         }
     }
     
@@ -253,7 +256,7 @@ class DimensionsManager {
         case .verySmall: return 30
         case .small: return 30
         case .middle: return 30
-        case .large: return 35
+        case .large, .xLarge: return 35
         }
     }
     
@@ -275,10 +278,11 @@ class DimensionsManager {
     
     static var emptyViewTopConstraint: CGFloat {
         switch heightDimension {
-        case .verySmall: return 30
-        case .small: return 70
-        case .middle: return 160
-        case .large: return 160
+        case .verySmall: return 100
+        case .small: return 100
+        case .middle: return 150
+        case .large: return 150
+        case .xLarge: return 180
         }
     }
 
@@ -287,7 +291,7 @@ class DimensionsManager {
         case .verySmall: return 20
         case .small: return 35
         case .middle: return 40
-        case .large: return 40
+        case .large, .xLarge: return 40
         }
     }
     
@@ -316,7 +320,7 @@ class DimensionsManager {
         case .verySmall: return 18
         case .small: return 18
         case .middle: return 25
-        case .large: return 25
+        case .large, .xLarge: return 25
         }
     }
     
@@ -327,7 +331,7 @@ class DimensionsManager {
         case .verySmall: return 10
         case .small: return 30
         case .middle: return 60
-        case .large: return 80
+        case .large, .xLarge: return 80
         }
     }
     
@@ -336,7 +340,7 @@ class DimensionsManager {
         case .verySmall: return 60
         case .small: return 60
         case .middle: return 60
-        case .large: return 60
+        case .large, .xLarge: return 60
         }
     }
     
@@ -347,7 +351,7 @@ class DimensionsManager {
         case .verySmall: return 70
         case .small: return 80
         case .middle: return 85
-        case .large: return 85
+        case .large, .xLarge: return 85
         }
     }
 
@@ -356,7 +360,7 @@ class DimensionsManager {
         case .verySmall: return 55
         case .small: return 65
         case .middle: return 70
-        case .large: return 70
+        case .large, .xLarge: return 70
         }
     }
     

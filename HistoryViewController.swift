@@ -19,6 +19,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet var tableView: UITableView!
     
     @IBOutlet weak var emptyHistoryView: UIView!
+    @IBOutlet weak var menuBar: UIView!
 
     fileprivate var dateFormatter: DateFormatter!
     
@@ -72,8 +73,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     fileprivate func loadInventories() {
-        Prov.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
-            self?.inventoryPicker?.inventories = inventories.toArray()
+        Prov.inventoryProvider.inventories(true, successHandler{[weak self] inventories in guard let weakSelf = self else { return }
+            weakSelf.inventoryPicker?.inventories = inventories.toArray()
+            weakSelf.menuBar.setHiddenAnimated(inventories.isEmpty)
+            let showEmptyHistoryView = inventories.isEmpty || weakSelf.sectionModels.isEmpty
+            weakSelf.emptyHistoryView.setHiddenAnimated(!showEmptyHistoryView)
         })
     }
     

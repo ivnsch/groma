@@ -25,74 +25,20 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="500"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Just add some, will ya?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zGk-15-p8M" customClass="LabelMore" customModule="groma">
-                                            <rect key="frame" x="20" y="456" width="335" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                    <integer key="value" value="40"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oops, there are no items yet" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pw-sM-s8g" customClass="LabelMore" customModule="groma">
-                                            <rect key="frame" x="20" y="426" width="335" height="22"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                            <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                    <integer key="value" value="50"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
-                                        </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="v4P-W6-KqR">
-                                            <rect key="frame" x="68" y="200" width="240" height="206"/>
-                                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="60" id="1yg-YH-OhE"/>
-                                                <constraint firstAttribute="height" constant="60" id="wWI-us-YKH"/>
-                                            </constraints>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="1yg-YH-OhE"/>
-                                                    <exclude reference="wWI-us-YKH"/>
-                                                </mask>
-                                            </variation>
-                                        </imageView>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="67Z-JT-kjD" customClass="EmptyView" customModule="groma" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="500"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </view>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="9pw-sM-s8g" firstAttribute="top" secondItem="v4P-W6-KqR" secondAttribute="bottom" constant="20" id="BK3-0R-7tn"/>
-                                        <constraint firstItem="v4P-W6-KqR" firstAttribute="centerX" secondItem="2DS-as-bOM" secondAttribute="centerX" id="BVM-cX-QQ8"/>
-                                        <constraint firstAttribute="trailing" secondItem="zGk-15-p8M" secondAttribute="trailing" constant="20" id="HuP-8o-YRk"/>
-                                        <constraint firstItem="zGk-15-p8M" firstAttribute="leading" secondItem="2DS-as-bOM" secondAttribute="leading" constant="20" id="JQW-aN-cOl"/>
-                                        <constraint firstAttribute="trailing" secondItem="9pw-sM-s8g" secondAttribute="trailing" constant="20" id="MYu-Zj-Ull"/>
-                                        <constraint firstItem="9pw-sM-s8g" firstAttribute="centerX" secondItem="2DS-as-bOM" secondAttribute="centerX" id="Uga-o1-Afu"/>
-                                        <constraint firstItem="zGk-15-p8M" firstAttribute="top" secondItem="9pw-sM-s8g" secondAttribute="bottom" constant="8" id="Ylg-kb-3Fh"/>
-                                        <constraint firstItem="zGk-15-p8M" firstAttribute="centerX" secondItem="2DS-as-bOM" secondAttribute="centerX" id="g9n-3R-mN0"/>
-                                        <constraint firstItem="9pw-sM-s8g" firstAttribute="leading" secondItem="2DS-as-bOM" secondAttribute="leading" constant="20" id="kDk-sr-MES"/>
-                                        <constraint firstItem="9pw-sM-s8g" firstAttribute="top" secondItem="v4P-W6-KqR" secondAttribute="bottom" constant="20" id="sLc-Aw-Ia3"/>
-                                        <constraint firstItem="v4P-W6-KqR" firstAttribute="top" secondItem="2DS-as-bOM" secondAttribute="top" constant="200" id="sU7-xm-4sa" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
-                                                    <integer key="value" value="100"/>
-                                                </userDefinedRuntimeAttribute>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
-                                                    <integer key="value" value="150"/>
-                                                </userDefinedRuntimeAttribute>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
-                                                    <integer key="value" value="200"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
-                                        </constraint>
-                                        <constraint firstItem="zGk-15-p8M" firstAttribute="top" secondItem="9pw-sM-s8g" secondAttribute="bottom" constant="8" id="z4l-hN-njG"/>
+                                        <constraint firstItem="67Z-JT-kjD" firstAttribute="leading" secondItem="2DS-as-bOM" secondAttribute="leading" id="5Cj-Bb-ADy"/>
+                                        <constraint firstAttribute="bottom" secondItem="67Z-JT-kjD" secondAttribute="bottom" id="Qcz-Zw-APp"/>
+                                        <constraint firstItem="67Z-JT-kjD" firstAttribute="top" secondItem="2DS-as-bOM" secondAttribute="top" id="Zaa-q2-Szf"/>
+                                        <constraint firstAttribute="trailing" secondItem="67Z-JT-kjD" secondAttribute="trailing" id="iu3-Qy-Omg"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="label1" destination="9pw-sM-s8g" id="ICB-5R-WYG"/>
-                                    <outlet property="label2" destination="zGk-15-p8M" id="cxS-Xj-Ufn"/>
+                                    <outlet property="view" destination="67Z-JT-kjD" id="C7V-gY-yEg"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -107,7 +53,4 @@
             <point key="canvasLocation" x="-241" y="0.0"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="empty_page" width="240" height="206"/>
-    </resources>
 </document>

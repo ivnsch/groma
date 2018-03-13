@@ -10,9 +10,8 @@ import UIKit
 
 class EmptyViewCell: UITableViewCell {
 
-    @IBOutlet weak var label1: UILabel!
-    @IBOutlet weak var label2: UILabel!
-    
+    @IBOutlet weak var view: EmptyView!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         contentView.backgroundColor = Theme.mainBGColor

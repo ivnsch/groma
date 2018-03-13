@@ -44,7 +44,7 @@ import Providers
                 case .verySmall: return vVerySmall
                 case .small: return vSmall
                 case .middle: return vMiddle
-                case .large: return vLarge
+                case .large, .xLarge: return vLarge
                 }
             }
         }()

@@ -93,7 +93,7 @@ class Fonts {
             case .regular: return 17
             case .large: return 19
             }
-        case .large: // iPhone 6+
+        case .large, .xLarge: // iPhone 6+, iPhone X
             switch size {
             case .superSmall: return 11
             case .verySmall: return 13

@@ -70,8 +70,8 @@ class EmptyViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! EmptyViewCell
-        cell.label1.text = labels.label1
-        cell.label2.text = labels.label2
+        cell.view.line1.text = labels.label1
+        cell.view.line2.text = labels.label2
         return cell
     }
     
