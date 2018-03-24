@@ -21,6 +21,7 @@
                 <outlet property="leftConstraint" destination="QjW-sd-7h7" id="XfI-ED-Ld3"/>
                 <outlet property="messageBottomConstraint" destination="VGG-Xh-eJs" id="Md1-3m-WaT"/>
                 <outlet property="messageTextView" destination="JEj-oE-46m" id="6Kf-aF-cMx"/>
+                <outlet property="okButton" destination="ChX-ss-J4v" id="anb-AT-9b0"/>
                 <outlet property="okButtonBottomConstraint" destination="AS4-Ag-aND" id="luc-wt-tje"/>
                 <outlet property="okButtonHeightConstraint" destination="EXf-ga-rUZ" id="HQM-Mz-Wua"/>
                 <outlet property="rightConstraint" destination="Mre-by-gzI" id="1AF-zk-PHQ"/>
@@ -67,7 +68,7 @@
                     <rect key="frame" x="40" y="332" width="295" height="50"/>
                     <color key="backgroundColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="50" id="EXf-ga-rUZ" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
+                        <constraint firstAttribute="height" constant="50" id="EXf-ga-rUZ" customClass="SubmitButtonHeightConstraint" customModule="groma" customModuleProvider="target">
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
                                     <integer key="value" value="40"/>

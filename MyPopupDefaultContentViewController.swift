@@ -26,6 +26,7 @@ class MyPopupDefaultContentViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleTextView: UILabel!
     @IBOutlet weak var messageTextView: UILabel!
+    @IBOutlet weak var okButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
 
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
@@ -82,6 +83,12 @@ class MyPopupDefaultContentViewController: UIViewController {
         if !contents.hasCancel {
             cancelButtonHeightConstraint.constant = 0
         }
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        okButton.layer.cornerRadius = DimensionsManager.submitButtonCornerRadius
     }
 
     override func viewWillAppear(_ animated: Bool) {
