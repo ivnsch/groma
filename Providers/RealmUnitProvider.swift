@@ -135,9 +135,7 @@ class RealmUnitProvider: RealmProvider {
                     storedUnits.append(unit)
                 }
             }
-
-            return (saveObjsSync(predefinedUnits, update: true), // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
-                predefinedUnits)
+            return (true, predefinedUnits)
         }
     }
 
