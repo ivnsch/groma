@@ -507,7 +507,7 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func restorePrefillProductsLocal(_ handler: @escaping (ProviderResult<Bool>) -> Void) {
-        DBProv.productProvider.restorePrefillProducts() {restoredSomethingMaybe in
+        DBProv.productProvider.restorePrefillProducts {restoredSomethingMaybe in
             if let restoredSomething = restoredSomethingMaybe {
                 handler(ProviderResult(status: .success, sucessResult: restoredSomething))
             } else {

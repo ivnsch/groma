@@ -251,6 +251,7 @@ popup_list_was_deleted_in_other_device = "La lista \"%@\" fue removida por otro 
 popup_please_accept_terms = "Por favor acepta las condiciones";
 popup_your_data_was_overwritten = "Tus datos locales fueron sobrescritos.";
 popup_are_you_sure_remove_account = "Quieres realmente borrar tu cuenta? Los datos serán removidos permanentemente.";
+popup_are_you_sure_remove_all_data = "Quieres realmente remover todos los datos? Esta acción es irrevocable.";
 popup_remove_account_help = "Borra tu cuenta del servidor. Tus datos locales no serán borrados y puedes continuar utilizando la app normalmente.";
 popup_your_account_was_removed = "Tu cuenta fue removida";
 popup_you_already_use_bundled_products = "Ya estas usando todos los productos predefinidos.";
@@ -259,6 +260,8 @@ popups_settings_overwrite = "Esto sobrescribirá todos tus datos (de Groma) en e
 popups_restore_bundled_products = "Agrega de nuevo productos predefinidos que hayas borrado. Esto no afecta tus productos existentes.";
 popups_restore_hints = "Reactiva las explicaciones .";
 popups_restore_units = "Agrega de nuevo las unidades de medida predefinidas. Nuevas unidades no son removidas.";
+popups_clear_all_data = "Borra todos los datos. Utliza la opción para agregar los productos predefinidos para tener el mismo estado que en una instalación nueva.";
+popups_participants_you_dont_have_to_add_yourself = "Du musst dich nicht selbst hinzufügen.";
 popups_participants_you_dont_have_to_add_yourself = "No tienes que agregarte tú mismo(a)";
 popups_participants_user_already_in_list = "%@\n ya está en la lista";
 popups_participants_user_not_registered = "%@\n no está registrado(a)";
@@ -339,7 +342,7 @@ setting_restore_bundled_products = "Restablecer productos predefinidos";
 setting_restore_hints = "Restablecer explicaciones";
 setting_restore_units = "Restablecer unidades de medida";
 setting_real_time_connection = "Conexión en tiempo real";
-
+setting_clear_data= "Remover datos";
 
 title_products = "Productos";
 title_login = "Sesión";

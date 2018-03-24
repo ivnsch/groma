@@ -190,6 +190,7 @@ class RealmGlobalProvider: RealmProvider {
     // NOTE: Outdated
     fileprivate func clearAllDataSync(_ realm: Realm) {
         realm.delete(realm.objects(GroupItem.self))
+        realm.delete(realm.objects(Ingredient.self))
         realm.delete(realm.objects(ListItem.self))
         realm.delete(realm.objects(InventoryItem.self))
         realm.delete(realm.objects(HistoryItem.self))
@@ -199,30 +200,49 @@ class RealmGlobalProvider: RealmProvider {
         realm.delete(realm.objects(ProductGroup.self))
         realm.delete(realm.objects(List.self))
         realm.delete(realm.objects(DBInventory.self))
+        realm.delete(realm.objects(Recipe.self))
         
         realm.delete(realm.objects(StoreProduct.self))
+        realm.delete(realm.objects(QuantifiableProduct.self))
         realm.delete(realm.objects(Product.self))
         realm.delete(realm.objects(ProductCategory.self))
+        realm.delete(realm.objects(Item.self))
+
+        realm.delete(realm.objects(Unit.self))
+        realm.delete(realm.objects(BaseQuantity.self))
+        realm.delete(realm.objects(DBTextSpan.self))
+        realm.delete(realm.objects(DBFraction.self))
 
         realm.delete(realm.objects(DBSharedUser.self))
 
-        // tombstones
-        realm.delete(realm.objects(DBRemoveGroupItem.self))
-        realm.delete(realm.objects(DBRemoveListItem.self))
-        realm.delete(realm.objects(DBRemoveInventoryItem.self))
-        realm.delete(realm.objects(DBRemoveHistoryItem.self))
+//        realm.delete(realm.objects(RecipesContainer.self))
+//        realm.delete(realm.objects(InventoriesContainer.self))
+//        realm.delete(realm.objects(ListsContainer.self))
+//        realm.delete(realm.objects(BaseQuantitiesContainer.self))
+//        realm.delete(realm.objects(UnitsContainer.self))
+//        realm.delete(realm.objects(FractionsContainer.self))
 
-        realm.delete(realm.objects(SectionToRemove.self))
-        
-        realm.delete(realm.objects(DBRemoveProductGroup.self))
-        realm.delete(realm.objects(DBRemoveList.self))
-        realm.delete(realm.objects(DBRemoveInventory.self))
+        // tombstones -- outdated
+//        realm.delete(realm.objects(DBRemoveGroupItem.self))
+//        realm.delete(realm.objects(DBRemoveListItem.self))
+//        realm.delete(realm.objects(DBRemoveInventoryItem.self))
+//        realm.delete(realm.objects(DBRemoveHistoryItem.self))
+//
+//        realm.delete(realm.objects(SectionToRemove.self))
+//
+//        realm.delete(realm.objects(DBRemoveProductGroup.self))
+//        realm.delete(realm.objects(DBRemoveList.self))
+//        realm.delete(realm.objects(DBRemoveInventory.self))
+//
+//        realm.delete(realm.objects(StoreProductToRemove.self))
+//        realm.delete(realm.objects(ProductToRemove.self))
+//        realm.delete(realm.objects(DBRemoveProductCategory.self))
+//
+//        realm.delete(realm.objects(DBRemoveSharedUser.self))
 
-        realm.delete(realm.objects(StoreProductToRemove.self))
-        realm.delete(realm.objects(ProductToRemove.self))
-        realm.delete(realm.objects(DBRemoveProductCategory.self))
 
-        realm.delete(realm.objects(DBRemoveSharedUser.self))
+        // We deleted the containers - restore them immediately. The app isn't in a usable state without containers.
+//        initContainers(realm: realm)
     }
     
     func clearAllData(_ handler: @escaping (Bool) -> Void) {

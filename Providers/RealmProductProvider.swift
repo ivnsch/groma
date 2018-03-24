@@ -1185,8 +1185,20 @@ class RealmProductProvider: RealmProvider {
     func restorePrefillProducts(_ handler: @escaping (Bool?) -> Void) {
         
         doInWriteTransaction({realm in
-            
-            guard let units = DBProv.unitProvider.unitsSync(buyable: nil) else {logger.e("Couldn't load units. Can't restore prefill product"); return false}
+
+            var unitsMaybe = DBProv.unitProvider.unitsSync(buyable: nil)
+            if unitsMaybe == nil || unitsMaybe?.isEmpty == true {
+                logger.i("Couldn't load units. This may happen after user cleared all data. Restoring all units...")
+                let restoredUnits = DBProv.unitProvider.initDefaultUnitsSync(doTransaction: false)
+                logger.i("Restored units (\(String(describing: restoredUnits?.count)) (note: transaction not finished yet).", .db)
+
+                // Fetch again
+                unitsMaybe = DBProv.unitProvider.unitsSync(buyable: nil)
+            }
+            guard let units = unitsMaybe else {
+                logger.i("Couldn't load units. Can't restore prefill products.")
+                return false
+            }
 
             let lang = LangManager().appLang
 

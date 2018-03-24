@@ -76,9 +76,16 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         initGlobalTabBar() // since ListsTableViewController is the always the first controller (that shows a tabbar) init tabBar insets here. Tried to do this in AppDelegate with root controller it doesn't have tabBarController.
 
         Notification.subscribe(.realmSwapped, selector: #selector(ListsTableViewController.onRealmSwapped(_:)), observer: self)
+        Notification.subscribe(.willClearAllData, selector: #selector(ListsTableViewController.onWillClearAllData(_:)), observer: self)
     }
 
     @objc func onRealmSwapped(_ note: Foundation.Notification) {
+        closeListItemsController()
+        initModels()
+    }
+
+    @objc func onWillClearAllData(_ note: Foundation.Notification) {
+        // Exit items view such that there will be no realm exceptions, because the items reference deleted objects
         closeListItemsController()
         initModels()
     }

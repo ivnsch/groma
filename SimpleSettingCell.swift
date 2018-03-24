@@ -17,7 +17,8 @@ class SimpleSettingCell: UITableViewCell {
 
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var helpButton: UIButton!
-    
+    @IBOutlet weak var helpImage: UIImageView!
+
     var delegate: SimpleSettingCellDelegate?
     
     var setting: SimpleSetting? {
@@ -25,7 +26,7 @@ class SimpleSettingCell: UITableViewCell {
             if let setting = setting {
                 label.text = setting.label
                 label.textColor = setting.labelColor
-                helpButton.isHidden = !setting.hasHelp
+                [helpButton, helpImage].forEach { $0.isHidden = !setting.hasHelp }
             }
         }
     }

@@ -249,6 +249,7 @@ popup_list_was_deleted_in_other_device = "The list \"%@\" was deleted from anoth
 popup_please_accept_terms = "Please accept the terms and conditions";
 popup_your_data_was_overwritten = "Your local data was overwritten";
 popup_are_you_sure_remove_account = "Are you sure you want to remove your account?";
+popup_are_you_sure_remove_all_data = "Are you sure you want to remove all data? You will not be able to get it back.";
 popup_remove_account_help = "Deletes your account from the server. This means you will not be able to synchronize anymore with other users or devices. Your local data isn't affected and you can continue using the app normally.";
 popup_your_account_was_removed = "Your account was removed";
 popup_you_already_use_bundled_products = "You're already using all the bundled products.";
@@ -257,6 +258,7 @@ popups_settings_overwrite = "This will overwrite all your Groma data on this dev
 popups_restore_bundled_products = "Restores bundled products that you deleted since the installation of the app. Your existing products and items are not affected.";
 popups_restore_hints = "Restores all explanation popups and hints.";
 popups_restore_units = "Restores bundled units. Custom units are not deleted.";
+popups_clear_all_data = "Removes all data (lists, recipes, inventories, history, stats, products, etc.). Use setting to restore bundled products after, if you want the same state as in a new install.";
 popups_participants_you_dont_have_to_add_yourself = "You don't have to add yourself to the list";
 popups_participants_user_already_in_list = "The user: %@\n is already in the list";
 popups_participants_user_not_registered = "The user: %@\n is not registered";
@@ -337,7 +339,7 @@ setting_restore_bundled_products = "Restore bundled products";
 setting_restore_hints = "Restore hints";
 setting_restore_units = "Restore units";
 setting_real_time_connection = "Real time connection";
-
+setting_clear_data= "Clear data";
 
 title_products = "Products";
 title_login = "Login";

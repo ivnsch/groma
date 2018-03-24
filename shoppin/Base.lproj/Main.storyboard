@@ -450,6 +450,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="helpButton" destination="dSI-bX-GUc" id="YdO-t5-TPC"/>
+                                            <outlet property="helpImage" destination="Lht-Jd-FKh" id="caP-4S-afV"/>
                                             <outlet property="label" destination="gE1-hG-c7M" id="ipE-I9-3AH"/>
                                         </connections>
                                     </tableViewCell>

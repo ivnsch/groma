@@ -77,7 +77,9 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "What are purchasable units?", text: "Units that can be purchased! Examples: A liter or a pack are purchasable, as you find things in stores measured directly in liters (e.g. a 2L beverage) or packs (e.g. a pack of sweets). A tablespoon or a shot are not purchasable, as normally stores do not sell products measured in these units. You can edit this property."),
 
         HelpItem(title: "What are edible products?", text: "Products that you can eat! This is to filter out non-edible products from the recipe section (you will not be able to add e.g. cleaning agent to a recipe). You can edit this property."),
-        
+
+        HelpItem(title: "The app is not working!", text: "You can contact the support via \"feedback\" in the \"More\" screen. There's also always the nuclear (and quick) option - in case your data became corrupted and the app isn't usable at all (which of course shouldn't-happen™️) - you can use the \"clear all data\" option in the settings and restore the bundled products after it (also in the settings), such that you get the same state of a new install. Needless to say, this will erase permanently your lists, history, etc. You will have to add them again."),
+
 //        HelpItem(title: "Do I need an account?", text: "Nope, unless that is you’d like to share your Lists or Inventories with other users or other devices."),
 //        
 //        HelpItem(title: "Can I use the app offline?", text: "Yes! If you have are logged in and go offline, the app will sync automatically when you're back online."),
@@ -146,6 +148,8 @@ class HelpProviderImpl: HelpProvider {
 
         HelpItem(title: "Ich kann nicht die Information finden, die ich suche", text: "Sende uns eine Feedback Email! Wir beantworten gerne deine Fragen."),
 
+        HelpItem(title: "Die app funktioniert nicht!", text: "Du kannst den Support via \"Feedback\" im \"Mehr\" Screen kontaktieren. Wenn nichts geht, kann es sein dass Datensätze beschädigt sind (was normalerweise, ahem, nie passieren sollte). Wenn du nicht auf den Support warten willst, kannst du in den Einstellungen alle deine Daten löschen. Danach kannst du die Produkte wiederherstellen (auch in den Einstellungen) um denselben Stand einer Neuinstallation zu haben. Dies wird das Problem sehr wahrscheinlich beheben aber selbstverständlich musst du danach deine Listen, Rezepte usw. erneut hinzufügen."),
+
 //        HelpItem(title: "Brauche ich einen Benutzerkonto?", text: "Wenn du listen oder Inventare mit anderen nicht teilen willst, oder mit anderen Geräten synchronisieren willst, ist ein Benutzerkonto unnötig. Die Funktionalität von dieser App mit und ohne Benutzerkonto, außer diesen Eigenschaften ist gleich."),
 //        
 //        HelpItem(title: "Kann ich die App offline benutzen?", text: "Ja, du musst nicht einen Benutzerkonto haben. Wenn du eingeloggt bist und offline gehst, wird sich die App automatisch synchronisieren sobald du zurück online bist."),
@@ -211,7 +215,9 @@ class HelpProviderImpl: HelpProvider {
         HelpItem(title: "Qué son productos comestibles?", text: "Como el adjetivo lo indica, productos que se pueden comer! Esto es para remover productos que no se pueden comer del menú en las recetas - por ejemplo, no puedes agregar detergente a una receta. Esta propiedad es editable."),
 
         HelpItem(title: "No encuentro la información que estoy buscando", text: "Envíanos un feedback email! Nos alegra mucho responder todas tus preguntas!"),
-        
+
+        HelpItem(title: "Nada funciona!", text: "Puedes contactar el servicio al cliente por medio de \"Feedback\" en la vista \"Más\". Si quieres una solución rápida - en caso que tengas datos corruptos (esto normalmente no debe ocurrir), lo cual causa errores constantemente, puedes borrar todos los datos. Esto lo haces en las opciones. Después de esto puedes reestablecer los productor predefinidos (también desde las opciones) para tener el mismo estado que en una instalación nueva. Sobra decir que después de esto tendrás que agregar tus listas, recetas, etc. otra vez."),
+
 //        HelpItem(title: "Necesito una cuenta de usuario?", text: "A menos que quieras compartir tus listas o inventarios con otros usuarios o syncronizar con otros dispositivos, no necesitas una cuenta. Para todo lo demas, la app es identica con o sin cuenta."),
 //        
 //        HelpItem(title: "Puedo utilizar la app cuando no estoy online?", text: "Sí, una conexión internet o cuenta de usuario no es necesaria. Si estás online y te desconectas, la app se syncronizará automáticamente cuando te conectes de nuevo."),

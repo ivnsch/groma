@@ -26,6 +26,8 @@ public enum Notification: String {
     case Logout = "Logout"
 
     case realmSwapped = "RealmSwapped"
+
+    case willClearAllData = "willClearAllData"
     
     public static func send(_ notification: Notification, dict: [String: AnyObject]? = nil) {
         NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: notification.rawValue), object: nil, userInfo: dict)

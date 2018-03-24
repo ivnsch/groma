@@ -56,20 +56,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     fileprivate let restorePrefillProductsSetting = SimpleSetting(id: .restorePrefillProducts, label: trans("setting_restore_bundled_products"), hasHelp: true)
     fileprivate let restoreHintsSetting = SimpleSetting(id: .restoreHints, label: trans("setting_restore_hints"), hasHelp: true)
     fileprivate let restoreUnitsSetting = SimpleSetting(id: .restoreUnits, label: trans("setting_restore_units"), hasHelp: true)
+    fileprivate let clearAllDataSetting = SimpleSetting(id: .clearAllData, label: trans("setting_clear_data"), hasHelp: true)
 
     // developer
     fileprivate let addDummyHistoryItemsSetting = SimpleSetting(id: .addDummyHistoryItems, label: "Add dummy history items") // debug
-    fileprivate let clearAllDataSetting = SimpleSetting(id: .clearAllData, label: "Clear all data") // debug
-    
+
     fileprivate var settings: [Setting] = []
     
     fileprivate let overwritePopupMessage: String = trans("popups_settings_overwrite")
-    
     fileprivate let restoreProductsMessage: String = trans("popups_restore_bundled_products")
-    
     fileprivate let restoreHintsMessage: String = trans("popups_restore_hints")
-
     fileprivate let restoreUnitsMessage: String = trans("popups_restore_units")
+    fileprivate let clearDataMessage: String = trans("popups_clear_all_data")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,10 +93,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 //                overwriteDataSetting,
 //                removeAccountSetting, // TODO!!!!!!!!!!!!!!!!!!!!!!! how to do this with Realm?
 //                addDummyHistoryItemsSetting,
-//                clearAllDataSetting,
                 restorePrefillProductsSetting,
                 restoreHintsSetting,
-                restoreUnitsSetting
+                restoreUnitsSetting,
+                clearAllDataSetting
             ]
         } else {
             settings = [
@@ -107,7 +105,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 //                clearAllDataSetting,
                 restorePrefillProductsSetting,
                 restoreHintsSetting,
-                restoreUnitsSetting
+                restoreUnitsSetting,
+                clearAllDataSetting
             ]
         }
         
@@ -222,11 +221,17 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     // Debug only
     fileprivate func clearAllData() {
-        Prov.globalProvider.clearAllData(false, handler: successHandler{ [weak self] in guard let weakSelf = self else {return}
-            weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("The data was cleared"))
+        showPopup(parent: self, type: .warning, message: trans("popup_are_you_sure_remove_all_data"), okText: trans("popup_button_yes"), onOk: { [weak self] in
+            if let weakSelf = self {
+                Notification.send(.willClearAllData)
+
+                Prov.globalProvider.clearAllData(false, handler: weakSelf.successHandler{ [weak self] in guard let weakSelf = self else {return}
+                    weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("The data was cleared"))
+                })
+            }
         })
     }
-    
+
     fileprivate func restorePrefillProducts() {
         
         func onRestored() {
@@ -242,14 +247,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             centerYOffset: -80, onOk: { [weak self] in guard let weakSelf = self else {return}
                 Prov.productProvider.restorePrefillProductsLocal(weakSelf.resultHandler(resetProgress: false, onSuccess: { restoredSomething in
                     if restoredSomething {
-                        if ConnectionProvider.connectedAndLoggedIn {
-                            weakSelf.progressVisible()
-                            Prov.globalProvider.sync(false, handler: weakSelf.successHandler{ syncResult in
-                                onRestored()
-                            })
-                        } else {
+//                        if ConnectionProvider.connectedAndLoggedIn {
+//                            weakSelf.progressVisible()
+//                            Prov.globalProvider.sync(false, handler: weakSelf.successHandler{ syncResult in
+//                                onRestored()
+//                            })
+//                        } else {
                             onRestored()
-                        }
+//                        }
                     } else {
                         weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("popup_you_already_use_bundled_products"))
                     }
@@ -360,7 +365,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.view.backgroundColor = UIColor.flatRed
         switch setting.id {
 
-
         case .overwriteData:
             showPopup(parent: self, type: .info, message: overwritePopupMessage)
 
@@ -372,6 +376,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         case .restoreUnits:
             showPopup(parent: self, type: .info, message: restoreUnitsMessage)
+
+        case .clearAllData:
+            showPopup(parent: self, type: .info, message: clearDataMessage)
 
         default: logger.e("No supported setting: \(setting)")
         }

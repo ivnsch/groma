@@ -262,11 +262,15 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         // But now we have an additional service where we do this beforehand
         // TODO clean solution?
         
-        validateInputs(self.listInputsValidator) {[weak self] in
+        validateInputs(self.listInputsValidator) { [weak self] in
             
             guard let weakSelf = self else {return}
             guard let inventory = weakSelf.selectedInventory else {
-                MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_please_select_inventory"), centerYOffset: -80)
+                let currentFirstResponder = weakSelf.currentFirstResponder
+                view.endEditing(true)
+                MyPopupHelper.showPopup(parent: weakSelf.root, type: .info, message: trans("popup_please_select_inventory"), onOkOrCancel: {
+                    currentFirstResponder?.becomeFirstResponder()
+                })
                 return
             }
             guard let bgColor = weakSelf.view.backgroundColor else {logger.e("Invalid state: view has no bg color"); return}
@@ -395,7 +399,12 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             }
             
         } else {
-            MyPopupHelper.showPopup(parent: self, type: .info, message: trans("popup_please_login_for_participants"), centerYOffset: -80)
+            let currentFirstResponder = self.currentFirstResponder
+            view.endEditing(true)
+            // TODO more convenient way to do this (pass a callback to ok as well as cancel - onDismiss?)
+            MyPopupHelper.showPopup(parent: root, type: .info, message: trans("popup_please_login_for_participants"), onOkOrCancel: {
+                currentFirstResponder?.becomeFirstResponder()
+            })
         }
     }
     
@@ -462,7 +471,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         if let list = listToEdit {
             Prov.pullProvider.pullListProducs(list.uuid, srcUser: user, successHandler{[weak self] listItems in  guard let weakSelf = self else {return}
                 self?.parent?.progressVisible(false)
-                MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_list_products_updated_to_match_user", user.email), centerYOffset: -80)
+                MyPopupHelper.showPopup(parent: weakSelf, type: .info, message: trans("popup_list_products_updated_to_match_user", user.email))
             })
         }
     }

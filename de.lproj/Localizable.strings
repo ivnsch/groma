@@ -251,6 +251,7 @@ popup_list_was_deleted_in_other_device = "Die Liste \"%@\" wurde auf einem ander
 popup_please_accept_terms = "Bitte akzeptiere die AGB.";
 popup_your_data_was_overwritten = "Deine lokale Daten wurden überschrieben.";
 popup_are_you_sure_remove_account = "Bist du sicher dass du dein Benutzerkonto löschen willst?";
+popup_are_you_sure_remove_all_data = "Bist du sicher, dass du alle Daten unwiderruflich löschen willst?";
 popup_remove_account_help = "Löscht dein Konto aus dem Server. Deine Daten auf deinen Geräten bleiben erhalten und du kannst weiterhin die app benutzen.";
 popup_your_account_was_removed = "Dein Benutzerkonto wurde gelöscht.";
 popup_you_already_use_bundled_products = "Du benutzt alle gebündelte Produkte bereits.";
@@ -259,6 +260,7 @@ popups_settings_overwrite = "Dies wird deine (Groma) Daten auf diesem Gerät mit
 popups_restore_bundled_products = "Stellt gelöschte gebündelte Produkte wieder her. Deine existierende Produkte werden hiervon nicht betroffen.";
 popups_restore_hints = "Stellt alle Hinweise wieder her.";
 popups_restore_units = "Stellt die gebündelten Messeinheiten wieder her. Eigene Messeinheiten werden nicht gelöscht.";
+popups_clear_all_data = "Löscht alle Daten. Benutze danach die Einstellung um die gebündelten Produkte wiederherzustellen um den Zustand einer Neuinstallation zu bekommen.";
 popups_participants_you_dont_have_to_add_yourself = "Du musst dich nicht selbst hinzufügen.";
 popups_participants_user_already_in_list = "%@\n ist bereits in den Teilnehmern.";
 popups_participants_user_not_registered = "%@\n ist nicht registriert.";
@@ -338,7 +340,7 @@ setting_restore_bundled_products = "Gebündelte Produkte wiederherstellen";
 setting_restore_hints = "Hinweise wiederherstellen";
 setting_restore_units = "Messeinheiten wiederherstellen";
 setting_real_time_connection = "Echtzeitverbindung";
-
+setting_clear_data = "Daten löschen";
 
 title_products = "Produkte";
 title_login = "Einloggen";

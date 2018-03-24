@@ -74,41 +74,46 @@ class RealmUnitProvider: RealmProvider {
     }
     
     func initDefaultUnits(_ handler: @escaping ([Unit]?) -> Void) {
+        handler(initDefaultUnitsSync())
+    }
 
-//        let objs: [Object] = defaultUnits + defaultFractions
+    func initDefaultUnitsSync(doTransaction: Bool = true) -> [Unit]? {
+        //        let objs: [Object] = defaultUnits + defaultFractions
 
-        let (savedSuccess, units) = savePredefinedUnitsSync(update: false)
+        // For now doing "micro transactions" here, i.e. not adding the defaults units / bases / fractions in a single transaction
+        // Reason: there's no reason to interrupt the process if adding any of these fails
+
+        let (savedSuccess, units) = savePredefinedUnitsSync(update: false, doTransaction: doTransaction)
         if savedSuccess { // needs to be in main thread, otherwise we get realm thread error when using the returned defaultUnits
 
             var fractionsSuccess = true
             for fraction in defaultFractions {
-                let (success, _) = DBProv.fractionProvider.add(fraction: fraction) // We use here provider method to append to list, not only save object
-                
+                let (success, _) = DBProv.fractionProvider.add(fraction: fraction, doTransaction: doTransaction) // We use here provider method to append to list, not only save object
+
                 fractionsSuccess = fractionsSuccess && success
             }
             if !fractionsSuccess {
                 logger.e("Couldn't prefill some or all fractions") // only log, prefilling fractions is not critical for the app to work
             }
-            
+
             var basesSuccess = true
             for base in defaultBaseQuantities {
-                let (success, _) = DBProv.unitProvider.add(base: base) // We use here provider method to append to list, not only save object
-                
+                let (success, _) = DBProv.unitProvider.add(base: base, doTransaction: doTransaction) // We use here provider method to append to list, not only save object
+
                 basesSuccess = basesSuccess && success
             }
             if !basesSuccess {
                 logger.e("Couldn't prefill some or all bases") // only log, prefilling bases is not critical for the app to work
             }
-            
-            
-            handler(units)
-            
+
+            return units
+
         } else {
-            handler(nil)
+            return nil
         }
     }
 
-    func savePredefinedUnitsSync(update: Bool) -> (saved: Bool, units: [Unit]) {
+    func savePredefinedUnitsSync(update: Bool, doTransaction: Bool = true) -> (saved: Bool, units: [Unit]) {
         guard let unitsContainer: UnitsContainer = loadSync(predicate: nil)?.first else {
             logger.e("Invalid state: no container")
             return (false, [])
@@ -119,14 +124,14 @@ class RealmUnitProvider: RealmProvider {
 
         if update {
             for predefinedUnit in predefinedUnits {
-                if let storedUnit = addIfNotExistsSync(unit: predefinedUnit, units: unitsContainer.units) {
+                if let storedUnit = addIfNotExistsSync(unit: predefinedUnit, units: unitsContainer.units, doTransaction: doTransaction) {
                     storedUnits.append(storedUnit)
                 }
             }
             return (true, storedUnits)
         } else {
             for predefinedUnit in predefinedUnits {
-                if let unit = addUnitSync(unit: predefinedUnit, units: unitsContainer.units){
+                if let unit = addUnitSync(unit: predefinedUnit, units: unitsContainer.units, doTransaction: doTransaction) {
                     storedUnits.append(unit)
                 }
             }
@@ -155,19 +160,33 @@ class RealmUnitProvider: RealmProvider {
         return addUnitSync(unit: unit, units: finalUnits)
     }
 
-    fileprivate func addUnitSync(unit: Unit, units: RealmSwift.List<Unit>) -> Unit? {
-        return doInWriteTransactionSync {realm -> Unit in
+    fileprivate func addUnitSync(unit: Unit, units: RealmSwift.List<Unit>, doTransaction: Bool = true, transactionRealm: Realm? = nil) -> Unit? {
+        func transactionContent(realm: Realm) -> Unit {
             realm.add(unit, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
             units.append(unit)
             return unit
         }
+
+        if doTransaction {
+            return doInWriteTransactionSync { realm -> Unit in
+                return transactionContent(realm: realm)
+            }
+        } else {
+            do {
+                let realm = try transactionRealm ?? RealmConfig.realm()
+                return transactionContent(realm: realm)
+            } catch (let e) {
+                logger.e("Couldn't create realm: \(e)", .db)
+                return nil
+            }
+        }
     }
 
-    func addIfNotExistsSync(unit: Unit, units: RealmSwift.List<Unit>) -> Unit? {
+    fileprivate func addIfNotExistsSync(unit: Unit, units: RealmSwift.List<Unit>, doTransaction: Bool = true) -> Unit? {
         if let storedUnit = findUnit(name: unit.name) {
             return storedUnit
         } else {
-            return addUnitSync(unit: unit, units: units)
+            return addUnitSync(unit: unit, units: units, doTransaction: doTransaction)
         }
     }
 
@@ -319,7 +338,7 @@ class RealmUnitProvider: RealmProvider {
         }
     }
     
-    func add(base: BaseQuantity) -> (success: Bool, isNew: Bool) {
+    func add(base: BaseQuantity, doTransaction: Bool = true) -> (success: Bool, isNew: Bool) {
         
         if findBaseQuantity(val: base.val) != nil {
             return (true, false)
@@ -329,12 +348,29 @@ class RealmUnitProvider: RealmProvider {
                 logger.e("Invalid state: no container")
                 return (false, false)
             }
-            
-            let successMaybe = doInWriteTransactionSync {realm -> Bool in
+
+            func transactionContent(realm: Realm) -> Bool {
                 realm.add(base, update: true) // it's necessary to do this additionally to append, see http://stackoverflow.com/a/40595430/930450
                 basesContainer.bases.append(base)
                 return true
             }
+
+            let successMaybe: Bool? = {
+                if doTransaction {
+                    return doInWriteTransactionSync { realm -> Bool in
+                        return transactionContent(realm: realm)
+                    }
+                } else {
+                    do {
+                        let realm = try RealmConfig.realm()
+                        return transactionContent(realm: realm)
+                    } catch (let e) {
+                        logger.e("Couldn't create realm: \(e)", .db)
+                        return false
+                    }
+                }
+            } ()
+
             return successMaybe.map{($0, true)} ?? (false, true)
         }
     }

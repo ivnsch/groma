@@ -14,7 +14,10 @@ struct ValidationAlertCreator { // had some problems subclassing UIAlertControll
 
     static func present(_ errors: ValidatorDictionary<ValidationError>, parent: UIViewController, firstResponder: UITextField? = nil) {
         let errorMessages = errors.map { $0.value.errorMessage }
+        present(errorMessages, parent: parent, firstResponder: firstResponder)
+    }
 
+    static func present(_ errorMessages: [String], parent: UIViewController, firstResponder: UITextField? = nil) {
         func onOkOrCancel() {
             firstResponder?.becomeFirstResponder()
         }
