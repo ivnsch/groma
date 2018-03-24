@@ -12,27 +12,27 @@ import RealmSwift
 
 class RealmUnitProvider: RealmProvider {
 
-    let defaultBaseQuantities: [BaseQuantity] = [
-        BaseQuantity(1),
-        BaseQuantity(1.5),
-        BaseQuantity(2),
-        BaseQuantity(4),
-        BaseQuantity(6),
-        BaseQuantity(12),
-        BaseQuantity(500),
-        BaseQuantity(750)
+    let defaultBaseQuantities: [Float] = [
+        1,
+        1.5,
+        2,
+        4,
+        6,
+        12,
+        500,
+        750
     ]
 
-    let defaultFractions: [DBFraction] = [
-        DBFraction(numerator: 1, denominator: 2),
-        DBFraction(numerator: 1, denominator: 3),
-        DBFraction(numerator: 1, denominator: 4),
-        DBFraction(numerator: 1, denominator: 5),
-        DBFraction(numerator: 1, denominator: 6),
-        DBFraction(numerator: 1, denominator: 7),
-        DBFraction(numerator: 1, denominator: 8),
-        DBFraction(numerator: 2, denominator: 3),
-        DBFraction(numerator: 3, denominator: 4),
+    let defaultFractions: [Fraction] = [
+        Fraction(numerator: 1, denominator: 2),
+        Fraction(numerator: 1, denominator: 3),
+        Fraction(numerator: 1, denominator: 4),
+        Fraction(numerator: 1, denominator: 5),
+        Fraction(numerator: 1, denominator: 6),
+        Fraction(numerator: 1, denominator: 7),
+        Fraction(numerator: 1, denominator: 8),
+        Fraction(numerator: 2, denominator: 3),
+        Fraction(numerator: 3, denominator: 4),
         ]
 
     var predefinedUnits: [Unit] {
@@ -88,7 +88,8 @@ class RealmUnitProvider: RealmProvider {
 
             var fractionsSuccess = true
             for fraction in defaultFractions {
-                let (success, _) = DBProv.fractionProvider.add(fraction: fraction, doTransaction: doTransaction) // We use here provider method to append to list, not only save object
+                let dbFraction = DBFraction(numerator: fraction.numerator, denominator: fraction.denominator)
+                let (success, _) = DBProv.fractionProvider.add(fraction: dbFraction, doTransaction: doTransaction) // We use here provider method to append to list, not only save object
 
                 fractionsSuccess = fractionsSuccess && success
             }
@@ -98,7 +99,8 @@ class RealmUnitProvider: RealmProvider {
 
             var basesSuccess = true
             for base in defaultBaseQuantities {
-                let (success, _) = DBProv.unitProvider.add(base: base, doTransaction: doTransaction) // We use here provider method to append to list, not only save object
+                let dbBase = BaseQuantity(base)
+                let (success, _) = DBProv.unitProvider.add(base: dbBase, doTransaction: doTransaction) // We use here provider method to append to list, not only save object
 
                 basesSuccess = basesSuccess && success
             }
