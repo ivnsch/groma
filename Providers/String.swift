@@ -120,7 +120,7 @@ public extension String {
     // MARK: - Range
     
     public var fullRange: NSRange {
-        return NSMakeRange(0, self.characters.count)
+        return NSMakeRange(0, self.count)
     }
     
     // src: http://stackoverflow.com/a/27880748/930450

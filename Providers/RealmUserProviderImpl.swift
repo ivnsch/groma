@@ -148,7 +148,7 @@ class RealmUserProviderImpl: UserProvider {
         logger.e("Not implemented") // TODO
         handler(ProviderResult(status: .success))
 
-        guard let currentUser = SyncUser.current else {
+        guard let _ = SyncUser.current else {
             logger.e("No current user! can't remove account", .api, .db)
             handler(ProviderResult(status: .unknown))
             return

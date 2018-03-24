@@ -1363,7 +1363,7 @@ class RealmListItemProvider: RealmProvider {
 
             // If src section is empty, delete it
             if srcSection.listItems.isEmpty {
-                if let sectionIndex = list.sections(status: status).index(of: srcSection) {
+                if let _ = list.sections(status: status).index(of: srcSection) {
                     let section = list.sections(status: status)
                     realm.delete(section)
                     return MoveListItemResult(deletedSrcSection: true)

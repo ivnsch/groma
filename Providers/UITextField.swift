@@ -44,7 +44,7 @@ extension UITextField {
     
     @objc public func checkMaxLength(_ sender: UITextField) {
         if let newText = sender.text {
-            if newText.characters.count > maxLength {
+            if newText.count > maxLength {
                 let cursorPosition = selectedTextRange
                 text = (newText as NSString).substring(with: NSRange(location: 0, length: maxLength))
                 selectedTextRange = cursorPosition
