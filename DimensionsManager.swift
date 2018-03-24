@@ -226,8 +226,8 @@ class DimensionsManager {
     
     static var defaultCellHeight: CGFloat {
         switch heightDimension {
-        case .verySmall: return 62
-        case .small: return 62
+        case .verySmall: return 70
+        case .small: return 70
         case .middle: return 82
         case .large, .xLarge: return 91
         }
