@@ -98,6 +98,8 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
     }
 
     fileprivate func staticLayout() {
+        userNameField.placeholder = trans("placeholder_user_name")
+        passwordField.placeholder = trans("placeholder_password")
         loginButton.layer.cornerRadius = DimensionsManager.submitButtonCornerRadius
     }
 

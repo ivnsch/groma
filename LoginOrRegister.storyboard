@@ -230,8 +230,8 @@
                                     <action selector="onEyePress:" destination="4xN-Sk-YzP" eventType="touchUpInside" id="ulm-Tq-MXR"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="evX-Gm-bbJ" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="126" y="280" width="123" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="evX-Gm-bbJ" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="127" y="280" width="123" height="30"/>
                                 <state key="normal" title="Forgot password?">
                                     <color key="titleColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
