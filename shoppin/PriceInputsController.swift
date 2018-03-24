@@ -71,6 +71,11 @@ class PriceInputsController: UIViewController, UITextFieldDelegate {
         priceTextField.addTarget(self, action: #selector(priceTextFieldDidChange(_:)), for: .editingChanged)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        priceTextField.becomeFirstResponder()
+    }
+
     func initStaticText() {
         priceTextField.setPlaceholderWithColor(trans("placeholder_price_inputs_price"), color: UIColor.white)
         quantityTextField.setPlaceholderWithColor(trans("placeholder_price_inputs_quantity"), color: UIColor.white)
