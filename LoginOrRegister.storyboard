@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_register" translatesAutoresizingMaskIntoConstraints="NO" id="awZ-eE-jJR">
-                                <rect key="frame" x="-42" y="10" width="459" height="100"/>
+                                <rect key="frame" x="-42" y="20" width="459" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="yug-5y-IhS" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                         <userDefinedRuntimeAttributes>
@@ -41,7 +41,7 @@
                                 </constraints>
                             </imageView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nUK-Yj-LWy" customClass="DesignableUITextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="52.5" y="120" width="270" height="35"/>
+                                <rect key="frame" x="52.5" y="130" width="270" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Syj-Pt-nFq" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                         <userDefinedRuntimeAttributes>
@@ -83,7 +83,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bw0-j8-uAM" customClass="DesignableUITextField" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="52.5" y="160" width="270" height="35"/>
+                                <rect key="frame" x="52.5" y="175" width="270" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="4C6-7b-sAx" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                         <userDefinedRuntimeAttributes>
@@ -124,7 +124,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pYQ-Up-a4i" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="42.5" y="205" width="290" height="50"/>
+                                <rect key="frame" x="42.5" y="220" width="290" height="50"/>
                                 <color key="backgroundColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Dmt-k3-Cfx" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
@@ -163,7 +163,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eXu-Xy-HZG" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="159" y="295" width="57" height="30"/>
+                                <rect key="frame" x="159" y="320" width="57" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="8u9-SQ-6UX" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                         <userDefinedRuntimeAttributes>
@@ -198,7 +198,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in enables you to sync with the cloud and share lists with other people" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ktj-23-cyZ" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="62.5" y="335" width="250" height="33.5"/>
+                                <rect key="frame" x="62.5" y="360" width="250" height="33.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -209,7 +209,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i2w-Ea-Xfq" customClass="MyFacebookButton" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="62.5" y="383.5" width="250" height="45"/>
+                                <rect key="frame" x="62.5" y="408.5" width="250" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="2tE-KH-WRd"/>
                                     <constraint firstAttribute="height" constant="45" id="MDo-GT-vef" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
@@ -238,8 +238,8 @@
                                     <action selector="onFacebookLoginButtonTap" destination="4xN-Sk-YzP" eventType="touchUpInside" id="dCP-5Z-gzl"/>
                                 </connections>
                             </button>
-                            <button tag="123" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sVW-c9-pTZ" customClass="MyGoogleLoginButton" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="62.5" y="443.5" width="250" height="45"/>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sVW-c9-pTZ" customClass="MyGoogleLoginButton" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="62.5" y="468.5" width="250" height="45"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="LkY-gf-LJB"/>
@@ -266,7 +266,7 @@
                                 </connections>
                             </button>
                             <button contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6r8-Eq-vDW">
-                                <rect key="frame" x="292.5" y="157.5" width="40" height="40"/>
+                                <rect key="frame" x="292.5" y="172.5" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="756-bu-OWV"/>
                                     <constraint firstAttribute="width" constant="40" id="fvy-W4-a9j"/>
@@ -279,7 +279,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="evX-Gm-bbJ" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="126" y="265" width="123" height="30"/>
+                                <rect key="frame" x="126" y="280" width="123" height="30"/>
                                 <state key="normal" title="Forgot password?">
                                     <color key="titleColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -293,14 +293,14 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="username" translatesAutoresizingMaskIntoConstraints="NO" id="tDw-9e-mZm">
-                                <rect key="frame" x="52" y="127.5" width="20" height="20"/>
+                                <rect key="frame" x="52" y="140" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="2Jt-sB-ecq"/>
                                     <constraint firstAttribute="height" constant="20" id="559-e4-Kyq"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="yKm-uq-lwo">
-                                <rect key="frame" x="52" y="167" width="20" height="20"/>
+                                <rect key="frame" x="52" y="182" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="3VU-p4-cov"/>
                                     <constraint firstAttribute="height" constant="20" id="cPz-xT-Mxk"/>
