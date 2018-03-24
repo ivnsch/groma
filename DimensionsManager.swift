@@ -311,19 +311,30 @@ class DimensionsManager {
     static var topMenuBarHeight: CGFloat {
         return 40
     }
-    
-    // MARK: User details
-    
-    // Rename - default button radius?
-    static var userDetailsLogoutButtonRadius: CGFloat {
+
+    // For now this is used only in authentication related controllers
+    static var submitButtonHeight: CGFloat {
         switch heightDimension {
-        case .verySmall: return 18
-        case .small: return 18
-        case .middle: return 25
-        case .large, .xLarge: return 25
+        case .verySmall: return 40
+        case .small: return 40
+        case .middle: return 45
+        case .large, .xLarge: return 45
         }
     }
-    
+
+    static var socialButtonHeight: CGFloat {
+        return submitButtonHeight
+    }
+
+    static var submitButtonCornerRadius: CGFloat {
+        switch heightDimension {
+        case .verySmall: return 20
+        case .small: return 20
+        case .middle: return 20
+        case .large, .xLarge: return 20
+        }
+    }
+
     // MARK: Login
     
     static var topConstraintFirstInputWhenClose: CGFloat {

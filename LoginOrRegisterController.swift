@@ -93,12 +93,12 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
 //        eyeView.delegate = self
 
         staticLayout()
-
+        
         onUIReady?()
     }
 
     fileprivate func staticLayout() {
-        loginButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
+        loginButton.layer.cornerRadius = DimensionsManager.submitButtonCornerRadius
     }
 
     override func viewWillAppear(_ animated: Bool) {

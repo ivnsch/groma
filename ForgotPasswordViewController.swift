@@ -47,7 +47,7 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
     }
     
     fileprivate func layout() {
-        sendButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
+        sendButton.layer.cornerRadius = DimensionsManager.submitButtonCornerRadius
     }
     
     override func viewWillAppear(_ animated: Bool) {

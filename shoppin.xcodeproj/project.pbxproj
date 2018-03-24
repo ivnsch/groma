@@ -28,6 +28,7 @@
 		6A17C4DC1FF027F300372DDB /* TooltipPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A17C4DA1FF027F300372DDB /* TooltipPicker.xib */; };
 		6A17C4DF1FF02FB200372DDB /* TooltipPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A17C4DD1FF02FB200372DDB /* TooltipPickerCell.swift */; };
 		6A17C4E01FF02FB200372DDB /* TooltipPickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A17C4DE1FF02FB200372DDB /* TooltipPickerCell.xib */; };
+		6A1950DF20668D4F00774052 /* SocialButtonHeightConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1950DE20668D4F00774052 /* SocialButtonHeightConstraint.swift */; };
 		6A1BBADA1E44AF5E00BC7404 /* UITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */; };
 		6A1BBAE01E44B57300BC7404 /* ListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */; };
 		6A278F8C1E69CA1A00126F8E /* SwipeToDeleteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A278F8B1E69CA1A00126F8E /* SwipeToDeleteHelper.swift */; };
@@ -123,6 +124,7 @@
 		6A80370C201D351B00FAD9C3 /* UnitBaseHelpBasesExplanationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A80370A201D351B00FAD9C3 /* UnitBaseHelpBasesExplanationCell.xib */; };
 		6A80370F201D3B6A00FAD9C3 /* ReferenceQuantityPriceHelpCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A80370D201D3B6A00FAD9C3 /* ReferenceQuantityPriceHelpCell.swift */; };
 		6A803710201D3B6A00FAD9C3 /* ReferenceQuantityPriceHelpCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A80370E201D3B6A00FAD9C3 /* ReferenceQuantityPriceHelpCell.xib */; };
+		6A92A86720667378000975E7 /* SubmitButtonHeightConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A92A86620667378000975E7 /* SubmitButtonHeightConstraint.swift */; };
 		6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AACDC181E475BE000A9E1EC /* ExplanationView.swift */; };
 		6AACDC1B1E475C0C00A9E1EC /* ExplanationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */; };
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
@@ -565,6 +567,7 @@
 		6A17C4DA1FF027F300372DDB /* TooltipPicker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TooltipPicker.xib; sourceTree = "<group>"; };
 		6A17C4DD1FF02FB200372DDB /* TooltipPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipPickerCell.swift; sourceTree = "<group>"; };
 		6A17C4DE1FF02FB200372DDB /* TooltipPickerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TooltipPickerCell.xib; sourceTree = "<group>"; };
+		6A1950DE20668D4F00774052 /* SocialButtonHeightConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButtonHeightConstraint.swift; sourceTree = "<group>"; };
 		6A1B5A291FF99392002E5BAC /* Providers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Providers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A1BBAD91E44AF5E00BC7404 /* UITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewController.swift; sourceTree = "<group>"; };
 		6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ListItemCell.xib; path = ../ListItemCell.xib; sourceTree = "<group>"; };
@@ -664,6 +667,7 @@
 		6A80370A201D351B00FAD9C3 /* UnitBaseHelpBasesExplanationCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UnitBaseHelpBasesExplanationCell.xib; sourceTree = "<group>"; };
 		6A80370D201D3B6A00FAD9C3 /* ReferenceQuantityPriceHelpCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceQuantityPriceHelpCell.swift; sourceTree = "<group>"; };
 		6A80370E201D3B6A00FAD9C3 /* ReferenceQuantityPriceHelpCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReferenceQuantityPriceHelpCell.xib; sourceTree = "<group>"; };
+		6A92A86620667378000975E7 /* SubmitButtonHeightConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButtonHeightConstraint.swift; sourceTree = "<group>"; };
 		6AACDC181E475BE000A9E1EC /* ExplanationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExplanationView.swift; sourceTree = "<group>"; };
 		6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExplanationView.xib; sourceTree = "<group>"; };
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
@@ -2012,6 +2016,8 @@
 				EBB6D7551CD69E6100F9C711 /* TextFieldMore.swift */,
 				6A740BC12058761600A2B502 /* EmptyViewTopConstraint.swift */,
 				EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */,
+				6A92A86620667378000975E7 /* SubmitButtonHeightConstraint.swift */,
+				6A1950DE20668D4F00774052 /* SocialButtonHeightConstraint.swift */,
 				EBB2CBC91CF20AD50040C619 /* LeftRightBigPaddingConstraint.swift */,
 				EBB2CBC51CF0CFAD0040C619 /* TextFieldHeightConstraint.swift */,
 				EB4B39C31CEBF05300B41063 /* TopEmptyViewConstraint.swift */,
@@ -3277,6 +3283,7 @@
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
 				6A3A67DA1E5921CA00B5354F /* UnitView.swift in Sources */,
 				6A3A67D81E59219B00B5354F /* UnitCell.swift in Sources */,
+				6A1950DF20668D4F00774052 /* SocialButtonHeightConstraint.swift in Sources */,
 				EBF1F9ED1CD7F77700F8016F /* SwitchSettingCell.swift in Sources */,
 				EB37ABB91CA09B4F00FE9D7A /* PullToAddHelper.swift in Sources */,
 				6AF46EBB1E5BBBC900BBFF4C /* UnitSubmitCell.swift in Sources */,
@@ -3465,6 +3472,7 @@
 				6ADC6F401E4D32CD005BE5EB /* FractionCell.swift in Sources */,
 				6AB79F982038D88D00524FBC /* HandlingImageView.swift in Sources */,
 				EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */,
+				6A92A86720667378000975E7 /* SubmitButtonHeightConstraint.swift in Sources */,
 				EB37ABBB1CA2021C00FE9D7A /* RoundTextField.swift in Sources */,
 				6A3F5DE01FEAFE5E003085F6 /* DefaultCollectionViewItemManager.swift in Sources */,
 			);

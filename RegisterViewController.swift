@@ -74,7 +74,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     }
     
     fileprivate func staticLayout() {
-        regButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
+        regButton.layer.cornerRadius = DimensionsManager.submitButtonCornerRadius
     }
     
     override func viewWillAppear(_ animated: Bool) {

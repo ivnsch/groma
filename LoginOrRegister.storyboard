@@ -127,23 +127,7 @@
                                 <rect key="frame" x="42.5" y="220" width="290" height="50"/>
                                 <color key="backgroundColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="Dmt-k3-Cfx" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
-                                                <real key="value" value="35"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                                <real key="value" value="35"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                                <integer key="value" value="40"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                                <integer key="value" value="40"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </constraint>
+                                    <constraint firstAttribute="height" constant="50" id="Dmt-k3-Cfx" customClass="SubmitButtonHeightConstraint" customModule="groma" customModuleProvider="target"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Login">
@@ -212,23 +196,7 @@
                                 <rect key="frame" x="62.5" y="408.5" width="250" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="2tE-KH-WRd"/>
-                                    <constraint firstAttribute="height" constant="45" id="MDo-GT-vef" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
-                                                <integer key="value" value="40"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                                <integer key="value" value="40"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                                <integer key="value" value="50"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                                <integer key="value" value="50"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </constraint>
+                                    <constraint firstAttribute="height" constant="45" id="MDo-GT-vef" customClass="SocialButtonHeightConstraint" customModule="groma" customModuleProvider="target"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal">
@@ -243,23 +211,7 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="LkY-gf-LJB"/>
-                                    <constraint firstAttribute="height" constant="45" id="r6S-CP-VaX" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
-                                                <integer key="value" value="40"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                                <integer key="value" value="40"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                                <integer key="value" value="50"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                                <integer key="value" value="50"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </constraint>
+                                    <constraint firstAttribute="height" constant="45" id="r6S-CP-VaX" customClass="SocialButtonHeightConstraint" customModule="groma" customModuleProvider="target"/>
                                 </constraints>
                                 <connections>
                                     <action selector="onGoogleLoginButtonTap" destination="4xN-Sk-YzP" eventType="touchUpInside" id="pRa-Uk-GPw"/>

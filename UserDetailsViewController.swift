@@ -34,9 +34,9 @@ class UserDetailsViewController: UIViewController {
             logger.e("Invalid state, we are in user details but there's no stored user")
         }
 
+        logoutButton.layer.cornerRadius = DimensionsManager.submitButtonCornerRadius
+
         helpButtonImage.tintColor = Theme.lightGray2 // for some reason not working in storyboard
-        
-        logoutButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
     }
     
     fileprivate func initContents(_ user: DBSharedUser) {

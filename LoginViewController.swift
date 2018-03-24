@@ -136,7 +136,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 //    }
     
     fileprivate func staticLayout() {
-        loginButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
+        loginButton.layer.cornerRadius = DimensionsManager.submitButtonCornerRadius
     }
     
     override func viewWillAppear(_ animated: Bool) {
