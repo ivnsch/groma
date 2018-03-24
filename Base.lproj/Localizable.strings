@@ -543,7 +543,7 @@ add_recipe_to_list_placeholder_to_add = "To add:";
 
 base_unit_help_title = "Help";
 base_unit_help_note_explanation_title = "Note";
-base_unit_help_note_explanation_text = "You dont *have* to use all this. You can instead put everything in the names, e.g. \"eggs 6x\", assign a price to it (which is optional as well) and that's it! Use what you like best!";
+base_unit_help_note_explanation_text = "You don't *have* to use all this. You can instead put everything in the names, e.g. \"eggs 6x\", assign a price to it (which is optional as well) and that's it! Use what you like best!";
 base_unit_help_reference_quantity_price = "The %%4reference quantity%%4 and %%5price%%5 go here:";
 base_unit_help_reference_quantity_price_2 = "This tooltip appears when you tap on the price view (also shown here) in the add (or edit) item view.";
 base_unit_help_unit_bases = "You enter %%1unit%%1, %%2base quantity%%2 and %%3second base quantity%%3 in the view where you opened this popup";
