@@ -118,21 +118,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     // Debug only
     fileprivate func removeHistory() {
         Prov.historyProvider.removeAllHistoryItems(successHandler{ [weak self] in guard let weakSelf = self else { return }
-            weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("The history was cleared"))
+            weakSelf.showPopup(type: .info, message: trans("The history was cleared"))
         })
     }
     
     fileprivate func overwriteData() {
-        showPopup(parent: self, type: .warning, message: overwritePopupMessage, okText: trans("popup_button_continue"), onOk: { [weak self] in guard let weakSelf = self else {return}
+        showPopup(type: .warning, message: overwritePopupMessage, okText: trans("popup_button_continue"), onOk: { [weak self] in guard let weakSelf = self else {return}
             weakSelf.progressVisible()
             Prov.globalProvider.fullDownload(weakSelf.successHandler({ [weak self] result in
-                self?.showPopup(parent: weakSelf, type: .info, message: trans("popup_your_data_was_overwritten"))
+                self?.showPopup(type: .info, message: trans("popup_your_data_was_overwritten"))
             }))
         })
     }
     
     fileprivate func removeAccount() {
-        showPopup(parent: self, type: .warning, message: trans("popup_are_you_sure_remove_account"), okText: trans("popup_button_yes"), onOk: { [weak self] in
+        showPopup(type: .warning, message: trans("popup_are_you_sure_remove_account"), okText: trans("popup_button_yes"), onOk: { [weak self] in
             if let weakSelf = self {
 
                 Prov.userProvider.removeAccount(weakSelf.successHandler({
@@ -145,7 +145,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                         weakSelf.updateServerRelatedItemsUI()
                     }
 
-                    weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("popup_your_account_was_removed"), onOk: {
+                    weakSelf.showPopup(type: .info, message: trans("popup_your_account_was_removed"), onOk: {
                         onOkOrDismiss()
                     }, onDismiss: {
                         onOkOrDismiss()
@@ -178,7 +178,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     Prov.productProvider.products(NSRange(location: 0, length: 500), sortBy: .alphabetic, weakSelf.successHandler{(products: Results<QuantifiableProduct>) in
                         
                         guard products.count > 0 else {
-                            weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("You need some products to be able to add history items"))
+                            weakSelf.showPopup(type: .info, message: trans("You need some products to be able to add history items"))
                             return
                         }
                         
@@ -205,12 +205,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                         // put the history items for past months in a flat array and save
                         let flattened: [HistoryItem] = Array(historyItems.joined())
                         Prov.historyProvider.addHistoryItems(flattened, weakSelf.successHandler{
-                            weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("Dummy history items added to inventory: \(inventory.name)"))
+                            weakSelf.showPopup(type: .info, message: trans("Dummy history items added to inventory: \(inventory.name)"))
                             })
                         })
                     
                 } else {
-                    weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("You need to have at least 1 inventory to add history items"))
+                    weakSelf.showPopup(type: .info, message: trans("You need to have at least 1 inventory to add history items"))
                 }
                 
             } else {
@@ -221,12 +221,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     // Debug only
     fileprivate func clearAllData() {
-        showPopup(parent: self, type: .warning, message: trans("popup_are_you_sure_remove_all_data"), okText: trans("popup_button_yes"), onOk: { [weak self] in
+        showPopup(type: .warning, message: trans("popup_are_you_sure_remove_all_data"), okText: trans("popup_button_yes"), onOk: { [weak self] in
             if let weakSelf = self {
                 Notification.send(.willClearAllData)
 
                 Prov.globalProvider.clearAllData(false, handler: weakSelf.successHandler{ [weak self] in guard let weakSelf = self else {return}
-                    weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("The data was cleared"))
+                    weakSelf.showPopup(type: .info, message: trans("The data was cleared"))
                 })
             }
         })
@@ -235,7 +235,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     fileprivate func restorePrefillProducts() {
         
         func onRestored() {
-            showPopup(parent: self, type: .info, message: trans("popup_title_bundled_products_restored"))
+            showPopup(type: .info, message: trans("popup_title_bundled_products_restored"))
         }
 
         MyPopupHelper.showPopup(
@@ -256,7 +256,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                             onRestored()
 //                        }
                     } else {
-                        weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("popup_you_already_use_bundled_products"))
+                        weakSelf.showPopup(type: .info, message: trans("popup_you_already_use_bundled_products"))
                     }
                 }, onErrorAdditional: {_ in }))
 
@@ -273,12 +273,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         PreferencesManager.savePreference(.showedCanSwipeToIncrementCounter, value: NSNumber(value: SwipeToIncrementAlertHelperNew.countToShowPopup as Int)) // show first time user tries to increment after this
         PreferencesManager.savePreference(.showedLongTapToEditCounter, value: NSNumber(value: SwipeToIncrementAlertHelperNew.countToShowPopup as Int)) // show first time user tries to increment after this
         PreferencesManager.savePreference(.showedTapToEditCounter, value: NSNumber(value: 0))
-        showPopup(parent: self, type: .info, message: trans("popup_hints_restored"))
+        showPopup(type: .info, message: trans("popup_hints_restored"))
     }
 
     fileprivate func restoreUnits() {
         Prov.unitProvider.restorePredefinedUnits(successHandler { [weak self] in guard let weakSelf = self else { return }
-            weakSelf.showPopup(parent: weakSelf, type: .info, message: trans("popup_title_bundled_unit_restored"))
+            weakSelf.showPopup(type: .info, message: trans("popup_title_bundled_unit_restored"))
         })
     }
 
@@ -355,8 +355,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
 
-    fileprivate func showPopup(parent: UIViewController, type: MyPopupDefaultContentType, message: String, okText: String = trans("popup_button_ok"), onOk: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil) {
-        MyPopupHelper.showPopup(parent: parent, type: type, message: message, okText: okText, centerYOffset: -80, onOk: onOk, onCancel: onDismiss)
+    fileprivate func showPopup(type: MyPopupDefaultContentType, message: String, okText: String = trans("popup_button_ok"), onOk: (() -> Void)? = nil, onDismiss: (() -> Void)? = nil) {
+        MyPopupHelper.showPopup(parent: root, type: type, message: message, okText: okText, onOk: onOk, onCancel: onDismiss)
     }
 
     // MARK: - SimpleSettingCellDelegate
@@ -366,19 +366,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch setting.id {
 
         case .overwriteData:
-            showPopup(parent: self, type: .info, message: overwritePopupMessage)
+            showPopup(type: .info, message: overwritePopupMessage)
 
         case .restorePrefillProducts:
-            showPopup(parent: self, type: .info, message: restoreProductsMessage)
+            showPopup(type: .info, message: restoreProductsMessage)
 
         case .restoreHints:
-            showPopup(parent: self, type: .info, message: restoreHintsMessage)
+            showPopup(type: .info, message: restoreHintsMessage)
 
         case .restoreUnits:
-            showPopup(parent: self, type: .info, message: restoreUnitsMessage)
+            showPopup(type: .info, message: restoreUnitsMessage)
 
         case .clearAllData:
-            showPopup(parent: self, type: .info, message: clearDataMessage)
+            showPopup(type: .info, message: clearDataMessage)
 
         default: logger.e("No supported setting: \(setting)")
         }
