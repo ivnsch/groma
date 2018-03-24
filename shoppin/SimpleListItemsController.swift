@@ -288,7 +288,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
         // TODO!!!!!!!!!!!!!!!!!!!!! update for new UI - we probably will not use "select" anymore but swipe and without undo
         
         if !isEditing { // open quick add in edit mode
-            guard let realmData = realmData else {logger.e("No realm data"); return}
+            guard let realmData = realmData else { logger.e("No realm data"); return }
             
             // TODO!!!! when receive switch status via websocket we will *not* show undo (undo should be only for the device doing the switch) but submit immediately this means:
             // 1. call switchstatus like here, 2. switch status in provider updates status/order, maybe deletes section, etc 3. update the table view - swipe the item and maybe delete section(this should be similar to calling onListItemClear except the animation in this case is not swipe, but that should be ok?)

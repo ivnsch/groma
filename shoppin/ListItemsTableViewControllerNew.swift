@@ -345,7 +345,16 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     
     
     // MARK: - ListItemCellDelegateNew
-    
+
+    func dumpSections() {
+        guard let sections = sections else { logger.e("No sections"); return }
+        for section in sections {
+            print(section.name)
+            for li in section.listItems {
+                print("\t\(li.product.product.product.item.name)")
+            }
+        }
+    }
     
     func onItemSwiped(_ listItem: ListItem) {
         
