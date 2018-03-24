@@ -200,7 +200,7 @@ public extension String {
 //    }
     
     public func capitalizeFirst() -> String {
-        if characters.count > 0 {
+        if count > 0 {
             var copy = self
             copy.replaceSubrange(self.startIndex...self.startIndex, with: String(self[self.startIndex]).capitalized)
             return copy
@@ -210,7 +210,7 @@ public extension String {
     }
     
     public func uncapitalizeFirst() -> String {
-        if characters.count > 0 {
+        if count > 0 {
             var copy = self
             copy.replaceSubrange(self.startIndex...self.startIndex, with: String(self[self.startIndex]).lowercased())
             return copy
