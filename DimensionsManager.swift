@@ -335,6 +335,11 @@ class DimensionsManager {
         }
     }
 
+    // horizontal space popup edges to screen edges
+    static var minPopupHMargin: CGFloat {
+        return 20
+    }
+
     // MARK: Login
     
     static var topConstraintFirstInputWhenClose: CGFloat {

@@ -545,6 +545,6 @@ base_unit_help_title = "Ayuda";
 base_unit_help_note_explanation_title = "Nota";
 base_unit_help_note_explanation_text = "No *tienes* que usar todo esto. Puedes también simplemente poner todo en el nombre, por ejemplo \"huevos 6x\", poner un precio (el cual también es opcional) y ya está! Utiliza lo que mejor te parezca!";
 base_unit_help_reference_quantity_price = "La %%4cantidad de referencia%%4 y el %%5precio%%5 van aquí:";
-base_unit_help_reference_quantity_price_2 = "Este tooltip aparece cuando seleccionas el precio (también visible aquí) en la vista para agregar (o editar) items.";
+base_unit_help_reference_quantity_price_2 = "Este tooltip aparece cuando seleccionas el precio en la vista para agregar (o editar) items.";
 base_unit_help_unit_bases = "La %%1unidad%%1, la %%2cantidad básica%%2 y la %%3segunda candidad básica%%3 van en la vista donde abriste este popup";
 

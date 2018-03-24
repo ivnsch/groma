@@ -11,7 +11,12 @@ import Providers
 
 class MyPopupHelper {
 
-    fileprivate static let contentFrame = CGRect(x: 100, y: 20, width: 340, height: 480)
+    fileprivate static let preferredContentFrame = CGRect(x: 100, y: 20, width: 340, height: 480)
+
+    fileprivate static var contentFrame: CGRect {
+        let width = min(preferredContentFrame.width, UIScreen.main.bounds.width - DimensionsManager.minPopupHMargin * 2)
+        return preferredContentFrame.copy(width: width)
+    }
 
     fileprivate static var swipeHelper: GenericSwipeHelper? // arc
 
