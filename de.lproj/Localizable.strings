@@ -379,7 +379,7 @@ generic_undo = "Rückgängig";
 
 
 placeholder_enter_email = "E-mail";
-placeholder_user_name = "Benutzername";
+placeholder_user_name = "E-mail";
 placeholder_password = "Kennwort";
 
 placeholder_section_name = "Abteilungsname";

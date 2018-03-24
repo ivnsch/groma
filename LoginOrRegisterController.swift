@@ -119,16 +119,14 @@ class LoginOrRegisterController: UIViewController, ForgotPasswordDelegate, GIDSi
     fileprivate func initValidator() {
         let validator = Validator()
         validator.registerField(self.userNameField, rules: [NotEmptyTrimmedRule(message: trans("validation_name_not_empty"))])
-//        validator.registerField(self.userNameField, rules: [EmailRule(message: trans("validation_email_format"))])
+        validator.registerField(self.userNameField, rules: [EmailRule(message: trans("validation_email_format"))])
         validator.registerField(self.passwordField, rules: [RequiredRule(message: trans("validation_missing_password"))]) // TODO repl with translation key, for now this so testers understand
         self.validator = validator
     }
 
     fileprivate func fillTestInput() {
-        userNameField.text = "test"
+        userNameField.text = "ivanschuetz@gmail.com"
         passwordField.text = "test"
-        //        userNameField.text = "ivanschuetz@gmail.com"
-        //        passwordField.text = "test123Q"
     }
 
     @IBAction func loginOrRegisterTapped(_ sender: AnyObject) {

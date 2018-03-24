@@ -381,7 +381,7 @@ generic_undo = "Undo";
 
 
 placeholder_enter_email = "Enter your email";
-placeholder_user_name = "Username";
+placeholder_user_name = "Email";
 placeholder_password = "Password";
 
 placeholder_section_name = "Section name";

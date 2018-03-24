@@ -381,7 +381,7 @@ generic_undo = "Deshacer";
 
 
 placeholder_enter_email = "Ingresa tu e-mail";
-placeholder_user_name = "Nombre de usuario";
+placeholder_user_name = "E-mail";
 placeholder_password = "Clave";
 
 placeholder_section_name = "Nombre de sección";
