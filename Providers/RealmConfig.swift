@@ -14,15 +14,15 @@ import Realm.Dynamic
 public struct RealmConfig {
 
     #if (arch(i386) || arch(x86_64)) && os(iOS)
-        fileprivate static let syncHost = "192.168.0.208"
+        fileprivate static let syncHost = "gr.us1.cloud.realm.io"
     #else // device
-        fileprivate static let syncHost = "192.168.0.208"
+        fileprivate static let syncHost = "gr.us1.cloud.realm.io"
     #endif
-    fileprivate static let syncRealmPath = "groma4"
+    fileprivate static let syncRealmPath = "default"
 
-    static let syncAuthURL = URL(string: "http://\(syncHost):9080")!
-    static let syncServerURL = URL(string: "realm://\(syncHost):9080/~/\(syncRealmPath)")!
-    static let syncUserUrl = URL(string: "http://\(syncHost):9080/auth/user/")!
+    static let syncAuthURL = URL(string: "https://\(syncHost)")!
+    static let syncServerURL = URL(string: "realms://\(syncHost)/~/\(syncRealmPath)")!
+    static let syncUserUrl = URL(string: "https://\(syncHost)/user/")!
 
     fileprivate static var documentsDirectoryUrl: URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
@@ -87,7 +87,7 @@ public struct RealmConfig {
     }
 
     public static func syncedRealmConfigutation(user: SyncUser) -> Realm.Configuration {
-        var config = RealmConfig.config
+        var config = Realm.Configuration()
 
         config.syncConfiguration = SyncConfiguration(user: user, realmURL: syncServerURL)
         config.objectTypes = [List.self, DBInventory.self, Section.self, Product.self, DBSharedUser.self,
