@@ -64,7 +64,7 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
-                                        <real key="value" value="40"/>
+                                        <integer key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
                                         <real key="value" value="50"/>
@@ -101,7 +101,7 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
-                                        <real key="value" value="40"/>
+                                        <integer key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
                                         <real key="value" value="50"/>

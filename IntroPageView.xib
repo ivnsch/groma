@@ -15,7 +15,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XNR-ne-y1N">
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XNR-ne-y1N">
                     <rect key="frame" x="40" y="0.0" width="295" height="607"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gA-1a-5TJ" customClass="LabelMore" customModule="groma" customModuleProvider="target">
@@ -39,7 +39,7 @@
                 <constraint firstItem="XNR-ne-y1N" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="9e5-V5-E8e" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
-                            <integer key="value" value="50"/>
+                            <real key="value" value="0.0"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
                             <real key="value" value="50"/>
@@ -53,7 +53,7 @@
                 <constraint firstAttribute="trailing" secondItem="XNR-ne-y1N" secondAttribute="trailing" constant="40" id="J9H-6A-iyb" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
-                            <integer key="value" value="50"/>
+                            <real key="value" value="0.0"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
                             <real key="value" value="50"/>
