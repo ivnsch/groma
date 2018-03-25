@@ -8,6 +8,7 @@
 
 import UIKit
 import ChameleonFramework
+import Providers
 
 protocol FlatColorPickerControllerDelegate: class {
     func onColorPicked(_ color: UIColor)
@@ -17,7 +18,7 @@ protocol FlatColorPickerControllerDelegate: class {
 class FlatColorPickerController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    
+
     let flatColors: [UIColor] = [
         UIColor.flatRedDark,
         UIColor.flatOrangeDark,
@@ -53,7 +54,12 @@ class FlatColorPickerController: UIViewController, UICollectionViewDataSource, U
 //        let tap = UITapGestureRecognizer(target: self, action: "onTapCollectionViewBG:")
 //        view.addGestureRecognizer(tap)
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.bottomInset = 10
+    }
+
     func onTapCollectionViewBG(_ sender: UIView) {
         delegate?.onDismiss()
     }
@@ -73,7 +79,9 @@ class FlatColorPickerController: UIViewController, UICollectionViewDataSource, U
         circleView.backgroundColor = UIColor.clear
         cell.contentView.backgroundColor = UIColor.white
         cell.contentView.addSubview(circleView)
-        
+
+        circleView.center = cell.contentView.center
+
         return cell
     }
     

@@ -368,9 +368,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
 
         let topBarHeight: CGFloat = Theme.navBarHeight
 
-        controller.view.frame = CGRect(x: 0, y: topBarHeight, width: parent.view.width, height: parent.view.height)
+        controller.view.frame = CGRect(x: 0, y: topBarHeight, width: parent.view.width, height: parent.view.height - topBarHeight)
         popup.contentView = controller.view
-        popup.contentCenter = CGPoint(x: parent.view.center.x, y: parent.view.center.y + topBarHeight)
+        popup.contentCenter = CGPoint(x: parent.view.center.x, y: parent.view.center.y + topBarHeight / 2)
         self.colorPopup = popup
 
         popup.show(from: colorButton)
