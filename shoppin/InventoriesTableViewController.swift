@@ -163,12 +163,12 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     override func canRemoveModel(_ model: ExpandableTableViewModel, can: @escaping (Bool) -> Void) {
 //        _ = (model as! ExpandableTableViewInventoryModelRealm).inventory
         MyPopupHelper.showPopup(
-            parent: self,
+            parent: root,
             type: .warning,
             title: trans("popup_title_confirm"),
             message: trans("popup_remove_inventory_warning"),
             okText: trans("popup_button_remove"),
-            centerYOffset: 80, onOk: {
+            onOk: {
                 can(true)
             }, onCancel: {
                 can(false)
@@ -271,7 +271,13 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                         logger.e("Invalid state inventory name not contained in: \(message)", .ui)
                         return []
                     } ()
-                    MyPopupHelper.showPopup(parent: weakSelf, type: .error, message: message, highlightRanges: ranges, centerYOffset: -80)
+
+                    let addEditNameInput = weakSelf.topAddEditListControllerManager?.controller?.listNameInputField
+                    let currentFirstResponder = (addEditNameInput?.isFirstResponder ?? false) ? addEditNameInput : nil
+                    weakSelf.view.endEditing(true)
+                    MyPopupHelper.showPopup(parent: weakSelf.root, type: .error, message: message, highlightRanges: ranges, onOkOrCancel: {
+                        currentFirstResponder?.becomeFirstResponder()
+                    })
                 } else {
                     weakSelf.defaultErrorHandler()(result)
                 }

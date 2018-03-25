@@ -273,8 +273,13 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                         logger.e("Invalid state list name not contained in: \(message)", .ui)
                         return []
                     } ()
-                    MyPopupHelper.showPopup(parent: weakSelf, type: .error, message: message, highlightRanges: ranges, centerYOffset: -80)
 
+                    let addEditNameInput = weakSelf.topAddEditListControllerManager?.controller?.listNameInputField
+                    let currentFirstResponder = (addEditNameInput?.isFirstResponder ?? false) ? addEditNameInput : nil
+                    weakSelf.view.endEditing(true)
+                    MyPopupHelper.showPopup(parent: weakSelf.root, type: .error, message: message, highlightRanges: ranges, onOkOrCancel: {
+                        currentFirstResponder?.becomeFirstResponder()
+                    })
                 } else {
                     weakSelf.defaultErrorHandler()(result)
                 }
