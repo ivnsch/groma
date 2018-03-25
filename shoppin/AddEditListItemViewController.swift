@@ -176,7 +176,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
     fileprivate var productQuantityController: ProductQuantityController?
 
-    fileprivate var priceInputs: PriceInputsState = PriceInputsState(quantity: 0, secondQuantity: nil, price: 0) {
+    fileprivate var priceInputs: PriceInputsState = PriceInputsState(quantity: 1, secondQuantity: nil, price: 0) {
         didSet {
             updateTotalPrice()
         }
