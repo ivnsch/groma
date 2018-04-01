@@ -247,6 +247,8 @@ class StatsViewController: UIViewController
                         self?.initChart(aggregate)
                         self?.initThisMonthSpendingsLabels(aggregate)
                     }
+
+                    self?.inventoryPicker?.dismiss()
                 }
             })
         } else {

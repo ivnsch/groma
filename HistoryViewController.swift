@@ -53,6 +53,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         inventoryPicker = InventoryPicker(button: inventoriesButton, controller: self) {[weak self] inventory in
             self?.selectedInventory = inventory
+            self?.inventoryPicker?.dismiss()
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(HistoryViewController.onWebsocketHistoryItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.HistoryItem.rawValue), object: nil)

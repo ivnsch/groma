@@ -53,10 +53,15 @@ class InventoryPicker: NSObject {
         
         button.addTarget(self, action: #selector(InventoryPicker.onButtonTap(_:)), for: .touchUpInside)
     }
+
+    func dismiss() {
+        inventoriesPopup?.dismiss(animated: true)
+        inventoriesPopup = nil
+    }
     
     @objc func onButtonTap(_ sender: UIButton) {
-        if let popup = inventoriesPopup {
-            popup.dismiss(animated: true)
+        if let _ = inventoriesPopup {
+            dismiss()
         } else {
             let options = inventories.map { $0.name }
             let picker = createPicker(options: options, selectedOption: selectedInventory?.name)
@@ -66,6 +71,7 @@ class InventoryPicker: NSObject {
             popup.onDismiss = { [weak picker] in
                 picker?.removeFromParentViewController()
             }
+            inventoriesPopup = popup
         }
     }
 }
