@@ -326,7 +326,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         
                                 guard let noneUnit = unitDict[.none] else {logger.e("No none unit! can't add list items."); onFinish?(); return}
 
-                                let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
+                                let productsInputs: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill list
 
@@ -342,9 +342,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                                     }
                                 }
 
-                                let inputs = productsIngredients.map {
+                                let inputs = productsInputs.map {
                                     // NOTE: Assumes all example list items are edible (edible: true). To change this set this flag in the productsWithQuantity tuples.
-                                    ListItemInput(name: $0.product.product.item.name, quantity: $0.quantity, price: 0, refPrice: nil, refQuantity: nil, section: $0.product.product.item.category.name, sectionColor: $0.product.product.item.category.color, note: nil, baseQuantity: $0.product.baseQuantity, secondBaseQuantity: $0.product.secondBaseQuantity.value, unit: $0.product.unit.name, brand: $0.product.product.brand, edible: true)
+                                    ListItemInput(name: $0.product.product.item.name, quantity: $0.quantity, price: 0, refPrice: nil, refQuantity: 1, section: $0.product.product.item.category.name, sectionColor: $0.product.product.item.category.color, note: nil, baseQuantity: $0.product.baseQuantity, secondBaseQuantity: $0.product.secondBaseQuantity.value, unit: $0.product.unit.name, brand: $0.product.product.brand, edible: true)
                                 }
                                 
                                 Prov.listItemsProvider.addNew(listItemInputs: inputs, list: exampleList, status: .todo, realmData: nil, weakSelf.resultHandler(onSuccess: {[weak self] foo in
