@@ -221,6 +221,8 @@ public class Section: DBSyncable, Identifiable {
 
         dict["statusVal"] = statusVal as AnyObject?
 
+        dict["compoundKey"] = compoundKey as AnyObject?
+
         return dict
     }
 
