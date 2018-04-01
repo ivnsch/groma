@@ -240,7 +240,7 @@ class StatsViewController: UIViewController
         if let inventory = selectedInventory {
             Prov.statsProvider.history(timePeriod, group: AggregateGroup.all, inventory: inventory, successHandler{[weak self] aggregate in
                 if self?.aggregate?.timePeriod != aggregate.timePeriod || self?.aggregate?.monthYearAggregates ?? [] != aggregate.monthYearAggregates { // don't reload if there are no changes
-                    self?.showIsEmpty(!aggregate.monthYearAggregates.isEmpty)
+                    self?.showIsEmpty(aggregate.monthYearAggregates.isEmpty)
                     self?.aggregate = aggregate
                     
                     if !aggregate.monthYearAggregates.isEmpty {
