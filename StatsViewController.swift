@@ -98,7 +98,7 @@ class StatsViewController: UIViewController
         NotificationCenter.default.removeObserver(self)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadInventories()
     }
