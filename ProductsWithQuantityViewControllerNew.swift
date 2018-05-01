@@ -317,7 +317,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     // MARK: -
     
     fileprivate func findFirstVisibleItem(_ f: (ProductWithQuantity2) -> Bool) -> (index: Int, model: ProductWithQuantity2, cell: ProductWithQuantityTableViewCell)? {
-        return (tableView.visibleCells.flatMap {cell in
+        return (tableView.visibleCells.compactMap {cell in
             let cell =  cell as! ProductWithQuantityTableViewCell
             guard let model = cell.model else {logger.e("Invalid state: no model"); return nil}
             guard let indexPath = cell.indexPath else {logger.e("Invalid state: no index path"); return nil}

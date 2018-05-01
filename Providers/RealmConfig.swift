@@ -13,7 +13,7 @@ import Realm.Dynamic
 
 public struct RealmConfig {
 
-    #if (arch(i386) || arch(x86_64)) && os(iOS)
+    #if targetEnvironment(simulator)
         fileprivate static let syncHost = "gr.us1.cloud.realm.io"
     #else // device
         fileprivate static let syncHost = "gr.us1.cloud.realm.io"

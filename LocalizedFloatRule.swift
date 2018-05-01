@@ -20,7 +20,7 @@ open class LocalizedFloatRule: Rule {
     open func validate(_ value: String) -> Bool {
         do {
             let regex = try NSRegularExpression(pattern: "[-+]?(\\d*[.,])?\\d+", options: [])
-            let match = regex.numberOfMatches(in: value, options: [], range: NSRange(location: 0, length: value.characters.count))
+            let match = regex.numberOfMatches(in: value, options: [], range: NSRange(location: 0, length: value.count))
             return match == 1
             
         } catch _ {

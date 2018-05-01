@@ -125,7 +125,7 @@ class StatsProviderImpl: StatsProvider {
                     let monthYears = stride(from: min(timePeriod.quantity + 1, 0), through: max(timePeriod.quantity, 0), by: 1).map {quantity in
                         MonthYear(month: referenceDateMonth, year: referenceDateYear).offsetMonths(quantity)
                     }
-                    let monthYearsWithoutNils = monthYears.flatMap{$0} // we are not expecting nils here but we avoid ! (except in outlets) as general rule. There's an error log in offestMonths.
+                    let monthYearsWithoutNils = monthYears.compactMap{ $0 } // we are not expecting nils here but we avoid ! (except in outlets) as general rule. There's an error log in offestMonths.
                     for monthYear in monthYearsWithoutNils {
                         dict[monthYear] = nil
                     }

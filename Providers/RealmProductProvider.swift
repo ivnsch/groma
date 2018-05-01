@@ -371,7 +371,7 @@ class RealmProductProvider: RealmProvider {
         }, resultHandler: {(productsWithMaybeSectionsUuids: [(product: String, section: SectionUnique?)]?) in
             do {
                 let realm = try RealmConfig.realm()
-                let productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)]? = productsWithMaybeSectionsUuids?.flatMap {productUuid, sectionUnique in
+                let productsWithMaybeSections: [(product: QuantifiableProduct, section: Section?)]? = productsWithMaybeSectionsUuids?.compactMap {productUuid, sectionUnique in
                     if let product = realm.objects(QuantifiableProduct.self).filter(QuantifiableProduct.createFilter(productUuid)).first {
                         let section = sectionUnique.flatMap{realm.objects(Section.self).filter(Section.createFilter(unique: $0)).first}
                         return (product, section)
@@ -433,7 +433,7 @@ class RealmProductProvider: RealmProvider {
             }, resultHandler: {(productsWithMaybeSectionsUniques: [(product: String, section: SectionUnique?)]?) in
                 do {
                     let realm = try RealmConfig.realm()
-                    let productsWithMaybeSections: [(product: Product, section: Section?)]? = productsWithMaybeSectionsUniques?.flatMap {productUuid, sectionUnique in
+                    let productsWithMaybeSections: [(product: Product, section: Section?)]? = productsWithMaybeSectionsUniques?.compactMap {productUuid, sectionUnique in
                         if let product = realm.objects(Product.self).filter(Product.createFilter(productUuid)).first {
                             let section = sectionUnique.flatMap{ realm.objects(Section.self).filter(Section.createFilter(unique: $0)).first }
                             return (product, section)

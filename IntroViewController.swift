@@ -188,7 +188,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                     
                     let itemsDict = itemsResults.toDictionary {($0.name, $0)}
 
-                    let ingredients: [Ingredient] = ingredientModels.flatMap {ingredientModel in
+                    let ingredients: [Ingredient] = ingredientModels.compactMap {ingredientModel in
                         // It would be better to delete the recipe on failure instead of skip but this is quicker to implement
                         guard let unit = unitDict[ingredientModel.unitId] else {logger.e("Didn't find unit for id: \(ingredientModel.unitId). Can't add ingredient"); return nil}
                         guard let item = itemsDict[ingredientModel.name] else {logger.e("Didn't find item with name: \(ingredientModel.name). Can't add ingredient"); return nil}
@@ -249,7 +249,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 
                                 guard let noneUnit = unitDict[.none] else {logger.e("No none unit! can't add group items."); onFinish?(); return}
 
-                                let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = ingredients.flatMap {ingredient in
+                                let productsIngredients: [(product: QuantifiableProduct, quantity: Float)] = ingredients.compactMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill group
                                         let quanatifiableProduct = QuantifiableProduct(uuid: UUID().uuidString, baseQuantity: 1, unit: noneUnit, product: product)
@@ -326,7 +326,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                         
                                 guard let noneUnit = unitDict[.none] else {logger.e("No none unit! can't add list items."); onFinish?(); return}
 
-                                let productsInputs: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.flatMap {ingredient in
+                                let productsInputs: [(product: QuantifiableProduct, quantity: Float)] = productsWithQuantity.compactMap {ingredient in
                                     if let product = products.findFirst({$0.item.name == ingredient.name}) {
                                         // for now use products without unit to prefill list
 
