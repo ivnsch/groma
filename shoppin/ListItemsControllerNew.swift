@@ -93,7 +93,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         NotificationCenter.default.addObserver(self, selector: #selector(ListItemsControllerNew.onListRemovedNotification(_:)), name: NSNotification.Name(rawValue: Notification.ListRemoved.rawValue), object: nil)
     }
- 
+
     override func initProgrammaticViews() {
         super.initProgrammaticViews()
         
@@ -163,6 +163,11 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             case .update(_, let deletions, let insertions, let modifications):
                 logger.d("LIST ITEMS notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
 
+                if deletions.count > 1 {
+                    logger.i("Got multiple deletions: reloading table", .ui)
+                    weakSelf.listItemsTableViewController.tableView.reloadData()
+
+                } else {
 
                 // TODO pass modifications to listItemsTableViewController, don't access table view directly
                 weakSelf.listItemsTableViewController.tableView.beginUpdates()
@@ -184,8 +189,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 //                    }
 //                    weakSelf.closeTopController()
 
-
-
+                }
 
 //                logger.d("self?.onTableViewChangedQuantifiables(")
 
@@ -193,19 +197,19 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 
                 // TODO crash: both devices delete their duplicate at the same time, which sends a delete for an out of index item
                 // e.g. testing with only 1 list item -> add to cart at the same time -> both get a duplicated section and delete it (with removePossibleSectionDuplicates), send it to the other (index of deleted section is 1) since duplicate was deleted locally already receiver has only 1 section and deleted index 1 is out of bounds -> crash
-//                if !insertions.isEmpty {
-//                    logger.w("TODO LIST insertions not empty! will remove possible duplicates thread: \(Thread.current)", .ui)
-//                    if let list = weakSelf.currentList {
-//                        Prov.listItemsProvider.removePossibleSectionDuplicates(list: list, status: weakSelf.status, weakSelf.successHandler { removedADuplicate in
-//                            if removedADuplicate {
-//                                logger.i("Removed a section duplicate! Reloading table view", .ui)
+                if !insertions.isEmpty || !modifications.isEmpty { // Checking for modifications too - here we work with sections, not listitems, so modified sections can mean inserted listitem.
+                    logger.w("TODO LIST insertions not empty! will remove possible duplicates thread: \(Thread.current)", .ui)
+                    if let list = weakSelf.currentList {
+                        Prov.listItemsProvider.removePossibleSectionDuplicates(list: list, status: weakSelf.status, weakSelf.successHandler { removedADuplicate in
+                            if removedADuplicate {
+                                logger.i("Removed a section duplicate! Reloading table view", .ui)
 //                                weakSelf.listItemsTableViewController.tableView.reloadData()
-//                            }
-//                        })
-//                    } else {
-//                        logger.e("Unexpected: No list.", .ui)
-//                    }
-//                }
+                            }
+                        })
+                    } else {
+                        logger.e("Unexpected: No list.", .ui)
+                    }
+                }
 
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread
