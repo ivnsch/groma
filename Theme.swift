@@ -37,7 +37,7 @@ public struct Theme {
     public static var black = UIColor(hexString: "222222")
     
     public static var navigationBarTextColor = UIColor.black
-    public static var navigationBarBackgroundColor = UIColor(hexString: "FFFFFF")
+    public static var navigationBarBackgroundColor = mainBGColor
     public static var tabBarBackgroundColor = blue
     public static var navBarAddColor = blue
     public static var tabBarSelectedColor = UIColor.white
@@ -56,7 +56,8 @@ public struct Theme {
     public static let lightGray = UIColor.lightGray
     public static let lightGray2 = UIColor(hexString: "d2d2d2")
 
-    public static let mainBGColor = UIColor(hexString: "f4f8f9")
+//    public static let mainBGColor = UIColor(hexString: "f4f8f9")
+    public static let mainBGColor = UIColor.white
 
     public static let fractionsBGColor = UIColor.gray
     public static let unitsBGColor = UIColor.white
@@ -68,7 +69,7 @@ public struct Theme {
     public static let fractionsSelectedColor = blue
     public static let deleteRed = UIColor(hexString: "F66823")
     
-    public static let defaultTableViewBGColor = mainBGColor
+    public static let defaultTableViewBGColor = UIColor(hexString: "f4f8f9")
     
     public static let popupCornerRadius: CGFloat = 6
     

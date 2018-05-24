@@ -17,7 +17,7 @@ open class NotEmptyTrimmedRule: Rule {
     }
     
     open func validate(_ value: String) -> Bool {
-        return !value.trim().characters.isEmpty
+        return !value.trim().isEmpty
     }
     
     open func errorMessage() -> String {

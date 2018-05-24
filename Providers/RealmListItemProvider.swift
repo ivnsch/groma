@@ -876,9 +876,10 @@ class RealmListItemProvider: RealmProvider {
         
         func transactionContent() -> Float {
             listItem.incrementQuantity(quantity)
+            realmData?.realm.add(listItem, update: true) // TODO is this necessary?
             return listItem.quantity
         }
-        
+
         if doTransaction {
             return doInWriteTransactionSync(realmData: realmData) {realm -> Float in
                 return transactionContent()
@@ -943,57 +944,67 @@ class RealmListItemProvider: RealmProvider {
     /// price set when used in form
     // TODO!!!!!!!!!!!!!!!!!! remove RealmData and "doTransaction" everywhere -- to indicate that a transaction already exists, pass a Realm. Notification token separately where needed.
     func addSync(quantifiableProduct: QuantifiableProduct, store: String, refPrice: Float?, refQuantity: Float?, list: List, quantity: Float, note: String?, status: ListItemStatus, realmData: RealmData?, doTransaction: Bool = true) -> (AddListItemResult)? {
-        
-        refresh()
 
         // We execute this on successful add/increment(where increment here means also "add to list" user action).
         // We don't wait until execution finishes or handle error if it fails, since this is not critical
         func incrementFav() {
-            DBProv.productProvider.incrementFav(productUuid: quantifiableProduct.product.uuid, realm: realmData?.realm, notificationTokens: realmData?.tokens ?? [], doTransaction: doTransaction, {saved in
+            DBProv.productProvider.incrementFav(productUuid: quantifiableProduct.product.uuid, realm: realmData?.realm, notificationTokens: realmData?.tokens ?? [], doTransaction: false, {saved in
                 if !saved {
                     logger.e("Couldn't increment product fav")
                 }
             })
         }
-        
-        switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: doTransaction) {
-            
-        case .ok(let sectionResult):
-            
-            let section = sectionResult.section
-            
-            let existingListItemMaybe = section.listItems.filter(ListItem.createFilter(quantifiableProductUnique: quantifiableProduct.unique)).first
-            
-            if let existingListItem = existingListItemMaybe, let listItemIndex = section.listItems.index(of: existingListItem) {
-                let quantityMaybe = incrementSync(existingListItem, quantity: quantity, realmData: realmData, doTransaction: doTransaction)
-                if quantityMaybe != nil {
 
-                    incrementFav()
-                        
-                    return AddListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, listItemIndex: listItemIndex, sectionIndex: sectionResult.index)
-//                    return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
-                } else {
-                    logger.e("Couldn't increment existing list item")
-                    return nil
+        // NOTE executing everything in the same transaction otherwise it ignores the notification token (i.e. it sends the notification) in some places, e.g. incrementSync!
+        func transactionContent(realmData: RealmData?) -> AddListItemResult? {
+
+            switch DBProv.sectionProvider.mergeOrCreateSectionSync(quantifiableProduct.product.item.category.name, sectionColor: quantifiableProduct.product.item.category.color, status: status, possibleNewOrder: nil, list: list, realmData: realmData, doTransaction: false) {
+
+            case .ok(let sectionResult):
+
+                let section = sectionResult.section
+
+                let existingListItemMaybe = section.listItems.filter(ListItem.createFilter(quantifiableProductUnique: quantifiableProduct.unique)).first
+
+                if let existingListItem = existingListItemMaybe, let listItemIndex = section.listItems.index(of: existingListItem) {
+                    let quantityMaybe = incrementSync(existingListItem, quantity: quantity, realmData: realmData, doTransaction: false)
+                    if quantityMaybe != nil {
+
+                        incrementFav()
+
+                        return AddListItemResult(listItem: existingListItem, section: section, isNewItem: false, isNewSection: sectionResult.isNew, listItemIndex: listItemIndex, sectionIndex: sectionResult.index)
+                        //                    return (listItem: existingListItem, isNew: false, isNewSection: isNewSection)
+                    } else {
+                        logger.e("Couldn't increment existing list item")
+                        return nil
+                    }
+
+                } else { // new list item
+
+                    // TODO section, list - see note on create
+                    if let createdListItem = createSync(quantifiableProduct, store: store, refPrice: refPrice, refQuantity: refQuantity, section: section, list: list, quantity: quantity, note: note, realmData: realmData, doTransaction: false) {
+
+                        incrementFav()
+
+                        return AddListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, listItemIndex: section.listItems.count - 1, sectionIndex: sectionResult.index)
+                    } else {
+                        logger.e("Couldn't create list item, quantifiableProduct: \(quantifiableProduct)")
+                        return nil
+                    }
                 }
 
-            } else { // new list item
-                
-                // TODO section, list - see note on create
-                if let createdListItem = createSync(quantifiableProduct, store: store, refPrice: refPrice, refQuantity: refQuantity, section: section, list: list, quantity: quantity, note: note, realmData: realmData, doTransaction: doTransaction) {
-                    
-                    incrementFav()
-                    
-                    return AddListItemResult(listItem: createdListItem, section: section, isNewItem: true, isNewSection: sectionResult.isNew, listItemIndex: section.listItems.count - 1, sectionIndex: sectionResult.index)
-                } else {
-                    logger.e("Couldn't create list item, quantifiableProduct: \(quantifiableProduct)")
-                    return nil
-                }
-            }
-         
             case .err(let error):
                 logger.e("Error: \(error), quantifiableProduct: \(quantifiableProduct.uuid):\(quantifiableProduct.product.item.name)")
                 return nil
+            }
+        }
+
+        if doTransaction {
+            return doInWriteTransactionSync(realmData: realmData) { realm -> AddListItemResult? in
+                return transactionContent(realmData: realmData)
+            }
+        } else {
+            return transactionContent(realmData: realmData)
         }
     }
     

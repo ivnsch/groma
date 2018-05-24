@@ -30,7 +30,8 @@ import UIKit
         addSubview(view)
 
         view.fillSuperview()
-
+        view.backgroundColor = Theme.mainBGColor
+        
         isUserInteractionEnabled = true
         view.isUserInteractionEnabled = true
 

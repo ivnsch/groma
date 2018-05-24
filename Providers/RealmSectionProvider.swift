@@ -250,10 +250,7 @@ class RealmSectionProvider: RealmProvider {
             
             let addResult: AddSectionResult = {
                 let sectionUnique = SectionUnique(name: sectionName, listUuid: list.uuid, status: status)
-                if let section = sections.filter(Section.createFilter(unique: sectionUnique)).first, let index = sections.index(of: section)
-                
-                {
-                    
+                if let section = sections.filter(Section.createFilter(unique: sectionUnique)).first, let index = sections.index(of: section) {
                     section.color = sectionColor
                     realm.add(section, update: true) // TODO is this necessary?
                     return AddSectionResult(section: section, isNew: false, index: index)

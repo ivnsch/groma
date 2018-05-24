@@ -61,6 +61,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         NotificationCenter.default.addObserver(self, selector: #selector(HistoryViewController.onWebsocketProductCategory(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ProductCategory.rawValue), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(HistoryViewController.onWebsocketListItem(_:)), name: NSNotification.Name(rawValue: WSNotificationName.ListItem.rawValue), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(HistoryViewController.onIncomingGlobalSyncFinished(_:)), name: NSNotification.Name(rawValue: WSNotificationName.IncomingGlobalSyncFinished.rawValue), object: nil)        
+
+        emptyHistoryView.backgroundColor = Theme.mainBGColor
     }
     
     deinit {
