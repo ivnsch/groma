@@ -63,24 +63,4 @@ class ExpandableItemsTableViewCell: UITableViewCell {
             }
         }
     }
-
-    override func willTransition(to state: UITableViewCellStateMask) {
-        super.willTransition(to: state)
-
-        // Replace delete and reorder images
-        DispatchQueue.main.async {
-            if state.contains(UITableViewCellStateMask.showingEditControlMask) {
-                for subview in self.subviews {
-                    if String(describing: type(of: subview)).contains("UITableViewCellEditControl") {
-                        (subview.subviews[safe: 1] as? UIImageView)?.image = #imageLiteral(resourceName: "sort_fav")
-                        //                    subview.frame = CGRect(x: aSubView.frame.origin.x, y: aSubView.frame.origin.y, widthaSubView.frame.size.width, aSubView.frame.size.height - 10)
-                    } else if String(describing: type(of: subview)).contains("UITableViewCellReorderControl") {
-                        let firstImage = subview.subviews.first as? UIImageView
-                        firstImage?.image = #imageLiteral(resourceName: "speechbubble")
-                        firstImage?.frame = CGRect(x: subview.center.x - 15, y: subview.center.y - 15, width: 30, height: 30)
-                    }
-                }
-            }
-        }
-    }
 }
