@@ -311,7 +311,31 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeight
     }
-    
+
+    // This is apparently for custom delete (or left?) icon - may be of interest later
+//    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+//        let button1 = UITableViewRowAction(style: .default, title: "action1") { action, indexPath in
+//            print("button1 pressed!")
+//        }
+//        button1.backgroundColor = UIColor.flatBlue
+//        let button2 = UITableViewRowAction(style: .default, title: "action2") { action, indexPath in
+//            print("button2 pressed!")
+//        }
+//        button2.backgroundColor = UIColor.flatLime
+//        return [button1, button2]
+//    }
+//
+//    @available(iOS 11.0, *)
+//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, handler) in
+//            // handle
+//        }
+//        deleteAction.backgroundColor = .flatRed
+//        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+//        configuration.performsFirstActionWithFullSwipe = false
+//        return configuration
+//    }
+
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let model = itemForRow(row: indexPath.row) else{logger.e("Illegal state: no model for index path: \(indexPath)"); return}
