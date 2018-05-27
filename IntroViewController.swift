@@ -8,16 +8,18 @@
 
 import UIKit
 import SwipeView
-
+import Lottie
 import Providers
 
 enum IntroMode {
     case launch, more
 }
 
-class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, SwipeViewDataSource, SwipeViewDelegate {
-
+class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
+, SwipeViewDataSource, SwipeViewDelegate
+{
     @IBOutlet weak var swipeView: SwipeView!
+    @IBOutlet weak var animationView: LOTAnimationView!
     @IBOutlet weak var pageControl: UIPageControl!
 
     @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
@@ -29,9 +31,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     @IBOutlet weak var verticalCenterSlideConstraint: NSLayoutConstraint!
     
     var mode: IntroMode = .launch
-    
+
+    // TODO remove imageName - we don't use static images anymore
     fileprivate var pageModels: [(key: String, imageName: String)] = []
-    
+
+    fileprivate var databaseFinishedLoading = false
+
     var onCreateExampleList: VoidFunction?
     
     fileprivate let suggestionsPrefiller = SuggestionsPrefiller()
@@ -39,12 +44,23 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     fileprivate var finishedSlider = false {
         didSet {
             if mode == .launch {
+                skipButton.setHiddenAnimated(false)
+                if databaseFinishedLoading == false {
+                    progressIndicator.isHidden = false
+                    progressIndicator.startAnimating()
+                }
                 skipButton.setTitle(trans("intro_button_start"), for: UIControlState())
                 skipButton.setTitleColor(Theme.black, for: UIControlState())
             }
         }
     }
-    
+
+    fileprivate var beforeFirstSliderDrag = true
+
+    // (start, length) in percentage of total animaton duration
+    // for example the first idle scene ("image" shown in the first page) starts say at 12.5% and has a length of 20% -> (12.5, 20)
+    fileprivate var animationIntervals: [(Double, Double)] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,13 +69,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
         
         pageModels = [(trans("intro_slide_lists"), "intro_lists"),
+                      (trans("intro_slide_recipes"), "intro_inventory"),
                       (trans("intro_slide_inventories"), "intro_inventory"),
                       (trans("intro_slide_stats"), "intro_stats")]
-        if CountryHelper.isInServerSupportedCountry() {
-            pageModels.append((trans("intro_slide_real_time"), "intro_sharing"))
-        }
-        
-        
+//        if CountryHelper.isInServerSupportedCountry() {
+//            pageModels.append((trans("intro_slide_real_time"), "intro_sharing"))
+//        }
+
         pageControl.numberOfPages = pageModels.count
 
         if mode == .launch {
@@ -68,22 +84,16 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             
             logger.v("Will init database: \(initActions)")
 
-            func toggleButtons(_ canSkip: Bool) {
-                progressIndicator.isHidden = canSkip
-                skipButton.isHidden = !canSkip
-                if !progressIndicator.isHidden {
-                    progressIndicator.startAnimating()
-                }
-            }
-            
+            skipButton.isHidden = true // for now always hidden - we force user to see all the intro
+            progressIndicator.isHidden = true
+
             if initActions {
-                toggleButtons(false)
-                
-                initDatabase {
-                    toggleButtons(true)
+                initDatabase { [weak self] in
+                    self?.databaseFinishedLoading = true
+                    self?.progressIndicator.isHidden = true
                 }
             } else {
-                toggleButtons(true)
+                databaseFinishedLoading = true
             }
             
         } else {
@@ -91,8 +101,31 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             skipButton.isHidden = true
             progressIndicator.isHidden = true
         }
+
+        initIntroAnimation()
     }
-    
+
+    fileprivate func initIntroAnimation() {
+        initAnimationIntervals()
+        animationView.setAnimation(named: "groma-intro-02")
+        if let firstSceneStart = animationIntervals[safe: 1] {
+            animationView.play(toProgress: CGFloat(firstSceneStart.0 / 100), withCompletion: nil)
+        } else {
+            logger.e("Start of first intro scene not found", .ui)
+        }
+    }
+
+    fileprivate func initAnimationIntervals() {
+        // progress percentage of idle scenes in animation (about in the middle of the respective idle interval)
+        // got these numbers with trial and error - if the animation changes these numbers (most probably) have to be updated.
+        let starts = [ 0, 12.5, 30, 55, 88 ]
+        for i in 0..<starts.count {
+            let current = starts[i]
+            let next = starts[safe: i + 1] ?? 100
+            animationIntervals.append((current, next - current))
+        }
+    }
+
     @IBAction func loginTapped(sender: UIButton) {
         startLogin(.normal)
     }
@@ -463,28 +496,22 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     func onRegisterFromLoginSuccess() {
     }
-    
+
     // MARK: - SwipeViewDataSource
-    
+
     func numberOfItems(in swipeView: SwipeView!) -> Int {
         return pageModels.count
     }
-    
-    func swipeView(_ swipeView: SwipeView!, viewForItemAt index: Int, reusing view: UIView!) -> UIView! {
-    
-        let v = (view ?? Bundle.loadView("IntroPageView", owner: self)!) as! IntroPageView
-        
-        let pageModel = pageModels[index]
-        
-        let image = UIImage(named: pageModel.imageName)!
-        v.imageView.image = image
-        v.label.text = pageModel.key
 
+    func swipeView(_ swipeView: SwipeView!, viewForItemAt index: Int, reusing view: UIView!) -> UIView! {
+        let v = (view ?? Bundle.loadView("IntroPageView", owner: self)!) as! IntroPageView
+        let pageModel = pageModels[index]
+        v.label.text = pageModel.key
         return v
     }
 
     // MARK: - SwipeViewDelegate
-    
+
     func swipeViewCurrentItemIndexDidChange(_ swipeView: SwipeView!) {
         pageControl.currentPage = swipeView.currentItemIndex
         if swipeView.currentItemIndex == pageModels.count - 1 {
@@ -493,11 +520,31 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
             }
         }
     }
-    
+
     func swipeViewItemSize(_ swipeView: SwipeView!) -> CGSize {
         return swipeView.frame.size
     }
-    
+
+    func swipeViewWillBeginDragging(_ swipeView: SwipeView!) {
+        beforeFirstSliderDrag = false
+    }
+
+    func swipeViewDidScroll(_ swipeView: SwipeView!) {
+        let progress = swipeView.scrollOffset
+
+        // at the beginning the swiper triggers some scroll events with 0, which would reset the animation (the first page is > 0%)
+        // so we don't react to events until the user has dragged the first time
+        if !beforeFirstSliderDrag {
+            let whole = Int(progress) // whole part of progress number
+            let fraction: Double = Double(progress) - Double(Int(progress)) // fraction part of progress number
+
+            // if let normally not necessary - just in case
+            if let interval = animationIntervals[safe: whole + 1] { // get animation interval
+                let animProgress = interval.1 * Double(fraction) + interval.0 // calculate animation progress
+                animationView.animationProgress = CGFloat(animProgress) / 100
+            }
+        }
+    }
     
     deinit {
         logger.v("Deinit intro controller")

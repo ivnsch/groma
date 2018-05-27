@@ -415,10 +415,11 @@ example_group_fruits_salad = "Ensalada de frutas";
 
 
 intro_button_start = "Empezar";
-intro_slide_lists = "Administra confortablemente tus listas de compras";
-intro_slide_inventories = "Conecta tus listas con inventarios para controlar tus víveres";
+intro_slide_lists = "Administra tus listas de compras";
+intro_slide_recipes = "Agrega tus recetas favoritas";
+intro_slide_inventories = "Controla tu inventario";
 intro_slide_real_time = "Comparte con otros usuarios en tiempo real";
-intro_slide_stats = "Analiza tu comportamiento de consumo y gastos";
+intro_slide_stats = "Analiza tu consumo";
 
 
 participants_count_singular = "%@ participante";

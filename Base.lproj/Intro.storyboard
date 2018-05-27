@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,24 +22,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="6ZS-ry-WaI" customClass="SwipeView">
-                                <rect key="frame" x="0.0" y="164" width="375" height="300"/>
+                            <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="6ZS-ry-WaI" customClass="LOTAnimationView">
+                                <rect key="frame" x="0.0" y="103.5" width="375" height="300"/>
                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="gWF-zF-RTt"/>
                                 </constraints>
-                                <connections>
-                                    <outlet property="dataSource" destination="k9Y-sO-uBl" id="2Sa-1E-BJa"/>
-                                    <outlet property="delegate" destination="k9Y-sO-uBl" id="U2a-xG-2zJ"/>
-                                </connections>
                             </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="mkE-ao-QPc">
-                                <rect key="frame" x="168" y="474" width="39" height="37"/>
+                                <rect key="frame" x="168" y="423.5" width="39" height="37"/>
                                 <color key="pageIndicatorTintColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="currentPageIndicatorTintColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </pageControl>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJR-Pk-tTx" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
-                                <rect key="frame" x="170" y="541" width="35" height="34"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJR-Pk-tTx" customClass="ButtonMore" customModule="groma" customModuleProvider="target">
+                                <rect key="frame" x="170" y="490.5" width="35" height="34"/>
                                 <accessibility key="accessibilityConfiguration" identifier="skip"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Skip">
@@ -54,28 +51,35 @@
                                     <action selector="skipTapped:" destination="k9Y-sO-uBl" eventType="touchUpInside" id="DUq-XT-1UN"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="pJ3-Ic-Ev2">
-                                <rect key="frame" x="177" y="548" width="20" height="20"/>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="pJ3-Ic-Ev2">
+                                <rect key="frame" x="177" y="497.5" width="20" height="20"/>
                             </activityIndicatorView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ynb-xz-qyx" customClass="SwipeView">
+                                <rect key="frame" x="16" y="20" width="343" height="393.5"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="k9Y-sO-uBl" id="jlh-MV-n5y"/>
+                                    <outlet property="delegate" destination="k9Y-sO-uBl" id="8TY-LL-IM3"/>
+                                </connections>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="6ZS-ry-WaI" secondAttribute="trailing" id="15Y-Bf-R9H" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
-                                        <real key="value" value="50"/>
+                                        <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
-                                        <real key="value" value="60"/>
+                                        <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
-                            <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="10" id="2Je-Xu-p9d"/>
-                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerY" secondItem="q6e-yE-ONc" secondAttribute="centerY" constant="-20" id="3Tk-Zj-DvH" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
+                            <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="20" id="2Je-Xu-p9d"/>
+                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerY" secondItem="q6e-yE-ONc" secondAttribute="centerY" constant="-80" id="3Tk-Zj-DvH" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
@@ -95,19 +99,23 @@
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="7sM-E7-U7q"/>
                             <constraint firstItem="pJ3-Ic-Ev2" firstAttribute="centerY" secondItem="NJR-Pk-tTx" secondAttribute="centerY" id="93w-fo-p1C"/>
                             <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="CJC-Vy-ef8"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ynb-xz-qyx" secondAttribute="trailing" id="Jt2-dl-as4"/>
+                            <constraint firstItem="Ynb-xz-qyx" firstAttribute="top" secondItem="q6e-yE-ONc" secondAttribute="topMargin" id="P1H-rr-x50"/>
+                            <constraint firstItem="Ynb-xz-qyx" firstAttribute="leading" secondItem="q6e-yE-ONc" secondAttribute="leadingMargin" id="W7p-ZN-NCh"/>
                             <constraint firstItem="pJ3-Ic-Ev2" firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="kq0-sL-AYj"/>
                             <constraint firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="mK8-90-YtI"/>
+                            <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="Ynb-xz-qyx" secondAttribute="bottom" constant="10" id="p4M-ut-kH7"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="leading" secondItem="q6e-yE-ONc" secondAttribute="leading" id="xZ6-gy-O9O" customClass="MultiLayoutConstraint" customModule="groma" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
-                                        <real key="value" value="50"/>
+                                        <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
-                                        <real key="value" value="60"/>
+                                        <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
@@ -115,10 +123,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="05r-p6-eT1"/>
                     <connections>
+                        <outlet property="animationView" destination="6ZS-ry-WaI" id="YCL-Q3-BpS"/>
                         <outlet property="pageControl" destination="mkE-ao-QPc" id="fb6-Vq-8Za"/>
                         <outlet property="progressIndicator" destination="pJ3-Ic-Ev2" id="ShC-N5-xC0"/>
                         <outlet property="skipButton" destination="NJR-Pk-tTx" id="vOf-eA-cbw"/>
-                        <outlet property="swipeView" destination="6ZS-ry-WaI" id="TgR-a1-308"/>
                         <outlet property="verticalCenterSlideConstraint" destination="3Tk-Zj-DvH" id="rMo-yr-l31"/>
                     </connections>
                 </viewController>

@@ -132,6 +132,7 @@
 		6AACDC191E475BE000A9E1EC /* ExplanationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AACDC181E475BE000A9E1EC /* ExplanationView.swift */; };
 		6AACDC1B1E475C0C00A9E1EC /* ExplanationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */; };
 		6AAD8C021E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */; };
+		6AB3F5F820BAED070087A91D /* groma-intro-02.json in Resources */ = {isa = PBXBuildFile; fileRef = 6AB3F5F720BAED070087A91D /* groma-intro-02.json */; };
 		6AB79F982038D88D00524FBC /* HandlingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB79F972038D88D00524FBC /* HandlingImageView.swift */; };
 		6ACF4D381E51EFBE00DE9D43 /* ManageItemsAccordionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */; };
 		6ACF4D3B1E51F00600DE9D43 /* ManageItemsAccordion.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */; };
@@ -679,6 +680,7 @@
 		6AACDC181E475BE000A9E1EC /* ExplanationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExplanationView.swift; sourceTree = "<group>"; };
 		6AACDC1A1E475C0C00A9E1EC /* ExplanationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExplanationView.xib; sourceTree = "<group>"; };
 		6AAD8C011E34FFF600DAA3D8 /* GromFromViewControlerAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GromFromViewControlerAnimator.swift; sourceTree = "<group>"; };
+		6AB3F5F720BAED070087A91D /* groma-intro-02.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "groma-intro-02.json"; sourceTree = "<group>"; };
 		6AB79F972038D88D00524FBC /* HandlingImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlingImageView.swift; sourceTree = "<group>"; };
 		6ACF4D371E51EFBE00DE9D43 /* ManageItemsAccordionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManageItemsAccordionController.swift; path = ../ManageItemsAccordionController.swift; sourceTree = "<group>"; };
 		6ACF4D3A1E51F00600DE9D43 /* ManageItemsAccordion.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageItemsAccordion.storyboard; sourceTree = "<group>"; };
@@ -2001,6 +2003,7 @@
 				EBB5266D1BEFD8820002A286 /* help */,
 				EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */,
 				EB9207EA1C4C4FC200332332 /* Localizable.strings */,
+				6AB3F5F720BAED070087A91D /* groma-intro-02.json */,
 				6AD51A8E1E4F5E350053934E /* MyTabBarController.swift */,
 				6A287E831E5210D000868244 /* Globals.swift */,
 			);
@@ -2918,6 +2921,7 @@
 				EBD668121CED4DE00055EE0B /* ManageProducts.storyboard in Resources */,
 				6A287E891E52672600868244 /* EditNameColorController.xib in Resources */,
 				6AD23FFF1FED922C0080161E /* AddRecipeController.xib in Resources */,
+				6AB3F5F820BAED070087A91D /* groma-intro-02.json in Resources */,
 				EBB655A81CF3D13D00B49A55 /* ProductsWithQuantity.storyboard in Resources */,
 				6AFDAFAB1FFCFA5900C57703 /* PriceInputsController.xib in Resources */,
 				EB4B39D21CED425000B41063 /* UserDetails.storyboard in Resources */,
@@ -3024,6 +3028,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftCharts/SwiftCharts.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
 				"${BUILT_PRODUCTS_DIR}/SwipeView/SwipeView.framework",
+				"${BUILT_PRODUCTS_DIR}/lottie-ios/Lottie.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3045,6 +3050,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftCharts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lottie.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3077,7 +3083,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle,
+				"$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -3113,6 +3119,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftCharts/SwiftCharts.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftValidator/SwiftValidator.framework",
 				"${BUILT_PRODUCTS_DIR}/SwipeView/SwipeView.framework",
+				"${BUILT_PRODUCTS_DIR}/lottie-ios/Lottie.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3134,6 +3141,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftCharts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftValidator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lottie.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3148,7 +3156,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle,
+				"$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
