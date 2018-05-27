@@ -14,7 +14,9 @@ class PathButton: UIButton {
     
     var on: Bool = false {
         didSet {
-            setPathsForState(on)
+            if oldValue != on {
+                setPathsForState(on)
+            }
         }
     }
     
@@ -36,7 +38,7 @@ class PathButton: UIButton {
         }
     }
     
-    func setup(offPaths: [CGPath], onPaths: [CGPath]) {
+    func setup(offPaths: [CGPath], onPaths: [CGPath], lineWidth: CGFloat = 2.5) {
         guard offPaths.count == onPaths.count else {print("Error: PathButton.setup: Paths must have same count. offPaths: \(offPaths.count), onPaths: \(onPaths.count). Not setting anything."); return}
 
         self.offPaths = offPaths
@@ -50,7 +52,7 @@ class PathButton: UIButton {
             sublayer.lineJoin      = kCALineJoinRound
             sublayer.lineCap       = kCALineCapRound
             sublayer.contentsScale = layer.contentsScale
-            sublayer.lineWidth     = 2.5
+            sublayer.lineWidth     = lineWidth
             layer.addSublayer(sublayer)
         }
         

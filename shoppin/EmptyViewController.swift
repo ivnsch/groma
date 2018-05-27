@@ -17,7 +17,7 @@ class EmptyViewController: UITableViewController {
         }
     }
     
-    fileprivate var pullToAddView: MyRefreshControl?
+    fileprivate var pullToAdd: PullToAddHelper?
 
     weak var container: UIView?
 
@@ -52,18 +52,11 @@ class EmptyViewController: UITableViewController {
     }
 
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.mainBGColor, tableView: tableView)
-        refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
-        self.refreshControl = refreshControl
-        
-        pullToAddView = refreshControl
+        pullToAdd = PullToAddHelper(tableView: tableView, onPull: { [weak self] in
+            self?.onTapOrPull?()
+        })
     }
-    
-    @objc func onPullRefresh(_ sender: UIRefreshControl) {
-        sender.endRefreshing()
-        onTapOrPull?()
-    }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -80,9 +73,12 @@ class EmptyViewController: UITableViewController {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -40)
+        pullToAdd?.scrollViewDidScroll(scrollView: scrollView)
     }
 
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        pullToAdd?.scrollViewDidEndDecelerating(scrollView)
+    }
     
     @objc func onTap(_ sender: UITapGestureRecognizer) {
         onTapOrPull?()

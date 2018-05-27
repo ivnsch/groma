@@ -832,7 +832,7 @@ class SimpleListItemsTableViewController: UITableViewController {
     weak var scrollViewDelegate: UIScrollViewDelegate?
     weak var listItemsEditTableViewDelegate: ListItemsEditTableViewDelegateNew?
 
-    fileprivate var pullToAddView: MyRefreshControl?
+    fileprivate var pullToAdd: PullToAddHelper?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -912,18 +912,11 @@ class SimpleListItemsTableViewController: UITableViewController {
     // MARK: - Pull to refresh
     
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.mainBGColor, tableView: tableView)
-        refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
-        self.refreshControl = refreshControl
-        self.pullToAddView = refreshControl
+        pullToAdd = PullToAddHelper(tableView: tableView, onPull: { [weak self] in
+            self?.listItemsTableViewDelegate?.onPullToAdd()
+        })
+    }
 
-    }
-    
-    @objc func onPullRefresh(_ sender: UIRefreshControl) {
-        sender.endRefreshing()
-        listItemsTableViewDelegate?.onPullToAdd()
-    }
-    
     // MARK: - Scrolling
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -931,7 +924,11 @@ class SimpleListItemsTableViewController: UITableViewController {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -40)
+        pullToAdd?.scrollViewDidScroll(scrollView: scrollView)
+    }
+
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        pullToAdd?.scrollViewDidEndDecelerating(scrollView)
     }
     
     // MARK: - Etc

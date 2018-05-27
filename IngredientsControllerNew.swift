@@ -73,7 +73,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     fileprivate var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
 
-    fileprivate var pullToAddView: MyRefreshControl?
+    fileprivate var pullToAdd: PullToAddHelper?
 
     // To differenciate from add, etc. We need to disable the animation of top menu to bottom in this case
     fileprivate var triggeredExpandEditIngredient = false
@@ -221,23 +221,20 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     // MARK: - Pull to add
     
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.mainBGColor, tableView: tableView)
-        refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
-        tableViewController.refreshControl = refreshControl
-        
-        pullToAddView = refreshControl
+        pullToAdd = PullToAddHelper(tableView: tableView, onPull: { [weak self] in
+            _ = self?.toggleTopAddController(false)
+        })
     }
-    
-    @objc func onPullRefresh(_ sender: UIRefreshControl) {
-        sender.endRefreshing()
-        _ = toggleTopAddController(false)
-    }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
-        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -40)
+        pullToAdd?.scrollViewDidScroll(scrollView: scrollView)
     }
-    
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        pullToAdd?.scrollViewDidEndDecelerating(scrollView)
+    }
+
     // MARK: -
     
     func load() {

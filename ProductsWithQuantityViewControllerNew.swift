@@ -110,13 +110,10 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
 
         sortBy = sortByOptions.first
 
-        if delegate?.isPullToAddEnabled() ?? false {
-            self.pullToAdd = PullToAddHelper(tableView: tableView) {[weak self] refreshControl in
-                refreshControl.endRefreshing()
-                self?.delegate?.onPullToAdd()
-            }
-        }
-        
+        pullToAdd = PullToAddHelper(tableView: tableView, onPull: { [weak self] in
+            self?.delegate?.onPullToAdd()
+        })
+
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
         tapRecognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(tapRecognizer)
@@ -501,7 +498,11 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegate?.onTableViewScroll(scrollView)
-        pullToAdd?.refreshControl.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
+        pullToAdd?.scrollViewDidScroll(scrollView: scrollView)
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        pullToAdd?.scrollViewDidEndDecelerating(scrollView)
     }
 }
 

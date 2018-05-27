@@ -9,118 +9,49 @@
 import UIKit
 import Providers
 
-
-// TODO object oriented
 class PullToAddHelper {
 
-    
-    var onPull: ((MyRefreshControl) -> Void)?
-    
-    let refreshControl: MyRefreshControl
-    
-    init(tableView: UITableView, onPull: @escaping (MyRefreshControl) -> Void) {
+    var onPull: (() -> Void)?
+
+    private var pullToRefresh: PullToRefresh?
+
+    var consumed = false
+    var consumedAnim = false
+
+    init(tableView: UITableView, onPull: @escaping () -> Void) {
         self.onPull = onPull
-        
-        let refreshControl = MyRefreshControl(frame: CGRect(x: 0, y: tableView.y, width: tableView.width, height: 200),
-                                              backgroundColor: tableView.backgroundColor, tableView: tableView)
 
+        let pullToRefresh = PullToRefresh()
+        let height: CGFloat = 150
+        pullToRefresh.frame = CGRect(x: 0, y: -height, width: tableView.width, height: height)
+        tableView.addSubview(pullToRefresh)
 
-
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshControl
-        } else {
-            tableView.backgroundView = refreshControl
-        }
-        
-        self.refreshControl = refreshControl
-        
-        refreshControl.addTarget(self, action: #selector(onPullRefresh(_:)), for: .valueChanged)
-
+        self.pullToRefresh = pullToRefresh
     }
-    
-    @objc func onPullRefresh(_ sender: UIRefreshControl) {
-        onPull?(refreshControl)
-    }
-    
-    
-    // backwards compatibility - TODO remove
-    // Creates default refresh control
-    // backgroundColor: Overrides parentController's view background color as background color of pull to add
-    static func createPullToAdd(_ parentController: UIViewController, backgroundColor: UIColor? = nil, tableView: UITableView) -> MyRefreshControl {
-        let refreshControl = MyRefreshControl(frame: CGRect.zero, backgroundColor: backgroundColor ?? parentController.view.backgroundColor, tableView: tableView)
-        return refreshControl
-    }
-}
 
-
-class MyRefreshControl: UIRefreshControl {
-    
-    var arrow: UIImageView?
-
-    weak var tableView: UITableView?
-
-    init(frame: CGRect, backgroundColor: UIColor?, tableView: UITableView) {
-        super.init(frame: frame)
-
-        self.tableView = tableView
-
-        let bgView = UIView()
-        bgView.translatesAutoresizingMaskIntoConstraints = false
-        bgView.backgroundColor = backgroundColor // to hide the built in activity indicator
-        addSubview(bgView)
-        bgView.fillSuperview()
-        
-        let label = UILabel()
-        label.font = Fonts.fontForSizeCategory(40)
-        label.textColor = Theme.grey
-        label.text = trans("pull_to_add")
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        bgView.addSubview(label)
-        
-        _ = label.alignTop(bgView, constant: 35)
-        _ = label.alignRight(bgView)
-        _ = label.alignLeft(bgView)
-        _ = label.alignBottom(bgView)
-        
-        if let arrowImage = UIImage(named: "pull_to_add") {
-            let imageView = UIImageView(image: arrowImage)
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            bgView.addSubview(imageView)
-            
-            _ = imageView.positionAboveView(label, constant: -10)
-            _ = imageView.centerXInParent()
-
-            self.arrow = imageView
-            
-            
-            imageView.transform = CGAffineTransform(rotationAngle: 180.degreesToRadians)
-
-            
-        } else {
-            logger.e("No arrow image!")
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let offset = scrollView.contentOffset.y
+        pullToRefresh?.updateForScrollOffset(offset: offset)
+        if (offset < -120 && !consumed) {
+            consumed = true
+            onPull?()
         }
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        // TODO sometimes (about 1 in 20) the + icon isn't resetted - because scrollViewDidEndDecelerating isn't called?
+        // This means when the user drags down again they see a + instead of the expected arrow.
+        // Non-critical, since it comes back to normal when this drag snaps back to top. But it should be fixed.
+        // Note that listening to a 0 offset in scrollViewDidScroll also doesn't work because this is called
+        // before the recyclerview snaps back sometimes interfering with the still valid + state, so there's flickering
+        // between the animations.
+        if scrollView.contentOffset.y <= 0 {
+            onSnapToTop()
+        }
     }
-    
-    
-    func updateForScrollOffset(offset: CGFloat, startOffset: CGFloat = 0) {
 
-        tableView?.sendSubview(toBack: self) // it's necessary to do this here, otherwise comes to front (sending to back at start doesn't work)
-
-        let startOffset: CGFloat = startOffset
-        
-        let totalAngle: CGFloat = 180
-        let distanceForTotalAngle: CGFloat = 75
-        
-        let ratio = totalAngle / distanceForTotalAngle
-        
-        let currentDistance = offset - startOffset
-        let currentAngle = min(0, currentDistance * ratio) // TODO when scrolling back (lifting finger) we get here 0 and arrow jumps back. Should revert gradually. When scrolling manually back this doesn't happen.
-    
-        arrow?.transform = CGAffineTransform(rotationAngle: 180.degreesToRadians + min(180.degreesToRadians, abs(currentAngle.degreesToRadians)))
+    private func onSnapToTop() {
+        consumed = false
+        pullToRefresh?.scrollViewDidEndDecelerating()
     }
 }

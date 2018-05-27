@@ -50,29 +50,27 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     fileprivate var swipedTableViewListItem: TableViewListItem? // Item marked for "undo".
     
-    fileprivate var pullToAddView: MyRefreshControl?
+    fileprivate var pullToAdd: PullToAddHelper?
 
     func touchEnabled(_ enabled:Bool) {
         self.tableView.isUserInteractionEnabled = enabled
     }
     
     func enablePullToAdd() {
-        let refreshControl = PullToAddHelper.createPullToAdd(self, tableView: tableView)
-        refreshControl.addTarget(self, action: #selector(ListItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)
-        self.refreshControl = refreshControl
-        self.pullToAddView = refreshControl
+        pullToAdd = PullToAddHelper(tableView: tableView, onPull: { [weak self] in
+            self?.listItemsTableViewDelegate?.onPullToAdd()
+        })
     }
-    
-    @objc func onPullRefresh(_ sender: UIRefreshControl) {
-        sender.endRefreshing()
-        listItemsTableViewDelegate?.onPullToAdd()
-    }
-    
+
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         listItemsTableViewDelegate?.onTableViewScroll(scrollView)
-        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y)
+        pullToAdd?.scrollViewDidScroll(scrollView: scrollView)
     }
-    
+
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        pullToAdd?.scrollViewDidEndDecelerating(scrollView)
+    }
+
     var sectionsExpanded: Bool = true
     
     var cellMode: ListItemCellMode = .note {

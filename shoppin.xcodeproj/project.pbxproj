@@ -85,6 +85,9 @@
 		6A407ABE1E33A44400D77405 /* AddRecipeIngredientCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A407ABC1E33A44400D77405 /* AddRecipeIngredientCell.xib */; };
 		6A42C3851E437C4900F8E0E6 /* SimpleListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A42C3831E437C4900F8E0E6 /* SimpleListItemsController.swift */; };
 		6A42C3861E437C4900F8E0E6 /* SimpleListItemsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A42C3841E437C4900F8E0E6 /* SimpleListItemsController.xib */; };
+		6A42E78C20B9D50B00166F32 /* PullToRefresh.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A42E78B20B9D50B00166F32 /* PullToRefresh.xib */; };
+		6A42E78E20B9D5B900166F32 /* PullToRefreshArrowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A42E78D20B9D5B900166F32 /* PullToRefreshArrowModel.swift */; };
+		6A42E79020B9D99B00166F32 /* PullToRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A42E78F20B9D99B00166F32 /* PullToRefresh.swift */; };
 		6A4D04CE1FEB16FB005BDA52 /* UnitCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4D04CD1FEB16FB005BDA52 /* UnitCollectionViewManager.swift */; };
 		6A4DBFDA1FF9B18800B2AB15 /* Providers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A4DBFDB1FF9B18800B2AB15 /* Providers.framework */; };
 		6A4DBFDD1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4DBFDC1FFAFF9600B2AB15 /* MoveItemsToCartTest.swift */; };
@@ -626,6 +629,9 @@
 		6A407ABC1E33A44400D77405 /* AddRecipeIngredientCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddRecipeIngredientCell.xib; sourceTree = "<group>"; };
 		6A42C3831E437C4900F8E0E6 /* SimpleListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleListItemsController.swift; sourceTree = "<group>"; };
 		6A42C3841E437C4900F8E0E6 /* SimpleListItemsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SimpleListItemsController.xib; sourceTree = "<group>"; };
+		6A42E78B20B9D50B00166F32 /* PullToRefresh.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PullToRefresh.xib; sourceTree = "<group>"; };
+		6A42E78D20B9D5B900166F32 /* PullToRefreshArrowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefreshArrowModel.swift; sourceTree = "<group>"; };
+		6A42E78F20B9D99B00166F32 /* PullToRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefresh.swift; sourceTree = "<group>"; };
 		6A4D04CD1FEB16FB005BDA52 /* UnitCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitCollectionViewManager.swift; sourceTree = "<group>"; };
 		6A4DBFD71FF9B0C000B2AB15 /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A4DBFD91FF9B10D00B2AB15 /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1300,6 +1306,15 @@
 				6A1BBADE1E44B57300BC7404 /* ListItemCell.xib */,
 			);
 			name = generic;
+			sourceTree = "<group>";
+		};
+		6A42E79120B9DA6000166F32 /* pullToRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				6A42E78B20B9D50B00166F32 /* PullToRefresh.xib */,
+				6A42E78F20B9D99B00166F32 /* PullToRefresh.swift */,
+			);
+			name = pullToRefresh;
 			sourceTree = "<group>";
 		};
 		6A4D04CC1FEB1523005BDA52 /* unitOrBase */ = {
@@ -2582,6 +2597,8 @@
 				6ACFFBF41FE5BEC50000DDEB /* MoundsView.swift */,
 				6A633754201E06AE001E4969 /* DesignableUITextField.swift */,
 				6AB79F972038D88D00524FBC /* HandlingImageView.swift */,
+				6A42E79120B9DA6000166F32 /* pullToRefresh */,
+				6A42E78D20B9D5B900166F32 /* PullToRefreshArrowModel.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -2937,6 +2954,7 @@
 				6ACFFBF31FE5716F0000DDEB /* SelectIngredientDataHeader.xib in Resources */,
 				EB4B39C51CED405600B41063 /* ModalLoginController.storyboard in Resources */,
 				EBD558CD1BF3C11E0048F287 /* Scale.storyboard in Resources */,
+				6A42E78C20B9D50B00166F32 /* PullToRefresh.xib in Resources */,
 				EB22C7141C4B034400285352 /* ShareApp.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3421,6 +3439,7 @@
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
 				6AE41A141E49E15300B8459D /* SelectQuantifiableController.swift in Sources */,
 				EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */,
+				6A42E78E20B9D5B900166F32 /* PullToRefreshArrowModel.swift in Sources */,
 				6AD51ABF1E512FAA0053934E /* UIColor.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				6A42C3851E437C4900F8E0E6 /* SimpleListItemsController.swift in Sources */,
@@ -3459,6 +3478,7 @@
 				EBF162E21A3C83D50048E37C /* ListItemsViewSection.swift in Sources */,
 				EBF1A1541B82213200F34105 /* HistoryViewController.swift in Sources */,
 				6A7E64861FEAAD1E00F75DFD /* AddNewItemInputCell.swift in Sources */,
+				6A42E79020B9D99B00166F32 /* PullToRefresh.swift in Sources */,
 				6ACFFBF71FE5C0160000DDEB /* IngredientQuantityView.swift in Sources */,
 				6A05647C1E8C628F00E5C74D /* CenterAlignedCollectionViewFlowLayout.swift in Sources */,
 				EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */,

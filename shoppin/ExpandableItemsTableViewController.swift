@@ -95,7 +95,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 
     fileprivate let cellHeight = DimensionsManager.defaultCellHeight
     
-    fileprivate var pullToAddView: MyRefreshControl?
+    fileprivate var pullToAdd: PullToAddHelper?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,14 +104,13 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         tableView.backgroundColor = Theme.mainBGColor
 
         tableView.allowsSelectionDuringEditing = true
+
+        pullToAdd = PullToAddHelper(tableView: tableView, onPull: { [weak self] in
+            self?.onPullToAdd()
+        })
         
 //        setEmptyUI(false, animated: false) // start with hidden empty view, this way there's no "fade in" animation when starting (non empty) screens the first time
 
-        let refreshControl = PullToAddHelper.createPullToAdd(self, backgroundColor: Theme.mainBGColor, tableView: tableView)
-        tableViewController.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(ExpandableItemsTableViewController.onPullRefresh(_:)), for: .valueChanged)
-        self.pullToAddView = refreshControl
-        
         originalNavBarFrame = topBar.frame
         
         topBar.delegate = self
@@ -146,13 +145,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     // MARK: -
     
     func onExpandableClose() {
-    }
-    
-    // MARK: - Pull to add
-    
-    @objc func onPullRefresh(_ sender: UIRefreshControl) {
-        sender.endRefreshing()
-        onPullToAdd()
     }
 
     func onPullToAdd() {
@@ -397,12 +389,16 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
             }
         }
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
-        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
+        pullToAdd?.scrollViewDidScroll(scrollView: scrollView)
     }
-    
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        pullToAdd?.scrollViewDidEndDecelerating(scrollView)
+    }
+
     func openTopController(rotateTopBarButton: Bool = true) {
         // override
     }

@@ -62,7 +62,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     fileprivate var explanationManager: ExplanationManager = ExplanationManager()
 
-    fileprivate var pullToAddView: MyRefreshControl?
+    fileprivate var pullToAdd: PullToAddHelper?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,14 +71,11 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         tableView.backgroundColor = Theme.defaultTableViewBGColor
-        
-        if delegate?.isPullToAddEnabled() ?? false {
-            let refreshControl = PullToAddHelper.createPullToAdd(self, tableView: tableView)
-            tableViewController.refreshControl = refreshControl
-            refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), for: .valueChanged)
-            self.pullToAddView = refreshControl
-        }
-        
+
+        pullToAdd = PullToAddHelper(tableView: tableView, onPull: { [weak self] in
+            self?.delegate?.onPullToAdd()
+        })
+
         // TODO custom empty view, put this there
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProductsWithQuantityViewController.onEmptyInventoryViewTap(_:)))
         emptyView.addGestureRecognizer(tapRecognizer)
@@ -98,11 +95,6 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         explanationManager.checker = checker
     }
     
-    @objc func onPullRefresh(_ sender: UIRefreshControl) {
-        sender.endRefreshing()
-        delegate?.onPullToAdd()
-    }
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "embedTableViewController" {
             tableViewController = segue.destination as! UITableViewController
@@ -143,9 +135,13 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pullToAddView?.updateForScrollOffset(offset: scrollView.contentOffset.y)
+        pullToAdd?.scrollViewDidScroll(scrollView: scrollView)
     }
-    
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        pullToAdd?.scrollViewDidEndDecelerating(scrollView)
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if explanationManager.showExplanation && indexPath.row == explanationManager.row { // Explanation cell

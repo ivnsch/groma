@@ -98,8 +98,7 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     func enablePullToAdd() {
-        self.pullToAdd = PullToAddHelper(tableView: tableView) {[weak self] refreshControl in
-            refreshControl.endRefreshing()
+        pullToAdd = PullToAddHelper(tableView: tableView) {[weak self] in
             self?.listItemsTableViewDelegate?.onPullToAdd()
         }
     }
@@ -137,8 +136,12 @@ class ListItemsTableViewControllerNew: UIViewController, ListItemCellDelegateNew
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pullToAdd?.refreshControl.updateForScrollOffset(offset: scrollView.contentOffset.y, startOffset: -60)
+        pullToAdd?.scrollViewDidScroll(scrollView: scrollView)
         listItemsTableViewDelegate?.onTableViewScroll(scrollView)
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        pullToAdd?.scrollViewDidEndDecelerating(scrollView)
     }
     
 //    TODO!!!!!!!!!!!!!!!! ?
