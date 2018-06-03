@@ -44,7 +44,8 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
     @IBOutlet weak var tableView: UITableView!
 
     @IBOutlet weak var topMenuView: UIView!
-    
+    @IBOutlet weak var topDivider: UIView!
+
     var sortBy: InventoryItemsSortOption? {
         didSet {
             if let sortBy = sortBy {
@@ -147,6 +148,7 @@ class ProductsWithQuantityViewControllerNew: UIViewController, UITableViewDataSo
         // necessary?
         delegate?.onEmpty(isEmpty)
         topMenuView.setHiddenAnimated(isEmpty)
+        topDivider.isHidden = isEmpty
     }
 
     func setEmptyUI(_ empty: Bool, animated: Bool) {

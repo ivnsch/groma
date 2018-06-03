@@ -49,6 +49,8 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
     
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var topMenusHeightConstraint: NSLayoutConstraint!
+
+    @IBOutlet weak var topDivider: UIView!
     
     fileprivate weak var tableViewController: UITableViewController!
     
@@ -901,6 +903,12 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         topQuickAddControllerManager?.height = DimensionsManager.quickAddHeight
         super.openQuickAdd(rotateTopBarButton: rotateTopBarButton, itemToEdit: itemToEdit)
     }
+
+    override func setEmptyUI(_ empty: Bool, animated: Bool) {
+        super.setEmptyUI(empty, animated: animated)
+        topDivider.isHidden = empty
+    }
+
     // MARK: -
     
     deinit {
