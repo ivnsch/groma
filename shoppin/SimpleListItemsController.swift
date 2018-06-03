@@ -840,6 +840,7 @@ class SimpleListItemsTableViewController: UITableViewController {
         tableView.allowsSelectionDuringEditing = true
         tableView.separatorStyle = .none
         tableView.register(UINib(nibName: "ListItemCell", bundle: nil), forCellReuseIdentifier: "cell")
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
