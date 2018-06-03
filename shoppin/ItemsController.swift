@@ -280,6 +280,8 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
         if !editing {
             setDefaultLeftButtons()
             topBar.setRightButtonModels(rightButtonsDefault())
+        } else {
+            topBar.setLeftButtonIds([.edit, .expandSections])
         }
     }
     

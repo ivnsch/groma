@@ -56,7 +56,7 @@ class PathButton: UIButton {
             layer.addSublayer(sublayer)
         }
         
-        setPathsForState(on)
+        setPathsForState(on, animated: false)
     }
     
     override func awakeFromNib() {
@@ -95,18 +95,20 @@ class PathButton: UIButton {
         fatalError("Override")
     }
     
-    func setPathsForState(_ on: Bool) {
+    func setPathsForState(_ on: Bool, animated: Bool = true) {
         guard let onPaths = onPaths, let offPaths = offPaths else {print("Warn: PathButton.onTap: no paths, doing nothing"); return}
 
         let fromPaths = on ? offPaths : onPaths
         let toPaths = on ? onPaths : offPaths
         
         for (index, path) in toPaths.enumerated() {
-            let anim = animationWithKeyPath("path", damping: 10)
-            anim.fromValue = fromPaths[index]
-            anim.toValue = path
-            // TODO cleaner implementation, this index based access and casting is super unsafe
-            (layer.sublayers![index] as! CAShapeLayer).add(anim, forKey: "path")
+            if animated {
+                let anim = animationWithKeyPath("path", damping: 10)
+                anim.fromValue = fromPaths[index]
+                anim.toValue = path
+                // TODO cleaner implementation, this index based access and casting is super unsafe
+                (layer.sublayers![index] as! CAShapeLayer).add(anim, forKey: "path")
+            }
             (layer.sublayers![index] as! CAShapeLayer).path = path
         }
     }

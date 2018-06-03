@@ -20,7 +20,7 @@ protocol ListTopBarViewDelegate: class {
 }
 
 enum ListTopBarViewButtonId: Int {
-    case add = 0, submit = 1, toggleOpen = 2, edit = 3
+    case add = 0, submit = 1, toggleOpen = 2, edit = 3, expandSections = 4
     
     var name: String {
         switch self {
@@ -32,6 +32,8 @@ enum ListTopBarViewButtonId: Int {
             return "toggle"
         case .edit:
             return "edit"
+        case .expandSections:
+            return "expandSections"
         }
     }
 }
@@ -100,7 +102,10 @@ class ListTopBarView: UIView {
     fileprivate var centerYOffsetInExpandedState: Float = 0 // offset of center of available height to center of total height, derived from centerYInExpandedState
     
     fileprivate var titleLabelFont = Fonts.fontForSizeCategory(50)
-    
+
+    // hack - TODO remove this - generic way to update state of buttons
+    var expandSectionButton: ExpandCollapseButton?
+
     override func awakeFromNib() {
         super.awakeFromNib()
         translatesAutoresizingMaskIntoConstraints = false
@@ -297,6 +302,7 @@ class ListTopBarView: UIView {
         if left {
             for button in leftButtons {
                 button.removeFromSuperview()
+                expandSectionButton = nil
             }
             leftButtons = []
             
@@ -312,14 +318,21 @@ class ListTopBarView: UIView {
             var modelsWithButtons: [(model: TopBarButtonModel, button: UIButton, inner: UIButton)] = []
             
             func createButton(_ model: TopBarButtonModel, imgName: String, tintColor: UIColor) -> UIButton {
-                let button = UIButton()
-                button.translatesAutoresizingMaskIntoConstraints = false
-                button.imageView?.tintColor = tintColor
-                
-                button.setImage(UIImage(named: imgName), for: UIControlState())
 
+                var button: UIButton
+                if model.buttonId == .expandSections {
+                    let expandCollapseButton = ExpandCollapseButton()
+                    button = expandCollapseButton
+                    expandSectionButton = expandCollapseButton // note: hack - see comment on variable
+
+                } else {
+                    button = UIButton()
+                    button.imageView?.tintColor = tintColor
+                    button.setImage(UIImage(named: imgName), for: UIControlState())
+                }
+
+                button.translatesAutoresizingMaskIntoConstraints = false
                 button.tag = model.buttonId.rawValue
-                
                 button.isUserInteractionEnabled = false
                 
                 let tapView = UIButton()
@@ -353,6 +366,9 @@ class ListTopBarView: UIView {
                     _ = createButton(model, imgName: "tb_done", tintColor: fgColor)
                 case .toggleOpen:
                     _ = createButton(model, imgName: "tb_add", tintColor: Theme.navBarAddColor)
+                case .expandSections:
+                    // TODO don't pass imgName and tintColor here
+                    _ = createButton(model, imgName: "", tintColor: Theme.navBarAddColor)
                 }
             }
             

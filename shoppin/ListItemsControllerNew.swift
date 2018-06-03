@@ -454,8 +454,22 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     fileprivate func getTableViewInset() -> CGFloat {
         return topBar.frame.height
     }
-    
-    
+
+    override func onTopBarButtonTap(_ buttonId: ListTopBarViewButtonId) {
+        if buttonId == .expandSections {
+            if let expandSectionButton = topBar.expandSectionButton {
+                // change the button's state (this is different to other buttons in the topbar since the button does the
+                // animation itself
+                expandSectionButton.on = !expandSectionButton.on
+                toggleReorderSections()
+            } else {
+                logger.e("Invalid state - tapped on expand section button but not set", .ui)
+            }
+        } else {
+            super.onTopBarButtonTap(buttonId)
+        }
+    }
+
     // MARK: - ListItemsEditTableViewDelegateNew
     
     func onListItemsOrderChangedSection(_ tableViewListItems: [ListItem]) {
