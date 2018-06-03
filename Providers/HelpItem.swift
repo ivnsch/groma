@@ -9,7 +9,7 @@
 import Foundation
 
 public enum HelpItemType {
-    case normal, troubleshooting
+    case normal, troubleshooting, basesPopup
 }
 
 // Help screen content items

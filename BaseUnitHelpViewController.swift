@@ -44,6 +44,30 @@ class BaseUnitHelpViewController: UIViewController {
         return itemTypeColors[itemType] ?? UIColor.black
     }
 
+    static func show(parent: UIViewController, from: UIView? = nil) {
+        let helpController = BaseUnitHelpViewController()
+        let preferredFrame = CGRect(x: 100, y: 10, width: 340, height: 520)
+
+        helpController.view.frame = {
+            let width = min(preferredFrame.width, UIScreen.main.bounds.width - DimensionsManager.minPopupHMargin * 2)
+            return preferredFrame.copy(width: width)
+        } ()
+
+        helpController.view.layer.cornerRadius = Theme.popupCornerRadius
+        helpController.view.clipsToBounds = true
+
+        let popup = MyPopupHelper.showCustomPopupFrom(parent: parent, centerYOffset: 0, contentController: helpController, swipeEnabled: false, useDefaultFrame: false, from: from)
+
+        helpController.closeTapHandler = {
+            helpController.removeFromParentViewController()
+            if from == nil {
+                popup.hideFall()
+            } else {
+                popup.hide()
+            }
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -151,7 +175,7 @@ extension BaseUnitHelpViewController: UITableViewDelegate {
         case noteCellIndex:
             return 100
         case cellModels.count + 1:
-            return 70
+            return 90
         case cellModels.count + 2:
             return 270
         default:

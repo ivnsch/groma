@@ -241,7 +241,7 @@ popup_remove_section_completion_confirm = "Quieres remover %@?\nEsto removerá t
 popup_remove_product_completion_confirm = "Quieres remover %@?\nEsto removerá también entradas en listas, inventarios o recetas con este nombre.";
 popup_remove_brand_completion_confirm = "Quieres remover %@?\nEsto removerá todos los productos con esta marca e ítems en listas, grupos, inventarios e historial asociados con ellos.";
 popup_remove_unit_completion_confirm = "Quieres remover %@?\nEsto removerá todos los productos utilizando esta unidad e ítems en listas, grupos, inventarios e historial asociados con ellos.";
-popup_remove_base_completion_confirm = "Quieres remover %@?\nEsto removerá todos los productos utilizando esta cantidad base e ítems en listas, grupos, inventarios e historial asociados con ellos.";
+popup_remove_base_completion_confirm = "Quieres remover %@?\nEsto removerá todos los productos utilizando esta cantidad básica e ítems en listas, grupos, inventarios e historial asociados con ellos.";
 popup_couldnt_find_email_account = "No se encontró una cuenta de email.";
 popup_group_was_deleted_in_other_device = "El grupo \"%@\" fue removido en otro dispositivo. Retorno a grupos.";
 popup_delete_history_also_deletes_stats = "Remover entradas del historial también remueve estos datos del reporte.";
@@ -308,7 +308,7 @@ popup_button_remove_list = "Remover lista";
 button_close_help = "Cerrar ayuda";
 
 popup_you_cant_delete_default_unit = "La unidad de medida básica no se puede eliminar!";
-popup_you_cant_delete_default_base_quantity = "La cantidad base default no se puede eliminar!";
+popup_you_cant_delete_default_base_quantity = "La cantidad básica default no se puede eliminar!";
 
 error_not_authenticated = "No hay una sesión activa. Por favor conéctate e intenta de nuevo.";
 error_already_exists = "Ya existe";
@@ -531,10 +531,10 @@ select_units = "Unidades";
 select_ingredient_data_submit = "Guardar";
 select_ingredient_data_header_units = "Unidad";
 select_ingredient_data_header_quantity = "Cantidad";
-select_unit_base_header_quantity = "Cantidad base";
+select_unit_base_header_quantity = "Cantidad básica";
 select_unit_base_header_second_quantity = "Segunda candidad base (opcional)";
 enter_custom_unit_placeholder = "O ingresa tu propia unidad";
-enter_custom_base_quantity_placeholder = "O ingresa tu propia cantidad base";
+enter_custom_base_quantity_placeholder = "O ingresa tu propia cantidad básica";
 update_base_unit_submit_button_title = "Actualizar";
 
 add_recipe_to_list_submit_button_title = "Agregar a lista";

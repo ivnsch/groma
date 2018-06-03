@@ -110,7 +110,11 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - HelpHeaderViewDelegate
     
     func onHeaderTap(_ header: HelpHeaderView, sectionIndex: Int, sectionModel: HelpItemSectionModel) {
-        setHeaderExpanded(header, sectionIndex: sectionIndex, sectionModel: sectionModel)
+        if sectionModel.obj.type == .basesPopup {
+            BaseUnitHelpViewController.show(parent: root)
+        } else {
+            setHeaderExpanded(header, sectionIndex: sectionIndex, sectionModel: sectionModel)
+        }
     }
     
     fileprivate func setHeaderExpanded(_ header: HelpHeaderView, sectionIndex: Int, sectionModel: HelpItemSectionModel) {

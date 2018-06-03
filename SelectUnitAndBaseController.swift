@@ -393,23 +393,7 @@ class SelectUnitAndBaseController: UIViewController {
     // MARK: Help
 
     @IBAction func onHelpTap(_ sender: UIButton) {
-        let helpController = BaseUnitHelpViewController()
-        let preferredFrame = CGRect(x: 100, y: 10, width: 340, height: 520)
-
-        helpController.view.frame = {
-            let width = min(preferredFrame.width, UIScreen.main.bounds.width - DimensionsManager.minPopupHMargin * 2)
-            return preferredFrame.copy(width: width)
-        } ()
-
-        helpController.view.layer.cornerRadius = Theme.popupCornerRadius
-        helpController.view.clipsToBounds = true
-
-        let popup = MyPopupHelper.showCustomPopupFrom(parent: root, centerYOffset: 0, contentController: helpController, swipeEnabled: false, useDefaultFrame: false, from: helpButtonImage)
-
-        helpController.closeTapHandler = {
-            helpController.removeFromParentViewController()
-            popup.hide()
-        }
+        BaseUnitHelpViewController.show(parent: root, from: helpButtonImage)
 
         helpButtonImage.layer.removeAllAnimations()
         helpButtonImage.transform = CGAffineTransform.identity
