@@ -73,7 +73,9 @@ class InventoryProviderImpl: InventoryProvider {
     }
     
     public func delete(index: Int, inventories: RealmSwift.List<DBInventory>, notificationToken: NotificationToken, _ handler: @escaping (ProviderResult<Any>) -> Void) {
-        DBProv.inventoryProvider.delete(index: index, inventories: inventories, notificationToken: notificationToken) {success in
+        let inventoryUuid = inventories[index].uuid
+        DBProv.inventoryProvider.delete(index: index, inventories: inventories, notificationToken: notificationToken) { success in
+            Notification.send(.InventoryRemoved, dict: [NotificationKey.inventory: inventoryUuid as AnyObject])
             handler(ProviderResult(status: success ? .success : .databaseUnknown))
         }
     }
@@ -200,37 +202,6 @@ class InventoryProviderImpl: InventoryProvider {
             } else {
                 logger.e("Error updating inventories order in local database, orderUpdates: \(orderUpdates)")
                 handler(ProviderResult(status: .unknown))
-            }
-        }
-    }
-    
-    func removeInventory(_ inventory: DBInventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        removeInventory(inventory.uuid, remote: remote, handler)
-    }
-
-    func removeInventory(_ uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ()) {
-        dbInventoryProvider.removeInventory(uuid, markForSync: remote) {removed in
-            handler(ProviderResult(status: removed ? .success : .databaseUnknown))
-            if removed {
-                
-                Notification.send(.ListRemoved, dict: [NotificationKey.list: uuid as AnyObject])
-
-                // Remove all backend code?
-//                if remote {
-//                    self?.remoteProvider.removeInventory(uuid) {remoteResult in
-//                        if remoteResult.success {
-//                            self?.dbInventoryProvider.clearInventoryTombstone(uuid) {removeTombstoneSuccess in
-//                                if !removeTombstoneSuccess {
-//                                    logger.e("Couldn't delete tombstone for inventory: \(uuid)")
-//                                }
-//                            }
-//                        } else {
-//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-//                        }
-//                    }
-//                }
-            } else {
-                logger.e("DB remove didn't succeed")
             }
         }
     }

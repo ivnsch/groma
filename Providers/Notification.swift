@@ -9,7 +9,8 @@
 import Foundation
 
 public enum Notification: String {
-    case ListRemoved = "ListRemoved"
+    case InventoryRemoved = "InventoryRemoved"
+
     case LoginTokenExpired = "LoginTokenExpired"
 
     case ListInvitationAccepted = "ListInvitationAccepted"
@@ -39,5 +40,5 @@ public enum Notification: String {
 }
 
 public struct NotificationKey {
-    public static let list = "list"
+    public static let inventory = "inventory"
 }

@@ -31,11 +31,7 @@ public protocol InventoryProvider {
     func updateInventory(_ inventory: DBInventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
     func updateInventoriesOrder(_ orderUpdates: [OrderUpdate], withoutNotifying: [NotificationToken], realm: Realm?, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
-    
-    func removeInventory(_ inventory: DBInventory, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
 
-    func removeInventory(_ uuid: String, remote: Bool, _ handler: @escaping (ProviderResult<Any>) -> ())
-    
     func acceptInvitation(_ invitation: RemoteInventoryInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void)
     
     func rejectInvitation(_ invitation: RemoteInventoryInvitation, _ handler: @escaping (ProviderResult<Any>) -> Void)

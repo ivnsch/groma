@@ -91,7 +91,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         
         initEmptyView(line1: trans("empty_list_line1"), line2: trans("empty_list_line2"))
         
-        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsControllerNew.onListRemovedNotification(_:)), name: NSNotification.Name(rawValue: Notification.ListRemoved.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ListItemsControllerNew.onInventoryRemovedNotification(_:)), name: NSNotification.Name(rawValue: Notification.InventoryRemoved.rawValue), object: nil)
     }
 
     override func initProgrammaticViews() {
@@ -163,52 +163,58 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
             case .update(_, let deletions, let insertions, let modifications):
                 logger.d("LIST ITEMS notification, deletions: \(deletions), let insertions: \(insertions), let modifications: \(modifications)")
 
-                if deletions.count > 1 {
-                    logger.i("Got multiple deletions: reloading table", .ui)
-                    weakSelf.listItemsTableViewController.tableView.reloadData()
+                // when we delete an inventory the list, listitems etc. are deleted too - don't process notification if this is the case
+                // default to true - if there's no list there's also no reason to run this block
+                if !(weakSelf.list?.isInvalidated ?? true) {
 
-                } else {
+                    if deletions.count > 1 {
+                        logger.i("Got multiple deletions: reloading table", .ui)
+                        weakSelf.listItemsTableViewController.tableView.reloadData()
 
-                // TODO pass modifications to listItemsTableViewController, don't access table view directly
-                weakSelf.listItemsTableViewController.tableView.beginUpdates()
-                weakSelf.listItemsTableViewController.tableView.insertSections(IndexSet(insertions), with: .top)
-                weakSelf.listItemsTableViewController.tableView.deleteSections(IndexSet(deletions), with: .top)
-                weakSelf.listItemsTableViewController.tableView.reloadSections(IndexSet(modifications), with: .none)
-                weakSelf.listItemsTableViewController.tableView.endUpdates()
-                
-                
-                weakSelf.updateEmptyUI()
-
-                // TODO!!!!!!!!!!!!!!!: update
-//                    if replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.
-//                        weakSelf.updatePossibleList()
-//                    } else {
-//                        weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
-//                        //                    self?.updatePrices(.MemOnly)
-//                        weakSelf.onTableViewChangedQuantifiables()
-//                    }
-//                    weakSelf.closeTopController()
-
-                }
-
-//                logger.d("self?.onTableViewChangedQuantifiables(")
-
-                weakSelf.onTableViewChangedQuantifiables()
-
-                // TODO crash: both devices delete their duplicate at the same time, which sends a delete for an out of index item
-                // e.g. testing with only 1 list item -> add to cart at the same time -> both get a duplicated section and delete it (with removePossibleSectionDuplicates), send it to the other (index of deleted section is 1) since duplicate was deleted locally already receiver has only 1 section and deleted index 1 is out of bounds -> crash
-                if !insertions.isEmpty || !modifications.isEmpty { // Checking for modifications too - here we work with sections, not listitems, so modified sections can mean inserted listitem.
-                    logger.w("TODO LIST insertions not empty! will remove possible duplicates thread: \(Thread.current)", .ui)
-                    if let list = weakSelf.currentList {
-                        Prov.listItemsProvider.removePossibleSectionDuplicates(list: list, status: weakSelf.status, weakSelf.successHandler { removedADuplicate in
-                            if removedADuplicate {
-                                logger.i("Removed a section duplicate! Reloading table view", .ui)
-//                                weakSelf.listItemsTableViewController.tableView.reloadData()
-                            }
-                        })
                     } else {
-                        logger.e("Unexpected: No list.", .ui)
+
+                        // TODO pass modifications to listItemsTableViewController, don't access table view directly
+                        weakSelf.listItemsTableViewController.tableView.beginUpdates()
+                        weakSelf.listItemsTableViewController.tableView.insertSections(IndexSet(insertions), with: .top)
+                        weakSelf.listItemsTableViewController.tableView.deleteSections(IndexSet(deletions), with: .top)
+                        weakSelf.listItemsTableViewController.tableView.reloadSections(IndexSet(modifications), with: .none)
+                        weakSelf.listItemsTableViewController.tableView.endUpdates()
+
+
+                        weakSelf.updateEmptyUI()
+
+                        // TODO!!!!!!!!!!!!!!!: update
+                        //                    if replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.
+                        //                        weakSelf.updatePossibleList()
+                        //                    } else {
+                        //                        weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
+                        //                        //                    self?.updatePrices(.MemOnly)
+                        //                        weakSelf.onTableViewChangedQuantifiables()
+                        //                    }
+                        //                    weakSelf.closeTopController()
+
                     }
+
+                    //                logger.d("self?.onTableViewChangedQuantifiables(")
+
+                    weakSelf.onTableViewChangedQuantifiables()
+
+                    // TODO crash: both devices delete their duplicate at the same time, which sends a delete for an out of index item
+                    // e.g. testing with only 1 list item -> add to cart at the same time -> both get a duplicated section and delete it (with removePossibleSectionDuplicates), send it to the other (index of deleted section is 1) since duplicate was deleted locally already receiver has only 1 section and deleted index 1 is out of bounds -> crash
+                    if !insertions.isEmpty || !modifications.isEmpty { // Checking for modifications too - here we work with sections, not listitems, so modified sections can mean inserted listitem.
+                        logger.w("TODO LIST insertions not empty! will remove possible duplicates thread: \(Thread.current)", .ui)
+                        if let list = weakSelf.currentList {
+                            Prov.listItemsProvider.removePossibleSectionDuplicates(list: list, status: weakSelf.status, weakSelf.successHandler { removedADuplicate in
+                                if removedADuplicate {
+                                    logger.i("Removed a section duplicate! Reloading table view", .ui)
+                                    //                                weakSelf.listItemsTableViewController.tableView.reloadData()
+                                }
+                            })
+                        } else {
+                            logger.e("Unexpected: No list.", .ui)
+                        }
+                    }
+
                 }
 
             case .error(let error):
@@ -1044,14 +1050,16 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
     
     // MARK: - Notification
     
-    @objc func onListRemovedNotification(_ note: Foundation.Notification) {
-        guard let info = (note as NSNotification).userInfo as? Dictionary<String, String> else {logger.e("Invalid info: \(note)"); return}
-        guard let listUuid = info[NotificationKey.list] else {logger.e("No list uuid: \(info)"); return}
-        guard let currentList = currentList else {logger.w("No current list, ignoring list removed notification."); return}
+    @objc func onInventoryRemovedNotification(_ note: Foundation.Notification) {
+        guard let info = (note as NSNotification).userInfo as? Dictionary<String, String> else { logger.e("Invalid info: \(note)"); return }
+        guard let inventoryUuid = info[NotificationKey.inventory] else { logger.e("No list uuid: \(info)"); return }
+        guard let currentList = currentList else { logger.w("No current list, ignoring list removed notification."); return }
         
-        // If we happen to be showing a list that was just removed (e.g. because user removed an inventory the list was associated to), exit.
-        // In this case (opposed to websocket notification) we don't show an alert, as this is triggered by an action of the user in the same device and user should know it was removed.
-        if listUuid == currentList.uuid {
+        // If we happen to be showing a list tht references a deleted inventory, delete it
+        // we assume the user was alerted in the inventory that the list will be removed
+        // Note that deleting the inventory invalidates the list, so we don't really need to check for uuid here - just in case.
+        // (accessing the uuid of an invalidated objects crashes, so need invalidated check as well)
+        if currentList.isInvalidated || inventoryUuid == currentList.inventory.uuid {
             back()
         }
     }
