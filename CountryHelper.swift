@@ -19,9 +19,10 @@ class CountryHelper {
     }
     
     static func isInServerSupportedCountry() -> Bool {
-        
-        return true // we will release only to countries where the server is also supported
-        
+        return false // server not working yet
+
+        // we will release only to countries where the server is also supported
+
 //        let countryCodeMaybe = currentDeviceCountry()?.lowercased()
 //        let isSupported = countryCodeMaybe.map{serverSupportedCountries.contains($0)} ?? false
 //        

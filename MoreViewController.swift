@@ -39,7 +39,7 @@ class MoreViewController: UITableViewController {
             MoreItem(type: .settings, text: trans("more_settings"), image: #imageLiteral(resourceName: "more_settings")),
             MoreItem(type: .help, text: trans("more_help"), image: #imageLiteral(resourceName: "more_help")),
             MoreItem(type: .share, text: trans("more_share"), image: #imageLiteral(resourceName: "more_share")),
-            MoreItem(type: .community, text: trans("more_community"), image: #imageLiteral(resourceName: "more_community")),
+//            MoreItem(type: .community, text: trans("more_community"), image: #imageLiteral(resourceName: "more_community")),
             MoreItem(type: .feedback, text: trans("more_feedback"), image: #imageLiteral(resourceName: "more_feedback")),
             MoreItem(type: .watchIntro, text: trans("more_intro"), image: #imageLiteral(resourceName: "more_intro")),
             MoreItem(type: .about, text: trans("more_about"), image: #imageLiteral(resourceName: "more_info")),
