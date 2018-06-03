@@ -101,7 +101,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         super.viewDidLoad()
 
         view.backgroundColor = Theme.mainBGColor
-        tableView.backgroundColor = Theme.mainBGColor
+        tableView.backgroundColor = Theme.defaultTableViewBGColor
 
         tableView.allowsSelectionDuringEditing = true
 

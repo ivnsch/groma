@@ -105,7 +105,7 @@ class SimpleListItemsController: UIViewController, UITextFieldDelegate, UIScroll
 
         listItemsTableViewController.enablePullToAdd()
 
-        listItemsTableViewController.view.backgroundColor = Theme.mainBGColor
+        listItemsTableViewController.view.backgroundColor = Theme.defaultTableViewBGColor
         
         view.sendSubview(toBack: listItemsTableViewController.view)
         
@@ -842,7 +842,7 @@ class SimpleListItemsTableViewController: UITableViewController {
         tableView.register(UINib(nibName: "ListItemCell", bundle: nil), forCellReuseIdentifier: "cell")
         tableView.backgroundColor = Theme.defaultTableViewBGColor
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return listItems?.count ?? 0
     }

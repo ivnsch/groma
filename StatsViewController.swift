@@ -80,7 +80,7 @@ class StatsViewController: UIViewController
 
         Notification.subscribe(.realmSwapped, selector: #selector(InventoriesTableViewController.onRealmSwapped(_:)), observer: self)
 
-        view.backgroundColor = Theme.defaultTableViewBGColor
+        view.backgroundColor = Theme.mainBGColor
     }
 
     fileprivate func initPicker() {
