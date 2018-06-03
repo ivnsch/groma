@@ -24,9 +24,8 @@ protocol ListItemCellDelegateNew: class {
 class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityViewDelegate, SwipeToDeleteHelperDelegate {
     
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var brandLabel: UILabel!
+    @IBOutlet weak var infosLabel: UILabel!
 //    @IBOutlet weak var quantityLabel: UILabel!
-    @IBOutlet weak var baseQuantityLabel: UILabel!
 //    @IBOutlet weak var priceLabel: UILabel! // this was a label below the item's quantity in edit mode howing total price for this item. For now disabled as it overlaps with surrounding +/- and maybe a bit too much information for the user.
     
     @IBOutlet weak var centerVerticallyNameLabelConstraint: NSLayoutConstraint!
@@ -97,12 +96,10 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
                 
                 shownQuantity = listItem.quantity
 //                shownQuantity = listItem.quantity(status)
-                
-                centerVerticallyNameLabelConstraint.constant = listItem.product.product.product.brand.isEmpty ? 0 : 10
-                brandLabel.text = listItem.product.product.product.brand
-                
-                baseQuantityLabel.text = listItem.product.product.baseText
-                
+
+                infosLabel.text = infosText(listItem: listItem)
+                centerVerticallyNameLabelConstraint.constant = (infosLabel.text ?? "").isEmpty ? 0 : 10
+
                 sectionColorView.backgroundColor = listItem.section.color
                 
                 updateModeItemsVisibility(false)
@@ -119,6 +116,12 @@ class ListItemCellNew: SwipeableCell, SwipeToIncrementHelperDelegate, QuantityVi
                 updateStrikeLine()
             }
         }
+    }
+
+    fileprivate func infosText(listItem: ListItem) -> String {
+        return [listItem.product.product.product.brand, listItem.product.product.baseText].filter {
+            !$0.isEmpty
+        }.joined(separator: ", ")
     }
 
     fileprivate func updateStrikeLine() {

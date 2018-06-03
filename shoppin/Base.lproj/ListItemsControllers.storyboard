@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="QHZ-uV-ZSM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="QHZ-uV-ZSM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,7 +33,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="eMF-ZE-4G9">
-                                        <rect key="frame" x="75" y="150" width="226" height="206"/>
+                                        <rect key="frame" x="75" y="150" width="226" height="205"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="BdM-XD-w7S"/>
@@ -47,7 +47,7 @@
                                         </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The backstore is empty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPu-gm-3Bj" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                        <rect key="frame" x="93" y="376" width="189" height="22"/>
+                                        <rect key="frame" x="93" y="375" width="189" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -227,9 +227,7 @@
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" image="stash"/>
                                         <connections>
-                                            <segue destination="KWE-NE-tbC" kind="show" identifier="stashSegue" id="Bbh-0T-TaJ">
-                                                <nil key="action"/>
-                                            </segue>
+                                            <segue destination="KWE-NE-tbC" kind="show" identifier="stashSegue" id="Bbh-0T-TaJ"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -420,9 +418,7 @@
                         <outlet property="stashView" destination="5T4-jf-M2R" id="8VN-fu-N77"/>
                         <outlet property="topBar" destination="CzC-OK-nPG" id="oXI-vs-Kwq"/>
                         <outlet property="topBarHeightConstraint" destination="1ni-VY-RBO" id="X31-Hb-6DF"/>
-                        <segue destination="Jkv-5K-pqw" kind="show" identifier="doneViewControllerSegue" id="bTN-qH-tco">
-                            <nil key="action"/>
-                        </segue>
+                        <segue destination="Jkv-5K-pqw" kind="show" identifier="doneViewControllerSegue" id="bTN-qH-tco"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Url-oC-rlR" sceneMemberID="firstResponder"/>
@@ -509,17 +505,6 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="Q23-sC-Zlg" customClass="LabelMore" customModule="groma" customModuleProvider="target">
-                                                    <rect key="frame" x="78" y="25" width="112" height="22"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                            <integer key="value" value="50"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </label>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="114" placeholderIntrinsicHeight="84" translatesAutoresizingMaskIntoConstraints="NO" id="259-87-721" customClass="QuantityView" customModule="groma" customModuleProvider="target">
                                                     <rect key="frame" x="261" y="0.0" width="114" height="91"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -527,7 +512,6 @@
                                             </subviews>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
-                                                <constraint firstItem="8LP-6w-Aa7" firstAttribute="leading" secondItem="Q23-sC-Zlg" secondAttribute="trailing" constant="10" id="6In-iC-WU0"/>
                                                 <constraint firstAttribute="bottom" secondItem="259-87-721" secondAttribute="bottom" id="9LC-7x-L3m"/>
                                                 <constraint firstItem="259-87-721" firstAttribute="leading" secondItem="8LP-6w-Aa7" secondAttribute="trailing" id="FB9-89-d3h"/>
                                                 <constraint firstAttribute="bottom" secondItem="W7z-OP-2eO" secondAttribute="bottom" constant="4" id="FR7-gt-I5f"/>
@@ -537,12 +521,11 @@
                                                 <constraint firstAttribute="trailing" secondItem="259-87-721" secondAttribute="trailing" id="P0w-Kx-G4d" customClass="LeftRightPaddingConstraint" customModule="groma" customModuleProvider="target"/>
                                                 <constraint firstItem="8LP-6w-Aa7" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="PQI-WY-75Y"/>
                                                 <constraint firstAttribute="bottom" secondItem="8LP-6w-Aa7" secondAttribute="bottom" id="QJM-Rb-ZH3"/>
-                                                <constraint firstItem="Q23-sC-Zlg" firstAttribute="leading" secondItem="npq-ts-NkO" secondAttribute="trailing" constant="5" id="ZQS-bS-hnO"/>
                                                 <constraint firstAttribute="centerY" secondItem="npq-ts-NkO" secondAttribute="centerY" constant="10" id="aPq-1R-TWY"/>
                                                 <constraint firstItem="9Rc-cx-ee2" firstAttribute="leading" secondItem="npq-ts-NkO" secondAttribute="leading" id="avc-VW-rvi"/>
                                                 <constraint firstItem="8LP-6w-Aa7" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" id="cTT-nZ-E4n"/>
                                                 <constraint firstItem="9Rc-cx-ee2" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" constant="10" id="den-ag-xFz"/>
-                                                <constraint firstItem="Q23-sC-Zlg" firstAttribute="baseline" secondItem="npq-ts-NkO" secondAttribute="baseline" id="ly6-ma-gKJ"/>
+                                                <constraint firstItem="8LP-6w-Aa7" firstAttribute="leading" secondItem="9Rc-cx-ee2" secondAttribute="trailing" constant="10" id="pp4-NJ-EeN"/>
                                                 <constraint firstItem="259-87-721" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="xZU-R0-J9P"/>
                                             </constraints>
                                             <variation key="default">
@@ -569,14 +552,13 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
-                                    <outlet property="baseQuantityLabel" destination="Q23-sC-Zlg" id="ZwK-l6-MTn"/>
                                     <outlet property="bgIconLeft" destination="a2Q-w2-HKK" id="VuQ-9y-sTD"/>
                                     <outlet property="bgIconRight" destination="jMV-Fq-LvI" id="tXE-CJ-62K"/>
-                                    <outlet property="brandLabel" destination="9Rc-cx-ee2" id="3AD-fD-V2K"/>
                                     <outlet property="centerVerticallyNameLabelConstraint" destination="aPq-1R-TWY" id="eCQ-dH-UjM"/>
                                     <outlet property="contentViewLeftConstraint" destination="orc-lq-4ob" id="ch4-Vg-ytB"/>
                                     <outlet property="contentViewRightConstraint" destination="M0m-8G-fqg" id="d3b-rN-Xpc"/>
                                     <outlet property="deleteButton" destination="34m-yG-k8j" id="kqX-Ye-a0Q"/>
+                                    <outlet property="infosLabel" destination="9Rc-cx-ee2" id="Y38-lY-pfd"/>
                                     <outlet property="myContentView" destination="mEO-yB-hml" id="zsB-5b-YPD"/>
                                     <outlet property="nameLabel" destination="npq-ts-NkO" id="e3j-25-fIv"/>
                                     <outlet property="noteButton" destination="8LP-6w-Aa7" id="6Qg-cK-Ip5"/>
@@ -604,7 +586,7 @@
     <resources>
         <image name="added" width="24" height="23"/>
         <image name="cart" width="27" height="23"/>
-        <image name="empty_page" width="240" height="206"/>
+        <image name="empty_page" width="240" height="205"/>
         <image name="speechbubble" width="23" height="23"/>
         <image name="stash" width="32" height="31"/>
     </resources>
