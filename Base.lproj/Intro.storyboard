@@ -127,6 +127,7 @@
                         <outlet property="pageControl" destination="mkE-ao-QPc" id="fb6-Vq-8Za"/>
                         <outlet property="progressIndicator" destination="pJ3-Ic-Ev2" id="ShC-N5-xC0"/>
                         <outlet property="skipButton" destination="NJR-Pk-tTx" id="vOf-eA-cbw"/>
+                        <outlet property="swipeView" destination="Ynb-xz-qyx" id="H5b-IL-Ziw"/>
                         <outlet property="verticalCenterSlideConstraint" destination="3Tk-Zj-DvH" id="rMo-yr-l31"/>
                     </connections>
                 </viewController>

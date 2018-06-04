@@ -115,10 +115,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
         }
     }
 
+    // TODO remove animation intervals - we don't use them anymore - except to display the first but this can be done via (animation)frame - tired!
     fileprivate func initAnimationIntervals() {
         // progress percentage of idle scenes in animation (about in the middle of the respective idle interval)
         // got these numbers with trial and error - if the animation changes these numbers (most probably) have to be updated.
-        let starts = [ 0, 12.5, 30, 55, 88 ]
+        let starts = [ 0, 13.5, 38, 67, 98 ]
         for i in 0..<starts.count {
             let current = starts[i]
             let next = starts[safe: i + 1] ?? 100
@@ -529,23 +530,87 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate
         beforeFirstSliderDrag = false
     }
 
+    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    // animation
+    // yes, this has to be refactored. it's late!
+
+    private var lastSwipeViewOffset: CGFloat = 0
+    
+    private var animating1 = false
+    private var animating2 = false
+    private var animating3 = false
+    private var animating4 = false
+    private var animating5 = false
+    private var animating6 = false
+
     func swipeViewDidScroll(_ swipeView: SwipeView!) {
         let progress = swipeView.scrollOffset
 
-        // at the beginning the swiper triggers some scroll events with 0, which would reset the animation (the first page is > 0%)
-        // so we don't react to events until the user has dragged the first time
-        if !beforeFirstSliderDrag {
-            let whole = Int(progress) // whole part of progress number
-            let fraction: Double = Double(progress) - Double(Int(progress)) // fraction part of progress number
+        let direction = lastSwipeViewOffset < progress ? 1 : -1
 
-            // if let normally not necessary - just in case
-            if let interval = animationIntervals[safe: whole + 1] { // get animation interval
-                let animProgress = interval.1 * Double(fraction) + interval.0 // calculate animation progress
-                animationView.animationProgress = CGFloat(animProgress) / 100
+        if progress > 0.40 && progress < 0.60 {
+            if direction == 1 {
+                if animating2 || animating3 || animating4 || animating5 || animating6 {
+                    animationView.stop()
+                }
+                animating1 = true
+                animationView.play(fromFrame: 25, toFrame: 55, withCompletion: { [weak self] finished in
+                    self?.animating1 = false
+                })
+            } else if direction == -1 {
+                if animating1 || animating3 || animating4 || animating5 || animating6 {
+                    animationView.stop()
+                }
+                animating2 = true
+                animationView.play(fromFrame: 55, toFrame: 25, withCompletion: { [weak self] finished in
+                    self?.animating2 = false
+                })
+            }
+        } else if progress > 1.40 && progress < 1.60 {
+            if direction == 1 {
+                if animating2 || animating1 || animating4 || animating5 || animating6 {
+                    animationView.stop()
+                }
+                animating3 = true
+                animationView.play(fromFrame: 55, toFrame: 101, withCompletion: { [weak self] finished in
+                    self?.animating3 = false
+                })
+            } else if direction == -1 {
+                if animating2 || animating3 || animating1 || animating5 || animating6 {
+                    animationView.stop()
+                }
+                animating4 = true
+                animationView.play(fromFrame: 101, toFrame: 55, withCompletion: { [weak self] finished in
+                    self?.animating4 = false
+                })
+            }
+        } else if progress > 2.40 && progress < 2.60 {
+            if direction == 1 {
+                if animating2 || animating3 || animating4 || animating1 || animating6 {
+                    animationView.stop()
+                }
+                animating5 = true
+                animationView.play(fromFrame: 101, toFrame: 148, withCompletion: { [weak self] finished in
+                    self?.animating5 = false
+                })
+            } else if direction == -1 {
+                if animating2 || animating3 || animating4 || animating5 || animating1 {
+                    animationView.stop()
+                }
+                animating6 = true
+                animationView.play(fromFrame: 148, toFrame: 101, withCompletion: { [weak self] finished in
+                    self?.animating6 = false
+                })
             }
         }
+
+        lastSwipeViewOffset = progress
     }
-    
+
+    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+
     deinit {
         logger.v("Deinit intro controller")
     }
