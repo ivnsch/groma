@@ -3083,7 +3083,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-shoppinUITests/Pods-shoppinUITests-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle",
+				$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle,
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -3156,7 +3156,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-groma/Pods-groma-resources.sh",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle",
+				$PODS_CONFIGURATION_BUILD_DIR/HockeySDK/HockeySDKResources.bundle,
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -4016,7 +4016,7 @@
 				OTHER_SWIFT_FLAGS = "-DRELEASE $(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = co.groma.groma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3cd90607-52fb-46b1-a10a-e8dee10cdf4b";
+				PROVISIONING_PROFILE = "6a11d41d-b34d-4d6a-9aab-6537ebbac159";
 				PROVISIONING_PROFILE_SPECIFIER = "Groma AdHoc";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
