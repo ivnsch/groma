@@ -819,7 +819,7 @@ class IngredientsControllerNew: ItemsController, UIPickerViewDataSource, UIPicke
         let fullRange = NSRange(location: 0, length: text.count)
         attributedText.setAttributes([
             .font: UIFont.systemFont(ofSize: 17),
-            .foregroundColor: UIColor(hexString: "b7b7b7")
+            .foregroundColor: UIColor(hexString: "666666")
         ], range: fullRange)
 
         for span in spans {
