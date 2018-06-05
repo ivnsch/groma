@@ -32,6 +32,9 @@ def gromadeps
     pod 'ASValueTrackingSlider', '~> 0.12.1'
     pod 'ChartLegends', '~> 0.0.6'
     pod 'lottie-ios'
+    pod 'FBSDKCoreKit'
+    pod 'FBSDKLoginKit'
+    pod 'FBSDKShareKit'
     providersdeps
 end
 
