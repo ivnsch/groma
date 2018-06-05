@@ -9,10 +9,6 @@
 /* Begin PBXBuildFile section */
 		5819FB5E1DDDF59500FB2CC1 /* Validatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5819FB5D1DDDF59500FB2CC1 /* Validatable.swift */; };
 		58FA07161DE1F2550059F2D0 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FA07151DE1F2550059F2D0 /* Bolts.framework */; };
-		58FBD9B11DDCDA19002242D6 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AD1DDCDA18002242D6 /* FBSDKCoreKit.framework */; };
-		58FBD9B21DDCDA19002242D6 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AE1DDCDA18002242D6 /* FBSDKLoginKit.framework */; };
-		58FBD9B31DDCDA19002242D6 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9AF1DDCDA19002242D6 /* FBSDKMessengerShareKit.framework */; };
-		58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FBD9B01DDCDA19002242D6 /* FBSDKShareKit.framework */; };
 		6A05647C1E8C628F00E5C74D /* CenterAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A05647B1E8C628F00E5C74D /* CenterAlignedCollectionViewFlowLayout.swift */; };
 		6A0ACE101FE9CED1007E64D5 /* IngredientDataSubHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0ACE0E1FE9CED1007E64D5 /* IngredientDataSubHeaderCell.swift */; };
 		6A0ACE111FE9CED1007E64D5 /* IngredientDataSubHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A0ACE0F1FE9CED1007E64D5 /* IngredientDataSubHeaderCell.xib */; };
@@ -1128,13 +1124,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				58FBD9B31DDCDA19002242D6 /* FBSDKMessengerShareKit.framework in Frameworks */,
 				6AEA4EA41E0461660040557D /* Providers.framework in Frameworks */,
 				EB0F5F881B98A10100035175 /* SystemConfiguration.framework in Frameworks */,
-				58FBD9B41DDCDA19002242D6 /* FBSDKShareKit.framework in Frameworks */,
 				58FA07161DE1F2550059F2D0 /* Bolts.framework in Frameworks */,
-				58FBD9B11DDCDA19002242D6 /* FBSDKCoreKit.framework in Frameworks */,
-				58FBD9B21DDCDA19002242D6 /* FBSDKLoginKit.framework in Frameworks */,
 				AE4ACBEA0F92FC70EBA5FB3A /* Pods_groma.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
