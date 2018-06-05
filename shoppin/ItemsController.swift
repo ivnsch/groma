@@ -281,8 +281,12 @@ class ItemsController: UIViewController, QuickAddDelegate, ExpandableTopViewCont
             setDefaultLeftButtons()
             topBar.setRightButtonModels(rightButtonsDefault())
         } else {
-            topBar.setLeftButtonIds([.edit, .expandSections])
+            topBar.setLeftButtonIds(editingLeftButtonids())
         }
+    }
+
+    func editingLeftButtonids() -> [ListTopBarViewButtonId] {
+        return [.edit]
     }
     
     @objc func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

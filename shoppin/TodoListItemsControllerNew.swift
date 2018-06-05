@@ -147,6 +147,10 @@ class TodoListItemsControllerNew: ListItemsControllerNew, CartListItemsControlle
         
         cartController?.setEditing(editing, animated: animated)
     }
+
+    override func editingLeftButtonids() -> [ListTopBarViewButtonId] {
+        return [.edit, .expandSections]
+    }
     
     override func onToggleReorderSections(_ isNowInReorderSections: Bool) {
 //        self.todoListItemsEditBottomView?.expandCollapseButtonExpanded = isNowInReorderSections
