@@ -1070,9 +1070,10 @@ extension IngredientsControllerNew: UITableViewDataSource, UITableViewDelegate {
                 topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
             }
         } else {
-            if indexPath.section == 1 { // Recipe text row
-                recipeTextCellIsInEditModeWhileTableViewIsInReadMode
-         = true
+            // enter edit (specifically the recipe text cell) mode if showing the "tap to add text" placeholder
+            let isShowingPlaceholder = (recipe?.text.isEmpty ?? true) && recipeText.string.isEmpty
+            if indexPath.section == 1 && isShowingPlaceholder { // Recipe empty text row
+                recipeTextCellIsInEditModeWhileTableViewIsInReadMode = true
                 tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .fade)
             }
         }
