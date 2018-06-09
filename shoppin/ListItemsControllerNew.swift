@@ -73,7 +73,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         return 0
     }
     
-    fileprivate var topEditSectionControllerManager: ExpandableTopViewController<EditSectionViewController>?
+    var topEditSectionControllerManager: ExpandableTopViewController<EditSectionViewController>?
     
     fileprivate var initializedTableViewBottomInset = false
     
@@ -84,8 +84,6 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        topEditSectionControllerManager = initEditSectionControllerManager()
         
         _ = topBar.dotColor
         
@@ -116,7 +114,7 @@ class ListItemsControllerNew: ItemsController, UITextFieldDelegate, UIScrollView
         }
     }
     
-    fileprivate func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
+    func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
         let top = topBar.frame.height
         let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 70, animateTableViewInset: false, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] _ in
             let controller = EditSectionViewController()
